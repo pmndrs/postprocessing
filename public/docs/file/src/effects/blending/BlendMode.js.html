@@ -115,7 +115,7 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/effects/blending/BlendMode.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { Uniform } from &quot;three&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { EventDispatcher, Uniform } from &quot;three&quot;;
 import { BlendFunction } from &quot;./BlendFunction.js&quot;;
 
 import addBlendFunction from &quot;./glsl/add/shader.frag&quot;;
@@ -170,7 +170,7 @@ const blendFunctions = new Map([
  * A blend mode.
  */
 
-export class BlendMode {
+export class BlendMode extends EventDispatcher {
 
 	/**
 	 * Constructs a new blend mode.
@@ -181,10 +181,13 @@ export class BlendMode {
 
 	constructor(blendFunction, opacity = 1.0) {
 
+		super();
+
 		/**
 		 * The blend function.
 		 *
 		 * @type {BlendFunction}
+		 * @private
 		 */
 
 		this.blendFunction = blendFunction;
@@ -196,6 +199,31 @@ export class BlendMode {
 		 */
 
 		this.opacity = new Uniform(opacity);
+
+	}
+
+	/**
+	 * Returns the blend function.
+	 *
+	 * @return {BlendFunction} The blend function.
+	 */
+
+	getBlendFunction() {
+
+		return this.blendFunction;
+
+	}
+
+	/**
+	 * Sets the blend function.
+	 *
+	 * @param {BlendFunction} blendFunction - The blend function.
+	 */
+
+	setBlendFunction(blendFunction) {
+
+		this.blendFunction = blendFunction;
+		this.dispatchEvent({ type: &quot;change&quot; });
 
 	}
 

@@ -60,15 +60,6 @@ export class PatternDemo extends PostProcessingDemo {
 
 		this.scanlineEffect = null;
 
-		/**
-		 * A pass.
-		 *
-		 * @type {Pass}
-		 * @private
-		 */
-
-		this.pass = null;
-
 	}
 
 	/**
@@ -194,7 +185,6 @@ export class PatternDemo extends PostProcessingDemo {
 		this.dotScreenEffect = dotScreenEffect;
 		this.gridEffect = gridEffect;
 		this.scanlineEffect = scanlineEffect;
-		this.pass = pass;
 
 		composer.addPass(pass);
 
@@ -208,7 +198,6 @@ export class PatternDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const pass = this.pass;
 		const dotScreenEffect = this.dotScreenEffect;
 		const gridEffect = this.gridEffect;
 		const scanlineEffect = this.scanlineEffect;
@@ -255,8 +244,7 @@ export class PatternDemo extends PostProcessingDemo {
 
 		folder.add(params.dotScreen, "blend mode", BlendFunction).onChange(() => {
 
-			dotScreenEffect.blendMode.blendFunction = Number(params.dotScreen["blend mode"]);
-			pass.recompile();
+			dotScreenEffect.blendMode.setBlendFunction(Number(params.dotScreen["blend mode"]));
 
 		});
 
@@ -284,8 +272,7 @@ export class PatternDemo extends PostProcessingDemo {
 
 		folder.add(params.grid, "blend mode", BlendFunction).onChange(() => {
 
-			gridEffect.blendMode.blendFunction = Number(params.grid["blend mode"]);
-			pass.recompile();
+			gridEffect.blendMode.setBlendFunction(Number(params.grid["blend mode"]));
 
 		});
 
@@ -307,8 +294,7 @@ export class PatternDemo extends PostProcessingDemo {
 
 		folder.add(params.scanline, "blend mode", BlendFunction).onChange(() => {
 
-			scanlineEffect.blendMode.blendFunction = Number(params.scanline["blend mode"]);
-			pass.recompile();
+			scanlineEffect.blendMode.setBlendFunction(Number(params.scanline["blend mode"]));
 
 		});
 

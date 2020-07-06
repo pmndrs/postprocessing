@@ -157,20 +157,24 @@ export class NoiseEffect extends Effect {
 	/**
 	 * Enables or disables noise premultiplication.
 	 *
-	 * You&apos;ll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Boolean}
 	 */
 
 	set premultiply(value) {
 
-		if(value) {
+		if(this.premultiply !== value) {
 
-			this.defines.set(&quot;PREMULTIPLY&quot;, &quot;1&quot;);
+			if(value) {
 
-		} else {
+				this.defines.set(&quot;PREMULTIPLY&quot;, &quot;1&quot;);
 
-			this.defines.delete(&quot;PREMULTIPLY&quot;);
+			} else {
+
+				this.defines.delete(&quot;PREMULTIPLY&quot;);
+
+			}
+
+			this.setChanged();
 
 		}
 

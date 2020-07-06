@@ -161,8 +161,6 @@ export class ToneMappingEffect extends Effect {
 	/**
 	 * Sets the resolution of the internal render targets.
 	 *
-	 * You'll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Number}
 	 */
 
@@ -170,13 +168,15 @@ export class ToneMappingEffect extends Effect {
 
 		// Round the given value to the next power of two.
 		const exponent = Math.max(0, Math.ceil(Math.log2(value)));
-		value = Math.pow(2, exponent);
+		const size = Math.pow(2, exponent);
 
-		this.renderTargetLuminance.setSize(value, value);
-		this.renderTargetPrevious.setSize(value, value);
-		this.renderTargetAdapted.setSize(value, value);
+		this.renderTargetLuminance.setSize(size, size);
+		this.renderTargetPrevious.setSize(size, size);
+		this.renderTargetAdapted.setSize(size, size);
 
-		this.adaptiveLuminancePass.getFullscreenMaterial().defines.MIP_LEVEL_1X1 = exponent.toFixed(1);
+		const material = this.adaptiveLuminancePass.getFullscreenMaterial();
+		material.defines.MIP_LEVEL_1X1 = exponent.toFixed(1);
+		material.needsUpdate = true;
 
 	}
 
@@ -195,22 +195,26 @@ export class ToneMappingEffect extends Effect {
 	/**
 	 * Enables or disables adaptive luminance.
 	 *
-	 * You'll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Boolean}
 	 */
 
 	set adaptive(value) {
 
-		if(value) {
+		if(this.adaptive !== value) {
 
-			this.defines.set("ADAPTED_LUMINANCE", "1");
-			this.uniforms.get("luminanceMap").value = this.renderTargetAdapted.texture;
+			if(value) {
 
-		} else {
+				this.defines.set("ADAPTED_LUMINANCE", "1");
+				this.uniforms.get("luminanceMap").value = this.renderTargetAdapted.texture;
 
-			this.defines.delete("ADAPTED_LUMINANCE");
-			this.uniforms.get("luminanceMap").value = null;
+			} else {
+
+				this.defines.delete("ADAPTED_LUMINANCE");
+				this.uniforms.get("luminanceMap").value = null;
+
+			}
+
+			this.setChanged();
 
 		}
 

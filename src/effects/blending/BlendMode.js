@@ -1,4 +1,4 @@
-import { Uniform } from "three";
+import { EventDispatcher, Uniform } from "three";
 import { BlendFunction } from "./BlendFunction.js";
 
 import addBlendFunction from "./glsl/add/shader.frag";
@@ -53,7 +53,7 @@ const blendFunctions = new Map([
  * A blend mode.
  */
 
-export class BlendMode {
+export class BlendMode extends EventDispatcher {
 
 	/**
 	 * Constructs a new blend mode.
@@ -64,10 +64,13 @@ export class BlendMode {
 
 	constructor(blendFunction, opacity = 1.0) {
 
+		super();
+
 		/**
 		 * The blend function.
 		 *
 		 * @type {BlendFunction}
+		 * @private
 		 */
 
 		this.blendFunction = blendFunction;
@@ -79,6 +82,31 @@ export class BlendMode {
 		 */
 
 		this.opacity = new Uniform(opacity);
+
+	}
+
+	/**
+	 * Returns the blend function.
+	 *
+	 * @return {BlendFunction} The blend function.
+	 */
+
+	getBlendFunction() {
+
+		return this.blendFunction;
+
+	}
+
+	/**
+	 * Sets the blend function.
+	 *
+	 * @param {BlendFunction} blendFunction - The blend function.
+	 */
+
+	setBlendFunction(blendFunction) {
+
+		this.blendFunction = blendFunction;
+		this.dispatchEvent({ type: "change" });
 
 	}
 

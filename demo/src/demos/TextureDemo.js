@@ -48,15 +48,6 @@ export class TextureDemo extends PostProcessingDemo {
 
 		this.effect = null;
 
-		/**
-		 * A pass.
-		 *
-		 * @type {Pass}
-		 * @private
-		 */
-
-		this.pass = null;
-
 	}
 
 	/**
@@ -169,7 +160,6 @@ export class TextureDemo extends PostProcessingDemo {
 		const pass = new EffectPass(camera, smaaEffect, textureEffect);
 
 		this.effect = textureEffect;
-		this.pass = pass;
 
 		composer.addPass(pass);
 
@@ -183,7 +173,6 @@ export class TextureDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const pass = this.pass;
 		const effect = this.effect;
 		const blendMode = effect.blendMode;
 
@@ -203,7 +192,6 @@ export class TextureDemo extends PostProcessingDemo {
 		folder.add(params.uv, "enabled").onChange(() => {
 
 			effect.uvTransform = params.uv.enabled;
-			pass.recompile();
 
 		});
 
@@ -229,8 +217,7 @@ export class TextureDemo extends PostProcessingDemo {
 
 		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-			blendMode.blendFunction = Number(params["blend mode"]);
-			pass.recompile();
+			blendMode.setBlendFunction(Number(params["blend mode"]));
 
 		});
 

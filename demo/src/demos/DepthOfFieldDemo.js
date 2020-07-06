@@ -272,14 +272,13 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 
 			const mode = Number(params["render mode"]);
 
-			depthEffect.blendMode.blendFunction = (mode === RenderMode.DEPTH) ? BlendFunction.NORMAL : BlendFunction.SKIP;
-			cocTextureEffect.blendMode.blendFunction = (mode === RenderMode.COC) ? BlendFunction.NORMAL : BlendFunction.SKIP;
-			vignetteEffect.blendMode.blendFunction = (mode === RenderMode.DEFAULT && params.vignette.enabled) ? BlendFunction.NORMAL : BlendFunction.SKIP;
+			depthEffect.blendMode.setBlendFunction((mode === RenderMode.DEPTH) ? BlendFunction.NORMAL : BlendFunction.SKIP);
+			cocTextureEffect.blendMode.setBlendFunction((mode === RenderMode.COC) ? BlendFunction.NORMAL : BlendFunction.SKIP);
+			vignetteEffect.blendMode.setBlendFunction((mode === RenderMode.DEFAULT && params.vignette.enabled) ? BlendFunction.NORMAL : BlendFunction.SKIP);
 
 			smaaPass.enabled = (mode === RenderMode.DEFAULT);
 			effectPass.encodeOutput = (mode === RenderMode.DEFAULT);
 			effectPass.renderToScreen = (mode !== RenderMode.DEFAULT);
-			effectPass.recompile();
 
 		}
 
@@ -323,12 +322,11 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 
 		folder.add(params.vignette, "enabled").onChange(() => {
 
-			vignetteEffect.blendMode.blendFunction = params.vignette.enabled ? BlendFunction.NORMAL : BlendFunction.SKIP;
-			effectPass.recompile();
+			vignetteEffect.blendMode.setBlendFunction(params.vignette.enabled ? BlendFunction.NORMAL : BlendFunction.SKIP);
 
 		});
 
-		folder.add(vignetteEffect, "eskil").onChange(() => effectPass.recompile());
+		folder.add(vignetteEffect, "eskil");
 
 		folder.add(params.vignette, "offset").min(0.0).max(1.0).step(0.001).onChange(() => {
 
@@ -350,8 +348,7 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 
 		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-			blendMode.blendFunction = Number(params["blend mode"]);
-			effectPass.recompile();
+			blendMode.setBlendFunction(Number(params["blend mode"]));
 
 		});
 

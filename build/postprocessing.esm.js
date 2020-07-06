@@ -1,10 +1,10 @@
 /**
- * postprocessing v6.15.1 build Mon Jun 29 2020
+ * postprocessing v6.16.0 build Mon Jul 06 2020
  * https://github.com/vanruesc/postprocessing
  * Copyright 2020 Raoul van Rüschen
  * @license Zlib
  */
-import { ShaderMaterial, Uniform, Vector2 as Vector2$1, PerspectiveCamera, Matrix4, Camera, Scene, Mesh, BufferGeometry, BufferAttribute, WebGLRenderTarget, LinearFilter, UnsignedByteType, RGBFormat, Color, MeshDepthMaterial, RGBADepthPacking, NearestFilter, FloatType, MeshNormalMaterial, WebGLMultisampleRenderTarget, DepthTexture, DepthStencilFormat, UnsignedInt248Type, UnsignedIntType, RGBAFormat, DataTexture, LuminanceFormat, RedFormat, RGFormat, Loader, LoadingManager, RepeatWrapping, Vector3, Vector4, MeshBasicMaterial, Texture, sRGBEncoding, LinearEncoding, Matrix3, LinearMipmapLinearFilter, LinearMipMapLinearFilter } from 'three';
+import { ShaderMaterial, Uniform, Vector2 as Vector2$1, PerspectiveCamera, Matrix4, Camera, Scene, Mesh, BufferGeometry, BufferAttribute, WebGLRenderTarget, LinearFilter, UnsignedByteType, RGBFormat, Color, MeshDepthMaterial, RGBADepthPacking, NearestFilter, FloatType, EventDispatcher, MeshNormalMaterial, WebGLMultisampleRenderTarget, DepthTexture, DepthStencilFormat, UnsignedInt248Type, UnsignedIntType, RGBAFormat, DataTexture, LuminanceFormat, RedFormat, RGFormat, Loader, LoadingManager, RepeatWrapping, Vector3, Vector4, MeshBasicMaterial, Texture, sRGBEncoding, LinearEncoding, Matrix3, LinearMipmapLinearFilter, LinearMipMapLinearFilter } from 'three';
 
 /**
  * A color channel enumeration.
@@ -2479,6 +2479,8 @@ class Pass {
 		this.needsSwap = true;
 
 		/**
+		 * Only relevant for subclassing.
+		 *
 		 * Indicates whether the {@link EffectComposer} should prepare a depth
 		 * texture for this pass.
 		 *
@@ -2673,11 +2675,6 @@ class Pass {
 	/**
 	 * Performs a shallow search for disposable properties and deletes them. The
 	 * pass will be inoperative after this method was called!
-	 *
-	 * Disposable objects:
-	 *  - WebGLRenderTarget
-	 *  - Material
-	 *  - Texture
 	 *
 	 * The {@link EffectComposer} calls this method when it is being destroyed.
 	 * You may, however, use it independently to free memory when you are certain
@@ -4116,7 +4113,7 @@ const blendFunctions = new Map([
  * A blend mode.
  */
 
-class BlendMode {
+class BlendMode extends EventDispatcher {
 
 	/**
 	 * Constructs a new blend mode.
@@ -4127,10 +4124,13 @@ class BlendMode {
 
 	constructor(blendFunction, opacity = 1.0) {
 
+		super();
+
 		/**
 		 * The blend function.
 		 *
 		 * @type {BlendFunction}
+		 * @private
 		 */
 
 		this.blendFunction = blendFunction;
@@ -4142,6 +4142,31 @@ class BlendMode {
 		 */
 
 		this.opacity = new Uniform(opacity);
+
+	}
+
+	/**
+	 * Returns the blend function.
+	 *
+	 * @return {BlendFunction} The blend function.
+	 */
+
+	getBlendFunction() {
+
+		return this.blendFunction;
+
+	}
+
+	/**
+	 * Sets the blend function.
+	 *
+	 * @param {BlendFunction} blendFunction - The blend function.
+	 */
+
+	setBlendFunction(blendFunction) {
+
+		this.blendFunction = blendFunction;
+		this.dispatchEvent({ type: "change" });
 
 	}
 
@@ -4169,7 +4194,7 @@ class BlendMode {
  * @implements {Disposable}
  */
 
-class Effect {
+class Effect extends EventDispatcher {
 
 	/**
 	 * Constructs a new effect.
@@ -4194,6 +4219,8 @@ class Effect {
 		vertexShader = null
 	} = {}) {
 
+		super();
+
 		/**
 		 * The name of this effect.
 		 *
@@ -4205,10 +4232,8 @@ class Effect {
 		/**
 		 * The effect attributes.
 		 *
-		 * Effects that have the same attributes will be executed in the order in
-		 * which they were registered. Some attributes imply a higher priority.
-		 *
 		 * @type {EffectAttribute}
+		 * @private
 		 */
 
 		this.attributes = attributes;
@@ -4217,6 +4242,7 @@ class Effect {
 		 * The fragment shader.
 		 *
 		 * @type {String}
+		 * @private
 		 */
 
 		this.fragmentShader = fragmentShader;
@@ -4225,6 +4251,7 @@ class Effect {
 		 * The vertex shader.
 		 *
 		 * @type {String}
+		 * @private
 		 */
 
 		this.vertexShader = vertexShader;
@@ -4232,7 +4259,7 @@ class Effect {
 		/**
 		 * Preprocessor macro definitions.
 		 *
-		 * You'll need to call {@link EffectPass#recompile} after changing a macro.
+		 * Call {@link Effect.setChanged} after changing macro definitions.
 		 *
 		 * @type {Map<String, String>}
 		 */
@@ -4243,7 +4270,9 @@ class Effect {
 		 * Shader uniforms.
 		 *
 		 * You may freely modify the values of these uniforms at runtime. However,
-		 * uniforms must not be removed or added after the effect was created.
+		 * uniforms should not be removed or added after the effect was created.
+		 *
+		 * Call {@link Effect.setChanged} after adding or removing uniforms.
 		 *
 		 * @type {Map<String, Uniform>}
 		 */
@@ -4253,8 +4282,7 @@ class Effect {
 		/**
 		 * WebGL extensions that are required by this effect.
 		 *
-		 * You'll need to call {@link EffectPass#recompile} after adding or removing
-		 * an extension.
+		 * Call {@link Effect.setChanged} after adding or removing extensions.
 		 *
 		 * @type {Set<WebGLExtension>}
 		 */
@@ -4267,14 +4295,108 @@ class Effect {
 		 * The result of this effect will be blended with the result of the previous
 		 * effect using this blend mode.
 		 *
-		 * Feel free to adjust the opacity of the blend mode at runtime. However,
-		 * you'll need to call {@link EffectPass#recompile} if you change the blend
-		 * function.
-		 *
 		 * @type {BlendMode}
 		 */
 
 		this.blendMode = new BlendMode(blendFunction);
+		this.blendMode.addEventListener("change", (event) => this.setChanged());
+
+	}
+
+	/**
+	 * Informs the associated {@link EffectPass} that this effect has changed in
+	 * a way that requires a shader recompilation.
+	 *
+	 * Call this method after changing macro definitions or extensions and after
+	 * adding or removing uniforms.
+	 *
+	 * @protected
+	 */
+
+	setChanged() {
+
+		this.dispatchEvent({ type: "change" });
+
+	}
+
+	/**
+	 * Returns the effect attributes.
+	 *
+	 * @return {EffectAttribute} The attributes.
+	 */
+
+	getAttributes() {
+
+		return this.attributes;
+
+	}
+
+	/**
+	 * Sets the effect attributes.
+	 *
+	 * Effects that have the same attributes will be executed in the order in
+	 * which they were registered. Some attributes imply a higher priority.
+	 *
+	 * @protected
+	 * @param {EffectAttribute} attributes - The attributes.
+	 */
+
+	setAttributes(attributes) {
+
+		this.attributes = attributes;
+		this.setChanged();
+
+	}
+
+	/**
+	 * Returns the fragment shader.
+	 *
+	 * @return {String} The fragment shader.
+	 */
+
+	getFragmentShader() {
+
+		return this.fragmentShader;
+
+	}
+
+	/**
+	 * Sets the fragment shader.
+	 *
+	 * @protected
+	 * @param {String} fragmentShader - The fragment shader.
+	 */
+
+	setFragmentShader(fragmentShader) {
+
+		this.fragmentShader = fragmentShader;
+		this.setChanged();
+
+	}
+
+	/**
+	 * Returns the vertex shader.
+	 *
+	 * @return {String} The vertex shader.
+	 */
+
+	getVertexShader() {
+
+		return this.vertexShader;
+
+	}
+
+	/**
+	 * Sets the vertex shader.
+	 *
+	 * @protected
+	 * @param {String} vertexShader - The vertex shader.
+	 */
+
+	setVertexShader(vertexShader) {
+
+		this.vertexShader = vertexShader;
+		this.setChanged();
 
 	}
 
@@ -4347,11 +4469,6 @@ class Effect {
 	 * Performs a shallow search for properties that define a dispose method and
 	 * deletes them. The effect will be inoperative after this method was called!
 	 *
-	 * Disposable objects:
-	 *  - render targets
-	 *  - materials
-	 *  - textures
-	 *
 	 * The {@link EffectPass} calls this method when it is being destroyed. Do not
 	 * call this method directly.
 	 */
@@ -4379,17 +4496,17 @@ class Effect {
  * Attributes can be concatenated using the bitwise OR operator.
  *
  * @type {Object}
- * @property {Number} CONVOLUTION - Describes effects that fetch additional samples from the input buffer. There cannot be more than one effect with this attribute per {@link EffectPass}.
- * @property {Number} DEPTH - Describes effects that require a depth texture.
  * @property {Number} NONE - No attributes. Most effects don't need to specify any attributes.
+ * @property {Number} DEPTH - Describes effects that require a depth texture.
+ * @property {Number} CONVOLUTION - Describes effects that fetch additional samples from the input buffer. There cannot be more than one effect with this attribute per {@link EffectPass}.
  * @example const attributes = EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH;
  */
 
 const EffectAttribute = {
 
-	CONVOLUTION: 2,
+	NONE: 0,
 	DEPTH: 1,
-	NONE: 0
+	CONVOLUTION: 2
 
 };
 
@@ -4492,8 +4609,8 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 	const blendMode = effect.blendMode;
 	const shaders = new Map([
-		["fragment", effect.fragmentShader],
-		["vertex", effect.vertexShader]
+		["fragment", effect.getFragmentShader()],
+		["vertex", effect.getVertexShader()]
 	]);
 
 	const mainImageExists = (shaders.get("fragment") !== undefined && shaders.get("fragment").indexOf("mainImage") >= 0);
@@ -4582,7 +4699,7 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 			uniforms.set(blendOpacity, blendMode.opacity);
 
 			// Blend the result of this effect with the input color.
-			string += "color0 = blend" + blendMode.blendFunction +
+			string += "color0 = blend" + blendMode.getBlendFunction() +
 				"(color0, color1, " + blendOpacity + ");\n\n\t";
 
 			shaderParts.set(Section.FRAGMENT_MAIN_IMAGE,
@@ -4614,6 +4731,8 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
  * An effect pass.
  *
  * Use this pass to combine {@link Effect} instances.
+ *
+ * @implements {EventListener}
  */
 
 class EffectPass extends Pass {
@@ -4766,6 +4885,36 @@ class EffectPass extends Pass {
 	}
 
 	/**
+	 * Compares required resources with device capabilities.
+	 *
+	 * @private
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 */
+
+	verifyResources(renderer) {
+
+		const capabilities = renderer.capabilities;
+		let max = Math.min(capabilities.maxFragmentUniforms, capabilities.maxVertexUniforms);
+
+		if(this.uniforms > max) {
+
+			console.warn("The current rendering context doesn't support more than " +
+				max + " uniforms, but " + this.uniforms + " were defined");
+
+		}
+
+		max = capabilities.maxVaryings;
+
+		if(this.varyings > max) {
+
+			console.warn("The current rendering context doesn't support more than " +
+				max + " varyings, but " + this.varyings + " were defined");
+
+		}
+
+	}
+
+	/**
 	 * Updates the compound shader material.
 	 *
 	 * @private
@@ -4795,18 +4944,19 @@ class EffectPass extends Pass {
 
 		for(const effect of this.effects) {
 
-			if(effect.blendMode.blendFunction === BlendFunction.SKIP) {
+			if(effect.blendMode.getBlendFunction() === BlendFunction.SKIP) {
 
 				// Check if this effect relies on depth and then continue.
-				attributes |= (effect.attributes & EffectAttribute.DEPTH);
+				attributes |= (effect.getAttributes() & EffectAttribute.DEPTH);
 
-			} else if((attributes & EffectAttribute.CONVOLUTION) !== 0 && (effect.attributes & EffectAttribute.CONVOLUTION) !== 0) {
+			} else if((attributes & EffectAttribute.CONVOLUTION) !== 0 &&
+				(effect.getAttributes() & EffectAttribute.CONVOLUTION) !== 0) {
 
 				console.error("Convolution effects cannot be merged", effect);
 
 			} else {
 
-				attributes |= effect.attributes;
+				attributes |= effect.getAttributes();
 
 				result = integrateEffect(("e" + id++), effect, shaderParts, blendModes, defines, uniforms, attributes);
 
@@ -4833,7 +4983,7 @@ class EffectPass extends Pass {
 		for(const blendMode of blendModes.values()) {
 
 			shaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) +
-				blendMode.getShaderCode().replace(blendRegExp, "blend" + blendMode.blendFunction) + "\n");
+				blendMode.getShaderCode().replace(blendRegExp, "blend" + blendMode.getBlendFunction()) + "\n");
 
 		}
 
@@ -4895,17 +5045,27 @@ class EffectPass extends Pass {
 
 		}
 
+		this.needsUpdate = false;
+
 	}
 
 	/**
 	 * Updates the shader material.
 	 *
 	 * Warning: This method triggers a relatively expensive shader recompilation.
+	 *
+	 * @param {WebGLRenderer} [renderer] - The renderer.
 	 */
 
-	recompile() {
+	recompile(renderer) {
 
 		this.updateMaterial();
+
+		if(renderer !== undefined) {
+
+			this.verifyResources(renderer);
+
+		}
 
 	}
 
@@ -4958,6 +5118,12 @@ class EffectPass extends Pass {
 		const material = this.getFullscreenMaterial();
 		const time = material.uniforms.time.value + deltaTime;
 
+		if(this.needsUpdate) {
+
+			this.recompile(renderer);
+
+		}
+
 		for(const effect of this.effects) {
 
 			effect.update(renderer, inputBuffer, deltaTime);
@@ -5004,33 +5170,19 @@ class EffectPass extends Pass {
 
 	initialize(renderer, alpha, frameBufferType) {
 
-		// Initialize effects before building the final shader.
+		this.capabilities = renderer.capabilities;
+
+		// Initialize effects before building the shader.
 		for(const effect of this.effects) {
 
 			effect.initialize(renderer, alpha, frameBufferType);
+			effect.addEventListener("change", (event) => this.handleEvent(event));
 
 		}
 
 		// Initialize the fullscreen material.
 		this.updateMaterial();
-
-		// Compare required resources with capabilities.
-		const capabilities = renderer.capabilities;
-		let max = Math.min(capabilities.maxFragmentUniforms, capabilities.maxVertexUniforms);
-
-		if(this.uniforms > max) {
-
-			console.warn("The current rendering context doesn't support more than " + max + " uniforms, but " + this.uniforms + " were defined");
-
-		}
-
-		max = capabilities.maxVaryings;
-
-		if(this.varyings > max) {
-
-			console.warn("The current rendering context doesn't support more than " + max + " varyings, but " + this.varyings + " were defined");
-
-		}
+		this.verifyResources(renderer);
 
 	}
 
@@ -5047,6 +5199,24 @@ class EffectPass extends Pass {
 		for(const effect of this.effects) {
 
 			effect.dispose();
+
+		}
+
+	}
+
+	/**
+	 * Handles events.
+	 *
+	 * @param {Event} event - An event.
+	 */
+
+	handleEvent(event) {
+
+		switch(event.type) {
+
+			case "change":
+				this.needsUpdate = true;
+				break;
 
 		}
 
@@ -7083,7 +7253,7 @@ class DepthEffect extends Effect {
 	}
 
 	/**
-	 * Indicates whether depth will be inverted.
+	 * Indicates whether depth should be inverted.
 	 *
 	 * @type {Boolean}
 	 */
@@ -7097,14 +7267,26 @@ class DepthEffect extends Effect {
 	/**
 	 * Enables or disables depth inversion.
 	 *
-	 * You'll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Boolean}
 	 */
 
 	set inverted(value) {
 
-		value ? this.defines.set("INVERTED", "1") : this.defines.delete("INVERTED");
+		if(this.inverted !== value) {
+
+			if(value) {
+
+				this.defines.set("INVERTED", "1");
+
+			} else {
+
+				this.defines.delete("INVERTED");
+
+			}
+
+			this.setChanged();
+
+		}
 
 	}
 
@@ -9918,7 +10100,7 @@ class GodRaysEffect extends Effect {
 	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
 	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
 	 * @param {KernelSize} [options.kernelSize=KernelSize.SMALL] - The blur kernel size. Has no effect if blur is disabled.
-	 * @param {Number} [options.blur=true] - Whether the god rays should be blurred to reduce artifacts.
+	 * @param {Boolean} [options.blur=true] - Whether the god rays should be blurred to reduce artifacts.
 	 */
 
 	constructor(camera, lightSource, {
@@ -10691,20 +10873,24 @@ class NoiseEffect extends Effect {
 	/**
 	 * Enables or disables noise premultiplication.
 	 *
-	 * You'll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Boolean}
 	 */
 
 	set premultiply(value) {
 
-		if(value) {
+		if(this.premultiply !== value) {
 
-			this.defines.set("PREMULTIPLY", "1");
+			if(value) {
 
-		} else {
+				this.defines.set("PREMULTIPLY", "1");
 
-			this.defines.delete("PREMULTIPLY");
+			} else {
+
+				this.defines.delete("PREMULTIPLY");
+
+			}
+
+			this.setChanged();
 
 		}
 
@@ -10767,35 +10953,31 @@ class OutlineEffect extends Effect {
 				["edgeStrength", new Uniform(edgeStrength)],
 				["visibleEdgeColor", new Uniform(new Color(visibleEdgeColor))],
 				["hiddenEdgeColor", new Uniform(new Color(hiddenEdgeColor))],
-				["pulse", new Uniform(1.0)]
+				["pulse", new Uniform(1.0)],
+				["patternScale", new Uniform(1.0)],
+				["patternTexture", new Uniform(null)]
 			])
 
 		});
 
-		// Intercept blend function changes.
-		this.blendMode = ((defines) => (new Proxy(this.blendMode, {
+		// Handle alpha blending.
+		this.blendMode.addEventListener("change", (event) => {
 
-			set(target, name, value) {
+			if(this.blendMode.getBlendFunction() === BlendFunction.ALPHA) {
 
-				if(value === BlendFunction.ALPHA) {
+				this.defines.set("ALPHA", "1");
 
-					defines.set("ALPHA", "1");
+			} else {
 
-				} else {
-
-					defines.delete("ALPHA");
-
-				}
-
-				target[name] = value;
-
-				return true;
+				this.defines.delete("ALPHA");
 
 			}
 
-		})))(this.defines);
+			this.setChanged();
 
-		this.blendMode.blendFunction = blendFunction;
+		});
+
+		this.blendMode.setBlendFunction(blendFunction);
 		this.setPatternTexture(patternTexture);
 		this.xRay = xRay;
 
@@ -11116,22 +11298,31 @@ class OutlineEffect extends Effect {
 	/**
 	 * Enables or disables X-Ray outlines.
 	 *
-	 * You'll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Boolean}
 	 */
 
 	set xRay(value) {
 
-		value ? this.defines.set("X_RAY", "1") : this.defines.delete("X_RAY");
+		if(this.xRay !== value) {
+
+			if(value) {
+
+				this.defines.set("X_RAY", "1");
+
+			} else {
+
+				this.defines.delete("X_RAY");
+
+			}
+
+			this.setChanged();
+
+		}
 
 	}
 
 	/**
 	 * Sets the pattern texture.
-	 *
-	 * You'll need to call {@link EffectPass#recompile} after changing the
-	 * texture.
 	 *
 	 * @param {Texture} texture - The new texture.
 	 */
@@ -11143,18 +11334,18 @@ class OutlineEffect extends Effect {
 			texture.wrapS = texture.wrapT = RepeatWrapping;
 
 			this.defines.set("USE_PATTERN", "1");
-			this.uniforms.set("patternScale", new Uniform(1.0));
-			this.uniforms.set("patternTexture", new Uniform(texture));
-			this.vertexShader = vertexShader$9;
+			this.uniforms.get("patternTexture").value = texture;
+			this.setVertexShader(vertexShader$9);
 
 		} else {
 
 			this.defines.delete("USE_PATTERN");
-			this.uniforms.delete("patternScale");
-			this.uniforms.delete("patternTexture");
-			this.vertexShader = null;
+			this.uniforms.get("patternTexture").value = null;
+			this.setVertexShader(null);
 
 		}
+
+		this.setChanged();
 
 	}
 
@@ -11523,7 +11714,8 @@ class RealisticBokehEffect extends Effect {
 				["luminanceGain", new Uniform(luminanceGain)],
 				["bias", new Uniform(bias)],
 				["fringe", new Uniform(fringe)],
-				["maxBlur", new Uniform(maxBlur)]
+				["maxBlur", new Uniform(maxBlur)],
+				["dof", new Uniform(null)]
 			])
 
 		});
@@ -11551,17 +11743,16 @@ class RealisticBokehEffect extends Effect {
 	/**
 	 * Sets the amount of blur iterations.
 	 *
-	 * You'll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Number}
 	 */
 
 	set rings(value) {
 
-		value = Math.floor(value);
+		const r = Math.floor(value);
+		this.defines.set("RINGS_INT", r.toFixed(0));
+		this.defines.set("RINGS_FLOAT", r.toFixed(1));
 
-		this.defines.set("RINGS_INT", value.toFixed(0));
-		this.defines.set("RINGS_FLOAT", value.toFixed(1));
+		this.setChanged();
 
 	}
 
@@ -11580,17 +11771,16 @@ class RealisticBokehEffect extends Effect {
 	/**
 	 * Sets the amount of blur samples per ring.
 	 *
-	 * You'll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Number}
 	 */
 
 	set samples(value) {
 
-		value = Math.floor(value);
+		const s = Math.floor(value);
+		this.defines.set("SAMPLES_INT", s.toFixed(0));
+		this.defines.set("SAMPLES_FLOAT", s.toFixed(1));
 
-		this.defines.set("SAMPLES_INT", value.toFixed(0));
-		this.defines.set("SAMPLES_FLOAT", value.toFixed(1));
+		this.setChanged();
 
 	}
 
@@ -11609,14 +11799,26 @@ class RealisticBokehEffect extends Effect {
 	/**
 	 * Enables or disables focal point highlighting.
 	 *
-	 * You'll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Boolean}
 	 */
 
 	set showFocus(value) {
 
-		value ? this.defines.set("SHOW_FOCUS", "1") : this.defines.delete("SHOW_FOCUS");
+		if(this.showFocus !== value) {
+
+			if(value) {
+
+				this.defines.set("SHOW_FOCUS", "1");
+
+			} else {
+
+				this.defines.delete("SHOW_FOCUS");
+
+			}
+
+			this.setChanged();
+
+		}
 
 	}
 
@@ -11637,22 +11839,26 @@ class RealisticBokehEffect extends Effect {
 	/**
 	 * Enables or disables manual Depth of Field.
 	 *
-	 * You'll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Boolean}
 	 */
 
 	set manualDoF(value) {
 
-		if(value) {
+		if(this.manualDoF !== value) {
 
-			this.defines.set("MANUAL_DOF", "1");
-			this.uniforms.set("dof", new Uniform(new Vector4(0.2, 1.0, 0.2, 2.0)));
+			if(value) {
 
-		} else {
+				this.defines.set("MANUAL_DOF", "1");
+				this.uniforms.get("dof").value = new Vector4(0.2, 1.0, 0.2, 2.0);
 
-			this.defines.delete("MANUAL_DOF");
-			this.uniforms.delete("dof");
+			} else {
+
+				this.defines.delete("MANUAL_DOF");
+				this.uniforms.get("dof").value = null;
+
+			}
+
+			this.setChanged();
 
 		}
 
@@ -11673,14 +11879,26 @@ class RealisticBokehEffect extends Effect {
 	/**
 	 * Enables or disables pentagonal blur.
 	 *
-	 * You'll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Boolean}
 	 */
 
 	set pentagon(value) {
 
-		value ? this.defines.set("PENTAGON", "1") : this.defines.delete("PENTAGON");
+		if(this.pentagon !== value) {
+
+			if(value) {
+
+				this.defines.set("PENTAGON", "1");
+
+			} else {
+
+				this.defines.delete("PENTAGON");
+
+			}
+
+			this.setChanged();
+
+		}
 
 	}
 
@@ -12362,7 +12580,7 @@ class SMAAEffect extends Effect {
 
 		if(edgeDetectionMode === EdgeDetectionMode.DEPTH) {
 
-			this.attributes |= EffectAttribute.DEPTH;
+			this.setAttributes(this.getAttributes() | EffectAttribute.DEPTH);
 
 		}
 
@@ -12651,7 +12869,16 @@ const SMAAPreset = {
 
 };
 
-var fragmentShader$A = "uniform sampler2D aoBuffer;uniform float luminanceInfluence;\n#ifdef DEPTH_AWARE_UPSAMPLING\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D normalDepthBuffer;\n#else\nuniform mediump sampler2D normalDepthBuffer;\n#endif\n#endif\nvoid mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){float aoLinear=texture2D(aoBuffer,uv).r;\n#if defined(DEPTH_AWARE_UPSAMPLING) && __VERSION__ == 300\nvec4 normalDepth[4]=vec4[](textureOffset(normalDepthBuffer,uv,ivec2(0,0)),textureOffset(normalDepthBuffer,uv,ivec2(0,1)),textureOffset(normalDepthBuffer,uv,ivec2(1,0)),textureOffset(normalDepthBuffer,uv,ivec2(1,1)));float dot01=dot(normalDepth[0].rgb,normalDepth[1].rgb);float dot02=dot(normalDepth[0].rgb,normalDepth[2].rgb);float dot03=dot(normalDepth[0].rgb,normalDepth[3].rgb);float minDot=min(dot01,min(dot02,dot03));float s=step(THRESHOLD,minDot);float smallestDistance=1.0;int index;for(int i=0;i<4;++i){float distance=abs(depth-normalDepth[i].a);if(distance<smallestDistance){smallestDistance=distance;index=i;}}ivec2 offsets[4]=ivec2[](ivec2(0,0),ivec2(0,1),ivec2(1,0),ivec2(1,1));ivec2 coord=ivec2(uv*vec2(textureSize(aoBuffer,0)))+offsets[index];float aoNearest=texelFetch(aoBuffer,coord,0).r;float ao=mix(aoNearest,aoLinear,s);\n#else\nfloat ao=aoLinear;\n#endif\nfloat l=linearToRelativeLuminance(inputColor.rgb);ao=mix(ao,1.0,l*luminanceInfluence);outputColor=vec4(vec3(ao),inputColor.a);}";
+var fragmentShader$A = "uniform sampler2D aoBuffer;uniform float luminanceInfluence;\n#ifdef DEPTH_AWARE_UPSAMPLING\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D normalDepthBuffer;\n#else\nuniform mediump sampler2D normalDepthBuffer;\n#endif\n#endif\n#ifdef COLORIZE\nuniform vec3 color;\n#endif\nvoid mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){float aoLinear=texture2D(aoBuffer,uv).r;\n#if defined(DEPTH_AWARE_UPSAMPLING) && __VERSION__ == 300\nvec4 normalDepth[4]=vec4[](textureOffset(normalDepthBuffer,uv,ivec2(0,0)),textureOffset(normalDepthBuffer,uv,ivec2(0,1)),textureOffset(normalDepthBuffer,uv,ivec2(1,0)),textureOffset(normalDepthBuffer,uv,ivec2(1,1)));float dot01=dot(normalDepth[0].rgb,normalDepth[1].rgb);float dot02=dot(normalDepth[0].rgb,normalDepth[2].rgb);float dot03=dot(normalDepth[0].rgb,normalDepth[3].rgb);float minDot=min(dot01,min(dot02,dot03));float s=step(THRESHOLD,minDot);float smallestDistance=1.0;int index;for(int i=0;i<4;++i){float distance=abs(depth-normalDepth[i].a);if(distance<smallestDistance){smallestDistance=distance;index=i;}}ivec2 offsets[4]=ivec2[](ivec2(0,0),ivec2(0,1),ivec2(1,0),ivec2(1,1));ivec2 coord=ivec2(uv*vec2(textureSize(aoBuffer,0)))+offsets[index];float aoNearest=texelFetch(aoBuffer,coord,0).r;float ao=mix(aoNearest,aoLinear,s);\n#else\nfloat ao=aoLinear;\n#endif\nfloat l=linearToRelativeLuminance(inputColor.rgb);ao=mix(ao,1.0,l*luminanceInfluence);\n#ifdef COLORIZE\noutputColor=vec4(1.0-(1.0-ao)*(1.0-color),inputColor.a);\n#else\noutputColor=vec4(vec3(ao),inputColor.a);\n#endif\n}";
+
+/**
+ * The size of the generated noise texture.
+ *
+ * @type {Number}
+ * @private
+ */
+
+const NOISE_TEXTURE_SIZE = 64;
 
 /**
  * A Screen Space Ambient Occlusion (SSAO) effect.
@@ -12684,9 +12911,9 @@ class SSAOEffect extends Effect {
 	 * @param {Texture} normalBuffer - A texture that contains the scene normals. May be null if a normalDepthBuffer is provided. See {@link NormalPass}.
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
-	 * @param {Number} [options.distanceScaling=true] - Enables or disables distance-based radius scaling.
-	 * @param {Number} [options.depthAwareUpsampling=true] - Enables or disables depth-aware upsampling. Has no effect if WebGL 2 is not supported.
-	 * @param {Number} [options.normalDepthBuffer=null] - A texture that contains downsampled scene normals and depth. See {@link DepthDownsamplingPass}.
+	 * @param {Boolean} [options.distanceScaling=true] - Enables or disables distance-based radius scaling.
+	 * @param {Boolean} [options.depthAwareUpsampling=true] - Enables or disables depth-aware upsampling. Has no effect if WebGL 2 is not supported.
+	 * @param {Texture} [options.normalDepthBuffer=null] - A texture that contains downsampled scene normals and depth. See {@link DepthDownsamplingPass}.
 	 * @param {Number} [options.samples=9] - The amount of samples per pixel. Should not be a multiple of the ring count.
 	 * @param {Number} [options.rings=7] - The amount of spiral turns in the occlusion sampling pattern. Should be a prime number.
 	 * @param {Number} [options.distanceThreshold=0.97] - A global distance threshold at which the occlusion effect starts to fade out. Range [0.0, 1.0].
@@ -12699,6 +12926,7 @@ class SSAOEffect extends Effect {
 	 * @param {Number} [options.intensity=1.0] - The intensity of the ambient occlusion.
 	 * @param {Number} [options.bias=0.025] - An occlusion bias. Eliminates artifacts caused by depth discontinuities.
 	 * @param {Number} [options.fade=0.01] - Influences the smoothness of the shadows. A lower value results in higher contrast.
+	 * @param {Color} [options.color=null] - The color of the ambient occlusion.
 	 * @param {Number} [options.resolutionScale=1.0] - The resolution scale.
 	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
 	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
@@ -12721,6 +12949,7 @@ class SSAOEffect extends Effect {
 		intensity = 1.0,
 		bias = 0.025,
 		fade = 0.01,
+		color = null,
 		resolutionScale = 1.0,
 		width = Resizer.AUTO_SIZE,
 		height = Resizer.AUTO_SIZE
@@ -12733,7 +12962,9 @@ class SSAOEffect extends Effect {
 
 			uniforms: new Map([
 				["aoBuffer", new Uniform(null)],
+				["normalDepthBuffer", new Uniform(null)],
 				["luminanceInfluence", new Uniform(luminanceInfluence)],
+				["color", new Uniform(null)],
 				["scale", new Uniform(0.0)] // Unused.
 			])
 
@@ -12794,7 +13025,7 @@ class SSAOEffect extends Effect {
 
 		this.ssaoPass = new ShaderPass((() => {
 
-			const noiseTexture = new NoiseTexture(64, 64);
+			const noiseTexture = new NoiseTexture(NOISE_TEXTURE_SIZE, NOISE_TEXTURE_SIZE);
 			noiseTexture.wrapS = noiseTexture.wrapT = RepeatWrapping;
 
 			const material = new SSAOMaterial(camera);
@@ -12811,8 +13042,8 @@ class SSAOEffect extends Effect {
 
 				if(depthAwareUpsampling) {
 
-					this.uniforms.set("normalDepthBuffer", new Uniform(normalDepthBuffer));
-					this.defines.set("DEPTH_AWARE_UPSAMPLING", "1");
+					this.depthAwareUpsampling = depthAwareUpsampling;
+					this.uniforms.get("normalDepthBuffer").value = normalDepthBuffer;
 					this.defines.set("THRESHOLD", "0.997");
 
 				}
@@ -12830,6 +13061,7 @@ class SSAOEffect extends Effect {
 		this.distanceScaling = distanceScaling;
 		this.samples = samples;
 		this.rings = rings;
+		this.color = color;
 
 		// @todo Special case treatment added for backwards-compatibility.
 		this.radius = (radius > 1.0) ? (radius / 100.0) : radius;
@@ -12935,6 +13167,44 @@ class SSAOEffect extends Effect {
 	}
 
 	/**
+	 * Indicates whether depth-aware upsampling is enabled.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get depthAwareUpsampling() {
+
+		return this.defines.has("DEPTH_AWARE_UPSAMPLING");
+
+	}
+
+	/**
+	 * Enables or disables depth-aware upsampling.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set depthAwareUpsampling(value) {
+
+		if(this.depthAwareUpsampling !== value) {
+
+			if(value) {
+
+				this.defines.set("DEPTH_AWARE_UPSAMPLING", "1");
+
+			} else {
+
+				this.defines.delete("DEPTH_AWARE_UPSAMPLING");
+
+			}
+
+			this.setChanged();
+
+		}
+
+	}
+
+	/**
 	 * Indicates whether distance-based radius scaling is enabled.
 	 *
 	 * @type {Boolean}
@@ -12969,6 +13239,59 @@ class SSAOEffect extends Effect {
 			}
 
 			material.needsUpdate = true;
+
+		}
+
+	}
+
+	/**
+	 * The color of the ambient occlusion.
+	 *
+	 * @type {Color}
+	 */
+
+	get color() {
+
+		return this.uniforms.get("color").value;
+
+	}
+
+	/**
+	 * Sets the color of the ambient occlusion.
+	 *
+	 * Set to `null` to disable colorization.
+	 *
+	 * @type {Color}
+	 */
+
+	set color(value) {
+
+		const uniforms = this.uniforms;
+		const defines = this.defines;
+
+		if(value === null) {
+
+			if(defines.has("COLORIZE")) {
+
+				defines.delete("COLORIZE");
+				uniforms.get("color").value = null;
+				this.setChanged();
+
+			}
+
+		} else {
+
+			if(defines.has("COLORIZE")) {
+
+				uniforms.get("color").value.set(value);
+
+			} else {
+
+				defines.set("COLORIZE", "1");
+				uniforms.get("color").value = new Color(value);
+				this.setChanged();
+
+			}
 
 		}
 
@@ -13061,7 +13384,7 @@ class SSAOEffect extends Effect {
 
 		const camera = this.camera;
 		const uniforms = this.ssaoMaterial.uniforms;
-		uniforms.noiseScale.value.set(w, h).divideScalar(64.0);
+		uniforms.noiseScale.value.set(w, h).divideScalar(NOISE_TEXTURE_SIZE);
 		uniforms.inverseProjectionMatrix.value.getInverse(camera.projectionMatrix);
 		uniforms.projectionMatrix.value.copy(camera.projectionMatrix);
 
@@ -13102,7 +13425,9 @@ class TextureEffect extends Effect {
 			]),
 
 			uniforms: new Map([
-				["texture", new Uniform(null)]
+				["texture", new Uniform(null)],
+				["scale", new Uniform(1.0)],
+				["uvTransform", new Uniform(null)]
 			])
 
 		});
@@ -13127,29 +13452,39 @@ class TextureEffect extends Effect {
 	/**
 	 * Sets the texture.
 	 *
-	 * You'll need to call {@link EffectPass#recompile} if you switch to a texture
-	 * that uses a different encoding.
-	 *
 	 * @type {Texture}
 	 */
 
 	set texture(value) {
 
-		this.uniforms.get("texture").value = value;
+		const currentTexture = this.texture;
 
-		if(value !== null) {
+		if(currentTexture !== value) {
 
-			if(value.encoding === sRGBEncoding) {
+			const previousEncoding = (currentTexture !== null) ? currentTexture.encoding : null;
+			this.uniforms.get("texture").value = value;
 
-				this.defines.set("texelToLinear(texel)", "sRGBToLinear(texel)");
+			if(value !== null) {
 
-			} else if(value.encoding === LinearEncoding) {
+				if(value.encoding === sRGBEncoding) {
 
-				this.defines.set("texelToLinear(texel)", "texel");
+					this.defines.set("texelToLinear(texel)", "sRGBToLinear(texel)");
 
-			} else {
+				} else if(value.encoding === LinearEncoding) {
 
-				console.log("Unsupported encoding: " + value.encoding);
+					this.defines.set("texelToLinear(texel)", "texel");
+
+				} else {
+
+					console.log("Unsupported encoding: " + value.encoding);
+
+				}
+
+				if(previousEncoding !== value.encoding) {
+
+					this.setChanged();
+
+				}
 
 			}
 
@@ -13175,31 +13510,33 @@ class TextureEffect extends Effect {
 	/**
 	 * Enables or disables aspect correction.
 	 *
-	 * You'll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Number}
 	 * @deprecated Use uvTransform instead for full control over the texture coordinates.
 	 */
 
 	set aspectCorrection(value) {
 
-		if(value) {
+		if(this.aspectCorrection !== value) {
 
-			if(this.uvTransform) {
+			if(value) {
 
-				this.uvTransform = false;
+				if(this.uvTransform) {
+
+					this.uvTransform = false;
+
+				}
+
+				this.defines.set("ASPECT_CORRECTION", "1");
+				this.setVertexShader(vertexShader$c);
+
+			} else {
+
+				this.defines.delete("ASPECT_CORRECTION");
+				this.setVertexShader(null);
 
 			}
 
-			this.defines.set("ASPECT_CORRECTION", "1");
-			this.uniforms.set("scale", new Uniform(1.0));
-			this.vertexShader = vertexShader$c;
-
-		} else {
-
-			this.defines.delete("ASPECT_CORRECTION");
-			this.uniforms.delete("scale");
-			this.vertexShader = null;
+			this.setChanged();
 
 		}
 
@@ -13223,30 +13560,34 @@ class TextureEffect extends Effect {
 	/**
 	 * Enables or disables texture UV transformation.
 	 *
-	 * You'll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Boolean}
 	 */
 
 	set uvTransform(value) {
 
-		if(value) {
+		if(this.uvTransform !== value) {
 
-			if(this.aspectCorrection) {
+			if(value) {
 
-				this.aspectCorrection = false;
+				if(this.aspectCorrection) {
+
+					this.aspectCorrection = false;
+
+				}
+
+				this.defines.set("UV_TRANSFORM", "1");
+				this.uniforms.get("uvTransform").value = new Matrix3();
+				this.setVertexShader(vertexShader$c);
+
+			} else {
+
+				this.defines.delete("UV_TRANSFORM");
+				this.uniforms.get("uvTransform").value = null;
+				this.setVertexShader(null);
 
 			}
 
-			this.defines.set("UV_TRANSFORM", "1");
-			this.uniforms.set("uvTransform", new Uniform(new Matrix3()));
-			this.vertexShader = vertexShader$c;
-
-		} else {
-
-			this.defines.delete("UV_TRANSFORM");
-			this.uniforms.delete("uvTransform");
-			this.vertexShader = null;
+			this.setChanged();
 
 		}
 
@@ -13255,9 +13596,6 @@ class TextureEffect extends Effect {
 	/**
 	 * Sets the swizzles that will be applied to the `r`, `g`, `b`, and `a`
 	 * components of a texel before it is written to the output color.
-	 *
-	 * You'll need to call {@link EffectPass#recompile} after changing the
-	 * texture swizzles.
 	 *
 	 * @param {ColorChannel} r - The swizzle for the `r` component.
 	 * @param {ColorChannel} [g=r] - The swizzle for the `g` component.
@@ -13278,6 +13616,7 @@ class TextureEffect extends Effect {
 		}
 
 		this.defines.set("TEXEL", "texel" + swizzle);
+		this.setChanged();
 
 	}
 
@@ -13452,8 +13791,6 @@ class ToneMappingEffect extends Effect {
 	/**
 	 * Sets the resolution of the internal render targets.
 	 *
-	 * You'll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Number}
 	 */
 
@@ -13461,13 +13798,15 @@ class ToneMappingEffect extends Effect {
 
 		// Round the given value to the next power of two.
 		const exponent = Math.max(0, Math.ceil(Math.log2(value)));
-		value = Math.pow(2, exponent);
+		const size = Math.pow(2, exponent);
 
-		this.renderTargetLuminance.setSize(value, value);
-		this.renderTargetPrevious.setSize(value, value);
-		this.renderTargetAdapted.setSize(value, value);
+		this.renderTargetLuminance.setSize(size, size);
+		this.renderTargetPrevious.setSize(size, size);
+		this.renderTargetAdapted.setSize(size, size);
 
-		this.adaptiveLuminancePass.getFullscreenMaterial().defines.MIP_LEVEL_1X1 = exponent.toFixed(1);
+		const material = this.adaptiveLuminancePass.getFullscreenMaterial();
+		material.defines.MIP_LEVEL_1X1 = exponent.toFixed(1);
+		material.needsUpdate = true;
 
 	}
 
@@ -13486,22 +13825,26 @@ class ToneMappingEffect extends Effect {
 	/**
 	 * Enables or disables adaptive luminance.
 	 *
-	 * You'll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Boolean}
 	 */
 
 	set adaptive(value) {
 
-		if(value) {
+		if(this.adaptive !== value) {
 
-			this.defines.set("ADAPTED_LUMINANCE", "1");
-			this.uniforms.get("luminanceMap").value = this.renderTargetAdapted.texture;
+			if(value) {
 
-		} else {
+				this.defines.set("ADAPTED_LUMINANCE", "1");
+				this.uniforms.get("luminanceMap").value = this.renderTargetAdapted.texture;
 
-			this.defines.delete("ADAPTED_LUMINANCE");
-			this.uniforms.get("luminanceMap").value = null;
+			} else {
+
+				this.defines.delete("ADAPTED_LUMINANCE");
+				this.uniforms.get("luminanceMap").value = null;
+
+			}
+
+			this.setChanged();
 
 		}
 
@@ -13669,20 +14012,24 @@ class VignetteEffect extends Effect {
 	/**
 	 * Enables or disables Eskil's vignette technique.
 	 *
-	 * You'll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Boolean}
 	 */
 
 	set eskil(value) {
 
-		if(value) {
+		if(this.eskil !== value) {
 
-			this.defines.set("ESKIL", "1");
+			if(value) {
 
-		} else {
+				this.defines.set("ESKIL", "1");
 
-			this.defines.delete("ESKIL");
+			} else {
+
+				this.defines.delete("ESKIL");
+
+			}
+
+			this.setChanged();
 
 		}
 

@@ -106,7 +106,7 @@ export class SMAAEffect extends Effect {
 
 		if(edgeDetectionMode === EdgeDetectionMode.DEPTH) {
 
-			this.attributes |= EffectAttribute.DEPTH;
+			this.setAttributes(this.getAttributes() | EffectAttribute.DEPTH);
 
 		}
 

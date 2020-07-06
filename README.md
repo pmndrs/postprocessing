@@ -21,19 +21,30 @@ npm install three postprocessing
 
 ## Usage
 
-Please refer to the [usage example](https://github.com/mrdoob/three.js/blob/master/README.md) of three.js for information about how to setup the renderer, scene and camera.
+Post processing introduces the concept of passes and effects to extend the common rendering workflow with fullscreen image manipulation tools. The following WebGL attributes should be used for an optimal post processing workflow:
 
 ```js
-import { Clock, PerspectiveCamera, Scene, WebGLRenderer } from "three";
+import { WebGLRenderer } from "three";
+
+const renderer = new WebGLRenderer({
+	powerPreference: "high-performance",
+	antialias: false,
+	stencil: false,
+	depth: false
+});
+```
+
+The [EffectComposer](https://vanruesc.github.io/postprocessing/public/docs/class/src/core/EffectComposer.js~EffectComposer.html) manages and runs passes. It is common practice to use a [RenderPass](https://vanruesc.github.io/postprocessing/public/docs/class/src/passes/RenderPass.js~RenderPass.html) as the first pass to automatically clear the buffers and render a scene for further processing. Fullscreen image effects are rendered via the [EffectPass](https://vanruesc.github.io/postprocessing/public/docs/class/src/passes/EffectPass.js~EffectPass.html). Please refer to the [usage example](https://github.com/mrdoob/three.js/blob/master/README.md) of three.js for more information on how to setup the renderer, scene and camera.
+
+```js
 import { BloomEffect, EffectComposer, EffectPass, RenderPass } from "postprocessing";
+import { Clock } from "three";
 
-const composer = new EffectComposer(new WebGLRenderer());
-const camera = new PerspectiveCamera();
-const scene = new Scene();
-const clock = new Clock();
-
+const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
 composer.addPass(new EffectPass(camera, new BloomEffect()));
+
+const clock = new Clock();
 
 (function render() {
 

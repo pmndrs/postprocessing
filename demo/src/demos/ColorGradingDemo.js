@@ -249,8 +249,7 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 		folder.add(params.colorAverage, "blend mode", BlendFunction).onChange(() => {
 
-			colorAverageEffect.blendMode.blendFunction = Number(params.colorAverage["blend mode"]);
-			pass.recompile();
+			colorAverageEffect.blendMode.setBlendFunction(Number(params.colorAverage["blend mode"]));
 
 		});
 
@@ -270,8 +269,7 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 		folder.add(params.sepia, "blend mode", BlendFunction).onChange(() => {
 
-			sepiaEffect.blendMode.blendFunction = Number(params.sepia["blend mode"]);
-			pass.recompile();
+			sepiaEffect.blendMode.setBlendFunction(Number(params.sepia["blend mode"]));
 
 		});
 
@@ -297,8 +295,7 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 		folder.add(params.brightnessContrast, "blend mode", BlendFunction).onChange(() => {
 
-			brightnessContrastEffect.blendMode.blendFunction = Number(params.brightnessContrast["blend mode"]);
-			pass.recompile();
+			brightnessContrastEffect.blendMode.setBlendFunction(Number(params.brightnessContrast["blend mode"]));
 
 		});
 
@@ -324,8 +321,7 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 		folder.add(params.hueSaturation, "blend mode", BlendFunction).onChange(() => {
 
-			hueSaturationEffect.blendMode.blendFunction = Number(params.hueSaturation["blend mode"]);
-			pass.recompile();
+			hueSaturationEffect.blendMode.setBlendFunction(Number(params.hueSaturation["blend mode"]));
 
 		});
 

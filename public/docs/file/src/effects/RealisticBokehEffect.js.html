@@ -184,7 +184,8 @@ export class RealisticBokehEffect extends Effect {
 				[&quot;luminanceGain&quot;, new Uniform(luminanceGain)],
 				[&quot;bias&quot;, new Uniform(bias)],
 				[&quot;fringe&quot;, new Uniform(fringe)],
-				[&quot;maxBlur&quot;, new Uniform(maxBlur)]
+				[&quot;maxBlur&quot;, new Uniform(maxBlur)],
+				[&quot;dof&quot;, new Uniform(null)]
 			])
 
 		});
@@ -212,17 +213,16 @@ export class RealisticBokehEffect extends Effect {
 	/**
 	 * Sets the amount of blur iterations.
 	 *
-	 * You&apos;ll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Number}
 	 */
 
 	set rings(value) {
 
-		value = Math.floor(value);
+		const r = Math.floor(value);
+		this.defines.set(&quot;RINGS_INT&quot;, r.toFixed(0));
+		this.defines.set(&quot;RINGS_FLOAT&quot;, r.toFixed(1));
 
-		this.defines.set(&quot;RINGS_INT&quot;, value.toFixed(0));
-		this.defines.set(&quot;RINGS_FLOAT&quot;, value.toFixed(1));
+		this.setChanged();
 
 	}
 
@@ -241,17 +241,16 @@ export class RealisticBokehEffect extends Effect {
 	/**
 	 * Sets the amount of blur samples per ring.
 	 *
-	 * You&apos;ll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Number}
 	 */
 
 	set samples(value) {
 
-		value = Math.floor(value);
+		const s = Math.floor(value);
+		this.defines.set(&quot;SAMPLES_INT&quot;, s.toFixed(0));
+		this.defines.set(&quot;SAMPLES_FLOAT&quot;, s.toFixed(1));
 
-		this.defines.set(&quot;SAMPLES_INT&quot;, value.toFixed(0));
-		this.defines.set(&quot;SAMPLES_FLOAT&quot;, value.toFixed(1));
+		this.setChanged();
 
 	}
 
@@ -270,14 +269,26 @@ export class RealisticBokehEffect extends Effect {
 	/**
 	 * Enables or disables focal point highlighting.
 	 *
-	 * You&apos;ll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Boolean}
 	 */
 
 	set showFocus(value) {
 
-		value ? this.defines.set(&quot;SHOW_FOCUS&quot;, &quot;1&quot;) : this.defines.delete(&quot;SHOW_FOCUS&quot;);
+		if(this.showFocus !== value) {
+
+			if(value) {
+
+				this.defines.set(&quot;SHOW_FOCUS&quot;, &quot;1&quot;);
+
+			} else {
+
+				this.defines.delete(&quot;SHOW_FOCUS&quot;);
+
+			}
+
+			this.setChanged();
+
+		}
 
 	}
 
@@ -298,22 +309,26 @@ export class RealisticBokehEffect extends Effect {
 	/**
 	 * Enables or disables manual Depth of Field.
 	 *
-	 * You&apos;ll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Boolean}
 	 */
 
 	set manualDoF(value) {
 
-		if(value) {
+		if(this.manualDoF !== value) {
 
-			this.defines.set(&quot;MANUAL_DOF&quot;, &quot;1&quot;);
-			this.uniforms.set(&quot;dof&quot;, new Uniform(new Vector4(0.2, 1.0, 0.2, 2.0)));
+			if(value) {
 
-		} else {
+				this.defines.set(&quot;MANUAL_DOF&quot;, &quot;1&quot;);
+				this.uniforms.get(&quot;dof&quot;).value = new Vector4(0.2, 1.0, 0.2, 2.0);
 
-			this.defines.delete(&quot;MANUAL_DOF&quot;);
-			this.uniforms.delete(&quot;dof&quot;);
+			} else {
+
+				this.defines.delete(&quot;MANUAL_DOF&quot;);
+				this.uniforms.get(&quot;dof&quot;).value = null;
+
+			}
+
+			this.setChanged();
 
 		}
 
@@ -334,14 +349,26 @@ export class RealisticBokehEffect extends Effect {
 	/**
 	 * Enables or disables pentagonal blur.
 	 *
-	 * You&apos;ll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Boolean}
 	 */
 
 	set pentagon(value) {
 
-		value ? this.defines.set(&quot;PENTAGON&quot;, &quot;1&quot;) : this.defines.delete(&quot;PENTAGON&quot;);
+		if(this.pentagon !== value) {
+
+			if(value) {
+
+				this.defines.set(&quot;PENTAGON&quot;, &quot;1&quot;);
+
+			} else {
+
+				this.defines.delete(&quot;PENTAGON&quot;);
+
+			}
+
+			this.setChanged();
+
+		}
 
 	}
 

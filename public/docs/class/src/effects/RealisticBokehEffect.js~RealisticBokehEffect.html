@@ -131,7 +131,7 @@
 
   
   
-  <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span><a href="class/src/effects/Effect.js~Effect.html">Effect</a></span> &#x2192; RealisticBokehEffect</div></div>
+  <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span>three~EventDispatcher</span> &#x2192; <span><a href="class/src/effects/Effect.js~Effect.html">Effect</a></span> &#x2192; RealisticBokehEffect</div></div>
   
   
   
@@ -512,35 +512,6 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-member-attributes">attributes</a></span></span><span class="code" data-ice="signature">: <span><a href="variable/index.html#static-variable-EffectAttribute">EffectAttribute</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>The effect attributes.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
           <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-member-blendMode">blendMode</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/effects/blending/BlendMode.js~BlendMode.html">BlendMode</a></span></span>
         </p>
       </div>
@@ -628,35 +599,6 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-member-fragmentShader">fragmentShader</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>The fragment shader.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
           <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-member-name">name</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
         </p>
       </div>
@@ -715,13 +657,14 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-member-vertexShader">vertexShader</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-dispose">dispose</a></span></span><span class="code" data-ice="signature">()</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>The vertex shader.</p>
+        <div data-ice="description"><p>Performs a shallow search for properties that define a dispose method and
+deletes them.</p>
 </div>
       </div>
     </td>
@@ -744,14 +687,71 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-dispose">dispose</a></span></span><span class="code" data-ice="signature">()</span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-getAttributes">getAttributes</a></span></span><span class="code" data-ice="signature">(): <span><a href="variable/index.html#static-variable-EffectAttribute">EffectAttribute</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Performs a shallow search for properties that define a dispose method and
-deletes them.</p>
+        <div data-ice="description"><p>Returns the effect attributes.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-getFragmentShader">getFragmentShader</a></span></span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Returns the fragment shader.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-getVertexShader">getVertexShader</a></span></span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Returns the vertex shader.</p>
 </div>
       </div>
     </td>
@@ -868,6 +868,123 @@ deletes them.</p>
         
         
         <div data-ice="description"><p>Updates the effect by performing supporting operations.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">protected</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-setAttributes">setAttributes</a></span></span><span class="code" data-ice="signature">(attributes: <span><a href="variable/index.html#static-variable-EffectAttribute">EffectAttribute</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the effect attributes.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">protected</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-setChanged">setChanged</a></span></span><span class="code" data-ice="signature">()</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Informs the associated <span><a href="class/src/passes/EffectPass.js~EffectPass.html">EffectPass</a></span> that this effect has changed in
+a way that requires a shader recompilation.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">protected</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-setFragmentShader">setFragmentShader</a></span></span><span class="code" data-ice="signature">(fragmentShader: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the fragment shader.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">protected</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-setVertexShader">setVertexShader</a></span></span><span class="code" data-ice="signature">(vertexShader: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the vertex shader.</p>
 </div>
       </div>
     </td>
@@ -1072,7 +1189,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber175">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber186">source</a></span></span>
     </span>
   </h3>
 
@@ -1117,7 +1234,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber189">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber198">source</a></span></span>
     </span>
   </h3>
 
@@ -1125,7 +1242,6 @@ deletes them.</p>
   
   
   <div data-ice="description"><p>Enables or disables manual Depth of Field.</p>
-<p>You&apos;ll need to call <span><a href="class/src/passes/EffectPass.js~EffectPass.html#instance-method-recompile">EffectPass#recompile</a></span> after changing this value.</p>
 </div>
 
   
@@ -1162,7 +1278,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber211">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber226">source</a></span></span>
     </span>
   </h3>
 
@@ -1206,7 +1322,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber225">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber238">source</a></span></span>
     </span>
   </h3>
 
@@ -1214,7 +1330,6 @@ deletes them.</p>
   
   
   <div data-ice="description"><p>Enables or disables pentagonal blur.</p>
-<p>You&apos;ll need to call <span><a href="class/src/passes/EffectPass.js~EffectPass.html#instance-method-recompile">EffectPass#recompile</a></span> after changing this value.</p>
 </div>
 
   
@@ -1251,7 +1366,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber89">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber90">source</a></span></span>
     </span>
   </h3>
 
@@ -1295,7 +1410,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber103">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber102">source</a></span></span>
     </span>
   </h3>
 
@@ -1303,7 +1418,6 @@ deletes them.</p>
   
   
   <div data-ice="description"><p>Sets the amount of blur iterations.</p>
-<p>You&apos;ll need to call <span><a href="class/src/passes/EffectPass.js~EffectPass.html#instance-method-recompile">EffectPass#recompile</a></span> after changing this value.</p>
 </div>
 
   
@@ -1384,7 +1498,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber132">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber130">source</a></span></span>
     </span>
   </h3>
 
@@ -1392,7 +1506,6 @@ deletes them.</p>
   
   
   <div data-ice="description"><p>Sets the amount of blur samples per ring.</p>
-<p>You&apos;ll need to call <span><a href="class/src/passes/EffectPass.js~EffectPass.html#instance-method-recompile">EffectPass#recompile</a></span> after changing this value.</p>
 </div>
 
   
@@ -1429,7 +1542,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber147">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber146">source</a></span></span>
     </span>
   </h3>
 
@@ -1473,7 +1586,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber161">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber158">source</a></span></span>
     </span>
   </h3>
 
@@ -1481,7 +1594,6 @@ deletes them.</p>
   
   
   <div data-ice="description"><p>Enables or disables focal point highlighting.</p>
-<p>You&apos;ll need to call <span><a href="class/src/passes/EffectPass.js~EffectPass.html#instance-method-recompile">EffectPass#recompile</a></span> after changing this value.</p>
 </div>
 
   

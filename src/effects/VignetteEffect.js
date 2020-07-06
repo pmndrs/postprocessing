@@ -59,20 +59,24 @@ export class VignetteEffect extends Effect {
 	/**
 	 * Enables or disables Eskil's vignette technique.
 	 *
-	 * You'll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Boolean}
 	 */
 
 	set eskil(value) {
 
-		if(value) {
+		if(this.eskil !== value) {
 
-			this.defines.set("ESKIL", "1");
+			if(value) {
 
-		} else {
+				this.defines.set("ESKIL", "1");
 
-			this.defines.delete("ESKIL");
+			} else {
+
+				this.defines.delete("ESKIL");
+
+			}
+
+			this.setChanged();
 
 		}
 

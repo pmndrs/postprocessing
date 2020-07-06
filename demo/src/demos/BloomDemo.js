@@ -507,10 +507,8 @@ export class BloomDemo extends PostProcessingDemo {
 
 		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-			blendModeA.blendFunction = blendModeB.blendFunction = Number(params["blend mode"]);
-
-			passA.recompile();
-			passB.recompile();
+			blendModeA.setBlendFunction(Number(params["blend mode"]));
+			blendModeB.setBlendFunction(Number(params["blend mode"]));
 
 		});
 

@@ -146,6 +146,8 @@ export class Pass {
 		this.needsSwap = true;
 
 		/**
+		 * Only relevant for subclassing.
+		 *
 		 * Indicates whether the {@link EffectComposer} should prepare a depth
 		 * texture for this pass.
 		 *
@@ -340,11 +342,6 @@ export class Pass {
 	/**
 	 * Performs a shallow search for disposable properties and deletes them. The
 	 * pass will be inoperative after this method was called!
-	 *
-	 * Disposable objects:
-	 *  - WebGLRenderTarget
-	 *  - Material
-	 *  - Texture
 	 *
 	 * The {@link EffectComposer} calls this method when it is being destroyed.
 	 * You may, however, use it independently to free memory when you are certain

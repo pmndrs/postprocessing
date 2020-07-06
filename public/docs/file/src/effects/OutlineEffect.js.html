@@ -185,35 +185,31 @@ export class OutlineEffect extends Effect {
 				[&quot;edgeStrength&quot;, new Uniform(edgeStrength)],
 				[&quot;visibleEdgeColor&quot;, new Uniform(new Color(visibleEdgeColor))],
 				[&quot;hiddenEdgeColor&quot;, new Uniform(new Color(hiddenEdgeColor))],
-				[&quot;pulse&quot;, new Uniform(1.0)]
+				[&quot;pulse&quot;, new Uniform(1.0)],
+				[&quot;patternScale&quot;, new Uniform(1.0)],
+				[&quot;patternTexture&quot;, new Uniform(null)]
 			])
 
 		});
 
-		// Intercept blend function changes.
-		this.blendMode = ((defines) =&gt; (new Proxy(this.blendMode, {
+		// Handle alpha blending.
+		this.blendMode.addEventListener(&quot;change&quot;, (event) =&gt; {
 
-			set(target, name, value) {
+			if(this.blendMode.getBlendFunction() === BlendFunction.ALPHA) {
 
-				if(value === BlendFunction.ALPHA) {
+				this.defines.set(&quot;ALPHA&quot;, &quot;1&quot;);
 
-					defines.set(&quot;ALPHA&quot;, &quot;1&quot;);
+			} else {
 
-				} else {
-
-					defines.delete(&quot;ALPHA&quot;);
-
-				}
-
-				target[name] = value;
-
-				return true;
+				this.defines.delete(&quot;ALPHA&quot;);
 
 			}
 
-		})))(this.defines);
+			this.setChanged();
 
-		this.blendMode.blendFunction = blendFunction;
+		});
+
+		this.blendMode.setBlendFunction(blendFunction);
 		this.setPatternTexture(patternTexture);
 		this.xRay = xRay;
 
@@ -534,22 +530,31 @@ export class OutlineEffect extends Effect {
 	/**
 	 * Enables or disables X-Ray outlines.
 	 *
-	 * You&apos;ll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Boolean}
 	 */
 
 	set xRay(value) {
 
-		value ? this.defines.set(&quot;X_RAY&quot;, &quot;1&quot;) : this.defines.delete(&quot;X_RAY&quot;);
+		if(this.xRay !== value) {
+
+			if(value) {
+
+				this.defines.set(&quot;X_RAY&quot;, &quot;1&quot;);
+
+			} else {
+
+				this.defines.delete(&quot;X_RAY&quot;);
+
+			}
+
+			this.setChanged();
+
+		}
 
 	}
 
 	/**
 	 * Sets the pattern texture.
-	 *
-	 * You&apos;ll need to call {@link EffectPass#recompile} after changing the
-	 * texture.
 	 *
 	 * @param {Texture} texture - The new texture.
 	 */
@@ -561,18 +566,18 @@ export class OutlineEffect extends Effect {
 			texture.wrapS = texture.wrapT = RepeatWrapping;
 
 			this.defines.set(&quot;USE_PATTERN&quot;, &quot;1&quot;);
-			this.uniforms.set(&quot;patternScale&quot;, new Uniform(1.0));
-			this.uniforms.set(&quot;patternTexture&quot;, new Uniform(texture));
-			this.vertexShader = vertexShader;
+			this.uniforms.get(&quot;patternTexture&quot;).value = texture;
+			this.setVertexShader(vertexShader);
 
 		} else {
 
 			this.defines.delete(&quot;USE_PATTERN&quot;);
-			this.uniforms.delete(&quot;patternScale&quot;);
-			this.uniforms.delete(&quot;patternTexture&quot;);
-			this.vertexShader = null;
+			this.uniforms.get(&quot;patternTexture&quot;).value = null;
+			this.setVertexShader(null);
 
 		}
+
+		this.setChanged();
 
 	}
 

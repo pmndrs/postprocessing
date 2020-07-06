@@ -1,4 +1,5 @@
 import {
+	Color,
 	LinearFilter,
 	RepeatWrapping,
 	RGBFormat,
@@ -14,6 +15,15 @@ import { ShaderPass } from "../passes";
 import { Effect, EffectAttribute } from "./Effect.js";
 
 import fragmentShader from "./glsl/ssao/shader.frag";
+
+/**
+ * The size of the generated noise texture.
+ *
+ * @type {Number}
+ * @private
+ */
+
+const NOISE_TEXTURE_SIZE = 64;
 
 /**
  * A Screen Space Ambient Occlusion (SSAO) effect.
@@ -46,9 +56,9 @@ export class SSAOEffect extends Effect {
 	 * @param {Texture} normalBuffer - A texture that contains the scene normals. May be null if a normalDepthBuffer is provided. See {@link NormalPass}.
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
-	 * @param {Number} [options.distanceScaling=true] - Enables or disables distance-based radius scaling.
-	 * @param {Number} [options.depthAwareUpsampling=true] - Enables or disables depth-aware upsampling. Has no effect if WebGL 2 is not supported.
-	 * @param {Number} [options.normalDepthBuffer=null] - A texture that contains downsampled scene normals and depth. See {@link DepthDownsamplingPass}.
+	 * @param {Boolean} [options.distanceScaling=true] - Enables or disables distance-based radius scaling.
+	 * @param {Boolean} [options.depthAwareUpsampling=true] - Enables or disables depth-aware upsampling. Has no effect if WebGL 2 is not supported.
+	 * @param {Texture} [options.normalDepthBuffer=null] - A texture that contains downsampled scene normals and depth. See {@link DepthDownsamplingPass}.
 	 * @param {Number} [options.samples=9] - The amount of samples per pixel. Should not be a multiple of the ring count.
 	 * @param {Number} [options.rings=7] - The amount of spiral turns in the occlusion sampling pattern. Should be a prime number.
 	 * @param {Number} [options.distanceThreshold=0.97] - A global distance threshold at which the occlusion effect starts to fade out. Range [0.0, 1.0].
@@ -61,6 +71,7 @@ export class SSAOEffect extends Effect {
 	 * @param {Number} [options.intensity=1.0] - The intensity of the ambient occlusion.
 	 * @param {Number} [options.bias=0.025] - An occlusion bias. Eliminates artifacts caused by depth discontinuities.
 	 * @param {Number} [options.fade=0.01] - Influences the smoothness of the shadows. A lower value results in higher contrast.
+	 * @param {Color} [options.color=null] - The color of the ambient occlusion.
 	 * @param {Number} [options.resolutionScale=1.0] - The resolution scale.
 	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
 	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
@@ -83,6 +94,7 @@ export class SSAOEffect extends Effect {
 		intensity = 1.0,
 		bias = 0.025,
 		fade = 0.01,
+		color = null,
 		resolutionScale = 1.0,
 		width = Resizer.AUTO_SIZE,
 		height = Resizer.AUTO_SIZE
@@ -95,7 +107,9 @@ export class SSAOEffect extends Effect {
 
 			uniforms: new Map([
 				["aoBuffer", new Uniform(null)],
+				["normalDepthBuffer", new Uniform(null)],
 				["luminanceInfluence", new Uniform(luminanceInfluence)],
+				["color", new Uniform(null)],
 				["scale", new Uniform(0.0)] // Unused.
 			])
 
@@ -156,7 +170,7 @@ export class SSAOEffect extends Effect {
 
 		this.ssaoPass = new ShaderPass((() => {
 
-			const noiseTexture = new NoiseTexture(64, 64);
+			const noiseTexture = new NoiseTexture(NOISE_TEXTURE_SIZE, NOISE_TEXTURE_SIZE);
 			noiseTexture.wrapS = noiseTexture.wrapT = RepeatWrapping;
 
 			const material = new SSAOMaterial(camera);
@@ -173,8 +187,8 @@ export class SSAOEffect extends Effect {
 
 				if(depthAwareUpsampling) {
 
-					this.uniforms.set("normalDepthBuffer", new Uniform(normalDepthBuffer));
-					this.defines.set("DEPTH_AWARE_UPSAMPLING", "1");
+					this.depthAwareUpsampling = depthAwareUpsampling;
+					this.uniforms.get("normalDepthBuffer").value = normalDepthBuffer;
 					this.defines.set("THRESHOLD", "0.997");
 
 				}
@@ -192,6 +206,7 @@ export class SSAOEffect extends Effect {
 		this.distanceScaling = distanceScaling;
 		this.samples = samples;
 		this.rings = rings;
+		this.color = color;
 
 		// @todo Special case treatment added for backwards-compatibility.
 		this.radius = (radius > 1.0) ? (radius / 100.0) : radius;
@@ -297,6 +312,44 @@ export class SSAOEffect extends Effect {
 	}
 
 	/**
+	 * Indicates whether depth-aware upsampling is enabled.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get depthAwareUpsampling() {
+
+		return this.defines.has("DEPTH_AWARE_UPSAMPLING");
+
+	}
+
+	/**
+	 * Enables or disables depth-aware upsampling.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set depthAwareUpsampling(value) {
+
+		if(this.depthAwareUpsampling !== value) {
+
+			if(value) {
+
+				this.defines.set("DEPTH_AWARE_UPSAMPLING", "1");
+
+			} else {
+
+				this.defines.delete("DEPTH_AWARE_UPSAMPLING");
+
+			}
+
+			this.setChanged();
+
+		}
+
+	}
+
+	/**
 	 * Indicates whether distance-based radius scaling is enabled.
 	 *
 	 * @type {Boolean}
@@ -331,6 +384,59 @@ export class SSAOEffect extends Effect {
 			}
 
 			material.needsUpdate = true;
+
+		}
+
+	}
+
+	/**
+	 * The color of the ambient occlusion.
+	 *
+	 * @type {Color}
+	 */
+
+	get color() {
+
+		return this.uniforms.get("color").value;
+
+	}
+
+	/**
+	 * Sets the color of the ambient occlusion.
+	 *
+	 * Set to `null` to disable colorization.
+	 *
+	 * @type {Color}
+	 */
+
+	set color(value) {
+
+		const uniforms = this.uniforms;
+		const defines = this.defines;
+
+		if(value === null) {
+
+			if(defines.has("COLORIZE")) {
+
+				defines.delete("COLORIZE");
+				uniforms.get("color").value = null;
+				this.setChanged();
+
+			}
+
+		} else {
+
+			if(defines.has("COLORIZE")) {
+
+				uniforms.get("color").value.set(value);
+
+			} else {
+
+				defines.set("COLORIZE", "1");
+				uniforms.get("color").value = new Color(value);
+				this.setChanged();
+
+			}
 
 		}
 
@@ -423,7 +529,7 @@ export class SSAOEffect extends Effect {
 
 		const camera = this.camera;
 		const uniforms = this.ssaoMaterial.uniforms;
-		uniforms.noiseScale.value.set(w, h).divideScalar(64.0);
+		uniforms.noiseScale.value.set(w, h).divideScalar(NOISE_TEXTURE_SIZE);
 		uniforms.inverseProjectionMatrix.value.getInverse(camera.projectionMatrix);
 		uniforms.projectionMatrix.value.copy(camera.projectionMatrix);
 

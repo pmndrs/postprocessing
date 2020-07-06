@@ -83,8 +83,8 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 	const blendMode = effect.blendMode;
 	const shaders = new Map([
-		["fragment", effect.fragmentShader],
-		["vertex", effect.vertexShader]
+		["fragment", effect.getFragmentShader()],
+		["vertex", effect.getVertexShader()]
 	]);
 
 	const mainImageExists = (shaders.get("fragment") !== undefined && shaders.get("fragment").indexOf("mainImage") >= 0);
@@ -173,7 +173,7 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 			uniforms.set(blendOpacity, blendMode.opacity);
 
 			// Blend the result of this effect with the input color.
-			string += "color0 = blend" + blendMode.blendFunction +
+			string += "color0 = blend" + blendMode.getBlendFunction() +
 				"(color0, color1, " + blendOpacity + ");\n\n\t";
 
 			shaderParts.set(Section.FRAGMENT_MAIN_IMAGE,
@@ -205,6 +205,8 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
  * An effect pass.
  *
  * Use this pass to combine {@link Effect} instances.
+ *
+ * @implements {EventListener}
  */
 
 export class EffectPass extends Pass {
@@ -357,6 +359,36 @@ export class EffectPass extends Pass {
 	}
 
 	/**
+	 * Compares required resources with device capabilities.
+	 *
+	 * @private
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 */
+
+	verifyResources(renderer) {
+
+		const capabilities = renderer.capabilities;
+		let max = Math.min(capabilities.maxFragmentUniforms, capabilities.maxVertexUniforms);
+
+		if(this.uniforms > max) {
+
+			console.warn("The current rendering context doesn't support more than " +
+				max + " uniforms, but " + this.uniforms + " were defined");
+
+		}
+
+		max = capabilities.maxVaryings;
+
+		if(this.varyings > max) {
+
+			console.warn("The current rendering context doesn't support more than " +
+				max + " varyings, but " + this.varyings + " were defined");
+
+		}
+
+	}
+
+	/**
 	 * Updates the compound shader material.
 	 *
 	 * @private
@@ -386,18 +418,19 @@ export class EffectPass extends Pass {
 
 		for(const effect of this.effects) {
 
-			if(effect.blendMode.blendFunction === BlendFunction.SKIP) {
+			if(effect.blendMode.getBlendFunction() === BlendFunction.SKIP) {
 
 				// Check if this effect relies on depth and then continue.
-				attributes |= (effect.attributes & EffectAttribute.DEPTH);
+				attributes |= (effect.getAttributes() & EffectAttribute.DEPTH);
 
-			} else if((attributes & EffectAttribute.CONVOLUTION) !== 0 && (effect.attributes & EffectAttribute.CONVOLUTION) !== 0) {
+			} else if((attributes & EffectAttribute.CONVOLUTION) !== 0 &&
+				(effect.getAttributes() & EffectAttribute.CONVOLUTION) !== 0) {
 
 				console.error("Convolution effects cannot be merged", effect);
 
 			} else {
 
-				attributes |= effect.attributes;
+				attributes |= effect.getAttributes();
 
 				result = integrateEffect(("e" + id++), effect, shaderParts, blendModes, defines, uniforms, attributes);
 
@@ -424,7 +457,7 @@ export class EffectPass extends Pass {
 		for(const blendMode of blendModes.values()) {
 
 			shaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) +
-				blendMode.getShaderCode().replace(blendRegExp, "blend" + blendMode.blendFunction) + "\n");
+				blendMode.getShaderCode().replace(blendRegExp, "blend" + blendMode.getBlendFunction()) + "\n");
 
 		}
 
@@ -486,17 +519,27 @@ export class EffectPass extends Pass {
 
 		}
 
+		this.needsUpdate = false;
+
 	}
 
 	/**
 	 * Updates the shader material.
 	 *
 	 * Warning: This method triggers a relatively expensive shader recompilation.
+	 *
+	 * @param {WebGLRenderer} [renderer] - The renderer.
 	 */
 
-	recompile() {
+	recompile(renderer) {
 
 		this.updateMaterial();
+
+		if(renderer !== undefined) {
+
+			this.verifyResources(renderer);
+
+		}
 
 	}
 
@@ -549,6 +592,12 @@ export class EffectPass extends Pass {
 		const material = this.getFullscreenMaterial();
 		const time = material.uniforms.time.value + deltaTime;
 
+		if(this.needsUpdate) {
+
+			this.recompile(renderer);
+
+		}
+
 		for(const effect of this.effects) {
 
 			effect.update(renderer, inputBuffer, deltaTime);
@@ -595,33 +644,19 @@ export class EffectPass extends Pass {
 
 	initialize(renderer, alpha, frameBufferType) {
 
-		// Initialize effects before building the final shader.
+		this.capabilities = renderer.capabilities;
+
+		// Initialize effects before building the shader.
 		for(const effect of this.effects) {
 
 			effect.initialize(renderer, alpha, frameBufferType);
+			effect.addEventListener("change", (event) => this.handleEvent(event));
 
 		}
 
 		// Initialize the fullscreen material.
 		this.updateMaterial();
-
-		// Compare required resources with capabilities.
-		const capabilities = renderer.capabilities;
-		let max = Math.min(capabilities.maxFragmentUniforms, capabilities.maxVertexUniforms);
-
-		if(this.uniforms > max) {
-
-			console.warn("The current rendering context doesn't support more than " + max + " uniforms, but " + this.uniforms + " were defined");
-
-		}
-
-		max = capabilities.maxVaryings;
-
-		if(this.varyings > max) {
-
-			console.warn("The current rendering context doesn't support more than " + max + " varyings, but " + this.varyings + " were defined");
-
-		}
+		this.verifyResources(renderer);
 
 	}
 
@@ -638,6 +673,24 @@ export class EffectPass extends Pass {
 		for(const effect of this.effects) {
 
 			effect.dispose();
+
+		}
+
+	}
+
+	/**
+	 * Handles events.
+	 *
+	 * @param {Event} event - An event.
+	 */
+
+	handleEvent(event) {
+
+		switch(event.type) {
+
+			case "change":
+				this.needsUpdate = true;
+				break;
 
 		}
 

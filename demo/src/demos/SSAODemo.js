@@ -195,6 +195,7 @@ export class SSAODemo extends PostProcessingDemo {
 			intensity: 1.33,
 			bias: 0.025,
 			fade: 0.01,
+			color: null,
 			resolutionScale: 0.5
 		});
 
@@ -234,6 +235,7 @@ export class SSAODemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
+		const color = new Color();
 		const capabilities = this.composer.getRenderer().capabilities;
 
 		const effectPass = this.effectPass;
@@ -273,6 +275,7 @@ export class SSAODemo extends PostProcessingDemo {
 			"fade": uniforms.fade.value,
 			"render mode": RenderMode.DEFAULT,
 			"resolution": ssaoEffect.resolution.scale,
+			"color": 0x000000,
 			"opacity": blendMode.opacity.value,
 			"blend mode": blendMode.blendFunction
 		};
@@ -280,9 +283,6 @@ export class SSAODemo extends PostProcessingDemo {
 		function toggleRenderMode() {
 
 			const mode = Number(params["render mode"]);
-
-			textureEffect.blendMode.blendFunction = (mode !== RenderMode.DEFAULT) ?
-				BlendFunction.NORMAL : BlendFunction.SKIP;
 
 			if(mode === RenderMode.DEPTH) {
 
@@ -299,7 +299,8 @@ export class SSAODemo extends PostProcessingDemo {
 
 			}
 
-			effectPass.recompile();
+			textureEffect.blendMode.setBlendFunction((mode !== RenderMode.DEFAULT) ?
+				BlendFunction.NORMAL : BlendFunction.SKIP);
 
 		}
 
@@ -340,22 +341,13 @@ export class SSAODemo extends PostProcessingDemo {
 
 			f.add(params.upsampling, "enabled").onChange(() => {
 
-				if(params.upsampling.enabled) {
-
-					ssaoEffect.defines.set("DEPTH_AWARE_UPSAMPLING", "1");
-
-				} else {
-
-					ssaoEffect.defines.delete("DEPTH_AWARE_UPSAMPLING");
-
-				}
-
-				effectPass.recompile();
+				ssaoEffect.depthAwareUpsampling = params.upsampling.enabled;
 
 			});
 
 			f.add(params.upsampling, "threshold").min(0.0).max(1.0).step(0.001).onChange(() => {
 
+				// Note: This threshold is not really supposed to be changed.
 				ssaoEffect.defines.set("THRESHOLD", params.upsampling.threshold.toFixed(3));
 				effectPass.recompile();
 
@@ -415,6 +407,13 @@ export class SSAODemo extends PostProcessingDemo {
 
 		});
 
+		menu.addColor(params, "color").onChange(() => {
+
+			ssaoEffect.color = (params.color === 0x000000) ? null :
+				color.setHex(params.color).convertSRGBToLinear();
+
+		});
+
 		menu.add(params, "opacity").min(0.0).max(1.0).step(0.001).onChange(() => {
 
 			blendMode.opacity.value = params.opacity;
@@ -423,8 +422,7 @@ export class SSAODemo extends PostProcessingDemo {
 
 		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-			blendMode.blendFunction = Number(params["blend mode"]);
-			effectPass.recompile();
+			blendMode.setBlendFunction(Number(params["blend mode"]));
 
 		});
 

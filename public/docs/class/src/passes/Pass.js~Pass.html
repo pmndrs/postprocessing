@@ -278,8 +278,7 @@ depth test and depth write flags of their fullscreen shader material.</p>
       <div>
         
         
-        <div data-ice="description"><p>Indicates whether the <span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span> should prepare a depth
-texture for this pass.</p>
+        <div data-ice="description"><p>Only relevant for subclassing.</p>
 </div>
       </div>
     </td>
@@ -788,7 +787,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber166">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber168">source</a></span></span>
     </span>
   </h3>
 
@@ -876,14 +875,15 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber158">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber160">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Indicates whether the <span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span> should prepare a depth
+  <div data-ice="description"><p>Only relevant for subclassing.</p>
+<p>Indicates whether the <span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span> should prepare a depth
 texture for this pass.</p>
 <p>Set this to <code>true</code> if this pass relies on depth information from a
 preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a></span>.</p>
@@ -971,7 +971,7 @@ the screen. Otherwise, the contents of the input buffer will be lost.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber176">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber178">source</a></span></span>
     </span>
   </h3>
 
@@ -1015,7 +1015,7 @@ the screen. Otherwise, the contents of the input buffer will be lost.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber191">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber193">source</a></span></span>
     </span>
   </h3>
 
@@ -1154,7 +1154,7 @@ be updated as well.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber354">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber351">source</a></span></span>
     </span>
   </h3>
 
@@ -1163,12 +1163,6 @@ be updated as well.</p>
   
   <div data-ice="description"><p>Performs a shallow search for disposable properties and deletes them. The
 pass will be inoperative after this method was called!</p>
-<p>Disposable objects:</p>
-<ul>
-<li>WebGLRenderTarget</li>
-<li>Material</li>
-<li>Texture</li>
-</ul>
 <p>The <span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span> calls this method when it is being destroyed.
 You may, however, use it independently to free memory when you are certain
 that you don&apos;t need this pass anymore.</p>
@@ -1208,7 +1202,7 @@ that you don&apos;t need this pass anymore.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber263">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber265">source</a></span></span>
     </span>
   </h3>
 
@@ -1265,7 +1259,7 @@ that you don&apos;t need this pass anymore.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber215">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber217">source</a></span></span>
     </span>
   </h3>
 
@@ -1322,7 +1316,7 @@ that you don&apos;t need this pass anymore.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber338">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber340">source</a></span></span>
     </span>
   </h3>
 
@@ -1411,7 +1405,7 @@ queue, but not before its size has been set.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber297">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber299">source</a></span></span>
     </span>
   </h3>
 
@@ -1513,7 +1507,7 @@ queue, but not before its size has been set.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber281">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber283">source</a></span></span>
     </span>
   </h3>
 
@@ -1585,7 +1579,7 @@ of a preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">Re
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber317">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber319">source</a></span></span>
     </span>
   </h3>
 
@@ -1666,7 +1660,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber231">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber233">source</a></span></span>
     </span>
   </h3>
 
