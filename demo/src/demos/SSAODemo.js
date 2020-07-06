@@ -195,6 +195,7 @@ export class SSAODemo extends PostProcessingDemo {
 			intensity: 1.33,
 			bias: 0.025,
 			fade: 0.01,
+			color: null,
 			resolutionScale: 0.5
 		});
 
@@ -234,6 +235,7 @@ export class SSAODemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
+		const color = new Color();
 		const capabilities = this.composer.getRenderer().capabilities;
 
 		const effectPass = this.effectPass;
@@ -273,6 +275,7 @@ export class SSAODemo extends PostProcessingDemo {
 			"fade": uniforms.fade.value,
 			"render mode": RenderMode.DEFAULT,
 			"resolution": ssaoEffect.resolution.scale,
+			"color": 0x000000,
 			"opacity": blendMode.opacity.value,
 			"blend mode": blendMode.blendFunction
 		};
@@ -338,22 +341,13 @@ export class SSAODemo extends PostProcessingDemo {
 
 			f.add(params.upsampling, "enabled").onChange(() => {
 
-				if(params.upsampling.enabled) {
-
-					ssaoEffect.defines.set("DEPTH_AWARE_UPSAMPLING", "1");
-
-				} else {
-
-					ssaoEffect.defines.delete("DEPTH_AWARE_UPSAMPLING");
-
-				}
-
-				effectPass.recompile();
+				ssaoEffect.depthAwareUpsampling = params.upsampling.enabled;
 
 			});
 
 			f.add(params.upsampling, "threshold").min(0.0).max(1.0).step(0.001).onChange(() => {
 
+				// Note: This threshold is not really supposed to be changed.
 				ssaoEffect.defines.set("THRESHOLD", params.upsampling.threshold.toFixed(3));
 				effectPass.recompile();
 
@@ -410,6 +404,13 @@ export class SSAODemo extends PostProcessingDemo {
 		menu.add(params, "intensity").min(1.0).max(4.0).step(0.01).onChange(() => {
 
 			uniforms.intensity.value = params.intensity;
+
+		});
+
+		menu.addColor(params, "color").onChange(() => {
+
+			ssaoEffect.color = (params.color === 0x000000) ? null :
+				color.setHex(params.color).convertSRGBToLinear();
 
 		});
 
