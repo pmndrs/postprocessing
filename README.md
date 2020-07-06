@@ -26,17 +26,15 @@ Post processing introduces the concept of passes and effects to extend the commo
 ```js
 import { WebGLRenderer } from "three";
 
-const attributes = {
+const renderer = new WebGLRenderer({
 	powerPreference: "high-performance",
 	antialias: false,
 	stencil: false,
 	depth: false
-};
-
-const renderer = new WebGLRenderer(attributes);
+});
 ```
 
-The `EffectComposer` manages and runs passes. The `RenderPass` renders your scene and the `EffectPass` applies fullscreen image effects. Please refer to the [usage example](https://github.com/mrdoob/three.js/blob/master/README.md) of three.js for more information on how to setup the renderer, scene and camera.
+The [EffectComposer](https://vanruesc.github.io/postprocessing/public/docs/class/src/core/EffectComposer.js~EffectComposer.html) manages and runs passes. It is common practice to use a [RenderPass](https://vanruesc.github.io/postprocessing/public/docs/class/src/passes/RenderPass.js~RenderPass.html) as the first pass to automatically clear the buffers and render a scene for further processing. Fullscreen image effects are rendered via the [EffectPass](https://vanruesc.github.io/postprocessing/public/docs/class/src/passes/EffectPass.js~EffectPass.html). Please refer to the [usage example](https://github.com/mrdoob/three.js/blob/master/README.md) of three.js for more information on how to setup the renderer, scene and camera.
 
 ```js
 import { BloomEffect, EffectComposer, EffectPass, RenderPass } from "postprocessing";
