@@ -176,6 +176,7 @@ export class ToneMappingEffect extends Effect {
 
 		const material = this.adaptiveLuminancePass.getFullscreenMaterial();
 		material.defines.MIP_LEVEL_1X1 = exponent.toFixed(1);
+		material.needsUpdate = true;
 
 	}
 
