@@ -150,7 +150,7 @@ export class DepthDownsamplingPass extends Pass {
 
 		if(!renderer.capabilities.isWebGL2) {
 
-			renderer.getContext().getExtension("OES_texture_float");
+			console.error("The DepthDownsamplingPass requires WebGL 2");
 
 		}
 
