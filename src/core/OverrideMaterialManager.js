@@ -109,12 +109,9 @@ export class OverrideMaterialManager {
 		const materialInstanced = this.materialInstanced;
 		const originalMaterials = this.originalMaterials;
 
+		// Ignore shadows.
 		const shadowMapEnabled = renderer.shadowMap.enabled;
-		const sortObjects = renderer.sortObjects;
-
-		// Ignore shadows and transparency.
 		renderer.shadowMap.enabled = false;
-		renderer.sortObjects = false;
 
 		if(workaroundEnabled) {
 
@@ -171,7 +168,6 @@ export class OverrideMaterialManager {
 		}
 
 		renderer.shadowMap.enabled = shadowMapEnabled;
-		renderer.sortObjects = sortObjects;
 
 	}
 
