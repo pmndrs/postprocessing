@@ -103,18 +103,22 @@ export class RenderPass extends Pass {
 
 		const manager = this.overrideMaterialManager;
 
-		if(value !== null && manager !== null) {
+		if(value !== null) {
 
-			manager.setMaterial(value);
+			if(manager !== null) {
 
-		} else if(value === null) {
+				manager.setMaterial(value);
+
+			} else {
+
+				this.overrideMaterialManager = new OverrideMaterialManager(value);
+
+			}
+
+		} else if(manager !== null) {
 
 			manager.dispose();
 			this.overrideMaterialManager = null;
-
-		} else {
-
-			this.overrideMaterialManager = new OverrideMaterialManager(value);
 
 		}
 
