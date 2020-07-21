@@ -414,17 +414,7 @@ export class SSAOEffect extends Effect {
 		const uniforms = this.uniforms;
 		const defines = this.defines;
 
-		if(value === null) {
-
-			if(defines.has("COLORIZE")) {
-
-				defines.delete("COLORIZE");
-				uniforms.get("color").value = null;
-				this.setChanged();
-
-			}
-
-		} else {
+		if(value !== null) {
 
 			if(defines.has("COLORIZE")) {
 
@@ -437,6 +427,12 @@ export class SSAOEffect extends Effect {
 				this.setChanged();
 
 			}
+
+		} else if(defines.has("COLORIZE")) {
+
+			defines.delete("COLORIZE");
+			uniforms.get("color").value = null;
+			this.setChanged();
 
 		}
 

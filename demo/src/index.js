@@ -167,7 +167,7 @@ function onLoad(event) {
 
 	}
 
-	// Keep a reference the camera of the current demo for debugging purposes.
+	// Keep a reference of the camera of the current demo for debugging purposes.
 	camera = demo.camera;
 
 	// Assign this camera to the main render pass.
