@@ -261,7 +261,7 @@ window.addEventListener("load", (event) => {
 
 	}
 
-	render();
+	requestAnimationFrame(render);
 
 });
 

@@ -218,16 +218,16 @@ export class BlurDemo extends PostProcessingDemo {
 	/**
 	 * Renders this demo.
 	 *
-	 * @param {Number} delta - The time since the last frame in seconds.
+	 * @param {Number} deltaTime - The time since the last frame in seconds.
 	 */
 
-	render(delta) {
+	render(deltaTime) {
 
 		const object = this.object;
 		const PI2 = 2.0 * Math.PI;
 
-		object.rotation.x += 0.05 * delta;
-		object.rotation.y += 0.25 * delta;
+		object.rotation.x += 0.05 * deltaTime;
+		object.rotation.y += 0.25 * deltaTime;
 
 		if(object.rotation.x >= PI2) {
 
@@ -241,7 +241,7 @@ export class BlurDemo extends PostProcessingDemo {
 
 		}
 
-		super.render(delta);
+		super.render(deltaTime);
 
 	}
 

@@ -236,18 +236,18 @@ export class AntialiasingDemo extends PostProcessingDemo {
 	/**
 	 * Renders this demo.
 	 *
-	 * @param {Number} delta - The time since the last frame in seconds.
+	 * @param {Number} deltaTime - The time since the last frame in seconds.
 	 */
 
-	render(delta) {
+	render(deltaTime) {
 
 		if(this.rotate) {
 
 			const object = this.object;
 			const PI2 = 2.0 * Math.PI;
 
-			object.rotation.x += 0.01 * delta;
-			object.rotation.y += 0.05 * delta;
+			object.rotation.x += 0.01 * deltaTime;
+			object.rotation.y += 0.05 * deltaTime;
 
 			if(object.rotation.x >= PI2) {
 
@@ -263,7 +263,7 @@ export class AntialiasingDemo extends PostProcessingDemo {
 
 		}
 
-		super.render(delta);
+		super.render(deltaTime);
 
 	}
 
