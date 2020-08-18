@@ -282,7 +282,7 @@ export class EffectPass extends Pass {
 		 * @type {Number}
 		 */
 
-		this.maxTime = 1e3;
+		this.maxTime = Number.POSITIVE_INFINITY;
 
 	}
 
