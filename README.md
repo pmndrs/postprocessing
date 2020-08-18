@@ -122,5 +122,3 @@ Please refer to the [contribution guidelines](https://github.com/vanruesc/postpr
 This library is licensed under the [Zlib license](https://github.com/vanruesc/postprocessing/blob/master/LICENSE.md).
 
 The original code that this library is based on, was written by [mrdoob](https://mrdoob.com) and the [three.js contributors](https://github.com/mrdoob/three.js/graphs/contributors) and is licensed under the [MIT license](https://github.com/mrdoob/three.js/blob/master/LICENSE).
-
-The noise and scanline effects incorporate code written by Georg Steinrohder and Pat Shearon which was released under the [Creative Commons Attribution 3.0 License](https://creativecommons.org/licenses/by/3.0/).
