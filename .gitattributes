@@ -2,7 +2,7 @@
 * text=auto
 
 # Custom for Visual Studio
-*.cs     diff=csharp
+*.cs diff=csharp
 
 # Standard to msysgit
 *.doc	 diff=astextplain
@@ -16,6 +16,7 @@
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
 
-# Linguist project language statistics
+# Linguist language statistics
+build/*       linguist-generated
+public/demo/* linguist-generated
 public/docs/* linguist-documentation
-public/demo/* linguist-generated=true
