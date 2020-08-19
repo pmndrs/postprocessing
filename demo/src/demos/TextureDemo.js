@@ -124,6 +124,7 @@ export class TextureDemo extends PostProcessingDemo {
 		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
 		controls.settings.translation.enabled = true;
+		controls.settings.sensitivity.rotation = 2.2;
 		controls.settings.sensitivity.translation = 3.0;
 		controls.lookAt(target);
 		controls.setOrbitEnabled(false);

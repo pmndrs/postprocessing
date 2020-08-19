@@ -274,6 +274,7 @@ export class BloomDemo extends PostProcessingDemo {
 		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
 		controls.settings.translation.enabled = false;
+		controls.settings.sensitivity.rotation = 2.2;
 		controls.settings.sensitivity.zoom = 1.0;
 		controls.lookAt(scene.position);
 		this.controls = controls;
