@@ -14,8 +14,8 @@ import {
 	TorusBufferGeometry
 } from "three";
 
-import { ProgressManager } from "../utils/ProgressManager.js";
-import { PostProcessingDemo } from "./PostProcessingDemo.js";
+import { ProgressManager } from "../utils/ProgressManager";
+import { PostProcessingDemo } from "./PostProcessingDemo";
 
 import {
 	BlendFunction,

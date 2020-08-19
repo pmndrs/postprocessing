@@ -8,10 +8,10 @@ import {
 } from "three";
 
 import { SpatialControls } from "spatial-controls";
-import { ProgressManager } from "../utils/ProgressManager.js";
-import { PostProcessingDemo } from "./PostProcessingDemo.js";
+import { ProgressManager } from "../utils/ProgressManager";
+import { PostProcessingDemo } from "./PostProcessingDemo";
 
-import * as Sponza from "./objects/Sponza.js";
+import * as Sponza from "./objects/Sponza";
 
 import {
 	BlendFunction,

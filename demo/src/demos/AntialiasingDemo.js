@@ -1,10 +1,10 @@
 import { Color, PerspectiveCamera, Vector3 } from "three";
 import { SpatialControls } from "spatial-controls";
-import { ProgressManager } from "../utils/ProgressManager.js";
-import { PostProcessingDemo } from "./PostProcessingDemo.js";
+import { ProgressManager } from "../utils/ProgressManager";
+import { PostProcessingDemo } from "./PostProcessingDemo";
 
-import * as Cage from "./objects/Cage.js";
-import * as Sponza from "./objects/Sponza.js";
+import * as Cage from "./objects/Cage";
+import * as Sponza from "./objects/Sponza";
 
 import {
 	BlendFunction,

@@ -9,11 +9,11 @@ import {
 } from "three";
 
 import { SpatialControls } from "spatial-controls";
-import { ProgressManager } from "../utils/ProgressManager.js";
-import { PostProcessingDemo } from "./PostProcessingDemo.js";
+import { ProgressManager } from "../utils/ProgressManager";
+import { PostProcessingDemo } from "./PostProcessingDemo";
 
-import * as Cage from "./objects/Cage.js";
-import * as SphereCloud from "./objects/SphereCloud.js";
+import * as Cage from "./objects/Cage";
+import * as SphereCloud from "./objects/SphereCloud";
 
 import {
 	BlendFunction,
