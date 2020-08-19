@@ -6,7 +6,7 @@ import {
 	sRGBEncoding
 } from "three";
 
-import { DeltaControls } from "delta-controls";
+import { SpatialControls } from "spatial-controls";
 import { ProgressManager } from "../utils/ProgressManager.js";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
@@ -152,7 +152,7 @@ export class BlurDemo extends PostProcessingDemo {
 
 		// Controls.
 
-		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
+		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
 		controls.settings.translation.enabled = false;
 		controls.settings.sensitivity.zoom = 1.0;

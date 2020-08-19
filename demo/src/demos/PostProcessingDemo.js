@@ -19,6 +19,15 @@ export class PostProcessingDemo extends Demo {
 		super(id);
 
 		/**
+		 * Spatial controls
+		 *
+		 * @type {SpatialControls}
+		 * @protected
+		 */
+
+		this.controls = null;
+
+		/**
 		 * An effect composer.
 		 *
 		 * @type {EffectComposer}
