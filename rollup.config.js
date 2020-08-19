@@ -47,12 +47,14 @@ const settings = {
 const worker = {
 	smaa: {
 		input: "src/images/smaa/utils/worker.js",
-		plugins: production ? [resolve(), buble(settings.buble)] : [resolve()],
+		plugins: [resolve()].concat(production ? [
+			buble(settings.buble),
+			terser()
+		] : []),
 		output: {
 			dir: "src/images/smaa/utils/",
 			entryFileNames: "[name].tmp",
-			format: "iife",
-			plugins: [terser()]
+			format: "iife"
 		}
 	}
 }
