@@ -128,9 +128,10 @@ window.addEventListener("load", (event) => {
 	// Setup demo switch and load event handlers.
 	manager.addEventListener("change", (event) => {
 
-		renderer.shadowMap.needsUpdate = true;
 		composer.removeAllPasses();
+		composer.autoRenderToScreen = true;
 		composer.addPass(event.demo.renderPass);
+		renderer.shadowMap.needsUpdate = true;
 
 		ProgressManager.reset();
 		document.querySelector(".loading").classList.remove("hidden");
