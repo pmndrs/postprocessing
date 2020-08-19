@@ -7,12 +7,12 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { BlendFunction } from "./blending/BlendFunction.js";
-import { Resizer } from "../core";
-import { NoiseTexture } from "../images";
+import { BlendFunction } from "./blending/BlendFunction";
+import { Resizer } from "../core/Resizer";
+import { NoiseTexture } from "../images/textures/NoiseTexture";
 import { SSAOMaterial } from "../materials";
 import { ShaderPass } from "../passes";
-import { Effect, EffectAttribute } from "./Effect.js";
+import { Effect, EffectAttribute } from "./Effect";
 
 import fragmentShader from "./glsl/ssao/shader.frag";
 

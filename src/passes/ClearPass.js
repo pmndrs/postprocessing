@@ -1,5 +1,5 @@
 import { Color } from "three";
-import { Pass } from "./Pass.js";
+import { Pass } from "./Pass";
 
 /**
  * Stores the original clear color of the renderer.

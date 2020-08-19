@@ -1,5 +1,5 @@
 import { ShaderMaterial, Uniform } from "three";
-import { ColorChannel } from "../core/ColorChannel.js";
+import { ColorChannel } from "../core/ColorChannel";
 
 import fragmentShader from "./glsl/mask/shader.frag";
 import vertexShader from "./glsl/common/shader.vert";

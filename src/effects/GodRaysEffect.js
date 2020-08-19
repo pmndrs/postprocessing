@@ -12,11 +12,11 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { Resizer } from "../core";
+import { Resizer } from "../core/Resizer";
 import { DepthMaskMaterial, KernelSize, GodRaysMaterial } from "../materials";
 import { BlurPass, ClearPass, RenderPass, ShaderPass } from "../passes";
-import { BlendFunction } from "./blending/BlendFunction.js";
-import { Effect, EffectAttribute } from "./Effect.js";
+import { BlendFunction } from "./blending/BlendFunction";
+import { Effect, EffectAttribute } from "./Effect";
 
 import fragmentShader from "./glsl/god-rays/shader.frag";
 

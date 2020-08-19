@@ -1,6 +1,6 @@
-import { OverrideMaterialManager } from "../core/OverrideMaterialManager.js";
-import { ClearPass } from "./ClearPass.js";
-import { Pass } from "./Pass.js";
+import { OverrideMaterialManager } from "../core/OverrideMaterialManager";
+import { ClearPass } from "./ClearPass";
+import { Pass } from "./Pass";
 
 /**
  * A pass that renders a given scene into the input buffer or to screen.

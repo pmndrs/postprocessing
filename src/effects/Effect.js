@@ -1,6 +1,5 @@
 import { EventDispatcher } from "three";
-import { BlendFunction } from "./blending/BlendFunction.js";
-import { BlendMode } from "./blending/BlendMode.js";
+import { BlendFunction, BlendMode } from "./blending";
 
 /**
  * An abstract effect.

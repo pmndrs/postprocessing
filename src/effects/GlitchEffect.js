@@ -6,9 +6,9 @@ import {
 	Vector2
 } from "three";
 
-import { NoiseTexture } from "../images";
-import { BlendFunction } from "./blending/BlendFunction.js";
-import { Effect } from "./Effect.js";
+import { NoiseTexture } from "../images/textures/NoiseTexture";
+import { BlendFunction } from "./blending/BlendFunction";
+import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/glitch/shader.frag";
 

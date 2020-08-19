@@ -1,6 +1,6 @@
 import { LinearFilter, RGBFormat, UnsignedByteType, WebGLRenderTarget } from "three";
 import { CopyMaterial } from "../materials";
-import { Pass } from "./Pass.js";
+import { Pass } from "./Pass";
 
 /**
  * A pass that renders the result from a previous pass to another render target.

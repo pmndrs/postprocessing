@@ -1,5 +1,5 @@
 import { EventDispatcher, Uniform } from "three";
-import { BlendFunction } from "./BlendFunction.js";
+import { BlendFunction } from "./BlendFunction";
 
 import addBlendFunction from "./glsl/add/shader.frag";
 import alphaBlendFunction from "./glsl/alpha/shader.frag";

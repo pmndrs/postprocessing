@@ -1,5 +1,5 @@
-import { SMAAAreaImageData } from "./SMAAAreaImageData.js";
-import { SMAASearchImageData } from "./SMAASearchImageData.js";
+import { SMAAAreaImageData } from "./SMAAAreaImageData";
+import { SMAASearchImageData } from "./SMAASearchImageData";
 
 /**
  * Handles messages from the main thread.

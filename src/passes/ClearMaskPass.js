@@ -1,4 +1,4 @@
-import { Pass } from "./Pass.js";
+import { Pass } from "./Pass";
 
 /**
  * A pass that disables the stencil test.
