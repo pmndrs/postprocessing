@@ -117,9 +117,9 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/passes/DepthDownsamplingPass.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { FloatType, NearestFilter, WebGLRenderTarget } from &quot;three&quot;;
 
-import { Resizer } from &quot;../core/Resizer.js&quot;;
+import { Resizer } from &quot;../core/Resizer&quot;;
 import { DepthDownsamplingMaterial } from &quot;../materials&quot;;
-import { Pass } from &quot;./Pass.js&quot;;
+import { Pass } from &quot;./Pass&quot;;
 
 /**
  * A pass that downsamples the scene depth by picking the most representative
@@ -267,7 +267,7 @@ export class DepthDownsamplingPass extends Pass {
 
 		if(!renderer.capabilities.isWebGL2) {
 
-			renderer.getContext().getExtension(&quot;OES_texture_float&quot;);
+			console.error(&quot;The DepthDownsamplingPass requires WebGL 2&quot;);
 
 		}
 

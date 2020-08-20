@@ -115,9 +115,9 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/passes/RenderPass.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { OverrideMaterialManager } from &quot;../core/OverrideMaterialManager.js&quot;;
-import { ClearPass } from &quot;./ClearPass.js&quot;;
-import { Pass } from &quot;./Pass.js&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { OverrideMaterialManager } from &quot;../core/OverrideMaterialManager&quot;;
+import { ClearPass } from &quot;./ClearPass&quot;;
+import { Pass } from &quot;./Pass&quot;;
 
 /**
  * A pass that renders a given scene into the input buffer or to screen.
@@ -220,18 +220,22 @@ export class RenderPass extends Pass {
 
 		const manager = this.overrideMaterialManager;
 
-		if(value !== null &amp;&amp; manager !== null) {
+		if(value !== null) {
 
-			manager.setMaterial(value);
+			if(manager !== null) {
 
-		} else if(value === null) {
+				manager.setMaterial(value);
+
+			} else {
+
+				this.overrideMaterialManager = new OverrideMaterialManager(value);
+
+			}
+
+		} else if(manager !== null) {
 
 			manager.dispose();
 			this.overrideMaterialManager = null;
-
-		} else {
-
-			this.overrideMaterialManager = new OverrideMaterialManager(value);
 
 		}
 

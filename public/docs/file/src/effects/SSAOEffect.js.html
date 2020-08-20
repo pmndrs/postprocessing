@@ -124,12 +124,12 @@
 	WebGLRenderTarget
 } from &quot;three&quot;;
 
-import { BlendFunction } from &quot;./blending/BlendFunction.js&quot;;
-import { Resizer } from &quot;../core&quot;;
-import { NoiseTexture } from &quot;../images&quot;;
+import { BlendFunction } from &quot;./blending/BlendFunction&quot;;
+import { Resizer } from &quot;../core/Resizer&quot;;
+import { NoiseTexture } from &quot;../images/textures/NoiseTexture&quot;;
 import { SSAOMaterial } from &quot;../materials&quot;;
 import { ShaderPass } from &quot;../passes&quot;;
-import { Effect, EffectAttribute } from &quot;./Effect.js&quot;;
+import { Effect, EffectAttribute } from &quot;./Effect&quot;;
 
 import fragmentShader from &quot;./glsl/ssao/shader.frag&quot;;
 
@@ -531,17 +531,7 @@ export class SSAOEffect extends Effect {
 		const uniforms = this.uniforms;
 		const defines = this.defines;
 
-		if(value === null) {
-
-			if(defines.has(&quot;COLORIZE&quot;)) {
-
-				defines.delete(&quot;COLORIZE&quot;);
-				uniforms.get(&quot;color&quot;).value = null;
-				this.setChanged();
-
-			}
-
-		} else {
+		if(value !== null) {
 
 			if(defines.has(&quot;COLORIZE&quot;)) {
 
@@ -554,6 +544,12 @@ export class SSAOEffect extends Effect {
 				this.setChanged();
 
 			}
+
+		} else if(defines.has(&quot;COLORIZE&quot;)) {
+
+			defines.delete(&quot;COLORIZE&quot;);
+			uniforms.get(&quot;color&quot;).value = null;
+			this.setChanged();
 
 		}
 

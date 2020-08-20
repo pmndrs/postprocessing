@@ -116,11 +116,11 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/effects/BloomEffect.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { LinearFilter, RGBFormat, Uniform, UnsignedByteType, WebGLRenderTarget } from &quot;three&quot;;
-import { Resizer } from &quot;../core&quot;;
+import { Resizer } from &quot;../core/Resizer&quot;;
 import { KernelSize, LuminanceMaterial } from &quot;../materials&quot;;
 import { BlurPass, ShaderPass } from &quot;../passes&quot;;
-import { BlendFunction } from &quot;./blending/BlendFunction.js&quot;;
-import { Effect } from &quot;./Effect.js&quot;;
+import { BlendFunction } from &quot;./blending/BlendFunction&quot;;
+import { Effect } from &quot;./Effect&quot;;
 
 import fragmentShader from &quot;./glsl/bloom/shader.frag&quot;;
 
