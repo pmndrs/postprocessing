@@ -67,7 +67,9 @@
 		"three": ">= 0.102.0 < 0.120.0"
 	},
 	"devDependencies": {
-		"@rollup/plugin-buble": "0.x.x",
+		"@babel/core": "7.x.x",
+		"@babel/preset-env": "7.x.x",
+		"@rollup/plugin-babel": "5.x.x",
 		"@rollup/plugin-node-resolve": "9.x.x",
 		"ava": "3.x.x",
 		"concurrently": "5.x.x",

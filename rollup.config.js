@@ -1,4 +1,4 @@
-import buble from "@rollup/plugin-buble";
+import babel from "@rollup/plugin-babel";
 import resolve from "@rollup/plugin-node-resolve";
 import glsl from "rollup-plugin-glsl";
 import { string } from "rollup-plugin-string";
@@ -25,12 +25,8 @@ const globals = Object.assign({}, ...external.map((value) => ({
 // Plugin settings.
 
 const settings = {
-	buble: {
-		include: ["**/*.js"],
-		transforms: {
-			modules: false,
-			dangerousForOf: true
-		}
+	babel: {
+		babelHelpers: "bundled"
 	},
 	glsl: {
 		include: ["**/*.frag", "**/*.vert"],
@@ -48,7 +44,7 @@ const worker = {
 	smaa: {
 		input: "src/images/smaa/utils/worker.js",
 		plugins: [resolve()].concat(production ? [
-			buble(settings.buble),
+			babel(settings.babel),
 			terser()
 		] : []),
 		output: {
@@ -79,7 +75,7 @@ const lib = {
 		input: "src/index.js",
 		plugins: [
 			resolve(),
-			buble(settings.buble),
+			babel(settings.babel),
 			glsl(settings.glsl),
 			string(settings.string)
 		],
@@ -119,7 +115,7 @@ const demo = {
 	},
 	main: {
 		input: production ? "public/demo/index.js" : "demo/src/index.js",
-		plugins: production ? [buble(settings.buble)] : [
+		plugins: production ? [babel(settings.babel)] : [
 			resolve(),
 			glsl(settings.glsl),
 			string(settings.string)
