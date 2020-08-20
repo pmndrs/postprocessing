@@ -6,9 +6,9 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { Resizer } from "../core/Resizer.js";
-import { Pass } from "./Pass.js";
-import { RenderPass } from "./RenderPass.js";
+import { Resizer } from "../core/Resizer";
+import { Pass } from "./Pass";
+import { RenderPass } from "./RenderPass";
 
 /**
  * A pass that renders the normals of a given scene.

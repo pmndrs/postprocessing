@@ -10,8 +10,8 @@ import {
 
 import { AdaptiveLuminanceMaterial, LuminanceMaterial } from "../materials";
 import { ClearPass, SavePass, ShaderPass } from "../passes";
-import { BlendFunction } from "./blending/BlendFunction.js";
-import { Effect } from "./Effect.js";
+import { BlendFunction } from "./blending/BlendFunction";
+import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/tone-mapping/shader.frag";
 

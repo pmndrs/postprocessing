@@ -1,5 +1,5 @@
-export { NoiseTexture } from "./textures/NoiseTexture.js";
-export { SMAAImageLoader } from "./smaa/utils/SMAAImageLoader.js";
-export { SMAAAreaImageData } from "./smaa/utils/SMAAAreaImageData.js";
-export { SMAASearchImageData } from "./smaa/utils/SMAASearchImageData.js";
-export { RawImageData } from "./RawImageData.js";
+export { NoiseTexture } from "./textures/NoiseTexture";
+export { SMAAImageLoader } from "./smaa/utils/SMAAImageLoader";
+export { SMAAAreaImageData } from "./smaa/utils/SMAAAreaImageData";
+export { SMAASearchImageData } from "./smaa/utils/SMAASearchImageData";
+export { RawImageData } from "./RawImageData";

@@ -1,10 +1,10 @@
 /**
- * postprocessing v6.16.0 build Mon Jul 06 2020
+ * postprocessing v6.17.0 build Thu Aug 20 2020
  * https://github.com/vanruesc/postprocessing
  * Copyright 2020 Raoul van Rüschen
  * @license Zlib
  */
-import { ShaderMaterial, Uniform, Vector2 as Vector2$1, PerspectiveCamera, Matrix4, Camera, Scene, Mesh, BufferGeometry, BufferAttribute, WebGLRenderTarget, LinearFilter, UnsignedByteType, RGBFormat, Color, MeshDepthMaterial, RGBADepthPacking, NearestFilter, FloatType, EventDispatcher, MeshNormalMaterial, WebGLMultisampleRenderTarget, DepthTexture, DepthStencilFormat, UnsignedInt248Type, UnsignedIntType, RGBAFormat, DataTexture, LuminanceFormat, RedFormat, RGFormat, Loader, LoadingManager, RepeatWrapping, Vector3, Vector4, MeshBasicMaterial, Texture, sRGBEncoding, LinearEncoding, Matrix3, LinearMipmapLinearFilter, LinearMipMapLinearFilter } from 'three';
+import { ShaderMaterial, Uniform, Vector2 as Vector2$1, Vector4, PerspectiveCamera, Matrix4, Camera, Scene, Mesh, BufferGeometry, BufferAttribute, WebGLRenderTarget, LinearFilter, UnsignedByteType, RGBFormat, Color, MeshDepthMaterial, RGBADepthPacking, NearestFilter, FloatType, EventDispatcher, MeshNormalMaterial, WebGLMultisampleRenderTarget, DepthTexture, DepthStencilFormat, UnsignedInt248Type, UnsignedIntType, RGBAFormat, DataTexture, LuminanceFormat, RedFormat, RGFormat, RepeatWrapping, Vector3, MeshBasicMaterial, Texture, sRGBEncoding, LinearEncoding, Matrix3, LinearMipmapLinearFilter, LinearMipMapLinearFilter, Loader, LoadingManager } from 'three';
 
 /**
  * A color channel enumeration.
@@ -90,7 +90,7 @@ class AdaptiveLuminanceMaterial extends ShaderMaterial {
 
 }
 
-var fragmentShader$1 = "uniform sampler2D inputBuffer;uniform sampler2D cocBuffer;uniform vec2 texelSize;uniform float scale;\n#if PASS == 1\nuniform float kernel64[128];\n#else\nuniform float kernel16[32];\n#endif\nvarying vec2 vUv;void main(){\n#ifdef FOREGROUND\nvec2 CoCNearFar=texture2D(cocBuffer,vUv).rg;float CoC=CoCNearFar.r*scale;\n#else\nfloat CoC=texture2D(cocBuffer,vUv).g*scale;\n#endif\nif(CoC==0.0){gl_FragColor=texture2D(inputBuffer,vUv);}else{\n#ifdef FOREGROUND\nvec2 step=texelSize*max(CoC,CoCNearFar.g*scale);\n#else\nvec2 step=texelSize*CoC;\n#endif\n#if PASS == 1\nvec4 acc=vec4(0.0);for(int i=0;i<128;i+=2){vec2 uv=step*vec2(kernel64[i],kernel64[i+1])+vUv;acc+=texture2D(inputBuffer,uv);}gl_FragColor=acc/64.0;\n#else\nvec4 maxValue=texture2D(inputBuffer,vUv);for(int i=0;i<32;i+=2){vec2 uv=step*vec2(kernel16[i],kernel16[i+1])+vUv;maxValue=max(texture2D(inputBuffer,uv),maxValue);}gl_FragColor=maxValue;\n#endif\n}}";
+var fragmentShader$1 = "uniform sampler2D inputBuffer;uniform sampler2D cocBuffer;uniform vec2 texelSize;uniform float scale;\n#if PASS == 1\nuniform vec4 kernel64[32];\n#else\nuniform vec4 kernel16[8];\n#endif\nvarying vec2 vUv;void main(){\n#ifdef FOREGROUND\nvec2 CoCNearFar=texture2D(cocBuffer,vUv).rg;float CoC=CoCNearFar.r*scale;\n#else\nfloat CoC=texture2D(cocBuffer,vUv).g*scale;\n#endif\nif(CoC==0.0){gl_FragColor=texture2D(inputBuffer,vUv);}else{\n#ifdef FOREGROUND\nvec2 step=texelSize*max(CoC,CoCNearFar.g*scale);\n#else\nvec2 step=texelSize*CoC;\n#endif\n#if PASS == 1\nvec4 acc=vec4(0.0);for(int i=0;i<32;++i){vec4 kernel=kernel64[i];vec2 uv=step*kernel.xy+vUv;acc+=texture2D(inputBuffer,uv);uv=step*kernel.zw+vUv;acc+=texture2D(inputBuffer,uv);}gl_FragColor=acc/64.0;\n#else\nvec4 maxValue=texture2D(inputBuffer,vUv);for(int i=0;i<8;++i){vec4 kernel=kernel16[i];vec2 uv=step*kernel.xy+vUv;maxValue=max(texture2D(inputBuffer,uv),maxValue);uv=step*kernel.zw+vUv;maxValue=max(texture2D(inputBuffer,uv),maxValue);}gl_FragColor=maxValue;\n#endif\n}}";
 
 /**
  * A bokeh blur material.
@@ -122,8 +122,8 @@ class BokehMaterial extends ShaderMaterial {
 			},
 
 			uniforms: {
-				kernel64: new Uniform(new Float32Array(128)),
-				kernel16: new Uniform(new Float32Array(32)),
+				kernel64: new Uniform(null),
+				kernel16: new Uniform(null),
 				inputBuffer: new Uniform(null),
 				cocBuffer: new Uniform(null),
 				texelSize: new Uniform(new Vector2$1()),
@@ -152,7 +152,7 @@ class BokehMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Generates the blur kernels; one big one and a small one for highlights.
+	 * Generates the blur kernels.
 	 *
 	 * @private
 	 */
@@ -160,8 +160,8 @@ class BokehMaterial extends ShaderMaterial {
 	generateKernel() {
 
 		const GOLDEN_ANGLE = 2.39996323;
-		const points64 = this.uniforms.kernel64.value;
-		const points16 = this.uniforms.kernel16.value;
+		const points64 = new Float32Array(128);
+		const points16 = new Float32Array(32);
 
 		let i64 = 0, i16 = 0;
 
@@ -184,6 +184,31 @@ class BokehMaterial extends ShaderMaterial {
 			}
 
 		}
+
+		// Pack points into vec4 instances to reduce the uniform count.
+		const kernel64 = [];
+		const kernel16 = [];
+
+		for(let i = 0; i < 128;) {
+
+			kernel64.push(new Vector4(
+				points64[i++], points64[i++],
+				points64[i++], points64[i++]
+			));
+
+		}
+
+		for(let i = 0; i < 32;) {
+
+			kernel16.push(new Vector4(
+				points16[i++], points16[i++],
+				points16[i++], points16[i++]
+			));
+
+		}
+
+		this.uniforms.kernel64.value = kernel64;
+		this.uniforms.kernel16.value = kernel16;
 
 	}
 
@@ -3334,12 +3359,9 @@ class OverrideMaterialManager {
 		const materialInstanced = this.materialInstanced;
 		const originalMaterials = this.originalMaterials;
 
+		// Ignore shadows.
 		const shadowMapEnabled = renderer.shadowMap.enabled;
-		const sortObjects = renderer.sortObjects;
-
-		// Ignore shadows and transparency.
 		renderer.shadowMap.enabled = false;
-		renderer.sortObjects = false;
 
 		if(workaroundEnabled) {
 
@@ -3396,7 +3418,6 @@ class OverrideMaterialManager {
 		}
 
 		renderer.shadowMap.enabled = shadowMapEnabled;
-		renderer.sortObjects = sortObjects;
 
 	}
 
@@ -3562,18 +3583,22 @@ class RenderPass extends Pass {
 
 		const manager = this.overrideMaterialManager;
 
-		if(value !== null && manager !== null) {
+		if(value !== null) {
 
-			manager.setMaterial(value);
+			if(manager !== null) {
 
-		} else if(value === null) {
+				manager.setMaterial(value);
+
+			} else {
+
+				this.overrideMaterialManager = new OverrideMaterialManager(value);
+
+			}
+
+		} else if(manager !== null) {
 
 			manager.dispose();
 			this.overrideMaterialManager = null;
-
-		} else {
-
-			this.overrideMaterialManager = new OverrideMaterialManager(value);
 
 		}
 
@@ -3987,7 +4012,7 @@ class DepthDownsamplingPass extends Pass {
 
 		if(!renderer.capabilities.isWebGL2) {
 
-			renderer.getContext().getExtension("OES_texture_float");
+			console.error("The DepthDownsamplingPass requires WebGL 2");
 
 		}
 
@@ -4808,7 +4833,7 @@ class EffectPass extends Pass {
 		 * @type {Number}
 		 */
 
-		this.maxTime = 1e3;
+		this.maxTime = Number.POSITIVE_INFINITY;
 
 	}
 
@@ -6015,6 +6040,32 @@ class EffectComposer {
 	}
 
 	/**
+	 * Deletes the current depth texture.
+	 *
+	 * @private
+	 */
+
+	deleteDepthTexture() {
+
+		if(this.depthTexture !== null) {
+
+			this.depthTexture.dispose();
+			this.depthTexture = null;
+
+			this.inputBuffer.depthTexture = null;
+			this.outputBuffer.depthTexture = null;
+
+			for(const pass of this.passes) {
+
+				pass.setDepthTexture(null);
+
+			}
+
+		}
+
+	}
+
+	/**
 	 * Creates a new render target by replicating the renderer's canvas.
 	 *
 	 * The created render target uses a linear filter for texel minification and
@@ -6156,30 +6207,24 @@ class EffectComposer {
 
 				if(!depthTextureRequired) {
 
-					this.depthTexture.dispose();
-					this.depthTexture = null;
-
-					this.inputBuffer.depthTexture = null;
-					this.outputBuffer.depthTexture = null;
-
-					pass.setDepthTexture(null);
-
-					for(pass of passes) {
-
-						pass.setDepthTexture(null);
-
-					}
+					this.deleteDepthTexture();
 
 				}
 
 			}
 
-			if(this.autoRenderToScreen && passes.length > 0) {
+			if(this.autoRenderToScreen) {
 
-				// Check if the removed pass was the last one in the chain.
+				// Check if the removed pass was the last one.
 				if(index === passes.length) {
 
-					passes[passes.length - 1].renderToScreen = true;
+					pass.renderToScreen = false;
+
+					if(passes.length > 0) {
+
+						passes[passes.length - 1].renderToScreen = true;
+
+					}
 
 				}
 
@@ -6190,9 +6235,33 @@ class EffectComposer {
 	}
 
 	/**
+	 * Removes all passes without deleting them.
+	 */
+
+	removeAllPasses() {
+
+		const passes = this.passes;
+
+		this.deleteDepthTexture();
+
+		if(passes.length > 0) {
+
+			if(this.autoRenderToScreen) {
+
+				passes[passes.length - 1].renderToScreen = false;
+
+			}
+
+			this.passes = [];
+
+		}
+
+	}
+
+	/**
 	 * Renders all enabled passes in the order in which they were added.
 	 *
-	 * @param {Number} deltaTime - The time between the last frame and the current one in seconds.
+	 * @param {Number} deltaTime - The time since the last frame in seconds.
 	 */
 
 	render(deltaTime) {
@@ -7905,1803 +7974,6 @@ class NoiseTexture extends DataTexture {
 	constructor(width, height, format = LuminanceFormat, type = UnsignedByteType) {
 
 		super(getNoise(width * height, format, type), width, height, format, type);
-
-	}
-
-}
-
-/**
- * Creates a new canvas from raw image data.
- *
- * @private
- * @param {Number} width - The image width.
- * @param {Number} height - The image height.
- * @param {Uint8ClampedArray} data - The image data.
- * @return {Canvas} The canvas.
- */
-
-function createCanvas(width, height, data) {
-
-	const canvas = document.createElementNS("http://www.w3.org/1999/xhtml", "canvas");
-	const context = canvas.getContext("2d");
-
-	const imageData = context.createImageData(width, height);
-	imageData.data.set(data);
-
-	canvas.width = width;
-	canvas.height = height;
-
-	context.putImageData(imageData, 0, 0);
-
-	return canvas;
-
-}
-
-/**
- * A container for raw image data.
- */
-
-class RawImageData {
-
-	/**
-	 * Constructs a new image data container.
-	 *
-	 * @param {Number} [width=0] - The width of the image.
-	 * @param {Number} [height=0] - The height of the image.
-	 * @param {Uint8ClampedArray} [data=null] - The image data.
-	 */
-
-	constructor(width = 0, height = 0, data = null) {
-
-		/**
-		 * The width of the image.
-		 *
-		 * @type {Number}
-		 */
-
-		this.width = width;
-
-		/**
-		 * The height of the image.
-		 *
-		 * @type {Number}
-		 */
-
-		this.height = height;
-
-		/**
-		 * The image data.
-		 *
-		 * @type {Uint8ClampedArray}
-		 */
-
-		this.data = data;
-
-	}
-
-	/**
-	 * Creates a canvas from this image data.
-	 *
-	 * @return {Canvas} The canvas or null if it couldn't be created.
-	 */
-
-	toCanvas() {
-
-		return (typeof document === "undefined") ? null : createCanvas(
-			this.width,
-			this.height,
-			this.data
-		);
-
-	}
-
-	/**
-	 * Creates a new image data container.
-	 *
-	 * @param {Object} data - Raw image data.
-	 * @return {RawImageData} The image data.
-	 */
-
-	static from(data) {
-
-		return new RawImageData(data.width, data.height, data.data);
-
-	}
-
-}
-
-var workerProgram = "!function(){\"use strict\";function e(e,t){if(!(e instanceof t))throw new TypeError(\"Cannot call a class as a function\")}function t(e,t){for(var a=0;a<t.length;a++){var n=t[a];n.enumerable=n.enumerable||!1,n.configurable=!0,\"value\"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}function a(e,a,n){return a&&t(e.prototype,a),n&&t(e,n),e}var n=function(){function t(){var a=arguments.length>0&&void 0!==arguments[0]?arguments[0]:0,n=arguments.length>1&&void 0!==arguments[1]?arguments[1]:0,s=arguments.length>2&&void 0!==arguments[2]?arguments[2]:null;e(this,t),this.width=a,this.height=n,this.data=s}return a(t,[{key:\"toCanvas\",value:function(){return\"undefined\"==typeof document?null:(e=this.width,t=this.height,a=this.data,n=document.createElementNS(\"http://www.w3.org/1999/xhtml\",\"canvas\"),s=n.getContext(\"2d\"),(r=s.createImageData(e,t)).data.set(a),n.width=e,n.height=t,s.putImageData(r,0,0),n);var e,t,a,n,s,r}}],[{key:\"from\",value:function(e){return new t(e.width,e.height,e.data)}}]),t}(),s=function(){function t(){var a=arguments.length>0&&void 0!==arguments[0]?arguments[0]:0,n=arguments.length>1&&void 0!==arguments[1]?arguments[1]:0;e(this,t),this.x=a,this.y=n}return a(t,[{key:\"set\",value:function(e,t){return this.x=e,this.y=t,this}},{key:\"equals\",value:function(e){return this===e||this.x===e.x&&this.y===e.y}}]),t}(),r=function t(){e(this,t),this.min=new s,this.max=new s},i=new r,y=new r,c=new Float32Array([0,-.25,.25,-.125,.125,-.375,.375]),u=[new Float32Array([0,0]),new Float32Array([.25,-.25]),new Float32Array([-.25,.25]),new Float32Array([.125,-.125]),new Float32Array([-.125,.125])],h=[new Uint8Array([0,0]),new Uint8Array([3,0]),new Uint8Array([0,3]),new Uint8Array([3,3]),new Uint8Array([1,0]),new Uint8Array([4,0]),new Uint8Array([1,3]),new Uint8Array([4,3]),new Uint8Array([0,1]),new Uint8Array([3,1]),new Uint8Array([0,4]),new Uint8Array([3,4]),new Uint8Array([1,1]),new Uint8Array([4,1]),new Uint8Array([1,4]),new Uint8Array([4,4])],o=[new Uint8Array([0,0]),new Uint8Array([1,0]),new Uint8Array([0,2]),new Uint8Array([1,2]),new Uint8Array([2,0]),new Uint8Array([3,0]),new Uint8Array([2,2]),new Uint8Array([3,2]),new Uint8Array([0,1]),new Uint8Array([1,1]),new Uint8Array([0,3]),new Uint8Array([1,3]),new Uint8Array([2,1]),new Uint8Array([3,1]),new Uint8Array([2,3]),new Uint8Array([3,3])];function w(e,t,a){return e+(t-e)*a}function x(e,t){var a,n=t.min,s=t.max,r=.5*Math.sqrt(2*n.x),i=.5*Math.sqrt(2*n.y),y=.5*Math.sqrt(2*s.x),c=.5*Math.sqrt(2*s.y),u=(a=e/32,Math.min(Math.max(a,0),1));return n.set(w(r,n.x,u),w(i,n.y,u)),s.set(w(y,s.x,u),w(c,s.y,u)),t}function f(e,t,a,n){var s,r,i,y,c=t.x-e.x,u=t.y-e.y,h=a,o=a+1,w=e.y+u*(h-e.x)/c,x=e.y+u*(o-e.x)/c;return h>=e.x&&h<t.x||o>e.x&&o<=t.x?Math.sign(w)===Math.sign(x)||Math.abs(w)<1e-4||Math.abs(x)<1e-4?(s=(w+x)/2)<0?n.set(Math.abs(s),0):n.set(0,Math.abs(s)):(r=(y=-e.y*c/u+e.x)>e.x?w*(y-Math.trunc(y))/2:0,i=y<t.x?x*(1-(y-Math.trunc(y)))/2:0,(s=Math.abs(r)>Math.abs(i)?r:-i)<0?n.set(Math.abs(r),Math.abs(i)):n.set(Math.abs(i),Math.abs(r))):n.set(0,0),n}function l(e,t,a,n,s){var r=i.min,c=i.max,u=y.min,h=y.max,o=y,w=.5+n,l=.5+n-1,b=t+a+1;switch(e){case 0:s.set(0,0);break;case 1:t<=a?f(r.set(0,l),c.set(b/2,0),t,s):s.set(0,0);break;case 2:t>=a?f(r.set(b/2,0),c.set(b,l),t,s):s.set(0,0);break;case 3:f(r.set(0,l),c.set(b/2,0),t,u),f(r.set(b/2,0),c.set(b,l),t,h),x(b,o),s.set(u.x+h.x,u.y+h.y);break;case 4:t<=a?f(r.set(0,w),c.set(b/2,0),t,s):s.set(0,0);break;case 5:s.set(0,0);break;case 6:Math.abs(n)>0?(f(r.set(0,w),c.set(b,l),t,u),f(r.set(0,w),c.set(b/2,0),t,h),f(r.set(b/2,0),c.set(b,l),t,s),h.set(h.x+s.x,h.y+s.y),s.set((u.x+h.x)/2,(u.y+h.y)/2)):f(r.set(0,w),c.set(b,l),t,s);break;case 7:f(r.set(0,w),c.set(b,l),t,s);break;case 8:t>=a?f(r.set(b/2,0),c.set(b,w),t,s):s.set(0,0);break;case 9:Math.abs(n)>0?(f(r.set(0,l),c.set(b,w),t,u),f(r.set(0,l),c.set(b/2,0),t,h),f(r.set(b/2,0),c.set(b,w),t,s),h.set(h.x+s.x,h.y+s.y),s.set((u.x+h.x)/2,(u.y+h.y)/2)):f(r.set(0,l),c.set(b,w),t,s);break;case 10:s.set(0,0);break;case 11:f(r.set(0,l),c.set(b,w),t,s);break;case 12:f(r.set(0,w),c.set(b/2,0),t,u),f(r.set(b/2,0),c.set(b,w),t,h),x(b,o),s.set(u.x+h.x,u.y+h.y);break;case 13:f(r.set(0,l),c.set(b,w),t,s);break;case 14:f(r.set(0,w),c.set(b,l),t,s);break;case 15:s.set(0,0)}return s}function b(e,t,a,n){var s=e.equals(t);if(!s){var r=(e.x+t.x)/2,i=(e.y+t.y)/2;s=(t.y-e.y)*(a-r)+(e.x-t.x)*(n-i)>0}return s}function A(e,t,a,n){var s,r,i;for(s=0,i=0;i<30;++i)for(r=0;r<30;++r)b(e,t,a+r/29,n+i/29)&&++s;return s/900}function v(e,t,a,n,s,r){var i=o[e],y=i[0],c=i[1];return y>0&&(t.x+=s[0],t.y+=s[1]),c>0&&(a.x+=s[0],a.y+=s[1]),r.set(1-A(t,a,1+n,0+n),A(t,a,1+n,1+n))}function k(e,t,a,n,s){var r=i.min,c=i.max,u=y.min,h=y.max,o=t+a+1;switch(e){case 0:v(e,r.set(1,1),c.set(1+o,1+o),t,n,u),v(e,r.set(1,0),c.set(1+o,0+o),t,n,h),s.set((u.x+h.x)/2,(u.y+h.y)/2);break;case 1:v(e,r.set(1,0),c.set(0+o,0+o),t,n,u),v(e,r.set(1,0),c.set(1+o,0+o),t,n,h),s.set((u.x+h.x)/2,(u.y+h.y)/2);break;case 2:v(e,r.set(0,0),c.set(1+o,0+o),t,n,u),v(e,r.set(1,0),c.set(1+o,0+o),t,n,h),s.set((u.x+h.x)/2,(u.y+h.y)/2);break;case 3:v(e,r.set(1,0),c.set(1+o,0+o),t,n,s);break;case 4:v(e,r.set(1,1),c.set(0+o,0+o),t,n,u),v(e,r.set(1,1),c.set(1+o,0+o),t,n,h),s.set((u.x+h.x)/2,(u.y+h.y)/2);break;case 5:v(e,r.set(1,1),c.set(0+o,0+o),t,n,u),v(e,r.set(1,0),c.set(1+o,0+o),t,n,h),s.set((u.x+h.x)/2,(u.y+h.y)/2);break;case 6:v(e,r.set(1,1),c.set(1+o,0+o),t,n,s);break;case 7:v(e,r.set(1,1),c.set(1+o,0+o),t,n,u),v(e,r.set(1,0),c.set(1+o,0+o),t,n,h),s.set((u.x+h.x)/2,(u.y+h.y)/2);break;case 8:v(e,r.set(0,0),c.set(1+o,1+o),t,n,u),v(e,r.set(1,0),c.set(1+o,1+o),t,n,h),s.set((u.x+h.x)/2,(u.y+h.y)/2);break;case 9:v(e,r.set(1,0),c.set(1+o,1+o),t,n,s);break;case 10:v(e,r.set(0,0),c.set(1+o,1+o),t,n,u),v(e,r.set(1,0),c.set(1+o,0+o),t,n,h),s.set((u.x+h.x)/2,(u.y+h.y)/2);break;case 11:v(e,r.set(1,0),c.set(1+o,1+o),t,n,u),v(e,r.set(1,0),c.set(1+o,0+o),t,n,h),s.set((u.x+h.x)/2,(u.y+h.y)/2);break;case 12:v(e,r.set(1,1),c.set(1+o,1+o),t,n,s);break;case 13:v(e,r.set(1,1),c.set(1+o,1+o),t,n,u),v(e,r.set(1,0),c.set(1+o,1+o),t,n,h),s.set((u.x+h.x)/2,(u.y+h.y)/2);break;case 14:v(e,r.set(1,1),c.set(1+o,1+o),t,n,u),v(e,r.set(1,1),c.set(1+o,0+o),t,n,h),s.set((u.x+h.x)/2,(u.y+h.y)/2);break;case 15:v(e,r.set(1,1),c.set(1+o,1+o),t,n,u),v(e,r.set(1,0),c.set(1+o,0+o),t,n,h),s.set((u.x+h.x)/2,(u.y+h.y)/2)}return s}function U(e,t,a){var n,r,i,y,c,u,h,o,w=new s;for(n=0,r=e.length;n<r;++n)for(h=(u=e[n]).data,o=u.width,y=0;y<o;++y)for(i=0;i<o;++i)a?l(n,i,y,t,w):k(n,i,y,t,w),h[c=2*(y*o+i)]=255*w.x,h[c+1]=255*w.y}function d(e,t,a,n,r,i){var y,c,u,h,o,w,x,f,l,b,A=new s,v=i.data,k=i.width;for(y=0,c=t.length;y<c;++y)for(x=a[y],l=(f=t[y]).data,b=f.width,h=0;h<n;++h)for(u=0;u<n;++u)A.set(x[0]*n+e.x+u,x[1]*n+e.y+h),w=r?2*(h*h*b+u*u):2*(h*b+u),v[o=4*(A.y*k+A.x)]=l[w],v[o+1]=l[w+1],v[o+2]=0,v[o+3]=255}var g=function(){function t(){e(this,t)}return a(t,null,[{key:\"generate\",value:function(){var e,t,a=5*c.length*16,r=new Uint8ClampedArray(160*a*4),i=new n(160,a,r),y=Math.pow(15,2)+1,w=[],x=[],f=new s;for(e=0;e<16;++e)w.push(new n(y,y,new Uint8ClampedArray(y*y*2),2)),x.push(new n(20,20,new Uint8ClampedArray(800),2));for(e=0,t=c.length;e<t;++e)U(w,c[e],!0),f.set(0,80*e),d(f,w,h,16,!0,i);for(e=0,t=u.length;e<t;++e)U(x,u[e],!1),f.set(80,80*e),d(f,x,o,20,!1,i);return i}}]),t}(),m=new Map([[p([0,0,0,0]),[0,0,0,0]],[p([0,0,0,1]),[0,0,0,1]],[p([0,0,1,0]),[0,0,1,0]],[p([0,0,1,1]),[0,0,1,1]],[p([0,1,0,0]),[0,1,0,0]],[p([0,1,0,1]),[0,1,0,1]],[p([0,1,1,0]),[0,1,1,0]],[p([0,1,1,1]),[0,1,1,1]],[p([1,0,0,0]),[1,0,0,0]],[p([1,0,0,1]),[1,0,0,1]],[p([1,0,1,0]),[1,0,1,0]],[p([1,0,1,1]),[1,0,1,1]],[p([1,1,0,0]),[1,1,0,0]],[p([1,1,0,1]),[1,1,0,1]],[p([1,1,1,0]),[1,1,1,0]],[p([1,1,1,1]),[1,1,1,1]]]);function M(e,t,a){return e+(t-e)*a}function p(e){var t=M(e[0],e[1],.75),a=M(e[2],e[3],.75);return M(t,a,.875)}function C(e,t){var a=0;return 1===t[3]&&1!==e[1]&&1!==e[3]&&(a+=1),1===a&&1===t[2]&&1!==e[0]&&1!==e[2]&&(a+=1),a}var q=function(){function t(){e(this,t)}return a(t,null,[{key:\"generate\",value:function(){var e,t,a,s,r,i,y,c,u,h,o=new Uint8ClampedArray(2178),w=new Uint8ClampedArray(4096);for(t=0;t<33;++t)for(e=0;e<66;++e)a=.03125*e,s=.03125*t,m.has(a)&&m.has(s)&&(i=m.get(a),y=m.get(s),o[r=66*t+e]=127*(c=i,h=void 0,h=0,1===(u=y)[3]&&(h+=1),1===h&&1===u[2]&&1!==c[1]&&1!==c[3]&&(h+=1),h),o[r+33]=127*C(i,y));for(r=0,t=17;t<33;++t)for(e=0;e<64;++e,r+=4)w[r]=o[66*t+e],w[r+3]=255;return new n(64,16,w)}}]),t}();self.addEventListener(\"message\",(function(e){var t=g.generate(),a=q.generate();postMessage({areaImageData:t,searchImageData:a},[t.data.buffer,a.data.buffer]),close()}))}();\n";
-
-/**
- * Generates the SMAA data images.
- *
- * @private
- * @param {Boolean} [disableCache=false] - Determines whether the generated image data should be cached.
- * @return {Promise} A promise that returns the search image and area image as a data URL pair.
- */
-
-function generate(disableCache = false) {
-
-	const workerURL = URL.createObjectURL(new Blob([workerProgram], { type: "text/javascript" }));
-	const worker = new Worker(workerURL);
-
-	return new Promise((resolve, reject) => {
-
-		worker.addEventListener("error", (event) => reject(event.error));
-		worker.addEventListener("message", (event) => {
-
-			const searchImageData = RawImageData.from(event.data.searchImageData);
-			const areaImageData = RawImageData.from(event.data.areaImageData);
-
-			const urls = [
-				searchImageData.toCanvas().toDataURL(),
-				areaImageData.toCanvas().toDataURL()
-			];
-
-			if(!disableCache && window.localStorage !== undefined) {
-
-				localStorage.setItem("smaa-search", urls[0]);
-				localStorage.setItem("smaa-area", urls[1]);
-
-			}
-
-			URL.revokeObjectURL(workerURL);
-			resolve(urls);
-
-		});
-
-		worker.postMessage(null);
-
-	});
-
-}
-
-/**
- * An SMAA image loader.
- *
- * This loader uses a worker thread to generate the search and area images. The
- * Generated data URLs will be cached using localStorage, if available. To
- * disable caching, please refer to {@link SMAAImageLoader.disableCache}.
- *
- * @experimental Added for testing, API might change in patch or minor releases. Requires three >= r108.
- */
-
-class SMAAImageLoader extends Loader {
-
-	/**
-	 * Constructs a new SMAA image loader.
-	 *
-	 * @param {LoadingManager} [manager] - A loading manager.
-	 */
-
-	constructor(manager) {
-
-		super(manager);
-
-		/**
-		 * Indicates whether data image caching is disabled.
-		 *
-		 * @type {Boolean}
-		 */
-
-		this.disableCache = false;
-
-	}
-
-	/**
-	 * Loads the SMAA data images.
-	 *
-	 * @param {Function} [onLoad] - A function to call when the loading process is done.
-	 * @param {Function} [onError] - A function to call when an error occurs.
-	 * @return {Promise} A promise that returns the search image and area image as a pair.
-	 */
-
-	load(onLoad = () => {}, onError = () => {}) {
-
-		// Conform to the signature (url, onLoad, onProgress, onError).
-		if(arguments.length === 4) {
-
-			onLoad = arguments[1];
-			onError = arguments[3];
-
-		} else if(arguments.length === 3 || typeof arguments[0] !== "function") {
-
-			onLoad = arguments[1];
-			onError = () => {};
-
-		}
-
-		const externalManager = this.manager;
-		const internalManager = new LoadingManager();
-
-		externalManager.itemStart("smaa-search");
-		externalManager.itemStart("smaa-area");
-		internalManager.itemStart("smaa-search");
-		internalManager.itemStart("smaa-area");
-
-		return new Promise((resolve, reject) => {
-
-			const cachedURLs = (!this.disableCache && window.localStorage !== undefined) ? [
-				localStorage.getItem("smaa-search"),
-				localStorage.getItem("smaa-area")
-			] : [null, null];
-
-			const promise = (cachedURLs[0] !== null && cachedURLs[1] !== null) ?
-				Promise.resolve(cachedURLs) : generate(this.disableCache);
-
-			promise.then((urls) => {
-
-				const result = [new Image(), new Image()];
-
-				internalManager.onLoad = () => {
-
-					onLoad(result);
-					resolve(result);
-
-				};
-
-				result[0].addEventListener("load", () => {
-
-					externalManager.itemEnd("smaa-search");
-					internalManager.itemEnd("smaa-search");
-
-				});
-
-				result[1].addEventListener("load", () => {
-
-					externalManager.itemEnd("smaa-area");
-					internalManager.itemEnd("smaa-area");
-
-				});
-
-				result[0].src = urls[0];
-				result[1].src = urls[1];
-
-			}).catch((error) => {
-
-				externalManager.itemError("smaa-search");
-				externalManager.itemError("smaa-area");
-
-				onError(error);
-				reject(error);
-
-			});
-
-		});
-
-	}
-
-}
-
-/**
- * A 2D vector.
- *
- * @private
- */
-
-class Vector2 {
-
-	/**
-	 * Constructs a new vector.
-	 *
-	 * @param {Number} [x=0] - The initial x value.
-	 * @param {Number} [y=0] - The initial y value.
-	 */
-
-	constructor(x = 0, y = 0) {
-
-		/**
-		 * The X component.
-		 *
-		 * @type {Number}
-		 */
-
-		this.x = x;
-
-		/**
-		 * The Y component.
-		 *
-		 * @type {Number}
-		 */
-
-		this.y = y;
-
-	}
-
-	/**
-	 * Sets the components of this vector.
-	 *
-	 * @param {Number} x - The new x value.
-	 * @param {Number} y - The new y value.
-	 * @return {Vector2} This vector.
-	 */
-
-	set(x, y) {
-
-		this.x = x;
-		this.y = y;
-
-		return this;
-
-	}
-
-	/**
-	 * Checks if the given vector equals this vector.
-	 *
-	 * @param {Vector2} v - A vector.
-	 * @return {Boolean} Whether this vector equals the given one.
-	 */
-
-	equals(v) {
-
-		return (this === v || (this.x === v.x && this.y === v.y));
-
-	}
-
-}
-
-/**
- * A 2D box.
- *
- * @private
- */
-
-class Box2 {
-
-	/**
-	 * Constructs a new box.
-	 */
-
-	constructor() {
-
-		this.min = new Vector2();
-		this.max = new Vector2();
-
-	}
-
-}
-
-/**
- * A box.
- *
- * @type {Box2}
- * @private
- */
-
-const b0 = new Box2();
-
-/**
- * A box.
- *
- * @type {Box2}
- * @private
- */
-
-const b1 = new Box2();
-
-/**
- * The orthogonal texture size.
- *
- * @type {Number}
- * @private
- */
-
-const ORTHOGONAL_SIZE = 16;
-
-/**
- * The diagonal texture size.
- *
- * @type {Number}
- * @private
- */
-
-const DIAGONAL_SIZE = 20;
-
-/**
- * The number of samples for calculating areas in the diagonal textures.
- * Diagonal areas are calculated using brute force sampling.
- *
- * @type {Number}
- * @private
- */
-
-const DIAGONAL_SAMPLES = 30;
-
-/**
- * The maximum distance for smoothing U-shapes.
- *
- * @type {Number}
- * @private
- */
-
-const SMOOTH_MAX_DISTANCE = 32;
-
-/**
- * Subsampling offsets for orthogonal areas.
- *
- * @type {Float32Array}
- * @private
- */
-
-const orthogonalSubsamplingOffsets = new Float32Array([
-	0.0, -0.25, 0.25, -0.125, 0.125, -0.375, 0.375
-]);
-
-/**
- * Subsampling offset pairs for diagonal areas.
- *
- * @type {Float32Array[]}
- * @private
- */
-
-const diagonalSubsamplingOffsets = [
-
-	new Float32Array([0.0, 0.0]),
-	new Float32Array([0.25, -0.25]),
-	new Float32Array([-0.25, 0.25]),
-	new Float32Array([0.125, -0.125]),
-	new Float32Array([-0.125, 0.125])
-
-];
-
-/**
- * Orthogonal pattern positioning coordinates.
- *
- * Used for placing each pattern subtexture into a specific spot.
- *
- * @type {Uint8Array[]}
- * @private
- */
-
-const orthogonalEdges = [
-
-	new Uint8Array([0, 0]),
-	new Uint8Array([3, 0]),
-	new Uint8Array([0, 3]),
-	new Uint8Array([3, 3]),
-
-	new Uint8Array([1, 0]),
-	new Uint8Array([4, 0]),
-	new Uint8Array([1, 3]),
-	new Uint8Array([4, 3]),
-
-	new Uint8Array([0, 1]),
-	new Uint8Array([3, 1]),
-	new Uint8Array([0, 4]),
-	new Uint8Array([3, 4]),
-
-	new Uint8Array([1, 1]),
-	new Uint8Array([4, 1]),
-	new Uint8Array([1, 4]),
-	new Uint8Array([4, 4])
-
-];
-
-/**
- * Diagonal pattern positioning coordinates.
- *
- * Used for placing each pattern subtexture into a specific spot.
- *
- * @type {Uint8Array[]}
- * @private
- */
-
-const diagonalEdges = [
-
-	new Uint8Array([0, 0]),
-	new Uint8Array([1, 0]),
-	new Uint8Array([0, 2]),
-	new Uint8Array([1, 2]),
-
-	new Uint8Array([2, 0]),
-	new Uint8Array([3, 0]),
-	new Uint8Array([2, 2]),
-	new Uint8Array([3, 2]),
-
-	new Uint8Array([0, 1]),
-	new Uint8Array([1, 1]),
-	new Uint8Array([0, 3]),
-	new Uint8Array([1, 3]),
-
-	new Uint8Array([2, 1]),
-	new Uint8Array([3, 1]),
-	new Uint8Array([2, 3]),
-	new Uint8Array([3, 3])
-
-];
-
-/**
- * Linearly interpolates between two values.
- *
- * @private
- * @param {Number} a - The initial value.
- * @param {Number} b - The target value.
- * @param {Number} p - The interpolation value.
- * @return {Number} The interpolated value.
- */
-
-function lerp(a, b, p) {
-
-	return a + (b - a) * p;
-
-}
-
-/**
- * Clamps a value to the range [0, 1].
- *
- * @private
- * @param {Number} a - The value.
- * @return {Number} The saturated value.
- */
-
-function saturate(a) {
-
-	return Math.min(Math.max(a, 0.0), 1.0);
-
-}
-
-/**
- * A smoothing function for small U-patterns.
- *
- * @private
- * @param {Number} d - A smoothing factor.
- * @param {Box2} b - The area that should be smoothed.
- * @return {Box2} The smoothed area.
- */
-
-function smoothArea(d, b) {
-
-	const a1 = b.min;
-	const a2 = b.max;
-
-	const b1X = Math.sqrt(a1.x * 2.0) * 0.5;
-	const b1Y = Math.sqrt(a1.y * 2.0) * 0.5;
-	const b2X = Math.sqrt(a2.x * 2.0) * 0.5;
-	const b2Y = Math.sqrt(a2.y * 2.0) * 0.5;
-
-	const p = saturate(d / SMOOTH_MAX_DISTANCE);
-
-	a1.set(lerp(b1X, a1.x, p), lerp(b1Y, a1.y, p));
-	a2.set(lerp(b2X, a2.x, p), lerp(b2Y, a2.y, p));
-
-	return b;
-
-}
-
-/**
- * Calculates the area under the line p1 -> p2, for the pixels (x, x + 1).
- *
- * @private
- * @param {Vector2} p1 - The starting point of the line.
- * @param {Vector2} p2 - The ending point of the line.
- * @param {Number} x - The pixel index.
- * @param {Vector2} result - A target vector to store the area in.
- * @return {Vector2} The area.
- */
-
-function calculateOrthogonalArea(p1, p2, x, result) {
-
-	const dX = p2.x - p1.x;
-	const dY = p2.y - p1.y;
-
-	const x1 = x;
-	const x2 = x + 1.0;
-
-	const y1 = p1.y + dY * (x1 - p1.x) / dX;
-	const y2 = p1.y + dY * (x2 - p1.x) / dX;
-
-	let a, a1, a2, t;
-
-	// Check if x is inside the area.
-	if((x1 >= p1.x && x1 < p2.x) || (x2 > p1.x && x2 <= p2.x)) {
-
-		// Check if this is a trapezoid.
-		if(Math.sign(y1) === Math.sign(y2) || Math.abs(y1) < 1e-4 || Math.abs(y2) < 1e-4) {
-
-			a = (y1 + y2) / 2.0;
-
-			if(a < 0.0) {
-
-				result.set(Math.abs(a), 0.0);
-
-			} else {
-
-				result.set(0.0, Math.abs(a));
-
-			}
-
-		} else {
-
-			// Two triangles.
-			t = -p1.y * dX / dY + p1.x;
-
-			a1 = (t > p1.x) ? y1 * (t - Math.trunc(t)) / 2.0 : 0.0;
-			a2 = (t < p2.x) ? y2 * (1.0 - (t - Math.trunc(t))) / 2.0 : 0.0;
-
-			a = (Math.abs(a1) > Math.abs(a2)) ? a1 : -a2;
-
-			if(a < 0.0) {
-
-				result.set(Math.abs(a1), Math.abs(a2));
-
-			} else {
-
-				result.set(Math.abs(a2), Math.abs(a1));
-
-			}
-
-		}
-
-	} else {
-
-		result.set(0, 0);
-
-	}
-
-	return result;
-
-}
-
-/**
- * Calculates the area for a given pattern and distances to the left and to the
- * right, biased by an offset.
- *
- * @private
- * @param {Number} pattern - A pattern index.
- * @param {Number} left - The left distance.
- * @param {Number} right - The right distance.
- * @param {Number} offset - An offset.
- * @param {Vector2} result - A target vector to store the area in.
- * @return {Vector2} The orthogonal area.
- */
-
-function calculateOrthogonalAreaForPattern(pattern, left, right, offset, result) {
-
-	const p1 = b0.min;
-	const p2 = b0.max;
-	const a1 = b1.min;
-	const a2 = b1.max;
-	const a = b1;
-
-	/* o1           |
-	 *      .-------´
-	 * o2   |
-	 *
-	 *      <---d--->
-	 */
-
-	const o1 = 0.5 + offset;
-	const o2 = 0.5 + offset - 1.0;
-	const d = left + right + 1;
-
-	switch(pattern) {
-
-		case 0: {
-
-			//    ------
-
-			result.set(0, 0);
-
-			break;
-
-		}
-
-		case 1: {
-
-			/*   .------
-			 *   |
-			 *
-			 * The offset is only applied to L patterns in the crossing edge side to
-			 * make it converge with the unfiltered pattern 0.
-			 * The pattern 0 must not be filtered to avoid artifacts.
-			 */
-
-			if(left <= right) {
-
-				calculateOrthogonalArea(p1.set(0.0, o2), p2.set(d / 2.0, 0.0), left, result);
-
-			} else {
-
-				result.set(0, 0);
-
-			}
-
-			break;
-
-		}
-
-		case 2: {
-
-			/*    ------.
-			 *          |
-			 */
-
-			if(left >= right) {
-
-				calculateOrthogonalArea(p1.set(d / 2.0, 0.0), p2.set(d, o2), left, result);
-
-			} else {
-
-				result.set(0, 0);
-
-			}
-
-			break;
-
-		}
-
-		case 3: {
-
-			/*   .------.
-			 *   |      |
-			 */
-
-			calculateOrthogonalArea(p1.set(0.0, o2), p2.set(d / 2.0, 0.0), left, a1);
-			calculateOrthogonalArea(p1.set(d / 2.0, 0.0), p2.set(d, o2), left, a2);
-
-			smoothArea(d, a);
-
-			result.set(a1.x + a2.x, a1.y + a2.y);
-
-			break;
-
-		}
-
-		case 4: {
-
-			/*   |
-			 *   `------
-			 */
-
-			if(left <= right) {
-
-				calculateOrthogonalArea(p1.set(0.0, o1), p2.set(d / 2.0, 0.0), left, result);
-
-			} else {
-
-				result.set(0, 0);
-
-			}
-
-			break;
-
-		}
-
-		case 5: {
-
-			/*   |
-			 *   +------
-			 *   |
-			 */
-
-			result.set(0, 0);
-
-			break;
-
-		}
-
-		case 6: {
-
-			/*   |
-			 *   `------.
-			 *          |
-			 *
-			 * A problem of not offseting L patterns (see above) is that for certain
-			 * max search distances, the pixels in the center of a Z pattern will
-			 * detect the full Z pattern, while the pixels in the sides will detect an
-			 * L pattern. To avoid discontinuities, the full offsetted Z
-			 * revectorization is blended with partially offsetted L patterns.
-			 */
-
-			if(Math.abs(offset) > 0.0) {
-
-				calculateOrthogonalArea(p1.set(0.0, o1), p2.set(d, o2), left, a1);
-				calculateOrthogonalArea(p1.set(0.0, o1), p2.set(d / 2.0, 0.0), left, a2);
-				calculateOrthogonalArea(p1.set(d / 2.0, 0.0), p2.set(d, o2), left, result);
-				a2.set(a2.x + result.x, a2.y + result.y);
-
-				result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
-
-			} else {
-
-				calculateOrthogonalArea(p1.set(0.0, o1), p2.set(d, o2), left, result);
-
-			}
-
-			break;
-
-		}
-
-		case 7: {
-
-			/*   |
-			 *   +------.
-			 *   |      |
-			 */
-
-			calculateOrthogonalArea(p1.set(0.0, o1), p2.set(d, o2), left, result);
-
-			break;
-
-		}
-
-		case 8: {
-
-			/*          |
-			 *    ------´
-			 */
-
-			if(left >= right) {
-
-				calculateOrthogonalArea(p1.set(d / 2.0, 0.0), p2.set(d, o1), left, result);
-
-			} else {
-
-				result.set(0, 0);
-
-			}
-
-			break;
-
-		}
-
-		case 9: {
-
-			/*          |
-			 *   .------´
-			 *   |
-			 */
-
-			if(Math.abs(offset) > 0.0) {
-
-				calculateOrthogonalArea(p1.set(0.0, o2), p2.set(d, o1), left, a1);
-				calculateOrthogonalArea(p1.set(0.0, o2), p2.set(d / 2.0, 0.0), left, a2);
-				calculateOrthogonalArea(p1.set(d / 2.0, 0.0), p2.set(d, o1), left, result);
-				a2.set(a2.x + result.x, a2.y + result.y);
-
-				result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
-
-			} else {
-
-				calculateOrthogonalArea(p1.set(0.0, o2), p2.set(d, o1), left, result);
-
-			}
-
-			break;
-
-		}
-
-		case 10: {
-
-			/*          |
-			 *    ------+
-			 *          |
-			 */
-
-			result.set(0, 0);
-
-			break;
-
-		}
-
-		case 11: {
-
-			/*          |
-			 *   .------+
-			 *   |      |
-			 */
-
-			calculateOrthogonalArea(p1.set(0.0, o2), p2.set(d, o1), left, result);
-
-			break;
-
-		}
-
-		case 12: {
-
-			/*   |      |
-			 *   `------´
-			 */
-
-			calculateOrthogonalArea(p1.set(0.0, o1), p2.set(d / 2.0, 0.0), left, a1);
-			calculateOrthogonalArea(p1.set(d / 2.0, 0.0), p2.set(d, o1), left, a2);
-
-			smoothArea(d, a);
-
-			result.set(a1.x + a2.x, a1.y + a2.y);
-
-			break;
-
-		}
-
-		case 13: {
-
-			/*   |      |
-			 *   +------´
-			 *   |
-			 */
-
-			calculateOrthogonalArea(p1.set(0.0, o2), p2.set(d, o1), left, result);
-
-			break;
-
-		}
-
-		case 14: {
-
-			/*   |      |
-			 *   `------+
-			 *          |
-			 */
-
-			calculateOrthogonalArea(p1.set(0.0, o1), p2.set(d, o2), left, result);
-
-			break;
-
-		}
-
-		case 15: {
-
-			/*   |      |
-			 *   +------+
-			 *   |      |
-			 */
-
-			result.set(0, 0);
-
-			break;
-
-		}
-
-	}
-
-	return result;
-
-}
-
-/**
- * Determines whether the given pixel is inside the specified area.
- *
- * @private
- * @param {Vector2} p1 - The lower bounds of the area.
- * @param {Vector2} p2 - The upper bounds of the area.
- * @param {Vector2} x - The X-coordinates.
- * @param {Vector2} y - The Y-coordinates.
- * @return {Vector2} Whether the pixel lies inside the area.
- */
-
-function isInsideArea(p1, p2, x, y) {
-
-	let result = p1.equals(p2);
-
-	if(!result) {
-
-		let xm = (p1.x + p2.x) / 2.0;
-		let ym = (p1.y + p2.y) / 2.0;
-
-		let a = p2.y - p1.y;
-		let b = p1.x - p2.x;
-
-		let c = a * (x - xm) + b * (y - ym);
-
-		result = (c > 0.0);
-
-	}
-
-	return result;
-
-}
-
-/**
- * Calculates the area under the line p1 -> p2 for the pixel p using brute force
- * sampling.
- *
- * @private
- * @param {Vector2} p1 - The lower bounds of the area.
- * @param {Vector2} p2 - The upper bounds of the area.
- * @param {Number} pX - The X-coordinates.
- * @param {Number} pY - The Y-coordinates.
- * @return {Number} The amount of pixels inside the area relative to the total amount of sampled pixels.
- */
-
-function calculateDiagonalAreaForPixel(p1, p2, pX, pY) {
-
-	let a;
-	let x, y;
-	let offsetX, offsetY;
-
-	for(a = 0, y = 0; y < DIAGONAL_SAMPLES; ++y) {
-
-		for(x = 0; x < DIAGONAL_SAMPLES; ++x) {
-
-			offsetX = x / (DIAGONAL_SAMPLES - 1.0);
-			offsetY = y / (DIAGONAL_SAMPLES - 1.0);
-
-			if(isInsideArea(p1, p2, pX + offsetX, pY + offsetY)) {
-
-				++a;
-
-			}
-
-		}
-
-	}
-
-	return a / (DIAGONAL_SAMPLES * DIAGONAL_SAMPLES);
-
-}
-
-/**
- * Calculates the area under the line p1 -> p2. This includes the pixel and its
- * opposite.
- *
- * @private
- * @param {Number} pattern - A pattern index.
- * @param {Vector2} p1 - The lower bounds of the area.
- * @param {Vector2} p2 - The upper bounds of the area.
- * @param {Number} left - The left distance.
- * @param {Float32Array} offset - An offset.
- * @param {Vector2} result - A target vector to store the area in.
- * @return {Vector2} The area.
- */
-
-function calculateDiagonalArea(pattern, p1, p2, left, offset, result) {
-
-	const e = diagonalEdges[pattern];
-	const e1 = e[0];
-	const e2 = e[1];
-
-	if(e1 > 0) {
-
-		p1.x += offset[0];
-		p1.y += offset[1];
-
-	}
-
-	if(e2 > 0) {
-
-		p2.x += offset[0];
-		p2.y += offset[1];
-
-	}
-
-	return result.set(
-		1.0 - calculateDiagonalAreaForPixel(p1, p2, 1.0 + left, 0.0 + left),
-		calculateDiagonalAreaForPixel(p1, p2, 1.0 + left, 1.0 + left)
-	);
-
-}
-
-/**
- * Calculates the area for a given pattern and distances to the left and to the
- * right, biased by an offset.
- *
- * @private
- * @param {Number} pattern - A pattern index.
- * @param {Number} left - The left distance.
- * @param {Number} right - The right distance.
- * @param {Float32Array} offset - An offset.
- * @param {Vector2} result - A target vector to store the area in.
- * @return {Vector2} The orthogonal area.
- */
-
-function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
-
-	const p1 = b0.min;
-	const p2 = b0.max;
-	const a1 = b1.min;
-	const a2 = b1.max;
-
-	const d = left + right + 1;
-
-	/* There is some Black Magic involved in the diagonal area calculations.
-	 *
-	 * Unlike orthogonal patterns, the "null" pattern (one without crossing edges)
-	 * must be filtered, and the ends of both the "null" and L patterns are not
-	 * known: L and U patterns have different endings, and the adjacent pattern is
-	 * unknown. Therefore, a blend of both possibilities is computed.
-	 */
-
-	switch(pattern) {
-
-		case 0: {
-
-			/*         .-´
-			 *       .-´
-			 *     .-´
-			 *   .-´
-			 *   ´
-			 */
-
-			// First possibility.
-			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
-
-			// Second possibility.
-			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
-
-			// Blend both possibilities together.
-			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
-
-			break;
-
-		}
-
-		case 1: {
-
-			/*         .-´
-			 *       .-´
-			 *     .-´
-			 *   .-´
-			 *   |
-			 *   |
-			 */
-
-			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(0.0 + d, 0.0 + d), left, offset, a1);
-			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
-
-			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
-
-			break;
-
-		}
-
-		case 2: {
-
-			/*         .----
-			 *       .-´
-			 *     .-´
-			 *   .-´
-			 *   ´
-			 */
-
-			calculateDiagonalArea(pattern, p1.set(0.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a1);
-			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
-
-			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
-
-			break;
-
-		}
-
-		case 3: {
-
-			/*
-			 *         .----
-			 *       .-´
-			 *     .-´
-			 *   .-´
-			 *   |
-			 *   |
-			 */
-
-			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, result);
-
-			break;
-
-		}
-
-		case 4: {
-
-			/*         .-´
-			 *       .-´
-			 *     .-´
-			 * ----´
-			 */
-
-			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(0.0 + d, 0.0 + d), left, offset, a1);
-			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
-
-			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
-
-			break;
-
-		}
-
-		case 5: {
-
-			/*         .-´
-			 *       .-´
-			 *     .-´
-			 * --.-´
-			 *   |
-			 *   |
-			 */
-
-			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(0.0 + d, 0.0 + d), left, offset, a1);
-			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
-
-			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
-
-			break;
-
-		}
-
-		case 6: {
-
-			/*         .----
-			 *       .-´
-			 *     .-´
-			 * ----´
-			 */
-
-			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 0.0 + d), left, offset, result);
-
-			break;
-
-		}
-
-		case 7: {
-
-			/*         .----
-			 *       .-´
-			 *     .-´
-			 * --.-´
-			 *   |
-			 *   |
-			 */
-
-			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 0.0 + d), left, offset, a1);
-			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
-
-			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
-
-			break;
-
-		}
-
-		case 8: {
-
-			/*         |
-			 *         |
-			 *       .-´
-			 *     .-´
-			 *   .-´
-			 *   ´
-			 */
-
-			calculateDiagonalArea(pattern, p1.set(0.0, 0.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
-			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 1.0 + d), left, offset, a2);
-
-			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
-
-			break;
-
-		}
-
-		case 9: {
-
-			/*         |
-			 *         |
-			 *       .-´
-			 *     .-´
-			 *   .-´
-			 *   |
-			 *   |
-			 */
-
-			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 1.0 + d), left, offset, result);
-
-			break;
-
-		}
-
-		case 10: {
-
-			/*         |
-			 *         .----
-			 *       .-´
-			 *     .-´
-			 *   .-´
-			 *   ´
-			 */
-
-			calculateDiagonalArea(pattern, p1.set(0.0, 0.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
-			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
-
-			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
-
-			break;
-
-		}
-
-		case 11: {
-
-			/*         |
-			 *         .----
-			 *       .-´
-			 *     .-´
-			 *   .-´
-			 *   |
-			 *   |
-			 */
-
-			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
-			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
-
-			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
-
-			break;
-
-		}
-
-		case 12: {
-
-			/*         |
-			 *         |
-			 *       .-´
-			 *     .-´
-			 * ----´
-			 */
-
-			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 1.0 + d), left, offset, result);
-
-			break;
-
-		}
-
-		case 13: {
-
-			/*         |
-			 *         |
-			 *       .-´
-			 *     .-´
-			 * --.-´
-			 *   |
-			 *   |
-			 */
-
-			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
-			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 1.0 + d), left, offset, a2);
-
-			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
-
-			break;
-
-		}
-
-		case 14: {
-
-			/*         |
-			 *         .----
-			 *       .-´
-			 *     .-´
-			 * ----´
-			 */
-
-			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
-			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
-
-			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
-
-			break;
-
-		}
-
-		case 15: {
-
-			/*         |
-			 *         .----
-			 *       .-´
-			 *     .-´
-			 * --.-´
-			 *   |
-			 *   |
-			 */
-
-			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
-			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
-
-			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
-
-			break;
-
-		}
-
-	}
-
-	return result;
-
-}
-
-/**
- * Calculates orthogonal or diagonal patterns for a given offset.
- *
- * @private
- * @param {RawImageData[]} patterns - The patterns to assemble.
- * @param {Number|Float32Array} offset - A pattern offset. Diagonal offsets are pairs.
- * @param {Boolean} orthogonal - Whether the patterns are orthogonal or diagonal.
- */
-
-function generatePatterns(patterns, offset, orthogonal) {
-
-	const result = new Vector2();
-
-	let i, l;
-	let x, y;
-	let c;
-
-	let pattern;
-	let data, size;
-
-	for(i = 0, l = patterns.length; i < l; ++i) {
-
-		pattern = patterns[i];
-
-		data = pattern.data;
-		size = pattern.width;
-
-		for(y = 0; y < size; ++y) {
-
-			for(x = 0; x < size; ++x) {
-
-				if(orthogonal) {
-
-					calculateOrthogonalAreaForPattern(i, x, y, offset, result);
-
-				} else {
-
-					calculateDiagonalAreaForPattern(i, x, y, offset, result);
-
-				}
-
-				c = (y * size + x) * 2;
-
-				data[c] = result.x * 255;
-				data[c + 1] = result.y * 255;
-
-			}
-
-		}
-
-	}
-
-}
-
-/**
- * Assembles orthogonal or diagonal patterns into the final area image.
- *
- * @private
- * @param {Vector2} base - A base position.
- * @param {RawImageData[]} patterns - The patterns to assemble.
- * @param {Uint8Array[]} edges - Edge coordinate pairs, used for positioning.
- * @param {Number} size - The pattern size.
- * @param {Boolean} orthogonal - Whether the patterns are orthogonal or diagonal.
- * @param {RawImageData} target - The target image data.
- */
-
-function assemble(base, patterns, edges, size, orthogonal, target) {
-
-	const p = new Vector2();
-
-	const dstData = target.data;
-	const dstWidth = target.width;
-
-	let i, l;
-	let x, y;
-	let c, d;
-
-	let edge;
-	let pattern;
-	let srcData, srcWidth;
-
-	for(i = 0, l = patterns.length; i < l; ++i) {
-
-		edge = edges[i];
-		pattern = patterns[i];
-
-		srcData = pattern.data;
-		srcWidth = pattern.width;
-
-		for(y = 0; y < size; ++y) {
-
-			for(x = 0; x < size; ++x) {
-
-				p.set(
-					edge[0] * size + base.x + x,
-					edge[1] * size + base.y + y
-				);
-
-				c = (p.y * dstWidth + p.x) * 4;
-
-				/* The texture coordinates of orthogonal patterns are compressed
-				quadratically to reach longer distances for a given texture size. */
-				d = orthogonal ? ((y * y * srcWidth + x * x) * 2) :
-					((y * srcWidth + x) * 2);
-
-				dstData[c] = srcData[d];
-				dstData[c + 1] = srcData[d + 1];
-				dstData[c + 2] = 0;
-				dstData[c + 3] = 255;
-
-			}
-
-		}
-
-	}
-
-}
-
-/**
- * SMAA area image data.
- *
- * This texture allows to obtain the area for a certain pattern and distances
- * to the left and to the right of the identified line.
- *
- * Based on the official python scripts:
- *  https://github.com/iryoku/smaa/tree/master/Scripts
- */
-
-class SMAAAreaImageData {
-
-	/**
-	 * Creates a new area image.
-	 *
-	 * @return {RawImageData} The generated image data.
-	 */
-
-	static generate() {
-
-		const width = 2 * 5 * ORTHOGONAL_SIZE;
-		const height = orthogonalSubsamplingOffsets.length * 5 * ORTHOGONAL_SIZE;
-
-		const data = new Uint8ClampedArray(width * height * 4);
-		const result = new RawImageData(width, height, data);
-
-		const orthogonalPatternSize = Math.pow(ORTHOGONAL_SIZE - 1, 2) + 1;
-		const diagonalPatternSize = DIAGONAL_SIZE;
-
-		const orthogonalPatterns = [];
-		const diagonalPatterns = [];
-
-		const base = new Vector2();
-
-		let i, l;
-
-		// Prepare 16 image data sets for the orthogonal and diagonal subtextures.
-		for(i = 0; i < 16; ++i) {
-
-			orthogonalPatterns.push(new RawImageData(orthogonalPatternSize, orthogonalPatternSize,
-				new Uint8ClampedArray(orthogonalPatternSize * orthogonalPatternSize * 2), 2));
-
-			diagonalPatterns.push(new RawImageData(diagonalPatternSize, diagonalPatternSize,
-				new Uint8ClampedArray(diagonalPatternSize * diagonalPatternSize * 2), 2));
-
-		}
-
-		for(i = 0, l = orthogonalSubsamplingOffsets.length; i < l; ++i) {
-
-			// Generate 16 orthogonal patterns for each offset.
-			generatePatterns(orthogonalPatterns, orthogonalSubsamplingOffsets[i], true);
-
-			// Assemble the orthogonal patterns and place them on the left side.
-			base.set(0, 5 * ORTHOGONAL_SIZE * i);
-			assemble(base, orthogonalPatterns, orthogonalEdges, ORTHOGONAL_SIZE, true, result);
-
-		}
-
-		for(i = 0, l = diagonalSubsamplingOffsets.length; i < l; ++i) {
-
-			// Generate 16 diagonal patterns for each offset.
-			generatePatterns(diagonalPatterns, diagonalSubsamplingOffsets[i], false);
-
-			// Assemble the diagonal patterns and place them on the right side.
-			base.set(5 * ORTHOGONAL_SIZE, 4 * DIAGONAL_SIZE * i);
-			assemble(base, diagonalPatterns, diagonalEdges, DIAGONAL_SIZE, false, result);
-
-		}
-
-		return result;
-
-	}
-
-}
-
-/**
- * This dictionary returns which edges are active for a certain bilinear fetch:
- * it's the reverse lookup of the bilinear function.
- *
- * @type {Map}
- * @private
- */
-
-const edges = new Map([
-
-	[bilinear([0, 0, 0, 0]), [0, 0, 0, 0]],
-	[bilinear([0, 0, 0, 1]), [0, 0, 0, 1]],
-	[bilinear([0, 0, 1, 0]), [0, 0, 1, 0]],
-	[bilinear([0, 0, 1, 1]), [0, 0, 1, 1]],
-
-	[bilinear([0, 1, 0, 0]), [0, 1, 0, 0]],
-	[bilinear([0, 1, 0, 1]), [0, 1, 0, 1]],
-	[bilinear([0, 1, 1, 0]), [0, 1, 1, 0]],
-	[bilinear([0, 1, 1, 1]), [0, 1, 1, 1]],
-
-	[bilinear([1, 0, 0, 0]), [1, 0, 0, 0]],
-	[bilinear([1, 0, 0, 1]), [1, 0, 0, 1]],
-	[bilinear([1, 0, 1, 0]), [1, 0, 1, 0]],
-	[bilinear([1, 0, 1, 1]), [1, 0, 1, 1]],
-
-	[bilinear([1, 1, 0, 0]), [1, 1, 0, 0]],
-	[bilinear([1, 1, 0, 1]), [1, 1, 0, 1]],
-	[bilinear([1, 1, 1, 0]), [1, 1, 1, 0]],
-	[bilinear([1, 1, 1, 1]), [1, 1, 1, 1]]
-
-]);
-
-/**
- * Linearly interpolates between two values.
- *
- * @private
- * @param {Number} a - The initial value.
- * @param {Number} b - The target value.
- * @param {Number} p - The interpolation value.
- * @return {Number} The interpolated value.
- */
-
-function lerp$1(a, b, p) {
-
-	return a + (b - a) * p;
-
-}
-
-/**
- * Calculates the bilinear fetch for a certain edge combination.
- *
- *     e[0]       e[1]
- *
- *              x <-------- Sample Position: (-0.25, -0.125)
- *     e[2]       e[3] <--- Current Pixel [3]: (0.0, 0.0)
- *
- * @private
- * @param {Number[]} e - The edge combination.
- * @return {Number} The interpolated value.
- */
-
-function bilinear(e) {
-
-	const a = lerp$1(e[0], e[1], 1.0 - 0.25);
-	const b = lerp$1(e[2], e[3], 1.0 - 0.25);
-
-	return lerp$1(a, b, 1.0 - 0.125);
-
-}
-
-/**
- * Computes the delta distance to add in the last step of searches to the left.
- *
- * @private
- * @param {Number[]} left - The left edge combination.
- * @param {Number[]} top - The top edge combination.
- * @return {Number} The left delta distance.
- */
-
-function deltaLeft(left, top) {
-
-	let d = 0;
-
-	// If there is an edge, continue.
-	if(top[3] === 1) {
-
-		d += 1;
-
-	}
-
-	/* If an edge was previously found, there is another edge and there are no
-	crossing edges, continue. */
-	if(d === 1 && top[2] === 1 && left[1] !== 1 && left[3] !== 1) {
-
-		d += 1;
-
-	}
-
-	return d;
-
-}
-
-/**
- * Computes the delta distance to add in the last step of searches to the right.
- *
- * @private
- * @param {Number[]} left - The left edge combination.
- * @param {Number[]} top - The top edge combination.
- * @return {Number} The right delta distance.
- */
-
-function deltaRight(left, top) {
-
-	let d = 0;
-
-	// If there is an edge, and no crossing edges, continue.
-	if(top[3] === 1 && left[1] !== 1 && left[3] !== 1) {
-
-		d += 1;
-
-	}
-
-	/* If an edge was previously found, there is another edge and there are no
-	crossing edges, continue. */
-	if(d === 1 && top[2] === 1 && left[0] !== 1 && left[2] !== 1) {
-
-		d += 1;
-
-	}
-
-	return d;
-
-}
-
-/**
- * SMAA search image data.
- *
- * This image stores information about how many pixels the line search
- * algorithm must advance in the last step.
- *
- * Based on the official python scripts:
- *  https://github.com/iryoku/smaa/tree/master/Scripts
- */
-
-class SMAASearchImageData {
-
-	/**
-	 * Creates a new search image.
-	 *
-	 * @return {RawImageData} The generated image data.
-	 */
-
-	static generate() {
-
-		const width = 66;
-		const height = 33;
-		const halfWidth = width / 2;
-
-		const croppedWidth = 64;
-		const croppedHeight = 16;
-
-		const data = new Uint8ClampedArray(width * height);
-		const croppedData = new Uint8ClampedArray(croppedWidth * croppedHeight * 4);
-
-		let x, y;
-		let s, t, i;
-		let e1, e2;
-
-		// Calculate delta distances.
-		for(y = 0; y < height; ++y) {
-
-			for(x = 0; x < width; ++x) {
-
-				s = 0.03125 * x;
-				t = 0.03125 * y;
-
-				if(edges.has(s) && edges.has(t)) {
-
-					e1 = edges.get(s);
-					e2 = edges.get(t);
-
-					i = y * width + x;
-
-					// Maximize the dynamic range to help the compression.
-					data[i] = (127 * deltaLeft(e1, e2));
-					data[i + halfWidth] = (127 * deltaRight(e1, e2));
-
-				}
-
-			}
-
-		}
-
-		// Crop the result to powers-of-two to make it BC4-friendly.
-		for(i = 0, y = height - croppedHeight; y < height; ++y) {
-
-			for(x = 0; x < croppedWidth; ++x, i += 4) {
-
-				croppedData[i] = data[y * width + x];
-				croppedData[i + 3] = 255;
-
-			}
-
-		}
-
-		return new RawImageData(croppedWidth, croppedHeight, croppedData);
 
 	}
 
@@ -11908,6 +10180,9 @@ var fragmentShader$w = "uniform float count;void mainImage(const in vec4 inputCo
 
 /**
  * A scanline effect.
+ *
+ * Based on an implementation by Georg 'Leviathan' Steinrohder (CC BY 3.0):
+ * http://www.truevision3d.com/forums/showcase/staticnoise_colorblackwhite_scanline_shaders-t18698.0.html
  */
 
 class ScanlineEffect extends Effect {
@@ -13269,17 +11544,7 @@ class SSAOEffect extends Effect {
 		const uniforms = this.uniforms;
 		const defines = this.defines;
 
-		if(value === null) {
-
-			if(defines.has("COLORIZE")) {
-
-				defines.delete("COLORIZE");
-				uniforms.get("color").value = null;
-				this.setChanged();
-
-			}
-
-		} else {
+		if(value !== null) {
 
 			if(defines.has("COLORIZE")) {
 
@@ -13292,6 +11557,12 @@ class SSAOEffect extends Effect {
 				this.setChanged();
 
 			}
+
+		} else if(defines.has("COLORIZE")) {
+
+			defines.delete("COLORIZE");
+			uniforms.get("color").value = null;
+			this.setChanged();
 
 		}
 
@@ -14032,6 +12303,1803 @@ class VignetteEffect extends Effect {
 			this.setChanged();
 
 		}
+
+	}
+
+}
+
+/**
+ * Creates a new canvas from raw image data.
+ *
+ * @private
+ * @param {Number} width - The image width.
+ * @param {Number} height - The image height.
+ * @param {Uint8ClampedArray} data - The image data.
+ * @return {Canvas} The canvas.
+ */
+
+function createCanvas(width, height, data) {
+
+	const canvas = document.createElementNS("http://www.w3.org/1999/xhtml", "canvas");
+	const context = canvas.getContext("2d");
+
+	const imageData = context.createImageData(width, height);
+	imageData.data.set(data);
+
+	canvas.width = width;
+	canvas.height = height;
+
+	context.putImageData(imageData, 0, 0);
+
+	return canvas;
+
+}
+
+/**
+ * A container for raw image data.
+ */
+
+class RawImageData {
+
+	/**
+	 * Constructs a new image data container.
+	 *
+	 * @param {Number} [width=0] - The width of the image.
+	 * @param {Number} [height=0] - The height of the image.
+	 * @param {Uint8ClampedArray} [data=null] - The image data.
+	 */
+
+	constructor(width = 0, height = 0, data = null) {
+
+		/**
+		 * The width of the image.
+		 *
+		 * @type {Number}
+		 */
+
+		this.width = width;
+
+		/**
+		 * The height of the image.
+		 *
+		 * @type {Number}
+		 */
+
+		this.height = height;
+
+		/**
+		 * The image data.
+		 *
+		 * @type {Uint8ClampedArray}
+		 */
+
+		this.data = data;
+
+	}
+
+	/**
+	 * Creates a canvas from this image data.
+	 *
+	 * @return {Canvas} The canvas or null if it couldn't be created.
+	 */
+
+	toCanvas() {
+
+		return (typeof document === "undefined") ? null : createCanvas(
+			this.width,
+			this.height,
+			this.data
+		);
+
+	}
+
+	/**
+	 * Creates a new image data container.
+	 *
+	 * @param {Object} data - Raw image data.
+	 * @return {RawImageData} The image data.
+	 */
+
+	static from(data) {
+
+		return new RawImageData(data.width, data.height, data.data);
+
+	}
+
+}
+
+var workerProgram = "!function(){\"use strict\";var e=function(e,t,a){void 0===e&&(e=0),void 0===t&&(t=0),void 0===a&&(a=null),this.width=e,this.height=t,this.data=a};e.prototype.toCanvas=function(){return\"undefined\"==typeof document?null:(e=this.width,t=this.height,a=this.data,s=document.createElementNS(\"http://www.w3.org/1999/xhtml\",\"canvas\"),r=s.getContext(\"2d\"),(n=r.createImageData(e,t)).data.set(a),s.width=e,s.height=t,r.putImageData(n,0,0),s);var e,t,a,s,r,n},e.from=function(t){return new e(t.width,t.height,t.data)};var t=function(e,t){void 0===e&&(e=0),void 0===t&&(t=0),this.x=e,this.y=t};t.prototype.set=function(e,t){return this.x=e,this.y=t,this},t.prototype.equals=function(e){return this===e||this.x===e.x&&this.y===e.y};var a=function(){this.min=new t,this.max=new t},s=new a,r=new a,n=16,i=30,y=new Float32Array([0,-.25,.25,-.125,.125,-.375,.375]),x=[new Float32Array([0,0]),new Float32Array([.25,-.25]),new Float32Array([-.25,.25]),new Float32Array([.125,-.125]),new Float32Array([-.125,.125])],c=[new Uint8Array([0,0]),new Uint8Array([3,0]),new Uint8Array([0,3]),new Uint8Array([3,3]),new Uint8Array([1,0]),new Uint8Array([4,0]),new Uint8Array([1,3]),new Uint8Array([4,3]),new Uint8Array([0,1]),new Uint8Array([3,1]),new Uint8Array([0,4]),new Uint8Array([3,4]),new Uint8Array([1,1]),new Uint8Array([4,1]),new Uint8Array([1,4]),new Uint8Array([4,4])],w=[new Uint8Array([0,0]),new Uint8Array([1,0]),new Uint8Array([0,2]),new Uint8Array([1,2]),new Uint8Array([2,0]),new Uint8Array([3,0]),new Uint8Array([2,2]),new Uint8Array([3,2]),new Uint8Array([0,1]),new Uint8Array([1,1]),new Uint8Array([0,3]),new Uint8Array([1,3]),new Uint8Array([2,1]),new Uint8Array([3,1]),new Uint8Array([2,3]),new Uint8Array([3,3])];function o(e,t,a){return e+(t-e)*a}function h(e,t){var a,s=t.min,r=t.max,n=.5*Math.sqrt(2*s.x),i=.5*Math.sqrt(2*s.y),y=.5*Math.sqrt(2*r.x),x=.5*Math.sqrt(2*r.y),c=(a=e/32,Math.min(Math.max(a,0),1));return s.set(o(n,s.x,c),o(i,s.y,c)),r.set(o(y,r.x,c),o(x,r.y,c)),t}function u(e,t,a,s){var r,n,i,y,x=t.x-e.x,c=t.y-e.y,w=a,o=a+1,h=e.y+c*(w-e.x)/x,u=e.y+c*(o-e.x)/x;return w>=e.x&&w<t.x||o>e.x&&o<=t.x?Math.sign(h)===Math.sign(u)||Math.abs(h)<1e-4||Math.abs(u)<1e-4?(r=(h+u)/2)<0?s.set(Math.abs(r),0):s.set(0,Math.abs(r)):(n=(y=-e.y*x/c+e.x)>e.x?h*(y-Math.trunc(y))/2:0,i=y<t.x?u*(1-(y-Math.trunc(y)))/2:0,(r=Math.abs(n)>Math.abs(i)?n:-i)<0?s.set(Math.abs(n),Math.abs(i)):s.set(Math.abs(i),Math.abs(n))):s.set(0,0),s}function f(e,t,a,n,i){var y=s.min,x=s.max,c=r.min,w=r.max,o=r,f=.5+n,b=.5+n-1,A=t+a+1;switch(e){case 0:i.set(0,0);break;case 1:t<=a?u(y.set(0,b),x.set(A/2,0),t,i):i.set(0,0);break;case 2:t>=a?u(y.set(A/2,0),x.set(A,b),t,i):i.set(0,0);break;case 3:u(y.set(0,b),x.set(A/2,0),t,c),u(y.set(A/2,0),x.set(A,b),t,w),h(A,o),i.set(c.x+w.x,c.y+w.y);break;case 4:t<=a?u(y.set(0,f),x.set(A/2,0),t,i):i.set(0,0);break;case 5:i.set(0,0);break;case 6:Math.abs(n)>0?(u(y.set(0,f),x.set(A,b),t,c),u(y.set(0,f),x.set(A/2,0),t,w),u(y.set(A/2,0),x.set(A,b),t,i),w.set(w.x+i.x,w.y+i.y),i.set((c.x+w.x)/2,(c.y+w.y)/2)):u(y.set(0,f),x.set(A,b),t,i);break;case 7:u(y.set(0,f),x.set(A,b),t,i);break;case 8:t>=a?u(y.set(A/2,0),x.set(A,f),t,i):i.set(0,0);break;case 9:Math.abs(n)>0?(u(y.set(0,b),x.set(A,f),t,c),u(y.set(0,b),x.set(A/2,0),t,w),u(y.set(A/2,0),x.set(A,f),t,i),w.set(w.x+i.x,w.y+i.y),i.set((c.x+w.x)/2,(c.y+w.y)/2)):u(y.set(0,b),x.set(A,f),t,i);break;case 10:i.set(0,0);break;case 11:u(y.set(0,b),x.set(A,f),t,i);break;case 12:u(y.set(0,f),x.set(A/2,0),t,c),u(y.set(A/2,0),x.set(A,f),t,w),h(A,o),i.set(c.x+w.x,c.y+w.y);break;case 13:u(y.set(0,b),x.set(A,f),t,i);break;case 14:u(y.set(0,f),x.set(A,b),t,i);break;case 15:i.set(0,0)}return i}function b(e,t,a,s){var r=e.equals(t);if(!r){var n=(e.x+t.x)/2,i=(e.y+t.y)/2;r=(t.y-e.y)*(a-n)+(e.x-t.x)*(s-i)>0}return r}function A(e,t,a,s){var r,n,y;for(r=0,y=0;y<i;++y)for(n=0;n<i;++n)b(e,t,a+n/29,s+y/29)&&++r;return r/900}function U(e,t,a,s,r,n){var i=w[e],y=i[0],x=i[1];return y>0&&(t.x+=r[0],t.y+=r[1]),x>0&&(a.x+=r[0],a.y+=r[1]),n.set(1-A(t,a,1+s,0+s),A(t,a,1+s,1+s))}function d(e,t,a,n,i){var y=s.min,x=s.max,c=r.min,w=r.max,o=t+a+1;switch(e){case 0:U(e,y.set(1,1),x.set(1+o,1+o),t,n,c),U(e,y.set(1,0),x.set(1+o,0+o),t,n,w),i.set((c.x+w.x)/2,(c.y+w.y)/2);break;case 1:U(e,y.set(1,0),x.set(0+o,0+o),t,n,c),U(e,y.set(1,0),x.set(1+o,0+o),t,n,w),i.set((c.x+w.x)/2,(c.y+w.y)/2);break;case 2:U(e,y.set(0,0),x.set(1+o,0+o),t,n,c),U(e,y.set(1,0),x.set(1+o,0+o),t,n,w),i.set((c.x+w.x)/2,(c.y+w.y)/2);break;case 3:U(e,y.set(1,0),x.set(1+o,0+o),t,n,i);break;case 4:U(e,y.set(1,1),x.set(0+o,0+o),t,n,c),U(e,y.set(1,1),x.set(1+o,0+o),t,n,w),i.set((c.x+w.x)/2,(c.y+w.y)/2);break;case 5:U(e,y.set(1,1),x.set(0+o,0+o),t,n,c),U(e,y.set(1,0),x.set(1+o,0+o),t,n,w),i.set((c.x+w.x)/2,(c.y+w.y)/2);break;case 6:U(e,y.set(1,1),x.set(1+o,0+o),t,n,i);break;case 7:U(e,y.set(1,1),x.set(1+o,0+o),t,n,c),U(e,y.set(1,0),x.set(1+o,0+o),t,n,w),i.set((c.x+w.x)/2,(c.y+w.y)/2);break;case 8:U(e,y.set(0,0),x.set(1+o,1+o),t,n,c),U(e,y.set(1,0),x.set(1+o,1+o),t,n,w),i.set((c.x+w.x)/2,(c.y+w.y)/2);break;case 9:U(e,y.set(1,0),x.set(1+o,1+o),t,n,i);break;case 10:U(e,y.set(0,0),x.set(1+o,1+o),t,n,c),U(e,y.set(1,0),x.set(1+o,0+o),t,n,w),i.set((c.x+w.x)/2,(c.y+w.y)/2);break;case 11:U(e,y.set(1,0),x.set(1+o,1+o),t,n,c),U(e,y.set(1,0),x.set(1+o,0+o),t,n,w),i.set((c.x+w.x)/2,(c.y+w.y)/2);break;case 12:U(e,y.set(1,1),x.set(1+o,1+o),t,n,i);break;case 13:U(e,y.set(1,1),x.set(1+o,1+o),t,n,c),U(e,y.set(1,0),x.set(1+o,1+o),t,n,w),i.set((c.x+w.x)/2,(c.y+w.y)/2);break;case 14:U(e,y.set(1,1),x.set(1+o,1+o),t,n,c),U(e,y.set(1,1),x.set(1+o,0+o),t,n,w),i.set((c.x+w.x)/2,(c.y+w.y)/2);break;case 15:U(e,y.set(1,1),x.set(1+o,1+o),t,n,c),U(e,y.set(1,0),x.set(1+o,0+o),t,n,w),i.set((c.x+w.x)/2,(c.y+w.y)/2)}return i}function v(e,a,s){var r,n,i,y,x,c,w,o,h=new t;for(r=0,n=e.length;r<n;++r)for(w=(c=e[r]).data,o=c.width,y=0;y<o;++y)for(i=0;i<o;++i)s?f(r,i,y,a,h):d(r,i,y,a,h),w[x=2*(y*o+i)]=255*h.x,w[x+1]=255*h.y}function k(e,a,s,r,n,i){var y,x,c,w,o,h,u,f,b,A,U=new t,d=i.data,v=i.width;for(y=0,x=a.length;y<x;++y)for(u=s[y],b=(f=a[y]).data,A=f.width,w=0;w<r;++w)for(c=0;c<r;++c)U.set(u[0]*r+e.x+c,u[1]*r+e.y+w),h=n?2*(w*w*A+c*c):2*(w*A+c),d[o=4*(U.y*v+U.x)]=b[h],d[o+1]=b[h+1],d[o+2]=0,d[o+3]=255}var m=function(){};m.generate=function(){var a,s,r=5*y.length*n,i=new Uint8ClampedArray(160*r*4),o=new e(160,r,i),h=Math.pow(15,2)+1,u=[],f=[],b=new t;for(a=0;a<16;++a)u.push(new e(h,h,new Uint8ClampedArray(h*h*2),2)),f.push(new e(20,20,new Uint8ClampedArray(800),2));for(a=0,s=y.length;a<s;++a)v(u,y[a],!0),b.set(0,80*a),k(b,u,c,n,!0,o);for(a=0,s=x.length;a<s;++a)v(f,x[a],!1),b.set(80,80*a),k(b,f,w,20,!1,o);return o};var l=new Map([[M([0,0,0,0]),[0,0,0,0]],[M([0,0,0,1]),[0,0,0,1]],[M([0,0,1,0]),[0,0,1,0]],[M([0,0,1,1]),[0,0,1,1]],[M([0,1,0,0]),[0,1,0,0]],[M([0,1,0,1]),[0,1,0,1]],[M([0,1,1,0]),[0,1,1,0]],[M([0,1,1,1]),[0,1,1,1]],[M([1,0,0,0]),[1,0,0,0]],[M([1,0,0,1]),[1,0,0,1]],[M([1,0,1,0]),[1,0,1,0]],[M([1,0,1,1]),[1,0,1,1]],[M([1,1,0,0]),[1,1,0,0]],[M([1,1,0,1]),[1,1,0,1]],[M([1,1,1,0]),[1,1,1,0]],[M([1,1,1,1]),[1,1,1,1]]]);function g(e,t,a){return e+(t-e)*a}function M(e){var t=g(e[0],e[1],.75),a=g(e[2],e[3],.75);return g(t,a,.875)}function p(e,t){var a=0;return 1===t[3]&&1!==e[1]&&1!==e[3]&&(a+=1),1===a&&1===t[2]&&1!==e[0]&&1!==e[2]&&(a+=1),a}var C=function(){};C.generate=function(){var t,a,s,r,n,i,y,x,c,w,o=new Uint8ClampedArray(2178),h=new Uint8ClampedArray(4096);for(a=0;a<33;++a)for(t=0;t<66;++t)s=.03125*t,r=.03125*a,l.has(s)&&l.has(r)&&(i=l.get(s),y=l.get(r),o[n=66*a+t]=127*(x=i,w=void 0,w=0,1===(c=y)[3]&&(w+=1),1===w&&1===c[2]&&1!==x[1]&&1!==x[3]&&(w+=1),w),o[n+33]=127*p(i,y));for(n=0,a=17;a<33;++a)for(t=0;t<64;++t,n+=4)h[n]=o[66*a+t],h[n+3]=255;return new e(64,16,h)},self.addEventListener(\"message\",(function(e){var t=m.generate(),a=C.generate();postMessage({areaImageData:t,searchImageData:a},[t.data.buffer,a.data.buffer]),close()}))}();\n";
+
+/**
+ * Generates the SMAA data images.
+ *
+ * @private
+ * @param {Boolean} [disableCache=false] - Determines whether the generated image data should be cached.
+ * @return {Promise} A promise that returns the search image and area image as a data URL pair.
+ */
+
+function generate(disableCache = false) {
+
+	const workerURL = URL.createObjectURL(new Blob([workerProgram], { type: "text/javascript" }));
+	const worker = new Worker(workerURL);
+
+	return new Promise((resolve, reject) => {
+
+		worker.addEventListener("error", (event) => reject(event.error));
+		worker.addEventListener("message", (event) => {
+
+			const searchImageData = RawImageData.from(event.data.searchImageData);
+			const areaImageData = RawImageData.from(event.data.areaImageData);
+
+			const urls = [
+				searchImageData.toCanvas().toDataURL(),
+				areaImageData.toCanvas().toDataURL()
+			];
+
+			if(!disableCache && window.localStorage !== undefined) {
+
+				localStorage.setItem("smaa-search", urls[0]);
+				localStorage.setItem("smaa-area", urls[1]);
+
+			}
+
+			URL.revokeObjectURL(workerURL);
+			resolve(urls);
+
+		});
+
+		worker.postMessage(null);
+
+	});
+
+}
+
+/**
+ * An SMAA image loader.
+ *
+ * This loader uses a worker thread to generate the search and area images. The
+ * Generated data URLs will be cached using localStorage, if available. To
+ * disable caching, please refer to {@link SMAAImageLoader.disableCache}.
+ *
+ * @experimental Added for testing, API might change in patch or minor releases. Requires three >= r108.
+ */
+
+class SMAAImageLoader extends Loader {
+
+	/**
+	 * Constructs a new SMAA image loader.
+	 *
+	 * @param {LoadingManager} [manager] - A loading manager.
+	 */
+
+	constructor(manager) {
+
+		super(manager);
+
+		/**
+		 * Indicates whether data image caching is disabled.
+		 *
+		 * @type {Boolean}
+		 */
+
+		this.disableCache = false;
+
+	}
+
+	/**
+	 * Loads the SMAA data images.
+	 *
+	 * @param {Function} [onLoad] - A function to call when the loading process is done.
+	 * @param {Function} [onError] - A function to call when an error occurs.
+	 * @return {Promise} A promise that returns the search image and area image as a pair.
+	 */
+
+	load(onLoad = () => {}, onError = () => {}) {
+
+		// Conform to the signature (url, onLoad, onProgress, onError).
+		if(arguments.length === 4) {
+
+			onLoad = arguments[1];
+			onError = arguments[3];
+
+		} else if(arguments.length === 3 || typeof arguments[0] !== "function") {
+
+			onLoad = arguments[1];
+			onError = () => {};
+
+		}
+
+		const externalManager = this.manager;
+		const internalManager = new LoadingManager();
+
+		externalManager.itemStart("smaa-search");
+		externalManager.itemStart("smaa-area");
+		internalManager.itemStart("smaa-search");
+		internalManager.itemStart("smaa-area");
+
+		return new Promise((resolve, reject) => {
+
+			const cachedURLs = (!this.disableCache && window.localStorage !== undefined) ? [
+				localStorage.getItem("smaa-search"),
+				localStorage.getItem("smaa-area")
+			] : [null, null];
+
+			const promise = (cachedURLs[0] !== null && cachedURLs[1] !== null) ?
+				Promise.resolve(cachedURLs) : generate(this.disableCache);
+
+			promise.then((urls) => {
+
+				const result = [new Image(), new Image()];
+
+				internalManager.onLoad = () => {
+
+					onLoad(result);
+					resolve(result);
+
+				};
+
+				result[0].addEventListener("load", () => {
+
+					externalManager.itemEnd("smaa-search");
+					internalManager.itemEnd("smaa-search");
+
+				});
+
+				result[1].addEventListener("load", () => {
+
+					externalManager.itemEnd("smaa-area");
+					internalManager.itemEnd("smaa-area");
+
+				});
+
+				result[0].src = urls[0];
+				result[1].src = urls[1];
+
+			}).catch((error) => {
+
+				externalManager.itemError("smaa-search");
+				externalManager.itemError("smaa-area");
+
+				onError(error);
+				reject(error);
+
+			});
+
+		});
+
+	}
+
+}
+
+/**
+ * A 2D vector.
+ *
+ * @private
+ */
+
+class Vector2 {
+
+	/**
+	 * Constructs a new vector.
+	 *
+	 * @param {Number} [x=0] - The initial x value.
+	 * @param {Number} [y=0] - The initial y value.
+	 */
+
+	constructor(x = 0, y = 0) {
+
+		/**
+		 * The X component.
+		 *
+		 * @type {Number}
+		 */
+
+		this.x = x;
+
+		/**
+		 * The Y component.
+		 *
+		 * @type {Number}
+		 */
+
+		this.y = y;
+
+	}
+
+	/**
+	 * Sets the components of this vector.
+	 *
+	 * @param {Number} x - The new x value.
+	 * @param {Number} y - The new y value.
+	 * @return {Vector2} This vector.
+	 */
+
+	set(x, y) {
+
+		this.x = x;
+		this.y = y;
+
+		return this;
+
+	}
+
+	/**
+	 * Checks if the given vector equals this vector.
+	 *
+	 * @param {Vector2} v - A vector.
+	 * @return {Boolean} Whether this vector equals the given one.
+	 */
+
+	equals(v) {
+
+		return (this === v || (this.x === v.x && this.y === v.y));
+
+	}
+
+}
+
+/**
+ * A 2D box.
+ *
+ * @private
+ */
+
+class Box2 {
+
+	/**
+	 * Constructs a new box.
+	 */
+
+	constructor() {
+
+		this.min = new Vector2();
+		this.max = new Vector2();
+
+	}
+
+}
+
+/**
+ * A box.
+ *
+ * @type {Box2}
+ * @private
+ */
+
+const b0 = new Box2();
+
+/**
+ * A box.
+ *
+ * @type {Box2}
+ * @private
+ */
+
+const b1 = new Box2();
+
+/**
+ * The orthogonal texture size.
+ *
+ * @type {Number}
+ * @private
+ */
+
+const ORTHOGONAL_SIZE = 16;
+
+/**
+ * The diagonal texture size.
+ *
+ * @type {Number}
+ * @private
+ */
+
+const DIAGONAL_SIZE = 20;
+
+/**
+ * The number of samples for calculating areas in the diagonal textures.
+ * Diagonal areas are calculated using brute force sampling.
+ *
+ * @type {Number}
+ * @private
+ */
+
+const DIAGONAL_SAMPLES = 30;
+
+/**
+ * The maximum distance for smoothing U-shapes.
+ *
+ * @type {Number}
+ * @private
+ */
+
+const SMOOTH_MAX_DISTANCE = 32;
+
+/**
+ * Subsampling offsets for orthogonal areas.
+ *
+ * @type {Float32Array}
+ * @private
+ */
+
+const orthogonalSubsamplingOffsets = new Float32Array([
+	0.0, -0.25, 0.25, -0.125, 0.125, -0.375, 0.375
+]);
+
+/**
+ * Subsampling offset pairs for diagonal areas.
+ *
+ * @type {Float32Array[]}
+ * @private
+ */
+
+const diagonalSubsamplingOffsets = [
+
+	new Float32Array([0.0, 0.0]),
+	new Float32Array([0.25, -0.25]),
+	new Float32Array([-0.25, 0.25]),
+	new Float32Array([0.125, -0.125]),
+	new Float32Array([-0.125, 0.125])
+
+];
+
+/**
+ * Orthogonal pattern positioning coordinates.
+ *
+ * Used for placing each pattern subtexture into a specific spot.
+ *
+ * @type {Uint8Array[]}
+ * @private
+ */
+
+const orthogonalEdges = [
+
+	new Uint8Array([0, 0]),
+	new Uint8Array([3, 0]),
+	new Uint8Array([0, 3]),
+	new Uint8Array([3, 3]),
+
+	new Uint8Array([1, 0]),
+	new Uint8Array([4, 0]),
+	new Uint8Array([1, 3]),
+	new Uint8Array([4, 3]),
+
+	new Uint8Array([0, 1]),
+	new Uint8Array([3, 1]),
+	new Uint8Array([0, 4]),
+	new Uint8Array([3, 4]),
+
+	new Uint8Array([1, 1]),
+	new Uint8Array([4, 1]),
+	new Uint8Array([1, 4]),
+	new Uint8Array([4, 4])
+
+];
+
+/**
+ * Diagonal pattern positioning coordinates.
+ *
+ * Used for placing each pattern subtexture into a specific spot.
+ *
+ * @type {Uint8Array[]}
+ * @private
+ */
+
+const diagonalEdges = [
+
+	new Uint8Array([0, 0]),
+	new Uint8Array([1, 0]),
+	new Uint8Array([0, 2]),
+	new Uint8Array([1, 2]),
+
+	new Uint8Array([2, 0]),
+	new Uint8Array([3, 0]),
+	new Uint8Array([2, 2]),
+	new Uint8Array([3, 2]),
+
+	new Uint8Array([0, 1]),
+	new Uint8Array([1, 1]),
+	new Uint8Array([0, 3]),
+	new Uint8Array([1, 3]),
+
+	new Uint8Array([2, 1]),
+	new Uint8Array([3, 1]),
+	new Uint8Array([2, 3]),
+	new Uint8Array([3, 3])
+
+];
+
+/**
+ * Linearly interpolates between two values.
+ *
+ * @private
+ * @param {Number} a - The initial value.
+ * @param {Number} b - The target value.
+ * @param {Number} p - The interpolation value.
+ * @return {Number} The interpolated value.
+ */
+
+function lerp(a, b, p) {
+
+	return a + (b - a) * p;
+
+}
+
+/**
+ * Clamps a value to the range [0, 1].
+ *
+ * @private
+ * @param {Number} a - The value.
+ * @return {Number} The saturated value.
+ */
+
+function saturate(a) {
+
+	return Math.min(Math.max(a, 0.0), 1.0);
+
+}
+
+/**
+ * A smoothing function for small U-patterns.
+ *
+ * @private
+ * @param {Number} d - A smoothing factor.
+ * @param {Box2} b - The area that should be smoothed.
+ * @return {Box2} The smoothed area.
+ */
+
+function smoothArea(d, b) {
+
+	const a1 = b.min;
+	const a2 = b.max;
+
+	const b1X = Math.sqrt(a1.x * 2.0) * 0.5;
+	const b1Y = Math.sqrt(a1.y * 2.0) * 0.5;
+	const b2X = Math.sqrt(a2.x * 2.0) * 0.5;
+	const b2Y = Math.sqrt(a2.y * 2.0) * 0.5;
+
+	const p = saturate(d / SMOOTH_MAX_DISTANCE);
+
+	a1.set(lerp(b1X, a1.x, p), lerp(b1Y, a1.y, p));
+	a2.set(lerp(b2X, a2.x, p), lerp(b2Y, a2.y, p));
+
+	return b;
+
+}
+
+/**
+ * Calculates the area under the line p1 -> p2, for the pixels (x, x + 1).
+ *
+ * @private
+ * @param {Vector2} p1 - The starting point of the line.
+ * @param {Vector2} p2 - The ending point of the line.
+ * @param {Number} x - The pixel index.
+ * @param {Vector2} result - A target vector to store the area in.
+ * @return {Vector2} The area.
+ */
+
+function calculateOrthogonalArea(p1, p2, x, result) {
+
+	const dX = p2.x - p1.x;
+	const dY = p2.y - p1.y;
+
+	const x1 = x;
+	const x2 = x + 1.0;
+
+	const y1 = p1.y + dY * (x1 - p1.x) / dX;
+	const y2 = p1.y + dY * (x2 - p1.x) / dX;
+
+	let a, a1, a2, t;
+
+	// Check if x is inside the area.
+	if((x1 >= p1.x && x1 < p2.x) || (x2 > p1.x && x2 <= p2.x)) {
+
+		// Check if this is a trapezoid.
+		if(Math.sign(y1) === Math.sign(y2) || Math.abs(y1) < 1e-4 || Math.abs(y2) < 1e-4) {
+
+			a = (y1 + y2) / 2.0;
+
+			if(a < 0.0) {
+
+				result.set(Math.abs(a), 0.0);
+
+			} else {
+
+				result.set(0.0, Math.abs(a));
+
+			}
+
+		} else {
+
+			// Two triangles.
+			t = -p1.y * dX / dY + p1.x;
+
+			a1 = (t > p1.x) ? y1 * (t - Math.trunc(t)) / 2.0 : 0.0;
+			a2 = (t < p2.x) ? y2 * (1.0 - (t - Math.trunc(t))) / 2.0 : 0.0;
+
+			a = (Math.abs(a1) > Math.abs(a2)) ? a1 : -a2;
+
+			if(a < 0.0) {
+
+				result.set(Math.abs(a1), Math.abs(a2));
+
+			} else {
+
+				result.set(Math.abs(a2), Math.abs(a1));
+
+			}
+
+		}
+
+	} else {
+
+		result.set(0, 0);
+
+	}
+
+	return result;
+
+}
+
+/**
+ * Calculates the area for a given pattern and distances to the left and to the
+ * right, biased by an offset.
+ *
+ * @private
+ * @param {Number} pattern - A pattern index.
+ * @param {Number} left - The left distance.
+ * @param {Number} right - The right distance.
+ * @param {Number} offset - An offset.
+ * @param {Vector2} result - A target vector to store the area in.
+ * @return {Vector2} The orthogonal area.
+ */
+
+function calculateOrthogonalAreaForPattern(pattern, left, right, offset, result) {
+
+	const p1 = b0.min;
+	const p2 = b0.max;
+	const a1 = b1.min;
+	const a2 = b1.max;
+	const a = b1;
+
+	/* o1           |
+	 *      .-------´
+	 * o2   |
+	 *
+	 *      <---d--->
+	 */
+
+	const o1 = 0.5 + offset;
+	const o2 = 0.5 + offset - 1.0;
+	const d = left + right + 1;
+
+	switch(pattern) {
+
+		case 0: {
+
+			//    ------
+
+			result.set(0, 0);
+
+			break;
+
+		}
+
+		case 1: {
+
+			/*   .------
+			 *   |
+			 *
+			 * The offset is only applied to L patterns in the crossing edge side to
+			 * make it converge with the unfiltered pattern 0.
+			 * The pattern 0 must not be filtered to avoid artifacts.
+			 */
+
+			if(left <= right) {
+
+				calculateOrthogonalArea(p1.set(0.0, o2), p2.set(d / 2.0, 0.0), left, result);
+
+			} else {
+
+				result.set(0, 0);
+
+			}
+
+			break;
+
+		}
+
+		case 2: {
+
+			/*    ------.
+			 *          |
+			 */
+
+			if(left >= right) {
+
+				calculateOrthogonalArea(p1.set(d / 2.0, 0.0), p2.set(d, o2), left, result);
+
+			} else {
+
+				result.set(0, 0);
+
+			}
+
+			break;
+
+		}
+
+		case 3: {
+
+			/*   .------.
+			 *   |      |
+			 */
+
+			calculateOrthogonalArea(p1.set(0.0, o2), p2.set(d / 2.0, 0.0), left, a1);
+			calculateOrthogonalArea(p1.set(d / 2.0, 0.0), p2.set(d, o2), left, a2);
+
+			smoothArea(d, a);
+
+			result.set(a1.x + a2.x, a1.y + a2.y);
+
+			break;
+
+		}
+
+		case 4: {
+
+			/*   |
+			 *   `------
+			 */
+
+			if(left <= right) {
+
+				calculateOrthogonalArea(p1.set(0.0, o1), p2.set(d / 2.0, 0.0), left, result);
+
+			} else {
+
+				result.set(0, 0);
+
+			}
+
+			break;
+
+		}
+
+		case 5: {
+
+			/*   |
+			 *   +------
+			 *   |
+			 */
+
+			result.set(0, 0);
+
+			break;
+
+		}
+
+		case 6: {
+
+			/*   |
+			 *   `------.
+			 *          |
+			 *
+			 * A problem of not offseting L patterns (see above) is that for certain
+			 * max search distances, the pixels in the center of a Z pattern will
+			 * detect the full Z pattern, while the pixels in the sides will detect an
+			 * L pattern. To avoid discontinuities, the full offsetted Z
+			 * revectorization is blended with partially offsetted L patterns.
+			 */
+
+			if(Math.abs(offset) > 0.0) {
+
+				calculateOrthogonalArea(p1.set(0.0, o1), p2.set(d, o2), left, a1);
+				calculateOrthogonalArea(p1.set(0.0, o1), p2.set(d / 2.0, 0.0), left, a2);
+				calculateOrthogonalArea(p1.set(d / 2.0, 0.0), p2.set(d, o2), left, result);
+				a2.set(a2.x + result.x, a2.y + result.y);
+
+				result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
+
+			} else {
+
+				calculateOrthogonalArea(p1.set(0.0, o1), p2.set(d, o2), left, result);
+
+			}
+
+			break;
+
+		}
+
+		case 7: {
+
+			/*   |
+			 *   +------.
+			 *   |      |
+			 */
+
+			calculateOrthogonalArea(p1.set(0.0, o1), p2.set(d, o2), left, result);
+
+			break;
+
+		}
+
+		case 8: {
+
+			/*          |
+			 *    ------´
+			 */
+
+			if(left >= right) {
+
+				calculateOrthogonalArea(p1.set(d / 2.0, 0.0), p2.set(d, o1), left, result);
+
+			} else {
+
+				result.set(0, 0);
+
+			}
+
+			break;
+
+		}
+
+		case 9: {
+
+			/*          |
+			 *   .------´
+			 *   |
+			 */
+
+			if(Math.abs(offset) > 0.0) {
+
+				calculateOrthogonalArea(p1.set(0.0, o2), p2.set(d, o1), left, a1);
+				calculateOrthogonalArea(p1.set(0.0, o2), p2.set(d / 2.0, 0.0), left, a2);
+				calculateOrthogonalArea(p1.set(d / 2.0, 0.0), p2.set(d, o1), left, result);
+				a2.set(a2.x + result.x, a2.y + result.y);
+
+				result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
+
+			} else {
+
+				calculateOrthogonalArea(p1.set(0.0, o2), p2.set(d, o1), left, result);
+
+			}
+
+			break;
+
+		}
+
+		case 10: {
+
+			/*          |
+			 *    ------+
+			 *          |
+			 */
+
+			result.set(0, 0);
+
+			break;
+
+		}
+
+		case 11: {
+
+			/*          |
+			 *   .------+
+			 *   |      |
+			 */
+
+			calculateOrthogonalArea(p1.set(0.0, o2), p2.set(d, o1), left, result);
+
+			break;
+
+		}
+
+		case 12: {
+
+			/*   |      |
+			 *   `------´
+			 */
+
+			calculateOrthogonalArea(p1.set(0.0, o1), p2.set(d / 2.0, 0.0), left, a1);
+			calculateOrthogonalArea(p1.set(d / 2.0, 0.0), p2.set(d, o1), left, a2);
+
+			smoothArea(d, a);
+
+			result.set(a1.x + a2.x, a1.y + a2.y);
+
+			break;
+
+		}
+
+		case 13: {
+
+			/*   |      |
+			 *   +------´
+			 *   |
+			 */
+
+			calculateOrthogonalArea(p1.set(0.0, o2), p2.set(d, o1), left, result);
+
+			break;
+
+		}
+
+		case 14: {
+
+			/*   |      |
+			 *   `------+
+			 *          |
+			 */
+
+			calculateOrthogonalArea(p1.set(0.0, o1), p2.set(d, o2), left, result);
+
+			break;
+
+		}
+
+		case 15: {
+
+			/*   |      |
+			 *   +------+
+			 *   |      |
+			 */
+
+			result.set(0, 0);
+
+			break;
+
+		}
+
+	}
+
+	return result;
+
+}
+
+/**
+ * Determines whether the given pixel is inside the specified area.
+ *
+ * @private
+ * @param {Vector2} p1 - The lower bounds of the area.
+ * @param {Vector2} p2 - The upper bounds of the area.
+ * @param {Vector2} x - The X-coordinates.
+ * @param {Vector2} y - The Y-coordinates.
+ * @return {Vector2} Whether the pixel lies inside the area.
+ */
+
+function isInsideArea(p1, p2, x, y) {
+
+	let result = p1.equals(p2);
+
+	if(!result) {
+
+		let xm = (p1.x + p2.x) / 2.0;
+		let ym = (p1.y + p2.y) / 2.0;
+
+		let a = p2.y - p1.y;
+		let b = p1.x - p2.x;
+
+		let c = a * (x - xm) + b * (y - ym);
+
+		result = (c > 0.0);
+
+	}
+
+	return result;
+
+}
+
+/**
+ * Calculates the area under the line p1 -> p2 for the pixel p using brute force
+ * sampling.
+ *
+ * @private
+ * @param {Vector2} p1 - The lower bounds of the area.
+ * @param {Vector2} p2 - The upper bounds of the area.
+ * @param {Number} pX - The X-coordinates.
+ * @param {Number} pY - The Y-coordinates.
+ * @return {Number} The amount of pixels inside the area relative to the total amount of sampled pixels.
+ */
+
+function calculateDiagonalAreaForPixel(p1, p2, pX, pY) {
+
+	let a;
+	let x, y;
+	let offsetX, offsetY;
+
+	for(a = 0, y = 0; y < DIAGONAL_SAMPLES; ++y) {
+
+		for(x = 0; x < DIAGONAL_SAMPLES; ++x) {
+
+			offsetX = x / (DIAGONAL_SAMPLES - 1.0);
+			offsetY = y / (DIAGONAL_SAMPLES - 1.0);
+
+			if(isInsideArea(p1, p2, pX + offsetX, pY + offsetY)) {
+
+				++a;
+
+			}
+
+		}
+
+	}
+
+	return a / (DIAGONAL_SAMPLES * DIAGONAL_SAMPLES);
+
+}
+
+/**
+ * Calculates the area under the line p1 -> p2. This includes the pixel and its
+ * opposite.
+ *
+ * @private
+ * @param {Number} pattern - A pattern index.
+ * @param {Vector2} p1 - The lower bounds of the area.
+ * @param {Vector2} p2 - The upper bounds of the area.
+ * @param {Number} left - The left distance.
+ * @param {Float32Array} offset - An offset.
+ * @param {Vector2} result - A target vector to store the area in.
+ * @return {Vector2} The area.
+ */
+
+function calculateDiagonalArea(pattern, p1, p2, left, offset, result) {
+
+	const e = diagonalEdges[pattern];
+	const e1 = e[0];
+	const e2 = e[1];
+
+	if(e1 > 0) {
+
+		p1.x += offset[0];
+		p1.y += offset[1];
+
+	}
+
+	if(e2 > 0) {
+
+		p2.x += offset[0];
+		p2.y += offset[1];
+
+	}
+
+	return result.set(
+		1.0 - calculateDiagonalAreaForPixel(p1, p2, 1.0 + left, 0.0 + left),
+		calculateDiagonalAreaForPixel(p1, p2, 1.0 + left, 1.0 + left)
+	);
+
+}
+
+/**
+ * Calculates the area for a given pattern and distances to the left and to the
+ * right, biased by an offset.
+ *
+ * @private
+ * @param {Number} pattern - A pattern index.
+ * @param {Number} left - The left distance.
+ * @param {Number} right - The right distance.
+ * @param {Float32Array} offset - An offset.
+ * @param {Vector2} result - A target vector to store the area in.
+ * @return {Vector2} The orthogonal area.
+ */
+
+function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
+
+	const p1 = b0.min;
+	const p2 = b0.max;
+	const a1 = b1.min;
+	const a2 = b1.max;
+
+	const d = left + right + 1;
+
+	/* There is some Black Magic involved in the diagonal area calculations.
+	 *
+	 * Unlike orthogonal patterns, the "null" pattern (one without crossing edges)
+	 * must be filtered, and the ends of both the "null" and L patterns are not
+	 * known: L and U patterns have different endings, and the adjacent pattern is
+	 * unknown. Therefore, a blend of both possibilities is computed.
+	 */
+
+	switch(pattern) {
+
+		case 0: {
+
+			/*         .-´
+			 *       .-´
+			 *     .-´
+			 *   .-´
+			 *   ´
+			 */
+
+			// First possibility.
+			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
+
+			// Second possibility.
+			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
+
+			// Blend both possibilities together.
+			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
+
+			break;
+
+		}
+
+		case 1: {
+
+			/*         .-´
+			 *       .-´
+			 *     .-´
+			 *   .-´
+			 *   |
+			 *   |
+			 */
+
+			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(0.0 + d, 0.0 + d), left, offset, a1);
+			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
+
+			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
+
+			break;
+
+		}
+
+		case 2: {
+
+			/*         .----
+			 *       .-´
+			 *     .-´
+			 *   .-´
+			 *   ´
+			 */
+
+			calculateDiagonalArea(pattern, p1.set(0.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a1);
+			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
+
+			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
+
+			break;
+
+		}
+
+		case 3: {
+
+			/*
+			 *         .----
+			 *       .-´
+			 *     .-´
+			 *   .-´
+			 *   |
+			 *   |
+			 */
+
+			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, result);
+
+			break;
+
+		}
+
+		case 4: {
+
+			/*         .-´
+			 *       .-´
+			 *     .-´
+			 * ----´
+			 */
+
+			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(0.0 + d, 0.0 + d), left, offset, a1);
+			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
+
+			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
+
+			break;
+
+		}
+
+		case 5: {
+
+			/*         .-´
+			 *       .-´
+			 *     .-´
+			 * --.-´
+			 *   |
+			 *   |
+			 */
+
+			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(0.0 + d, 0.0 + d), left, offset, a1);
+			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
+
+			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
+
+			break;
+
+		}
+
+		case 6: {
+
+			/*         .----
+			 *       .-´
+			 *     .-´
+			 * ----´
+			 */
+
+			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 0.0 + d), left, offset, result);
+
+			break;
+
+		}
+
+		case 7: {
+
+			/*         .----
+			 *       .-´
+			 *     .-´
+			 * --.-´
+			 *   |
+			 *   |
+			 */
+
+			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 0.0 + d), left, offset, a1);
+			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
+
+			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
+
+			break;
+
+		}
+
+		case 8: {
+
+			/*         |
+			 *         |
+			 *       .-´
+			 *     .-´
+			 *   .-´
+			 *   ´
+			 */
+
+			calculateDiagonalArea(pattern, p1.set(0.0, 0.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
+			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 1.0 + d), left, offset, a2);
+
+			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
+
+			break;
+
+		}
+
+		case 9: {
+
+			/*         |
+			 *         |
+			 *       .-´
+			 *     .-´
+			 *   .-´
+			 *   |
+			 *   |
+			 */
+
+			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 1.0 + d), left, offset, result);
+
+			break;
+
+		}
+
+		case 10: {
+
+			/*         |
+			 *         .----
+			 *       .-´
+			 *     .-´
+			 *   .-´
+			 *   ´
+			 */
+
+			calculateDiagonalArea(pattern, p1.set(0.0, 0.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
+			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
+
+			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
+
+			break;
+
+		}
+
+		case 11: {
+
+			/*         |
+			 *         .----
+			 *       .-´
+			 *     .-´
+			 *   .-´
+			 *   |
+			 *   |
+			 */
+
+			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
+			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
+
+			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
+
+			break;
+
+		}
+
+		case 12: {
+
+			/*         |
+			 *         |
+			 *       .-´
+			 *     .-´
+			 * ----´
+			 */
+
+			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 1.0 + d), left, offset, result);
+
+			break;
+
+		}
+
+		case 13: {
+
+			/*         |
+			 *         |
+			 *       .-´
+			 *     .-´
+			 * --.-´
+			 *   |
+			 *   |
+			 */
+
+			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
+			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 1.0 + d), left, offset, a2);
+
+			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
+
+			break;
+
+		}
+
+		case 14: {
+
+			/*         |
+			 *         .----
+			 *       .-´
+			 *     .-´
+			 * ----´
+			 */
+
+			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
+			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
+
+			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
+
+			break;
+
+		}
+
+		case 15: {
+
+			/*         |
+			 *         .----
+			 *       .-´
+			 *     .-´
+			 * --.-´
+			 *   |
+			 *   |
+			 */
+
+			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
+			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
+
+			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
+
+			break;
+
+		}
+
+	}
+
+	return result;
+
+}
+
+/**
+ * Calculates orthogonal or diagonal patterns for a given offset.
+ *
+ * @private
+ * @param {RawImageData[]} patterns - The patterns to assemble.
+ * @param {Number|Float32Array} offset - A pattern offset. Diagonal offsets are pairs.
+ * @param {Boolean} orthogonal - Whether the patterns are orthogonal or diagonal.
+ */
+
+function generatePatterns(patterns, offset, orthogonal) {
+
+	const result = new Vector2();
+
+	let i, l;
+	let x, y;
+	let c;
+
+	let pattern;
+	let data, size;
+
+	for(i = 0, l = patterns.length; i < l; ++i) {
+
+		pattern = patterns[i];
+
+		data = pattern.data;
+		size = pattern.width;
+
+		for(y = 0; y < size; ++y) {
+
+			for(x = 0; x < size; ++x) {
+
+				if(orthogonal) {
+
+					calculateOrthogonalAreaForPattern(i, x, y, offset, result);
+
+				} else {
+
+					calculateDiagonalAreaForPattern(i, x, y, offset, result);
+
+				}
+
+				c = (y * size + x) * 2;
+
+				data[c] = result.x * 255;
+				data[c + 1] = result.y * 255;
+
+			}
+
+		}
+
+	}
+
+}
+
+/**
+ * Assembles orthogonal or diagonal patterns into the final area image.
+ *
+ * @private
+ * @param {Vector2} base - A base position.
+ * @param {RawImageData[]} patterns - The patterns to assemble.
+ * @param {Uint8Array[]} edges - Edge coordinate pairs, used for positioning.
+ * @param {Number} size - The pattern size.
+ * @param {Boolean} orthogonal - Whether the patterns are orthogonal or diagonal.
+ * @param {RawImageData} target - The target image data.
+ */
+
+function assemble(base, patterns, edges, size, orthogonal, target) {
+
+	const p = new Vector2();
+
+	const dstData = target.data;
+	const dstWidth = target.width;
+
+	let i, l;
+	let x, y;
+	let c, d;
+
+	let edge;
+	let pattern;
+	let srcData, srcWidth;
+
+	for(i = 0, l = patterns.length; i < l; ++i) {
+
+		edge = edges[i];
+		pattern = patterns[i];
+
+		srcData = pattern.data;
+		srcWidth = pattern.width;
+
+		for(y = 0; y < size; ++y) {
+
+			for(x = 0; x < size; ++x) {
+
+				p.set(
+					edge[0] * size + base.x + x,
+					edge[1] * size + base.y + y
+				);
+
+				c = (p.y * dstWidth + p.x) * 4;
+
+				/* The texture coordinates of orthogonal patterns are compressed
+				quadratically to reach longer distances for a given texture size. */
+				d = orthogonal ? ((y * y * srcWidth + x * x) * 2) :
+					((y * srcWidth + x) * 2);
+
+				dstData[c] = srcData[d];
+				dstData[c + 1] = srcData[d + 1];
+				dstData[c + 2] = 0;
+				dstData[c + 3] = 255;
+
+			}
+
+		}
+
+	}
+
+}
+
+/**
+ * SMAA area image data.
+ *
+ * This texture allows to obtain the area for a certain pattern and distances
+ * to the left and to the right of the identified line.
+ *
+ * Based on the official python scripts:
+ *  https://github.com/iryoku/smaa/tree/master/Scripts
+ */
+
+class SMAAAreaImageData {
+
+	/**
+	 * Creates a new area image.
+	 *
+	 * @return {RawImageData} The generated image data.
+	 */
+
+	static generate() {
+
+		const width = 2 * 5 * ORTHOGONAL_SIZE;
+		const height = orthogonalSubsamplingOffsets.length * 5 * ORTHOGONAL_SIZE;
+
+		const data = new Uint8ClampedArray(width * height * 4);
+		const result = new RawImageData(width, height, data);
+
+		const orthogonalPatternSize = Math.pow(ORTHOGONAL_SIZE - 1, 2) + 1;
+		const diagonalPatternSize = DIAGONAL_SIZE;
+
+		const orthogonalPatterns = [];
+		const diagonalPatterns = [];
+
+		const base = new Vector2();
+
+		let i, l;
+
+		// Prepare 16 image data sets for the orthogonal and diagonal subtextures.
+		for(i = 0; i < 16; ++i) {
+
+			orthogonalPatterns.push(new RawImageData(orthogonalPatternSize, orthogonalPatternSize,
+				new Uint8ClampedArray(orthogonalPatternSize * orthogonalPatternSize * 2), 2));
+
+			diagonalPatterns.push(new RawImageData(diagonalPatternSize, diagonalPatternSize,
+				new Uint8ClampedArray(diagonalPatternSize * diagonalPatternSize * 2), 2));
+
+		}
+
+		for(i = 0, l = orthogonalSubsamplingOffsets.length; i < l; ++i) {
+
+			// Generate 16 orthogonal patterns for each offset.
+			generatePatterns(orthogonalPatterns, orthogonalSubsamplingOffsets[i], true);
+
+			// Assemble the orthogonal patterns and place them on the left side.
+			base.set(0, 5 * ORTHOGONAL_SIZE * i);
+			assemble(base, orthogonalPatterns, orthogonalEdges, ORTHOGONAL_SIZE, true, result);
+
+		}
+
+		for(i = 0, l = diagonalSubsamplingOffsets.length; i < l; ++i) {
+
+			// Generate 16 diagonal patterns for each offset.
+			generatePatterns(diagonalPatterns, diagonalSubsamplingOffsets[i], false);
+
+			// Assemble the diagonal patterns and place them on the right side.
+			base.set(5 * ORTHOGONAL_SIZE, 4 * DIAGONAL_SIZE * i);
+			assemble(base, diagonalPatterns, diagonalEdges, DIAGONAL_SIZE, false, result);
+
+		}
+
+		return result;
+
+	}
+
+}
+
+/**
+ * This dictionary returns which edges are active for a certain bilinear fetch:
+ * it's the reverse lookup of the bilinear function.
+ *
+ * @type {Map}
+ * @private
+ */
+
+const edges = new Map([
+
+	[bilinear([0, 0, 0, 0]), [0, 0, 0, 0]],
+	[bilinear([0, 0, 0, 1]), [0, 0, 0, 1]],
+	[bilinear([0, 0, 1, 0]), [0, 0, 1, 0]],
+	[bilinear([0, 0, 1, 1]), [0, 0, 1, 1]],
+
+	[bilinear([0, 1, 0, 0]), [0, 1, 0, 0]],
+	[bilinear([0, 1, 0, 1]), [0, 1, 0, 1]],
+	[bilinear([0, 1, 1, 0]), [0, 1, 1, 0]],
+	[bilinear([0, 1, 1, 1]), [0, 1, 1, 1]],
+
+	[bilinear([1, 0, 0, 0]), [1, 0, 0, 0]],
+	[bilinear([1, 0, 0, 1]), [1, 0, 0, 1]],
+	[bilinear([1, 0, 1, 0]), [1, 0, 1, 0]],
+	[bilinear([1, 0, 1, 1]), [1, 0, 1, 1]],
+
+	[bilinear([1, 1, 0, 0]), [1, 1, 0, 0]],
+	[bilinear([1, 1, 0, 1]), [1, 1, 0, 1]],
+	[bilinear([1, 1, 1, 0]), [1, 1, 1, 0]],
+	[bilinear([1, 1, 1, 1]), [1, 1, 1, 1]]
+
+]);
+
+/**
+ * Linearly interpolates between two values.
+ *
+ * @private
+ * @param {Number} a - The initial value.
+ * @param {Number} b - The target value.
+ * @param {Number} p - The interpolation value.
+ * @return {Number} The interpolated value.
+ */
+
+function lerp$1(a, b, p) {
+
+	return a + (b - a) * p;
+
+}
+
+/**
+ * Calculates the bilinear fetch for a certain edge combination.
+ *
+ *     e[0]       e[1]
+ *
+ *              x <-------- Sample Position: (-0.25, -0.125)
+ *     e[2]       e[3] <--- Current Pixel [3]: (0.0, 0.0)
+ *
+ * @private
+ * @param {Number[]} e - The edge combination.
+ * @return {Number} The interpolated value.
+ */
+
+function bilinear(e) {
+
+	const a = lerp$1(e[0], e[1], 1.0 - 0.25);
+	const b = lerp$1(e[2], e[3], 1.0 - 0.25);
+
+	return lerp$1(a, b, 1.0 - 0.125);
+
+}
+
+/**
+ * Computes the delta distance to add in the last step of searches to the left.
+ *
+ * @private
+ * @param {Number[]} left - The left edge combination.
+ * @param {Number[]} top - The top edge combination.
+ * @return {Number} The left delta distance.
+ */
+
+function deltaLeft(left, top) {
+
+	let d = 0;
+
+	// If there is an edge, continue.
+	if(top[3] === 1) {
+
+		d += 1;
+
+	}
+
+	/* If an edge was previously found, there is another edge and there are no
+	crossing edges, continue. */
+	if(d === 1 && top[2] === 1 && left[1] !== 1 && left[3] !== 1) {
+
+		d += 1;
+
+	}
+
+	return d;
+
+}
+
+/**
+ * Computes the delta distance to add in the last step of searches to the right.
+ *
+ * @private
+ * @param {Number[]} left - The left edge combination.
+ * @param {Number[]} top - The top edge combination.
+ * @return {Number} The right delta distance.
+ */
+
+function deltaRight(left, top) {
+
+	let d = 0;
+
+	// If there is an edge, and no crossing edges, continue.
+	if(top[3] === 1 && left[1] !== 1 && left[3] !== 1) {
+
+		d += 1;
+
+	}
+
+	/* If an edge was previously found, there is another edge and there are no
+	crossing edges, continue. */
+	if(d === 1 && top[2] === 1 && left[0] !== 1 && left[2] !== 1) {
+
+		d += 1;
+
+	}
+
+	return d;
+
+}
+
+/**
+ * SMAA search image data.
+ *
+ * This image stores information about how many pixels the line search
+ * algorithm must advance in the last step.
+ *
+ * Based on the official python scripts:
+ *  https://github.com/iryoku/smaa/tree/master/Scripts
+ */
+
+class SMAASearchImageData {
+
+	/**
+	 * Creates a new search image.
+	 *
+	 * @return {RawImageData} The generated image data.
+	 */
+
+	static generate() {
+
+		const width = 66;
+		const height = 33;
+		const halfWidth = width / 2;
+
+		const croppedWidth = 64;
+		const croppedHeight = 16;
+
+		const data = new Uint8ClampedArray(width * height);
+		const croppedData = new Uint8ClampedArray(croppedWidth * croppedHeight * 4);
+
+		let x, y;
+		let s, t, i;
+		let e1, e2;
+
+		// Calculate delta distances.
+		for(y = 0; y < height; ++y) {
+
+			for(x = 0; x < width; ++x) {
+
+				s = 0.03125 * x;
+				t = 0.03125 * y;
+
+				if(edges.has(s) && edges.has(t)) {
+
+					e1 = edges.get(s);
+					e2 = edges.get(t);
+
+					i = y * width + x;
+
+					// Maximize the dynamic range to help the compression.
+					data[i] = (127 * deltaLeft(e1, e2));
+					data[i + halfWidth] = (127 * deltaRight(e1, e2));
+
+				}
+
+			}
+
+		}
+
+		// Crop the result to powers-of-two to make it BC4-friendly.
+		for(i = 0, y = height - croppedHeight; y < height; ++y) {
+
+			for(x = 0; x < croppedWidth; ++x, i += 4) {
+
+				croppedData[i] = data[y * width + x];
+				croppedData[i + 3] = 255;
+
+			}
+
+		}
+
+		return new RawImageData(croppedWidth, croppedHeight, croppedData);
 
 	}
 

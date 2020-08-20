@@ -1,5 +1,5 @@
-import { BlendFunction } from "./blending/BlendFunction.js";
-import { Effect, EffectAttribute } from "./Effect.js";
+import { BlendFunction } from "./blending/BlendFunction";
+import { Effect, EffectAttribute } from "./Effect";
 
 import fragmentShader from "./glsl/depth/shader.frag";
 

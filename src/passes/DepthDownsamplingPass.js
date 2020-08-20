@@ -1,8 +1,8 @@
 import { FloatType, NearestFilter, WebGLRenderTarget } from "three";
 
-import { Resizer } from "../core/Resizer.js";
+import { Resizer } from "../core/Resizer";
 import { DepthDownsamplingMaterial } from "../materials";
-import { Pass } from "./Pass.js";
+import { Pass } from "./Pass";
 
 /**
  * A pass that downsamples the scene depth by picking the most representative
@@ -150,7 +150,7 @@ export class DepthDownsamplingPass extends Pass {
 
 		if(!renderer.capabilities.isWebGL2) {
 
-			renderer.getContext().getExtension("OES_texture_float");
+			console.error("The DepthDownsamplingPass requires WebGL 2");
 
 		}
 

@@ -297,6 +297,32 @@ export class EffectComposer {
 	}
 
 	/**
+	 * Deletes the current depth texture.
+	 *
+	 * @private
+	 */
+
+	deleteDepthTexture() {
+
+		if(this.depthTexture !== null) {
+
+			this.depthTexture.dispose();
+			this.depthTexture = null;
+
+			this.inputBuffer.depthTexture = null;
+			this.outputBuffer.depthTexture = null;
+
+			for(const pass of this.passes) {
+
+				pass.setDepthTexture(null);
+
+			}
+
+		}
+
+	}
+
+	/**
 	 * Creates a new render target by replicating the renderer's canvas.
 	 *
 	 * The created render target uses a linear filter for texel minification and
@@ -438,30 +464,24 @@ export class EffectComposer {
 
 				if(!depthTextureRequired) {
 
-					this.depthTexture.dispose();
-					this.depthTexture = null;
-
-					this.inputBuffer.depthTexture = null;
-					this.outputBuffer.depthTexture = null;
-
-					pass.setDepthTexture(null);
-
-					for(pass of passes) {
-
-						pass.setDepthTexture(null);
-
-					}
+					this.deleteDepthTexture();
 
 				}
 
 			}
 
-			if(this.autoRenderToScreen && passes.length > 0) {
+			if(this.autoRenderToScreen) {
 
-				// Check if the removed pass was the last one in the chain.
+				// Check if the removed pass was the last one.
 				if(index === passes.length) {
 
-					passes[passes.length - 1].renderToScreen = true;
+					pass.renderToScreen = false;
+
+					if(passes.length > 0) {
+
+						passes[passes.length - 1].renderToScreen = true;
+
+					}
 
 				}
 
@@ -472,9 +492,33 @@ export class EffectComposer {
 	}
 
 	/**
+	 * Removes all passes without deleting them.
+	 */
+
+	removeAllPasses() {
+
+		const passes = this.passes;
+
+		this.deleteDepthTexture();
+
+		if(passes.length > 0) {
+
+			if(this.autoRenderToScreen) {
+
+				passes[passes.length - 1].renderToScreen = false;
+
+			}
+
+			this.passes = [];
+
+		}
+
+	}
+
+	/**
 	 * Renders all enabled passes in the order in which they were added.
 	 *
-	 * @param {Number} deltaTime - The time between the last frame and the current one in seconds.
+	 * @param {Number} deltaTime - The time since the last frame in seconds.
 	 */
 
 	render(deltaTime) {

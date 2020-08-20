@@ -6,11 +6,11 @@ import {
 	sRGBEncoding
 } from "three";
 
-import { DeltaControls } from "delta-controls";
-import { ProgressManager } from "../utils/ProgressManager.js";
-import { PostProcessingDemo } from "./PostProcessingDemo.js";
+import { SpatialControls } from "spatial-controls";
+import { ProgressManager } from "../utils/ProgressManager";
+import { PostProcessingDemo } from "./PostProcessingDemo";
 
-import * as SphereCloud from "./objects/SphereCloud.js";
+import * as SphereCloud from "./objects/SphereCloud";
 
 import {
 	BlurPass,
@@ -152,9 +152,10 @@ export class BlurDemo extends PostProcessingDemo {
 
 		// Controls.
 
-		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
+		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
 		controls.settings.translation.enabled = false;
+		controls.settings.sensitivity.rotation = 2.2;
 		controls.settings.sensitivity.zoom = 1.0;
 		controls.lookAt(scene.position);
 		this.controls = controls;
@@ -218,16 +219,16 @@ export class BlurDemo extends PostProcessingDemo {
 	/**
 	 * Renders this demo.
 	 *
-	 * @param {Number} delta - The time since the last frame in seconds.
+	 * @param {Number} deltaTime - The time since the last frame in seconds.
 	 */
 
-	render(delta) {
+	render(deltaTime) {
 
 		const object = this.object;
 		const PI2 = 2.0 * Math.PI;
 
-		object.rotation.x += 0.05 * delta;
-		object.rotation.y += 0.25 * delta;
+		object.rotation.x += 0.05 * deltaTime;
+		object.rotation.y += 0.25 * deltaTime;
 
 		if(object.rotation.x >= PI2) {
 
@@ -241,7 +242,7 @@ export class BlurDemo extends PostProcessingDemo {
 
 		}
 
-		super.render(delta);
+		super.render(deltaTime);
 
 	}
 

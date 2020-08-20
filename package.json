@@ -1,6 +1,6 @@
 {
 	"name": "postprocessing",
-	"version": "6.16.0",
+	"version": "6.17.0",
 	"description": "A post processing library that provides the means to implement image filter effects for three.js.",
 	"homepage": "https://github.com/vanruesc/postprocessing",
 	"main": "build/postprocessing.js",
@@ -44,11 +44,12 @@
 		"build": "rollup -c",
 		"build:production": "cross-env NODE_ENV=production npm run build",
 		"watch": "rollup -c -w",
-		"dev": "concurrently --kill-others \"hs -s\" \"rollup -c -w\"",
+		"dev": "concurrently -k -n server,rollup,eslint \"hs -s\" \"rollup -c -w\" \"esw -w src demo/src\"",
 		"doc": "rimraf public/docs && esdoc",
-		"pretest": "npm run build:production",
-		"test": "ava",
-		"prepack": "npm test && npm run doc"
+		"lint": "eslint src demo/src",
+		"prepack": "npm test && npm run doc",
+		"pretest": "rimraf build && npm run build:production",
+		"test": "ava"
 	},
 	"ava": {
 		"failFast": true,
@@ -60,36 +61,33 @@
 		]
 	},
 	"eslintConfig": {
-		"extends": "delta"
+		"extends": "aether"
 	},
 	"peerDependencies": {
-		"three": ">= 0.102.0 < 0.119.0"
+		"three": ">= 0.102.0 < 0.120.0"
 	},
 	"devDependencies": {
-		"@babel/core": "7.x.x",
-		"@babel/preset-env": "7.x.x",
-		"@rollup/plugin-babel": "5.x.x",
-		"@rollup/plugin-node-resolve": "8.x.x",
+		"@rollup/plugin-buble": "0.x.x",
+		"@rollup/plugin-node-resolve": "9.x.x",
 		"ava": "3.x.x",
 		"concurrently": "5.x.x",
 		"cross-env": "7.x.x",
 		"dat.gui": "0.x.x",
-		"delta-controls": "2.x.x",
 		"esdoc": "1.x.x",
 		"esdoc-importpath-plugin": "1.x.x",
 		"esdoc-standard-plugin": "1.x.x",
-		"eslint-config-delta": "1.x.x",
+		"eslint": "7.x.x",
+		"eslint-config-aether": "1.x.x",
+		"eslint-watch": "7.x.x",
 		"esm": "3.x.x",
 		"http-server": "0.x.x",
-		"math-ds": "1.x.x",
 		"rimraf": "3.x.x",
 		"rollup": "2.x.x",
-		"rollup-plugin-eslint": "6.x.x",
 		"rollup-plugin-glsl": "1.x.x",
 		"rollup-plugin-string": "3.x.x",
-		"rollup-plugin-terser": "6.x.x",
-		"synthetic-event": "1.x.x",
-		"three": "0.118.x",
-		"three-demo": "3.x.x"
+		"rollup-plugin-terser": "7.x.x",
+		"spatial-controls": "3.x.x",
+		"three": "0.x.x",
+		"three-demo": "4.x.x"
 	}
 }

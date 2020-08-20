@@ -1,7 +1,7 @@
 import { LinearFilter, RGBFormat, UnsignedByteType, WebGLRenderTarget } from "three";
 import { ConvolutionMaterial, KernelSize } from "../materials";
-import { Resizer } from "../core/Resizer.js";
-import { Pass } from "./Pass.js";
+import { Resizer } from "../core/Resizer";
+import { Pass } from "./Pass";
 
 /**
  * An efficient, incremental blur pass.

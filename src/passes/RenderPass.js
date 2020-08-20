@@ -1,6 +1,6 @@
-import { OverrideMaterialManager } from "../core/OverrideMaterialManager.js";
-import { ClearPass } from "./ClearPass.js";
-import { Pass } from "./Pass.js";
+import { OverrideMaterialManager } from "../core/OverrideMaterialManager";
+import { ClearPass } from "./ClearPass";
+import { Pass } from "./Pass";
 
 /**
  * A pass that renders a given scene into the input buffer or to screen.
@@ -103,18 +103,22 @@ export class RenderPass extends Pass {
 
 		const manager = this.overrideMaterialManager;
 
-		if(value !== null && manager !== null) {
+		if(value !== null) {
 
-			manager.setMaterial(value);
+			if(manager !== null) {
 
-		} else if(value === null) {
+				manager.setMaterial(value);
+
+			} else {
+
+				this.overrideMaterialManager = new OverrideMaterialManager(value);
+
+			}
+
+		} else if(manager !== null) {
 
 			manager.dispose();
 			this.overrideMaterialManager = null;
-
-		} else {
-
-			this.overrideMaterialManager = new OverrideMaterialManager(value);
 
 		}
 

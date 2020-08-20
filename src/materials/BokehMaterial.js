@@ -1,4 +1,4 @@
-import { ShaderMaterial, Uniform, Vector2 } from "three";
+import { ShaderMaterial, Uniform, Vector2, Vector4 } from "three";
 
 import fragmentShader from "./glsl/bokeh/shader.frag";
 import vertexShader from "./glsl/common/shader.vert";
@@ -33,8 +33,8 @@ export class BokehMaterial extends ShaderMaterial {
 			},
 
 			uniforms: {
-				kernel64: new Uniform(new Float32Array(128)),
-				kernel16: new Uniform(new Float32Array(32)),
+				kernel64: new Uniform(null),
+				kernel16: new Uniform(null),
 				inputBuffer: new Uniform(null),
 				cocBuffer: new Uniform(null),
 				texelSize: new Uniform(new Vector2()),
@@ -63,7 +63,7 @@ export class BokehMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Generates the blur kernels; one big one and a small one for highlights.
+	 * Generates the blur kernels.
 	 *
 	 * @private
 	 */
@@ -71,8 +71,8 @@ export class BokehMaterial extends ShaderMaterial {
 	generateKernel() {
 
 		const GOLDEN_ANGLE = 2.39996323;
-		const points64 = this.uniforms.kernel64.value;
-		const points16 = this.uniforms.kernel16.value;
+		const points64 = new Float32Array(128);
+		const points16 = new Float32Array(32);
 
 		let i64 = 0, i16 = 0;
 
@@ -95,6 +95,31 @@ export class BokehMaterial extends ShaderMaterial {
 			}
 
 		}
+
+		// Pack points into vec4 instances to reduce the uniform count.
+		const kernel64 = [];
+		const kernel16 = [];
+
+		for(let i = 0; i < 128;) {
+
+			kernel64.push(new Vector4(
+				points64[i++], points64[i++],
+				points64[i++], points64[i++]
+			));
+
+		}
+
+		for(let i = 0; i < 32;) {
+
+			kernel16.push(new Vector4(
+				points16[i++], points16[i++],
+				points16[i++], points16[i++]
+			));
+
+		}
+
+		this.uniforms.kernel64.value = kernel64;
+		this.uniforms.kernel16.value = kernel16;
 
 	}
 

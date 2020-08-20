@@ -1,5 +1,6 @@
 import { AmbientLight, CameraHelper, DirectionalLight } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { TextureUtils } from "../../utils/TextureUtils";
 
 /**
  * The tag under which the asset is stored.
@@ -55,32 +56,13 @@ export function load(assets, manager, anisotropy) {
 
 			if(object.isMesh) {
 
-				const m = object.material;
-
-				const maps = [
-					m.map,
-					m.bumpMap,
-					m.normalMap,
-					m.roughnessMap,
-					m.metalnessMap
-				];
-
-				for(const map of maps) {
-
-					if(map !== undefined && map !== null) {
-
-						map.anisotropy = anisotropy;
-
-					}
-
-				}
-
 				object.castShadow = object.receiveShadow = true;
 
 			}
 
 		});
 
+		TextureUtils.setAnisotropy(gltf.scene, anisotropy);
 		assets.set(tag, gltf.scene);
 
 	});

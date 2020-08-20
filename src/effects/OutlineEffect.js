@@ -11,8 +11,8 @@ import {
 import { Resizer, Selection } from "../core";
 import { DepthComparisonMaterial, OutlineMaterial, KernelSize } from "../materials";
 import { BlurPass, ClearPass, DepthPass, RenderPass, ShaderPass } from "../passes";
-import { BlendFunction } from "./blending/BlendFunction.js";
-import { Effect } from "./Effect.js";
+import { BlendFunction } from "./blending/BlendFunction";
+import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/outline/shader.frag";
 import vertexShader from "./glsl/outline/shader.vert";

@@ -1,5 +1,5 @@
-import { ClearPass } from "./ClearPass.js";
-import { Pass } from "./Pass.js";
+import { ClearPass } from "./ClearPass";
+import { Pass } from "./Pass";
 
 /**
  * A stencil mask pass.

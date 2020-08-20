@@ -1,11 +1,14 @@
 import { Uniform, Vector2 } from "three";
-import { BlendFunction } from "./blending/BlendFunction.js";
-import { Effect } from "./Effect.js";
+import { BlendFunction } from "./blending/BlendFunction";
+import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/scanlines/shader.frag";
 
 /**
  * A scanline effect.
+ *
+ * Based on an implementation by Georg 'Leviathan' Steinrohder (CC BY 3.0):
+ * http://www.truevision3d.com/forums/showcase/staticnoise_colorblackwhite_scanline_shaders-t18698.0.html
  */
 
 export class ScanlineEffect extends Effect {

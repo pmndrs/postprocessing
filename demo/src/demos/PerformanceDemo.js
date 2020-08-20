@@ -14,8 +14,8 @@ import {
 	TorusBufferGeometry
 } from "three";
 
-import { ProgressManager } from "../utils/ProgressManager.js";
-import { PostProcessingDemo } from "./PostProcessingDemo.js";
+import { ProgressManager } from "../utils/ProgressManager";
+import { PostProcessingDemo } from "./PostProcessingDemo";
 
 import {
 	BlendFunction,
@@ -392,13 +392,13 @@ export class PerformanceDemo extends PostProcessingDemo {
 	/**
 	 * Renders this demo.
 	 *
-	 * @param {Number} delta - The time since the last frame in seconds.
+	 * @param {Number} deltaTime - The time since the last frame in seconds.
 	 */
 
-	render(delta) {
+	render(deltaTime) {
 
-		this.acc0 += delta;
-		this.acc1 += delta;
+		this.acc0 += deltaTime;
+		this.acc1 += deltaTime;
 
 		if(this.acc0 >= 1.0) {
 
@@ -416,7 +416,7 @@ export class PerformanceDemo extends PostProcessingDemo {
 		this.sun.updateWorldMatrix(true, false);
 		this.light.position.copy(this.sun.position);
 
-		super.render(delta);
+		super.render(deltaTime);
 
 	}
 

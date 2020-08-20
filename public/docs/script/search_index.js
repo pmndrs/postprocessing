@@ -840,6 +840,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/core/effectcomposer.js~effectcomposer#removeallpasses",
+    "class/src/core/EffectComposer.js~EffectComposer.html#instance-method-removeAllPasses",
+    "src/core/EffectComposer.js~EffectComposer#removeAllPasses",
+    "method"
+  ],
+  [
     "src/core/effectcomposer.js~effectcomposer#removepass",
     "class/src/core/EffectComposer.js~EffectComposer.html#instance-method-removePass",
     "src/core/EffectComposer.js~EffectComposer#removePass",

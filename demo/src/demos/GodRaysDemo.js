@@ -10,11 +10,11 @@ import {
 	Vector3
 } from "three";
 
-import { DeltaControls } from "delta-controls";
-import { ProgressManager } from "../utils/ProgressManager.js";
-import { PostProcessingDemo } from "./PostProcessingDemo.js";
+import { SpatialControls } from "spatial-controls";
+import { ProgressManager } from "../utils/ProgressManager";
+import { PostProcessingDemo } from "./PostProcessingDemo";
 
-import * as Sponza from "./objects/Sponza.js";
+import * as Sponza from "./objects/Sponza";
 
 import {
 	BlendFunction,
@@ -143,9 +143,10 @@ export class GodRaysDemo extends PostProcessingDemo {
 		// Controls.
 
 		const target = new Vector3(8.4, 2.15, 0.5);
-		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
+		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
 		controls.settings.translation.enabled = true;
+		controls.settings.sensitivity.rotation = 2.2;
 		controls.settings.sensitivity.translation = 3.0;
 		controls.lookAt(target);
 		controls.setOrbitEnabled(false);

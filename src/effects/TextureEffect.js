@@ -1,7 +1,7 @@
 import { LinearEncoding, Matrix3, sRGBEncoding, Uniform } from "three";
-import { ColorChannel } from "../core";
-import { BlendFunction } from "./blending/BlendFunction.js";
-import { Effect } from "./Effect.js";
+import { ColorChannel } from "../core/ColorChannel";
+import { BlendFunction } from "./blending/BlendFunction";
+import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/texture/shader.frag";
 import vertexShader from "./glsl/texture/shader.vert";

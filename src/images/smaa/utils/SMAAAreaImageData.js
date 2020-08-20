@@ -1,4 +1,4 @@
-import { RawImageData } from "../../RawImageData.js";
+import { RawImageData } from "../../RawImageData";
 
 /**
  * A 2D vector.

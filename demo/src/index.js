@@ -2,7 +2,6 @@ import {
 	HalfFloatType,
 	PCFSoftShadowMap,
 	sRGBEncoding,
-	Vector2,
 	Vector3,
 	WebGLRenderer
 } from "three";
@@ -10,60 +9,25 @@ import {
 import { DemoManager } from "three-demo";
 import { EffectComposer, OverrideMaterialManager } from "../../src";
 
-import { AntialiasingDemo } from "./demos/AntialiasingDemo.js";
-import { BloomDemo } from "./demos/BloomDemo.js";
-import { BlurDemo } from "./demos/BlurDemo.js";
-import { ColorDepthDemo } from "./demos/ColorDepthDemo.js";
-import { ColorGradingDemo } from "./demos/ColorGradingDemo.js";
-import { DepthOfFieldDemo } from "./demos/DepthOfFieldDemo.js";
-import { GlitchDemo } from "./demos/GlitchDemo.js";
-import { GodRaysDemo } from "./demos/GodRaysDemo.js";
-import { OutlineDemo } from "./demos/OutlineDemo.js";
-import { PatternDemo } from "./demos/PatternDemo.js";
-import { PixelationDemo } from "./demos/PixelationDemo.js";
-import { ShockWaveDemo } from "./demos/ShockWaveDemo.js";
-import { SSAODemo } from "./demos/SSAODemo.js";
-import { TextureDemo } from "./demos/TextureDemo.js";
-import { ToneMappingDemo } from "./demos/ToneMappingDemo.js";
-import { PerformanceDemo } from "./demos/PerformanceDemo.js";
+import { AntialiasingDemo } from "./demos/AntialiasingDemo";
+import { BloomDemo } from "./demos/BloomDemo";
+import { BlurDemo } from "./demos/BlurDemo";
+import { ColorDepthDemo } from "./demos/ColorDepthDemo";
+import { ColorGradingDemo } from "./demos/ColorGradingDemo";
+import { DepthOfFieldDemo } from "./demos/DepthOfFieldDemo";
+import { GlitchDemo } from "./demos/GlitchDemo";
+import { GodRaysDemo } from "./demos/GodRaysDemo";
+import { OutlineDemo } from "./demos/OutlineDemo";
+import { PatternDemo } from "./demos/PatternDemo";
+import { PixelationDemo } from "./demos/PixelationDemo";
+import { ShockWaveDemo } from "./demos/ShockWaveDemo";
+import { SSAODemo } from "./demos/SSAODemo";
+import { TextureDemo } from "./demos/TextureDemo";
+import { ToneMappingDemo } from "./demos/ToneMappingDemo";
+import { PerformanceDemo } from "./demos/PerformanceDemo";
 
-import { ProgressManager } from "./utils/ProgressManager.js";
-
-/**
- * A cache that keeps track of loaded demos.
- *
- * @type {WeakSet}
- * @private
- */
-
-const cache = new WeakSet();
-
-/**
- * A renderer.
- *
- * @type {WebGLRenderer}
- * @private
- */
-
-let renderer;
-
-/**
- * A camera.
- *
- * @type {Camera}
- * @private
- */
-
-let camera;
-
-/**
- * An effect composer.
- *
- * @type {EffectComposer}
- * @private
- */
-
-let composer;
+import { ProgressManager } from "./utils/ProgressManager";
+import { TextureUtils } from "./utils/TextureUtils";
 
 /**
  * A demo manager.
@@ -75,106 +39,25 @@ let composer;
 let manager;
 
 /**
- * The main render loop.
+ * A camera.
  *
+ * @type {Camera}
  * @private
- * @param {DOMHighResTimeStamp} now - The current time.
  */
 
-function render(now) {
+let camera;
+
+/**
+ * Renders the current demo.
+ *
+ * @private
+ * @param {DOMHighResTimeStamp} timestamp - The current time in seconds.
+ */
+
+function render(timestamp) {
 
 	requestAnimationFrame(render);
-	manager.render(now);
-
-}
-
-/**
- * Handles demo change events.
- *
- * @private
- * @param {Event} event - An event.
- */
-
-function onChange(event) {
-
-	const demo = event.demo;
-
-	// Make sure that the main renderer is being used and update it just in case.
-	const size = composer.getRenderer().getSize(new Vector2());
-	renderer.setSize(size.width, size.height);
-	renderer.shadowMap.needsUpdate = true;
-	composer.replaceRenderer(renderer);
-	composer.reset();
-	composer.addPass(demo.renderPass);
-
-	// Reset the progress bar and show it.
-	ProgressManager.reset();
-	document.querySelector(".loading").classList.remove("hidden");
-
-}
-
-/**
- * Handles demo load events.
- *
- * @private
- * @param {Event} event - An event.
- */
-
-function onLoad(event) {
-
-	const demo = event.demo;
-
-	if(!cache.has(demo)) {
-
-		// Prevent stuttering when new objects come into view.
-		renderer.compile(demo.scene, demo.camera);
-
-		// Initialize textures ahead of time.
-		demo.scene.traverse((object) => {
-
-			if(object.isMesh) {
-
-				const m = object.material;
-
-				const maps = [
-					m.map,
-					m.lightMap,
-					m.aoMap,
-					m.emissiveMap,
-					m.bumpMap,
-					m.normalMap,
-					m.displacementMap,
-					m.roughnessMap,
-					m.metalnessMap,
-					m.alphaMap
-				];
-
-				for(const map of maps) {
-
-					if(map !== undefined && map !== null) {
-
-						renderer.initTexture(map);
-
-					}
-
-				}
-
-			}
-
-		});
-
-		cache.add(demo);
-
-	}
-
-	// Keep a reference the camera of the current demo for debugging purposes.
-	camera = demo.camera;
-
-	// Assign this camera to the main render pass.
-	demo.renderPass.camera = camera;
-
-	// Hide the progress bar.
-	document.querySelector(".loading").classList.add("hidden");
+	manager.render(timestamp);
 
 }
 
@@ -189,9 +72,10 @@ window.addEventListener("load", (event) => {
 
 	const debug = (window.location.href.indexOf("debug") !== -1);
 	const viewport = document.getElementById("viewport");
+	const demoCache = new WeakSet();
 
 	// Create and configure the renderer.
-	renderer = new WebGLRenderer({
+	const renderer = new WebGLRenderer({
 		powerPreference: "high-performance",
 		antialias: false,
 		stencil: false,
@@ -213,7 +97,7 @@ window.addEventListener("load", (event) => {
 	OverrideMaterialManager.workaroundEnabled = true;
 
 	// Create the effect composer.
-	composer = new EffectComposer(renderer, {
+	const composer = new EffectComposer(renderer, {
 		frameBufferType: HalfFloatType
 	});
 
@@ -224,8 +108,35 @@ window.addEventListener("load", (event) => {
 	});
 
 	// Setup demo switch and load event handlers.
-	manager.addEventListener("change", onChange);
-	manager.addEventListener("load", onLoad);
+	manager.addEventListener("change", (event) => {
+
+		composer.reset();
+		composer.addPass(event.demo.renderPass);
+		renderer.shadowMap.needsUpdate = true;
+
+		ProgressManager.reset();
+		document.querySelector(".loading").classList.remove("hidden");
+
+	});
+
+	manager.addEventListener("load", (event) => {
+
+		const demo = event.demo;
+		camera = demo.camera;
+		demo.renderPass.camera = camera;
+
+		if(!demoCache.has(demo)) {
+
+			// Prevent stuttering when new objects come into view.
+			renderer.compile(demo.scene, camera);
+			TextureUtils.initializeTextures(renderer, demo.scene);
+			demoCache.add(demo);
+
+		}
+
+		document.querySelector(".loading").classList.add("hidden");
+
+	});
 
 	const demos = [
 		new AntialiasingDemo(composer),
@@ -261,44 +172,23 @@ window.addEventListener("load", (event) => {
 
 	}
 
-	render();
+	requestAnimationFrame(render);
 
 });
 
 /**
  * Handles browser resizing.
  *
- * @private
  * @param {Event} event - An event.
  */
 
-window.addEventListener("resize", (function() {
+window.addEventListener("resize", (event) => {
 
-	let timeoutId = 0;
+	const width = window.innerWidth;
+	const height = window.innerHeight;
+	manager.setSize(width, height);
 
-	function handleResize(event) {
-
-		const width = event.target.innerWidth;
-		const height = event.target.innerHeight;
-
-		manager.setSize(width, height);
-		composer.setSize(width, height);
-
-		timeoutId = 0;
-
-	}
-
-	return function onResize(event) {
-
-		if(timeoutId === 0) {
-
-			timeoutId = setTimeout(handleResize, 100, event);
-
-		}
-
-	};
-
-}()));
+});
 
 /**
  * Performs initialization tasks when the document is ready.
@@ -330,7 +220,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
  * Toggles the visibility of the interface on H key press.
  *
  * @private
- * @param {Event} event - An event.
+ * @param {KeyboardEvent} event - An event.
  */
 
 document.addEventListener("keydown", (event) => {

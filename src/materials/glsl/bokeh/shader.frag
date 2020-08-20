@@ -6,11 +6,11 @@ uniform float scale;
 
 #if PASS == 1
 
-	uniform float kernel64[128];
+	uniform vec4 kernel64[32];
 
 #else
 
-	uniform float kernel16[32];
+	uniform vec4 kernel16[8];
 
 #endif
 
@@ -51,9 +51,15 @@ void main() {
 
 			vec4 acc = vec4(0.0);
 
-			for(int i = 0; i < 128; i += 2) {
+			// Each vector contains two sampling points (64 in total).
+			for(int i = 0; i < 32; ++i) {
 
-				vec2 uv = step * vec2(kernel64[i], kernel64[i + 1]) + vUv;
+				vec4 kernel = kernel64[i];
+
+				vec2 uv = step * kernel.xy + vUv;
+				acc += texture2D(inputBuffer, uv);
+
+				uv = step * kernel.zw + vUv;
 				acc += texture2D(inputBuffer, uv);
 
 			}
@@ -64,9 +70,15 @@ void main() {
 
 			vec4 maxValue = texture2D(inputBuffer, vUv);
 
-			for(int i = 0; i < 32; i += 2) {
+			// Each vector contains two sampling points (16 in total).
+			for(int i = 0; i < 8; ++i) {
 
-				vec2 uv = step * vec2(kernel16[i], kernel16[i + 1]) + vUv;
+				vec4 kernel = kernel16[i];
+
+				vec2 uv = step * kernel.xy + vUv;
+				maxValue = max(texture2D(inputBuffer, uv), maxValue);
+
+				uv = step * kernel.zw + vUv;
 				maxValue = max(texture2D(inputBuffer, uv), maxValue);
 
 			}

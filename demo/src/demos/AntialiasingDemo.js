@@ -1,10 +1,10 @@
 import { Color, PerspectiveCamera, Vector3 } from "three";
-import { DeltaControls } from "delta-controls";
-import { ProgressManager } from "../utils/ProgressManager.js";
-import { PostProcessingDemo } from "./PostProcessingDemo.js";
+import { SpatialControls } from "spatial-controls";
+import { ProgressManager } from "../utils/ProgressManager";
+import { PostProcessingDemo } from "./PostProcessingDemo";
 
-import * as Cage from "./objects/Cage.js";
-import * as Sponza from "./objects/Sponza.js";
+import * as Cage from "./objects/Cage";
+import * as Sponza from "./objects/Sponza";
 
 import {
 	BlendFunction,
@@ -161,9 +161,10 @@ export class AntialiasingDemo extends PostProcessingDemo {
 		// Controls.
 
 		const target = new Vector3(-0.5, 6.5, -0.25);
-		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
+		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
 		controls.settings.translation.enabled = true;
+		controls.settings.sensitivity.rotation = 2.2;
 		controls.settings.sensitivity.translation = 3.0;
 		controls.lookAt(target);
 		controls.setOrbitEnabled(false);
@@ -236,18 +237,18 @@ export class AntialiasingDemo extends PostProcessingDemo {
 	/**
 	 * Renders this demo.
 	 *
-	 * @param {Number} delta - The time since the last frame in seconds.
+	 * @param {Number} deltaTime - The time since the last frame in seconds.
 	 */
 
-	render(delta) {
+	render(deltaTime) {
 
 		if(this.rotate) {
 
 			const object = this.object;
 			const PI2 = 2.0 * Math.PI;
 
-			object.rotation.x += 0.01 * delta;
-			object.rotation.y += 0.05 * delta;
+			object.rotation.x += 0.01 * deltaTime;
+			object.rotation.y += 0.05 * deltaTime;
 
 			if(object.rotation.x >= PI2) {
 
@@ -263,7 +264,7 @@ export class AntialiasingDemo extends PostProcessingDemo {
 
 		}
 
-		super.render(delta);
+		super.render(deltaTime);
 
 	}
 

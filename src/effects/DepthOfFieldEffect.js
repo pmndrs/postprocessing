@@ -2,8 +2,8 @@ import { LinearFilter, RGBFormat, Uniform, UnsignedByteType, WebGLRenderTarget }
 import { ColorChannel, Resizer } from "../core";
 import { BokehMaterial, CircleOfConfusionMaterial, KernelSize, MaskFunction, MaskMaterial } from "../materials";
 import { BlurPass, ShaderPass } from "../passes";
-import { BlendFunction } from "./blending/BlendFunction.js";
-import { Effect, EffectAttribute } from "./Effect.js";
+import { BlendFunction } from "./blending/BlendFunction";
+import { Effect, EffectAttribute } from "./Effect";
 
 import fragmentShader from "./glsl/depth-of-field/shader.frag";
 

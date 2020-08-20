@@ -8,9 +8,9 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { Selection } from "../core";
+import { Selection } from "../core/Selection";
 import { ClearPass, RenderPass } from "../passes";
-import { BloomEffect } from "./BloomEffect.js";
+import { BloomEffect } from "./BloomEffect";
 
 /**
  * A selective bloom effect.

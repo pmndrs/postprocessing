@@ -116,13 +116,16 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/effects/ScanlineEffect.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { Uniform, Vector2 } from &quot;three&quot;;
-import { BlendFunction } from &quot;./blending/BlendFunction.js&quot;;
-import { Effect } from &quot;./Effect.js&quot;;
+import { BlendFunction } from &quot;./blending/BlendFunction&quot;;
+import { Effect } from &quot;./Effect&quot;;
 
 import fragmentShader from &quot;./glsl/scanlines/shader.frag&quot;;
 
 /**
  * A scanline effect.
+ *
+ * Based on an implementation by Georg &apos;Leviathan&apos; Steinrohder (CC BY 3.0):
+ * http://www.truevision3d.com/forums/showcase/staticnoise_colorblackwhite_scanline_shaders-t18698.0.html
  */
 
 export class ScanlineEffect extends Effect {

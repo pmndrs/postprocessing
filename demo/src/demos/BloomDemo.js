@@ -8,12 +8,12 @@ import {
 	Vector2
 } from "three";
 
-import { DeltaControls } from "delta-controls";
-import { ProgressManager } from "../utils/ProgressManager.js";
-import { PostProcessingDemo } from "./PostProcessingDemo.js";
+import { SpatialControls } from "spatial-controls";
+import { ProgressManager } from "../utils/ProgressManager";
+import { PostProcessingDemo } from "./PostProcessingDemo";
 
-import * as Cage from "./objects/Cage.js";
-import * as SphereCloud from "./objects/SphereCloud.js";
+import * as Cage from "./objects/Cage";
+import * as SphereCloud from "./objects/SphereCloud";
 
 import {
 	BlendFunction,
@@ -271,9 +271,10 @@ export class BloomDemo extends PostProcessingDemo {
 
 		// Controls.
 
-		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
+		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
 		controls.settings.translation.enabled = false;
+		controls.settings.sensitivity.rotation = 2.2;
 		controls.settings.sensitivity.zoom = 1.0;
 		controls.lookAt(scene.position);
 		this.controls = controls;
