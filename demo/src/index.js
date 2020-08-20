@@ -30,13 +30,13 @@ import { ProgressManager } from "./utils/ProgressManager";
 import { TextureUtils } from "./utils/TextureUtils";
 
 /**
- * A renderer.
+ * A demo manager.
  *
- * @type {WebGLRenderer}
+ * @type {DemoManager}
  * @private
  */
 
-let renderer;
+let manager;
 
 /**
  * A camera.
@@ -48,34 +48,16 @@ let renderer;
 let camera;
 
 /**
- * An effect composer.
- *
- * @type {EffectComposer}
- * @private
- */
-
-let composer;
-
-/**
- * A demo manager.
- *
- * @type {DemoManager}
- * @private
- */
-
-let manager;
-
-/**
- * The main render loop.
+ * Renders the current demo.
  *
  * @private
- * @param {DOMHighResTimeStamp} now - The current time.
+ * @param {DOMHighResTimeStamp} timestamp - The current time in seconds.
  */
 
-function render(now) {
+function render(timestamp) {
 
 	requestAnimationFrame(render);
-	manager.render(now);
+	manager.render(timestamp);
 
 }
 
@@ -93,7 +75,7 @@ window.addEventListener("load", (event) => {
 	const demoCache = new WeakSet();
 
 	// Create and configure the renderer.
-	renderer = new WebGLRenderer({
+	const renderer = new WebGLRenderer({
 		powerPreference: "high-performance",
 		antialias: false,
 		stencil: false,
@@ -115,7 +97,7 @@ window.addEventListener("load", (event) => {
 	OverrideMaterialManager.workaroundEnabled = true;
 
 	// Create the effect composer.
-	composer = new EffectComposer(renderer, {
+	const composer = new EffectComposer(renderer, {
 		frameBufferType: HalfFloatType
 	});
 
@@ -128,8 +110,7 @@ window.addEventListener("load", (event) => {
 	// Setup demo switch and load event handlers.
 	manager.addEventListener("change", (event) => {
 
-		composer.removeAllPasses();
-		composer.autoRenderToScreen = true;
+		composer.reset();
 		composer.addPass(event.demo.renderPass);
 		renderer.shadowMap.needsUpdate = true;
 
