@@ -472,7 +472,7 @@ export class EffectComposer {
 
 			if(this.autoRenderToScreen) {
 
-				// Check if the removed pass was the last one in the chain.
+				// Check if the removed pass was the last one.
 				if(index === passes.length) {
 
 					pass.renderToScreen = false;
@@ -492,7 +492,7 @@ export class EffectComposer {
 	}
 
 	/**
-	 * Removes all passes.
+	 * Removes all passes without deleting them.
 	 */
 
 	removeAllPasses() {
@@ -518,7 +518,7 @@ export class EffectComposer {
 	/**
 	 * Renders all enabled passes in the order in which they were added.
 	 *
-	 * @param {Number} deltaTime - The time between the last frame and the current one in seconds.
+	 * @param {Number} deltaTime - The time since the last frame in seconds.
 	 */
 
 	render(deltaTime) {
