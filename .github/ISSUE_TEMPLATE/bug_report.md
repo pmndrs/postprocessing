@@ -7,6 +7,9 @@ assignees: ''
 
 ---
 
+**Before opening a bug report**
+Search the issue tracker for similar bug reports before submitting a new one.
+
 **Describe the bug**
 A clear and concise description of what the bug is.
 
@@ -20,16 +23,19 @@ A clear and concise description of what you expected to happen.
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
+**Library versions used (please complete the following information):**
+  - Three: [e.g. 0.119.0]
+  - Post Processing: [e.g. 6.0.0]
+
 **Desktop (please complete the following information):**
- - OS: [e.g. Linux]
- - Browser [e.g. Chrome]
- - Version [e.g. 6.1.0]
+ - OS: [e.g. Windows 10]
+ - Browser [e.g. Chrome 0.0.0.0]
+ - Graphics hardware: [e.g. NVIDIA GTX 1050]
 
 **Smartphone (please complete the following information):**
  - Device: [e.g. iPhone6]
  - OS: [e.g. Android 10]
- - Browser [e.g. Stock browser, Firefox]
- - Version [e.g. 68.11.0]
+ - Browser [e.g. Firefox 68.11.0]
 
 **Additional context**
 Add any other context about the problem here.
