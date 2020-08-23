@@ -6,14 +6,6 @@ labels: ''
 assignees: ''
 
 ---
----
-name: Bug report
-about: Create a report about a potential defect
-title: ''
-labels: ''
-assignees: ''
-
----
 
 ### Description of the bug
 
