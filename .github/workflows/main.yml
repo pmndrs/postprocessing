@@ -12,13 +12,14 @@ on:
 
 jobs:
   test:
+    name: Test
     runs-on: ubuntu-latest
     steps:
       - name: Git checkout
         uses: actions/checkout@v2
-      - name: Install node
+      - name: Install Node
         uses: actions/setup-node@v1
-      - name: Install dependencies
-        uses: jaid/action-npm-install@v1.2.1
-      - name: Build and test
-        run: npm test
+      - name: Install PNPM
+        run: npm install -g pnpm
+      - name: Install and test
+        run: pnpm install-test
