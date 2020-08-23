@@ -1,7 +1,7 @@
 # Post Processing
 
-[![Build status](https://travis-ci.org/vanruesc/postprocessing.svg?branch=master)](https://travis-ci.org/vanruesc/postprocessing)
-[![npm version](https://badgen.net/npm/v/postprocessing?color=green)](https://www.npmjs.com/package/postprocessing)
+![CI](https://github.com/vanruesc/postprocessing/workflows/CI/badge.svg?branch=master)
+[![Version](https://badgen.net/npm/v/postprocessing?color=green)](https://www.npmjs.com/package/postprocessing)
 [![Peer dependencies](https://img.shields.io/david/peer/vanruesc/postprocessing)](https://david-dm.org/vanruesc/postprocessing?type=peer)
 [![CDN](https://badgen.net/jsdelivr/hits/npm/postprocessing)](https://www.jsdelivr.com/package/npm/postprocessing)
 
