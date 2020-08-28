@@ -34,15 +34,6 @@ export class RenderPass extends Pass {
 		this.clearPass = new ClearPass();
 
 		/**
-		 * A depth texture.
-		 *
-		 * @type {DepthTexture}
-		 * @private
-		 */
-
-		this.depthTexture = null;
-
-		/**
 		 * An override material manager.
 		 *
 		 * @type {OverrideMaterialManager}
@@ -161,34 +152,6 @@ export class RenderPass extends Pass {
 	}
 
 	/**
-	 * Returns the current depth texture.
-	 *
-	 * @return {Texture} The current depth texture, or null if there is none.
-	 */
-
-	getDepthTexture() {
-
-		return this.depthTexture;
-
-	}
-
-	/**
-	 * Sets the depth texture.
-	 *
-	 * The provided texture will be attached to the input buffer unless this pass
-	 * renders to screen.
-	 *
-	 * @param {DepthTexture} depthTexture - A depth texture.
-	 * @param {Number} [depthPacking=0] - The depth packing.
-	 */
-
-	setDepthTexture(depthTexture, depthPacking = 0) {
-
-		this.depthTexture = depthTexture;
-
-	}
-
-	/**
 	 * Renders the scene.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
@@ -203,13 +166,6 @@ export class RenderPass extends Pass {
 		const scene = this.scene;
 		const camera = this.camera;
 		const renderTarget = this.renderToScreen ? null : inputBuffer;
-
-		if(this.depthTexture !== null && !this.renderToScreen) {
-
-			inputBuffer.depthTexture = this.depthTexture;
-			outputBuffer.depthTexture = null;
-
-		}
 
 		if(this.clear) {
 
