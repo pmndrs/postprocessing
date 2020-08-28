@@ -55,6 +55,18 @@ export class SavePass extends Pass {
 	}
 
 	/**
+	 * The saved texture.
+	 *
+	 * @type {Texture}
+	 */
+
+	get texture() {
+
+		return this.renderTarget.texture;
+
+	}
+
+	/**
 	 * Saves the input buffer.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
