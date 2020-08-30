@@ -360,7 +360,15 @@ export class Pass {
 
 		for(const key of Object.keys(this)) {
 
-			if(this[key] !== null && typeof this[key].dispose === "function") {
+			const property = this[key];
+
+			if(property !== null && typeof property.dispose === "function") {
+
+				if(property instanceof Scene) {
+
+					continue;
+
+				}
 
 				/** @ignore */
 				this[key].dispose();

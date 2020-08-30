@@ -1,4 +1,4 @@
-import { EventDispatcher } from "three";
+import { EventDispatcher, Scene } from "three";
 import { BlendFunction, BlendMode } from "./blending";
 
 /**
@@ -294,7 +294,15 @@ export class Effect extends EventDispatcher {
 
 		for(const key of Object.keys(this)) {
 
-			if(this[key] !== null && typeof this[key].dispose === "function") {
+			const property = this[key];
+
+			if(property !== null && typeof property.dispose === "function") {
+
+				if(property instanceof Scene) {
+
+					continue;
+
+				}
 
 				/** @ignore */
 				this[key].dispose();
