@@ -543,6 +543,9 @@ export class EffectComposer {
 
 				const depthTexture = this.createDepthTexture();
 
+				// Hack: Make sure the input buffer uses the depth texture.
+				this.inputBuffer.depthTexture = depthTexture;
+
 				for(pass of passes) {
 
 					pass.setDepthTexture(depthTexture);

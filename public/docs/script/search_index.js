@@ -4164,12 +4164,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/passes/renderpass.js~renderpass#getdepthtexture",
-    "class/src/passes/RenderPass.js~RenderPass.html#instance-method-getDepthTexture",
-    "src/passes/RenderPass.js~RenderPass#getDepthTexture",
-    "method"
-  ],
-  [
     "src/passes/renderpass.js~renderpass#needsswap",
     "class/src/passes/RenderPass.js~RenderPass.html#instance-member-needsSwap",
     "src/passes/RenderPass.js~RenderPass#needsSwap",
@@ -4204,12 +4198,6 @@ window.esdocSearchIndex = [
     "class/src/passes/RenderPass.js~RenderPass.html#instance-set-renderToScreen",
     "src/passes/RenderPass.js~RenderPass#renderToScreen",
     "member"
-  ],
-  [
-    "src/passes/renderpass.js~renderpass#setdepthtexture",
-    "class/src/passes/RenderPass.js~RenderPass.html#instance-method-setDepthTexture",
-    "src/passes/RenderPass.js~RenderPass#setDepthTexture",
-    "method"
   ],
   [
     "src/passes/savepass.js",
@@ -4258,6 +4246,12 @@ window.esdocSearchIndex = [
     "class/src/passes/SavePass.js~SavePass.html#instance-method-setSize",
     "src/passes/SavePass.js~SavePass#setSize",
     "method"
+  ],
+  [
+    "src/passes/savepass.js~savepass#texture",
+    "class/src/passes/SavePass.js~SavePass.html#instance-get-texture",
+    "src/passes/SavePass.js~SavePass#texture",
+    "member"
   ],
   [
     "src/passes/shaderpass.js",

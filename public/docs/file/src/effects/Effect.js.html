@@ -115,7 +115,7 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/effects/Effect.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { EventDispatcher } from &quot;three&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { EventDispatcher, Scene } from &quot;three&quot;;
 import { BlendFunction, BlendMode } from &quot;./blending&quot;;
 
 /**
@@ -411,7 +411,15 @@ export class Effect extends EventDispatcher {
 
 		for(const key of Object.keys(this)) {
 
-			if(this[key] !== null &amp;&amp; typeof this[key].dispose === &quot;function&quot;) {
+			const property = this[key];
+
+			if(property !== null &amp;&amp; typeof property.dispose === &quot;function&quot;) {
+
+				if(property instanceof Scene) {
+
+					continue;
+
+				}
 
 				/** @ignore */
 				this[key].dispose();

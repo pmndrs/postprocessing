@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.17.1 build Thu Aug 20 2020
+ * postprocessing v6.17.2 build Sun Aug 30 2020
  * https://github.com/vanruesc/postprocessing
  * Copyright 2020 Raoul van Rüschen
  * @license Zlib
@@ -2718,7 +2718,15 @@ class Pass {
 
 		for(const key of Object.keys(this)) {
 
-			if(this[key] !== null && typeof this[key].dispose === "function") {
+			const property = this[key];
+
+			if(property !== null && typeof property.dispose === "function") {
+
+				if(property instanceof Scene) {
+
+					continue;
+
+				}
 
 				/** @ignore */
 				this[key].dispose();
@@ -3514,15 +3522,6 @@ class RenderPass extends Pass {
 		this.clearPass = new ClearPass();
 
 		/**
-		 * A depth texture.
-		 *
-		 * @type {DepthTexture}
-		 * @private
-		 */
-
-		this.depthTexture = null;
-
-		/**
 		 * An override material manager.
 		 *
 		 * @type {OverrideMaterialManager}
@@ -3641,34 +3640,6 @@ class RenderPass extends Pass {
 	}
 
 	/**
-	 * Returns the current depth texture.
-	 *
-	 * @return {Texture} The current depth texture, or null if there is none.
-	 */
-
-	getDepthTexture() {
-
-		return this.depthTexture;
-
-	}
-
-	/**
-	 * Sets the depth texture.
-	 *
-	 * The provided texture will be attached to the input buffer unless this pass
-	 * renders to screen.
-	 *
-	 * @param {DepthTexture} depthTexture - A depth texture.
-	 * @param {Number} [depthPacking=0] - The depth packing.
-	 */
-
-	setDepthTexture(depthTexture, depthPacking = 0) {
-
-		this.depthTexture = depthTexture;
-
-	}
-
-	/**
 	 * Renders the scene.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
@@ -3683,13 +3654,6 @@ class RenderPass extends Pass {
 		const scene = this.scene;
 		const camera = this.camera;
 		const renderTarget = this.renderToScreen ? null : inputBuffer;
-
-		if(this.depthTexture !== null && !this.renderToScreen) {
-
-			inputBuffer.depthTexture = this.depthTexture;
-			outputBuffer.depthTexture = null;
-
-		}
 
 		if(this.clear) {
 
@@ -4502,7 +4466,15 @@ class Effect extends EventDispatcher {
 
 		for(const key of Object.keys(this)) {
 
-			if(this[key] !== null && typeof this[key].dispose === "function") {
+			const property = this[key];
+
+			if(property !== null && typeof property.dispose === "function") {
+
+				if(property instanceof Scene) {
+
+					continue;
+
+				}
 
 				/** @ignore */
 				this[key].dispose();
@@ -5603,6 +5575,18 @@ class SavePass extends Pass {
 	}
 
 	/**
+	 * The saved texture.
+	 *
+	 * @type {Texture}
+	 */
+
+	get texture() {
+
+		return this.renderTarget.texture;
+
+	}
+
+	/**
 	 * Saves the input buffer.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
@@ -6168,6 +6152,9 @@ class EffectComposer {
 			if(this.depthTexture === null) {
 
 				const depthTexture = this.createDepthTexture();
+
+				// Hack: Make sure the input buffer uses the depth texture.
+				this.inputBuffer.depthTexture = depthTexture;
 
 				for(pass of passes) {
 

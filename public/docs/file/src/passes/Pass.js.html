@@ -477,7 +477,15 @@ export class Pass {
 
 		for(const key of Object.keys(this)) {
 
-			if(this[key] !== null &amp;&amp; typeof this[key].dispose === &quot;function&quot;) {
+			const property = this[key];
+
+			if(property !== null &amp;&amp; typeof property.dispose === &quot;function&quot;) {
+
+				if(property instanceof Scene) {
+
+					continue;
+
+				}
 
 				/** @ignore */
 				this[key].dispose();

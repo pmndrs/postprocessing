@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.17.1 build Thu Aug 20 2020
+ * postprocessing v6.17.2 build Sun Aug 30 2020
  * https://github.com/vanruesc/postprocessing
  * Copyright 2020 Raoul van Rüschen
  * @license Zlib
@@ -1760,8 +1760,13 @@
 
 	      for (var _i = 0, _Object$keys = Object.keys(this); _i < _Object$keys.length; _i++) {
 	        var key = _Object$keys[_i];
+	        var property = this[key];
 
-	        if (this[key] !== null && typeof this[key].dispose === "function") {
+	        if (property !== null && typeof property.dispose === "function") {
+	          if (property instanceof three.Scene) {
+	            continue;
+	          }
+
 	          this[key].dispose();
 	        }
 	      }
@@ -2150,7 +2155,6 @@
 	    _this = _super.call(this, "RenderPass", scene, camera);
 	    _this.needsSwap = false;
 	    _this.clearPass = new ClearPass();
-	    _this.depthTexture = null;
 	    _this.overrideMaterialManager = overrideMaterial === null ? null : new OverrideMaterialManager(overrideMaterial);
 	    return _this;
 	  }
@@ -2161,26 +2165,11 @@
 	      return this.clearPass;
 	    }
 	  }, {
-	    key: "getDepthTexture",
-	    value: function getDepthTexture() {
-	      return this.depthTexture;
-	    }
-	  }, {
-	    key: "setDepthTexture",
-	    value: function setDepthTexture(depthTexture) {
-	      this.depthTexture = depthTexture;
-	    }
-	  }, {
 	    key: "render",
 	    value: function render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 	      var scene = this.scene;
 	      var camera = this.camera;
 	      var renderTarget = this.renderToScreen ? null : inputBuffer;
-
-	      if (this.depthTexture !== null && !this.renderToScreen) {
-	        inputBuffer.depthTexture = this.depthTexture;
-	        outputBuffer.depthTexture = null;
-	      }
 
 	      if (this.clear) {
 	        this.clearPass.render(renderer, inputBuffer);
@@ -2603,8 +2592,13 @@
 	    value: function dispose() {
 	      for (var _i = 0, _Object$keys = Object.keys(this); _i < _Object$keys.length; _i++) {
 	        var key = _Object$keys[_i];
+	        var property = this[key];
 
-	        if (this[key] !== null && typeof this[key].dispose === "function") {
+	        if (property !== null && typeof property.dispose === "function") {
+	          if (property instanceof three.Scene) {
+	            continue;
+	          }
+
 	          this[key].dispose();
 	        }
 	      }
@@ -3308,6 +3302,11 @@
 	        this.renderTarget.texture.type = frameBufferType;
 	      }
 	    }
+	  }, {
+	    key: "texture",
+	    get: function get() {
+	      return this.renderTarget.texture;
+	    }
 	  }]);
 
 	  return SavePass;
@@ -3539,6 +3538,7 @@
 	      if (pass.needsDepthTexture || this.depthTexture !== null) {
 	        if (this.depthTexture === null) {
 	          var depthTexture = this.createDepthTexture();
+	          this.inputBuffer.depthTexture = depthTexture;
 
 	          var _iterator2 = _createForOfIteratorHelper(passes),
 	              _step2;
