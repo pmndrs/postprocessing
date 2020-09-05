@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.17.2 build Sun Aug 30 2020
+ * postprocessing v6.17.3 build Sun Sep 06 2020
  * https://github.com/vanruesc/postprocessing
  * Copyright 2020 Raoul van Rüschen
  * @license Zlib
@@ -3714,9 +3714,7 @@ class DepthPass extends Pass {
 		 */
 
 		this.renderPass = new RenderPass(scene, camera, new MeshDepthMaterial({
-			depthPacking: RGBADepthPacking,
-			morphTargets: true,
-			skinning: true
+			depthPacking: RGBADepthPacking
 		}));
 
 		const clearPass = this.renderPass.getClearPass();
@@ -5404,11 +5402,7 @@ class NormalPass extends Pass {
 		 * @private
 		 */
 
-		this.renderPass = new RenderPass(scene, camera, new MeshNormalMaterial({
-			morphTargets: true,
-			morphNormals: true,
-			skinning: true
-		}));
+		this.renderPass = new RenderPass(scene, camera, new MeshNormalMaterial());
 
 		const clearPass = this.renderPass.getClearPass();
 		clearPass.overrideClearColor = new Color(0x7777ff);
@@ -6008,6 +6002,10 @@ class EffectComposer {
 
 		const depthTexture = this.depthTexture = new DepthTexture();
 
+		// Hack: Make sure the input buffer uses the depth texture.
+		this.inputBuffer.depthTexture = depthTexture;
+		this.inputBuffer.dispose();
+
 		if(this.inputBuffer.stencilBuffer) {
 
 			depthTexture.format = DepthStencilFormat;
@@ -6036,8 +6034,9 @@ class EffectComposer {
 			this.depthTexture.dispose();
 			this.depthTexture = null;
 
+			// Update the input buffer.
 			this.inputBuffer.depthTexture = null;
-			this.outputBuffer.depthTexture = null;
+			this.inputBuffer.dispose();
 
 			for(const pass of this.passes) {
 
@@ -6153,9 +6152,6 @@ class EffectComposer {
 
 				const depthTexture = this.createDepthTexture();
 
-				// Hack: Make sure the input buffer uses the depth texture.
-				this.inputBuffer.depthTexture = depthTexture;
-
 				for(pass of passes) {
 
 					pass.setDepthTexture(depthTexture);
@@ -6193,6 +6189,12 @@ class EffectComposer {
 				const depthTextureRequired = passes.reduce(reducer, false);
 
 				if(!depthTextureRequired) {
+
+					if(pass.getDepthTexture() === this.depthTexture) {
+
+						pass.setDepthTexture(null);
+
+					}
 
 					this.deleteDepthTexture();
 
@@ -6386,14 +6388,12 @@ class EffectComposer {
 		if(this.inputBuffer !== null) {
 
 			this.inputBuffer.dispose();
-			this.inputBuffer = null;
 
 		}
 
 		if(this.outputBuffer !== null) {
 
 			this.outputBuffer.dispose();
-			this.outputBuffer = null;
 
 		}
 

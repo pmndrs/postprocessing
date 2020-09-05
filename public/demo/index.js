@@ -38031,9 +38031,7 @@
       _this69 = _super65.call(this, "DepthPass");
       _this69.needsSwap = false;
       _this69.renderPass = new RenderPass(scene, camera, new MeshDepthMaterial({
-        depthPacking: RGBADepthPacking,
-        morphTargets: true,
-        skinning: true
+        depthPacking: RGBADepthPacking
       }));
 
       var clearPass = _this69.renderPass.getClearPass();
@@ -38942,11 +38940,7 @@
 
       _this76 = _super71.call(this, "NormalPass");
       _this76.needsSwap = false;
-      _this76.renderPass = new RenderPass(scene, camera, new MeshNormalMaterial({
-        morphTargets: true,
-        morphNormals: true,
-        skinning: true
-      }));
+      _this76.renderPass = new RenderPass(scene, camera, new MeshNormalMaterial());
 
       var clearPass = _this76.renderPass.getClearPass();
 
@@ -39207,6 +39201,8 @@
       key: "createDepthTexture",
       value: function createDepthTexture() {
         var depthTexture = this.depthTexture = new DepthTexture();
+        this.inputBuffer.depthTexture = depthTexture;
+        this.inputBuffer.dispose();
 
         if (this.inputBuffer.stencilBuffer) {
           depthTexture.format = DepthStencilFormat;
@@ -39224,7 +39220,7 @@
           this.depthTexture.dispose();
           this.depthTexture = null;
           this.inputBuffer.depthTexture = null;
-          this.outputBuffer.depthTexture = null;
+          this.inputBuffer.dispose();
 
           var _iterator15 = _createForOfIteratorHelper(this.passes),
               _step15;
@@ -39298,7 +39294,6 @@
         if (pass.needsDepthTexture || this.depthTexture !== null) {
           if (this.depthTexture === null) {
             var depthTexture = this.createDepthTexture();
-            this.inputBuffer.depthTexture = depthTexture;
 
             var _iterator16 = _createForOfIteratorHelper(passes),
                 _step16;
@@ -39334,6 +39329,10 @@
             var depthTextureRequired = passes.reduce(reducer, false);
 
             if (!depthTextureRequired) {
+              if (pass.getDepthTexture() === this.depthTexture) {
+                pass.setDepthTexture(null);
+              }
+
               this.deleteDepthTexture();
             }
           }
@@ -39473,12 +39472,10 @@
 
         if (this.inputBuffer !== null) {
           this.inputBuffer.dispose();
-          this.inputBuffer = null;
         }
 
         if (this.outputBuffer !== null) {
           this.outputBuffer.dispose();
-          this.outputBuffer = null;
         }
 
         if (this.depthTexture !== null) {

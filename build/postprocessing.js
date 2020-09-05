@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.17.2 build Sun Aug 30 2020
+ * postprocessing v6.17.3 build Sun Sep 06 2020
  * https://github.com/vanruesc/postprocessing
  * Copyright 2020 Raoul van Rüschen
  * @license Zlib
@@ -2248,9 +2248,7 @@
 	    _this = _super.call(this, "DepthPass");
 	    _this.needsSwap = false;
 	    _this.renderPass = new RenderPass(scene, camera, new three.MeshDepthMaterial({
-	      depthPacking: three.RGBADepthPacking,
-	      morphTargets: true,
-	      skinning: true
+	      depthPacking: three.RGBADepthPacking
 	    }));
 
 	    var clearPass = _this.renderPass.getClearPass();
@@ -3182,11 +3180,7 @@
 
 	    _this = _super.call(this, "NormalPass");
 	    _this.needsSwap = false;
-	    _this.renderPass = new RenderPass(scene, camera, new three.MeshNormalMaterial({
-	      morphTargets: true,
-	      morphNormals: true,
-	      skinning: true
-	    }));
+	    _this.renderPass = new RenderPass(scene, camera, new three.MeshNormalMaterial());
 
 	    var clearPass = _this.renderPass.getClearPass();
 
@@ -3447,6 +3441,8 @@
 	    key: "createDepthTexture",
 	    value: function createDepthTexture() {
 	      var depthTexture = this.depthTexture = new three.DepthTexture();
+	      this.inputBuffer.depthTexture = depthTexture;
+	      this.inputBuffer.dispose();
 
 	      if (this.inputBuffer.stencilBuffer) {
 	        depthTexture.format = three.DepthStencilFormat;
@@ -3464,7 +3460,7 @@
 	        this.depthTexture.dispose();
 	        this.depthTexture = null;
 	        this.inputBuffer.depthTexture = null;
-	        this.outputBuffer.depthTexture = null;
+	        this.inputBuffer.dispose();
 
 	        var _iterator = _createForOfIteratorHelper(this.passes),
 	            _step;
@@ -3538,7 +3534,6 @@
 	      if (pass.needsDepthTexture || this.depthTexture !== null) {
 	        if (this.depthTexture === null) {
 	          var depthTexture = this.createDepthTexture();
-	          this.inputBuffer.depthTexture = depthTexture;
 
 	          var _iterator2 = _createForOfIteratorHelper(passes),
 	              _step2;
@@ -3574,6 +3569,10 @@
 	          var depthTextureRequired = passes.reduce(reducer, false);
 
 	          if (!depthTextureRequired) {
+	            if (pass.getDepthTexture() === this.depthTexture) {
+	              pass.setDepthTexture(null);
+	            }
+
 	            this.deleteDepthTexture();
 	          }
 	        }
@@ -3713,12 +3712,10 @@
 
 	      if (this.inputBuffer !== null) {
 	        this.inputBuffer.dispose();
-	        this.inputBuffer = null;
 	      }
 
 	      if (this.outputBuffer !== null) {
 	        this.outputBuffer.dispose();
-	        this.outputBuffer = null;
 	      }
 
 	      if (this.depthTexture !== null) {
