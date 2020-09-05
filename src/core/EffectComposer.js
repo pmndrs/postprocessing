@@ -281,6 +281,8 @@ export class EffectComposer {
 
 		const depthTexture = this.depthTexture = new DepthTexture();
 
+		// Hack: Make sure the input buffer uses the depth texture.
+		this.inputBuffer.depthTexture = depthTexture;
 		if(this.inputBuffer.stencilBuffer) {
 
 			depthTexture.format = DepthStencilFormat;
@@ -425,9 +427,6 @@ export class EffectComposer {
 			if(this.depthTexture === null) {
 
 				const depthTexture = this.createDepthTexture();
-
-				// Hack: Make sure the input buffer uses the depth texture.
-				this.inputBuffer.depthTexture = depthTexture;
 
 				for(pass of passes) {
 
@@ -659,14 +658,12 @@ export class EffectComposer {
 		if(this.inputBuffer !== null) {
 
 			this.inputBuffer.dispose();
-			this.inputBuffer = null;
 
 		}
 
 		if(this.outputBuffer !== null) {
 
 			this.outputBuffer.dispose();
-			this.outputBuffer = null;
 
 		}
 

@@ -47,9 +47,7 @@ export class DepthPass extends Pass {
 		 */
 
 		this.renderPass = new RenderPass(scene, camera, new MeshDepthMaterial({
-			depthPacking: RGBADepthPacking,
-			morphTargets: true,
-			skinning: true
+			depthPacking: RGBADepthPacking
 		}));
 
 		const clearPass = this.renderPass.getClearPass();
