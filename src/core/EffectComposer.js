@@ -634,24 +634,13 @@ export class EffectComposer {
 
 	reset() {
 
-		const renderTarget = this.inputBuffer.clone();
-
 		this.dispose();
-
-		// Reanimate.
-		this.inputBuffer = renderTarget;
-		this.outputBuffer = renderTarget.clone();
-		this.depthTexture = null;
-		this.copyPass = new ShaderPass(new CopyMaterial());
 		this.autoRenderToScreen = true;
 
 	}
 
 	/**
-	 * Destroys this composer and all passes.
-	 *
-	 * This method deallocates all disposable objects created by the passes. It
-	 * also deletes the main frame buffers of this composer.
+	 * Disposes this composer and all passes.
 	 */
 
 	dispose() {
@@ -676,12 +665,7 @@ export class EffectComposer {
 
 		}
 
-		if(this.depthTexture !== null) {
-
-			this.depthTexture.dispose();
-
-		}
-
+		this.deleteDepthTexture();
 		this.copyPass.dispose();
 
 	}
