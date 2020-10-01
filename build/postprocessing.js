@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.17.3 build Sun Sep 06 2020
+ * postprocessing v6.17.4 build Thu Oct 01 2020
  * https://github.com/vanruesc/postprocessing
  * Copyright 2020 Raoul van Rüschen
  * @license Zlib
@@ -3683,12 +3683,7 @@
 	  }, {
 	    key: "reset",
 	    value: function reset() {
-	      var renderTarget = this.inputBuffer.clone();
 	      this.dispose();
-	      this.inputBuffer = renderTarget;
-	      this.outputBuffer = renderTarget.clone();
-	      this.depthTexture = null;
-	      this.copyPass = new ShaderPass(new CopyMaterial());
 	      this.autoRenderToScreen = true;
 	    }
 	  }, {
@@ -3718,10 +3713,7 @@
 	        this.outputBuffer.dispose();
 	      }
 
-	      if (this.depthTexture !== null) {
-	        this.depthTexture.dispose();
-	      }
-
+	      this.deleteDepthTexture();
 	      this.copyPass.dispose();
 	    }
 	  }, {
