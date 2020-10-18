@@ -168,6 +168,7 @@ export class EffectComposer {
 				value
 			);
 
+			this.inputBuffer.depthTexture = this.depthTexture;
 			this.outputBuffer = this.inputBuffer.clone();
 
 		}
