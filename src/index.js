@@ -74,6 +74,7 @@ export {
 	MaskMaterial,
 	OutlineMaterial,
 	OutlineEdgesMaterial,
+	PredicationMode,
 	Section,
 	SMAAWeightsMaterial,
 	SSAOMaterial

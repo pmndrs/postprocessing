@@ -1,6 +1,6 @@
 import { ShaderMaterial, Uniform, Vector2 } from "three";
 
-import fragmentShader from "./glsl/edge-detection/color.frag";
+import fragmentShader from "./glsl/edge-detection/shader.frag";
 import vertexShader from "./glsl/edge-detection/shader.vert";
 
 /**
@@ -24,6 +24,7 @@ export class ColorEdgesMaterial extends ShaderMaterial {
 			type: "ColorEdgesMaterial",
 
 			defines: {
+				EDGE_DETECTION_MODE: "2",
 				LOCAL_CONTRAST_ADAPTATION_FACTOR: "2.0",
 				EDGE_THRESHOLD: "0.1"
 			},
