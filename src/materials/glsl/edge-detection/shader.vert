@@ -1,7 +1,3 @@
-precision highp float;
-
-attribute vec3 position;
-
 uniform vec2 texelSize;
 
 varying vec2 vUv;
