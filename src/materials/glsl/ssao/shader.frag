@@ -94,7 +94,7 @@ float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth
 	float noise = texture2D(noiseTexture, vUv2).r;
 	float baseAngle = noise * PI2;
 
-	float inv_samples = 1.0 / SAMPLES_FLOAT;
+	float invSamples = 1.0 / SAMPLES_FLOAT;
 	float rings = SPIRAL_TURNS * PI2;
 
 	float occlusion = 0.0;
@@ -102,7 +102,7 @@ float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth
 
 	for(int i = 0; i < SAMPLES_INT; ++i) {
 
-		float alpha = (float(i) + 0.5) * inv_samples;
+		float alpha = (float(i) + 0.5) * invSamples;
 		float angle = alpha * rings + baseAngle;
 
 		vec2 coord = alpha * radius * vec2(cos(angle), sin(angle)) * texelSize + uv;
