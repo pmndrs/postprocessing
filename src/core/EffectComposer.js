@@ -610,10 +610,12 @@ export class EffectComposer {
 			const size = renderer.getSize(new Vector2());
 			width = size.width; height = size.height;
 
-		}
+		} else {
 
-		// Update the logical render size.
-		renderer.setSize(width, height, updateStyle);
+			// Update the logical render size.
+			renderer.setSize(width, height, updateStyle);
+
+		}
 
 		// The drawing buffer size takes the device pixel ratio into account.
 		const drawingBufferSize = renderer.getDrawingBufferSize(new Vector2());
