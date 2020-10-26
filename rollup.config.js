@@ -42,13 +42,13 @@ const settings = {
 
 const worker = {
 	smaa: {
-		input: "src/images/smaa/utils/worker.js",
+		input: "src/images/smaa/worker.js",
 		plugins: [resolve()].concat(production ? [
 			babel(settings.babel),
 			terser()
 		] : []),
 		output: {
-			dir: "src/images/smaa/utils/",
+			dir: "src/images/smaa",
 			entryFileNames: "[name].tmp",
 			format: "iife"
 		}

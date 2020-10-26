@@ -50,9 +50,12 @@ export {
 	NoiseTexture,
 	RawImageData,
 	SMAAAreaImageData,
-	SMAAImageLoader,
 	SMAASearchImageData
 } from "./images";
+
+export {
+	SMAAImageLoader
+} from "./loaders";
 
 export {
 	AdaptiveLuminanceMaterial,

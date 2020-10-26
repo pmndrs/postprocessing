@@ -1,6 +1,6 @@
 import { Loader, LoadingManager } from "three";
-import { RawImageData } from "../../RawImageData";
-import workerProgram from "./worker.tmp";
+import { RawImageData } from "../images/RawImageData";
+import workerProgram from "../images/smaa/worker.tmp";
 
 /**
  * Generates the SMAA data images.
@@ -83,7 +83,7 @@ export class SMAAImageLoader extends Loader {
 	 *
 	 * @param {Function} [onLoad] - A function to call when the loading process is done.
 	 * @param {Function} [onError] - A function to call when an error occurs.
-	 * @return {Promise} A promise that returns the search image and area image as a pair.
+	 * @return {Promise<Image[]>} A promise that returns the search image and area image as a pair.
 	 */
 
 	load(onLoad = () => {}, onError = () => {}) {

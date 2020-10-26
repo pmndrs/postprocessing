@@ -2,7 +2,7 @@ import { SMAAAreaImageData } from "./SMAAAreaImageData";
 import { SMAASearchImageData } from "./SMAASearchImageData";
 
 /**
- * Handles messages from the main thread.
+ * Generates the SMAA area and search lookup tables.
  *
  * @private
  * @param {Event} event - A message event.
