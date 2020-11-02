@@ -258,6 +258,12 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "postprocessing~lambdapass",
+    "class/src/passes/LambdaPass.js~LambdaPass.html",
+    "<span>LambdaPass</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "class"
+  ],
+  [
     "postprocessing~luminancematerial",
     "class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html",
     "<span>LuminanceMaterial</span> <span class=\"search-result-import-path\">postprocessing</span>",
@@ -336,6 +342,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "postprocessing~predicationmode",
+    "variable/index.html#static-variable-PredicationMode",
+    "<span>PredicationMode</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "variable"
+  ],
+  [
     "postprocessing~rawimagedata",
     "class/src/images/RawImageData.js~RawImageData.html",
     "<span>RawImageData</span> <span class=\"search-result-import-path\">postprocessing</span>",
@@ -367,7 +379,7 @@ window.esdocSearchIndex = [
   ],
   [
     "postprocessing~smaaareaimagedata",
-    "class/src/images/smaa/utils/SMAAAreaImageData.js~SMAAAreaImageData.html",
+    "class/src/images/smaa/SMAAAreaImageData.js~SMAAAreaImageData.html",
     "<span>SMAAAreaImageData</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
@@ -379,7 +391,7 @@ window.esdocSearchIndex = [
   ],
   [
     "postprocessing~smaaimageloader",
-    "class/src/images/smaa/utils/SMAAImageLoader.js~SMAAImageLoader.html",
+    "class/src/loaders/SMAAImageLoader.js~SMAAImageLoader.html",
     "<span>SMAAImageLoader</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
@@ -391,7 +403,7 @@ window.esdocSearchIndex = [
   ],
   [
     "postprocessing~smaasearchimagedata",
-    "class/src/images/smaa/utils/SMAASearchImageData.js~SMAASearchImageData.html",
+    "class/src/images/smaa/SMAASearchImageData.js~SMAASearchImageData.html",
     "<span>SMAASearchImageData</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
@@ -2748,6 +2760,30 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/images/smaa/smaaareaimagedata.js",
+    "file/src/images/smaa/SMAAAreaImageData.js.html",
+    "src/images/smaa/SMAAAreaImageData.js",
+    "file"
+  ],
+  [
+    "src/images/smaa/smaaareaimagedata.js~smaaareaimagedata.generate",
+    "class/src/images/smaa/SMAAAreaImageData.js~SMAAAreaImageData.html#static-method-generate",
+    "src/images/smaa/SMAAAreaImageData.js~SMAAAreaImageData.generate",
+    "method"
+  ],
+  [
+    "src/images/smaa/smaasearchimagedata.js",
+    "file/src/images/smaa/SMAASearchImageData.js.html",
+    "src/images/smaa/SMAASearchImageData.js",
+    "file"
+  ],
+  [
+    "src/images/smaa/smaasearchimagedata.js~smaasearchimagedata.generate",
+    "class/src/images/smaa/SMAASearchImageData.js~SMAASearchImageData.html#static-method-generate",
+    "src/images/smaa/SMAASearchImageData.js~SMAASearchImageData.generate",
+    "method"
+  ],
+  [
     "src/images/smaa/areaimagedataurl.js",
     "file/src/images/smaa/areaImageDataURL.js.html",
     "src/images/smaa/areaImageDataURL.js",
@@ -2760,57 +2796,9 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/images/smaa/utils/smaaareaimagedata.js",
-    "file/src/images/smaa/utils/SMAAAreaImageData.js.html",
-    "src/images/smaa/utils/SMAAAreaImageData.js",
-    "file"
-  ],
-  [
-    "src/images/smaa/utils/smaaareaimagedata.js~smaaareaimagedata.generate",
-    "class/src/images/smaa/utils/SMAAAreaImageData.js~SMAAAreaImageData.html#static-method-generate",
-    "src/images/smaa/utils/SMAAAreaImageData.js~SMAAAreaImageData.generate",
-    "method"
-  ],
-  [
-    "src/images/smaa/utils/smaaimageloader.js",
-    "file/src/images/smaa/utils/SMAAImageLoader.js.html",
-    "src/images/smaa/utils/SMAAImageLoader.js",
-    "file"
-  ],
-  [
-    "src/images/smaa/utils/smaaimageloader.js~smaaimageloader#constructor",
-    "class/src/images/smaa/utils/SMAAImageLoader.js~SMAAImageLoader.html#instance-constructor-constructor",
-    "src/images/smaa/utils/SMAAImageLoader.js~SMAAImageLoader#constructor",
-    "method"
-  ],
-  [
-    "src/images/smaa/utils/smaaimageloader.js~smaaimageloader#disablecache",
-    "class/src/images/smaa/utils/SMAAImageLoader.js~SMAAImageLoader.html#instance-member-disableCache",
-    "src/images/smaa/utils/SMAAImageLoader.js~SMAAImageLoader#disableCache",
-    "member"
-  ],
-  [
-    "src/images/smaa/utils/smaaimageloader.js~smaaimageloader#load",
-    "class/src/images/smaa/utils/SMAAImageLoader.js~SMAAImageLoader.html#instance-method-load",
-    "src/images/smaa/utils/SMAAImageLoader.js~SMAAImageLoader#load",
-    "method"
-  ],
-  [
-    "src/images/smaa/utils/smaasearchimagedata.js",
-    "file/src/images/smaa/utils/SMAASearchImageData.js.html",
-    "src/images/smaa/utils/SMAASearchImageData.js",
-    "file"
-  ],
-  [
-    "src/images/smaa/utils/smaasearchimagedata.js~smaasearchimagedata.generate",
-    "class/src/images/smaa/utils/SMAASearchImageData.js~SMAASearchImageData.html#static-method-generate",
-    "src/images/smaa/utils/SMAASearchImageData.js~SMAASearchImageData.generate",
-    "method"
-  ],
-  [
-    "src/images/smaa/utils/worker.js",
-    "file/src/images/smaa/utils/worker.js.html",
-    "src/images/smaa/utils/worker.js",
+    "src/images/smaa/worker.js",
+    "file/src/images/smaa/worker.js.html",
+    "src/images/smaa/worker.js",
     "file"
   ],
   [
@@ -2829,6 +2817,36 @@ window.esdocSearchIndex = [
     "src/index.js",
     "file/src/index.js.html",
     "src/index.js",
+    "file"
+  ],
+  [
+    "src/loaders/smaaimageloader.js",
+    "file/src/loaders/SMAAImageLoader.js.html",
+    "src/loaders/SMAAImageLoader.js",
+    "file"
+  ],
+  [
+    "src/loaders/smaaimageloader.js~smaaimageloader#constructor",
+    "class/src/loaders/SMAAImageLoader.js~SMAAImageLoader.html#instance-constructor-constructor",
+    "src/loaders/SMAAImageLoader.js~SMAAImageLoader#constructor",
+    "method"
+  ],
+  [
+    "src/loaders/smaaimageloader.js~smaaimageloader#disablecache",
+    "class/src/loaders/SMAAImageLoader.js~SMAAImageLoader.html#instance-member-disableCache",
+    "src/loaders/SMAAImageLoader.js~SMAAImageLoader#disableCache",
+    "member"
+  ],
+  [
+    "src/loaders/smaaimageloader.js~smaaimageloader#load",
+    "class/src/loaders/SMAAImageLoader.js~SMAAImageLoader.html#instance-method-load",
+    "src/loaders/SMAAImageLoader.js~SMAAImageLoader#load",
+    "method"
+  ],
+  [
+    "src/loaders/index.js",
+    "file/src/loaders/index.js.html",
+    "src/loaders/index.js",
     "file"
   ],
   [
@@ -3060,12 +3078,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/materials/edgedetectionmaterial.js~edgedetectionmaterial#fragmentshader",
-    "class/src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial.html#instance-member-fragmentShader",
-    "src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial#fragmentShader",
-    "member"
-  ],
-  [
     "src/materials/edgedetectionmaterial.js~edgedetectionmaterial#needsupdate",
     "class/src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial.html#instance-member-needsUpdate",
     "src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial#needsUpdate",
@@ -3087,6 +3099,36 @@ window.esdocSearchIndex = [
     "src/materials/edgedetectionmaterial.js~edgedetectionmaterial#setlocalcontrastadaptationfactor",
     "class/src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial.html#instance-method-setLocalContrastAdaptationFactor",
     "src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial#setLocalContrastAdaptationFactor",
+    "method"
+  ],
+  [
+    "src/materials/edgedetectionmaterial.js~edgedetectionmaterial#setpredicationbuffer",
+    "class/src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial.html#instance-method-setPredicationBuffer",
+    "src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial#setPredicationBuffer",
+    "method"
+  ],
+  [
+    "src/materials/edgedetectionmaterial.js~edgedetectionmaterial#setpredicationmode",
+    "class/src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial.html#instance-method-setPredicationMode",
+    "src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial#setPredicationMode",
+    "method"
+  ],
+  [
+    "src/materials/edgedetectionmaterial.js~edgedetectionmaterial#setpredicationscale",
+    "class/src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial.html#instance-method-setPredicationScale",
+    "src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial#setPredicationScale",
+    "method"
+  ],
+  [
+    "src/materials/edgedetectionmaterial.js~edgedetectionmaterial#setpredicationstrength",
+    "class/src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial.html#instance-method-setPredicationStrength",
+    "src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial#setPredicationStrength",
+    "method"
+  ],
+  [
+    "src/materials/edgedetectionmaterial.js~edgedetectionmaterial#setpredicationthreshold",
+    "class/src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial.html#instance-method-setPredicationThreshold",
+    "src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial#setPredicationThreshold",
     "method"
   ],
   [
@@ -3915,6 +3957,30 @@ window.esdocSearchIndex = [
     "src/passes/effectpass.js~effectpass#setsize",
     "class/src/passes/EffectPass.js~EffectPass.html#instance-method-setSize",
     "src/passes/EffectPass.js~EffectPass#setSize",
+    "method"
+  ],
+  [
+    "src/passes/lambdapass.js",
+    "file/src/passes/LambdaPass.js.html",
+    "src/passes/LambdaPass.js",
+    "file"
+  ],
+  [
+    "src/passes/lambdapass.js~lambdapass#constructor",
+    "class/src/passes/LambdaPass.js~LambdaPass.html#instance-constructor-constructor",
+    "src/passes/LambdaPass.js~LambdaPass#constructor",
+    "method"
+  ],
+  [
+    "src/passes/lambdapass.js~lambdapass#needsswap",
+    "class/src/passes/LambdaPass.js~LambdaPass.html#instance-member-needsSwap",
+    "src/passes/LambdaPass.js~LambdaPass#needsSwap",
+    "member"
+  ],
+  [
+    "src/passes/lambdapass.js~lambdapass#render",
+    "class/src/passes/LambdaPass.js~LambdaPass.html#instance-method-render",
+    "src/passes/LambdaPass.js~LambdaPass#render",
     "method"
   ],
   [
