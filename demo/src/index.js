@@ -227,7 +227,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 });
 
 /**
- * Toggles the visibility of the interface on H key press.
+ * Handles keyboard events.
  *
  * @private
  * @param {KeyboardEvent} event - An event.
