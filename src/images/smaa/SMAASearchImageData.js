@@ -1,4 +1,4 @@
-import { RawImageData } from "../../RawImageData";
+import { RawImageData } from "../RawImageData";
 
 /**
  * This dictionary returns which edges are active for a certain bilinear fetch:
