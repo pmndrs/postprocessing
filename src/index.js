@@ -90,6 +90,7 @@ export {
 	DepthPass,
 	DepthDownsamplingPass,
 	EffectPass,
+	LambdaPass,
 	MaskPass,
 	NormalPass,
 	Pass,
