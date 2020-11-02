@@ -4,6 +4,7 @@ export { ClearPass } from "./ClearPass";
 export { DepthPass } from "./DepthPass";
 export { DepthDownsamplingPass } from "./DepthDownsamplingPass";
 export { EffectPass } from "./EffectPass";
+export { LambdaPass } from "./LambdaPass";
 export { MaskPass } from "./MaskPass";
 export { NormalPass } from "./NormalPass";
 export { Pass } from "./Pass";

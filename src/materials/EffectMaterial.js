@@ -19,11 +19,11 @@ export class EffectMaterial extends ShaderMaterial {
 	 * @param {Map<String, String>} [shaderParts=null] - A collection of shader snippets. See {@link Section}.
 	 * @param {Map<String, String>} [defines=null] - A collection of preprocessor macro definitions.
 	 * @param {Map<String, Uniform>} [uniforms=null] - A collection of uniforms.
-	 * @param {Camera} [camera=null] - A camera.
+	 * @param {Camera} [camera] - A camera.
 	 * @param {Boolean} [dithering=false] - Whether dithering should be enabled.
 	 */
 
-	constructor(shaderParts = null, defines = null, uniforms = null, camera = null, dithering = false) {
+	constructor(shaderParts = null, defines = null, uniforms = null, camera, dithering = false) {
 
 		super({
 

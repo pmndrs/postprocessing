@@ -1,6 +1,6 @@
 {
 	"name": "postprocessing",
-	"version": "6.17.4",
+	"version": "6.18.0",
 	"description": "A post processing library that provides the means to implement image filter effects for three.js.",
 	"homepage": "https://github.com/vanruesc/postprocessing",
 	"main": "build/postprocessing.js",
@@ -47,7 +47,7 @@
 		"dev": "concurrently -k -n server,rollup,eslint \"hs -s\" \"rollup -c -w\" \"esw -w src demo/src\"",
 		"doc": "rimraf public/docs && esdoc",
 		"lint": "eslint src demo/src",
-		"prepack": "npm test && npm run doc",
+		"prepublishOnly": "npm test && npm run doc",
 		"pretest": "rimraf build && npm run build:production",
 		"test": "ava"
 	},
@@ -64,13 +64,13 @@
 		"extends": "aether"
 	},
 	"peerDependencies": {
-		"three": ">= 0.102.0 < 0.122.0"
+		"three": ">= 0.102.0 < 0.123.0"
 	},
 	"devDependencies": {
 		"@babel/core": "7.x.x",
 		"@babel/preset-env": "7.x.x",
 		"@rollup/plugin-babel": "5.x.x",
-		"@rollup/plugin-node-resolve": "9.x.x",
+		"@rollup/plugin-node-resolve": "10.x.x",
 		"ava": "3.x.x",
 		"concurrently": "5.x.x",
 		"cross-env": "7.x.x",

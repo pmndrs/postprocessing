@@ -303,6 +303,8 @@ export class SSAODemo extends PostProcessingDemo {
 			textureEffect.blendMode.setBlendFunction((mode !== RenderMode.DEFAULT) ?
 				BlendFunction.NORMAL : BlendFunction.SKIP);
 
+			effectPass.encodeOutput = (mode === RenderMode.DEFAULT);
+
 		}
 
 		if(capabilities.isWebGL2) {

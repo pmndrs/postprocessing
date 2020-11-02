@@ -397,7 +397,7 @@
     };
   }
 
-  var REVISION = '121';
+  var REVISION = '122';
   var CullFaceNone = 0;
   var CullFaceBack = 1;
   var CullFaceFront = 2;
@@ -1049,17 +1049,17 @@
       }
     }, {
       key: "fromArray",
-      value: function fromArray(array, offset) {
-        if (offset === undefined) offset = 0;
+      value: function fromArray(array) {
+        var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
         this.x = array[offset];
         this.y = array[offset + 1];
         return this;
       }
     }, {
       key: "toArray",
-      value: function toArray(array, offset) {
-        if (array === undefined) array = [];
-        if (offset === undefined) offset = 0;
+      value: function toArray() {
+        var array = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+        var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
         array[offset] = this.x;
         array[offset + 1] = this.y;
         return array;
@@ -1396,8 +1396,8 @@
       }
     }, {
       key: "fromArray",
-      value: function fromArray(array, offset) {
-        if (offset === undefined) offset = 0;
+      value: function fromArray(array) {
+        var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
         for (var _i2 = 0; _i2 < 9; _i2++) {
           this.elements[_i2] = array[_i2 + offset];
@@ -1407,9 +1407,9 @@
       }
     }, {
       key: "toArray",
-      value: function toArray(array, offset) {
-        if (array === undefined) array = [];
-        if (offset === undefined) offset = 0;
+      value: function toArray() {
+        var array = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+        var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
         var te = this.elements;
         array[offset] = te[0];
         array[offset + 1] = te[1];
@@ -2124,8 +2124,8 @@
       }
     }, {
       key: "fromArray",
-      value: function fromArray(array, offset) {
-        if (offset === undefined) offset = 0;
+      value: function fromArray(array) {
+        var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
         this.x = array[offset];
         this.y = array[offset + 1];
         this.z = array[offset + 2];
@@ -2134,9 +2134,9 @@
       }
     }, {
       key: "toArray",
-      value: function toArray(array, offset) {
-        if (array === undefined) array = [];
-        if (offset === undefined) offset = 0;
+      value: function toArray() {
+        var array = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+        var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
         array[offset] = this.x;
         array[offset + 1] = this.y;
         array[offset + 2] = this.z;
@@ -2633,8 +2633,8 @@
       }
     }, {
       key: "fromArray",
-      value: function fromArray(array, offset) {
-        if (offset === undefined) offset = 0;
+      value: function fromArray(array) {
+        var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
         this._x = array[offset];
         this._y = array[offset + 1];
         this._z = array[offset + 2];
@@ -2646,9 +2646,9 @@
       }
     }, {
       key: "toArray",
-      value: function toArray(array, offset) {
-        if (array === undefined) array = [];
-        if (offset === undefined) offset = 0;
+      value: function toArray() {
+        var array = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+        var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
         array[offset] = this._x;
         array[offset + 1] = this._y;
         array[offset + 2] = this._z;
@@ -3339,8 +3339,8 @@
       }
     }, {
       key: "fromArray",
-      value: function fromArray(array, offset) {
-        if (offset === undefined) offset = 0;
+      value: function fromArray(array) {
+        var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
         this.x = array[offset];
         this.y = array[offset + 1];
         this.z = array[offset + 2];
@@ -3348,9 +3348,9 @@
       }
     }, {
       key: "toArray",
-      value: function toArray(array, offset) {
-        if (array === undefined) array = [];
-        if (offset === undefined) offset = 0;
+      value: function toArray() {
+        var array = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+        var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
         array[offset] = this.x;
         array[offset + 1] = this.y;
         array[offset + 2] = this.z;
@@ -5033,8 +5033,8 @@
       }
     }, {
       key: "fromArray",
-      value: function fromArray(array, offset) {
-        if (offset === undefined) offset = 0;
+      value: function fromArray(array) {
+        var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
         for (var _i11 = 0; _i11 < 16; _i11++) {
           this.elements[_i11] = array[_i11 + offset];
@@ -5044,9 +5044,9 @@
       }
     }, {
       key: "toArray",
-      value: function toArray(array, offset) {
-        if (array === undefined) array = [];
-        if (offset === undefined) offset = 0;
+      value: function toArray() {
+        var array = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+        var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
         var te = this.elements;
         array[offset] = te[0];
         array[offset + 1] = te[1];
@@ -5273,9 +5273,9 @@
       }
     }, {
       key: "toArray",
-      value: function toArray(array, offset) {
-        if (array === undefined) array = [];
-        if (offset === undefined) offset = 0;
+      value: function toArray() {
+        var array = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+        var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
         array[offset] = this._x;
         array[offset + 1] = this._y;
         array[offset + 2] = this._z;
@@ -5641,6 +5641,16 @@
 
       return this;
     },
+    clear: function clear() {
+      for (var _i14 = 0; _i14 < this.children.length; _i14++) {
+        var object = this.children[_i14];
+        object.parent = null;
+        object.dispatchEvent(_removedEvent);
+      }
+
+      this.children.length = 0;
+      return this;
+    },
     attach: function attach(object) {
       this.updateWorldMatrix(true, false);
 
@@ -5666,8 +5676,8 @@
     getObjectByProperty: function getObjectByProperty(name, value) {
       if (this[name] === value) return this;
 
-      for (var _i14 = 0, l = this.children.length; _i14 < l; _i14++) {
-        var child = this.children[_i14];
+      for (var _i15 = 0, l = this.children.length; _i15 < l; _i15++) {
+        var child = this.children[_i15];
         var object = child.getObjectByProperty(name, value);
 
         if (object !== undefined) {
@@ -5721,8 +5731,8 @@
       callback(this);
       var children = this.children;
 
-      for (var _i15 = 0, l = children.length; _i15 < l; _i15++) {
-        children[_i15].traverse(callback);
+      for (var _i16 = 0, l = children.length; _i16 < l; _i16++) {
+        children[_i16].traverse(callback);
       }
     },
     traverseVisible: function traverseVisible(callback) {
@@ -5730,8 +5740,8 @@
       callback(this);
       var children = this.children;
 
-      for (var _i16 = 0, l = children.length; _i16 < l; _i16++) {
-        children[_i16].traverseVisible(callback);
+      for (var _i17 = 0, l = children.length; _i17 < l; _i17++) {
+        children[_i17].traverseVisible(callback);
       }
     },
     traverseAncestors: function traverseAncestors(callback) {
@@ -5762,8 +5772,8 @@
 
       var children = this.children;
 
-      for (var _i17 = 0, l = children.length; _i17 < l; _i17++) {
-        children[_i17].updateMatrixWorld(force);
+      for (var _i18 = 0, l = children.length; _i18 < l; _i18++) {
+        children[_i18].updateMatrixWorld(force);
       }
     },
     updateWorldMatrix: function updateWorldMatrix(updateParents, updateChildren) {
@@ -5784,8 +5794,8 @@
       if (updateChildren === true) {
         var children = this.children;
 
-        for (var _i18 = 0, l = children.length; _i18 < l; _i18++) {
-          children[_i18].updateWorldMatrix(false, true);
+        for (var _i19 = 0, l = children.length; _i19 < l; _i19++) {
+          children[_i19].updateWorldMatrix(false, true);
         }
       }
     },
@@ -5844,8 +5854,8 @@
           var shapes = parameters.shapes;
 
           if (Array.isArray(shapes)) {
-            for (var _i19 = 0, l = shapes.length; _i19 < l; _i19++) {
-              var shape = shapes[_i19];
+            for (var _i20 = 0, l = shapes.length; _i20 < l; _i20++) {
+              var shape = shapes[_i20];
               serialize(meta.shapes, shape);
             }
           } else {
@@ -5858,8 +5868,8 @@
         if (Array.isArray(this.material)) {
           var uuids = [];
 
-          for (var _i20 = 0, _l = this.material.length; _i20 < _l; _i20++) {
-            uuids.push(serialize(meta.materials, this.material[_i20]));
+          for (var _i21 = 0, _l = this.material.length; _i21 < _l; _i21++) {
+            uuids.push(serialize(meta.materials, this.material[_i21]));
           }
 
           object.material = uuids;
@@ -5871,8 +5881,8 @@
       if (this.children.length > 0) {
         object.children = [];
 
-        for (var _i21 = 0; _i21 < this.children.length; _i21++) {
-          object.children.push(this.children[_i21].toJSON(meta).object);
+        for (var _i22 = 0; _i22 < this.children.length; _i22++) {
+          object.children.push(this.children[_i22].toJSON(meta).object);
         }
       }
 
@@ -5930,8 +5940,8 @@
       this.userData = JSON.parse(JSON.stringify(source.userData));
 
       if (recursive === true) {
-        for (var _i22 = 0; _i22 < source.children.length; _i22++) {
-          var child = source.children[_i22];
+        for (var _i23 = 0; _i23 < source.children.length; _i23++) {
+          var child = source.children[_i23];
           this.add(child.clone());
         }
       }
@@ -6954,8 +6964,8 @@
       }
     }, {
       key: "fromArray",
-      value: function fromArray(array, offset) {
-        if (offset === undefined) offset = 0;
+      value: function fromArray(array) {
+        var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
         this.r = array[offset];
         this.g = array[offset + 1];
         this.b = array[offset + 2];
@@ -6963,9 +6973,9 @@
       }
     }, {
       key: "toArray",
-      value: function toArray(array, offset) {
-        if (array === undefined) array = [];
-        if (offset === undefined) offset = 0;
+      value: function toArray() {
+        var array = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+        var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
         array[offset] = this.r;
         array[offset + 1] = this.g;
         array[offset + 2] = this.b;
@@ -7030,12 +7040,12 @@
         this.color.copy(source.color);
         this.materialIndex = source.materialIndex;
 
-        for (var _i23 = 0, il = source.vertexNormals.length; _i23 < il; _i23++) {
-          this.vertexNormals[_i23] = source.vertexNormals[_i23].clone();
+        for (var _i24 = 0, il = source.vertexNormals.length; _i24 < il; _i24++) {
+          this.vertexNormals[_i24] = source.vertexNormals[_i24].clone();
         }
 
-        for (var _i24 = 0, _il = source.vertexColors.length; _i24 < _il; _i24++) {
-          this.vertexColors[_i24] = source.vertexColors[_i24].clone();
+        for (var _i25 = 0, _il = source.vertexColors.length; _i25 < _il; _i25++) {
+          this.vertexColors[_i25] = source.vertexColors[_i25].clone();
         }
 
         return this;
@@ -7322,8 +7332,8 @@
         var n = srcPlanes.length;
         dstPlanes = new Array(n);
 
-        for (var _i25 = 0; _i25 !== n; ++_i25) {
-          dstPlanes[_i25] = srcPlanes[_i25].clone();
+        for (var _i26 = 0; _i26 !== n; ++_i26) {
+          dstPlanes[_i26] = srcPlanes[_i26].clone();
         }
       }
 
@@ -7454,8 +7464,8 @@
       index1 *= this.itemSize;
       index2 *= attribute.itemSize;
 
-      for (var _i26 = 0, l = this.itemSize; _i26 < l; _i26++) {
-        this.array[index1 + _i26] = attribute.array[index2 + _i26];
+      for (var _i27 = 0, l = this.itemSize; _i27 < l; _i27++) {
+        this.array[index1 + _i27] = attribute.array[index2 + _i27];
       }
 
       return this;
@@ -7468,11 +7478,11 @@
       var array = this.array;
       var offset = 0;
 
-      for (var _i27 = 0, l = colors.length; _i27 < l; _i27++) {
-        var _color2 = colors[_i27];
+      for (var _i28 = 0, l = colors.length; _i28 < l; _i28++) {
+        var _color2 = colors[_i28];
 
         if (_color2 === undefined) {
-          console.warn('THREE.BufferAttribute.copyColorsArray(): color is undefined', _i27);
+          console.warn('THREE.BufferAttribute.copyColorsArray(): color is undefined', _i28);
           _color2 = new Color();
         }
 
@@ -7487,11 +7497,11 @@
       var array = this.array;
       var offset = 0;
 
-      for (var _i28 = 0, l = vectors.length; _i28 < l; _i28++) {
-        var vector = vectors[_i28];
+      for (var _i29 = 0, l = vectors.length; _i29 < l; _i29++) {
+        var vector = vectors[_i29];
 
         if (vector === undefined) {
-          console.warn('THREE.BufferAttribute.copyVector2sArray(): vector is undefined', _i28);
+          console.warn('THREE.BufferAttribute.copyVector2sArray(): vector is undefined', _i29);
           vector = new Vector2();
         }
 
@@ -7505,11 +7515,11 @@
       var array = this.array;
       var offset = 0;
 
-      for (var _i29 = 0, l = vectors.length; _i29 < l; _i29++) {
-        var vector = vectors[_i29];
+      for (var _i30 = 0, l = vectors.length; _i30 < l; _i30++) {
+        var vector = vectors[_i30];
 
         if (vector === undefined) {
-          console.warn('THREE.BufferAttribute.copyVector3sArray(): vector is undefined', _i29);
+          console.warn('THREE.BufferAttribute.copyVector3sArray(): vector is undefined', _i30);
           vector = new Vector3();
         }
 
@@ -7524,11 +7534,11 @@
       var array = this.array;
       var offset = 0;
 
-      for (var _i30 = 0, l = vectors.length; _i30 < l; _i30++) {
-        var vector = vectors[_i30];
+      for (var _i31 = 0, l = vectors.length; _i31 < l; _i31++) {
+        var vector = vectors[_i31];
 
         if (vector === undefined) {
-          console.warn('THREE.BufferAttribute.copyVector4sArray(): vector is undefined', _i30);
+          console.warn('THREE.BufferAttribute.copyVector4sArray(): vector is undefined', _i31);
           vector = new Vector4();
         }
 
@@ -7542,60 +7552,60 @@
     },
     applyMatrix3: function applyMatrix3(m) {
       if (this.itemSize === 2) {
-        for (var _i31 = 0, l = this.count; _i31 < l; _i31++) {
-          _vector2$1.fromBufferAttribute(this, _i31);
+        for (var _i32 = 0, l = this.count; _i32 < l; _i32++) {
+          _vector2$1.fromBufferAttribute(this, _i32);
 
           _vector2$1.applyMatrix3(m);
 
-          this.setXY(_i31, _vector2$1.x, _vector2$1.y);
+          this.setXY(_i32, _vector2$1.x, _vector2$1.y);
         }
       } else if (this.itemSize === 3) {
-        for (var _i32 = 0, _l2 = this.count; _i32 < _l2; _i32++) {
-          _vector$3.fromBufferAttribute(this, _i32);
+        for (var _i33 = 0, _l2 = this.count; _i33 < _l2; _i33++) {
+          _vector$3.fromBufferAttribute(this, _i33);
 
           _vector$3.applyMatrix3(m);
 
-          this.setXYZ(_i32, _vector$3.x, _vector$3.y, _vector$3.z);
+          this.setXYZ(_i33, _vector$3.x, _vector$3.y, _vector$3.z);
         }
       }
 
       return this;
     },
     applyMatrix4: function applyMatrix4(m) {
-      for (var _i33 = 0, l = this.count; _i33 < l; _i33++) {
-        _vector$3.x = this.getX(_i33);
-        _vector$3.y = this.getY(_i33);
-        _vector$3.z = this.getZ(_i33);
-
-        _vector$3.applyMatrix4(m);
-
-        this.setXYZ(_i33, _vector$3.x, _vector$3.y, _vector$3.z);
-      }
-
-      return this;
-    },
-    applyNormalMatrix: function applyNormalMatrix(m) {
       for (var _i34 = 0, l = this.count; _i34 < l; _i34++) {
         _vector$3.x = this.getX(_i34);
         _vector$3.y = this.getY(_i34);
         _vector$3.z = this.getZ(_i34);
 
-        _vector$3.applyNormalMatrix(m);
+        _vector$3.applyMatrix4(m);
 
         this.setXYZ(_i34, _vector$3.x, _vector$3.y, _vector$3.z);
       }
 
       return this;
     },
-    transformDirection: function transformDirection(m) {
+    applyNormalMatrix: function applyNormalMatrix(m) {
       for (var _i35 = 0, l = this.count; _i35 < l; _i35++) {
         _vector$3.x = this.getX(_i35);
         _vector$3.y = this.getY(_i35);
         _vector$3.z = this.getZ(_i35);
 
-        _vector$3.transformDirection(m);
+        _vector$3.applyNormalMatrix(m);
 
         this.setXYZ(_i35, _vector$3.x, _vector$3.y, _vector$3.z);
+      }
+
+      return this;
+    },
+    transformDirection: function transformDirection(m) {
+      for (var _i36 = 0, l = this.count; _i36 < l; _i36++) {
+        _vector$3.x = this.getX(_i36);
+        _vector$3.y = this.getY(_i36);
+        _vector$3.z = this.getZ(_i36);
+
+        _vector$3.transformDirection(m);
+
+        this.setXYZ(_i36, _vector$3.x, _vector$3.y, _vector$3.z);
       }
 
       return this;
@@ -7804,9 +7814,9 @@
         if (morphTargetsLength > 0) {
           morphTargetsPosition = [];
 
-          for (var _i36 = 0; _i36 < morphTargetsLength; _i36++) {
-            morphTargetsPosition[_i36] = {
-              name: morphTargets[_i36].name,
+          for (var _i37 = 0; _i37 < morphTargetsLength; _i37++) {
+            morphTargetsPosition[_i37] = {
+              name: morphTargets[_i37].name,
               data: []
             };
           }
@@ -7821,9 +7831,9 @@
         if (morphNormalsLength > 0) {
           morphTargetsNormal = [];
 
-          for (var _i37 = 0; _i37 < morphNormalsLength; _i37++) {
-            morphTargetsNormal[_i37] = {
-              name: morphNormals[_i37].name,
+          for (var _i38 = 0; _i38 < morphNormalsLength; _i38++) {
+            morphTargetsNormal[_i38] = {
+              name: morphNormals[_i38].name,
               data: []
             };
           }
@@ -7840,8 +7850,8 @@
           console.error('THREE.DirectGeometry: Faceless geometries are not supported.');
         }
 
-        for (var _i38 = 0; _i38 < faces.length; _i38++) {
-          var face = faces[_i38];
+        for (var _i39 = 0; _i39 < faces.length; _i39++) {
+          var face = faces[_i39];
           this.vertices.push(vertices[face.a], vertices[face.b], vertices[face.c]);
           var vertexNormals = face.vertexNormals;
 
@@ -7862,23 +7872,23 @@
           }
 
           if (hasFaceVertexUv === true) {
-            var vertexUvs = faceVertexUvs[0][_i38];
+            var vertexUvs = faceVertexUvs[0][_i39];
 
             if (vertexUvs !== undefined) {
               this.uvs.push(vertexUvs[0], vertexUvs[1], vertexUvs[2]);
             } else {
-              console.warn('THREE.DirectGeometry.fromGeometry(): Undefined vertexUv ', _i38);
+              console.warn('THREE.DirectGeometry.fromGeometry(): Undefined vertexUv ', _i39);
               this.uvs.push(new Vector2(), new Vector2(), new Vector2());
             }
           }
 
           if (hasFaceVertexUv2 === true) {
-            var _vertexUvs = faceVertexUvs[1][_i38];
+            var _vertexUvs = faceVertexUvs[1][_i39];
 
             if (_vertexUvs !== undefined) {
               this.uvs2.push(_vertexUvs[0], _vertexUvs[1], _vertexUvs[2]);
             } else {
-              console.warn('THREE.DirectGeometry.fromGeometry(): Undefined vertexUv2 ', _i38);
+              console.warn('THREE.DirectGeometry.fromGeometry(): Undefined vertexUv2 ', _i39);
               this.uvs2.push(new Vector2(), new Vector2(), new Vector2());
             }
           }
@@ -7889,7 +7899,7 @@
           }
 
           for (var _j = 0; _j < morphNormalsLength; _j++) {
-            var morphNormal = morphNormals[_j].vertexNormals[_i38];
+            var morphNormal = morphNormals[_j].vertexNormals[_i39];
 
             morphTargetsNormal[_j].data.push(morphNormal.a, morphNormal.b, morphNormal.c);
           }
@@ -7929,8 +7939,8 @@
     if (array.length === 0) return -Infinity;
     var max = array[0];
 
-    for (var _i39 = 1, l = array.length; _i39 < l; ++_i39) {
-      if (array[_i39] > max) max = array[_i39];
+    for (var _i40 = 1, l = array.length; _i40 < l; ++_i40) {
+      if (array[_i40] > max) max = array[_i40];
     }
 
     return max;
@@ -8120,8 +8130,8 @@
     setFromPoints: function setFromPoints(points) {
       var position = [];
 
-      for (var _i40 = 0, l = points.length; _i40 < l; _i40++) {
-        var point = points[_i40];
+      for (var _i41 = 0, l = points.length; _i41 < l; _i41++) {
+        var point = points[_i41];
         position.push(point.x, point.y, point.z || 0);
       }
 
@@ -8257,8 +8267,8 @@
         var array = [];
         var morphTargets = geometry.morphTargets[name];
 
-        for (var _i41 = 0, l = morphTargets.length; _i41 < l; _i41++) {
-          var morphTarget = morphTargets[_i41];
+        for (var _i42 = 0, l = morphTargets.length; _i42 < l; _i42++) {
+          var morphTarget = morphTargets[_i42];
           var attribute = new Float32BufferAttribute(morphTarget.data.length * 3, 3);
           attribute.name = morphTarget.name;
           array.push(attribute.copyVector3sArray(morphTarget.data));
@@ -8305,8 +8315,8 @@
         this.boundingBox.setFromBufferAttribute(position);
 
         if (morphAttributesPosition) {
-          for (var _i42 = 0, il = morphAttributesPosition.length; _i42 < il; _i42++) {
-            var morphAttribute = morphAttributesPosition[_i42];
+          for (var _i43 = 0, il = morphAttributesPosition.length; _i43 < il; _i43++) {
+            var morphAttribute = morphAttributesPosition[_i43];
 
             _box$2.setFromBufferAttribute(morphAttribute);
 
@@ -8352,8 +8362,8 @@
         _box$2.setFromBufferAttribute(position);
 
         if (morphAttributesPosition) {
-          for (var _i43 = 0, il = morphAttributesPosition.length; _i43 < il; _i43++) {
-            var morphAttribute = morphAttributesPosition[_i43];
+          for (var _i44 = 0, il = morphAttributesPosition.length; _i44 < il; _i44++) {
+            var morphAttribute = morphAttributesPosition[_i44];
 
             _boxMorphTargets.setFromBufferAttribute(morphAttribute);
 
@@ -8377,15 +8387,15 @@
 
         var maxRadiusSq = 0;
 
-        for (var _i44 = 0, _il2 = position.count; _i44 < _il2; _i44++) {
-          _vector$4.fromBufferAttribute(position, _i44);
+        for (var _i45 = 0, _il2 = position.count; _i45 < _il2; _i45++) {
+          _vector$4.fromBufferAttribute(position, _i45);
 
           maxRadiusSq = Math.max(maxRadiusSq, center.distanceToSquared(_vector$4));
         }
 
         if (morphAttributesPosition) {
-          for (var _i45 = 0, _il3 = morphAttributesPosition.length; _i45 < _il3; _i45++) {
-            var _morphAttribute = morphAttributesPosition[_i45];
+          for (var _i46 = 0, _il3 = morphAttributesPosition.length; _i46 < _il3; _i46++) {
+            var _morphAttribute = morphAttributesPosition[_i46];
             var morphTargetsRelative = this.morphTargetsRelative;
 
             for (var j = 0, jl = _morphAttribute.count; j < jl; j++) {
@@ -8421,8 +8431,8 @@
           normalAttribute = new BufferAttribute(new Float32Array(positionAttribute.count * 3), 3);
           this.setAttribute('normal', normalAttribute);
         } else {
-          for (var _i46 = 0, il = normalAttribute.count; _i46 < il; _i46++) {
-            normalAttribute.setXYZ(_i46, 0, 0, 0);
+          for (var _i47 = 0, il = normalAttribute.count; _i47 < il; _i47++) {
+            normalAttribute.setXYZ(_i47, 0, 0, 0);
           }
         }
 
@@ -8437,10 +8447,10 @@
             _ab = new Vector3();
 
         if (index) {
-          for (var _i47 = 0, _il4 = index.count; _i47 < _il4; _i47 += 3) {
-            var vA = index.getX(_i47 + 0);
-            var vB = index.getX(_i47 + 1);
-            var vC = index.getX(_i47 + 2);
+          for (var _i48 = 0, _il4 = index.count; _i48 < _il4; _i48 += 3) {
+            var vA = index.getX(_i48 + 0);
+            var vB = index.getX(_i48 + 1);
+            var vC = index.getX(_i48 + 2);
             pA.fromBufferAttribute(positionAttribute, vA);
             pB.fromBufferAttribute(positionAttribute, vB);
             pC.fromBufferAttribute(positionAttribute, vC);
@@ -8460,18 +8470,18 @@
             normalAttribute.setXYZ(vC, nC.x, nC.y, nC.z);
           }
         } else {
-          for (var _i48 = 0, _il5 = positionAttribute.count; _i48 < _il5; _i48 += 3) {
-            pA.fromBufferAttribute(positionAttribute, _i48 + 0);
-            pB.fromBufferAttribute(positionAttribute, _i48 + 1);
-            pC.fromBufferAttribute(positionAttribute, _i48 + 2);
+          for (var _i49 = 0, _il5 = positionAttribute.count; _i49 < _il5; _i49 += 3) {
+            pA.fromBufferAttribute(positionAttribute, _i49 + 0);
+            pB.fromBufferAttribute(positionAttribute, _i49 + 1);
+            pC.fromBufferAttribute(positionAttribute, _i49 + 2);
             cb.subVectors(pC, pB);
 
             _ab.subVectors(pA, pB);
 
             cb.cross(_ab);
-            normalAttribute.setXYZ(_i48 + 0, cb.x, cb.y, cb.z);
-            normalAttribute.setXYZ(_i48 + 1, cb.x, cb.y, cb.z);
-            normalAttribute.setXYZ(_i48 + 2, cb.x, cb.y, cb.z);
+            normalAttribute.setXYZ(_i49 + 0, cb.x, cb.y, cb.z);
+            normalAttribute.setXYZ(_i49 + 1, cb.x, cb.y, cb.z);
+            normalAttribute.setXYZ(_i49 + 2, cb.x, cb.y, cb.z);
           }
         }
 
@@ -8501,8 +8511,8 @@
         var attributeOffset = attribute2.itemSize * offset;
         var length = Math.min(attributeArray2.length, attributeArray1.length - attributeOffset);
 
-        for (var _i49 = 0, j = attributeOffset; _i49 < length; _i49++, j++) {
-          attributeArray1[j] = attributeArray2[_i49];
+        for (var _i50 = 0, j = attributeOffset; _i50 < length; _i50++, j++) {
+          attributeArray1[j] = attributeArray2[_i50];
         }
       }
 
@@ -8511,12 +8521,12 @@
     normalizeNormals: function normalizeNormals() {
       var normals = this.attributes.normal;
 
-      for (var _i50 = 0, il = normals.count; _i50 < il; _i50++) {
-        _vector$4.fromBufferAttribute(normals, _i50);
+      for (var _i51 = 0, il = normals.count; _i51 < il; _i51++) {
+        _vector$4.fromBufferAttribute(normals, _i51);
 
         _vector$4.normalize();
 
-        normals.setXYZ(_i50, _vector$4.x, _vector$4.y, _vector$4.z);
+        normals.setXYZ(_i51, _vector$4.x, _vector$4.y, _vector$4.z);
       }
     },
     toNonIndexed: function toNonIndexed() {
@@ -8528,8 +8538,8 @@
         var index = 0,
             index2 = 0;
 
-        for (var _i51 = 0, l = indices.length; _i51 < l; _i51++) {
-          index = indices[_i51] * itemSize;
+        for (var _i52 = 0, l = indices.length; _i52 < l; _i52++) {
+          index = indices[_i52] * itemSize;
 
           for (var j = 0; j < itemSize; j++) {
             array2[index2++] = array[index++];
@@ -8560,8 +8570,8 @@
         var morphArray = [];
         var morphAttribute = morphAttributes[_name2];
 
-        for (var _i52 = 0, il = morphAttribute.length; _i52 < il; _i52++) {
-          var _attribute5 = morphAttribute[_i52];
+        for (var _i53 = 0, il = morphAttribute.length; _i53 < il; _i53++) {
+          var _attribute5 = morphAttribute[_i53];
 
           var _newAttribute = convertBufferAttribute(_attribute5, indices);
 
@@ -8574,8 +8584,8 @@
       geometry2.morphTargetsRelative = this.morphTargetsRelative;
       var groups = this.groups;
 
-      for (var _i53 = 0, l = groups.length; _i53 < l; _i53++) {
-        var group = groups[_i53];
+      for (var _i54 = 0, l = groups.length; _i54 < l; _i54++) {
+        var group = groups[_i54];
         geometry2.addGroup(group.start, group.count, group.materialIndex);
       }
 
@@ -8632,8 +8642,8 @@
         var attributeArray = this.morphAttributes[_key3];
         var array = [];
 
-        for (var _i54 = 0, il = attributeArray.length; _i54 < il; _i54++) {
-          var _attribute6 = attributeArray[_i54];
+        for (var _i55 = 0, il = attributeArray.length; _i55 < il; _i55++) {
+          var _attribute6 = attributeArray[_i55];
 
           var _attributeData = _attribute6.toJSON(data.data);
 
@@ -8700,8 +8710,8 @@
         var array = [];
         var morphAttribute = morphAttributes[_name3];
 
-        for (var _i55 = 0, l = morphAttribute.length; _i55 < l; _i55++) {
-          array.push(morphAttribute[_i55].clone(data));
+        for (var _i56 = 0, l = morphAttribute.length; _i56 < l; _i56++) {
+          array.push(morphAttribute[_i56].clone(data));
         }
 
         this.morphAttributes[_name3] = array;
@@ -8710,8 +8720,8 @@
       this.morphTargetsRelative = source.morphTargetsRelative;
       var groups = source.groups;
 
-      for (var _i56 = 0, _l3 = groups.length; _i56 < _l3; _i56++) {
-        var group = groups[_i56];
+      for (var _i57 = 0, _l3 = groups.length; _i57 < _l3; _i57++) {
+        var group = groups[_i57];
         this.addGroup(group.start, group.count, group.materialIndex);
       }
 
@@ -8863,8 +8873,8 @@
 
         if (index !== null) {
           if (Array.isArray(material)) {
-            for (var _i57 = 0, il = groups.length; _i57 < il; _i57++) {
-              var group = groups[_i57];
+            for (var _i58 = 0, il = groups.length; _i58 < il; _i58++) {
+              var group = groups[_i58];
               var groupMaterial = material[group.materialIndex];
               var start = Math.max(group.start, drawRange.start);
               var end = Math.min(group.start + group.count, drawRange.start + drawRange.count);
@@ -8887,25 +8897,25 @@
 
             var _end2 = Math.min(index.count, drawRange.start + drawRange.count);
 
-            for (var _i58 = _start2, _il6 = _end2; _i58 < _il6; _i58 += 3) {
-              var _a = index.getX(_i58);
+            for (var _i59 = _start2, _il6 = _end2; _i59 < _il6; _i59 += 3) {
+              var _a = index.getX(_i59);
 
-              var _b = index.getX(_i58 + 1);
+              var _b = index.getX(_i59 + 1);
 
-              var _c = index.getX(_i58 + 2);
+              var _c = index.getX(_i59 + 2);
 
               intersection = checkBufferGeometryIntersection(this, material, raycaster, _ray, position, morphPosition, morphTargetsRelative, uv, uv2, _a, _b, _c);
 
               if (intersection) {
-                intersection.faceIndex = Math.floor(_i58 / 3);
+                intersection.faceIndex = Math.floor(_i59 / 3);
                 intersects.push(intersection);
               }
             }
           }
         } else if (position !== undefined) {
           if (Array.isArray(material)) {
-            for (var _i59 = 0, _il7 = groups.length; _i59 < _il7; _i59++) {
-              var _group = groups[_i59];
+            for (var _i60 = 0, _il7 = groups.length; _i60 < _il7; _i60++) {
+              var _group = groups[_i60];
               var _groupMaterial = material[_group.materialIndex];
 
               var _start3 = Math.max(_group.start, drawRange.start);
@@ -8933,17 +8943,17 @@
 
             var _end4 = Math.min(position.count, drawRange.start + drawRange.count);
 
-            for (var _i60 = _start4, _il8 = _end4; _i60 < _il8; _i60 += 3) {
-              var _a3 = _i60;
+            for (var _i61 = _start4, _il8 = _end4; _i61 < _il8; _i61 += 3) {
+              var _a3 = _i61;
 
-              var _b3 = _i60 + 1;
+              var _b3 = _i61 + 1;
 
-              var _c3 = _i60 + 2;
+              var _c3 = _i61 + 2;
 
               intersection = checkBufferGeometryIntersection(this, material, raycaster, _ray, position, morphPosition, morphTargetsRelative, uv, uv2, _a3, _b3, _c3);
 
               if (intersection) {
-                intersection.faceIndex = Math.floor(_i60 / 3);
+                intersection.faceIndex = Math.floor(_i61 / 3);
                 intersects.push(intersection);
               }
             }
@@ -9028,9 +9038,9 @@
 
       _morphC.set(0, 0, 0);
 
-      for (var _i61 = 0, il = morphPosition.length; _i61 < il; _i61++) {
-        var influence = morphInfluences[_i61];
-        var morphAttribute = morphPosition[_i61];
+      for (var _i62 = 0, il = morphPosition.length; _i62 < il; _i62++) {
+        var influence = morphInfluences[_i62];
+        var morphAttribute = morphPosition[_i62];
         if (influence === 0) continue;
 
         _tempA.fromBufferAttribute(morphAttribute, a);
@@ -9400,7 +9410,7 @@
         target = new Vector3();
       }
 
-      this.updateMatrixWorld(true);
+      this.updateWorldMatrix(true, false);
       var e = this.matrixWorld.elements;
       return target.set(-e[8], -e[9], -e[10]).normalize();
     },
@@ -9600,17 +9610,6 @@
       renderer.setRenderTarget(currentRenderTarget);
       renderer.xr.enabled = currentXrEnabled;
     };
-
-    this.clear = function (renderer, color, depth, stencil) {
-      var currentRenderTarget = renderer.getRenderTarget();
-
-      for (var _i62 = 0; _i62 < 6; _i62++) {
-        renderer.setRenderTarget(renderTarget, _i62);
-        renderer.clear(color, depth, stencil);
-      }
-
-      renderer.setRenderTarget(currentRenderTarget);
-    };
   }
 
   CubeCamera.prototype = Object.create(Object3D.prototype);
@@ -9690,6 +9689,17 @@
     return this;
   };
 
+  WebGLCubeRenderTarget.prototype.clear = function (renderer, color, depth, stencil) {
+    var currentRenderTarget = renderer.getRenderTarget();
+
+    for (var _i63 = 0; _i63 < 6; _i63++) {
+      renderer.setRenderTarget(this, _i63);
+      renderer.clear(color, depth, stencil);
+    }
+
+    renderer.setRenderTarget(currentRenderTarget);
+  };
+
   function DataTexture(data, width, height, format, type, mapping, wrapS, wrapT, magFilter, minFilter, anisotropy, encoding) {
     Texture.call(this, null, mapping, wrapS, wrapT, magFilter, minFilter, format, type, anisotropy, encoding);
     this.image = {
@@ -9742,8 +9752,8 @@
       value: function copy(frustum) {
         var planes = this.planes;
 
-        for (var _i63 = 0; _i63 < 6; _i63++) {
-          planes[_i63].copy(frustum.planes[_i63]);
+        for (var _i64 = 0; _i64 < 6; _i64++) {
+          planes[_i64].copy(frustum.planes[_i64]);
         }
 
         return this;
@@ -9805,8 +9815,8 @@
         var center = sphere.center;
         var negRadius = -sphere.radius;
 
-        for (var _i64 = 0; _i64 < 6; _i64++) {
-          var distance = planes[_i64].distanceToPoint(center);
+        for (var _i65 = 0; _i65 < 6; _i65++) {
+          var distance = planes[_i65].distanceToPoint(center);
 
           if (distance < negRadius) {
             return false;
@@ -9820,8 +9830,8 @@
       value: function intersectsBox(box) {
         var planes = this.planes;
 
-        for (var _i65 = 0; _i65 < 6; _i65++) {
-          var plane = planes[_i65];
+        for (var _i66 = 0; _i66 < 6; _i66++) {
+          var plane = planes[_i66];
           _vector$5.x = plane.normal.x > 0 ? box.max.x : box.min.x;
           _vector$5.y = plane.normal.y > 0 ? box.max.y : box.min.y;
           _vector$5.z = plane.normal.z > 0 ? box.max.z : box.min.z;
@@ -9838,8 +9848,8 @@
       value: function containsPoint(point) {
         var planes = this.planes;
 
-        for (var _i66 = 0; _i66 < 6; _i66++) {
-          if (planes[_i66].distanceToPoint(point) < 0) {
+        for (var _i67 = 0; _i67 < 6; _i67++) {
+          if (planes[_i67].distanceToPoint(point) < 0) {
             return false;
           }
         }
@@ -11024,10 +11034,10 @@
       var enabledAttributes = [];
       var attributeDivisors = [];
 
-      for (var _i67 = 0; _i67 < maxVertexAttributes; _i67++) {
-        newAttributes[_i67] = 0;
-        enabledAttributes[_i67] = 0;
-        attributeDivisors[_i67] = 0;
+      for (var _i68 = 0; _i68 < maxVertexAttributes; _i68++) {
+        newAttributes[_i68] = 0;
+        enabledAttributes[_i68] = 0;
+        attributeDivisors[_i68] = 0;
       }
 
       return {
@@ -11083,8 +11093,8 @@
     function initAttributes() {
       var newAttributes = currentState.newAttributes;
 
-      for (var _i68 = 0, il = newAttributes.length; _i68 < il; _i68++) {
-        newAttributes[_i68] = 0;
+      for (var _i69 = 0, il = newAttributes.length; _i69 < il; _i69++) {
+        newAttributes[_i69] = 0;
       }
     }
 
@@ -11116,10 +11126,10 @@
       var newAttributes = currentState.newAttributes;
       var enabledAttributes = currentState.enabledAttributes;
 
-      for (var _i69 = 0, il = enabledAttributes.length; _i69 < il; _i69++) {
-        if (enabledAttributes[_i69] !== newAttributes[_i69]) {
-          gl.disableVertexAttribArray(_i69);
-          enabledAttributes[_i69] = 0;
+      for (var _i70 = 0, il = enabledAttributes.length; _i70 < il; _i70++) {
+        if (enabledAttributes[_i70] !== newAttributes[_i70]) {
+          gl.disableVertexAttribArray(_i70);
+          enabledAttributes[_i70] = 0;
         }
       }
     }
@@ -11489,8 +11499,8 @@
         uniform.value = dstArray;
         dstArray = projectPlanes(planes, camera, lGlobal, useCache);
 
-        for (var _i70 = 0; _i70 !== lGlobal; ++_i70) {
-          dstArray[_i70] = globalState[_i70];
+        for (var _i71 = 0; _i71 !== lGlobal; ++_i71) {
+          dstArray[_i71] = globalState[_i71];
         }
 
         materialProperties.clippingState = dstArray;
@@ -11525,8 +11535,8 @@
             dstArray = new Float32Array(flatSize);
           }
 
-          for (var _i71 = 0, i4 = dstOffset; _i71 !== nPlanes; ++_i71, i4 += 4) {
-            plane.copy(planes[_i71]).applyMatrix4(viewMatrix, viewNormalMatrix);
+          for (var _i72 = 0, i4 = dstOffset; _i72 !== nPlanes; ++_i72, i4 += 4) {
+            plane.copy(planes[_i72]).applyMatrix4(viewMatrix, viewNormalMatrix);
             plane.normal.toArray(dstArray, i4);
             dstArray[i4 + 3] = plane.constant;
           }
@@ -11576,6 +11586,7 @@
               renderer.setRenderTarget(currentRenderTarget);
               renderer.setRenderList(currentRenderList);
               renderer.setRenderState(currentRenderState);
+              texture.addEventListener('dispose', onTextureDispose);
               return mapTextureMapping(renderTarget.texture, texture.mapping);
             } else {
               return null;
@@ -11585,6 +11596,17 @@
       }
 
       return texture;
+    }
+
+    function onTextureDispose(event) {
+      var texture = event.target;
+      texture.removeEventListener('dispose', onTextureDispose);
+      var cubemap = cubemaps.get(texture);
+
+      if (cubemap !== undefined) {
+        cubemaps["delete"](texture);
+        cubemap.dispose();
+      }
     }
 
     function dispose() {
@@ -11666,7 +11688,7 @@
         wireframeAttributes["delete"](buffergeometry);
       }
 
-      bindingStates.releaseStatesOfGeometry(geometry);
+      bindingStates.releaseStatesOfGeometry(buffergeometry);
 
       if (geometry.isInstancedBufferGeometry === true) {
         delete geometry._maxInstanceCount;
@@ -11707,8 +11729,8 @@
       for (var _name4 in morphAttributes) {
         var array = morphAttributes[_name4];
 
-        for (var _i72 = 0, l = array.length; _i72 < l; _i72++) {
-          attributes.update(array[_i72], 34962);
+        for (var _i73 = 0, l = array.length; _i73 < l; _i73++) {
+          attributes.update(array[_i73], 34962);
         }
       }
     }
@@ -11723,22 +11745,22 @@
         var array = geometryIndex.array;
         version = geometryIndex.version;
 
-        for (var _i73 = 0, l = array.length; _i73 < l; _i73 += 3) {
-          var a = array[_i73 + 0];
-          var b = array[_i73 + 1];
-          var c = array[_i73 + 2];
+        for (var _i74 = 0, l = array.length; _i74 < l; _i74 += 3) {
+          var a = array[_i74 + 0];
+          var b = array[_i74 + 1];
+          var c = array[_i74 + 2];
           indices.push(a, b, b, c, c, a);
         }
       } else {
         var _array = geometryPosition.array;
         version = geometryPosition.version;
 
-        for (var _i74 = 0, _l4 = _array.length / 3 - 1; _i74 < _l4; _i74 += 3) {
-          var _a4 = _i74 + 0;
+        for (var _i75 = 0, _l4 = _array.length / 3 - 1; _i75 < _l4; _i75 += 3) {
+          var _a4 = _i75 + 0;
 
-          var _b4 = _i74 + 1;
+          var _b4 = _i75 + 1;
 
-          var _c4 = _i74 + 2;
+          var _c4 = _i75 + 2;
 
           indices.push(_a4, _b4, _b4, _c4, _c4, _a4);
         }
@@ -11897,8 +11919,8 @@
     var morphInfluences = new Float32Array(8);
     var workInfluences = [];
 
-    for (var _i75 = 0; _i75 < 8; _i75++) {
-      workInfluences[_i75] = [_i75, 0];
+    for (var _i76 = 0; _i76 < 8; _i76++) {
+      workInfluences[_i76] = [_i76, 0];
     }
 
     function update(object, geometry, material, program) {
@@ -11909,28 +11931,28 @@
       if (influences === undefined) {
         influences = [];
 
-        for (var _i76 = 0; _i76 < length; _i76++) {
-          influences[_i76] = [_i76, 0];
+        for (var _i77 = 0; _i77 < length; _i77++) {
+          influences[_i77] = [_i77, 0];
         }
 
         influencesList[geometry.id] = influences;
       }
 
-      for (var _i77 = 0; _i77 < length; _i77++) {
-        var influence = influences[_i77];
-        influence[0] = _i77;
-        influence[1] = objectInfluences[_i77];
+      for (var _i78 = 0; _i78 < length; _i78++) {
+        var influence = influences[_i78];
+        influence[0] = _i78;
+        influence[1] = objectInfluences[_i78];
       }
 
       influences.sort(absNumericalSort);
 
-      for (var _i78 = 0; _i78 < 8; _i78++) {
-        if (_i78 < length && influences[_i78][1]) {
-          workInfluences[_i78][0] = influences[_i78][0];
-          workInfluences[_i78][1] = influences[_i78][1];
+      for (var _i79 = 0; _i79 < 8; _i79++) {
+        if (_i79 < length && influences[_i79][1]) {
+          workInfluences[_i79][0] = influences[_i79][0];
+          workInfluences[_i79][1] = influences[_i79][1];
         } else {
-          workInfluences[_i78][0] = Number.MAX_SAFE_INTEGER;
-          workInfluences[_i78][1] = 0;
+          workInfluences[_i79][0] = Number.MAX_SAFE_INTEGER;
+          workInfluences[_i79][1] = 0;
         }
       }
 
@@ -11939,32 +11961,32 @@
       var morphNormals = material.morphNormals && geometry.morphAttributes.normal;
       var morphInfluencesSum = 0;
 
-      for (var _i79 = 0; _i79 < 8; _i79++) {
-        var _influence = workInfluences[_i79];
+      for (var _i80 = 0; _i80 < 8; _i80++) {
+        var _influence = workInfluences[_i80];
         var index = _influence[0];
         var value = _influence[1];
 
         if (index !== Number.MAX_SAFE_INTEGER && value) {
-          if (morphTargets && geometry.getAttribute('morphTarget' + _i79) !== morphTargets[index]) {
-            geometry.setAttribute('morphTarget' + _i79, morphTargets[index]);
+          if (morphTargets && geometry.getAttribute('morphTarget' + _i80) !== morphTargets[index]) {
+            geometry.setAttribute('morphTarget' + _i80, morphTargets[index]);
           }
 
-          if (morphNormals && geometry.getAttribute('morphNormal' + _i79) !== morphNormals[index]) {
-            geometry.setAttribute('morphNormal' + _i79, morphNormals[index]);
+          if (morphNormals && geometry.getAttribute('morphNormal' + _i80) !== morphNormals[index]) {
+            geometry.setAttribute('morphNormal' + _i80, morphNormals[index]);
           }
 
-          morphInfluences[_i79] = value;
+          morphInfluences[_i80] = value;
           morphInfluencesSum += value;
         } else {
-          if (morphTargets && geometry.getAttribute('morphTarget' + _i79) !== undefined) {
-            geometry.deleteAttribute('morphTarget' + _i79);
+          if (morphTargets && geometry.getAttribute('morphTarget' + _i80) !== undefined) {
+            geometry.deleteAttribute('morphTarget' + _i80);
           }
 
-          if (morphNormals && geometry.getAttribute('morphNormal' + _i79) !== undefined) {
-            geometry.deleteAttribute('morphNormal' + _i79);
+          if (morphNormals && geometry.getAttribute('morphNormal' + _i80) !== undefined) {
+            geometry.deleteAttribute('morphNormal' + _i80);
           }
 
-          morphInfluences[_i79] = 0;
+          morphInfluences[_i80] = 0;
         }
       }
 
@@ -12079,10 +12101,10 @@
     if (nBlocks !== 0) {
       firstElem.toArray(r, 0);
 
-      for (var _i80 = 1, offset = 0; _i80 !== nBlocks; ++_i80) {
+      for (var _i81 = 1, offset = 0; _i81 !== nBlocks; ++_i81) {
         offset += blockSize;
 
-        array[_i80].toArray(r, offset);
+        array[_i81].toArray(r, offset);
       }
     }
 
@@ -12092,16 +12114,16 @@
   function arraysEqual(a, b) {
     if (a.length !== b.length) return false;
 
-    for (var _i81 = 0, l = a.length; _i81 < l; _i81++) {
-      if (a[_i81] !== b[_i81]) return false;
+    for (var _i82 = 0, l = a.length; _i82 < l; _i82++) {
+      if (a[_i82] !== b[_i82]) return false;
     }
 
     return true;
   }
 
   function copyArray(a, b) {
-    for (var _i82 = 0, l = b.length; _i82 < l; _i82++) {
-      a[_i82] = b[_i82];
+    for (var _i83 = 0, l = b.length; _i83 < l; _i83++) {
+      a[_i83] = b[_i83];
     }
   }
 
@@ -12113,8 +12135,8 @@
       arrayCacheI32[n] = r;
     }
 
-    for (var _i83 = 0; _i83 !== n; ++_i83) {
-      r[_i83] = textures.allocateTextureUnit();
+    for (var _i84 = 0; _i84 !== n; ++_i84) {
+      r[_i84] = textures.allocateTextureUnit();
     }
 
     return r;
@@ -12439,8 +12461,8 @@
     var units = allocTexUnits(textures, n);
     gl.uniform1iv(this.addr, units);
 
-    for (var _i84 = 0; _i84 !== n; ++_i84) {
-      textures.safeSetTexture2D(v[_i84] || emptyTexture, units[_i84]);
+    for (var _i85 = 0; _i85 !== n; ++_i85) {
+      textures.safeSetTexture2D(v[_i85] || emptyTexture, units[_i85]);
     }
   }
 
@@ -12449,8 +12471,8 @@
     var units = allocTexUnits(textures, n);
     gl.uniform1iv(this.addr, units);
 
-    for (var _i85 = 0; _i85 !== n; ++_i85) {
-      textures.safeSetTextureCube(v[_i85] || emptyCubeTexture, units[_i85]);
+    for (var _i86 = 0; _i86 !== n; ++_i86) {
+      textures.safeSetTextureCube(v[_i86] || emptyCubeTexture, units[_i86]);
     }
   }
 
@@ -12542,8 +12564,8 @@
   StructuredUniform.prototype.setValue = function (gl, value, textures) {
     var seq = this.seq;
 
-    for (var _i86 = 0, n = seq.length; _i86 !== n; ++_i86) {
-      var u = seq[_i86];
+    for (var _i87 = 0, n = seq.length; _i87 !== n; ++_i87) {
+      var u = seq[_i87];
       u.setValue(gl, value[u.id], textures);
     }
   };
@@ -12590,8 +12612,8 @@
     this.map = {};
     var n = gl.getProgramParameter(program, 35718);
 
-    for (var _i87 = 0; _i87 < n; ++_i87) {
-      var info = gl.getActiveUniform(program, _i87),
+    for (var _i88 = 0; _i88 < n; ++_i88) {
+      var info = gl.getActiveUniform(program, _i88),
           addr = gl.getUniformLocation(program, info.name);
       parseUniform(info, addr, this);
     }
@@ -12608,8 +12630,8 @@
   };
 
   WebGLUniforms.upload = function (gl, seq, values, textures) {
-    for (var _i88 = 0, n = seq.length; _i88 !== n; ++_i88) {
-      var u = seq[_i88],
+    for (var _i89 = 0, n = seq.length; _i89 !== n; ++_i89) {
+      var u = seq[_i89],
           _v4 = values[u.id];
 
       if (_v4.needsUpdate !== false) {
@@ -12621,8 +12643,8 @@
   WebGLUniforms.seqWithValue = function (seq, values) {
     var r = [];
 
-    for (var _i89 = 0, n = seq.length; _i89 !== n; ++_i89) {
-      var u = seq[_i89];
+    for (var _i90 = 0, n = seq.length; _i90 !== n; ++_i90) {
+      var u = seq[_i90];
       if (u.id in values) r.push(u);
     }
 
@@ -12641,8 +12663,8 @@
   function addLineNumbers(string) {
     var lines = string.split('\n');
 
-    for (var _i90 = 0; _i90 < lines.length; _i90++) {
-      lines[_i90] = _i90 + 1 + ': ' + lines[_i90];
+    for (var _i91 = 0; _i91 < lines.length; _i91++) {
+      lines[_i91] = _i91 + 1 + ': ' + lines[_i91];
     }
 
     return lines.join('\n');
@@ -12751,8 +12773,8 @@
     var attributes = {};
     var n = gl.getProgramParameter(program, 35721);
 
-    for (var _i91 = 0; _i91 < n; _i91++) {
-      var info = gl.getActiveAttrib(program, _i91);
+    for (var _i92 = 0; _i92 < n; _i92++) {
+      var info = gl.getActiveAttrib(program, _i92);
       var name = info.name;
       attributes[name] = gl.getAttribLocation(program, name);
     }
@@ -12803,8 +12825,8 @@
   function loopReplacer(match, start, end, snippet) {
     var string = '';
 
-    for (var _i92 = parseInt(start); _i92 < parseInt(end); _i92++) {
-      string += snippet.replace(/\[\s*i\s*\]/g, '[ ' + _i92 + ' ]').replace(/UNROLLED_LOOP_INDEX/g, _i92);
+    for (var _i93 = parseInt(start); _i93 < parseInt(end); _i93++) {
+      string += snippet.replace(/\[\s*i\s*\]/g, '[ ' + _i93 + ' ]').replace(/UNROLLED_LOOP_INDEX/g, _i93);
     }
 
     return string;
@@ -13230,8 +13252,8 @@
       }
 
       if (parameters.isRawShaderMaterial === false) {
-        for (var _i93 = 0; _i93 < parameterNames.length; _i93++) {
-          array.push(parameters[parameterNames[_i93]]);
+        for (var _i94 = 0; _i94 < parameterNames.length; _i94++) {
+          array.push(parameters[parameterNames[_i94]]);
         }
 
         array.push(renderer.outputEncoding);
@@ -13279,9 +13301,9 @@
 
     function releaseProgram(program) {
       if (--program.usedTimes === 0) {
-        var _i94 = programs.indexOf(program);
+        var _i95 = programs.indexOf(program);
 
-        programs[_i94] = programs[programs.length - 1];
+        programs[_i95] = programs[programs.length - 1];
         programs.pop();
         program.destroy();
       }
@@ -13423,8 +13445,8 @@
     }
 
     function finish() {
-      for (var _i95 = renderItemsIndex, il = renderItems.length; _i95 < il; _i95++) {
-        var renderItem = renderItems[_i95];
+      for (var _i96 = renderItemsIndex, il = renderItems.length; _i96 < il; _i96++) {
+        var renderItem = renderItems[_i96];
         if (renderItem.id === null) break;
         renderItem.id = null;
         renderItem.object = null;
@@ -13595,7 +13617,7 @@
     return (lightB.castShadow ? 1 : 0) - (lightA.castShadow ? 1 : 0);
   }
 
-  function WebGLLights() {
+  function WebGLLights(extensions, capabilities) {
     var cache = new UniformsCache();
     var shadowCache = ShadowUniformsCache();
     var state = {
@@ -13630,7 +13652,7 @@
       hemi: []
     };
 
-    for (var _i96 = 0; _i96 < 9; _i96++) {
+    for (var _i97 = 0; _i97 < 9; _i97++) {
       state.probe.push(new Vector3());
     }
 
@@ -13643,8 +13665,8 @@
           g = 0,
           b = 0;
 
-      for (var _i97 = 0; _i97 < 9; _i97++) {
-        state.probe[_i97].set(0, 0, 0);
+      for (var _i98 = 0; _i98 < 9; _i98++) {
+        state.probe[_i98].set(0, 0, 0);
       }
 
       var directionalLength = 0;
@@ -13658,8 +13680,8 @@
       var viewMatrix = camera.matrixWorldInverse;
       lights.sort(shadowCastingLightsFirst);
 
-      for (var _i98 = 0, l = lights.length; _i98 < l; _i98++) {
-        var light = lights[_i98];
+      for (var _i99 = 0, l = lights.length; _i99 < l; _i99++) {
+        var light = lights[_i99];
         var _color4 = light.color;
         var intensity = light.intensity;
         var distance = light.distance;
@@ -13810,8 +13832,20 @@
       }
 
       if (rectAreaLength > 0) {
-        state.rectAreaLTC1 = UniformsLib.LTC_1;
-        state.rectAreaLTC2 = UniformsLib.LTC_2;
+        if (capabilities.isWebGL2) {
+          state.rectAreaLTC1 = UniformsLib.LTC_FLOAT_1;
+          state.rectAreaLTC2 = UniformsLib.LTC_FLOAT_2;
+        } else {
+          if (extensions.has('OES_texture_float_linear') === true) {
+            state.rectAreaLTC1 = UniformsLib.LTC_FLOAT_1;
+            state.rectAreaLTC2 = UniformsLib.LTC_FLOAT_2;
+          } else if (extensions.has('OES_texture_half_float_linear') === true) {
+            state.rectAreaLTC1 = UniformsLib.LTC_HALF_1;
+            state.rectAreaLTC2 = UniformsLib.LTC_HALF_2;
+          } else {
+            console.error('THREE.WebGLRenderer: Unable to use RectAreaLight. Missing WebGL extensions.');
+          }
+        }
       }
 
       state.ambient[0] = r;
@@ -13852,8 +13886,8 @@
     };
   }
 
-  function WebGLRenderState() {
-    var lights = new WebGLLights();
+  function WebGLRenderState(extensions, capabilities) {
+    var lights = new WebGLLights(extensions, capabilities);
     var lightsArray = [];
     var shadowsArray = [];
 
@@ -13888,19 +13922,19 @@
     };
   }
 
-  function WebGLRenderStates() {
+  function WebGLRenderStates(extensions, capabilities) {
     var renderStates = new WeakMap();
 
     function get(scene, camera) {
       var renderState;
 
       if (renderStates.has(scene) === false) {
-        renderState = new WebGLRenderState();
+        renderState = new WebGLRenderState(extensions, capabilities);
         renderStates.set(scene, new WeakMap());
         renderStates.get(scene).set(camera, renderState);
       } else {
         if (renderStates.get(scene).has(camera) === false) {
-          renderState = new WebGLRenderState();
+          renderState = new WebGLRenderState(extensions, capabilities);
           renderStates.get(scene).set(camera, renderState);
         } else {
           renderState = renderStates.get(scene).get(camera);
@@ -14061,8 +14095,8 @@
 
       _state.setScissorTest(false);
 
-      for (var _i99 = 0, il = lights.length; _i99 < il; _i99++) {
-        var light = lights[_i99];
+      for (var _i100 = 0, il = lights.length; _i100 < il; _i100++) {
+        var light = lights[_i100];
         var shadow = light.shadow;
 
         if (shadow === undefined) {
@@ -14314,8 +14348,8 @@
 
       var children = object.children;
 
-      for (var _i100 = 0, l = children.length; _i100 < l; _i100++) {
-        renderObject(children[_i100], camera, shadowCamera, light, type);
+      for (var _i101 = 0, l = children.length; _i101 < l; _i101++) {
+        renderObject(children[_i101], camera, shadowCamera, light, type);
       }
     }
   }
@@ -14554,8 +14588,8 @@
       gl.texParameteri(type, 10241, 9728);
       gl.texParameteri(type, 10240, 9728);
 
-      for (var _i101 = 0; _i101 < count; _i101++) {
-        gl.texImage2D(target + _i101, 0, 6408, 1, 1, 0, 6408, 5121, data);
+      for (var _i102 = 0; _i102 < count; _i102++) {
+        gl.texImage2D(target + _i102, 0, 6408, 1, 1, 0, 6408, 5121, data);
       }
 
       return texture;
@@ -15079,10 +15113,10 @@
       }
 
       if (renderTarget.isWebGLCubeRenderTarget) {
-        for (var _i102 = 0; _i102 < 6; _i102++) {
-          _gl.deleteFramebuffer(renderTargetProperties.__webglFramebuffer[_i102]);
+        for (var _i103 = 0; _i103 < 6; _i103++) {
+          _gl.deleteFramebuffer(renderTargetProperties.__webglFramebuffer[_i103]);
 
-          if (renderTargetProperties.__webglDepthbuffer) _gl.deleteRenderbuffer(renderTargetProperties.__webglDepthbuffer[_i102]);
+          if (renderTargetProperties.__webglDepthbuffer) _gl.deleteRenderbuffer(renderTargetProperties.__webglDepthbuffer[_i103]);
         }
       } else {
         _gl.deleteFramebuffer(renderTargetProperties.__webglFramebuffer);
@@ -15296,9 +15330,9 @@
         state.texImage2D(3553, 0, glInternalFormat, image.width, image.height, 0, glFormat, glType, null);
       } else if (texture.isDataTexture) {
         if (mipmaps.length > 0 && supportsMips) {
-          for (var _i103 = 0, il = mipmaps.length; _i103 < il; _i103++) {
-            mipmap = mipmaps[_i103];
-            state.texImage2D(3553, _i103, glInternalFormat, mipmap.width, mipmap.height, 0, glFormat, glType, mipmap.data);
+          for (var _i104 = 0, il = mipmaps.length; _i104 < il; _i104++) {
+            mipmap = mipmaps[_i104];
+            state.texImage2D(3553, _i104, glInternalFormat, mipmap.width, mipmap.height, 0, glFormat, glType, mipmap.data);
           }
 
           texture.generateMipmaps = false;
@@ -15308,17 +15342,17 @@
           textureProperties.__maxMipLevel = 0;
         }
       } else if (texture.isCompressedTexture) {
-        for (var _i104 = 0, _il9 = mipmaps.length; _i104 < _il9; _i104++) {
-          mipmap = mipmaps[_i104];
+        for (var _i105 = 0, _il9 = mipmaps.length; _i105 < _il9; _i105++) {
+          mipmap = mipmaps[_i105];
 
           if (texture.format !== RGBAFormat && texture.format !== RGBFormat) {
             if (glFormat !== null) {
-              state.compressedTexImage2D(3553, _i104, glInternalFormat, mipmap.width, mipmap.height, 0, mipmap.data);
+              state.compressedTexImage2D(3553, _i105, glInternalFormat, mipmap.width, mipmap.height, 0, mipmap.data);
             } else {
               console.warn('THREE.WebGLRenderer: Attempt to load unsupported compressed texture format in .uploadTexture()');
             }
           } else {
-            state.texImage2D(3553, _i104, glInternalFormat, mipmap.width, mipmap.height, 0, glFormat, glType, mipmap.data);
+            state.texImage2D(3553, _i105, glInternalFormat, mipmap.width, mipmap.height, 0, glFormat, glType, mipmap.data);
           }
         }
 
@@ -15331,9 +15365,9 @@
         textureProperties.__maxMipLevel = 0;
       } else {
         if (mipmaps.length > 0 && supportsMips) {
-          for (var _i105 = 0, _il10 = mipmaps.length; _i105 < _il10; _i105++) {
-            mipmap = mipmaps[_i105];
-            state.texImage2D(3553, _i105, glInternalFormat, glFormat, glType, mipmap);
+          for (var _i106 = 0, _il10 = mipmaps.length; _i106 < _il10; _i106++) {
+            mipmap = mipmaps[_i106];
+            state.texImage2D(3553, _i106, glInternalFormat, glFormat, glType, mipmap);
           }
 
           texture.generateMipmaps = false;
@@ -15364,11 +15398,11 @@
       var isDataTexture = texture.image[0] && texture.image[0].isDataTexture;
       var cubeImage = [];
 
-      for (var _i106 = 0; _i106 < 6; _i106++) {
+      for (var _i107 = 0; _i107 < 6; _i107++) {
         if (!isCompressed && !isDataTexture) {
-          cubeImage[_i106] = resizeImage(texture.image[_i106], false, true, maxCubemapSize);
+          cubeImage[_i107] = resizeImage(texture.image[_i107], false, true, maxCubemapSize);
         } else {
-          cubeImage[_i106] = isDataTexture ? texture.image[_i106].image : texture.image[_i106];
+          cubeImage[_i107] = isDataTexture ? texture.image[_i107].image : texture.image[_i107];
         }
       }
 
@@ -15381,20 +15415,20 @@
       var mipmaps;
 
       if (isCompressed) {
-        for (var _i107 = 0; _i107 < 6; _i107++) {
-          mipmaps = cubeImage[_i107].mipmaps;
+        for (var _i108 = 0; _i108 < 6; _i108++) {
+          mipmaps = cubeImage[_i108].mipmaps;
 
           for (var j = 0; j < mipmaps.length; j++) {
             var mipmap = mipmaps[j];
 
             if (texture.format !== RGBAFormat && texture.format !== RGBFormat) {
               if (glFormat !== null) {
-                state.compressedTexImage2D(34069 + _i107, j, glInternalFormat, mipmap.width, mipmap.height, 0, mipmap.data);
+                state.compressedTexImage2D(34069 + _i108, j, glInternalFormat, mipmap.width, mipmap.height, 0, mipmap.data);
               } else {
                 console.warn('THREE.WebGLRenderer: Attempt to load unsupported compressed texture format in .setTextureCube()');
               }
             } else {
-              state.texImage2D(34069 + _i107, j, glInternalFormat, mipmap.width, mipmap.height, 0, glFormat, glType, mipmap.data);
+              state.texImage2D(34069 + _i108, j, glInternalFormat, mipmap.width, mipmap.height, 0, glFormat, glType, mipmap.data);
             }
           }
         }
@@ -15403,21 +15437,21 @@
       } else {
         mipmaps = texture.mipmaps;
 
-        for (var _i108 = 0; _i108 < 6; _i108++) {
+        for (var _i109 = 0; _i109 < 6; _i109++) {
           if (isDataTexture) {
-            state.texImage2D(34069 + _i108, 0, glInternalFormat, cubeImage[_i108].width, cubeImage[_i108].height, 0, glFormat, glType, cubeImage[_i108].data);
+            state.texImage2D(34069 + _i109, 0, glInternalFormat, cubeImage[_i109].width, cubeImage[_i109].height, 0, glFormat, glType, cubeImage[_i109].data);
 
             for (var _j3 = 0; _j3 < mipmaps.length; _j3++) {
               var _mipmap = mipmaps[_j3];
-              var mipmapImage = _mipmap.image[_i108].image;
-              state.texImage2D(34069 + _i108, _j3 + 1, glInternalFormat, mipmapImage.width, mipmapImage.height, 0, glFormat, glType, mipmapImage.data);
+              var mipmapImage = _mipmap.image[_i109].image;
+              state.texImage2D(34069 + _i109, _j3 + 1, glInternalFormat, mipmapImage.width, mipmapImage.height, 0, glFormat, glType, mipmapImage.data);
             }
           } else {
-            state.texImage2D(34069 + _i108, 0, glInternalFormat, glFormat, glType, cubeImage[_i108]);
+            state.texImage2D(34069 + _i109, 0, glInternalFormat, glFormat, glType, cubeImage[_i109]);
 
             for (var _j4 = 0; _j4 < mipmaps.length; _j4++) {
               var _mipmap2 = mipmaps[_j4];
-              state.texImage2D(34069 + _i108, _j4 + 1, glInternalFormat, glFormat, glType, _mipmap2.image[_i108]);
+              state.texImage2D(34069 + _i109, _j4 + 1, glInternalFormat, glFormat, glType, _mipmap2.image[_i109]);
             }
           }
         }
@@ -15539,11 +15573,11 @@
         if (isCube) {
           renderTargetProperties.__webglDepthbuffer = [];
 
-          for (var _i109 = 0; _i109 < 6; _i109++) {
-            _gl.bindFramebuffer(36160, renderTargetProperties.__webglFramebuffer[_i109]);
+          for (var _i110 = 0; _i110 < 6; _i110++) {
+            _gl.bindFramebuffer(36160, renderTargetProperties.__webglFramebuffer[_i110]);
 
-            renderTargetProperties.__webglDepthbuffer[_i109] = _gl.createRenderbuffer();
-            setupRenderBufferStorage(renderTargetProperties.__webglDepthbuffer[_i109], renderTarget, false);
+            renderTargetProperties.__webglDepthbuffer[_i110] = _gl.createRenderbuffer();
+            setupRenderBufferStorage(renderTargetProperties.__webglDepthbuffer[_i110], renderTarget, false);
           }
         } else {
           _gl.bindFramebuffer(36160, renderTargetProperties.__webglFramebuffer);
@@ -15574,8 +15608,8 @@
       if (isCube) {
         renderTargetProperties.__webglFramebuffer = [];
 
-        for (var _i110 = 0; _i110 < 6; _i110++) {
-          renderTargetProperties.__webglFramebuffer[_i110] = _gl.createFramebuffer();
+        for (var _i111 = 0; _i111 < 6; _i111++) {
+          renderTargetProperties.__webglFramebuffer[_i111] = _gl.createFramebuffer();
         }
       } else {
         renderTargetProperties.__webglFramebuffer = _gl.createFramebuffer();
@@ -15616,8 +15650,8 @@
         state.bindTexture(34067, textureProperties.__webglTexture);
         setTextureParameters(34067, renderTarget.texture, supportsMips);
 
-        for (var _i111 = 0; _i111 < 6; _i111++) {
-          setupFrameBufferTexture(renderTargetProperties.__webglFramebuffer[_i111], renderTarget, 36064, 34069 + _i111);
+        for (var _i112 = 0; _i112 < 6; _i112++) {
+          setupFrameBufferTexture(renderTargetProperties.__webglFramebuffer[_i112], renderTarget, 36064, 34069 + _i112);
         }
 
         if (textureNeedsGenerateMipmaps(renderTarget.texture, supportsMips)) {
@@ -15899,7 +15933,7 @@
         };
 
         if (window.XRHand) {
-          for (var _i112 = 0; _i112 <= window.XRHand.LITTLE_PHALANX_TIP; _i112++) {
+          for (var _i113 = 0; _i113 <= window.XRHand.LITTLE_PHALANX_TIP; _i113++) {
             var joint = new Group();
             joint.matrixAutoUpdate = false;
             joint.visible = false;
@@ -15978,10 +16012,10 @@
         if (hand && inputSource.hand) {
           handPose = true;
 
-          for (var _i113 = 0; _i113 <= window.XRHand.LITTLE_PHALANX_TIP; _i113++) {
-            if (inputSource.hand[_i113]) {
-              var jointPose = frame.getJointPose(inputSource.hand[_i113], referenceSpace);
-              var joint = hand.joints[_i113];
+          for (var _i114 = 0; _i114 <= window.XRHand.LITTLE_PHALANX_TIP; _i114++) {
+            if (inputSource.hand[_i114]) {
+              var jointPose = frame.getJointPose(inputSource.hand[_i114], referenceSpace);
+              var joint = hand.joints[_i114];
 
               if (jointPose !== null) {
                 joint.matrix.fromArray(jointPose.transform.matrix);
@@ -16202,12 +16236,12 @@
     function updateInputSources(event) {
       var inputSources = session.inputSources;
 
-      for (var _i114 = 0; _i114 < controllers.length; _i114++) {
-        inputSourcesMap.set(inputSources[_i114], controllers[_i114]);
+      for (var _i115 = 0; _i115 < controllers.length; _i115++) {
+        inputSourcesMap.set(inputSources[_i115], controllers[_i115]);
       }
 
-      for (var _i115 = 0; _i115 < event.removed.length; _i115++) {
-        var inputSource = event.removed[_i115];
+      for (var _i116 = 0; _i116 < event.removed.length; _i116++) {
+        var inputSource = event.removed[_i116];
         var controller = inputSourcesMap.get(inputSource);
 
         if (controller) {
@@ -16219,8 +16253,8 @@
         }
       }
 
-      for (var _i116 = 0; _i116 < event.added.length; _i116++) {
-        var _inputSource = event.added[_i116];
+      for (var _i117 = 0; _i117 < event.added.length; _i117++) {
+        var _inputSource = event.added[_i117];
 
         var _controller = inputSourcesMap.get(_inputSource);
 
@@ -16293,15 +16327,15 @@
       var cameras = cameraVR.cameras;
       updateCamera(cameraVR, parent);
 
-      for (var _i117 = 0; _i117 < cameras.length; _i117++) {
-        updateCamera(cameras[_i117], parent);
+      for (var _i118 = 0; _i118 < cameras.length; _i118++) {
+        updateCamera(cameras[_i118], parent);
       }
 
       camera.matrixWorld.copy(cameraVR.matrixWorld);
       var children = camera.children;
 
-      for (var _i118 = 0, l = children.length; _i118 < l; _i118++) {
-        children[_i118].updateMatrixWorld(true);
+      for (var _i119 = 0, l = children.length; _i119 < l; _i119++) {
+        children[_i119].updateMatrixWorld(true);
       }
 
       if (cameras.length === 2) {
@@ -16329,10 +16363,10 @@
           cameraVRNeedsUpdate = true;
         }
 
-        for (var _i119 = 0; _i119 < views.length; _i119++) {
-          var view = views[_i119];
+        for (var _i120 = 0; _i120 < views.length; _i120++) {
+          var view = views[_i120];
           var viewport = baseLayer.getViewport(view);
-          var _camera2 = cameras[_i119];
+          var _camera2 = cameras[_i120];
 
           _camera2.matrix.fromArray(view.transform.matrix);
 
@@ -16340,7 +16374,7 @@
 
           _camera2.viewport.set(viewport.x, viewport.y, viewport.width, viewport.height);
 
-          if (_i119 === 0) {
+          if (_i120 === 0) {
             cameraVR.matrix.copy(_camera2.matrix);
           }
 
@@ -16352,9 +16386,9 @@
 
       var inputSources = session.inputSources;
 
-      for (var _i120 = 0; _i120 < controllers.length; _i120++) {
-        var controller = controllers[_i120];
-        var inputSource = inputSources[_i120];
+      for (var _i121 = 0; _i121 < controllers.length; _i121++) {
+        var controller = controllers[_i121];
+        var inputSource = inputSources[_i121];
         controller.update(inputSource, frame, referenceSpace);
       }
 
@@ -16909,8 +16943,8 @@
     var _gl = _context;
 
     function getContext(contextNames, contextAttributes) {
-      for (var _i121 = 0; _i121 < contextNames.length; _i121++) {
-        var contextName = contextNames[_i121];
+      for (var _i122 = 0; _i122 < contextNames.length; _i122++) {
+        var contextName = contextNames[_i122];
 
         var context = _canvas.getContext(contextName, contextAttributes);
 
@@ -17007,7 +17041,7 @@
       programCache = new WebGLPrograms(_this, cubemaps, extensions, capabilities, bindingStates, clipping);
       materials = new WebGLMaterials(properties);
       renderLists = new WebGLRenderLists(properties);
-      renderStates = new WebGLRenderStates();
+      renderStates = new WebGLRenderStates(extensions, capabilities);
       background = new WebGLBackground(_this, cubemaps, state, objects, _premultipliedAlpha);
       bufferRenderer = new WebGLBufferRenderer(_gl, extensions, info, capabilities);
       indexedBufferRenderer = new WebGLIndexedBufferRenderer(_gl, extensions, info, capabilities);
@@ -17381,8 +17415,8 @@
     this.compile = function (scene, camera) {
       currentRenderState = renderStates.get(scene, camera);
       currentRenderState.init();
-      scene.traverse(function (object) {
-        if (object.isLight) {
+      scene.traverseVisible(function (object) {
+        if (object.isLight && object.layers.test(camera.layers)) {
           currentRenderState.pushLight(object);
 
           if (object.castShadow) {
@@ -17397,8 +17431,8 @@
 
         if (material) {
           if (Array.isArray(material)) {
-            for (var _i122 = 0; _i122 < material.length; _i122++) {
-              var material2 = material[_i122];
+            for (var _i123 = 0; _i123 < material.length; _i123++) {
+              var material2 = material[_i123];
 
               if (compiled.has(material2) === false) {
                 initMaterial(material2, scene, object);
@@ -17564,8 +17598,8 @@
             if (Array.isArray(_material)) {
               var groups = _geometry4.groups;
 
-              for (var _i123 = 0, l = groups.length; _i123 < l; _i123++) {
-                var group = groups[_i123];
+              for (var _i124 = 0, l = groups.length; _i124 < l; _i124++) {
+                var group = groups[_i124];
                 var groupMaterial = _material[group.materialIndex];
 
                 if (groupMaterial && groupMaterial.visible) {
@@ -17581,16 +17615,16 @@
 
       var children = object.children;
 
-      for (var _i124 = 0, _l5 = children.length; _i124 < _l5; _i124++) {
-        projectObject(children[_i124], camera, groupOrder, sortObjects);
+      for (var _i125 = 0, _l5 = children.length; _i125 < _l5; _i125++) {
+        projectObject(children[_i125], camera, groupOrder, sortObjects);
       }
     }
 
     function renderObjects(renderList, scene, camera) {
       var overrideMaterial = scene.isScene === true ? scene.overrideMaterial : null;
 
-      for (var _i125 = 0, l = renderList.length; _i125 < l; _i125++) {
-        var renderItem = renderList[_i125];
+      for (var _i126 = 0, l = renderList.length; _i126 < l; _i126++) {
+        var renderItem = renderList[_i126];
         var object = renderItem.object;
         var _geometry5 = renderItem.geometry;
         var material = overrideMaterial === null ? renderItem.material : overrideMaterial;
@@ -18170,8 +18204,8 @@
       index1 *= this.stride;
       index2 *= attribute.stride;
 
-      for (var _i126 = 0, l = this.stride; _i126 < l; _i126++) {
-        this.array[index1 + _i126] = attribute.array[index2 + _i126];
+      for (var _i127 = 0, l = this.stride; _i127 < l; _i127++) {
+        this.array[index1 + _i127] = attribute.array[index2 + _i127];
       }
 
       return this;
@@ -18255,14 +18289,14 @@
   Object.assign(InterleavedBufferAttribute.prototype, {
     isInterleavedBufferAttribute: true,
     applyMatrix4: function applyMatrix4(m) {
-      for (var _i127 = 0, l = this.data.count; _i127 < l; _i127++) {
-        _vector$6.x = this.getX(_i127);
-        _vector$6.y = this.getY(_i127);
-        _vector$6.z = this.getZ(_i127);
+      for (var _i128 = 0, l = this.data.count; _i128 < l; _i128++) {
+        _vector$6.x = this.getX(_i128);
+        _vector$6.y = this.getY(_i128);
+        _vector$6.z = this.getZ(_i128);
 
         _vector$6.applyMatrix4(m);
 
-        this.setXYZ(_i127, _vector$6.x, _vector$6.y, _vector$6.z);
+        this.setXYZ(_i128, _vector$6.x, _vector$6.y, _vector$6.z);
       }
 
       return this;
@@ -18321,8 +18355,8 @@
         console.log('THREE.InterleavedBufferAttribute.clone(): Cloning an interlaved buffer attribute will deinterleave buffer data.');
         var array = [];
 
-        for (var _i128 = 0; _i128 < this.count; _i128++) {
-          var index = _i128 * this.data.stride + this.offset;
+        for (var _i129 = 0; _i129 < this.count; _i129++) {
+          var index = _i129 * this.data.stride + this.offset;
 
           for (var j = 0; j < this.itemSize; j++) {
             array.push(this.data.array[index + j]);
@@ -18347,8 +18381,8 @@
         console.log('THREE.InterleavedBufferAttribute.toJSON(): Serializing an interlaved buffer attribute will deinterleave buffer data.');
         var array = [];
 
-        for (var _i129 = 0; _i129 < this.count; _i129++) {
-          var index = _i129 * this.data.stride + this.offset;
+        for (var _i130 = 0; _i130 < this.count; _i130++) {
+          var index = _i130 * this.data.stride + this.offset;
 
           for (var j = 0; j < this.itemSize; j++) {
             array.push(this.data.array[index + j]);
@@ -18565,8 +18599,8 @@
       Object3D.prototype.copy.call(this, source, false);
       var levels = source.levels;
 
-      for (var _i130 = 0, l = levels.length; _i130 < l; _i130++) {
-        var level = levels[_i130];
+      for (var _i131 = 0, l = levels.length; _i131 < l; _i131++) {
+        var level = levels[_i131];
         this.addLevel(level.object.clone(), level.distance);
       }
 
@@ -18599,15 +18633,15 @@
       var levels = this.levels;
 
       if (levels.length > 0) {
-        var _i131, l;
+        var _i132, l;
 
-        for (_i131 = 1, l = levels.length; _i131 < l; _i131++) {
-          if (distance < levels[_i131].distance) {
+        for (_i132 = 1, l = levels.length; _i132 < l; _i132++) {
+          if (distance < levels[_i132].distance) {
             break;
           }
         }
 
-        return levels[_i131 - 1].object;
+        return levels[_i132 - 1].object;
       }
 
       return null;
@@ -18633,21 +18667,21 @@
         var distance = _v1$4.distanceTo(_v2$2) / camera.zoom;
         levels[0].object.visible = true;
 
-        var _i132, l;
+        var _i133, l;
 
-        for (_i132 = 1, l = levels.length; _i132 < l; _i132++) {
-          if (distance >= levels[_i132].distance) {
-            levels[_i132 - 1].object.visible = false;
-            levels[_i132].object.visible = true;
+        for (_i133 = 1, l = levels.length; _i133 < l; _i133++) {
+          if (distance >= levels[_i133].distance) {
+            levels[_i133 - 1].object.visible = false;
+            levels[_i133].object.visible = true;
           } else {
             break;
           }
         }
 
-        this._currentLevel = _i132 - 1;
+        this._currentLevel = _i133 - 1;
 
-        for (; _i132 < l; _i132++) {
-          levels[_i132].object.visible = false;
+        for (; _i133 < l; _i133++) {
+          levels[_i133].object.visible = false;
         }
       }
     },
@@ -18657,8 +18691,8 @@
       data.object.levels = [];
       var levels = this.levels;
 
-      for (var _i133 = 0, l = levels.length; _i133 < l; _i133++) {
-        var level = levels[_i133];
+      for (var _i134 = 0, l = levels.length; _i134 < l; _i134++) {
+        var level = levels[_i134];
         data.object.levels.push({
           object: level.object.uuid,
           distance: level.distance
@@ -18711,11 +18745,11 @@
       var vector = new Vector4();
       var skinWeight = this.geometry.attributes.skinWeight;
 
-      for (var _i134 = 0, l = skinWeight.count; _i134 < l; _i134++) {
-        vector.x = skinWeight.getX(_i134);
-        vector.y = skinWeight.getY(_i134);
-        vector.z = skinWeight.getZ(_i134);
-        vector.w = skinWeight.getW(_i134);
+      for (var _i135 = 0, l = skinWeight.count; _i135 < l; _i135++) {
+        vector.x = skinWeight.getX(_i135);
+        vector.y = skinWeight.getY(_i135);
+        vector.z = skinWeight.getZ(_i135);
+        vector.w = skinWeight.getW(_i135);
         var scale = 1.0 / vector.manhattanLength();
 
         if (scale !== Infinity) {
@@ -18724,7 +18758,7 @@
           vector.set(1, 0, 0, 0);
         }
 
-        skinWeight.setXYZW(_i134, vector.x, vector.y, vector.z, vector.w);
+        skinWeight.setXYZW(_i135, vector.x, vector.y, vector.z, vector.w);
       }
     },
     updateMatrixWorld: function updateMatrixWorld(force) {
@@ -18752,11 +18786,11 @@
         basePosition.fromBufferAttribute(geometry.attributes.position, index).applyMatrix4(this.bindMatrix);
         target.set(0, 0, 0);
 
-        for (var _i135 = 0; _i135 < 4; _i135++) {
-          var weight = skinWeight.getComponent(_i135);
+        for (var _i136 = 0; _i136 < 4; _i136++) {
+          var weight = skinWeight.getComponent(_i136);
 
           if (weight !== 0) {
-            var boneIndex = skinIndex.getComponent(_i135);
+            var boneIndex = skinIndex.getComponent(_i136);
             matrix.multiplyMatrices(skeleton.bones[boneIndex].matrixWorld, skeleton.boneInverses[boneIndex]);
             target.addScaledVector(vector.copy(basePosition).applyMatrix4(matrix), weight);
           }
@@ -18786,7 +18820,7 @@
         console.warn('THREE.Skeleton boneInverses is the wrong length.');
         this.boneInverses = [];
 
-        for (var _i136 = 0, il = this.bones.length; _i136 < il; _i136++) {
+        for (var _i137 = 0, il = this.bones.length; _i137 < il; _i137++) {
           this.boneInverses.push(new Matrix4());
         }
       }
@@ -18797,27 +18831,27 @@
     calculateInverses: function calculateInverses() {
       this.boneInverses = [];
 
-      for (var _i137 = 0, il = this.bones.length; _i137 < il; _i137++) {
+      for (var _i138 = 0, il = this.bones.length; _i138 < il; _i138++) {
         var inverse = new Matrix4();
 
-        if (this.bones[_i137]) {
-          inverse.getInverse(this.bones[_i137].matrixWorld);
+        if (this.bones[_i138]) {
+          inverse.getInverse(this.bones[_i138].matrixWorld);
         }
 
         this.boneInverses.push(inverse);
       }
     },
     pose: function pose() {
-      for (var _i138 = 0, il = this.bones.length; _i138 < il; _i138++) {
-        var bone = this.bones[_i138];
+      for (var _i139 = 0, il = this.bones.length; _i139 < il; _i139++) {
+        var bone = this.bones[_i139];
 
         if (bone) {
-          bone.matrixWorld.getInverse(this.boneInverses[_i138]);
+          bone.matrixWorld.getInverse(this.boneInverses[_i139]);
         }
       }
 
-      for (var _i139 = 0, _il11 = this.bones.length; _i139 < _il11; _i139++) {
-        var _bone = this.bones[_i139];
+      for (var _i140 = 0, _il11 = this.bones.length; _i140 < _il11; _i140++) {
+        var _bone = this.bones[_i140];
 
         if (_bone) {
           if (_bone.parent && _bone.parent.isBone) {
@@ -18838,12 +18872,12 @@
       var boneMatrices = this.boneMatrices;
       var boneTexture = this.boneTexture;
 
-      for (var _i140 = 0, il = bones.length; _i140 < il; _i140++) {
-        var matrix = bones[_i140] ? bones[_i140].matrixWorld : _identityMatrix;
+      for (var _i141 = 0, il = bones.length; _i141 < il; _i141++) {
+        var matrix = bones[_i141] ? bones[_i141].matrixWorld : _identityMatrix;
 
-        _offsetMatrix.multiplyMatrices(matrix, boneInverses[_i140]);
+        _offsetMatrix.multiplyMatrices(matrix, boneInverses[_i141]);
 
-        _offsetMatrix.toArray(boneMatrices, _i140 * 16);
+        _offsetMatrix.toArray(boneMatrices, _i141 * 16);
       }
 
       if (boneTexture !== undefined) {
@@ -18854,8 +18888,8 @@
       return new Skeleton(this.bones, this.boneInverses);
     },
     getBoneByName: function getBoneByName(name) {
-      for (var _i141 = 0, il = this.bones.length; _i141 < il; _i141++) {
-        var bone = this.bones[_i141];
+      for (var _i142 = 0, il = this.bones.length; _i142 < il; _i142++) {
+        var bone = this.bones[_i142];
 
         if (bone.name === name) {
           return bone;
@@ -18933,8 +18967,8 @@
 
         _mesh.raycast(raycaster, _instanceIntersects);
 
-        for (var _i142 = 0, l = _instanceIntersects.length; _i142 < l; _i142++) {
-          var intersect = _instanceIntersects[_i142];
+        for (var _i143 = 0, l = _instanceIntersects.length; _i143 < l; _i143++) {
+          var intersect = _instanceIntersects[_i143];
           intersect.instanceId = instanceId;
           intersect.object = this;
           intersects.push(intersect);
@@ -19013,13 +19047,13 @@
           var positionAttribute = geometry.attributes.position;
           var lineDistances = [0];
 
-          for (var _i143 = 1, l = positionAttribute.count; _i143 < l; _i143++) {
-            _start.fromBufferAttribute(positionAttribute, _i143 - 1);
+          for (var _i144 = 1, l = positionAttribute.count; _i144 < l; _i144++) {
+            _start.fromBufferAttribute(positionAttribute, _i144 - 1);
 
-            _end.fromBufferAttribute(positionAttribute, _i143);
+            _end.fromBufferAttribute(positionAttribute, _i144);
 
-            lineDistances[_i143] = lineDistances[_i143 - 1];
-            lineDistances[_i143] += _start.distanceTo(_end);
+            lineDistances[_i144] = lineDistances[_i144 - 1];
+            lineDistances[_i144] += _start.distanceTo(_end);
           }
 
           geometry.setAttribute('lineDistance', new Float32BufferAttribute(lineDistances, 1));
@@ -19031,9 +19065,9 @@
         var _lineDistances = geometry.lineDistances;
         _lineDistances[0] = 0;
 
-        for (var _i144 = 1, _l6 = _vertices.length; _i144 < _l6; _i144++) {
-          _lineDistances[_i144] = _lineDistances[_i144 - 1];
-          _lineDistances[_i144] += _vertices[_i144 - 1].distanceTo(_vertices[_i144]);
+        for (var _i145 = 1, _l6 = _vertices.length; _i145 < _l6; _i145++) {
+          _lineDistances[_i145] = _lineDistances[_i145 - 1];
+          _lineDistances[_i145] += _vertices[_i145 - 1].distanceTo(_vertices[_i145]);
         }
       }
 
@@ -19072,9 +19106,9 @@
         if (index !== null) {
           var _indices = index.array;
 
-          for (var _i145 = 0, l = _indices.length - 1; _i145 < l; _i145 += step) {
-            var a = _indices[_i145];
-            var b = _indices[_i145 + 1];
+          for (var _i146 = 0, l = _indices.length - 1; _i146 < l; _i146 += step) {
+            var a = _indices[_i146];
+            var b = _indices[_i146 + 1];
             vStart.fromBufferAttribute(positionAttribute, a);
             vEnd.fromBufferAttribute(positionAttribute, b);
 
@@ -19087,16 +19121,16 @@
             intersects.push({
               distance: distance,
               point: interSegment.clone().applyMatrix4(this.matrixWorld),
-              index: _i145,
+              index: _i146,
               face: null,
               faceIndex: null,
               object: this
             });
           }
         } else {
-          for (var _i146 = 0, _l7 = positionAttribute.count - 1; _i146 < _l7; _i146 += step) {
-            vStart.fromBufferAttribute(positionAttribute, _i146);
-            vEnd.fromBufferAttribute(positionAttribute, _i146 + 1);
+          for (var _i147 = 0, _l7 = positionAttribute.count - 1; _i147 < _l7; _i147 += step) {
+            vStart.fromBufferAttribute(positionAttribute, _i147);
+            vEnd.fromBufferAttribute(positionAttribute, _i147 + 1);
 
             var _distSq = _ray$1.distanceSqToSegment(vStart, vEnd, interRay, interSegment);
 
@@ -19109,7 +19143,7 @@
             intersects.push({
               distance: _distance,
               point: interSegment.clone().applyMatrix4(this.matrixWorld),
-              index: _i146,
+              index: _i147,
               face: null,
               faceIndex: null,
               object: this
@@ -19120,8 +19154,8 @@
         var _vertices2 = geometry.vertices;
         var nbVertices = _vertices2.length;
 
-        for (var _i147 = 0; _i147 < nbVertices - 1; _i147 += step) {
-          var _distSq2 = _ray$1.distanceSqToSegment(_vertices2[_i147], _vertices2[_i147 + 1], interRay, interSegment);
+        for (var _i148 = 0; _i148 < nbVertices - 1; _i148 += step) {
+          var _distSq2 = _ray$1.distanceSqToSegment(_vertices2[_i148], _vertices2[_i148 + 1], interRay, interSegment);
 
           if (_distSq2 > localThresholdSq) continue;
           interRay.applyMatrix4(this.matrixWorld);
@@ -19132,7 +19166,7 @@
           intersects.push({
             distance: _distance2,
             point: interSegment.clone().applyMatrix4(this.matrixWorld),
-            index: _i147,
+            index: _i148,
             face: null,
             faceIndex: null,
             object: this
@@ -19191,13 +19225,13 @@
           var positionAttribute = geometry.attributes.position;
           var lineDistances = [];
 
-          for (var _i148 = 0, l = positionAttribute.count; _i148 < l; _i148 += 2) {
-            _start$1.fromBufferAttribute(positionAttribute, _i148);
+          for (var _i149 = 0, l = positionAttribute.count; _i149 < l; _i149 += 2) {
+            _start$1.fromBufferAttribute(positionAttribute, _i149);
 
-            _end$1.fromBufferAttribute(positionAttribute, _i148 + 1);
+            _end$1.fromBufferAttribute(positionAttribute, _i149 + 1);
 
-            lineDistances[_i148] = _i148 === 0 ? 0 : lineDistances[_i148 - 1];
-            lineDistances[_i148 + 1] = lineDistances[_i148] + _start$1.distanceTo(_end$1);
+            lineDistances[_i149] = _i149 === 0 ? 0 : lineDistances[_i149 - 1];
+            lineDistances[_i149 + 1] = lineDistances[_i149] + _start$1.distanceTo(_end$1);
           }
 
           geometry.setAttribute('lineDistance', new Float32BufferAttribute(lineDistances, 1));
@@ -19208,13 +19242,13 @@
         var _vertices3 = geometry.vertices;
         var _lineDistances2 = geometry.lineDistances;
 
-        for (var _i149 = 0, _l8 = _vertices3.length; _i149 < _l8; _i149 += 2) {
-          _start$1.copy(_vertices3[_i149]);
+        for (var _i150 = 0, _l8 = _vertices3.length; _i150 < _l8; _i150 += 2) {
+          _start$1.copy(_vertices3[_i150]);
 
-          _end$1.copy(_vertices3[_i149 + 1]);
+          _end$1.copy(_vertices3[_i150 + 1]);
 
-          _lineDistances2[_i149] = _i149 === 0 ? 0 : _lineDistances2[_i149 - 1];
-          _lineDistances2[_i149 + 1] = _lineDistances2[_i149] + _start$1.distanceTo(_end$1);
+          _lineDistances2[_i150] = _i150 === 0 ? 0 : _lineDistances2[_i150 - 1];
+          _lineDistances2[_i150 + 1] = _lineDistances2[_i150] + _start$1.distanceTo(_end$1);
         }
       }
 
@@ -19312,25 +19346,25 @@
         if (index !== null) {
           var _indices2 = index.array;
 
-          for (var _i150 = 0, il = _indices2.length; _i150 < il; _i150++) {
-            var a = _indices2[_i150];
+          for (var _i151 = 0, il = _indices2.length; _i151 < il; _i151++) {
+            var a = _indices2[_i151];
 
             _position$1.fromBufferAttribute(positionAttribute, a);
 
             testPoint(_position$1, a, localThresholdSq, matrixWorld, raycaster, intersects, this);
           }
         } else {
-          for (var _i151 = 0, l = positionAttribute.count; _i151 < l; _i151++) {
-            _position$1.fromBufferAttribute(positionAttribute, _i151);
+          for (var _i152 = 0, l = positionAttribute.count; _i152 < l; _i152++) {
+            _position$1.fromBufferAttribute(positionAttribute, _i152);
 
-            testPoint(_position$1, _i151, localThresholdSq, matrixWorld, raycaster, intersects, this);
+            testPoint(_position$1, _i152, localThresholdSq, matrixWorld, raycaster, intersects, this);
           }
         }
       } else {
         var _vertices4 = geometry.vertices;
 
-        for (var _i152 = 0, _l9 = _vertices4.length; _i152 < _l9; _i152++) {
-          testPoint(_vertices4[_i152], _i152, localThresholdSq, matrixWorld, raycaster, intersects, this);
+        for (var _i153 = 0, _l9 = _vertices4.length; _i153 < _l9; _i153++) {
+          testPoint(_vertices4[_i153], _i153, localThresholdSq, matrixWorld, raycaster, intersects, this);
         }
       }
     },
@@ -19407,6 +19441,9 @@
 
   VideoTexture.prototype = Object.assign(Object.create(Texture.prototype), {
     constructor: VideoTexture,
+    clone: function clone() {
+      return new this.constructor(this.image).copy(this);
+    },
     isVideoTexture: true,
     update: function update() {
       var video = this.image;
@@ -19506,13 +19543,13 @@
     applyMatrix4: function applyMatrix4(matrix) {
       var normalMatrix = new Matrix3().getNormalMatrix(matrix);
 
-      for (var _i153 = 0, il = this.vertices.length; _i153 < il; _i153++) {
-        var vertex = this.vertices[_i153];
+      for (var _i154 = 0, il = this.vertices.length; _i154 < il; _i154++) {
+        var vertex = this.vertices[_i154];
         vertex.applyMatrix4(matrix);
       }
 
-      for (var _i154 = 0, _il12 = this.faces.length; _i154 < _il12; _i154++) {
-        var face = this.faces[_i154];
+      for (var _i155 = 0, _il12 = this.faces.length; _i155 < _il12; _i155++) {
+        var face = this.faces[_i155];
         face.normal.applyMatrix3(normalMatrix).normalize();
 
         for (var j = 0, jl = face.vertexNormals.length; j < jl; j++) {
@@ -19587,11 +19624,11 @@
       var uv2 = attributes.uv2;
       if (uv2 !== undefined) this.faceVertexUvs[1] = [];
 
-      for (var _i155 = 0; _i155 < position.count; _i155++) {
-        scope.vertices.push(new Vector3().fromBufferAttribute(position, _i155));
+      for (var _i156 = 0; _i156 < position.count; _i156++) {
+        scope.vertices.push(new Vector3().fromBufferAttribute(position, _i156));
 
         if (color !== undefined) {
-          scope.colors.push(new Color().fromBufferAttribute(color, _i155));
+          scope.colors.push(new Color().fromBufferAttribute(color, _i156));
         }
       }
 
@@ -19613,8 +19650,8 @@
       var groups = geometry.groups;
 
       if (groups.length > 0) {
-        for (var _i156 = 0; _i156 < groups.length; _i156++) {
-          var group = groups[_i156];
+        for (var _i157 = 0; _i157 < groups.length; _i157++) {
+          var group = groups[_i157];
           var start = group.start;
           var count = group.count;
 
@@ -19628,12 +19665,12 @@
         }
       } else {
         if (index !== undefined) {
-          for (var _i157 = 0; _i157 < index.count; _i157 += 3) {
-            addFace(index.getX(_i157), index.getX(_i157 + 1), index.getX(_i157 + 2));
+          for (var _i158 = 0; _i158 < index.count; _i158 += 3) {
+            addFace(index.getX(_i158), index.getX(_i158 + 1), index.getX(_i158 + 2));
           }
         } else {
-          for (var _i158 = 0; _i158 < position.count; _i158 += 3) {
-            addFace(_i158, _i158 + 1, _i158 + 2);
+          for (var _i159 = 0; _i159 < position.count; _i159 += 3) {
+            addFace(_i159, _i159 + 1, _i159 + 2);
           }
         }
       }
@@ -19779,11 +19816,11 @@
 
         if (!face.__originalVertexNormals) face.__originalVertexNormals = [];
 
-        for (var _i159 = 0, il = face.vertexNormals.length; _i159 < il; _i159++) {
-          if (!face.__originalVertexNormals[_i159]) {
-            face.__originalVertexNormals[_i159] = face.vertexNormals[_i159].clone();
+        for (var _i160 = 0, il = face.vertexNormals.length; _i160 < il; _i160++) {
+          if (!face.__originalVertexNormals[_i160]) {
+            face.__originalVertexNormals[_i160] = face.vertexNormals[_i160].clone();
           } else {
-            face.__originalVertexNormals[_i159].copy(face.vertexNormals[_i159]);
+            face.__originalVertexNormals[_i160].copy(face.vertexNormals[_i160]);
           }
         }
       }
@@ -19791,13 +19828,13 @@
       var tmpGeo = new Geometry();
       tmpGeo.faces = this.faces;
 
-      for (var _i160 = 0, _il13 = this.morphTargets.length; _i160 < _il13; _i160++) {
-        if (!this.morphNormals[_i160]) {
-          this.morphNormals[_i160] = {};
-          this.morphNormals[_i160].faceNormals = [];
-          this.morphNormals[_i160].vertexNormals = [];
-          var dstNormalsFace = this.morphNormals[_i160].faceNormals;
-          var dstNormalsVertex = this.morphNormals[_i160].vertexNormals;
+      for (var _i161 = 0, _il13 = this.morphTargets.length; _i161 < _il13; _i161++) {
+        if (!this.morphNormals[_i161]) {
+          this.morphNormals[_i161] = {};
+          this.morphNormals[_i161].faceNormals = [];
+          this.morphNormals[_i161].vertexNormals = [];
+          var dstNormalsFace = this.morphNormals[_i161].faceNormals;
+          var dstNormalsVertex = this.morphNormals[_i161].vertexNormals;
 
           for (var _f4 = 0, _fl3 = this.faces.length; _f4 < _fl3; _f4++) {
             var faceNormal = new Vector3();
@@ -19811,8 +19848,8 @@
           }
         }
 
-        var morphNormals = this.morphNormals[_i160];
-        tmpGeo.vertices = this.morphTargets[_i160].vertices;
+        var morphNormals = this.morphNormals[_i161];
+        tmpGeo.vertices = this.morphTargets[_i161].vertices;
         tmpGeo.computeFaceNormals();
         tmpGeo.computeVertexNormals();
 
@@ -19871,19 +19908,19 @@
         normalMatrix = new Matrix3().getNormalMatrix(matrix);
       }
 
-      for (var _i161 = 0, il = vertices2.length; _i161 < il; _i161++) {
-        var vertex = vertices2[_i161];
+      for (var _i162 = 0, il = vertices2.length; _i162 < il; _i162++) {
+        var vertex = vertices2[_i162];
         var vertexCopy = vertex.clone();
         if (matrix !== undefined) vertexCopy.applyMatrix4(matrix);
         vertices1.push(vertexCopy);
       }
 
-      for (var _i162 = 0, _il14 = colors2.length; _i162 < _il14; _i162++) {
-        colors1.push(colors2[_i162].clone());
+      for (var _i163 = 0, _il14 = colors2.length; _i163 < _il14; _i163++) {
+        colors1.push(colors2[_i163].clone());
       }
 
-      for (var _i163 = 0, _il15 = faces2.length; _i163 < _il15; _i163++) {
-        var face = faces2[_i163];
+      for (var _i164 = 0, _il15 = faces2.length; _i164 < _il15; _i164++) {
+        var face = faces2[_i164];
 
         var normal = void 0,
             _color5 = void 0;
@@ -19918,9 +19955,9 @@
         faces1.push(faceCopy);
       }
 
-      for (var _i164 = 0, _il16 = geometry.faceVertexUvs.length; _i164 < _il16; _i164++) {
-        var faceVertexUvs2 = geometry.faceVertexUvs[_i164];
-        if (this.faceVertexUvs[_i164] === undefined) this.faceVertexUvs[_i164] = [];
+      for (var _i165 = 0, _il16 = geometry.faceVertexUvs.length; _i165 < _il16; _i165++) {
+        var faceVertexUvs2 = geometry.faceVertexUvs[_i165];
+        if (this.faceVertexUvs[_i165] === undefined) this.faceVertexUvs[_i165] = [];
 
         for (var _j6 = 0, _jl3 = faceVertexUvs2.length; _j6 < _jl3; _j6++) {
           var uvs2 = faceVertexUvs2[_j6],
@@ -19930,7 +19967,7 @@
             uvsCopy.push(uvs2[k].clone());
           }
 
-          this.faceVertexUvs[_i164].push(uvsCopy);
+          this.faceVertexUvs[_i165].push(uvsCopy);
         }
       }
     },
@@ -19950,23 +19987,23 @@
       var precisionPoints = 4;
       var precision = Math.pow(10, precisionPoints);
 
-      for (var _i165 = 0, il = this.vertices.length; _i165 < il; _i165++) {
-        var _v7 = this.vertices[_i165];
+      for (var _i166 = 0, il = this.vertices.length; _i166 < il; _i166++) {
+        var _v7 = this.vertices[_i166];
         var key = Math.round(_v7.x * precision) + '_' + Math.round(_v7.y * precision) + '_' + Math.round(_v7.z * precision);
 
         if (verticesMap[key] === undefined) {
-          verticesMap[key] = _i165;
-          unique.push(this.vertices[_i165]);
-          changes[_i165] = unique.length - 1;
+          verticesMap[key] = _i166;
+          unique.push(this.vertices[_i166]);
+          changes[_i166] = unique.length - 1;
         } else {
-          changes[_i165] = changes[verticesMap[key]];
+          changes[_i166] = changes[verticesMap[key]];
         }
       }
 
       var faceIndicesToRemove = [];
 
-      for (var _i166 = 0, _il17 = this.faces.length; _i166 < _il17; _i166++) {
-        var face = this.faces[_i166];
+      for (var _i167 = 0, _il17 = this.faces.length; _i167 < _il17; _i167++) {
+        var face = this.faces[_i167];
         face.a = changes[face.a];
         face.b = changes[face.b];
         face.c = changes[face.c];
@@ -19974,14 +20011,14 @@
 
         for (var n = 0; n < 3; n++) {
           if (_indices3[n] === _indices3[(n + 1) % 3]) {
-            faceIndicesToRemove.push(_i166);
+            faceIndicesToRemove.push(_i167);
             break;
           }
         }
       }
 
-      for (var _i167 = faceIndicesToRemove.length - 1; _i167 >= 0; _i167--) {
-        var idx = faceIndicesToRemove[_i167];
+      for (var _i168 = faceIndicesToRemove.length - 1; _i168 >= 0; _i168--) {
+        var idx = faceIndicesToRemove[_i168];
         this.faces.splice(idx, 1);
 
         for (var j = 0, jl = this.faceVertexUvs.length; j < jl; j++) {
@@ -19996,8 +20033,8 @@
     setFromPoints: function setFromPoints(points) {
       this.vertices = [];
 
-      for (var _i168 = 0, l = points.length; _i168 < l; _i168++) {
-        var point = points[_i168];
+      for (var _i169 = 0, l = points.length; _i169 < l; _i169++) {
+        var point = points[_i169];
         this.vertices.push(new Vector3(point.x, point.y, point.z || 0));
       }
 
@@ -20007,8 +20044,8 @@
       var faces = this.faces;
       var length = faces.length;
 
-      for (var _i169 = 0; _i169 < length; _i169++) {
-        faces[_i169]._id = _i169;
+      for (var _i170 = 0; _i170 < length; _i170++) {
+        faces[_i170]._id = _i170;
       }
 
       function materialIndexSort(a, b) {
@@ -20022,8 +20059,8 @@
       if (uvs1 && uvs1.length === length) newUvs1 = [];
       if (uvs2 && uvs2.length === length) newUvs2 = [];
 
-      for (var _i170 = 0; _i170 < length; _i170++) {
-        var id = faces[_i170]._id;
+      for (var _i171 = 0; _i171 < length; _i171++) {
+        var id = faces[_i171]._id;
         if (newUvs1) newUvs1.push(uvs1[id]);
         if (newUvs2) newUvs2.push(uvs2[id]);
       }
@@ -20055,8 +20092,8 @@
 
       var vertices = [];
 
-      for (var _i171 = 0; _i171 < this.vertices.length; _i171++) {
-        var vertex = this.vertices[_i171];
+      for (var _i172 = 0; _i172 < this.vertices.length; _i172++) {
+        var vertex = this.vertices[_i172];
         vertices.push(vertex.x, vertex.y, vertex.z);
       }
 
@@ -20068,11 +20105,11 @@
       var uvs = [];
       var uvsHash = {};
 
-      for (var _i172 = 0; _i172 < this.faces.length; _i172++) {
-        var face = this.faces[_i172];
+      for (var _i173 = 0; _i173 < this.faces.length; _i173++) {
+        var face = this.faces[_i173];
         var hasMaterial = true;
         var hasFaceUv = false;
-        var hasFaceVertexUv = this.faceVertexUvs[0][_i172] !== undefined;
+        var hasFaceVertexUv = this.faceVertexUvs[0][_i173] !== undefined;
         var hasFaceNormal = face.normal.length() > 0;
         var hasFaceVertexNormal = face.vertexNormals.length > 0;
         var hasFaceColor = face.color.r !== 1 || face.color.g !== 1 || face.color.b !== 1;
@@ -20091,7 +20128,7 @@
         faces.push(face.materialIndex);
 
         if (hasFaceVertexUv) {
-          var faceVertexUvs = this.faceVertexUvs[0][_i172];
+          var faceVertexUvs = this.faceVertexUvs[0][_i173];
           faces.push(getUvIndex(faceVertexUvs[0]), getUvIndex(faceVertexUvs[1]), getUvIndex(faceVertexUvs[2]));
         }
 
@@ -20180,27 +20217,27 @@
       this.name = source.name;
       var vertices = source.vertices;
 
-      for (var _i173 = 0, il = vertices.length; _i173 < il; _i173++) {
-        this.vertices.push(vertices[_i173].clone());
+      for (var _i174 = 0, il = vertices.length; _i174 < il; _i174++) {
+        this.vertices.push(vertices[_i174].clone());
       }
 
       var colors = source.colors;
 
-      for (var _i174 = 0, _il18 = colors.length; _i174 < _il18; _i174++) {
-        this.colors.push(colors[_i174].clone());
+      for (var _i175 = 0, _il18 = colors.length; _i175 < _il18; _i175++) {
+        this.colors.push(colors[_i175].clone());
       }
 
       var faces = source.faces;
 
-      for (var _i175 = 0, _il19 = faces.length; _i175 < _il19; _i175++) {
-        this.faces.push(faces[_i175].clone());
+      for (var _i176 = 0, _il19 = faces.length; _i176 < _il19; _i176++) {
+        this.faces.push(faces[_i176].clone());
       }
 
-      for (var _i176 = 0, _il20 = source.faceVertexUvs.length; _i176 < _il20; _i176++) {
-        var faceVertexUvs = source.faceVertexUvs[_i176];
+      for (var _i177 = 0, _il20 = source.faceVertexUvs.length; _i177 < _il20; _i177++) {
+        var faceVertexUvs = source.faceVertexUvs[_i177];
 
-        if (this.faceVertexUvs[_i176] === undefined) {
-          this.faceVertexUvs[_i176] = [];
+        if (this.faceVertexUvs[_i177] === undefined) {
+          this.faceVertexUvs[_i177] = [];
         }
 
         for (var j = 0, jl = faceVertexUvs.length; j < jl; j++) {
@@ -20212,29 +20249,29 @@
             uvsCopy.push(uv.clone());
           }
 
-          this.faceVertexUvs[_i176].push(uvsCopy);
+          this.faceVertexUvs[_i177].push(uvsCopy);
         }
       }
 
       var morphTargets = source.morphTargets;
 
-      for (var _i177 = 0, _il21 = morphTargets.length; _i177 < _il21; _i177++) {
+      for (var _i178 = 0, _il21 = morphTargets.length; _i178 < _il21; _i178++) {
         var morphTarget = {};
-        morphTarget.name = morphTargets[_i177].name;
+        morphTarget.name = morphTargets[_i178].name;
 
-        if (morphTargets[_i177].vertices !== undefined) {
+        if (morphTargets[_i178].vertices !== undefined) {
           morphTarget.vertices = [];
 
-          for (var _j7 = 0, _jl4 = morphTargets[_i177].vertices.length; _j7 < _jl4; _j7++) {
-            morphTarget.vertices.push(morphTargets[_i177].vertices[_j7].clone());
+          for (var _j7 = 0, _jl4 = morphTargets[_i178].vertices.length; _j7 < _jl4; _j7++) {
+            morphTarget.vertices.push(morphTargets[_i178].vertices[_j7].clone());
           }
         }
 
-        if (morphTargets[_i177].normals !== undefined) {
+        if (morphTargets[_i178].normals !== undefined) {
           morphTarget.normals = [];
 
-          for (var _j8 = 0, _jl5 = morphTargets[_i177].normals.length; _j8 < _jl5; _j8++) {
-            morphTarget.normals.push(morphTargets[_i177].normals[_j8].clone());
+          for (var _j8 = 0, _jl5 = morphTargets[_i178].normals.length; _j8 < _jl5; _j8++) {
+            morphTarget.normals.push(morphTargets[_i178].normals[_j8].clone());
           }
         }
 
@@ -20243,14 +20280,14 @@
 
       var morphNormals = source.morphNormals;
 
-      for (var _i178 = 0, _il22 = morphNormals.length; _i178 < _il22; _i178++) {
+      for (var _i179 = 0, _il22 = morphNormals.length; _i179 < _il22; _i179++) {
         var morphNormal = {};
 
-        if (morphNormals[_i178].vertexNormals !== undefined) {
+        if (morphNormals[_i179].vertexNormals !== undefined) {
           morphNormal.vertexNormals = [];
 
-          for (var _j9 = 0, _jl6 = morphNormals[_i178].vertexNormals.length; _j9 < _jl6; _j9++) {
-            var srcVertexNormal = morphNormals[_i178].vertexNormals[_j9];
+          for (var _j9 = 0, _jl6 = morphNormals[_i179].vertexNormals.length; _j9 < _jl6; _j9++) {
+            var srcVertexNormal = morphNormals[_i179].vertexNormals[_j9];
             var destVertexNormal = {};
             destVertexNormal.a = srcVertexNormal.a.clone();
             destVertexNormal.b = srcVertexNormal.b.clone();
@@ -20259,11 +20296,11 @@
           }
         }
 
-        if (morphNormals[_i178].faceNormals !== undefined) {
+        if (morphNormals[_i179].faceNormals !== undefined) {
           morphNormal.faceNormals = [];
 
-          for (var _j10 = 0, _jl7 = morphNormals[_i178].faceNormals.length; _j10 < _jl7; _j10++) {
-            morphNormal.faceNormals.push(morphNormals[_i178].faceNormals[_j10].clone());
+          for (var _j10 = 0, _jl7 = morphNormals[_i179].faceNormals.length; _j10 < _jl7; _j10++) {
+            morphNormal.faceNormals.push(morphNormals[_i179].faceNormals[_j10].clone());
           }
         }
 
@@ -20272,20 +20309,20 @@
 
       var skinWeights = source.skinWeights;
 
-      for (var _i179 = 0, _il23 = skinWeights.length; _i179 < _il23; _i179++) {
-        this.skinWeights.push(skinWeights[_i179].clone());
+      for (var _i180 = 0, _il23 = skinWeights.length; _i180 < _il23; _i180++) {
+        this.skinWeights.push(skinWeights[_i180].clone());
       }
 
       var skinIndices = source.skinIndices;
 
-      for (var _i180 = 0, _il24 = skinIndices.length; _i180 < _il24; _i180++) {
-        this.skinIndices.push(skinIndices[_i180].clone());
+      for (var _i181 = 0, _il24 = skinIndices.length; _i181 < _il24; _i181++) {
+        this.skinIndices.push(skinIndices[_i181].clone());
       }
 
       var lineDistances = source.lineDistances;
 
-      for (var _i181 = 0, _il25 = lineDistances.length; _i181 < _il25; _i181++) {
-        this.lineDistances.push(lineDistances[_i181]);
+      for (var _i182 = 0, _il25 = lineDistances.length; _i182 < _il25; _i182++) {
+        this.lineDistances.push(lineDistances[_i182]);
       }
 
       var boundingBox = source.boundingBox;
@@ -20455,12 +20492,12 @@
         for (var _x10 = 0; _x10 < radialSegments; _x10++) {
           var c = centerIndexStart + _x10;
 
-          var _i182 = centerIndexEnd + _x10;
+          var _i183 = centerIndexEnd + _x10;
 
           if (top === true) {
-            indices.push(_i182, _i182 + 1, c);
+            indices.push(_i183, _i183 + 1, c);
           } else {
-            indices.push(_i182 + 1, _i182, c);
+            indices.push(_i183 + 1, _i183, c);
           }
 
           groupCount += 3;
@@ -20546,10 +20583,10 @@
         var b = new Vector3();
         var c = new Vector3();
 
-        for (var _i183 = 0; _i183 < indices.length; _i183 += 3) {
-          getVertexByIndex(indices[_i183 + 0], a);
-          getVertexByIndex(indices[_i183 + 1], b);
-          getVertexByIndex(indices[_i183 + 2], c);
+        for (var _i184 = 0; _i184 < indices.length; _i184 += 3) {
+          getVertexByIndex(indices[_i184 + 0], a);
+          getVertexByIndex(indices[_i184 + 1], b);
+          getVertexByIndex(indices[_i184 + 2], c);
           subdivideFace(a, b, c, detail);
         }
       }
@@ -20558,33 +20595,33 @@
         var cols = detail + 1;
         var v = [];
 
-        for (var _i184 = 0; _i184 <= cols; _i184++) {
-          v[_i184] = [];
-          var aj = a.clone().lerp(c, _i184 / cols);
-          var bj = b.clone().lerp(c, _i184 / cols);
-          var rows = cols - _i184;
+        for (var _i185 = 0; _i185 <= cols; _i185++) {
+          v[_i185] = [];
+          var aj = a.clone().lerp(c, _i185 / cols);
+          var bj = b.clone().lerp(c, _i185 / cols);
+          var rows = cols - _i185;
 
           for (var j = 0; j <= rows; j++) {
-            if (j === 0 && _i184 === cols) {
-              v[_i184][j] = aj;
+            if (j === 0 && _i185 === cols) {
+              v[_i185][j] = aj;
             } else {
-              v[_i184][j] = aj.clone().lerp(bj, j / rows);
+              v[_i185][j] = aj.clone().lerp(bj, j / rows);
             }
           }
         }
 
-        for (var _i185 = 0; _i185 < cols; _i185++) {
-          for (var _j11 = 0; _j11 < 2 * (cols - _i185) - 1; _j11++) {
+        for (var _i186 = 0; _i186 < cols; _i186++) {
+          for (var _j11 = 0; _j11 < 2 * (cols - _i186) - 1; _j11++) {
             var k = Math.floor(_j11 / 2);
 
             if (_j11 % 2 === 0) {
-              pushVertex(v[_i185][k + 1]);
-              pushVertex(v[_i185 + 1][k]);
-              pushVertex(v[_i185][k]);
+              pushVertex(v[_i186][k + 1]);
+              pushVertex(v[_i186 + 1][k]);
+              pushVertex(v[_i186][k]);
             } else {
-              pushVertex(v[_i185][k + 1]);
-              pushVertex(v[_i185 + 1][k + 1]);
-              pushVertex(v[_i185 + 1][k]);
+              pushVertex(v[_i186][k + 1]);
+              pushVertex(v[_i186 + 1][k + 1]);
+              pushVertex(v[_i186 + 1][k]);
             }
           }
         }
@@ -20593,24 +20630,24 @@
       function applyRadius(radius) {
         var vertex = new Vector3();
 
-        for (var _i186 = 0; _i186 < vertexBuffer.length; _i186 += 3) {
-          vertex.x = vertexBuffer[_i186 + 0];
-          vertex.y = vertexBuffer[_i186 + 1];
-          vertex.z = vertexBuffer[_i186 + 2];
+        for (var _i187 = 0; _i187 < vertexBuffer.length; _i187 += 3) {
+          vertex.x = vertexBuffer[_i187 + 0];
+          vertex.y = vertexBuffer[_i187 + 1];
+          vertex.z = vertexBuffer[_i187 + 2];
           vertex.normalize().multiplyScalar(radius);
-          vertexBuffer[_i186 + 0] = vertex.x;
-          vertexBuffer[_i186 + 1] = vertex.y;
-          vertexBuffer[_i186 + 2] = vertex.z;
+          vertexBuffer[_i187 + 0] = vertex.x;
+          vertexBuffer[_i187 + 1] = vertex.y;
+          vertexBuffer[_i187 + 2] = vertex.z;
         }
       }
 
       function generateUVs() {
         var vertex = new Vector3();
 
-        for (var _i187 = 0; _i187 < vertexBuffer.length; _i187 += 3) {
-          vertex.x = vertexBuffer[_i187 + 0];
-          vertex.y = vertexBuffer[_i187 + 1];
-          vertex.z = vertexBuffer[_i187 + 2];
+        for (var _i188 = 0; _i188 < vertexBuffer.length; _i188 += 3) {
+          vertex.x = vertexBuffer[_i188 + 0];
+          vertex.y = vertexBuffer[_i188 + 1];
+          vertex.z = vertexBuffer[_i188 + 2];
           var u = azimuth(vertex) / 2 / Math.PI + 0.5;
 
           var _v9 = inclination(vertex) / Math.PI + 0.5;
@@ -20623,17 +20660,17 @@
       }
 
       function correctSeam() {
-        for (var _i188 = 0; _i188 < uvBuffer.length; _i188 += 6) {
-          var x0 = uvBuffer[_i188 + 0];
-          var x1 = uvBuffer[_i188 + 2];
-          var x2 = uvBuffer[_i188 + 4];
+        for (var _i189 = 0; _i189 < uvBuffer.length; _i189 += 6) {
+          var x0 = uvBuffer[_i189 + 0];
+          var x1 = uvBuffer[_i189 + 2];
+          var x2 = uvBuffer[_i189 + 4];
           var max = Math.max(x0, x1, x2);
           var min = Math.min(x0, x1, x2);
 
           if (max > 0.9 && min < 0.1) {
-            if (x0 < 0.2) uvBuffer[_i188 + 0] += 1;
-            if (x1 < 0.2) uvBuffer[_i188 + 2] += 1;
-            if (x2 < 0.2) uvBuffer[_i188 + 4] += 1;
+            if (x0 < 0.2) uvBuffer[_i189 + 0] += 1;
+            if (x1 < 0.2) uvBuffer[_i189 + 2] += 1;
+            if (x2 < 0.2) uvBuffer[_i189 + 4] += 1;
           }
         }
       }
@@ -20658,10 +20695,10 @@
         var uvB = new Vector2();
         var uvC = new Vector2();
 
-        for (var _i189 = 0, j = 0; _i189 < vertexBuffer.length; _i189 += 9, j += 6) {
-          a.set(vertexBuffer[_i189 + 0], vertexBuffer[_i189 + 1], vertexBuffer[_i189 + 2]);
-          b.set(vertexBuffer[_i189 + 3], vertexBuffer[_i189 + 4], vertexBuffer[_i189 + 5]);
-          c.set(vertexBuffer[_i189 + 6], vertexBuffer[_i189 + 7], vertexBuffer[_i189 + 8]);
+        for (var _i190 = 0, j = 0; _i190 < vertexBuffer.length; _i190 += 9, j += 6) {
+          a.set(vertexBuffer[_i190 + 0], vertexBuffer[_i190 + 1], vertexBuffer[_i190 + 2]);
+          b.set(vertexBuffer[_i190 + 3], vertexBuffer[_i190 + 4], vertexBuffer[_i190 + 5]);
+          c.set(vertexBuffer[_i190 + 6], vertexBuffer[_i190 + 7], vertexBuffer[_i190 + 8]);
           uvA.set(uvBuffer[j + 0], uvBuffer[j + 1]);
           uvB.set(uvBuffer[j + 2], uvBuffer[j + 3]);
           uvC.set(uvBuffer[j + 4], uvBuffer[j + 5]);
@@ -20720,9 +20757,9 @@
         minX = maxX = data[0];
         minY = maxY = data[1];
 
-        for (var _i190 = dim; _i190 < outerLen; _i190 += dim) {
-          x = data[_i190];
-          y = data[_i190 + 1];
+        for (var _i191 = dim; _i191 < outerLen; _i191 += dim) {
+          x = data[_i191];
+          y = data[_i191 + 1];
           if (x < minX) minX = x;
           if (y < minY) minY = y;
           if (x > maxX) maxX = x;
@@ -21221,9 +21258,9 @@
   function signedArea(data, start, end, dim) {
     var sum = 0;
 
-    for (var _i191 = start, j = end - dim; _i191 < end; _i191 += dim) {
-      sum += (data[j] - data[_i191]) * (data[_i191 + 1] + data[j + 1]);
-      j = _i191;
+    for (var _i192 = start, j = end - dim; _i192 < end; _i192 += dim) {
+      sum += (data[j] - data[_i192]) * (data[_i192 + 1] + data[j + 1]);
+      j = _i192;
     }
 
     return sum;
@@ -21252,16 +21289,16 @@
       var holeIndex = contour.length;
       holes.forEach(removeDupEndPts);
 
-      for (var _i192 = 0; _i192 < holes.length; _i192++) {
+      for (var _i193 = 0; _i193 < holes.length; _i193++) {
         holeIndices.push(holeIndex);
-        holeIndex += holes[_i192].length;
-        addContour(vertices, holes[_i192]);
+        holeIndex += holes[_i193].length;
+        addContour(vertices, holes[_i193]);
       }
 
       var triangles = Earcut.triangulate(vertices, holeIndices);
 
-      for (var _i193 = 0; _i193 < triangles.length; _i193 += 3) {
-        faces.push(triangles.slice(_i193, _i193 + 3));
+      for (var _i194 = 0; _i194 < triangles.length; _i194 += 3) {
+        faces.push(triangles.slice(_i194, _i194 + 3));
       }
 
       return faces;
@@ -21277,9 +21314,9 @@
   }
 
   function addContour(vertices, contour) {
-    for (var _i194 = 0; _i194 < contour.length; _i194++) {
-      vertices.push(contour[_i194].x);
-      vertices.push(contour[_i194].y);
+    for (var _i195 = 0; _i195 < contour.length; _i195++) {
+      vertices.push(contour[_i195].x);
+      vertices.push(contour[_i195].y);
     }
   }
 
@@ -21306,8 +21343,8 @@
       var verticesArray = [];
       var uvArray = [];
 
-      for (var _i195 = 0, l = shapes.length; _i195 < l; _i195++) {
-        var shape = shapes[_i195];
+      for (var _i196 = 0, l = shapes.length; _i196 < l; _i196++) {
+        var shape = shapes[_i196];
         addShape(shape);
       }
 
@@ -21450,10 +21487,10 @@
 
         var contourMovements = [];
 
-        for (var _i196 = 0, il = contour.length, j = il - 1, k = _i196 + 1; _i196 < il; _i196++, j++, k++) {
+        for (var _i197 = 0, il = contour.length, j = il - 1, k = _i197 + 1; _i197 < il; _i197++, j++, k++) {
           if (j === il) j = 0;
           if (k === il) k = 0;
-          contourMovements[_i196] = getBevelVec(contour[_i196], contour[j], contour[k]);
+          contourMovements[_i197] = getBevelVec(contour[_i197], contour[j], contour[k]);
         }
 
         var holesMovements = [];
@@ -21464,10 +21501,10 @@
           var _ahole2 = holes[_h2];
           oneHoleMovements = [];
 
-          for (var _i197 = 0, _il26 = _ahole2.length, _j12 = _il26 - 1, _k = _i197 + 1; _i197 < _il26; _i197++, _j12++, _k++) {
+          for (var _i198 = 0, _il26 = _ahole2.length, _j12 = _il26 - 1, _k = _i198 + 1; _i198 < _il26; _i198++, _j12++, _k++) {
             if (_j12 === _il26) _j12 = 0;
             if (_k === _il26) _k = 0;
-            oneHoleMovements[_i197] = getBevelVec(_ahole2[_i197], _ahole2[_j12], _ahole2[_k]);
+            oneHoleMovements[_i198] = getBevelVec(_ahole2[_i198], _ahole2[_j12], _ahole2[_k]);
           }
 
           holesMovements.push(oneHoleMovements);
@@ -21481,8 +21518,8 @@
 
           var _bs = bevelSize * Math.sin(t * Math.PI / 2) + bevelOffset;
 
-          for (var _i198 = 0, _il27 = contour.length; _i198 < _il27; _i198++) {
-            var vert = scalePt2(contour[_i198], contourMovements[_i198], _bs);
+          for (var _i199 = 0, _il27 = contour.length; _i199 < _il27; _i199++) {
+            var vert = scalePt2(contour[_i199], contourMovements[_i199], _bs);
             v(vert.x, vert.y, -_z4);
           }
 
@@ -21490,8 +21527,8 @@
             var _ahole3 = holes[_h3];
             oneHoleMovements = holesMovements[_h3];
 
-            for (var _i199 = 0, _il28 = _ahole3.length; _i199 < _il28; _i199++) {
-              var _vert = scalePt2(_ahole3[_i199], oneHoleMovements[_i199], _bs);
+            for (var _i200 = 0, _il28 = _ahole3.length; _i200 < _il28; _i200++) {
+              var _vert = scalePt2(_ahole3[_i200], oneHoleMovements[_i200], _bs);
 
               v(_vert.x, _vert.y, -_z4);
             }
@@ -21500,8 +21537,8 @@
 
         var bs = bevelSize + bevelOffset;
 
-        for (var _i200 = 0; _i200 < vlen; _i200++) {
-          var _vert2 = bevelEnabled ? scalePt2(vertices[_i200], verticesMovements[_i200], bs) : vertices[_i200];
+        for (var _i201 = 0; _i201 < vlen; _i201++) {
+          var _vert2 = bevelEnabled ? scalePt2(vertices[_i201], verticesMovements[_i201], bs) : vertices[_i201];
 
           if (!extrudeByPath) {
             v(_vert2.x, _vert2.y, 0);
@@ -21514,8 +21551,8 @@
         }
 
         for (var s = 1; s <= steps; s++) {
-          for (var _i201 = 0; _i201 < vlen; _i201++) {
-            var _vert3 = bevelEnabled ? scalePt2(vertices[_i201], verticesMovements[_i201], bs) : vertices[_i201];
+          for (var _i202 = 0; _i202 < vlen; _i202++) {
+            var _vert3 = bevelEnabled ? scalePt2(vertices[_i202], verticesMovements[_i202], bs) : vertices[_i202];
 
             if (!extrudeByPath) {
               v(_vert3.x, _vert3.y, depth / steps * s);
@@ -21535,8 +21572,8 @@
 
           var _bs2 = bevelSize * Math.sin(_t * Math.PI / 2) + bevelOffset;
 
-          for (var _i202 = 0, _il29 = contour.length; _i202 < _il29; _i202++) {
-            var _vert4 = scalePt2(contour[_i202], contourMovements[_i202], _bs2);
+          for (var _i203 = 0, _il29 = contour.length; _i203 < _il29; _i203++) {
+            var _vert4 = scalePt2(contour[_i203], contourMovements[_i203], _bs2);
 
             v(_vert4.x, _vert4.y, depth + _z5);
           }
@@ -21545,8 +21582,8 @@
             var _ahole4 = holes[_h4];
             oneHoleMovements = holesMovements[_h4];
 
-            for (var _i203 = 0, _il30 = _ahole4.length; _i203 < _il30; _i203++) {
-              var _vert5 = scalePt2(_ahole4[_i203], oneHoleMovements[_i203], _bs2);
+            for (var _i204 = 0, _il30 = _ahole4.length; _i204 < _il30; _i204++) {
+              var _vert5 = scalePt2(_ahole4[_i204], oneHoleMovements[_i204], _bs2);
 
               if (!extrudeByPath) {
                 v(_vert5.x, _vert5.y, depth + _z5);
@@ -21567,26 +21604,26 @@
             var layer = 0;
             var offset = vlen * layer;
 
-            for (var _i204 = 0; _i204 < flen; _i204++) {
-              var face = faces[_i204];
+            for (var _i205 = 0; _i205 < flen; _i205++) {
+              var face = faces[_i205];
               f3(face[2] + offset, face[1] + offset, face[0] + offset);
             }
 
             layer = steps + bevelSegments * 2;
             offset = vlen * layer;
 
-            for (var _i205 = 0; _i205 < flen; _i205++) {
-              var _face5 = faces[_i205];
+            for (var _i206 = 0; _i206 < flen; _i206++) {
+              var _face5 = faces[_i206];
               f3(_face5[0] + offset, _face5[1] + offset, _face5[2] + offset);
             }
           } else {
-            for (var _i206 = 0; _i206 < flen; _i206++) {
-              var _face6 = faces[_i206];
+            for (var _i207 = 0; _i207 < flen; _i207++) {
+              var _face6 = faces[_i207];
               f3(_face6[2], _face6[1], _face6[0]);
             }
 
-            for (var _i207 = 0; _i207 < flen; _i207++) {
-              var _face7 = faces[_i207];
+            for (var _i208 = 0; _i208 < flen; _i208++) {
+              var _face7 = faces[_i208];
               f3(_face7[0] + vlen * steps, _face7[1] + vlen * steps, _face7[2] + vlen * steps);
             }
           }
@@ -21731,8 +21768,8 @@
     data.shapes = [];
 
     if (Array.isArray(shapes)) {
-      for (var _i208 = 0, l = shapes.length; _i208 < l; _i208++) {
-        var shape = shapes[_i208];
+      for (var _i209 = 0, l = shapes.length; _i209 < l; _i209++) {
+        var shape = shapes[_i209];
         data.shapes.push(shape.uuid);
       }
     } else {
@@ -21785,8 +21822,8 @@
     data.shapes = [];
 
     if (Array.isArray(shapes)) {
-      for (var _i209 = 0, l = shapes.length; _i209 < l; _i209++) {
-        var shape = shapes[_i209];
+      for (var _i210 = 0, l = shapes.length; _i210 < l; _i210++) {
+        var shape = shapes[_i210];
         data.shapes.push(shape.uuid);
       }
     } else {
@@ -21846,8 +21883,8 @@
 
     var sliceCount = slices + 1;
 
-    for (var _i210 = 0; _i210 <= stacks; _i210++) {
-      var _v10 = _i210 / stacks;
+    for (var _i211 = 0; _i211 <= stacks; _i211++) {
+      var _v10 = _i211 / stacks;
 
       for (var j = 0; j <= slices; j++) {
         var u = j / slices;
@@ -21876,12 +21913,12 @@
       }
     }
 
-    for (var _i211 = 0; _i211 < stacks; _i211++) {
+    for (var _i212 = 0; _i212 < stacks; _i212++) {
       for (var _j14 = 0; _j14 < slices; _j14++) {
-        var a = _i211 * sliceCount + _j14;
-        var b = _i211 * sliceCount + _j14 + 1;
-        var c = (_i211 + 1) * sliceCount + _j14 + 1;
-        var d = (_i211 + 1) * sliceCount + _j14;
+        var a = _i212 * sliceCount + _j14;
+        var b = _i212 * sliceCount + _j14 + 1;
+        var c = (_i212 + 1) * sliceCount + _j14 + 1;
+        var d = (_i212 + 1) * sliceCount + _j14;
         indices.push(a, b, d);
         indices.push(b, c, d);
       }
@@ -21938,10 +21975,10 @@
       if (Array.isArray(shapes) === false) {
         addShape(shapes);
       } else {
-        for (var _i212 = 0; _i212 < shapes.length; _i212++) {
-          addShape(shapes[_i212]);
+        for (var _i213 = 0; _i213 < shapes.length; _i213++) {
+          addShape(shapes[_i213]);
 
-          _this12.addGroup(groupStart, groupCount, _i212);
+          _this12.addGroup(groupStart, groupCount, _i213);
 
           groupStart += groupCount;
           groupCount = 0;
@@ -21966,30 +22003,30 @@
           shapeVertices = shapeVertices.reverse();
         }
 
-        for (var _i213 = 0, l = shapeHoles.length; _i213 < l; _i213++) {
-          var shapeHole = shapeHoles[_i213];
+        for (var _i214 = 0, l = shapeHoles.length; _i214 < l; _i214++) {
+          var shapeHole = shapeHoles[_i214];
 
           if (ShapeUtils.isClockWise(shapeHole) === true) {
-            shapeHoles[_i213] = shapeHole.reverse();
+            shapeHoles[_i214] = shapeHole.reverse();
           }
         }
 
         var faces = ShapeUtils.triangulateShape(shapeVertices, shapeHoles);
 
-        for (var _i214 = 0, _l10 = shapeHoles.length; _i214 < _l10; _i214++) {
-          var _shapeHole = shapeHoles[_i214];
+        for (var _i215 = 0, _l10 = shapeHoles.length; _i215 < _l10; _i215++) {
+          var _shapeHole = shapeHoles[_i215];
           shapeVertices = shapeVertices.concat(_shapeHole);
         }
 
-        for (var _i215 = 0, _l11 = shapeVertices.length; _i215 < _l11; _i215++) {
-          var vertex = shapeVertices[_i215];
+        for (var _i216 = 0, _l11 = shapeVertices.length; _i216 < _l11; _i216++) {
+          var vertex = shapeVertices[_i216];
           vertices.push(vertex.x, vertex.y, 0);
           normals.push(0, 0, 1);
           uvs.push(vertex.x, vertex.y);
         }
 
-        for (var _i216 = 0, _l12 = faces.length; _i216 < _l12; _i216++) {
-          var face = faces[_i216];
+        for (var _i217 = 0, _l12 = faces.length; _i217 < _l12; _i217++) {
+          var face = faces[_i217];
           var a = face[0] + indexOffset;
           var b = face[1] + indexOffset;
           var c = face[2] + indexOffset;
@@ -22017,8 +22054,8 @@
     data.shapes = [];
 
     if (Array.isArray(shapes)) {
-      for (var _i217 = 0, l = shapes.length; _i217 < l; _i217++) {
-        var shape = shapes[_i217];
+      for (var _i218 = 0, l = shapes.length; _i218 < l; _i218++) {
+        var shape = shapes[_i218];
         data.shapes.push(shape.uuid);
       }
     } else {
@@ -22074,8 +22111,8 @@
     data.shapes = [];
 
     if (Array.isArray(shapes)) {
-      for (var _i218 = 0, l = shapes.length; _i218 < l; _i218++) {
-        var shape = shapes[_i218];
+      for (var _i219 = 0, l = shapes.length; _i219 < l; _i219++) {
+        var shape = shapes[_i219];
         data.shapes.push(shape.uuid);
       }
     } else {
@@ -22209,8 +22246,8 @@
       var normal = new Vector3();
 
       for (var j = 0; j <= radialSegments; j++) {
-        for (var _i219 = 0; _i219 <= tubularSegments; _i219++) {
-          var u = _i219 / tubularSegments * arc;
+        for (var _i220 = 0; _i220 <= tubularSegments; _i220++) {
+          var u = _i220 / tubularSegments * arc;
 
           var _v12 = j / radialSegments * Math.PI * 2;
 
@@ -22222,17 +22259,17 @@
           center.y = radius * Math.sin(u);
           normal.subVectors(vertex, center).normalize();
           normals.push(normal.x, normal.y, normal.z);
-          uvs.push(_i219 / tubularSegments);
+          uvs.push(_i220 / tubularSegments);
           uvs.push(j / radialSegments);
         }
       }
 
       for (var _j15 = 1; _j15 <= radialSegments; _j15++) {
-        for (var _i220 = 1; _i220 <= tubularSegments; _i220++) {
-          var a = (tubularSegments + 1) * _j15 + _i220 - 1;
-          var b = (tubularSegments + 1) * (_j15 - 1) + _i220 - 1;
-          var c = (tubularSegments + 1) * (_j15 - 1) + _i220;
-          var d = (tubularSegments + 1) * _j15 + _i220;
+        for (var _i221 = 1; _i221 <= tubularSegments; _i221++) {
+          var a = (tubularSegments + 1) * _j15 + _i221 - 1;
+          var b = (tubularSegments + 1) * (_j15 - 1) + _i221 - 1;
+          var c = (tubularSegments + 1) * (_j15 - 1) + _i221;
+          var d = (tubularSegments + 1) * _j15 + _i221;
           indices.push(a, b, d);
           indices.push(b, c, d);
         }
@@ -22794,8 +22831,8 @@
       var n = times.length;
       var result = new Array(n);
 
-      for (var _i221 = 0; _i221 !== n; ++_i221) {
-        result[_i221] = _i221;
+      for (var _i222 = 0; _i222 !== n; ++_i222) {
+        result[_i222] = _i222;
       }
 
       result.sort(compareTime);
@@ -22805,8 +22842,8 @@
       var nValues = values.length;
       var result = new values.constructor(nValues);
 
-      for (var _i222 = 0, dstOffset = 0; dstOffset !== nValues; ++_i222) {
-        var srcOffset = order[_i222] * stride;
+      for (var _i223 = 0, dstOffset = 0; dstOffset !== nValues; ++_i223) {
+        var srcOffset = order[_i223] * stride;
 
         for (var j = 0; j !== stride; ++j) {
           result[dstOffset++] = values[srcOffset + j];
@@ -22868,8 +22905,8 @@
       clip.name = name;
       var tracks = [];
 
-      for (var _i223 = 0; _i223 < clip.tracks.length; ++_i223) {
-        var track = clip.tracks[_i223];
+      for (var _i224 = 0; _i224 < clip.tracks.length; ++_i224) {
+        var track = clip.tracks[_i224];
         var valueSize = track.getValueSize();
         var times = [];
         var values = [];
@@ -22893,14 +22930,14 @@
       clip.tracks = tracks;
       var minStartTime = Infinity;
 
-      for (var _i224 = 0; _i224 < clip.tracks.length; ++_i224) {
-        if (minStartTime > clip.tracks[_i224].times[0]) {
-          minStartTime = clip.tracks[_i224].times[0];
+      for (var _i225 = 0; _i225 < clip.tracks.length; ++_i225) {
+        if (minStartTime > clip.tracks[_i225].times[0]) {
+          minStartTime = clip.tracks[_i225].times[0];
         }
       }
 
-      for (var _i225 = 0; _i225 < clip.tracks.length; ++_i225) {
-        clip.tracks[_i225].shift(-1 * minStartTime);
+      for (var _i226 = 0; _i226 < clip.tracks.length; ++_i226) {
+        clip.tracks[_i226].shift(-1 * minStartTime);
       }
 
       clip.resetDuration();
@@ -22913,8 +22950,8 @@
       var numTracks = referenceClip.tracks.length;
       var referenceTime = referenceFrame / fps;
 
-      var _loop = function _loop(_i226) {
-        var referenceTrack = referenceClip.tracks[_i226];
+      var _loop = function _loop(_i227) {
+        var referenceTrack = referenceClip.tracks[_i227];
         var referenceTrackType = referenceTrack.ValueTypeName;
         if (referenceTrackType === 'bool' || referenceTrackType === 'string') return "continue";
         var targetTrack = targetClip.tracks.find(function (track) {
@@ -22980,8 +23017,8 @@
         }
       };
 
-      for (var _i226 = 0; _i226 < numTracks; ++_i226) {
-        var _ret = _loop(_i226);
+      for (var _i227 = 0; _i227 < numTracks; ++_i227) {
+        var _ret = _loop(_i227);
 
         if (_ret === "continue") continue;
       }
@@ -23106,8 +23143,8 @@
           stride = this.valueSize,
           offset = index * stride;
 
-      for (var _i227 = 0; _i227 !== stride; ++_i227) {
-        result[_i227] = values[offset + _i227];
+      for (var _i228 = 0; _i228 !== stride; ++_i228) {
+        result[_i228] = values[offset + _i228];
       }
 
       return result;
@@ -23204,8 +23241,8 @@
       var s1 = (-1 - wN) * ppp + (1.5 + wN) * pp + 0.5 * p;
       var sN = wN * ppp - wN * pp;
 
-      for (var _i228 = 0; _i228 !== stride; ++_i228) {
-        result[_i228] = sP * values[oP + _i228] + s0 * values[o0 + _i228] + s1 * values[o1 + _i228] + sN * values[oN + _i228];
+      for (var _i229 = 0; _i229 !== stride; ++_i229) {
+        result[_i229] = sP * values[oP + _i229] + s0 * values[o0 + _i229] + s1 * values[o1 + _i229] + sN * values[oN + _i229];
       }
 
       return result;
@@ -23227,8 +23264,8 @@
           weight1 = (t - t0) / (t1 - t0),
           weight0 = 1 - weight1;
 
-      for (var _i229 = 0; _i229 !== stride; ++_i229) {
-        result[_i229] = values[offset0 + _i229] * weight0 + values[offset1 + _i229] * weight1;
+      for (var _i230 = 0; _i230 !== stride; ++_i230) {
+        result[_i230] = values[offset0 + _i230] * weight0 + values[offset1 + _i230] * weight1;
       }
 
       return result;
@@ -23347,8 +23384,8 @@
       if (timeOffset !== 0.0) {
         var times = this.times;
 
-        for (var _i230 = 0, n = times.length; _i230 !== n; ++_i230) {
-          times[_i230] += timeOffset;
+        for (var _i231 = 0, n = times.length; _i231 !== n; ++_i231) {
+          times[_i231] += timeOffset;
         }
       }
 
@@ -23358,8 +23395,8 @@
       if (timeScale !== 1.0) {
         var times = this.times;
 
-        for (var _i231 = 0, n = times.length; _i231 !== n; ++_i231) {
-          times[_i231] *= timeScale;
+        for (var _i232 = 0, n = times.length; _i232 !== n; ++_i232) {
+          times[_i232] *= timeScale;
         }
       }
 
@@ -23414,17 +23451,17 @@
 
       var prevTime = null;
 
-      for (var _i232 = 0; _i232 !== nKeys; _i232++) {
-        var currTime = times[_i232];
+      for (var _i233 = 0; _i233 !== nKeys; _i233++) {
+        var currTime = times[_i233];
 
         if (typeof currTime === 'number' && isNaN(currTime)) {
-          console.error('THREE.KeyframeTrack: Time is not a valid number.', this, _i232, currTime);
+          console.error('THREE.KeyframeTrack: Time is not a valid number.', this, _i233, currTime);
           valid = false;
           break;
         }
 
         if (prevTime !== null && prevTime > currTime) {
-          console.error('THREE.KeyframeTrack: Out of order keys.', this, _i232, currTime, prevTime);
+          console.error('THREE.KeyframeTrack: Out of order keys.', this, _i233, currTime, prevTime);
           valid = false;
           break;
         }
@@ -23434,11 +23471,11 @@
 
       if (values !== undefined) {
         if (AnimationUtils.isTypedArray(values)) {
-          for (var _i233 = 0, n = values.length; _i233 !== n; ++_i233) {
-            var value = values[_i233];
+          for (var _i234 = 0, n = values.length; _i234 !== n; ++_i234) {
+            var value = values[_i234];
 
             if (isNaN(value)) {
-              console.error('THREE.KeyframeTrack: Value is not a valid number.', this, _i233, value);
+              console.error('THREE.KeyframeTrack: Value is not a valid number.', this, _i234, value);
               valid = false;
               break;
             }
@@ -23456,14 +23493,14 @@
           lastIndex = times.length - 1;
       var writeIndex = 1;
 
-      for (var _i234 = 1; _i234 < lastIndex; ++_i234) {
+      for (var _i235 = 1; _i235 < lastIndex; ++_i235) {
         var keep = false;
-        var time = times[_i234];
-        var timeNext = times[_i234 + 1];
+        var time = times[_i235];
+        var timeNext = times[_i235 + 1];
 
-        if (time !== timeNext && (_i234 !== 1 || time !== time[0])) {
+        if (time !== timeNext && (_i235 !== 1 || time !== time[0])) {
           if (!smoothInterpolation) {
-            var offset = _i234 * stride,
+            var offset = _i235 * stride,
                 offsetP = offset - stride,
                 offsetN = offset + stride;
 
@@ -23481,9 +23518,9 @@
         }
 
         if (keep) {
-          if (_i234 !== writeIndex) {
-            times[writeIndex] = times[_i234];
-            var readOffset = _i234 * stride,
+          if (_i235 !== writeIndex) {
+            times[writeIndex] = times[_i235];
+            var readOffset = _i235 * stride,
                 writeOffset = writeIndex * stride;
 
             for (var _j16 = 0; _j16 !== stride; ++_j16) {
@@ -23685,8 +23722,8 @@
           jsonTracks = json.tracks,
           frameTime = 1.0 / (json.fps || 1.0);
 
-      for (var _i235 = 0, n = jsonTracks.length; _i235 !== n; ++_i235) {
-        tracks.push(parseKeyframeTrack(jsonTracks[_i235]).scale(frameTime));
+      for (var _i236 = 0, n = jsonTracks.length; _i236 !== n; ++_i236) {
+        tracks.push(parseKeyframeTrack(jsonTracks[_i236]).scale(frameTime));
       }
 
       return new AnimationClip(json.name, json.duration, tracks, json.blendMode);
@@ -23702,8 +23739,8 @@
         'blendMode': clip.blendMode
       };
 
-      for (var _i236 = 0, n = clipTracks.length; _i236 !== n; ++_i236) {
-        tracks.push(KeyframeTrack.toJSON(clipTracks[_i236]));
+      for (var _i237 = 0, n = clipTracks.length; _i237 !== n; ++_i237) {
+        tracks.push(KeyframeTrack.toJSON(clipTracks[_i237]));
       }
 
       return json;
@@ -23712,10 +23749,10 @@
       var numMorphTargets = morphTargetSequence.length;
       var tracks = [];
 
-      for (var _i237 = 0; _i237 < numMorphTargets; _i237++) {
+      for (var _i238 = 0; _i238 < numMorphTargets; _i238++) {
         var times = [];
         var values = [];
-        times.push((_i237 + numMorphTargets - 1) % numMorphTargets, _i237, (_i237 + 1) % numMorphTargets);
+        times.push((_i238 + numMorphTargets - 1) % numMorphTargets, _i238, (_i238 + 1) % numMorphTargets);
         values.push(0, 1, 0);
         var order = AnimationUtils.getKeyframeOrder(times);
         times = AnimationUtils.sortedArray(times, 1, order);
@@ -23726,7 +23763,7 @@
           values.push(values[0]);
         }
 
-        tracks.push(new NumberKeyframeTrack('.morphTargetInfluences[' + morphTargetSequence[_i237].name + ']', times, values).scale(1.0 / fps));
+        tracks.push(new NumberKeyframeTrack('.morphTargetInfluences[' + morphTargetSequence[_i238].name + ']', times, values).scale(1.0 / fps));
       }
 
       return new AnimationClip(name, -1, tracks);
@@ -23739,9 +23776,9 @@
         clipArray = o.geometry && o.geometry.animations || o.animations;
       }
 
-      for (var _i238 = 0; _i238 < clipArray.length; _i238++) {
-        if (clipArray[_i238].name === name) {
-          return clipArray[_i238];
+      for (var _i239 = 0; _i239 < clipArray.length; _i239++) {
+        if (clipArray[_i239].name === name) {
+          return clipArray[_i239];
         }
       }
 
@@ -23751,8 +23788,8 @@
       var animationToMorphTargets = {};
       var pattern = /^([\w-]*?)([\d]+)$/;
 
-      for (var _i239 = 0, il = morphTargets.length; _i239 < il; _i239++) {
-        var morphTarget = morphTargets[_i239];
+      for (var _i240 = 0, il = morphTargets.length; _i240 < il; _i240++) {
+        var morphTarget = morphTargets[_i240];
         var parts = morphTarget.name.match(pattern);
 
         if (parts && parts.length > 1) {
@@ -23851,8 +23888,8 @@
       var tracks = this.tracks;
       var duration = 0;
 
-      for (var _i240 = 0, n = tracks.length; _i240 !== n; ++_i240) {
-        var track = this.tracks[_i240];
+      for (var _i241 = 0, n = tracks.length; _i241 !== n; ++_i241) {
+        var track = this.tracks[_i241];
         duration = Math.max(duration, track.times[track.times.length - 1]);
       }
 
@@ -23860,8 +23897,8 @@
       return this;
     },
     trim: function trim() {
-      for (var _i241 = 0; _i241 < this.tracks.length; _i241++) {
-        this.tracks[_i241].trim(0, this.duration);
+      for (var _i242 = 0; _i242 < this.tracks.length; _i242++) {
+        this.tracks[_i242].trim(0, this.duration);
       }
 
       return this;
@@ -23869,15 +23906,15 @@
     validate: function validate() {
       var valid = true;
 
-      for (var _i242 = 0; _i242 < this.tracks.length; _i242++) {
-        valid = valid && this.tracks[_i242].validate();
+      for (var _i243 = 0; _i243 < this.tracks.length; _i243++) {
+        valid = valid && this.tracks[_i243].validate();
       }
 
       return valid;
     },
     optimize: function optimize() {
-      for (var _i243 = 0; _i243 < this.tracks.length; _i243++) {
-        this.tracks[_i243].optimize();
+      for (var _i244 = 0; _i244 < this.tracks.length; _i244++) {
+        this.tracks[_i244].optimize();
       }
 
       return this;
@@ -23885,8 +23922,8 @@
     clone: function clone() {
       var tracks = [];
 
-      for (var _i244 = 0; _i244 < this.tracks.length; _i244++) {
-        tracks.push(this.tracks[_i244].clone());
+      for (var _i245 = 0; _i245 < this.tracks.length; _i245++) {
+        tracks.push(this.tracks[_i245].clone());
       }
 
       return new AnimationClip(this.name, this.duration, tracks, this.blendMode);
@@ -23986,9 +24023,9 @@
     };
 
     this.getHandler = function (file) {
-      for (var _i245 = 0, l = handlers.length; _i245 < l; _i245 += 2) {
-        var regex = handlers[_i245];
-        var loader = handlers[_i245 + 1];
+      for (var _i246 = 0, l = handlers.length; _i246 < l; _i246 += 2) {
+        var regex = handlers[_i246];
+        var loader = handlers[_i246 + 1];
         if (regex.global) regex.lastIndex = 0;
 
         if (regex.test(file)) {
@@ -24094,8 +24131,8 @@
             case 'blob':
               var view = new Uint8Array(data.length);
 
-              for (var _i246 = 0; _i246 < data.length; _i246++) {
-                view[_i246] = data.charCodeAt(_i246);
+              for (var _i247 = 0; _i247 < data.length; _i247++) {
+                view[_i247] = data.charCodeAt(_i247);
               }
 
               if (responseType === 'blob') {
@@ -24151,15 +24188,15 @@
             if (this.status === 0) console.warn('THREE.FileLoader: HTTP Status 0 received.');
             Cache.add(url, response);
 
-            for (var _i247 = 0, il = callbacks.length; _i247 < il; _i247++) {
-              var callback = callbacks[_i247];
+            for (var _i248 = 0, il = callbacks.length; _i248 < il; _i248++) {
+              var callback = callbacks[_i248];
               if (callback.onLoad) callback.onLoad(response);
             }
 
             scope.manager.itemEnd(url);
           } else {
-            for (var _i248 = 0, _il31 = callbacks.length; _i248 < _il31; _i248++) {
-              var _callback = callbacks[_i248];
+            for (var _i249 = 0, _il31 = callbacks.length; _i249 < _il31; _i249++) {
+              var _callback = callbacks[_i249];
               if (_callback.onError) _callback.onError(event);
             }
 
@@ -24170,8 +24207,8 @@
         request.addEventListener('progress', function (event) {
           var callbacks = loading[url];
 
-          for (var _i249 = 0, il = callbacks.length; _i249 < il; _i249++) {
-            var callback = callbacks[_i249];
+          for (var _i250 = 0, il = callbacks.length; _i250 < il; _i250++) {
+            var callback = callbacks[_i250];
             if (callback.onProgress) callback.onProgress(event);
           }
         }, false);
@@ -24179,8 +24216,8 @@
           var callbacks = loading[url];
           delete loading[url];
 
-          for (var _i250 = 0, il = callbacks.length; _i250 < il; _i250++) {
-            var callback = callbacks[_i250];
+          for (var _i251 = 0, il = callbacks.length; _i251 < il; _i251++) {
+            var callback = callbacks[_i251];
             if (callback.onError) callback.onError(event);
           }
 
@@ -24191,8 +24228,8 @@
           var callbacks = loading[url];
           delete loading[url];
 
-          for (var _i251 = 0, il = callbacks.length; _i251 < il; _i251++) {
-            var callback = callbacks[_i251];
+          for (var _i252 = 0, il = callbacks.length; _i252 < il; _i252++) {
+            var callback = callbacks[_i252];
             if (callback.onError) callback.onError(event);
           }
 
@@ -24252,8 +24289,8 @@
     parse: function parse(json) {
       var animations = [];
 
-      for (var _i252 = 0; _i252 < json.length; _i252++) {
-        var clip = AnimationClip.parse(json[_i252]);
+      for (var _i253 = 0; _i253 < json.length; _i253++) {
+        var clip = AnimationClip.parse(json[_i253]);
         animations.push(clip);
       }
 
@@ -24300,8 +24337,8 @@
       }
 
       if (Array.isArray(url)) {
-        for (var _i253 = 0, il = url.length; _i253 < il; ++_i253) {
-          loadTexture(_i253);
+        for (var _i254 = 0, il = url.length; _i254 < il; ++_i254) {
+          loadTexture(_i254);
         }
       } else {
         loader.load(url, function (buffer) {
@@ -24315,8 +24352,8 @@
                 mipmaps: []
               };
 
-              for (var _i254 = 0; _i254 < texDatas.mipmapCount; _i254++) {
-                images[f].mipmaps.push(texDatas.mipmaps[f * texDatas.mipmapCount + _i254]);
+              for (var _i255 = 0; _i255 < texDatas.mipmapCount; _i255++) {
+                images[f].mipmaps.push(texDatas.mipmaps[f * texDatas.mipmapCount + _i255]);
                 images[f].format = texDatas.format;
                 images[f].width = texDatas.width;
                 images[f].height = texDatas.height;
@@ -24419,8 +24456,8 @@
         }, undefined, onError);
       }
 
-      for (var _i255 = 0; _i255 < urls.length; ++_i255) {
-        loadTexture(_i255);
+      for (var _i256 = 0; _i256 < urls.length; ++_i256) {
+        loadTexture(_i256);
       }
 
       return texture;
@@ -24641,11 +24678,11 @@
       var vec = new Vector3();
       var mat = new Matrix4();
 
-      for (var _i256 = 0; _i256 <= segments; _i256++) {
-        var u = _i256 / segments;
-        tangents[_i256] = this.getTangentAt(u, new Vector3());
+      for (var _i257 = 0; _i257 <= segments; _i257++) {
+        var u = _i257 / segments;
+        tangents[_i257] = this.getTangentAt(u, new Vector3());
 
-        tangents[_i256].normalize();
+        tangents[_i257].normalize();
       }
 
       normals[0] = new Vector3();
@@ -24673,19 +24710,19 @@
       normals[0].crossVectors(tangents[0], vec);
       binormals[0].crossVectors(tangents[0], normals[0]);
 
-      for (var _i257 = 1; _i257 <= segments; _i257++) {
-        normals[_i257] = normals[_i257 - 1].clone();
-        binormals[_i257] = binormals[_i257 - 1].clone();
-        vec.crossVectors(tangents[_i257 - 1], tangents[_i257]);
+      for (var _i258 = 1; _i258 <= segments; _i258++) {
+        normals[_i258] = normals[_i258 - 1].clone();
+        binormals[_i258] = binormals[_i258 - 1].clone();
+        vec.crossVectors(tangents[_i258 - 1], tangents[_i258]);
 
         if (vec.length() > Number.EPSILON) {
           vec.normalize();
-          var theta = Math.acos(MathUtils.clamp(tangents[_i257 - 1].dot(tangents[_i257]), -1, 1));
+          var theta = Math.acos(MathUtils.clamp(tangents[_i258 - 1].dot(tangents[_i258]), -1, 1));
 
-          normals[_i257].applyMatrix4(mat.makeRotationAxis(vec, theta));
+          normals[_i258].applyMatrix4(mat.makeRotationAxis(vec, theta));
         }
 
-        binormals[_i257].crossVectors(tangents[_i257], normals[_i257]);
+        binormals[_i258].crossVectors(tangents[_i258], normals[_i258]);
       }
 
       if (closed === true) {
@@ -24697,10 +24734,10 @@
           _theta = -_theta;
         }
 
-        for (var _i258 = 1; _i258 <= segments; _i258++) {
-          normals[_i258].applyMatrix4(mat.makeRotationAxis(tangents[_i258], _theta * _i258));
+        for (var _i259 = 1; _i259 <= segments; _i259++) {
+          normals[_i259].applyMatrix4(mat.makeRotationAxis(tangents[_i259], _theta * _i259));
 
-          binormals[_i258].crossVectors(tangents[_i258], normals[_i258]);
+          binormals[_i259].crossVectors(tangents[_i259], normals[_i259]);
         }
       }
 
@@ -24955,8 +24992,8 @@
     Curve.prototype.copy.call(this, source);
     this.points = [];
 
-    for (var _i259 = 0, l = source.points.length; _i259 < l; _i259++) {
-      var point = source.points[_i259];
+    for (var _i260 = 0, l = source.points.length; _i260 < l; _i260++) {
+      var point = source.points[_i260];
       this.points.push(point.clone());
     }
 
@@ -24970,8 +25007,8 @@
     var data = Curve.prototype.toJSON.call(this);
     data.points = [];
 
-    for (var _i260 = 0, l = this.points.length; _i260 < l; _i260++) {
-      var point = this.points[_i260];
+    for (var _i261 = 0, l = this.points.length; _i261 < l; _i261++) {
+      var point = this.points[_i261];
       data.points.push(point.toArray());
     }
 
@@ -24985,8 +25022,8 @@
     Curve.prototype.fromJSON.call(this, json);
     this.points = [];
 
-    for (var _i261 = 0, l = json.points.length; _i261 < l; _i261++) {
-      var point = json.points[_i261];
+    for (var _i262 = 0, l = json.points.length; _i262 < l; _i262++) {
+      var point = json.points[_i262];
       this.points.push(new Vector3().fromArray(point));
     }
 
@@ -25365,8 +25402,8 @@
     Curve.prototype.copy.call(this, source);
     this.points = [];
 
-    for (var _i262 = 0, l = source.points.length; _i262 < l; _i262++) {
-      var point = source.points[_i262];
+    for (var _i263 = 0, l = source.points.length; _i263 < l; _i263++) {
+      var point = source.points[_i263];
       this.points.push(point.clone());
     }
 
@@ -25377,8 +25414,8 @@
     var data = Curve.prototype.toJSON.call(this);
     data.points = [];
 
-    for (var _i263 = 0, l = this.points.length; _i263 < l; _i263++) {
-      var point = this.points[_i263];
+    for (var _i264 = 0, l = this.points.length; _i264 < l; _i264++) {
+      var point = this.points[_i264];
       data.points.push(point.toArray());
     }
 
@@ -25389,8 +25426,8 @@
     Curve.prototype.fromJSON.call(this, json);
     this.points = [];
 
-    for (var _i264 = 0, l = json.points.length; _i264 < l; _i264++) {
-      var point = json.points[_i264];
+    for (var _i265 = 0, l = json.points.length; _i265 < l; _i265++) {
+      var point = json.points[_i265];
       this.points.push(new Vector2().fromArray(point));
     }
 
@@ -25467,8 +25504,8 @@
       var lengths = [];
       var sums = 0;
 
-      for (var _i265 = 0, l = this.curves.length; _i265 < l; _i265++) {
-        sums += this.curves[_i265].getLength();
+      for (var _i266 = 0, l = this.curves.length; _i266 < l; _i266++) {
+        sums += this.curves[_i266].getLength();
         lengths.push(sums);
       }
 
@@ -25479,8 +25516,8 @@
       if (divisions === undefined) divisions = 40;
       var points = [];
 
-      for (var _i266 = 0; _i266 <= divisions; _i266++) {
-        points.push(this.getPoint(_i266 / divisions));
+      for (var _i267 = 0; _i267 <= divisions; _i267++) {
+        points.push(this.getPoint(_i267 / divisions));
       }
 
       if (this.autoClose) {
@@ -25494,8 +25531,8 @@
       var points = [];
       var last;
 
-      for (var _i267 = 0, curves = this.curves; _i267 < curves.length; _i267++) {
-        var curve = curves[_i267];
+      for (var _i268 = 0, curves = this.curves; _i268 < curves.length; _i268++) {
+        var curve = curves[_i268];
         var resolution = curve && curve.isEllipseCurve ? divisions * 2 : curve && (curve.isLineCurve || curve.isLineCurve3) ? 1 : curve && curve.isSplineCurve ? divisions * curve.points.length : divisions;
         var pts = curve.getPoints(resolution);
 
@@ -25517,8 +25554,8 @@
       Curve.prototype.copy.call(this, source);
       this.curves = [];
 
-      for (var _i268 = 0, l = source.curves.length; _i268 < l; _i268++) {
-        var curve = source.curves[_i268];
+      for (var _i269 = 0, l = source.curves.length; _i269 < l; _i269++) {
+        var curve = source.curves[_i269];
         this.curves.push(curve.clone());
       }
 
@@ -25530,8 +25567,8 @@
       data.autoClose = this.autoClose;
       data.curves = [];
 
-      for (var _i269 = 0, l = this.curves.length; _i269 < l; _i269++) {
-        var curve = this.curves[_i269];
+      for (var _i270 = 0, l = this.curves.length; _i270 < l; _i270++) {
+        var curve = this.curves[_i270];
         data.curves.push(curve.toJSON());
       }
 
@@ -25542,8 +25579,8 @@
       this.autoClose = json.autoClose;
       this.curves = [];
 
-      for (var _i270 = 0, l = json.curves.length; _i270 < l; _i270++) {
-        var curve = json.curves[_i270];
+      for (var _i271 = 0, l = json.curves.length; _i271 < l; _i271++) {
+        var curve = json.curves[_i271];
         this.curves.push(new Curves[curve.type]().fromJSON(curve));
       }
 
@@ -25566,8 +25603,8 @@
     setFromPoints: function setFromPoints(points) {
       this.moveTo(points[0].x, points[0].y);
 
-      for (var _i271 = 1, l = points.length; _i271 < l; _i271++) {
-        this.lineTo(points[_i271].x, points[_i271].y);
+      for (var _i272 = 1, l = points.length; _i272 < l; _i272++) {
+        this.lineTo(points[_i272].x, points[_i272].y);
       }
 
       return this;
@@ -25662,8 +25699,8 @@
     getPointsHoles: function getPointsHoles(divisions) {
       var holesPts = [];
 
-      for (var _i272 = 0, l = this.holes.length; _i272 < l; _i272++) {
-        holesPts[_i272] = this.holes[_i272].getPoints(divisions);
+      for (var _i273 = 0, l = this.holes.length; _i273 < l; _i273++) {
+        holesPts[_i273] = this.holes[_i273].getPoints(divisions);
       }
 
       return holesPts;
@@ -25678,8 +25715,8 @@
       Path.prototype.copy.call(this, source);
       this.holes = [];
 
-      for (var _i273 = 0, l = source.holes.length; _i273 < l; _i273++) {
-        var hole = source.holes[_i273];
+      for (var _i274 = 0, l = source.holes.length; _i274 < l; _i274++) {
+        var hole = source.holes[_i274];
         this.holes.push(hole.clone());
       }
 
@@ -25690,8 +25727,8 @@
       data.uuid = this.uuid;
       data.holes = [];
 
-      for (var _i274 = 0, l = this.holes.length; _i274 < l; _i274++) {
-        var hole = this.holes[_i274];
+      for (var _i275 = 0, l = this.holes.length; _i275 < l; _i275++) {
+        var hole = this.holes[_i275];
         data.holes.push(hole.toJSON());
       }
 
@@ -25702,8 +25739,8 @@
       this.uuid = json.uuid;
       this.holes = [];
 
-      for (var _i275 = 0, l = json.holes.length; _i275 < l; _i275++) {
-        var hole = json.holes[_i275];
+      for (var _i276 = 0, l = json.holes.length; _i276 < l; _i276++) {
+        var hole = json.holes[_i276];
         this.holes.push(new Path().fromJSON(hole));
       }
 
@@ -26124,7 +26161,7 @@
       });
       this.coefficients = [];
 
-      for (var _i276 = 0; _i276 < 9; _i276++) {
+      for (var _i277 = 0; _i277 < 9; _i277++) {
         this.coefficients.push(new Vector3());
       }
     }
@@ -26132,8 +26169,8 @@
     _createClass(SphericalHarmonics3, [{
       key: "set",
       value: function set(coefficients) {
-        for (var _i277 = 0; _i277 < 9; _i277++) {
-          this.coefficients[_i277].copy(coefficients[_i277]);
+        for (var _i278 = 0; _i278 < 9; _i278++) {
+          this.coefficients[_i278].copy(coefficients[_i278]);
         }
 
         return this;
@@ -26141,8 +26178,8 @@
     }, {
       key: "zero",
       value: function zero() {
-        for (var _i278 = 0; _i278 < 9; _i278++) {
-          this.coefficients[_i278].set(0, 0, 0);
+        for (var _i279 = 0; _i279 < 9; _i279++) {
+          this.coefficients[_i279].set(0, 0, 0);
         }
 
         return this;
@@ -26186,8 +26223,8 @@
     }, {
       key: "add",
       value: function add(sh) {
-        for (var _i279 = 0; _i279 < 9; _i279++) {
-          this.coefficients[_i279].add(sh.coefficients[_i279]);
+        for (var _i280 = 0; _i280 < 9; _i280++) {
+          this.coefficients[_i280].add(sh.coefficients[_i280]);
         }
 
         return this;
@@ -26195,8 +26232,8 @@
     }, {
       key: "addScaledSH",
       value: function addScaledSH(sh, s) {
-        for (var _i280 = 0; _i280 < 9; _i280++) {
-          this.coefficients[_i280].addScaledVector(sh.coefficients[_i280], s);
+        for (var _i281 = 0; _i281 < 9; _i281++) {
+          this.coefficients[_i281].addScaledVector(sh.coefficients[_i281], s);
         }
 
         return this;
@@ -26204,8 +26241,8 @@
     }, {
       key: "scale",
       value: function scale(s) {
-        for (var _i281 = 0; _i281 < 9; _i281++) {
-          this.coefficients[_i281].multiplyScalar(s);
+        for (var _i282 = 0; _i282 < 9; _i282++) {
+          this.coefficients[_i282].multiplyScalar(s);
         }
 
         return this;
@@ -26213,8 +26250,8 @@
     }, {
       key: "lerp",
       value: function lerp(sh, alpha) {
-        for (var _i282 = 0; _i282 < 9; _i282++) {
-          this.coefficients[_i282].lerp(sh.coefficients[_i282], alpha);
+        for (var _i283 = 0; _i283 < 9; _i283++) {
+          this.coefficients[_i283].lerp(sh.coefficients[_i283], alpha);
         }
 
         return this;
@@ -26222,8 +26259,8 @@
     }, {
       key: "equals",
       value: function equals(sh) {
-        for (var _i283 = 0; _i283 < 9; _i283++) {
-          if (!this.coefficients[_i283].equals(sh.coefficients[_i283])) {
+        for (var _i284 = 0; _i284 < 9; _i284++) {
+          if (!this.coefficients[_i284].equals(sh.coefficients[_i284])) {
             return false;
           }
         }
@@ -26242,25 +26279,25 @@
       }
     }, {
       key: "fromArray",
-      value: function fromArray(array, offset) {
-        if (offset === undefined) offset = 0;
+      value: function fromArray(array) {
+        var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
         var coefficients = this.coefficients;
 
-        for (var _i284 = 0; _i284 < 9; _i284++) {
-          coefficients[_i284].fromArray(array, offset + _i284 * 3);
+        for (var _i285 = 0; _i285 < 9; _i285++) {
+          coefficients[_i285].fromArray(array, offset + _i285 * 3);
         }
 
         return this;
       }
     }, {
       key: "toArray",
-      value: function toArray(array, offset) {
-        if (array === undefined) array = [];
-        if (offset === undefined) offset = 0;
+      value: function toArray() {
+        var array = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+        var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
         var coefficients = this.coefficients;
 
-        for (var _i285 = 0; _i285 < 9; _i285++) {
-          coefficients[_i285].toArray(array, offset + _i285 * 3);
+        for (var _i286 = 0; _i286 < 9; _i286++) {
+          coefficients[_i286].toArray(array, offset + _i286 * 3);
         }
 
         return array;
@@ -26353,12 +26390,12 @@
       var material = new Materials[json.type]();
       if (json.uuid !== undefined) material.uuid = json.uuid;
       if (json.name !== undefined) material.name = json.name;
-      if (json.color !== undefined) material.color.setHex(json.color);
+      if (json.color !== undefined && material.color !== undefined) material.color.setHex(json.color);
       if (json.roughness !== undefined) material.roughness = json.roughness;
       if (json.metalness !== undefined) material.metalness = json.metalness;
       if (json.sheen !== undefined) material.sheen = new Color().setHex(json.sheen);
-      if (json.emissive !== undefined) material.emissive.setHex(json.emissive);
-      if (json.specular !== undefined) material.specular.setHex(json.specular);
+      if (json.emissive !== undefined && material.emissive !== undefined) material.emissive.setHex(json.emissive);
+      if (json.specular !== undefined && material.specular !== undefined) material.specular.setHex(json.specular);
       if (json.shininess !== undefined) material.shininess = json.shininess;
       if (json.clearcoat !== undefined) material.clearcoat = json.clearcoat;
       if (json.clearcoatRoughness !== undefined) material.clearcoatRoughness = json.clearcoatRoughness;
@@ -26519,8 +26556,8 @@
 
       var s = '';
 
-      for (var _i286 = 0, il = array.length; _i286 < il; _i286++) {
-        s += String.fromCharCode(array[_i286]);
+      for (var _i287 = 0, il = array.length; _i287 < il; _i287++) {
+        s += String.fromCharCode(array[_i287]);
       }
 
       try {
@@ -26674,8 +26711,8 @@
           var attributeArray = morphAttributes[_key4];
           var array = [];
 
-          for (var _i287 = 0, il = attributeArray.length; _i287 < il; _i287++) {
-            var _attribute9 = attributeArray[_i287];
+          for (var _i288 = 0, il = attributeArray.length; _i288 < il; _i288++) {
+            var _attribute9 = attributeArray[_i288];
 
             var _bufferAttribute = void 0;
 
@@ -26706,8 +26743,8 @@
       var groups = json.data.groups || json.data.drawcalls || json.data.offsets;
 
       if (groups !== undefined) {
-        for (var _i288 = 0, n = groups.length; _i288 !== n; ++_i288) {
-          var group = groups[_i288];
+        for (var _i289 = 0, n = groups.length; _i289 !== n; ++_i289) {
+          var group = groups[_i289];
           geometry.addGroup(group.start, group.count, group.materialIndex);
         }
       }
@@ -26832,8 +26869,8 @@
       function toShapesNoHoles(inSubpaths) {
         var shapes = [];
 
-        for (var _i289 = 0, l = inSubpaths.length; _i289 < l; _i289++) {
-          var _tmpPath = inSubpaths[_i289];
+        for (var _i290 = 0, l = inSubpaths.length; _i290 < l; _i290++) {
+          var _tmpPath = inSubpaths[_i290];
 
           var _tmpShape = new Shape();
 
@@ -26906,8 +26943,8 @@
       newShapes[mainIdx] = undefined;
       newShapeHoles[mainIdx] = [];
 
-      for (var _i290 = 0, l = subPaths.length; _i290 < l; _i290++) {
-        tmpPath = subPaths[_i290];
+      for (var _i291 = 0, l = subPaths.length; _i291 < l; _i291++) {
+        tmpPath = subPaths[_i291];
         tmpPoints = tmpPath.getPoints();
         solid = isClockWise(tmpPoints);
         solid = isCCW ? !solid : solid;
@@ -26976,10 +27013,10 @@
 
       var tmpHoles;
 
-      for (var _i291 = 0, il = newShapes.length; _i291 < il; _i291++) {
-        tmpShape = newShapes[_i291].s;
+      for (var _i292 = 0, il = newShapes.length; _i292 < il; _i292++) {
+        tmpShape = newShapes[_i292].s;
         shapes.push(tmpShape);
-        tmpHoles = newShapeHoles[_i291];
+        tmpHoles = newShapeHoles[_i292];
 
         for (var j = 0, jl = tmpHoles.length; j < jl; j++) {
           tmpShape.holes.push(tmpHoles[j].h);
@@ -27018,8 +27055,8 @@
     var offsetX = 0,
         offsetY = 0;
 
-    for (var _i292 = 0; _i292 < chars.length; _i292++) {
-      var _char = chars[_i292];
+    for (var _i293 = 0; _i293 < chars.length; _i293++) {
+      var _char = chars[_i293];
 
       if (_char === '\n') {
         offsetX = 0;
@@ -27048,37 +27085,37 @@
     if (glyph.o) {
       var outline = glyph._cachedOutline || (glyph._cachedOutline = glyph.o.split(' '));
 
-      for (var _i293 = 0, l = outline.length; _i293 < l;) {
-        var action = outline[_i293++];
+      for (var _i294 = 0, l = outline.length; _i294 < l;) {
+        var action = outline[_i294++];
 
         switch (action) {
           case 'm':
-            x = outline[_i293++] * scale + offsetX;
-            y = outline[_i293++] * scale + offsetY;
+            x = outline[_i294++] * scale + offsetX;
+            y = outline[_i294++] * scale + offsetY;
             path.moveTo(x, y);
             break;
 
           case 'l':
-            x = outline[_i293++] * scale + offsetX;
-            y = outline[_i293++] * scale + offsetY;
+            x = outline[_i294++] * scale + offsetX;
+            y = outline[_i294++] * scale + offsetY;
             path.lineTo(x, y);
             break;
 
           case 'q':
-            cpx = outline[_i293++] * scale + offsetX;
-            cpy = outline[_i293++] * scale + offsetY;
-            cpx1 = outline[_i293++] * scale + offsetX;
-            cpy1 = outline[_i293++] * scale + offsetY;
+            cpx = outline[_i294++] * scale + offsetX;
+            cpy = outline[_i294++] * scale + offsetY;
+            cpx1 = outline[_i294++] * scale + offsetX;
+            cpy1 = outline[_i294++] * scale + offsetY;
             path.quadraticCurveTo(cpx1, cpy1, cpx, cpy);
             break;
 
           case 'b':
-            cpx = outline[_i293++] * scale + offsetX;
-            cpy = outline[_i293++] * scale + offsetY;
-            cpx1 = outline[_i293++] * scale + offsetX;
-            cpy1 = outline[_i293++] * scale + offsetY;
-            cpx2 = outline[_i293++] * scale + offsetX;
-            cpy2 = outline[_i293++] * scale + offsetY;
+            cpx = outline[_i294++] * scale + offsetX;
+            cpy = outline[_i294++] * scale + offsetY;
+            cpx1 = outline[_i294++] * scale + offsetX;
+            cpy1 = outline[_i294++] * scale + offsetY;
+            cpx2 = outline[_i294++] * scale + offsetX;
+            cpy2 = outline[_i294++] * scale + offsetY;
             path.bezierCurveTo(cpx1, cpy1, cpx2, cpy2, cpx, cpy);
             break;
         }
@@ -27425,8 +27462,8 @@
         if (this.filters.length > 0) {
           this.source.connect(this.filters[0]);
 
-          for (var _i294 = 1, l = this.filters.length; _i294 < l; _i294++) {
-            this.filters[_i294 - 1].connect(this.filters[_i294]);
+          for (var _i295 = 1, l = this.filters.length; _i295 < l; _i295++) {
+            this.filters[_i295 - 1].connect(this.filters[_i295]);
           }
 
           this.filters[this.filters.length - 1].connect(this.getOutput());
@@ -27443,8 +27480,8 @@
         if (this.filters.length > 0) {
           this.source.disconnect(this.filters[0]);
 
-          for (var _i295 = 1, l = this.filters.length; _i295 < l; _i295++) {
-            this.filters[_i295 - 1].disconnect(this.filters[_i295]);
+          for (var _i296 = 1, l = this.filters.length; _i296 < l; _i296++) {
+            this.filters[_i296 - 1].disconnect(this.filters[_i296]);
           }
 
           this.filters[this.filters.length - 1].disconnect(this.getOutput());
@@ -27467,10 +27504,10 @@
 
         if (this._connected === true) {
           this.disconnect();
-          this.filters = value;
+          this.filters = value.slice();
           this.connect();
         } else {
-          this.filters = value;
+          this.filters = value.slice();
         }
 
         return this;
@@ -27630,8 +27667,8 @@
       var currentWeight = this.cumulativeWeight;
 
       if (currentWeight === 0) {
-        for (var _i296 = 0; _i296 !== stride; ++_i296) {
-          buffer[offset + _i296] = buffer[_i296];
+        for (var _i297 = 0; _i297 !== stride; ++_i297) {
+          buffer[offset + _i297] = buffer[_i297];
         }
 
         currentWeight = weight;
@@ -27677,8 +27714,8 @@
         this._mixBufferRegionAdditive(buffer, offset, this._addIndex * stride, 1, stride);
       }
 
-      for (var _i297 = stride, e = stride + stride; _i297 !== e; ++_i297) {
-        if (buffer[_i297] !== buffer[_i297 + stride]) {
+      for (var _i298 = stride, e = stride + stride; _i298 !== e; ++_i298) {
+        if (buffer[_i298] !== buffer[_i298 + stride]) {
           binding.setValue(buffer, offset);
           break;
         }
@@ -27691,8 +27728,8 @@
           originalValueOffset = stride * this._origIndex;
       binding.getValue(buffer, originalValueOffset);
 
-      for (var _i298 = stride, e = originalValueOffset; _i298 !== e; ++_i298) {
-        buffer[_i298] = buffer[originalValueOffset + _i298 % stride];
+      for (var _i299 = stride, e = originalValueOffset; _i299 !== e; ++_i299) {
+        buffer[_i299] = buffer[originalValueOffset + _i299 % stride];
       }
 
       this._setIdentity();
@@ -27708,8 +27745,8 @@
       var startIndex = this._addIndex * this.valueSize;
       var endIndex = startIndex + this.valueSize;
 
-      for (var _i299 = startIndex; _i299 < endIndex; _i299++) {
-        this.buffer[_i299] = 0;
+      for (var _i300 = startIndex; _i300 < endIndex; _i300++) {
+        this.buffer[_i300] = 0;
       }
     },
     _setAdditiveIdentityQuaternion: function _setAdditiveIdentityQuaternion() {
@@ -27721,14 +27758,14 @@
       var startIndex = this._origIndex * this.valueSize;
       var targetIndex = this._addIndex * this.valueSize;
 
-      for (var _i300 = 0; _i300 < this.valueSize; _i300++) {
-        this.buffer[targetIndex + _i300] = this.buffer[startIndex + _i300];
+      for (var _i301 = 0; _i301 < this.valueSize; _i301++) {
+        this.buffer[targetIndex + _i301] = this.buffer[startIndex + _i301];
       }
     },
     _select: function _select(buffer, dstOffset, srcOffset, t, stride) {
       if (t >= 0.5) {
-        for (var _i301 = 0; _i301 !== stride; ++_i301) {
-          buffer[dstOffset + _i301] = buffer[srcOffset + _i301];
+        for (var _i302 = 0; _i302 !== stride; ++_i302) {
+          buffer[dstOffset + _i302] = buffer[srcOffset + _i302];
         }
       }
     },
@@ -27743,15 +27780,15 @@
     _lerp: function _lerp(buffer, dstOffset, srcOffset, t, stride) {
       var s = 1 - t;
 
-      for (var _i302 = 0; _i302 !== stride; ++_i302) {
-        var j = dstOffset + _i302;
-        buffer[j] = buffer[j] * s + buffer[srcOffset + _i302] * t;
+      for (var _i303 = 0; _i303 !== stride; ++_i303) {
+        var j = dstOffset + _i303;
+        buffer[j] = buffer[j] * s + buffer[srcOffset + _i303] * t;
       }
     },
     _lerpAdditive: function _lerpAdditive(buffer, dstOffset, srcOffset, t, stride) {
-      for (var _i303 = 0; _i303 !== stride; ++_i303) {
-        var j = dstOffset + _i303;
-        buffer[j] = buffer[j] + buffer[srcOffset + _i303] * t;
+      for (var _i304 = 0; _i304 !== stride; ++_i304) {
+        var j = dstOffset + _i304;
+        buffer[j] = buffer[j] + buffer[srcOffset + _i304] * t;
       }
     }
   });
@@ -27791,22 +27828,22 @@
     setValue: function setValue(array, offset) {
       var bindings = this._bindings;
 
-      for (var _i304 = this._targetGroup.nCachedObjects_, n = bindings.length; _i304 !== n; ++_i304) {
-        bindings[_i304].setValue(array, offset);
+      for (var _i305 = this._targetGroup.nCachedObjects_, n = bindings.length; _i305 !== n; ++_i305) {
+        bindings[_i305].setValue(array, offset);
       }
     },
     bind: function bind() {
       var bindings = this._bindings;
 
-      for (var _i305 = this._targetGroup.nCachedObjects_, n = bindings.length; _i305 !== n; ++_i305) {
-        bindings[_i305].bind();
+      for (var _i306 = this._targetGroup.nCachedObjects_, n = bindings.length; _i306 !== n; ++_i306) {
+        bindings[_i306].bind();
       }
     },
     unbind: function unbind() {
       var bindings = this._bindings;
 
-      for (var _i306 = this._targetGroup.nCachedObjects_, n = bindings.length; _i306 !== n; ++_i306) {
-        bindings[_i306].unbind();
+      for (var _i307 = this._targetGroup.nCachedObjects_, n = bindings.length; _i307 !== n; ++_i307) {
+        bindings[_i307].unbind();
       }
     }
   });
@@ -27876,8 +27913,8 @@
 
       if (root.children) {
         var searchNodeSubtree = function searchNodeSubtree(children) {
-          for (var _i307 = 0; _i307 < children.length; _i307++) {
-            var childNode = children[_i307];
+          for (var _i308 = 0; _i308 < children.length; _i308++) {
+            var childNode = children[_i308];
 
             if (childNode.name === nodeName || childNode.uuid === nodeName) {
               return childNode;
@@ -27920,8 +27957,8 @@
     }, function getValue_array(buffer, offset) {
       var source = this.resolvedProperty;
 
-      for (var _i308 = 0, n = source.length; _i308 !== n; ++_i308) {
-        buffer[offset++] = source[_i308];
+      for (var _i309 = 0, n = source.length; _i309 !== n; ++_i309) {
+        buffer[offset++] = source[_i309];
       }
     }, function getValue_arrayElement(buffer, offset) {
       buffer[offset] = this.resolvedProperty[this.propertyIndex];
@@ -27939,22 +27976,22 @@
     }], [function setValue_array(buffer, offset) {
       var dest = this.resolvedProperty;
 
-      for (var _i309 = 0, n = dest.length; _i309 !== n; ++_i309) {
-        dest[_i309] = buffer[offset++];
+      for (var _i310 = 0, n = dest.length; _i310 !== n; ++_i310) {
+        dest[_i310] = buffer[offset++];
       }
     }, function setValue_array_setNeedsUpdate(buffer, offset) {
       var dest = this.resolvedProperty;
 
-      for (var _i310 = 0, n = dest.length; _i310 !== n; ++_i310) {
-        dest[_i310] = buffer[offset++];
+      for (var _i311 = 0, n = dest.length; _i311 !== n; ++_i311) {
+        dest[_i311] = buffer[offset++];
       }
 
       this.targetObject.needsUpdate = true;
     }, function setValue_array_setMatrixWorldNeedsUpdate(buffer, offset) {
       var dest = this.resolvedProperty;
 
-      for (var _i311 = 0, n = dest.length; _i311 !== n; ++_i311) {
-        dest[_i311] = buffer[offset++];
+      for (var _i312 = 0, n = dest.length; _i312 !== n; ++_i312) {
+        dest[_i312] = buffer[offset++];
       }
 
       this.targetObject.matrixWorldNeedsUpdate = true;
@@ -28029,9 +28066,9 @@
 
             targetObject = targetObject.skeleton.bones;
 
-            for (var _i312 = 0; _i312 < targetObject.length; _i312++) {
-              if (targetObject[_i312].name === objectIndex) {
-                objectIndex = _i312;
+            for (var _i313 = 0; _i313 < targetObject.length; _i313++) {
+              if (targetObject[_i313].name === objectIndex) {
+                objectIndex = _i313;
                 break;
               }
             }
@@ -28132,8 +28169,8 @@
     var indices = {};
     this._indicesByUUID = indices;
 
-    for (var _i313 = 0, n = arguments.length; _i313 !== n; ++_i313) {
-      indices[arguments[_i313].uuid] = _i313;
+    for (var _i314 = 0, n = arguments.length; _i314 !== n; ++_i314) {
+      indices[arguments[_i314].uuid] = _i314;
     }
 
     this._paths = [];
@@ -28173,8 +28210,8 @@
           nObjects = objects.length,
           nCachedObjects = this.nCachedObjects_;
 
-      for (var _i314 = 0, n = arguments.length; _i314 !== n; ++_i314) {
-        var object = arguments[_i314],
+      for (var _i315 = 0, n = arguments.length; _i315 !== n; ++_i315) {
+        var object = arguments[_i315],
             uuid = object.uuid;
         var _index = indicesByUUID[uuid];
 
@@ -28221,8 +28258,8 @@
           nBindings = bindings.length;
       var nCachedObjects = this.nCachedObjects_;
 
-      for (var _i315 = 0, n = arguments.length; _i315 !== n; ++_i315) {
-        var object = arguments[_i315],
+      for (var _i316 = 0, n = arguments.length; _i316 !== n; ++_i316) {
+        var object = arguments[_i316],
             uuid = object.uuid,
             _index2 = indicesByUUID[uuid];
 
@@ -28254,8 +28291,8 @@
       var nCachedObjects = this.nCachedObjects_,
           nObjects = objects.length;
 
-      for (var _i316 = 0, n = arguments.length; _i316 !== n; ++_i316) {
-        var object = arguments[_i316],
+      for (var _i317 = 0, n = arguments.length; _i317 !== n; ++_i317) {
+        var object = arguments[_i317],
             uuid = object.uuid,
             _index3 = indicesByUUID[uuid];
 
@@ -28285,7 +28322,10 @@
             var _lastIndex = --nObjects,
                 _lastObject = objects[_lastIndex];
 
-            indicesByUUID[_lastObject.uuid] = _index3;
+            if (_lastIndex > 0) {
+              indicesByUUID[_lastObject.uuid] = _index3;
+            }
+
             objects[_index3] = _lastObject;
             objects.pop();
 
@@ -28318,9 +28358,9 @@
       parsedPaths.push(parsedPath);
       bindings.push(bindingsForPath);
 
-      for (var _i317 = nCachedObjects, n = objects.length; _i317 !== n; ++_i317) {
-        var object = objects[_i317];
-        bindingsForPath[_i317] = new PropertyBinding(object, path, parsedPath);
+      for (var _i318 = nCachedObjects, n = objects.length; _i318 !== n; ++_i318) {
+        var object = objects[_i318];
+        bindingsForPath[_i318] = new PropertyBinding(object, path, parsedPath);
       }
 
       return bindingsForPath;
@@ -28363,10 +28403,10 @@
         endingEnd: ZeroCurvatureEnding
       };
 
-      for (var _i318 = 0; _i318 !== nTracks; ++_i318) {
-        var interpolant = tracks[_i318].createInterpolant(null);
+      for (var _i319 = 0; _i319 !== nTracks; ++_i319) {
+        var interpolant = tracks[_i319].createInterpolant(null);
 
-        interpolants[_i318] = interpolant;
+        interpolants[_i319] = interpolant;
         interpolant.settings = interpolantSettings;
       }
 
@@ -28853,15 +28893,15 @@
         bindingsByRoot[rootUuid] = bindingsByName;
       }
 
-      for (var _i319 = 0; _i319 !== nTracks; ++_i319) {
-        var track = tracks[_i319],
+      for (var _i320 = 0; _i320 !== nTracks; ++_i320) {
+        var track = tracks[_i320],
             trackName = track.name;
         var binding = bindingsByName[trackName];
 
         if (binding !== undefined) {
-          bindings[_i319] = binding;
+          bindings[_i320] = binding;
         } else {
-          binding = bindings[_i319];
+          binding = bindings[_i320];
 
           if (binding !== undefined) {
             if (binding._cacheIndex === null) {
@@ -28873,16 +28913,16 @@
             continue;
           }
 
-          var path = prototypeAction && prototypeAction._propertyBindings[_i319].binding.parsedPath;
+          var path = prototypeAction && prototypeAction._propertyBindings[_i320].binding.parsedPath;
           binding = new PropertyMixer(PropertyBinding.create(root, trackName, path), track.ValueTypeName, track.getValueSize());
           ++binding.referenceCount;
 
           this._addInactiveBinding(binding, rootUuid, trackName);
 
-          bindings[_i319] = binding;
+          bindings[_i320] = binding;
         }
 
-        interpolants[_i319].resultBuffer = binding.buffer;
+        interpolants[_i320].resultBuffer = binding.buffer;
       }
     },
     _activateAction: function _activateAction(action) {
@@ -28899,8 +28939,8 @@
 
         var bindings = action._propertyBindings;
 
-        for (var _i320 = 0, n = bindings.length; _i320 !== n; ++_i320) {
-          var binding = bindings[_i320];
+        for (var _i321 = 0, n = bindings.length; _i321 !== n; ++_i321) {
+          var binding = bindings[_i321];
 
           if (binding.useCount++ === 0) {
             this._lendBinding(binding);
@@ -28916,8 +28956,8 @@
       if (this._isActiveAction(action)) {
         var bindings = action._propertyBindings;
 
-        for (var _i321 = 0, n = bindings.length; _i321 !== n; ++_i321) {
-          var binding = bindings[_i321];
+        for (var _i322 = 0, n = bindings.length; _i322 !== n; ++_i322) {
+          var binding = bindings[_i322];
 
           if (--binding.useCount === 0) {
             binding.restoreOriginalState();
@@ -29029,8 +29069,8 @@
     _removeInactiveBindingsForAction: function _removeInactiveBindingsForAction(action) {
       var bindings = action._propertyBindings;
 
-      for (var _i322 = 0, n = bindings.length; _i322 !== n; ++_i322) {
-        var binding = bindings[_i322];
+      for (var _i323 = 0, n = bindings.length; _i323 !== n; ++_i323) {
+        var binding = bindings[_i323];
 
         if (--binding.referenceCount === 0) {
           this._removeInactiveBinding(binding);
@@ -29186,8 +29226,8 @@
       var actions = this._actions,
           nActions = this._nActiveActions;
 
-      for (var _i323 = nActions - 1; _i323 >= 0; --_i323) {
-        actions[_i323].stop();
+      for (var _i324 = nActions - 1; _i324 >= 0; --_i324) {
+        actions[_i324].stop();
       }
 
       return this;
@@ -29200,8 +29240,8 @@
           timeDirection = Math.sign(deltaTime),
           accuIndex = this._accuIndex ^= 1;
 
-      for (var _i324 = 0; _i324 !== nActions; ++_i324) {
-        var action = actions[_i324];
+      for (var _i325 = 0; _i325 !== nActions; ++_i325) {
+        var action = actions[_i325];
 
         action._update(time, deltaTime, timeDirection, accuIndex);
       }
@@ -29209,8 +29249,8 @@
       var bindings = this._bindings,
           nBindings = this._nActiveBindings;
 
-      for (var _i325 = 0; _i325 !== nBindings; ++_i325) {
-        bindings[_i325].apply(accuIndex);
+      for (var _i326 = 0; _i326 !== nBindings; ++_i326) {
+        bindings[_i326].apply(accuIndex);
       }
 
       return this;
@@ -29218,8 +29258,8 @@
     setTime: function setTime(timeInSeconds) {
       this.time = 0;
 
-      for (var _i326 = 0; _i326 < this._actions.length; _i326++) {
-        this._actions[_i326].time = 0;
+      for (var _i327 = 0; _i327 < this._actions.length; _i327++) {
+        this._actions[_i327].time = 0;
       }
 
       return this.update(timeInSeconds);
@@ -29236,8 +29276,8 @@
       if (actionsForClip !== undefined) {
         var actionsToRemove = actionsForClip.knownActions;
 
-        for (var _i327 = 0, n = actionsToRemove.length; _i327 !== n; ++_i327) {
-          var action = actionsToRemove[_i327];
+        for (var _i328 = 0, n = actionsToRemove.length; _i328 !== n; ++_i328) {
+          var action = actionsToRemove[_i328];
 
           this._deactivateAction(action);
 
@@ -29415,8 +29455,8 @@
     if (recursive === true) {
       var children = object.children;
 
-      for (var _i328 = 0, l = children.length; _i328 < l; _i328++) {
-        _intersectObject(children[_i328], raycaster, intersects, true);
+      for (var _i329 = 0, l = children.length; _i329 < l; _i329++) {
+        _intersectObject(children[_i329], raycaster, intersects, true);
       }
     }
   }
@@ -29454,8 +29494,8 @@
         return intersects;
       }
 
-      for (var _i329 = 0, l = objects.length; _i329 < l; _i329++) {
-        _intersectObject(objects[_i329], this, intersects, recursive);
+      for (var _i330 = 0, l = objects.length; _i330 < l; _i330++) {
+        _intersectObject(objects[_i330], this, intersects, recursive);
       }
 
       intersects.sort(ascSort);
@@ -29555,8 +29595,8 @@
       value: function setFromPoints(points) {
         this.makeEmpty();
 
-        for (var _i330 = 0, il = points.length; _i330 < il; _i330++) {
-          this.expandByPoint(points[_i330]);
+        for (var _i331 = 0, il = points.length; _i331 < il; _i331++) {
+          this.expandByPoint(points[_i331]);
         }
 
         return this;
@@ -29860,8 +29900,8 @@
     if (points !== undefined) {
       var position = geometry.getAttribute('position');
 
-      for (var _i331 = 0, l = points.length; _i331 < l; _i331++) {
-        position.setXYZ(points[_i331], _vector$b.x, _vector$b.y, _vector$b.z);
+      for (var _i332 = 0, l = points.length; _i332 < l; _i332++) {
+        position.setXYZ(points[_i332], _vector$b.x, _vector$b.y, _vector$b.z);
       }
     }
   }
@@ -29889,8 +29929,8 @@
       console.warn('THREE.CurvePath: .createGeometry() has been removed. Use new THREE.Geometry().setFromPoints( points ) instead.');
       var geometry = new Geometry();
 
-      for (var _i332 = 0, l = points.length; _i332 < l; _i332++) {
-        var point = points[_i332];
+      for (var _i333 = 0, l = points.length; _i333 < l; _i333++) {
+        var point = points[_i333];
         geometry.vertices.push(new Vector3(point.x, point.y, point.z || 0));
       }
 
@@ -30964,6 +31004,11 @@
   CubeCamera.prototype.updateCubeMap = function (renderer, scene) {
     console.warn('THREE.CubeCamera: .updateCubeMap() is now .update().');
     return this.update(renderer, scene);
+  };
+
+  CubeCamera.prototype.clear = function (renderer, color, depth, stencil) {
+    console.warn('THREE.CubeCamera: .clear() is now .renderTarget.clear().');
+    return this.renderTarget.clear(renderer, color, depth, stencil);
   };
 
   ImageUtils.crossOrigin = undefined;
@@ -33855,7 +33900,7 @@
 
   var GUI$1 = GUI;
   /**
-   * three-demo v4.0.3 build Wed Sep 30 2020
+   * three-demo v4.0.4 build Sat Oct 31 2020
    * https://github.com/vanruesc/three-demo
    * Copyright 2020 Raoul van Rüschen
    * @license Zlib
@@ -34202,14 +34247,14 @@
         var i64 = 0,
             i16 = 0;
 
-        for (var _i333 = 0; _i333 < 80; ++_i333) {
-          var theta = _i333 * GOLDEN_ANGLE;
-          var r = Math.sqrt(_i333) / Math.sqrt(80);
+        for (var _i334 = 0; _i334 < 80; ++_i334) {
+          var theta = _i334 * GOLDEN_ANGLE;
+          var r = Math.sqrt(_i334) / Math.sqrt(80);
 
           var u = r * Math.cos(theta),
               _v13 = r * Math.sin(theta);
 
-          if (_i333 % 5 === 0) {
+          if (_i334 % 5 === 0) {
             points16[i16++] = u;
             points16[i16++] = _v13;
           } else {
@@ -34221,12 +34266,12 @@
         var kernel64 = [];
         var kernel16 = [];
 
-        for (var _i334 = 0; _i334 < 128;) {
-          kernel64.push(new Vector4(points64[_i334++], points64[_i334++], points64[_i334++], points64[_i334++]));
+        for (var _i335 = 0; _i335 < 128;) {
+          kernel64.push(new Vector4(points64[_i335++], points64[_i335++], points64[_i335++], points64[_i335++]));
         }
 
-        for (var _i335 = 0; _i335 < 32;) {
-          kernel16.push(new Vector4(points16[_i335++], points16[_i335++], points16[_i335++], points16[_i335++]));
+        for (var _i336 = 0; _i336 < 32;) {
+          kernel16.push(new Vector4(points16[_i336++], points16[_i336++], points16[_i336++], points16[_i336++]));
         }
 
         this.uniforms.kernel64.value = kernel64;
@@ -34310,9 +34355,9 @@
     return CircleOfConfusionMaterial;
   }(ShaderMaterial);
 
-  var fragmentShaderColor = "uniform sampler2D inputBuffer;varying vec2 vUv;varying vec2 vUv0;varying vec2 vUv1;varying vec2 vUv2;varying vec2 vUv3;varying vec2 vUv4;varying vec2 vUv5;void main(){const vec2 threshold=vec2(EDGE_THRESHOLD);vec4 delta;vec3 c=texture2D(inputBuffer,vUv).rgb;vec3 cLeft=texture2D(inputBuffer,vUv0).rgb;vec3 t=abs(c-cLeft);delta.x=max(max(t.r,t.g),t.b);vec3 cTop=texture2D(inputBuffer,vUv1).rgb;t=abs(c-cTop);delta.y=max(max(t.r,t.g),t.b);vec2 edges=step(threshold,delta.xy);if(dot(edges,vec2(1.0))==0.0){discard;}vec3 cRight=texture2D(inputBuffer,vUv2).rgb;t=abs(c-cRight);delta.z=max(max(t.r,t.g),t.b);vec3 cBottom=texture2D(inputBuffer,vUv3).rgb;t=abs(c-cBottom);delta.w=max(max(t.r,t.g),t.b);vec2 maxDelta=max(delta.xy,delta.zw);vec3 cLeftLeft=texture2D(inputBuffer,vUv4).rgb;t=abs(c-cLeftLeft);delta.z=max(max(t.r,t.g),t.b);vec3 cTopTop=texture2D(inputBuffer,vUv5).rgb;t=abs(c-cTopTop);delta.w=max(max(t.r,t.g),t.b);maxDelta=max(maxDelta.xy,delta.zw);float finalDelta=max(maxDelta.x,maxDelta.y);edges*=step(finalDelta,LOCAL_CONTRAST_ADAPTATION_FACTOR*delta.xy);gl_FragColor=vec4(edges,0.0,1.0);}";
+  var fragmentShader$3 = "varying vec2 vUv;varying vec2 vUv0;varying vec2 vUv1;\n#if EDGE_DETECTION_MODE != 0\nvarying vec2 vUv2;varying vec2 vUv3;varying vec2 vUv4;varying vec2 vUv5;\n#endif\n#if EDGE_DETECTION_MODE == 1\n#include <common>\n#endif\n#if EDGE_DETECTION_MODE == 0 || PREDICATION_MODE == 1\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D depthBuffer;\n#else\nuniform mediump sampler2D depthBuffer;\n#endif\nfloat readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(depthBuffer,uv));\n#else\nreturn texture2D(depthBuffer,uv).r;\n#endif\n}vec3 gatherNeighbors(){float p=readDepth(vUv);float pLeft=readDepth(vUv0);float pTop=readDepth(vUv1);return vec3(p,pLeft,pTop);}\n#elif PREDICATION_MODE == 2\nuniform sampler2D predicationBuffer;vec3 gatherNeighbors(){float p=texture2D(predicationBuffer,vUv).r;float pLeft=texture2D(predicationBuffer,vUv0).r;float pTop=texture2D(predicationBuffer,vUv1).r;return vec3(p,pLeft,pTop);}\n#endif\n#if PREDICATION_MODE != 0\nvec2 calculatePredicatedThreshold(){vec3 neighbours=gatherNeighbors();vec2 delta=abs(neighbours.xx-neighbours.yz);vec2 edges=step(PREDICATION_THRESHOLD,delta);return PREDICATION_SCALE*EDGE_THRESHOLD*(1.0-PREDICATION_STRENGTH*edges);}\n#endif\n#if EDGE_DETECTION_MODE != 0\nuniform sampler2D inputBuffer;\n#endif\nvoid main(){\n#if EDGE_DETECTION_MODE == 0\nconst vec2 threshold=vec2(DEPTH_THRESHOLD);\n#elif PREDICATION_MODE != 0\nvec2 threshold=calculatePredicatedThreshold();\n#else\nconst vec2 threshold=vec2(EDGE_THRESHOLD);\n#endif\n#if EDGE_DETECTION_MODE == 0\nvec3 neighbors=gatherNeighbors();vec2 delta=abs(neighbors.xx-vec2(neighbors.y,neighbors.z));vec2 edges=step(threshold,delta);if(dot(edges,vec2(1.0))==0.0){discard;}gl_FragColor=vec4(edges,0.0,1.0);\n#elif EDGE_DETECTION_MODE == 1\nfloat l=linearToRelativeLuminance(texture2D(inputBuffer,vUv).rgb);float lLeft=linearToRelativeLuminance(texture2D(inputBuffer,vUv0).rgb);float lTop=linearToRelativeLuminance(texture2D(inputBuffer,vUv1).rgb);vec4 delta;delta.xy=abs(l-vec2(lLeft,lTop));vec2 edges=step(threshold,delta.xy);if(dot(edges,vec2(1.0))==0.0){discard;}float lRight=linearToRelativeLuminance(texture2D(inputBuffer,vUv2).rgb);float lBottom=linearToRelativeLuminance(texture2D(inputBuffer,vUv3).rgb);delta.zw=abs(l-vec2(lRight,lBottom));vec2 maxDelta=max(delta.xy,delta.zw);float lLeftLeft=linearToRelativeLuminance(texture2D(inputBuffer,vUv4).rgb);float lTopTop=linearToRelativeLuminance(texture2D(inputBuffer,vUv5).rgb);delta.zw=abs(vec2(lLeft,lTop)-vec2(lLeftLeft,lTopTop));maxDelta=max(maxDelta.xy,delta.zw);float finalDelta=max(maxDelta.x,maxDelta.y);edges.xy*=step(finalDelta,LOCAL_CONTRAST_ADAPTATION_FACTOR*delta.xy);gl_FragColor=vec4(edges,0.0,1.0);\n#elif EDGE_DETECTION_MODE == 2\nvec4 delta;vec3 c=texture2D(inputBuffer,vUv).rgb;vec3 cLeft=texture2D(inputBuffer,vUv0).rgb;vec3 t=abs(c-cLeft);delta.x=max(max(t.r,t.g),t.b);vec3 cTop=texture2D(inputBuffer,vUv1).rgb;t=abs(c-cTop);delta.y=max(max(t.r,t.g),t.b);vec2 edges=step(threshold,delta.xy);if(dot(edges,vec2(1.0))==0.0){discard;}vec3 cRight=texture2D(inputBuffer,vUv2).rgb;t=abs(c-cRight);delta.z=max(max(t.r,t.g),t.b);vec3 cBottom=texture2D(inputBuffer,vUv3).rgb;t=abs(c-cBottom);delta.w=max(max(t.r,t.g),t.b);vec2 maxDelta=max(delta.xy,delta.zw);vec3 cLeftLeft=texture2D(inputBuffer,vUv4).rgb;t=abs(c-cLeftLeft);delta.z=max(max(t.r,t.g),t.b);vec3 cTopTop=texture2D(inputBuffer,vUv5).rgb;t=abs(c-cTopTop);delta.w=max(max(t.r,t.g),t.b);maxDelta=max(maxDelta.xy,delta.zw);float finalDelta=max(maxDelta.x,maxDelta.y);edges*=step(finalDelta,LOCAL_CONTRAST_ADAPTATION_FACTOR*delta.xy);gl_FragColor=vec4(edges,0.0,1.0);\n#endif\n}";
   var vertexShader$1 = "uniform vec2 texelSize;varying vec2 vUv;varying vec2 vUv0;varying vec2 vUv1;\n#if EDGE_DETECTION_MODE != 0\nvarying vec2 vUv2;varying vec2 vUv3;varying vec2 vUv4;varying vec2 vUv5;\n#endif\nvoid main(){vUv=position.xy*0.5+0.5;vUv0=vUv+texelSize*vec2(-1.0,0.0);vUv1=vUv+texelSize*vec2(0.0,-1.0);\n#if EDGE_DETECTION_MODE != 0\nvUv2=vUv+texelSize*vec2(1.0,0.0);vUv3=vUv+texelSize*vec2(0.0,1.0);vUv4=vUv+texelSize*vec2(-2.0,0.0);vUv5=vUv+texelSize*vec2(0.0,-2.0);\n#endif\ngl_Position=vec4(position.xy,1.0,1.0);}";
-  var fragmentShader$3 = "#include <common>\n#include <dithering_pars_fragment>\nuniform sampler2D inputBuffer;varying vec2 vUv0;varying vec2 vUv1;varying vec2 vUv2;varying vec2 vUv3;void main(){vec4 sum=texture2D(inputBuffer,vUv0);sum+=texture2D(inputBuffer,vUv1);sum+=texture2D(inputBuffer,vUv2);sum+=texture2D(inputBuffer,vUv3);gl_FragColor=sum*0.25;\n#include <dithering_fragment>\n}";
+  var fragmentShader$4 = "#include <common>\n#include <dithering_pars_fragment>\nuniform sampler2D inputBuffer;varying vec2 vUv0;varying vec2 vUv1;varying vec2 vUv2;varying vec2 vUv3;void main(){vec4 sum=texture2D(inputBuffer,vUv0);sum+=texture2D(inputBuffer,vUv1);sum+=texture2D(inputBuffer,vUv2);sum+=texture2D(inputBuffer,vUv3);gl_FragColor=sum*0.25;\n#include <dithering_fragment>\n}";
   var vertexShader$2 = "uniform vec2 texelSize;uniform vec2 halfTexelSize;uniform float kernel;uniform float scale;/*Packing multiple texture coordinates into one varying and using a swizzle toextract them in the fragment shader still causes a dependent texture read.*/varying vec2 vUv0;varying vec2 vUv1;varying vec2 vUv2;varying vec2 vUv3;void main(){vec2 uv=position.xy*0.5+0.5;vec2 dUv=(texelSize*vec2(kernel)+halfTexelSize)*scale;vUv0=vec2(uv.x-dUv.x,uv.y+dUv.y);vUv1=vec2(uv.x+dUv.x,uv.y+dUv.y);vUv2=vec2(uv.x+dUv.x,uv.y-dUv.y);vUv3=vec2(uv.x-dUv.x,uv.y-dUv.y);gl_Position=vec4(position.xy,1.0,1.0);}";
 
   var ConvolutionMaterial = function (_ShaderMaterial4) {
@@ -34336,7 +34381,7 @@
           kernel: new Uniform(0.0),
           scale: new Uniform(1.0)
         },
-        fragmentShader: fragmentShader$3,
+        fragmentShader: fragmentShader$4,
         vertexShader: vertexShader$2,
         depthWrite: false,
         depthTest: false
@@ -34374,7 +34419,7 @@
     VERY_LARGE: 4,
     HUGE: 5
   };
-  var fragmentShader$4 = "uniform sampler2D inputBuffer;uniform float opacity;varying vec2 vUv;void main(){vec4 texel=texture2D(inputBuffer,vUv);gl_FragColor=opacity*texel;\n#include <encodings_fragment>\n}";
+  var fragmentShader$5 = "uniform sampler2D inputBuffer;uniform float opacity;varying vec2 vUv;void main(){vec4 texel=texture2D(inputBuffer,vUv);gl_FragColor=opacity*texel;\n#include <encodings_fragment>\n}";
 
   var CopyMaterial = function (_ShaderMaterial5) {
     _inherits(CopyMaterial, _ShaderMaterial5);
@@ -34392,7 +34437,7 @@
           inputBuffer: new Uniform(null),
           opacity: new Uniform(1.0)
         },
-        fragmentShader: fragmentShader$4,
+        fragmentShader: fragmentShader$5,
         vertexShader: vertexShader,
         depthWrite: false,
         depthTest: false
@@ -34404,7 +34449,7 @@
     return CopyMaterial;
   }(ShaderMaterial);
 
-  var fragmentShader$5 = "#include <packing>\n#include <clipping_planes_pars_fragment>\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D depthBuffer;\n#else\nuniform mediump sampler2D depthBuffer;\n#endif\nuniform float cameraNear;uniform float cameraFar;varying float vViewZ;varying vec4 vProjTexCoord;void main(){\n#include <clipping_planes_fragment>\nvec2 projTexCoord=(vProjTexCoord.xy/vProjTexCoord.w)*0.5+0.5;projTexCoord=clamp(projTexCoord,0.002,0.998);float fragCoordZ=unpackRGBAToDepth(texture2D(depthBuffer,projTexCoord));\n#ifdef PERSPECTIVE_CAMERA\nfloat viewZ=perspectiveDepthToViewZ(fragCoordZ,cameraNear,cameraFar);\n#else\nfloat viewZ=orthographicDepthToViewZ(fragCoordZ,cameraNear,cameraFar);\n#endif\nfloat depthTest=(-vViewZ>-viewZ)? 1.0 : 0.0;gl_FragColor.rg=vec2(0.0,depthTest);}";
+  var fragmentShader$6 = "#include <packing>\n#include <clipping_planes_pars_fragment>\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D depthBuffer;\n#else\nuniform mediump sampler2D depthBuffer;\n#endif\nuniform float cameraNear;uniform float cameraFar;varying float vViewZ;varying vec4 vProjTexCoord;void main(){\n#include <clipping_planes_fragment>\nvec2 projTexCoord=(vProjTexCoord.xy/vProjTexCoord.w)*0.5+0.5;projTexCoord=clamp(projTexCoord,0.002,0.998);float fragCoordZ=unpackRGBAToDepth(texture2D(depthBuffer,projTexCoord));\n#ifdef PERSPECTIVE_CAMERA\nfloat viewZ=perspectiveDepthToViewZ(fragCoordZ,cameraNear,cameraFar);\n#else\nfloat viewZ=orthographicDepthToViewZ(fragCoordZ,cameraNear,cameraFar);\n#endif\nfloat depthTest=(-vViewZ>-viewZ)? 1.0 : 0.0;gl_FragColor.rg=vec2(0.0,depthTest);}";
   var vertexShader$3 = "#include <common>\n#include <morphtarget_pars_vertex>\n#include <skinning_pars_vertex>\n#include <clipping_planes_pars_vertex>\nvarying float vViewZ;varying vec4 vProjTexCoord;void main(){\n#include <skinbase_vertex>\n#include <begin_vertex>\n#include <morphtarget_vertex>\n#include <skinning_vertex>\n#include <project_vertex>\nvViewZ=mvPosition.z;vProjTexCoord=gl_Position;\n#include <clipping_planes_vertex>\n}";
 
   var DepthComparisonMaterial = function (_ShaderMaterial6) {
@@ -34427,7 +34472,7 @@
           cameraNear: new Uniform(0.3),
           cameraFar: new Uniform(1000)
         },
-        fragmentShader: fragmentShader$5,
+        fragmentShader: fragmentShader$6,
         vertexShader: vertexShader$3,
         depthWrite: false,
         depthTest: false,
@@ -34462,7 +34507,7 @@
     return DepthComparisonMaterial;
   }(ShaderMaterial);
 
-  var fragmentShader$6 = "#include <packing>\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D depthBuffer;\n#else\nuniform mediump sampler2D depthBuffer;\n#endif\n#ifdef DOWNSAMPLE_NORMALS\nuniform sampler2D normalBuffer;\n#endif\nvarying vec2 vUv0;varying vec2 vUv1;varying vec2 vUv2;varying vec2 vUv3;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(depthBuffer,uv));\n#else\nreturn texture2D(depthBuffer,uv).r;\n#endif\n}/***Returns the index of the most representative depth in the 2x2 neighborhood.*/int findBestDepth(const in float samples[4]){float c=(samples[0]+samples[1]+samples[2]+samples[3])/4.0;float distances[4]=float[](abs(c-samples[0]),abs(c-samples[1]),abs(c-samples[2]),abs(c-samples[3]));float maxDistance=max(max(distances[0],distances[1]),max(distances[2],distances[3]));int remaining[3];int rejected[3];int i,j,k;for(i=0,j=0,k=0;i<4;++i){if(distances[i]<maxDistance){remaining[j++]=i;}else{rejected[k++]=i;}}for(;j<3;++j){remaining[j]=rejected[--k];}vec3 s=vec3(samples[remaining[0]],samples[remaining[1]],samples[remaining[2]]);c=(s.x+s.y+s.z)/3.0;distances[0]=abs(c-s.x);distances[1]=abs(c-s.y);distances[2]=abs(c-s.z);float minDistance=min(distances[0],min(distances[1],distances[2]));for(i=0;i<3;++i){if(distances[i]==minDistance){break;}}return remaining[i];}void main(){float d[4]=float[](readDepth(vUv0),readDepth(vUv1),readDepth(vUv2),readDepth(vUv3));int index=findBestDepth(d);\n#ifdef DOWNSAMPLE_NORMALS\nvec2 uvs[4]=vec2[](vUv0,vUv1,vUv2,vUv3);vec3 n=texture2D(normalBuffer,uvs[index]).rgb;\n#else\nvec3 n=vec3(0.0);\n#endif\ngl_FragColor=vec4(n,d[index]);}";
+  var fragmentShader$7 = "#include <packing>\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D depthBuffer;\n#else\nuniform mediump sampler2D depthBuffer;\n#endif\n#ifdef DOWNSAMPLE_NORMALS\nuniform sampler2D normalBuffer;\n#endif\nvarying vec2 vUv0;varying vec2 vUv1;varying vec2 vUv2;varying vec2 vUv3;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(depthBuffer,uv));\n#else\nreturn texture2D(depthBuffer,uv).r;\n#endif\n}/***Returns the index of the most representative depth in the 2x2 neighborhood.*/int findBestDepth(const in float samples[4]){float c=(samples[0]+samples[1]+samples[2]+samples[3])/4.0;float distances[4]=float[](abs(c-samples[0]),abs(c-samples[1]),abs(c-samples[2]),abs(c-samples[3]));float maxDistance=max(max(distances[0],distances[1]),max(distances[2],distances[3]));int remaining[3];int rejected[3];int i,j,k;for(i=0,j=0,k=0;i<4;++i){if(distances[i]<maxDistance){remaining[j++]=i;}else{rejected[k++]=i;}}for(;j<3;++j){remaining[j]=rejected[--k];}vec3 s=vec3(samples[remaining[0]],samples[remaining[1]],samples[remaining[2]]);c=(s.x+s.y+s.z)/3.0;distances[0]=abs(c-s.x);distances[1]=abs(c-s.y);distances[2]=abs(c-s.z);float minDistance=min(distances[0],min(distances[1],distances[2]));for(i=0;i<3;++i){if(distances[i]==minDistance){break;}}return remaining[i];}void main(){float d[4]=float[](readDepth(vUv0),readDepth(vUv1),readDepth(vUv2),readDepth(vUv3));int index=findBestDepth(d);\n#ifdef DOWNSAMPLE_NORMALS\nvec2 uvs[4]=vec2[](vUv0,vUv1,vUv2,vUv3);vec3 n=texture2D(normalBuffer,uvs[index]).rgb;\n#else\nvec3 n=vec3(0.0);\n#endif\ngl_FragColor=vec4(n,d[index]);}";
   var vertexShader$4 = "uniform vec2 texelSize;varying vec2 vUv0;varying vec2 vUv1;varying vec2 vUv2;varying vec2 vUv3;void main(){vec2 uv=position.xy*0.5+0.5;vUv0=uv;vUv1=vec2(uv.x,uv.y+texelSize.y);vUv2=vec2(uv.x+texelSize.x,uv.y);vUv3=uv+texelSize;gl_Position=vec4(position.xy,1.0,1.0);}";
 
   var DepthDownsamplingMaterial = function (_ShaderMaterial7) {
@@ -34485,7 +34530,7 @@
           normalBuffer: new Uniform(null),
           texelSize: new Uniform(new Vector2())
         },
-        fragmentShader: fragmentShader$6,
+        fragmentShader: fragmentShader$7,
         vertexShader: vertexShader$4,
         depthWrite: false,
         depthTest: false
@@ -34513,7 +34558,7 @@
     return DepthDownsamplingMaterial;
   }(ShaderMaterial);
 
-  var fragmentShader$7 = "#include <common>\n#include <packing>\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D depthBuffer0;uniform highp sampler2D depthBuffer1;\n#else\nuniform mediump sampler2D depthBuffer0;uniform mediump sampler2D depthBuffer1;\n#endif\nuniform sampler2D inputBuffer;varying vec2 vUv;void main(){\n#if DEPTH_PACKING_0 == 3201\nfloat d0=unpackRGBAToDepth(texture2D(depthBuffer0,vUv));\n#else\nfloat d0=texture2D(depthBuffer0,vUv).r;\n#endif\n#if DEPTH_PACKING_1 == 3201\nfloat d1=unpackRGBAToDepth(texture2D(depthBuffer1,vUv));\n#else\nfloat d1=texture2D(depthBuffer1,vUv).r;\n#endif\nif(d0<d1){discard;}gl_FragColor=texture2D(inputBuffer,vUv);}";
+  var fragmentShader$8 = "#include <common>\n#include <packing>\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D depthBuffer0;uniform highp sampler2D depthBuffer1;\n#else\nuniform mediump sampler2D depthBuffer0;uniform mediump sampler2D depthBuffer1;\n#endif\nuniform sampler2D inputBuffer;varying vec2 vUv;void main(){\n#if DEPTH_PACKING_0 == 3201\nfloat d0=unpackRGBAToDepth(texture2D(depthBuffer0,vUv));\n#else\nfloat d0=texture2D(depthBuffer0,vUv).r;\n#endif\n#if DEPTH_PACKING_1 == 3201\nfloat d1=unpackRGBAToDepth(texture2D(depthBuffer1,vUv));\n#else\nfloat d1=texture2D(depthBuffer1,vUv).r;\n#endif\nif(d0<d1){discard;}gl_FragColor=texture2D(inputBuffer,vUv);}";
 
   var DepthMaskMaterial = function (_ShaderMaterial8) {
     _inherits(DepthMaskMaterial, _ShaderMaterial8);
@@ -34536,7 +34581,7 @@
           depthBuffer1: new Uniform(null),
           inputBuffer: new Uniform(null)
         },
-        fragmentShader: fragmentShader$7,
+        fragmentShader: fragmentShader$8,
         vertexShader: vertexShader,
         depthWrite: false,
         depthTest: false
@@ -34547,9 +34592,6 @@
 
     return DepthMaskMaterial;
   }(ShaderMaterial);
-
-  var fragmentShaderDepth = "#include <packing>\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D depthBuffer;\n#else\nuniform mediump sampler2D depthBuffer;\n#endif\nvarying vec2 vUv;varying vec2 vUv0;varying vec2 vUv1;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(depthBuffer,uv));\n#else\nreturn texture2D(depthBuffer,uv).r;\n#endif\n}/***Gathers the current texel,and the top-left neighbors.*/vec3 gatherNeighbors(){float p=readDepth(vUv);float pLeft=readDepth(vUv0);float pTop=readDepth(vUv1);return vec3(p,pLeft,pTop);}void main(){const vec2 threshold=vec2(DEPTH_THRESHOLD);vec3 neighbors=gatherNeighbors();vec2 delta=abs(neighbors.xx-vec2(neighbors.y,neighbors.z));vec2 edges=step(threshold,delta);if(dot(edges,vec2(1.0))==0.0){discard;}gl_FragColor=vec4(edges,0.0,1.0);}";
-  var fragmentShaderLuma = "#include <common>\nuniform sampler2D inputBuffer;varying vec2 vUv;varying vec2 vUv0;varying vec2 vUv1;varying vec2 vUv2;varying vec2 vUv3;varying vec2 vUv4;varying vec2 vUv5;void main(){const vec2 threshold=vec2(EDGE_THRESHOLD);float l=linearToRelativeLuminance(texture2D(inputBuffer,vUv).rgb);float lLeft=linearToRelativeLuminance(texture2D(inputBuffer,vUv0).rgb);float lTop=linearToRelativeLuminance(texture2D(inputBuffer,vUv1).rgb);vec4 delta;delta.xy=abs(l-vec2(lLeft,lTop));vec2 edges=step(threshold,delta.xy);if(dot(edges,vec2(1.0))==0.0){discard;}float lRight=linearToRelativeLuminance(texture2D(inputBuffer,vUv2).rgb);float lBottom=linearToRelativeLuminance(texture2D(inputBuffer,vUv3).rgb);delta.zw=abs(l-vec2(lRight,lBottom));vec2 maxDelta=max(delta.xy,delta.zw);float lLeftLeft=linearToRelativeLuminance(texture2D(inputBuffer,vUv4).rgb);float lTopTop=linearToRelativeLuminance(texture2D(inputBuffer,vUv5).rgb);delta.zw=abs(vec2(lLeft,lTop)-vec2(lLeftLeft,lTopTop));maxDelta=max(maxDelta.xy,delta.zw);float finalDelta=max(maxDelta.x,maxDelta.y);edges.xy*=step(finalDelta,LOCAL_CONTRAST_ADAPTATION_FACTOR*delta.xy);gl_FragColor=vec4(edges,0.0,1.0);}";
 
   var EdgeDetectionMaterial = function (_ShaderMaterial9) {
     _inherits(EdgeDetectionMaterial, _ShaderMaterial9);
@@ -34570,13 +34612,19 @@
           LOCAL_CONTRAST_ADAPTATION_FACTOR: "2.0",
           EDGE_THRESHOLD: "0.1",
           DEPTH_THRESHOLD: "0.01",
+          PREDICATION_MODE: "0",
+          PREDICATION_THRESHOLD: "0.01",
+          PREDICATION_SCALE: "2.0",
+          PREDICATION_STRENGTH: "1.0",
           DEPTH_PACKING: "0"
         },
         uniforms: {
           inputBuffer: new Uniform(null),
           depthBuffer: new Uniform(null),
+          predicationBuffer: new Uniform(null),
           texelSize: new Uniform(texelSize)
         },
+        fragmentShader: fragmentShader$3,
         vertexShader: vertexShader$1,
         depthWrite: false,
         depthTest: false
@@ -34591,36 +34639,49 @@
     _createClass(EdgeDetectionMaterial, [{
       key: "setEdgeDetectionMode",
       value: function setEdgeDetectionMode(mode) {
-        switch (mode) {
-          case EdgeDetectionMode.DEPTH:
-            this.fragmentShader = fragmentShaderDepth;
-            break;
-
-          case EdgeDetectionMode.LUMA:
-            this.fragmentShader = fragmentShaderLuma;
-            break;
-
-          case EdgeDetectionMode.COLOR:
-          default:
-            this.fragmentShader = fragmentShaderColor;
-            break;
-        }
-
         this.defines.EDGE_DETECTION_MODE = mode.toFixed(0);
         this.needsUpdate = true;
       }
     }, {
       key: "setLocalContrastAdaptationFactor",
       value: function setLocalContrastAdaptationFactor(factor) {
-        this.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR = factor.toFixed("2");
+        this.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR = factor.toFixed("6");
         this.needsUpdate = true;
       }
     }, {
       key: "setEdgeDetectionThreshold",
       value: function setEdgeDetectionThreshold(threshold) {
-        var t = Math.min(Math.max(threshold, 0.05), 0.5);
-        this.defines.EDGE_THRESHOLD = t.toFixed("2");
-        this.defines.DEPTH_THRESHOLD = (t * 0.1).toFixed("3");
+        this.defines.EDGE_THRESHOLD = threshold.toFixed("6");
+        this.defines.DEPTH_THRESHOLD = (threshold * 0.1).toFixed("6");
+        this.needsUpdate = true;
+      }
+    }, {
+      key: "setPredicationMode",
+      value: function setPredicationMode(mode) {
+        this.defines.PREDICATION_MODE = mode.toFixed(0);
+        this.needsUpdate = true;
+      }
+    }, {
+      key: "setPredicationBuffer",
+      value: function setPredicationBuffer(predicationBuffer) {
+        this.uniforms.predicationBuffer.value = predicationBuffer;
+      }
+    }, {
+      key: "setPredicationThreshold",
+      value: function setPredicationThreshold(threshold) {
+        this.defines.PREDICATION_THRESHOLD = threshold.toFixed("6");
+        this.needsUpdate = true;
+      }
+    }, {
+      key: "setPredicationScale",
+      value: function setPredicationScale(scale) {
+        this.defines.PREDICATION_SCALE = scale.toFixed("6");
+        this.needsUpdate = true;
+      }
+    }, {
+      key: "setPredicationStrength",
+      value: function setPredicationStrength(strength) {
+        this.defines.PREDICATION_STRENGTH = strength.toFixed("6");
         this.needsUpdate = true;
       }
     }, {
@@ -34642,6 +34703,11 @@
     LUMA: 1,
     COLOR: 2
   };
+  var PredicationMode = {
+    DISABLED: 0,
+    DEPTH: 1,
+    CUSTOM: 2
+  };
   var fragmentTemplate = "#include <common>\n#include <packing>\n#include <dithering_pars_fragment>\nuniform sampler2D inputBuffer;\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D depthBuffer;\n#else\nuniform mediump sampler2D depthBuffer;\n#endif\nuniform vec2 resolution;uniform vec2 texelSize;uniform float cameraNear;uniform float cameraFar;uniform float aspect;uniform float time;varying vec2 vUv;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(depthBuffer,uv));\n#else\nreturn texture2D(depthBuffer,uv).r;\n#endif\n}float getViewZ(const in float depth){\n#ifdef PERSPECTIVE_CAMERA\nreturn perspectiveDepthToViewZ(depth,cameraNear,cameraFar);\n#else\nreturn orthographicDepthToViewZ(depth,cameraNear,cameraFar);\n#endif\n}FRAGMENT_HEADvoid main(){FRAGMENT_MAIN_UVvec4 color0=texture2D(inputBuffer,UV);vec4 color1=vec4(0.0);FRAGMENT_MAIN_IMAGEgl_FragColor=color0;\n#ifdef ENCODE_OUTPUT\n#include <encodings_fragment>\n#endif\n#include <dithering_fragment>\n}";
   var vertexTemplate = "uniform vec2 resolution;uniform vec2 texelSize;uniform float cameraNear;uniform float cameraFar;uniform float aspect;uniform float time;varying vec2 vUv;VERTEX_HEADvoid main(){vUv=position.xy*0.5+0.5;VERTEX_MAIN_SUPPORTgl_Position=vec4(position.xy,1.0,1.0);}";
 
@@ -34656,7 +34722,7 @@
       var shaderParts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
       var defines = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
       var uniforms = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-      var camera = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+      var camera = arguments.length > 3 ? arguments[3] : undefined;
       var dithering = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
 
       _classCallCheck(this, EffectMaterial);
@@ -34795,7 +34861,7 @@
     VERTEX_HEAD: "VERTEX_HEAD",
     VERTEX_MAIN_SUPPORT: "VERTEX_MAIN_SUPPORT"
   };
-  var fragmentShader$8 = "#include <common>\n#include <dithering_pars_fragment>\nuniform sampler2D inputBuffer;uniform vec2 lightPosition;uniform float exposure;uniform float decay;uniform float density;uniform float weight;uniform float clampMax;varying vec2 vUv;void main(){vec2 coord=vUv;vec2 delta=lightPosition-coord;delta*=1.0/SAMPLES_FLOAT*density;float illuminationDecay=1.0;vec4 color=vec4(0.0);/*Estimate the probability of occlusion at each pixel by summing samplesalong a ray to the light position.*/for(int i=0;i<SAMPLES_INT;++i){coord+=delta;vec4 texel=texture2D(inputBuffer,coord);texel*=illuminationDecay*weight;color+=texel;illuminationDecay*=decay;}gl_FragColor=clamp(color*exposure,0.0,clampMax);\n#include <dithering_fragment>\n}";
+  var fragmentShader$9 = "#include <common>\n#include <dithering_pars_fragment>\nuniform sampler2D inputBuffer;uniform vec2 lightPosition;uniform float exposure;uniform float decay;uniform float density;uniform float weight;uniform float clampMax;varying vec2 vUv;void main(){vec2 coord=vUv;vec2 delta=lightPosition-coord;delta*=1.0/SAMPLES_FLOAT*density;float illuminationDecay=1.0;vec4 color=vec4(0.0);/*Estimate the probability of occlusion at each pixel by summing samplesalong a ray to the light position.*/for(int i=0;i<SAMPLES_INT;++i){coord+=delta;vec4 texel=texture2D(inputBuffer,coord);texel*=illuminationDecay*weight;color+=texel;illuminationDecay*=decay;}gl_FragColor=clamp(color*exposure,0.0,clampMax);\n#include <dithering_fragment>\n}";
 
   var GodRaysMaterial = function (_ShaderMaterial11) {
     _inherits(GodRaysMaterial, _ShaderMaterial11);
@@ -34822,7 +34888,7 @@
           exposure: new Uniform(1.0),
           clampMax: new Uniform(1.0)
         },
-        fragmentShader: fragmentShader$8,
+        fragmentShader: fragmentShader$9,
         vertexShader: vertexShader,
         depthWrite: false,
         depthTest: false
@@ -34847,7 +34913,7 @@
     return GodRaysMaterial;
   }(ShaderMaterial);
 
-  var fragmentShader$9 = "#include <common>\nuniform sampler2D inputBuffer;\n#ifdef RANGE\nuniform vec2 range;\n#elif defined(THRESHOLD)\nuniform float threshold;uniform float smoothing;\n#endif\nvarying vec2 vUv;void main(){vec4 texel=texture2D(inputBuffer,vUv);float l=linearToRelativeLuminance(texel.rgb);\n#ifdef RANGE\nfloat low=step(range.x,l);float high=step(l,range.y);l*=low*high;\n#elif defined(THRESHOLD)\nl=smoothstep(threshold,threshold+smoothing,l);\n#endif\n#ifdef COLOR\ngl_FragColor=vec4(texel.rgb*l,l);\n#else\ngl_FragColor=vec4(l);\n#endif\n}";
+  var fragmentShader$a = "#include <common>\nuniform sampler2D inputBuffer;\n#ifdef RANGE\nuniform vec2 range;\n#elif defined(THRESHOLD)\nuniform float threshold;uniform float smoothing;\n#endif\nvarying vec2 vUv;void main(){vec4 texel=texture2D(inputBuffer,vUv);float l=linearToRelativeLuminance(texel.rgb);\n#ifdef RANGE\nfloat low=step(range.x,l);float high=step(l,range.y);l*=low*high;\n#elif defined(THRESHOLD)\nl=smoothstep(threshold,threshold+smoothing,l);\n#endif\n#ifdef COLOR\ngl_FragColor=vec4(texel.rgb*l,l);\n#else\ngl_FragColor=vec4(l);\n#endif\n}";
 
   var LuminanceMaterial = function (_ShaderMaterial12) {
     _inherits(LuminanceMaterial, _ShaderMaterial12);
@@ -34871,7 +34937,7 @@
           smoothing: new Uniform(1.0),
           range: new Uniform(useRange ? luminanceRange : new Vector2())
         },
-        fragmentShader: fragmentShader$9,
+        fragmentShader: fragmentShader$a,
         vertexShader: vertexShader,
         depthWrite: false,
         depthTest: false
@@ -34964,7 +35030,7 @@
     return LuminanceMaterial;
   }(ShaderMaterial);
 
-  var fragmentShader$a = "uniform sampler2D maskTexture;uniform sampler2D inputBuffer;\n#if MASK_FUNCTION != 0\nuniform float strength;\n#endif\nvarying vec2 vUv;void main(){\n#if COLOR_CHANNEL == 0\nfloat mask=texture2D(maskTexture,vUv).r;\n#elif COLOR_CHANNEL == 1\nfloat mask=texture2D(maskTexture,vUv).g;\n#elif COLOR_CHANNEL == 2\nfloat mask=texture2D(maskTexture,vUv).b;\n#else\nfloat mask=texture2D(maskTexture,vUv).a;\n#endif\n#if MASK_FUNCTION == 0\n#ifdef INVERTED\nif(mask>0.0){discard;}\n#else\nif(mask==0.0){discard;}\n#endif\n#else\nmask=clamp(mask*strength,0.0,1.0);\n#ifdef INVERTED\nmask=(1.0-mask);\n#endif\n#if MASK_FUNCTION == 1\ngl_FragColor=mask*texture2D(inputBuffer,vUv);\n#else\ngl_FragColor=vec4(mask*texture2D(inputBuffer,vUv).rgb,mask);\n#endif\n#endif\n}";
+  var fragmentShader$b = "uniform sampler2D maskTexture;uniform sampler2D inputBuffer;\n#if MASK_FUNCTION != 0\nuniform float strength;\n#endif\nvarying vec2 vUv;void main(){\n#if COLOR_CHANNEL == 0\nfloat mask=texture2D(maskTexture,vUv).r;\n#elif COLOR_CHANNEL == 1\nfloat mask=texture2D(maskTexture,vUv).g;\n#elif COLOR_CHANNEL == 2\nfloat mask=texture2D(maskTexture,vUv).b;\n#else\nfloat mask=texture2D(maskTexture,vUv).a;\n#endif\n#if MASK_FUNCTION == 0\n#ifdef INVERTED\nif(mask>0.0){discard;}\n#else\nif(mask==0.0){discard;}\n#endif\n#else\nmask=clamp(mask*strength,0.0,1.0);\n#ifdef INVERTED\nmask=(1.0-mask);\n#endif\n#if MASK_FUNCTION == 1\ngl_FragColor=mask*texture2D(inputBuffer,vUv);\n#else\ngl_FragColor=vec4(mask*texture2D(inputBuffer,vUv).rgb,mask);\n#endif\n#endif\n}";
 
   var MaskMaterial = function (_ShaderMaterial13) {
     _inherits(MaskMaterial, _ShaderMaterial13);
@@ -34985,7 +35051,7 @@
           inputBuffer: new Uniform(null),
           strength: new Uniform(1.0)
         },
-        fragmentShader: fragmentShader$a,
+        fragmentShader: fragmentShader$b,
         vertexShader: vertexShader,
         depthWrite: false,
         depthTest: false
@@ -35045,7 +35111,7 @@
     MULTIPLY: 1,
     MULTIPLY_RGB_SET_ALPHA: 2
   };
-  var fragmentShader$b = "uniform sampler2D inputBuffer;varying vec2 vUv0;varying vec2 vUv1;varying vec2 vUv2;varying vec2 vUv3;void main(){vec2 c0=texture2D(inputBuffer,vUv0).rg;vec2 c1=texture2D(inputBuffer,vUv1).rg;vec2 c2=texture2D(inputBuffer,vUv2).rg;vec2 c3=texture2D(inputBuffer,vUv3).rg;float d0=(c0.x-c1.x)*0.5;float d1=(c2.x-c3.x)*0.5;float d=length(vec2(d0,d1));float a0=min(c0.y,c1.y);float a1=min(c2.y,c3.y);float visibilityFactor=min(a0,a1);gl_FragColor.rg=(1.0-visibilityFactor>0.001)? vec2(d,0.0): vec2(0.0,d);}";
+  var fragmentShader$c = "uniform sampler2D inputBuffer;varying vec2 vUv0;varying vec2 vUv1;varying vec2 vUv2;varying vec2 vUv3;void main(){vec2 c0=texture2D(inputBuffer,vUv0).rg;vec2 c1=texture2D(inputBuffer,vUv1).rg;vec2 c2=texture2D(inputBuffer,vUv2).rg;vec2 c3=texture2D(inputBuffer,vUv3).rg;float d0=(c0.x-c1.x)*0.5;float d1=(c2.x-c3.x)*0.5;float d=length(vec2(d0,d1));float a0=min(c0.y,c1.y);float a1=min(c2.y,c3.y);float visibilityFactor=min(a0,a1);gl_FragColor.rg=(1.0-visibilityFactor>0.001)? vec2(d,0.0): vec2(0.0,d);}";
   var vertexShader$5 = "uniform vec2 texelSize;varying vec2 vUv0;varying vec2 vUv1;varying vec2 vUv2;varying vec2 vUv3;void main(){vec2 uv=position.xy*0.5+0.5;vUv0=vec2(uv.x+texelSize.x,uv.y);vUv1=vec2(uv.x-texelSize.x,uv.y);vUv2=vec2(uv.x,uv.y+texelSize.y);vUv3=vec2(uv.x,uv.y-texelSize.y);gl_Position=vec4(position.xy,1.0,1.0);}";
 
   var OutlineMaterial = function (_ShaderMaterial14) {
@@ -35066,7 +35132,7 @@
           inputBuffer: new Uniform(null),
           texelSize: new Uniform(new Vector2())
         },
-        fragmentShader: fragmentShader$b,
+        fragmentShader: fragmentShader$c,
         vertexShader: vertexShader$5,
         depthWrite: false,
         depthTest: false
@@ -35089,7 +35155,7 @@
     return OutlineMaterial;
   }(ShaderMaterial);
 
-  var fragmentShader$c = "#define sampleLevelZeroOffset(t, coord, offset) texture2D(t, coord + offset * texelSize)\n#if __VERSION__ < 300\n#define round(v) floor(v + 0.5)\n#endif\nuniform sampler2D inputBuffer;uniform sampler2D areaTexture;uniform sampler2D searchTexture;uniform vec2 texelSize;uniform vec2 resolution;varying vec2 vUv;varying vec4 vOffset[3];varying vec2 vPixCoord;/***Moves values to a target vector based on a given conditional vector.*/void movec(const in bvec2 c,inout vec2 variable,const in vec2 value){if(c.x){variable.x=value.x;}if(c.y){variable.y=value.y;}}void movec(const in bvec4 c,inout vec4 variable,const in vec4 value){movec(c.xy,variable.xy,value.xy);movec(c.zw,variable.zw,value.zw);}/***Allows to decode two binary values from a bilinear-filtered access.**Bilinear access for fetching 'e' have a 0.25 offset,and we are interested*in the R and G edges:**+---G---+-------+*|x o R   x|*+-------+-------+**Then,if one of these edge is enabled:*Red:(0.75*X+0.25*1)=>0.25 or 1.0*Green:(0.75*1+0.25*X)=>0.75 or 1.0**This function will unpack the values(mad+mul+round):*wolframalpha.com: round(x*abs(5*x-5*0.75))plot 0 to 1*/vec2 decodeDiagBilinearAccess(in vec2 e){e.r=e.r*abs(5.0*e.r-5.0*0.75);return round(e);}vec4 decodeDiagBilinearAccess(in vec4 e){e.rb=e.rb*abs(5.0*e.rb-5.0*0.75);return round(e);}/***Diagonal pattern searches.*/vec2 searchDiag1(const in vec2 texCoord,const in vec2 dir,out vec2 e){vec4 coord=vec4(texCoord,-1.0,1.0);vec3 t=vec3(texelSize,1.0);for(int i=0;i<MAX_SEARCH_STEPS_INT;++i){if(!(coord.z<float(MAX_SEARCH_STEPS_DIAG_INT-1)&&coord.w>0.9)){break;}coord.xyz=t*vec3(dir,1.0)+coord.xyz;e=texture2D(inputBuffer,coord.xy).rg;coord.w=dot(e,vec2(0.5));}return coord.zw;}vec2 searchDiag2(const in vec2 texCoord,const in vec2 dir,out vec2 e){vec4 coord=vec4(texCoord,-1.0,1.0);coord.x+=0.25*texelSize.x;vec3 t=vec3(texelSize,1.0);for(int i=0;i<MAX_SEARCH_STEPS_INT;++i){if(!(coord.z<float(MAX_SEARCH_STEPS_DIAG_INT-1)&&coord.w>0.9)){break;}coord.xyz=t*vec3(dir,1.0)+coord.xyz;e=texture2D(inputBuffer,coord.xy).rg;e=decodeDiagBilinearAccess(e);coord.w=dot(e,vec2(0.5));}return coord.zw;}/***Calculates the area corresponding to a certain diagonal distance and crossing*edges 'e'.*/vec2 areaDiag(const in vec2 dist,const in vec2 e,const in float offset){vec2 texCoord=vec2(AREATEX_MAX_DISTANCE_DIAG,AREATEX_MAX_DISTANCE_DIAG)*e+dist;texCoord=AREATEX_PIXEL_SIZE*texCoord+0.5*AREATEX_PIXEL_SIZE;texCoord.x+=0.5;texCoord.y+=AREATEX_SUBTEX_SIZE*offset;return texture2D(areaTexture,texCoord).rg;}/***Searches for diagonal patterns and returns the corresponding weights.*/vec2 calculateDiagWeights(const in vec2 texCoord,const in vec2 e,const in vec4 subsampleIndices){vec2 weights=vec2(0.0);vec4 d;vec2 end;if(e.r>0.0){d.xz=searchDiag1(texCoord,vec2(-1.0,1.0),end);d.x+=float(end.y>0.9);}else{d.xz=vec2(0.0);}d.yw=searchDiag1(texCoord,vec2(1.0,-1.0),end);if(d.x+d.y>2.0){vec4 coords=vec4(-d.x+0.25,d.x,d.y,-d.y-0.25)*texelSize.xyxy+texCoord.xyxy;vec4 c;c.xy=sampleLevelZeroOffset(inputBuffer,coords.xy,vec2(-1,0)).rg;c.zw=sampleLevelZeroOffset(inputBuffer,coords.zw,vec2(1,0)).rg;c.yxwz=decodeDiagBilinearAccess(c.xyzw);vec2 cc=vec2(2.0)*c.xz+c.yw;movec(bvec2(step(0.9,d.zw)),cc,vec2(0.0));weights+=areaDiag(d.xy,cc,subsampleIndices.z);}d.xz=searchDiag2(texCoord,vec2(-1.0,-1.0),end);if(sampleLevelZeroOffset(inputBuffer,texCoord,vec2(1,0)).r>0.0){d.yw=searchDiag2(texCoord,vec2(1.0),end);d.y+=float(end.y>0.9);}else{d.yw=vec2(0.0);}if(d.x+d.y>2.0){vec4 coords=vec4(-d.x,-d.x,d.y,d.y)*texelSize.xyxy+texCoord.xyxy;vec4 c;c.x=sampleLevelZeroOffset(inputBuffer,coords.xy,vec2(-1,0)).g;c.y=sampleLevelZeroOffset(inputBuffer,coords.xy,vec2(0,-1)).r;c.zw=sampleLevelZeroOffset(inputBuffer,coords.zw,vec2(1,0)).gr;vec2 cc=vec2(2.0)*c.xz+c.yw;movec(bvec2(step(0.9,d.zw)),cc,vec2(0.0));weights+=areaDiag(d.xy,cc,subsampleIndices.w).gr;}return weights;}/***Determines how much length should be added in the last step of the searches.**Takes the bilinearly interpolated edge(see @PSEUDO_GATHER4),and adds 0,1*or 2 depending on which edges and crossing edges are active.*/float searchLength(const in vec2 e,const in float offset){/*The texture is flipped vertically,with left and right cases taking halfof the space horizontally.*/vec2 scale=SEARCHTEX_SIZE*vec2(0.5,-1.0);vec2 bias=SEARCHTEX_SIZE*vec2(offset,1.0);scale+=vec2(-1.0,1.0);bias+=vec2(0.5,-0.5);scale*=1.0/SEARCHTEX_PACKED_SIZE;bias*=1.0/SEARCHTEX_PACKED_SIZE;return texture2D(searchTexture,scale*e+bias).r;}/***Horizontal search for the second pass.*/float searchXLeft(in vec2 texCoord,const in float end){/*@PSEUDO_GATHER4This texCoord has been offset by(-0.25,-0.125)in the vertex shader tosample between edges,thus fetching four edges in a row.Sampling with different offsets in each direction allows to disambiguatewhich edges are active from the four fetched ones.*/vec2 e=vec2(0.0,1.0);for(int i=0;i<MAX_SEARCH_STEPS_INT;++i){if(!(texCoord.x>end&&e.g>0.8281&&e.r==0.0)){break;}e=texture2D(inputBuffer,texCoord).rg;texCoord=vec2(-2.0,0.0)*texelSize+texCoord;}float offset=-(255.0/127.0)*searchLength(e,0.0)+3.25;return texelSize.x*offset+texCoord.x;}float searchXRight(vec2 texCoord,const in float end){vec2 e=vec2(0.0,1.0);for(int i=0;i<MAX_SEARCH_STEPS_INT;++i){if(!(texCoord.x<end&&e.g>0.8281&&e.r==0.0)){break;}e=texture2D(inputBuffer,texCoord).rg;texCoord=vec2(2.0,0.0)*texelSize.xy+texCoord;}float offset=-(255.0/127.0)*searchLength(e,0.5)+3.25;return-texelSize.x*offset+texCoord.x;}/***Vertical search for the second pass.*/float searchYUp(vec2 texCoord,const in float end){vec2 e=vec2(1.0,0.0);for(int i=0;i<MAX_SEARCH_STEPS_INT;++i){if(!(texCoord.y>end&&e.r>0.8281&&e.g==0.0)){break;}e=texture2D(inputBuffer,texCoord).rg;texCoord=-vec2(0.0,2.0)*texelSize.xy+texCoord;}float offset=-(255.0/127.0)*searchLength(e.gr,0.0)+3.25;return texelSize.y*offset+texCoord.y;}float searchYDown(vec2 texCoord,const in float end){vec2 e=vec2(1.0,0.0);for(int i=0;i<MAX_SEARCH_STEPS_INT;i++){if(!(texCoord.y<end&&e.r>0.8281&&e.g==0.0)){break;}e=texture2D(inputBuffer,texCoord).rg;texCoord=vec2(0.0,2.0)*texelSize.xy+texCoord;}float offset=-(255.0/127.0)*searchLength(e.gr,0.5)+3.25;return-texelSize.y*offset+texCoord.y;}/***Determines the areas at each side of the current edge.*/vec2 area(const in vec2 dist,const in float e1,const in float e2,const in float offset){vec2 texCoord=vec2(AREATEX_MAX_DISTANCE)*round(4.0*vec2(e1,e2))+dist;texCoord=AREATEX_PIXEL_SIZE*texCoord+0.5*AREATEX_PIXEL_SIZE;texCoord.y=AREATEX_SUBTEX_SIZE*offset+texCoord.y;return texture2D(areaTexture,texCoord).rg;}/***Corner detection.*/void detectHorizontalCornerPattern(inout vec2 weights,const in vec4 texCoord,const in vec2 d){\n#if !defined(DISABLE_CORNER_DETECTION)\nvec2 leftRight=step(d.xy,d.yx);vec2 rounding=(1.0-CORNER_ROUNDING_NORM)*leftRight;rounding/=leftRight.x+leftRight.y;vec2 factor=vec2(1.0);factor.x-=rounding.x*sampleLevelZeroOffset(inputBuffer,texCoord.xy,vec2(0,1)).r;factor.x-=rounding.y*sampleLevelZeroOffset(inputBuffer,texCoord.zw,vec2(1,1)).r;factor.y-=rounding.x*sampleLevelZeroOffset(inputBuffer,texCoord.xy,vec2(0,-2)).r;factor.y-=rounding.y*sampleLevelZeroOffset(inputBuffer,texCoord.zw,vec2(1,-2)).r;weights*=clamp(factor,0.0,1.0);\n#endif\n}void detectVerticalCornerPattern(inout vec2 weights,const in vec4 texCoord,const in vec2 d){\n#if !defined(DISABLE_CORNER_DETECTION)\nvec2 leftRight=step(d.xy,d.yx);vec2 rounding=(1.0-CORNER_ROUNDING_NORM)*leftRight;rounding/=leftRight.x+leftRight.y;vec2 factor=vec2(1.0);factor.x-=rounding.x*sampleLevelZeroOffset(inputBuffer,texCoord.xy,vec2(1,0)).g;factor.x-=rounding.y*sampleLevelZeroOffset(inputBuffer,texCoord.zw,vec2(1,1)).g;factor.y-=rounding.x*sampleLevelZeroOffset(inputBuffer,texCoord.xy,vec2(-2,0)).g;factor.y-=rounding.y*sampleLevelZeroOffset(inputBuffer,texCoord.zw,vec2(-2,1)).g;weights*=clamp(factor,0.0,1.0);\n#endif\n}void main(){vec4 weights=vec4(0.0);vec4 subsampleIndices=vec4(0.0);vec2 e=texture2D(inputBuffer,vUv).rg;if(e.g>0.0){\n#if !defined(DISABLE_DIAG_DETECTION)\n/*Diagonals have both north and west edges,so searching for them in one ofthe boundaries is enough.*/weights.rg=calculateDiagWeights(vUv,e,subsampleIndices);if(weights.r==-weights.g){\n#endif\nvec2 d;vec3 coords;coords.x=searchXLeft(vOffset[0].xy,vOffset[2].x);coords.y=vOffset[1].y;d.x=coords.x;/*Now fetch the left crossing edges,two at a time using bilinearfiltering. Sampling at-0.25(see @CROSSING_OFFSET)enables to discern whatvalue each edge has.*/float e1=texture2D(inputBuffer,coords.xy).r;coords.z=searchXRight(vOffset[0].zw,vOffset[2].y);d.y=coords.z;/*Translate distances to pixel units for better interleave arithmetic andmemory accesses.*/d=round(resolution.xx*d+-vPixCoord.xx);vec2 sqrtD=sqrt(abs(d));float e2=sampleLevelZeroOffset(inputBuffer,coords.zy,vec2(1,0)).r;weights.rg=area(sqrtD,e1,e2,subsampleIndices.y);coords.y=vUv.y;detectHorizontalCornerPattern(weights.rg,coords.xyzy,d);\n#if !defined(DISABLE_DIAG_DETECTION)\n}else{e.r=0.0;}\n#endif\n}if(e.r>0.0){vec2 d;vec3 coords;coords.y=searchYUp(vOffset[1].xy,vOffset[2].z);coords.x=vOffset[0].x;d.x=coords.y;float e1=texture2D(inputBuffer,coords.xy).g;coords.z=searchYDown(vOffset[1].zw,vOffset[2].w);d.y=coords.z;d=round(resolution.yy*d-vPixCoord.yy);vec2 sqrtD=sqrt(abs(d));float e2=sampleLevelZeroOffset(inputBuffer,coords.xz,vec2(0,1)).g;weights.ba=area(sqrtD,e1,e2,subsampleIndices.x);coords.x=vUv.x;detectVerticalCornerPattern(weights.ba,coords.xyxz,d);}gl_FragColor=weights;}";
+  var fragmentShader$d = "#define sampleLevelZeroOffset(t, coord, offset) texture2D(t, coord + offset * texelSize)\n#if __VERSION__ < 300\n#define round(v) floor(v + 0.5)\n#endif\nuniform sampler2D inputBuffer;uniform sampler2D areaTexture;uniform sampler2D searchTexture;uniform vec2 texelSize;uniform vec2 resolution;varying vec2 vUv;varying vec4 vOffset[3];varying vec2 vPixCoord;/***Moves values to a target vector based on a given conditional vector.*/void movec(const in bvec2 c,inout vec2 variable,const in vec2 value){if(c.x){variable.x=value.x;}if(c.y){variable.y=value.y;}}void movec(const in bvec4 c,inout vec4 variable,const in vec4 value){movec(c.xy,variable.xy,value.xy);movec(c.zw,variable.zw,value.zw);}/***Allows to decode two binary values from a bilinear-filtered access.**Bilinear access for fetching 'e' have a 0.25 offset,and we are interested*in the R and G edges:**+---G---+-------+*|x o R   x|*+-------+-------+**Then,if one of these edge is enabled:*Red:(0.75*X+0.25*1)=>0.25 or 1.0*Green:(0.75*1+0.25*X)=>0.75 or 1.0**This function will unpack the values(mad+mul+round):*wolframalpha.com: round(x*abs(5*x-5*0.75))plot 0 to 1*/vec2 decodeDiagBilinearAccess(in vec2 e){e.r=e.r*abs(5.0*e.r-5.0*0.75);return round(e);}vec4 decodeDiagBilinearAccess(in vec4 e){e.rb=e.rb*abs(5.0*e.rb-5.0*0.75);return round(e);}/***Diagonal pattern searches.*/vec2 searchDiag1(const in vec2 texCoord,const in vec2 dir,out vec2 e){vec4 coord=vec4(texCoord,-1.0,1.0);vec3 t=vec3(texelSize,1.0);for(int i=0;i<MAX_SEARCH_STEPS_INT;++i){if(!(coord.z<float(MAX_SEARCH_STEPS_DIAG_INT-1)&&coord.w>0.9)){break;}coord.xyz=t*vec3(dir,1.0)+coord.xyz;e=texture2D(inputBuffer,coord.xy).rg;coord.w=dot(e,vec2(0.5));}return coord.zw;}vec2 searchDiag2(const in vec2 texCoord,const in vec2 dir,out vec2 e){vec4 coord=vec4(texCoord,-1.0,1.0);coord.x+=0.25*texelSize.x;vec3 t=vec3(texelSize,1.0);for(int i=0;i<MAX_SEARCH_STEPS_INT;++i){if(!(coord.z<float(MAX_SEARCH_STEPS_DIAG_INT-1)&&coord.w>0.9)){break;}coord.xyz=t*vec3(dir,1.0)+coord.xyz;e=texture2D(inputBuffer,coord.xy).rg;e=decodeDiagBilinearAccess(e);coord.w=dot(e,vec2(0.5));}return coord.zw;}/***Calculates the area corresponding to a certain diagonal distance and crossing*edges 'e'.*/vec2 areaDiag(const in vec2 dist,const in vec2 e,const in float offset){vec2 texCoord=vec2(AREATEX_MAX_DISTANCE_DIAG,AREATEX_MAX_DISTANCE_DIAG)*e+dist;texCoord=AREATEX_PIXEL_SIZE*texCoord+0.5*AREATEX_PIXEL_SIZE;texCoord.x+=0.5;texCoord.y+=AREATEX_SUBTEX_SIZE*offset;return texture2D(areaTexture,texCoord).rg;}/***Searches for diagonal patterns and returns the corresponding weights.*/vec2 calculateDiagWeights(const in vec2 texCoord,const in vec2 e,const in vec4 subsampleIndices){vec2 weights=vec2(0.0);vec4 d;vec2 end;if(e.r>0.0){d.xz=searchDiag1(texCoord,vec2(-1.0,1.0),end);d.x+=float(end.y>0.9);}else{d.xz=vec2(0.0);}d.yw=searchDiag1(texCoord,vec2(1.0,-1.0),end);if(d.x+d.y>2.0){vec4 coords=vec4(-d.x+0.25,d.x,d.y,-d.y-0.25)*texelSize.xyxy+texCoord.xyxy;vec4 c;c.xy=sampleLevelZeroOffset(inputBuffer,coords.xy,vec2(-1,0)).rg;c.zw=sampleLevelZeroOffset(inputBuffer,coords.zw,vec2(1,0)).rg;c.yxwz=decodeDiagBilinearAccess(c.xyzw);vec2 cc=vec2(2.0)*c.xz+c.yw;movec(bvec2(step(0.9,d.zw)),cc,vec2(0.0));weights+=areaDiag(d.xy,cc,subsampleIndices.z);}d.xz=searchDiag2(texCoord,vec2(-1.0,-1.0),end);if(sampleLevelZeroOffset(inputBuffer,texCoord,vec2(1,0)).r>0.0){d.yw=searchDiag2(texCoord,vec2(1.0),end);d.y+=float(end.y>0.9);}else{d.yw=vec2(0.0);}if(d.x+d.y>2.0){vec4 coords=vec4(-d.x,-d.x,d.y,d.y)*texelSize.xyxy+texCoord.xyxy;vec4 c;c.x=sampleLevelZeroOffset(inputBuffer,coords.xy,vec2(-1,0)).g;c.y=sampleLevelZeroOffset(inputBuffer,coords.xy,vec2(0,-1)).r;c.zw=sampleLevelZeroOffset(inputBuffer,coords.zw,vec2(1,0)).gr;vec2 cc=vec2(2.0)*c.xz+c.yw;movec(bvec2(step(0.9,d.zw)),cc,vec2(0.0));weights+=areaDiag(d.xy,cc,subsampleIndices.w).gr;}return weights;}/***Determines how much length should be added in the last step of the searches.**Takes the bilinearly interpolated edge(see @PSEUDO_GATHER4),and adds 0,1*or 2 depending on which edges and crossing edges are active.*/float searchLength(const in vec2 e,const in float offset){/*The texture is flipped vertically,with left and right cases taking halfof the space horizontally.*/vec2 scale=SEARCHTEX_SIZE*vec2(0.5,-1.0);vec2 bias=SEARCHTEX_SIZE*vec2(offset,1.0);scale+=vec2(-1.0,1.0);bias+=vec2(0.5,-0.5);scale*=1.0/SEARCHTEX_PACKED_SIZE;bias*=1.0/SEARCHTEX_PACKED_SIZE;return texture2D(searchTexture,scale*e+bias).r;}/***Horizontal search for the second pass.*/float searchXLeft(in vec2 texCoord,const in float end){/*@PSEUDO_GATHER4This texCoord has been offset by(-0.25,-0.125)in the vertex shader tosample between edges,thus fetching four edges in a row.Sampling with different offsets in each direction allows to disambiguatewhich edges are active from the four fetched ones.*/vec2 e=vec2(0.0,1.0);for(int i=0;i<MAX_SEARCH_STEPS_INT;++i){if(!(texCoord.x>end&&e.g>0.8281&&e.r==0.0)){break;}e=texture2D(inputBuffer,texCoord).rg;texCoord=vec2(-2.0,0.0)*texelSize+texCoord;}float offset=-(255.0/127.0)*searchLength(e,0.0)+3.25;return texelSize.x*offset+texCoord.x;}float searchXRight(vec2 texCoord,const in float end){vec2 e=vec2(0.0,1.0);for(int i=0;i<MAX_SEARCH_STEPS_INT;++i){if(!(texCoord.x<end&&e.g>0.8281&&e.r==0.0)){break;}e=texture2D(inputBuffer,texCoord).rg;texCoord=vec2(2.0,0.0)*texelSize.xy+texCoord;}float offset=-(255.0/127.0)*searchLength(e,0.5)+3.25;return-texelSize.x*offset+texCoord.x;}/***Vertical search for the second pass.*/float searchYUp(vec2 texCoord,const in float end){vec2 e=vec2(1.0,0.0);for(int i=0;i<MAX_SEARCH_STEPS_INT;++i){if(!(texCoord.y>end&&e.r>0.8281&&e.g==0.0)){break;}e=texture2D(inputBuffer,texCoord).rg;texCoord=-vec2(0.0,2.0)*texelSize.xy+texCoord;}float offset=-(255.0/127.0)*searchLength(e.gr,0.0)+3.25;return texelSize.y*offset+texCoord.y;}float searchYDown(vec2 texCoord,const in float end){vec2 e=vec2(1.0,0.0);for(int i=0;i<MAX_SEARCH_STEPS_INT;i++){if(!(texCoord.y<end&&e.r>0.8281&&e.g==0.0)){break;}e=texture2D(inputBuffer,texCoord).rg;texCoord=vec2(0.0,2.0)*texelSize.xy+texCoord;}float offset=-(255.0/127.0)*searchLength(e.gr,0.5)+3.25;return-texelSize.y*offset+texCoord.y;}/***Determines the areas at each side of the current edge.*/vec2 area(const in vec2 dist,const in float e1,const in float e2,const in float offset){vec2 texCoord=vec2(AREATEX_MAX_DISTANCE)*round(4.0*vec2(e1,e2))+dist;texCoord=AREATEX_PIXEL_SIZE*texCoord+0.5*AREATEX_PIXEL_SIZE;texCoord.y=AREATEX_SUBTEX_SIZE*offset+texCoord.y;return texture2D(areaTexture,texCoord).rg;}/***Corner detection.*/void detectHorizontalCornerPattern(inout vec2 weights,const in vec4 texCoord,const in vec2 d){\n#if !defined(DISABLE_CORNER_DETECTION)\nvec2 leftRight=step(d.xy,d.yx);vec2 rounding=(1.0-CORNER_ROUNDING_NORM)*leftRight;rounding/=leftRight.x+leftRight.y;vec2 factor=vec2(1.0);factor.x-=rounding.x*sampleLevelZeroOffset(inputBuffer,texCoord.xy,vec2(0,1)).r;factor.x-=rounding.y*sampleLevelZeroOffset(inputBuffer,texCoord.zw,vec2(1,1)).r;factor.y-=rounding.x*sampleLevelZeroOffset(inputBuffer,texCoord.xy,vec2(0,-2)).r;factor.y-=rounding.y*sampleLevelZeroOffset(inputBuffer,texCoord.zw,vec2(1,-2)).r;weights*=clamp(factor,0.0,1.0);\n#endif\n}void detectVerticalCornerPattern(inout vec2 weights,const in vec4 texCoord,const in vec2 d){\n#if !defined(DISABLE_CORNER_DETECTION)\nvec2 leftRight=step(d.xy,d.yx);vec2 rounding=(1.0-CORNER_ROUNDING_NORM)*leftRight;rounding/=leftRight.x+leftRight.y;vec2 factor=vec2(1.0);factor.x-=rounding.x*sampleLevelZeroOffset(inputBuffer,texCoord.xy,vec2(1,0)).g;factor.x-=rounding.y*sampleLevelZeroOffset(inputBuffer,texCoord.zw,vec2(1,1)).g;factor.y-=rounding.x*sampleLevelZeroOffset(inputBuffer,texCoord.xy,vec2(-2,0)).g;factor.y-=rounding.y*sampleLevelZeroOffset(inputBuffer,texCoord.zw,vec2(-2,1)).g;weights*=clamp(factor,0.0,1.0);\n#endif\n}void main(){vec4 weights=vec4(0.0);vec4 subsampleIndices=vec4(0.0);vec2 e=texture2D(inputBuffer,vUv).rg;if(e.g>0.0){\n#if !defined(DISABLE_DIAG_DETECTION)\n/*Diagonals have both north and west edges,so searching for them in one ofthe boundaries is enough.*/weights.rg=calculateDiagWeights(vUv,e,subsampleIndices);if(weights.r==-weights.g){\n#endif\nvec2 d;vec3 coords;coords.x=searchXLeft(vOffset[0].xy,vOffset[2].x);coords.y=vOffset[1].y;d.x=coords.x;/*Now fetch the left crossing edges,two at a time using bilinearfiltering. Sampling at-0.25(see @CROSSING_OFFSET)enables to discern whatvalue each edge has.*/float e1=texture2D(inputBuffer,coords.xy).r;coords.z=searchXRight(vOffset[0].zw,vOffset[2].y);d.y=coords.z;/*Translate distances to pixel units for better interleave arithmetic andmemory accesses.*/d=round(resolution.xx*d+-vPixCoord.xx);vec2 sqrtD=sqrt(abs(d));float e2=sampleLevelZeroOffset(inputBuffer,coords.zy,vec2(1,0)).r;weights.rg=area(sqrtD,e1,e2,subsampleIndices.y);coords.y=vUv.y;detectHorizontalCornerPattern(weights.rg,coords.xyzy,d);\n#if !defined(DISABLE_DIAG_DETECTION)\n}else{e.r=0.0;}\n#endif\n}if(e.r>0.0){vec2 d;vec3 coords;coords.y=searchYUp(vOffset[1].xy,vOffset[2].z);coords.x=vOffset[0].x;d.x=coords.y;float e1=texture2D(inputBuffer,coords.xy).g;coords.z=searchYDown(vOffset[1].zw,vOffset[2].w);d.y=coords.z;d=round(resolution.yy*d-vPixCoord.yy);vec2 sqrtD=sqrt(abs(d));float e2=sampleLevelZeroOffset(inputBuffer,coords.xz,vec2(0,1)).g;weights.ba=area(sqrtD,e1,e2,subsampleIndices.x);coords.x=vUv.x;detectVerticalCornerPattern(weights.ba,coords.xyxz,d);}gl_FragColor=weights;}";
   var vertexShader$6 = "uniform vec2 texelSize;uniform vec2 resolution;varying vec2 vUv;varying vec4 vOffset[3];varying vec2 vPixCoord;void main(){vUv=position.xy*0.5+0.5;vPixCoord=vUv*resolution;vOffset[0]=vUv.xyxy+texelSize.xyxy*vec4(-0.25,-0.125,1.25,-0.125);vOffset[1]=vUv.xyxy+texelSize.xyxy*vec4(-0.125,-0.25,-0.125,1.25);vOffset[2]=vec4(vOffset[0].xz,vOffset[1].yw)+vec4(-2.0,2.0,-2.0,2.0)*texelSize.xxyy*MAX_SEARCH_STEPS_FLOAT;gl_Position=vec4(position.xy,1.0,1.0);}";
 
   var SMAAWeightsMaterial = function (_ShaderMaterial15) {
@@ -35128,7 +35194,7 @@
           texelSize: new Uniform(texelSize),
           resolution: new Uniform(resolution)
         },
-        fragmentShader: fragmentShader$c,
+        fragmentShader: fragmentShader$d,
         vertexShader: vertexShader$6,
         depthWrite: false,
         depthTest: false
@@ -35194,7 +35260,7 @@
     return SMAAWeightsMaterial;
   }(ShaderMaterial);
 
-  var fragmentShader$d = "#include <common>\n#include <packing>\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D normalDepthBuffer;\n#else\nuniform mediump sampler2D normalDepthBuffer;\n#endif\n#ifndef NORMAL_DEPTH\nuniform sampler2D normalBuffer;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(normalDepthBuffer,uv));\n#else\nreturn texture2D(normalDepthBuffer,uv).r;\n#endif\n}\n#endif\nuniform sampler2D noiseTexture;uniform mat4 inverseProjectionMatrix;uniform mat4 projectionMatrix;uniform vec2 texelSize;uniform float cameraNear;uniform float cameraFar;uniform float minRadiusScale;uniform float intensity;uniform float fade;uniform float bias;uniform vec2 distanceCutoff;uniform vec2 proximityCutoff;varying vec2 vUv;varying vec2 vUv2;float getViewZ(const in float depth){\n#ifdef PERSPECTIVE_CAMERA\nreturn perspectiveDepthToViewZ(depth,cameraNear,cameraFar);\n#else\nreturn orthographicDepthToViewZ(depth,cameraNear,cameraFar);\n#endif\n}vec3 getViewPosition(const in vec2 screenPosition,const in float depth,const in float viewZ){float clipW=projectionMatrix[2][3]*viewZ+projectionMatrix[3][3];vec4 clipPosition=vec4((vec3(screenPosition,depth)-0.5)*2.0,1.0);clipPosition*=clipW;return(inverseProjectionMatrix*clipPosition).xyz;}float getAmbientOcclusion(const in vec3 p,const in vec3 n,const in float depth,const in vec2 uv){\n#ifdef DISTANCE_SCALING\nfloat radiusScale=1.0-smoothstep(0.0,distanceCutoff.y,depth);radiusScale=radiusScale*(1.0-minRadiusScale)+minRadiusScale;float radius=RADIUS*radiusScale;\n#else\nfloat radius=RADIUS;\n#endif\nfloat noise=texture2D(noiseTexture,vUv2).r;float baseAngle=noise*PI2;float inv_samples=1.0/SAMPLES_FLOAT;float rings=SPIRAL_TURNS*PI2;float occlusion=0.0;int taps=0;for(int i=0;i<SAMPLES_INT;++i){float alpha=(float(i)+0.5)*inv_samples;float angle=alpha*rings+baseAngle;vec2 coord=alpha*radius*vec2(cos(angle),sin(angle))*texelSize+uv;if(coord.s<0.0||coord.s>1.0||coord.t<0.0||coord.t>1.0){continue;}\n#ifdef NORMAL_DEPTH\nfloat sampleDepth=texture2D(normalDepthBuffer,coord).a;\n#else\nfloat sampleDepth=readDepth(coord);\n#endif\nfloat viewZ=getViewZ(sampleDepth);\n#ifdef PERSPECTIVE_CAMERA\nfloat linearSampleDepth=viewZToOrthographicDepth(viewZ,cameraNear,cameraFar);\n#else\nfloat linearSampleDepth=sampleDepth;\n#endif\nfloat proximity=abs(depth-linearSampleDepth);if(proximity<proximityCutoff.y){float falloff=1.0-smoothstep(proximityCutoff.x,proximityCutoff.y,proximity);vec3 Q=getViewPosition(coord,sampleDepth,viewZ);vec3 v=Q-p;float vv=dot(v,v);float vn=dot(v,n)-bias;float f=max(RADIUS_SQ-vv,0.0)/RADIUS_SQ;occlusion+=(f*f*f*max(vn/(fade+vv),0.0))*falloff;}++taps;}return occlusion/(4.0*max(float(taps),1.0));}void main(){\n#ifdef NORMAL_DEPTH\nvec4 normalDepth=texture2D(normalDepthBuffer,vUv);\n#else\nvec4 normalDepth=vec4(texture2D(normalBuffer,vUv).rgb,readDepth(vUv));\n#endif\nfloat ao=1.0;float depth=normalDepth.a;float viewZ=getViewZ(depth);\n#ifdef PERSPECTIVE_CAMERA\nfloat linearDepth=viewZToOrthographicDepth(viewZ,cameraNear,cameraFar);\n#else\nfloat linearDepth=depth;\n#endif\nif(linearDepth<distanceCutoff.y){vec3 viewPosition=getViewPosition(vUv,depth,viewZ);vec3 viewNormal=unpackRGBToNormal(normalDepth.rgb);ao-=getAmbientOcclusion(viewPosition,viewNormal,linearDepth,vUv);float d=smoothstep(distanceCutoff.x,distanceCutoff.y,linearDepth);ao=mix(ao,1.0,d);ao=clamp(pow(ao,abs(intensity)),0.0,1.0);}gl_FragColor.r=ao;}";
+  var fragmentShader$e = "#include <common>\n#include <packing>\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D normalDepthBuffer;\n#else\nuniform mediump sampler2D normalDepthBuffer;\n#endif\n#ifndef NORMAL_DEPTH\nuniform sampler2D normalBuffer;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(normalDepthBuffer,uv));\n#else\nreturn texture2D(normalDepthBuffer,uv).r;\n#endif\n}\n#endif\nuniform sampler2D noiseTexture;uniform mat4 inverseProjectionMatrix;uniform mat4 projectionMatrix;uniform vec2 texelSize;uniform float cameraNear;uniform float cameraFar;uniform float minRadiusScale;uniform float intensity;uniform float fade;uniform float bias;uniform vec2 distanceCutoff;uniform vec2 proximityCutoff;varying vec2 vUv;varying vec2 vUv2;float getViewZ(const in float depth){\n#ifdef PERSPECTIVE_CAMERA\nreturn perspectiveDepthToViewZ(depth,cameraNear,cameraFar);\n#else\nreturn orthographicDepthToViewZ(depth,cameraNear,cameraFar);\n#endif\n}vec3 getViewPosition(const in vec2 screenPosition,const in float depth,const in float viewZ){float clipW=projectionMatrix[2][3]*viewZ+projectionMatrix[3][3];vec4 clipPosition=vec4((vec3(screenPosition,depth)-0.5)*2.0,1.0);clipPosition*=clipW;return(inverseProjectionMatrix*clipPosition).xyz;}float getAmbientOcclusion(const in vec3 p,const in vec3 n,const in float depth,const in vec2 uv){\n#ifdef DISTANCE_SCALING\nfloat radiusScale=1.0-smoothstep(0.0,distanceCutoff.y,depth);radiusScale=radiusScale*(1.0-minRadiusScale)+minRadiusScale;float radius=RADIUS*radiusScale;\n#else\nfloat radius=RADIUS;\n#endif\nfloat noise=texture2D(noiseTexture,vUv2).r;float baseAngle=noise*PI2;float invSamples=1.0/SAMPLES_FLOAT;float rings=SPIRAL_TURNS*PI2;float occlusion=0.0;int taps=0;for(int i=0;i<SAMPLES_INT;++i){float alpha=(float(i)+0.5)*invSamples;float angle=alpha*rings+baseAngle;vec2 coord=alpha*radius*vec2(cos(angle),sin(angle))*texelSize+uv;if(coord.s<0.0||coord.s>1.0||coord.t<0.0||coord.t>1.0){continue;}\n#ifdef NORMAL_DEPTH\nfloat sampleDepth=texture2D(normalDepthBuffer,coord).a;\n#else\nfloat sampleDepth=readDepth(coord);\n#endif\nfloat viewZ=getViewZ(sampleDepth);\n#ifdef PERSPECTIVE_CAMERA\nfloat linearSampleDepth=viewZToOrthographicDepth(viewZ,cameraNear,cameraFar);\n#else\nfloat linearSampleDepth=sampleDepth;\n#endif\nfloat proximity=abs(depth-linearSampleDepth);if(proximity<proximityCutoff.y){float falloff=1.0-smoothstep(proximityCutoff.x,proximityCutoff.y,proximity);vec3 Q=getViewPosition(coord,sampleDepth,viewZ);vec3 v=Q-p;float vv=dot(v,v);float vn=dot(v,n)-bias;float f=max(RADIUS_SQ-vv,0.0)/RADIUS_SQ;occlusion+=(f*f*f*max(vn/(fade+vv),0.0))*falloff;}++taps;}return occlusion/(4.0*max(float(taps),1.0));}void main(){\n#ifdef NORMAL_DEPTH\nvec4 normalDepth=texture2D(normalDepthBuffer,vUv);\n#else\nvec4 normalDepth=vec4(texture2D(normalBuffer,vUv).rgb,readDepth(vUv));\n#endif\nfloat ao=1.0;float depth=normalDepth.a;float viewZ=getViewZ(depth);\n#ifdef PERSPECTIVE_CAMERA\nfloat linearDepth=viewZToOrthographicDepth(viewZ,cameraNear,cameraFar);\n#else\nfloat linearDepth=depth;\n#endif\nif(linearDepth<distanceCutoff.y){vec3 viewPosition=getViewPosition(vUv,depth,viewZ);vec3 viewNormal=unpackRGBToNormal(normalDepth.rgb);ao-=getAmbientOcclusion(viewPosition,viewNormal,linearDepth,vUv);float d=smoothstep(distanceCutoff.x,distanceCutoff.y,linearDepth);ao=mix(ao,1.0,d);ao=clamp(pow(ao,abs(intensity)),0.0,1.0);}gl_FragColor.r=ao;}";
   var vertexShader$7 = "uniform vec2 noiseScale;varying vec2 vUv;varying vec2 vUv2;void main(){vUv=position.xy*0.5+0.5;vUv2=vUv*noiseScale;gl_Position=vec4(position.xy,1.0,1.0);}";
 
   var SSAOMaterial = function (_ShaderMaterial16) {
@@ -35235,7 +35301,7 @@
           fade: new Uniform(0.01),
           bias: new Uniform(0.0)
         },
-        fragmentShader: fragmentShader$d,
+        fragmentShader: fragmentShader$e,
         vertexShader: vertexShader$7,
         depthWrite: false,
         depthTest: false
@@ -35458,8 +35524,8 @@
           material.dispose();
         }
 
-        for (var _i336 = 0, _Object$keys = Object.keys(this); _i336 < _Object$keys.length; _i336++) {
-          var key = _Object$keys[_i336];
+        for (var _i337 = 0, _Object$keys = Object.keys(this); _i337 < _Object$keys.length; _i337++) {
+          var key = _Object$keys[_i337];
           var property = this[key];
 
           if (property !== null && typeof property.dispose === "function") {
@@ -35871,9 +35937,14 @@
       value: function render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
         var scene = this.scene;
         var camera = this.camera;
+        var background = scene.background;
         var renderTarget = this.renderToScreen ? null : inputBuffer;
 
         if (this.clear) {
+          if (this.clearPass.overrideClearColor !== null) {
+            scene.background = null;
+          }
+
           this.clearPass.render(renderer, inputBuffer);
         }
 
@@ -35883,6 +35954,10 @@
           this.overrideMaterialManager.render(renderer, scene, camera);
         } else {
           renderer.render(scene, camera);
+        }
+
+        if (scene.background !== background) {
+          scene.background = background;
         }
       }
     }, {
@@ -36272,8 +36347,8 @@
     }, {
       key: "dispose",
       value: function dispose() {
-        for (var _i337 = 0, _Object$keys2 = Object.keys(this); _i337 < _Object$keys2.length; _i337++) {
-          var key = _Object$keys2[_i337];
+        for (var _i338 = 0, _Object$keys2 = Object.keys(this); _i338 < _Object$keys2.length; _i338++) {
+          var key = _Object$keys2[_i338];
           var property = this[key];
 
           if (property !== null && typeof property.dispose === "function") {
@@ -37338,9 +37413,10 @@
           var size = renderer.getSize(new Vector2());
           width = size.width;
           height = size.height;
+        } else {
+          renderer.setSize(width, height, updateStyle);
         }
 
-        renderer.setSize(width, height, updateStyle);
         var drawingBufferSize = renderer.getDrawingBufferSize(new Vector2());
         this.inputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
         this.outputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
@@ -37411,6 +37487,7 @@
           this.inputBuffer.dispose();
           this.outputBuffer.dispose();
           this.inputBuffer = this.createBuffer(buffer.depthBuffer, buffer.stencilBuffer, buffer.texture.type, value);
+          this.inputBuffer.depthTexture = this.depthTexture;
           this.outputBuffer = this.inputBuffer.clone();
         }
       }
@@ -37560,7 +37637,7 @@
     return Selection;
   }(_wrapNativeSuper(Set));
 
-  var fragmentShader$e = "uniform sampler2D texture;uniform float intensity;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){outputColor=clamp(texture2D(texture,uv)*intensity,0.0,1.0);}";
+  var fragmentShader$f = "uniform sampler2D texture;uniform float intensity;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){outputColor=clamp(texture2D(texture,uv)*intensity,0.0,1.0);}";
 
   var BloomEffect = function (_Effect) {
     _inherits(BloomEffect, _Effect);
@@ -37590,7 +37667,7 @@
 
       _classCallCheck(this, BloomEffect);
 
-      _this52 = _super47.call(this, "BloomEffect", fragmentShader$e, {
+      _this52 = _super47.call(this, "BloomEffect", fragmentShader$f, {
         blendFunction: blendFunction,
         uniforms: new Map([["texture", new Uniform(null)], ["intensity", new Uniform(intensity)]])
       });
@@ -37726,7 +37803,7 @@
     return BloomEffect;
   }(Effect);
 
-  var fragmentShader$f = "uniform float brightness;uniform float contrast;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec3 color=inputColor.rgb+vec3(brightness-0.5);if(contrast>0.0){color/=vec3(1.0-contrast);}else{color*=vec3(1.0+contrast);}outputColor=vec4(min(color+vec3(0.5),1.0),inputColor.a);}";
+  var fragmentShader$g = "uniform float brightness;uniform float contrast;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec3 color=inputColor.rgb+vec3(brightness-0.5);if(contrast>0.0){color/=vec3(1.0-contrast);}else{color*=vec3(1.0+contrast);}outputColor=vec4(min(color+vec3(0.5),1.0),inputColor.a);}";
 
   var BrightnessContrastEffect = function (_Effect2) {
     _inherits(BrightnessContrastEffect, _Effect2);
@@ -37744,7 +37821,7 @@
 
       _classCallCheck(this, BrightnessContrastEffect);
 
-      return _super48.call(this, "BrightnessContrastEffect", fragmentShader$f, {
+      return _super48.call(this, "BrightnessContrastEffect", fragmentShader$g, {
         blendFunction: blendFunction,
         uniforms: new Map([["brightness", new Uniform(brightness)], ["contrast", new Uniform(contrast)]])
       });
@@ -37753,7 +37830,7 @@
     return BrightnessContrastEffect;
   }(Effect);
 
-  var fragmentShader$g = "void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){float sum=inputColor.r+inputColor.g+inputColor.b;outputColor=vec4(vec3(sum/3.0),inputColor.a);}";
+  var fragmentShader$h = "void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){float sum=inputColor.r+inputColor.g+inputColor.b;outputColor=vec4(vec3(sum/3.0),inputColor.a);}";
 
   var ColorAverageEffect = function (_Effect3) {
     _inherits(ColorAverageEffect, _Effect3);
@@ -37765,7 +37842,7 @@
 
       _classCallCheck(this, ColorAverageEffect);
 
-      return _super49.call(this, "ColorAverageEffect", fragmentShader$g, {
+      return _super49.call(this, "ColorAverageEffect", fragmentShader$h, {
         blendFunction: blendFunction
       });
     }
@@ -37773,7 +37850,7 @@
     return ColorAverageEffect;
   }(Effect);
 
-  var fragmentShader$h = "uniform float factor;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){outputColor=vec4(floor(inputColor.rgb*factor+0.5)/factor,inputColor.a);}";
+  var fragmentShader$i = "uniform float factor;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){outputColor=vec4(floor(inputColor.rgb*factor+0.5)/factor,inputColor.a);}";
 
   var ColorDepthEffect = function (_Effect4) {
     _inherits(ColorDepthEffect, _Effect4);
@@ -37791,7 +37868,7 @@
 
       _classCallCheck(this, ColorDepthEffect);
 
-      _this53 = _super50.call(this, "ColorDepthEffect", fragmentShader$h, {
+      _this53 = _super50.call(this, "ColorDepthEffect", fragmentShader$i, {
         blendFunction: blendFunction,
         uniforms: new Map([["factor", new Uniform(1.0)]])
       });
@@ -37818,7 +37895,7 @@
     return ColorDepthEffect;
   }(Effect);
 
-  var fragmentShader$i = "varying vec2 vUvR;varying vec2 vUvB;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec4 color=inputColor;\n#ifdef ALPHA\nvec2 ra=texture2D(inputBuffer,vUvR).ra;vec2 ba=texture2D(inputBuffer,vUvB).ba;color.r=ra.x;color.b=ba.x;color.a=max(max(ra.y,ba.y),inputColor.a);\n#else\ncolor.r=texture2D(inputBuffer,vUvR).r;color.b=texture2D(inputBuffer,vUvB).b;\n#endif\noutputColor=color;}";
+  var fragmentShader$j = "varying vec2 vUvR;varying vec2 vUvB;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec4 color=inputColor;\n#ifdef ALPHA\nvec2 ra=texture2D(inputBuffer,vUvR).ra;vec2 ba=texture2D(inputBuffer,vUvB).ba;color.r=ra.x;color.b=ba.x;color.a=max(max(ra.y,ba.y),inputColor.a);\n#else\ncolor.r=texture2D(inputBuffer,vUvR).r;color.b=texture2D(inputBuffer,vUvB).b;\n#endif\noutputColor=color;}";
   var vertexShader$8 = "uniform vec2 offset;varying vec2 vUvR;varying vec2 vUvB;void mainSupport(const in vec2 uv){vUvR=uv+offset;vUvB=uv-offset;}";
 
   var ChromaticAberrationEffect = function (_Effect5) {
@@ -37835,7 +37912,7 @@
 
       _classCallCheck(this, ChromaticAberrationEffect);
 
-      return _super51.call(this, "ChromaticAberrationEffect", fragmentShader$i, {
+      return _super51.call(this, "ChromaticAberrationEffect", fragmentShader$j, {
         vertexShader: vertexShader$8,
         blendFunction: blendFunction,
         attributes: EffectAttribute.CONVOLUTION,
@@ -37865,7 +37942,7 @@
     return ChromaticAberrationEffect;
   }(Effect);
 
-  var fragmentShader$j = "void mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){\n#ifdef INVERTED\nvec3 color=vec3(1.0-depth);\n#else\nvec3 color=vec3(depth);\n#endif\noutputColor=vec4(color,inputColor.a);}";
+  var fragmentShader$k = "void mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){\n#ifdef INVERTED\nvec3 color=vec3(1.0-depth);\n#else\nvec3 color=vec3(depth);\n#endif\noutputColor=vec4(color,inputColor.a);}";
 
   var DepthEffect = function (_Effect6) {
     _inherits(DepthEffect, _Effect6);
@@ -37883,7 +37960,7 @@
 
       _classCallCheck(this, DepthEffect);
 
-      _this54 = _super52.call(this, "DepthEffect", fragmentShader$j, {
+      _this54 = _super52.call(this, "DepthEffect", fragmentShader$k, {
         blendFunction: blendFunction,
         attributes: EffectAttribute.DEPTH
       });
@@ -37912,7 +37989,7 @@
     return DepthEffect;
   }(Effect);
 
-  var fragmentShader$k = "uniform sampler2D nearColorBuffer;uniform sampler2D farColorBuffer;uniform sampler2D nearCoCBuffer;uniform float scale;void mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){vec4 colorNear=texture2D(nearColorBuffer,uv);vec4 colorFar=texture2D(farColorBuffer,uv);float CoCNear=texture2D(nearCoCBuffer,uv).r;CoCNear=min(CoCNear*scale,1.0);vec4 result=inputColor*(1.0-colorFar.a)+colorFar;result=mix(result,colorNear,CoCNear);outputColor=result;}";
+  var fragmentShader$l = "uniform sampler2D nearColorBuffer;uniform sampler2D farColorBuffer;uniform sampler2D nearCoCBuffer;uniform float scale;void mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){vec4 colorNear=texture2D(nearColorBuffer,uv);vec4 colorFar=texture2D(farColorBuffer,uv);float CoCNear=texture2D(nearCoCBuffer,uv).r;CoCNear=min(CoCNear*scale,1.0);vec4 result=inputColor*(1.0-colorFar.a)+colorFar;result=mix(result,colorNear,CoCNear);outputColor=result;}";
 
   var DepthOfFieldEffect = function (_Effect7) {
     _inherits(DepthOfFieldEffect, _Effect7);
@@ -37938,7 +38015,7 @@
 
       _classCallCheck(this, DepthOfFieldEffect);
 
-      _this55 = _super53.call(this, "DepthOfFieldEffect", fragmentShader$k, {
+      _this55 = _super53.call(this, "DepthOfFieldEffect", fragmentShader$l, {
         blendFunction: blendFunction,
         attributes: EffectAttribute.DEPTH,
         uniforms: new Map([["nearColorBuffer", new Uniform(null)], ["farColorBuffer", new Uniform(null)], ["nearCoCBuffer", new Uniform(null)], ["scale", new Uniform(1.0)]])
@@ -38108,7 +38185,7 @@
     return DepthOfFieldEffect;
   }(Effect);
 
-  var fragmentShader$l = "uniform vec2 angle;uniform float scale;float pattern(const in vec2 uv){vec2 point=scale*vec2(dot(angle.yx,vec2(uv.x,-uv.y)),dot(angle,uv));return(sin(point.x)*sin(point.y))*4.0;}void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec3 color=vec3(inputColor.rgb*10.0-5.0+pattern(uv*resolution));outputColor=vec4(color,inputColor.a);}";
+  var fragmentShader$m = "uniform vec2 angle;uniform float scale;float pattern(const in vec2 uv){vec2 point=scale*vec2(dot(angle.yx,vec2(uv.x,-uv.y)),dot(angle,uv));return(sin(point.x)*sin(point.y))*4.0;}void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec3 color=vec3(inputColor.rgb*10.0-5.0+pattern(uv*resolution));outputColor=vec4(color,inputColor.a);}";
 
   var DotScreenEffect = function (_Effect8) {
     _inherits(DotScreenEffect, _Effect8);
@@ -38128,7 +38205,7 @@
 
       _classCallCheck(this, DotScreenEffect);
 
-      _this56 = _super54.call(this, "DotScreenEffect", fragmentShader$l, {
+      _this56 = _super54.call(this, "DotScreenEffect", fragmentShader$m, {
         blendFunction: blendFunction,
         uniforms: new Map([["angle", new Uniform(new Vector2())], ["scale", new Uniform(scale)]])
       });
@@ -38159,14 +38236,14 @@
     if (type === UnsignedByteType) {
       data = new Uint8Array(size * channels.get(format));
 
-      for (var _i338 = 0, l = data.length; _i338 < l; ++_i338) {
-        data[_i338] = Math.random() * 255;
+      for (var _i339 = 0, l = data.length; _i339 < l; ++_i339) {
+        data[_i339] = Math.random() * 255;
       }
     } else {
       data = new Float32Array(size * channels.get(format));
 
-      for (var _i339 = 0, _l13 = data.length; _i339 < _l13; ++_i339) {
-        data[_i339] = Math.random();
+      for (var _i340 = 0, _l13 = data.length; _i340 < _l13; ++_i340) {
+        data[_i340] = Math.random();
       }
     }
 
@@ -38190,7 +38267,7 @@
     return NoiseTexture;
   }(DataTexture);
 
-  var fragmentShader$m = "uniform sampler2D perturbationMap;uniform bool active;uniform float columns;uniform float random;uniform vec2 seed;uniform vec2 distortion;void mainUv(inout vec2 uv){if(active){if(uv.y<distortion.x+columns&&uv.y>distortion.x-columns*random){float sx=clamp(ceil(seed.x),0.0,1.0);uv.y=sx*(1.0-(uv.y+distortion.y))+(1.0-sx)*distortion.y;}if(uv.x<distortion.y+columns&&uv.x>distortion.y-columns*random){float sy=clamp(ceil(seed.y),0.0,1.0);uv.x=sy*distortion.x+(1.0-sy)*(1.0-(uv.x+distortion.x));}vec2 normal=texture2D(perturbationMap,uv*random*random).rg;uv+=normal*seed*(random*0.2);}}";
+  var fragmentShader$n = "uniform sampler2D perturbationMap;uniform bool active;uniform float columns;uniform float random;uniform vec2 seed;uniform vec2 distortion;void mainUv(inout vec2 uv){if(active){if(uv.y<distortion.x+columns&&uv.y>distortion.x-columns*random){float sx=clamp(ceil(seed.x),0.0,1.0);uv.y=sx*(1.0-(uv.y+distortion.y))+(1.0-sx)*distortion.y;}if(uv.x<distortion.y+columns&&uv.x>distortion.y-columns*random){float sy=clamp(ceil(seed.y),0.0,1.0);uv.x=sy*distortion.x+(1.0-sy)*(1.0-(uv.x+distortion.x));}vec2 normal=texture2D(perturbationMap,uv*random*random).rg;uv+=normal*seed*(random*0.2);}}";
   var tag = "Glitch.Generated";
 
   function randomFloat(low, high) {
@@ -38227,7 +38304,7 @@
 
       _classCallCheck(this, GlitchEffect);
 
-      _this57 = _super56.call(this, "GlitchEffect", fragmentShader$m, {
+      _this57 = _super56.call(this, "GlitchEffect", fragmentShader$n, {
         blendFunction: blendFunction,
         uniforms: new Map([["perturbationMap", new Uniform(null)], ["columns", new Uniform(columns)], ["active", new Uniform(false)], ["random", new Uniform(1.0)], ["seed", new Uniform(new Vector2())], ["distortion", new Uniform(new Vector2())]])
       });
@@ -38344,7 +38421,7 @@
     CONSTANT_MILD: 2,
     CONSTANT_WILD: 3
   };
-  var fragmentShader$n = "uniform sampler2D texture;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){outputColor=texture2D(texture,uv);}";
+  var fragmentShader$o = "uniform sampler2D texture;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){outputColor=texture2D(texture,uv);}";
   var v = new Vector3();
   var m = new Matrix4();
 
@@ -38384,7 +38461,7 @@
 
       _classCallCheck(this, GodRaysEffect);
 
-      _this58 = _super57.call(this, "GodRaysEffect", fragmentShader$n, {
+      _this58 = _super57.call(this, "GodRaysEffect", fragmentShader$o, {
         blendFunction: blendFunction,
         attributes: EffectAttribute.DEPTH,
         uniforms: new Map([["texture", new Uniform(null)]])
@@ -38604,7 +38681,7 @@
     return GodRaysEffect;
   }(Effect);
 
-  var fragmentShader$o = "uniform vec2 scale;uniform float lineWidth;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){float grid=0.5-max(abs(mod(uv.x*scale.x,1.0)-0.5),abs(mod(uv.y*scale.y,1.0)-0.5));outputColor=vec4(vec3(smoothstep(0.0,lineWidth,grid)),inputColor.a);}";
+  var fragmentShader$p = "uniform vec2 scale;uniform float lineWidth;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){float grid=0.5-max(abs(mod(uv.x*scale.x,1.0)-0.5),abs(mod(uv.y*scale.y,1.0)-0.5));outputColor=vec4(vec3(smoothstep(0.0,lineWidth,grid)),inputColor.a);}";
 
   var GridEffect = function (_Effect11) {
     _inherits(GridEffect, _Effect11);
@@ -38624,7 +38701,7 @@
 
       _classCallCheck(this, GridEffect);
 
-      _this59 = _super58.call(this, "GridEffect", fragmentShader$o, {
+      _this59 = _super58.call(this, "GridEffect", fragmentShader$p, {
         blendFunction: blendFunction,
         uniforms: new Map([["scale", new Uniform(new Vector2())], ["lineWidth", new Uniform(lineWidth)]])
       });
@@ -38670,7 +38747,7 @@
     return GridEffect;
   }(Effect);
 
-  var fragmentShader$p = "uniform vec3 hue;uniform float saturation;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec3 color=vec3(dot(inputColor.rgb,hue.xyz),dot(inputColor.rgb,hue.zxy),dot(inputColor.rgb,hue.yzx));float average=(color.r+color.g+color.b)/3.0;vec3 diff=average-color;if(saturation>0.0){color+=diff*(1.0-1.0/(1.001-saturation));}else{color+=diff*-saturation;}outputColor=vec4(min(color,1.0),inputColor.a);}";
+  var fragmentShader$q = "uniform vec3 hue;uniform float saturation;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec3 color=vec3(dot(inputColor.rgb,hue.xyz),dot(inputColor.rgb,hue.zxy),dot(inputColor.rgb,hue.yzx));float average=(color.r+color.g+color.b)/3.0;vec3 diff=average-color;if(saturation>0.0){color+=diff*(1.0-1.0/(1.001-saturation));}else{color+=diff*-saturation;}outputColor=vec4(min(color,1.0),inputColor.a);}";
 
   var HueSaturationEffect = function (_Effect12) {
     _inherits(HueSaturationEffect, _Effect12);
@@ -38690,7 +38767,7 @@
 
       _classCallCheck(this, HueSaturationEffect);
 
-      _this60 = _super59.call(this, "HueSaturationEffect", fragmentShader$p, {
+      _this60 = _super59.call(this, "HueSaturationEffect", fragmentShader$q, {
         blendFunction: blendFunction,
         uniforms: new Map([["hue", new Uniform(new Vector3())], ["saturation", new Uniform(saturation)]])
       });
@@ -38712,7 +38789,7 @@
     return HueSaturationEffect;
   }(Effect);
 
-  var fragmentShader$q = "void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec3 noise=vec3(rand(uv*time));\n#ifdef PREMULTIPLY\noutputColor=vec4(min(inputColor.rgb*noise,vec3(1.0)),inputColor.a);\n#else\noutputColor=vec4(noise,inputColor.a);\n#endif\n}";
+  var fragmentShader$r = "void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec3 noise=vec3(rand(uv*time));\n#ifdef PREMULTIPLY\noutputColor=vec4(min(inputColor.rgb*noise,vec3(1.0)),inputColor.a);\n#else\noutputColor=vec4(noise,inputColor.a);\n#endif\n}";
 
   var NoiseEffect = function (_Effect13) {
     _inherits(NoiseEffect, _Effect13);
@@ -38730,7 +38807,7 @@
 
       _classCallCheck(this, NoiseEffect);
 
-      _this61 = _super60.call(this, "NoiseEffect", fragmentShader$q, {
+      _this61 = _super60.call(this, "NoiseEffect", fragmentShader$r, {
         blendFunction: blendFunction
       });
       _this61.premultiply = premultiply;
@@ -38758,7 +38835,7 @@
     return NoiseEffect;
   }(Effect);
 
-  var fragmentShader$r = "uniform sampler2D edgeTexture;uniform sampler2D maskTexture;uniform vec3 visibleEdgeColor;uniform vec3 hiddenEdgeColor;uniform float pulse;uniform float edgeStrength;\n#ifdef USE_PATTERN\nuniform sampler2D patternTexture;varying vec2 vUvPattern;\n#endif\nvoid mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec2 edge=texture2D(edgeTexture,uv).rg;vec2 mask=texture2D(maskTexture,uv).rg;\n#ifndef X_RAY\nedge.y=0.0;\n#endif\nedge*=(edgeStrength*mask.x*pulse);vec3 color=edge.x*visibleEdgeColor+edge.y*hiddenEdgeColor;float visibilityFactor=0.0;\n#ifdef USE_PATTERN\nvec4 patternColor=texture2D(patternTexture,vUvPattern);\n#ifdef X_RAY\nfloat hiddenFactor=0.5;\n#else\nfloat hiddenFactor=0.0;\n#endif\nvisibilityFactor=(1.0-mask.y>0.0)? 1.0 : hiddenFactor;visibilityFactor*=(1.0-mask.x)*patternColor.a;color+=visibilityFactor*patternColor.rgb;\n#endif\nfloat alpha=max(max(edge.x,edge.y),visibilityFactor);\n#ifdef ALPHA\noutputColor=vec4(color,alpha);\n#else\noutputColor=vec4(color,max(alpha,inputColor.a));\n#endif\n}";
+  var fragmentShader$s = "uniform sampler2D edgeTexture;uniform sampler2D maskTexture;uniform vec3 visibleEdgeColor;uniform vec3 hiddenEdgeColor;uniform float pulse;uniform float edgeStrength;\n#ifdef USE_PATTERN\nuniform sampler2D patternTexture;varying vec2 vUvPattern;\n#endif\nvoid mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec2 edge=texture2D(edgeTexture,uv).rg;vec2 mask=texture2D(maskTexture,uv).rg;\n#ifndef X_RAY\nedge.y=0.0;\n#endif\nedge*=(edgeStrength*mask.x*pulse);vec3 color=edge.x*visibleEdgeColor+edge.y*hiddenEdgeColor;float visibilityFactor=0.0;\n#ifdef USE_PATTERN\nvec4 patternColor=texture2D(patternTexture,vUvPattern);\n#ifdef X_RAY\nfloat hiddenFactor=0.5;\n#else\nfloat hiddenFactor=0.0;\n#endif\nvisibilityFactor=(1.0-mask.y>0.0)? 1.0 : hiddenFactor;visibilityFactor*=(1.0-mask.x)*patternColor.a;color+=visibilityFactor*patternColor.rgb;\n#endif\nfloat alpha=max(max(edge.x,edge.y),visibilityFactor);\n#ifdef ALPHA\noutputColor=vec4(color,alpha);\n#else\noutputColor=vec4(color,max(alpha,inputColor.a));\n#endif\n}";
   var vertexShader$9 = "uniform float patternScale;varying vec2 vUvPattern;void mainSupport(const in vec2 uv){vUvPattern=uv*vec2(aspect,1.0)*patternScale;}";
 
   var OutlineEffect = function (_Effect14) {
@@ -38797,7 +38874,7 @@
 
       _classCallCheck(this, OutlineEffect);
 
-      _this62 = _super61.call(this, "OutlineEffect", fragmentShader$r, {
+      _this62 = _super61.call(this, "OutlineEffect", fragmentShader$s, {
         uniforms: new Map([["maskTexture", new Uniform(null)], ["edgeTexture", new Uniform(null)], ["edgeStrength", new Uniform(edgeStrength)], ["visibleEdgeColor", new Uniform(new Color(visibleEdgeColor))], ["hiddenEdgeColor", new Uniform(new Color(hiddenEdgeColor))], ["pulse", new Uniform(1.0)], ["patternScale", new Uniform(1.0)], ["patternTexture", new Uniform(null)]])
       });
 
@@ -39041,7 +39118,7 @@
     return OutlineEffect;
   }(Effect);
 
-  var fragmentShader$s = "uniform bool active;uniform vec2 d;void mainUv(inout vec2 uv){if(active){uv=vec2(d.x*(floor(uv.x/d.x)+0.5),d.y*(floor(uv.y/d.y)+0.5));}}";
+  var fragmentShader$t = "uniform bool active;uniform vec2 d;void mainUv(inout vec2 uv){if(active){uv=vec2(d.x*(floor(uv.x/d.x)+0.5),d.y*(floor(uv.y/d.y)+0.5));}}";
 
   var PixelationEffect = function (_Effect15) {
     _inherits(PixelationEffect, _Effect15);
@@ -39055,7 +39132,7 @@
 
       _classCallCheck(this, PixelationEffect);
 
-      _this63 = _super62.call(this, "PixelationEffect", fragmentShader$s, {
+      _this63 = _super62.call(this, "PixelationEffect", fragmentShader$t, {
         uniforms: new Map([["active", new Uniform(false)], ["d", new Uniform(new Vector2())]])
       });
       _this63.resolution = new Vector2();
@@ -39093,7 +39170,7 @@
     return PixelationEffect;
   }(Effect);
 
-  var fragmentShader$t = "uniform float count;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec2 sl=vec2(sin(uv.y*count),cos(uv.y*count));vec3 scanlines=vec3(sl.x,sl.y,sl.x);outputColor=vec4(scanlines,inputColor.a);}";
+  var fragmentShader$u = "uniform float count;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec2 sl=vec2(sin(uv.y*count),cos(uv.y*count));vec3 scanlines=vec3(sl.x,sl.y,sl.x);outputColor=vec4(scanlines,inputColor.a);}";
 
   var ScanlineEffect = function (_Effect16) {
     _inherits(ScanlineEffect, _Effect16);
@@ -39111,7 +39188,7 @@
 
       _classCallCheck(this, ScanlineEffect);
 
-      _this64 = _super63.call(this, "ScanlineEffect", fragmentShader$t, {
+      _this64 = _super63.call(this, "ScanlineEffect", fragmentShader$u, {
         blendFunction: blendFunction,
         uniforms: new Map([["count", new Uniform(0.0)]])
       });
@@ -39142,7 +39219,7 @@
     return ScanlineEffect;
   }(Effect);
 
-  var fragmentShader$u = "uniform bool active;uniform vec2 center;uniform float waveSize;uniform float radius;uniform float maxRadius;uniform float amplitude;varying float vSize;void mainUv(inout vec2 uv){if(active){vec2 aspectCorrection=vec2(aspect,1.0);vec2 difference=uv*aspectCorrection-center*aspectCorrection;float distance=sqrt(dot(difference,difference))*vSize;if(distance>radius){if(distance<radius+waveSize){float angle=(distance-radius)*PI2/waveSize;float cosSin=(1.0-cos(angle))*0.5;float extent=maxRadius+waveSize;float decay=max(extent-distance*distance,0.0)/extent;uv-=((cosSin*amplitude*difference)/distance)*decay;}}}}";
+  var fragmentShader$v = "uniform bool active;uniform vec2 center;uniform float waveSize;uniform float radius;uniform float maxRadius;uniform float amplitude;varying float vSize;void mainUv(inout vec2 uv){if(active){vec2 aspectCorrection=vec2(aspect,1.0);vec2 difference=uv*aspectCorrection-center*aspectCorrection;float distance=sqrt(dot(difference,difference))*vSize;if(distance>radius){if(distance<radius+waveSize){float angle=(distance-radius)*PI2/waveSize;float cosSin=(1.0-cos(angle))*0.5;float extent=maxRadius+waveSize;float decay=max(extent-distance*distance,0.0)/extent;uv-=((cosSin*amplitude*difference)/distance)*decay;}}}}";
   var vertexShader$a = "uniform float size;uniform float cameraDistance;varying float vSize;void mainSupport(){vSize=(0.1*cameraDistance)/size;}";
   var HALF_PI = Math.PI * 0.5;
   var v$1 = new Vector3();
@@ -39170,7 +39247,7 @@
 
       _classCallCheck(this, ShockWaveEffect);
 
-      _this65 = _super64.call(this, "ShockWaveEffect", fragmentShader$u, {
+      _this65 = _super64.call(this, "ShockWaveEffect", fragmentShader$v, {
         vertexShader: vertexShader$a,
         uniforms: new Map([["active", new Uniform(false)], ["center", new Uniform(new Vector2(0.5, 0.5))], ["cameraDistance", new Uniform(1.0)], ["size", new Uniform(1.0)], ["radius", new Uniform(-waveSize)], ["maxRadius", new Uniform(maxRadius)], ["waveSize", new Uniform(waveSize)], ["amplitude", new Uniform(amplitude)]])
       });
@@ -39345,7 +39422,7 @@
     return SelectiveBloomEffect;
   }(BloomEffect);
 
-  var fragmentShader$v = "uniform float intensity;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec3 color=vec3(dot(inputColor.rgb,vec3(1.0-0.607*intensity,0.769*intensity,0.189*intensity)),dot(inputColor.rgb,vec3(0.349*intensity,1.0-0.314*intensity,0.168*intensity)),dot(inputColor.rgb,vec3(0.272*intensity,0.534*intensity,1.0-0.869*intensity)));outputColor=vec4(color,inputColor.a);}";
+  var fragmentShader$w = "uniform float intensity;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec3 color=vec3(dot(inputColor.rgb,vec3(1.0-0.607*intensity,0.769*intensity,0.189*intensity)),dot(inputColor.rgb,vec3(0.349*intensity,1.0-0.314*intensity,0.168*intensity)),dot(inputColor.rgb,vec3(0.272*intensity,0.534*intensity,1.0-0.869*intensity)));outputColor=vec4(color,inputColor.a);}";
 
   var SepiaEffect = function (_Effect18) {
     _inherits(SepiaEffect, _Effect18);
@@ -39361,7 +39438,7 @@
 
       _classCallCheck(this, SepiaEffect);
 
-      return _super66.call(this, "SepiaEffect", fragmentShader$v, {
+      return _super66.call(this, "SepiaEffect", fragmentShader$w, {
         blendFunction: blendFunction,
         uniforms: new Map([["intensity", new Uniform(intensity)]])
       });
@@ -39372,7 +39449,7 @@
 
   var searchImageDataURL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAQCAYAAACm53kpAAAAeElEQVRYR+2XSwqAMAxEJ168ePEqwRSKhIIiuHjJqiU0gWE+1CQdApcVAMUAuARaMGCX1MIL/Ow13++9lW2s3mW9MWvsnWc/2fvGygwPAN4E8QzAA4CXAB6AHjG4JTHYI1ey3pcx6FHnEfhLDOIBKAmUBK6/ANUDTlROXAHd9EC1AAAAAElFTkSuQmCC";
   var areaImageDataURL = "data:image/png;base64,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";
-  var fragmentShader$w = "uniform sampler2D weightMap;varying vec2 vOffset0;varying vec2 vOffset1;/***Moves values to a target vector based on a given conditional vector.*/void movec(const in bvec2 c,inout vec2 variable,const in vec2 value){if(c.x){variable.x=value.x;}if(c.y){variable.y=value.y;}}void movec(const in bvec4 c,inout vec4 variable,const in vec4 value){movec(c.xy,variable.xy,value.xy);movec(c.zw,variable.zw,value.zw);}void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec4 a;a.x=texture2D(weightMap,vOffset0).a;a.y=texture2D(weightMap,vOffset1).g;a.wz=texture2D(weightMap,uv).rb;vec4 color=inputColor;if(dot(a,vec4(1.0))>=1e-5){bool h=max(a.x,a.z)>max(a.y,a.w);vec4 blendingOffset=vec4(0.0,a.y,0.0,a.w);vec2 blendingWeight=a.yw;movec(bvec4(h),blendingOffset,vec4(a.x,0.0,a.z,0.0));movec(bvec2(h),blendingWeight,a.xz);blendingWeight/=dot(blendingWeight,vec2(1.0));vec4 blendingCoord=blendingOffset*vec4(texelSize,-texelSize)+uv.xyxy;color=blendingWeight.x*texture2D(inputBuffer,blendingCoord.xy);color+=blendingWeight.y*texture2D(inputBuffer,blendingCoord.zw);}outputColor=color;}";
+  var fragmentShader$x = "uniform sampler2D weightMap;varying vec2 vOffset0;varying vec2 vOffset1;/***Moves values to a target vector based on a given conditional vector.*/void movec(const in bvec2 c,inout vec2 variable,const in vec2 value){if(c.x){variable.x=value.x;}if(c.y){variable.y=value.y;}}void movec(const in bvec4 c,inout vec4 variable,const in vec4 value){movec(c.xy,variable.xy,value.xy);movec(c.zw,variable.zw,value.zw);}void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec4 a;a.x=texture2D(weightMap,vOffset0).a;a.y=texture2D(weightMap,vOffset1).g;a.wz=texture2D(weightMap,uv).rb;vec4 color=inputColor;if(dot(a,vec4(1.0))>=1e-5){bool h=max(a.x,a.z)>max(a.y,a.w);vec4 blendingOffset=vec4(0.0,a.y,0.0,a.w);vec2 blendingWeight=a.yw;movec(bvec4(h),blendingOffset,vec4(a.x,0.0,a.z,0.0));movec(bvec2(h),blendingWeight,a.xz);blendingWeight/=dot(blendingWeight,vec2(1.0));vec4 blendingCoord=blendingOffset*vec4(texelSize,-texelSize)+uv.xyxy;color=blendingWeight.x*texture2D(inputBuffer,blendingCoord.xy);color+=blendingWeight.y*texture2D(inputBuffer,blendingCoord.zw);}outputColor=color;}";
   var vertexShader$b = "varying vec2 vOffset0;varying vec2 vOffset1;void mainSupport(const in vec2 uv){vOffset0=uv+texelSize*vec2(1.0,0.0);vOffset1=uv+texelSize*vec2(0.0,1.0);}";
 
   var SMAAEffect = function (_Effect19) {
@@ -39388,10 +39465,10 @@
 
       _classCallCheck(this, SMAAEffect);
 
-      _this67 = _super67.call(this, "SMAAEffect", fragmentShader$w, {
+      _this67 = _super67.call(this, "SMAAEffect", fragmentShader$x, {
         vertexShader: vertexShader$b,
         blendFunction: BlendFunction.NORMAL,
-        attributes: EffectAttribute.CONVOLUTION,
+        attributes: EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH,
         uniforms: new Map([["weightMap", new Uniform(null)]])
       });
       _this67.renderTargetEdges = new WebGLRenderTarget(1, 1, {
@@ -39409,35 +39486,27 @@
       _this67.clearPass.overrideClearColor = new Color(0x000000);
       _this67.clearPass.overrideClearAlpha = 1.0;
       _this67.edgeDetectionPass = new ShaderPass(new EdgeDetectionMaterial(new Vector2(), edgeDetectionMode));
-
-      if (edgeDetectionMode === EdgeDetectionMode.DEPTH) {
-        _this67.setAttributes(_this67.getAttributes() | EffectAttribute.DEPTH);
-      }
-
       _this67.weightsPass = new ShaderPass(new SMAAWeightsMaterial());
+      var searchTexture = new Texture(searchImage);
+      searchTexture.name = "SMAA.Search";
+      searchTexture.magFilter = NearestFilter;
+      searchTexture.minFilter = NearestFilter;
+      searchTexture.format = RGBAFormat;
+      searchTexture.generateMipmaps = false;
+      searchTexture.needsUpdate = true;
+      searchTexture.flipY = true;
+      var areaTexture = new Texture(areaImage);
+      areaTexture.name = "SMAA.Area";
+      areaTexture.minFilter = LinearFilter;
+      areaTexture.format = RGBAFormat;
+      areaTexture.generateMipmaps = false;
+      areaTexture.needsUpdate = true;
+      areaTexture.flipY = false;
 
-      _this67.weightsPass.getFullscreenMaterial().uniforms.searchTexture.value = function () {
-        var searchTexture = new Texture(searchImage);
-        searchTexture.name = "SMAA.Search";
-        searchTexture.magFilter = NearestFilter;
-        searchTexture.minFilter = NearestFilter;
-        searchTexture.format = RGBAFormat;
-        searchTexture.generateMipmaps = false;
-        searchTexture.needsUpdate = true;
-        searchTexture.flipY = true;
-        return searchTexture;
-      }();
+      var weightsMaterial = _this67.weightsPass.getFullscreenMaterial();
 
-      _this67.weightsPass.getFullscreenMaterial().uniforms.areaTexture.value = function () {
-        var areaTexture = new Texture(areaImage);
-        areaTexture.name = "SMAA.Area";
-        areaTexture.minFilter = LinearFilter;
-        areaTexture.format = RGBAFormat;
-        areaTexture.generateMipmaps = false;
-        areaTexture.needsUpdate = true;
-        areaTexture.flipY = false;
-        return areaTexture;
-      }();
+      weightsMaterial.uniforms.searchTexture.value = searchTexture;
+      weightsMaterial.uniforms.areaTexture.value = areaTexture;
 
       _this67.applyPreset(preset);
 
@@ -39565,7 +39634,7 @@
     HIGH: 2,
     ULTRA: 3
   };
-  var fragmentShader$x = "uniform sampler2D aoBuffer;uniform float luminanceInfluence;\n#ifdef DEPTH_AWARE_UPSAMPLING\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D normalDepthBuffer;\n#else\nuniform mediump sampler2D normalDepthBuffer;\n#endif\n#endif\n#ifdef COLORIZE\nuniform vec3 color;\n#endif\nvoid mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){float aoLinear=texture2D(aoBuffer,uv).r;\n#if defined(DEPTH_AWARE_UPSAMPLING) && __VERSION__ == 300\nvec4 normalDepth[4]=vec4[](textureOffset(normalDepthBuffer,uv,ivec2(0,0)),textureOffset(normalDepthBuffer,uv,ivec2(0,1)),textureOffset(normalDepthBuffer,uv,ivec2(1,0)),textureOffset(normalDepthBuffer,uv,ivec2(1,1)));float dot01=dot(normalDepth[0].rgb,normalDepth[1].rgb);float dot02=dot(normalDepth[0].rgb,normalDepth[2].rgb);float dot03=dot(normalDepth[0].rgb,normalDepth[3].rgb);float minDot=min(dot01,min(dot02,dot03));float s=step(THRESHOLD,minDot);float smallestDistance=1.0;int index;for(int i=0;i<4;++i){float distance=abs(depth-normalDepth[i].a);if(distance<smallestDistance){smallestDistance=distance;index=i;}}ivec2 offsets[4]=ivec2[](ivec2(0,0),ivec2(0,1),ivec2(1,0),ivec2(1,1));ivec2 coord=ivec2(uv*vec2(textureSize(aoBuffer,0)))+offsets[index];float aoNearest=texelFetch(aoBuffer,coord,0).r;float ao=mix(aoNearest,aoLinear,s);\n#else\nfloat ao=aoLinear;\n#endif\nfloat l=linearToRelativeLuminance(inputColor.rgb);ao=mix(ao,1.0,l*luminanceInfluence);\n#ifdef COLORIZE\noutputColor=vec4(1.0-(1.0-ao)*(1.0-color),inputColor.a);\n#else\noutputColor=vec4(vec3(ao),inputColor.a);\n#endif\n}";
+  var fragmentShader$y = "uniform sampler2D aoBuffer;uniform float luminanceInfluence;\n#ifdef DEPTH_AWARE_UPSAMPLING\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D normalDepthBuffer;\n#else\nuniform mediump sampler2D normalDepthBuffer;\n#endif\n#endif\n#ifdef COLORIZE\nuniform vec3 color;\n#endif\nvoid mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){float aoLinear=texture2D(aoBuffer,uv).r;\n#if defined(DEPTH_AWARE_UPSAMPLING) && __VERSION__ == 300\nvec4 normalDepth[4]=vec4[](textureOffset(normalDepthBuffer,uv,ivec2(0,0)),textureOffset(normalDepthBuffer,uv,ivec2(0,1)),textureOffset(normalDepthBuffer,uv,ivec2(1,0)),textureOffset(normalDepthBuffer,uv,ivec2(1,1)));float dot01=dot(normalDepth[0].rgb,normalDepth[1].rgb);float dot02=dot(normalDepth[0].rgb,normalDepth[2].rgb);float dot03=dot(normalDepth[0].rgb,normalDepth[3].rgb);float minDot=min(dot01,min(dot02,dot03));float s=step(THRESHOLD,minDot);float smallestDistance=1.0;int index;for(int i=0;i<4;++i){float distance=abs(depth-normalDepth[i].a);if(distance<smallestDistance){smallestDistance=distance;index=i;}}ivec2 offsets[4]=ivec2[](ivec2(0,0),ivec2(0,1),ivec2(1,0),ivec2(1,1));ivec2 coord=ivec2(uv*vec2(textureSize(aoBuffer,0)))+offsets[index];float aoNearest=texelFetch(aoBuffer,coord,0).r;float ao=mix(aoNearest,aoLinear,s);\n#else\nfloat ao=aoLinear;\n#endif\nfloat l=linearToRelativeLuminance(inputColor.rgb);ao=mix(ao,1.0,l*luminanceInfluence);\n#ifdef COLORIZE\noutputColor=vec4(1.0-(1.0-ao)*(1.0-color),inputColor.a);\n#else\noutputColor=vec4(vec3(ao),inputColor.a);\n#endif\n}";
   var NOISE_TEXTURE_SIZE = 64;
 
   var SSAOEffect = function (_Effect20) {
@@ -39620,7 +39689,7 @@
 
       _classCallCheck(this, SSAOEffect);
 
-      _this68 = _super68.call(this, "SSAOEffect", fragmentShader$x, {
+      _this68 = _super68.call(this, "SSAOEffect", fragmentShader$y, {
         blendFunction: blendFunction,
         attributes: EffectAttribute.DEPTH,
         uniforms: new Map([["aoBuffer", new Uniform(null)], ["normalDepthBuffer", new Uniform(null)], ["luminanceInfluence", new Uniform(luminanceInfluence)], ["color", new Uniform(null)], ["scale", new Uniform(0.0)]])
@@ -39820,7 +39889,7 @@
     return SSAOEffect;
   }(Effect);
 
-  var fragmentShader$y = "uniform sampler2D texture;\n#if defined(ASPECT_CORRECTION) || defined(UV_TRANSFORM)\nvarying vec2 vUv2;\n#endif\nvoid mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){\n#if defined(ASPECT_CORRECTION) || defined(UV_TRANSFORM)\nvec4 texel=texelToLinear(texture2D(texture,vUv2));\n#else\nvec4 texel=texelToLinear(texture2D(texture,uv));\n#endif\noutputColor=TEXEL;}";
+  var fragmentShader$z = "uniform sampler2D texture;\n#if defined(ASPECT_CORRECTION) || defined(UV_TRANSFORM)\nvarying vec2 vUv2;\n#endif\nvoid mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){\n#if defined(ASPECT_CORRECTION) || defined(UV_TRANSFORM)\nvec4 texel=texelToLinear(texture2D(texture,vUv2));\n#else\nvec4 texel=texelToLinear(texture2D(texture,uv));\n#endif\noutputColor=TEXEL;}";
   var vertexShader$c = "#ifdef ASPECT_CORRECTION\nuniform float scale;\n#else\nuniform mat3 uvTransform;\n#endif\nvarying vec2 vUv2;void mainSupport(const in vec2 uv){\n#ifdef ASPECT_CORRECTION\nvUv2=uv*vec2(aspect,1.0)*scale;\n#else\nvUv2=(uvTransform*vec3(uv,1.0)).xy;\n#endif\n}";
 
   var TextureEffect = function (_Effect21) {
@@ -39841,7 +39910,7 @@
 
       _classCallCheck(this, TextureEffect);
 
-      _this69 = _super69.call(this, "TextureEffect", fragmentShader$y, {
+      _this69 = _super69.call(this, "TextureEffect", fragmentShader$z, {
         blendFunction: blendFunction,
         defines: new Map([["TEXEL", "texel"]]),
         uniforms: new Map([["texture", new Uniform(null)], ["scale", new Uniform(1.0)], ["uvTransform", new Uniform(null)]])
@@ -39955,7 +40024,7 @@
     return TextureEffect;
   }(Effect);
 
-  var fragmentShader$z = "uniform sampler2D luminanceMap;uniform float middleGrey;uniform float maxLuminance;uniform float averageLuminance;vec3 toneMap(vec3 c){\n#ifdef ADAPTED_LUMINANCE\nfloat lumAvg=texture2D(luminanceMap,vec2(0.5)).r;\n#else\nfloat lumAvg=averageLuminance;\n#endif\nfloat lumPixel=linearToRelativeLuminance(c);float lumScaled=(lumPixel*middleGrey)/lumAvg;float lumCompressed=(lumScaled*(1.0+(lumScaled/(maxLuminance*maxLuminance))))/(1.0+lumScaled);return lumCompressed*c;}void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){outputColor=vec4(toneMap(inputColor.rgb),inputColor.a);}";
+  var fragmentShader$A = "uniform sampler2D luminanceMap;uniform float middleGrey;uniform float maxLuminance;uniform float averageLuminance;vec3 toneMap(vec3 c){\n#ifdef ADAPTED_LUMINANCE\nfloat lumAvg=texture2D(luminanceMap,vec2(0.5)).r;\n#else\nfloat lumAvg=averageLuminance;\n#endif\nfloat lumPixel=linearToRelativeLuminance(c);float lumScaled=(lumPixel*middleGrey)/lumAvg;float lumCompressed=(lumScaled*(1.0+(lumScaled/(maxLuminance*maxLuminance))))/(1.0+lumScaled);return lumCompressed*c;}void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){outputColor=vec4(toneMap(inputColor.rgb),inputColor.a);}";
 
   var ToneMappingEffect = function (_Effect22) {
     _inherits(ToneMappingEffect, _Effect22);
@@ -39983,7 +40052,7 @@
 
       _classCallCheck(this, ToneMappingEffect);
 
-      _this70 = _super70.call(this, "ToneMappingEffect", fragmentShader$z, {
+      _this70 = _super70.call(this, "ToneMappingEffect", fragmentShader$A, {
         blendFunction: blendFunction,
         uniforms: new Map([["luminanceMap", new Uniform(null)], ["middleGrey", new Uniform(middleGrey)], ["maxLuminance", new Uniform(maxLuminance)], ["averageLuminance", new Uniform(averageLuminance)]])
       });
@@ -40099,7 +40168,7 @@
     return ToneMappingEffect;
   }(Effect);
 
-  var fragmentShader$A = "uniform float offset;uniform float darkness;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){const vec2 center=vec2(0.5);vec3 color=inputColor.rgb;\n#ifdef ESKIL\nvec2 coord=(uv-center)*vec2(offset);color=mix(color,vec3(1.0-darkness),dot(coord,coord));\n#else\nfloat d=distance(uv,center);color*=smoothstep(0.8,offset*0.799,d*(darkness+offset));\n#endif\noutputColor=vec4(color,inputColor.a);}";
+  var fragmentShader$B = "uniform float offset;uniform float darkness;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){const vec2 center=vec2(0.5);vec3 color=inputColor.rgb;\n#ifdef ESKIL\nvec2 coord=(uv-center)*vec2(offset);color=mix(color,vec3(1.0-darkness),dot(coord,coord));\n#else\nfloat d=distance(uv,center);color*=smoothstep(0.8,offset*0.799,d*(darkness+offset));\n#endif\noutputColor=vec4(color,inputColor.a);}";
 
   var VignetteEffect = function (_Effect23) {
     _inherits(VignetteEffect, _Effect23);
@@ -40119,7 +40188,7 @@
         offset: 0.5,
         darkness: 0.5
       }, options);
-      _this71 = _super71.call(this, "VignetteEffect", fragmentShader$A, {
+      _this71 = _super71.call(this, "VignetteEffect", fragmentShader$B, {
         blendFunction: settings.blendFunction,
         uniforms: new Map([["offset", new Uniform(settings.offset)], ["darkness", new Uniform(settings.darkness)]])
       });
@@ -40288,7 +40357,7 @@
     return SMAAImageLoader;
   }(Loader);
   /**
-   * spatial-controls v3.0.2 build Wed Sep 30 2020
+   * spatial-controls v3.0.3 build Sat Oct 31 2020
    * https://github.com/vanruesc/spatial-controls
    * Copyright 2020 Raoul van Rüschen
    * @license Zlib
@@ -41510,6 +41579,7 @@
       this.dracoLoader = null;
       this.ddsLoader = null;
       this.ktx2Loader = null;
+      this.meshoptDecoder = null;
       this.pluginCallbacks = [];
       this.register(function (parser) {
         return new GLTFMaterialsClearcoatExtension(parser);
@@ -41518,10 +41588,16 @@
         return new GLTFTextureBasisUExtension(parser);
       });
       this.register(function (parser) {
+        return new GLTFTextureWebPExtension(parser);
+      });
+      this.register(function (parser) {
         return new GLTFMaterialsTransmissionExtension(parser);
       });
       this.register(function (parser) {
         return new GLTFLightsExtension(parser);
+      });
+      this.register(function (parser) {
+        return new GLTFMeshoptCompression(parser);
       });
     }
 
@@ -41580,6 +41656,10 @@
         this.ktx2Loader = ktx2Loader;
         return this;
       },
+      setMeshoptDecoder: function setMeshoptDecoder(meshoptDecoder) {
+        this.meshoptDecoder = meshoptDecoder;
+        return this;
+      },
       register: function register(callback) {
         if (this.pluginCallbacks.indexOf(callback) === -1) {
           this.pluginCallbacks.push(callback);
@@ -41629,7 +41709,8 @@
           path: path || this.resourcePath || '',
           crossOrigin: this.crossOrigin,
           manager: this.manager,
-          ktx2Loader: this.ktx2Loader
+          ktx2Loader: this.ktx2Loader,
+          meshoptDecoder: this.meshoptDecoder
         });
         parser.fileLoader.setRequestHeader(this.requestHeader);
 
@@ -41713,6 +41794,8 @@
       KHR_TEXTURE_BASISU: 'KHR_texture_basisu',
       KHR_TEXTURE_TRANSFORM: 'KHR_texture_transform',
       KHR_MESH_QUANTIZATION: 'KHR_mesh_quantization',
+      EXT_TEXTURE_WEBP: 'EXT_texture_webp',
+      EXT_MESHOPT_COMPRESSION: 'EXT_meshopt_compression',
       MSFT_TEXTURE_DDS: 'MSFT_texture_dds'
     };
 
@@ -41944,10 +42027,96 @@
       var loader = parser.options.ktx2Loader;
 
       if (!loader) {
-        throw new Error('THREE.GLTFLoader: setKTX2Loader must be called before loading KTX2 textures');
+        if (json.extensionsRequired && json.extensionsRequired.indexOf(this.name) >= 0) {
+          throw new Error('THREE.GLTFLoader: setKTX2Loader must be called before loading KTX2 textures');
+        } else {
+          return null;
+        }
       }
 
       return parser.loadTextureImage(textureIndex, source, loader);
+    };
+
+    function GLTFTextureWebPExtension(parser) {
+      this.parser = parser;
+      this.name = EXTENSIONS.EXT_TEXTURE_WEBP;
+      this.isSupported = null;
+    }
+
+    GLTFTextureWebPExtension.prototype.loadTexture = function (textureIndex) {
+      var name = this.name;
+      var parser = this.parser;
+      var json = parser.json;
+      var textureDef = json.textures[textureIndex];
+
+      if (!textureDef.extensions || !textureDef.extensions[name]) {
+        return null;
+      }
+
+      var extension = textureDef.extensions[name];
+      var source = json.images[extension.source];
+      var loader = source.uri ? parser.options.manager.getHandler(source.uri) : parser.textureLoader;
+      return this.detectSupport().then(function (isSupported) {
+        if (isSupported) return parser.loadTextureImage(textureIndex, source, loader);
+
+        if (json.extensionsRequired && json.extensionsRequired.indexOf(name) >= 0) {
+          throw new Error('THREE.GLTFLoader: WebP required by asset but unsupported.');
+        }
+
+        return parser.loadTexture(textureIndex);
+      });
+    };
+
+    GLTFTextureWebPExtension.prototype.detectSupport = function () {
+      if (!this.isSupported) {
+        this.isSupported = new Promise(function (resolve) {
+          var image = new Image();
+          image.src = 'data:image/webp;base64,UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA';
+
+          image.onload = image.onerror = function () {
+            resolve(image.height === 1);
+          };
+        });
+      }
+
+      return this.isSupported;
+    };
+
+    function GLTFMeshoptCompression(parser) {
+      this.name = EXTENSIONS.EXT_MESHOPT_COMPRESSION;
+      this.parser = parser;
+    }
+
+    GLTFMeshoptCompression.prototype.loadBufferView = function (index) {
+      var json = this.parser.json;
+      var bufferView = json.bufferViews[index];
+
+      if (bufferView.extensions && bufferView.extensions[this.name]) {
+        var extensionDef = bufferView.extensions[this.name];
+        var buffer = this.parser.getDependency('buffer', extensionDef.buffer);
+        var decoder = this.parser.options.meshoptDecoder;
+
+        if (!decoder || !decoder.supported) {
+          if (json.extensionsRequired && json.extensionsRequired.indexOf(this.name) >= 0) {
+            throw new Error('THREE.GLTFLoader: setMeshoptDecoder must be called before loading compressed files');
+          } else {
+            return null;
+          }
+        }
+
+        return Promise.all([buffer, decoder.ready]).then(function (res) {
+          var byteOffset = extensionDef.byteOffset || 0;
+          var byteLength = extensionDef.byteLength || 0;
+          var count = extensionDef.count;
+          var stride = extensionDef.byteStride;
+          var result = new ArrayBuffer(count * stride);
+          var source = new Uint8Array(res[0], byteOffset, byteLength);
+          decoder.decodeGltfBuffer(new Uint8Array(result), count, stride, source, extensionDef.mode, extensionDef.filter);
+          return result;
+        });
+      } else {
+        return null;
+      }
     };
 
     var BINARY_EXTENSION_HEADER_MAGIC = 'glTF';
@@ -43398,7 +43567,6 @@
           }
 
           mesh.name = parser.createUniqueName(meshDef.name || 'mesh_' + meshIndex);
-          if (geometries.length > 1) mesh.name += '_' + i;
           assignExtrasToUserData(mesh, meshDef);
           parser.assignFinalMaterial(mesh);
           meshes.push(mesh);
@@ -43763,8 +43931,8 @@
             var _m13 = node.material;
             var maps = [_m13.map, _m13.lightMap, _m13.aoMap, _m13.emissiveMap, _m13.bumpMap, _m13.normalMap, _m13.displacementMap, _m13.roughnessMap, _m13.metalnessMap, _m13.alphaMap];
 
-            for (var _i340 = 0, _maps = maps; _i340 < _maps.length; _i340++) {
-              var _map2 = _maps[_i340];
+            for (var _i341 = 0, _maps = maps; _i341 < _maps.length; _i341++) {
+              var _map2 = _maps[_i341];
 
               if (_map2 !== undefined && _map2 !== null) {
                 renderer.initTexture(_map2);
@@ -43781,8 +43949,8 @@
             var _m14 = node.material;
             var maps = [_m14.map, _m14.emissiveMap, _m14.specularMap, _m14.bumpMap, _m14.normalMap, _m14.roughnessMap, _m14.metalnessMap];
 
-            for (var _i341 = 0, _maps2 = maps; _i341 < _maps2.length; _i341++) {
-              var _map3 = _maps2[_i341];
+            for (var _i342 = 0, _maps2 = maps; _i342 < _maps2.length; _i342++) {
+              var _map3 = _maps2[_i342];
 
               if (_map3 !== undefined && _map3 !== null) {
                 _map3.anisotropy = anisotropy;
@@ -43887,7 +44055,7 @@
         var composer = this.composer;
         var renderer = composer.getRenderer();
         var aspect = window.innerWidth / window.innerHeight;
-        var camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
+        var camera = new PerspectiveCamera(50, aspect, 0.3, 2000);
         camera.position.set(4, 8, 0.75);
         this.camera = camera;
         var target = new Vector3(-0.5, 6.5, -0.25);
@@ -43908,7 +44076,11 @@
         cage.rotation.y += Math.PI * 0.3;
         this.object = cage;
         scene.add(cage);
-        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"), SMAAPreset.HIGH, EdgeDetectionMode.DEPTH);
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"), SMAAPreset.HIGH, EdgeDetectionMode.COLOR);
+        smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.05);
+        smaaEffect.edgeDetectionMaterial.setPredicationMode(PredicationMode.DEPTH);
+        smaaEffect.edgeDetectionMaterial.setPredicationThreshold(0.002);
+        smaaEffect.edgeDetectionMaterial.setPredicationScale(1.0);
         var edgesTextureEffect = new TextureEffect({
           blendFunction: BlendFunction.SKIP,
           texture: smaaEffect.renderTargetEdges.texture
@@ -43962,12 +44134,17 @@
         var edgesTextureEffect = this.edgesTextureEffect;
         var weightsTextureEffect = this.weightsTextureEffect;
         var edgeDetectionMaterial = smaaEffect.edgeDetectionMaterial;
-        var AAMode = Object.assign({
+        var AAMode = {
           DISABLED: 0,
           SMAA: 1
-        }, !renderer.capabilities.isWebGL2 ? {} : {
-          MSAA: 2
-        });
+        };
+
+        if (renderer.capabilities.isWebGL2) {
+          Object.assign(AAMode, {
+            MSAA: 2
+          });
+        }
+
         var SMAAMode = {
           DEFAULT: 0,
           SMAA_EDGES: 1,
@@ -43978,18 +44155,28 @@
           "smaa": {
             "mode": SMAAMode.DEFAULT,
             "preset": SMAAPreset.HIGH,
-            "edge detection": EdgeDetectionMode.DEPTH,
-            "contrast factor": Number(edgeDetectionMaterial.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR),
             "opacity": smaaEffect.blendMode.opacity.value,
             "blend mode": smaaEffect.blendMode.blendFunction
+          },
+          "edgeDetection": {
+            "mode": Number(edgeDetectionMaterial.defines.EDGE_DETECTION_MODE),
+            "contrast factor": Number(edgeDetectionMaterial.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR),
+            "threshold": Number(edgeDetectionMaterial.defines.EDGE_THRESHOLD)
+          },
+          "predication": {
+            "mode": Number(edgeDetectionMaterial.defines.PREDICATION_MODE),
+            "threshold": Number(edgeDetectionMaterial.defines.PREDICATION_THRESHOLD),
+            "strength": Number(edgeDetectionMaterial.defines.PREDICATION_STRENGTH),
+            "scale": Number(edgeDetectionMaterial.defines.PREDICATION_SCALE)
           }
         };
+        delete PredicationMode.CUSTOM;
         menu.add(this, "rotate");
         menu.add(params, "antialiasing", AAMode).onChange(function () {
           var mode = Number(params.antialiasing);
           effectPass.enabled = mode === AAMode.SMAA;
           copyPass.enabled = !effectPass.enabled;
-          composer.multisampling = mode === AAMode.MSAA ? Math.min(4, context.getParameter(context.MAX_SAMPLES)) : 0;
+          composer.multisampling = mode !== AAMode.MSAA ? 0 : Math.min(4, context.getParameter(context.MAX_SAMPLES));
         });
         var folder = menu.addFolder("SMAA");
         folder.add(params.smaa, "mode", SMAAMode).onChange(function () {
@@ -44000,12 +44187,30 @@
         });
         folder.add(params.smaa, "preset", SMAAPreset).onChange(function () {
           smaaEffect.applyPreset(Number(params.smaa.preset));
+          params.edgeDetection.threshold = Number(edgeDetectionMaterial.defines.EDGE_THRESHOLD);
         });
-        folder.add(params.smaa, "edge detection", EdgeDetectionMode).onChange(function () {
-          edgeDetectionMaterial.setEdgeDetectionMode(Number(params.smaa["edge detection"]));
+        var subfolder = folder.addFolder("Edge Detection");
+        subfolder.add(params.edgeDetection, "mode", EdgeDetectionMode).onChange(function () {
+          edgeDetectionMaterial.setEdgeDetectionMode(Number(params.edgeDetection.mode));
         });
-        folder.add(params.smaa, "contrast factor").min(1.0).max(3.0).step(0.01).onChange(function () {
-          edgeDetectionMaterial.setLocalContrastAdaptationFactor(Number(params.smaa["contrast factor"]));
+        subfolder.add(params.edgeDetection, "contrast factor").min(1.0).max(3.0).step(0.01).onChange(function () {
+          edgeDetectionMaterial.setLocalContrastAdaptationFactor(Number(params.edgeDetection["contrast factor"]));
+        });
+        subfolder.add(params.edgeDetection, "threshold").min(0.0).max(0.5).step(0.0001).onChange(function () {
+          edgeDetectionMaterial.setEdgeDetectionThreshold(Number(params.edgeDetection.threshold));
+        }).listen();
+        subfolder = folder.addFolder("Predicated Thresholding");
+        subfolder.add(params.predication, "mode", PredicationMode).onChange(function () {
+          edgeDetectionMaterial.setPredicationMode(Number(params.predication.mode));
+        });
+        subfolder.add(params.predication, "threshold").min(0.0).max(0.5).step(0.0001).onChange(function () {
+          edgeDetectionMaterial.setPredicationThreshold(Number(params.predication.threshold));
+        });
+        subfolder.add(params.predication, "strength").min(0.0).max(1.0).step(0.0001).onChange(function () {
+          edgeDetectionMaterial.setPredicationStrength(Number(params.predication.strength));
+        });
+        subfolder.add(params.predication, "scale").min(1.0).max(5.0).step(0.01).onChange(function () {
+          edgeDetectionMaterial.setPredicationScale(Number(params.predication.scale));
         });
         folder.add(params.smaa, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
           smaaEffect.blendMode.opacity.value = params.smaa.opacity;
@@ -44027,7 +44232,7 @@
     var geometry = new SphereBufferGeometry(1, 5, 5);
     var twoPI = 2 * Math.PI;
 
-    for (var _i342 = 0; _i342 < amount; ++_i342) {
+    for (var _i343 = 0; _i343 < amount; ++_i343) {
       var material = new MeshPhongMaterial({
         color: 0xffffff * Math.random(),
         flatShading: true
@@ -45440,8 +45645,8 @@
         var radius = 3.0;
         var angle = 0.4;
 
-        for (var _i343 = 0, _meshes = meshes; _i343 < _meshes.length; _i343++) {
-          mesh = _meshes[_i343];
+        for (var _i344 = 0, _meshes = meshes; _i344 < _meshes.length; _i344++) {
+          mesh = _meshes[_i344];
           mesh.position.set(radius * Math.cos(angle), 0, radius * Math.sin(angle));
           angle += step;
         }
@@ -46099,6 +46304,7 @@
           }
 
           textureEffect.blendMode.setBlendFunction(mode !== RenderMode.DEFAULT ? BlendFunction.NORMAL : BlendFunction.SKIP);
+          effectPass.encodeOutput = mode === RenderMode.DEFAULT;
         }
 
         if (capabilities.isWebGL2) {
@@ -46682,8 +46888,8 @@
         folder.add(params, "firefox");
         folder.add(params, "chrome");
 
-        for (var _i344 = 0, _infoOptions = infoOptions; _i344 < _infoOptions.length; _i344++) {
-          var option = _infoOptions[_i344];
+        for (var _i345 = 0, _infoOptions = infoOptions; _i345 < _infoOptions.length; _i345++) {
+          var option = _infoOptions[_i345];
           option.domElement.style.pointerEvents = "none";
         }
       }
@@ -46702,6 +46908,7 @@
   }(PostProcessingDemo);
 
   var manager;
+  var composer;
   var camera;
 
   function render(timestamp) {
@@ -46730,7 +46937,7 @@
     renderer.shadowMap.needsUpdate = true;
     renderer.shadowMap.enabled = true;
     OverrideMaterialManager.workaroundEnabled = true;
-    var composer = new EffectComposer(renderer, {
+    composer = new EffectComposer(renderer, {
       frameBufferType: HalfFloatType
     });
     manager = new DemoManager(viewport, {
@@ -46766,8 +46973,8 @@
       window.location.hash = "";
     }
 
-    for (var _i345 = 0, _demos = demos; _i345 < _demos.length; _i345++) {
-      var demo = _demos[_i345];
+    for (var _i346 = 0, _demos = demos; _i346 < _demos.length; _i346++) {
+      var demo = _demos[_i346];
       manager.addDemo(demo);
     }
 
@@ -46777,6 +46984,7 @@
     var width = window.innerWidth;
     var height = window.innerHeight;
     manager.setSize(width, height);
+    composer.setSize(width, height);
   });
   document.addEventListener("DOMContentLoaded", function (event) {
     var img = document.querySelector(".info img");

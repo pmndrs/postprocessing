@@ -1,7 +1,6 @@
 uniform vec2 texelSize;
 
 varying vec2 vUv;
-
 varying vec2 vUv0;
 varying vec2 vUv1;
 

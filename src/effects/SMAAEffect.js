@@ -44,7 +44,7 @@ export class SMAAEffect extends Effect {
 
 			vertexShader,
 			blendFunction: BlendFunction.NORMAL,
-			attributes: EffectAttribute.CONVOLUTION,
+			attributes: EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH,
 
 			uniforms: new Map([
 				["weightMap", new Uniform(null)]
@@ -104,12 +104,6 @@ export class SMAAEffect extends Effect {
 			new EdgeDetectionMaterial(new Vector2(), edgeDetectionMode)
 		);
 
-		if(edgeDetectionMode === EdgeDetectionMode.DEPTH) {
-
-			this.setAttributes(this.getAttributes() | EffectAttribute.DEPTH);
-
-		}
-
 		/**
 		 * An SMAA weights pass.
 		 *
@@ -119,34 +113,26 @@ export class SMAAEffect extends Effect {
 
 		this.weightsPass = new ShaderPass(new SMAAWeightsMaterial());
 
-		this.weightsPass.getFullscreenMaterial().uniforms.searchTexture.value = (() => {
+		const searchTexture = new Texture(searchImage);
+		searchTexture.name = "SMAA.Search";
+		searchTexture.magFilter = NearestFilter;
+		searchTexture.minFilter = NearestFilter;
+		searchTexture.format = RGBAFormat;
+		searchTexture.generateMipmaps = false;
+		searchTexture.needsUpdate = true;
+		searchTexture.flipY = true;
 
-			const searchTexture = new Texture(searchImage);
-			searchTexture.name = "SMAA.Search";
-			searchTexture.magFilter = NearestFilter;
-			searchTexture.minFilter = NearestFilter;
-			searchTexture.format = RGBAFormat;
-			searchTexture.generateMipmaps = false;
-			searchTexture.needsUpdate = true;
-			searchTexture.flipY = true;
+		const areaTexture = new Texture(areaImage);
+		areaTexture.name = "SMAA.Area";
+		areaTexture.minFilter = LinearFilter;
+		areaTexture.format = RGBAFormat;
+		areaTexture.generateMipmaps = false;
+		areaTexture.needsUpdate = true;
+		areaTexture.flipY = false;
 
-			return searchTexture;
-
-		})();
-
-		this.weightsPass.getFullscreenMaterial().uniforms.areaTexture.value = (() => {
-
-			const areaTexture = new Texture(areaImage);
-			areaTexture.name = "SMAA.Area";
-			areaTexture.minFilter = LinearFilter;
-			areaTexture.format = RGBAFormat;
-			areaTexture.generateMipmaps = false;
-			areaTexture.needsUpdate = true;
-			areaTexture.flipY = false;
-
-			return areaTexture;
-
-		})();
+		const weightsMaterial = this.weightsPass.getFullscreenMaterial();
+		weightsMaterial.uniforms.searchTexture.value = searchTexture;
+		weightsMaterial.uniforms.areaTexture.value = areaTexture;
 
 		this.applyPreset(preset);
 

@@ -50,9 +50,12 @@ export {
 	NoiseTexture,
 	RawImageData,
 	SMAAAreaImageData,
-	SMAAImageLoader,
 	SMAASearchImageData
 } from "./images";
+
+export {
+	SMAAImageLoader
+} from "./loaders";
 
 export {
 	AdaptiveLuminanceMaterial,
@@ -74,6 +77,7 @@ export {
 	MaskMaterial,
 	OutlineMaterial,
 	OutlineEdgesMaterial,
+	PredicationMode,
 	Section,
 	SMAAWeightsMaterial,
 	SSAOMaterial
@@ -86,6 +90,7 @@ export {
 	DepthPass,
 	DepthDownsamplingPass,
 	EffectPass,
+	LambdaPass,
 	MaskPass,
 	NormalPass,
 	Pass,

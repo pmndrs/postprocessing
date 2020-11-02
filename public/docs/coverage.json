@@ -1,7 +1,7 @@
 {
-  "coverage": "96.11%",
-  "expectCount": 773,
-  "actualCount": 743,
+  "coverage": "96.16%",
+  "expectCount": 783,
+  "actualCount": 753,
   "files": {
     "src/core/ColorChannel.js": {
       "expectCount": 1,
@@ -198,7 +198,7 @@
       "actualCount": 8,
       "undocumentLines": []
     },
-    "src/images/smaa/utils/SMAAAreaImageData.js": {
+    "src/images/smaa/SMAAAreaImageData.js": {
       "expectCount": 33,
       "actualCount": 31,
       "undocumentLines": [
@@ -206,12 +206,7 @@
         85
       ]
     },
-    "src/images/smaa/utils/SMAAImageLoader.js": {
-      "expectCount": 5,
-      "actualCount": 5,
-      "undocumentLines": []
-    },
-    "src/images/smaa/utils/SMAASearchImageData.js": {
+    "src/images/smaa/SMAASearchImageData.js": {
       "expectCount": 7,
       "actualCount": 7,
       "undocumentLines": []
@@ -219,6 +214,11 @@
     "src/images/textures/NoiseTexture.js": {
       "expectCount": 3,
       "actualCount": 3,
+      "undocumentLines": []
+    },
+    "src/loaders/SMAAImageLoader.js": {
+      "expectCount": 5,
+      "actualCount": 5,
       "undocumentLines": []
     },
     "src/materials/AdaptiveLuminanceMaterial.js": {
@@ -242,7 +242,7 @@
       "expectCount": 6,
       "actualCount": 5,
       "undocumentLines": [
-        65
+        66
       ]
     },
     "src/materials/ConvolutionMaterial.js": {
@@ -273,11 +273,10 @@
       "undocumentLines": []
     },
     "src/materials/EdgeDetectionMaterial.js": {
-      "expectCount": 11,
-      "actualCount": 9,
+      "expectCount": 16,
+      "actualCount": 15,
       "undocumentLines": [
-        77,
-        96
+        81
       ]
     },
     "src/materials/EffectMaterial.js": {
@@ -372,6 +371,13 @@
         505,
         522,
         647
+      ]
+    },
+    "src/passes/LambdaPass.js": {
+      "expectCount": 5,
+      "actualCount": 4,
+      "undocumentLines": [
+        19
       ]
     },
     "src/passes/MaskPass.js": {

@@ -11,6 +11,7 @@ import {
 	CopyMaterial,
 	EdgeDetectionMode,
 	EffectPass,
+	PredicationMode,
 	ShaderPass,
 	SMAAEffect,
 	SMAAImageLoader,
@@ -154,7 +155,7 @@ export class AntialiasingDemo extends PostProcessingDemo {
 		// Camera.
 
 		const aspect = window.innerWidth / window.innerHeight;
-		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
+		const camera = new PerspectiveCamera(50, aspect, 0.3, 2000);
 		camera.position.set(4, 8, 0.75);
 		this.camera = camera;
 
@@ -197,8 +198,13 @@ export class AntialiasingDemo extends PostProcessingDemo {
 			assets.get("smaa-search"),
 			assets.get("smaa-area"),
 			SMAAPreset.HIGH,
-			EdgeDetectionMode.DEPTH
+			EdgeDetectionMode.COLOR
 		);
+
+		smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.05);
+		smaaEffect.edgeDetectionMaterial.setPredicationMode(PredicationMode.DEPTH);
+		smaaEffect.edgeDetectionMaterial.setPredicationThreshold(0.002);
+		smaaEffect.edgeDetectionMaterial.setPredicationScale(1.0);
 
 		const edgesTextureEffect = new TextureEffect({
 			blendFunction: BlendFunction.SKIP,
@@ -288,12 +294,16 @@ export class AntialiasingDemo extends PostProcessingDemo {
 		const weightsTextureEffect = this.weightsTextureEffect;
 		const edgeDetectionMaterial = smaaEffect.edgeDetectionMaterial;
 
-		const AAMode = Object.assign({
+		const AAMode = {
 			DISABLED: 0,
 			SMAA: 1
-		}, !renderer.capabilities.isWebGL2 ? {} : {
-			MSAA: 2
-		});
+		};
+
+		if(renderer.capabilities.isWebGL2) {
+
+			Object.assign(AAMode, { MSAA: 2 });
+
+		}
 
 		const SMAAMode = {
 			DEFAULT: 0,
@@ -306,12 +316,24 @@ export class AntialiasingDemo extends PostProcessingDemo {
 			"smaa": {
 				"mode": SMAAMode.DEFAULT,
 				"preset": SMAAPreset.HIGH,
-				"edge detection": EdgeDetectionMode.DEPTH,
-				"contrast factor": Number(edgeDetectionMaterial.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR),
 				"opacity": smaaEffect.blendMode.opacity.value,
 				"blend mode": smaaEffect.blendMode.blendFunction
+			},
+			"edgeDetection": {
+				"mode": Number(edgeDetectionMaterial.defines.EDGE_DETECTION_MODE),
+				"contrast factor": Number(edgeDetectionMaterial.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR),
+				"threshold": Number(edgeDetectionMaterial.defines.EDGE_THRESHOLD)
+			},
+			"predication": {
+				"mode": Number(edgeDetectionMaterial.defines.PREDICATION_MODE),
+				"threshold": Number(edgeDetectionMaterial.defines.PREDICATION_THRESHOLD),
+				"strength": Number(edgeDetectionMaterial.defines.PREDICATION_STRENGTH),
+				"scale": Number(edgeDetectionMaterial.defines.PREDICATION_SCALE)
 			}
 		};
+
+		// Disable PredicationMode.CUSTOM for the demo.
+		delete PredicationMode.CUSTOM;
 
 		menu.add(this, "rotate");
 
@@ -322,7 +344,8 @@ export class AntialiasingDemo extends PostProcessingDemo {
 			effectPass.enabled = (mode === AAMode.SMAA);
 			copyPass.enabled = !effectPass.enabled;
 
-			composer.multisampling = (mode === AAMode.MSAA) ? Math.min(4, context.getParameter(context.MAX_SAMPLES)) : 0;
+			composer.multisampling = (mode !== AAMode.MSAA) ? 0 :
+				Math.min(4, context.getParameter(context.MAX_SAMPLES));
 
 		});
 
@@ -341,18 +364,53 @@ export class AntialiasingDemo extends PostProcessingDemo {
 		folder.add(params.smaa, "preset", SMAAPreset).onChange(() => {
 
 			smaaEffect.applyPreset(Number(params.smaa.preset));
+			params.edgeDetection.threshold = Number(edgeDetectionMaterial.defines.EDGE_THRESHOLD);
 
 		});
 
-		folder.add(params.smaa, "edge detection", EdgeDetectionMode).onChange(() => {
+		let subfolder = folder.addFolder("Edge Detection");
 
-			edgeDetectionMaterial.setEdgeDetectionMode(Number(params.smaa["edge detection"]));
+		subfolder.add(params.edgeDetection, "mode", EdgeDetectionMode).onChange(() => {
+
+			edgeDetectionMaterial.setEdgeDetectionMode(Number(params.edgeDetection.mode));
 
 		});
 
-		folder.add(params.smaa, "contrast factor").min(1.0).max(3.0).step(0.01).onChange(() => {
+		subfolder.add(params.edgeDetection, "contrast factor").min(1.0).max(3.0).step(0.01).onChange(() => {
 
-			edgeDetectionMaterial.setLocalContrastAdaptationFactor(Number(params.smaa["contrast factor"]));
+			edgeDetectionMaterial.setLocalContrastAdaptationFactor(Number(params.edgeDetection["contrast factor"]));
+
+		});
+
+		subfolder.add(params.edgeDetection, "threshold").min(0.0).max(0.5).step(0.0001).onChange(() => {
+
+			edgeDetectionMaterial.setEdgeDetectionThreshold(Number(params.edgeDetection.threshold));
+
+		}).listen();
+
+		subfolder = folder.addFolder("Predicated Thresholding");
+
+		subfolder.add(params.predication, "mode", PredicationMode).onChange(() => {
+
+			edgeDetectionMaterial.setPredicationMode(Number(params.predication.mode));
+
+		});
+
+		subfolder.add(params.predication, "threshold").min(0.0).max(0.5).step(0.0001).onChange(() => {
+
+			edgeDetectionMaterial.setPredicationThreshold(Number(params.predication.threshold));
+
+		});
+
+		subfolder.add(params.predication, "strength").min(0.0).max(1.0).step(0.0001).onChange(() => {
+
+			edgeDetectionMaterial.setPredicationStrength(Number(params.predication.strength));
+
+		});
+
+		subfolder.add(params.predication, "scale").min(1.0).max(5.0).step(0.01).onChange(() => {
+
+			edgeDetectionMaterial.setPredicationScale(Number(params.predication.scale));
 
 		});
 

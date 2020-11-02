@@ -7,7 +7,7 @@ export { CopyMaterial } from "./CopyMaterial";
 export { DepthComparisonMaterial } from "./DepthComparisonMaterial";
 export { DepthDownsamplingMaterial } from "./DepthDownsamplingMaterial";
 export { DepthMaskMaterial } from "./DepthMaskMaterial";
-export { EdgeDetectionMaterial, EdgeDetectionMode } from "./EdgeDetectionMaterial";
+export { EdgeDetectionMaterial, EdgeDetectionMode, PredicationMode } from "./EdgeDetectionMaterial";
 export { EffectMaterial, Section } from "./EffectMaterial";
 export { GodRaysMaterial } from "./GodRaysMaterial";
 export { LuminanceMaterial } from "./LuminanceMaterial";

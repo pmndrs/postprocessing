@@ -39,6 +39,15 @@ import { TextureUtils } from "./utils/TextureUtils";
 let manager;
 
 /**
+ * A composer.
+ *
+ * @type {EffectComposer}
+ * @private
+ */
+
+let composer;
+
+/**
  * A camera.
  *
  * @type {Camera}
@@ -97,7 +106,7 @@ window.addEventListener("load", (event) => {
 	OverrideMaterialManager.workaroundEnabled = true;
 
 	// Create the effect composer.
-	const composer = new EffectComposer(renderer, {
+	composer = new EffectComposer(renderer, {
 		frameBufferType: HalfFloatType
 	});
 
@@ -187,6 +196,7 @@ window.addEventListener("resize", (event) => {
 	const width = window.innerWidth;
 	const height = window.innerHeight;
 	manager.setSize(width, height);
+	composer.setSize(width, height);
 
 });
 
@@ -217,7 +227,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 });
 
 /**
- * Toggles the visibility of the interface on H key press.
+ * Handles keyboard events.
  *
  * @private
  * @param {KeyboardEvent} event - An event.

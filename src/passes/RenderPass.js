@@ -165,9 +165,17 @@ export class RenderPass extends Pass {
 
 		const scene = this.scene;
 		const camera = this.camera;
+		const background = scene.background;
 		const renderTarget = this.renderToScreen ? null : inputBuffer;
 
 		if(this.clear) {
+
+			if(this.clearPass.overrideClearColor !== null) {
+
+				// This clear color is important! Ignore the scene background.
+				scene.background = null;
+
+			}
 
 			this.clearPass.render(renderer, inputBuffer);
 
@@ -182,6 +190,13 @@ export class RenderPass extends Pass {
 		} else {
 
 			renderer.render(scene, camera);
+
+		}
+
+		if(scene.background !== background) {
+
+			// Restore the background.
+			scene.background = background;
 
 		}
 
