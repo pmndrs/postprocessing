@@ -2,7 +2,6 @@
 
 [![CI](https://badgen.net/github/checks/vanruesc/postprocessing)](https://github.com/vanruesc/postprocessing/actions)
 [![Version](https://badgen.net/npm/v/postprocessing?color=green)](https://www.npmjs.com/package/postprocessing)
-[![Peer dependencies](https://badgen.net/david/peer/vanruesc/postprocessing)](https://david-dm.org/vanruesc/postprocessing?type=peer)
 [![CDN](https://badgen.net/jsdelivr/hits/npm/postprocessing)](https://www.jsdelivr.com/package/npm/postprocessing)
 
 A post processing library that provides the means to implement image filter effects for [three.js](https://threejs.org/).
