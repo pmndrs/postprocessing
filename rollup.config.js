@@ -3,8 +3,8 @@ import resolve from "@rollup/plugin-node-resolve";
 import glsl from "rollup-plugin-glsl";
 import { string } from "rollup-plugin-string";
 import { terser } from "rollup-plugin-terser";
+import pkg from "./package.json";
 
-const pkg = require("./package.json");
 const date = (new Date()).toDateString();
 
 // Meta settings.
