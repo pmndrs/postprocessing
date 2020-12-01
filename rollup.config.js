@@ -1,4 +1,5 @@
 import babel from "@rollup/plugin-babel";
+import eslint from "@rollup/plugin-eslint";
 import resolve from "@rollup/plugin-node-resolve";
 import glsl from "rollup-plugin-glsl";
 import { string } from "rollup-plugin-string";
@@ -6,8 +7,11 @@ import { terser } from "rollup-plugin-terser";
 import pkg from "./package.json";
 
 const date = (new Date()).toDateString();
-
-// Meta settings.
+const production = (process.env.NODE_ENV === "production");
+const external = Object.keys(pkg.peerDependencies);
+const globals = Object.assign({}, ...external.map((value) => ({
+	[value]: value.replace(/-/g, "").toUpperCase()
+})));
 
 const banner = `/**
  * ${pkg.name} v${pkg.version} build ${date}
@@ -16,35 +20,35 @@ const banner = `/**
  * @license ${pkg.license}
  */`;
 
-const production = (process.env.NODE_ENV === "production");
-const external = Object.keys(pkg.peerDependencies);
-const globals = Object.assign({}, ...external.map((value) => ({
-	[value]: value.replace(/-/g, "").toUpperCase()
-})));
-
-// Plugin settings.
-
-const settings = {
-	babel: {
-		babelHelpers: "bundled"
-	},
-	glsl: {
-		include: ["**/*.frag", "**/*.vert"],
-		compress: production,
-		sourceMap: false
-	},
-	string: {
-		include: ["**/*.tmp"]
-	}
+const babelSettings = {
+	babelHelpers: "bundled"
 };
 
-// Bundle configurations.
+function createPlugins(plugins = []) {
+
+	return [
+		resolve(),
+		eslint({
+			fix: true,
+			include: ["**/*.js"]
+		}),
+		glsl({
+			sourceMap: false,
+			compress: production,
+			include: ["**/*.frag", "**/*.vert"]
+		}),
+		string({
+			include: ["**/*.tmp"]
+		})
+	].concat(plugins);
+
+}
 
 const worker = {
 	smaa: {
 		input: "src/images/smaa/worker.js",
-		plugins: [resolve()].concat(production ? [
-			babel(settings.babel),
+		plugins: createPlugins(production ? [
+			babel(babelSettings),
 			terser()
 		] : []),
 		output: {
@@ -58,11 +62,7 @@ const worker = {
 const lib = {
 	module: {
 		input: "src/index.js",
-		plugins: [
-			resolve(),
-			glsl(settings.glsl),
-			string(settings.string)
-		],
+		plugins: createPlugins(),
 		external,
 		output: {
 			dir: "build",
@@ -73,12 +73,7 @@ const lib = {
 	},
 	main: {
 		input: "src/index.js",
-		plugins: [
-			resolve(),
-			babel(settings.babel),
-			glsl(settings.glsl),
-			string(settings.string)
-		],
+		plugins: createPlugins([babel(babelSettings)]),
 		external,
 		output: [{
 			dir: "build",
@@ -102,11 +97,7 @@ const lib = {
 const demo = {
 	module: {
 		input: "demo/src/index.js",
-		plugins: [
-			resolve(),
-			glsl(settings.glsl),
-			string(settings.string)
-		],
+		plugins: createPlugins(),
 		output: {
 			dir: "public/demo",
 			entryFileNames: "[name].js",
@@ -115,11 +106,7 @@ const demo = {
 	},
 	main: {
 		input: production ? "public/demo/index.js" : "demo/src/index.js",
-		plugins: production ? [babel(settings.babel)] : [
-			resolve(),
-			glsl(settings.glsl),
-			string(settings.string)
-		],
+		plugins: production ? [babel(babelSettings)] : createPlugins(),
 		output: [{
 			dir: "public/demo",
 			entryFileNames: "[name].js",
