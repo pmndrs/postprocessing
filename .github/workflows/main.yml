@@ -22,4 +22,4 @@ jobs:
       - name: Install PNPM
         run: npm install -g pnpm
       - name: Install and test
-        run: pnpm install-test
+        run: pnpm install-test --frozen-lockfile=false
