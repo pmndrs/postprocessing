@@ -1,10 +1,11 @@
-export { BlendFunction, BlendMode } from "./blending";
+export * from "./blending";
 
 export { BloomEffect } from "./BloomEffect";
 export { BokehEffect } from "./BokehEffect";
 export { BrightnessContrastEffect } from "./BrightnessContrastEffect";
 export { ColorAverageEffect } from "./ColorAverageEffect";
 export { ColorDepthEffect } from "./ColorDepthEffect";
+export { ColorGradingEffect } from "./ColorGradingEffect";
 export { ChromaticAberrationEffect } from "./ChromaticAberrationEffect";
 export { DepthEffect } from "./DepthEffect";
 export { DepthOfFieldEffect } from "./DepthOfFieldEffect";
