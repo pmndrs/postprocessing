@@ -41,16 +41,18 @@
 	],
 	"scripts": {
 		"ava": "ava",
-		"build": "rollup -c",
-		"build:production": "cross-env NODE_ENV=production npm run build",
-		"dev": "npm-p start watch",
+		"build": "run-s build:*",
+		"build:js": "cross-env NODE_ENV=production rollup -c",
+		"dev": "run-p start watch",
 		"doc": "rimraf public/docs && esdoc",
 		"lint": "eslint src demo/src --fix",
 		"prepublishOnly": "npm test && npm run doc",
-		"pretest": "rimraf build && npm run build:production",
-		"test": "ava",
+		"pretest": "rimraf build",
+		"test": "run-s lint build ava",
 		"start": "hs -s",
-		"watch": "rollup -c -w"
+		"watch": "run-p watch:*",
+		"watch:eslint": "esw -w --ext .js src demo/src",
+		"watch:js": "rollup -c -w"
 	},
 	"ava": {
 		"failFast": true,
@@ -80,6 +82,7 @@
 		"esdoc-standard-plugin": "1.x.x",
 		"eslint": "7.x.x",
 		"eslint-config-aether": "1.x.x",
+		"eslint-watch": "7.x.x",
 		"esm": "3.x.x",
 		"http-server": "0.x.x",
 		"npm-run-all": "4.x.x",
