@@ -526,7 +526,7 @@ export class SSAOEffect extends Effect {
 		const camera = this.camera;
 		const uniforms = this.ssaoMaterial.uniforms;
 		uniforms.noiseScale.value.set(w, h).divideScalar(NOISE_TEXTURE_SIZE);
-		uniforms.inverseProjectionMatrix.value.getInverse(camera.projectionMatrix);
+		uniforms.inverseProjectionMatrix.value.copy(camera.projectionMatrix).invert();
 		uniforms.projectionMatrix.value.copy(camera.projectionMatrix);
 
 		// Update the absolute radius.
