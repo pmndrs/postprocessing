@@ -1,5 +1,4 @@
 import babel from "@rollup/plugin-babel";
-import eslint from "@rollup/plugin-eslint";
 import resolve from "@rollup/plugin-node-resolve";
 import glsl from "rollup-plugin-glsl";
 import { string } from "rollup-plugin-string";
@@ -28,10 +27,6 @@ function createPlugins(plugins = []) {
 
 	return [
 		resolve(),
-		eslint({
-			fix: true,
-			include: ["**/*.js"]
-		}),
 		glsl({
 			sourceMap: false,
 			compress: production,
