@@ -1,5 +1,5 @@
 import test from "ava";
-import { OverrideMaterialManager } from "../../build/postprocessing.esm.js";
+import { OverrideMaterialManager } from "../../";
 
 test("can be instantiated and disposed", t => {
 

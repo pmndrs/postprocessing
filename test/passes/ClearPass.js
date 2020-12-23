@@ -1,5 +1,5 @@
 import test from "ava";
-import { ClearPass } from "../../build/postprocessing.esm.js";
+import { ClearPass } from "../../";
 
 test("can be created and destroyed", t => {
 

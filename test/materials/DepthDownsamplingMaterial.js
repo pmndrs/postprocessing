@@ -1,5 +1,5 @@
 import test from "ava";
-import { DepthDownsamplingMaterial } from "../../build/postprocessing.esm.js";
+import { DepthDownsamplingMaterial } from "../../";
 
 test("can be created", t => {
 

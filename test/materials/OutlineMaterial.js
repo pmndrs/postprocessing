@@ -1,5 +1,5 @@
 import test from "ava";
-import { OutlineMaterial } from "../../build/postprocessing.esm.js";
+import { OutlineMaterial } from "../../";
 
 test("can be created", t => {
 

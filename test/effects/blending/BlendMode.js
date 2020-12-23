@@ -1,5 +1,5 @@
 import test from "ava";
-import { BlendFunction, BlendMode } from "../../../build/postprocessing.esm.js";
+import { BlendFunction, BlendMode } from "../../../";
 
 test("can be created", t => {
 

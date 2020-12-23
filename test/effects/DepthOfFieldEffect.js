@@ -1,5 +1,5 @@
 import test from "ava";
-import { DepthOfFieldEffect } from "../../build/postprocessing.esm.js";
+import { DepthOfFieldEffect } from "../../";
 
 test("can be created and destroyed", t => {
 

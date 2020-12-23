@@ -1,5 +1,5 @@
 import test from "ava";
-import { EdgeDetectionMaterial } from "../../build/postprocessing.esm.js";
+import { EdgeDetectionMaterial } from "../../";
 
 test("can be created", t => {
 

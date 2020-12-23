@@ -1,5 +1,5 @@
 import test from "ava";
-import { EffectComposer } from "../../build/postprocessing.esm.js";
+import { EffectComposer } from "../../";
 
 test("can be instantiated and disposed", t => {
 

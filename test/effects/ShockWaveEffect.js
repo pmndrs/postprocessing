@@ -1,5 +1,5 @@
 import test from "ava";
-import { ShockWaveEffect } from "../../build/postprocessing.esm.js";
+import { ShockWaveEffect } from "../../";
 
 test("can be created and destroyed", t => {
 

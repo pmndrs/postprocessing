@@ -1,5 +1,5 @@
 import test from "ava";
-import { AdaptiveLuminanceMaterial } from "../../build/postprocessing.esm.js";
+import { AdaptiveLuminanceMaterial } from "../../";
 
 test("can be created", t => {
 

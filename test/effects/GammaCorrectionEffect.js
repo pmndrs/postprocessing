@@ -1,5 +1,5 @@
 import test from "ava";
-import { GammaCorrectionEffect } from "../../build/postprocessing.esm.js";
+import { GammaCorrectionEffect } from "../../";
 
 test("can be created and destroyed", t => {
 

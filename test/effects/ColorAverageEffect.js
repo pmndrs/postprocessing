@@ -1,5 +1,5 @@
 import test from "ava";
-import { ColorAverageEffect } from "../../build/postprocessing.esm.js";
+import { ColorAverageEffect } from "../../";
 
 test("can be created and destroyed", t => {
 

@@ -1,5 +1,5 @@
 import test from "ava";
-import { Pass } from "../../build/postprocessing.esm.js";
+import { Pass } from "../../";
 
 test("can be created and destroyed", t => {
 

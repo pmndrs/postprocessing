@@ -1,5 +1,5 @@
 import test from "ava";
-import { HueSaturationEffect } from "../../build/postprocessing.esm.js";
+import { HueSaturationEffect } from "../../";
 
 test("can be created and destroyed", t => {
 

@@ -1,5 +1,5 @@
 import test from "ava";
-import { SSAOMaterial } from "../../build/postprocessing.esm.js";
+import { SSAOMaterial } from "../../";
 
 test("can be created", t => {
 
