@@ -6,7 +6,8 @@
 	"main": "build/postprocessing.js",
 	"module": "build/postprocessing.esm.js",
 	"exports": {
-		".": "./build/postprocessing.esm.js"
+		"import": "./build/postprocessing.esm.js",
+		"require": "./build/postprocessing.js"
 	},
 	"sideEffects": false,
 	"license": "Zlib",
