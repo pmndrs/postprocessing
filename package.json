@@ -43,17 +43,17 @@
 	"scripts": {
 		"ava": "ava",
 		"build": "run-s build:*",
-		"build:js": "cross-env NODE_ENV=production rollup -c",
+		"build:js": "cross-env NODE_ENV=production ts-node-script esbuild",
+		"clean": "del-cli public/docs build",
 		"dev": "run-p start watch",
-		"doc": "rimraf public/docs && esdoc",
-		"lint": "eslint src demo/src --fix",
+		"doc": "esdoc",
+		"lint": "eslint src demo/src --ext .js --fix",
 		"prepublishOnly": "npm test && npm run doc",
-		"pretest": "rimraf build",
-		"test": "run-s lint build ava",
+		"test": "run-s clean lint build ava",
 		"start": "hs -s",
 		"watch": "run-p watch:*",
 		"watch:eslint": "esw -w --ext .js src demo/src",
-		"watch:js": "rollup -c -w"
+		"watch:js": "ts-node-script esbuild -w"
 	},
 	"ava": {
 		"failFast": true,
@@ -65,19 +65,22 @@
 		]
 	},
 	"eslintConfig": {
+		"root": true,
 		"extends": "aether"
 	},
 	"peerDependencies": {
 		"three": ">= 0.102.0 < 0.124.0"
 	},
 	"devDependencies": {
-		"@babel/core": "7.x.x",
-		"@babel/preset-env": "7.x.x",
-		"@rollup/plugin-babel": "5.x.x",
-		"@rollup/plugin-node-resolve": "11.x.x",
+		"@types/node": "14.x.x",
+		"@types/yargs": "15.x.x",
 		"ava": "3.x.x",
+		"chokidar": "3.x.x",
 		"cross-env": "7.x.x",
 		"dat.gui": "0.x.x",
+		"del-cli": "3.x.x",
+		"esbuild": "0.x.x",
+		"esbuild-plugin-glsl": "1.x.x",
 		"esdoc": "1.x.x",
 		"esdoc-importpath-plugin": "1.x.x",
 		"esdoc-standard-plugin": "1.x.x",
@@ -87,13 +90,12 @@
 		"esm": "3.x.x",
 		"http-server": "0.x.x",
 		"npm-run-all": "4.x.x",
-		"rimraf": "3.x.x",
-		"rollup": "2.x.x",
-		"rollup-plugin-glsl": "1.x.x",
-		"rollup-plugin-string": "3.x.x",
-		"rollup-plugin-terser": "7.x.x",
 		"spatial-controls": "3.x.x",
 		"three": "0.x.x",
-		"three-demo": "4.x.x"
+		"three-demo": "4.x.x",
+		"ts-node": "9.x.x",
+		"tslib": "2.x.x",
+		"typescript": "4.x.x",
+		"yargs": "16.x.x"
 	}
 }
