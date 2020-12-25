@@ -92,7 +92,7 @@ export class LUTCubeLoader extends Loader {
 
 		}
 
-		const size = result[1];
+		const size = Number(result[1]);
 		const data = new Float32Array(size * size * size * 3);
 
 		const domainMin = new Vector3(0, 0, 0);
@@ -102,7 +102,7 @@ export class LUTCubeLoader extends Loader {
 
 		if(result !== null) {
 
-			domainMin.set(result[1], result[2], result[3]);
+			domainMin.set(Number(result[1]), Number(result[2]), Number(result[3]));
 
 		}
 
@@ -110,7 +110,7 @@ export class LUTCubeLoader extends Loader {
 
 		if(result !== null) {
 
-			domainMax.set(result[1], result[2], result[3]);
+			domainMax.set(Number(result[1]), Number(result[2]), Number(result[3]));
 
 		}
 
@@ -130,8 +130,6 @@ export class LUTCubeLoader extends Loader {
 			data[i++] = Number(result[3]);
 
 		}
-
-		console.log("CUBE", data);
 
 		const lut = new LookupTexture3D(data, size, size, size);
 		lut.type = FloatType;
