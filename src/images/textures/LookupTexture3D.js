@@ -140,8 +140,8 @@ export class LookupTexture3D extends DataTexture3D {
 
 	toTexture2D() {
 
-		const width = this.width * this.depth;
-		const height = this.height;
+		const width = this.image.width;
+		const height = this.image.height * this.image.depth;
 
 		const texture = new DataTexture(this.image.data, width, height);
 		texture.format = this.format;
