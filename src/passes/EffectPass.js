@@ -156,7 +156,7 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 		if(mainImageExists) {
 
-			const depthParamRegExp = /mainImage *\([\w\s,]*?depth[\w\s,]*?\)/;
+			const depthParamRegExp = /MainImage *\([\w\s,]*?depth[\w\s,]*?\)/;
 			let string = prefix + "MainImage(color0, UV, ";
 
 			// The effect may sample depth in a different shader.
