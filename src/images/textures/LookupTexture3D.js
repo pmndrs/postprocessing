@@ -24,20 +24,18 @@ const c = new Color();
 export class LookupTexture3D extends DataTexture3D {
 
 	/**
-	 * Constructs a new lookup texture.
+	 * Constructs a cubic 3D lookup texture.
 	 *
 	 * LUTs are usually stored as sRGB textures and may need to be converted into
 	 * linear color space via `convertSRGBToLinear()`.
 	 *
 	 * @param {TypedArray} data - The data.
-	 * @param {Number} width - The width.
-	 * @param {Number} height - The height.
-	 * @param {Number} depth - The depth.
+	 * @param {Number} size - The sidelength.
 	 */
 
-	constructor(data, width, height, depth) {
+	constructor(data, size) {
 
-		super(data, width, height, depth);
+		super(data, size, size, size);
 
 		this.format = RGBFormat;
 		this.magFilter = LinearFilter;
