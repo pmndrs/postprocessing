@@ -52,7 +52,7 @@
 		"test": "run-s clean lint build ava",
 		"start": "hs -s",
 		"watch": "run-p watch:*",
-		"watch:eslint": "esw -w --ext .js src demo/src",
+		"watch:eslint": "esw -w --ext .js --color src demo/src",
 		"watch:js": "ts-node-script esbuild -w"
 	},
 	"ava": {
