@@ -1,4 +1,4 @@
-import { FileLoader, FloatType, Loader, LoadingManager } from "three";
+import { FileLoader, Loader, LoadingManager, sRGBEncoding } from "three";
 import { LookupTexture3D } from "../images/textures/LookupTexture3D";
 
 /**
@@ -87,8 +87,6 @@ export class LUT3dlLoader extends Loader {
 
 		}
 
-		console.log(result);
-
 		const gridLines = result[0].trim().split(/\s+/g).map((n) => Number(n));
 		const gridStep = gridLines[1] - gridLines[0];
 		const size = gridLines.length;
@@ -139,10 +137,8 @@ export class LUT3dlLoader extends Loader {
 
 		}
 
-		console.log("3DL", maxBitValue, data);
-
 		const lut = new LookupTexture3D(data, size, size, size);
-		lut.type = FloatType;
+		lut.encoding = sRGBEncoding;
 
 		return lut;
 

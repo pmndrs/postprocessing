@@ -1,4 +1,4 @@
-import { FileLoader, FloatType, Loader, LoadingManager, Vector3 } from "three";
+import { FileLoader, Loader, LoadingManager, sRGBEncoding, Vector3 } from "three";
 import { LookupTexture3D } from "../images/textures/LookupTexture3D";
 
 /**
@@ -132,7 +132,7 @@ export class LUTCubeLoader extends Loader {
 		}
 
 		const lut = new LookupTexture3D(data, size, size, size);
-		lut.type = FloatType;
+		lut.encoding = sRGBEncoding;
 
 		if(title !== null) {
 
