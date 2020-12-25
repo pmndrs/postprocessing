@@ -5,7 +5,9 @@ import {
 	DataTexture3D,
 	FloatType,
 	LinearFilter,
-	RGBFormat
+	LinearEncoding,
+	RGBFormat,
+	sRGBEncoding
 } from "three";
 
 /**
@@ -38,6 +40,8 @@ export class LookupTexture3D extends DataTexture3D {
 		super(data, size, size, size);
 
 		this.format = RGBFormat;
+		this.type = FloatType;
+		this.encoding = LinearEncoding;
 		this.magFilter = LinearFilter;
 		this.wrapS = ClampToEdgeWrapping;
 		this.wrapT = ClampToEdgeWrapping;
@@ -142,6 +146,7 @@ export class LookupTexture3D extends DataTexture3D {
 		const texture = new DataTexture(this.image.data, width, height);
 		texture.format = this.format;
 		texture.type = this.type;
+		texture.encoding = this.encoding;
 		texture.magFilter = this.magFilter;
 		texture.wrapS = this.wrapS;
 		texture.wrapT = this.wrapT;
