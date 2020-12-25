@@ -112,9 +112,15 @@ export class LookupTexture3D extends DataTexture3D {
 
 		const data = this.image.data;
 
-		for(let i = 0, l = data.length; i < l; i += 3) {
+		if(this.encoding === sRGBEncoding) {
 
-			c.fromArray(data, i).convertSRGBToLinear().toArray(data, i);
+			for(let i = 0, l = data.length; i < l; i += 3) {
+
+				c.fromArray(data, i).convertSRGBToLinear().toArray(data, i);
+
+			}
+
+			this.encoding = LinearEncoding;
 
 		}
 
