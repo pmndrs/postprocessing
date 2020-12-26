@@ -4,7 +4,6 @@
 	"description": "A post processing library that provides the means to implement image filter effects for three.js.",
 	"homepage": "https://github.com/vanruesc/postprocessing",
 	"main": "build/postprocessing.js",
-	"module": "build/postprocessing.esm.js",
 	"exports": {
 		"import": "./build/postprocessing.esm.js",
 		"require": "./build/postprocessing.js"
@@ -48,7 +47,7 @@
 		"dev": "run-p start watch",
 		"doc": "esdoc",
 		"lint": "eslint src demo/src --ext .js --fix",
-		"prepublishOnly": "npm test && npm run doc",
+		"prepublishOnly": "run-s test doc",
 		"test": "run-s clean lint build ava",
 		"start": "hs -s",
 		"watch": "run-p watch:*",
