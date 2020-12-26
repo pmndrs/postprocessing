@@ -7,7 +7,8 @@ import {
 	LinearFilter,
 	LinearEncoding,
 	RGBFormat,
-	sRGBEncoding
+	sRGBEncoding,
+	UnsignedByteType
 } from "three";
 
 /**
@@ -50,64 +51,40 @@ export class LookupTexture3D extends DataTexture3D {
 	}
 
 	/**
-	 * The current texture type.
+	 * Converts the LUT data into unsigned byte data.
 	 *
-	 * @type {Number}
-	 */
-
-	/*get type() {
-
-		return this.type;
-
-	}*/
-
-	/**
-	 * Sets the texture type.
-	 *
-	 * @type {Number}
-	 */
-
-	/*set type(value) {
-
-		this.type = value;
-		this.data = (value === FloatType) ?
-			this.highPrecisionData :
-			this.createLowPrecisionData();
-
-	}*/
-
-	/**
-	 * Creates a low precision version of the LUT data if it doesn't exist yet.
+	 * This is a lossy process so `convertSRGBToLinear` should be called first.
 	 *
 	 * @private
 	 * @return {Uint8Array} The low precision data.
 	 */
 
-	createLowPrecisionData() {
+	convertToUint8() {
 
-		const data = this.image.data;
-		let lowPrecisionData = data;
+		if(this.type === FloatType) {
 
-		if(data instanceof Float32Array) {
+			const floatData = this.image.data;
+			const uint8Data = new Uint8Array(floatData.length);
 
-			lowPrecisionData = new Uint8Array(data.length);
+			for(let i = 0, l = floatData.length; i < l; ++i) {
 
-			for(let i = 0, l = data.length; i < l; ++i) {
-
-				lowPrecisionData[i] = data[i++] * 255;
+				uint8Data[i] = floatData[i++] * 255;
 
 			}
 
-			console.log("Created low precision data", lowPrecisionData);
+			this.image.data = uint8Data;
+			this.type = UnsignedByteType;
 
 		}
 
-		return lowPrecisionData;
+		return this;
 
 	}
 
 	/**
-	 * Converts this lookup texture into linear color space.
+	 * Converts this LUT into linear color space.
+	 *
+	 * Linear LUTs skip the gamma correction step in the fragment shader.
 	 *
 	 * @return {LookupTexture3D} This texture.
 	 */
@@ -165,6 +142,7 @@ export class LookupTexture3D extends DataTexture3D {
 	static createNeutralData(size) {
 
 		const data = new Float32Array(size * size * size * 3);
+		const s = 1.0 / (size - 1.0);
 
 		for(let r = 0; r < size; ++r) {
 
@@ -173,9 +151,9 @@ export class LookupTexture3D extends DataTexture3D {
 				for(let b = 0; b < size; ++b) {
 
 					const i = r + g * size + b * size * size;
-					data[i * 3 + 0] = r / (size - 1.0);
-					data[i * 3 + 1] = g / (size - 1.0);
-					data[i * 3 + 2] = b / (size - 1.0);
+					data[i * 3 + 0] = r * s;
+					data[i * 3 + 1] = g * s;
+					data[i * 3 + 2] = b * s;
 
 				}
 

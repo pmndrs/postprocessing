@@ -1,4 +1,4 @@
-import { FloatType, Uniform } from "three";
+import { FloatType, LinearEncoding, sRGBEncoding, Uniform } from "three";
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect } from "./Effect";
 
@@ -62,27 +62,44 @@ export class ColorGradingEffect extends Effect {
 		if(this.lut !== value) {
 
 			this.uniforms.get("lut").value = value;
-
-			defines.delete("USE_LUT");
-			defines.delete("LUT_3D");
-			defines.delete("LUT_HIGH_PRECISION");
-			defines.delete("LUT_SIZE");
-			defines.delete("INV_LUT_SIZE");
-			defines.delete("LUT_HALF_TEXEL_SIZE");
+			defines.clear();
 
 			if(value !== null) {
 
 				defines.set("USE_LUT", "1");
-console.log(value);
+
 				if(value.isDataTexture3D) {
 
 					defines.set("LUT_3D", "1");
 
 				} else {
 
-					defines.set("LUT_SIZE", value.image.width.toFixed(6));
-					defines.set("LUT_TEXEL_SIZE", (1.0 / value.image.width).toFixed(6));
-					defines.set("LUT_HALF_TEXEL_SIZE", ((1.0 / value.image.width) * 0.5).toFixed(6));
+					let size = value.image.width;
+
+					if(size > value.image.height) {
+
+						defines.set("LUT_STRIP_HORIZONTAL");
+						size = value.image.height;
+
+					}
+
+					defines.set("LUT_SIZE", size.toFixed(11));
+					defines.set("LUT_TEXEL_SIZE", (1.0 / size).toFixed(11));
+					defines.set("LUT_HALF_TEXEL_SIZE", (0.5 / size).toFixed(11));
+
+				}
+
+				if(value.encoding === sRGBEncoding) {
+
+					this.defines.set("texelToLinear(texel)", "sRGBToLinear(texel)");
+
+				} else if(value.encoding === LinearEncoding) {
+
+					this.defines.set("texelToLinear(texel)", "texel");
+
+				} else {
+
+					console.log("Unsupported encoding: " + value.encoding);
 
 				}
 
@@ -97,18 +114,6 @@ console.log(value);
 			this.setChanged();
 
 		}
-
-	}
-
-	/**
-	 * Performs initialization tasks.
-	 *
-	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
-	 * @param {Number} frameBufferType - The type of the main frame buffers.
-	 */
-
-	initialize(renderer, alpha, frameBufferType) {
 
 	}
 
