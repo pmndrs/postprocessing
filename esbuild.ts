@@ -22,14 +22,22 @@ async function build(changedFile: string = null): Promise<void> {
 	for(const configs of configGroups) {
 
 		const t0 = Date.now();
-		const p: Promise<void>[] = configs.map((c: BuildOptions) => {
+		const promises: Promise<BuildResult>[] = configs.map((c: BuildOptions) => {
 
-			return (path.normalize(c.outfile) === f) ? Promise.resolve() :
-				service.build(c).then((r) => handleResult(r, c.outfile, Date.now() - t0));
+			let p: Promise<BuildResult> = null;
+
+			if(path.normalize(c.outfile) !== f) {
+
+				p = service.build(c);
+				p.then((r) => handleResult(r, c.outfile, Date.now() - t0));
+
+			}
+
+			return p;
 
 		});
 
-		await Promise.all(p).catch((e) => console.error(e));
+		await Promise.all(promises).catch((e) => console.error(e));
 
 	}
 
