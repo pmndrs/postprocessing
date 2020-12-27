@@ -43,7 +43,7 @@ function config(entryPoint: string, outfile: string, format: string, minify = fa
 
 export default [
 	[
-		config("src/images/smaa/worker.js", "tmp/smaa.worker", "iife", production),
+		config("src/images/smaa/worker.js", "tmp/smaa.worker", "iife", production)
 	],
 	production ? [
 		config("src/index.js", `build/${pkg.name}.esm.js`, "esm"),
