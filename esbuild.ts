@@ -6,14 +6,6 @@ import configGroups from "./esbuild.config";
 
 const { argv } = yargs.options({ watch: { alias: "w", type: "boolean" } });
 
-function handleResult(result: BuildResult, file: string, elapsed: number): void {
-
-	console.log(`Built ${file} in ${elapsed}ms`);
-	result.warnings.forEach((w) => console.warn(w.text,
-		`${w.location.file} ${w.location.line}:${w.location.column}`));
-
-}
-
 async function build(changedFile: string = null): Promise<void> {
 
 	const service = await startService();
@@ -22,14 +14,19 @@ async function build(changedFile: string = null): Promise<void> {
 	for(const configs of configGroups) {
 
 		const t0 = Date.now();
-		const promises: Promise<BuildResult>[] = configs.map((c: BuildOptions) => {
+		const promises: Promise<void>[] = configs.map((c: BuildOptions) => {
 
-			let p: Promise<BuildResult> = null;
+			let p: Promise<void> = null;
 
 			if(path.normalize(c.outfile) !== f) {
 
-				p = service.build(c);
-				p.then((r) => handleResult(r, c.outfile, Date.now() - t0));
+				p = service.build(c).then((result) => {
+
+					console.log(`Built ${c.outfile} in ${Date.now() - t0}ms`);
+					result.warnings.forEach((w) => console.warn(w.text,
+						`${w.location.line}:${w.location.column} ${w.location.file}`));
+
+				}).catch((e) => console.error(`Failed to build ${c.outfile}`));
 
 			}
 
@@ -37,7 +34,7 @@ async function build(changedFile: string = null): Promise<void> {
 
 		});
 
-		await Promise.all(promises).catch((e) => console.error(e));
+		await Promise.all(promises);
 
 	}
 
