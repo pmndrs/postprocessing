@@ -1,4 +1,11 @@
-import { Matrix4, PerspectiveCamera, ShaderMaterial, Uniform, Vector2 } from "three";
+import {
+	Matrix4,
+	NoBlending,
+	PerspectiveCamera,
+	ShaderMaterial,
+	Uniform,
+	Vector2
+} from "three";
 
 import fragmentShader from "./glsl/ssao/shader.frag";
 import vertexShader from "./glsl/ssao/shader.vert";
@@ -56,6 +63,7 @@ export class SSAOMaterial extends ShaderMaterial {
 			fragmentShader,
 			vertexShader,
 
+			blending: NoBlending,
 			depthWrite: false,
 			depthTest: false
 

@@ -1,4 +1,4 @@
-import { ShaderMaterial, Uniform, Vector2 } from "three";
+import { NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
 
 import fragmentShader from "./glsl/outline/shader.frag";
 import vertexShader from "./glsl/outline/shader.vert";
@@ -29,6 +29,7 @@ export class OutlineMaterial extends ShaderMaterial {
 			fragmentShader,
 			vertexShader,
 
+			blending: NoBlending,
 			depthWrite: false,
 			depthTest: false
 

@@ -1,4 +1,4 @@
-import { ShaderMaterial, Uniform } from "three";
+import { NoBlending, ShaderMaterial, Uniform } from "three";
 import { ColorChannel } from "../core/ColorChannel";
 
 import fragmentShader from "./glsl/mask/shader.frag";
@@ -33,6 +33,7 @@ export class MaskMaterial extends ShaderMaterial {
 			fragmentShader,
 			vertexShader,
 
+			blending: NoBlending,
 			depthWrite: false,
 			depthTest: false
 

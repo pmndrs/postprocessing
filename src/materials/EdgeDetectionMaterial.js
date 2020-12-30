@@ -1,4 +1,4 @@
-import { ShaderMaterial, Uniform, Vector2 } from "three";
+import { NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
 
 import fragmentShader from "./glsl/edge-detection/shader.frag";
 import vertexShader from "./glsl/edge-detection/shader.vert";
@@ -45,6 +45,8 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 
 			fragmentShader,
 			vertexShader,
+
+			blending: NoBlending,
 			depthWrite: false,
 			depthTest: false
 
