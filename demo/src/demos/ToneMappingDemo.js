@@ -12,7 +12,8 @@ import {
 	SMAAEffect,
 	SMAAImageLoader,
 	SMAAPreset,
-	ToneMappingEffect
+	ToneMappingEffect,
+	ToneMappingMode
 } from "../../../src";
 
 /**
@@ -107,12 +108,12 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 		const aspect = window.innerWidth / window.innerHeight;
 		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
-		camera.position.set(-0.5, 5, -0.5);
+		camera.position.set(-5.15, 8.1, -0.95);
 		this.camera = camera;
 
 		// Controls.
 
-		const target = new Vector3(-0.5, 10, 0);
+		const target = new Vector3(-4.4, 8.6, -0.5);
 		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
 		controls.settings.translation.enabled = true;
@@ -146,20 +147,18 @@ export class ToneMappingDemo extends PostProcessingDemo {
 		smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.01);
 
 		const toneMappingEffect = new ToneMappingEffect({
-			blendFunction: BlendFunction.NORMAL,
-			adaptive: true,
+			mode: ToneMappingMode.REINHARD2_ADAPTIVE,
 			resolution: 256,
+			whitePoint: 4.0,
 			middleGrey: 0.6,
-			maxLuminance: 16.0,
-			averageLuminance: 1.0,
-			adaptationRate: 2.0
+			minLuminance: 0.01,
+			averageLuminance: 0.01,
+			adaptationRate: 1.0
 		});
 
 		this.effect = toneMappingEffect;
 
 		const pass = new EffectPass(camera, smaaEffect, toneMappingEffect);
-		pass.dithering = true;
-		this.pass = pass;
 
 		composer.addPass(pass);
 
@@ -173,51 +172,75 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const pass = this.pass;
 		const effect = this.effect;
 		const blendMode = effect.blendMode;
+		const adaptiveLuminancePass = effect.adaptiveLuminancePass;
+		const adaptiveLuminanceMaterial = adaptiveLuminancePass.getFullscreenMaterial();
 
 		const params = {
+			"mode": effect.mode,
+			"exposure": 1.0,
 			"resolution": effect.resolution,
-			"adaptation rate": effect.adaptationRate,
-			"average lum": effect.uniforms.get("averageLuminance").value,
-			"max lum": effect.uniforms.get("maxLuminance").value,
+			"white point": effect.uniforms.get("whitePoint").value,
 			"middle grey": effect.uniforms.get("middleGrey").value,
+			"average lum": effect.uniforms.get("averageLuminance").value,
+			"min lum": adaptiveLuminanceMaterial.uniforms.minLuminance.value,
+			"adaptation rate": adaptiveLuminancePass.adaptationRate,
 			"opacity": blendMode.opacity.value,
 			"blend mode": blendMode.blendFunction
 		};
 
-		menu.add(params, "resolution", [64, 128, 256, 512, 1024]).onChange(() => {
+		menu.add(params, "mode", ToneMappingMode).onChange(() => {
 
-			effect.resolution = Number(params.resolution);
-
-		});
-
-		let f = menu.addFolder("Luminance");
-
-		f.add(effect, "adaptive");
-
-		f.add(params, "adaptation rate").min(0.0).max(5.0).step(0.01).onChange(() => {
-
-			effect.adaptationRate = params["adaptation rate"];
+			effect.mode = Number(params.mode);
 
 		});
 
-		f.add(params, "average lum").min(0.01).max(1.0).step(0.01).onChange(() => {
+		menu.add(params, "exposure").min(0.0).max(2.0).step(0.001).onChange(() => {
+
+			effect.uniforms.get("toneMappingExposure").value = params.exposure;
+
+		});
+
+		let f = menu.addFolder("Reinhard (Modified)");
+
+		f.add(params, "white point").min(1.0).max(16.0).step(0.01).onChange(() => {
+
+			effect.uniforms.get("whitePoint").value = params["white point"];
+
+		});
+
+		f.add(params, "middle grey").min(0.0).max(1.0).step(0.0001).onChange(() => {
+
+			effect.uniforms.get("middleGrey").value = params["middle grey"];
+
+		});
+
+		f.add(params, "average lum").min(0.0001).max(1.0).step(0.0001).onChange(() => {
 
 			effect.uniforms.get("averageLuminance").value = params["average lum"];
 
 		});
 
-		f.add(params, "max lum").min(0.0).max(32.0).step(1).onChange(() => {
+		f.open();
 
-			effect.uniforms.get("maxLuminance").value = params["max lum"];
+		f = menu.addFolder("Reinhard (Adaptive)");
+
+		f.add(params, "resolution", [64, 128, 256, 512]).onChange(() => {
+
+			effect.resolution = Number(params.resolution);
 
 		});
 
-		f.add(params, "middle grey").min(0.0).max(1.0).step(0.01).onChange(() => {
+		f.add(params, "adaptation rate").min(0.001).max(3.0).step(0.001).onChange(() => {
 
-			effect.uniforms.get("middleGrey").value = params["middle grey"];
+			adaptiveLuminancePass.adaptationRate = params["adaptation rate"];
+
+		});
+
+		f.add(params, "min lum").min(0.001).max(1.0).step(0.001).onChange(() => {
+
+			adaptiveLuminanceMaterial.uniforms.minLuminance.value = params["min lum"];
 
 		});
 
@@ -234,8 +257,6 @@ export class ToneMappingDemo extends PostProcessingDemo {
 			blendMode.setBlendFunction(Number(params["blend mode"]));
 
 		});
-
-		menu.add(pass, "dithering");
 
 	}
 
