@@ -27,5 +27,5 @@ export { SepiaEffect } from "./SepiaEffect";
 export { SMAAEffect, SMAAPreset } from "./SMAAEffect";
 export { SSAOEffect } from "./SSAOEffect";
 export { TextureEffect } from "./TextureEffect";
-export { ToneMappingEffect } from "./ToneMappingEffect";
+export { ToneMappingEffect, ToneMappingMode } from "./ToneMappingEffect";
 export { VignetteEffect } from "./VignetteEffect";
