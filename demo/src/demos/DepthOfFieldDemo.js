@@ -186,7 +186,7 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 			EdgeDetectionMode.DEPTH
 		);
 
-		smaaEffect.setEdgeDetectionThreshold(0.05);
+		smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.01);
 
 		const depthOfFieldEffect = new DepthOfFieldEffect(camera, {
 			focusDistance: 0.0,

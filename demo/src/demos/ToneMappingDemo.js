@@ -143,7 +143,7 @@ export class ToneMappingDemo extends PostProcessingDemo {
 			EdgeDetectionMode.DEPTH
 		);
 
-		smaaEffect.setEdgeDetectionThreshold(0.05);
+		smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.01);
 
 		const toneMappingEffect = new ToneMappingEffect({
 			blendFunction: BlendFunction.NORMAL,
