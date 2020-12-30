@@ -27,7 +27,6 @@ import { ToneMappingDemo } from "./demos/ToneMappingDemo";
 import { PerformanceDemo } from "./demos/PerformanceDemo";
 
 import { ProgressManager } from "./utils/ProgressManager";
-import { TextureUtils } from "./utils/TextureUtils";
 
 /**
  * A demo manager.
@@ -59,7 +58,6 @@ let camera;
 /**
  * Renders the current demo.
  *
- * @private
  * @param {DOMHighResTimeStamp} timestamp - The current time in seconds.
  */
 
@@ -73,7 +71,6 @@ function render(timestamp) {
 /**
  * Performs initialization tasks when the page has been fully loaded.
  *
- * @private
  * @param {Event} event - An event.
  */
 
@@ -137,8 +134,9 @@ window.addEventListener("load", (event) => {
 		if(!demoCache.has(demo)) {
 
 			// Prevent stuttering when new objects come into view.
-			renderer.compile(demo.scene, camera);
-			TextureUtils.initializeTextures(renderer, demo.scene);
+			demo.scene.traverse((node) => (node.frustumCulled = false));
+			manager.render(0.0);
+			demo.scene.traverse((node) => (node.frustumCulled = true));
 			demoCache.add(demo);
 
 		}
