@@ -24,8 +24,8 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 			},
 
 			uniforms: {
-				previousLuminanceBuffer: new Uniform(null),
-				currentLuminanceBuffer: new Uniform(null),
+				luminanceBuffer0: new Uniform(null),
+				luminanceBuffer1: new Uniform(null),
 				minLuminance: new Uniform(0.01),
 				deltaTime: new Uniform(0.0),
 				tau: new Uniform(1.0)
@@ -36,7 +36,11 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 
 			blending: NoBlending,
 			depthWrite: false,
-			depthTest: false
+			depthTest: false,
+
+			extensions: {
+				shaderTextureLOD: true
+			}
 
 		});
 
