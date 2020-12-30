@@ -73,17 +73,19 @@ export class TextureEffect extends Effect {
 
 			if(value !== null) {
 
-				if(value.encoding === sRGBEncoding) {
+				switch(value.encoding) {
 
-					this.defines.set("texelToLinear(texel)", "sRGBToLinear(texel)");
+					case sRGBEncoding:
+						this.defines.set("texelToLinear(texel)", "sRGBToLinear(texel)");
+						break;
 
-				} else if(value.encoding === LinearEncoding) {
+					case LinearEncoding:
+						this.defines.set("texelToLinear(texel)", "texel");
+						break;
 
-					this.defines.set("texelToLinear(texel)", "texel");
-
-				} else {
-
-					console.log("Unsupported encoding: " + value.encoding);
+					default:
+						console.log("Unsupported encoding: " + value.encoding);
+						break;
 
 				}
 
