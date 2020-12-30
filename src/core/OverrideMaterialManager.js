@@ -66,6 +66,48 @@ export class OverrideMaterialManager {
 
 		this.setMaterial(material);
 
+		/**
+		 * The current mesh count.
+		 *
+		 * @type {Number}
+		 * @private
+		 */
+
+		this.meshCount = 0;
+
+		/**
+		 * Assigns an appropriate override material to a given mesh.
+		 *
+		 * @param {Object3D} node - A scene node.
+		 * @private
+		 */
+
+		this.replaceMaterial = (node) => {
+
+			if(node.isMesh) {
+
+				this.originalMaterials.set(node, node.material);
+
+				if(node.isInstancedMesh) {
+
+					node.material = this.materialInstanced;
+
+				} else if(node.isSkinnedMesh) {
+
+					node.material = this.materialSkinning;
+
+				} else {
+
+					node.material = this.material;
+
+				}
+
+				++this.meshCount;
+
+			}
+
+		};
+
 	}
 
 	/**
@@ -104,46 +146,16 @@ export class OverrideMaterialManager {
 
 	render(renderer, scene, camera) {
 
-		const material = this.material;
-		const materialSkinning = this.materialSkinning;
-		const materialInstanced = this.materialInstanced;
-		const originalMaterials = this.originalMaterials;
-
 		// Ignore shadows.
 		const shadowMapEnabled = renderer.shadowMap.enabled;
 		renderer.shadowMap.enabled = false;
 
 		if(workaroundEnabled) {
 
-			let meshCount = 0;
+			const originalMaterials = this.originalMaterials;
 
-			// Replace materials of all meshes with the correct override materials.
-			scene.traverse((node) => {
-
-				if(node.isMesh) {
-
-					originalMaterials.set(node, node.material);
-
-					if(node.isInstancedMesh) {
-
-						node.material = materialInstanced;
-
-					} else if(node.isSkinnedMesh) {
-
-						node.material = materialSkinning;
-
-					} else {
-
-						node.material = material;
-
-					}
-
-					++meshCount;
-
-				}
-
-			});
-
+			this.meshCount = 0;
+			scene.traverse(this.replaceMaterial);
 			renderer.render(scene, camera);
 
 			for(const entry of originalMaterials) {
@@ -152,7 +164,7 @@ export class OverrideMaterialManager {
 
 			}
 
-			if(meshCount !== originalMaterials.size) {
+			if(this.meshCount !== originalMaterials.size) {
 
 				originalMaterials.clear();
 
@@ -161,7 +173,7 @@ export class OverrideMaterialManager {
 		} else {
 
 			const overrideMaterial = scene.overrideMaterial;
-			scene.overrideMaterial = material;
+			scene.overrideMaterial = this.material;
 			renderer.render(scene, camera);
 			scene.overrideMaterial = overrideMaterial;
 
