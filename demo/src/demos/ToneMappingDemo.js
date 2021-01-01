@@ -159,7 +159,6 @@ export class ToneMappingDemo extends PostProcessingDemo {
 		this.effect = toneMappingEffect;
 
 		const pass = new EffectPass(camera, smaaEffect, toneMappingEffect);
-
 		composer.addPass(pass);
 
 	}
@@ -178,7 +177,7 @@ export class ToneMappingDemo extends PostProcessingDemo {
 		const adaptiveLuminanceMaterial = adaptiveLuminancePass.getFullscreenMaterial();
 
 		const params = {
-			"mode": effect.mode,
+			"mode": effect.getMode(),
 			"exposure": 1.0,
 			"resolution": effect.resolution,
 			"white point": effect.uniforms.get("whitePoint").value,
@@ -192,7 +191,7 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 		menu.add(params, "mode", ToneMappingMode).onChange(() => {
 
-			effect.mode = Number(params.mode);
+			effect.setMode(Number(params.mode));
 
 		});
 
