@@ -1,30 +1,14 @@
 #ifdef LUT_3D
 
-	#if defined(LUT_HIGH_PRECISION) && defined(GL_FRAGMENT_PRECISION_HIGH)
+	#ifdef LUT_PRECISION_HIGH
 
-		uniform highp sampler3D lut;
+		uniform mediump sampler3D lut;
 
 	#else
 
 		uniform lowp sampler3D lut;
 
 	#endif
-
-#else
-
-	#if defined(LUT_HIGH_PRECISION) && defined(GL_FRAGMENT_PRECISION_HIGH)
-
-		uniform highp sampler2D lut;
-
-	#else
-
-		uniform lowp sampler2D lut;
-
-	#endif
-
-#endif
-
-#ifdef LUT_3D
 
 	vec4 applyLUT(vec3 rgb) {
 
@@ -33,6 +17,16 @@
 	}
 
 #else
+
+	#ifdef LUT_PRECISION_HIGH
+
+		uniform mediump sampler2D lut;
+
+	#else
+
+		uniform lowp sampler2D lut;
+
+	#endif
 
 	vec4 applyLUT(vec3 rgb) {
 
@@ -50,7 +44,7 @@
 
 		#ifdef LUT_STRIP_HORIZONTAL
 
-			// Common 2D strip LUTs extend horizontally.
+			// Common 2D LUTs extend horizontally.
 			float xOffset = rgb.x * LUT_TEXEL_SIZE;
 			vec2 uv1 = vec2(xOffset, rgb.y);
 			vec2 uv2 = vec2(uv1);
@@ -81,14 +75,8 @@
 
 void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
 
-	#ifdef USE_LUT
-
-		outputColor = vec4(texelToLinear(applyLUT(inputColor.rgb)).rgb, inputColor.a);
-
-	#else
-
-		outputColor = inputColor;
-
-	#endif
+	vec3 c = linearToInputTexel(inputColor).rgb;
+	c = texelToLinear(applyLUT(c)).rgb;
+	outputColor = vec4(c, inputColor.a);
 
 }
