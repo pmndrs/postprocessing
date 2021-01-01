@@ -65,7 +65,7 @@ export class LookupTexture3D extends DataTexture3D {
 		if(this.type === FloatType) {
 
 			const floatData = this.image.data;
-			const uint8Data = new Uint8Array(floatData.length);
+			const uint8Data = new Uint8ClampedArray(floatData.length);
 
 			for(let i = 0, l = floatData.length; i < l; ++i) {
 
