@@ -58,6 +58,9 @@ export class LUTEffect extends Effect {
 	/**
 	 * Sets the input encoding.
 	 *
+	 * If set to `sRGBEncoding`, all input colors will first be converted into
+	 * sRGB color space before the LUT is applied.
+	 *
 	 * @param {Number} value - The encoding.
 	 */
 
