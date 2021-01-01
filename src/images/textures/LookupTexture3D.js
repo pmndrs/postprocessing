@@ -141,7 +141,7 @@ export class LookupTexture3D extends DataTexture3D {
 
 	static createNeutralData(size) {
 
-		const data = new Float32Array(size * size * size * 3);
+		const data = new Float32Array(size ** 3 * 3);
 		const s = 1.0 / (size - 1.0);
 
 		for(let r = 0; r < size; ++r) {

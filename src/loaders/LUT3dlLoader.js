@@ -101,7 +101,7 @@ export class LUT3dlLoader extends Loader {
 
 		}
 
-		const data = new Float32Array(size * size * size * 3);
+		const data = new Float32Array(size ** 3 * 3);
 		let maxValue = 0.0;
 		let index = 0;
 

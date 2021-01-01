@@ -93,7 +93,7 @@ export class LUTCubeLoader extends Loader {
 		}
 
 		const size = Number(result[1]);
-		const data = new Float32Array(size * size * size * 3);
+		const data = new Float32Array(size ** 3 * 3);
 
 		const domainMin = new Vector3(0, 0, 0);
 		const domainMax = new Vector3(1, 1, 1);
