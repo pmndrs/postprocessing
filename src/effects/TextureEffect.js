@@ -84,7 +84,7 @@ export class TextureEffect extends Effect {
 						break;
 
 					default:
-						console.log("Unsupported encoding: " + value.encoding);
+						console.error("Unsupported encoding:", value.encoding);
 						break;
 
 				}
