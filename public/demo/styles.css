@@ -30,11 +30,11 @@ p {
 	margin: 0;
 }
 
-div[role="main"] {
+main {
 	height: 100%;
 }
 
-div[role="complementary"] {
+aside {
 	padding: 0 5px;
 	position: fixed;
 	right: 0;
@@ -116,4 +116,8 @@ img:hover {
 
 .dg {
 	user-select: none;
+}
+
+.dg select {
+	max-width: 100%;
 }
