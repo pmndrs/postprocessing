@@ -41,8 +41,9 @@ function config(entryPoint: string, outfile: string, format: string, minify = fa
 
 }
 
-export default [
+export const configGroups = [
 	[
+		config("src/images/lut/worker.js", "tmp/lut.worker", "iife", production),
 		config("src/images/smaa/worker.js", "tmp/smaa.worker", "iife", production)
 	],
 	production ? [
@@ -55,3 +56,5 @@ export default [
 		config("demo/src/index.js", "public/demo/index.js", "iife")
 	]
 ];
+
+export const sourceDirectories = ["src", "demo/src"];
