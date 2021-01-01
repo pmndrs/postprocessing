@@ -11,6 +11,8 @@ import {
 	UnsignedByteType
 } from "three";
 
+import { RawImageData } from "../RawImageData";
+
 /**
  * A color.
  *
@@ -22,15 +24,15 @@ const c = new Color();
 
 /**
  * A 3D lookup texture (LUT).
+ *
+ * This texture can be used as-is in a WebGL 2 context. It can also be converted
+ * into a regular 2D texture for backwards compatibility.
  */
 
 export class LookupTexture3D extends DataTexture3D {
 
 	/**
 	 * Constructs a cubic 3D lookup texture.
-	 *
-	 * LUTs are usually stored as sRGB textures and may need to be converted into
-	 * linear color space via `convertSRGBToLinear()`.
 	 *
 	 * @param {TypedArray} data - The data.
 	 * @param {Number} size - The sidelength.
@@ -40,8 +42,8 @@ export class LookupTexture3D extends DataTexture3D {
 
 		super(data, size, size, size);
 
-		this.format = RGBFormat;
 		this.type = FloatType;
+		this.format = RGBFormat;
 		this.encoding = LinearEncoding;
 		this.magFilter = LinearFilter;
 		this.wrapS = ClampToEdgeWrapping;
@@ -52,12 +54,60 @@ export class LookupTexture3D extends DataTexture3D {
 	}
 
 	/**
+	 * Scales this LUT up to a given target size using tetrahedral interpolation.
+	 *
+	 * Does nothing if the target size is the same as the current size.
+	 *
+	 * @param {Number} size - The target sidelength.
+	 * @return {LookupTexture3D} This texture.
+	 */
+
+	scaleUp(size) {
+
+		if(size < this.image.width) {
+
+			console.error("The target size must be larger than the current size");
+
+		} else if(size > this.image.width) {
+
+			// todo
+
+		}
+
+	}
+
+	/**
+	 * Applies the given LUT to this one.
+	 *
+	 * @param {LookupTexture3D} lut - A LUT. Must have the same dimensions as this LUT.
+	 * @return {LookupTexture3D} This texture.
+	 */
+
+	applyLUT(lut) {
+
+		if(lut.image.width !== this.image.width) {
+
+			console.error("Size mismatch");
+
+		} else if(lut.type !== this.type) {
+
+			console.error("Type mismatch");
+
+		} else {
+
+			// todo
+
+		}
+
+	}
+
+	/**
 	 * Converts the LUT data into unsigned byte data.
 	 *
-	 * This is a lossy process so `convertSRGBToLinear` should be called first.
+	 * This is a lossy operation which should only be performed after all other
+	 * transformations have been applied.
 	 *
-	 * @private
-	 * @return {Uint8Array} The low precision data.
+	 * @return {LookupTexture3D} This texture.
 	 */
 
 	convertToUint8() {
@@ -83,9 +133,65 @@ export class LookupTexture3D extends DataTexture3D {
 	}
 
 	/**
-	 * Converts this LUT into linear color space.
+	 * Converts the LUT data into float data.
 	 *
-	 * Linear LUTs skip the gamma correction step in the fragment shader.
+	 * @return {LookupTexture3D} This texture.
+	 */
+
+	convertToFloat() {
+
+		if(this.type === UnsignedByteType) {
+
+			const uint8Data = this.image.data;
+			const floatData = new Float32Array(uint8Data.length);
+
+			for(let i = 0, l = uint8Data.length; i < l; ++i) {
+
+				floatData[i] = uint8Data[i] / 255;
+
+			}
+
+			this.image.data = floatData;
+			this.type = FloatType;
+
+		}
+
+		return this;
+
+	}
+
+	/**
+	 * Converts the output of this LUT into sRGB color space.
+	 *
+	 * @return {LookupTexture3D} This texture.
+	 */
+
+	convertLinearToSRGB() {
+
+		const data = this.image.data;
+
+		if(this.type === FloatType) {
+
+			for(let i = 0, l = data.length; i < l; i += 3) {
+
+				c.fromArray(data, i).convertLinearToSRGB().toArray(data, i);
+
+			}
+
+			this.encoding = sRGBEncoding;
+
+		} else {
+
+			console.error("Color space conversion requires FloatType data");
+
+		}
+
+		return this;
+
+	}
+
+	/**
+	 * Converts the output of this LUT into linear color space.
 	 *
 	 * @return {LookupTexture3D} This texture.
 	 */
@@ -94,7 +200,7 @@ export class LookupTexture3D extends DataTexture3D {
 
 		const data = this.image.data;
 
-		if(this.encoding === sRGBEncoding) {
+		if(this.type === FloatType) {
 
 			for(let i = 0, l = data.length; i < l; i += 3) {
 
@@ -104,6 +210,10 @@ export class LookupTexture3D extends DataTexture3D {
 
 			this.encoding = LinearEncoding;
 
+		} else {
+
+			console.error("Color space conversion requires FloatType data");
+
 		}
 
 		return this;
@@ -111,7 +221,7 @@ export class LookupTexture3D extends DataTexture3D {
 	}
 
 	/**
-	 * Creates a new 2D data texture from this 3D LUT.
+	 * Converts this LUT into a 2D data texture.
 	 *
 	 * @return {DataTexture} The texture.
 	 */
@@ -122,12 +232,13 @@ export class LookupTexture3D extends DataTexture3D {
 		const height = this.image.height * this.image.depth;
 
 		const texture = new DataTexture(this.image.data, width, height);
-		texture.format = this.format;
 		texture.type = this.type;
+		texture.format = this.format;
 		texture.encoding = this.encoding;
 		texture.magFilter = this.magFilter;
 		texture.wrapS = this.wrapS;
 		texture.wrapT = this.wrapT;
+		texture.generateMipmaps = false;
 
 		return texture;
 
