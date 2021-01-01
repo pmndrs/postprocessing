@@ -2,7 +2,15 @@
 
 	#ifdef LUT_PRECISION_HIGH
 
-		uniform mediump sampler3D lut;
+		#ifdef GL_FRAGMENT_PRECISION_HIGH
+
+			uniform highp sampler3D lut;
+
+		#else
+
+			uniform mediump sampler3D lut;
+
+		#endif
 
 	#else
 
@@ -20,7 +28,15 @@
 
 	#ifdef LUT_PRECISION_HIGH
 
-		uniform mediump sampler2D lut;
+		#ifdef GL_FRAGMENT_PRECISION_HIGH
+
+			uniform highp sampler2D lut;
+
+		#else
+
+			uniform mediump sampler2D lut;
+
+		#endif
 
 	#else
 

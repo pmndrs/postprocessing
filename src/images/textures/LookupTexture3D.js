@@ -47,6 +47,7 @@ export class LookupTexture3D extends DataTexture3D {
 		this.wrapS = ClampToEdgeWrapping;
 		this.wrapT = ClampToEdgeWrapping;
 		this.wrapR = ClampToEdgeWrapping;
+		this.unpackAlignment = 1;
 
 	}
 
