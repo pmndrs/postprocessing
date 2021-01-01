@@ -137,10 +137,10 @@ export class LookupTexture3D extends DataTexture3D {
 	 * Creates neutral 3D LUT data.
 	 *
 	 * @param {Number} size - The size of the cubic LUT texture.
-	 * @return {Float32Array} The neutral 3D LUT data.
+	 * @return {LookupTexture3D} The neutral 3D LUT.
 	 */
 
-	static createNeutralData(size) {
+	static createNeutral(size) {
 
 		const data = new Float32Array(size ** 3 * 3);
 		const s = 1.0 / (size - 1.0);
@@ -151,10 +151,10 @@ export class LookupTexture3D extends DataTexture3D {
 
 				for(let b = 0; b < size; ++b) {
 
-					const i = r + g * size + b * size * size;
-					data[i * 3 + 0] = r * s;
-					data[i * 3 + 1] = g * s;
-					data[i * 3 + 2] = b * s;
+					const i3 = (r + g * size + b * size * size) * 3;
+					data[i3 + 0] = r * s;
+					data[i3 + 1] = g * s;
+					data[i3 + 2] = b * s;
 
 				}
 
@@ -162,7 +162,7 @@ export class LookupTexture3D extends DataTexture3D {
 
 		}
 
-		return data;
+		return new LookupTexture3D(data, size);
 
 	}
 
