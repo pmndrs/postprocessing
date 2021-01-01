@@ -117,38 +117,38 @@ export class ToneMappingEffect extends Effect {
 		this.uniforms.get("luminanceBuffer").value = this.adaptiveLuminancePass.texture;
 
 		/**
-		 * The current tone mapping operator.
+		 * The current tone mapping mode.
 		 *
 		 * @type {ToneMappingMode}
 		 * @private
 		 */
 
-		this.operator = null;
+		this.mode = null;
+		this.setMode(mode);
 
 		this.resolution = resolution;
-		this.mode = mode;
 
 	}
 
 	/**
-	 * The current tone mapping mode.
+	 * Returns the current tone mapping mode.
 	 *
-	 * @type {ToneMappingMode}
+	 * @return {ToneMappingMode} The tone mapping mode.
 	 */
 
-	get mode() {
+	getMode() {
 
-		return this.operator;
+		return this.mode;
 
 	}
 
 	/**
 	 * Sets the tone mapping mode.
 	 *
-	 * @type {ToneMappingMode}
+	 * @param {ToneMappingMode} value - The tone mapping mode.
 	 */
 
-	set mode(value) {
+	setMode(value) {
 
 		const currentMode = this.mode;
 
@@ -189,7 +189,7 @@ export class ToneMappingEffect extends Effect {
 
 			}
 
-			this.operator = value;
+			this.mode = value;
 			this.setChanged();
 
 		}
