@@ -111,23 +111,46 @@ export class LookupTexture3D extends DataTexture3D {
 	/**
 	 * Applies the given LUT to this one.
 	 *
-	 * @param {LookupTexture3D} lut - A LUT. Must have the same dimensions as this LUT.
+	 * @param {LookupTexture3D} lut - A LUT. Must have the same dimensions and type as this LUT.
 	 * @return {LookupTexture3D} This texture.
 	 */
 
 	applyLUT(lut) {
 
-		if(lut.image.width !== this.image.width) {
+		const img0 = this.image;
+		const img1 = lut.image;
+
+		const size0 = Math.min(img0.width, img0.height, img0.depth);
+		const size1 = Math.min(img1.width, img1.height, img1.depth);
+
+		if(size0 !== size1) {
 
 			console.error("Size mismatch");
 
-		} else if(lut.type !== this.type) {
+		} else if(lut.type !== FloatType || this.type !== FloatType) {
 
-			console.error("Type mismatch");
+			console.error("Both LUTs must be FloatType textures");
 
 		} else {
 
-			// todo
+			const data0 = img0.data;
+			const data1 = img1.data;
+			const size = size0;
+			const s = size - 1;
+
+			for(let i = 0, l = size ** 3; i < l; ++i) {
+
+				const i3 = i * 3;
+				const r = data0[i3 + 0] * s;
+				const g = data0[i3 + 1] * s;
+				const b = data0[i3 + 2] * s;
+				const iRGB = Math.round(r + g * size + b * size * size) * 3;
+
+				data0[i3 + 0] = data1[iRGB + 0];
+				data0[i3 + 1] = data1[iRGB + 1];
+				data0[i3 + 2] = data1[iRGB + 2];
+
+			}
 
 		}
 
