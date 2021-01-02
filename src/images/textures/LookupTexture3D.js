@@ -59,8 +59,8 @@ export class LookupTexture3D extends DataTexture3D {
 	 * Scales this LUT up to a given target size using tetrahedral interpolation.
 	 *
 	 * @param {Number} size - The target sidelength.
-	 * @param {Boolean} [transferData=true] - Set to false to keep the original data.
-	 * @return {Promise<LookupTexture3D>} A promise that returns a new LUT upon completion.
+	 * @param {Boolean} [transferData=true] - Set to false to keep the original data intact.
+	 * @return {Promise<LookupTexture3D>} A promise that resolves with a new LUT upon completion.
 	 */
 
 	scaleUp(size, transferData = true) {

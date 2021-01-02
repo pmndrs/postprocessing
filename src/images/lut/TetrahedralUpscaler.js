@@ -2,6 +2,7 @@
  * Two temporary vectors.
  *
  * @type {Float32Array[]}
+ * @private
  */
 
 const P = [
@@ -10,9 +11,10 @@ const P = [
 ];
 
 /**
- * Four temporary colors.
+ * Four temporary RGB color containers.
  *
  * @type {Float32Array[]}
+ * @private
  */
 
 const C = [
@@ -26,6 +28,7 @@ const C = [
  * Six congruent and equal sized tetrahedra, each defined by four vertices.
  *
  * @type {Float32Array[][]}
+ * @private
  */
 
 const T = [
@@ -65,10 +68,11 @@ const T = [
 /**
  * Calculates the volume of a given tetrahedron.
  *
- * @param {Float32Array} a - A tetrahedra vertex.
- * @param {Float32Array} b - A tetrahedra vertex.
- * @param {Float32Array} c - A tetrahedra vertex.
- * @param {Float32Array} d - A tetrahedra vertex.
+ * @private
+ * @param {Float32Array} a - A tetrahedron vertex.
+ * @param {Float32Array} b - A tetrahedron vertex.
+ * @param {Float32Array} c - A tetrahedron vertex.
+ * @param {Float32Array} d - A tetrahedron vertex.
  * @return {Number} The volume.
  */
 
@@ -107,6 +111,7 @@ function calculateTetrahedronVolume(a, b, c, d) {
 /**
  * Samples the given data.
  *
+ * @private
  * @param {TypedArray} data - The source data.
  * @param {Number} size - The size of the source texture.
  * @param {Number} x - The X coordinate.
@@ -127,6 +132,7 @@ function sample(data, size, x, y, z, color) {
 /**
  * Samples the given data using tetrahedral interpolation.
  *
+ * @private
  * @param {TypedArray} data - The source data.
  * @param {Number} size - The size of the source texture.
  * @param {Number} u - The U coordinate.
