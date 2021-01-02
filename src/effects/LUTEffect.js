@@ -29,9 +29,6 @@ export class LUTEffect extends Effect {
 
 		});
 
-		this.setInputEncoding(LinearEncoding);
-		this.setLUT(lut);
-
 		/**
 		 * The input encoding.
 		 *
@@ -39,12 +36,17 @@ export class LUTEffect extends Effect {
 		 * @private
 		 */
 
-		this.inputEncoding = LinearEncoding;
+		this.inputEncoding = sRGBEncoding;
+
+		this.setInputEncoding(sRGBEncoding);
+		this.setLUT(lut);
 
 	}
 
 	/**
 	 * Returns the input encoding.
+	 *
+	 * This is set to `sRGBEncoding` by default since most LUTs expect sRGB input.
 	 *
 	 * @return {Number} The encoding.
 	 */
@@ -58,8 +60,7 @@ export class LUTEffect extends Effect {
 	/**
 	 * Sets the input encoding.
 	 *
-	 * If set to `sRGBEncoding`, all input colors will first be converted into
-	 * sRGB color space before the LUT is applied.
+	 * Set this to `LinearEncoding` if your LUT expects linear color input.
 	 *
 	 * @param {Number} value - The encoding.
 	 */
