@@ -4,6 +4,7 @@ import { TetrahedralUpscaler } from "./TetrahedralUpscaler";
 /**
  * Performs long-running LUT transformations.
  *
+ * @private
  * @param {Event} event - A message event.
  */
 

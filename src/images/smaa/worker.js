@@ -8,13 +8,15 @@ import { SMAASearchImageData } from "./SMAASearchImageData";
  * @param {Event} event - A message event.
  */
 
-self.addEventListener("message", function onMessage(event) {
+self.addEventListener("message", (event) => {
 
 	const areaImageData = SMAAAreaImageData.generate();
 	const searchImageData = SMAASearchImageData.generate();
 
-	postMessage({ areaImageData, searchImageData },
-		[areaImageData.data.buffer, searchImageData.data.buffer]);
+	postMessage({ areaImageData, searchImageData }, [
+		areaImageData.data.buffer,
+		searchImageData.data.buffer
+	]);
 
 	close();
 
