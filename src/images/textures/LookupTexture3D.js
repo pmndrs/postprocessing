@@ -413,7 +413,10 @@ export class LookupTexture3D extends DataTexture3D {
 
 		}
 
-		return new LookupTexture3D(data, size);
+		const lut = new LookupTexture3D(data, size);
+		lut.name = "neutral";
+
+		return lut;
 
 	}
 
