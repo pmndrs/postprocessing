@@ -12,6 +12,8 @@ import {
 } from "three";
 
 import { RawImageData } from "../RawImageData";
+import { LUTOperation } from "../lut/LUTOperation";
+import workerProgram from "../../../tmp/lut.worker";
 
 /**
  * A color.
@@ -56,23 +58,53 @@ export class LookupTexture3D extends DataTexture3D {
 	/**
 	 * Scales this LUT up to a given target size using tetrahedral interpolation.
 	 *
-	 * Does nothing if the target size is the same as the current size.
-	 *
 	 * @param {Number} size - The target sidelength.
-	 * @return {LookupTexture3D} This texture.
+	 * @param {Boolean} [transferData=true] - Set to false to keep the original data.
+	 * @return {Promise<LookupTexture3D>} A promise that returns a new LUT upon completion.
 	 */
 
-	scaleUp(size) {
+	scaleUp(size, transferData = true) {
 
-		if(size < this.image.width) {
+		const image = this.image;
+		let promise;
 
-			console.error("The target size must be larger than the current size");
+		if(size <= image.width) {
 
-		} else if(size > this.image.width) {
+			promise = Promise.reject(new Error("The target size must be larger than the current size"));
 
-			// todo
+		} else if(size > image.width) {
+
+			const workerURL = URL.createObjectURL(new Blob([workerProgram], { type: "text/javascript" }));
+			const worker = new Worker(workerURL);
+
+			promise = new Promise((resolve, reject) => {
+
+				worker.addEventListener("error", (event) => reject(event.error));
+				worker.addEventListener("message", (event) => {
+
+					const lut = new LookupTexture3D(event.data, size);
+					lut.encoding = this.encoding;
+					lut.type = this.type;
+					lut.name = this.name;
+
+					URL.revokeObjectURL(workerURL);
+					resolve(lut);
+
+				});
+
+				const transferList = transferData ? [image.data.buffer] : [];
+
+				worker.postMessage({
+					operation: LUTOperation.SCALE_UP,
+					data: image.data,
+					size
+				}, transferList);
+
+			});
 
 		}
+
+		return promise;
 
 	}
 
