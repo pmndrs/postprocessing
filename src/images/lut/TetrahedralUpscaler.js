@@ -117,9 +117,7 @@ function calculateTetrahedronVolume(a, b, c, d) {
 
 function sample(data, size, x, y, z, color) {
 
-	const i = x + y * size + z * size * size;
-	const i3 = i * 3;
-
+	const i3 = (x + y * size + z * size * size) * 3;
 	color[0] = data[i3 + 0];
 	color[1] = data[i3 + 1];
 	color[2] = data[i3 + 2];
@@ -139,9 +137,9 @@ function sample(data, size, x, y, z, color) {
 
 function tetrahedralSample(data, size, u, v, w, color) {
 
-	const px = u * (size - 1);
-	const py = v * (size - 1);
-	const pz = w * (size - 1);
+	const px = u * (size - 1.0);
+	const py = v * (size - 1.0);
+	const pz = w * (size - 1.0);
 
 	const minX = Math.floor(px);
 	const minY = Math.floor(py);
