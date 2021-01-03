@@ -1,6 +1,6 @@
 {
 	"name": "postprocessing",
-	"version": "6.18.0",
+	"version": "6.19.0",
 	"description": "A post processing library that provides the means to implement image filter effects for three.js.",
 	"homepage": "https://github.com/vanruesc/postprocessing",
 	"main": "build/postprocessing.js",
@@ -44,7 +44,7 @@
 		"ava": "ava",
 		"build": "run-s build:*",
 		"build:js": "cross-env NODE_ENV=production ts-node-script esbuild",
-		"clean": "del-cli public/docs build",
+		"clean": "del-cli public/docs tmp build",
 		"dev": "run-p start watch",
 		"doc": "esdoc",
 		"lint": "eslint src demo/src --ext .js --fix",

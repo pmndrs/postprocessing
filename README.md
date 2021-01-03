@@ -89,6 +89,7 @@ _The total demo download size is about `60 MB`._
    - Sepia
    - Brightness & Contrast
    - Hue & Saturation
+   - LUT
  - [Depth of Field](https://vanruesc.github.io/postprocessing/public/demo/#depth-of-field)
    - Vignette
  - [Glitch](https://vanruesc.github.io/postprocessing/public/demo/#glitch)
