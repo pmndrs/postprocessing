@@ -19,7 +19,9 @@ jobs:
         uses: actions/checkout@v2
       - name: Install Node
         uses: actions/setup-node@v1
+        with:
+          node-version: "14"
       - name: Install PNPM
         run: npm install -g pnpm
       - name: Install and test
-        run: pnpm install-test
+        run: pnpm install-test --frozen-lockfile=false

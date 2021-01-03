@@ -1,12 +1,13 @@
 {
 	"name": "postprocessing",
-	"version": "6.18.0",
+	"version": "6.19.0",
 	"description": "A post processing library that provides the means to implement image filter effects for three.js.",
 	"homepage": "https://github.com/vanruesc/postprocessing",
 	"main": "build/postprocessing.js",
 	"module": "build/postprocessing.esm.js",
 	"exports": {
-		".": "./build/postprocessing.esm.js"
+		"import": "./build/postprocessing.esm.js",
+		"require": "./build/postprocessing.js"
 	},
 	"sideEffects": false,
 	"license": "Zlib",
@@ -41,15 +42,18 @@
 	],
 	"scripts": {
 		"ava": "ava",
-		"build": "rollup -c",
-		"build:production": "cross-env NODE_ENV=production npm run build",
-		"watch": "rollup -c -w",
-		"dev": "concurrently -k -n server,rollup,eslint \"hs -s\" \"rollup -c -w\" \"esw -w src demo/src\"",
-		"doc": "rimraf public/docs && esdoc",
-		"lint": "eslint src demo/src",
-		"prepublishOnly": "npm test && npm run doc",
-		"pretest": "rimraf build && npm run build:production",
-		"test": "ava"
+		"build": "run-s build:*",
+		"build:js": "cross-env NODE_ENV=production ts-node-script esbuild",
+		"clean": "del-cli public/docs tmp build",
+		"dev": "run-p start watch",
+		"doc": "esdoc",
+		"lint": "eslint src demo/src --ext .js --fix",
+		"prepublishOnly": "run-s clean test doc",
+		"test": "run-s lint build ava",
+		"start": "hs -s",
+		"watch": "run-p watch:*",
+		"watch:eslint": "esw -w --ext .js --color src demo/src",
+		"watch:js": "ts-node-script esbuild -w"
 	},
 	"ava": {
 		"failFast": true,
@@ -61,20 +65,22 @@
 		]
 	},
 	"eslintConfig": {
+		"root": true,
 		"extends": "aether"
 	},
 	"peerDependencies": {
-		"three": ">= 0.102.0 < 0.123.0"
+		"three": ">= 0.102.0 < 0.125.0"
 	},
 	"devDependencies": {
-		"@babel/core": "7.x.x",
-		"@babel/preset-env": "7.x.x",
-		"@rollup/plugin-babel": "5.x.x",
-		"@rollup/plugin-node-resolve": "10.x.x",
+		"@types/node": "14.x.x",
+		"@types/yargs": "15.x.x",
 		"ava": "3.x.x",
-		"concurrently": "5.x.x",
+		"chokidar": "3.x.x",
 		"cross-env": "7.x.x",
 		"dat.gui": "0.x.x",
+		"del-cli": "3.x.x",
+		"esbuild": "0.x.x",
+		"esbuild-plugin-glsl": "1.x.x",
 		"esdoc": "1.x.x",
 		"esdoc-importpath-plugin": "1.x.x",
 		"esdoc-standard-plugin": "1.x.x",
@@ -83,13 +89,13 @@
 		"eslint-watch": "7.x.x",
 		"esm": "3.x.x",
 		"http-server": "0.x.x",
-		"rimraf": "3.x.x",
-		"rollup": "2.x.x",
-		"rollup-plugin-glsl": "1.x.x",
-		"rollup-plugin-string": "3.x.x",
-		"rollup-plugin-terser": "7.x.x",
+		"npm-run-all": "4.x.x",
 		"spatial-controls": "3.x.x",
 		"three": "0.x.x",
-		"three-demo": "4.x.x"
+		"three-demo": "4.x.x",
+		"ts-node": "9.x.x",
+		"tslib": "2.x.x",
+		"typescript": "4.x.x",
+		"yargs": "16.x.x"
 	}
 }

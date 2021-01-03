@@ -1,7 +1,7 @@
 {
-  "coverage": "96.16%",
-  "expectCount": 783,
-  "actualCount": 753,
+  "coverage": "95.35%",
+  "expectCount": 840,
+  "actualCount": 801,
   "files": {
     "src/core/ColorChannel.js": {
       "expectCount": 1,
@@ -24,8 +24,8 @@
       "undocumentLines": []
     },
     "src/core/OverrideMaterialManager.js": {
-      "expectCount": 13,
-      "actualCount": 13,
+      "expectCount": 15,
+      "actualCount": 15,
       "undocumentLines": []
     },
     "src/core/Resizable.js": {
@@ -128,6 +128,11 @@
       "actualCount": 3,
       "undocumentLines": []
     },
+    "src/effects/LUTEffect.js": {
+      "expectCount": 7,
+      "actualCount": 7,
+      "undocumentLines": []
+    },
     "src/effects/NoiseEffect.js": {
       "expectCount": 4,
       "actualCount": 4,
@@ -193,6 +198,16 @@
       "actualCount": 4,
       "undocumentLines": []
     },
+    "src/images/lut/LUTOperation.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/images/lut/TetrahedralUpscaler.js": {
+      "expectCount": 8,
+      "actualCount": 8,
+      "undocumentLines": []
+    },
     "src/images/RawImageData.js": {
       "expectCount": 8,
       "actualCount": 8,
@@ -211,7 +226,31 @@
       "actualCount": 7,
       "undocumentLines": []
     },
+    "src/images/textures/LookupTexture3D.js": {
+      "expectCount": 21,
+      "actualCount": 13,
+      "undocumentLines": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54
+      ]
+    },
     "src/images/textures/NoiseTexture.js": {
+      "expectCount": 3,
+      "actualCount": 3,
+      "undocumentLines": []
+    },
+    "src/loaders/LUT3dlLoader.js": {
+      "expectCount": 3,
+      "actualCount": 3,
+      "undocumentLines": []
+    },
+    "src/loaders/LUTCubeLoader.js": {
       "expectCount": 3,
       "actualCount": 3,
       "undocumentLines": []
@@ -235,14 +274,14 @@
       "expectCount": 7,
       "actualCount": 6,
       "undocumentLines": [
-        72
+        73
       ]
     },
     "src/materials/ColorEdgesMaterial.js": {
       "expectCount": 6,
       "actualCount": 5,
       "undocumentLines": [
-        66
+        67
       ]
     },
     "src/materials/ConvolutionMaterial.js": {
@@ -264,7 +303,7 @@
       "expectCount": 7,
       "actualCount": 6,
       "undocumentLines": [
-        69
+        70
       ]
     },
     "src/materials/DepthMaskMaterial.js": {
@@ -276,37 +315,37 @@
       "expectCount": 16,
       "actualCount": 15,
       "undocumentLines": [
-        81
+        83
       ]
     },
     "src/materials/EffectMaterial.js": {
       "expectCount": 14,
       "actualCount": 11,
       "undocumentLines": [
-        103,
-        116,
-        121
+        104,
+        117,
+        122
       ]
     },
     "src/materials/GodRaysMaterial.js": {
       "expectCount": 6,
       "actualCount": 5,
       "undocumentLines": [
-        90
+        91
       ]
     },
     "src/materials/LuminanceMaterial.js": {
       "expectCount": 18,
       "actualCount": 17,
       "undocumentLines": [
-        145
+        146
       ]
     },
     "src/materials/MaskMaterial.js": {
       "expectCount": 12,
       "actualCount": 11,
       "undocumentLines": [
-        72
+        73
       ]
     },
     "src/materials/OutlineMaterial.js": {
@@ -318,14 +357,21 @@
       "expectCount": 11,
       "actualCount": 10,
       "undocumentLines": [
-        85
+        86
       ]
     },
     "src/materials/SSAOMaterial.js": {
       "expectCount": 8,
       "actualCount": 7,
       "undocumentLines": [
-        92
+        100
+      ]
+    },
+    "src/passes/AdaptiveLuminancePass.js": {
+      "expectCount": 12,
+      "actualCount": 11,
+      "undocumentLines": [
+        37
       ]
     },
     "src/passes/BlurPass.js": {
@@ -367,10 +413,10 @@
       "expectCount": 29,
       "actualCount": 25,
       "undocumentLines": [
-        476,
-        505,
-        522,
-        647
+        477,
+        506,
+        523,
+        648
       ]
     },
     "src/passes/LambdaPass.js": {

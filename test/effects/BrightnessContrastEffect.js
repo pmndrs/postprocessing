@@ -1,5 +1,5 @@
 import test from "ava";
-import { BrightnessContrastEffect } from "../../build/postprocessing.esm.js";
+import { BrightnessContrastEffect } from "../../";
 
 test("can be created and destroyed", t => {
 

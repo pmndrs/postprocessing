@@ -1,4 +1,4 @@
-import { ShaderMaterial, Uniform, Vector2 } from "three";
+import { NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
 
 import fragmentShader from "./glsl/depth-downsampling/shader.frag";
 import vertexShader from "./glsl/depth-downsampling/shader.vert";
@@ -35,6 +35,7 @@ export class DepthDownsamplingMaterial extends ShaderMaterial {
 			fragmentShader,
 			vertexShader,
 
+			blending: NoBlending,
 			depthWrite: false,
 			depthTest: false
 

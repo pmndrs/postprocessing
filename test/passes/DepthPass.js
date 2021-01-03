@@ -1,5 +1,5 @@
 import test from "ava";
-import { DepthPass } from "../../build/postprocessing.esm.js";
+import { DepthPass } from "../../";
 
 test("can be created and destroyed", t => {
 

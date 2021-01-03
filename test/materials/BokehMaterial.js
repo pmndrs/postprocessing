@@ -1,5 +1,5 @@
 import test from "ava";
-import { BokehMaterial } from "../../build/postprocessing.esm.js";
+import { BokehMaterial } from "../../";
 
 test("can be created", t => {
 

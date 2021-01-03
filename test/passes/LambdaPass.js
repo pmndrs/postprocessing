@@ -1,5 +1,5 @@
 import test from "ava";
-import { LambdaPass } from "../../build/postprocessing.esm.js";
+import { LambdaPass } from "../../";
 
 test("can be created and destroyed", t => {
 

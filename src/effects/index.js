@@ -1,4 +1,4 @@
-export { BlendFunction, BlendMode } from "./blending";
+export * from "./blending";
 
 export { BloomEffect } from "./BloomEffect";
 export { BokehEffect } from "./BokehEffect";
@@ -15,6 +15,7 @@ export { GlitchEffect, GlitchMode } from "./GlitchEffect";
 export { GodRaysEffect } from "./GodRaysEffect";
 export { GridEffect } from "./GridEffect";
 export { HueSaturationEffect } from "./HueSaturationEffect";
+export { LUTEffect } from "./LUTEffect";
 export { NoiseEffect } from "./NoiseEffect";
 export { OutlineEffect } from "./OutlineEffect";
 export { PixelationEffect } from "./PixelationEffect";
@@ -26,5 +27,5 @@ export { SepiaEffect } from "./SepiaEffect";
 export { SMAAEffect, SMAAPreset } from "./SMAAEffect";
 export { SSAOEffect } from "./SSAOEffect";
 export { TextureEffect } from "./TextureEffect";
-export { ToneMappingEffect } from "./ToneMappingEffect";
+export { ToneMappingEffect, ToneMappingMode } from "./ToneMappingEffect";
 export { VignetteEffect } from "./VignetteEffect";

@@ -1,14 +1,28 @@
-uniform sampler2D luminanceMap;
+#include <tonemapping_pars_fragment>
+
+uniform sampler2D luminanceBuffer;
+uniform float toneMappingExposure;
+uniform float whitePoint;
 uniform float middleGrey;
-uniform float maxLuminance;
-uniform float averageLuminance;
 
-vec3 toneMap(vec3 c) {
+#ifndef ADAPTIVE
 
-	#ifdef ADAPTED_LUMINANCE
+	uniform float averageLuminance;
 
-		// Get the calculated average luminance by sampling the center.
-		float lumAvg = texture2D(luminanceMap, vec2(0.5)).r;
+#endif
+
+vec3 Reinhard2ToneMapping(vec3 color) {
+
+	color *= toneMappingExposure;
+
+	// Calculate the luminance of the current pixel.
+	float l = linearToRelativeLuminance(color);
+
+	#ifdef ADAPTIVE
+
+		// Get the average luminance from the adaptive 1x1 buffer.
+		float lumAvg = texture2D(luminanceBuffer, vec2(0.5)).r;
+		lumAvg = max(lumAvg, 1e-6);
 
 	#else
 
@@ -16,20 +30,24 @@ vec3 toneMap(vec3 c) {
 
 	#endif
 
-	// Calculate the luminance of the current pixel.
-	float lumPixel = linearToRelativeLuminance(c);
+	float lumScaled = (l * middleGrey) / lumAvg;
+	float lumCompressed = lumScaled * (1.0 + lumScaled / (whitePoint * whitePoint));
+	lumCompressed /= (1.0 + lumScaled);
 
-	// Apply the modified operator (Reinhard Eq. 4).
-	float lumScaled = (lumPixel * middleGrey) / lumAvg;
-
-	float lumCompressed = (lumScaled * (1.0 + (lumScaled / (maxLuminance * maxLuminance)))) / (1.0 + lumScaled);
-
-	return lumCompressed * c;
+	return lumCompressed * color;
 
 }
 
 void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
 
-	outputColor = vec4(toneMap(inputColor.rgb), inputColor.a);
+	#ifdef REINHARD2
+
+		outputColor = vec4(Reinhard2ToneMapping(inputColor.rgb), inputColor.a);
+
+	#else
+
+		outputColor = vec4(toneMapping(inputColor.rgb), inputColor.a);
+
+	#endif
 
 }

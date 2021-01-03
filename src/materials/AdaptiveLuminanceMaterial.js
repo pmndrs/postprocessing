@@ -1,4 +1,4 @@
-import { ShaderMaterial, Uniform } from "three";
+import { NoBlending, ShaderMaterial, Uniform } from "three";
 
 import fragmentShader from "./glsl/adaptive-luminance/shader.frag";
 import vertexShader from "./glsl/common/shader.vert";
@@ -24,8 +24,8 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 			},
 
 			uniforms: {
-				previousLuminanceBuffer: new Uniform(null),
-				currentLuminanceBuffer: new Uniform(null),
+				luminanceBuffer0: new Uniform(null),
+				luminanceBuffer1: new Uniform(null),
 				minLuminance: new Uniform(0.01),
 				deltaTime: new Uniform(0.0),
 				tau: new Uniform(1.0)
@@ -34,8 +34,13 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 			fragmentShader,
 			vertexShader,
 
+			blending: NoBlending,
 			depthWrite: false,
-			depthTest: false
+			depthTest: false,
+
+			extensions: {
+				shaderTextureLOD: true
+			}
 
 		});
 

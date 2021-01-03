@@ -1,5 +1,5 @@
 import test from "ava";
-import { DepthMaskMaterial } from "../../build/postprocessing.esm.js";
+import { DepthMaskMaterial } from "../../";
 
 test("can be created", t => {
 

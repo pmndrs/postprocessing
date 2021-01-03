@@ -52,6 +52,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html">GodRaysEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GridEffect.js~GridEffect.html">GridEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/HueSaturationEffect.js~HueSaturationEffect.html">HueSaturationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/LUTEffect.js~LUTEffect.html">LUTEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/NoiseEffect.js~NoiseEffect.html">NoiseEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html">OutlineEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/PixelationEffect.js~PixelationEffect.html">PixelationEffect</a></span></span></li>
@@ -69,13 +70,19 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-WebGLExtension">WebGLExtension</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GlitchMode">GlitchMode</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SMAAPreset">SMAAPreset</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ToneMappingMode">ToneMappingMode</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects-blending">effects/blending</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/blending/BlendMode.js~BlendMode.html">BlendMode</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-BlendFunction">BlendFunction</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images">images</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/RawImageData.js~RawImageData.html">RawImageData</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images-lut">images/lut</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/lut/TetrahedralUpscaler.js~TetrahedralUpscaler.html">TetrahedralUpscaler</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LUTOperation">LUTOperation</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images-smaa">images/smaa</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/smaa/SMAAAreaImageData.js~SMAAAreaImageData.html">SMAAAreaImageData</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/smaa/SMAASearchImageData.js~SMAASearchImageData.html">SMAASearchImageData</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images-textures">images/textures</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/textures/NoiseTexture.js~NoiseTexture.html">NoiseTexture</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#loaders">loaders</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/loaders/SMAAImageLoader.js~SMAAImageLoader.html">SMAAImageLoader</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images-textures">images/textures</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html">LookupTexture3D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/textures/NoiseTexture.js~NoiseTexture.html">NoiseTexture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#loaders">loaders</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/loaders/LUT3dlLoader.js~LUT3dlLoader.html">LUT3dlLoader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/loaders/LUTCubeLoader.js~LUTCubeLoader.html">LUTCubeLoader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/loaders/SMAAImageLoader.js~SMAAImageLoader.html">SMAAImageLoader</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#materials">materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/AdaptiveLuminanceMaterial.js~AdaptiveLuminanceMaterial.html">AdaptiveLuminanceMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/BokehMaterial.js~BokehMaterial.html">BokehMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CircleOfConfusionMaterial.js~CircleOfConfusionMaterial.html">CircleOfConfusionMaterial</a></span></span></li>
@@ -99,7 +106,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Section">Section</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MaskFunction">MaskFunction</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-OutlineEdgesMaterial">OutlineEdgesMaterial</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#passes">passes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BlurPass.js~BlurPass.html">BlurPass</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#passes">passes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/AdaptiveLuminancePass.js~AdaptiveLuminancePass.html">AdaptiveLuminancePass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BlurPass.js~BlurPass.html">BlurPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearMaskPass.js~ClearMaskPass.html">ClearMaskPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass.html">DepthDownsamplingPass</a></span></span></li>
@@ -118,7 +126,6 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/effects/ToneMappingEffect.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {
-	Color,
 	LinearFilter,
 	LinearMipMapLinearFilter,
 	LinearMipmapLinearFilter,
@@ -127,23 +134,22 @@
 	WebGLRenderTarget
 } from &quot;three&quot;;
 
-import { AdaptiveLuminanceMaterial, LuminanceMaterial } from &quot;../materials&quot;;
-import { ClearPass, SavePass, ShaderPass } from &quot;../passes&quot;;
+import { LuminanceMaterial } from &quot;../materials&quot;;
+import { AdaptiveLuminancePass, ShaderPass } from &quot;../passes&quot;;
 import { BlendFunction } from &quot;./blending/BlendFunction&quot;;
 import { Effect } from &quot;./Effect&quot;;
 
 import fragmentShader from &quot;./glsl/tone-mapping/shader.frag&quot;;
 
 /**
- * A tone mapping effect that supports adaptive luminosity.
+ * A tone mapping effect.
  *
- * If adaptivity is enabled, this effect generates a texture that represents the
- * luminosity of the current scene and adjusts it over time to simulate the
- * optic nerve responding to the amount of light it is receiving.
+ * Requires support for `EXT_shader_texture_lod` and
+ * `EXT_color_buffer_half_float`.
  *
  * Reference:
- *  GDC2007 - Wolfgang Engel, Post-Processing Pipeline
- *  http://perso.univ-lyon1.fr/jean-claude.iehl/Public/educ/GAMA/2007/gdc07/Post-Processing_Pipeline.pdf
+ * GDC2007 - Wolfgang Engel, Post-Processing Pipeline
+ * http://perso.univ-lyon1.fr/jean-claude.iehl/Public/educ/GAMA/2007/gdc07/Post-Processing_Pipeline.pdf
  */
 
 export class ToneMappingEffect extends Effect {
@@ -151,24 +157,33 @@ export class ToneMappingEffect extends Effect {
 	/**
 	 * Constructs a new tone mapping effect.
 	 *
+	 * The additional parameters only affect the Reinhard2 operator.
+	 *
+	 * @todo Remove deprecated params and change default white point to 4.
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
-	 * @param {Boolean} [options.adaptive=true] - Whether the tone mapping should use an adaptive luminance map.
-	 * @param {Number} [options.resolution=256] - The render texture resolution of the luminance map.
+	 * @param {Boolean} [options.adaptive=true] - Deprecated. Use mode instead.
+	 * @param {ToneMappingMode} [options.mode=ToneMappingMode.REINHARD2_ADAPTIVE] - The tone mapping mode.
+	 * @param {Number} [options.resolution=256] - The resolution of the luminance texture. Must be a power of two.
+	 * @param {Number} [options.maxLuminance=16.0] - Deprecated. Same as whitePoint.
+	 * @param {Number} [options.whitePoint=16.0] - The white point.
 	 * @param {Number} [options.middleGrey=0.6] - The middle grey factor.
-	 * @param {Number} [options.maxLuminance=16.0] - The maximum luminance.
-	 * @param {Number} [options.averageLuminance=1.0] - The average luminance.
+	 * @param {Number} [options.minLuminance=0.01] - The minimum luminance. Prevents very high exposure in dark scenes.
+	 * @param {Number} [options.averageLuminance=1.0] - The average luminance. Used for the non-adaptive Reinhard operator.
 	 * @param {Number} [options.adaptationRate=1.0] - The luminance adaptation rate.
 	 */
 
 	constructor({
 		blendFunction = BlendFunction.NORMAL,
 		adaptive = true,
+		mode = adaptive ? ToneMappingMode.REINHARD2_ADAPTIVE : ToneMappingMode.REINHARD2,
 		resolution = 256,
-		middleGrey = 0.6,
 		maxLuminance = 16.0,
+		whitePoint = maxLuminance,
+		middleGrey = 0.6,
+		minLuminance = 0.01,
 		averageLuminance = 1.0,
-		adaptationRate = 2.0
+		adaptationRate = 1.0
 	} = {}) {
 
 		super(&quot;ToneMappingEffect&quot;, fragmentShader, {
@@ -176,9 +191,11 @@ export class ToneMappingEffect extends Effect {
 			blendFunction,
 
 			uniforms: new Map([
-				[&quot;luminanceMap&quot;, new Uniform(null)],
+				[&quot;luminanceBuffer&quot;, new Uniform(null)],
+				[&quot;toneMappingExposure&quot;, new Uniform(1.0)],
+				[&quot;maxLuminance&quot;, new Uniform(maxLuminance)], // Unused
+				[&quot;whitePoint&quot;, new Uniform(whitePoint)],
 				[&quot;middleGrey&quot;, new Uniform(middleGrey)],
-				[&quot;maxLuminance&quot;, new Uniform(maxLuminance)],
 				[&quot;averageLuminance&quot;, new Uniform(averageLuminance)]
 			])
 
@@ -200,42 +217,11 @@ export class ToneMappingEffect extends Effect {
 			format: RGBFormat
 		});
 
-		this.renderTargetLuminance.texture.name = &quot;ToneMapping.Luminance&quot;;
+		this.renderTargetLuminance.texture.name = &quot;Luminance&quot;;
 		this.renderTargetLuminance.texture.generateMipmaps = true;
 
 		/**
-		 * The render target for adapted luminance.
-		 *
-		 * @type {WebGLRenderTarget}
-		 * @private
-		 */
-
-		this.renderTargetAdapted = this.renderTargetLuminance.clone();
-		this.renderTargetAdapted.texture.name = &quot;ToneMapping.AdaptedLuminance&quot;;
-		this.renderTargetAdapted.texture.generateMipmaps = false;
-		this.renderTargetAdapted.texture.minFilter = LinearFilter;
-
-		/**
-		 * A render target that holds a copy of the adapted luminance.
-		 *
-		 * @type {WebGLRenderTarget}
-		 * @private
-		 */
-
-		this.renderTargetPrevious = this.renderTargetAdapted.clone();
-		this.renderTargetPrevious.texture.name = &quot;ToneMapping.PreviousLuminance&quot;;
-
-		/**
-		 * A save pass.
-		 *
-		 * @type {SavePass}
-		 * @private
-		 */
-
-		this.savePass = new SavePass(this.renderTargetPrevious, false);
-
-		/**
-		 * A luminance shader pass.
+		 * A luminance pass.
 		 *
 		 * @type {ShaderPass}
 		 * @private
@@ -243,25 +229,97 @@ export class ToneMappingEffect extends Effect {
 
 		this.luminancePass = new ShaderPass(new LuminanceMaterial());
 
-		const luminanceMaterial = this.luminancePass.getFullscreenMaterial();
-		luminanceMaterial.useThreshold = false;
-
 		/**
-		 * An adaptive luminance shader pass.
+		 * An adaptive luminance pass.
 		 *
-		 * @type {ShaderPass}
+		 * @type {AdaptiveLuminancePass}
 		 * @private
 		 */
 
-		this.adaptiveLuminancePass = new ShaderPass(new AdaptiveLuminanceMaterial());
+		this.adaptiveLuminancePass = new AdaptiveLuminancePass(this.renderTargetLuminance.texture, {
+			minLuminance,
+			adaptationRate
+		});
 
-		const uniforms = this.adaptiveLuminancePass.getFullscreenMaterial().uniforms;
-		uniforms.previousLuminanceBuffer.value = this.renderTargetPrevious.texture;
-		uniforms.currentLuminanceBuffer.value = this.renderTargetLuminance.texture;
+		this.uniforms.get(&quot;luminanceBuffer&quot;).value = this.adaptiveLuminancePass.texture;
 
-		this.adaptationRate = adaptationRate;
+		/**
+		 * The current tone mapping mode.
+		 *
+		 * @type {ToneMappingMode}
+		 * @private
+		 */
+
+		this.mode = null;
+		this.setMode(mode);
+
 		this.resolution = resolution;
-		this.adaptive = adaptive;
+
+	}
+
+	/**
+	 * Returns the current tone mapping mode.
+	 *
+	 * @return {ToneMappingMode} The tone mapping mode.
+	 */
+
+	getMode() {
+
+		return this.mode;
+
+	}
+
+	/**
+	 * Sets the tone mapping mode.
+	 *
+	 * @param {ToneMappingMode} value - The tone mapping mode.
+	 */
+
+	setMode(value) {
+
+		const currentMode = this.mode;
+
+		if(currentMode !== value) {
+
+			this.defines.clear();
+
+			// Use one of the built-in tone mapping operators.
+			switch(value) {
+
+				case ToneMappingMode.REINHARD:
+					this.defines.set(&quot;toneMapping(texel)&quot;, &quot;ReinhardToneMapping(texel)&quot;);
+					break;
+
+				case ToneMappingMode.OPTIMIZED_CINEON:
+					this.defines.set(&quot;toneMapping(texel)&quot;, &quot;OptimizedCineonToneMapping(texel)&quot;);
+					break;
+
+				case ToneMappingMode.ACES_FILMIC:
+					this.defines.set(&quot;toneMapping(texel)&quot;, &quot;ACESFilmicToneMapping(texel)&quot;);
+					break;
+
+				default:
+					this.defines.set(&quot;toneMapping(texel)&quot;, &quot;texel&quot;);
+					break;
+
+			}
+
+			// Use a custom Reinhard operator.
+			if(value === ToneMappingMode.REINHARD2) {
+
+				this.defines.set(&quot;REINHARD2&quot;, &quot;1&quot;);
+
+			} else if(value === ToneMappingMode.REINHARD2_ADAPTIVE) {
+
+				this.defines.set(&quot;REINHARD2&quot;, &quot;1&quot;);
+				this.defines.set(&quot;ADAPTIVE&quot;, &quot;1&quot;);
+
+			}
+
+			this.mode = value;
+			this.setChanged();
+
+		}
 
 	}
 
@@ -278,7 +336,7 @@ export class ToneMappingEffect extends Effect {
 	}
 
 	/**
-	 * Sets the resolution of the internal render targets.
+	 * Sets the resolution of the luminance texture. Must be a power of two.
 	 *
 	 * @type {Number}
 	 */
@@ -290,12 +348,7 @@ export class ToneMappingEffect extends Effect {
 		const size = Math.pow(2, exponent);
 
 		this.renderTargetLuminance.setSize(size, size);
-		this.renderTargetPrevious.setSize(size, size);
-		this.renderTargetAdapted.setSize(size, size);
-
-		const material = this.adaptiveLuminancePass.getFullscreenMaterial();
-		material.defines.MIP_LEVEL_1X1 = exponent.toFixed(1);
-		material.needsUpdate = true;
+		this.adaptiveLuminancePass.mipLevel1x1 = exponent;
 
 	}
 
@@ -303,11 +356,12 @@ export class ToneMappingEffect extends Effect {
 	 * Indicates whether this pass uses adaptive luminance.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use mode instead.
 	 */
 
 	get adaptive() {
 
-		return this.defines.has(&quot;ADAPTED_LUMINANCE&quot;);
+		return this.defines.has(&quot;ADAPTIVE&quot;);
 
 	}
 
@@ -315,27 +369,12 @@ export class ToneMappingEffect extends Effect {
 	 * Enables or disables adaptive luminance.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Set mode to ToneMappingMode.REINHARD2_ADAPTIVE instead.
 	 */
 
 	set adaptive(value) {
 
-		if(this.adaptive !== value) {
-
-			if(value) {
-
-				this.defines.set(&quot;ADAPTED_LUMINANCE&quot;, &quot;1&quot;);
-				this.uniforms.get(&quot;luminanceMap&quot;).value = this.renderTargetAdapted.texture;
-
-			} else {
-
-				this.defines.delete(&quot;ADAPTED_LUMINANCE&quot;);
-				this.uniforms.get(&quot;luminanceMap&quot;).value = null;
-
-			}
-
-			this.setChanged();
-
-		}
+		this.mode = value ? ToneMappingMode.REINHARD2_ADAPTIVE : ToneMappingMode.REINHARD2;
 
 	}
 
@@ -343,21 +382,23 @@ export class ToneMappingEffect extends Effect {
 	 * The luminance adaptation rate.
 	 *
 	 * @type {Number}
+	 * @deprecated Use adaptiveLuminancePass.adaptationRate instead.
 	 */
 
 	get adaptationRate() {
 
-		return this.adaptiveLuminancePass.getFullscreenMaterial().uniforms.tau.value;
+		return this.adaptiveLuminancePass.adaptationRate;
 
 	}
 
 	/**
 	 * @type {Number}
+	 * @deprecated Use adaptiveLuminancePass.adaptationRate instead.
 	 */
 
 	set adaptationRate(value) {
 
-		this.adaptiveLuminancePass.getFullscreenMaterial().uniforms.tau.value = value;
+		this.adaptiveLuminancePass.adaptationRate = value;
 
 	}
 
@@ -395,33 +436,12 @@ export class ToneMappingEffect extends Effect {
 
 	update(renderer, inputBuffer, deltaTime) {
 
-		if(this.adaptive) {
+		if(this.mode === ToneMappingMode.REINHARD2_ADAPTIVE) {
 
-			// Render the luminance of the current scene into a mipmap render target.
 			this.luminancePass.render(renderer, inputBuffer, this.renderTargetLuminance);
-
-			// Use the frame delta to adapt the luminance over time.
-			const uniforms = this.adaptiveLuminancePass.getFullscreenMaterial().uniforms;
-			uniforms.deltaTime.value = deltaTime;
-			this.adaptiveLuminancePass.render(renderer, null, this.renderTargetAdapted);
-
-			// Save the adapted luminance for the next frame.
-			this.savePass.render(renderer, this.renderTargetAdapted);
+			this.adaptiveLuminancePass.render(renderer, null, null, deltaTime);
 
 		}
-
-	}
-
-	/**
-	 * Updates the size of internal render targets.
-	 *
-	 * @param {Number} width - The width.
-	 * @param {Number} height - The height.
-	 */
-
-	setSize(width, height) {
-
-		this.savePass.setSize(width, height);
 
 	}
 
@@ -435,14 +455,32 @@ export class ToneMappingEffect extends Effect {
 
 	initialize(renderer, alpha, frameBufferType) {
 
-		const clearPass = new ClearPass(true, false, false);
-		clearPass.overrideClearColor = new Color(0x7fffff);
-		clearPass.render(renderer, this.renderTargetPrevious);
-		clearPass.dispose();
+		this.adaptiveLuminancePass.initialize(renderer, alpha, frameBufferType);
 
 	}
 
 }
+
+/**
+ * A tone mapping mode enumeration.
+ *
+ * @type {Object}
+ * @property {Number} REINHARD - Simple Reinhard tone mapping.
+ * @property {Number} REINHARD2 - Modified Reinhard tone mapping.
+ * @property {Number} REINHARD2_ADAPTIVE - Simulates the optic nerve responding to the amount of light it is receiving.
+ * @property {Number} OPTIMIZED_CINEON - Optimized filmic operator by Jim Hejl and Richard Burgess-Dawson.
+ * @property {Number} ACES_FILMIC - ACES tone mapping with a scale of 1.0/0.6.
+ */
+
+export const ToneMappingMode = {
+
+	REINHARD: 0,
+	REINHARD2: 1,
+	REINHARD2_ADAPTIVE: 2,
+	OPTIMIZED_CINEON: 3,
+	ACES_FILMIC: 4
+
+};
 </code></pre>
 
 </div>

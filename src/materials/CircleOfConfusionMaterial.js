@@ -1,4 +1,4 @@
-import { PerspectiveCamera, ShaderMaterial, Uniform } from "three";
+import { NoBlending, PerspectiveCamera, ShaderMaterial, Uniform } from "three";
 
 import fragmentShader from "./glsl/circle-of-confusion/shader.frag";
 import vertexShader from "./glsl/common/shader.vert";
@@ -36,6 +36,7 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 			fragmentShader,
 			vertexShader,
 
+			blending: NoBlending,
 			depthWrite: false,
 			depthTest: false
 

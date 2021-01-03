@@ -1,5 +1,5 @@
 import test from "ava";
-import { ConvolutionMaterial } from "../../build/postprocessing.esm.js";
+import { ConvolutionMaterial } from "../../";
 
 test("can be created", t => {
 

@@ -1,5 +1,5 @@
 import test from "ava";
-import { DotScreenEffect } from "../../build/postprocessing.esm.js";
+import { DotScreenEffect } from "../../";
 
 test("can be created and destroyed", t => {
 

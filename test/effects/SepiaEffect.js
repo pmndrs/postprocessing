@@ -1,5 +1,5 @@
 import test from "ava";
-import { SepiaEffect } from "../../build/postprocessing.esm.js";
+import { SepiaEffect } from "../../";
 
 test("can be created and destroyed", t => {
 

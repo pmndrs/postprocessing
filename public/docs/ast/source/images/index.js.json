@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 235,
+  "end": 416,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 5,
+      "line": 8,
       "column": 0
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 235,
+    "end": 416,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 5,
+        "line": 8,
         "column": 0
       }
     },
@@ -31,7 +31,7 @@
       {
         "type": "ExportNamedDeclaration",
         "start": 0,
-        "end": 55,
+        "end": 50,
         "loc": {
           "start": {
             "line": 1,
@@ -39,7 +39,7 @@
           },
           "end": {
             "line": 1,
-            "column": 55
+            "column": 50
           }
         },
         "declaration": null,
@@ -71,9 +71,9 @@
                   "line": 1,
                   "column": 21
                 },
-                "identifierName": "NoiseTexture"
+                "identifierName": "LUTOperation"
               },
-              "name": "NoiseTexture"
+              "name": "LUTOperation"
             },
             "exported": {
               "type": "Identifier",
@@ -88,16 +88,16 @@
                   "line": 1,
                   "column": 21
                 },
-                "identifierName": "NoiseTexture"
+                "identifierName": "LUTOperation"
               },
-              "name": "NoiseTexture"
+              "name": "LUTOperation"
             }
           }
         ],
         "source": {
           "type": "StringLiteral",
           "start": 29,
-          "end": 54,
+          "end": 49,
           "loc": {
             "start": {
               "line": 1,
@@ -105,20 +105,20 @@
             },
             "end": {
               "line": 1,
-              "column": 54
+              "column": 49
             }
           },
           "extra": {
-            "rawValue": "./textures/NoiseTexture",
-            "raw": "\"./textures/NoiseTexture\""
+            "rawValue": "./lut/LUTOperation",
+            "raw": "\"./lut/LUTOperation\""
           },
-          "value": "./textures/NoiseTexture"
+          "value": "./lut/LUTOperation"
         }
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 57,
-        "end": 118,
+        "start": 52,
+        "end": 116,
         "loc": {
           "start": {
             "line": 2,
@@ -126,15 +126,15 @@
           },
           "end": {
             "line": 2,
-            "column": 61
+            "column": 64
           }
         },
         "declaration": null,
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 66,
-            "end": 83,
+            "start": 61,
+            "end": 80,
             "loc": {
               "start": {
                 "line": 2,
@@ -142,13 +142,13 @@
               },
               "end": {
                 "line": 2,
-                "column": 26
+                "column": 28
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 66,
-              "end": 83,
+              "start": 61,
+              "end": 80,
               "loc": {
                 "start": {
                   "line": 2,
@@ -156,6 +156,93 @@
                 },
                 "end": {
                   "line": 2,
+                  "column": 28
+                },
+                "identifierName": "TetrahedralUpscaler"
+              },
+              "name": "TetrahedralUpscaler"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 61,
+              "end": 80,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 9
+                },
+                "end": {
+                  "line": 2,
+                  "column": 28
+                },
+                "identifierName": "TetrahedralUpscaler"
+              },
+              "name": "TetrahedralUpscaler"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 88,
+          "end": 115,
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 36
+            },
+            "end": {
+              "line": 2,
+              "column": 63
+            }
+          },
+          "extra": {
+            "rawValue": "./lut/TetrahedralUpscaler",
+            "raw": "\"./lut/TetrahedralUpscaler\""
+          },
+          "value": "./lut/TetrahedralUpscaler"
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 118,
+        "end": 179,
+        "loc": {
+          "start": {
+            "line": 3,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 61
+          }
+        },
+        "declaration": null,
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start": 127,
+            "end": 144,
+            "loc": {
+              "start": {
+                "line": 3,
+                "column": 9
+              },
+              "end": {
+                "line": 3,
+                "column": 26
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 127,
+              "end": 144,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 9
+                },
+                "end": {
+                  "line": 3,
                   "column": 26
                 },
                 "identifierName": "SMAAAreaImageData"
@@ -164,15 +251,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 66,
-              "end": 83,
+              "start": 127,
+              "end": 144,
               "loc": {
                 "start": {
-                  "line": 2,
+                  "line": 3,
                   "column": 9
                 },
                 "end": {
-                  "line": 2,
+                  "line": 3,
                   "column": 26
                 },
                 "identifierName": "SMAAAreaImageData"
@@ -183,15 +270,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 91,
-          "end": 117,
+          "start": 152,
+          "end": 178,
           "loc": {
             "start": {
-              "line": 2,
+              "line": 3,
               "column": 34
             },
             "end": {
-              "line": 2,
+              "line": 3,
               "column": 60
             }
           },
@@ -204,15 +291,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 120,
-        "end": 185,
+        "start": 181,
+        "end": 246,
         "loc": {
           "start": {
-            "line": 3,
+            "line": 4,
             "column": 0
           },
           "end": {
-            "line": 3,
+            "line": 4,
             "column": 65
           }
         },
@@ -220,29 +307,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 129,
-            "end": 148,
+            "start": 190,
+            "end": 209,
             "loc": {
               "start": {
-                "line": 3,
+                "line": 4,
                 "column": 9
               },
               "end": {
-                "line": 3,
+                "line": 4,
                 "column": 28
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 129,
-              "end": 148,
+              "start": 190,
+              "end": 209,
               "loc": {
                 "start": {
-                  "line": 3,
+                  "line": 4,
                   "column": 9
                 },
                 "end": {
-                  "line": 3,
+                  "line": 4,
                   "column": 28
                 },
                 "identifierName": "SMAASearchImageData"
@@ -251,15 +338,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 129,
-              "end": 148,
+              "start": 190,
+              "end": 209,
               "loc": {
                 "start": {
-                  "line": 3,
+                  "line": 4,
                   "column": 9
                 },
                 "end": {
-                  "line": 3,
+                  "line": 4,
                   "column": 28
                 },
                 "identifierName": "SMAASearchImageData"
@@ -270,15 +357,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 156,
-          "end": 184,
+          "start": 217,
+          "end": 245,
           "loc": {
             "start": {
-              "line": 3,
+              "line": 4,
               "column": 36
             },
             "end": {
-              "line": 3,
+              "line": 4,
               "column": 64
             }
           },
@@ -291,15 +378,189 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 187,
-        "end": 233,
+        "start": 248,
+        "end": 309,
         "loc": {
           "start": {
-            "line": 4,
+            "line": 5,
             "column": 0
           },
           "end": {
-            "line": 4,
+            "line": 5,
+            "column": 61
+          }
+        },
+        "declaration": null,
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start": 257,
+            "end": 272,
+            "loc": {
+              "start": {
+                "line": 5,
+                "column": 9
+              },
+              "end": {
+                "line": 5,
+                "column": 24
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 257,
+              "end": 272,
+              "loc": {
+                "start": {
+                  "line": 5,
+                  "column": 9
+                },
+                "end": {
+                  "line": 5,
+                  "column": 24
+                },
+                "identifierName": "LookupTexture3D"
+              },
+              "name": "LookupTexture3D"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 257,
+              "end": 272,
+              "loc": {
+                "start": {
+                  "line": 5,
+                  "column": 9
+                },
+                "end": {
+                  "line": 5,
+                  "column": 24
+                },
+                "identifierName": "LookupTexture3D"
+              },
+              "name": "LookupTexture3D"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 280,
+          "end": 308,
+          "loc": {
+            "start": {
+              "line": 5,
+              "column": 32
+            },
+            "end": {
+              "line": 5,
+              "column": 60
+            }
+          },
+          "extra": {
+            "rawValue": "./textures/LookupTexture3D",
+            "raw": "\"./textures/LookupTexture3D\""
+          },
+          "value": "./textures/LookupTexture3D"
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 311,
+        "end": 366,
+        "loc": {
+          "start": {
+            "line": 6,
+            "column": 0
+          },
+          "end": {
+            "line": 6,
+            "column": 55
+          }
+        },
+        "declaration": null,
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start": 320,
+            "end": 332,
+            "loc": {
+              "start": {
+                "line": 6,
+                "column": 9
+              },
+              "end": {
+                "line": 6,
+                "column": 21
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 320,
+              "end": 332,
+              "loc": {
+                "start": {
+                  "line": 6,
+                  "column": 9
+                },
+                "end": {
+                  "line": 6,
+                  "column": 21
+                },
+                "identifierName": "NoiseTexture"
+              },
+              "name": "NoiseTexture"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 320,
+              "end": 332,
+              "loc": {
+                "start": {
+                  "line": 6,
+                  "column": 9
+                },
+                "end": {
+                  "line": 6,
+                  "column": 21
+                },
+                "identifierName": "NoiseTexture"
+              },
+              "name": "NoiseTexture"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 340,
+          "end": 365,
+          "loc": {
+            "start": {
+              "line": 6,
+              "column": 29
+            },
+            "end": {
+              "line": 6,
+              "column": 54
+            }
+          },
+          "extra": {
+            "rawValue": "./textures/NoiseTexture",
+            "raw": "\"./textures/NoiseTexture\""
+          },
+          "value": "./textures/NoiseTexture"
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 368,
+        "end": 414,
+        "loc": {
+          "start": {
+            "line": 7,
+            "column": 0
+          },
+          "end": {
+            "line": 7,
             "column": 46
           }
         },
@@ -307,29 +568,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 196,
-            "end": 208,
+            "start": 377,
+            "end": 389,
             "loc": {
               "start": {
-                "line": 4,
+                "line": 7,
                 "column": 9
               },
               "end": {
-                "line": 4,
+                "line": 7,
                 "column": 21
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 196,
-              "end": 208,
+              "start": 377,
+              "end": 389,
               "loc": {
                 "start": {
-                  "line": 4,
+                  "line": 7,
                   "column": 9
                 },
                 "end": {
-                  "line": 4,
+                  "line": 7,
                   "column": 21
                 },
                 "identifierName": "RawImageData"
@@ -338,15 +599,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 196,
-              "end": 208,
+              "start": 377,
+              "end": 389,
               "loc": {
                 "start": {
-                  "line": 4,
+                  "line": 7,
                   "column": 9
                 },
                 "end": {
-                  "line": 4,
+                  "line": 7,
                   "column": 21
                 },
                 "identifierName": "RawImageData"
@@ -357,15 +618,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 216,
-          "end": 232,
+          "start": 397,
+          "end": 413,
           "loc": {
             "start": {
-              "line": 4,
+              "line": 7,
               "column": 29
             },
             "end": {
-              "line": 4,
+              "line": 7,
               "column": 45
             }
           },
@@ -446,7 +707,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "NoiseTexture",
+      "value": "LUTOperation",
       "start": 9,
       "end": 21,
       "loc": {
@@ -524,9 +785,9 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "./textures/NoiseTexture",
+      "value": "./lut/LUTOperation",
       "start": 29,
-      "end": 54,
+      "end": 49,
       "loc": {
         "start": {
           "line": 1,
@@ -534,7 +795,7 @@
         },
         "end": {
           "line": 1,
-          "column": 54
+          "column": 49
         }
       }
     },
@@ -551,16 +812,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 54,
-      "end": 55,
+      "start": 49,
+      "end": 50,
       "loc": {
         "start": {
           "line": 1,
-          "column": 54
+          "column": 49
         },
         "end": {
           "line": 1,
-          "column": 55
+          "column": 50
         }
       }
     },
@@ -579,8 +840,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 57,
-      "end": 63,
+      "start": 52,
+      "end": 58,
       "loc": {
         "start": {
           "line": 2,
@@ -604,8 +865,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 64,
-      "end": 65,
+      "start": 59,
+      "end": 60,
       "loc": {
         "start": {
           "line": 2,
@@ -629,9 +890,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "SMAAAreaImageData",
-      "start": 66,
-      "end": 83,
+      "value": "TetrahedralUpscaler",
+      "start": 61,
+      "end": 80,
       "loc": {
         "start": {
           "line": 2,
@@ -639,6 +900,189 @@
         },
         "end": {
           "line": 2,
+          "column": 28
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 81,
+      "end": 82,
+      "loc": {
+        "start": {
+          "line": 2,
+          "column": 29
+        },
+        "end": {
+          "line": 2,
+          "column": 30
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "from",
+      "start": 83,
+      "end": 87,
+      "loc": {
+        "start": {
+          "line": 2,
+          "column": 31
+        },
+        "end": {
+          "line": 2,
+          "column": 35
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "./lut/TetrahedralUpscaler",
+      "start": 88,
+      "end": 115,
+      "loc": {
+        "start": {
+          "line": 2,
+          "column": 36
+        },
+        "end": {
+          "line": 2,
+          "column": 63
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 115,
+      "end": 116,
+      "loc": {
+        "start": {
+          "line": 2,
+          "column": 63
+        },
+        "end": {
+          "line": 2,
+          "column": 64
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "export",
+        "keyword": "export",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "export",
+      "start": 118,
+      "end": 124,
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 0
+        },
+        "end": {
+          "line": 3,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 125,
+      "end": 126,
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 7
+        },
+        "end": {
+          "line": 3,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "SMAAAreaImageData",
+      "start": 127,
+      "end": 144,
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 9
+        },
+        "end": {
+          "line": 3,
           "column": 26
         }
       }
@@ -655,15 +1099,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 84,
-      "end": 85,
+      "start": 145,
+      "end": 146,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 3,
           "column": 27
         },
         "end": {
-          "line": 2,
+          "line": 3,
           "column": 28
         }
       }
@@ -681,15 +1125,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 86,
-      "end": 90,
+      "start": 147,
+      "end": 151,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 3,
           "column": 29
         },
         "end": {
-          "line": 2,
+          "line": 3,
           "column": 33
         }
       }
@@ -708,15 +1152,15 @@
         "updateContext": null
       },
       "value": "./smaa/SMAAAreaImageData",
-      "start": 91,
-      "end": 117,
+      "start": 152,
+      "end": 178,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 3,
           "column": 34
         },
         "end": {
-          "line": 2,
+          "line": 3,
           "column": 60
         }
       }
@@ -734,15 +1178,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 117,
-      "end": 118,
+      "start": 178,
+      "end": 179,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 3,
           "column": 60
         },
         "end": {
-          "line": 2,
+          "line": 3,
           "column": 61
         }
       }
@@ -762,15 +1206,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 120,
-      "end": 126,
+      "start": 181,
+      "end": 187,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 4,
           "column": 0
         },
         "end": {
-          "line": 3,
+          "line": 4,
           "column": 6
         }
       }
@@ -787,15 +1231,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 127,
-      "end": 128,
+      "start": 188,
+      "end": 189,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 4,
           "column": 7
         },
         "end": {
-          "line": 3,
+          "line": 4,
           "column": 8
         }
       }
@@ -813,15 +1257,15 @@
         "binop": null
       },
       "value": "SMAASearchImageData",
-      "start": 129,
-      "end": 148,
+      "start": 190,
+      "end": 209,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 4,
           "column": 9
         },
         "end": {
-          "line": 3,
+          "line": 4,
           "column": 28
         }
       }
@@ -838,15 +1282,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 149,
-      "end": 150,
+      "start": 210,
+      "end": 211,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 4,
           "column": 29
         },
         "end": {
-          "line": 3,
+          "line": 4,
           "column": 30
         }
       }
@@ -864,15 +1308,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 151,
-      "end": 155,
+      "start": 212,
+      "end": 216,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 4,
           "column": 31
         },
         "end": {
-          "line": 3,
+          "line": 4,
           "column": 35
         }
       }
@@ -891,15 +1335,15 @@
         "updateContext": null
       },
       "value": "./smaa/SMAASearchImageData",
-      "start": 156,
-      "end": 184,
+      "start": 217,
+      "end": 245,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 4,
           "column": 36
         },
         "end": {
-          "line": 3,
+          "line": 4,
           "column": 64
         }
       }
@@ -917,15 +1361,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 184,
-      "end": 185,
+      "start": 245,
+      "end": 246,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 4,
           "column": 64
         },
         "end": {
-          "line": 3,
+          "line": 4,
           "column": 65
         }
       }
@@ -945,15 +1389,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 187,
-      "end": 193,
+      "start": 248,
+      "end": 254,
       "loc": {
         "start": {
-          "line": 4,
+          "line": 5,
           "column": 0
         },
         "end": {
-          "line": 4,
+          "line": 5,
           "column": 6
         }
       }
@@ -970,15 +1414,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 194,
-      "end": 195,
+      "start": 255,
+      "end": 256,
       "loc": {
         "start": {
-          "line": 4,
+          "line": 5,
           "column": 7
         },
         "end": {
-          "line": 4,
+          "line": 5,
           "column": 8
         }
       }
@@ -995,16 +1439,199 @@
         "postfix": false,
         "binop": null
       },
-      "value": "RawImageData",
-      "start": 196,
-      "end": 208,
+      "value": "LookupTexture3D",
+      "start": 257,
+      "end": 272,
       "loc": {
         "start": {
-          "line": 4,
+          "line": 5,
           "column": 9
         },
         "end": {
-          "line": 4,
+          "line": 5,
+          "column": 24
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 273,
+      "end": 274,
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 25
+        },
+        "end": {
+          "line": 5,
+          "column": 26
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "from",
+      "start": 275,
+      "end": 279,
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 27
+        },
+        "end": {
+          "line": 5,
+          "column": 31
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "./textures/LookupTexture3D",
+      "start": 280,
+      "end": 308,
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 32
+        },
+        "end": {
+          "line": 5,
+          "column": 60
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 308,
+      "end": 309,
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 60
+        },
+        "end": {
+          "line": 5,
+          "column": 61
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "export",
+        "keyword": "export",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "export",
+      "start": 311,
+      "end": 317,
+      "loc": {
+        "start": {
+          "line": 6,
+          "column": 0
+        },
+        "end": {
+          "line": 6,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 318,
+      "end": 319,
+      "loc": {
+        "start": {
+          "line": 6,
+          "column": 7
+        },
+        "end": {
+          "line": 6,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "NoiseTexture",
+      "start": 320,
+      "end": 332,
+      "loc": {
+        "start": {
+          "line": 6,
+          "column": 9
+        },
+        "end": {
+          "line": 6,
           "column": 21
         }
       }
@@ -1021,15 +1648,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 209,
-      "end": 210,
+      "start": 333,
+      "end": 334,
       "loc": {
         "start": {
-          "line": 4,
+          "line": 6,
           "column": 22
         },
         "end": {
-          "line": 4,
+          "line": 6,
           "column": 23
         }
       }
@@ -1047,15 +1674,198 @@
         "binop": null
       },
       "value": "from",
-      "start": 211,
-      "end": 215,
+      "start": 335,
+      "end": 339,
       "loc": {
         "start": {
-          "line": 4,
+          "line": 6,
           "column": 24
         },
         "end": {
-          "line": 4,
+          "line": 6,
+          "column": 28
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "./textures/NoiseTexture",
+      "start": 340,
+      "end": 365,
+      "loc": {
+        "start": {
+          "line": 6,
+          "column": 29
+        },
+        "end": {
+          "line": 6,
+          "column": 54
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 365,
+      "end": 366,
+      "loc": {
+        "start": {
+          "line": 6,
+          "column": 54
+        },
+        "end": {
+          "line": 6,
+          "column": 55
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "export",
+        "keyword": "export",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "export",
+      "start": 368,
+      "end": 374,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 0
+        },
+        "end": {
+          "line": 7,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 375,
+      "end": 376,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 7
+        },
+        "end": {
+          "line": 7,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "RawImageData",
+      "start": 377,
+      "end": 389,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 9
+        },
+        "end": {
+          "line": 7,
+          "column": 21
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 390,
+      "end": 391,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 22
+        },
+        "end": {
+          "line": 7,
+          "column": 23
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "from",
+      "start": 392,
+      "end": 396,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 24
+        },
+        "end": {
+          "line": 7,
           "column": 28
         }
       }
@@ -1074,15 +1884,15 @@
         "updateContext": null
       },
       "value": "./RawImageData",
-      "start": 216,
-      "end": 232,
+      "start": 397,
+      "end": 413,
       "loc": {
         "start": {
-          "line": 4,
+          "line": 7,
           "column": 29
         },
         "end": {
-          "line": 4,
+          "line": 7,
           "column": 45
         }
       }
@@ -1100,15 +1910,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 232,
-      "end": 233,
+      "start": 413,
+      "end": 414,
       "loc": {
         "start": {
-          "line": 4,
+          "line": 7,
           "column": 45
         },
         "end": {
-          "line": 4,
+          "line": 7,
           "column": 46
         }
       }
@@ -1126,15 +1936,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 235,
-      "end": 235,
+      "start": 416,
+      "end": 416,
       "loc": {
         "start": {
-          "line": 5,
+          "line": 8,
           "column": 0
         },
         "end": {
-          "line": 5,
+          "line": 8,
           "column": 0
         }
       }

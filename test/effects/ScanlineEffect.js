@@ -1,5 +1,5 @@
 import test from "ava";
-import { ScanlineEffect } from "../../build/postprocessing.esm.js";
+import { ScanlineEffect } from "../../";
 
 test("can be created and destroyed", t => {
 

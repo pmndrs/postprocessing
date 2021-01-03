@@ -1,3 +1,4 @@
+export { AdaptiveLuminancePass } from "./AdaptiveLuminancePass";
 export { BlurPass } from "./BlurPass";
 export { ClearMaskPass } from "./ClearMaskPass";
 export { ClearPass } from "./ClearPass";

@@ -30,11 +30,11 @@ p {
 	margin: 0;
 }
 
-div[role="main"] {
+main {
 	height: 100%;
 }
 
-div[role="complementary"] {
+aside {
 	padding: 0 5px;
 	position: fixed;
 	right: 0;
@@ -52,8 +52,29 @@ img:hover {
 	opacity: 0.25;
 }
 
+.progress * {
+	cursor: progress !important;
+}
+
 .hidden {
 	display: none;
+}
+
+.warning {
+	align-items: center;
+	background: black;
+	bottom: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	left: 0;
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+.warning a {
+	margin-top: 1em;
 }
 
 .loading {
@@ -116,4 +137,8 @@ img:hover {
 
 .dg {
 	user-select: none;
+}
+
+.dg select {
+	max-width: 100%;
 }

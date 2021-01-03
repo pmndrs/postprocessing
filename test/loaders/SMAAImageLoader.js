@@ -1,5 +1,5 @@
 import test from "ava";
-import { SMAAImageLoader } from "../../../../build/postprocessing.esm.js";
+import { SMAAImageLoader } from "../../";
 
 test("can be created", t => {
 

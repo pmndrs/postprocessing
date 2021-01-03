@@ -4,7 +4,7 @@
  * @private
  * @param {Number} width - The image width.
  * @param {Number} height - The image height.
- * @param {Uint8ClampedArray} data - The image data.
+ * @param {Uint8ClampedArray|Image} data - The image data.
  * @return {Canvas} The canvas.
  */
 
@@ -13,20 +13,30 @@ function createCanvas(width, height, data) {
 	const canvas = document.createElementNS("http://www.w3.org/1999/xhtml", "canvas");
 	const context = canvas.getContext("2d");
 
-	const imageData = context.createImageData(width, height);
-	imageData.data.set(data);
-
 	canvas.width = width;
 	canvas.height = height;
 
-	context.putImageData(imageData, 0, 0);
+	if(data instanceof Image) {
+
+		context.drawImage(data, 0, 0);
+
+	} else {
+
+		const imageData = context.createImageData(width, height);
+		imageData.data.set(data);
+
+		context.putImageData(imageData, 0, 0);
+
+	}
 
 	return canvas;
 
 }
 
 /**
- * A container for raw image data.
+ * A container for raw RGBA image data.
+ *
+ * @implements {ImageData}
  */
 
 export class RawImageData {
@@ -58,7 +68,7 @@ export class RawImageData {
 		this.height = height;
 
 		/**
-		 * The image data.
+		 * The RGBA image data.
 		 *
 		 * @type {Uint8ClampedArray}
 		 */
@@ -70,7 +80,7 @@ export class RawImageData {
 	/**
 	 * Creates a canvas from this image data.
 	 *
-	 * @return {Canvas} The canvas or null if it couldn't be created.
+	 * @return {Canvas} The canvas, or null if it couldn't be created.
 	 */
 
 	toCanvas() {
@@ -86,13 +96,33 @@ export class RawImageData {
 	/**
 	 * Creates a new image data container.
 	 *
-	 * @param {Object} data - Raw image data.
+	 * @param {ImageData|Image} image - An image or plain image data.
 	 * @return {RawImageData} The image data.
 	 */
 
-	static from(data) {
+	static from(image) {
 
-		return new RawImageData(data.width, data.height, data.data);
+		let { width, height } = image;
+		let data;
+
+		if(image instanceof Image) {
+
+			const canvas = createCanvas(width, height, image);
+
+			if(canvas !== null) {
+
+				const context = canvas.getContext("2d");
+				data = context.getImageData(0, 0, width, height).data;
+
+			}
+
+		} else {
+
+			data = image.data;
+
+		}
+
+		return new RawImageData(width, height, data);
 
 	}
 

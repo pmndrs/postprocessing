@@ -1,5 +1,5 @@
 import test from "ava";
-import { GlitchEffect } from "../../build/postprocessing.esm.js";
+import { GlitchEffect } from "../../";
 
 test("can be created and destroyed", t => {
 

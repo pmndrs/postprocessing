@@ -1,5 +1,5 @@
 import test from "ava";
-import { SMAAWeightsMaterial } from "../../build/postprocessing.esm.js";
+import { SMAAWeightsMaterial } from "../../";
 
 test("can be created", t => {
 

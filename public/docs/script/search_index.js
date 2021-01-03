@@ -6,6 +6,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "postprocessing~adaptiveluminancepass",
+    "class/src/passes/AdaptiveLuminancePass.js~AdaptiveLuminancePass.html",
+    "<span>AdaptiveLuminancePass</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "class"
+  ],
+  [
     "postprocessing~blendfunction",
     "variable/index.html#static-variable-BlendFunction",
     "<span>BlendFunction</span> <span class=\"search-result-import-path\">postprocessing</span>",
@@ -258,9 +264,39 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "postprocessing~lut3dlloader",
+    "class/src/loaders/LUT3dlLoader.js~LUT3dlLoader.html",
+    "<span>LUT3dlLoader</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "class"
+  ],
+  [
+    "postprocessing~lutcubeloader",
+    "class/src/loaders/LUTCubeLoader.js~LUTCubeLoader.html",
+    "<span>LUTCubeLoader</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "class"
+  ],
+  [
+    "postprocessing~luteffect",
+    "class/src/effects/LUTEffect.js~LUTEffect.html",
+    "<span>LUTEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "class"
+  ],
+  [
+    "postprocessing~lutoperation",
+    "variable/index.html#static-variable-LUTOperation",
+    "<span>LUTOperation</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "variable"
+  ],
+  [
     "postprocessing~lambdapass",
     "class/src/passes/LambdaPass.js~LambdaPass.html",
     "<span>LambdaPass</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "class"
+  ],
+  [
+    "postprocessing~lookuptexture3d",
+    "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html",
+    "<span>LookupTexture3D</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
@@ -474,6 +510,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "postprocessing~tetrahedralupscaler",
+    "class/src/images/lut/TetrahedralUpscaler.js~TetrahedralUpscaler.html",
+    "<span>TetrahedralUpscaler</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "class"
+  ],
+  [
     "postprocessing~textureeffect",
     "class/src/effects/TextureEffect.js~TextureEffect.html",
     "<span>TextureEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
@@ -484,6 +526,12 @@ window.esdocSearchIndex = [
     "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html",
     "<span>ToneMappingEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
+  ],
+  [
+    "postprocessing~tonemappingmode",
+    "variable/index.html#static-variable-ToneMappingMode",
+    "<span>ToneMappingMode</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "variable"
   ],
   [
     "postprocessing~vignetteeffect",
@@ -1842,6 +1890,42 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/effects/luteffect.js",
+    "file/src/effects/LUTEffect.js.html",
+    "src/effects/LUTEffect.js",
+    "file"
+  ],
+  [
+    "src/effects/luteffect.js~luteffect#constructor",
+    "class/src/effects/LUTEffect.js~LUTEffect.html#instance-constructor-constructor",
+    "src/effects/LUTEffect.js~LUTEffect#constructor",
+    "method"
+  ],
+  [
+    "src/effects/luteffect.js~luteffect#getinputencoding",
+    "class/src/effects/LUTEffect.js~LUTEffect.html#instance-method-getInputEncoding",
+    "src/effects/LUTEffect.js~LUTEffect#getInputEncoding",
+    "method"
+  ],
+  [
+    "src/effects/luteffect.js~luteffect#getlut",
+    "class/src/effects/LUTEffect.js~LUTEffect.html#instance-method-getLUT",
+    "src/effects/LUTEffect.js~LUTEffect#getLUT",
+    "method"
+  ],
+  [
+    "src/effects/luteffect.js~luteffect#setinputencoding",
+    "class/src/effects/LUTEffect.js~LUTEffect.html#instance-method-setInputEncoding",
+    "src/effects/LUTEffect.js~LUTEffect#setInputEncoding",
+    "method"
+  ],
+  [
+    "src/effects/luteffect.js~luteffect#setlut",
+    "class/src/effects/LUTEffect.js~LUTEffect.html#instance-method-setLUT",
+    "src/effects/LUTEffect.js~LUTEffect#setLUT",
+    "method"
+  ],
+  [
     "src/effects/noiseeffect.js",
     "file/src/effects/NoiseEffect.js.html",
     "src/effects/NoiseEffect.js",
@@ -2604,6 +2688,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/effects/tonemappingeffect.js~tonemappingeffect#getmode",
+    "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-method-getMode",
+    "src/effects/ToneMappingEffect.js~ToneMappingEffect#getMode",
+    "method"
+  ],
+  [
     "src/effects/tonemappingeffect.js~tonemappingeffect#initialize",
     "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-method-initialize",
     "src/effects/ToneMappingEffect.js~ToneMappingEffect#initialize",
@@ -2622,9 +2712,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/effects/tonemappingeffect.js~tonemappingeffect#setsize",
-    "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-method-setSize",
-    "src/effects/ToneMappingEffect.js~ToneMappingEffect#setSize",
+    "src/effects/tonemappingeffect.js~tonemappingeffect#setmode",
+    "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-method-setMode",
+    "src/effects/ToneMappingEffect.js~ToneMappingEffect#setMode",
     "method"
   ],
   [
@@ -2760,6 +2850,30 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/images/lut/lutoperation.js",
+    "file/src/images/lut/LUTOperation.js.html",
+    "src/images/lut/LUTOperation.js",
+    "file"
+  ],
+  [
+    "src/images/lut/tetrahedralupscaler.js",
+    "file/src/images/lut/TetrahedralUpscaler.js.html",
+    "src/images/lut/TetrahedralUpscaler.js",
+    "file"
+  ],
+  [
+    "src/images/lut/tetrahedralupscaler.js~tetrahedralupscaler.expand",
+    "class/src/images/lut/TetrahedralUpscaler.js~TetrahedralUpscaler.html#static-method-expand",
+    "src/images/lut/TetrahedralUpscaler.js~TetrahedralUpscaler.expand",
+    "method"
+  ],
+  [
+    "src/images/lut/worker.js",
+    "file/src/images/lut/worker.js.html",
+    "src/images/lut/worker.js",
+    "file"
+  ],
+  [
     "src/images/smaa/smaaareaimagedata.js",
     "file/src/images/smaa/SMAAAreaImageData.js.html",
     "src/images/smaa/SMAAAreaImageData.js",
@@ -2802,6 +2916,126 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/images/textures/lookuptexture3d.js",
+    "file/src/images/textures/LookupTexture3D.js.html",
+    "src/images/textures/LookupTexture3D.js",
+    "file"
+  ],
+  [
+    "src/images/textures/lookuptexture3d.js~lookuptexture3d#applylut",
+    "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#instance-method-applyLUT",
+    "src/images/textures/LookupTexture3D.js~LookupTexture3D#applyLUT",
+    "method"
+  ],
+  [
+    "src/images/textures/lookuptexture3d.js~lookuptexture3d#constructor",
+    "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#instance-constructor-constructor",
+    "src/images/textures/LookupTexture3D.js~LookupTexture3D#constructor",
+    "method"
+  ],
+  [
+    "src/images/textures/lookuptexture3d.js~lookuptexture3d#convertlineartosrgb",
+    "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#instance-method-convertLinearToSRGB",
+    "src/images/textures/LookupTexture3D.js~LookupTexture3D#convertLinearToSRGB",
+    "method"
+  ],
+  [
+    "src/images/textures/lookuptexture3d.js~lookuptexture3d#convertsrgbtolinear",
+    "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#instance-method-convertSRGBToLinear",
+    "src/images/textures/LookupTexture3D.js~LookupTexture3D#convertSRGBToLinear",
+    "method"
+  ],
+  [
+    "src/images/textures/lookuptexture3d.js~lookuptexture3d#converttofloat",
+    "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#instance-method-convertToFloat",
+    "src/images/textures/LookupTexture3D.js~LookupTexture3D#convertToFloat",
+    "method"
+  ],
+  [
+    "src/images/textures/lookuptexture3d.js~lookuptexture3d#converttouint8",
+    "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#instance-method-convertToUint8",
+    "src/images/textures/LookupTexture3D.js~LookupTexture3D#convertToUint8",
+    "method"
+  ],
+  [
+    "src/images/textures/lookuptexture3d.js~lookuptexture3d#encoding",
+    "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#instance-member-encoding",
+    "src/images/textures/LookupTexture3D.js~LookupTexture3D#encoding",
+    "member"
+  ],
+  [
+    "src/images/textures/lookuptexture3d.js~lookuptexture3d#format",
+    "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#instance-member-format",
+    "src/images/textures/LookupTexture3D.js~LookupTexture3D#format",
+    "member"
+  ],
+  [
+    "src/images/textures/lookuptexture3d.js~lookuptexture3d#islookuptexture3d",
+    "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#instance-get-isLookupTexture3D",
+    "src/images/textures/LookupTexture3D.js~LookupTexture3D#isLookupTexture3D",
+    "member"
+  ],
+  [
+    "src/images/textures/lookuptexture3d.js~lookuptexture3d#magfilter",
+    "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#instance-member-magFilter",
+    "src/images/textures/LookupTexture3D.js~LookupTexture3D#magFilter",
+    "member"
+  ],
+  [
+    "src/images/textures/lookuptexture3d.js~lookuptexture3d#scaleup",
+    "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#instance-method-scaleUp",
+    "src/images/textures/LookupTexture3D.js~LookupTexture3D#scaleUp",
+    "method"
+  ],
+  [
+    "src/images/textures/lookuptexture3d.js~lookuptexture3d#todatatexture",
+    "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#instance-method-toDataTexture",
+    "src/images/textures/LookupTexture3D.js~LookupTexture3D#toDataTexture",
+    "method"
+  ],
+  [
+    "src/images/textures/lookuptexture3d.js~lookuptexture3d#type",
+    "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#instance-member-type",
+    "src/images/textures/LookupTexture3D.js~LookupTexture3D#type",
+    "member"
+  ],
+  [
+    "src/images/textures/lookuptexture3d.js~lookuptexture3d#unpackalignment",
+    "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#instance-member-unpackAlignment",
+    "src/images/textures/LookupTexture3D.js~LookupTexture3D#unpackAlignment",
+    "member"
+  ],
+  [
+    "src/images/textures/lookuptexture3d.js~lookuptexture3d#wrapr",
+    "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#instance-member-wrapR",
+    "src/images/textures/LookupTexture3D.js~LookupTexture3D#wrapR",
+    "member"
+  ],
+  [
+    "src/images/textures/lookuptexture3d.js~lookuptexture3d#wraps",
+    "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#instance-member-wrapS",
+    "src/images/textures/LookupTexture3D.js~LookupTexture3D#wrapS",
+    "member"
+  ],
+  [
+    "src/images/textures/lookuptexture3d.js~lookuptexture3d#wrapt",
+    "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#instance-member-wrapT",
+    "src/images/textures/LookupTexture3D.js~LookupTexture3D#wrapT",
+    "member"
+  ],
+  [
+    "src/images/textures/lookuptexture3d.js~lookuptexture3d.createneutral",
+    "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#static-method-createNeutral",
+    "src/images/textures/LookupTexture3D.js~LookupTexture3D.createNeutral",
+    "method"
+  ],
+  [
+    "src/images/textures/lookuptexture3d.js~lookuptexture3d.from",
+    "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#static-method-from",
+    "src/images/textures/LookupTexture3D.js~LookupTexture3D.from",
+    "method"
+  ],
+  [
     "src/images/textures/noisetexture.js",
     "file/src/images/textures/NoiseTexture.js.html",
     "src/images/textures/NoiseTexture.js",
@@ -2818,6 +3052,42 @@ window.esdocSearchIndex = [
     "file/src/index.js.html",
     "src/index.js",
     "file"
+  ],
+  [
+    "src/loaders/lut3dlloader.js",
+    "file/src/loaders/LUT3dlLoader.js.html",
+    "src/loaders/LUT3dlLoader.js",
+    "file"
+  ],
+  [
+    "src/loaders/lut3dlloader.js~lut3dlloader#load",
+    "class/src/loaders/LUT3dlLoader.js~LUT3dlLoader.html#instance-method-load",
+    "src/loaders/LUT3dlLoader.js~LUT3dlLoader#load",
+    "method"
+  ],
+  [
+    "src/loaders/lut3dlloader.js~lut3dlloader#parse",
+    "class/src/loaders/LUT3dlLoader.js~LUT3dlLoader.html#instance-method-parse",
+    "src/loaders/LUT3dlLoader.js~LUT3dlLoader#parse",
+    "method"
+  ],
+  [
+    "src/loaders/lutcubeloader.js",
+    "file/src/loaders/LUTCubeLoader.js.html",
+    "src/loaders/LUTCubeLoader.js",
+    "file"
+  ],
+  [
+    "src/loaders/lutcubeloader.js~lutcubeloader#load",
+    "class/src/loaders/LUTCubeLoader.js~LUTCubeLoader.html#instance-method-load",
+    "src/loaders/LUTCubeLoader.js~LUTCubeLoader#load",
+    "method"
+  ],
+  [
+    "src/loaders/lutcubeloader.js~lutcubeloader#parse",
+    "class/src/loaders/LUTCubeLoader.js~LUTCubeLoader.html#instance-method-parse",
+    "src/loaders/LUTCubeLoader.js~LUTCubeLoader#parse",
+    "method"
   ],
   [
     "src/loaders/smaaimageloader.js",
@@ -3520,6 +3790,60 @@ window.esdocSearchIndex = [
     "file/src/materials/index.js.html",
     "src/materials/index.js",
     "file"
+  ],
+  [
+    "src/passes/adaptiveluminancepass.js",
+    "file/src/passes/AdaptiveLuminancePass.js.html",
+    "src/passes/AdaptiveLuminancePass.js",
+    "file"
+  ],
+  [
+    "src/passes/adaptiveluminancepass.js~adaptiveluminancepass#adaptationrate",
+    "class/src/passes/AdaptiveLuminancePass.js~AdaptiveLuminancePass.html#instance-get-adaptationRate",
+    "src/passes/AdaptiveLuminancePass.js~AdaptiveLuminancePass#adaptationRate",
+    "member"
+  ],
+  [
+    "src/passes/adaptiveluminancepass.js~adaptiveluminancepass#adaptationrate",
+    "class/src/passes/AdaptiveLuminancePass.js~AdaptiveLuminancePass.html#instance-set-adaptationRate",
+    "src/passes/AdaptiveLuminancePass.js~AdaptiveLuminancePass#adaptationRate",
+    "member"
+  ],
+  [
+    "src/passes/adaptiveluminancepass.js~adaptiveluminancepass#constructor",
+    "class/src/passes/AdaptiveLuminancePass.js~AdaptiveLuminancePass.html#instance-constructor-constructor",
+    "src/passes/AdaptiveLuminancePass.js~AdaptiveLuminancePass#constructor",
+    "method"
+  ],
+  [
+    "src/passes/adaptiveluminancepass.js~adaptiveluminancepass#initialize",
+    "class/src/passes/AdaptiveLuminancePass.js~AdaptiveLuminancePass.html#instance-method-initialize",
+    "src/passes/AdaptiveLuminancePass.js~AdaptiveLuminancePass#initialize",
+    "method"
+  ],
+  [
+    "src/passes/adaptiveluminancepass.js~adaptiveluminancepass#miplevel1x1",
+    "class/src/passes/AdaptiveLuminancePass.js~AdaptiveLuminancePass.html#instance-set-mipLevel1x1",
+    "src/passes/AdaptiveLuminancePass.js~AdaptiveLuminancePass#mipLevel1x1",
+    "member"
+  ],
+  [
+    "src/passes/adaptiveluminancepass.js~adaptiveluminancepass#needsswap",
+    "class/src/passes/AdaptiveLuminancePass.js~AdaptiveLuminancePass.html#instance-member-needsSwap",
+    "src/passes/AdaptiveLuminancePass.js~AdaptiveLuminancePass#needsSwap",
+    "member"
+  ],
+  [
+    "src/passes/adaptiveluminancepass.js~adaptiveluminancepass#render",
+    "class/src/passes/AdaptiveLuminancePass.js~AdaptiveLuminancePass.html#instance-method-render",
+    "src/passes/AdaptiveLuminancePass.js~AdaptiveLuminancePass#render",
+    "method"
+  ],
+  [
+    "src/passes/adaptiveluminancepass.js~adaptiveluminancepass#texture",
+    "class/src/passes/AdaptiveLuminancePass.js~AdaptiveLuminancePass.html#instance-get-texture",
+    "src/passes/AdaptiveLuminancePass.js~AdaptiveLuminancePass#texture",
+    "member"
   ],
   [
     "src/passes/blurpass.js",

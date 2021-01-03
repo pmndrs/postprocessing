@@ -1,5 +1,5 @@
 import test from "ava";
-import { ColorDepthEffect } from "../../build/postprocessing.esm.js";
+import { ColorDepthEffect } from "../../";
 
 test("can be created and destroyed", t => {
 

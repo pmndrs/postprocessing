@@ -113,6 +113,30 @@ export class GlitchDemo extends PostProcessingDemo {
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
 
+		// Epilepsy warning
+
+		if(sessionStorage.getItem("epilepsy-warning") === null) {
+
+			const div = document.createElement("div");
+			div.classList.add("warning");
+			const p = document.createElement("p");
+			p.innerText = "The following effect may trigger epileptic seizures or blackouts";
+			const a = document.createElement("a");
+			a.innerText = "Click here to continue";
+			a.href = "Click here to continue";
+			a.addEventListener("click", (event) => {
+
+				event.preventDefault();
+				sessionStorage.setItem("epilepsy-warning", "1");
+				div.remove();
+
+			});
+
+			div.append(p, a);
+			document.body.append(div);
+
+		}
+
 		// Camera.
 
 		const aspect = window.innerWidth / window.innerHeight;
@@ -153,7 +177,7 @@ export class GlitchDemo extends PostProcessingDemo {
 			EdgeDetectionMode.DEPTH
 		);
 
-		smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.05);
+		smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.01);
 
 		const chromaticAberrationEffect = new ChromaticAberrationEffect();
 

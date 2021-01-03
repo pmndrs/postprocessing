@@ -1,4 +1,4 @@
-import { ShaderMaterial, Uniform, Vector2, Vector4 } from "three";
+import { NoBlending, ShaderMaterial, Uniform, Vector2, Vector4 } from "three";
 
 import fragmentShader from "./glsl/bokeh/shader.frag";
 import vertexShader from "./glsl/common/shader.vert";
@@ -44,6 +44,7 @@ export class BokehMaterial extends ShaderMaterial {
 			fragmentShader,
 			vertexShader,
 
+			blending: NoBlending,
 			depthWrite: false,
 			depthTest: false
 

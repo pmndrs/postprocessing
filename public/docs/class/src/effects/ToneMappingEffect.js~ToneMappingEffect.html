@@ -52,6 +52,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html">GodRaysEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GridEffect.js~GridEffect.html">GridEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/HueSaturationEffect.js~HueSaturationEffect.html">HueSaturationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/LUTEffect.js~LUTEffect.html">LUTEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/NoiseEffect.js~NoiseEffect.html">NoiseEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html">OutlineEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/PixelationEffect.js~PixelationEffect.html">PixelationEffect</a></span></span></li>
@@ -69,13 +70,19 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-WebGLExtension">WebGLExtension</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GlitchMode">GlitchMode</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SMAAPreset">SMAAPreset</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ToneMappingMode">ToneMappingMode</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects-blending">effects/blending</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/blending/BlendMode.js~BlendMode.html">BlendMode</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-BlendFunction">BlendFunction</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images">images</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/RawImageData.js~RawImageData.html">RawImageData</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images-lut">images/lut</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/lut/TetrahedralUpscaler.js~TetrahedralUpscaler.html">TetrahedralUpscaler</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LUTOperation">LUTOperation</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images-smaa">images/smaa</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/smaa/SMAAAreaImageData.js~SMAAAreaImageData.html">SMAAAreaImageData</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/smaa/SMAASearchImageData.js~SMAASearchImageData.html">SMAASearchImageData</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images-textures">images/textures</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/textures/NoiseTexture.js~NoiseTexture.html">NoiseTexture</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#loaders">loaders</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/loaders/SMAAImageLoader.js~SMAAImageLoader.html">SMAAImageLoader</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images-textures">images/textures</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html">LookupTexture3D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/textures/NoiseTexture.js~NoiseTexture.html">NoiseTexture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#loaders">loaders</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/loaders/LUT3dlLoader.js~LUT3dlLoader.html">LUT3dlLoader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/loaders/LUTCubeLoader.js~LUTCubeLoader.html">LUTCubeLoader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/loaders/SMAAImageLoader.js~SMAAImageLoader.html">SMAAImageLoader</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#materials">materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/AdaptiveLuminanceMaterial.js~AdaptiveLuminanceMaterial.html">AdaptiveLuminanceMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/BokehMaterial.js~BokehMaterial.html">BokehMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CircleOfConfusionMaterial.js~CircleOfConfusionMaterial.html">CircleOfConfusionMaterial</a></span></span></li>
@@ -99,7 +106,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Section">Section</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MaskFunction">MaskFunction</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-OutlineEdgesMaterial">OutlineEdgesMaterial</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#passes">passes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BlurPass.js~BlurPass.html">BlurPass</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#passes">passes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/AdaptiveLuminancePass.js~AdaptiveLuminancePass.html">AdaptiveLuminancePass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BlurPass.js~BlurPass.html">BlurPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearMaskPass.js~ClearMaskPass.html">ClearMaskPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass.html">DepthDownsamplingPass</a></span></span></li>
@@ -117,13 +125,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ToneMappingEffect} from &apos;<span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber30">postprocessing</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ToneMappingEffect} from &apos;<span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber28">postprocessing</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber30">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber28">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -143,13 +151,12 @@
 
   
   
-  <div class="description" data-ice="description"><p>A tone mapping effect that supports adaptive luminosity.</p>
-<p>If adaptivity is enabled, this effect generates a texture that represents the
-luminosity of the current scene and adjusts it over time to simulate the
-optic nerve responding to the amount of light it is receiving.</p>
+  <div class="description" data-ice="description"><p>A tone mapping effect.</p>
+<p>Requires support for <code>EXT_shader_texture_lod</code> and
+<code>EXT_color_buffer_half_float</code>.</p>
 <p>Reference:
- GDC2007 - Wolfgang Engel, Post-Processing Pipeline
- <a href="http://perso.univ-lyon1.fr/jean-claude.iehl/Public/educ/GAMA/2007/gdc07/Post-Processing_Pipeline.pdf">http://perso.univ-lyon1.fr/jean-claude.iehl/Public/educ/GAMA/2007/gdc07/Post-Processing_Pipeline.pdf</a></p>
+GDC2007 - Wolfgang Engel, Post-Processing Pipeline
+<a href="http://perso.univ-lyon1.fr/jean-claude.iehl/Public/educ/GAMA/2007/gdc07/Post-Processing_Pipeline.pdf">http://perso.univ-lyon1.fr/jean-claude.iehl/Public/educ/GAMA/2007/gdc07/Post-Processing_Pipeline.pdf</a></p>
 </div>
   
 
@@ -222,7 +229,7 @@ optic nerve responding to the amount of light it is receiving.</p>
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this get was deprecated. Use adaptiveLuminancePass.adaptationRate instead.</div>
         
         <div data-ice="description"><p>The luminance adaptation rate.</p>
 </div>
@@ -251,7 +258,7 @@ optic nerve responding to the amount of light it is receiving.</p>
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this set was deprecated. Use adaptiveLuminancePass.adaptationRate instead.</div>
         
         
       </div>
@@ -279,7 +286,7 @@ optic nerve responding to the amount of light it is receiving.</p>
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this get was deprecated. Use mode instead.</div>
         
         <div data-ice="description"><p>Indicates whether this pass uses adaptive luminance.</p>
 </div>
@@ -308,7 +315,7 @@ optic nerve responding to the amount of light it is receiving.</p>
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this set was deprecated. Set mode to ToneMappingMode.REINHARD2_ADAPTIVE instead.</div>
         
         <div data-ice="description"><p>Enables or disables adaptive luminance.</p>
 </div>
@@ -424,7 +431,7 @@ optic nerve responding to the amount of light it is receiving.</p>
       <div>
         
         
-        <div data-ice="description"><p>Sets the resolution of the internal render targets.</p>
+        <div data-ice="description"><p>Sets the resolution of the luminance texture.</p>
 </div>
       </div>
     </td>
@@ -441,6 +448,35 @@ optic nerve responding to the amount of light it is receiving.</p>
   <tbody>
   
   <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-method-getMode">getMode</a></span></span><span class="code" data-ice="signature">(): <span><a href="variable/index.html#static-variable-ToneMappingMode">ToneMappingMode</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Returns the current tone mapping mode.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
     <td>
       <span class="access" data-ice="access">public</span>
       
@@ -483,13 +519,13 @@ optic nerve responding to the amount of light it is receiving.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-method-setSize">setSize</a></span></span><span class="code" data-ice="signature">(width: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, height: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-method-setMode">setMode</a></span></span><span class="code" data-ice="signature">(value: <span><a href="variable/index.html#static-variable-ToneMappingMode">ToneMappingMode</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Updates the size of internal render targets.</p>
+        <div data-ice="description"><p>Sets the tone mapping mode.</p>
 </div>
       </div>
     </td>
@@ -1050,7 +1086,7 @@ a way that requires a shader recompilation.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber45">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber49">source</a></span></span>
     </span>
   </h3>
 
@@ -1058,6 +1094,7 @@ a way that requires a shader recompilation.</p>
   
   
   <div data-ice="description"><p>Constructs a new tone mapping effect.</p>
+<p>The additional parameters only affect the Reinhard2 operator.</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/effects/Effect.js~Effect.html#instance-constructor-constructor">Effect#constructor</a></span></div>
@@ -1090,7 +1127,15 @@ a way that requires a shader recompilation.</p>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: true</li></ul></td>
-      <td data-ice="description"><p>Whether the tone mapping should use an adaptive luminance map.</p>
+      <td data-ice="description"><p>Deprecated. Use mode instead.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.mode</td>
+      <td data-ice="type" class="code"><span><a href="variable/index.html#static-variable-ToneMappingMode">ToneMappingMode</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: ToneMappingMode.REINHARD2_ADAPTIVE</li></ul></td>
+      <td data-ice="description"><p>The tone mapping mode.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -1098,7 +1143,23 @@ a way that requires a shader recompilation.</p>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: 256</li></ul></td>
-      <td data-ice="description"><p>The render texture resolution of the luminance map.</p>
+      <td data-ice="description"><p>The resolution of the luminance texture. Must be a power of two.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.maxLuminance</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 16.0</li></ul></td>
+      <td data-ice="description"><p>Deprecated. Same as whitePoint.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.whitePoint</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 16.0</li></ul></td>
+      <td data-ice="description"><p>The white point.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -1110,11 +1171,11 @@ a way that requires a shader recompilation.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">options.maxLuminance</td>
+      <td data-ice="name" class="code" data-depth="1">options.minLuminance</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: 16.0</li></ul></td>
-      <td data-ice="description"><p>The maximum luminance.</p>
+<li>default: 0.01</li></ul></td>
+      <td data-ice="description"><p>The minimum luminance. Prevents very high exposure in dark scenes.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -1122,7 +1183,7 @@ a way that requires a shader recompilation.</p>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: 1.0</li></ul></td>
-      <td data-ice="description"><p>The average luminance.</p>
+      <td data-ice="description"><p>The average luminance. Used for the non-adaptive Reinhard operator.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -1153,7 +1214,7 @@ a way that requires a shader recompilation.</p>
   
 
   
-  
+  <div data-ice="todo"><h4>TODO:</h4><ul><li><span>Remove deprecated params and change default white point to 4.</span></li></ul></div>
 </div>
 </div>
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
@@ -1170,12 +1231,12 @@ a way that requires a shader recompilation.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber229">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber261">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this get was deprecated. Use adaptiveLuminancePass.adaptationRate instead.</div>
   
   <div data-ice="description"><p>The luminance adaptation rate.</p>
 </div>
@@ -1214,12 +1275,12 @@ a way that requires a shader recompilation.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber239">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber272">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this set was deprecated. Use adaptiveLuminancePass.adaptationRate instead.</div>
   
   
 
@@ -1257,12 +1318,12 @@ a way that requires a shader recompilation.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber189">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber235">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this get was deprecated. Use mode instead.</div>
   
   <div data-ice="description"><p>Indicates whether this pass uses adaptive luminance.</p>
 </div>
@@ -1301,12 +1362,12 @@ a way that requires a shader recompilation.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber201">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber248">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this set was deprecated. Set mode to ToneMappingMode.REINHARD2_ADAPTIVE instead.</div>
   
   <div data-ice="description"><p>Enables or disables adaptive luminance.</p>
 </div>
@@ -1345,7 +1406,7 @@ a way that requires a shader recompilation.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber250">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber283">source</a></span></span>
     </span>
   </h3>
 
@@ -1388,7 +1449,7 @@ a way that requires a shader recompilation.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber263">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber296">source</a></span></span>
     </span>
   </h3>
 
@@ -1431,7 +1492,7 @@ a way that requires a shader recompilation.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber155">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber205">source</a></span></span>
     </span>
   </h3>
 
@@ -1475,14 +1536,14 @@ a way that requires a shader recompilation.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber167">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber217">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets the resolution of the internal render targets.</p>
+  <div data-ice="description"><p>Sets the resolution of the luminance texture. Must be a power of two.</p>
 </div>
 
   
@@ -1511,6 +1572,63 @@ a way that requires a shader recompilation.</p>
 <div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
 
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-getMode">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">getMode</span><span class="code" data-ice="signature">(): <span><a href="variable/index.html#static-variable-ToneMappingMode">ToneMappingMode</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber139">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Returns the current tone mapping mode.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="variable/index.html#static-variable-ToneMappingMode">ToneMappingMode</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The tone mapping mode.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-initialize">
     <span class="access" data-ice="access">public</span>
     
@@ -1522,7 +1640,7 @@ a way that requires a shader recompilation.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber317">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber329">source</a></span></span>
     </span>
   </h3>
 
@@ -1586,28 +1704,28 @@ a way that requires a shader recompilation.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-setSize">
+  <h3 data-ice="anchor" id="instance-method-setMode">
     <span class="access" data-ice="access">public</span>
     
     
     
     
     
-    <span class="code" data-ice="name">setSize</span><span class="code" data-ice="signature">(width: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, height: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="code" data-ice="name">setMode</span><span class="code" data-ice="signature">(value: <span><a href="variable/index.html#static-variable-ToneMappingMode">ToneMappingMode</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber303">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber151">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Updates the size of internal render targets.</p>
+  <div data-ice="description"><p>Sets the tone mapping mode.</p>
 </div>
 
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-setSize">Effect#setSize</a></span></div>
+  
 
   <div data-ice="properties"><div data-ice="properties">
   <h4 data-ice="title">Params:</h4>
@@ -1618,17 +1736,10 @@ a way that requires a shader recompilation.</p>
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">width</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="name" class="code" data-depth="0">value</td>
+      <td data-ice="type" class="code"><span><a href="variable/index.html#static-variable-ToneMappingMode">ToneMappingMode</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>The width.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">height</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>The height.</p>
+      <td data-ice="description"><p>The tone mapping mode.</p>
 </td>
     </tr>
 </tbody>
@@ -1665,7 +1776,7 @@ a way that requires a shader recompilation.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber277">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber310">source</a></span></span>
     </span>
   </h3>
 

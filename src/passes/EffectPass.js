@@ -87,8 +87,8 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 		["vertex", effect.getVertexShader()]
 	]);
 
-	const mainImageExists = (shaders.get("fragment") !== undefined && shaders.get("fragment").indexOf("mainImage") >= 0);
-	const mainUvExists = (shaders.get("fragment") !== undefined && shaders.get("fragment").indexOf("mainUv") >= 0);
+	const mainImageExists = (shaders.get("fragment") !== undefined && /mainImage/.test(shaders.get("fragment")));
+	const mainUvExists = (shaders.get("fragment") !== undefined && /mainUv/.test(shaders.get("fragment")));
 
 	let varyings = [], names = [];
 	let transformedUv = false;
@@ -117,12 +117,12 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 		}
 
-		if(shaders.get("vertex") !== null && shaders.get("vertex").indexOf("mainSupport") >= 0) {
+		if(shaders.get("vertex") !== null && /mainSupport/.test(shaders.get("vertex"))) {
 
 			let string = "\t" + prefix + "MainSupport(";
 
 			// Check if the vertex shader expects uv coordinates.
-			if(shaders.get("vertex").indexOf("uv") >= 0) {
+			if(/mainSupport *\([\w\s]*?uv\s*?\)/.test(shaders.get("vertex"))) {
 
 				string += "vUv";
 
@@ -156,10 +156,11 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 		if(mainImageExists) {
 
+			const depthParamRegExp = /MainImage *\([\w\s,]*?depth[\w\s,]*?\)/;
 			let string = prefix + "MainImage(color0, UV, ";
 
 			// The effect may sample depth in a different shader.
-			if((attributes & EffectAttribute.DEPTH) !== 0 && shaders.get("fragment").indexOf("depth") >= 0) {
+			if((attributes & EffectAttribute.DEPTH) !== 0 && depthParamRegExp.test(shaders.get("fragment"))) {
 
 				string += "depth, ";
 				readDepth = true;

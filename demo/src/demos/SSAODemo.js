@@ -175,7 +175,7 @@ export class SSAODemo extends PostProcessingDemo {
 			EdgeDetectionMode.DEPTH
 		);
 
-		smaaEffect.setEdgeDetectionThreshold(0.05);
+		smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.01);
 
 		// Note: Thresholds and falloff correspond to camera near/far.
 		// Example: worldDistance = distanceThreshold * (camera.far - camera.near)

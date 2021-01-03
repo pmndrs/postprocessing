@@ -1,5 +1,5 @@
 import test from "ava";
-import { CircleOfConfusionMaterial } from "../../build/postprocessing.esm.js";
+import { CircleOfConfusionMaterial } from "../../";
 
 test("can be created", t => {
 

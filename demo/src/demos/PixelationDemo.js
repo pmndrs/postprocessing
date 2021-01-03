@@ -133,7 +133,7 @@ export class PixelationDemo extends PostProcessingDemo {
 			EdgeDetectionMode.DEPTH
 		);
 
-		smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.05);
+		smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.01);
 
 		const pixelationEffect = new PixelationEffect(5.0);
 

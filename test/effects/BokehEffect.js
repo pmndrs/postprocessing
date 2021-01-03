@@ -1,5 +1,5 @@
 import test from "ava";
-import { BokehEffect } from "../../build/postprocessing.esm.js";
+import { BokehEffect } from "../../";
 
 test("can be created and destroyed", t => {
 

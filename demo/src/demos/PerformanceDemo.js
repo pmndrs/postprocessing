@@ -37,6 +37,8 @@ import {
 	SMAAImageLoader,
 	SMAAPreset,
 	TextureEffect,
+	ToneMappingEffect,
+	ToneMappingMode,
 	VignetteEffect
 } from "../../../src";
 
@@ -289,7 +291,7 @@ export class PerformanceDemo extends PostProcessingDemo {
 			EdgeDetectionMode.DEPTH
 		);
 
-		smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.05);
+		smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.01);
 
 		const bloomEffect = new BloomEffect({
 			blendFunction: BlendFunction.ADD,
@@ -340,6 +342,10 @@ export class PerformanceDemo extends PostProcessingDemo {
 		const noiseEffect = new NoiseEffect({ premultiply: true });
 		const vignetteEffect = new VignetteEffect();
 
+		const toneMappingEffect = new ToneMappingEffect({
+			mode: ToneMappingMode.ACES_FILMIC
+		});
+
 		colorAverageEffect.blendMode.opacity.value = 0.01;
 		sepiaEffect.blendMode.opacity.value = 0.01;
 		dotScreenEffect.blendMode.opacity.value = 0.01;
@@ -362,7 +368,8 @@ export class PerformanceDemo extends PostProcessingDemo {
 			sepiaEffect,
 			textureEffect,
 			noiseEffect,
-			vignetteEffect
+			vignetteEffect,
+			toneMappingEffect
 		];
 
 		// Merge all effects into one pass.

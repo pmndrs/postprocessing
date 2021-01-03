@@ -1,4 +1,4 @@
-import { PerspectiveCamera, ShaderMaterial, Uniform } from "three";
+import { NoBlending, PerspectiveCamera, ShaderMaterial, Uniform } from "three";
 
 import fragmentShader from "./glsl/depth-comparison/shader.frag";
 import vertexShader from "./glsl/depth-comparison/shader.vert";
@@ -31,6 +31,7 @@ export class DepthComparisonMaterial extends ShaderMaterial {
 			fragmentShader,
 			vertexShader,
 
+			blending: NoBlending,
 			depthWrite: false,
 			depthTest: false,
 

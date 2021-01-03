@@ -97,7 +97,9 @@ export class ClearPass extends Pass {
 
 		if(hasOverrideClearColor) {
 
-			color.copy(renderer.getClearColor());
+			/* @todo Remove extra copy operation and raise peer dependency version:
+			renderer.getClearColor() expects a target since three r124. */
+			color.copy(renderer.getClearColor(color));
 			renderer.setClearColor(overrideClearColor, hasOverrideClearAlpha ?
 				overrideClearAlpha : clearAlpha);
 

@@ -1,5 +1,5 @@
 import test from "ava";
-import { LuminanceMaterial } from "../../build/postprocessing.esm.js";
+import { LuminanceMaterial } from "../../";
 
 test("can be created", t => {
 
