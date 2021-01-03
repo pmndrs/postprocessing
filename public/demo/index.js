@@ -37329,6 +37329,22 @@
       const assets = this.assets;
       const composer2 = this.composer;
       const renderer = composer2.getRenderer();
+      if (sessionStorage.getItem("epilepsy-warning") === null) {
+        const div = document.createElement("div");
+        div.classList.add("warning");
+        const p = document.createElement("p");
+        p.innerText = "The following effect may trigger epileptic seizures or blackouts";
+        const a = document.createElement("a");
+        a.innerText = "Click here to continue";
+        a.href = "Click here to continue";
+        a.addEventListener("click", (event) => {
+          event.preventDefault();
+          sessionStorage.setItem("epilepsy-warning", "1");
+          div.remove();
+        });
+        div.append(p, a);
+        document.body.append(div);
+      }
       const aspect2 = window.innerWidth / window.innerHeight;
       const camera2 = new PerspectiveCamera(50, aspect2, 0.5, 2e3);
       camera2.position.set(-9, 0.5, 0);
