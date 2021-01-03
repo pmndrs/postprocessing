@@ -316,7 +316,7 @@ export class LookupTexture3D extends DataTexture3D {
 	 *
 	 * Common image-based textures will be converted into 3D data textures.
 	 *
-	 * @param {Texture} texture - The LUT. Assumed to have cubic dimensions.
+	 * @param {Texture} texture - The LUT. Assumed to be cubic.
 	 * @return {LookupTexture3D} A new 3D LUT.
 	 */
 
@@ -399,8 +399,8 @@ export class LookupTexture3D extends DataTexture3D {
 	/**
 	 * Creates a neutral 3D LUT.
 	 *
-	 * @param {Number} size - The size of the cubic LUT texture.
-	 * @return {LookupTexture3D} The neutral 3D LUT.
+	 * @param {Number} size - The sidelength.
+	 * @return {LookupTexture3D} A neutral 3D LUT.
 	 */
 
 	static createNeutral(size) {
