@@ -383,7 +383,7 @@ export class ColorGradingDemo extends PostProcessingDemo {
 			const original = assets.get(params.lut.LUT);
 			const size = Math.min(original.image.width, original.image.height);
 			const targetSize = params.lut["target size"];
-			const scaleUp = params.lut["scale up"] && targetSize > size;
+			const scaleUp = params.lut["scale up"] && (targetSize > size);
 
 			let promise;
 
