@@ -60,6 +60,23 @@ img:hover {
 	display: none;
 }
 
+.warning {
+	align-items: center;
+	background: black;
+	bottom: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	left: 0;
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+.warning a {
+	margin-top: 1em;
+}
+
 .loading {
 	left: 0;
 	position: fixed;
