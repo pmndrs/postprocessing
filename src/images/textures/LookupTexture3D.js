@@ -56,6 +56,18 @@ export class LookupTexture3D extends DataTexture3D {
 	}
 
 	/**
+	 * Indicates that this is an instace of LookupTexture3D.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get isLookupTexture3D() {
+
+		return true;
+
+	}
+
+	/**
 	 * Scales this LUT up to a given target size using tetrahedral interpolation.
 	 *
 	 * @param {Number} size - The target sidelength.
