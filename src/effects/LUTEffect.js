@@ -117,7 +117,7 @@ export class LUTEffect extends Effect {
 
 		const defines = this.defines;
 
-		if(this.lut !== value) {
+		if(this.getLUT() !== value) {
 
 			this.uniforms.get("lut").value = value;
 
