@@ -94,15 +94,6 @@ export class ColorGradingDemo extends PostProcessingDemo {
 		this.colorGradingEffect = null;
 
 		/**
-		 * A pass.
-		 *
-		 * @type {Pass}
-		 * @private
-		 */
-
-		this.pass = null;
-
-		/**
 		 * A collection that maps LUT IDs to file names.
 		 *
 		 * @type {Map<String, String>}
@@ -337,7 +328,6 @@ export class ColorGradingDemo extends PostProcessingDemo {
 		const capabilities = this.composer.getRenderer().capabilities;
 		const assets = this.assets;
 		const luts = this.luts;
-		const pass = this.pass;
 
 		const brightnessContrastEffect = this.brightnessContrastEffect;
 		const colorAverageEffect = this.colorAverageEffect;
@@ -530,8 +520,6 @@ export class ColorGradingDemo extends PostProcessingDemo {
 		});
 
 		f.open();
-
-		menu.add(pass, "dithering");
 
 	}
 
