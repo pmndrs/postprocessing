@@ -83,7 +83,7 @@ export class LUT3dlLoader extends Loader {
 
 		if(result === null) {
 
-			throw Error("Missing grid information");
+			throw new Error("Missing grid information");
 
 		}
 
@@ -118,10 +118,10 @@ export class LUT3dlLoader extends Loader {
 			const rLayer = Math.floor(index / (size * size)) % size;
 
 			// b grows first, then g, then r.
-			const d = bLayer * size * size + gLayer * size + rLayer;
-			data[3 * d + 0] = r;
-			data[3 * d + 1] = g;
-			data[3 * d + 2] = b;
+			const d3 = (bLayer * size * size + gLayer * size + rLayer) * 3;
+			data[d3 + 0] = r;
+			data[d3 + 1] = g;
+			data[d3 + 2] = b;
 
 			++index;
 

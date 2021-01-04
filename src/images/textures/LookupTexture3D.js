@@ -56,7 +56,7 @@ export class LookupTexture3D extends DataTexture3D {
 	}
 
 	/**
-	 * Indicates that this is an instace of LookupTexture3D.
+	 * Indicates that this is an instance of LookupTexture3D.
 	 *
 	 * @type {Boolean}
 	 */
@@ -82,7 +82,7 @@ export class LookupTexture3D extends DataTexture3D {
 
 		if(size <= image.width) {
 
-			promise = Promise.reject(new Error("The target size must be larger than the current size"));
+			promise = Promise.reject(new Error("The target size must be greater than the current size"));
 
 		} else if(size > image.width) {
 

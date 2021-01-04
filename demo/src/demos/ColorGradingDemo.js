@@ -307,6 +307,12 @@ export class ColorGradingDemo extends PostProcessingDemo {
 		const lutEffect = capabilities.isWebGL2 ? new LUTEffect(lut) :
 			new LUTEffect(lut.convertToUint8().toDataTexture());
 
+		this.brightnessContrastEffect = brightnessContrastEffect;
+		this.colorAverageEffect = colorAverageEffect;
+		this.hueSaturationEffect = hueSaturationEffect;
+		this.sepiaEffect = sepiaEffect;
+		this.lutEffect = lutEffect;
+
 		const pass = new EffectPass(camera,
 			smaaEffect,
 			colorAverageEffect,
@@ -315,14 +321,6 @@ export class ColorGradingDemo extends PostProcessingDemo {
 			hueSaturationEffect,
 			lutEffect
 		);
-
-		this.pass = pass;
-
-		this.brightnessContrastEffect = brightnessContrastEffect;
-		this.colorAverageEffect = colorAverageEffect;
-		this.hueSaturationEffect = hueSaturationEffect;
-		this.sepiaEffect = sepiaEffect;
-		this.lutEffect = lutEffect;
 
 		composer.addPass(pass);
 
