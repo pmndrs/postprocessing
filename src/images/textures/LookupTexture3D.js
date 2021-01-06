@@ -47,6 +47,7 @@ export class LookupTexture3D extends DataTexture3D {
 		this.type = FloatType;
 		this.format = RGBFormat;
 		this.encoding = LinearEncoding;
+		this.minFilter = LinearFilter;
 		this.magFilter = LinearFilter;
 		this.wrapS = ClampToEdgeWrapping;
 		this.wrapT = ClampToEdgeWrapping;
