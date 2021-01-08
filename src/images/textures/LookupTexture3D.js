@@ -165,6 +165,8 @@ export class LookupTexture3D extends DataTexture3D {
 
 			}
 
+			this.needsUpdate = true;
+
 		}
 
 		return this;
@@ -195,6 +197,7 @@ export class LookupTexture3D extends DataTexture3D {
 
 			this.image.data = uint8Data;
 			this.type = UnsignedByteType;
+			this.needsUpdate = true;
 
 		}
 
@@ -223,6 +226,7 @@ export class LookupTexture3D extends DataTexture3D {
 
 			this.image.data = floatData;
 			this.type = FloatType;
+			this.needsUpdate = true;
 
 		}
 
@@ -249,6 +253,7 @@ export class LookupTexture3D extends DataTexture3D {
 			}
 
 			this.encoding = sRGBEncoding;
+			this.needsUpdate = true;
 
 		} else {
 
@@ -279,6 +284,7 @@ export class LookupTexture3D extends DataTexture3D {
 			}
 
 			this.encoding = LinearEncoding;
+			this.needsUpdate = true;
 
 		} else {
 
