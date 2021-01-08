@@ -7,6 +7,7 @@ import {
 	LinearFilter,
 	LinearEncoding,
 	RGBFormat,
+	RGBAFormat,
 	sRGBEncoding,
 	UnsignedByteType
 } from "three";
@@ -144,6 +145,10 @@ export class LookupTexture3D extends DataTexture3D {
 
 			console.error("Both LUTs must be FloatType textures");
 
+		} else if(lut.format !== RGBFormat || this.format !== RGBFormat) {
+
+			console.error("Both LUTs must be RGB textures");
+
 		} else {
 
 			const data0 = img0.data;
@@ -246,7 +251,9 @@ export class LookupTexture3D extends DataTexture3D {
 
 		if(this.type === FloatType) {
 
-			for(let i = 0, l = data.length; i < l; i += 3) {
+			const stride = (this.format === RGBAFormat) ? 4 : 3;
+
+			for(let i = 0, l = data.length; i < l; i += stride) {
 
 				c.fromArray(data, i).convertLinearToSRGB().toArray(data, i);
 
@@ -277,7 +284,9 @@ export class LookupTexture3D extends DataTexture3D {
 
 		if(this.type === FloatType) {
 
-			for(let i = 0, l = data.length; i < l; i += 3) {
+			const stride = (this.format === RGBAFormat) ? 4 : 3;
+
+			for(let i = 0, l = data.length; i < l; i += stride) {
 
 				c.fromArray(data, i).convertSRGBToLinear().toArray(data, i);
 
@@ -289,6 +298,40 @@ export class LookupTexture3D extends DataTexture3D {
 		} else {
 
 			console.error("Color space conversion requires FloatType data");
+
+		}
+
+		return this;
+
+	}
+
+	/**
+	 * Converts the LUT data into RGBA data.
+	 *
+	 * @return {LookupTexture3D} This texture.
+	 */
+
+	convertToRGBA() {
+
+		if(this.format === RGBFormat) {
+
+			const size = this.image.width;
+			const rgbData = this.image.data;
+			const rgbaData = new rgbData.constructor(size ** 3 * 4);
+			const maxValue = (this.type === FloatType) ? 1.0 : 255;
+
+			for(let i = 0, j = 0, l = rgbData.length; i < l; i += 3, j += 4) {
+
+				rgbaData[j + 0] = rgbData[i + 0];
+				rgbaData[j + 1] = rgbData[i + 1];
+				rgbaData[j + 2] = rgbData[i + 2];
+				rgbaData[j + 3] = maxValue;
+
+			}
+
+			this.image.data = rgbaData;
+			this.format = RGBAFormat;
+			this.needsUpdate = true;
 
 		}
 
