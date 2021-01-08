@@ -26,6 +26,7 @@ import {
 	LookupTexture3D,
 	LUT3dlLoader,
 	LUTCubeLoader,
+	RawImageData,
 	SepiaEffect,
 	SMAAEffect,
 	SMAAImageLoader,
@@ -101,7 +102,8 @@ export class ColorGradingDemo extends PostProcessingDemo {
 		 */
 
 		this.luts = new Map([
-			["neutral", null],
+			["neutral-2", null],
+			["neutral-8", null],
 			["bleach-bypass", "lut-bleach-bypass.png"],
 			["candle-light", "lut-candle-light.png"],
 			["cool-contrast", "lut-cool-contrast.png"],
@@ -253,19 +255,26 @@ export class ColorGradingDemo extends PostProcessingDemo {
 		controls.setOrbitEnabled(false);
 		this.controls = controls;
 
-		// Sky.
+		// Sky
 
 		scene.background = new Color(0xeeeeee);
 
-		// Lights.
+		// Lights
 
 		scene.add(...Sponza.createLights());
 
-		// Objects.
+		// Objects
 
 		scene.add(assets.get(Sponza.tag));
 
-		// Passes.
+		// LUT Preview
+
+		const img = document.createElement("img");
+		img.title = "This is a compressed preview image";
+		img.classList.add("lut", "hidden");
+		document.body.append(img);
+
+		// Passes
 
 		const smaaEffect = new SMAAEffect(
 			assets.get("smaa-search"),
@@ -289,14 +298,20 @@ export class ColorGradingDemo extends PostProcessingDemo {
 			hue: 0.0
 		});
 
-		const lutNeutral = LookupTexture3D.createNeutral(32);
-		lutNeutral.encoding = sRGBEncoding;
-		assets.set(lutNeutral.name, lutNeutral);
+		const lutNeutral2 = LookupTexture3D.createNeutral(2);
+		lutNeutral2.name = "neutral-2";
+		assets.set(lutNeutral2.name, lutNeutral2);
 
-		const lut = LookupTexture3D.from(assets.get("filmic1"));
+		const lutNeutral8 = LookupTexture3D.createNeutral(8);
+		lutNeutral8.name = "neutral-8";
+		assets.set(lutNeutral8.name, lutNeutral8);
+
+		const lut = LookupTexture3D.from(assets.get("neutral-2"));
 
 		const lutEffect = capabilities.isWebGL2 ? new LUTEffect(lut) :
 			new LUTEffect(lut.convertToUint8().toDataTexture());
+
+		// lutEffect.setInputEncoding(LinearEncoding); // Debug
 
 		this.brightnessContrastEffect = brightnessContrastEffect;
 		this.colorAverageEffect = colorAverageEffect;
@@ -359,12 +374,35 @@ export class ColorGradingDemo extends PostProcessingDemo {
 			},
 			lut: {
 				"LUT": lutEffect.getLUT().name,
+				"base size": lutEffect.getLUT().image.width,
 				"scale up": false,
-				"target size": 48,
+				"target size": 32,
+				"show LUT": false,
 				"opacity": lutEffect.blendMode.opacity.value,
 				"blend mode": lutEffect.blendMode.blendFunction
 			}
 		};
+
+		function updateLUTPreview() {
+
+			const img = document.querySelector(".lut");
+
+			if(params.lut["show LUT"]) {
+
+				const lut = LookupTexture3D.from(lutEffect.getLUT());
+				const image = lut.convertToUint8().convertToRGBA().toDataTexture().image;
+
+				const rawImageData = RawImageData.from(image);
+				img.src = rawImageData.toCanvas().toDataURL();
+				img.classList.remove("hidden");
+
+			} else {
+
+				img.classList.add("hidden");
+
+			}
+
+		}
 
 		function changeLUT() {
 
@@ -400,6 +438,7 @@ export class ColorGradingDemo extends PostProcessingDemo {
 				}
 
 				lutEffect.getLUT().dispose();
+				params.lut["base size"] = size;
 
 				if(capabilities.isWebGL2) {
 
@@ -411,9 +450,13 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 				}
 
+				updateLUTPreview();
+
 			}).catch((error) => console.error(error));
 
 		}
+
+		const infoOptions = [];
 
 		let f = menu.addFolder("Color Average");
 
@@ -504,8 +547,12 @@ export class ColorGradingDemo extends PostProcessingDemo {
 		f = menu.addFolder("Lookup Texture 3D");
 
 		f.add(params.lut, "LUT", [...luts.keys()]).onChange(changeLUT);
+
+		infoOptions.push(f.add(params.lut, "base size").listen());
+
 		f.add(params.lut, "scale up").onChange(changeLUT);
-		f.add(params.lut, "target size", [32, 48, 64, 80, 96, 112, 128]).onChange(changeLUT);
+		f.add(params.lut, "target size", [32, 48, 64, 96, 128]).onChange(changeLUT);
+		f.add(params.lut, "show LUT").onChange(updateLUTPreview);
 
 		f.add(params.lut, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
 
@@ -520,6 +567,32 @@ export class ColorGradingDemo extends PostProcessingDemo {
 		});
 
 		f.open();
+
+		for(const option of infoOptions) {
+
+			option.domElement.style.pointerEvents = "none";
+
+		}
+
+	}
+
+	/**
+	 * Resets this demo.
+	 *
+	 * @return {Demo} This demo.
+	 */
+
+	reset() {
+
+		const img = document.querySelector(".lut");
+
+		if(img !== null) {
+
+			img.remove();
+
+		}
+
+		return super.reset();
 
 	}
 
