@@ -167,6 +167,8 @@ export class LookupTexture3D extends DataTexture3D {
 
 		}
 
+		return this;
+
 	}
 
 	/**
