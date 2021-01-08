@@ -6,6 +6,10 @@ import fragmentShader from "./glsl/lut/shader.frag";
 
 /**
  * A LUT effect.
+ *
+ * References:
+ * https://github.com/gkjohnson/threejs-sandbox/tree/master/3d-lut
+ * https://developer.nvidia.com/gpugems/gpugems2/part-iii-high-quality-rendering/chapter-24-using-lookup-tables-accelerate-color
  */
 
 export class LUTEffect extends Effect {
