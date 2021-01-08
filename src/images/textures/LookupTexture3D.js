@@ -308,9 +308,11 @@ export class LookupTexture3D extends DataTexture3D {
 		const height = this.image.height * this.image.depth;
 
 		const texture = new DataTexture(this.image.data, width, height);
+		texture.name = this.name;
 		texture.type = this.type;
 		texture.format = this.format;
 		texture.encoding = this.encoding;
+		texture.minFilter = this.minFilter;
 		texture.magFilter = this.magFilter;
 		texture.wrapS = this.wrapS;
 		texture.wrapT = this.wrapT;
