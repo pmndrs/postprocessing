@@ -31569,7 +31569,7 @@
   };
 
   // src/effects/glsl/lut/shader.frag
-  var shader_default57 = "#ifdef LUT_3D\r\n\r\n	#ifdef LUT_PRECISION_HIGH\r\n\r\n		#ifdef GL_FRAGMENT_PRECISION_HIGH\r\n\r\n			uniform highp sampler3D lut;\r\n\r\n		#else\r\n\r\n			uniform mediump sampler3D lut;\r\n\r\n		#endif\r\n\r\n	#else\r\n\r\n		uniform lowp sampler3D lut;\r\n\r\n	#endif\r\n\r\n	vec4 applyLUT(vec3 rgb) {\r\n\r\n		return texture(lut, rgb);\r\n\r\n	}\r\n\r\n#else\r\n\r\n	#ifdef LUT_PRECISION_HIGH\r\n\r\n		#ifdef GL_FRAGMENT_PRECISION_HIGH\r\n\r\n			uniform highp sampler2D lut;\r\n\r\n		#else\r\n\r\n			uniform mediump sampler2D lut;\r\n\r\n		#endif\r\n\r\n	#else\r\n\r\n		uniform lowp sampler2D lut;\r\n\r\n	#endif\r\n\r\n	vec4 applyLUT(vec3 rgb) {\r\n\r\n		// Prevent interpolation artifacts between adjacent slices.\r\n		rgb.xy = clamp(rgb.xy, LUT_HALF_TEXEL_SIZE, 1.0 - LUT_HALF_TEXEL_SIZE);\r\n\r\n		// Calculate the depth slice offset.\r\n		float zNormalized = rgb.z * LUT_SIZE;\r\n		float zSlice = min(floor(zNormalized), LUT_SIZE - 1.0);\r\n		float zMix = (zNormalized - zSlice) * LUT_TEXEL_SIZE;\r\n\r\n		// Get two LUT slices for interpolation.\r\n		float z1 = zSlice * LUT_TEXEL_SIZE;\r\n		float z2 = (zSlice + 1.0) * LUT_TEXEL_SIZE;\r\n\r\n		#ifdef LUT_STRIP_HORIZONTAL\r\n\r\n			// Common 2D LUTs extend horizontally.\r\n			float xOffset = rgb.x * LUT_TEXEL_SIZE;\r\n			vec2 uv1 = vec2(xOffset, rgb.y);\r\n			vec2 uv2 = vec2(uv1);\r\n\r\n			uv1.x += z1;\r\n			uv2.x += z2;\r\n\r\n		#else\r\n\r\n			// 3D LUTs extend vertically when used as 2D textures.\r\n			float yOffset = rgb.y * LUT_TEXEL_SIZE;\r\n			vec2 uv1 = vec2(rgb.x, yOffset);\r\n			vec2 uv2 = vec2(uv1);\r\n\r\n			uv1.y += z1;\r\n			uv2.y += z2;\r\n\r\n		#endif\r\n\r\n		vec4 sample1 = texture2D(lut, uv1);\r\n		vec4 sample2 = texture2D(lut, uv2);\r\n\r\n		return mix(sample1, sample2, zMix);\r\n\r\n	}\r\n\r\n#endif\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n	vec3 c = linearToInputTexel(inputColor).rgb;\r\n	c = texelToLinear(applyLUT(c)).rgb;\r\n	outputColor = vec4(c, inputColor.a);\r\n\r\n}\r\n";
+  var shader_default57 = "#ifdef LUT_3D\r\n\r\n	#ifdef LUT_PRECISION_HIGH\r\n\r\n		#ifdef GL_FRAGMENT_PRECISION_HIGH\r\n\r\n			uniform highp sampler3D lut;\r\n\r\n		#else\r\n\r\n			uniform mediump sampler3D lut;\r\n\r\n		#endif\r\n\r\n	#else\r\n\r\n		uniform lowp sampler3D lut;\r\n\r\n	#endif\r\n\r\n	vec4 applyLUT(const in vec3 rgb) {\r\n\r\n		return texture(lut, rgb);\r\n\r\n	}\r\n\r\n#else\r\n\r\n	#ifdef LUT_PRECISION_HIGH\r\n\r\n		#ifdef GL_FRAGMENT_PRECISION_HIGH\r\n\r\n			uniform highp sampler2D lut;\r\n\r\n		#else\r\n\r\n			uniform mediump sampler2D lut;\r\n\r\n		#endif\r\n\r\n	#else\r\n\r\n		uniform lowp sampler2D lut;\r\n\r\n	#endif\r\n\r\n	vec4 applyLUT(const in vec3 rgb) {\r\n\r\n		// Get the slices on either side of the sample.\r\n		float slice = rgb.b * LUT_SIZE;\r\n		float interp = fract(slice);\r\n		float slice0 = slice - interp;\r\n		float centeredInterp = interp - 0.5;\r\n		float slice1 = slice0 + sign(centeredInterp);\r\n\r\n		#ifdef LUT_STRIP_HORIZONTAL\r\n\r\n			// Pull X in by half a texel in each direction to avoid slice bleeding.\r\n			float xOffset = clamp(\r\n				rgb.r * LUT_TEXEL_HEIGHT,\r\n				LUT_TEXEL_WIDTH * 0.5,\r\n				LUT_TEXEL_HEIGHT - LUT_TEXEL_WIDTH * 0.5\r\n			);\r\n\r\n			vec2 uv0 = vec2(slice0 * LUT_TEXEL_HEIGHT + xOffset, rgb.g);\r\n			vec2 uv1 = vec2(slice1 * LUT_TEXEL_HEIGHT + xOffset, rgb.g);\r\n\r\n		#else\r\n\r\n			// Pull Y in by half a texel in each direction to avoid slice bleeding.\r\n			float yOffset = clamp(\r\n				rgb.g * LUT_TEXEL_WIDTH,\r\n				LUT_TEXEL_HEIGHT * 0.5,\r\n				LUT_TEXEL_WIDTH - LUT_TEXEL_HEIGHT * 0.5\r\n			);\r\n\r\n			vec2 uv0 = vec2(rgb.r, slice0 * LUT_TEXEL_WIDTH + yOffset);\r\n			vec2 uv1 = vec2(rgb.r, slice1 * LUT_TEXEL_WIDTH + yOffset);\r\n\r\n		#endif\r\n\r\n		vec4 sample0 = texture2D(lut, uv0);\r\n		vec4 sample1 = texture2D(lut, uv1);\r\n\r\n		return mix(sample0, sample1, abs(centeredInterp));\r\n\r\n	}\r\n\r\n#endif\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n	vec3 c = linearToInputTexel(inputColor).rgb;\r\n\r\n	#ifndef LUT_3D\r\n\r\n		c = clamp(c, 0.0, 1.0);\r\n\r\n	#endif\r\n\r\n	// Apply scale/offset to prevent nonlinearities near the LUT's edges.\r\n	c = texelToLinear(applyLUT(COORD_SCALE * c + COORD_OFFSET)).rgb;\r\n	outputColor = vec4(c, inputColor.a);\r\n\r\n}\r\n";
 
   // src/effects/LUTEffect.js
   var LUTEffect = class extends Effect {
@@ -31581,14 +31581,19 @@
         ])
       });
       this.inputEncoding = sRGBEncoding;
+      this.outputEncoding = this.inputEncoding;
       this.setInputEncoding(sRGBEncoding);
       this.setLUT(lut);
+    }
+    getOutputEncoding() {
+      return this.outputEncoding;
     }
     getInputEncoding() {
       return this.inputEncoding;
     }
     setInputEncoding(value) {
       const defines = this.defines;
+      const lut = this.getLUT();
       switch (value) {
         case sRGBEncoding:
           defines.set("linearToInputTexel(texel)", "LinearTosRGB(texel)");
@@ -31597,8 +31602,22 @@
           defines.set("linearToInputTexel(texel)", "texel");
           break;
         default:
-          console.error("Unsupported encoding:", value);
+          console.error("Unsupported input encoding:", value);
           break;
+      }
+      if (lut !== null) {
+        this.outputEncoding = lut.encoding === LinearEncoding ? value : lut.encoding;
+        switch (this.outputEncoding) {
+          case sRGBEncoding:
+            defines.set("texelToLinear(texel)", "sRGBToLinear(texel)");
+            break;
+          case LinearEncoding:
+            defines.set("texelToLinear(texel)", "texel");
+            break;
+          default:
+            console.error("Unsupported LUT encoding:", lut.encoding);
+            break;
+        }
       }
       if (this.inputEncoding !== value) {
         this.inputEncoding = value;
@@ -31608,38 +31627,32 @@
     getLUT() {
       return this.uniforms.get("lut").value;
     }
-    setLUT(value) {
+    setLUT(lut) {
       const defines = this.defines;
-      if (this.getLUT() !== value) {
-        this.uniforms.get("lut").value = value;
+      const inputEncoding = this.inputEncoding;
+      if (this.getLUT() !== lut) {
         defines.clear();
-        this.setInputEncoding(this.inputEncoding);
-        if (value.isDataTexture3D) {
+        const image = lut.image;
+        const size = Math.min(image.width, image.height);
+        const scale = (size - 1) / size;
+        const offset = 1 / (2 * size);
+        defines.set("COORD_SCALE", scale.toFixed(16));
+        defines.set("COORD_OFFSET", offset.toFixed(16));
+        if (lut.isDataTexture3D) {
           defines.set("LUT_3D", "1");
         } else {
-          let size = value.image.width;
-          if (size > value.image.height) {
+          if (image.width > image.height) {
             defines.set("LUT_STRIP_HORIZONTAL", "1");
-            size = value.image.height;
           }
-          defines.set("LUT_SIZE", size.toFixed(11));
-          defines.set("LUT_TEXEL_SIZE", (1 / size).toFixed(11));
-          defines.set("LUT_HALF_TEXEL_SIZE", (0.5 / size).toFixed(11));
+          defines.set("LUT_SIZE", size.toFixed(16));
+          defines.set("LUT_TEXEL_WIDTH", (1 / image.width).toFixed(16));
+          defines.set("LUT_TEXEL_HEIGHT", (1 / image.height).toFixed(16));
         }
-        switch (value.encoding) {
-          case sRGBEncoding:
-            defines.set("texelToLinear(texel)", "sRGBToLinear(texel)");
-            break;
-          case LinearEncoding:
-            defines.set("texelToLinear(texel)", "texel");
-            break;
-          default:
-            console.error("Unsupported encoding:", value.encoding);
-            break;
-        }
-        if (value.type === FloatType) {
+        if (lut.type === FloatType) {
           defines.set("LUT_PRECISION_HIGH", "1");
         }
+        this.uniforms.get("lut").value = lut;
+        this.setInputEncoding(inputEncoding);
         this.setChanged();
       }
     }
@@ -32766,7 +32779,7 @@
   };
 
   // tmp/lut.worker
-  var lut_default = '(()=>{var E={SCALE_UP:"lut.scaleup"},O=[new Float32Array(3),new Float32Array(3)],n=[new Float32Array(3),new Float32Array(3),new Float32Array(3),new Float32Array(3)],P=[[new Float32Array([0,0,0]),new Float32Array([1,0,0]),new Float32Array([1,1,0]),new Float32Array([1,1,1])],[new Float32Array([0,0,0]),new Float32Array([1,0,0]),new Float32Array([1,0,1]),new Float32Array([1,1,1])],[new Float32Array([0,0,0]),new Float32Array([0,0,1]),new Float32Array([1,0,1]),new Float32Array([1,1,1])],[new Float32Array([0,0,0]),new Float32Array([0,1,0]),new Float32Array([1,1,0]),new Float32Array([1,1,1])],[new Float32Array([0,0,0]),new Float32Array([0,1,0]),new Float32Array([0,1,1]),new Float32Array([1,1,1])],[new Float32Array([0,0,0]),new Float32Array([0,0,1]),new Float32Array([0,1,1]),new Float32Array([1,1,1])]];function Z(e,o,t,s){let a=t[0]-o[0],c=t[1]-o[1],l=t[2]-o[2],A=e[0]-o[0],F=e[1]-o[1],y=e[2]-o[2],f=c*y-l*F,w=l*A-a*y,d=a*F-c*A,i=Math.sqrt(f*f+w*w+d*d),b=i*.5,h=f/i,p=w/i,m=d/i,M=-(e[0]*h+e[1]*p+e[2]*m),g=s[0]*h+s[1]*p+s[2]*m;return Math.abs(g+M)*b/3}function T(e,o,t,s,a,c){let l=(t+s*o+a*o*o)*3;c[0]=e[l+0],c[1]=e[l+1],c[2]=e[l+2]}function q(e,o,t,s,a,c){let l=t*(o-1),A=s*(o-1),F=a*(o-1),y=Math.floor(l),f=Math.floor(A),w=Math.floor(F),d=Math.ceil(l),i=Math.ceil(A),b=Math.ceil(F);if(y===l&&f===A&&w===F)T(e,o,l,A,F,c);else{let h;t>=s&&s>=a?h=P[0]:t>=a&&a>=s?h=P[1]:a>=t&&t>=s?h=P[2]:s>=t&&t>=a?h=P[3]:s>=a&&a>=t?h=P[4]:a>=s&&s>=t&&(h=P[5]);let[p,m,M,g]=h,x=O[0];x[0]=t,x[1]=s,x[2]=a;let r=O[1],U=d-y,X=i-f,Y=b-w;r[0]=U*p[0]+y,r[1]=X*p[1]+f,r[2]=Y*p[2]+w,T(e,o,r[0],r[1],r[2],n[0]),r[0]=U*m[0]+y,r[1]=X*m[1]+f,r[2]=Y*m[2]+w,T(e,o,r[0],r[1],r[2],n[1]),r[0]=U*M[0]+y,r[1]=X*M[1]+f,r[2]=Y*M[2]+w,T(e,o,r[0],r[1],r[2],n[2]),r[0]=U*g[0]+y,r[1]=X*g[1]+f,r[2]=Y*g[2]+w,T(e,o,r[0],r[1],r[2],n[3]);let L=Z(m,M,g,x)*6,u=Z(p,M,g,x)*6,V=Z(p,m,g,x)*6,S=Z(p,m,M,x)*6;n[0][0]*=L,n[0][1]*=L,n[0][2]*=L,n[1][0]*=u,n[1][1]*=u,n[1][2]*=u,n[2][0]*=V,n[2][1]*=V,n[2][2]*=V,n[3][0]*=S,n[3][1]*=S,n[3][2]*=S,c[0]=n[0][0]+n[1][0]+n[2][0]+n[3][0],c[1]=n[0][1]+n[1][1]+n[2][1]+n[3][1],c[2]=n[0][2]+n[1][2]+n[2][2]+n[3][2]}}var C=class{static expand(o,t){let s=Math.cbrt(o.length/3),a=new Float32Array(3),c=new o.constructor(t**3*3),l=1/(t-1);for(let A=0;A<t;++A)for(let F=0;F<t;++F)for(let y=0;y<t;++y){let f=y*l,w=F*l,d=A*l,i=Math.round(y+F*t+A*t*t)*3;q(o,s,f,w,d,a),c[i+0]=a[0],c[i+1]=a[1],c[i+2]=a[2]}return c}};self.addEventListener("message",e=>{let o=e.data,t=o.data;switch(o.operation){case E.SCALE_UP:t=C.expand(t,o.size);break}postMessage(t,[t.buffer]),close()});})();\n';
+  var lut_default = '(()=>{var q={SCALE_UP:"lut.scaleup"};var _=[new Float32Array(3),new Float32Array(3)],t=[new Float32Array(3),new Float32Array(3),new Float32Array(3),new Float32Array(3)],P=[[new Float32Array([0,0,0]),new Float32Array([1,0,0]),new Float32Array([1,1,0]),new Float32Array([1,1,1])],[new Float32Array([0,0,0]),new Float32Array([1,0,0]),new Float32Array([1,0,1]),new Float32Array([1,1,1])],[new Float32Array([0,0,0]),new Float32Array([0,0,1]),new Float32Array([1,0,1]),new Float32Array([1,1,1])],[new Float32Array([0,0,0]),new Float32Array([0,1,0]),new Float32Array([1,1,0]),new Float32Array([1,1,1])],[new Float32Array([0,0,0]),new Float32Array([0,1,0]),new Float32Array([0,1,1]),new Float32Array([1,1,1])],[new Float32Array([0,0,0]),new Float32Array([0,0,1]),new Float32Array([0,1,1]),new Float32Array([1,1,1])]];function V(a,n,r,h){let i=r[0]-n[0],s=r[1]-n[1],c=r[2]-n[2],A=a[0]-n[0],F=a[1]-n[1],e=a[2]-n[2],l=s*e-c*F,w=c*A-i*e,f=i*F-s*A,y=Math.sqrt(l*l+w*w+f*f),m=y*.5,U=l/y,X=w/y,Y=f/y,p=-(a[0]*U+a[1]*X+a[2]*Y),u=h[0]*U+h[1]*X+h[2]*Y;return Math.abs(u+p)*m/3}function T(a,n,r,h,i,s){let c=(r+h*n+i*n*n)*3;s[0]=a[c+0],s[1]=a[c+1],s[2]=a[c+2]}function k(a,n,r,h,i,s){let c=r*(n-1),A=h*(n-1),F=i*(n-1),e=c%1,l=A%1,w=F%1,f=Math.floor(c),y=Math.floor(A),m=Math.floor(F),U=Math.ceil(c),X=Math.ceil(A),Y=Math.ceil(F);if(f===c&&y===A&&m===F)T(a,n,c,A,F,s);else{let p;e>=l&&l>=w?p=P[0]:e>=w&&w>=l?p=P[1]:w>=e&&e>=l?p=P[2]:l>=e&&e>=w?p=P[3]:l>=w&&w>=e?p=P[4]:w>=l&&l>=e&&(p=P[5]);let[u,M,x,d]=p,g=_[0];g[0]=e,g[1]=l,g[2]=w;let o=_[1],Z=U-f,b=X-y,L=Y-m;o[0]=Z*u[0]+f,o[1]=b*u[1]+y,o[2]=L*u[2]+m,T(a,n,o[0],o[1],o[2],t[0]),o[0]=Z*M[0]+f,o[1]=b*M[1]+y,o[2]=L*M[2]+m,T(a,n,o[0],o[1],o[2],t[1]),o[0]=Z*x[0]+f,o[1]=b*x[1]+y,o[2]=L*x[2]+m,T(a,n,o[0],o[1],o[2],t[2]),o[0]=Z*d[0]+f,o[1]=b*d[1]+y,o[2]=L*d[2]+m,T(a,n,o[0],o[1],o[2],t[3]);let v=V(M,x,d,g)*6,S=V(u,x,d,g)*6,C=V(u,M,d,g)*6,E=V(u,M,x,g)*6;t[0][0]*=v,t[0][1]*=v,t[0][2]*=v,t[1][0]*=S,t[1][1]*=S,t[1][2]*=S,t[2][0]*=C,t[2][1]*=C,t[2][2]*=C,t[3][0]*=E,t[3][1]*=E,t[3][2]*=E,s[0]=t[0][0]+t[1][0]+t[2][0]+t[3][0],s[1]=t[0][1]+t[1][1]+t[2][1]+t[3][1],s[2]=t[0][2]+t[1][2]+t[2][2]+t[3][2]}}var O=class{static expand(n,r){let h=Math.cbrt(n.length/3),i=new Float32Array(3),s=new n.constructor(r**3*3),c=1/(r-1);for(let A=0;A<r;++A)for(let F=0;F<r;++F)for(let e=0;e<r;++e){let l=e*c,w=F*c,f=A*c,y=Math.round(e+F*r+A*r*r)*3;k(n,h,l,w,f,i),s[y+0]=i[0],s[y+1]=i[1],s[y+2]=i[2]}return s}};self.addEventListener("message",a=>{let n=a.data,r=n.data;switch(n.operation){case q.SCALE_UP:r=O.expand(r,n.size);break}postMessage(r,[r.buffer]),close()});})();\n';
 
   // src/images/textures/LookupTexture3D.js
   var c = new Color();
@@ -32776,6 +32789,7 @@
       this.type = FloatType;
       this.format = RGBFormat;
       this.encoding = LinearEncoding;
+      this.minFilter = LinearFilter;
       this.magFilter = LinearFilter;
       this.wrapS = ClampToEdgeWrapping;
       this.wrapT = ClampToEdgeWrapping;
@@ -32789,7 +32803,7 @@
       const image = this.image;
       let promise;
       if (size <= image.width) {
-        promise = Promise.reject(new Error("The target size must be larger than the current size"));
+        promise = Promise.reject(new Error("The target size must be greater than the current size"));
       } else if (size > image.width) {
         const workerURL = URL.createObjectURL(new Blob([lut_default], {type: "text/javascript"}));
         const worker = new Worker(workerURL);
@@ -32822,6 +32836,8 @@
         console.error("Size mismatch");
       } else if (lut.type !== FloatType || this.type !== FloatType) {
         console.error("Both LUTs must be FloatType textures");
+      } else if (lut.format !== RGBFormat || this.format !== RGBFormat) {
+        console.error("Both LUTs must be RGB textures");
       } else {
         const data0 = img0.data;
         const data1 = img1.data;
@@ -32837,7 +32853,9 @@
           data0[i3 + 1] = data1[iRGB + 1];
           data0[i3 + 2] = data1[iRGB + 2];
         }
+        this.needsUpdate = true;
       }
+      return this;
     }
     convertToUint8() {
       if (this.type === FloatType) {
@@ -32848,6 +32866,7 @@
         }
         this.image.data = uint8Data;
         this.type = UnsignedByteType;
+        this.needsUpdate = true;
       }
       return this;
     }
@@ -32860,16 +32879,19 @@
         }
         this.image.data = floatData;
         this.type = FloatType;
+        this.needsUpdate = true;
       }
       return this;
     }
     convertLinearToSRGB() {
       const data = this.image.data;
       if (this.type === FloatType) {
-        for (let i = 0, l = data.length; i < l; i += 3) {
+        const stride = this.format === RGBAFormat ? 4 : 3;
+        for (let i = 0, l = data.length; i < l; i += stride) {
           c.fromArray(data, i).convertLinearToSRGB().toArray(data, i);
         }
         this.encoding = sRGBEncoding;
+        this.needsUpdate = true;
       } else {
         console.error("Color space conversion requires FloatType data");
       }
@@ -32878,12 +32900,32 @@
     convertSRGBToLinear() {
       const data = this.image.data;
       if (this.type === FloatType) {
-        for (let i = 0, l = data.length; i < l; i += 3) {
+        const stride = this.format === RGBAFormat ? 4 : 3;
+        for (let i = 0, l = data.length; i < l; i += stride) {
           c.fromArray(data, i).convertSRGBToLinear().toArray(data, i);
         }
         this.encoding = LinearEncoding;
+        this.needsUpdate = true;
       } else {
         console.error("Color space conversion requires FloatType data");
+      }
+      return this;
+    }
+    convertToRGBA() {
+      if (this.format === RGBFormat) {
+        const size = this.image.width;
+        const rgbData = this.image.data;
+        const rgbaData = new rgbData.constructor(size ** 3 * 4);
+        const maxValue = this.type === FloatType ? 1 : 255;
+        for (let i = 0, j = 0, l = rgbData.length; i < l; i += 3, j += 4) {
+          rgbaData[j + 0] = rgbData[i + 0];
+          rgbaData[j + 1] = rgbData[i + 1];
+          rgbaData[j + 2] = rgbData[i + 2];
+          rgbaData[j + 3] = maxValue;
+        }
+        this.image.data = rgbaData;
+        this.format = RGBAFormat;
+        this.needsUpdate = true;
       }
       return this;
     }
@@ -32891,9 +32933,11 @@
       const width = this.image.width;
       const height = this.image.height * this.image.depth;
       const texture = new DataTexture(this.image.data, width, height);
+      texture.name = this.name;
       texture.type = this.type;
       texture.format = this.format;
       texture.encoding = this.encoding;
+      texture.minFilter = this.minFilter;
       texture.magFilter = this.magFilter;
       texture.wrapS = this.wrapS;
       texture.wrapT = this.wrapT;
@@ -32994,7 +33038,7 @@
       const regExpDataPoints = /^([\d.]+) +([\d.]+) +([\d.]+) *$/gm;
       let result2 = regExpGridInfo.exec(input);
       if (result2 === null) {
-        throw Error("Missing grid information");
+        throw new Error("Missing grid information");
       }
       const gridLines = result2[0].trim().split(/\s+/g).map((n) => Number(n));
       const gridStep = gridLines[1] - gridLines[0];
@@ -33015,10 +33059,10 @@
         const bLayer = index % size;
         const gLayer = Math.floor(index / size) % size;
         const rLayer = Math.floor(index / (size * size)) % size;
-        const d = bLayer * size * size + gLayer * size + rLayer;
-        data[3 * d + 0] = r;
-        data[3 * d + 1] = g;
-        data[3 * d + 2] = b;
+        const d3 = (bLayer * size * size + gLayer * size + rLayer) * 3;
+        data[d3 + 0] = r;
+        data[d3 + 1] = g;
+        data[d3 + 2] = b;
         ++index;
       }
       const bits = Math.ceil(Math.log2(maxValue));
@@ -33072,7 +33116,7 @@
       const title = result2 !== null ? result2[1] : null;
       result2 = regExpSize.exec(input);
       if (result2 === null) {
-        throw Error("Missing LUT_3D_SIZE information");
+        throw new Error("Missing LUT_3D_SIZE information");
       }
       const size = Number(result2[1]);
       const data = new Float32Array(size ** 3 * 3);
@@ -33087,7 +33131,7 @@
         domainMax.set(Number(result2[1]), Number(result2[2]), Number(result2[3]));
       }
       if (domainMin.x !== 0 || domainMin.y !== 0 || domainMin.z !== 0 || domainMax.x !== 1 || domainMax.y !== 1 || domainMax.z !== 1) {
-        throw Error("Non-normalized input domain not supported");
+        throw new Error("Non-normalized input domain not supported");
       }
       let i = 0;
       while ((result2 = regExpDataPoints.exec(input)) !== null) {
@@ -33105,7 +33149,7 @@
   };
 
   // tmp/smaa.worker
-  var smaa_default = '(()=>{function X(s,a,y){let o=document.createElementNS("http://www.w3.org/1999/xhtml","canvas"),t=o.getContext("2d");if(o.width=s,o.height=a,y instanceof Image)t.drawImage(y,0,0);else{let r=t.createImageData(s,a);r.data.set(y),t.putImageData(r,0,0)}return o}var m=class{constructor(a=0,y=0,o=null){this.width=a,this.height=y,this.data=o}toCanvas(){return typeof document=="undefined"?null:X(this.width,this.height,this.data)}static from(a){let{width:y,height:o}=a,t;if(a instanceof Image){let r=X(y,o,a);r!==null&&(t=r.getContext("2d").getImageData(0,0,y,o).data)}else t=a.data;return new m(y,o,t)}},k=class{constructor(a=0,y=0){this.x=a,this.y=y}set(a,y){return this.x=a,this.y=y,this}equals(a){return this===a||this.x===a.x&&this.y===a.y}},E=class{constructor(){this.min=new k,this.max=new k}},u=new E,I=new E,M=16,q=20,D=30,Z=32,L=new Float32Array([0,-.25,.25,-.125,.125,-.375,.375]),_=[new Float32Array([0,0]),new Float32Array([.25,-.25]),new Float32Array([-.25,.25]),new Float32Array([.125,-.125]),new Float32Array([-.125,.125])],j=[new Uint8Array([0,0]),new Uint8Array([3,0]),new Uint8Array([0,3]),new Uint8Array([3,3]),new Uint8Array([1,0]),new Uint8Array([4,0]),new Uint8Array([1,3]),new Uint8Array([4,3]),new Uint8Array([0,1]),new Uint8Array([3,1]),new Uint8Array([0,4]),new Uint8Array([3,4]),new Uint8Array([1,1]),new Uint8Array([4,1]),new Uint8Array([1,4]),new Uint8Array([4,4])],W=[new Uint8Array([0,0]),new Uint8Array([1,0]),new Uint8Array([0,2]),new Uint8Array([1,2]),new Uint8Array([2,0]),new Uint8Array([3,0]),new Uint8Array([2,2]),new Uint8Array([3,2]),new Uint8Array([0,1]),new Uint8Array([1,1]),new Uint8Array([0,3]),new Uint8Array([1,3]),new Uint8Array([2,1]),new Uint8Array([3,1]),new Uint8Array([2,3]),new Uint8Array([3,3])];function S(s,a,y){return s+(a-s)*y}function z(s){return Math.min(Math.max(s,0),1)}function Y(s,a){let y=a.min,o=a.max,t=Math.sqrt(y.x*2)*.5,r=Math.sqrt(y.y*2)*.5,c=Math.sqrt(o.x*2)*.5,i=Math.sqrt(o.y*2)*.5,e=z(s/Z);return y.set(S(t,y.x,e),S(r,y.y,e)),o.set(S(c,o.x,e),S(i,o.y,e)),a}function d(s,a,y,o){let t=a.x-s.x,r=a.y-s.y,c=y,i=y+1,e=s.y+r*(c-s.x)/t,n=s.y+r*(i-s.x)/t,h,w,x,b;return c>=s.x&&c<a.x||i>s.x&&i<=a.x?Math.sign(e)===Math.sign(n)||Math.abs(e)<1e-4||Math.abs(n)<1e-4?(h=(e+n)/2,h<0?o.set(Math.abs(h),0):o.set(0,Math.abs(h))):(b=-s.y*t/r+s.x,w=b>s.x?e*(b-Math.trunc(b))/2:0,x=b<a.x?n*(1-(b-Math.trunc(b)))/2:0,h=Math.abs(w)>Math.abs(x)?w:-x,h<0?o.set(Math.abs(w),Math.abs(x)):o.set(Math.abs(x),Math.abs(w))):o.set(0,0),o}function B(s,a,y,o,t){let r=u.min,c=u.max,i=I.min,e=I.max,n=I,h=.5+o,w=.5+o-1,x=a+y+1;switch(s){case 0:{t.set(0,0);break}case 1:{a<=y?d(r.set(0,w),c.set(x/2,0),a,t):t.set(0,0);break}case 2:{a>=y?d(r.set(x/2,0),c.set(x,w),a,t):t.set(0,0);break}case 3:{d(r.set(0,w),c.set(x/2,0),a,i),d(r.set(x/2,0),c.set(x,w),a,e),Y(x,n),t.set(i.x+e.x,i.y+e.y);break}case 4:{a<=y?d(r.set(0,h),c.set(x/2,0),a,t):t.set(0,0);break}case 5:{t.set(0,0);break}case 6:{Math.abs(o)>0?(d(r.set(0,h),c.set(x,w),a,i),d(r.set(0,h),c.set(x/2,0),a,e),d(r.set(x/2,0),c.set(x,w),a,t),e.set(e.x+t.x,e.y+t.y),t.set((i.x+e.x)/2,(i.y+e.y)/2)):d(r.set(0,h),c.set(x,w),a,t);break}case 7:{d(r.set(0,h),c.set(x,w),a,t);break}case 8:{a>=y?d(r.set(x/2,0),c.set(x,h),a,t):t.set(0,0);break}case 9:{Math.abs(o)>0?(d(r.set(0,w),c.set(x,h),a,i),d(r.set(0,w),c.set(x/2,0),a,e),d(r.set(x/2,0),c.set(x,h),a,t),e.set(e.x+t.x,e.y+t.y),t.set((i.x+e.x)/2,(i.y+e.y)/2)):d(r.set(0,w),c.set(x,h),a,t);break}case 10:{t.set(0,0);break}case 11:{d(r.set(0,w),c.set(x,h),a,t);break}case 12:{d(r.set(0,h),c.set(x/2,0),a,i),d(r.set(x/2,0),c.set(x,h),a,e),Y(x,n),t.set(i.x+e.x,i.y+e.y);break}case 13:{d(r.set(0,w),c.set(x,h),a,t);break}case 14:{d(r.set(0,h),c.set(x,w),a,t);break}case 15:{t.set(0,0);break}}return t}function J(s,a,y,o){let t=s.equals(a);if(!t){let r=(s.x+a.x)/2,c=(s.y+a.y)/2,i=a.y-s.y,e=s.x-a.x;t=i*(y-r)+e*(o-c)>0}return t}function G(s,a,y,o){let t,r,c,i,e;for(t=0,c=0;c<D;++c)for(r=0;r<D;++r)i=r/(D-1),e=c/(D-1),J(s,a,y+i,o+e)&&++t;return t/(D*D)}function A(s,a,y,o,t,r){let c=W[s],i=c[0],e=c[1];return i>0&&(a.x+=t[0],a.y+=t[1]),e>0&&(y.x+=t[0],y.y+=t[1]),r.set(1-G(a,y,1+o,0+o),G(a,y,1+o,1+o))}function K(s,a,y,o,t){let r=u.min,c=u.max,i=I.min,e=I.max,n=a+y+1;switch(s){case 0:{A(s,r.set(1,1),c.set(1+n,1+n),a,o,i),A(s,r.set(1,0),c.set(1+n,0+n),a,o,e),t.set((i.x+e.x)/2,(i.y+e.y)/2);break}case 1:{A(s,r.set(1,0),c.set(0+n,0+n),a,o,i),A(s,r.set(1,0),c.set(1+n,0+n),a,o,e),t.set((i.x+e.x)/2,(i.y+e.y)/2);break}case 2:{A(s,r.set(0,0),c.set(1+n,0+n),a,o,i),A(s,r.set(1,0),c.set(1+n,0+n),a,o,e),t.set((i.x+e.x)/2,(i.y+e.y)/2);break}case 3:{A(s,r.set(1,0),c.set(1+n,0+n),a,o,t);break}case 4:{A(s,r.set(1,1),c.set(0+n,0+n),a,o,i),A(s,r.set(1,1),c.set(1+n,0+n),a,o,e),t.set((i.x+e.x)/2,(i.y+e.y)/2);break}case 5:{A(s,r.set(1,1),c.set(0+n,0+n),a,o,i),A(s,r.set(1,0),c.set(1+n,0+n),a,o,e),t.set((i.x+e.x)/2,(i.y+e.y)/2);break}case 6:{A(s,r.set(1,1),c.set(1+n,0+n),a,o,t);break}case 7:{A(s,r.set(1,1),c.set(1+n,0+n),a,o,i),A(s,r.set(1,0),c.set(1+n,0+n),a,o,e),t.set((i.x+e.x)/2,(i.y+e.y)/2);break}case 8:{A(s,r.set(0,0),c.set(1+n,1+n),a,o,i),A(s,r.set(1,0),c.set(1+n,1+n),a,o,e),t.set((i.x+e.x)/2,(i.y+e.y)/2);break}case 9:{A(s,r.set(1,0),c.set(1+n,1+n),a,o,t);break}case 10:{A(s,r.set(0,0),c.set(1+n,1+n),a,o,i),A(s,r.set(1,0),c.set(1+n,0+n),a,o,e),t.set((i.x+e.x)/2,(i.y+e.y)/2);break}case 11:{A(s,r.set(1,0),c.set(1+n,1+n),a,o,i),A(s,r.set(1,0),c.set(1+n,0+n),a,o,e),t.set((i.x+e.x)/2,(i.y+e.y)/2);break}case 12:{A(s,r.set(1,1),c.set(1+n,1+n),a,o,t);break}case 13:{A(s,r.set(1,1),c.set(1+n,1+n),a,o,i),A(s,r.set(1,0),c.set(1+n,1+n),a,o,e),t.set((i.x+e.x)/2,(i.y+e.y)/2);break}case 14:{A(s,r.set(1,1),c.set(1+n,1+n),a,o,i),A(s,r.set(1,1),c.set(1+n,0+n),a,o,e),t.set((i.x+e.x)/2,(i.y+e.y)/2);break}case 15:{A(s,r.set(1,1),c.set(1+n,1+n),a,o,i),A(s,r.set(1,0),c.set(1+n,0+n),a,o,e),t.set((i.x+e.x)/2,(i.y+e.y)/2);break}}return t}function H(s,a,y){let o=new k,t,r,c,i,e,n,h,w;for(t=0,r=s.length;t<r;++t)for(n=s[t],h=n.data,w=n.width,i=0;i<w;++i)for(c=0;c<w;++c)y?B(t,c,i,a,o):K(t,c,i,a,o),e=(i*w+c)*2,h[e]=o.x*255,h[e+1]=o.y*255}function T(s,a,y,o,t,r){let c=new k,i=r.data,e=r.width,n,h,w,x,b,U,C,F,P,l;for(n=0,h=a.length;n<h;++n)for(C=y[n],F=a[n],P=F.data,l=F.width,x=0;x<o;++x)for(w=0;w<o;++w)c.set(C[0]*o+s.x+w,C[1]*o+s.y+x),b=(c.y*e+c.x)*4,U=t?(x*x*l+w*w)*2:(x*l+w)*2,i[b]=P[U],i[b+1]=P[U+1],i[b+2]=0,i[b+3]=255}var v=class{static generate(){let a=2*5*M,y=L.length*5*M,o=new Uint8ClampedArray(a*y*4),t=new m(a,y,o),r=Math.pow(M-1,2)+1,c=q,i=[],e=[],n=new k,h,w;for(h=0;h<16;++h)i.push(new m(r,r,new Uint8ClampedArray(r*r*2),2)),e.push(new m(c,c,new Uint8ClampedArray(c*c*2),2));for(h=0,w=L.length;h<w;++h)H(i,L[h],!0),n.set(0,5*M*h),T(n,i,j,M,!0,t);for(h=0,w=_.length;h<w;++h)H(e,_[h],!1),n.set(5*M,4*q*h),T(n,e,W,q,!1,t);return t}},O=new Map([[g([0,0,0,0]),[0,0,0,0]],[g([0,0,0,1]),[0,0,0,1]],[g([0,0,1,0]),[0,0,1,0]],[g([0,0,1,1]),[0,0,1,1]],[g([0,1,0,0]),[0,1,0,0]],[g([0,1,0,1]),[0,1,0,1]],[g([0,1,1,0]),[0,1,1,0]],[g([0,1,1,1]),[0,1,1,1]],[g([1,0,0,0]),[1,0,0,0]],[g([1,0,0,1]),[1,0,0,1]],[g([1,0,1,0]),[1,0,1,0]],[g([1,0,1,1]),[1,0,1,1]],[g([1,1,0,0]),[1,1,0,0]],[g([1,1,0,1]),[1,1,0,1]],[g([1,1,1,0]),[1,1,1,0]],[g([1,1,1,1]),[1,1,1,1]]]);function N(s,a,y){return s+(a-s)*y}function g(s){let a=N(s[0],s[1],1-.25),y=N(s[2],s[3],1-.25);return N(a,y,1-.125)}function Q(s,a){let y=0;return a[3]===1&&(y+=1),y===1&&a[2]===1&&s[1]!==1&&s[3]!==1&&(y+=1),y}function V(s,a){let y=0;return a[3]===1&&s[1]!==1&&s[3]!==1&&(y+=1),y===1&&a[2]===1&&s[0]!==1&&s[2]!==1&&(y+=1),y}var R=class{static generate(){let a=66,y=33,o=a/2,t=64,r=16,c=new Uint8ClampedArray(a*y),i=new Uint8ClampedArray(t*r*4),e,n,h,w,x,b,U;for(n=0;n<y;++n)for(e=0;e<a;++e)h=.03125*e,w=.03125*n,O.has(h)&&O.has(w)&&(b=O.get(h),U=O.get(w),x=n*a+e,c[x]=127*Q(b,U),c[x+o]=127*V(b,U));for(x=0,n=y-r;n<y;++n)for(e=0;e<t;++e,x+=4)i[x]=c[n*a+e],i[x+3]=255;return new m(t,r,i)}};self.addEventListener("message",s=>{let a=v.generate(),y=R.generate();postMessage({areaImageData:a,searchImageData:y},[a.data.buffer,y.data.buffer]),close()});})();\n';
+  var smaa_default = '(()=>{function X(s,a,y){let o=document.createElementNS("http://www.w3.org/1999/xhtml","canvas"),t=o.getContext("2d");if(o.width=s,o.height=a,y instanceof Image)t.drawImage(y,0,0);else{let r=t.createImageData(s,a);r.data.set(y),t.putImageData(r,0,0)}return o}var m=class{constructor(a=0,y=0,o=null){this.width=a,this.height=y,this.data=o}toCanvas(){return typeof document=="undefined"?null:X(this.width,this.height,this.data)}static from(a){let{width:y,height:o}=a,t;if(a instanceof Image){let r=X(y,o,a);r!==null&&(t=r.getContext("2d").getImageData(0,0,y,o).data)}else t=a.data;return new m(y,o,t)}};var k=class{constructor(a=0,y=0){this.x=a,this.y=y}set(a,y){return this.x=a,this.y=y,this}equals(a){return this===a||this.x===a.x&&this.y===a.y}},E=class{constructor(){this.min=new k,this.max=new k}},u=new E,I=new E,M=16,q=20,D=30,Z=32,L=new Float32Array([0,-.25,.25,-.125,.125,-.375,.375]),_=[new Float32Array([0,0]),new Float32Array([.25,-.25]),new Float32Array([-.25,.25]),new Float32Array([.125,-.125]),new Float32Array([-.125,.125])],j=[new Uint8Array([0,0]),new Uint8Array([3,0]),new Uint8Array([0,3]),new Uint8Array([3,3]),new Uint8Array([1,0]),new Uint8Array([4,0]),new Uint8Array([1,3]),new Uint8Array([4,3]),new Uint8Array([0,1]),new Uint8Array([3,1]),new Uint8Array([0,4]),new Uint8Array([3,4]),new Uint8Array([1,1]),new Uint8Array([4,1]),new Uint8Array([1,4]),new Uint8Array([4,4])],W=[new Uint8Array([0,0]),new Uint8Array([1,0]),new Uint8Array([0,2]),new Uint8Array([1,2]),new Uint8Array([2,0]),new Uint8Array([3,0]),new Uint8Array([2,2]),new Uint8Array([3,2]),new Uint8Array([0,1]),new Uint8Array([1,1]),new Uint8Array([0,3]),new Uint8Array([1,3]),new Uint8Array([2,1]),new Uint8Array([3,1]),new Uint8Array([2,3]),new Uint8Array([3,3])];function S(s,a,y){return s+(a-s)*y}function z(s){return Math.min(Math.max(s,0),1)}function Y(s,a){let y=a.min,o=a.max,t=Math.sqrt(y.x*2)*.5,r=Math.sqrt(y.y*2)*.5,c=Math.sqrt(o.x*2)*.5,i=Math.sqrt(o.y*2)*.5,e=z(s/Z);return y.set(S(t,y.x,e),S(r,y.y,e)),o.set(S(c,o.x,e),S(i,o.y,e)),a}function d(s,a,y,o){let t=a.x-s.x,r=a.y-s.y,c=y,i=y+1,e=s.y+r*(c-s.x)/t,n=s.y+r*(i-s.x)/t,h,w,x,b;return c>=s.x&&c<a.x||i>s.x&&i<=a.x?Math.sign(e)===Math.sign(n)||Math.abs(e)<1e-4||Math.abs(n)<1e-4?(h=(e+n)/2,h<0?o.set(Math.abs(h),0):o.set(0,Math.abs(h))):(b=-s.y*t/r+s.x,w=b>s.x?e*(b-Math.trunc(b))/2:0,x=b<a.x?n*(1-(b-Math.trunc(b)))/2:0,h=Math.abs(w)>Math.abs(x)?w:-x,h<0?o.set(Math.abs(w),Math.abs(x)):o.set(Math.abs(x),Math.abs(w))):o.set(0,0),o}function B(s,a,y,o,t){let r=u.min,c=u.max,i=I.min,e=I.max,n=I,h=.5+o,w=.5+o-1,x=a+y+1;switch(s){case 0:{t.set(0,0);break}case 1:{a<=y?d(r.set(0,w),c.set(x/2,0),a,t):t.set(0,0);break}case 2:{a>=y?d(r.set(x/2,0),c.set(x,w),a,t):t.set(0,0);break}case 3:{d(r.set(0,w),c.set(x/2,0),a,i),d(r.set(x/2,0),c.set(x,w),a,e),Y(x,n),t.set(i.x+e.x,i.y+e.y);break}case 4:{a<=y?d(r.set(0,h),c.set(x/2,0),a,t):t.set(0,0);break}case 5:{t.set(0,0);break}case 6:{Math.abs(o)>0?(d(r.set(0,h),c.set(x,w),a,i),d(r.set(0,h),c.set(x/2,0),a,e),d(r.set(x/2,0),c.set(x,w),a,t),e.set(e.x+t.x,e.y+t.y),t.set((i.x+e.x)/2,(i.y+e.y)/2)):d(r.set(0,h),c.set(x,w),a,t);break}case 7:{d(r.set(0,h),c.set(x,w),a,t);break}case 8:{a>=y?d(r.set(x/2,0),c.set(x,h),a,t):t.set(0,0);break}case 9:{Math.abs(o)>0?(d(r.set(0,w),c.set(x,h),a,i),d(r.set(0,w),c.set(x/2,0),a,e),d(r.set(x/2,0),c.set(x,h),a,t),e.set(e.x+t.x,e.y+t.y),t.set((i.x+e.x)/2,(i.y+e.y)/2)):d(r.set(0,w),c.set(x,h),a,t);break}case 10:{t.set(0,0);break}case 11:{d(r.set(0,w),c.set(x,h),a,t);break}case 12:{d(r.set(0,h),c.set(x/2,0),a,i),d(r.set(x/2,0),c.set(x,h),a,e),Y(x,n),t.set(i.x+e.x,i.y+e.y);break}case 13:{d(r.set(0,w),c.set(x,h),a,t);break}case 14:{d(r.set(0,h),c.set(x,w),a,t);break}case 15:{t.set(0,0);break}}return t}function J(s,a,y,o){let t=s.equals(a);if(!t){let r=(s.x+a.x)/2,c=(s.y+a.y)/2,i=a.y-s.y,e=s.x-a.x;t=i*(y-r)+e*(o-c)>0}return t}function G(s,a,y,o){let t,r,c,i,e;for(t=0,c=0;c<D;++c)for(r=0;r<D;++r)i=r/(D-1),e=c/(D-1),J(s,a,y+i,o+e)&&++t;return t/(D*D)}function A(s,a,y,o,t,r){let c=W[s],i=c[0],e=c[1];return i>0&&(a.x+=t[0],a.y+=t[1]),e>0&&(y.x+=t[0],y.y+=t[1]),r.set(1-G(a,y,1+o,0+o),G(a,y,1+o,1+o))}function K(s,a,y,o,t){let r=u.min,c=u.max,i=I.min,e=I.max,n=a+y+1;switch(s){case 0:{A(s,r.set(1,1),c.set(1+n,1+n),a,o,i),A(s,r.set(1,0),c.set(1+n,0+n),a,o,e),t.set((i.x+e.x)/2,(i.y+e.y)/2);break}case 1:{A(s,r.set(1,0),c.set(0+n,0+n),a,o,i),A(s,r.set(1,0),c.set(1+n,0+n),a,o,e),t.set((i.x+e.x)/2,(i.y+e.y)/2);break}case 2:{A(s,r.set(0,0),c.set(1+n,0+n),a,o,i),A(s,r.set(1,0),c.set(1+n,0+n),a,o,e),t.set((i.x+e.x)/2,(i.y+e.y)/2);break}case 3:{A(s,r.set(1,0),c.set(1+n,0+n),a,o,t);break}case 4:{A(s,r.set(1,1),c.set(0+n,0+n),a,o,i),A(s,r.set(1,1),c.set(1+n,0+n),a,o,e),t.set((i.x+e.x)/2,(i.y+e.y)/2);break}case 5:{A(s,r.set(1,1),c.set(0+n,0+n),a,o,i),A(s,r.set(1,0),c.set(1+n,0+n),a,o,e),t.set((i.x+e.x)/2,(i.y+e.y)/2);break}case 6:{A(s,r.set(1,1),c.set(1+n,0+n),a,o,t);break}case 7:{A(s,r.set(1,1),c.set(1+n,0+n),a,o,i),A(s,r.set(1,0),c.set(1+n,0+n),a,o,e),t.set((i.x+e.x)/2,(i.y+e.y)/2);break}case 8:{A(s,r.set(0,0),c.set(1+n,1+n),a,o,i),A(s,r.set(1,0),c.set(1+n,1+n),a,o,e),t.set((i.x+e.x)/2,(i.y+e.y)/2);break}case 9:{A(s,r.set(1,0),c.set(1+n,1+n),a,o,t);break}case 10:{A(s,r.set(0,0),c.set(1+n,1+n),a,o,i),A(s,r.set(1,0),c.set(1+n,0+n),a,o,e),t.set((i.x+e.x)/2,(i.y+e.y)/2);break}case 11:{A(s,r.set(1,0),c.set(1+n,1+n),a,o,i),A(s,r.set(1,0),c.set(1+n,0+n),a,o,e),t.set((i.x+e.x)/2,(i.y+e.y)/2);break}case 12:{A(s,r.set(1,1),c.set(1+n,1+n),a,o,t);break}case 13:{A(s,r.set(1,1),c.set(1+n,1+n),a,o,i),A(s,r.set(1,0),c.set(1+n,1+n),a,o,e),t.set((i.x+e.x)/2,(i.y+e.y)/2);break}case 14:{A(s,r.set(1,1),c.set(1+n,1+n),a,o,i),A(s,r.set(1,1),c.set(1+n,0+n),a,o,e),t.set((i.x+e.x)/2,(i.y+e.y)/2);break}case 15:{A(s,r.set(1,1),c.set(1+n,1+n),a,o,i),A(s,r.set(1,0),c.set(1+n,0+n),a,o,e),t.set((i.x+e.x)/2,(i.y+e.y)/2);break}}return t}function H(s,a,y){let o=new k,t,r,c,i,e,n,h,w;for(t=0,r=s.length;t<r;++t)for(n=s[t],h=n.data,w=n.width,i=0;i<w;++i)for(c=0;c<w;++c)y?B(t,c,i,a,o):K(t,c,i,a,o),e=(i*w+c)*2,h[e]=o.x*255,h[e+1]=o.y*255}function T(s,a,y,o,t,r){let c=new k,i=r.data,e=r.width,n,h,w,x,b,U,C,F,P,l;for(n=0,h=a.length;n<h;++n)for(C=y[n],F=a[n],P=F.data,l=F.width,x=0;x<o;++x)for(w=0;w<o;++w)c.set(C[0]*o+s.x+w,C[1]*o+s.y+x),b=(c.y*e+c.x)*4,U=t?(x*x*l+w*w)*2:(x*l+w)*2,i[b]=P[U],i[b+1]=P[U+1],i[b+2]=0,i[b+3]=255}var v=class{static generate(){let a=2*5*M,y=L.length*5*M,o=new Uint8ClampedArray(a*y*4),t=new m(a,y,o),r=Math.pow(M-1,2)+1,c=q,i=[],e=[],n=new k,h,w;for(h=0;h<16;++h)i.push(new m(r,r,new Uint8ClampedArray(r*r*2),2)),e.push(new m(c,c,new Uint8ClampedArray(c*c*2),2));for(h=0,w=L.length;h<w;++h)H(i,L[h],!0),n.set(0,5*M*h),T(n,i,j,M,!0,t);for(h=0,w=_.length;h<w;++h)H(e,_[h],!1),n.set(5*M,4*q*h),T(n,e,W,q,!1,t);return t}};var O=new Map([[g([0,0,0,0]),[0,0,0,0]],[g([0,0,0,1]),[0,0,0,1]],[g([0,0,1,0]),[0,0,1,0]],[g([0,0,1,1]),[0,0,1,1]],[g([0,1,0,0]),[0,1,0,0]],[g([0,1,0,1]),[0,1,0,1]],[g([0,1,1,0]),[0,1,1,0]],[g([0,1,1,1]),[0,1,1,1]],[g([1,0,0,0]),[1,0,0,0]],[g([1,0,0,1]),[1,0,0,1]],[g([1,0,1,0]),[1,0,1,0]],[g([1,0,1,1]),[1,0,1,1]],[g([1,1,0,0]),[1,1,0,0]],[g([1,1,0,1]),[1,1,0,1]],[g([1,1,1,0]),[1,1,1,0]],[g([1,1,1,1]),[1,1,1,1]]]);function N(s,a,y){return s+(a-s)*y}function g(s){let a=N(s[0],s[1],1-.25),y=N(s[2],s[3],1-.25);return N(a,y,1-.125)}function Q(s,a){let y=0;return a[3]===1&&(y+=1),y===1&&a[2]===1&&s[1]!==1&&s[3]!==1&&(y+=1),y}function V(s,a){let y=0;return a[3]===1&&s[1]!==1&&s[3]!==1&&(y+=1),y===1&&a[2]===1&&s[0]!==1&&s[2]!==1&&(y+=1),y}var R=class{static generate(){let a=66,y=33,o=a/2,t=64,r=16,c=new Uint8ClampedArray(a*y),i=new Uint8ClampedArray(t*r*4),e,n,h,w,x,b,U;for(n=0;n<y;++n)for(e=0;e<a;++e)h=.03125*e,w=.03125*n,O.has(h)&&O.has(w)&&(b=O.get(h),U=O.get(w),x=n*a+e,c[x]=127*Q(b,U),c[x+o]=127*V(b,U));for(x=0,n=y-r;n<y;++n)for(e=0;e<t;++e,x+=4)i[x]=c[n*a+e],i[x+3]=255;return new m(t,r,i)}};self.addEventListener("message",s=>{let a=v.generate(),y=R.generate();postMessage({areaImageData:a,searchImageData:y},[a.data.buffer,y.data.buffer]),close()});})();\n';
 
   // src/loaders/SMAAImageLoader.js
   function generate(disableCache = false) {
@@ -36878,32 +36922,24 @@
       this.hueSaturationEffect = null;
       this.sepiaEffect = null;
       this.colorGradingEffect = null;
-      this.pass = null;
       this.luts = new Map([
-        ["neutral", null],
-        ["bleach-bypass", "lut-bleach-bypass.png"],
-        ["candle-light", "lut-candle-light.png"],
-        ["cool-contrast", "lut-cool-contrast.png"],
-        ["warm-contrast", "lut-warm-contrast.png"],
-        ["desaturated-fog", "lut-desaturated-fog.png"],
-        ["evening", "lut-evening.png"],
-        ["fall", "lut-fall.png"],
-        ["filmic1", "lut-filmic1.png"],
-        ["filmic2", "lut-filmic2.png"],
-        ["filmic3", "lut-filmic3.png"],
-        ["filmic4", "lut-filmic4.png"],
-        ["filmic5", "lut-filmic5.png"],
-        ["filmic6", "lut-filmic6.png"],
-        ["filmic7", "lut-filmic7.png"],
-        ["filmic8", "lut-filmic8.png"],
-        ["filmic9", "lut-filmic9.png"],
-        ["matrix-blue", "lut-matrix-blue.png"],
-        ["matrix-green", "lut-matrix-green.png"],
-        ["night1", "lut-night1.png"],
-        ["night2", "lut-night2.png"],
-        ["night-dark", "lut-night-dark.png"],
-        ["cinematic-3dl", "lut-presetpro-cinematic.3dl"],
-        ["cinematic-cube", "lut-presetpro-cinematic.cube"]
+        ["neutral-2", null],
+        ["neutral-4", null],
+        ["neutral-8", null],
+        ["png/bleach-bypass", "png/bleach-bypass.png"],
+        ["png/candle-light", "png/candle-light.png"],
+        ["png/cool-contrast", "png/cool-contrast.png"],
+        ["png/warm-contrast", "png/warm-contrast.png"],
+        ["png/desaturated-fog", "png/desaturated-fog.png"],
+        ["png/evening", "png/evening.png"],
+        ["png/fall", "png/fall.png"],
+        ["png/filmic1", "png/filmic1.png"],
+        ["png/filmic2", "png/filmic2.png"],
+        ["png/matrix-green", "png/matrix-green.png"],
+        ["png/strong-amber", "png/strong-amber.png"],
+        ["3dl/cinematic", "3dl/presetpro-cinematic.3dl"],
+        ["cube/cinematic", "cube/presetpro-cinematic.cube"],
+        ["cube/django-25", "cube/django-25.cube"]
       ]);
     }
     load() {
@@ -36981,6 +37017,10 @@
       scene.background = new Color(15658734);
       scene.add(...createLights());
       scene.add(assets.get(tag2));
+      const img = document.createElement("img");
+      img.title = "This is a compressed preview image";
+      img.classList.add("lut", "hidden");
+      document.body.append(img);
       const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"), SMAAPreset.HIGH, EdgeDetectionMode.DEPTH);
       smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.01);
       const colorAverageEffect = new ColorAverageEffect(BlendFunction.SKIP);
@@ -36993,25 +37033,29 @@
         saturation: 0.4,
         hue: 0
       });
-      const lutNeutral = LookupTexture3D.createNeutral(32);
-      lutNeutral.encoding = sRGBEncoding;
-      assets.set(lutNeutral.name, lutNeutral);
-      const lut = LookupTexture3D.from(assets.get("filmic1"));
+      const lutNeutral2 = LookupTexture3D.createNeutral(2);
+      lutNeutral2.name = "neutral-2";
+      assets.set(lutNeutral2.name, lutNeutral2);
+      const lutNeutral4 = LookupTexture3D.createNeutral(4);
+      lutNeutral4.name = "neutral-4";
+      assets.set(lutNeutral4.name, lutNeutral4);
+      const lutNeutral8 = LookupTexture3D.createNeutral(8);
+      lutNeutral8.name = "neutral-8";
+      assets.set(lutNeutral8.name, lutNeutral8);
+      const lut = LookupTexture3D.from(assets.get("png/filmic1"));
       const lutEffect = capabilities.isWebGL2 ? new LUTEffect(lut) : new LUTEffect(lut.convertToUint8().toDataTexture());
-      const pass = new EffectPass(camera2, smaaEffect, colorAverageEffect, sepiaEffect, brightnessContrastEffect, hueSaturationEffect, lutEffect);
-      this.pass = pass;
       this.brightnessContrastEffect = brightnessContrastEffect;
       this.colorAverageEffect = colorAverageEffect;
       this.hueSaturationEffect = hueSaturationEffect;
       this.sepiaEffect = sepiaEffect;
       this.lutEffect = lutEffect;
+      const pass = new EffectPass(camera2, smaaEffect, colorAverageEffect, sepiaEffect, brightnessContrastEffect, hueSaturationEffect, lutEffect);
       composer2.addPass(pass);
     }
     registerOptions(menu) {
       const capabilities = this.composer.getRenderer().capabilities;
       const assets = this.assets;
       const luts = this.luts;
-      const pass = this.pass;
       const brightnessContrastEffect = this.brightnessContrastEffect;
       const colorAverageEffect = this.colorAverageEffect;
       const hueSaturationEffect = this.hueSaturationEffect;
@@ -37041,12 +37085,32 @@
         },
         lut: {
           LUT: lutEffect.getLUT().name,
+          "base size": lutEffect.getLUT().image.width,
+          "3D texture": true,
           "scale up": false,
           "target size": 48,
+          "show LUT": false,
           opacity: lutEffect.blendMode.opacity.value,
           "blend mode": lutEffect.blendMode.blendFunction
         }
       };
+      let objectURL = null;
+      const img = document.querySelector(".lut");
+      img.addEventListener("load", () => URL.revokeObjectURL(objectURL));
+      function updateLUTPreview() {
+        if (params.lut["show LUT"]) {
+          const lut = LookupTexture3D.from(lutEffect.getLUT());
+          const image = lut.convertToUint8().convertToRGBA().toDataTexture().image;
+          const rawImageData = RawImageData.from(image);
+          rawImageData.toCanvas().toBlob((blob) => {
+            objectURL = URL.createObjectURL(blob);
+            img.src = objectURL;
+            img.classList.remove("hidden");
+          });
+        } else {
+          img.classList.add("hidden");
+        }
+      }
       function changeLUT() {
         const original = assets.get(params.lut.LUT);
         const size = Math.min(original.image.width, original.image.height);
@@ -37067,13 +37131,16 @@
             document.body.classList.remove("progress");
           }
           lutEffect.getLUT().dispose();
+          params.lut["base size"] = size;
           if (capabilities.isWebGL2) {
-            lutEffect.setLUT(lut);
+            lutEffect.setLUT(params.lut["3D texture"] ? lut : lut.toDataTexture());
           } else {
             lutEffect.setLUT(lut.convertToUint8().toDataTexture());
           }
+          updateLUTPreview();
         }).catch((error) => console.error(error));
       }
+      const infoOptions = [];
       let f = menu.addFolder("Color Average");
       f.add(params.colorAverage, "opacity").min(0).max(1).step(0.01).onChange(() => {
         colorAverageEffect.blendMode.opacity.value = params.colorAverage.opacity;
@@ -37119,8 +37186,13 @@
       });
       f = menu.addFolder("Lookup Texture 3D");
       f.add(params.lut, "LUT", [...luts.keys()]).onChange(changeLUT);
+      infoOptions.push(f.add(params.lut, "base size").listen());
+      if (capabilities.isWebGL2) {
+        f.add(params.lut, "3D texture").onChange(changeLUT);
+      }
       f.add(params.lut, "scale up").onChange(changeLUT);
-      f.add(params.lut, "target size", [32, 48, 64, 80, 96, 112, 128]).onChange(changeLUT);
+      f.add(params.lut, "target size", [32, 48, 64, 96, 128]).onChange(changeLUT);
+      f.add(params.lut, "show LUT").onChange(updateLUTPreview);
       f.add(params.lut, "opacity").min(0).max(1).step(0.01).onChange(() => {
         lutEffect.blendMode.opacity.value = params.lut.opacity;
       });
@@ -37128,7 +37200,16 @@
         lutEffect.blendMode.setBlendFunction(Number(params.lut["blend mode"]));
       });
       f.open();
-      menu.add(pass, "dithering");
+      for (const option of infoOptions) {
+        option.domElement.style.pointerEvents = "none";
+      }
+    }
+    reset() {
+      const img = document.querySelector(".lut");
+      if (img !== null) {
+        img.remove();
+      }
+      return super.reset();
     }
   };
 
@@ -38627,14 +38708,16 @@
       const scene = this.scene;
       const assets = this.assets;
       const composer2 = this.composer;
+      const renderer = composer2.getRenderer();
+      const capabilities = renderer.capabilities;
       const aspect2 = window.innerWidth / window.innerHeight;
       const camera2 = new PerspectiveCamera(50, aspect2, 0.3, 2e3);
       camera2.position.set(-10, 1.125, 0);
       camera2.lookAt(scene.position);
       this.camera = camera2;
       scene.background = assets.get("sky");
-      const ambientLight = new AmbientLight(2171169);
-      const pointLight = new PointLight(16759722, 50, 12);
+      const ambientLight = new AmbientLight(3289650);
+      const pointLight = new PointLight(16759722, 80, 12);
       this.light = pointLight;
       scene.add(ambientLight, pointLight);
       const material = new MeshPhongMaterial({
@@ -38709,8 +38792,10 @@
       const hueSaturationEffect = new HueSaturationEffect({saturation: 0.125});
       const noiseEffect = new NoiseEffect({premultiply: true});
       const vignetteEffect = new VignetteEffect();
+      const lut = LookupTexture3D.createNeutral(8);
+      const lutEffect = capabilities.isWebGL2 ? new LUTEffect(lut) : new LUTEffect(lut.convertToUint8().toDataTexture());
       const toneMappingEffect = new ToneMappingEffect({
-        mode: ToneMappingMode.ACES_FILMIC
+        mode: ToneMappingMode.REINHARD2_ADAPTIVE
       });
       colorAverageEffect.blendMode.opacity.value = 0.01;
       sepiaEffect.blendMode.opacity.value = 0.01;
@@ -38734,7 +38819,8 @@
         textureEffect,
         noiseEffect,
         vignetteEffect,
-        toneMappingEffect
+        toneMappingEffect,
+        lutEffect
       ];
       const effectPass = new EffectPass(camera2, ...effects);
       effectPass.renderToScreen = true;
