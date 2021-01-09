@@ -26,6 +26,7 @@ import {
 	LookupTexture3D,
 	LUT3dlLoader,
 	LUTCubeLoader,
+	RawImageData,
 	SepiaEffect,
 	SMAAEffect,
 	SMAAImageLoader,
@@ -94,15 +95,6 @@ export class ColorGradingDemo extends PostProcessingDemo {
 		this.colorGradingEffect = null;
 
 		/**
-		 * A pass.
-		 *
-		 * @type {Pass}
-		 * @private
-		 */
-
-		this.pass = null;
-
-		/**
 		 * A collection that maps LUT IDs to file names.
 		 *
 		 * @type {Map<String, String>}
@@ -110,30 +102,23 @@ export class ColorGradingDemo extends PostProcessingDemo {
 		 */
 
 		this.luts = new Map([
-			["neutral", null],
-			["bleach-bypass", "lut-bleach-bypass.png"],
-			["candle-light", "lut-candle-light.png"],
-			["cool-contrast", "lut-cool-contrast.png"],
-			["warm-contrast", "lut-warm-contrast.png"],
-			["desaturated-fog", "lut-desaturated-fog.png"],
-			["evening", "lut-evening.png"],
-			["fall", "lut-fall.png"],
-			["filmic1", "lut-filmic1.png"],
-			["filmic2", "lut-filmic2.png"],
-			["filmic3", "lut-filmic3.png"],
-			["filmic4", "lut-filmic4.png"],
-			["filmic5", "lut-filmic5.png"],
-			["filmic6", "lut-filmic6.png"],
-			["filmic7", "lut-filmic7.png"],
-			["filmic8", "lut-filmic8.png"],
-			["filmic9", "lut-filmic9.png"],
-			["matrix-blue", "lut-matrix-blue.png"],
-			["matrix-green", "lut-matrix-green.png"],
-			["night1", "lut-night1.png"],
-			["night2", "lut-night2.png"],
-			["night-dark", "lut-night-dark.png"],
-			["cinematic-3dl", "lut-presetpro-cinematic.3dl"],
-			["cinematic-cube", "lut-presetpro-cinematic.cube"]
+			["neutral-2", null],
+			["neutral-4", null],
+			["neutral-8", null],
+			["png/bleach-bypass", "png/bleach-bypass.png"],
+			["png/candle-light", "png/candle-light.png"],
+			["png/cool-contrast", "png/cool-contrast.png"],
+			["png/warm-contrast", "png/warm-contrast.png"],
+			["png/desaturated-fog", "png/desaturated-fog.png"],
+			["png/evening", "png/evening.png"],
+			["png/fall", "png/fall.png"],
+			["png/filmic1", "png/filmic1.png"],
+			["png/filmic2", "png/filmic2.png"],
+			["png/matrix-green", "png/matrix-green.png"],
+			["png/strong-amber", "png/strong-amber.png"],
+			["3dl/cinematic", "3dl/presetpro-cinematic.3dl"],
+			["cube/cinematic", "cube/presetpro-cinematic.cube"],
+			["cube/django-25", "cube/django-25.cube"]
 		]);
 
 	}
@@ -262,19 +247,26 @@ export class ColorGradingDemo extends PostProcessingDemo {
 		controls.setOrbitEnabled(false);
 		this.controls = controls;
 
-		// Sky.
+		// Sky
 
 		scene.background = new Color(0xeeeeee);
 
-		// Lights.
+		// Lights
 
 		scene.add(...Sponza.createLights());
 
-		// Objects.
+		// Objects
 
 		scene.add(assets.get(Sponza.tag));
 
-		// Passes.
+		// LUT Preview
+
+		const img = document.createElement("img");
+		img.title = "This is a compressed preview image";
+		img.classList.add("lut", "hidden");
+		document.body.append(img);
+
+		// Passes
 
 		const smaaEffect = new SMAAEffect(
 			assets.get("smaa-search"),
@@ -298,14 +290,30 @@ export class ColorGradingDemo extends PostProcessingDemo {
 			hue: 0.0
 		});
 
-		const lutNeutral = LookupTexture3D.createNeutral(32);
-		lutNeutral.encoding = sRGBEncoding;
-		assets.set(lutNeutral.name, lutNeutral);
+		const lutNeutral2 = LookupTexture3D.createNeutral(2);
+		lutNeutral2.name = "neutral-2";
+		assets.set(lutNeutral2.name, lutNeutral2);
 
-		const lut = LookupTexture3D.from(assets.get("filmic1"));
+		const lutNeutral4 = LookupTexture3D.createNeutral(4);
+		lutNeutral4.name = "neutral-4";
+		assets.set(lutNeutral4.name, lutNeutral4);
+
+		const lutNeutral8 = LookupTexture3D.createNeutral(8);
+		lutNeutral8.name = "neutral-8";
+		assets.set(lutNeutral8.name, lutNeutral8);
+
+		const lut = LookupTexture3D.from(assets.get("png/filmic1"));
 
 		const lutEffect = capabilities.isWebGL2 ? new LUTEffect(lut) :
 			new LUTEffect(lut.convertToUint8().toDataTexture());
+
+		// lutEffect.setInputEncoding(LinearEncoding); // Debug
+
+		this.brightnessContrastEffect = brightnessContrastEffect;
+		this.colorAverageEffect = colorAverageEffect;
+		this.hueSaturationEffect = hueSaturationEffect;
+		this.sepiaEffect = sepiaEffect;
+		this.lutEffect = lutEffect;
 
 		const pass = new EffectPass(camera,
 			smaaEffect,
@@ -315,14 +323,6 @@ export class ColorGradingDemo extends PostProcessingDemo {
 			hueSaturationEffect,
 			lutEffect
 		);
-
-		this.pass = pass;
-
-		this.brightnessContrastEffect = brightnessContrastEffect;
-		this.colorAverageEffect = colorAverageEffect;
-		this.hueSaturationEffect = hueSaturationEffect;
-		this.sepiaEffect = sepiaEffect;
-		this.lutEffect = lutEffect;
 
 		composer.addPass(pass);
 
@@ -339,7 +339,6 @@ export class ColorGradingDemo extends PostProcessingDemo {
 		const capabilities = this.composer.getRenderer().capabilities;
 		const assets = this.assets;
 		const luts = this.luts;
-		const pass = this.pass;
 
 		const brightnessContrastEffect = this.brightnessContrastEffect;
 		const colorAverageEffect = this.colorAverageEffect;
@@ -371,12 +370,46 @@ export class ColorGradingDemo extends PostProcessingDemo {
 			},
 			lut: {
 				"LUT": lutEffect.getLUT().name,
+				"base size": lutEffect.getLUT().image.width,
+				"3D texture": true,
 				"scale up": false,
 				"target size": 48,
+				"show LUT": false,
 				"opacity": lutEffect.blendMode.opacity.value,
 				"blend mode": lutEffect.blendMode.blendFunction
 			}
 		};
+
+		let objectURL = null;
+
+		const img = document.querySelector(".lut");
+		img.addEventListener("load", () => URL.revokeObjectURL(objectURL));
+
+		function updateLUTPreview() {
+
+			if(params.lut["show LUT"]) {
+
+				// This is pretty fast.
+				const lut = LookupTexture3D.from(lutEffect.getLUT());
+				const image = lut.convertToUint8().convertToRGBA().toDataTexture().image;
+				const rawImageData = RawImageData.from(image);
+
+				// This takes a while if the image is large.
+				rawImageData.toCanvas().toBlob((blob) => {
+
+					objectURL = URL.createObjectURL(blob);
+					img.src = objectURL;
+					img.classList.remove("hidden");
+
+				});
+
+			} else {
+
+				img.classList.add("hidden");
+
+			}
+
+		}
 
 		function changeLUT() {
 
@@ -412,10 +445,11 @@ export class ColorGradingDemo extends PostProcessingDemo {
 				}
 
 				lutEffect.getLUT().dispose();
+				params.lut["base size"] = size;
 
 				if(capabilities.isWebGL2) {
 
-					lutEffect.setLUT(lut);
+					lutEffect.setLUT(params.lut["3D texture"] ? lut : lut.toDataTexture());
 
 				} else {
 
@@ -423,9 +457,13 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 				}
 
+				updateLUTPreview();
+
 			}).catch((error) => console.error(error));
 
 		}
+
+		const infoOptions = [];
 
 		let f = menu.addFolder("Color Average");
 
@@ -516,8 +554,18 @@ export class ColorGradingDemo extends PostProcessingDemo {
 		f = menu.addFolder("Lookup Texture 3D");
 
 		f.add(params.lut, "LUT", [...luts.keys()]).onChange(changeLUT);
+
+		infoOptions.push(f.add(params.lut, "base size").listen());
+
+		if(capabilities.isWebGL2) {
+
+			f.add(params.lut, "3D texture").onChange(changeLUT);
+
+		}
+
 		f.add(params.lut, "scale up").onChange(changeLUT);
-		f.add(params.lut, "target size", [32, 48, 64, 80, 96, 112, 128]).onChange(changeLUT);
+		f.add(params.lut, "target size", [32, 48, 64, 96, 128]).onChange(changeLUT);
+		f.add(params.lut, "show LUT").onChange(updateLUTPreview);
 
 		f.add(params.lut, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
 
@@ -533,7 +581,31 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 		f.open();
 
-		menu.add(pass, "dithering");
+		for(const option of infoOptions) {
+
+			option.domElement.style.pointerEvents = "none";
+
+		}
+
+	}
+
+	/**
+	 * Resets this demo.
+	 *
+	 * @return {Demo} This demo.
+	 */
+
+	reset() {
+
+		const img = document.querySelector(".lut");
+
+		if(img !== null) {
+
+			img.remove();
+
+		}
+
+		return super.reset();
 
 	}
 

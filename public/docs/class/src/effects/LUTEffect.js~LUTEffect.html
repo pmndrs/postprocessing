@@ -125,13 +125,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {LUTEffect} from &apos;<span><a href="file/src/effects/LUTEffect.js.html#lineNumber11">postprocessing</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {LUTEffect} from &apos;<span><a href="file/src/effects/LUTEffect.js.html#lineNumber15">postprocessing</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/effects/LUTEffect.js.html#lineNumber11">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/effects/LUTEffect.js.html#lineNumber15">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -152,6 +152,9 @@
   
   
   <div class="description" data-ice="description"><p>A LUT effect.</p>
+<p>References:
+<a href="https://github.com/gkjohnson/threejs-sandbox/tree/master/3d-lut">https://github.com/gkjohnson/threejs-sandbox/tree/master/3d-lut</a>
+<a href="https://developer.nvidia.com/gpugems/gpugems2/part-iii-high-quality-rendering/chapter-24-using-lookup-tables-accelerate-color">https://developer.nvidia.com/gpugems/gpugems2/part-iii-high-quality-rendering/chapter-24-using-lookup-tables-accelerate-color</a></p>
 </div>
   
 
@@ -279,6 +282,35 @@
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/effects/LUTEffect.js~LUTEffect.html#instance-method-getOutputEncoding">getOutputEncoding</a></span></span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Returns the current output encoding.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/effects/LUTEffect.js~LUTEffect.html#instance-method-setInputEncoding">setInputEncoding</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
@@ -308,7 +340,7 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/LUTEffect.js~LUTEffect.html#instance-method-setLUT">setLUT</a></span></span><span class="code" data-ice="signature">(value: <span>Texture</span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/LUTEffect.js~LUTEffect.html#instance-method-setLUT">setLUT</a></span></span><span class="code" data-ice="signature">(lut: <span>Texture</span>)</span>
         </p>
       </div>
       <div>
@@ -846,7 +878,7 @@ a way that requires a shader recompilation.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/LUTEffect.js.html#lineNumber21">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/LUTEffect.js.html#lineNumber25">source</a></span></span>
     </span>
   </h3>
 
@@ -926,7 +958,7 @@ a way that requires a shader recompilation.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/LUTEffect.js.html#lineNumber54">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/LUTEffect.js.html#lineNumber79">source</a></span></span>
     </span>
   </h3>
 
@@ -984,7 +1016,7 @@ a way that requires a shader recompilation.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/LUTEffect.js.html#lineNumber104">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/LUTEffect.js.html#lineNumber153">source</a></span></span>
     </span>
   </h3>
 
@@ -1030,6 +1062,63 @@ a way that requires a shader recompilation.</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-getOutputEncoding">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">getOutputEncoding</span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/LUTEffect.js.html#lineNumber65">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Returns the current output encoding.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The encoding.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-setInputEncoding">
     <span class="access" data-ice="access">public</span>
     
@@ -1041,7 +1130,7 @@ a way that requires a shader recompilation.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/LUTEffect.js.html#lineNumber68">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/LUTEffect.js.html#lineNumber93">source</a></span></span>
     </span>
   </h3>
 
@@ -1099,11 +1188,11 @@ a way that requires a shader recompilation.</p>
     
     
     
-    <span class="code" data-ice="name">setLUT</span><span class="code" data-ice="signature">(value: <span>Texture</span>)</span>
+    <span class="code" data-ice="name">setLUT</span><span class="code" data-ice="signature">(lut: <span>Texture</span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/LUTEffect.js.html#lineNumber116">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/LUTEffect.js.html#lineNumber165">source</a></span></span>
     </span>
   </h3>
 
@@ -1124,7 +1213,7 @@ a way that requires a shader recompilation.</p>
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">value</td>
+      <td data-ice="name" class="code" data-depth="0">lut</td>
       <td data-ice="type" class="code"><span>Texture</span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>The LUT.</p>

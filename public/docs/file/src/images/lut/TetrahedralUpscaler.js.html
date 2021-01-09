@@ -274,6 +274,11 @@ function tetrahedralSample(data, size, u, v, w, color) {
 	const py = v * (size - 1.0);
 	const pz = w * (size - 1.0);
 
+	// Get the UVW coordinates relative to the min and max pixels.
+	const su = px % 1;
+	const sv = py % 1;
+	const sw = pz % 1;
+
 	const minX = Math.floor(px);
 	const minY = Math.floor(py);
 	const minZ = Math.floor(pz);
@@ -290,27 +295,27 @@ function tetrahedralSample(data, size, u, v, w, color) {
 
 		let vertices;
 
-		if(u &gt;= v &amp;&amp; v &gt;= w) {
+		if(su &gt;= sv &amp;&amp; sv &gt;= sw) {
 
 			vertices = T[0];
 
-		} else if(u &gt;= w &amp;&amp; w &gt;= v) {
+		} else if(su &gt;= sw &amp;&amp; sw &gt;= sv) {
 
 			vertices = T[1];
 
-		} else if(w &gt;= u &amp;&amp; u &gt;= v) {
+		} else if(sw &gt;= su &amp;&amp; su &gt;= sv) {
 
 			vertices = T[2];
 
-		} else if(v &gt;= u &amp;&amp; u &gt;= w) {
+		} else if(sv &gt;= su &amp;&amp; su &gt;= sw) {
 
 			vertices = T[3];
 
-		} else if(v &gt;= w &amp;&amp; w &gt;= u) {
+		} else if(sv &gt;= sw &amp;&amp; sw &gt;= su) {
 
 			vertices = T[4];
 
-		} else if(w &gt;= v &amp;&amp; v &gt;= u) {
+		} else if(sw &gt;= sv &amp;&amp; sv &gt;= su) {
 
 			vertices = T[5];
 
@@ -319,7 +324,7 @@ function tetrahedralSample(data, size, u, v, w, color) {
 		const [P0, P1, P2, P3] = vertices;
 
 		const coords = P[0];
-		coords[0] = u; coords[1] = v; coords[2] = w;
+		coords[0] = su; coords[1] = sv; coords[2] = sw;
 
 		const tmp = P[1];
 		const diffX = maxX - minX;

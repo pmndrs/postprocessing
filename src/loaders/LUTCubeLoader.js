@@ -88,7 +88,7 @@ export class LUTCubeLoader extends Loader {
 
 		if(result === null) {
 
-			throw Error("Missing LUT_3D_SIZE information");
+			throw new Error("Missing LUT_3D_SIZE information");
 
 		}
 
@@ -117,7 +117,7 @@ export class LUTCubeLoader extends Loader {
 		if(domainMin.x !== 0 || domainMin.y !== 0 || domainMin.z !== 0 ||
 			domainMax.x !== 1 || domainMax.y !== 1 || domainMax.z !== 1) {
 
-			throw Error("Non-normalized input domain not supported");
+			throw new Error("Non-normalized input domain not supported");
 
 		}
 

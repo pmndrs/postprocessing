@@ -1,5 +1,5 @@
 import test from "ava";
-import { Selection } from "../../build/postprocessing.esm.js";
+import { Selection } from "../../";
 
 test("can be instantiated", t => {
 

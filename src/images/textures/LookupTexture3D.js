@@ -7,6 +7,7 @@ import {
 	LinearFilter,
 	LinearEncoding,
 	RGBFormat,
+	RGBAFormat,
 	sRGBEncoding,
 	UnsignedByteType
 } from "three";
@@ -47,6 +48,7 @@ export class LookupTexture3D extends DataTexture3D {
 		this.type = FloatType;
 		this.format = RGBFormat;
 		this.encoding = LinearEncoding;
+		this.minFilter = LinearFilter;
 		this.magFilter = LinearFilter;
 		this.wrapS = ClampToEdgeWrapping;
 		this.wrapT = ClampToEdgeWrapping;
@@ -56,7 +58,7 @@ export class LookupTexture3D extends DataTexture3D {
 	}
 
 	/**
-	 * Indicates that this is an instace of LookupTexture3D.
+	 * Indicates that this is an instance of LookupTexture3D.
 	 *
 	 * @type {Boolean}
 	 */
@@ -82,7 +84,7 @@ export class LookupTexture3D extends DataTexture3D {
 
 		if(size <= image.width) {
 
-			promise = Promise.reject(new Error("The target size must be larger than the current size"));
+			promise = Promise.reject(new Error("The target size must be greater than the current size"));
 
 		} else if(size > image.width) {
 
@@ -123,7 +125,7 @@ export class LookupTexture3D extends DataTexture3D {
 	/**
 	 * Applies the given LUT to this one.
 	 *
-	 * @param {LookupTexture3D} lut - A LUT. Must have the same dimensions and type as this LUT.
+	 * @param {LookupTexture3D} lut - A LUT. Must have the same dimensions, type and format as this LUT.
 	 * @return {LookupTexture3D} This texture.
 	 */
 
@@ -142,6 +144,10 @@ export class LookupTexture3D extends DataTexture3D {
 		} else if(lut.type !== FloatType || this.type !== FloatType) {
 
 			console.error("Both LUTs must be FloatType textures");
+
+		} else if(lut.format !== RGBFormat || this.format !== RGBFormat) {
+
+			console.error("Both LUTs must be RGB textures");
 
 		} else {
 
@@ -164,7 +170,11 @@ export class LookupTexture3D extends DataTexture3D {
 
 			}
 
+			this.needsUpdate = true;
+
 		}
+
+		return this;
 
 	}
 
@@ -192,6 +202,7 @@ export class LookupTexture3D extends DataTexture3D {
 
 			this.image.data = uint8Data;
 			this.type = UnsignedByteType;
+			this.needsUpdate = true;
 
 		}
 
@@ -220,6 +231,7 @@ export class LookupTexture3D extends DataTexture3D {
 
 			this.image.data = floatData;
 			this.type = FloatType;
+			this.needsUpdate = true;
 
 		}
 
@@ -239,13 +251,16 @@ export class LookupTexture3D extends DataTexture3D {
 
 		if(this.type === FloatType) {
 
-			for(let i = 0, l = data.length; i < l; i += 3) {
+			const stride = (this.format === RGBAFormat) ? 4 : 3;
+
+			for(let i = 0, l = data.length; i < l; i += stride) {
 
 				c.fromArray(data, i).convertLinearToSRGB().toArray(data, i);
 
 			}
 
 			this.encoding = sRGBEncoding;
+			this.needsUpdate = true;
 
 		} else {
 
@@ -269,17 +284,54 @@ export class LookupTexture3D extends DataTexture3D {
 
 		if(this.type === FloatType) {
 
-			for(let i = 0, l = data.length; i < l; i += 3) {
+			const stride = (this.format === RGBAFormat) ? 4 : 3;
+
+			for(let i = 0, l = data.length; i < l; i += stride) {
 
 				c.fromArray(data, i).convertSRGBToLinear().toArray(data, i);
 
 			}
 
 			this.encoding = LinearEncoding;
+			this.needsUpdate = true;
 
 		} else {
 
 			console.error("Color space conversion requires FloatType data");
+
+		}
+
+		return this;
+
+	}
+
+	/**
+	 * Converts the LUT data into RGBA data.
+	 *
+	 * @return {LookupTexture3D} This texture.
+	 */
+
+	convertToRGBA() {
+
+		if(this.format === RGBFormat) {
+
+			const size = this.image.width;
+			const rgbData = this.image.data;
+			const rgbaData = new rgbData.constructor(size ** 3 * 4);
+			const maxValue = (this.type === FloatType) ? 1.0 : 255;
+
+			for(let i = 0, j = 0, l = rgbData.length; i < l; i += 3, j += 4) {
+
+				rgbaData[j + 0] = rgbData[i + 0];
+				rgbaData[j + 1] = rgbData[i + 1];
+				rgbaData[j + 2] = rgbData[i + 2];
+				rgbaData[j + 3] = maxValue;
+
+			}
+
+			this.image.data = rgbaData;
+			this.format = RGBAFormat;
+			this.needsUpdate = true;
 
 		}
 
@@ -299,9 +351,11 @@ export class LookupTexture3D extends DataTexture3D {
 		const height = this.image.height * this.image.depth;
 
 		const texture = new DataTexture(this.image.data, width, height);
+		texture.name = this.name;
 		texture.type = this.type;
 		texture.format = this.format;
 		texture.encoding = this.encoding;
+		texture.minFilter = this.minFilter;
 		texture.magFilter = this.magFilter;
 		texture.wrapS = this.wrapS;
 		texture.wrapT = this.wrapT;

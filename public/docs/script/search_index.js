@@ -1914,6 +1914,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/effects/luteffect.js~luteffect#getoutputencoding",
+    "class/src/effects/LUTEffect.js~LUTEffect.html#instance-method-getOutputEncoding",
+    "src/effects/LUTEffect.js~LUTEffect#getOutputEncoding",
+    "method"
+  ],
+  [
     "src/effects/luteffect.js~luteffect#setinputencoding",
     "class/src/effects/LUTEffect.js~LUTEffect.html#instance-method-setInputEncoding",
     "src/effects/LUTEffect.js~LUTEffect#setInputEncoding",
@@ -2952,6 +2958,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/images/textures/lookuptexture3d.js~lookuptexture3d#converttorgba",
+    "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#instance-method-convertToRGBA",
+    "src/images/textures/LookupTexture3D.js~LookupTexture3D#convertToRGBA",
+    "method"
+  ],
+  [
     "src/images/textures/lookuptexture3d.js~lookuptexture3d#converttouint8",
     "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#instance-method-convertToUint8",
     "src/images/textures/LookupTexture3D.js~LookupTexture3D#convertToUint8",
@@ -2979,6 +2991,18 @@ window.esdocSearchIndex = [
     "src/images/textures/lookuptexture3d.js~lookuptexture3d#magfilter",
     "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#instance-member-magFilter",
     "src/images/textures/LookupTexture3D.js~LookupTexture3D#magFilter",
+    "member"
+  ],
+  [
+    "src/images/textures/lookuptexture3d.js~lookuptexture3d#minfilter",
+    "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#instance-member-minFilter",
+    "src/images/textures/LookupTexture3D.js~LookupTexture3D#minFilter",
+    "member"
+  ],
+  [
+    "src/images/textures/lookuptexture3d.js~lookuptexture3d#needsupdate",
+    "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#instance-member-needsUpdate",
+    "src/images/textures/LookupTexture3D.js~LookupTexture3D#needsUpdate",
     "member"
   ],
   [

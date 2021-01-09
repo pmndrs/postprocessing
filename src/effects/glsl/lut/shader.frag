@@ -18,7 +18,7 @@
 
 	#endif
 
-	vec4 applyLUT(vec3 rgb) {
+	vec4 applyLUT(const in vec3 rgb) {
 
 		return texture(lut, rgb);
 
@@ -44,46 +44,45 @@
 
 	#endif
 
-	vec4 applyLUT(vec3 rgb) {
+	vec4 applyLUT(const in vec3 rgb) {
 
-		// Prevent interpolation artifacts between adjacent slices.
-		rgb.xy = clamp(rgb.xy, LUT_HALF_TEXEL_SIZE, 1.0 - LUT_HALF_TEXEL_SIZE);
-
-		// Calculate the depth slice offset.
-		float zNormalized = rgb.z * LUT_SIZE;
-		float zSlice = min(floor(zNormalized), LUT_SIZE - 1.0);
-		float zMix = (zNormalized - zSlice) * LUT_TEXEL_SIZE;
-
-		// Get two LUT slices for interpolation.
-		float z1 = zSlice * LUT_TEXEL_SIZE;
-		float z2 = (zSlice + 1.0) * LUT_TEXEL_SIZE;
+		// Get the slices on either side of the sample.
+		float slice = rgb.b * LUT_SIZE;
+		float interp = fract(slice);
+		float slice0 = slice - interp;
+		float centeredInterp = interp - 0.5;
+		float slice1 = slice0 + sign(centeredInterp);
 
 		#ifdef LUT_STRIP_HORIZONTAL
 
-			// Common 2D LUTs extend horizontally.
-			float xOffset = rgb.x * LUT_TEXEL_SIZE;
-			vec2 uv1 = vec2(xOffset, rgb.y);
-			vec2 uv2 = vec2(uv1);
+			// Pull X in by half a texel in each direction to avoid slice bleeding.
+			float xOffset = clamp(
+				rgb.r * LUT_TEXEL_HEIGHT,
+				LUT_TEXEL_WIDTH * 0.5,
+				LUT_TEXEL_HEIGHT - LUT_TEXEL_WIDTH * 0.5
+			);
 
-			uv1.x += z1;
-			uv2.x += z2;
+			vec2 uv0 = vec2(slice0 * LUT_TEXEL_HEIGHT + xOffset, rgb.g);
+			vec2 uv1 = vec2(slice1 * LUT_TEXEL_HEIGHT + xOffset, rgb.g);
 
 		#else
 
-			// 3D LUTs extend vertically when used as 2D textures.
-			float yOffset = rgb.y * LUT_TEXEL_SIZE;
-			vec2 uv1 = vec2(rgb.x, yOffset);
-			vec2 uv2 = vec2(uv1);
+			// Pull Y in by half a texel in each direction to avoid slice bleeding.
+			float yOffset = clamp(
+				rgb.g * LUT_TEXEL_WIDTH,
+				LUT_TEXEL_HEIGHT * 0.5,
+				LUT_TEXEL_WIDTH - LUT_TEXEL_HEIGHT * 0.5
+			);
 
-			uv1.y += z1;
-			uv2.y += z2;
+			vec2 uv0 = vec2(rgb.r, slice0 * LUT_TEXEL_WIDTH + yOffset);
+			vec2 uv1 = vec2(rgb.r, slice1 * LUT_TEXEL_WIDTH + yOffset);
 
 		#endif
 
+		vec4 sample0 = texture2D(lut, uv0);
 		vec4 sample1 = texture2D(lut, uv1);
-		vec4 sample2 = texture2D(lut, uv2);
 
-		return mix(sample1, sample2, zMix);
+		return mix(sample0, sample1, abs(centeredInterp));
 
 	}
 
@@ -92,7 +91,15 @@
 void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
 
 	vec3 c = linearToInputTexel(inputColor).rgb;
-	c = texelToLinear(applyLUT(c)).rgb;
+
+	#ifndef LUT_3D
+
+		c = clamp(c, 0.0, 1.0);
+
+	#endif
+
+	// Apply scale/offset to prevent nonlinearities near the LUT's edges.
+	c = texelToLinear(applyLUT(COORD_SCALE * c + COORD_OFFSET)).rgb;
 	outputColor = vec4(c, inputColor.a);
 
 }
