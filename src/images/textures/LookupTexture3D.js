@@ -125,7 +125,7 @@ export class LookupTexture3D extends DataTexture3D {
 	/**
 	 * Applies the given LUT to this one.
 	 *
-	 * @param {LookupTexture3D} lut - A LUT. Must have the same dimensions and type as this LUT.
+	 * @param {LookupTexture3D} lut - A LUT. Must have the same dimensions, type and format as this LUT.
 	 * @return {LookupTexture3D} This texture.
 	 */
 
