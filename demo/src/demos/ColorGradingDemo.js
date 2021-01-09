@@ -371,26 +371,37 @@ export class ColorGradingDemo extends PostProcessingDemo {
 			lut: {
 				"LUT": lutEffect.getLUT().name,
 				"base size": lutEffect.getLUT().image.width,
+				"3D texture": true,
 				"scale up": false,
-				"target size": 32,
+				"target size": 48,
 				"show LUT": false,
 				"opacity": lutEffect.blendMode.opacity.value,
 				"blend mode": lutEffect.blendMode.blendFunction
 			}
 		};
 
-		function updateLUTPreview() {
+		let objectURL = null;
 
-			const img = document.querySelector(".lut");
+		const img = document.querySelector(".lut");
+		img.addEventListener("load", () => URL.revokeObjectURL(objectURL));
+
+		function updateLUTPreview() {
 
 			if(params.lut["show LUT"]) {
 
+				// This is pretty fast.
 				const lut = LookupTexture3D.from(lutEffect.getLUT());
 				const image = lut.convertToUint8().convertToRGBA().toDataTexture().image;
-
 				const rawImageData = RawImageData.from(image);
-				img.src = rawImageData.toCanvas().toDataURL();
-				img.classList.remove("hidden");
+
+				// This takes a while if the image is large.
+				rawImageData.toCanvas().toBlob((blob) => {
+
+					objectURL = URL.createObjectURL(blob);
+					img.src = objectURL;
+					img.classList.remove("hidden");
+
+				});
 
 			} else {
 
@@ -438,7 +449,7 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 				if(capabilities.isWebGL2) {
 
-					lutEffect.setLUT(lut);
+					lutEffect.setLUT(params.lut["3D texture"] ? lut : lut.toDataTexture());
 
 				} else {
 
@@ -545,6 +556,12 @@ export class ColorGradingDemo extends PostProcessingDemo {
 		f.add(params.lut, "LUT", [...luts.keys()]).onChange(changeLUT);
 
 		infoOptions.push(f.add(params.lut, "base size").listen());
+
+		if(capabilities.isWebGL2) {
+
+			f.add(params.lut, "3D texture").onChange(changeLUT);
+
+		}
 
 		f.add(params.lut, "scale up").onChange(changeLUT);
 		f.add(params.lut, "target size", [32, 48, 64, 96, 128]).onChange(changeLUT);
