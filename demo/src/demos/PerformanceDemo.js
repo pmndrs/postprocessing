@@ -30,6 +30,8 @@ import {
 	GridEffect,
 	HueSaturationEffect,
 	KernelSize,
+	LookupTexture3D,
+	LUTEffect,
 	NoiseEffect,
 	SepiaEffect,
 	ScanlineEffect,
@@ -220,6 +222,8 @@ export class PerformanceDemo extends PostProcessingDemo {
 		const scene = this.scene;
 		const assets = this.assets;
 		const composer = this.composer;
+		const renderer = composer.getRenderer();
+		const capabilities = renderer.capabilities;
 
 		// Camera.
 
@@ -235,8 +239,8 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 		// Lights.
 
-		const ambientLight = new AmbientLight(0x212121);
-		const pointLight = new PointLight(0xffbbaa, 50, 12);
+		const ambientLight = new AmbientLight(0x323232);
+		const pointLight = new PointLight(0xffbbaa, 80, 12);
 
 		this.light = pointLight;
 		scene.add(ambientLight, pointLight);
@@ -342,8 +346,12 @@ export class PerformanceDemo extends PostProcessingDemo {
 		const noiseEffect = new NoiseEffect({ premultiply: true });
 		const vignetteEffect = new VignetteEffect();
 
+		const lut = LookupTexture3D.createNeutral(8);
+		const lutEffect = capabilities.isWebGL2 ? new LUTEffect(lut) :
+			new LUTEffect(lut.convertToUint8().toDataTexture());
+
 		const toneMappingEffect = new ToneMappingEffect({
-			mode: ToneMappingMode.ACES_FILMIC
+			mode: ToneMappingMode.REINHARD2_ADAPTIVE
 		});
 
 		colorAverageEffect.blendMode.opacity.value = 0.01;
@@ -369,7 +377,8 @@ export class PerformanceDemo extends PostProcessingDemo {
 			textureEffect,
 			noiseEffect,
 			vignetteEffect,
-			toneMappingEffect
+			toneMappingEffect,
+			lutEffect
 		];
 
 		// Merge all effects into one pass.
