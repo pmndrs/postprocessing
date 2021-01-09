@@ -20,6 +20,6 @@ test("generates accurate data", t => {
 
 	}
 
-	t.true(matches, "Should match a neutral LUT of size 32");
+	t.true(matches);
 
 });
