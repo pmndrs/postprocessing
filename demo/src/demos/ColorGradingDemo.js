@@ -302,7 +302,7 @@ export class ColorGradingDemo extends PostProcessingDemo {
 		lutNeutral8.name = "neutral-8";
 		assets.set(lutNeutral8.name, lutNeutral8);
 
-		const lut = LookupTexture3D.from(assets.get("neutral-2"));
+		const lut = LookupTexture3D.from(assets.get("png/filmic1"));
 
 		const lutEffect = capabilities.isWebGL2 ? new LUTEffect(lut) :
 			new LUTEffect(lut.convertToUint8().toDataTexture());
