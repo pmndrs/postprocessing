@@ -103,30 +103,22 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 		this.luts = new Map([
 			["neutral-2", null],
+			["neutral-4", null],
 			["neutral-8", null],
-			["bleach-bypass", "lut-bleach-bypass.png"],
-			["candle-light", "lut-candle-light.png"],
-			["cool-contrast", "lut-cool-contrast.png"],
-			["warm-contrast", "lut-warm-contrast.png"],
-			["desaturated-fog", "lut-desaturated-fog.png"],
-			["evening", "lut-evening.png"],
-			["fall", "lut-fall.png"],
-			["filmic1", "lut-filmic1.png"],
-			["filmic2", "lut-filmic2.png"],
-			["filmic3", "lut-filmic3.png"],
-			["filmic4", "lut-filmic4.png"],
-			["filmic5", "lut-filmic5.png"],
-			["filmic6", "lut-filmic6.png"],
-			["filmic7", "lut-filmic7.png"],
-			["filmic8", "lut-filmic8.png"],
-			["filmic9", "lut-filmic9.png"],
-			["matrix-blue", "lut-matrix-blue.png"],
-			["matrix-green", "lut-matrix-green.png"],
-			["night1", "lut-night1.png"],
-			["night2", "lut-night2.png"],
-			["night-dark", "lut-night-dark.png"],
-			["cinematic-3dl", "lut-presetpro-cinematic.3dl"],
-			["cinematic-cube", "lut-presetpro-cinematic.cube"]
+			["png/bleach-bypass", "png/bleach-bypass.png"],
+			["png/candle-light", "png/candle-light.png"],
+			["png/cool-contrast", "png/cool-contrast.png"],
+			["png/warm-contrast", "png/warm-contrast.png"],
+			["png/desaturated-fog", "png/desaturated-fog.png"],
+			["png/evening", "png/evening.png"],
+			["png/fall", "png/fall.png"],
+			["png/filmic1", "png/filmic1.png"],
+			["png/filmic2", "png/filmic2.png"],
+			["png/matrix-green", "png/matrix-green.png"],
+			["png/strong-amber", "png/strong-amber.png"],
+			["3dl/cinematic", "3dl/presetpro-cinematic.3dl"],
+			["cube/cinematic", "cube/presetpro-cinematic.cube"],
+			["cube/django-25", "cube/django-25.cube"]
 		]);
 
 	}
@@ -301,6 +293,10 @@ export class ColorGradingDemo extends PostProcessingDemo {
 		const lutNeutral2 = LookupTexture3D.createNeutral(2);
 		lutNeutral2.name = "neutral-2";
 		assets.set(lutNeutral2.name, lutNeutral2);
+
+		const lutNeutral4 = LookupTexture3D.createNeutral(4);
+		lutNeutral4.name = "neutral-4";
+		assets.set(lutNeutral4.name, lutNeutral4);
 
 		const lutNeutral8 = LookupTexture3D.createNeutral(8);
 		lutNeutral8.name = "neutral-8";
