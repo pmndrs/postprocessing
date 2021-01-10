@@ -32,7 +32,7 @@ vec3 Reinhard2ToneMapping(vec3 color) {
 	float lumCompressed = lumScaled * (1.0 + lumScaled / (whitePoint * whitePoint));
 	lumCompressed /= (1.0 + lumScaled);
 
-	return lumCompressed * color;
+	return clamp(lumCompressed * color, 0.0, 1.0);
 
 }
 
