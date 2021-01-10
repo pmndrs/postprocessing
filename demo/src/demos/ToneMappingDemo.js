@@ -149,7 +149,7 @@ export class ToneMappingDemo extends PostProcessingDemo {
 		const toneMappingEffect = new ToneMappingEffect({
 			mode: ToneMappingMode.REINHARD2_ADAPTIVE,
 			resolution: 256,
-			whitePoint: 4.0,
+			whitePoint: 16.0,
 			middleGrey: 0.6,
 			minLuminance: 0.01,
 			averageLuminance: 0.01,
@@ -157,9 +157,7 @@ export class ToneMappingDemo extends PostProcessingDemo {
 		});
 
 		this.effect = toneMappingEffect;
-
-		const pass = new EffectPass(camera, smaaEffect, toneMappingEffect);
-		composer.addPass(pass);
+		composer.addPass(new EffectPass(camera, smaaEffect, toneMappingEffect));
 
 	}
 
@@ -171,6 +169,7 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
+		const renderer = this.composer.getRenderer();
 		const effect = this.effect;
 		const blendMode = effect.blendMode;
 		const adaptiveLuminancePass = effect.adaptiveLuminancePass;
@@ -178,7 +177,7 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 		const params = {
 			"mode": effect.getMode(),
-			"exposure": 1.0,
+			"exposure": renderer.toneMappingExposure,
 			"resolution": effect.resolution,
 			"white point": effect.uniforms.get("whitePoint").value,
 			"middle grey": effect.uniforms.get("middleGrey").value,
@@ -197,13 +196,13 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 		menu.add(params, "exposure").min(0.0).max(2.0).step(0.001).onChange(() => {
 
-			effect.uniforms.get("toneMappingExposure").value = params.exposure;
+			renderer.toneMappingExposure = params.exposure;
 
 		});
 
 		let f = menu.addFolder("Reinhard (Modified)");
 
-		f.add(params, "white point").min(1.0).max(16.0).step(0.01).onChange(() => {
+		f.add(params, "white point").min(2.0).max(32.0).step(0.01).onChange(() => {
 
 			effect.uniforms.get("whitePoint").value = params["white point"];
 
