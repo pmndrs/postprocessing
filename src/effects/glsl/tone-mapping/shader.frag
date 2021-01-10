@@ -22,7 +22,6 @@ vec3 Reinhard2ToneMapping(vec3 color) {
 
 		// Get the average luminance from the adaptive 1x1 buffer.
 		float lumAvg = texture2D(luminanceBuffer, vec2(0.5)).r;
-		lumAvg = max(lumAvg, 1e-6);
 
 	#else
 
@@ -30,7 +29,7 @@ vec3 Reinhard2ToneMapping(vec3 color) {
 
 	#endif
 
-	float lumScaled = (l * middleGrey) / lumAvg;
+	float lumScaled = (l * middleGrey) / max(lumAvg, 1e-6);
 	float lumCompressed = lumScaled * (1.0 + lumScaled / (whitePoint * whitePoint));
 	lumCompressed /= (1.0 + lumScaled);
 
