@@ -1,7 +1,6 @@
 #include <tonemapping_pars_fragment>
 
 uniform sampler2D luminanceBuffer;
-uniform float toneMappingExposure;
 uniform float whitePoint;
 uniform float middleGrey;
 
