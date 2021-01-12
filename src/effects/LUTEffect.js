@@ -313,34 +313,26 @@ export class LUTEffect extends Effect {
 	configureTetrahedralInterpolation() {
 
 		const lut = this.getLUT();
+		lut.minFilter = LinearFilter;
+		lut.magFilter = LinearFilter;
 
-		if(this.tetrahedralInterpolation) {
+		this.defines.delete("TETRAHEDRAL_INTERPOLATION");
 
-			this.defines.set("TETRAHEDRAL_INTERPOLATION", "1");
+		if(this.tetrahedralInterpolation && lut !== null) {
 
-			if(lut !== null) {
+			if(lut instanceof DataTexture3D) {
 
-				if(lut instanceof DataTexture3D) {
+				this.defines.set("TETRAHEDRAL_INTERPOLATION", "1");
 
-					// Interpolate samples manually.
-					lut.minFilter = NearestFilter;
-					lut.magFilter = NearestFilter;
+				// Interpolate samples manually.
+				lut.minFilter = NearestFilter;
+				lut.magFilter = NearestFilter;
 
-				} else {
+			} else {
 
-					console.warn("Tetrahedral interpolation requires a 3D texture");
-
-				}
+				console.warn("Tetrahedral interpolation requires a 3D texture");
 
 			}
-
-		} else {
-
-			this.defines.delete("TETRAHEDRAL_INTERPOLATION");
-
-			// Use hardware interpolation.
-			lut.minFilter = LinearFilter;
-			lut.magFilter = LinearFilter;
 
 		}
 
