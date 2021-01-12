@@ -97,10 +97,10 @@ uniform vec3 offset;
 			}
 
 			// Interpolate manually to avoid 8-bit quantization of fractions.
-			vec3 sample1 = texture(lut, v1).rgb;
-			vec3 sample2 = texture(lut, v2).rgb;
-			vec3 sample3 = texture(lut, v3).rgb;
-			vec3 sample4 = texture(lut, v4).rgb;
+			vec4 n1 = texture(lut, v1);
+			vec4 n2 = texture(lut, v2);
+			vec4 n3 = texture(lut, v3);
+			vec4 n4 = texture(lut, v4);
 
 			vec4 weights = vec4(
 				1.0 - frac.x,
@@ -109,14 +109,15 @@ uniform vec3 offset;
 				frac.z
 			);
 
-			vec3 result = (
-				weights.x * sample1 +
-				weights.y * sample2 +
-				weights.z * sample3 +
-				weights.w * sample4
+			// weights.x * n1 + weights.y * n2 + weights.z * n3 + weights.w * n4
+			vec4 result = weights * mat4(
+				vec4(n1.r, n2.r, n3.r, n4.r),
+				vec4(n1.g, n2.g, n3.g, n4.g),
+				vec4(n1.b, n2.b, n3.b, n4.b),
+				vec4(1.0)
 			);
 
-			return vec4(result, 1.0);
+			return vec4(result.rgb, 1.0);
 
 		#else
 
@@ -154,8 +155,8 @@ uniform vec3 offset;
 
 		// Get the slices on either side of the sample.
 		float slice = rgb.b * LUT_SIZE;
-		float interp = fract(slice);
-		float slice0 = slice - interp;
+		float slice0 = floor(slice);
+		float interp = slice - slice0;
 		float centeredInterp = interp - 0.5;
 		float slice1 = slice0 + sign(centeredInterp);
 
