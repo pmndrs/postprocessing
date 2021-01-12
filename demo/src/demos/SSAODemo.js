@@ -126,14 +126,14 @@ export class SSAODemo extends PostProcessingDemo {
 		const renderer = composer.getRenderer();
 		const capabilities = renderer.capabilities;
 
-		// Camera.
+		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
 		const camera = new PerspectiveCamera(50, aspect, 0.5, 1000);
 		camera.position.set(9.45, 1.735, 0.75);
 		this.camera = camera;
 
-		// Controls.
+		// Controls
 
 		const target = new Vector3(8.45, 1.65, 0.6);
 		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
@@ -145,19 +145,19 @@ export class SSAODemo extends PostProcessingDemo {
 		controls.setOrbitEnabled(false);
 		this.controls = controls;
 
-		// Sky.
+		// Sky
 
 		scene.background = new Color(0xeeeeee);
 
-		// Lights.
+		// Lights
 
 		scene.add(...Sponza.createLights());
 
-		// Objects.
+		// Objects
 
 		scene.add(assets.get(Sponza.tag));
 
-		// Passes.
+		// Passes
 
 		const normalPass = new NormalPass(scene, camera);
 		const depthDownsamplingPass = new DepthDownsamplingPass({
@@ -313,10 +313,10 @@ export class SSAODemo extends PostProcessingDemo {
 
 		}
 
-		menu.add(params, "resolution").min(0.25).max(1.0).step(0.25).onChange(() => {
+		menu.add(params, "resolution").min(0.25).max(1.0).step(0.25).onChange((value) => {
 
-			ssaoEffect.resolution.scale = params.resolution;
-			depthDownsamplingPass.resolution.scale = params.resolution;
+			ssaoEffect.resolution.scale = value;
+			depthDownsamplingPass.resolution.scale = value;
 
 		});
 
@@ -326,15 +326,15 @@ export class SSAODemo extends PostProcessingDemo {
 
 		let f = menu.addFolder("Distance Scaling");
 
-		f.add(params.distanceScaling, "enabled").onChange(() => {
+		f.add(params.distanceScaling, "enabled").onChange((value) => {
 
-			ssaoEffect.distanceScaling = params.distanceScaling.enabled;
+			ssaoEffect.distanceScaling = value.enabled;
 
 		});
 
-		f.add(params.distanceScaling, "min scale").min(0.0).max(1.0).step(0.001).onChange(() => {
+		f.add(params.distanceScaling, "min scale").min(0.0).max(1.0).step(0.001).onChange((value) => {
 
-			uniforms.minRadiusScale.value = params.distanceScaling["min scale"];
+			uniforms.minRadiusScale.value = value;
 
 		});
 
@@ -342,16 +342,16 @@ export class SSAODemo extends PostProcessingDemo {
 
 			f = menu.addFolder("Depth-Aware Upsampling");
 
-			f.add(params.upsampling, "enabled").onChange(() => {
+			f.add(params.upsampling, "enabled").onChange((value) => {
 
-				ssaoEffect.depthAwareUpsampling = params.upsampling.enabled;
+				ssaoEffect.depthAwareUpsampling = value;
 
 			});
 
-			f.add(params.upsampling, "threshold").min(0.0).max(1.0).step(0.001).onChange(() => {
+			f.add(params.upsampling, "threshold").min(0.0).max(1.0).step(0.001).onChange((value) => {
 
 				// Note: This threshold is not really supposed to be changed.
-				ssaoEffect.defines.set("THRESHOLD", params.upsampling.threshold.toFixed(3));
+				ssaoEffect.defines.set("THRESHOLD", value.toFixed(3));
 				effectPass.recompile();
 
 			});
@@ -360,72 +360,72 @@ export class SSAODemo extends PostProcessingDemo {
 
 		f = menu.addFolder("Distance Cutoff");
 
-		f.add(params.distance, "threshold").min(0.0).max(1.0).step(0.0001).onChange(() => {
+		f.add(params.distance, "threshold").min(0.0).max(1.0).step(0.0001).onChange((value) => {
 
-			ssaoEffect.setDistanceCutoff(params.distance.threshold, params.distance.falloff);
+			ssaoEffect.setDistanceCutoff(value, params.distance.falloff);
 
 		});
 
-		f.add(params.distance, "falloff").min(0.0).max(1.0).step(0.0001).onChange(() => {
+		f.add(params.distance, "falloff").min(0.0).max(1.0).step(0.0001).onChange((value) => {
 
-			ssaoEffect.setDistanceCutoff(params.distance.threshold, params.distance.falloff);
+			ssaoEffect.setDistanceCutoff(params.distance.threshold, value);
 
 		});
 
 		f = menu.addFolder("Proximity Cutoff");
 
-		f.add(params.proximity, "threshold").min(0.0).max(0.01).step(0.0001).onChange(() => {
+		f.add(params.proximity, "threshold").min(0.0).max(0.01).step(0.0001).onChange((value) => {
 
-			ssaoEffect.setProximityCutoff(params.proximity.threshold, params.proximity.falloff);
-
-		});
-
-		f.add(params.proximity, "falloff").min(0.0).max(0.01).step(0.0001).onChange(() => {
-
-			ssaoEffect.setProximityCutoff(params.proximity.threshold, params.proximity.falloff);
+			ssaoEffect.setProximityCutoff(value, params.proximity.falloff);
 
 		});
 
-		menu.add(params, "bias").min(0.0).max(1.0).step(0.001).onChange(() => {
+		f.add(params.proximity, "falloff").min(0.0).max(0.01).step(0.0001).onChange((value) => {
 
-			uniforms.bias.value = params.bias;
-
-		});
-
-		menu.add(params, "fade").min(0.0).max(1.0).step(0.001).onChange(() => {
-
-			uniforms.fade.value = params.fade;
+			ssaoEffect.setProximityCutoff(params.proximity.threshold, value);
 
 		});
 
-		menu.add(params, "lum influence").min(0.0).max(1.0).step(0.001).onChange(() => {
+		menu.add(params, "bias").min(0.0).max(1.0).step(0.001).onChange((value) => {
 
-			ssaoEffect.uniforms.get("luminanceInfluence").value = params["lum influence"];
-
-		});
-
-		menu.add(params, "intensity").min(1.0).max(4.0).step(0.01).onChange(() => {
-
-			uniforms.intensity.value = params.intensity;
+			uniforms.bias.value = value;
 
 		});
 
-		menu.addColor(params, "color").onChange(() => {
+		menu.add(params, "fade").min(0.0).max(1.0).step(0.001).onChange((value) => {
 
-			ssaoEffect.color = (params.color === 0x000000) ? null :
-				color.setHex(params.color).convertSRGBToLinear();
-
-		});
-
-		menu.add(params, "opacity").min(0.0).max(1.0).step(0.001).onChange(() => {
-
-			blendMode.opacity.value = params.opacity;
+			uniforms.fade.value = value;
 
 		});
 
-		menu.add(params, "blend mode", BlendFunction).onChange(() => {
+		menu.add(params, "lum influence").min(0.0).max(1.0).step(0.001).onChange((value) => {
 
-			blendMode.setBlendFunction(Number(params["blend mode"]));
+			ssaoEffect.uniforms.get("luminanceInfluence").value = value;
+
+		});
+
+		menu.add(params, "intensity").min(1.0).max(4.0).step(0.01).onChange((value) => {
+
+			uniforms.intensity.value = value;
+
+		});
+
+		menu.addColor(params, "color").onChange((value) => {
+
+			ssaoEffect.color = (value === 0x000000) ? null :
+				color.setHex(value).convertSRGBToLinear();
+
+		});
+
+		menu.add(params, "opacity").min(0.0).max(1.0).step(0.001).onChange((value) => {
+
+			blendMode.opacity.value = value;
+
+		});
+
+		menu.add(params, "blend mode", BlendFunction).onChange((value) => {
+
+			blendMode.setBlendFunction(Number(value));
 
 		});
 

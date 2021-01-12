@@ -114,14 +114,14 @@ export class PatternDemo extends PostProcessingDemo {
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
 
-		// Camera.
+		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
 		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
 		camera.position.set(-9, 0.5, 0);
 		this.camera = camera;
 
-		// Controls.
+		// Controls
 
 		const target = new Vector3(0, 3, -3.5);
 		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
@@ -133,19 +133,19 @@ export class PatternDemo extends PostProcessingDemo {
 		controls.setOrbitEnabled(false);
 		this.controls = controls;
 
-		// Sky.
+		// Sky
 
 		scene.background = new Color(0xeeeeee);
 
-		// Lights.
+		// Lights
 
 		scene.add(...Sponza.createLights());
 
-		// Objects.
+		// Objects
 
 		scene.add(assets.get(Sponza.tag));
 
-		// Passes.
+		// Passes
 
 		const smaaEffect = new SMAAEffect(
 			assets.get("smaa-search"),
@@ -225,27 +225,27 @@ export class PatternDemo extends PostProcessingDemo {
 
 		let folder = menu.addFolder("Dot Screen");
 
-		folder.add(params.dotScreen, "angle").min(0.0).max(Math.PI).step(0.001).onChange(() => {
+		folder.add(params.dotScreen, "angle").min(0.0).max(Math.PI).step(0.001).onChange((value) => {
 
-			dotScreenEffect.setAngle(params.dotScreen.angle);
-
-		});
-
-		folder.add(params.dotScreen, "scale").min(0.0).max(1.0).step(0.01).onChange(() => {
-
-			dotScreenEffect.uniforms.get("scale").value = params.dotScreen.scale;
+			dotScreenEffect.setAngle(value);
 
 		});
 
-		folder.add(params.dotScreen, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
+		folder.add(params.dotScreen, "scale").min(0.0).max(1.0).step(0.01).onChange((value) => {
 
-			dotScreenEffect.blendMode.opacity.value = params.dotScreen.opacity;
+			dotScreenEffect.uniforms.get("scale").value = value;
 
 		});
 
-		folder.add(params.dotScreen, "blend mode", BlendFunction).onChange(() => {
+		folder.add(params.dotScreen, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
 
-			dotScreenEffect.blendMode.setBlendFunction(Number(params.dotScreen["blend mode"]));
+			dotScreenEffect.blendMode.opacity.value = value;
+
+		});
+
+		folder.add(params.dotScreen, "blend mode", BlendFunction).onChange((value) => {
+
+			dotScreenEffect.blendMode.setBlendFunction(Number(value));
 
 		});
 
@@ -253,27 +253,27 @@ export class PatternDemo extends PostProcessingDemo {
 
 		folder = menu.addFolder("Grid");
 
-		folder.add(params.grid, "scale").min(0.01).max(3.0).step(0.01).onChange(() => {
+		folder.add(params.grid, "scale").min(0.01).max(3.0).step(0.01).onChange((value) => {
 
-			gridEffect.setScale(params.grid.scale);
-
-		});
-
-		folder.add(params.grid, "line width").min(0.0).max(1.0).step(0.01).onChange(() => {
-
-			gridEffect.setLineWidth(params.grid["line width"]);
+			gridEffect.setScale(value);
 
 		});
 
-		folder.add(params.grid, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
+		folder.add(params.grid, "line width").min(0.0).max(1.0).step(0.01).onChange((value) => {
 
-			gridEffect.blendMode.opacity.value = params.grid.opacity;
+			gridEffect.setLineWidth(value);
 
 		});
 
-		folder.add(params.grid, "blend mode", BlendFunction).onChange(() => {
+		folder.add(params.grid, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
 
-			gridEffect.blendMode.setBlendFunction(Number(params.grid["blend mode"]));
+			gridEffect.blendMode.opacity.value = value;
+
+		});
+
+		folder.add(params.grid, "blend mode", BlendFunction).onChange((value) => {
+
+			gridEffect.blendMode.setBlendFunction(Number(value));
 
 		});
 
@@ -281,21 +281,21 @@ export class PatternDemo extends PostProcessingDemo {
 
 		folder = menu.addFolder("Scanline");
 
-		folder.add(params.scanline, "density").min(0.001).max(2.0).step(0.001).onChange(() => {
+		folder.add(params.scanline, "density").min(0.001).max(2.0).step(0.001).onChange((value) => {
 
-			scanlineEffect.setDensity(params.scanline.density);
-
-		});
-
-		folder.add(params.scanline, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
-
-			scanlineEffect.blendMode.opacity.value = params.scanline.opacity;
+			scanlineEffect.setDensity(value);
 
 		});
 
-		folder.add(params.scanline, "blend mode", BlendFunction).onChange(() => {
+		folder.add(params.scanline, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
 
-			scanlineEffect.blendMode.setBlendFunction(Number(params.scanline["blend mode"]));
+			scanlineEffect.blendMode.opacity.value = value;
+
+		});
+
+		folder.add(params.scanline, "blend mode", BlendFunction).onChange((value) => {
+
+			scanlineEffect.blendMode.setBlendFunction(Number(value));
 
 		});
 

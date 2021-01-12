@@ -104,14 +104,14 @@ export class ToneMappingDemo extends PostProcessingDemo {
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
 
-		// Camera.
+		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
 		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
 		camera.position.set(-5.15, 8.1, -0.95);
 		this.camera = camera;
 
-		// Controls.
+		// Controls
 
 		const target = new Vector3(-4.4, 8.6, -0.5);
 		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
@@ -123,19 +123,19 @@ export class ToneMappingDemo extends PostProcessingDemo {
 		controls.setOrbitEnabled(false);
 		this.controls = controls;
 
-		// Sky.
+		// Sky
 
 		scene.background = new Color(0xeeeeee);
 
-		// Lights.
+		// Lights
 
 		scene.add(...Sponza.createLights());
 
-		// Objects.
+		// Objects
 
 		scene.add(assets.get(Sponza.tag));
 
-		// Passes.
+		// Passes
 
 		const smaaEffect = new SMAAEffect(
 			assets.get("smaa-search"),
@@ -188,35 +188,35 @@ export class ToneMappingDemo extends PostProcessingDemo {
 			"blend mode": blendMode.blendFunction
 		};
 
-		menu.add(params, "mode", ToneMappingMode).onChange(() => {
+		menu.add(params, "mode", ToneMappingMode).onChange((value) => {
 
-			effect.setMode(Number(params.mode));
+			effect.setMode(Number(value));
 
 		});
 
-		menu.add(params, "exposure").min(0.0).max(2.0).step(0.001).onChange(() => {
+		menu.add(params, "exposure").min(0.0).max(2.0).step(0.001).onChange((value) => {
 
-			renderer.toneMappingExposure = params.exposure;
+			renderer.toneMappingExposure = value;
 
 		});
 
 		let f = menu.addFolder("Reinhard (Modified)");
 
-		f.add(params, "white point").min(2.0).max(32.0).step(0.01).onChange(() => {
+		f.add(params, "white point").min(2.0).max(32.0).step(0.01).onChange((value) => {
 
-			effect.uniforms.get("whitePoint").value = params["white point"];
-
-		});
-
-		f.add(params, "middle grey").min(0.0).max(1.0).step(0.0001).onChange(() => {
-
-			effect.uniforms.get("middleGrey").value = params["middle grey"];
+			effect.uniforms.get("whitePoint").value = value;
 
 		});
 
-		f.add(params, "average lum").min(0.0001).max(1.0).step(0.0001).onChange(() => {
+		f.add(params, "middle grey").min(0.0).max(1.0).step(0.0001).onChange((value) => {
 
-			effect.uniforms.get("averageLuminance").value = params["average lum"];
+			effect.uniforms.get("middleGrey").value = value;
+
+		});
+
+		f.add(params, "average lum").min(0.0001).max(1.0).step(0.0001).onChange((value) => {
+
+			effect.uniforms.get("averageLuminance").value = value;
 
 		});
 
@@ -224,35 +224,35 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 		f = menu.addFolder("Reinhard (Adaptive)");
 
-		f.add(params, "resolution", [64, 128, 256, 512]).onChange(() => {
+		f.add(params, "resolution", [64, 128, 256, 512]).onChange((value) => {
 
-			effect.resolution = Number(params.resolution);
-
-		});
-
-		f.add(params, "adaptation rate").min(0.001).max(3.0).step(0.001).onChange(() => {
-
-			adaptiveLuminancePass.adaptationRate = params["adaptation rate"];
+			effect.resolution = Number(value);
 
 		});
 
-		f.add(params, "min lum").min(0.001).max(1.0).step(0.001).onChange(() => {
+		f.add(params, "adaptation rate").min(0.001).max(3.0).step(0.001).onChange((value) => {
 
-			adaptiveLuminanceMaterial.uniforms.minLuminance.value = params["min lum"];
+			adaptiveLuminancePass.adaptationRate = value;
+
+		});
+
+		f.add(params, "min lum").min(0.001).max(1.0).step(0.001).onChange((value) => {
+
+			adaptiveLuminanceMaterial.uniforms.minLuminance.value = value;
 
 		});
 
 		f.open();
 
-		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
+		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
 
-			blendMode.opacity.value = params.opacity;
+			blendMode.opacity.value = value;
 
 		});
 
-		menu.add(params, "blend mode", BlendFunction).onChange(() => {
+		menu.add(params, "blend mode", BlendFunction).onChange((value) => {
 
-			blendMode.setBlendFunction(Number(params["blend mode"]));
+			blendMode.setBlendFunction(Number(value));
 
 		});
 

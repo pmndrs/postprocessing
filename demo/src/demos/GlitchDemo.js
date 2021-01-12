@@ -137,14 +137,14 @@ export class GlitchDemo extends PostProcessingDemo {
 
 		}
 
-		// Camera.
+		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
 		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
 		camera.position.set(-9, 0.5, 0);
 		this.camera = camera;
 
-		// Controls.
+		// Controls
 
 		const target = new Vector3(0, 3, -3.5);
 		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
@@ -156,19 +156,19 @@ export class GlitchDemo extends PostProcessingDemo {
 		controls.setOrbitEnabled(false);
 		this.controls = controls;
 
-		// Sky.
+		// Sky
 
 		scene.background = new Color(0xeeeeee);
 
-		// Lights.
+		// Lights
 
 		scene.add(...Sponza.createLights());
 
-		// Objects.
+		// Objects
 
 		scene.add(assets.get(Sponza.tag));
 
-		// Passes.
+		// Passes
 
 		const smaaEffect = new SMAAEffect(
 			assets.get("smaa-search"),
@@ -232,15 +232,15 @@ export class GlitchDemo extends PostProcessingDemo {
 			"columns": uniforms.get("columns").value
 		};
 
-		menu.add(params, "glitch mode", GlitchMode).onChange(() => {
+		menu.add(params, "glitch mode", GlitchMode).onChange((value) => {
 
-			effect.mode = Number(params["glitch mode"]);
+			effect.mode = Number(value);
 
 		});
 
-		menu.add(params, "custom pattern").onChange(() => {
+		menu.add(params, "custom pattern").onChange((value) => {
 
-			if(params["custom pattern"]) {
+			if(value) {
 
 				effect.setPerturbationMap(perturbationMap);
 
@@ -252,55 +252,55 @@ export class GlitchDemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(params, "min delay").min(0.0).max(2.0).step(0.001).onChange(() => {
+		menu.add(params, "min delay").min(0.0).max(2.0).step(0.001).onChange((value) => {
 
-			delay.x = params["min delay"];
-
-		});
-
-		menu.add(params, "max delay").min(2.0).max(4.0).step(0.001).onChange(() => {
-
-			delay.y = params["max delay"];
+			delay.x = value;
 
 		});
 
-		menu.add(params, "min duration").min(0.0).max(0.6).step(0.001).onChange(() => {
+		menu.add(params, "max delay").min(2.0).max(4.0).step(0.001).onChange((value) => {
 
-			duration.x = params["min duration"];
+			delay.y = value;
 
 		});
 
-		menu.add(params, "max duration").min(0.6).max(1.8).step(0.001).onChange(() => {
+		menu.add(params, "min duration").min(0.0).max(0.6).step(0.001).onChange((value) => {
 
-			duration.y = params["max duration"];
+			duration.x = value;
+
+		});
+
+		menu.add(params, "max duration").min(0.6).max(1.8).step(0.001).onChange((value) => {
+
+			duration.y = value;
 
 		});
 
 		const folder = menu.addFolder("Strength");
 
-		folder.add(params, "weak glitches").min(0.0).max(1.0).step(0.001).onChange(() => {
+		folder.add(params, "weak glitches").min(0.0).max(1.0).step(0.001).onChange((value) => {
 
-			strength.x = params["weak glitches"];
+			strength.x = value;
 
 		});
 
-		folder.add(params, "strong glitches").min(0.0).max(1.0).step(0.001).onChange(() => {
+		folder.add(params, "strong glitches").min(0.0).max(1.0).step(0.001).onChange((value) => {
 
-			strength.y = params["strong glitches"];
+			strength.y = value;
 
 		});
 
 		folder.open();
 
-		menu.add(params, "glitch ratio").min(0.0).max(1.0).step(0.001).onChange(() => {
+		menu.add(params, "glitch ratio").min(0.0).max(1.0).step(0.001).onChange((value) => {
 
-			effect.ratio = Number.parseFloat(params["glitch ratio"]);
+			effect.ratio = Number.parseFloat(value);
 
 		});
 
-		menu.add(params, "columns").min(0.0).max(0.5).step(0.001).onChange(() => {
+		menu.add(params, "columns").min(0.0).max(0.5).step(0.001).onChange((value) => {
 
-			uniforms.get("columns").value = params.columns;
+			uniforms.get("columns").value = value;
 
 		});
 

@@ -261,7 +261,7 @@ export class BloomDemo extends PostProcessingDemo {
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
 
-		// Camera.
+		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
 		const camera = new PerspectiveCamera(50, aspect, 1, 2000);
@@ -269,7 +269,7 @@ export class BloomDemo extends PostProcessingDemo {
 		camera.lookAt(scene.position);
 		this.camera = camera;
 
-		// Controls.
+		// Controls
 
 		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
@@ -279,11 +279,11 @@ export class BloomDemo extends PostProcessingDemo {
 		controls.lookAt(scene.position);
 		this.controls = controls;
 
-		// Sky.
+		// Sky
 
 		scene.background = assets.get("sky");
 
-		// Lights.
+		// Lights
 
 		const ambientLight = new AmbientLight(0x212121);
 		const mainLight = new DirectionalLight(0xffffff, 1.0);
@@ -294,22 +294,20 @@ export class BloomDemo extends PostProcessingDemo {
 
 		scene.add(ambientLight, mainLight, backLight);
 
-		// Random objects.
+		// Objects
 
 		const cloud = SphereCloud.create();
 		cloud.scale.setScalar(0.4);
 		this.object = cloud;
 		scene.add(cloud);
 
-		// Cubic cage.
-
 		scene.add(Cage.create());
 
-		// Raycaster.
+		// Raycaster
 
 		this.raycaster = new Raycaster();
 
-		// Passes.
+		// Passes
 
 		const smaaEffect = new SMAAEffect(
 			assets.get("smaa-search"),
@@ -423,47 +421,47 @@ export class BloomDemo extends PostProcessingDemo {
 			"blend mode": blendModeA.blendFunction
 		};
 
-		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(() => {
+		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange((value) => {
 
-			effectA.resolution.height = effectB.resolution.height = Number(params.resolution);
-
-		});
-
-		menu.add(params, "kernel size", KernelSize).onChange(() => {
-
-			effectA.blurPass.kernelSize = effectB.blurPass.kernelSize = Number(params["kernel size"]);
+			effectA.resolution.height = effectB.resolution.height = Number(value);
 
 		});
 
-		menu.add(params, "blur scale").min(0.0).max(1.0).step(0.01).onChange(() => {
+		menu.add(params, "kernel size", KernelSize).onChange((value) => {
 
-			effectA.blurPass.scale = effectB.blurPass.scale = Number(params["blur scale"]);
+			effectA.blurPass.kernelSize = effectB.blurPass.kernelSize = Number(value);
 
 		});
 
-		menu.add(params, "intensity").min(0.0).max(3.0).step(0.01).onChange(() => {
+		menu.add(params, "blur scale").min(0.0).max(1.0).step(0.01).onChange((value) => {
 
-			effectA.intensity = effectB.intensity = Number(params.intensity);
+			effectA.blurPass.scale = effectB.blurPass.scale = Number(value);
+
+		});
+
+		menu.add(params, "intensity").min(0.0).max(3.0).step(0.01).onChange((value) => {
+
+			effectA.intensity = effectB.intensity = Number(value);
 
 		});
 
 		let folder = menu.addFolder("Luminance");
 
-		folder.add(params.luminance, "filter").onChange(() => {
+		folder.add(params.luminance, "filter").onChange((value) => {
 
-			effectA.luminancePass.enabled = effectB.luminancePass.enabled = params.luminance.filter;
-
-		});
-
-		folder.add(params.luminance, "threshold").min(0.0).max(1.0).step(0.001).onChange(() => {
-
-			effectA.luminanceMaterial.threshold = effectB.luminanceMaterial.threshold = Number(params.luminance.threshold);
+			effectA.luminancePass.enabled = effectB.luminancePass.enabled = value;
 
 		});
 
-		folder.add(params.luminance, "smoothing").min(0.0).max(1.0).step(0.001).onChange(() => {
+		folder.add(params.luminance, "threshold").min(0.0).max(1.0).step(0.001).onChange((value) => {
 
-			effectA.luminanceMaterial.smoothing = effectB.luminanceMaterial.smoothing = Number(params.luminance.smoothing);
+			effectA.luminanceMaterial.threshold = effectB.luminanceMaterial.threshold = Number(value);
+
+		});
+
+		folder.add(params.luminance, "smoothing").min(0.0).max(1.0).step(0.001).onChange((value) => {
+
+			effectA.luminanceMaterial.smoothing = effectB.luminanceMaterial.smoothing = Number(value);
 
 		});
 
@@ -471,9 +469,9 @@ export class BloomDemo extends PostProcessingDemo {
 
 		folder = menu.addFolder("Selection");
 
-		folder.add(params.selection, "enabled").onChange(() => {
+		folder.add(params.selection, "enabled").onChange((value) => {
 
-			passB.enabled = params.selection.enabled;
+			passB.enabled = value;
 			passA.enabled = !passB.enabled;
 
 			if(passB.enabled) {
@@ -488,34 +486,34 @@ export class BloomDemo extends PostProcessingDemo {
 
 		});
 
-		folder.add(params.selection, "inverted").onChange(() => {
+		folder.add(params.selection, "inverted").onChange((value) => {
 
-			effectB.inverted = params.selection.inverted;
-
-		});
-
-		folder.add(params.selection, "ignore bg").onChange(() => {
-
-			effectB.ignoreBackground = params.selection["ignore bg"];
+			effectB.inverted = value;
 
 		});
 
-		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
+		folder.add(params.selection, "ignore bg").onChange((value) => {
 
-			blendModeA.opacity.value = blendModeB.opacity.value = params.opacity;
-
-		});
-
-		menu.add(params, "blend mode", BlendFunction).onChange(() => {
-
-			blendModeA.setBlendFunction(Number(params["blend mode"]));
-			blendModeB.setBlendFunction(Number(params["blend mode"]));
+			effectB.ignoreBackground = value;
 
 		});
 
-		menu.add(passA, "dithering").onChange(() => {
+		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
 
-			passB.dithering = passA.dithering;
+			blendModeA.opacity.value = blendModeB.opacity.value = value;
+
+		});
+
+		menu.add(params, "blend mode", BlendFunction).onChange((value) => {
+
+			blendModeA.setBlendFunction(Number(value));
+			blendModeB.setBlendFunction(Number(value));
+
+		});
+
+		menu.add(passA, "dithering").onChange((value) => {
+
+			passB.dithering = value;
 
 		});
 

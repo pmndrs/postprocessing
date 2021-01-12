@@ -228,14 +228,14 @@ export class ColorGradingDemo extends PostProcessingDemo {
 		const renderer = composer.getRenderer();
 		const capabilities = renderer.capabilities;
 
-		// Camera.
+		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
 		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
 		camera.position.set(-9, 0.5, 0);
 		this.camera = camera;
 
-		// Controls.
+		// Controls
 
 		const target = new Vector3(0, 3, -3.5);
 		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);

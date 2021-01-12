@@ -93,14 +93,14 @@ export class PixelationDemo extends PostProcessingDemo {
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
 
-		// Camera.
+		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
 		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
 		camera.position.set(-9, 0.5, 0);
 		this.camera = camera;
 
-		// Controls.
+		// Controls
 
 		const target = new Vector3(0, 3, -3.5);
 		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
@@ -112,19 +112,19 @@ export class PixelationDemo extends PostProcessingDemo {
 		controls.setOrbitEnabled(false);
 		this.controls = controls;
 
-		// Sky.
+		// Sky
 
 		scene.background = new Color(0xeeeeee);
 
-		// Lights.
+		// Lights
 
 		scene.add(...Sponza.createLights());
 
-		// Objects.
+		// Objects
 
 		scene.add(assets.get(Sponza.tag));
 
-		// Passes.
+		// Passes
 
 		const smaaEffect = new SMAAEffect(
 			assets.get("smaa-search"),
@@ -161,9 +161,9 @@ export class PixelationDemo extends PostProcessingDemo {
 			"granularity": effect.getGranularity()
 		};
 
-		menu.add(params, "granularity").min(0.0).max(50.0).step(0.1).onChange(() => {
+		menu.add(params, "granularity").min(0.0).max(50.0).step(0.1).onChange((value) => {
 
-			effect.setGranularity(params.granularity);
+			effect.setGranularity(value);
 
 		});
 
