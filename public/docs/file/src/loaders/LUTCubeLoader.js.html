@@ -222,8 +222,8 @@ export class LUTCubeLoader extends Loader {
 		const size = Number(result[1]);
 		const data = new Float32Array(size ** 3 * 3);
 
-		const domainMin = new Vector3(0, 0, 0);
-		const domainMax = new Vector3(1, 1, 1);
+		const domainMin = new Vector3(0.0, 0.0, 0.0);
+		const domainMax = new Vector3(1.0, 1.0, 1.0);
 
 		result = regExpDomainMin.exec(input);
 
@@ -241,10 +241,12 @@ export class LUTCubeLoader extends Loader {
 
 		}
 
-		if(domainMin.x !== 0 || domainMin.y !== 0 || domainMin.z !== 0 ||
-			domainMax.x !== 1 || domainMax.y !== 1 || domainMax.z !== 1) {
+		if(domainMin.x &gt; domainMax.x || domainMin.y &gt; domainMax.y || domainMin.z &gt; domainMax.z) {
 
-			throw new Error(&quot;Non-normalized input domain not supported&quot;);
+			console.error(&quot;Invalid input domain&quot;);
+
+			domainMin.set(0.0, 0.0, 0.0);
+			domainMax.set(1.0, 1.0, 1.0);
 
 		}
 
@@ -260,6 +262,8 @@ export class LUTCubeLoader extends Loader {
 
 		const lut = new LookupTexture3D(data, size, size, size);
 		lut.encoding = sRGBEncoding;
+		lut.domainMin.copy(domainMin);
+		lut.domainMax.copy(domainMax);
 
 		if(title !== null) {
 

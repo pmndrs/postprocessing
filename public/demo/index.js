@@ -31568,18 +31568,298 @@
     }
   };
 
+  // src/images/RawImageData.js
+  function createCanvas(width, height, data) {
+    const canvas = document.createElementNS("http://www.w3.org/1999/xhtml", "canvas");
+    const context = canvas.getContext("2d");
+    canvas.width = width;
+    canvas.height = height;
+    if (data instanceof Image) {
+      context.drawImage(data, 0, 0);
+    } else {
+      const imageData = context.createImageData(width, height);
+      imageData.data.set(data);
+      context.putImageData(imageData, 0, 0);
+    }
+    return canvas;
+  }
+  var RawImageData = class {
+    constructor(width = 0, height = 0, data = null) {
+      this.width = width;
+      this.height = height;
+      this.data = data;
+    }
+    toCanvas() {
+      return typeof document === "undefined" ? null : createCanvas(this.width, this.height, this.data);
+    }
+    static from(image) {
+      let {width, height} = image;
+      let data;
+      if (image instanceof Image) {
+        const canvas = createCanvas(width, height, image);
+        if (canvas !== null) {
+          const context = canvas.getContext("2d");
+          data = context.getImageData(0, 0, width, height).data;
+        }
+      } else {
+        data = image.data;
+      }
+      return new RawImageData(width, height, data);
+    }
+  };
+
+  // src/images/lut/LUTOperation.js
+  var LUTOperation = {
+    SCALE_UP: "lut.scaleup"
+  };
+
+  // tmp/lut.worker
+  var lut_default = '(()=>{var q={SCALE_UP:"lut.scaleup"};var _=[new Float32Array(3),new Float32Array(3)],t=[new Float32Array(3),new Float32Array(3),new Float32Array(3),new Float32Array(3)],P=[[new Float32Array([0,0,0]),new Float32Array([1,0,0]),new Float32Array([1,1,0]),new Float32Array([1,1,1])],[new Float32Array([0,0,0]),new Float32Array([1,0,0]),new Float32Array([1,0,1]),new Float32Array([1,1,1])],[new Float32Array([0,0,0]),new Float32Array([0,0,1]),new Float32Array([1,0,1]),new Float32Array([1,1,1])],[new Float32Array([0,0,0]),new Float32Array([0,1,0]),new Float32Array([1,1,0]),new Float32Array([1,1,1])],[new Float32Array([0,0,0]),new Float32Array([0,1,0]),new Float32Array([0,1,1]),new Float32Array([1,1,1])],[new Float32Array([0,0,0]),new Float32Array([0,0,1]),new Float32Array([0,1,1]),new Float32Array([1,1,1])]];function V(a,n,r,h){let i=r[0]-n[0],s=r[1]-n[1],c=r[2]-n[2],A=a[0]-n[0],F=a[1]-n[1],e=a[2]-n[2],l=s*e-c*F,w=c*A-i*e,f=i*F-s*A,y=Math.sqrt(l*l+w*w+f*f),m=y*.5,U=l/y,X=w/y,Y=f/y,p=-(a[0]*U+a[1]*X+a[2]*Y),u=h[0]*U+h[1]*X+h[2]*Y;return Math.abs(u+p)*m/3}function T(a,n,r,h,i,s){let c=(r+h*n+i*n*n)*3;s[0]=a[c+0],s[1]=a[c+1],s[2]=a[c+2]}function k(a,n,r,h,i,s){let c=r*(n-1),A=h*(n-1),F=i*(n-1),e=c%1,l=A%1,w=F%1,f=Math.floor(c),y=Math.floor(A),m=Math.floor(F),U=Math.ceil(c),X=Math.ceil(A),Y=Math.ceil(F);if(f===c&&y===A&&m===F)T(a,n,c,A,F,s);else{let p;e>=l&&l>=w?p=P[0]:e>=w&&w>=l?p=P[1]:w>=e&&e>=l?p=P[2]:l>=e&&e>=w?p=P[3]:l>=w&&w>=e?p=P[4]:w>=l&&l>=e&&(p=P[5]);let[u,M,x,d]=p,g=_[0];g[0]=e,g[1]=l,g[2]=w;let o=_[1],Z=U-f,b=X-y,L=Y-m;o[0]=Z*u[0]+f,o[1]=b*u[1]+y,o[2]=L*u[2]+m,T(a,n,o[0],o[1],o[2],t[0]),o[0]=Z*M[0]+f,o[1]=b*M[1]+y,o[2]=L*M[2]+m,T(a,n,o[0],o[1],o[2],t[1]),o[0]=Z*x[0]+f,o[1]=b*x[1]+y,o[2]=L*x[2]+m,T(a,n,o[0],o[1],o[2],t[2]),o[0]=Z*d[0]+f,o[1]=b*d[1]+y,o[2]=L*d[2]+m,T(a,n,o[0],o[1],o[2],t[3]);let v=V(M,x,d,g)*6,S=V(u,x,d,g)*6,C=V(u,M,d,g)*6,E=V(u,M,x,g)*6;t[0][0]*=v,t[0][1]*=v,t[0][2]*=v,t[1][0]*=S,t[1][1]*=S,t[1][2]*=S,t[2][0]*=C,t[2][1]*=C,t[2][2]*=C,t[3][0]*=E,t[3][1]*=E,t[3][2]*=E,s[0]=t[0][0]+t[1][0]+t[2][0]+t[3][0],s[1]=t[0][1]+t[1][1]+t[2][1]+t[3][1],s[2]=t[0][2]+t[1][2]+t[2][2]+t[3][2]}}var O=class{static expand(n,r){let h=Math.cbrt(n.length/3),i=new Float32Array(3),s=new n.constructor(r**3*3),c=1/(r-1);for(let A=0;A<r;++A)for(let F=0;F<r;++F)for(let e=0;e<r;++e){let l=e*c,w=F*c,f=A*c,y=Math.round(e+F*r+A*r*r)*3;k(n,h,l,w,f,i),s[y+0]=i[0],s[y+1]=i[1],s[y+2]=i[2]}return s}};self.addEventListener("message",a=>{let n=a.data,r=n.data;switch(n.operation){case q.SCALE_UP:r=O.expand(r,n.size);break}postMessage(r,[r.buffer]),close()});})();\n';
+
+  // src/images/textures/LookupTexture3D.js
+  var c = new Color();
+  var LookupTexture3D = class extends DataTexture3D {
+    constructor(data, size) {
+      super(data, size, size, size);
+      this.type = FloatType;
+      this.format = RGBFormat;
+      this.encoding = LinearEncoding;
+      this.minFilter = LinearFilter;
+      this.magFilter = LinearFilter;
+      this.wrapS = ClampToEdgeWrapping;
+      this.wrapT = ClampToEdgeWrapping;
+      this.wrapR = ClampToEdgeWrapping;
+      this.unpackAlignment = 1;
+      this.domainMin = new Vector3(0, 0, 0);
+      this.domainMax = new Vector3(1, 1, 1);
+    }
+    get isLookupTexture3D() {
+      return true;
+    }
+    scaleUp(size, transferData = true) {
+      const image = this.image;
+      let promise;
+      if (size <= image.width) {
+        promise = Promise.reject(new Error("The target size must be greater than the current size"));
+      } else if (size > image.width) {
+        const workerURL = URL.createObjectURL(new Blob([lut_default], {type: "text/javascript"}));
+        const worker = new Worker(workerURL);
+        promise = new Promise((resolve, reject) => {
+          worker.addEventListener("error", (event) => reject(event.error));
+          worker.addEventListener("message", (event) => {
+            const lut = new LookupTexture3D(event.data, size);
+            lut.encoding = this.encoding;
+            lut.type = this.type;
+            lut.name = this.name;
+            URL.revokeObjectURL(workerURL);
+            resolve(lut);
+          });
+          const transferList = transferData ? [image.data.buffer] : [];
+          worker.postMessage({
+            operation: LUTOperation.SCALE_UP,
+            data: image.data,
+            size
+          }, transferList);
+        });
+      }
+      return promise;
+    }
+    applyLUT(lut) {
+      const img0 = this.image;
+      const img1 = lut.image;
+      const size0 = Math.min(img0.width, img0.height, img0.depth);
+      const size1 = Math.min(img1.width, img1.height, img1.depth);
+      if (size0 !== size1) {
+        console.error("Size mismatch");
+      } else if (lut.type !== FloatType || this.type !== FloatType) {
+        console.error("Both LUTs must be FloatType textures");
+      } else if (lut.format !== RGBFormat || this.format !== RGBFormat) {
+        console.error("Both LUTs must be RGB textures");
+      } else {
+        const data0 = img0.data;
+        const data1 = img1.data;
+        const size = size0;
+        const s = size - 1;
+        for (let i = 0, l = size ** 3; i < l; ++i) {
+          const i3 = i * 3;
+          const r = data0[i3 + 0] * s;
+          const g = data0[i3 + 1] * s;
+          const b = data0[i3 + 2] * s;
+          const iRGB = Math.round(r + g * size + b * size * size) * 3;
+          data0[i3 + 0] = data1[iRGB + 0];
+          data0[i3 + 1] = data1[iRGB + 1];
+          data0[i3 + 2] = data1[iRGB + 2];
+        }
+        this.needsUpdate = true;
+      }
+      return this;
+    }
+    convertToUint8() {
+      if (this.type === FloatType) {
+        const floatData = this.image.data;
+        const uint8Data = new Uint8ClampedArray(floatData.length);
+        for (let i = 0, l = floatData.length; i < l; ++i) {
+          uint8Data[i] = floatData[i] * 255;
+        }
+        this.image.data = uint8Data;
+        this.type = UnsignedByteType;
+        this.needsUpdate = true;
+      }
+      return this;
+    }
+    convertToFloat() {
+      if (this.type === UnsignedByteType) {
+        const uint8Data = this.image.data;
+        const floatData = new Float32Array(uint8Data.length);
+        for (let i = 0, l = uint8Data.length; i < l; ++i) {
+          floatData[i] = uint8Data[i] / 255;
+        }
+        this.image.data = floatData;
+        this.type = FloatType;
+        this.needsUpdate = true;
+      }
+      return this;
+    }
+    convertLinearToSRGB() {
+      const data = this.image.data;
+      if (this.type === FloatType) {
+        const stride = this.format === RGBAFormat ? 4 : 3;
+        for (let i = 0, l = data.length; i < l; i += stride) {
+          c.fromArray(data, i).convertLinearToSRGB().toArray(data, i);
+        }
+        this.encoding = sRGBEncoding;
+        this.needsUpdate = true;
+      } else {
+        console.error("Color space conversion requires FloatType data");
+      }
+      return this;
+    }
+    convertSRGBToLinear() {
+      const data = this.image.data;
+      if (this.type === FloatType) {
+        const stride = this.format === RGBAFormat ? 4 : 3;
+        for (let i = 0, l = data.length; i < l; i += stride) {
+          c.fromArray(data, i).convertSRGBToLinear().toArray(data, i);
+        }
+        this.encoding = LinearEncoding;
+        this.needsUpdate = true;
+      } else {
+        console.error("Color space conversion requires FloatType data");
+      }
+      return this;
+    }
+    convertToRGBA() {
+      if (this.format === RGBFormat) {
+        const size = this.image.width;
+        const rgbData = this.image.data;
+        const rgbaData = new rgbData.constructor(size ** 3 * 4);
+        const maxValue = this.type === FloatType ? 1 : 255;
+        for (let i = 0, j = 0, l = rgbData.length; i < l; i += 3, j += 4) {
+          rgbaData[j + 0] = rgbData[i + 0];
+          rgbaData[j + 1] = rgbData[i + 1];
+          rgbaData[j + 2] = rgbData[i + 2];
+          rgbaData[j + 3] = maxValue;
+        }
+        this.image.data = rgbaData;
+        this.format = RGBAFormat;
+        this.needsUpdate = true;
+      }
+      return this;
+    }
+    toDataTexture() {
+      const width = this.image.width;
+      const height = this.image.height * this.image.depth;
+      const texture = new DataTexture(this.image.data, width, height);
+      texture.name = this.name;
+      texture.type = this.type;
+      texture.format = this.format;
+      texture.encoding = this.encoding;
+      texture.minFilter = LinearFilter;
+      texture.magFilter = LinearFilter;
+      texture.wrapS = this.wrapS;
+      texture.wrapT = this.wrapT;
+      texture.generateMipmaps = false;
+      return texture;
+    }
+    static from(texture) {
+      const image = texture.image;
+      const {width, height} = image;
+      const size = Math.min(width, height);
+      let data;
+      if (image instanceof Image) {
+        const rawImageData = RawImageData.from(image);
+        data = rawImageData.data;
+        const rearrangedData = new Uint8Array(size ** 3 * 3);
+        if (width > height) {
+          for (let z2 = 0; z2 < size; ++z2) {
+            for (let y2 = 0; y2 < size; ++y2) {
+              for (let x2 = 0; x2 < size; ++x2) {
+                const i4 = (x2 + z2 * size + y2 * size * size) * 4;
+                const i3 = (x2 + y2 * size + z2 * size * size) * 3;
+                rearrangedData[i3 + 0] = data[i4 + 0];
+                rearrangedData[i3 + 1] = data[i4 + 1];
+                rearrangedData[i3 + 2] = data[i4 + 2];
+              }
+            }
+          }
+        } else {
+          for (let i = 0, l = size ** 3; i < l; ++i) {
+            const i4 = i * 4;
+            const i3 = i * 3;
+            rearrangedData[i3 + 0] = data[i4 + 0];
+            rearrangedData[i3 + 1] = data[i4 + 1];
+            rearrangedData[i3 + 2] = data[i4 + 2];
+          }
+        }
+        data = rearrangedData;
+      } else {
+        data = image.data.slice();
+      }
+      const lut = new LookupTexture3D(data, size);
+      lut.type = texture.type;
+      lut.encoding = texture.encoding;
+      lut.name = texture.name;
+      return lut;
+    }
+    static createNeutral(size) {
+      const data = new Float32Array(size ** 3 * 3);
+      const s = 1 / (size - 1);
+      for (let r = 0; r < size; ++r) {
+        for (let g = 0; g < size; ++g) {
+          for (let b = 0; b < size; ++b) {
+            const i3 = (r + g * size + b * size * size) * 3;
+            data[i3 + 0] = r * s;
+            data[i3 + 1] = g * s;
+            data[i3 + 2] = b * s;
+          }
+        }
+      }
+      const lut = new LookupTexture3D(data, size);
+      lut.name = "neutral";
+      return lut;
+    }
+  };
+
   // src/effects/glsl/lut/shader.frag
-  var shader_default57 = "#ifdef LUT_3D\r\n\r\n	#ifdef LUT_PRECISION_HIGH\r\n\r\n		#ifdef GL_FRAGMENT_PRECISION_HIGH\r\n\r\n			uniform highp sampler3D lut;\r\n\r\n		#else\r\n\r\n			uniform mediump sampler3D lut;\r\n\r\n		#endif\r\n\r\n	#else\r\n\r\n		uniform lowp sampler3D lut;\r\n\r\n	#endif\r\n\r\n	vec4 applyLUT(const in vec3 rgb) {\r\n\r\n		return texture(lut, rgb);\r\n\r\n	}\r\n\r\n#else\r\n\r\n	#ifdef LUT_PRECISION_HIGH\r\n\r\n		#ifdef GL_FRAGMENT_PRECISION_HIGH\r\n\r\n			uniform highp sampler2D lut;\r\n\r\n		#else\r\n\r\n			uniform mediump sampler2D lut;\r\n\r\n		#endif\r\n\r\n	#else\r\n\r\n		uniform lowp sampler2D lut;\r\n\r\n	#endif\r\n\r\n	vec4 applyLUT(const in vec3 rgb) {\r\n\r\n		// Get the slices on either side of the sample.\r\n		float slice = rgb.b * LUT_SIZE;\r\n		float interp = fract(slice);\r\n		float slice0 = slice - interp;\r\n		float centeredInterp = interp - 0.5;\r\n		float slice1 = slice0 + sign(centeredInterp);\r\n\r\n		#ifdef LUT_STRIP_HORIZONTAL\r\n\r\n			// Pull X in by half a texel in each direction to avoid slice bleeding.\r\n			float xOffset = clamp(\r\n				rgb.r * LUT_TEXEL_HEIGHT,\r\n				LUT_TEXEL_WIDTH * 0.5,\r\n				LUT_TEXEL_HEIGHT - LUT_TEXEL_WIDTH * 0.5\r\n			);\r\n\r\n			vec2 uv0 = vec2(slice0 * LUT_TEXEL_HEIGHT + xOffset, rgb.g);\r\n			vec2 uv1 = vec2(slice1 * LUT_TEXEL_HEIGHT + xOffset, rgb.g);\r\n\r\n		#else\r\n\r\n			// Pull Y in by half a texel in each direction to avoid slice bleeding.\r\n			float yOffset = clamp(\r\n				rgb.g * LUT_TEXEL_WIDTH,\r\n				LUT_TEXEL_HEIGHT * 0.5,\r\n				LUT_TEXEL_WIDTH - LUT_TEXEL_HEIGHT * 0.5\r\n			);\r\n\r\n			vec2 uv0 = vec2(rgb.r, slice0 * LUT_TEXEL_WIDTH + yOffset);\r\n			vec2 uv1 = vec2(rgb.r, slice1 * LUT_TEXEL_WIDTH + yOffset);\r\n\r\n		#endif\r\n\r\n		vec4 sample0 = texture2D(lut, uv0);\r\n		vec4 sample1 = texture2D(lut, uv1);\r\n\r\n		return mix(sample0, sample1, abs(centeredInterp));\r\n\r\n	}\r\n\r\n#endif\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n	vec3 c = linearToInputTexel(inputColor).rgb;\r\n\r\n	#ifndef LUT_3D\r\n\r\n		c = clamp(c, 0.0, 1.0);\r\n\r\n	#endif\r\n\r\n	// Apply scale/offset to prevent nonlinearities near the LUT's edges.\r\n	c = texelToLinear(applyLUT(COORD_SCALE * c + COORD_OFFSET)).rgb;\r\n	outputColor = vec4(c, inputColor.a);\r\n\r\n}\r\n";
+  var shader_default57 = "uniform vec3 scale;\r\nuniform vec3 offset;\r\n\r\n#ifdef CUSTOM_INPUT_DOMAIN\r\n\r\n	uniform vec3 domainMin;\r\n	uniform vec3 domainMax;\r\n\r\n#endif\r\n\r\n#ifdef LUT_3D\r\n\r\n	#ifdef LUT_PRECISION_HIGH\r\n\r\n		#ifdef GL_FRAGMENT_PRECISION_HIGH\r\n\r\n			uniform highp sampler3D lut;\r\n\r\n		#else\r\n\r\n			uniform mediump sampler3D lut;\r\n\r\n		#endif\r\n\r\n	#else\r\n\r\n		uniform lowp sampler3D lut;\r\n\r\n	#endif\r\n\r\n	vec4 applyLUT(const in vec3 rgb) {\r\n\r\n		#ifdef TETRAHEDRAL_INTERPOLATION\r\n\r\n			/* Strategy: Fetch the four corners (v1, v2, v4, v4) of the cube that is\r\n			described by the current sampling coordinates, calculate the barycentric\r\n			weights and interpolate the nearest color samples. */\r\n\r\n			vec3 p = floor(rgb);\r\n			vec3 f = rgb - p;\r\n\r\n			vec3 v1 = (p + 0.5) * LUT_TEXEL_WIDTH;\r\n			vec3 v4 = (p + 1.5) * LUT_TEXEL_WIDTH;\r\n			vec3 v2, v3; // Must be identified.\r\n			vec3 frac;\r\n\r\n			if(f.r >= f.g) {\r\n\r\n				if(f.g > f.b) {\r\n\r\n					// T4: R >= G > B\r\n					frac = f.rgb;\r\n					v2 = vec3(v4.x, v1.y, v1.z);\r\n					v3 = vec3(v4.x, v4.y, v1.z);\r\n\r\n				} else if(f.r >= f.b) {\r\n\r\n					// T6: R >= B >= G\r\n					frac = f.rbg;\r\n					v2 = vec3(v4.x, v1.y, v1.z);\r\n					v3 = vec3(v4.x, v1.y, v4.z);\r\n\r\n				} else {\r\n\r\n					// T2: B > R >= G\r\n					frac = f.brg;\r\n					v2 = vec3(v1.x, v1.y, v4.z);\r\n					v3 = vec3(v4.x, v1.y, v4.z);\r\n\r\n				}\r\n\r\n			} else {\r\n\r\n				if(f.b > f.g) {\r\n\r\n					// T3: B > G > R\r\n					frac = f.bgr;\r\n					v2 = vec3(v1.x, v1.y, v4.z);\r\n					v3 = vec3(v1.x, v4.y, v4.z);\r\n\r\n				} else if(f.r >= f.b) {\r\n\r\n					// T5: G > R >= B\r\n					frac = f.grb;\r\n					v2 = vec3(v1.x, v4.y, v1.z);\r\n					v3 = vec3(v4.x, v4.y, v1.z);\r\n\r\n				} else {\r\n\r\n					// T1: G >= B > R\r\n					frac = f.gbr;\r\n					v2 = vec3(v1.x, v4.y, v1.z);\r\n					v3 = vec3(v1.x, v4.y, v4.z);\r\n\r\n				}\r\n\r\n			}\r\n\r\n			// Interpolate manually to avoid 8-bit quantization of fractions.\r\n			vec4 n1 = texture(lut, v1);\r\n			vec4 n2 = texture(lut, v2);\r\n			vec4 n3 = texture(lut, v3);\r\n			vec4 n4 = texture(lut, v4);\r\n\r\n			vec4 weights = vec4(\r\n				1.0 - frac.x,\r\n				frac.x - frac.y,\r\n				frac.y - frac.z,\r\n				frac.z\r\n			);\r\n\r\n			// weights.x * n1 + weights.y * n2 + weights.z * n3 + weights.w * n4\r\n			vec4 result = weights * mat4(\r\n				vec4(n1.r, n2.r, n3.r, n4.r),\r\n				vec4(n1.g, n2.g, n3.g, n4.g),\r\n				vec4(n1.b, n2.b, n3.b, n4.b),\r\n				vec4(1.0)\r\n			);\r\n\r\n			return vec4(result.rgb, 1.0);\r\n\r\n		#else\r\n\r\n			/* Built-in trilinear interpolation. Note that the fractional components\r\n			are quantized to 8 bits on common hardware, which introduces significant\r\n			error with small grid sizes. */\r\n\r\n			return texture(lut, rgb);\r\n\r\n		#endif\r\n\r\n	}\r\n\r\n#else\r\n\r\n	#ifdef LUT_PRECISION_HIGH\r\n\r\n		#ifdef GL_FRAGMENT_PRECISION_HIGH\r\n\r\n			uniform highp sampler2D lut;\r\n\r\n		#else\r\n\r\n			uniform mediump sampler2D lut;\r\n\r\n		#endif\r\n\r\n	#else\r\n\r\n		uniform lowp sampler2D lut;\r\n\r\n	#endif\r\n\r\n	vec4 applyLUT(const in vec3 rgb) {\r\n\r\n		// Get the slices on either side of the sample.\r\n		float slice = rgb.b * LUT_SIZE;\r\n		float slice0 = floor(slice);\r\n		float interp = slice - slice0;\r\n		float centeredInterp = interp - 0.5;\r\n		float slice1 = slice0 + sign(centeredInterp);\r\n\r\n		#ifdef LUT_STRIP_HORIZONTAL\r\n\r\n			// Pull X in by half a texel in each direction to avoid slice bleeding.\r\n			float xOffset = clamp(\r\n				rgb.r * LUT_TEXEL_HEIGHT,\r\n				LUT_TEXEL_WIDTH * 0.5,\r\n				LUT_TEXEL_HEIGHT - LUT_TEXEL_WIDTH * 0.5\r\n			);\r\n\r\n			vec2 uv0 = vec2(slice0 * LUT_TEXEL_HEIGHT + xOffset, rgb.g);\r\n			vec2 uv1 = vec2(slice1 * LUT_TEXEL_HEIGHT + xOffset, rgb.g);\r\n\r\n		#else\r\n\r\n			// Pull Y in by half a texel in each direction to avoid slice bleeding.\r\n			float yOffset = clamp(\r\n				rgb.g * LUT_TEXEL_WIDTH,\r\n				LUT_TEXEL_HEIGHT * 0.5,\r\n				LUT_TEXEL_WIDTH - LUT_TEXEL_HEIGHT * 0.5\r\n			);\r\n\r\n			vec2 uv0 = vec2(rgb.r, slice0 * LUT_TEXEL_WIDTH + yOffset);\r\n			vec2 uv1 = vec2(rgb.r, slice1 * LUT_TEXEL_WIDTH + yOffset);\r\n\r\n		#endif\r\n\r\n		// Manual trilinear interpolation (subject to quantization errors).\r\n		vec4 sample0 = texture2D(lut, uv0);\r\n		vec4 sample1 = texture2D(lut, uv1);\r\n\r\n		return mix(sample0, sample1, abs(centeredInterp));\r\n\r\n	}\r\n\r\n#endif\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n	vec3 c = linearToInputTexel(inputColor).rgb;\r\n\r\n	#ifdef CUSTOM_INPUT_DOMAIN\r\n\r\n		if(c.r >= domainMin.r && c.g >= domainMin.g && c.b >= domainMin.b &&\r\n			c.r <= domainMax.r && c.g <= domainMax.g && c.b <= domainMax.b) {\r\n\r\n			c = texelToLinear(applyLUT(scale * c + offset)).rgb;\r\n\r\n		} else {\r\n\r\n			c = inputColor.rgb;\r\n\r\n		}\r\n\r\n	#else\r\n\r\n		#if !defined(LUT_3D) || defined(TETRAHEDRAL_INTERPOLATION)\r\n\r\n			c = clamp(c, 0.0, 1.0);\r\n\r\n		#endif\r\n\r\n		c = texelToLinear(applyLUT(scale * c + offset)).rgb;\r\n\r\n	#endif\r\n\r\n	outputColor = vec4(c, inputColor.a);\r\n\r\n}\r\n";
 
   // src/effects/LUTEffect.js
   var LUTEffect = class extends Effect {
-    constructor(lut, {blendFunction = BlendFunction.NORMAL} = {}) {
+    constructor(lut, {
+      blendFunction = BlendFunction.NORMAL,
+      tetrahedralInterpolation = false
+    } = {}) {
       super("LUTEffect", shader_default57, {
         blendFunction,
         uniforms: new Map([
-          ["lut", new Uniform(null)]
+          ["lut", new Uniform(null)],
+          ["scale", new Uniform(new Vector3())],
+          ["offset", new Uniform(new Vector3())],
+          ["domainMin", new Uniform(null)],
+          ["domainMax", new Uniform(null)]
         ])
       });
+      this.tetrahedralInterpolation = tetrahedralInterpolation;
       this.inputEncoding = sRGBEncoding;
       this.outputEncoding = this.inputEncoding;
       this.setInputEncoding(sRGBEncoding);
@@ -31629,32 +31909,85 @@
     }
     setLUT(lut) {
       const defines = this.defines;
-      const inputEncoding = this.inputEncoding;
+      const uniforms = this.uniforms;
       if (this.getLUT() !== lut) {
-        defines.clear();
         const image = lut.image;
-        const size = Math.min(image.width, image.height);
-        const scale = (size - 1) / size;
-        const offset = 1 / (2 * size);
-        defines.set("COORD_SCALE", scale.toFixed(16));
-        defines.set("COORD_OFFSET", offset.toFixed(16));
-        if (lut.isDataTexture3D) {
-          defines.set("LUT_3D", "1");
-        } else {
-          if (image.width > image.height) {
-            defines.set("LUT_STRIP_HORIZONTAL", "1");
-          }
-          defines.set("LUT_SIZE", size.toFixed(16));
-          defines.set("LUT_TEXEL_WIDTH", (1 / image.width).toFixed(16));
-          defines.set("LUT_TEXEL_HEIGHT", (1 / image.height).toFixed(16));
-        }
-        if (lut.type === FloatType) {
+        defines.clear();
+        defines.set("LUT_SIZE", Math.min(image.width, image.height).toFixed(16));
+        defines.set("LUT_TEXEL_WIDTH", (1 / image.width).toFixed(16));
+        defines.set("LUT_TEXEL_HEIGHT", (1 / image.height).toFixed(16));
+        uniforms.get("lut").value = lut;
+        uniforms.get("domainMin").value = null;
+        uniforms.get("domainMax").value = null;
+        if (lut.type === FloatType || lut.type === HalfFloatType) {
           defines.set("LUT_PRECISION_HIGH", "1");
         }
-        this.uniforms.get("lut").value = lut;
-        this.setInputEncoding(inputEncoding);
+        if (image.width > image.height) {
+          defines.set("LUT_STRIP_HORIZONTAL", "1");
+        } else if (lut instanceof DataTexture3D) {
+          defines.set("LUT_3D", "1");
+        }
+        if (lut instanceof LookupTexture3D) {
+          const min = lut.domainMin;
+          const max = lut.domainMax;
+          if (min.x !== 0 || min.y !== 0 || min.z !== 0 || max.x !== 1 || max.y !== 1 || max.z !== 1) {
+            defines.set("CUSTOM_INPUT_DOMAIN", "1");
+            uniforms.get("domainMin").value = min.clone();
+            uniforms.get("domainMax").value = max.clone();
+          }
+        }
+        this.configureTetrahedralInterpolation();
+        this.updateScaleOffset();
+        this.setInputEncoding(this.inputEncoding);
         this.setChanged();
       }
+    }
+    updateScaleOffset() {
+      const lut = this.getLUT();
+      const size = Math.min(lut.image.width, lut.image.height);
+      const scale = this.uniforms.get("scale").value;
+      const offset = this.uniforms.get("offset").value;
+      if (this.defines.has("TETRAHEDRAL_INTERPOLATION")) {
+        if (this.defines.has("CUSTOM_INPUT_DOMAIN")) {
+          const domainScale = lut.domainMax.clone().sub(lut.domainMin);
+          scale.setScalar(size - 1).divide(domainScale);
+          offset.copy(lut.domainMin).negate().multiply(scale);
+        } else {
+          scale.setScalar(size - 1);
+          offset.setScalar(0);
+        }
+      } else {
+        if (this.defines.has("CUSTOM_INPUT_DOMAIN")) {
+          const domainScale = lut.domainMax.clone().sub(lut.domainMin).multiplyScalar(size);
+          scale.setScalar(size - 1).divide(domainScale);
+          offset.copy(lut.domainMin).negate().multiply(scale).addScalar(1 / (2 * size));
+        } else {
+          scale.setScalar((size - 1) / size);
+          offset.setScalar(1 / (2 * size));
+        }
+      }
+    }
+    configureTetrahedralInterpolation() {
+      const lut = this.getLUT();
+      lut.minFilter = LinearFilter;
+      lut.magFilter = LinearFilter;
+      this.defines.delete("TETRAHEDRAL_INTERPOLATION");
+      if (this.tetrahedralInterpolation && lut !== null) {
+        if (lut instanceof DataTexture3D) {
+          this.defines.set("TETRAHEDRAL_INTERPOLATION", "1");
+          lut.minFilter = NearestFilter;
+          lut.magFilter = NearestFilter;
+        } else {
+          console.warn("Tetrahedral interpolation requires a 3D texture");
+        }
+      }
+      lut.needsUpdate = true;
+    }
+    setTetrahedralInterpolationEnabled(enabled) {
+      this.tetrahedralInterpolation = enabled;
+      this.configureTetrahedralInterpolation();
+      this.updateScaleOffset();
+      this.setChanged();
     }
   };
 
@@ -32574,7 +32907,7 @@
   };
 
   // src/effects/glsl/tone-mapping/shader.frag
-  var shader_default71 = "#include <tonemapping_pars_fragment>\r\n\r\nuniform sampler2D luminanceBuffer;\r\nuniform float toneMappingExposure;\r\nuniform float whitePoint;\r\nuniform float middleGrey;\r\n\r\n#ifndef ADAPTIVE\r\n\r\n	uniform float averageLuminance;\r\n\r\n#endif\r\n\r\nvec3 Reinhard2ToneMapping(vec3 color) {\r\n\r\n	color *= toneMappingExposure;\r\n\r\n	// Calculate the luminance of the current pixel.\r\n	float l = linearToRelativeLuminance(color);\r\n\r\n	#ifdef ADAPTIVE\r\n\r\n		// Get the average luminance from the adaptive 1x1 buffer.\r\n		float lumAvg = texture2D(luminanceBuffer, vec2(0.5)).r;\r\n		lumAvg = max(lumAvg, 1e-6);\r\n\r\n	#else\r\n\r\n		float lumAvg = averageLuminance;\r\n\r\n	#endif\r\n\r\n	float lumScaled = (l * middleGrey) / lumAvg;\r\n	float lumCompressed = lumScaled * (1.0 + lumScaled / (whitePoint * whitePoint));\r\n	lumCompressed /= (1.0 + lumScaled);\r\n\r\n	return lumCompressed * color;\r\n\r\n}\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n	#ifdef REINHARD2\r\n\r\n		outputColor = vec4(Reinhard2ToneMapping(inputColor.rgb), inputColor.a);\r\n\r\n	#else\r\n\r\n		outputColor = vec4(toneMapping(inputColor.rgb), inputColor.a);\r\n\r\n	#endif\r\n\r\n}\r\n";
+  var shader_default71 = "#include <tonemapping_pars_fragment>\r\n\r\nuniform sampler2D luminanceBuffer;\r\nuniform float whitePoint;\r\nuniform float middleGrey;\r\n\r\n#ifndef ADAPTIVE\r\n\r\n	uniform float averageLuminance;\r\n\r\n#endif\r\n\r\nvec3 Reinhard2ToneMapping(vec3 color) {\r\n\r\n	color *= toneMappingExposure;\r\n\r\n	// Calculate the luminance of the current pixel.\r\n	float l = linearToRelativeLuminance(color);\r\n\r\n	#ifdef ADAPTIVE\r\n\r\n		// Get the average luminance from the adaptive 1x1 buffer.\r\n		float lumAvg = texture2D(luminanceBuffer, vec2(0.5)).r;\r\n\r\n	#else\r\n\r\n		float lumAvg = averageLuminance;\r\n\r\n	#endif\r\n\r\n	float lumScaled = (l * middleGrey) / max(lumAvg, 1e-6);\r\n	float lumCompressed = lumScaled * (1.0 + lumScaled / (whitePoint * whitePoint));\r\n	lumCompressed /= (1.0 + lumScaled);\r\n\r\n	return clamp(lumCompressed * color, 0.0, 1.0);\r\n\r\n}\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n	#ifdef REINHARD2\r\n\r\n		outputColor = vec4(Reinhard2ToneMapping(inputColor.rgb), inputColor.a);\r\n\r\n	#else\r\n\r\n		outputColor = vec4(toneMapping(inputColor.rgb), inputColor.a);\r\n\r\n	#endif\r\n\r\n}\r\n";
 
   // src/effects/ToneMappingEffect.js
   var ToneMappingEffect = class extends Effect {
@@ -32594,7 +32927,6 @@
         blendFunction,
         uniforms: new Map([
           ["luminanceBuffer", new Uniform(null)],
-          ["toneMappingExposure", new Uniform(1)],
           ["maxLuminance", new Uniform(maxLuminance)],
           ["whitePoint", new Uniform(whitePoint)],
           ["middleGrey", new Uniform(middleGrey)],
@@ -32733,276 +33065,6 @@
     }
   };
 
-  // src/images/lut/LUTOperation.js
-  var LUTOperation = {
-    SCALE_UP: "lut.scaleup"
-  };
-
-  // src/images/RawImageData.js
-  function createCanvas(width, height, data) {
-    const canvas = document.createElementNS("http://www.w3.org/1999/xhtml", "canvas");
-    const context = canvas.getContext("2d");
-    canvas.width = width;
-    canvas.height = height;
-    if (data instanceof Image) {
-      context.drawImage(data, 0, 0);
-    } else {
-      const imageData = context.createImageData(width, height);
-      imageData.data.set(data);
-      context.putImageData(imageData, 0, 0);
-    }
-    return canvas;
-  }
-  var RawImageData = class {
-    constructor(width = 0, height = 0, data = null) {
-      this.width = width;
-      this.height = height;
-      this.data = data;
-    }
-    toCanvas() {
-      return typeof document === "undefined" ? null : createCanvas(this.width, this.height, this.data);
-    }
-    static from(image) {
-      let {width, height} = image;
-      let data;
-      if (image instanceof Image) {
-        const canvas = createCanvas(width, height, image);
-        if (canvas !== null) {
-          const context = canvas.getContext("2d");
-          data = context.getImageData(0, 0, width, height).data;
-        }
-      } else {
-        data = image.data;
-      }
-      return new RawImageData(width, height, data);
-    }
-  };
-
-  // tmp/lut.worker
-  var lut_default = '(()=>{var q={SCALE_UP:"lut.scaleup"};var _=[new Float32Array(3),new Float32Array(3)],t=[new Float32Array(3),new Float32Array(3),new Float32Array(3),new Float32Array(3)],P=[[new Float32Array([0,0,0]),new Float32Array([1,0,0]),new Float32Array([1,1,0]),new Float32Array([1,1,1])],[new Float32Array([0,0,0]),new Float32Array([1,0,0]),new Float32Array([1,0,1]),new Float32Array([1,1,1])],[new Float32Array([0,0,0]),new Float32Array([0,0,1]),new Float32Array([1,0,1]),new Float32Array([1,1,1])],[new Float32Array([0,0,0]),new Float32Array([0,1,0]),new Float32Array([1,1,0]),new Float32Array([1,1,1])],[new Float32Array([0,0,0]),new Float32Array([0,1,0]),new Float32Array([0,1,1]),new Float32Array([1,1,1])],[new Float32Array([0,0,0]),new Float32Array([0,0,1]),new Float32Array([0,1,1]),new Float32Array([1,1,1])]];function V(a,n,r,h){let i=r[0]-n[0],s=r[1]-n[1],c=r[2]-n[2],A=a[0]-n[0],F=a[1]-n[1],e=a[2]-n[2],l=s*e-c*F,w=c*A-i*e,f=i*F-s*A,y=Math.sqrt(l*l+w*w+f*f),m=y*.5,U=l/y,X=w/y,Y=f/y,p=-(a[0]*U+a[1]*X+a[2]*Y),u=h[0]*U+h[1]*X+h[2]*Y;return Math.abs(u+p)*m/3}function T(a,n,r,h,i,s){let c=(r+h*n+i*n*n)*3;s[0]=a[c+0],s[1]=a[c+1],s[2]=a[c+2]}function k(a,n,r,h,i,s){let c=r*(n-1),A=h*(n-1),F=i*(n-1),e=c%1,l=A%1,w=F%1,f=Math.floor(c),y=Math.floor(A),m=Math.floor(F),U=Math.ceil(c),X=Math.ceil(A),Y=Math.ceil(F);if(f===c&&y===A&&m===F)T(a,n,c,A,F,s);else{let p;e>=l&&l>=w?p=P[0]:e>=w&&w>=l?p=P[1]:w>=e&&e>=l?p=P[2]:l>=e&&e>=w?p=P[3]:l>=w&&w>=e?p=P[4]:w>=l&&l>=e&&(p=P[5]);let[u,M,x,d]=p,g=_[0];g[0]=e,g[1]=l,g[2]=w;let o=_[1],Z=U-f,b=X-y,L=Y-m;o[0]=Z*u[0]+f,o[1]=b*u[1]+y,o[2]=L*u[2]+m,T(a,n,o[0],o[1],o[2],t[0]),o[0]=Z*M[0]+f,o[1]=b*M[1]+y,o[2]=L*M[2]+m,T(a,n,o[0],o[1],o[2],t[1]),o[0]=Z*x[0]+f,o[1]=b*x[1]+y,o[2]=L*x[2]+m,T(a,n,o[0],o[1],o[2],t[2]),o[0]=Z*d[0]+f,o[1]=b*d[1]+y,o[2]=L*d[2]+m,T(a,n,o[0],o[1],o[2],t[3]);let v=V(M,x,d,g)*6,S=V(u,x,d,g)*6,C=V(u,M,d,g)*6,E=V(u,M,x,g)*6;t[0][0]*=v,t[0][1]*=v,t[0][2]*=v,t[1][0]*=S,t[1][1]*=S,t[1][2]*=S,t[2][0]*=C,t[2][1]*=C,t[2][2]*=C,t[3][0]*=E,t[3][1]*=E,t[3][2]*=E,s[0]=t[0][0]+t[1][0]+t[2][0]+t[3][0],s[1]=t[0][1]+t[1][1]+t[2][1]+t[3][1],s[2]=t[0][2]+t[1][2]+t[2][2]+t[3][2]}}var O=class{static expand(n,r){let h=Math.cbrt(n.length/3),i=new Float32Array(3),s=new n.constructor(r**3*3),c=1/(r-1);for(let A=0;A<r;++A)for(let F=0;F<r;++F)for(let e=0;e<r;++e){let l=e*c,w=F*c,f=A*c,y=Math.round(e+F*r+A*r*r)*3;k(n,h,l,w,f,i),s[y+0]=i[0],s[y+1]=i[1],s[y+2]=i[2]}return s}};self.addEventListener("message",a=>{let n=a.data,r=n.data;switch(n.operation){case q.SCALE_UP:r=O.expand(r,n.size);break}postMessage(r,[r.buffer]),close()});})();\n';
-
-  // src/images/textures/LookupTexture3D.js
-  var c = new Color();
-  var LookupTexture3D = class extends DataTexture3D {
-    constructor(data, size) {
-      super(data, size, size, size);
-      this.type = FloatType;
-      this.format = RGBFormat;
-      this.encoding = LinearEncoding;
-      this.minFilter = LinearFilter;
-      this.magFilter = LinearFilter;
-      this.wrapS = ClampToEdgeWrapping;
-      this.wrapT = ClampToEdgeWrapping;
-      this.wrapR = ClampToEdgeWrapping;
-      this.unpackAlignment = 1;
-    }
-    get isLookupTexture3D() {
-      return true;
-    }
-    scaleUp(size, transferData = true) {
-      const image = this.image;
-      let promise;
-      if (size <= image.width) {
-        promise = Promise.reject(new Error("The target size must be greater than the current size"));
-      } else if (size > image.width) {
-        const workerURL = URL.createObjectURL(new Blob([lut_default], {type: "text/javascript"}));
-        const worker = new Worker(workerURL);
-        promise = new Promise((resolve, reject) => {
-          worker.addEventListener("error", (event) => reject(event.error));
-          worker.addEventListener("message", (event) => {
-            const lut = new LookupTexture3D(event.data, size);
-            lut.encoding = this.encoding;
-            lut.type = this.type;
-            lut.name = this.name;
-            URL.revokeObjectURL(workerURL);
-            resolve(lut);
-          });
-          const transferList = transferData ? [image.data.buffer] : [];
-          worker.postMessage({
-            operation: LUTOperation.SCALE_UP,
-            data: image.data,
-            size
-          }, transferList);
-        });
-      }
-      return promise;
-    }
-    applyLUT(lut) {
-      const img0 = this.image;
-      const img1 = lut.image;
-      const size0 = Math.min(img0.width, img0.height, img0.depth);
-      const size1 = Math.min(img1.width, img1.height, img1.depth);
-      if (size0 !== size1) {
-        console.error("Size mismatch");
-      } else if (lut.type !== FloatType || this.type !== FloatType) {
-        console.error("Both LUTs must be FloatType textures");
-      } else if (lut.format !== RGBFormat || this.format !== RGBFormat) {
-        console.error("Both LUTs must be RGB textures");
-      } else {
-        const data0 = img0.data;
-        const data1 = img1.data;
-        const size = size0;
-        const s = size - 1;
-        for (let i = 0, l = size ** 3; i < l; ++i) {
-          const i3 = i * 3;
-          const r = data0[i3 + 0] * s;
-          const g = data0[i3 + 1] * s;
-          const b = data0[i3 + 2] * s;
-          const iRGB = Math.round(r + g * size + b * size * size) * 3;
-          data0[i3 + 0] = data1[iRGB + 0];
-          data0[i3 + 1] = data1[iRGB + 1];
-          data0[i3 + 2] = data1[iRGB + 2];
-        }
-        this.needsUpdate = true;
-      }
-      return this;
-    }
-    convertToUint8() {
-      if (this.type === FloatType) {
-        const floatData = this.image.data;
-        const uint8Data = new Uint8ClampedArray(floatData.length);
-        for (let i = 0, l = floatData.length; i < l; ++i) {
-          uint8Data[i] = floatData[i] * 255;
-        }
-        this.image.data = uint8Data;
-        this.type = UnsignedByteType;
-        this.needsUpdate = true;
-      }
-      return this;
-    }
-    convertToFloat() {
-      if (this.type === UnsignedByteType) {
-        const uint8Data = this.image.data;
-        const floatData = new Float32Array(uint8Data.length);
-        for (let i = 0, l = uint8Data.length; i < l; ++i) {
-          floatData[i] = uint8Data[i] / 255;
-        }
-        this.image.data = floatData;
-        this.type = FloatType;
-        this.needsUpdate = true;
-      }
-      return this;
-    }
-    convertLinearToSRGB() {
-      const data = this.image.data;
-      if (this.type === FloatType) {
-        const stride = this.format === RGBAFormat ? 4 : 3;
-        for (let i = 0, l = data.length; i < l; i += stride) {
-          c.fromArray(data, i).convertLinearToSRGB().toArray(data, i);
-        }
-        this.encoding = sRGBEncoding;
-        this.needsUpdate = true;
-      } else {
-        console.error("Color space conversion requires FloatType data");
-      }
-      return this;
-    }
-    convertSRGBToLinear() {
-      const data = this.image.data;
-      if (this.type === FloatType) {
-        const stride = this.format === RGBAFormat ? 4 : 3;
-        for (let i = 0, l = data.length; i < l; i += stride) {
-          c.fromArray(data, i).convertSRGBToLinear().toArray(data, i);
-        }
-        this.encoding = LinearEncoding;
-        this.needsUpdate = true;
-      } else {
-        console.error("Color space conversion requires FloatType data");
-      }
-      return this;
-    }
-    convertToRGBA() {
-      if (this.format === RGBFormat) {
-        const size = this.image.width;
-        const rgbData = this.image.data;
-        const rgbaData = new rgbData.constructor(size ** 3 * 4);
-        const maxValue = this.type === FloatType ? 1 : 255;
-        for (let i = 0, j = 0, l = rgbData.length; i < l; i += 3, j += 4) {
-          rgbaData[j + 0] = rgbData[i + 0];
-          rgbaData[j + 1] = rgbData[i + 1];
-          rgbaData[j + 2] = rgbData[i + 2];
-          rgbaData[j + 3] = maxValue;
-        }
-        this.image.data = rgbaData;
-        this.format = RGBAFormat;
-        this.needsUpdate = true;
-      }
-      return this;
-    }
-    toDataTexture() {
-      const width = this.image.width;
-      const height = this.image.height * this.image.depth;
-      const texture = new DataTexture(this.image.data, width, height);
-      texture.name = this.name;
-      texture.type = this.type;
-      texture.format = this.format;
-      texture.encoding = this.encoding;
-      texture.minFilter = this.minFilter;
-      texture.magFilter = this.magFilter;
-      texture.wrapS = this.wrapS;
-      texture.wrapT = this.wrapT;
-      texture.generateMipmaps = false;
-      return texture;
-    }
-    static from(texture) {
-      const image = texture.image;
-      const {width, height} = image;
-      const size = Math.min(width, height);
-      let data;
-      if (image instanceof Image) {
-        const rawImageData = RawImageData.from(image);
-        data = rawImageData.data;
-        const rearrangedData = new Uint8Array(size ** 3 * 3);
-        if (width > height) {
-          for (let z2 = 0; z2 < size; ++z2) {
-            for (let y2 = 0; y2 < size; ++y2) {
-              for (let x2 = 0; x2 < size; ++x2) {
-                const i4 = (x2 + z2 * size + y2 * size * size) * 4;
-                const i3 = (x2 + y2 * size + z2 * size * size) * 3;
-                rearrangedData[i3 + 0] = data[i4 + 0];
-                rearrangedData[i3 + 1] = data[i4 + 1];
-                rearrangedData[i3 + 2] = data[i4 + 2];
-              }
-            }
-          }
-        } else {
-          for (let i = 0, l = size ** 3; i < l; ++i) {
-            const i4 = i * 4;
-            const i3 = i * 3;
-            rearrangedData[i3 + 0] = data[i4 + 0];
-            rearrangedData[i3 + 1] = data[i4 + 1];
-            rearrangedData[i3 + 2] = data[i4 + 2];
-          }
-        }
-        data = rearrangedData;
-      } else {
-        data = image.data.slice();
-      }
-      const lut = new LookupTexture3D(data, size);
-      lut.type = texture.type;
-      lut.encoding = texture.encoding;
-      lut.name = texture.name;
-      return lut;
-    }
-    static createNeutral(size) {
-      const data = new Float32Array(size ** 3 * 3);
-      const s = 1 / (size - 1);
-      for (let r = 0; r < size; ++r) {
-        for (let g = 0; g < size; ++g) {
-          for (let b = 0; b < size; ++b) {
-            const i3 = (r + g * size + b * size * size) * 3;
-            data[i3 + 0] = r * s;
-            data[i3 + 1] = g * s;
-            data[i3 + 2] = b * s;
-          }
-        }
-      }
-      const lut = new LookupTexture3D(data, size);
-      lut.name = "neutral";
-      return lut;
-    }
-  };
-
   // src/loaders/LUT3dlLoader.js
   var LUT3dlLoader = class extends Loader {
     load(url, onLoad = () => {
@@ -33130,8 +33192,10 @@
       if (result2 !== null) {
         domainMax.set(Number(result2[1]), Number(result2[2]), Number(result2[3]));
       }
-      if (domainMin.x !== 0 || domainMin.y !== 0 || domainMin.z !== 0 || domainMax.x !== 1 || domainMax.y !== 1 || domainMax.z !== 1) {
-        throw new Error("Non-normalized input domain not supported");
+      if (domainMin.x > domainMax.x || domainMin.y > domainMax.y || domainMin.z > domainMax.z) {
+        console.error("Invalid input domain");
+        domainMin.set(0, 0, 0);
+        domainMax.set(1, 1, 1);
       }
       let i = 0;
       while ((result2 = regExpDataPoints.exec(input)) !== null) {
@@ -33141,6 +33205,8 @@
       }
       const lut = new LookupTexture3D(data, size, size, size);
       lut.encoding = sRGBEncoding;
+      lut.domainMin.copy(domainMin);
+      lut.domainMax.copy(domainMax);
       if (title !== null) {
         lut.name = title;
       }
@@ -36405,51 +36471,51 @@
       };
       delete PredicationMode.CUSTOM;
       menu.add(this, "rotate");
-      menu.add(params, "antialiasing", AAMode).onChange(() => {
-        const mode = Number(params.antialiasing);
+      menu.add(params, "antialiasing", AAMode).onChange((value) => {
+        const mode = Number(value);
         effectPass.enabled = mode === AAMode.SMAA;
         copyPass.enabled = !effectPass.enabled;
         composer2.multisampling = mode !== AAMode.MSAA ? 0 : Math.min(4, context.getParameter(context.MAX_SAMPLES));
       });
       const folder = menu.addFolder("SMAA");
-      folder.add(params.smaa, "mode", SMAAMode).onChange(() => {
-        const mode = Number(params.smaa.mode);
+      folder.add(params.smaa, "mode", SMAAMode).onChange((value) => {
+        const mode = Number(value);
         edgesTextureEffect.blendMode.setBlendFunction(mode === SMAAMode.SMAA_EDGES ? BlendFunction.NORMAL : BlendFunction.SKIP);
         weightsTextureEffect.blendMode.setBlendFunction(mode === SMAAMode.SMAA_WEIGHTS ? BlendFunction.NORMAL : BlendFunction.SKIP);
         effectPass.encodeOutput = mode !== SMAAMode.SMAA_EDGES && mode !== SMAAMode.SMAA_WEIGHTS;
       });
-      folder.add(params.smaa, "preset", SMAAPreset).onChange(() => {
-        smaaEffect.applyPreset(Number(params.smaa.preset));
+      folder.add(params.smaa, "preset", SMAAPreset).onChange((value) => {
+        smaaEffect.applyPreset(Number(value));
         params.edgeDetection.threshold = Number(edgeDetectionMaterial.defines.EDGE_THRESHOLD);
       });
       let subfolder = folder.addFolder("Edge Detection");
-      subfolder.add(params.edgeDetection, "mode", EdgeDetectionMode).onChange(() => {
-        edgeDetectionMaterial.setEdgeDetectionMode(Number(params.edgeDetection.mode));
+      subfolder.add(params.edgeDetection, "mode", EdgeDetectionMode).onChange((value) => {
+        edgeDetectionMaterial.setEdgeDetectionMode(Number(value));
       });
-      subfolder.add(params.edgeDetection, "contrast factor").min(1).max(3).step(0.01).onChange(() => {
-        edgeDetectionMaterial.setLocalContrastAdaptationFactor(Number(params.edgeDetection["contrast factor"]));
+      subfolder.add(params.edgeDetection, "contrast factor").min(1).max(3).step(0.01).onChange((value) => {
+        edgeDetectionMaterial.setLocalContrastAdaptationFactor(Number(value));
       });
-      subfolder.add(params.edgeDetection, "threshold").min(0).max(0.5).step(1e-4).onChange(() => {
-        edgeDetectionMaterial.setEdgeDetectionThreshold(Number(params.edgeDetection.threshold));
+      subfolder.add(params.edgeDetection, "threshold").min(0).max(0.5).step(1e-4).onChange((value) => {
+        edgeDetectionMaterial.setEdgeDetectionThreshold(Number(value));
       }).listen();
       subfolder = folder.addFolder("Predicated Thresholding");
-      subfolder.add(params.predication, "mode", PredicationMode).onChange(() => {
-        edgeDetectionMaterial.setPredicationMode(Number(params.predication.mode));
+      subfolder.add(params.predication, "mode", PredicationMode).onChange((value) => {
+        edgeDetectionMaterial.setPredicationMode(Number(value));
       });
-      subfolder.add(params.predication, "threshold").min(0).max(0.5).step(1e-4).onChange(() => {
-        edgeDetectionMaterial.setPredicationThreshold(Number(params.predication.threshold));
+      subfolder.add(params.predication, "threshold").min(0).max(0.5).step(1e-4).onChange((value) => {
+        edgeDetectionMaterial.setPredicationThreshold(Number(value));
       });
-      subfolder.add(params.predication, "strength").min(0).max(1).step(1e-4).onChange(() => {
-        edgeDetectionMaterial.setPredicationStrength(Number(params.predication.strength));
+      subfolder.add(params.predication, "strength").min(0).max(1).step(1e-4).onChange((value) => {
+        edgeDetectionMaterial.setPredicationStrength(Number(value));
       });
-      subfolder.add(params.predication, "scale").min(1).max(5).step(0.01).onChange(() => {
-        edgeDetectionMaterial.setPredicationScale(Number(params.predication.scale));
+      subfolder.add(params.predication, "scale").min(1).max(5).step(0.01).onChange((value) => {
+        edgeDetectionMaterial.setPredicationScale(Number(value));
       });
-      folder.add(params.smaa, "opacity").min(0).max(1).step(0.01).onChange(() => {
-        smaaEffect.blendMode.opacity.value = params.smaa.opacity;
+      folder.add(params.smaa, "opacity").min(0).max(1).step(0.01).onChange((value) => {
+        smaaEffect.blendMode.opacity.value = value;
       });
-      folder.add(params.smaa, "blend mode", BlendFunction).onChange(() => {
-        smaaEffect.blendMode.setBlendFunction(Number(params.smaa["blend mode"]));
+      folder.add(params.smaa, "blend mode", BlendFunction).onChange((value) => {
+        smaaEffect.blendMode.setBlendFunction(Number(value));
       });
       folder.open();
     }
@@ -36650,32 +36716,32 @@
         opacity: blendModeA.opacity.value,
         "blend mode": blendModeA.blendFunction
       };
-      menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(() => {
-        effectA.resolution.height = effectB.resolution.height = Number(params.resolution);
+      menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange((value) => {
+        effectA.resolution.height = effectB.resolution.height = Number(value);
       });
-      menu.add(params, "kernel size", KernelSize).onChange(() => {
-        effectA.blurPass.kernelSize = effectB.blurPass.kernelSize = Number(params["kernel size"]);
+      menu.add(params, "kernel size", KernelSize).onChange((value) => {
+        effectA.blurPass.kernelSize = effectB.blurPass.kernelSize = Number(value);
       });
-      menu.add(params, "blur scale").min(0).max(1).step(0.01).onChange(() => {
-        effectA.blurPass.scale = effectB.blurPass.scale = Number(params["blur scale"]);
+      menu.add(params, "blur scale").min(0).max(1).step(0.01).onChange((value) => {
+        effectA.blurPass.scale = effectB.blurPass.scale = Number(value);
       });
-      menu.add(params, "intensity").min(0).max(3).step(0.01).onChange(() => {
-        effectA.intensity = effectB.intensity = Number(params.intensity);
+      menu.add(params, "intensity").min(0).max(3).step(0.01).onChange((value) => {
+        effectA.intensity = effectB.intensity = Number(value);
       });
       let folder = menu.addFolder("Luminance");
-      folder.add(params.luminance, "filter").onChange(() => {
-        effectA.luminancePass.enabled = effectB.luminancePass.enabled = params.luminance.filter;
+      folder.add(params.luminance, "filter").onChange((value) => {
+        effectA.luminancePass.enabled = effectB.luminancePass.enabled = value;
       });
-      folder.add(params.luminance, "threshold").min(0).max(1).step(1e-3).onChange(() => {
-        effectA.luminanceMaterial.threshold = effectB.luminanceMaterial.threshold = Number(params.luminance.threshold);
+      folder.add(params.luminance, "threshold").min(0).max(1).step(1e-3).onChange((value) => {
+        effectA.luminanceMaterial.threshold = effectB.luminanceMaterial.threshold = Number(value);
       });
-      folder.add(params.luminance, "smoothing").min(0).max(1).step(1e-3).onChange(() => {
-        effectA.luminanceMaterial.smoothing = effectB.luminanceMaterial.smoothing = Number(params.luminance.smoothing);
+      folder.add(params.luminance, "smoothing").min(0).max(1).step(1e-3).onChange((value) => {
+        effectA.luminanceMaterial.smoothing = effectB.luminanceMaterial.smoothing = Number(value);
       });
       folder.open();
       folder = menu.addFolder("Selection");
-      folder.add(params.selection, "enabled").onChange(() => {
-        passB.enabled = params.selection.enabled;
+      folder.add(params.selection, "enabled").onChange((value) => {
+        passB.enabled = value;
         passA.enabled = !passB.enabled;
         if (passB.enabled) {
           renderer.domElement.addEventListener("mousedown", this);
@@ -36683,21 +36749,21 @@
           renderer.domElement.removeEventListener("mousedown", this);
         }
       });
-      folder.add(params.selection, "inverted").onChange(() => {
-        effectB.inverted = params.selection.inverted;
+      folder.add(params.selection, "inverted").onChange((value) => {
+        effectB.inverted = value;
       });
-      folder.add(params.selection, "ignore bg").onChange(() => {
-        effectB.ignoreBackground = params.selection["ignore bg"];
+      folder.add(params.selection, "ignore bg").onChange((value) => {
+        effectB.ignoreBackground = value;
       });
-      menu.add(params, "opacity").min(0).max(1).step(0.01).onChange(() => {
-        blendModeA.opacity.value = blendModeB.opacity.value = params.opacity;
+      menu.add(params, "opacity").min(0).max(1).step(0.01).onChange((value) => {
+        blendModeA.opacity.value = blendModeB.opacity.value = value;
       });
-      menu.add(params, "blend mode", BlendFunction).onChange(() => {
-        blendModeA.setBlendFunction(Number(params["blend mode"]));
-        blendModeB.setBlendFunction(Number(params["blend mode"]));
+      menu.add(params, "blend mode", BlendFunction).onChange((value) => {
+        blendModeA.setBlendFunction(Number(value));
+        blendModeB.setBlendFunction(Number(value));
       });
-      menu.add(passA, "dithering").onChange(() => {
-        passB.dithering = passA.dithering;
+      menu.add(passA, "dithering").onChange((value) => {
+        passB.dithering = value;
       });
     }
     reset() {
@@ -36822,19 +36888,19 @@
         opacity: 1 - blendMode.opacity.value,
         "blend mode": blendMode.blendFunction
       };
-      menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(() => {
-        blurPass.resolution.height = Number(params.resolution);
+      menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange((value) => {
+        blurPass.resolution.height = Number(value);
       });
-      menu.add(params, "kernel size", KernelSize).onChange(() => {
-        blurPass.kernelSize = Number(params["kernel size"]);
+      menu.add(params, "kernel size", KernelSize).onChange((value) => {
+        blurPass.kernelSize = Number(value);
       });
-      menu.add(params, "scale").min(0).max(1).step(0.01).onChange(() => {
-        blurPass.scale = Number(params.scale);
+      menu.add(params, "scale").min(0).max(1).step(0.01).onChange((value) => {
+        blurPass.scale = Number(value);
       });
       menu.add(blurPass, "enabled");
       menu.add(texturePass, "dithering");
-      menu.add(params, "opacity").min(0).max(1).step(0.01).onChange(() => {
-        blendMode.opacity.value = 1 - params.opacity;
+      menu.add(params, "opacity").min(0).max(1).step(0.01).onChange((value) => {
+        blendMode.opacity.value = 1 - value;
       });
     }
   };
@@ -36901,14 +36967,14 @@
         opacity: blendMode.opacity.value,
         "blend mode": blendMode.blendFunction
       };
-      menu.add(params, "bits").min(1).max(32).step(1).onChange(() => {
-        effect.setBitDepth(params.bits);
+      menu.add(params, "bits").min(1).max(32).step(1).onChange((value) => {
+        effect.setBitDepth(value);
       });
-      menu.add(params, "opacity").min(0).max(1).step(0.01).onChange(() => {
-        blendMode.opacity.value = params.opacity;
+      menu.add(params, "opacity").min(0).max(1).step(0.01).onChange((value) => {
+        blendMode.opacity.value = value;
       });
-      menu.add(params, "blend mode", BlendFunction).onChange(() => {
-        blendMode.setBlendFunction(Number(params["blend mode"]));
+      menu.add(params, "blend mode", BlendFunction).onChange((value) => {
+        blendMode.setBlendFunction(Number(value));
       });
     }
   };
@@ -37087,6 +37153,7 @@
           LUT: lutEffect.getLUT().name,
           "base size": lutEffect.getLUT().image.width,
           "3D texture": true,
+          "tetrahedral filter": false,
           "scale up": false,
           "target size": 48,
           "show LUT": false,
@@ -37142,62 +37209,65 @@
       }
       const infoOptions = [];
       let f = menu.addFolder("Color Average");
-      f.add(params.colorAverage, "opacity").min(0).max(1).step(0.01).onChange(() => {
-        colorAverageEffect.blendMode.opacity.value = params.colorAverage.opacity;
+      f.add(params.colorAverage, "opacity").min(0).max(1).step(0.01).onChange((value) => {
+        colorAverageEffect.blendMode.opacity.value = value;
       });
-      f.add(params.colorAverage, "blend mode", BlendFunction).onChange(() => {
-        colorAverageEffect.blendMode.setBlendFunction(Number(params.colorAverage["blend mode"]));
+      f.add(params.colorAverage, "blend mode", BlendFunction).onChange((value) => {
+        colorAverageEffect.blendMode.setBlendFunction(Number(value));
       });
       f = menu.addFolder("Sepia");
-      f.add(params.sepia, "intensity").min(0).max(1).step(1e-3).onChange(() => {
-        sepiaEffect.uniforms.get("intensity").value = params.sepia.intensity;
+      f.add(params.sepia, "intensity").min(0).max(1).step(1e-3).onChange((value) => {
+        sepiaEffect.uniforms.get("intensity").value = value;
       });
-      f.add(params.sepia, "opacity").min(0).max(1).step(0.01).onChange(() => {
-        sepiaEffect.blendMode.opacity.value = params.sepia.opacity;
+      f.add(params.sepia, "opacity").min(0).max(1).step(0.01).onChange((value) => {
+        sepiaEffect.blendMode.opacity.value = value;
       });
-      f.add(params.sepia, "blend mode", BlendFunction).onChange(() => {
-        sepiaEffect.blendMode.setBlendFunction(Number(params.sepia["blend mode"]));
+      f.add(params.sepia, "blend mode", BlendFunction).onChange((value) => {
+        sepiaEffect.blendMode.setBlendFunction(Number(value));
       });
       f = menu.addFolder("Brightness & Contrast");
-      f.add(params.brightnessContrast, "brightness").min(-1).max(1).step(1e-3).onChange(() => {
-        brightnessContrastEffect.uniforms.get("brightness").value = params.brightnessContrast.brightness;
+      f.add(params.brightnessContrast, "brightness").min(-1).max(1).step(1e-3).onChange((value) => {
+        brightnessContrastEffect.uniforms.get("brightness").value = value;
       });
-      f.add(params.brightnessContrast, "contrast").min(-1).max(1).step(1e-3).onChange(() => {
-        brightnessContrastEffect.uniforms.get("contrast").value = params.brightnessContrast.contrast;
+      f.add(params.brightnessContrast, "contrast").min(-1).max(1).step(1e-3).onChange((value) => {
+        brightnessContrastEffect.uniforms.get("contrast").value = value;
       });
-      f.add(params.brightnessContrast, "opacity").min(0).max(1).step(0.01).onChange(() => {
-        brightnessContrastEffect.blendMode.opacity.value = params.brightnessContrast.opacity;
+      f.add(params.brightnessContrast, "opacity").min(0).max(1).step(0.01).onChange((value) => {
+        brightnessContrastEffect.blendMode.opacity.value = value;
       });
-      f.add(params.brightnessContrast, "blend mode", BlendFunction).onChange(() => {
-        brightnessContrastEffect.blendMode.setBlendFunction(Number(params.brightnessContrast["blend mode"]));
+      f.add(params.brightnessContrast, "blend mode", BlendFunction).onChange((value) => {
+        brightnessContrastEffect.blendMode.setBlendFunction(Number(value));
       });
       f = menu.addFolder("Hue & Saturation");
-      f.add(params.hueSaturation, "hue").min(0).max(Math.PI * 2).step(1e-3).onChange(() => {
-        hueSaturationEffect.setHue(params.hueSaturation.hue);
+      f.add(params.hueSaturation, "hue").min(0).max(Math.PI * 2).step(1e-3).onChange((value) => {
+        hueSaturationEffect.setHue(value);
       });
-      f.add(params.hueSaturation, "saturation").min(-1).max(1).step(1e-3).onChange(() => {
-        hueSaturationEffect.uniforms.get("saturation").value = params.hueSaturation.saturation;
+      f.add(params.hueSaturation, "saturation").min(-1).max(1).step(1e-3).onChange((value) => {
+        hueSaturationEffect.uniforms.get("saturation").value = value;
       });
-      f.add(params.hueSaturation, "opacity").min(0).max(1).step(0.01).onChange(() => {
-        hueSaturationEffect.blendMode.opacity.value = params.hueSaturation.opacity;
+      f.add(params.hueSaturation, "opacity").min(0).max(1).step(0.01).onChange((value) => {
+        hueSaturationEffect.blendMode.opacity.value = value;
       });
-      f.add(params.hueSaturation, "blend mode", BlendFunction).onChange(() => {
-        hueSaturationEffect.blendMode.setBlendFunction(Number(params.hueSaturation["blend mode"]));
+      f.add(params.hueSaturation, "blend mode", BlendFunction).onChange((value) => {
+        hueSaturationEffect.blendMode.setBlendFunction(Number(value));
       });
       f = menu.addFolder("Lookup Texture 3D");
       f.add(params.lut, "LUT", [...luts.keys()]).onChange(changeLUT);
       infoOptions.push(f.add(params.lut, "base size").listen());
       if (capabilities.isWebGL2) {
         f.add(params.lut, "3D texture").onChange(changeLUT);
+        f.add(params.lut, "tetrahedral filter").onChange((value) => {
+          lutEffect.setTetrahedralInterpolationEnabled(value);
+        });
       }
       f.add(params.lut, "scale up").onChange(changeLUT);
       f.add(params.lut, "target size", [32, 48, 64, 96, 128]).onChange(changeLUT);
       f.add(params.lut, "show LUT").onChange(updateLUTPreview);
-      f.add(params.lut, "opacity").min(0).max(1).step(0.01).onChange(() => {
-        lutEffect.blendMode.opacity.value = params.lut.opacity;
+      f.add(params.lut, "opacity").min(0).max(1).step(0.01).onChange((value) => {
+        lutEffect.blendMode.opacity.value = value;
       });
-      f.add(params.lut, "blend mode", BlendFunction).onChange(() => {
-        lutEffect.blendMode.setBlendFunction(Number(params.lut["blend mode"]));
+      f.add(params.lut, "blend mode", BlendFunction).onChange((value) => {
+        lutEffect.blendMode.setBlendFunction(Number(value));
       });
       f.open();
       for (const option of infoOptions) {
@@ -37337,39 +37407,39 @@
         effectPass.renderToScreen = mode !== RenderMode.DEFAULT;
       }
       menu.add(params, "render mode", RenderMode).onChange(toggleRenderMode);
-      menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(() => {
-        depthOfFieldEffect.resolution.height = Number(params.resolution);
+      menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange((value) => {
+        depthOfFieldEffect.resolution.height = Number(value);
       });
-      menu.add(params, "bokeh scale").min(1).max(5).step(1e-3).onChange(() => {
-        depthOfFieldEffect.bokehScale = params["bokeh scale"];
+      menu.add(params, "bokeh scale").min(1).max(5).step(1e-3).onChange((value) => {
+        depthOfFieldEffect.bokehScale = value;
       });
       let folder = menu.addFolder("Circle of Confusion");
-      folder.add(params.coc, "edge blur kernel", KernelSize).onChange(() => {
-        depthOfFieldEffect.blurPass.kernelSize = Number(params.coc["edge blur kernel"]);
+      folder.add(params.coc, "edge blur kernel", KernelSize).onChange((value) => {
+        depthOfFieldEffect.blurPass.kernelSize = Number(value);
       });
-      folder.add(params.coc, "focus").min(0).max(1).step(1e-3).onChange(() => {
-        cocMaterial.uniforms.focusDistance.value = params.coc.focus;
+      folder.add(params.coc, "focus").min(0).max(1).step(1e-3).onChange((value) => {
+        cocMaterial.uniforms.focusDistance.value = value;
       });
-      folder.add(params.coc, "focal length").min(0).max(1).step(1e-4).onChange(() => {
-        cocMaterial.uniforms.focalLength.value = params.coc["focal length"];
+      folder.add(params.coc, "focal length").min(0).max(1).step(1e-4).onChange((value) => {
+        cocMaterial.uniforms.focalLength.value = value;
       });
       folder.open();
       folder = menu.addFolder("Vignette");
-      folder.add(params.vignette, "enabled").onChange(() => {
-        vignetteEffect.blendMode.setBlendFunction(params.vignette.enabled ? BlendFunction.NORMAL : BlendFunction.SKIP);
+      folder.add(params.vignette, "enabled").onChange((value) => {
+        vignetteEffect.blendMode.setBlendFunction(value ? BlendFunction.NORMAL : BlendFunction.SKIP);
       });
       folder.add(vignetteEffect, "eskil");
-      folder.add(params.vignette, "offset").min(0).max(1).step(1e-3).onChange(() => {
-        vignetteEffect.uniforms.get("offset").value = params.vignette.offset;
+      folder.add(params.vignette, "offset").min(0).max(1).step(1e-3).onChange((value) => {
+        vignetteEffect.uniforms.get("offset").value = value;
       });
-      folder.add(params.vignette, "darkness").min(0).max(1).step(1e-3).onChange(() => {
-        vignetteEffect.uniforms.get("darkness").value = params.vignette.darkness;
+      folder.add(params.vignette, "darkness").min(0).max(1).step(1e-3).onChange((value) => {
+        vignetteEffect.uniforms.get("darkness").value = value;
       });
-      menu.add(params, "opacity").min(0).max(1).step(0.01).onChange(() => {
-        blendMode.opacity.value = params.opacity;
+      menu.add(params, "opacity").min(0).max(1).step(0.01).onChange((value) => {
+        blendMode.opacity.value = value;
       });
-      menu.add(params, "blend mode", BlendFunction).onChange(() => {
-        blendMode.setBlendFunction(Number(params["blend mode"]));
+      menu.add(params, "blend mode", BlendFunction).onChange((value) => {
+        blendMode.setBlendFunction(Number(value));
       });
     }
   };
@@ -37480,41 +37550,41 @@
         "glitch ratio": effect.ratio,
         columns: uniforms.get("columns").value
       };
-      menu.add(params, "glitch mode", GlitchMode).onChange(() => {
-        effect.mode = Number(params["glitch mode"]);
+      menu.add(params, "glitch mode", GlitchMode).onChange((value) => {
+        effect.mode = Number(value);
       });
-      menu.add(params, "custom pattern").onChange(() => {
-        if (params["custom pattern"]) {
+      menu.add(params, "custom pattern").onChange((value) => {
+        if (value) {
           effect.setPerturbationMap(perturbationMap);
         } else {
           effect.setPerturbationMap(effect.generatePerturbationMap(64));
         }
       });
-      menu.add(params, "min delay").min(0).max(2).step(1e-3).onChange(() => {
-        delay.x = params["min delay"];
+      menu.add(params, "min delay").min(0).max(2).step(1e-3).onChange((value) => {
+        delay.x = value;
       });
-      menu.add(params, "max delay").min(2).max(4).step(1e-3).onChange(() => {
-        delay.y = params["max delay"];
+      menu.add(params, "max delay").min(2).max(4).step(1e-3).onChange((value) => {
+        delay.y = value;
       });
-      menu.add(params, "min duration").min(0).max(0.6).step(1e-3).onChange(() => {
-        duration.x = params["min duration"];
+      menu.add(params, "min duration").min(0).max(0.6).step(1e-3).onChange((value) => {
+        duration.x = value;
       });
-      menu.add(params, "max duration").min(0.6).max(1.8).step(1e-3).onChange(() => {
-        duration.y = params["max duration"];
+      menu.add(params, "max duration").min(0.6).max(1.8).step(1e-3).onChange((value) => {
+        duration.y = value;
       });
       const folder = menu.addFolder("Strength");
-      folder.add(params, "weak glitches").min(0).max(1).step(1e-3).onChange(() => {
-        strength.x = params["weak glitches"];
+      folder.add(params, "weak glitches").min(0).max(1).step(1e-3).onChange((value) => {
+        strength.x = value;
       });
-      folder.add(params, "strong glitches").min(0).max(1).step(1e-3).onChange(() => {
-        strength.y = params["strong glitches"];
+      folder.add(params, "strong glitches").min(0).max(1).step(1e-3).onChange((value) => {
+        strength.y = value;
       });
       folder.open();
-      menu.add(params, "glitch ratio").min(0).max(1).step(1e-3).onChange(() => {
-        effect.ratio = Number.parseFloat(params["glitch ratio"]);
+      menu.add(params, "glitch ratio").min(0).max(1).step(1e-3).onChange((value) => {
+        effect.ratio = Number.parseFloat(value);
       });
-      menu.add(params, "columns").min(0).max(0.5).step(1e-3).onChange(() => {
-        uniforms.get("columns").value = params.columns;
+      menu.add(params, "columns").min(0).max(0.5).step(1e-3).onChange((value) => {
+        uniforms.get("columns").value = value;
       });
     }
   };
@@ -37627,39 +37697,39 @@
         opacity: blendMode.opacity.value,
         "blend mode": blendMode.blendFunction
       };
-      menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(() => {
-        effect.resolution.height = Number(params.resolution);
+      menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange((value) => {
+        effect.resolution.height = Number(value);
       });
       menu.add(pass, "dithering");
-      menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE + 1).step(1).onChange(() => {
-        effect.blur = params.blurriness > 0;
-        effect.blurPass.kernelSize = params.blurriness - 1;
+      menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE + 1).step(1).onChange((value) => {
+        effect.blur = value > 0;
+        effect.blurPass.kernelSize = value - 1;
       });
-      menu.add(params, "density").min(0).max(1).step(0.01).onChange(() => {
-        uniforms.density.value = params.density;
+      menu.add(params, "density").min(0).max(1).step(0.01).onChange((value) => {
+        uniforms.density.value = value;
       });
-      menu.add(params, "decay").min(0).max(1).step(0.01).onChange(() => {
-        uniforms.decay.value = params.decay;
+      menu.add(params, "decay").min(0).max(1).step(0.01).onChange((value) => {
+        uniforms.decay.value = value;
       });
-      menu.add(params, "weight").min(0).max(1).step(0.01).onChange(() => {
-        uniforms.weight.value = params.weight;
+      menu.add(params, "weight").min(0).max(1).step(0.01).onChange((value) => {
+        uniforms.weight.value = value;
       });
-      menu.add(params, "exposure").min(0).max(1).step(0.01).onChange(() => {
-        uniforms.exposure.value = params.exposure;
+      menu.add(params, "exposure").min(0).max(1).step(0.01).onChange((value) => {
+        uniforms.exposure.value = value;
       });
-      menu.add(params, "clampMax").min(0).max(1).step(0.01).onChange(() => {
-        uniforms.clampMax.value = params.clampMax;
+      menu.add(params, "clampMax").min(0).max(1).step(0.01).onChange((value) => {
+        uniforms.clampMax.value = value;
       });
       menu.add(effect, "samples").min(15).max(200).step(1);
-      menu.addColor(params, "color").onChange(() => {
-        sun.material.color.setHex(params.color).convertSRGBToLinear();
-        light.color.setHex(params.color).convertSRGBToLinear();
+      menu.addColor(params, "color").onChange((value) => {
+        sun.material.color.setHex(value).convertSRGBToLinear();
+        light.color.setHex(value).convertSRGBToLinear();
       });
-      menu.add(params, "opacity").min(0).max(1).step(0.01).onChange(() => {
-        blendMode.opacity.value = params.opacity;
+      menu.add(params, "opacity").min(0).max(1).step(0.01).onChange((value) => {
+        blendMode.opacity.value = value;
       });
-      menu.add(params, "blend mode", BlendFunction).onChange(() => {
-        blendMode.setBlendFunction(Number(params["blend mode"]));
+      menu.add(params, "blend mode", BlendFunction).onChange((value) => {
+        blendMode.setBlendFunction(Number(value));
       });
     }
   };
@@ -37873,45 +37943,45 @@
         opacity: blendMode.opacity.value,
         "blend mode": blendMode.blendFunction
       };
-      menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(() => {
-        effect.resolution.height = Number(params.resolution);
+      menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange((value) => {
+        effect.resolution.height = Number(value);
       });
       menu.add(pass, "dithering");
-      menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE + 1).step(1).onChange(() => {
-        effect.blur = params.blurriness > 0;
-        effect.blurPass.kernelSize = params.blurriness - 1;
+      menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE + 1).step(1).onChange((value) => {
+        effect.blur = value > 0;
+        effect.blurPass.kernelSize = value - 1;
       });
-      menu.add(params, "use pattern").onChange(() => {
-        if (params["use pattern"]) {
+      menu.add(params, "use pattern").onChange((value) => {
+        if (value) {
           effect.setPatternTexture(assets.get("pattern-color"));
           uniforms.get("patternScale").value = params["pattern scale"];
         } else {
           effect.setPatternTexture(null);
         }
       });
-      menu.add(params, "pattern scale").min(20).max(100).step(0.1).onChange(() => {
+      menu.add(params, "pattern scale").min(20).max(100).step(0.1).onChange((value) => {
         if (uniforms.has("patternScale")) {
-          uniforms.get("patternScale").value = params["pattern scale"];
+          uniforms.get("patternScale").value = value;
         }
       });
-      menu.add(params, "edge strength").min(0).max(10).step(0.01).onChange(() => {
-        uniforms.get("edgeStrength").value = params["edge strength"];
+      menu.add(params, "edge strength").min(0).max(10).step(0.01).onChange((value) => {
+        uniforms.get("edgeStrength").value = value;
       });
-      menu.add(params, "pulse speed").min(0).max(2).step(0.01).onChange(() => {
-        effect.pulseSpeed = params["pulse speed"];
+      menu.add(params, "pulse speed").min(0).max(2).step(0.01).onChange((value) => {
+        effect.pulseSpeed = value;
       });
-      menu.addColor(params, "visible edge").onChange(() => {
-        uniforms.get("visibleEdgeColor").value.setHex(params["visible edge"]).convertSRGBToLinear();
+      menu.addColor(params, "visible edge").onChange((value) => {
+        uniforms.get("visibleEdgeColor").value.setHex(value).convertSRGBToLinear();
       });
-      menu.addColor(params, "hidden edge").onChange(() => {
-        uniforms.get("hiddenEdgeColor").value.setHex(params["hidden edge"]).convertSRGBToLinear();
+      menu.addColor(params, "hidden edge").onChange((value) => {
+        uniforms.get("hiddenEdgeColor").value.setHex(value).convertSRGBToLinear();
       });
       menu.add(effect, "xRay");
-      menu.add(params, "opacity").min(0).max(1).step(0.01).onChange(() => {
-        blendMode.opacity.value = params.opacity;
+      menu.add(params, "opacity").min(0).max(1).step(0.01).onChange((value) => {
+        blendMode.opacity.value = value;
       });
-      menu.add(params, "blend mode", BlendFunction).onChange(() => {
-        blendMode.setBlendFunction(Number(params["blend mode"]));
+      menu.add(params, "blend mode", BlendFunction).onChange((value) => {
+        blendMode.setBlendFunction(Number(value));
       });
     }
     reset() {
@@ -38018,42 +38088,42 @@
         }
       };
       let folder = menu.addFolder("Dot Screen");
-      folder.add(params.dotScreen, "angle").min(0).max(Math.PI).step(1e-3).onChange(() => {
-        dotScreenEffect.setAngle(params.dotScreen.angle);
+      folder.add(params.dotScreen, "angle").min(0).max(Math.PI).step(1e-3).onChange((value) => {
+        dotScreenEffect.setAngle(value);
       });
-      folder.add(params.dotScreen, "scale").min(0).max(1).step(0.01).onChange(() => {
-        dotScreenEffect.uniforms.get("scale").value = params.dotScreen.scale;
+      folder.add(params.dotScreen, "scale").min(0).max(1).step(0.01).onChange((value) => {
+        dotScreenEffect.uniforms.get("scale").value = value;
       });
-      folder.add(params.dotScreen, "opacity").min(0).max(1).step(0.01).onChange(() => {
-        dotScreenEffect.blendMode.opacity.value = params.dotScreen.opacity;
+      folder.add(params.dotScreen, "opacity").min(0).max(1).step(0.01).onChange((value) => {
+        dotScreenEffect.blendMode.opacity.value = value;
       });
-      folder.add(params.dotScreen, "blend mode", BlendFunction).onChange(() => {
-        dotScreenEffect.blendMode.setBlendFunction(Number(params.dotScreen["blend mode"]));
+      folder.add(params.dotScreen, "blend mode", BlendFunction).onChange((value) => {
+        dotScreenEffect.blendMode.setBlendFunction(Number(value));
       });
       folder.open();
       folder = menu.addFolder("Grid");
-      folder.add(params.grid, "scale").min(0.01).max(3).step(0.01).onChange(() => {
-        gridEffect.setScale(params.grid.scale);
+      folder.add(params.grid, "scale").min(0.01).max(3).step(0.01).onChange((value) => {
+        gridEffect.setScale(value);
       });
-      folder.add(params.grid, "line width").min(0).max(1).step(0.01).onChange(() => {
-        gridEffect.setLineWidth(params.grid["line width"]);
+      folder.add(params.grid, "line width").min(0).max(1).step(0.01).onChange((value) => {
+        gridEffect.setLineWidth(value);
       });
-      folder.add(params.grid, "opacity").min(0).max(1).step(0.01).onChange(() => {
-        gridEffect.blendMode.opacity.value = params.grid.opacity;
+      folder.add(params.grid, "opacity").min(0).max(1).step(0.01).onChange((value) => {
+        gridEffect.blendMode.opacity.value = value;
       });
-      folder.add(params.grid, "blend mode", BlendFunction).onChange(() => {
-        gridEffect.blendMode.setBlendFunction(Number(params.grid["blend mode"]));
+      folder.add(params.grid, "blend mode", BlendFunction).onChange((value) => {
+        gridEffect.blendMode.setBlendFunction(Number(value));
       });
       folder.open();
       folder = menu.addFolder("Scanline");
-      folder.add(params.scanline, "density").min(1e-3).max(2).step(1e-3).onChange(() => {
-        scanlineEffect.setDensity(params.scanline.density);
+      folder.add(params.scanline, "density").min(1e-3).max(2).step(1e-3).onChange((value) => {
+        scanlineEffect.setDensity(value);
       });
-      folder.add(params.scanline, "opacity").min(0).max(1).step(0.01).onChange(() => {
-        scanlineEffect.blendMode.opacity.value = params.scanline.opacity;
+      folder.add(params.scanline, "opacity").min(0).max(1).step(0.01).onChange((value) => {
+        scanlineEffect.blendMode.opacity.value = value;
       });
-      folder.add(params.scanline, "blend mode", BlendFunction).onChange(() => {
-        scanlineEffect.blendMode.setBlendFunction(Number(params.scanline["blend mode"]));
+      folder.add(params.scanline, "blend mode", BlendFunction).onChange((value) => {
+        scanlineEffect.blendMode.setBlendFunction(Number(value));
       });
       folder.open();
     }
@@ -38120,8 +38190,8 @@
       const params = {
         granularity: effect.getGranularity()
       };
-      menu.add(params, "granularity").min(0).max(50).step(0.1).onChange(() => {
-        effect.setGranularity(params.granularity);
+      menu.add(params, "granularity").min(0).max(50).step(0.1).onChange((value) => {
+        effect.setGranularity(value);
       });
     }
   };
@@ -38206,17 +38276,17 @@
         amplitude: uniforms.get("amplitude").value
       };
       menu.add(effect, "speed").min(0).max(10).step(1e-3);
-      menu.add(params, "size").min(0.01).max(2).step(1e-3).onChange(() => {
-        uniforms.get("size").value = params.size;
+      menu.add(params, "size").min(0.01).max(2).step(1e-3).onChange((value) => {
+        uniforms.get("size").value = value;
       });
-      menu.add(params, "extent").min(0).max(10).step(1e-3).onChange(() => {
-        uniforms.get("maxRadius").value = params.extent;
+      menu.add(params, "extent").min(0).max(10).step(1e-3).onChange((value) => {
+        uniforms.get("maxRadius").value = value;
       });
-      menu.add(params, "waveSize").min(0).max(2).step(1e-3).onChange(() => {
-        uniforms.get("waveSize").value = params.waveSize;
+      menu.add(params, "waveSize").min(0).max(2).step(1e-3).onChange((value) => {
+        uniforms.get("waveSize").value = value;
       });
-      menu.add(params, "amplitude").min(0).max(0.25).step(1e-3).onChange(() => {
-        uniforms.get("amplitude").value = params.amplitude;
+      menu.add(params, "amplitude").min(0).max(0.25).step(1e-3).onChange((value) => {
+        uniforms.get("amplitude").value = value;
       });
       menu.add(effect, "explode");
     }
@@ -38372,64 +38442,64 @@
       if (capabilities.isWebGL2) {
         menu.add(params, "render mode", RenderMode).onChange(toggleRenderMode);
       }
-      menu.add(params, "resolution").min(0.25).max(1).step(0.25).onChange(() => {
-        ssaoEffect.resolution.scale = params.resolution;
-        depthDownsamplingPass.resolution.scale = params.resolution;
+      menu.add(params, "resolution").min(0.25).max(1).step(0.25).onChange((value) => {
+        ssaoEffect.resolution.scale = value;
+        depthDownsamplingPass.resolution.scale = value;
       });
       menu.add(ssaoEffect, "samples").min(1).max(32).step(1);
       menu.add(ssaoEffect, "rings").min(1).max(16).step(1);
       menu.add(ssaoEffect, "radius").min(1e-6).max(1).step(1e-3);
       let f = menu.addFolder("Distance Scaling");
-      f.add(params.distanceScaling, "enabled").onChange(() => {
-        ssaoEffect.distanceScaling = params.distanceScaling.enabled;
+      f.add(params.distanceScaling, "enabled").onChange((value) => {
+        ssaoEffect.distanceScaling = value.enabled;
       });
-      f.add(params.distanceScaling, "min scale").min(0).max(1).step(1e-3).onChange(() => {
-        uniforms.minRadiusScale.value = params.distanceScaling["min scale"];
+      f.add(params.distanceScaling, "min scale").min(0).max(1).step(1e-3).onChange((value) => {
+        uniforms.minRadiusScale.value = value;
       });
       if (capabilities.isWebGL2) {
         f = menu.addFolder("Depth-Aware Upsampling");
-        f.add(params.upsampling, "enabled").onChange(() => {
-          ssaoEffect.depthAwareUpsampling = params.upsampling.enabled;
+        f.add(params.upsampling, "enabled").onChange((value) => {
+          ssaoEffect.depthAwareUpsampling = value;
         });
-        f.add(params.upsampling, "threshold").min(0).max(1).step(1e-3).onChange(() => {
-          ssaoEffect.defines.set("THRESHOLD", params.upsampling.threshold.toFixed(3));
+        f.add(params.upsampling, "threshold").min(0).max(1).step(1e-3).onChange((value) => {
+          ssaoEffect.defines.set("THRESHOLD", value.toFixed(3));
           effectPass.recompile();
         });
       }
       f = menu.addFolder("Distance Cutoff");
-      f.add(params.distance, "threshold").min(0).max(1).step(1e-4).onChange(() => {
-        ssaoEffect.setDistanceCutoff(params.distance.threshold, params.distance.falloff);
+      f.add(params.distance, "threshold").min(0).max(1).step(1e-4).onChange((value) => {
+        ssaoEffect.setDistanceCutoff(value, params.distance.falloff);
       });
-      f.add(params.distance, "falloff").min(0).max(1).step(1e-4).onChange(() => {
-        ssaoEffect.setDistanceCutoff(params.distance.threshold, params.distance.falloff);
+      f.add(params.distance, "falloff").min(0).max(1).step(1e-4).onChange((value) => {
+        ssaoEffect.setDistanceCutoff(params.distance.threshold, value);
       });
       f = menu.addFolder("Proximity Cutoff");
-      f.add(params.proximity, "threshold").min(0).max(0.01).step(1e-4).onChange(() => {
-        ssaoEffect.setProximityCutoff(params.proximity.threshold, params.proximity.falloff);
+      f.add(params.proximity, "threshold").min(0).max(0.01).step(1e-4).onChange((value) => {
+        ssaoEffect.setProximityCutoff(value, params.proximity.falloff);
       });
-      f.add(params.proximity, "falloff").min(0).max(0.01).step(1e-4).onChange(() => {
-        ssaoEffect.setProximityCutoff(params.proximity.threshold, params.proximity.falloff);
+      f.add(params.proximity, "falloff").min(0).max(0.01).step(1e-4).onChange((value) => {
+        ssaoEffect.setProximityCutoff(params.proximity.threshold, value);
       });
-      menu.add(params, "bias").min(0).max(1).step(1e-3).onChange(() => {
-        uniforms.bias.value = params.bias;
+      menu.add(params, "bias").min(0).max(1).step(1e-3).onChange((value) => {
+        uniforms.bias.value = value;
       });
-      menu.add(params, "fade").min(0).max(1).step(1e-3).onChange(() => {
-        uniforms.fade.value = params.fade;
+      menu.add(params, "fade").min(0).max(1).step(1e-3).onChange((value) => {
+        uniforms.fade.value = value;
       });
-      menu.add(params, "lum influence").min(0).max(1).step(1e-3).onChange(() => {
-        ssaoEffect.uniforms.get("luminanceInfluence").value = params["lum influence"];
+      menu.add(params, "lum influence").min(0).max(1).step(1e-3).onChange((value) => {
+        ssaoEffect.uniforms.get("luminanceInfluence").value = value;
       });
-      menu.add(params, "intensity").min(1).max(4).step(0.01).onChange(() => {
-        uniforms.intensity.value = params.intensity;
+      menu.add(params, "intensity").min(1).max(4).step(0.01).onChange((value) => {
+        uniforms.intensity.value = value;
       });
-      menu.addColor(params, "color").onChange(() => {
-        ssaoEffect.color = params.color === 0 ? null : color2.setHex(params.color).convertSRGBToLinear();
+      menu.addColor(params, "color").onChange((value) => {
+        ssaoEffect.color = value === 0 ? null : color2.setHex(value).convertSRGBToLinear();
       });
-      menu.add(params, "opacity").min(0).max(1).step(1e-3).onChange(() => {
-        blendMode.opacity.value = params.opacity;
+      menu.add(params, "opacity").min(0).max(1).step(1e-3).onChange((value) => {
+        blendMode.opacity.value = value;
       });
-      menu.add(params, "blend mode", BlendFunction).onChange(() => {
-        blendMode.setBlendFunction(Number(params["blend mode"]));
+      menu.add(params, "blend mode", BlendFunction).onChange((value) => {
+        blendMode.setBlendFunction(Number(value));
       });
     }
   };
@@ -38511,8 +38581,8 @@
         "blend mode": blendMode.blendFunction
       };
       const folder = menu.addFolder("UV Transformation");
-      folder.add(params.uv, "enabled").onChange(() => {
-        effect.uvTransform = params.uv.enabled;
+      folder.add(params.uv, "enabled").onChange((value) => {
+        effect.uvTransform = value;
       });
       folder.open();
       let subFolder = folder.addFolder("Offset");
@@ -38524,11 +38594,11 @@
       subFolder = folder.addFolder("Center");
       subFolder.add(center, "x").min(0).max(1).step(1e-3);
       subFolder.add(center, "y").min(0).max(1).step(1e-3);
-      menu.add(params, "opacity").min(0).max(1).step(0.01).onChange(() => {
-        blendMode.opacity.value = params.opacity;
+      menu.add(params, "opacity").min(0).max(1).step(0.01).onChange((value) => {
+        blendMode.opacity.value = value;
       });
-      menu.add(params, "blend mode", BlendFunction).onChange(() => {
-        blendMode.setBlendFunction(Number(params["blend mode"]));
+      menu.add(params, "blend mode", BlendFunction).onChange((value) => {
+        blendMode.setBlendFunction(Number(value));
       });
     }
   };
@@ -38586,24 +38656,24 @@
       const toneMappingEffect = new ToneMappingEffect({
         mode: ToneMappingMode.REINHARD2_ADAPTIVE,
         resolution: 256,
-        whitePoint: 4,
+        whitePoint: 16,
         middleGrey: 0.6,
         minLuminance: 0.01,
         averageLuminance: 0.01,
         adaptationRate: 1
       });
       this.effect = toneMappingEffect;
-      const pass = new EffectPass(camera2, smaaEffect, toneMappingEffect);
-      composer2.addPass(pass);
+      composer2.addPass(new EffectPass(camera2, smaaEffect, toneMappingEffect));
     }
     registerOptions(menu) {
+      const renderer = this.composer.getRenderer();
       const effect = this.effect;
       const blendMode = effect.blendMode;
       const adaptiveLuminancePass = effect.adaptiveLuminancePass;
       const adaptiveLuminanceMaterial = adaptiveLuminancePass.getFullscreenMaterial();
       const params = {
         mode: effect.getMode(),
-        exposure: 1,
+        exposure: renderer.toneMappingExposure,
         resolution: effect.resolution,
         "white point": effect.uniforms.get("whitePoint").value,
         "middle grey": effect.uniforms.get("middleGrey").value,
@@ -38613,39 +38683,39 @@
         opacity: blendMode.opacity.value,
         "blend mode": blendMode.blendFunction
       };
-      menu.add(params, "mode", ToneMappingMode).onChange(() => {
-        effect.setMode(Number(params.mode));
+      menu.add(params, "mode", ToneMappingMode).onChange((value) => {
+        effect.setMode(Number(value));
       });
-      menu.add(params, "exposure").min(0).max(2).step(1e-3).onChange(() => {
-        effect.uniforms.get("toneMappingExposure").value = params.exposure;
+      menu.add(params, "exposure").min(0).max(2).step(1e-3).onChange((value) => {
+        renderer.toneMappingExposure = value;
       });
       let f = menu.addFolder("Reinhard (Modified)");
-      f.add(params, "white point").min(1).max(16).step(0.01).onChange(() => {
-        effect.uniforms.get("whitePoint").value = params["white point"];
+      f.add(params, "white point").min(2).max(32).step(0.01).onChange((value) => {
+        effect.uniforms.get("whitePoint").value = value;
       });
-      f.add(params, "middle grey").min(0).max(1).step(1e-4).onChange(() => {
-        effect.uniforms.get("middleGrey").value = params["middle grey"];
+      f.add(params, "middle grey").min(0).max(1).step(1e-4).onChange((value) => {
+        effect.uniforms.get("middleGrey").value = value;
       });
-      f.add(params, "average lum").min(1e-4).max(1).step(1e-4).onChange(() => {
-        effect.uniforms.get("averageLuminance").value = params["average lum"];
+      f.add(params, "average lum").min(1e-4).max(1).step(1e-4).onChange((value) => {
+        effect.uniforms.get("averageLuminance").value = value;
       });
       f.open();
       f = menu.addFolder("Reinhard (Adaptive)");
-      f.add(params, "resolution", [64, 128, 256, 512]).onChange(() => {
-        effect.resolution = Number(params.resolution);
+      f.add(params, "resolution", [64, 128, 256, 512]).onChange((value) => {
+        effect.resolution = Number(value);
       });
-      f.add(params, "adaptation rate").min(1e-3).max(3).step(1e-3).onChange(() => {
-        adaptiveLuminancePass.adaptationRate = params["adaptation rate"];
+      f.add(params, "adaptation rate").min(1e-3).max(3).step(1e-3).onChange((value) => {
+        adaptiveLuminancePass.adaptationRate = value;
       });
-      f.add(params, "min lum").min(1e-3).max(1).step(1e-3).onChange(() => {
-        adaptiveLuminanceMaterial.uniforms.minLuminance.value = params["min lum"];
+      f.add(params, "min lum").min(1e-3).max(1).step(1e-3).onChange((value) => {
+        adaptiveLuminanceMaterial.uniforms.minLuminance.value = value;
       });
       f.open();
-      menu.add(params, "opacity").min(0).max(1).step(0.01).onChange(() => {
-        blendMode.opacity.value = params.opacity;
+      menu.add(params, "opacity").min(0).max(1).step(0.01).onChange((value) => {
+        blendMode.opacity.value = value;
       });
-      menu.add(params, "blend mode", BlendFunction).onChange(() => {
-        blendMode.setBlendFunction(Number(params["blend mode"]));
+      menu.add(params, "blend mode", BlendFunction).onChange((value) => {
+        blendMode.setBlendFunction(Number(value));
       });
     }
   };
@@ -38859,10 +38929,10 @@
         chrome: () => window.open("https://www.google.com/search?q=chrome+--disable-frame-rate-limit --disable-gpu-vsync", "_blank")
       };
       infoOptions.push(menu.add(params, "effects"));
-      menu.add(params, "merge effects").onChange(() => {
-        this.effectPass.enabled = params["merge effects"];
+      menu.add(params, "merge effects").onChange((value) => {
+        this.effectPass.enabled = value;
         for (const pass of this.passes) {
-          pass.enabled = !params["merge effects"];
+          pass.enabled = !value;
         }
       });
       infoOptions.push(menu.add(this, "fps").listen());

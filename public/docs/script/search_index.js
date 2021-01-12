@@ -1932,6 +1932,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/effects/luteffect.js~luteffect#settetrahedralinterpolationenabled",
+    "class/src/effects/LUTEffect.js~LUTEffect.html#instance-method-setTetrahedralInterpolationEnabled",
+    "src/effects/LUTEffect.js~LUTEffect#setTetrahedralInterpolationEnabled",
+    "method"
+  ],
+  [
     "src/effects/noiseeffect.js",
     "file/src/effects/NoiseEffect.js.html",
     "src/effects/NoiseEffect.js",
@@ -2968,6 +2974,18 @@ window.esdocSearchIndex = [
     "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#instance-method-convertToUint8",
     "src/images/textures/LookupTexture3D.js~LookupTexture3D#convertToUint8",
     "method"
+  ],
+  [
+    "src/images/textures/lookuptexture3d.js~lookuptexture3d#domainmax",
+    "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#instance-member-domainMax",
+    "src/images/textures/LookupTexture3D.js~LookupTexture3D#domainMax",
+    "member"
+  ],
+  [
+    "src/images/textures/lookuptexture3d.js~lookuptexture3d#domainmin",
+    "class/src/images/textures/LookupTexture3D.js~LookupTexture3D.html#instance-member-domainMin",
+    "src/images/textures/LookupTexture3D.js~LookupTexture3D#domainMin",
+    "member"
   ],
   [
     "src/images/textures/lookuptexture3d.js~lookuptexture3d#encoding",

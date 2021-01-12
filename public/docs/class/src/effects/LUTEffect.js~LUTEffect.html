@@ -125,13 +125,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {LUTEffect} from &apos;<span><a href="file/src/effects/LUTEffect.js.html#lineNumber15">postprocessing</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {LUTEffect} from &apos;<span><a href="file/src/effects/LUTEffect.js.html#lineNumber35">postprocessing</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/effects/LUTEffect.js.html#lineNumber15">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/effects/LUTEffect.js.html#lineNumber35">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -152,9 +152,15 @@
   
   
   <div class="description" data-ice="description"><p>A LUT effect.</p>
+<p>The tetrahedral interpolation algorithm was inspired by an implementation
+from OpenColorIO which is licensed under the BSD 3-Clause License.</p>
+<p>The manual trilinear interpolation algorithm is based on an implementation
+by Garret Johnson which is licensed under the MIT License.</p>
 <p>References:
-<a href="https://github.com/gkjohnson/threejs-sandbox/tree/master/3d-lut">https://github.com/gkjohnson/threejs-sandbox/tree/master/3d-lut</a>
-<a href="https://developer.nvidia.com/gpugems/gpugems2/part-iii-high-quality-rendering/chapter-24-using-lookup-tables-accelerate-color">https://developer.nvidia.com/gpugems/gpugems2/part-iii-high-quality-rendering/chapter-24-using-lookup-tables-accelerate-color</a></p>
+<a href="https://developer.nvidia.com/gpugems/gpugems2/part-iii-high-quality-rendering/chapter-24-using-lookup-tables-accelerate-color">https://developer.nvidia.com/gpugems/gpugems2/part-iii-high-quality-rendering/chapter-24-using-lookup-tables-accelerate-color</a>
+<a href="https://www.nvidia.com/content/GTC/posters/2010/V01-Real-Time-Color-Space-Conversion-for-High-Resolution-Video.pdf">https://www.nvidia.com/content/GTC/posters/2010/V01-Real-Time-Color-Space-Conversion-for-High-Resolution-Video.pdf</a>
+<a href="https://github.com/AcademySoftwareFoundation/OpenColorIO/blob/master/src/OpenColorIO/ops/lut3d/">https://github.com/AcademySoftwareFoundation/OpenColorIO/blob/master/src/OpenColorIO/ops/lut3d/</a>
+<a href="https://github.com/gkjohnson/threejs-sandbox/tree/master/3d-lut">https://github.com/gkjohnson/threejs-sandbox/tree/master/3d-lut</a></p>
 </div>
   
 
@@ -347,6 +353,35 @@
         
         
         <div data-ice="description"><p>Sets the LUT.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/LUTEffect.js~LUTEffect.html#instance-method-setTetrahedralInterpolationEnabled">setTetrahedralInterpolationEnabled</a></span></span><span class="code" data-ice="signature">(enabled: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Enables or disables tetrahedral interpolation.</p>
 </div>
       </div>
     </td>
@@ -878,7 +913,7 @@ a way that requires a shader recompilation.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/LUTEffect.js.html#lineNumber25">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/LUTEffect.js.html#lineNumber46">source</a></span></span>
     </span>
   </h3>
 
@@ -920,6 +955,14 @@ a way that requires a shader recompilation.</p>
       <td data-ice="description"><p>The blend function of this effect.</p>
 </td>
     </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.tetrahedralInterpolation</td>
+      <td data-ice="type" class="code"><span><a href="variable/index.html#static-variable-BlendFunction">BlendFunction</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Enables or disables tetrahedral interpolation.</p>
+</td>
+    </tr>
 </tbody>
   </table>
 </div>
@@ -958,7 +1001,7 @@ a way that requires a shader recompilation.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/LUTEffect.js.html#lineNumber79">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/LUTEffect.js.html#lineNumber117">source</a></span></span>
     </span>
   </h3>
 
@@ -1016,7 +1059,7 @@ a way that requires a shader recompilation.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/LUTEffect.js.html#lineNumber153">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/LUTEffect.js.html#lineNumber190">source</a></span></span>
     </span>
   </h3>
 
@@ -1073,7 +1116,7 @@ a way that requires a shader recompilation.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/LUTEffect.js.html#lineNumber65">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/LUTEffect.js.html#lineNumber103">source</a></span></span>
     </span>
   </h3>
 
@@ -1130,7 +1173,7 @@ a way that requires a shader recompilation.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/LUTEffect.js.html#lineNumber93">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/LUTEffect.js.html#lineNumber131">source</a></span></span>
     </span>
   </h3>
 
@@ -1192,7 +1235,7 @@ a way that requires a shader recompilation.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/LUTEffect.js.html#lineNumber165">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/LUTEffect.js.html#lineNumber202">source</a></span></span>
     </span>
   </h3>
 
@@ -1217,6 +1260,69 @@ a way that requires a shader recompilation.</p>
       <td data-ice="type" class="code"><span>Texture</span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>The LUT.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-setTetrahedralInterpolationEnabled">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">setTetrahedralInterpolationEnabled</span><span class="code" data-ice="signature">(enabled: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/LUTEffect.js.html#lineNumber354">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Enables or disables tetrahedral interpolation. Requires a 3D LUT.</p>
+<p>Tetrahedral interpolation produces highly accurate results, but is slower
+than hardware interpolation. This feature is disabled by default.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">enabled</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Whether tetrahedral interpolation should be enabled.</p>
 </td>
     </tr>
 </tbody>
