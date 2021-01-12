@@ -1,3 +1,13 @@
+uniform vec3 scale;
+uniform vec3 offset;
+
+#ifdef CUSTOM_INPUT_DOMAIN
+
+	uniform vec3 domainMin;
+	uniform vec3 domainMax;
+
+#endif
+
 #ifdef LUT_3D
 
 	#ifdef LUT_PRECISION_HIGH
@@ -20,7 +30,103 @@
 
 	vec4 applyLUT(const in vec3 rgb) {
 
-		return texture(lut, rgb);
+		#ifdef TETRAHEDRAL_INTERPOLATION
+
+			/* Strategy: Fetch the four corners (v1, v2, v4, v4) of the cube that is
+			described by the current sampling coordinates, calculate the barycentric
+			weights and interpolate the nearest color samples. */
+
+			vec3 p = floor(rgb);
+			vec3 f = rgb - p;
+
+			vec3 v1 = (p + 0.5) * LUT_TEXEL_WIDTH;
+			vec3 v4 = (p + 1.5) * LUT_TEXEL_WIDTH;
+			vec3 v2, v3; // Must be identified.
+			vec3 frac;
+
+			if(f.r >= f.g) {
+
+				if(f.g > f.b) {
+
+					// T4: R >= G > B
+					frac = f.rgb;
+					v2 = vec3(v4.x, v1.y, v1.z);
+					v3 = vec3(v4.x, v4.y, v1.z);
+
+				} else if(f.r >= f.b) {
+
+					// T6: R >= B >= G
+					frac = f.rbg;
+					v2 = vec3(v4.x, v1.y, v1.z);
+					v3 = vec3(v4.x, v1.y, v4.z);
+
+				} else {
+
+					// T2: B > R >= G
+					frac = f.brg;
+					v2 = vec3(v1.x, v1.y, v4.z);
+					v3 = vec3(v4.x, v1.y, v4.z);
+
+				}
+
+			} else {
+
+				if(f.b > f.g) {
+
+					// T3: B > G > R
+					frac = f.bgr;
+					v2 = vec3(v1.x, v1.y, v4.z);
+					v3 = vec3(v1.x, v4.y, v4.z);
+
+				} else if(f.r >= f.b) {
+
+					// T5: G > R >= B
+					frac = f.grb;
+					v2 = vec3(v1.x, v4.y, v1.z);
+					v3 = vec3(v4.x, v4.y, v1.z);
+
+				} else {
+
+					// T1: G >= B > R
+					frac = f.gbr;
+					v2 = vec3(v1.x, v4.y, v1.z);
+					v3 = vec3(v1.x, v4.y, v4.z);
+
+				}
+
+			}
+
+			// Interpolate manually to avoid 8-bit quantization of fractions.
+			vec3 sample1 = texture(lut, v1).rgb;
+			vec3 sample2 = texture(lut, v2).rgb;
+			vec3 sample3 = texture(lut, v3).rgb;
+			vec3 sample4 = texture(lut, v4).rgb;
+
+			vec4 weights = vec4(
+				1.0 - frac.x,
+				frac.x - frac.y,
+				frac.y - frac.z,
+				frac.z
+			);
+
+			vec3 result = (
+				weights.x * sample1 +
+				weights.y * sample2 +
+				weights.z * sample3 +
+				weights.w * sample4
+			);
+
+			return vec4(result, 1.0);
+
+		#else
+
+			/* Built-in trilinear interpolation. Note that the fractional components
+			are quantized to 8 bits on common hardware, which introduces significant
+			error with small grid sizes. */
+
+			return texture(lut, rgb);
+
+		#endif
 
 	}
 
@@ -79,6 +185,7 @@
 
 		#endif
 
+		// Manual trilinear interpolation (subject to quantization errors).
 		vec4 sample0 = texture2D(lut, uv0);
 		vec4 sample1 = texture2D(lut, uv1);
 
@@ -92,14 +199,31 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
 
 	vec3 c = linearToInputTexel(inputColor).rgb;
 
-	#ifndef LUT_3D
+	#ifdef CUSTOM_INPUT_DOMAIN
 
-		c = clamp(c, 0.0, 1.0);
+		if(c.r >= domainMin.r && c.g >= domainMin.g && c.b >= domainMin.b &&
+			c.r <= domainMax.r && c.g <= domainMax.g && c.b <= domainMax.b) {
+
+			c = texelToLinear(applyLUT(scale * c + offset)).rgb;
+
+		} else {
+
+			c = inputColor.rgb;
+
+		}
+
+	#else
+
+		#ifndef LUT_3D
+
+			c = clamp(c, 0.0, 1.0);
+
+		#endif
+
+		c = texelToLinear(applyLUT(scale * c + offset)).rgb;
 
 	#endif
 
-	// Apply scale/offset to prevent nonlinearities near the LUT's edges.
-	c = texelToLinear(applyLUT(COORD_SCALE * c + COORD_OFFSET)).rgb;
 	outputColor = vec4(c, inputColor.a);
 
 }

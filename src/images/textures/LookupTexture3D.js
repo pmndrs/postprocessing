@@ -9,7 +9,8 @@ import {
 	RGBFormat,
 	RGBAFormat,
 	sRGBEncoding,
-	UnsignedByteType
+	UnsignedByteType,
+	Vector3
 } from "three";
 
 import { RawImageData } from "../RawImageData";
@@ -54,6 +55,22 @@ export class LookupTexture3D extends DataTexture3D {
 		this.wrapT = ClampToEdgeWrapping;
 		this.wrapR = ClampToEdgeWrapping;
 		this.unpackAlignment = 1;
+
+		/**
+		 * The lower bounds of the input domain.
+		 *
+		 * @type {Vector3}
+		 */
+
+		this.domainMin = new Vector3(0.0, 0.0, 0.0);
+
+		/**
+		 * The upper bounds of the input domain.
+		 *
+		 * @type {Vector3}
+		 */
+
+		this.domainMax = new Vector3(1.0, 1.0, 1.0);
 
 	}
 
@@ -341,6 +358,8 @@ export class LookupTexture3D extends DataTexture3D {
 
 	/**
 	 * Converts this LUT into a 2D data texture.
+	 *
+	 * Please note that custom input domains are not carried over to 2D textures.
 	 *
 	 * @return {DataTexture} The texture.
 	 */
