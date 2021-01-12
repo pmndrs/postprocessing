@@ -215,7 +215,7 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
 
 	#else
 
-		#ifndef LUT_3D
+		#if !defined(LUT_3D) || defined(TETRAHEDRAL_INTERPOLATION)
 
 			c = clamp(c, 0.0, 1.0);
 
