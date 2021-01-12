@@ -291,7 +291,9 @@ export class LUTEffect extends Effect {
 
 			if(this.defines.has("CUSTOM_INPUT_DOMAIN")) {
 
-				// @todo
+				const domainScale = lut.domainMax.clone().sub(lut.domainMin).multiplyScalar(size);
+				scale.setScalar(size - 1.0).divide(domainScale);
+				offset.copy(lut.domainMin).negate().multiply(scale).addScalar(1.0 / (2.0 * size));
 
 			} else {
 
