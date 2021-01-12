@@ -133,14 +133,14 @@ export class GodRaysDemo extends PostProcessingDemo {
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
 
-		// Camera.
+		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
 		const camera = new PerspectiveCamera(50, aspect, 0.3, 2000);
 		camera.position.set(9.25, 2.4, 1);
 		this.camera = camera;
 
-		// Controls.
+		// Controls
 
 		const target = new Vector3(8.4, 2.15, 0.5);
 		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
@@ -152,11 +152,11 @@ export class GodRaysDemo extends PostProcessingDemo {
 		controls.setOrbitEnabled(false);
 		this.controls = controls;
 
-		// Sky.
+		// Sky
 
 		scene.background = new Color(0x000000);
 
-		// Lights.
+		// Lights
 
 		const ambientLight = new AmbientLight(0x101010);
 
@@ -169,7 +169,7 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 		scene.add(ambientLight, mainLight);
 
-		// Sun.
+		// Sun
 
 		const sunMaterial = new MeshBasicMaterial({
 			color: 0xffddaa,
@@ -193,11 +193,11 @@ export class GodRaysDemo extends PostProcessingDemo {
 		// scene.add(group);
 		this.sun = sun;
 
-		// Objects.
+		// Objects
 
 		scene.add(assets.get(Sponza.tag));
 
-		// Passes.
+		// Passes
 
 		const smaaEffect = new SMAAEffect(
 			assets.get("smaa-search"),
@@ -259,69 +259,69 @@ export class GodRaysDemo extends PostProcessingDemo {
 			"blend mode": blendMode.blendFunction
 		};
 
-		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(() => {
+		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange((value) => {
 
-			effect.resolution.height = Number(params.resolution);
+			effect.resolution.height = Number(value);
 
 		});
 
 		menu.add(pass, "dithering");
 
-		menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE + 1).step(1).onChange(() => {
+		menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE + 1).step(1).onChange((value) => {
 
-			effect.blur = (params.blurriness > 0);
-			effect.blurPass.kernelSize = params.blurriness - 1;
-
-		});
-
-		menu.add(params, "density").min(0.0).max(1.0).step(0.01).onChange(() => {
-
-			uniforms.density.value = params.density;
+			effect.blur = (value > 0);
+			effect.blurPass.kernelSize = value - 1;
 
 		});
 
-		menu.add(params, "decay").min(0.0).max(1.0).step(0.01).onChange(() => {
+		menu.add(params, "density").min(0.0).max(1.0).step(0.01).onChange((value) => {
 
-			uniforms.decay.value = params.decay;
-
-		});
-
-		menu.add(params, "weight").min(0.0).max(1.0).step(0.01).onChange(() => {
-
-			uniforms.weight.value = params.weight;
+			uniforms.density.value = value;
 
 		});
 
-		menu.add(params, "exposure").min(0.0).max(1.0).step(0.01).onChange(() => {
+		menu.add(params, "decay").min(0.0).max(1.0).step(0.01).onChange((value) => {
 
-			uniforms.exposure.value = params.exposure;
+			uniforms.decay.value = value;
 
 		});
 
-		menu.add(params, "clampMax").min(0.0).max(1.0).step(0.01).onChange(() => {
+		menu.add(params, "weight").min(0.0).max(1.0).step(0.01).onChange((value) => {
 
-			uniforms.clampMax.value = params.clampMax;
+			uniforms.weight.value = value;
+
+		});
+
+		menu.add(params, "exposure").min(0.0).max(1.0).step(0.01).onChange((value) => {
+
+			uniforms.exposure.value = value;
+
+		});
+
+		menu.add(params, "clampMax").min(0.0).max(1.0).step(0.01).onChange((value) => {
+
+			uniforms.clampMax.value = value;
 
 		});
 
 		menu.add(effect, "samples").min(15).max(200).step(1);
 
-		menu.addColor(params, "color").onChange(() => {
+		menu.addColor(params, "color").onChange((value) => {
 
-			sun.material.color.setHex(params.color).convertSRGBToLinear();
-			light.color.setHex(params.color).convertSRGBToLinear();
-
-		});
-
-		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
-
-			blendMode.opacity.value = params.opacity;
+			sun.material.color.setHex(value).convertSRGBToLinear();
+			light.color.setHex(value).convertSRGBToLinear();
 
 		});
 
-		menu.add(params, "blend mode", BlendFunction).onChange(() => {
+		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
 
-			blendMode.setBlendFunction(Number(params["blend mode"]));
+			blendMode.opacity.value = value;
+
+		});
+
+		menu.add(params, "blend mode", BlendFunction).onChange((value) => {
+
+			blendMode.setBlendFunction(Number(value));
 
 		});
 

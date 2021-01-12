@@ -101,14 +101,14 @@ export class ShockWaveDemo extends PostProcessingDemo {
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
 
-		// Camera.
+		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
 		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
 		camera.position.set(-8, 1, -0.25);
 		this.camera = camera;
 
-		// Controls.
+		// Controls
 
 		const target = new Vector3(-0.5, 3, -0.25);
 		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
@@ -120,15 +120,15 @@ export class ShockWaveDemo extends PostProcessingDemo {
 		controls.setOrbitEnabled(false);
 		this.controls = controls;
 
-		// Sky.
+		// Sky
 
 		scene.background = new Color(0xeeeeee);
 
-		// Lights.
+		// Lights
 
 		scene.add(...Sponza.createLights());
 
-		// Objects.
+		// Objects
 
 		scene.add(assets.get(Sponza.tag));
 
@@ -143,7 +143,7 @@ export class ShockWaveDemo extends PostProcessingDemo {
 		mesh.position.copy(target);
 		scene.add(mesh);
 
-		// Passes.
+		// Passes
 
 		const smaaEffect = new SMAAEffect(
 			assets.get("smaa-search"),
@@ -191,27 +191,27 @@ export class ShockWaveDemo extends PostProcessingDemo {
 
 		menu.add(effect, "speed").min(0.0).max(10.0).step(0.001);
 
-		menu.add(params, "size").min(0.01).max(2.0).step(0.001).onChange(() => {
+		menu.add(params, "size").min(0.01).max(2.0).step(0.001).onChange((value) => {
 
-			uniforms.get("size").value = params.size;
-
-		});
-
-		menu.add(params, "extent").min(0.0).max(10.0).step(0.001).onChange(() => {
-
-			uniforms.get("maxRadius").value = params.extent;
+			uniforms.get("size").value = value;
 
 		});
 
-		menu.add(params, "waveSize").min(0.0).max(2.0).step(0.001).onChange(() => {
+		menu.add(params, "extent").min(0.0).max(10.0).step(0.001).onChange((value) => {
 
-			uniforms.get("waveSize").value = params.waveSize;
+			uniforms.get("maxRadius").value = value;
 
 		});
 
-		menu.add(params, "amplitude").min(0.0).max(0.25).step(0.001).onChange(() => {
+		menu.add(params, "waveSize").min(0.0).max(2.0).step(0.001).onChange((value) => {
 
-			uniforms.get("amplitude").value = params.amplitude;
+			uniforms.get("waveSize").value = value;
+
+		});
+
+		menu.add(params, "amplitude").min(0.0).max(0.25).step(0.001).onChange((value) => {
+
+			uniforms.get("amplitude").value = value;
 
 		});
 

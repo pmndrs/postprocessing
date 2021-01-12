@@ -94,14 +94,14 @@ export class ColorDepthDemo extends PostProcessingDemo {
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
 
-		// Camera.
+		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
 		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
 		camera.position.set(-9, 0.5, 0);
 		this.camera = camera;
 
-		// Controls.
+		// Controls
 
 		const target = new Vector3(0, 3, -3.5);
 		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
@@ -113,19 +113,19 @@ export class ColorDepthDemo extends PostProcessingDemo {
 		controls.setOrbitEnabled(false);
 		this.controls = controls;
 
-		// Sky.
+		// Sky
 
 		scene.background = new Color(0xeeeeee);
 
-		// Lights.
+		// Lights
 
 		scene.add(...Sponza.createLights());
 
-		// Objects.
+		// Objects
 
 		scene.add(assets.get(Sponza.tag));
 
-		// Passes.
+		// Passes
 
 		const smaaEffect = new SMAAEffect(
 			assets.get("smaa-search"),
@@ -161,21 +161,21 @@ export class ColorDepthDemo extends PostProcessingDemo {
 			"blend mode": blendMode.blendFunction
 		};
 
-		menu.add(params, "bits").min(1).max(32).step(1).onChange(() => {
+		menu.add(params, "bits").min(1).max(32).step(1).onChange((value) => {
 
-			effect.setBitDepth(params.bits);
-
-		});
-
-		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
-
-			blendMode.opacity.value = params.opacity;
+			effect.setBitDepth(value);
 
 		});
 
-		menu.add(params, "blend mode", BlendFunction).onChange(() => {
+		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
 
-			blendMode.setBlendFunction(Number(params["blend mode"]));
+			blendMode.opacity.value = value;
+
+		});
+
+		menu.add(params, "blend mode", BlendFunction).onChange((value) => {
+
+			blendMode.setBlendFunction(Number(value));
 
 		});
 

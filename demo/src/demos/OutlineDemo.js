@@ -259,7 +259,7 @@ export class OutlineDemo extends PostProcessingDemo {
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
 
-		// Camera.
+		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
 		const camera = new PerspectiveCamera(50, aspect, 1, 2000);
@@ -267,7 +267,7 @@ export class OutlineDemo extends PostProcessingDemo {
 		camera.lookAt(scene.position);
 		this.camera = camera;
 
-		// Controls.
+		// Controls
 
 		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
@@ -277,11 +277,11 @@ export class OutlineDemo extends PostProcessingDemo {
 		controls.lookAt(scene.position);
 		this.controls = controls;
 
-		// Sky.
+		// Sky
 
 		scene.background = assets.get("sky");
 
-		// Lights.
+		// Lights
 
 		const ambientLight = new AmbientLight(0x212121);
 		const mainLight = new DirectionalLight(0xff7e66, 1.0);
@@ -292,7 +292,7 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		scene.add(ambientLight, mainLight, backLight);
 
-		// Objects.
+		// Objects
 
 		const selection = [];
 		const meshes = [];
@@ -365,12 +365,12 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		}
 
-		// Raycaster.
+		// Raycaster
 
 		this.raycaster = new Raycaster();
 		renderer.domElement.addEventListener("mousedown", this);
 
-		// Passes.
+		// Passes
 
 		const smaaEffect = new SMAAEffect(
 			assets.get("smaa-search"),
@@ -449,24 +449,24 @@ export class OutlineDemo extends PostProcessingDemo {
 			"blend mode": blendMode.blendFunction
 		};
 
-		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(() => {
+		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange((value) => {
 
-			effect.resolution.height = Number(params.resolution);
+			effect.resolution.height = Number(value);
 
 		});
 
 		menu.add(pass, "dithering");
 
-		menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE + 1).step(1).onChange(() => {
+		menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE + 1).step(1).onChange((value) => {
 
-			effect.blur = (params.blurriness > 0);
-			effect.blurPass.kernelSize = params.blurriness - 1;
+			effect.blur = (value > 0);
+			effect.blurPass.kernelSize = value - 1;
 
 		});
 
-		menu.add(params, "use pattern").onChange(() => {
+		menu.add(params, "use pattern").onChange((value) => {
 
-			if(params["use pattern"]) {
+			if(value) {
 
 				effect.setPatternTexture(assets.get("pattern-color"));
 				uniforms.get("patternScale").value = params["pattern scale"];
@@ -479,51 +479,51 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(params, "pattern scale").min(20.0).max(100.0).step(0.1).onChange(() => {
+		menu.add(params, "pattern scale").min(20.0).max(100.0).step(0.1).onChange((value) => {
 
 			if(uniforms.has("patternScale")) {
 
-				uniforms.get("patternScale").value = params["pattern scale"];
+				uniforms.get("patternScale").value = value;
 
 			}
 
 		});
 
-		menu.add(params, "edge strength").min(0.0).max(10.0).step(0.01).onChange(() => {
+		menu.add(params, "edge strength").min(0.0).max(10.0).step(0.01).onChange((value) => {
 
-			uniforms.get("edgeStrength").value = params["edge strength"];
-
-		});
-
-		menu.add(params, "pulse speed").min(0.0).max(2.0).step(0.01).onChange(() => {
-
-			effect.pulseSpeed = params["pulse speed"];
+			uniforms.get("edgeStrength").value = value;
 
 		});
 
-		menu.addColor(params, "visible edge").onChange(() => {
+		menu.add(params, "pulse speed").min(0.0).max(2.0).step(0.01).onChange((value) => {
 
-			uniforms.get("visibleEdgeColor").value.setHex(params["visible edge"]).convertSRGBToLinear();
+			effect.pulseSpeed = value;
 
 		});
 
-		menu.addColor(params, "hidden edge").onChange(() => {
+		menu.addColor(params, "visible edge").onChange((value) => {
 
-			uniforms.get("hiddenEdgeColor").value.setHex(params["hidden edge"]).convertSRGBToLinear();
+			uniforms.get("visibleEdgeColor").value.setHex(value).convertSRGBToLinear();
+
+		});
+
+		menu.addColor(params, "hidden edge").onChange((value) => {
+
+			uniforms.get("hiddenEdgeColor").value.setHex(value).convertSRGBToLinear();
 
 		});
 
 		menu.add(effect, "xRay");
 
-		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
+		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
 
-			blendMode.opacity.value = params.opacity;
+			blendMode.opacity.value = value;
 
 		});
 
-		menu.add(params, "blend mode", BlendFunction).onChange(() => {
+		menu.add(params, "blend mode", BlendFunction).onChange((value) => {
 
-			blendMode.setBlendFunction(Number(params["blend mode"]));
+			blendMode.setBlendFunction(Number(value));
 
 		});
 

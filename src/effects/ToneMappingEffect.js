@@ -65,7 +65,6 @@ export class ToneMappingEffect extends Effect {
 
 			uniforms: new Map([
 				["luminanceBuffer", new Uniform(null)],
-				["toneMappingExposure", new Uniform(1.0)],
 				["maxLuminance", new Uniform(maxLuminance)], // Unused
 				["whitePoint", new Uniform(whitePoint)],
 				["middleGrey", new Uniform(middleGrey)],

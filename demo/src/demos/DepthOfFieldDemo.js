@@ -146,14 +146,14 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
 
-		// Camera.
+		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
 		const camera = new PerspectiveCamera(50, aspect, 0.3, 30);
 		camera.position.set(-2.3684, 0.5964, -1.3052);
 		this.camera = camera;
 
-		// Controls.
+		// Controls
 
 		const target = new Vector3(-1.4265, 0.6513, -1.6365);
 		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
@@ -165,19 +165,19 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 		controls.setOrbitEnabled(false);
 		this.controls = controls;
 
-		// Sky.
+		// Sky
 
 		scene.background = new Color(0xeeeeee);
 
-		// Lights.
+		// Lights
 
 		scene.add(...Sponza.createLights());
 
-		// Objects.
+		// Objects
 
 		scene.add(assets.get(Sponza.tag));
 
-		// Passes.
+		// Passes
 
 		const smaaEffect = new SMAAEffect(
 			assets.get("smaa-search"),
@@ -285,35 +285,35 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 
 		menu.add(params, "render mode", RenderMode).onChange(toggleRenderMode);
 
-		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(() => {
+		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange((value) => {
 
-			depthOfFieldEffect.resolution.height = Number(params.resolution);
+			depthOfFieldEffect.resolution.height = Number(value);
 
 		});
 
-		menu.add(params, "bokeh scale").min(1.0).max(5.0).step(0.001).onChange(() => {
+		menu.add(params, "bokeh scale").min(1.0).max(5.0).step(0.001).onChange((value) => {
 
-			depthOfFieldEffect.bokehScale = params["bokeh scale"];
+			depthOfFieldEffect.bokehScale = value;
 
 		});
 
 		let folder = menu.addFolder("Circle of Confusion");
 
-		folder.add(params.coc, "edge blur kernel", KernelSize).onChange(() => {
+		folder.add(params.coc, "edge blur kernel", KernelSize).onChange((value) => {
 
-			depthOfFieldEffect.blurPass.kernelSize = Number(params.coc["edge blur kernel"]);
-
-		});
-
-		folder.add(params.coc, "focus").min(0.0).max(1.0).step(0.001).onChange(() => {
-
-			cocMaterial.uniforms.focusDistance.value = params.coc.focus;
+			depthOfFieldEffect.blurPass.kernelSize = Number(value);
 
 		});
 
-		folder.add(params.coc, "focal length").min(0.0).max(1.0).step(0.0001).onChange(() => {
+		folder.add(params.coc, "focus").min(0.0).max(1.0).step(0.001).onChange((value) => {
 
-			cocMaterial.uniforms.focalLength.value = params.coc["focal length"];
+			cocMaterial.uniforms.focusDistance.value = value;
+
+		});
+
+		folder.add(params.coc, "focal length").min(0.0).max(1.0).step(0.0001).onChange((value) => {
+
+			cocMaterial.uniforms.focalLength.value = value;
 
 		});
 
@@ -321,35 +321,35 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 
 		folder = menu.addFolder("Vignette");
 
-		folder.add(params.vignette, "enabled").onChange(() => {
+		folder.add(params.vignette, "enabled").onChange((value) => {
 
-			vignetteEffect.blendMode.setBlendFunction(params.vignette.enabled ? BlendFunction.NORMAL : BlendFunction.SKIP);
+			vignetteEffect.blendMode.setBlendFunction(value ? BlendFunction.NORMAL : BlendFunction.SKIP);
 
 		});
 
 		folder.add(vignetteEffect, "eskil");
 
-		folder.add(params.vignette, "offset").min(0.0).max(1.0).step(0.001).onChange(() => {
+		folder.add(params.vignette, "offset").min(0.0).max(1.0).step(0.001).onChange((value) => {
 
-			vignetteEffect.uniforms.get("offset").value = params.vignette.offset;
-
-		});
-
-		folder.add(params.vignette, "darkness").min(0.0).max(1.0).step(0.001).onChange(() => {
-
-			vignetteEffect.uniforms.get("darkness").value = params.vignette.darkness;
+			vignetteEffect.uniforms.get("offset").value = value;
 
 		});
 
-		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
+		folder.add(params.vignette, "darkness").min(0.0).max(1.0).step(0.001).onChange((value) => {
 
-			blendMode.opacity.value = params.opacity;
+			vignetteEffect.uniforms.get("darkness").value = value;
 
 		});
 
-		menu.add(params, "blend mode", BlendFunction).onChange(() => {
+		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
 
-			blendMode.setBlendFunction(Number(params["blend mode"]));
+			blendMode.opacity.value = value;
+
+		});
+
+		menu.add(params, "blend mode", BlendFunction).onChange((value) => {
+
+			blendMode.setBlendFunction(Number(value));
 
 		});
 

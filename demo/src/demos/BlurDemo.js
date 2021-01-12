@@ -142,7 +142,7 @@ export class BlurDemo extends PostProcessingDemo {
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
 
-		// Camera.
+		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
 		const camera = new PerspectiveCamera(50, aspect, 1, 2000);
@@ -150,7 +150,7 @@ export class BlurDemo extends PostProcessingDemo {
 		camera.lookAt(scene.position);
 		this.camera = camera;
 
-		// Controls.
+		// Controls
 
 		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
@@ -160,11 +160,11 @@ export class BlurDemo extends PostProcessingDemo {
 		controls.lookAt(scene.position);
 		this.controls = controls;
 
-		// Sky.
+		// Sky
 
 		scene.background = assets.get("sky");
 
-		// Lights.
+		// Lights
 
 		const ambientLight = new AmbientLight(0x212121);
 		const mainLight = new DirectionalLight(0xff7e66, 1.0);
@@ -177,12 +177,12 @@ export class BlurDemo extends PostProcessingDemo {
 		scene.add(mainLight);
 		scene.add(backLight);
 
-		// Random objects.
+		// Objects
 
 		this.object = SphereCloud.create();
 		scene.add(this.object);
 
-		// Passes.
+		// Passes
 
 		const savePass = new SavePass();
 		const blurPass = new BlurPass({
@@ -267,30 +267,30 @@ export class BlurDemo extends PostProcessingDemo {
 			"blend mode": blendMode.blendFunction
 		};
 
-		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(() => {
+		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange((value) => {
 
-			blurPass.resolution.height = Number(params.resolution);
-
-		});
-
-		menu.add(params, "kernel size", KernelSize).onChange(() => {
-
-			blurPass.kernelSize = Number(params["kernel size"]);
+			blurPass.resolution.height = Number(value);
 
 		});
 
-		menu.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(() => {
+		menu.add(params, "kernel size", KernelSize).onChange((value) => {
 
-			blurPass.scale = Number(params.scale);
+			blurPass.kernelSize = Number(value);
+
+		});
+
+		menu.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange((value) => {
+
+			blurPass.scale = Number(value);
 
 		});
 
 		menu.add(blurPass, "enabled");
 		menu.add(texturePass, "dithering");
 
-		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
+		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
 
-			blendMode.opacity.value = 1.0 - params.opacity;
+			blendMode.opacity.value = 1.0 - value;
 
 		});
 

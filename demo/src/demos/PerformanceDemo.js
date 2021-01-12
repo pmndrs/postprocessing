@@ -225,7 +225,7 @@ export class PerformanceDemo extends PostProcessingDemo {
 		const renderer = composer.getRenderer();
 		const capabilities = renderer.capabilities;
 
-		// Camera.
+		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
 		const camera = new PerspectiveCamera(50, aspect, 0.3, 2000);
@@ -233,11 +233,11 @@ export class PerformanceDemo extends PostProcessingDemo {
 		camera.lookAt(scene.position);
 		this.camera = camera;
 
-		// Sky.
+		// Sky
 
 		scene.background = assets.get("sky");
 
-		// Lights.
+		// Lights
 
 		const ambientLight = new AmbientLight(0x323232);
 		const pointLight = new PointLight(0xffbbaa, 80, 12);
@@ -245,7 +245,7 @@ export class PerformanceDemo extends PostProcessingDemo {
 		this.light = pointLight;
 		scene.add(ambientLight, pointLight);
 
-		// Objects.
+		// Objects
 
 		const material = new MeshPhongMaterial({
 			envMap: assets.get("sky"),
@@ -273,7 +273,7 @@ export class PerformanceDemo extends PostProcessingDemo {
 		scene.add(torusMeshes[1]);
 		scene.add(torusMeshes[2]);
 
-		// Sun.
+		// Sun
 
 		const sunMaterial = new MeshBasicMaterial({
 			color: 0xffddaa,
@@ -286,7 +286,7 @@ export class PerformanceDemo extends PostProcessingDemo {
 		sun.frustumCulled = false;
 		this.sun = sun;
 
-		// Passes.
+		// Passes
 
 		const smaaEffect = new SMAAEffect(
 			assets.get("smaa-search"),
@@ -455,13 +455,13 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 		infoOptions.push(menu.add(params, "effects"));
 
-		menu.add(params, "merge effects").onChange(() => {
+		menu.add(params, "merge effects").onChange((value) => {
 
-			this.effectPass.enabled = params["merge effects"];
+			this.effectPass.enabled = value;
 
 			for(const pass of this.passes) {
 
-				pass.enabled = !params["merge effects"];
+				pass.enabled = !value;
 
 			}
 
