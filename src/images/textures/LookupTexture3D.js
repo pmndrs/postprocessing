@@ -374,8 +374,8 @@ export class LookupTexture3D extends DataTexture3D {
 		texture.type = this.type;
 		texture.format = this.format;
 		texture.encoding = this.encoding;
-		texture.minFilter = this.minFilter;
-		texture.magFilter = this.magFilter;
+		texture.minFilter = LinearFilter;
+		texture.magFilter = LinearFilter;
 		texture.wrapS = this.wrapS;
 		texture.wrapT = this.wrapT;
 		texture.generateMipmaps = false;
