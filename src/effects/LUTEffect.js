@@ -40,7 +40,7 @@ export class LUTEffect extends Effect {
 	 * @param {Texture} lut - The lookup texture.
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
-	 * @param {BlendFunction} [options.tetrahedralInterpolation=false] - Enables or disables tetrahedral interpolation.
+	 * @param {Boolean} [options.tetrahedralInterpolation=false] - Enables or disables tetrahedral interpolation.
 	 */
 
 	constructor(lut, {
