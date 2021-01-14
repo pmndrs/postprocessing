@@ -103,7 +103,7 @@ export class LookupTexture3D extends DataTexture3D {
 
 			promise = Promise.reject(new Error("The target size must be greater than the current size"));
 
-		} else if(size > image.width) {
+		} else {
 
 			const workerURL = URL.createObjectURL(new Blob([workerProgram], { type: "text/javascript" }));
 			const worker = new Worker(workerURL);
