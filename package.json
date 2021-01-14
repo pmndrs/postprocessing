@@ -46,7 +46,7 @@
 		"build:js": "cross-env NODE_ENV=production ts-node-script esbuild",
 		"ci": "run-s build test deploy",
 		"clean": "del-cli build public tmp",
-		"copy": "cpy --cwd=demo/static --parents **/* ../../public/demo",
+		"copy": "cpy --cwd=demo/static --parents '**/*' '../../public/demo'",
 		"deploy": "run-s copy doc",
 		"dev": "npm run copy && run-p start watch",
 		"doc": "esdoc",
