@@ -32,8 +32,8 @@ uniform vec3 offset;
 
 		#ifdef TETRAHEDRAL_INTERPOLATION
 
-			/* Strategy: Fetch the four corners (v1, v2, v4, v4) of the cube that is
-			described by the current sampling coordinates, calculate the barycentric
+			/* Strategy: Fetch the four corners (v1, v2, v3, v4) of the tetrahedron
+			that corresponds to the input coordinates, calculate the barycentric
 			weights and interpolate the nearest color samples. */
 
 			vec3 p = floor(rgb);
