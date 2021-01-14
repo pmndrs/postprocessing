@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile=false
       - name: Build and test
-        run: run-s build test deploy
+        run: pnpm run ci
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
