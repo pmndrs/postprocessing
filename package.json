@@ -46,7 +46,7 @@
 		"build:js": "cross-env NODE_ENV=production ts-node-script esbuild",
 		"clean": "del-cli build public tmp",
 		"copy": "cpy --cwd=demo/static --parents \"**/*\" \"../../public/demo\"",
-		"deploy": "run-s copy build doc",
+		"deploy": "run-s copy lint build doc",
 		"dev": "run-s clean copy && run-p start watch",
 		"doc": "esdoc",
 		"lint": "eslint --ext .js --fix src demo/src",
