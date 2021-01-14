@@ -20,12 +20,11 @@ jobs:
           node-version: "14"
       - name: Install PNPM
         run: npm install -g pnpm
-      - name: Install Dependencies
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile=false
       - name: Build and test
-        run: run-s build test
+        run: run-s build test deploy
       - name: Deploy
-        run: pnpm run deploy
         uses: JamesIves/github-pages-deploy-action@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
