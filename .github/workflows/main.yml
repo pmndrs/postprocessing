@@ -6,8 +6,8 @@ on:
       - main
 
 jobs:
-  test:
-    name: Test
+  test-deploy:
+    name: Test and deploy
     runs-on: ubuntu-latest
     steps:
       - name: Git checkout
@@ -17,7 +17,7 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v1
         with:
-          node-version: "14"
+          node-version: 14
       - name: Install PNPM
         run: npm install -g pnpm
       - name: Install dependencies
@@ -32,4 +32,5 @@ jobs:
           folder: public
           target_folder: public
           single_commit: true
+          silent: true
           clean: true
