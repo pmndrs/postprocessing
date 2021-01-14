@@ -20,13 +20,17 @@ jobs:
           node-version: "14"
       - name: Install PNPM
         run: npm install -g pnpm
-      - name: Install and test
-        run: pnpm install-test --frozen-lockfile=false
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile=false
+      - name: Build and test
+        run: run-s build test
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@3.7.1
+        run: pnpm run deploy
+        uses: JamesIves/github-pages-deploy-action@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
           folder: public
           single_commit: true
+          silent: true
           clean: true
