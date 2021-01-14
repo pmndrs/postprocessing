@@ -2,7 +2,7 @@ import { BuildOptions, BuildResult, startService } from "esbuild";
 import { watch } from "chokidar";
 import * as path from "path";
 import * as yargs from "yargs";
-import { configGroups, sourceDirectories } from "./esbuild.config";
+import { configLists, sourceDirectories } from "./esbuild.config";
 
 const { argv } = yargs.options({ watch: { alias: "w", type: "boolean" } });
 
@@ -11,7 +11,7 @@ async function build(changedFile: string = null): Promise<void> {
 	const service = await startService();
 	const f = (changedFile !== null) ? path.normalize(changedFile) : null;
 
-	for(const configs of configGroups) {
+	for(const configs of configLists) {
 
 		const t0 = Date.now();
 		const promises: Promise<void>[] = configs.map((c: BuildOptions) => {

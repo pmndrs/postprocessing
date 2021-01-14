@@ -6,6 +6,7 @@ const date = (new Date()).toDateString();
 const production = (process.env.NODE_ENV === "production");
 const globalName = pkg.name.replace(/-/g, "").toUpperCase();
 const external = Object.keys(pkg.peerDependencies);
+const sourceDirectories = ["src", "demo/src"];
 
 const banner = `/**
  * ${pkg.name} v${pkg.version} build ${date}
@@ -17,44 +18,44 @@ const banner = `/**
 // @todo Remove in next major release.
 const footer = `if(typeof module==="object"&&module.exports)module.exports=${globalName};`;
 
-function config(entryPoint: string, outfile: string, format: string, minify = false): BuildOptions {
+function config(infile: string, outfile: string, format: string, minify = false): BuildOptions {
 
-	const lib = (entryPoint === "src/index.js");
+	const lib = (infile === "src/index.js");
 	const iife = (format === "iife");
 
 	return {
-		entryPoints: [entryPoint],
-		outfile,
-		globalName: lib ? globalName : "",
+		entryPoints: [infile],
 		external: lib ? external : [],
+		globalName: lib ? globalName : "",
 		banner: lib ? banner : "",
 		footer: (lib && iife) ? footer : "",
-		plugins: [glsl({ minify: lib })],
+		plugins: [glsl({ minify })],
 		loader: {
 			".png": "dataurl",
 			".worker": "text"
 		},
 		bundle: true,
+		outfile,
 		minify,
 		format
 	} as BuildOptions;
 
 }
 
-export const configGroups = [
-	[
-		config("src/images/lut/worker.js", "tmp/lut.worker", "iife", production),
-		config("src/images/smaa/worker.js", "tmp/smaa.worker", "iife", production)
-	],
-	production ? [
-		config("src/index.js", `build/${pkg.name}.esm.js`, "esm"),
-		config("src/index.js", `build/${pkg.name}.js`, "iife"),
-		config("src/index.js", `build/${pkg.name}.min.js`, "iife", true),
-		config("demo/src/index.js", "public/demo/index.js", "iife"),
-		config("demo/src/index.js", "public/demo/index.min.js", "iife", true)
-	] : [
-		config("demo/src/index.js", "public/demo/index.js", "iife")
-	]
+const workerConfigs = [
+	config("src/images/lut/worker.js", "tmp/lut.worker", "iife", production),
+	config("src/images/smaa/worker.js", "tmp/smaa.worker", "iife", production)
 ];
 
+const demoConfigs = [
+	config("demo/src/index.js", "public/demo/index.js", "iife", production)
+];
+
+const libConfigs = production ? [
+	config("src/index.js", `build/${pkg.name}.esm.js`, "esm"),
+	config("src/index.js", `build/${pkg.name}.js`, "iife"),
+	config("src/index.js", `build/${pkg.name}.min.js`, "iife", true)
+] : [];
+
 export const sourceDirectories = ["src", "demo/src"];
+export const configLists = [workerConfigs, demoConfigs, libConfigs];
