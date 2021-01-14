@@ -76,7 +76,7 @@ function render(timestamp) {
 
 window.addEventListener("load", (event) => {
 
-	const debug = (window.location.href.indexOf("debug") !== -1);
+	const debug = (window.location.href.indexOf("localhost") !== -1);
 	const viewport = document.getElementById("viewport");
 	const demoCache = new WeakSet();
 
@@ -164,9 +164,10 @@ window.addEventListener("load", (event) => {
 		new PerformanceDemo(composer)
 	];
 
-	const id = demos.map((demo) => demo.id).indexOf(window.location.hash.slice(1));
+	const id = window.location.hash.slice(1);
+	const exists = demos.reduce((a, b) => (a || b.id === id), false);
 
-	if(id === -1) {
+	if(!exists) {
 
 		// Invalid URL hash: demo doesn't exist.
 		window.location.hash = "";
