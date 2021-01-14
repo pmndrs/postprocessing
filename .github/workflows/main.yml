@@ -25,7 +25,7 @@ jobs:
       - name: Build and test
         run: run-s build test deploy
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@v3
+        uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
