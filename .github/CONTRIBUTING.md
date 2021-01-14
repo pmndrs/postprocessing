@@ -11,15 +11,13 @@ Thank you for considering to contribute! :speech_balloon:
    (e.g. `Chrome 0.0.0.0 (64-bit), Windows 10 (64-bit), NVIDIA GTX 1050`).
 4. Describe the problem in detail. Explain what happened, and what you expected would happen.
 5. Provide a minimal test case (http://jsfiddle.net) or a link to a live version of your application.
-6. If helpful, include a screenshot. Annotate the screenshot for clarity.
+6. If applicable, include a screenshot. Consider annotating the screenshot for clarity.
 
 
 ## Pull Request Process :sparkles:
 
-When contributing to this repository, please first discuss the change you wish to make with the owners of this repository via the issue tracker.
+When contributing to this repository, please first discuss the changes you wish to make with the owners of this repository via the issue tracker.
 A proposed change should be focused and concise. Please adhere to the following guideline:
-
-__Do not include generated build files in your commits.__
 
 1. Create a feature branch based on the `dev` branch.
 2. Implement your patch or feature on that branch.
@@ -41,14 +39,14 @@ The following table provides an overview of the most important scripts:
 | dev   | Runs the watch script and serves files locally. |
 | test  | Generates production bundles and runs tests.    |
 
-__Note__: Setting `NODE_ENV` to `production` enables source code transpilation and minification which considerably slows down the build process. The `test` script does this automatically.
+__Note__: Setting `NODE_ENV` to `production` enables source code minification which slows down the build process. The `test` script does this automatically.
 
 
 ### Testing :heavy_check_mark:
 
-Use the script `npm run dev` to run an HTTP server in the background while building the demo bundle and watching for file changes at the same time. Open your web browser and navigate to http://localhost:8080/demo/index.debug.html. Please note that the default `index.html` will load the minified demo bundle which is _not_ desirable during development.
+Use the script `npm run dev` to run an HTTP server, build the demo bundle and watch files for changes. Open your web browser and navigate to http://localhost:8080/demo/index.html. Extend one of the existing demos or create a new one depending on the kind of feature you wish to implement. Make sure that your changes don't break the existing demos.
 
-__Hint__: Open the development tools in your browser and make sure that the browser cache is disabled while it's open.
+__Hint__: Open the development tools in your browser and make sure that the cache is disabled while it's open.
 
 
 ### Keeping Things Up-To-Date :hourglass:
@@ -57,10 +55,10 @@ Don't merge new changes from upstream into your feature branch.
 Instead, use `rebase` to replay all of your commits on top of the latest code base:
 
 ```sh
-git checkout master
-git pull upstream master
+git checkout main
+git pull upstream main
 git checkout my-feature
-git rebase master
+git rebase main
 ```
 
 Git will guide you through the process of resolving conflicts.
