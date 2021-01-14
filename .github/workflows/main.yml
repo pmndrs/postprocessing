@@ -30,6 +30,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
           folder: public
+          target_folder: public
           single_commit: true
           silent: true
           clean: true
