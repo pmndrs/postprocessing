@@ -2,13 +2,8 @@ name: CI
 
 on:
   push:
-    paths-ignore:
-      - "build/**"
-      - "public/**"
-  pull_request:
-    paths-ignore:
-      - "build/**"
-      - "public/**"
+    branches:
+      - main
 
 jobs:
   test:
@@ -17,6 +12,8 @@ jobs:
     steps:
       - name: Git checkout
         uses: actions/checkout@v2
+        with:
+          persist-credentials: false
       - name: Install Node
         uses: actions/setup-node@v1
         with:
@@ -25,3 +22,11 @@ jobs:
         run: npm install -g pnpm
       - name: Install and test
         run: pnpm install-test --frozen-lockfile=false
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          folder: public
+          single_commit: true
+          clean: true
