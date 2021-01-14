@@ -1,36 +1,15 @@
 name: CI
 
-on:
-  push:
-    branches:
-      - main
-
 jobs:
-  test-deploy:
-    name: Test and deploy
+  test:
+    name: Test
     runs-on: ubuntu-latest
     steps:
       - name: Git checkout
         uses: actions/checkout@v2
-        with:
-          persist-credentials: false
       - name: Install Node
         uses: actions/setup-node@v1
-        with:
-          node-version: 14
       - name: Install PNPM
         run: npm install -g pnpm
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile=false
-      - name: Build and test
-        run: pnpm run ci
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@3.7.1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: gh-pages
-          folder: public
-          target_folder: public
-          single_commit: true
-          silent: true
-          clean: true
+        run: pnpm install-test --frozen-lockfile=false
