@@ -6,7 +6,6 @@ const date = (new Date()).toDateString();
 const production = (process.env.NODE_ENV === "production");
 const globalName = pkg.name.replace(/-/g, "").toUpperCase();
 const external = Object.keys(pkg.peerDependencies);
-const sourceDirectories = ["src", "demo/src"];
 
 const banner = `/**
  * ${pkg.name} v${pkg.version} build ${date}
