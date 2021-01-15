@@ -387,9 +387,10 @@ export class EffectComposer {
 
 		const passes = this.passes;
 		const renderer = this.renderer;
+
+		const drawingBufferSize = renderer.getDrawingBufferSize(new Vector2());
 		const alpha = renderer.getContext().getContextAttributes().alpha;
 		const frameBufferType = this.inputBuffer.texture.type;
-		const drawingBufferSize = renderer.getDrawingBufferSize(new Vector2());
 
 		pass.setSize(drawingBufferSize.width, drawingBufferSize.height);
 		pass.initialize(renderer, alpha, frameBufferType);
@@ -458,7 +459,8 @@ export class EffectComposer {
 
 		const passes = this.passes;
 		const index = passes.indexOf(pass);
-		const removed = (passes.splice(index, 1).length > 0);
+		const exists = (index !== -1);
+		const removed = exists && (passes.splice(index, 1).length > 0);
 
 		if(removed) {
 
