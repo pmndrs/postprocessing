@@ -10,6 +10,6 @@ test("can be created and destroyed", t => {
 	const object = new SelectiveBloomEffect(scene, null);
 	object.dispose();
 
-	t.truthy(object);
+	t.pass();
 
 });

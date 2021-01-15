@@ -6,6 +6,6 @@ test("can be created and destroyed", t => {
 	const object = new ClearPass();
 	object.dispose();
 
-	t.truthy(object);
+	t.pass();
 
 });

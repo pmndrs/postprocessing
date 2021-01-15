@@ -6,6 +6,6 @@ test("can be instantiated and disposed", t => {
 	const object = new EffectComposer();
 	object.dispose();
 
-	t.truthy(object);
+	t.pass();
 
 });

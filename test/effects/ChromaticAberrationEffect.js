@@ -6,6 +6,6 @@ test("can be created and destroyed", t => {
 	const object = new ChromaticAberrationEffect();
 	object.dispose();
 
-	t.truthy(object);
+	t.pass();
 
 });

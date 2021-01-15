@@ -6,14 +6,12 @@ test("can be created and destroyed", t => {
 	const object = new EffectPass(null);
 	object.dispose();
 
-	t.truthy(object);
+	t.pass();
 
 });
 
 test("can create a compound shader material", t => {
 
-	const pass = new EffectPass(null, new DotScreenEffect());
-
-	t.truthy(pass);
+	t.truthy(new EffectPass(null, new DotScreenEffect()));
 
 });
