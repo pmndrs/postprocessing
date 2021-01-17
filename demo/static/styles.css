@@ -22,9 +22,10 @@ a:hover, a:active {
 
 aside {
 	padding: 0 5px;
-	position: fixed;
+	position: absolute;
 	right: 0;
 	top: 0;
+	z-index: 1;
 }
 
 aside img {
