@@ -345,11 +345,6 @@ export class BloomDemo extends PostProcessingDemo {
 		composer.addPass(effectPassA);
 		composer.addPass(effectPassB);
 
-		// Important: Make sure your lights are on! (SelectiveBloom)
-		ambientLight.layers.enable(selectiveBloomEffect.selection.layer);
-		mainLight.layers.enable(selectiveBloomEffect.selection.layer);
-		backLight.layers.enable(selectiveBloomEffect.selection.layer);
-
 	}
 
 	/**
