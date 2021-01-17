@@ -461,6 +461,7 @@ export class GodRaysEffect extends Effect {
 		const material = this.depthMaskPass.getFullscreenMaterial();
 		material.uniforms.depthBuffer0.value = depthTexture;
 		material.defines.DEPTH_PACKING_0 = depthPacking.toFixed(0);
+		material.needsUpdate = true;
 
 	}
 
