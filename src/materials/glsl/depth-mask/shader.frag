@@ -14,37 +14,55 @@
 #endif
 
 uniform sampler2D inputBuffer;
+uniform float bias0;
+uniform float bias1;
 
 varying vec2 vUv;
 
 void main() {
 
+	vec2 depth;
+
 	#if DEPTH_PACKING_0 == 3201
 
-		float d0 = unpackRGBAToDepth(texture2D(depthBuffer0, vUv));
+		depth.x = unpackRGBAToDepth(texture2D(depthBuffer0, vUv));
 
 	#else
 
-		float d0 = texture2D(depthBuffer0, vUv).r;
+		depth.x = texture2D(depthBuffer0, vUv).r;
 
 	#endif
 
 	#if DEPTH_PACKING_1 == 3201
 
-		float d1 = unpackRGBAToDepth(texture2D(depthBuffer1, vUv));
+		depth.y = unpackRGBAToDepth(texture2D(depthBuffer1, vUv));
 
 	#else
 
-		float d1 = texture2D(depthBuffer1, vUv).r;
+		depth.y = texture2D(depthBuffer1, vUv).r;
 
 	#endif
 
-	if(d0 < d1) {
+	depth = clamp(depth + vec2(bias0, bias1), 0.0, 1.0);
+
+	#ifdef KEEP_FAR
+
+		bool keep = (depth.x == 1.0) || depthTest(depth.x, depth.y);
+
+	#else
+
+		bool keep = (depth.x != 1.0) && depthTest(depth.x, depth.y);
+
+	#endif
+
+	if(keep) {
+
+		gl_FragColor = texture2D(inputBuffer, vUv);
+
+	} else {
 
 		discard;
 
 	}
-
-	gl_FragColor = texture2D(inputBuffer, vUv);
 
 }
