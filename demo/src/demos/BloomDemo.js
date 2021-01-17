@@ -285,14 +285,11 @@ export class BloomDemo extends PostProcessingDemo {
 
 		// Lights
 
-		const ambientLight = new AmbientLight(0x212121);
+		const ambientLight = new AmbientLight(0x323232);
 		const mainLight = new DirectionalLight(0xffffff, 1.0);
-		const backLight = new DirectionalLight(0xff7e66, 0.1);
-
 		mainLight.position.set(-1, 1, 1);
-		backLight.position.copy(mainLight.position).negate();
 
-		scene.add(ambientLight, mainLight, backLight);
+		scene.add(ambientLight, mainLight);
 
 		// Objects
 
