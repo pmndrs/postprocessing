@@ -1,24 +1,23 @@
 import {
-	Color,
 	LinearFilter,
-	MeshBasicMaterial,
+	NotEqualDepth,
+	EqualDepth,
+	RGBADepthPacking,
 	RGBFormat,
-	Scene,
 	UnsignedByteType,
 	WebGLRenderTarget
 } from "three";
 
 import { Selection } from "../core/Selection";
-import { ClearPass, RenderPass } from "../passes";
+import { DepthMaskMaterial } from "../materials";
+import { ClearPass, DepthPass, ShaderPass } from "../passes";
 import { BloomEffect } from "./BloomEffect";
+import { EffectAttribute } from "./Effect";
 
 /**
  * A selective bloom effect.
  *
- * This effect applies bloom only to selected objects by using layers. Make sure
- * to enable the selection layer for all relevant lights:
- *
- * `lights.forEach((l) => l.layers.enable(bloomEffect.selection.layer));`
+ * This effect applies bloom to selected objects only.
  *
  * Attention: If you don't need to limit bloom to a subset of objects, consider
  * using the {@link BloomEffect} instead for better performance.
@@ -38,14 +37,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 		super(options);
 
-		/**
-		 * The main scene.
-		 *
-		 * @type {Scene}
-		 * @private
-		 */
-
-		this.scene = scene;
+		this.setAttributes(this.getAttributes() | EffectAttribute.DEPTH);
 
 		/**
 		 * The main camera.
@@ -57,53 +49,36 @@ export class SelectiveBloomEffect extends BloomEffect {
 		this.camera = camera;
 
 		/**
+		 * A depth mask pass.
+		 *
+		 * @type {DepthPass}
+		 * @private
+		 */
+
+		this.depthPass = new DepthPass(scene, camera);
+
+		/**
 		 * A clear pass.
 		 *
 		 * @type {ClearPass}
 		 * @private
 		 */
 
-		this.clearPass = new ClearPass(true, true, false);
-		this.clearPass.overrideClearColor = new Color(0x000000);
+		this.clearPass = new ClearPass(true, false, false);
 
 		/**
-		 * A render pass.
+		 * A depth mask pass.
 		 *
-		 * @type {RenderPass}
+		 * @type {ShaderPass}
 		 * @private
 		 */
 
-		this.renderPass = new RenderPass(scene, camera);
-		this.renderPass.clear = false;
+		this.depthMaskPass = new ShaderPass(new DepthMaskMaterial());
 
-		/**
-		 * A render pass that renders all objects solid black.
-		 *
-		 * @type {RenderPass}
-		 * @private
-		 */
-
-		this.blackoutPass = new RenderPass(scene, camera, new MeshBasicMaterial({ color: 0x000000 }));
-		this.blackoutPass.clear = false;
-
-		/**
-		 * A render pass that only renders the background of the main scene.
-		 *
-		 * @type {RenderPass}
-		 * @private
-		 */
-
-		this.backgroundPass = (() => {
-
-			const backgroundScene = new Scene();
-			const pass = new RenderPass(backgroundScene, camera);
-
-			backgroundScene.background = scene.background;
-			pass.clear = false;
-
-			return pass;
-
-		})();
+		const depthMaskMaterial = this.depthMaskMaterial;
+		depthMaskMaterial.uniforms.depthBuffer1.value = this.depthPass.texture;
+		depthMaskMaterial.defines.DEPTH_PACKING_1 = RGBADepthPacking.toFixed(0);
+		depthMaskMaterial.setDepthMode(EqualDepth);
 
 		/**
 		 * A render target.
@@ -112,15 +87,15 @@ export class SelectiveBloomEffect extends BloomEffect {
 		 * @private
 		 */
 
-		this.renderTargetSelection = new WebGLRenderTarget(1, 1, {
+		this.renderTargetMasked = new WebGLRenderTarget(1, 1, {
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
 			stencilBuffer: false,
-			depthBuffer: true
+			depthBuffer: false
 		});
 
-		this.renderTargetSelection.texture.name = "Bloom.Selection";
-		this.renderTargetSelection.texture.generateMipmaps = false;
+		this.renderTargetMasked.texture.name = "Bloom.Masked";
+		this.renderTargetMasked.texture.generateMipmaps = false;
 
 		/**
 		 * A selection of objects.
@@ -130,37 +105,82 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 		this.selection = new Selection();
 
-		/**
-		 * Indicates whether the selection should be considered inverted.
-		 *
-		 * @type {Boolean}
-		 */
+	}
 
-		this.inverted = false;
+	/**
+	 * The depth mask material.
+	 *
+	 * @type {DepthMaskMaterial}
+	 * @private
+	 */
+
+	get depthMaskMaterial() {
+
+		return this.depthMaskPass.getFullscreenMaterial();
 
 	}
 
 	/**
-	 * Indicates whether the scene background should be ignored.
+	 * Indicates whether the selection should be considered inverted.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get inverted() {
+
+		return (this.depthMaskMaterial.getDepthMode() === NotEqualDepth);
+
+	}
+
+	/**
+	 * If enabled, the background colors will be discarded.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set inverted(value) {
+
+		this.depthMaskMaterial.setDepthMode(value ? NotEqualDepth : EqualDepth);
+
+	}
+
+	/**
+	 * Indicates whether the background colors will be discarded.
 	 *
 	 * @type {Boolean}
 	 */
 
 	get ignoreBackground() {
 
-		return !this.backgroundPass.enabled;
+		return !this.depthMaskMaterial.keepFar;
 
 	}
 
 	/**
-	 * Enables or disables background rendering.
+	 * If enabled, the background colors will be discarded.
 	 *
 	 * @type {Boolean}
 	 */
 
 	set ignoreBackground(value) {
 
-		this.backgroundPass.enabled = !value;
+		this.depthMaskMaterial.keepFar = !value;
+
+	}
+
+	/**
+	 * Sets the depth texture.
+	 *
+	 * @param {Texture} depthTexture - A depth texture.
+	 * @param {Number} [depthPacking=0] - The depth packing.
+	 */
+
+	setDepthTexture(depthTexture, depthPacking = 0) {
+
+		const material = this.depthMaskPass.getFullscreenMaterial();
+		material.uniforms.depthBuffer0.value = depthTexture;
+		material.defines.DEPTH_PACKING_0 = depthPacking.toFixed(0);
+		material.needsUpdate = true;
 
 	}
 
@@ -174,47 +194,21 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 	update(renderer, inputBuffer, deltaTime) {
 
-		const scene = this.scene;
 		const camera = this.camera;
 		const selection = this.selection;
-		const renderTarget = this.renderTargetSelection;
+		const renderTarget = this.renderTargetMasked;
 
-		const background = scene.background;
+		// Render depth of selected objects.
 		const mask = camera.layers.mask;
+		camera.layers.set(selection.layer);
+		this.depthPass.render(renderer);
+		camera.layers.mask = mask;
 
+		// Discard colors based on depth.
 		this.clearPass.render(renderer, renderTarget);
+		this.depthMaskPass.render(renderer, inputBuffer, renderTarget);
 
-		if(!this.ignoreBackground) {
-
-			this.backgroundPass.render(renderer, renderTarget);
-
-		}
-
-		scene.background = null;
-
-		if(this.inverted) {
-
-			camera.layers.set(selection.layer);
-			this.blackoutPass.render(renderer, renderTarget);
-			camera.layers.mask = mask;
-
-			selection.setVisible(false);
-			this.renderPass.render(renderer, renderTarget);
-			selection.setVisible(true);
-
-		} else {
-
-			selection.setVisible(false);
-			this.blackoutPass.render(renderer, renderTarget);
-			selection.setVisible(true);
-
-			camera.layers.set(selection.layer);
-			this.renderPass.render(renderer, renderTarget);
-			camera.layers.mask = mask;
-
-		}
-
-		scene.background = background;
+		// Render the bloom texture as usual.
 		super.update(renderer, renderTarget, deltaTime);
 
 	}
@@ -230,14 +224,11 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 		super.setSize(width, height);
 
-		this.backgroundPass.setSize(width, height);
-		this.blackoutPass.setSize(width, height);
-		this.renderPass.setSize(width, height);
+		this.clearPass.setSize(width, height);
+		this.depthPass.setSize(width, height);
+		this.depthMaskPass.setSize(width, height);
 
-		this.renderTargetSelection.setSize(
-			this.resolution.width,
-			this.resolution.height
-		);
+		this.renderTargetMasked.setSize(width, height);
 
 	}
 
@@ -253,19 +244,19 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 		super.initialize(renderer, alpha, frameBufferType);
 
-		this.backgroundPass.initialize(renderer, alpha, frameBufferType);
-		this.blackoutPass.initialize(renderer, alpha, frameBufferType);
-		this.renderPass.initialize(renderer, alpha, frameBufferType);
+		this.clearPass.initialize(renderer, alpha, frameBufferType);
+		this.depthPass.initialize(renderer, alpha, frameBufferType);
+		this.depthMaskPass.initialize(renderer, alpha, frameBufferType);
 
 		if(!alpha && frameBufferType === UnsignedByteType) {
 
-			this.renderTargetSelection.texture.format = RGBFormat;
+			this.renderTargetMasked.texture.format = RGBFormat;
 
 		}
 
 		if(frameBufferType !== undefined) {
 
-			this.renderTargetSelection.texture.type = frameBufferType;
+			this.renderTargetMasked.texture.type = frameBufferType;
 
 		}
 
