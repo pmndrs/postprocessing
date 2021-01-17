@@ -205,14 +205,10 @@ export class GodRaysEffect extends Effect {
 		 * @private
 		 */
 
-		this.depthMaskPass = new ShaderPass(((depthTexture) => {
+		this.depthMaskPass = new ShaderPass(new DepthMaskMaterial());
 
-			const material = new DepthMaskMaterial();
-			material.uniforms.depthBuffer1.value = depthTexture;
-
-			return material;
-
-		})(this.renderTargetLight.depthTexture));
+		const depthMaskMaterial = this.depthMaskPass.getFullscreenMaterial();
+		depthMaskMaterial.uniforms.depthBuffer1.value = this.renderTargetLight.depthTexture;
 
 		/**
 		 * A god rays blur pass.
@@ -221,18 +217,14 @@ export class GodRaysEffect extends Effect {
 		 * @private
 		 */
 
-		this.godRaysPass = new ShaderPass((() => {
+		this.godRaysPass = new ShaderPass(new GodRaysMaterial(this.screenPosition));
 
-			const material = new GodRaysMaterial(this.screenPosition);
-			material.uniforms.density.value = density;
-			material.uniforms.decay.value = decay;
-			material.uniforms.weight.value = weight;
-			material.uniforms.exposure.value = exposure;
-			material.uniforms.clampMax.value = clampMax;
-
-			return material;
-
-		})());
+		const godRaysMaterial = this.godRaysPass.getFullscreenMaterial();
+		godRaysMaterial.uniforms.density.value = density;
+		godRaysMaterial.uniforms.decay.value = decay;
+		godRaysMaterial.uniforms.weight.value = weight;
+		godRaysMaterial.uniforms.exposure.value = exposure;
+		godRaysMaterial.uniforms.clampMax.value = clampMax;
 
 		this.samples = samples;
 		this.blur = blur;

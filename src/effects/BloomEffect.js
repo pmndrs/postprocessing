@@ -1,7 +1,14 @@
-import { LinearFilter, RGBFormat, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
+import {
+	LinearFilter,
+	RGBFormat,
+	Uniform,
+	UnsignedByteType,
+	WebGLRenderTarget
+} from "three";
+
 import { Resizer } from "../core/Resizer";
-import { KernelSize, LuminanceMaterial } from "../materials";
-import { BlurPass, ShaderPass } from "../passes";
+import { KernelSize } from "../materials";
+import { BlurPass, LuminancePass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect } from "./Effect";
 
@@ -9,9 +16,6 @@ import fragmentShader from "./glsl/bloom/shader.frag";
 
 /**
  * A bloom effect.
- *
- * This effect uses the fast Kawase convolution technique and a luminance filter
- * to blur bright highlights.
  */
 
 export class BloomEffect extends Effect {
@@ -85,11 +89,15 @@ export class BloomEffect extends Effect {
 		 *
 		 * You may disable this pass to deactivate luminance filtering.
 		 *
-		 * @type {ShaderPass}
+		 * @type {LuminancePass}
 		 */
 
-		this.luminancePass = new ShaderPass(new LuminanceMaterial(true));
+		this.luminancePass = new LuminancePass({
+			renderTarget: this.renderTarget,
+			colorOutput: true
+		});
 
+		this.luminancePass.resolution = this.resolution;
 		this.luminanceMaterial.threshold = luminanceThreshold;
 		this.luminanceMaterial.smoothing = luminanceSmoothing;
 

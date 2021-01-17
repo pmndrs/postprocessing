@@ -7,8 +7,7 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { LuminanceMaterial } from "../materials";
-import { AdaptiveLuminancePass, ShaderPass } from "../passes";
+import { AdaptiveLuminancePass, LuminancePass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect } from "./Effect";
 
@@ -99,7 +98,9 @@ export class ToneMappingEffect extends Effect {
 		 * @private
 		 */
 
-		this.luminancePass = new ShaderPass(new LuminanceMaterial());
+		this.luminancePass = new LuminancePass({
+			renderTarget: this.renderTargetLuminance
+		});
 
 		/**
 		 * An adaptive luminance pass.
@@ -108,7 +109,7 @@ export class ToneMappingEffect extends Effect {
 		 * @private
 		 */
 
-		this.adaptiveLuminancePass = new AdaptiveLuminancePass(this.renderTargetLuminance.texture, {
+		this.adaptiveLuminancePass = new AdaptiveLuminancePass(this.luminancePass.texture, {
 			minLuminance,
 			adaptationRate
 		});
@@ -203,7 +204,7 @@ export class ToneMappingEffect extends Effect {
 
 	get resolution() {
 
-		return this.renderTargetLuminance.width;
+		return this.luminancePass.resolution.width;
 
 	}
 
@@ -219,7 +220,8 @@ export class ToneMappingEffect extends Effect {
 		const exponent = Math.max(0, Math.ceil(Math.log2(value)));
 		const size = Math.pow(2, exponent);
 
-		this.renderTargetLuminance.setSize(size, size);
+		this.luminancePass.resolution.width = size;
+		this.luminancePass.resolution.height = size;
 		this.adaptiveLuminancePass.mipLevel1x1 = exponent;
 
 	}
@@ -310,7 +312,7 @@ export class ToneMappingEffect extends Effect {
 
 		if(this.mode === ToneMappingMode.REINHARD2_ADAPTIVE) {
 
-			this.luminancePass.render(renderer, inputBuffer, this.renderTargetLuminance);
+			this.luminancePass.render(renderer, inputBuffer);
 			this.adaptiveLuminancePass.render(renderer, null, null, deltaTime);
 
 		}
