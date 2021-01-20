@@ -33,10 +33,7 @@ export class DepthComparisonMaterial extends ShaderMaterial {
 
 			blending: NoBlending,
 			depthWrite: false,
-			depthTest: false,
-
-			morphTargets: true,
-			skinning: true
+			depthTest: false
 
 		});
 

@@ -285,14 +285,11 @@ export class BloomDemo extends PostProcessingDemo {
 
 		// Lights
 
-		const ambientLight = new AmbientLight(0x212121);
+		const ambientLight = new AmbientLight(0x323232);
 		const mainLight = new DirectionalLight(0xffffff, 1.0);
-		const backLight = new DirectionalLight(0xff7e66, 0.1);
-
 		mainLight.position.set(-1, 1, 1);
-		backLight.position.copy(mainLight.position).negate();
 
-		scene.add(ambientLight, mainLight, backLight);
+		scene.add(ambientLight, mainLight);
 
 		// Objects
 
@@ -321,13 +318,13 @@ export class BloomDemo extends PostProcessingDemo {
 		const bloomOptions = {
 			blendFunction: BlendFunction.SCREEN,
 			kernelSize: KernelSize.MEDIUM,
-			luminanceThreshold: 0.8,
-			luminanceSmoothing: 0.075,
+			luminanceThreshold: 0.4,
+			luminanceSmoothing: 0.1,
 			height: 480
 		};
 
-		/* If you don't need to limit bloom to a subset of objects, it's recommended
-		to use the normal BloomEffect for better performance. */
+		/* If you don't need to limit bloom to a subset of objects, consider using
+		the basic BloomEffect for better performance. */
 		const bloomEffect = new BloomEffect(bloomOptions);
 		const selectiveBloomEffect = new SelectiveBloomEffect(scene, camera, bloomOptions);
 		selectiveBloomEffect.inverted = true;
@@ -347,11 +344,6 @@ export class BloomDemo extends PostProcessingDemo {
 
 		composer.addPass(effectPassA);
 		composer.addPass(effectPassB);
-
-		// Important: Make sure your lights are on! (SelectiveBloom)
-		ambientLight.layers.enable(selectiveBloomEffect.selection.layer);
-		mainLight.layers.enable(selectiveBloomEffect.selection.layer);
-		backLight.layers.enable(selectiveBloomEffect.selection.layer);
 
 	}
 
@@ -413,7 +405,7 @@ export class BloomDemo extends PostProcessingDemo {
 				"smoothing": effectA.luminanceMaterial.smoothing
 			},
 			"selection": {
-				"enabled": false,
+				"enabled": passB.enabled,
 				"inverted": effectB.inverted,
 				"ignore bg": effectB.ignoreBackground
 			},
@@ -497,6 +489,8 @@ export class BloomDemo extends PostProcessingDemo {
 			effectB.ignoreBackground = value;
 
 		});
+
+		folder.open();
 
 		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
 
