@@ -15,6 +15,8 @@ function generate(disableCache = false) {
 	const workerURL = URL.createObjectURL(new Blob([workerProgram], { type: "text/javascript" }));
 	const worker = new Worker(workerURL);
 
+	URL.revokeObjectURL(workerURL);
+
 	return new Promise((resolve, reject) => {
 
 		worker.addEventListener("error", (event) => reject(event.error));
@@ -22,20 +24,20 @@ function generate(disableCache = false) {
 
 			const searchImageData = RawImageData.from(event.data.searchImageData);
 			const areaImageData = RawImageData.from(event.data.areaImageData);
+			const useCache = (!disableCache && window.localStorage !== undefined);
 
 			const urls = [
-				searchImageData.toCanvas().toDataURL(),
-				areaImageData.toCanvas().toDataURL()
+				searchImageData.toCanvas().toDataURL("image/png", 1.0),
+				areaImageData.toCanvas().toDataURL("image/png", 1.0)
 			];
 
-			if(!disableCache && window.localStorage !== undefined) {
+			if(useCache) {
 
 				localStorage.setItem("smaa-search", urls[0]);
 				localStorage.setItem("smaa-area", urls[1]);
 
 			}
 
-			URL.revokeObjectURL(workerURL);
 			resolve(urls);
 
 		});
@@ -111,7 +113,8 @@ export class SMAAImageLoader extends Loader {
 
 		return new Promise((resolve, reject) => {
 
-			const cachedURLs = (!this.disableCache && window.localStorage !== undefined) ? [
+			const useCache = (!this.disableCache && window.localStorage !== undefined);
+			const cachedURLs = useCache ? [
 				localStorage.getItem("smaa-search"),
 				localStorage.getItem("smaa-area")
 			] : [null, null];
@@ -119,33 +122,34 @@ export class SMAAImageLoader extends Loader {
 			const promise = (cachedURLs[0] !== null && cachedURLs[1] !== null) ?
 				Promise.resolve(cachedURLs) : generate(this.disableCache);
 
-			promise.then((urls) => {
+			promise.then(([searchDataURL, areaDataURL]) => {
 
-				const result = [new Image(), new Image()];
+				const searchImage = new Image();
+				const areaImage = new Image();
 
 				internalManager.onLoad = () => {
 
-					onLoad(result);
-					resolve(result);
+					onLoad([searchImage, areaImage]);
+					resolve([searchImage, areaImage]);
 
 				};
 
-				result[0].addEventListener("load", () => {
+				searchImage.addEventListener("load", () => {
 
 					externalManager.itemEnd("smaa-search");
 					internalManager.itemEnd("smaa-search");
 
 				});
 
-				result[1].addEventListener("load", () => {
+				areaImage.addEventListener("load", () => {
 
 					externalManager.itemEnd("smaa-area");
 					internalManager.itemEnd("smaa-area");
 
 				});
 
-				result[0].src = urls[0];
-				result[1].src = urls[1];
+				searchImage.src = searchDataURL;
+				areaImage.src = areaDataURL;
 
 			}).catch((error) => {
 
