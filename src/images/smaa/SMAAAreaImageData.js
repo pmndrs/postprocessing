@@ -61,7 +61,7 @@ class Vector2 {
 
 	equals(v) {
 
-		return (this === v || (this.x === v.x && this.y === v.y));
+		return (this.x === v.x && this.y === v.y);
 
 	}
 
@@ -317,15 +317,13 @@ function calculateOrthogonalArea(p1, p2, x, result) {
 	const y1 = p1.y + dY * (x1 - p1.x) / dX;
 	const y2 = p1.y + dY * (x2 - p1.x) / dX;
 
-	let a, a1, a2, t;
-
 	// Check if x is inside the area.
 	if((x1 >= p1.x && x1 < p2.x) || (x2 > p1.x && x2 <= p2.x)) {
 
 		// Check if this is a trapezoid.
 		if(Math.sign(y1) === Math.sign(y2) || Math.abs(y1) < 1e-4 || Math.abs(y2) < 1e-4) {
 
-			a = (y1 + y2) / 2.0;
+			const a = (y1 + y2) / 2.0;
 
 			if(a < 0.0) {
 
@@ -340,12 +338,12 @@ function calculateOrthogonalArea(p1, p2, x, result) {
 		} else {
 
 			// Two triangles.
-			t = -p1.y * dX / dY + p1.x;
+			const t = -p1.y * dX / dY + p1.x;
 
-			a1 = (t > p1.x) ? y1 * (t - Math.trunc(t)) / 2.0 : 0.0;
-			a2 = (t < p2.x) ? y2 * (1.0 - (t - Math.trunc(t))) / 2.0 : 0.0;
+			const a1 = (t > p1.x) ? y1 * (t - Math.trunc(t)) / 2.0 : 0.0;
+			const a2 = (t < p2.x) ? y2 * (1.0 - (t - Math.trunc(t))) / 2.0 : 0.0;
 
-			a = (Math.abs(a1) > Math.abs(a2)) ? a1 : -a2;
+			const a = (Math.abs(a1) > Math.abs(a2)) ? a1 : -a2;
 
 			if(a < 0.0) {
 
@@ -703,13 +701,13 @@ function isInsideArea(p1, p2, x, y) {
 
 	if(!result) {
 
-		let xm = (p1.x + p2.x) / 2.0;
-		let ym = (p1.y + p2.y) / 2.0;
+		const xm = (p1.x + p2.x) / 2.0;
+		const ym = (p1.y + p2.y) / 2.0;
 
-		let a = p2.y - p1.y;
-		let b = p1.x - p2.x;
+		const a = p2.y - p1.y;
+		const b = p1.x - p2.x;
 
-		let c = a * (x - xm) + b * (y - ym);
+		const c = a * (x - xm) + b * (y - ym);
 
 		result = (c > 0.0);
 
@@ -733,16 +731,14 @@ function isInsideArea(p1, p2, x, y) {
 
 function calculateDiagonalAreaForPixel(p1, p2, pX, pY) {
 
-	let a;
-	let x, y;
-	let offsetX, offsetY;
+	let a = 0;
 
-	for(a = 0, y = 0; y < DIAGONAL_SAMPLES; ++y) {
+	for(let y = 0; y < DIAGONAL_SAMPLES; ++y) {
 
-		for(x = 0; x < DIAGONAL_SAMPLES; ++x) {
+		for(let x = 0; x < DIAGONAL_SAMPLES; ++x) {
 
-			offsetX = x / (DIAGONAL_SAMPLES - 1.0);
-			offsetY = y / (DIAGONAL_SAMPLES - 1.0);
+			const offsetX = x / (DIAGONAL_SAMPLES - 1.0);
+			const offsetY = y / (DIAGONAL_SAMPLES - 1.0);
 
 			if(isInsideArea(p1, p2, pX + offsetX, pY + offsetY)) {
 
@@ -1143,23 +1139,15 @@ function generatePatterns(patterns, offset, orthogonal) {
 
 	const result = new Vector2();
 
-	let i, l;
-	let x, y;
-	let c;
+	for(let i = 0, l = patterns.length; i < l; ++i) {
 
-	let pattern;
-	let data, size;
+		const pattern = patterns[i];
+		const data = pattern.data;
+		const size = pattern.width;
 
-	for(i = 0, l = patterns.length; i < l; ++i) {
+		for(let y = 0; y < size; ++y) {
 
-		pattern = patterns[i];
-
-		data = pattern.data;
-		size = pattern.width;
-
-		for(y = 0; y < size; ++y) {
-
-			for(x = 0; x < size; ++x) {
+			for(let x = 0; x < size; ++x) {
 
 				if(orthogonal) {
 
@@ -1171,8 +1159,7 @@ function generatePatterns(patterns, offset, orthogonal) {
 
 				}
 
-				c = (y * size + x) * 2;
-
+				const c = (y * size + x) * 2;
 				data[c] = result.x * 255;
 				data[c + 1] = result.y * 255;
 
@@ -1188,7 +1175,8 @@ function generatePatterns(patterns, offset, orthogonal) {
  * Assembles orthogonal or diagonal patterns into the final area image.
  *
  * @private
- * @param {Vector2} base - A base position.
+ * @param {Number} base - The base X-position.
+ * @param {Number} base - The base Y-position.
  * @param {RawImageData[]} patterns - The patterns to assemble.
  * @param {Uint8Array[]} edges - Edge coordinate pairs, used for positioning.
  * @param {Number} size - The pattern size.
@@ -1196,43 +1184,31 @@ function generatePatterns(patterns, offset, orthogonal) {
  * @param {RawImageData} target - The target image data.
  */
 
-function assemble(base, patterns, edges, size, orthogonal, target) {
-
-	const p = new Vector2();
+function assemble(baseX, baseY, patterns, edges, size, orthogonal, target) {
 
 	const dstData = target.data;
 	const dstWidth = target.width;
 
-	let i, l;
-	let x, y;
-	let c, d;
+	for(let i = 0, l = patterns.length; i < l; ++i) {
 
-	let edge;
-	let pattern;
-	let srcData, srcWidth;
+		const edge = edges[i];
+		const pattern = patterns[i];
 
-	for(i = 0, l = patterns.length; i < l; ++i) {
+		const srcData = pattern.data;
+		const srcWidth = pattern.width;
 
-		edge = edges[i];
-		pattern = patterns[i];
+		for(let y = 0; y < size; ++y) {
 
-		srcData = pattern.data;
-		srcWidth = pattern.width;
+			for(let x = 0; x < size; ++x) {
 
-		for(y = 0; y < size; ++y) {
+				const pX = edge[0] * size + baseX + x;
+				const pY = edge[1] * size + baseY + y;
 
-			for(x = 0; x < size; ++x) {
-
-				p.set(
-					edge[0] * size + base.x + x,
-					edge[1] * size + base.y + y
-				);
-
-				c = (p.y * dstWidth + p.x) * 4;
+				const c = (pY * dstWidth + pX) * 4;
 
 				/* The texture coordinates of orthogonal patterns are compressed
 				quadratically to reach longer distances for a given texture size. */
-				d = orthogonal ? ((y * y * srcWidth + x * x) * 2) :
+				const d = orthogonal ? ((y * y * srcWidth + x * x) * 2) :
 					((y * srcWidth + x) * 2);
 
 				dstData[c] = srcData[d];
@@ -1280,12 +1256,14 @@ export class SMAAAreaImageData {
 		const orthogonalPatterns = [];
 		const diagonalPatterns = [];
 
-		const base = new Vector2();
+		for(let i = 3, l = data.length; i < l; i += 4) {
 
-		let i, l;
+			data[i] = 255;
+
+		}
 
 		// Prepare 16 image data sets for the orthogonal and diagonal subtextures.
-		for(i = 0; i < 16; ++i) {
+		for(let i = 0; i < 16; ++i) {
 
 			orthogonalPatterns.push(new RawImageData(orthogonalPatternSize, orthogonalPatternSize,
 				new Uint8ClampedArray(orthogonalPatternSize * orthogonalPatternSize * 2), 2));
@@ -1295,25 +1273,39 @@ export class SMAAAreaImageData {
 
 		}
 
-		for(i = 0, l = orthogonalSubsamplingOffsets.length; i < l; ++i) {
+		for(let i = 0, l = orthogonalSubsamplingOffsets.length; i < l; ++i) {
 
 			// Generate 16 orthogonal patterns for each offset.
 			generatePatterns(orthogonalPatterns, orthogonalSubsamplingOffsets[i], true);
 
 			// Assemble the orthogonal patterns and place them on the left side.
-			base.set(0, 5 * ORTHOGONAL_SIZE * i);
-			assemble(base, orthogonalPatterns, orthogonalEdges, ORTHOGONAL_SIZE, true, result);
+			assemble(
+				0,
+				5 * ORTHOGONAL_SIZE * i,
+				orthogonalPatterns,
+				orthogonalEdges,
+				ORTHOGONAL_SIZE,
+				true,
+				result
+			);
 
 		}
 
-		for(i = 0, l = diagonalSubsamplingOffsets.length; i < l; ++i) {
+		for(let i = 0, l = diagonalSubsamplingOffsets.length; i < l; ++i) {
 
 			// Generate 16 diagonal patterns for each offset.
 			generatePatterns(diagonalPatterns, diagonalSubsamplingOffsets[i], false);
 
 			// Assemble the diagonal patterns and place them on the right side.
-			base.set(5 * ORTHOGONAL_SIZE, 4 * DIAGONAL_SIZE * i);
-			assemble(base, diagonalPatterns, diagonalEdges, DIAGONAL_SIZE, false, result);
+			assemble(
+				5 * ORTHOGONAL_SIZE,
+				4 * DIAGONAL_SIZE * i,
+				diagonalPatterns,
+				diagonalEdges,
+				DIAGONAL_SIZE,
+				false,
+				result
+			);
 
 		}
 
