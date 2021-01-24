@@ -37,7 +37,7 @@ The following table provides an overview of the most important scripts:
 | build | Builds and minifies all bundles.                             |
 | watch | Lints source files, builds the demo and listens for changes. |
 | dev   | Runs the watch script and serves files locally.              |
-| test  | Lints source files and runs unit tests.                      |
+| test  | Lints source files, builds all bundles and runs unit tests.  |
 
 __Note__: Setting `NODE_ENV` to `production` enables source code minification which slows down the build process. The `build` script does this automatically.
 
