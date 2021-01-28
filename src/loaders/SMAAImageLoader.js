@@ -42,16 +42,16 @@ export class SMAAImageLoader extends Loader {
 			const searchImage = new Image();
 			const areaImage = new Image();
 
-			internalManager.onError = (item) => {
+			internalManager.onError = (url) => {
 
 				if(onError !== null) {
 
-					onError(`Failed to load ${item}`);
+					onError(`Failed to load ${url}`);
 					resolve();
 
 				} else {
 
-					reject(`Failed to load ${item}`);
+					reject(`Failed to load ${url}`);
 
 				}
 
