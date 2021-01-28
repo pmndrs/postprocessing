@@ -23,7 +23,7 @@ export class LUT3dlLoader extends Loader {
 	 * @return {Promise<LookupTexture3D>} A promise that returns the lookup texture.
 	 */
 
-	load(url, onLoad = () => {}, onProgress = () => {}, onError = () => {}) {
+	load(url, onLoad = () => {}, onProgress = () => {}, onError = null) {
 
 		const externalManager = this.manager;
 		const internalManager = new LoadingManager();
@@ -34,11 +34,20 @@ export class LUT3dlLoader extends Loader {
 
 		return new Promise((resolve, reject) => {
 
-			internalManager.onError = (error) => {
+			internalManager.onError = (url) => {
 
 				externalManager.itemError(url);
-				onError(error);
-				reject(error);
+
+				if(onError !== null) {
+
+					onError(`Failed to load ${url}`);
+					resolve();
+
+				} else {
+
+					reject(`Failed to load ${url}`);
+
+				}
 
 			};
 
@@ -53,9 +62,10 @@ export class LUT3dlLoader extends Loader {
 					onLoad(result);
 					resolve(result);
 
-				} catch(error) {
+				} catch(e) {
 
-					internalManager.onError(error);
+					console.error(e);
+					internalManager.onError(url);
 
 				}
 
