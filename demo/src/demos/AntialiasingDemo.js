@@ -120,7 +120,7 @@ export class AntialiasingDemo extends PostProcessingDemo {
 
 				loadingManager.onLoad = () => setTimeout(resolve, 250);
 				loadingManager.onProgress = ProgressManager.updateProgress;
-				loadingManager.onError = reject;
+				loadingManager.onError = (url) => console.error(`Failed to load ${url}`);
 
 				Sponza.load(assets, loadingManager, anisotropy);
 
@@ -241,12 +241,12 @@ export class AntialiasingDemo extends PostProcessingDemo {
 	}
 
 	/**
-	 * Renders this demo.
+	 * Updates this demo.
 	 *
 	 * @param {Number} deltaTime - The time since the last frame in seconds.
 	 */
 
-	render(deltaTime) {
+	update(deltaTime) {
 
 		if(this.rotate) {
 
@@ -269,8 +269,6 @@ export class AntialiasingDemo extends PostProcessingDemo {
 			}
 
 		}
-
-		super.render(deltaTime);
 
 	}
 
