@@ -214,7 +214,7 @@ export class OutlineDemo extends PostProcessingDemo {
 
 				loadingManager.onLoad = () => setTimeout(resolve, 250);
 				loadingManager.onProgress = ProgressManager.updateProgress;
-				loadingManager.onError = reject;
+				loadingManager.onError = (url) => console.error(`Failed to load ${url}`);
 
 				cubeTextureLoader.load(urls, (t) => {
 
@@ -407,15 +407,14 @@ export class OutlineDemo extends PostProcessingDemo {
 	}
 
 	/**
-	 * Renders this demo.
+	 * Updates this demo.
 	 *
 	 * @param {Number} delta - The time since the last frame in seconds.
 	 */
 
-	render(delta) {
+	update(delta) {
 
 		this.animationMixer.update(delta);
-		super.render(delta);
 
 	}
 
@@ -530,19 +529,13 @@ export class OutlineDemo extends PostProcessingDemo {
 	}
 
 	/**
-	 * Resets this demo.
-	 *
-	 * @return {Demo} This demo.
+	 * Disposes this demo.
 	 */
 
-	reset() {
-
-		super.reset();
+	dispose() {
 
 		const dom = this.composer.getRenderer().domElement;
 		dom.removeEventListener("mousedown", this);
-
-		return this;
 
 	}
 

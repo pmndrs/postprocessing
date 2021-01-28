@@ -147,7 +147,7 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 				loadingManager.onLoad = () => setTimeout(resolve, 250);
 				loadingManager.onProgress = ProgressManager.updateProgress;
-				loadingManager.onError = reject;
+				loadingManager.onError = (url) => console.error(`Failed to load ${url}`);
 
 				Sponza.load(assets, loadingManager, anisotropy);
 
@@ -595,12 +595,10 @@ export class ColorGradingDemo extends PostProcessingDemo {
 	}
 
 	/**
-	 * Resets this demo.
-	 *
-	 * @return {Demo} This demo.
+	 * Disposes this demo.
 	 */
 
-	reset() {
+	dispose() {
 
 		const img = document.querySelector(".lut");
 
@@ -609,8 +607,6 @@ export class ColorGradingDemo extends PostProcessingDemo {
 			img.remove();
 
 		}
-
-		return super.reset();
 
 	}
 

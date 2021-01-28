@@ -1,57 +1,10 @@
 import { Loader, LoadingManager } from "three";
-import { RawImageData } from "../images/RawImageData";
-import workerProgram from "../../tmp/smaa.worker";
 
-/**
- * Generates the SMAA data images.
- *
- * @private
- * @param {Boolean} [disableCache=false] - Determines whether the generated image data should be cached.
- * @return {Promise} A promise that returns the search image and area image as a data URL pair.
- */
-
-function generate(disableCache = false) {
-
-	const workerURL = URL.createObjectURL(new Blob([workerProgram], { type: "text/javascript" }));
-	const worker = new Worker(workerURL);
-
-	return new Promise((resolve, reject) => {
-
-		worker.addEventListener("error", (event) => reject(event.error));
-		worker.addEventListener("message", (event) => {
-
-			const searchImageData = RawImageData.from(event.data.searchImageData);
-			const areaImageData = RawImageData.from(event.data.areaImageData);
-
-			const urls = [
-				searchImageData.toCanvas().toDataURL(),
-				areaImageData.toCanvas().toDataURL()
-			];
-
-			if(!disableCache && window.localStorage !== undefined) {
-
-				localStorage.setItem("smaa-search", urls[0]);
-				localStorage.setItem("smaa-area", urls[1]);
-
-			}
-
-			URL.revokeObjectURL(workerURL);
-			resolve(urls);
-
-		});
-
-		worker.postMessage(null);
-
-	});
-
-}
+import searchImageDataURL from "../images/smaa/searchImageDataURL";
+import areaImageDataURL from "../images/smaa/areaImageDataURL";
 
 /**
  * An SMAA image loader.
- *
- * This loader uses a worker thread to generate the search and area images. The
- * Generated data URLs will be cached using localStorage, if available. To
- * disable caching, please refer to {@link SMAAImageLoader.disableCache}.
  *
  * @experimental Added for testing, API might change in patch or minor releases. Requires three >= r108.
  */
@@ -59,34 +12,14 @@ function generate(disableCache = false) {
 export class SMAAImageLoader extends Loader {
 
 	/**
-	 * Constructs a new SMAA image loader.
-	 *
-	 * @param {LoadingManager} [manager] - A loading manager.
-	 */
-
-	constructor(manager) {
-
-		super(manager);
-
-		/**
-		 * Indicates whether data image caching is disabled.
-		 *
-		 * @type {Boolean}
-		 */
-
-		this.disableCache = false;
-
-	}
-
-	/**
 	 * Loads the SMAA data images.
 	 *
-	 * @param {Function} [onLoad] - A function to call when the loading process is done.
-	 * @param {Function} [onError] - A function to call when an error occurs.
+	 * @param {Function} [onLoad] - A callback that receives the search image and area image as a pair.
+	 * @param {Function} [onError] - An error callback that receives the URL of the image that failed to load.
 	 * @return {Promise<Image[]>} A promise that returns the search image and area image as a pair.
 	 */
 
-	load(onLoad = () => {}, onError = () => {}) {
+	load(onLoad = () => {}, onError = null) {
 
 		// Conform to the signature (url, onLoad, onProgress, onError).
 		if(arguments.length === 4) {
@@ -97,65 +30,76 @@ export class SMAAImageLoader extends Loader {
 		} else if(arguments.length === 3 || typeof arguments[0] !== "function") {
 
 			onLoad = arguments[1];
-			onError = () => {};
+			onError = null;
 
 		}
 
 		const externalManager = this.manager;
 		const internalManager = new LoadingManager();
 
-		externalManager.itemStart("smaa-search");
-		externalManager.itemStart("smaa-area");
-		internalManager.itemStart("smaa-search");
-		internalManager.itemStart("smaa-area");
-
 		return new Promise((resolve, reject) => {
 
-			const cachedURLs = (!this.disableCache && window.localStorage !== undefined) ? [
-				localStorage.getItem("smaa-search"),
-				localStorage.getItem("smaa-area")
-			] : [null, null];
+			const searchImage = new Image();
+			const areaImage = new Image();
 
-			const promise = (cachedURLs[0] !== null && cachedURLs[1] !== null) ?
-				Promise.resolve(cachedURLs) : generate(this.disableCache);
+			internalManager.onError = (url) => {
 
-			promise.then((urls) => {
+				externalManager.itemError(url);
 
-				const result = [new Image(), new Image()];
+				if(onError !== null) {
 
-				internalManager.onLoad = () => {
+					onError(`Failed to load ${url}`);
+					resolve();
 
-					onLoad(result);
-					resolve(result);
+				} else {
 
-				};
+					reject(`Failed to load ${url}`);
 
-				result[0].addEventListener("load", () => {
+				}
 
-					externalManager.itemEnd("smaa-search");
-					internalManager.itemEnd("smaa-search");
+			};
 
-				});
+			internalManager.onLoad = () => {
 
-				result[1].addEventListener("load", () => {
+				const result = [searchImage, areaImage];
+				onLoad(result);
+				resolve(result);
 
-					externalManager.itemEnd("smaa-area");
-					internalManager.itemEnd("smaa-area");
+			};
 
-				});
+			searchImage.addEventListener("error", (e) => {
 
-				result[0].src = urls[0];
-				result[1].src = urls[1];
-
-			}).catch((error) => {
-
-				externalManager.itemError("smaa-search");
-				externalManager.itemError("smaa-area");
-
-				onError(error);
-				reject(error);
+				internalManager.itemError("smaa-search");
 
 			});
+
+			areaImage.addEventListener("error", (e) => {
+
+				internalManager.itemError("smaa-area");
+
+			});
+
+			searchImage.addEventListener("load", () => {
+
+				externalManager.itemEnd("smaa-search");
+				internalManager.itemEnd("smaa-search");
+
+			});
+
+			areaImage.addEventListener("load", () => {
+
+				externalManager.itemEnd("smaa-area");
+				internalManager.itemEnd("smaa-area");
+
+			});
+
+			externalManager.itemStart("smaa-search");
+			externalManager.itemStart("smaa-area");
+			internalManager.itemStart("smaa-search");
+			internalManager.itemStart("smaa-area");
+
+			searchImage.src = searchImageDataURL;
+			areaImage.src = areaImageDataURL;
 
 		});
 

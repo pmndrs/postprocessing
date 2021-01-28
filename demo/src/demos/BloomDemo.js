@@ -224,7 +224,7 @@ export class BloomDemo extends PostProcessingDemo {
 
 				loadingManager.onLoad = () => setTimeout(resolve, 250);
 				loadingManager.onProgress = ProgressManager.updateProgress;
-				loadingManager.onError = reject;
+				loadingManager.onError = (url) => console.error(`Failed to load ${url}`);
 
 				cubeTextureLoader.load(urls, (t) => {
 
@@ -348,12 +348,12 @@ export class BloomDemo extends PostProcessingDemo {
 	}
 
 	/**
-	 * Renders this demo.
+	 * Updates this demo.
 	 *
 	 * @param {Number} delta - The time since the last frame in seconds.
 	 */
 
-	render(delta) {
+	update(delta) {
 
 		const object = this.object;
 		const PI2 = 2.0 * Math.PI;
@@ -372,8 +372,6 @@ export class BloomDemo extends PostProcessingDemo {
 			object.rotation.y -= PI2;
 
 		}
-
-		super.render(delta);
 
 	}
 
@@ -514,19 +512,13 @@ export class BloomDemo extends PostProcessingDemo {
 	}
 
 	/**
-	 * Resets this demo.
-	 *
-	 * @return {Demo} This demo.
+	 * Disposes this demo.
 	 */
 
-	reset() {
-
-		super.reset();
+	dispose() {
 
 		const dom = this.composer.getRenderer().domElement;
 		dom.removeEventListener("mousedown", this);
-
-		return this;
 
 	}
 

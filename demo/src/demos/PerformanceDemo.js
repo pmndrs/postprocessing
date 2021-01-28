@@ -179,7 +179,7 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 				loadingManager.onLoad = () => setTimeout(resolve, 250);
 				loadingManager.onProgress = ProgressManager.updateProgress;
-				loadingManager.onError = reject;
+				loadingManager.onError = (url) => console.error(`Failed to load ${url}`);
 
 				cubeTextureLoader.load(urls, (t) => {
 
@@ -406,12 +406,12 @@ export class PerformanceDemo extends PostProcessingDemo {
 	}
 
 	/**
-	 * Renders this demo.
+	 * Updates this demo.
 	 *
 	 * @param {Number} deltaTime - The time since the last frame in seconds.
 	 */
 
-	render(deltaTime) {
+	update(deltaTime) {
 
 		this.acc0 += deltaTime;
 		this.acc1 += deltaTime;
@@ -431,8 +431,6 @@ export class PerformanceDemo extends PostProcessingDemo {
 		this.sun.position.set(0, 2.5, Math.sin(this.acc1 * 0.4) * 8);
 		this.sun.updateWorldMatrix(true, false);
 		this.light.position.copy(this.sun.position);
-
-		super.render(deltaTime);
 
 	}
 
@@ -482,14 +480,10 @@ export class PerformanceDemo extends PostProcessingDemo {
 	}
 
 	/**
-	 * Resets this demo.
-	 *
-	 * @return {Demo} This demo.
+	 * Disposes this demo.
 	 */
 
-	reset() {
-
-		super.reset();
+	dispose() {
 
 		this.acc0 = 0.0;
 		this.acc1 = 0.0;

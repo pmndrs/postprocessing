@@ -105,7 +105,7 @@ export class BlurDemo extends PostProcessingDemo {
 
 				loadingManager.onLoad = () => setTimeout(resolve, 250);
 				loadingManager.onProgress = ProgressManager.updateProgress;
-				loadingManager.onError = reject;
+				loadingManager.onError = (url) => console.error(`Failed to load ${url}`);
 
 				cubeTextureLoader.load(urls, (t) => {
 
@@ -213,12 +213,12 @@ export class BlurDemo extends PostProcessingDemo {
 	}
 
 	/**
-	 * Renders this demo.
+	 * Update this demo.
 	 *
 	 * @param {Number} deltaTime - The time since the last frame in seconds.
 	 */
 
-	render(deltaTime) {
+	update(deltaTime) {
 
 		const object = this.object;
 		const PI2 = 2.0 * Math.PI;
@@ -237,8 +237,6 @@ export class BlurDemo extends PostProcessingDemo {
 			object.rotation.y -= PI2;
 
 		}
-
-		super.render(deltaTime);
 
 	}
 
