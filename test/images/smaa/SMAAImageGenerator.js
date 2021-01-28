@@ -1,5 +1,5 @@
 import test from "ava";
-import { SMAAImageGenerator } from "../../";
+import { SMAAImageGenerator } from "../../../";
 
 test("can be created", t => {
 
