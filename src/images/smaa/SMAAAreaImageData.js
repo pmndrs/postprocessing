@@ -1117,8 +1117,8 @@ function generatePatterns(patterns, offset, orthogonal) {
  * Assembles orthogonal or diagonal patterns into the final area image.
  *
  * @private
- * @param {Number} base - The base X-position.
- * @param {Number} base - The base Y-position.
+ * @param {Number} baseX - The base X-position.
+ * @param {Number} baseY - The base Y-position.
  * @param {RawImageData[]} patterns - The patterns to assemble.
  * @param {Uint8Array[]} edges - Edge coordinate pairs, used for positioning.
  * @param {Number} size - The pattern size.
