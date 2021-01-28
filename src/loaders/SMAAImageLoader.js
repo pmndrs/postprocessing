@@ -44,6 +44,8 @@ export class SMAAImageLoader extends Loader {
 
 			internalManager.onError = (url) => {
 
+				externalManager.itemError(url);
+
 				if(onError !== null) {
 
 					onError(`Failed to load ${url}`);
@@ -65,16 +67,14 @@ export class SMAAImageLoader extends Loader {
 
 			};
 
-			searchImage.addEventListener("error", (error) => {
+			searchImage.addEventListener("error", (e) => {
 
-				externalManager.itemError("smaa-search");
 				internalManager.itemError("smaa-search");
 
 			});
 
-			areaImage.addEventListener("error", (error) => {
+			areaImage.addEventListener("error", (e) => {
 
-				externalManager.itemError("smaa-area");
 				internalManager.itemError("smaa-area");
 
 			});
