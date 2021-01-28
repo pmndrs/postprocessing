@@ -14,8 +14,8 @@ export class SMAAImageLoader extends Loader {
 	/**
 	 * Loads the SMAA data images.
 	 *
-	 * @param {Function} [onLoad] - A function to call when the loading process is done.
-	 * @param {Function} [onError] - A function to call when an error occurs.
+	 * @param {Function} [onLoad] - A callback that receives the search image and area image as a pair.
+	 * @param {Function} [onError] - An error callback that receives the URL of the image that failed to load.
 	 * @return {Promise<Image[]>} A promise that returns the search image and area image as a pair.
 	 */
 

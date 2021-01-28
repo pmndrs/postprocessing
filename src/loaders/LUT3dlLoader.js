@@ -17,9 +17,9 @@ export class LUT3dlLoader extends Loader {
 	 * Loads a LUT.
 	 *
 	 * @param {String} url - The URL of the 3dl-file.
-	 * @param {Function} [onLoad] - A function to call when the loading process is done.
-	 * @param {Function} [onProgress] - A function to call when an error occurs.
-	 * @param {Function} [onError] - A function to call when an error occurs.
+	 * @param {Function} [onLoad] - A callback that receives the loaded lookup texture.
+	 * @param {Function} [onProgress] - A progress callback that receives the XMLHttpRequest instance.
+	 * @param {Function} [onError] - An error callback that receives the URL of the file that failed to load.
 	 * @return {Promise<LookupTexture3D>} A promise that returns the lookup texture.
 	 */
 
