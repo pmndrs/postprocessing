@@ -102,7 +102,7 @@ export class RawImageData {
 
 	static from(image) {
 
-		let { width, height } = image;
+		const { width, height } = image;
 		let data;
 
 		if(image instanceof Image) {
