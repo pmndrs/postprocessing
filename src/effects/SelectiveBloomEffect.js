@@ -49,7 +49,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 		this.camera = camera;
 
 		/**
-		 * A depth mask pass.
+		 * A depth pass.
 		 *
 		 * @type {DepthPass}
 		 * @private
@@ -133,7 +133,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 	}
 
 	/**
-	 * If enabled, the background colors will be discarded.
+	 * Inverts the selection.
 	 *
 	 * @type {Boolean}
 	 */
