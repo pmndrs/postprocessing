@@ -2,10 +2,12 @@ import {
 	AmbientLight,
 	AnimationMixer,
 	BoxBufferGeometry,
+	CircleBufferGeometry,
 	Color,
 	CubeTextureLoader,
 	ConeBufferGeometry,
 	DirectionalLight,
+	DoubleSide,
 	Mesh,
 	MeshPhongMaterial,
 	OctahedronBufferGeometry,
@@ -312,6 +314,18 @@ export class OutlineDemo extends PostProcessingDemo {
 			new OctahedronBufferGeometry(),
 			new MeshPhongMaterial({
 				color: 0xff00ff
+			})
+		);
+
+		scene.add(mesh);
+		meshes.push(mesh);
+		selection.push(mesh);
+
+		mesh = new Mesh(
+			new CircleBufferGeometry(0.75, 32),
+			new MeshPhongMaterial({
+				side: DoubleSide,
+				color: 0xff0000
 			})
 		);
 
