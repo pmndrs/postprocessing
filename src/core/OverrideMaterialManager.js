@@ -1,3 +1,5 @@
+import { BackSide, DoubleSide, FrontSide } from "three";
+
 /**
  * A flag that indicates whether the override material workaround is enabled.
  *
@@ -47,22 +49,31 @@ export class OverrideMaterialManager {
 		this.material = null;
 
 		/**
-		 * A clone of the override material.
+		 * Override materials for meshes that use standard front side triangles.
 		 *
-		 * @type {Material}
+		 * @type {Material[]}
 		 * @private
 		 */
 
-		this.materialInstanced = null;
+		this.materials = null;
 
 		/**
-		 * A clone of the override material.
+		 * Override materials for meshes that use back side triangles.
 		 *
-		 * @type {Material}
+		 * @type {Material[]}
 		 * @private
 		 */
 
-		this.materialSkinning = null;
+		this.materialsBackSide = null;
+
+		/**
+		 * Override materials for meshes that use double sided triangles.
+		 *
+		 * @type {Material[]}
+		 * @private
+		 */
+
+		this.materialsDoubleSide = null;
 
 		this.setMaterial(material);
 
@@ -86,19 +97,37 @@ export class OverrideMaterialManager {
 
 			if(node.isMesh) {
 
+				let materials;
+
+				switch(node.material.side) {
+
+					case DoubleSide:
+						materials = this.materialsDoubleSide;
+						break;
+
+					case BackSide:
+						materials = this.materialsBackSide;
+						break;
+
+					default:
+						materials = this.materials;
+						break;
+
+				}
+
 				this.originalMaterials.set(node, node.material);
 
-				if(node.isInstancedMesh) {
+				if(node.isSkinnedMesh) {
 
-					node.material = this.materialInstanced;
+					node.material = materials[2];
 
-				} else if(node.isSkinnedMesh) {
+				} else if(node.isInstancedMesh) {
 
-					node.material = this.materialSkinning;
+					node.material = materials[1];
 
 				} else {
 
-					node.material = this.material;
+					node.material = materials[0];
 
 				}
 
@@ -119,17 +148,45 @@ export class OverrideMaterialManager {
 	setMaterial(material) {
 
 		this.disposeMaterials();
+		this.material = material;
 
 		if(material !== null) {
 
-			this.material = material;
+			// Create materials for simple, skinned and instanced meshes.
+			const materials = this.materials = [
+				material.clone(),
+				material.clone(),
+				material.clone()
+			];
 
-			this.materialInstanced = material.clone();
-			this.materialInstanced.uniforms = Object.assign({}, material.uniforms);
+			for(const m of materials) {
 
-			this.materialSkinning = material.clone();
-			this.materialSkinning.uniforms = Object.assign({}, material.uniforms);
-			this.materialSkinning.skinning = true;
+				m.uniforms = Object.assign({}, material.uniforms);
+				m.side = FrontSide;
+
+			}
+
+			materials[2].skinning = true;
+
+			// Create additional materials for meshes that use BackSide.
+			this.materialsBackSide = materials.map((m) => {
+
+				const c = m.clone();
+				c.uniforms = Object.assign({}, material.uniforms);
+				c.side = BackSide;
+				return c;
+
+			});
+
+			// Create additional materials for meshes that use DoubleSide.
+			this.materialsDoubleSide = materials.map((m) => {
+
+				const c = m.clone();
+				c.uniforms = Object.assign({}, material.uniforms);
+				c.side = DoubleSide;
+				return c;
+
+			});
 
 		}
 
@@ -191,15 +248,17 @@ export class OverrideMaterialManager {
 
 	disposeMaterials() {
 
-		if(this.materialInstanced !== null) {
+		if(this.material !== null) {
 
-			this.materialInstanced.dispose();
+			const materials = this.materials
+				.concat(this.materialsBackSide)
+				.concat(this.materialsDoubleSide);
 
-		}
+			for(const m of materials) {
 
-		if(this.materialSkinning !== null) {
+				m.dispose();
 
-			this.materialSkinning.dispose();
+			}
 
 		}
 
