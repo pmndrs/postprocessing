@@ -1,4 +1,4 @@
-import { BuildOptions, BuildResult, startService } from "esbuild";
+import { startService } from "esbuild";
 import { watch } from "chokidar";
 import * as path from "path";
 import * as yargs from "yargs";
@@ -9,16 +9,15 @@ const { argv } = yargs.options({ watch: { alias: "w", type: "boolean" } });
 async function build(changedFile: string = null): Promise<void> {
 
 	const service = await startService();
-	const f = (changedFile !== null) ? path.normalize(changedFile) : null;
 
 	for(const configs of configLists) {
 
 		const t0 = Date.now();
-		const promises: Promise<void>[] = configs.map((c: BuildOptions) => {
+		const promises: Promise<void>[] = configs.map((c) => {
 
 			let p: Promise<void> = null;
 
-			if(path.normalize(c.outfile) !== f) {
+			if(path.normalize(c.outfile) !== changedFile) {
 
 				p = service.build(c).then((result) => {
 
@@ -38,8 +37,6 @@ async function build(changedFile: string = null): Promise<void> {
 
 	}
 
-	service.stop();
-
 }
 
 if(argv.watch) {
@@ -48,7 +45,7 @@ if(argv.watch) {
 		sourceDirectories.join(", ").replace(/, ([^,]*)$/, " and $1"));
 
 	const watcher = watch(sourceDirectories);
-	watcher.on("change", (f: string) => void build(f));
+	watcher.on("change", (f: string) => void build(path.normalize(f)));
 
 }
 
