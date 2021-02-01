@@ -15,18 +15,20 @@ const banner = `/**
  */`;
 
 // @todo Remove in next major release.
+const requireShim = `if(typeof window === "object"&&!window.require)window.require=()=>window.THREE;`;
 const footer = `if(typeof module==="object"&&module.exports)module.exports=${globalName};`;
 
 function config(infile: string, outfile: string, format: string, minify = false): BuildOptions {
 
 	const lib = (infile === "src/index.js");
 	const iife = (format === "iife");
+	const header = (!lib || !iife) ? banner : banner + "\n" + requireShim;
 
 	return {
 		entryPoints: [infile],
 		external: lib ? external : [],
 		globalName: lib ? globalName : "",
-		banner: lib ? banner : "",
+		banner: lib ? header : "",
 		footer: (lib && iife) ? footer : "",
 		plugins: [glsl({ minify })],
 		loader: {
