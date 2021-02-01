@@ -46,12 +46,12 @@ composer.addPass(new EffectPass(camera, new BloomEffect()));
 
 const clock = new Clock();
 
-(function render() {
+requestAnimationFrame(function render() {
 
 	requestAnimationFrame(render);
 	composer.render(clock.getDelta());
 
-}());
+});
 ```
 
 
