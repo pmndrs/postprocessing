@@ -16,8 +16,6 @@ jobs:
           persist-credentials: false
       - name: Install Node
         uses: actions/setup-node@v1
-        with:
-          node-version: 14
       - name: Install PNPM
         run: npm install -g pnpm
       - name: Install dependencies
