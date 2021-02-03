@@ -30,7 +30,7 @@ function config(infile: string, outfile: string, format: string, minify = false)
 		globalName: lib ? globalName : "",
 		banner: lib ? header : "",
 		footer: (lib && iife) ? footer : "",
-		plugins: [glsl({ minify })],
+		plugins: [glsl({ minify: production })],
 		loader: {
 			".png": "dataurl",
 			".worker": "text"
