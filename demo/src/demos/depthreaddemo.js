@@ -14,6 +14,7 @@ import { PostProcessingDemo } from "./PostProcessingDemo";
 import * as SphereCloud from "./objects/SphereCloud";
 
 import {
+	BlendFunction,
 	BlurPass,
 	EdgeDetectionMode,
 	EffectPass,
@@ -60,6 +61,7 @@ export class DepthReadDemo extends PostProcessingDemo {
 		 */
 
 		this.texturePass = null;
+		this.textureDepthPass = null;
 
 		/**
 		 * A texture effect.
@@ -69,6 +71,7 @@ export class DepthReadDemo extends PostProcessingDemo {
 		 */
 
 		this.textureEffect = null;
+		this.textureDepthViewEffect = null;
 
 		/**
 		 * An object.
@@ -105,7 +108,7 @@ export class DepthReadDemo extends PostProcessingDemo {
 			path + "nz" + format
 		];
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve, _reject) => {
 
 			if(assets.size === 0) {
 
@@ -213,12 +216,14 @@ export class DepthReadDemo extends PostProcessingDemo {
 
 		const smaaPass = new EffectPass(camera, smaaEffect);
 		const texturePass = new EffectPass(camera, textureEffect);
+		const textureDepthPass = new EffectPass(camera, textureDepthViewEffect);
 
 		textureEffect.blendMode.opacity.value = 0.0;
 		textureDepthViewEffect.blendMode.opacity.value = 0.5;
 
 		this.blurPass = blurPass;
 		this.texturePass = texturePass;
+		this.textureDepthPass = textureDepthPass;
 		this.textureEffect = textureEffect;
 		this.textureDepthViewEffect = textureDepthViewEffect;
 
@@ -227,6 +232,7 @@ export class DepthReadDemo extends PostProcessingDemo {
 		composer.addPass(savePass);
 		composer.addPass(blurPass);
 		composer.addPass(texturePass);
+		composer.addPass(textureDepthPass);
 
 	}
 
@@ -241,8 +247,8 @@ export class DepthReadDemo extends PostProcessingDemo {
 		const object = this.object;
 		const PI2 = 2.0 * Math.PI;
 
-		object.rotation.x += 0.05 * deltaTime;
-		object.rotation.y += 0.25 * deltaTime;
+		object.rotation.x += 0.0005 * deltaTime;
+		object.rotation.y += 0.0025 * deltaTime;
 
 		if(object.rotation.x >= PI2) {
 
@@ -267,16 +273,21 @@ export class DepthReadDemo extends PostProcessingDemo {
 	registerOptions(menu) {
 
 		const textureEffect = this.textureEffect;
+		const textureDepthViewEffect = this.textureDepthViewEffect;
 		const texturePass = this.texturePass;
+		const textureDepthPass = this.textureDepthPass;
 		const blurPass = this.blurPass;
 		const blendMode = textureEffect.blendMode;
+		const depthblendMode = textureDepthViewEffect.blendMode;
 
 		const params = {
 			resolution: blurPass.height,
 			"kernel size": blurPass.kernelSize,
 			scale: blurPass.scale,
 			opacity: 1.0 - blendMode.opacity.value,
-			"blend mode": blendMode.blendFunction
+			"depth opacity": 1.0 - depthblendMode.opacity.value,
+			"texeffect blur blend mode": blendMode.blendFunction,
+			"texeffect depth blend mode": depthblendMode.blendFunction
 		};
 
 		menu
@@ -306,6 +317,7 @@ export class DepthReadDemo extends PostProcessingDemo {
 
 		menu.add(blurPass, "enabled");
 		menu.add(texturePass, "dithering");
+		menu.add(textureDepthPass, "dithering");
 
 		menu
 			.add(params, "opacity")
@@ -317,6 +329,29 @@ export class DepthReadDemo extends PostProcessingDemo {
 				blendMode.opacity.value = 1.0 - value;
 
 			});
+
+		menu.add(params, "texeffect blur blend mode", BlendFunction).onChange((value) => {
+
+			blendMode.setBlendFunction(Number(value));
+
+		});
+
+		menu
+			.add(params, "depth opacity")
+			.min(0.0)
+			.max(1.0)
+			.step(0.01)
+			.onChange((value) => {
+
+				depthblendMode.opacity.value = 1.0 - value;
+
+			});
+		menu.add(params, "texeffect depth blend mode", BlendFunction).onChange((value) => {
+
+			depthblendMode.setBlendFunction(Number(value));
+
+		});
+
 
 	}
 

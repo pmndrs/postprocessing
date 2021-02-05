@@ -6,8 +6,8 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { Pass } from "src/passes/Pass";
-import DepthCopyMaterial from "./DepthCopyMaterial";
+import { Pass } from "../../../src/passes/Pass";
+import { DepthCopyMaterial } from "./DepthCopyMaterial";
 
 export class DepthSavePass extends Pass {
 
