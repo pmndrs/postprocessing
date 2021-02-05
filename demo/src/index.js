@@ -12,6 +12,7 @@ import { EffectComposer, OverrideMaterialManager } from "../../src";
 import { AntialiasingDemo } from "./demos/AntialiasingDemo";
 import { BloomDemo } from "./demos/BloomDemo";
 import { BlurDemo } from "./demos/BlurDemo";
+import { DepthReadDemo } from "./demos/depthreaddemo";
 import { ColorDepthDemo } from "./demos/ColorDepthDemo";
 import { ColorGradingDemo } from "./demos/ColorGradingDemo";
 import { DepthOfFieldDemo } from "./demos/DepthOfFieldDemo";
@@ -76,7 +77,7 @@ function render(timestamp) {
 
 window.addEventListener("load", (event) => {
 
-	const debug = (window.location.href.indexOf("localhost") !== -1);
+	const debug = window.location.href.indexOf("localhost") !== -1;
 	const viewport = document.getElementById("viewport");
 	const demoCache = new WeakSet();
 
@@ -149,6 +150,7 @@ window.addEventListener("load", (event) => {
 		new AntialiasingDemo(composer),
 		new BloomDemo(composer),
 		new BlurDemo(composer),
+		new DepthReadDemo(composer),
 		new ColorDepthDemo(composer),
 		new ColorGradingDemo(composer),
 		new DepthOfFieldDemo(composer),
@@ -165,7 +167,7 @@ window.addEventListener("load", (event) => {
 	];
 
 	const id = window.location.hash.slice(1);
-	const exists = demos.reduce((a, b) => (a || b.id === id), false);
+	const exists = demos.reduce((a, b) => a || b.id === id, false);
 
 	if(!exists) {
 
@@ -246,7 +248,10 @@ document.addEventListener("keydown", (event) => {
 		const v = new Vector3();
 		console.log("Camera position", camera.position);
 		console.log("World direction", camera.getWorldDirection(v));
-		console.log("Target position", v.addVectors(camera.position, camera.getWorldDirection(v)));
+		console.log(
+			"Target position",
+			v.addVectors(camera.position, camera.getWorldDirection(v))
+		);
 
 	}
 
