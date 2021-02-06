@@ -9,6 +9,20 @@ import {
 import { Pass } from "../../../src/passes/Pass";
 import { DepthCopyMaterial } from "./DepthCopyMaterial";
 
+const UnpackDownscale = 255 / 256;
+
+const PackFactorsX = 256 * 256 * 256, PackFactorsY = 256 * 256, PackFactorsZ = 256;
+const
+	UnpackFactorsX = UnpackDownscale / PackFactorsX,
+	UnpackFactorsY = UnpackDownscale / PackFactorsY,
+	UnpackFactorsZ = UnpackDownscale / PackFactorsZ;
+
+function unpackRGBAToDepth(v) {
+
+	return v[0] * UnpackFactorsX + v[1] * UnpackFactorsY + v[2] * UnpackFactorsZ + v[3];
+
+}
+
 export class DepthSavePass extends Pass {
 
 	constructor(depthPacking = BasicDepthPacking) {
@@ -57,6 +71,11 @@ export class DepthSavePass extends Pass {
 
 		renderer.setRenderTarget(this.renderToScreen ? null : this.renderTarget);
 		renderer.render(this.scene, this.camera);
+
+		const pixelBuffer = new Uint8Array(4);
+		renderer.readRenderTargetPixels(this.renderTarget, 0, 0, 1, 1, pixelBuffer);
+
+		console.log(pixelBuffer, unpackRGBAToDepth(pixelBuffer));
 
 	}
 
