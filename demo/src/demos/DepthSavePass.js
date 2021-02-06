@@ -1,5 +1,5 @@
 import {
-	BasicDepthPacking,
+	RGBADepthPacking,
 	FloatType,
 	NearestFilter,
 	UnsignedByteType,
@@ -23,9 +23,21 @@ function unpackRGBAToDepth(v) {
 
 }
 
+function viewZToPerspectiveDepth(viewZ, near, far) {
+
+	return ((near + viewZ) * far) / ((far - near) * viewZ);
+
+}
+
+function perspectiveDepthToViewZ(invClipZ, near, far) {
+
+	return (near * far) / ((far - near) * invClipZ - far);
+
+}
+
 export class DepthSavePass extends Pass {
 
-	constructor(depthPacking = BasicDepthPacking) {
+	constructor(camera, depthPacking = RGBADepthPacking) {
 
 		super("DepthSavePass");
 
@@ -34,9 +46,10 @@ export class DepthSavePass extends Pass {
 		this.setFullscreenMaterial(material);
 		this.needsDepthTexture = true;
 		this.needsSwap = false;
+		this.sceneCamera = camera;
 
 		this.renderTarget = new WebGLRenderTarget(1, 1, {
-			type: depthPacking === BasicDepthPacking ? FloatType : UnsignedByteType,
+			type: depthPacking === RGBADepthPacking ? UnsignedByteType : FloatType,
 			minFilter: NearestFilter,
 			magFilter: NearestFilter,
 			stencilBuffer: false,
@@ -44,6 +57,11 @@ export class DepthSavePass extends Pass {
 		});
 
 		this.renderTarget.texture.name = "DepthSavePass.Target";
+
+
+		this.near = this.sceneCamera.projectionMatrix.elements[14] / (this.sceneCamera.projectionMatrix.elements[10] - 1.0);
+		this.far = this.sceneCamera.projectionMatrix.elements[14] / (this.sceneCamera.projectionMatrix.elements[10] + 1.0);
+		console.log("nearfar", this.near, this.far);
 
 	}
 
@@ -75,7 +93,8 @@ export class DepthSavePass extends Pass {
 		const pixelBuffer = new Uint8Array(4);
 		renderer.readRenderTargetPixels(this.renderTarget, 0, 0, 1, 1, pixelBuffer);
 
-		console.log(pixelBuffer, unpackRGBAToDepth(pixelBuffer));
+		// https://stackoverflow.com/a/56439173
+		console.log('GPU depth!', -perspectiveDepthToViewZ(unpackRGBAToDepth(pixelBuffer) / 255, this.near, this.far));
 
 	}
 

@@ -3,8 +3,7 @@ import {
 	CubeTextureLoader,
 	DirectionalLight,
 	PerspectiveCamera,
-	sRGBEncoding,
-	RGBADepthPacking
+	sRGBEncoding
 } from "three";
 
 import { SpatialControls } from "spatial-controls";
@@ -198,7 +197,7 @@ export class DepthReadDemo extends PostProcessingDemo {
 		const blurPass = new BlurPass({
 			height: 480
 		});
-		const depthSavePass = new DepthSavePass(RGBADepthPacking);
+		const depthSavePass = new DepthSavePass(camera);
 
 		const smaaEffect = new SMAAEffect(
 			assets.get("smaa-search"),
