@@ -39,7 +39,7 @@ function perspectiveDepthToViewZ(invClipZ, near, far) {
 
 export class DepthSavePass extends Pass {
 
-	constructor(scene, camera, depthPacking = RGBADepthPacking) {
+	constructor(sceneObjects, camera, depthPacking = RGBADepthPacking) {
 
 		super("DepthSavePass");
 
@@ -59,7 +59,7 @@ export class DepthSavePass extends Pass {
 		});
 
 		this.renderTarget.texture.name = "DepthSavePass.Target";
-		this.scene = scene;
+		this.sceneObjects = sceneObjects;
 
 		this.near = this.sceneCamera.projectionMatrix.elements[14] / (this.sceneCamera.projectionMatrix.elements[10] - 1.0);
 		this.far = this.sceneCamera.projectionMatrix.elements[14] / (this.sceneCamera.projectionMatrix.elements[10] + 1.0);
@@ -79,14 +79,6 @@ export class DepthSavePass extends Pass {
 
 		this.x = ev.clientX;
 		this.y = ev.clientY;
-		const mouse = new Vector2((ev.clientX / window.innerWidth) * 2 - 1, -(ev.clientY / window.innerHeight) * 2 + 1);
-		if(this.raycaster) {
-
-			this.raycaster.setFromCamera(mouse, this.sceneCamera);
-			const intersects = this.raycaster.intersectObjects(this.scene.children);
-			console.log("raycast under mouse", intersects);
-
-		}
 
 	}
 
@@ -113,6 +105,17 @@ export class DepthSavePass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
+		const mouse = new Vector2((this.x / window.innerWidth) * 2 - 1, -(this.y / window.innerHeight) * 2 + 1);
+		this.raycaster.setFromCamera(mouse, this.sceneCamera);
+		const intersects = this.raycaster.intersectObjects([this.sceneObjects], true);
+		let lastCPURaycastLocation;
+		if(intersects.length) {
+
+			lastCPURaycastLocation = intersects[0].point;
+			// console.debug("raycast under mouse", lastCPURaycastLocation);
+
+		}
+
 		renderer.setRenderTarget(this.renderToScreen ? null : this.renderTarget);
 		renderer.render(this.scene, this.camera);
 
@@ -120,7 +123,13 @@ export class DepthSavePass extends Pass {
 		renderer.readRenderTargetPixels(this.renderTarget, this.x, this.y, 1, 1, pixelBuffer);
 
 		// https://stackoverflow.com/a/56439173
-		console.log("GPU depth!", -perspectiveDepthToViewZ(unpackRGBAToDepth(pixelBuffer) / 255, this.near, this.far));
+		console.log("GPU depth", -perspectiveDepthToViewZ(unpackRGBAToDepth(pixelBuffer) / 255, this.sceneCamera.near, this.sceneCamera.far));
+		if(lastCPURaycastLocation) {
+
+			// console.log("Raycast distance", lastCPURaycastLocation.clone().sub(this.sceneCamera.position).length());
+			console.log("GPU depth and CPU raycast hit distance", -perspectiveDepthToViewZ(unpackRGBAToDepth(pixelBuffer) / 255, this.sceneCamera.near, this.sceneCamera.far), lastCPURaycastLocation.clone().sub(this.sceneCamera.position).length());
+
+		}
 
 	}
 

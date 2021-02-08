@@ -197,7 +197,7 @@ export class DepthReadDemo extends PostProcessingDemo {
 		const blurPass = new BlurPass({
 			height: 480
 		});
-		const depthSavePass = new DepthSavePass(scene, camera);
+		const depthSavePass = new DepthSavePass(this.object, camera);
 
 		const smaaEffect = new SMAAEffect(
 			assets.get("smaa-search"),
