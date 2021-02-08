@@ -3,7 +3,9 @@ import {
 	FloatType,
 	NearestFilter,
 	UnsignedByteType,
-	WebGLRenderTarget
+	WebGLRenderTarget,
+	Vector2,
+	Raycaster
 } from "three";
 
 import { Pass } from "../../../src/passes/Pass";
@@ -37,7 +39,7 @@ function perspectiveDepthToViewZ(invClipZ, near, far) {
 
 export class DepthSavePass extends Pass {
 
-	constructor(camera, depthPacking = RGBADepthPacking) {
+	constructor(scene, camera, depthPacking = RGBADepthPacking) {
 
 		super("DepthSavePass");
 
@@ -57,13 +59,37 @@ export class DepthSavePass extends Pass {
 		});
 
 		this.renderTarget.texture.name = "DepthSavePass.Target";
-
+		this.scene = scene;
 
 		this.near = this.sceneCamera.projectionMatrix.elements[14] / (this.sceneCamera.projectionMatrix.elements[10] - 1.0);
 		this.far = this.sceneCamera.projectionMatrix.elements[14] / (this.sceneCamera.projectionMatrix.elements[10] + 1.0);
 		console.log("nearfar", this.near, this.far);
 
+		document.documentElement.addEventListener("mousemove", this.mousemoveCB.bind(this));
+
+		this.x = 0;
+		this.y = 0;
+		this.raycaster = new Raycaster();
+
+		window.depthSavePass = this;
+
 	}
+
+	mousemoveCB(ev) {
+
+		this.x = ev.clientX;
+		this.y = ev.clientY;
+		const mouse = new Vector2((ev.clientX / window.innerWidth) * 2 - 1, -(ev.clientY / window.innerHeight) * 2 + 1);
+		if(this.raycaster) {
+
+			this.raycaster.setFromCamera(mouse, this.sceneCamera);
+			const intersects = this.raycaster.intersectObjects(this.scene.children);
+			console.log("raycast under mouse", intersects);
+
+		}
+
+	}
+
 
 	get texture() {
 
@@ -91,10 +117,10 @@ export class DepthSavePass extends Pass {
 		renderer.render(this.scene, this.camera);
 
 		const pixelBuffer = new Uint8Array(4);
-		renderer.readRenderTargetPixels(this.renderTarget, 0, 0, 1, 1, pixelBuffer);
+		renderer.readRenderTargetPixels(this.renderTarget, this.x, this.y, 1, 1, pixelBuffer);
 
 		// https://stackoverflow.com/a/56439173
-		console.log('GPU depth!', -perspectiveDepthToViewZ(unpackRGBAToDepth(pixelBuffer) / 255, this.near, this.far));
+		console.log("GPU depth!", -perspectiveDepthToViewZ(unpackRGBAToDepth(pixelBuffer) / 255, this.near, this.far));
 
 	}
 
@@ -105,3 +131,4 @@ export class DepthSavePass extends Pass {
 	}
 
 }
+
