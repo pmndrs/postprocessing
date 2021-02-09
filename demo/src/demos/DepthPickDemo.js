@@ -17,7 +17,6 @@ import { PostProcessingDemo } from "./PostProcessingDemo";
 import * as SphereCloud from "./objects/SphereCloud";
 
 import {
-	BlendFunction,
 	BlurPass,
 	EdgeDetectionMode,
 	EffectPass,
@@ -29,13 +28,13 @@ import {
 	TextureEffect
 } from "../../../src";
 
-import { DepthSavePass } from "./DepthSavePass";
+import { DepthPickPass } from "./DepthPickPass";
 
 /**
- * A blur demo setup.
+ * A demo setup adapted from the blur demo to test GPU depth reading for raycasting.
  */
 
-export class DepthReadDemo extends PostProcessingDemo {
+export class DepthPickDemo extends PostProcessingDemo {
 
 	/**
 	 * Constructs a new blur demo.
@@ -45,7 +44,7 @@ export class DepthReadDemo extends PostProcessingDemo {
 
 	constructor(composer) {
 
-		super("DepthRead", composer);
+		super("DepthPick", composer);
 
 		/**
 		 * A blur pass.
@@ -64,7 +63,6 @@ export class DepthReadDemo extends PostProcessingDemo {
 		 */
 
 		this.texturePass = null;
-		this.textureDepthPass = null;
 
 		/**
 		 * A texture effect.
@@ -74,7 +72,6 @@ export class DepthReadDemo extends PostProcessingDemo {
 		 */
 
 		this.textureEffect = null;
-		this.textureDepthViewEffect = null;
 
 		/**
 		 * An object.
@@ -103,12 +100,9 @@ export class DepthReadDemo extends PostProcessingDemo {
 		const path = "textures/skies/sunset/";
 		const format = ".png";
 		const urls = [
-			path + "px" + format,
-			path + "nx" + format,
-			path + "py" + format,
-			path + "ny" + format,
-			path + "pz" + format,
-			path + "nz" + format
+			path + "px" + format, path + "nx" + format,
+			path + "py" + format, path + "ny" + format,
+			path + "pz" + format, path + "nz" + format
 		];
 
 		return new Promise((resolve, _reject) => {
@@ -117,8 +111,7 @@ export class DepthReadDemo extends PostProcessingDemo {
 
 				loadingManager.onLoad = () => setTimeout(resolve, 250);
 				loadingManager.onProgress = ProgressManager.updateProgress;
-				loadingManager.onError = (url) =>
-					console.error(`Failed to load ${url}`);
+				loadingManager.onError = (url) => console.error(`Failed to load ${url}`);
 
 				cubeTextureLoader.load(urls, (t) => {
 
@@ -165,11 +158,7 @@ export class DepthReadDemo extends PostProcessingDemo {
 
 		// Controls
 
-		const controls = new SpatialControls(
-			camera.position,
-			camera.quaternion,
-			renderer.domElement
-		);
+		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
 		controls.settings.translation.enabled = false;
 		controls.settings.sensitivity.rotation = 2.2;
@@ -195,7 +184,6 @@ export class DepthReadDemo extends PostProcessingDemo {
 		this.object = SphereCloud.create();
 		scene.add(this.object);
 
-		
 		const geometry = new PlaneGeometry(20, 20);
 		const material = new MeshBasicMaterial({ color: 0xffff00, side: DoubleSide });
 		const plane = new Mesh(geometry, material);
@@ -207,7 +195,7 @@ export class DepthReadDemo extends PostProcessingDemo {
 		const blurPass = new BlurPass({
 			height: 480
 		});
-		const depthSavePass = new DepthSavePass(scene, camera);
+		const depthPickPass = new DepthPickPass(camera);
 
 		const smaaEffect = new SMAAEffect(
 			assets.get("smaa-search"),
@@ -219,29 +207,20 @@ export class DepthReadDemo extends PostProcessingDemo {
 		const textureEffect = new TextureEffect({
 			texture: savePass.renderTarget.texture
 		});
-		const textureDepthViewEffect = new TextureEffect({
-			texture: depthSavePass.renderTarget.texture
-		});
 
 		const smaaPass = new EffectPass(camera, smaaEffect);
 		const texturePass = new EffectPass(camera, textureEffect);
-		const textureDepthPass = new EffectPass(camera, textureDepthViewEffect);
 
-		textureEffect.blendMode.opacity.value = 0.3;
-		textureDepthViewEffect.blendMode.opacity.value = 0.1;
+		textureEffect.blendMode.opacity.value = 0.0;
 
 		this.blurPass = blurPass;
 		this.texturePass = texturePass;
-		this.textureDepthPass = textureDepthPass;
 		this.textureEffect = textureEffect;
-		this.textureDepthViewEffect = textureDepthViewEffect;
 
-		composer.addPass(depthSavePass);
 		composer.addPass(smaaPass);
 		composer.addPass(savePass);
 		composer.addPass(blurPass);
 		composer.addPass(texturePass);
-		composer.addPass(textureDepthPass);
 
 	}
 
@@ -256,8 +235,8 @@ export class DepthReadDemo extends PostProcessingDemo {
 		const object = this.object;
 		const PI2 = 2.0 * Math.PI;
 
-		object.rotation.x += 0.0005 * deltaTime;
-		object.rotation.y += 0.0025 * deltaTime;
+		object.rotation.x += 0.05 * deltaTime;
+		object.rotation.y += 0.25 * deltaTime;
 
 		if(object.rotation.x >= PI2) {
 
@@ -282,30 +261,23 @@ export class DepthReadDemo extends PostProcessingDemo {
 	registerOptions(menu) {
 
 		const textureEffect = this.textureEffect;
-		const textureDepthViewEffect = this.textureDepthViewEffect;
 		const texturePass = this.texturePass;
-		const textureDepthPass = this.textureDepthPass;
 		const blurPass = this.blurPass;
 		const blendMode = textureEffect.blendMode;
-		const depthblendMode = textureDepthViewEffect.blendMode;
 
 		const params = {
-			resolution: blurPass.height,
+			"resolution": blurPass.height,
 			"kernel size": blurPass.kernelSize,
-			scale: blurPass.scale,
-			opacity: 1.0 - blendMode.opacity.value,
-			"depth opacity": 1.0 - depthblendMode.opacity.value,
-			"texeffect blur blend mode": blendMode.blendFunction,
-			"texeffect depth blend mode": depthblendMode.blendFunction
+			"scale": blurPass.scale,
+			"opacity": 1.0 - blendMode.opacity.value,
+			"blend mode": blendMode.blendFunction
 		};
 
-		menu
-			.add(params, "resolution", [240, 360, 480, 720, 1080])
-			.onChange((value) => {
+		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange((value) => {
 
-				blurPass.resolution.height = Number(value);
+			blurPass.resolution.height = Number(value);
 
-			});
+		});
 
 		menu.add(params, "kernel size", KernelSize).onChange((value) => {
 
@@ -313,54 +285,20 @@ export class DepthReadDemo extends PostProcessingDemo {
 
 		});
 
-		menu
-			.add(params, "scale")
-			.min(0.0)
-			.max(1.0)
-			.step(0.01)
-			.onChange((value) => {
+		menu.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange((value) => {
 
-				blurPass.scale = Number(value);
+			blurPass.scale = Number(value);
 
-			});
+		});
 
 		menu.add(blurPass, "enabled");
 		menu.add(texturePass, "dithering");
-		menu.add(textureDepthPass, "dithering");
 
-		menu
-			.add(params, "opacity")
-			.min(0.0)
-			.max(1.0)
-			.step(0.01)
-			.onChange((value) => {
+		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
 
-				blendMode.opacity.value = 1.0 - value;
-
-			});
-
-		menu.add(params, "texeffect blur blend mode", BlendFunction).onChange((value) => {
-
-			blendMode.setBlendFunction(Number(value));
+			blendMode.opacity.value = 1.0 - value;
 
 		});
-
-		menu
-			.add(params, "depth opacity")
-			.min(0.0)
-			.max(1.0)
-			.step(0.01)
-			.onChange((value) => {
-
-				depthblendMode.opacity.value = 1.0 - value;
-
-			});
-		menu.add(params, "texeffect depth blend mode", BlendFunction).onChange((value) => {
-
-			depthblendMode.setBlendFunction(Number(value));
-
-		});
-
 
 	}
 
