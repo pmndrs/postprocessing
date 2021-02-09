@@ -5,6 +5,8 @@ import {
 	UnsignedByteType,
 	WebGLRenderTarget,
 	Vector2,
+	Vector4,
+	Vector3,
 	Raycaster
 } from "three";
 
@@ -21,7 +23,7 @@ const
 
 function unpackRGBAToDepth(v) {
 
-	return v[0] * UnpackFactorsX + v[1] * UnpackFactorsY + v[2] * UnpackFactorsZ + v[3];
+	return (v[0] * UnpackFactorsX + v[1] * UnpackFactorsY + v[2] * UnpackFactorsZ + v[3]) / 256;
 
 }
 
@@ -39,7 +41,7 @@ function perspectiveDepthToViewZ(invClipZ, near, far) {
 
 export class DepthSavePass extends Pass {
 
-	constructor(sceneObjects, camera, depthPacking = RGBADepthPacking) {
+	constructor(parentScene, camera, depthPacking = RGBADepthPacking) {
 
 		super("DepthSavePass");
 
@@ -59,11 +61,11 @@ export class DepthSavePass extends Pass {
 		});
 
 		this.renderTarget.texture.name = "DepthSavePass.Target";
-		this.sceneObjects = sceneObjects;
+		this.parentScene = parentScene;
 
-		this.near = this.sceneCamera.projectionMatrix.elements[14] / (this.sceneCamera.projectionMatrix.elements[10] - 1.0);
-		this.far = this.sceneCamera.projectionMatrix.elements[14] / (this.sceneCamera.projectionMatrix.elements[10] + 1.0);
-		console.log("nearfar", this.near, this.far);
+		// this.near = this.sceneCamera.projectionMatrix.elements[14] / (this.sceneCamera.projectionMatrix.elements[10] - 1.0);
+		// this.far = this.sceneCamera.projectionMatrix.elements[14] / (this.sceneCamera.projectionMatrix.elements[10] + 1.0);
+		// console.log("nearfar", this.near, this.far);
 
 		document.documentElement.addEventListener("mousemove", this.mousemoveCB.bind(this));
 
@@ -107,7 +109,7 @@ export class DepthSavePass extends Pass {
 
 		const mouse = new Vector2((this.x / window.innerWidth) * 2 - 1, -(this.y / window.innerHeight) * 2 + 1);
 		this.raycaster.setFromCamera(mouse, this.sceneCamera);
-		const intersects = this.raycaster.intersectObjects([this.sceneObjects], true);
+		const intersects = this.raycaster.intersectObjects(this.parentScene.children, true);
 		let lastCPURaycastLocation;
 		if(intersects.length) {
 
@@ -116,18 +118,39 @@ export class DepthSavePass extends Pass {
 
 		}
 
+		this.cpuRaycastLocation = lastCPURaycastLocation;
+
 		renderer.setRenderTarget(this.renderToScreen ? null : this.renderTarget);
 		renderer.render(this.scene, this.camera);
 
 		const pixelBuffer = new Uint8Array(4);
-		renderer.readRenderTargetPixels(this.renderTarget, this.x, this.y, 1, 1, pixelBuffer);
+		renderer.readRenderTargetPixels(this.renderTarget, this.x, this.renderTarget.height - this.y, 1, 1, pixelBuffer);
 
 		// https://stackoverflow.com/a/56439173
-		console.log("GPU depth", -perspectiveDepthToViewZ(unpackRGBAToDepth(pixelBuffer) / 255, this.sceneCamera.near, this.sceneCamera.far));
+		// console.log("GPU depth", -perspectiveDepthToViewZ(unpackRGBAToDepth(pixelBuffer) / 255, this.sceneCamera.near, this.sceneCamera.far));
+
+		// console.log("GPU depth", unpackRGBAToDepth(pixelBuffer) / 255);
+		const gpuZ = -perspectiveDepthToViewZ(unpackRGBAToDepth(pixelBuffer), this.sceneCamera.near, this.sceneCamera.far);
+
+		const z = unpackRGBAToDepth(pixelBuffer);
+		// vec4: ndc x, y, z represented with w taking z
+		const world = new Vector3(mouse.x, mouse.y, z * 2 - 1).unproject(this.sceneCamera);
+		// const world = new Vector3(worldW.x / worldW.w, worldW.y / worldW.w, worldW.z / worldW.w);
+
+		this.gpuRaycastLocation = world;
+
+		const gpu = world.clone().sub(this.sceneCamera.position).length();
+
 		if(lastCPURaycastLocation) {
 
-			// console.log("Raycast distance", lastCPURaycastLocation.clone().sub(this.sceneCamera.position).length());
-			console.log("GPU depth and CPU raycast hit distance", -perspectiveDepthToViewZ(unpackRGBAToDepth(pixelBuffer) / 255, this.sceneCamera.near, this.sceneCamera.far), lastCPURaycastLocation.clone().sub(this.sceneCamera.position).length());
+			const cpu = lastCPURaycastLocation.clone().sub(this.sceneCamera.position).length();
+			// console.log("Raycast distance", 
+			// lastCPURaycastLocation.clone().sub(this.sceneCamera.position).length());
+			console.log("AAA", gpu, cpu, "absolute delta", gpu - cpu, "relative delta", (gpu - cpu) / Math.max(gpu, cpu), "COMPARE", this.gpuRaycastLocation, this.cpuRaycastLocation);
+
+		} else {
+
+			console.log("BBB", gpu, world);
 
 		}
 

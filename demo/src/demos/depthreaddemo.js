@@ -3,7 +3,11 @@ import {
 	CubeTextureLoader,
 	DirectionalLight,
 	PerspectiveCamera,
-	sRGBEncoding
+	sRGBEncoding,
+	PlaneGeometry,
+	DoubleSide,
+	MeshBasicMaterial,
+	Mesh
 } from "three";
 
 import { SpatialControls } from "spatial-controls";
@@ -191,13 +195,19 @@ export class DepthReadDemo extends PostProcessingDemo {
 		this.object = SphereCloud.create();
 		scene.add(this.object);
 
+		
+		const geometry = new PlaneGeometry(20, 20);
+		const material = new MeshBasicMaterial({ color: 0xffff00, side: DoubleSide });
+		const plane = new Mesh(geometry, material);
+		scene.add(plane);
+
 		// Passes
 
 		const savePass = new SavePass();
 		const blurPass = new BlurPass({
 			height: 480
 		});
-		const depthSavePass = new DepthSavePass(this.object, camera);
+		const depthSavePass = new DepthSavePass(scene, camera);
 
 		const smaaEffect = new SMAAEffect(
 			assets.get("smaa-search"),
