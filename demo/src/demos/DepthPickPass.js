@@ -27,7 +27,7 @@ function unpackRGBAToDepth(v) {
 
 export class DepthPickPass extends Pass {
 
-	constructor(camera, cb, depthPacking = RGBADepthPacking) {
+	constructor(camera, depthPacking = RGBADepthPacking) {
 
 		super("DepthPickPass");
 
@@ -51,16 +51,15 @@ export class DepthPickPass extends Pass {
 
 		window.depthPickPass = this;
 
-		this.gpuRaycastCB = cb;
 		this.sceneCamera = camera;
 
 	}
 
-	set position(value) {
+	query(mouse, cb) {
 
 		// perform the conversion from NDC to texcoord space
-		this.material.position = value.multiplyScalar(0.5).addScalar(.5);
-		this.receivedPosition = true;
+		this.material.position = mouse.clone().multiplyScalar(0.5).addScalar(.5);
+		this.receivedCb = cb;
 
 	}
 
@@ -86,7 +85,7 @@ export class DepthPickPass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
-		if(this.receivedPosition) {
+		if(this.receivedCb) {
 
 			renderer.setRenderTarget(this.renderToScreen ? null : this.renderTarget);
 			renderer.render(this.scene, this.camera);
@@ -99,7 +98,9 @@ export class DepthPickPass extends Pass {
 			// NDC space in preparation for camera unproject to obtain world space intersection position.
 			const world = new Vector3(this.material.uniforms.vUv.value.x, this.material.uniforms.vUv.value.y, z).multiplyScalar(2).subScalar(1).unproject(this.sceneCamera);
 
-			this.gpuRaycastCB(world);
+			this.receivedCb(world);
+
+			this.receivedCb = false;
 
 		}
 

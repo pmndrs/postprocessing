@@ -201,7 +201,7 @@ export class DepthPickDemo extends PostProcessingDemo {
 		const blurPass = new BlurPass({
 			height: 480
 		});
-		const depthPickPass = new DepthPickPass(camera, this.handleGPURaycast.bind(this));
+		const depthPickPass = new DepthPickPass(camera);
 		this.depthPickPass = depthPickPass;
 
 		const smaaEffect = new SMAAEffect(
@@ -233,12 +233,34 @@ export class DepthPickDemo extends PostProcessingDemo {
 		this.raycaster = new Raycaster();
 
 		const me = this;
-		document.documentElement.addEventListener("mousemove", (ev) => {
+
+		const downListener = (ev) => {
 
 			// set mouse coords to NDC coords
 			me.mouse = new Vector2((ev.x / window.innerWidth) * 2 - 1, -(ev.y / window.innerHeight) * 2 + 1);
+			me.depthPickPass.query(me.mouse, this.handleGPURaycast.bind(this));
+			me.mouseDown = true;
 
-		});
+		};
+		const moveListener = (ev) => {
+
+			// update the position
+			me.mouse = new Vector2((ev.x / window.innerWidth) * 2 - 1, -(ev.y / window.innerHeight) * 2 + 1);
+
+		};
+		const upListener = (ev) => {
+
+			me.mouseDown = false;
+
+		};
+
+		document.documentElement.addEventListener("mousedown", downListener);
+		document.documentElement.addEventListener("touchstart", downListener);
+		document.documentElement.addEventListener("mousemove", moveListener);
+		document.documentElement.addEventListener("touchmove", downListener);
+		document.documentElement.addEventListener("mouseup", upListener);
+		document.documentElement.addEventListener("touchend", upListener);
+		document.documentElement.addEventListener("touchcancel", upListener);
 
 	}
 
@@ -294,9 +316,9 @@ export class DepthPickDemo extends PostProcessingDemo {
 
 		// set mouse pos via the same NDC coords (establishing THREE's convention for mouse input 
 		// ray specification)
-		if(this.mouse) {
+		if(this.mouseDown) {
 
-			this.depthPickPass.position = this.mouse.clone();
+			this.depthPickPass.query(this.mouse, this.handleGPURaycast.bind(this));
 
 		}
 
