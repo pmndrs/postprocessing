@@ -73,7 +73,7 @@ export class DepthSavePass extends Pass {
 		this.y = 0;
 		this.raycaster = new Raycaster();
 
-		window.depthSavePass = this;
+		// window.depthSavePass = this;
 
 	}
 
@@ -118,7 +118,7 @@ export class DepthSavePass extends Pass {
 
 		}
 
-		this.cpuRaycastLocation = lastCPURaycastLocation;
+		const cpuRaycastLocation = lastCPURaycastLocation;
 
 		renderer.setRenderTarget(this.renderToScreen ? null : this.renderTarget);
 		renderer.render(this.scene, this.camera);
@@ -137,7 +137,7 @@ export class DepthSavePass extends Pass {
 		const world = new Vector3(mouse.x, mouse.y, z * 2 - 1).unproject(this.sceneCamera);
 		// const world = new Vector3(worldW.x / worldW.w, worldW.y / worldW.w, worldW.z / worldW.w);
 
-		this.gpuRaycastLocation = world;
+		const gpuRaycastLocation = world;
 
 		const gpu = world.clone().sub(this.sceneCamera.position).length();
 
@@ -146,11 +146,11 @@ export class DepthSavePass extends Pass {
 			const cpu = lastCPURaycastLocation.clone().sub(this.sceneCamera.position).length();
 			// console.log("Raycast distance", 
 			// lastCPURaycastLocation.clone().sub(this.sceneCamera.position).length());
-			console.log("AAA", gpu, cpu, "absolute delta", gpu - cpu, "relative delta", (gpu - cpu) / Math.max(gpu, cpu), "COMPARE", this.gpuRaycastLocation, this.cpuRaycastLocation);
+			console.debug("AAA", gpu, cpu, "absolute delta", gpu - cpu, "relative delta", (gpu - cpu) / Math.max(gpu, cpu), "COMPARE", this.gpuRaycastLocation, cpuRaycastLocation);
 
 		} else {
 
-			console.log("BBB", gpu, world);
+			console.debug("BBB", gpu, world);
 
 		}
 

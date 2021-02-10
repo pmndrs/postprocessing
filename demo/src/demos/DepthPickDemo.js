@@ -217,6 +217,7 @@ export class DepthPickDemo extends PostProcessingDemo {
 		this.texturePass = texturePass;
 		this.textureEffect = textureEffect;
 
+		composer.addPass(depthPickPass);
 		composer.addPass(smaaPass);
 		composer.addPass(savePass);
 		composer.addPass(blurPass);

@@ -13,6 +13,7 @@ import { AntialiasingDemo } from "./demos/AntialiasingDemo";
 import { BloomDemo } from "./demos/BloomDemo";
 import { BlurDemo } from "./demos/BlurDemo";
 import { DepthReadDemo } from "./demos/depthreaddemo";
+import { DepthPickDemo } from "./demos/DepthPickDemo";
 import { ColorDepthDemo } from "./demos/ColorDepthDemo";
 import { ColorGradingDemo } from "./demos/ColorGradingDemo";
 import { DepthOfFieldDemo } from "./demos/DepthOfFieldDemo";
@@ -151,6 +152,7 @@ window.addEventListener("load", (event) => {
 		new BloomDemo(composer),
 		new BlurDemo(composer),
 		new DepthReadDemo(composer),
+		new DepthPickDemo(composer),
 		new ColorDepthDemo(composer),
 		new ColorGradingDemo(composer),
 		new DepthOfFieldDemo(composer),

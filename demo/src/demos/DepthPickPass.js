@@ -4,7 +4,6 @@ import {
 	NearestFilter,
 	UnsignedByteType,
 	WebGLRenderTarget,
-	Vector2,
 	Vector3,
 	Raycaster
 } from "three";
@@ -26,21 +25,9 @@ function unpackRGBAToDepth(v) {
 
 }
 
-function viewZToPerspectiveDepth(viewZ, near, far) {
-
-	return ((near + viewZ) * far) / ((far - near) * viewZ);
-
-}
-
-function perspectiveDepthToViewZ(invClipZ, near, far) {
-
-	return (near * far) / ((far - near) * invClipZ - far);
-
-}
-
 export class DepthPickPass extends Pass {
 
-	constructor(parentScene, camera, depthPacking = RGBADepthPacking) {
+	constructor(camera, depthPacking = RGBADepthPacking) {
 
 		super("DepthPickPass");
 
@@ -52,6 +39,7 @@ export class DepthPickPass extends Pass {
 		this.sceneCamera = camera;
 
 		this.renderTarget = new WebGLRenderTarget(1, 1, {
+			// use RGBADepthPacking by default to get higher resolution on mobile devices.
 			type: depthPacking === RGBADepthPacking ? UnsignedByteType : FloatType,
 			minFilter: NearestFilter,
 			magFilter: NearestFilter,
@@ -60,26 +48,15 @@ export class DepthPickPass extends Pass {
 		});
 
 		this.renderTarget.texture.name = "DepthPickPass.Target";
-		this.parentScene = parentScene;
 
 		// this.near = this.sceneCamera.projectionMatrix.elements[14] / (this.sceneCamera.projectionMatrix.elements[10] - 1.0);
 		// this.far = this.sceneCamera.projectionMatrix.elements[14] / (this.sceneCamera.projectionMatrix.elements[10] + 1.0);
 		// console.log("nearfar", this.near, this.far);
 
-		document.documentElement.addEventListener("mousemove", this.mousemoveCB.bind(this));
-
 		this.x = 0;
 		this.y = 0;
-		this.raycaster = new Raycaster();
 
 		window.depthPickPass = this;
-
-	}
-
-	mousemoveCB(ev) {
-
-		this.x = ev.clientX;
-		this.y = ev.clientY;
 
 	}
 
@@ -105,19 +82,6 @@ export class DepthPickPass extends Pass {
 	}
 
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
-
-		const mouse = new Vector2((this.x / window.innerWidth) * 2 - 1, -(this.y / window.innerHeight) * 2 + 1);
-		this.raycaster.setFromCamera(mouse, this.sceneCamera);
-		const intersects = this.raycaster.intersectObjects(this.parentScene.children, true);
-		let lastCPURaycastLocation;
-		if(intersects.length) {
-
-			lastCPURaycastLocation = intersects[0].point;
-			// console.debug("raycast under mouse", lastCPURaycastLocation);
-
-		}
-
-		this.cpuRaycastLocation = lastCPURaycastLocation;
 
 		renderer.setRenderTarget(this.renderToScreen ? null : this.renderTarget);
 		renderer.render(this.scene, this.camera);
