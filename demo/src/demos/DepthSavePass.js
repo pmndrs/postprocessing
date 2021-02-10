@@ -63,17 +63,21 @@ export class DepthSavePass extends Pass {
 		this.renderTarget.texture.name = "DepthSavePass.Target";
 		this.parentScene = parentScene;
 
-		// this.near = this.sceneCamera.projectionMatrix.elements[14] / (this.sceneCamera.projectionMatrix.elements[10] - 1.0);
-		// this.far = this.sceneCamera.projectionMatrix.elements[14] / (this.sceneCamera.projectionMatrix.elements[10] + 1.0);
-		// console.log("nearfar", this.near, this.far);
-
-		document.documentElement.addEventListener("mousemove", this.mousemoveCB.bind(this));
+		this.boundMousemoveCB = this.mousemoveCB.bind(this);
+		document.documentElement.addEventListener("mousemove", this.boundMousemoveCB);
 
 		this.x = 0;
 		this.y = 0;
 		this.raycaster = new Raycaster();
 
 		// window.depthSavePass = this;
+
+	}
+
+	dispose() {
+
+		console.log("cleaning up event listeners DepthSavePass");
+		document.documentElement.removeEventListener("mousemove", this.boundMousemoveCB);
 
 	}
 

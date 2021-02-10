@@ -232,35 +232,54 @@ export class DepthPickDemo extends PostProcessingDemo {
 
 		this.raycaster = new Raycaster();
 
-		const me = this;
+		this.boundHandleGPURaycast = this.handleGPURaycast.bind(this);
 
-		const downListener = (ev) => {
+		this.boundDownListener = this.downListener.bind(this);
+		this.boundMoveListener = this.moveListener.bind(this);
+		this.boundUpListener = this.upListener.bind(this);
 
-			// set mouse coords to NDC coords
-			me.mouse = new Vector2((ev.x / window.innerWidth) * 2 - 1, -(ev.y / window.innerHeight) * 2 + 1);
-			me.depthPickPass.query(me.mouse, this.handleGPURaycast.bind(this));
-			me.mouseDown = true;
+		document.documentElement.addEventListener("mousedown", this.boundDownListener);
+		document.documentElement.addEventListener("touchstart", this.boundDownListener);
+		document.documentElement.addEventListener("mousemove", this.boundMoveListener);
+		document.documentElement.addEventListener("touchmove", this.boundDownListener);
+		document.documentElement.addEventListener("mouseup", this.boundUpListener);
+		document.documentElement.addEventListener("touchend", this.boundUpListener);
+		document.documentElement.addEventListener("touchcancel", this.boundUpListener);
 
-		};
-		const moveListener = (ev) => {
+	}
 
-			// update the position
-			me.mouse = new Vector2((ev.x / window.innerWidth) * 2 - 1, -(ev.y / window.innerHeight) * 2 + 1);
+	dispose() {
 
-		};
-		const upListener = (ev) => {
+		document.documentElement.removeEventListener("mousedown", this.boundDownListener);
+		document.documentElement.removeEventListener("touchstart", this.boundDownListener);
+		document.documentElement.removeEventListener("mousemove", this.boundMoveListener);
+		document.documentElement.removeEventListener("touchmove", this.boundDownListener);
+		document.documentElement.removeEventListener("mouseup", this.boundUpListener);
+		document.documentElement.removeEventListener("touchend", this.boundUpListener);
+		document.documentElement.removeEventListener("touchcancel", this.boundUpListener);
 
-			me.mouseDown = false;
+	}
 
-		};
 
-		document.documentElement.addEventListener("mousedown", downListener);
-		document.documentElement.addEventListener("touchstart", downListener);
-		document.documentElement.addEventListener("mousemove", moveListener);
-		document.documentElement.addEventListener("touchmove", downListener);
-		document.documentElement.addEventListener("mouseup", upListener);
-		document.documentElement.addEventListener("touchend", upListener);
-		document.documentElement.addEventListener("touchcancel", upListener);
+	downListener(ev) {
+
+		// set mouse coords to NDC coords
+		this.mouse = new Vector2((ev.x / window.innerWidth) * 2 - 1, -(ev.y / window.innerHeight) * 2 + 1);
+		this.depthPickPass.query(this.mouse, this.boundHandleGPURaycast);
+		this.mouseDown = true;
+
+	}
+
+	moveListener(ev) {
+
+		// update the position
+		this.mouse = new Vector2((ev.x / window.innerWidth) * 2 - 1, -(ev.y / window.innerHeight) * 2 + 1);
+
+	}
+
+	upListener(ev) {
+
+		this.mouseDown = false;
 
 	}
 
@@ -318,7 +337,7 @@ export class DepthPickDemo extends PostProcessingDemo {
 		// ray specification)
 		if(this.mouseDown) {
 
-			this.depthPickPass.query(this.mouse, this.handleGPURaycast.bind(this));
+			this.depthPickPass.query(this.mouse, this.boundHandleGPURaycast);
 
 		}
 
