@@ -27,7 +27,7 @@ function unpackRGBAToDepth(v) {
 
 export class DepthPickPass extends Pass {
 
-	constructor(camera, depthPacking = RGBADepthPacking) {
+	constructor(camera, cb, depthPacking = RGBADepthPacking) {
 
 		super("DepthPickPass");
 
@@ -37,7 +37,6 @@ export class DepthPickPass extends Pass {
 		this.setFullscreenMaterial(material);
 		this.needsDepthTexture = true;
 		this.needsSwap = false;
-		this.sceneCamera = camera;
 
 		this.renderTarget = new WebGLRenderTarget(2, 2, {
 			// use RGBADepthPacking by default to get higher resolution on mobile devices.
@@ -50,17 +49,18 @@ export class DepthPickPass extends Pass {
 
 		this.renderTarget.texture.name = "DepthPickPass.Target";
 
-		// this.near = this.sceneCamera.projectionMatrix.elements[14] / (this.sceneCamera.projectionMatrix.elements[10] - 1.0);
-		// this.far = this.sceneCamera.projectionMatrix.elements[14] / (this.sceneCamera.projectionMatrix.elements[10] + 1.0);
-		// console.log("nearfar", this.near, this.far);
-
 		window.depthPickPass = this;
+
+		this.gpuRaycastCB = cb;
+		this.sceneCamera = camera;
 
 	}
 
 	set position(value) {
 
-		this.material.position = value;
+		// perform the conversion from NDC to texcoord space
+		this.material.position = value.multiplyScalar(0.5).addScalar(.5);
+		this.receivedPosition = true;
 
 	}
 
@@ -86,13 +86,22 @@ export class DepthPickPass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
-		renderer.setRenderTarget(this.renderToScreen ? null : this.renderTarget);
-		renderer.render(this.scene, this.camera);
+		if(this.receivedPosition) {
 
-		const pixelBuffer = new Uint8Array(4);
-		renderer.readRenderTargetPixels(this.renderTarget, 1, 1, 1, 1, pixelBuffer);
+			renderer.setRenderTarget(this.renderToScreen ? null : this.renderTarget);
+			renderer.render(this.scene, this.camera);
 
-		console.debug(pixelBuffer, this.material.uniforms.vUv.value);
+			const pixelBuffer = new Uint8Array(4);
+			renderer.readRenderTargetPixels(this.renderTarget, 1, 1, 1, 1, pixelBuffer);
+			const z = unpackRGBAToDepth(pixelBuffer);
+
+			// values we have need to be converted from the 0-1 cube (texcoord, texcoord, depth) back to 
+			// NDC space in preparation for camera unproject to obtain world space intersection position.
+			const world = new Vector3(this.material.uniforms.vUv.value.x, this.material.uniforms.vUv.value.y, z).multiplyScalar(2).subScalar(1).unproject(this.sceneCamera);
+
+			this.gpuRaycastCB(world);
+
+		}
 
 	}
 

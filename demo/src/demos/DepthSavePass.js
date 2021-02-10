@@ -146,7 +146,7 @@ export class DepthSavePass extends Pass {
 			const cpu = lastCPURaycastLocation.clone().sub(this.sceneCamera.position).length();
 			// console.log("Raycast distance", 
 			// lastCPURaycastLocation.clone().sub(this.sceneCamera.position).length());
-			console.debug("AAA", gpu, cpu, "absolute delta", gpu - cpu, "relative delta", (gpu - cpu) / Math.max(gpu, cpu), "COMPARE", this.gpuRaycastLocation, cpuRaycastLocation);
+			console.debug("AAA", gpu, cpu, "absolute delta", gpu - cpu, "relative delta", (gpu - cpu) / Math.max(gpu, cpu), "COMPARE", gpuRaycastLocation, cpuRaycastLocation);
 
 		} else {
 

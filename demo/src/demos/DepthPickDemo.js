@@ -9,6 +9,7 @@ import {
 	MeshBasicMaterial,
 	Mesh,
 	Vector2,
+	AxesHelper,
 	Raycaster
 } from "three";
 
@@ -191,13 +192,16 @@ export class DepthPickDemo extends PostProcessingDemo {
 		const plane = new Mesh(geometry, material);
 		scene.add(plane);
 
+		const helper = new AxesHelper();
+		scene.add(helper);
+
 		// Passes
 
 		const savePass = new SavePass();
 		const blurPass = new BlurPass({
 			height: 480
 		});
-		const depthPickPass = new DepthPickPass(camera);
+		const depthPickPass = new DepthPickPass(camera, this.handleGPURaycast.bind(this));
 		this.depthPickPass = depthPickPass;
 
 		const smaaEffect = new SMAAEffect(
@@ -214,7 +218,7 @@ export class DepthPickDemo extends PostProcessingDemo {
 		const smaaPass = new EffectPass(camera, smaaEffect);
 		const texturePass = new EffectPass(camera, textureEffect);
 
-		textureEffect.blendMode.opacity.value = 0.0;
+		textureEffect.blendMode.opacity.value = 0.7;
 
 		this.blurPass = blurPass;
 		this.texturePass = texturePass;
@@ -231,10 +235,34 @@ export class DepthPickDemo extends PostProcessingDemo {
 		const me = this;
 		document.documentElement.addEventListener("mousemove", (ev) => {
 
-			me.x = ev.x;
-			me.y = ev.y;
+			// set mouse coords to NDC coords
+			me.mouse = new Vector2((ev.x / window.innerWidth) * 2 - 1, -(ev.y / window.innerHeight) * 2 + 1);
 
 		});
+
+	}
+
+	handleGPURaycast(position) {
+
+		// perform a cpu raycast to validate GPU raycast position result
+		// cpu raycast via NDC coords as THREE.Raycaster expects
+		this.raycaster.setFromCamera(this.mouse, this.camera);
+		const intersects = this.raycaster.intersectObjects(this.scene.children, true);
+		let lastCPURaycastLocation;
+		if(intersects.length) {
+
+			lastCPURaycastLocation = intersects[0].point;
+			console.debug(JSON.stringify({
+				"raycast discrepancy": lastCPURaycastLocation.clone().sub(position).length(),
+				cpu: lastCPURaycastLocation,
+				gpu: position
+			}, null, 2));
+
+		} else {
+
+			console.debug("cpu did not register a ray hit, gpu:", position);
+
+		}
 
 	}
 
@@ -264,21 +292,13 @@ export class DepthPickDemo extends PostProcessingDemo {
 
 		}
 
-		const mouse = new Vector2((this.x / window.innerWidth) * 2 - 1, -(this.y / window.innerHeight) * 2 + 1);
+		// set mouse pos via the same NDC coords (establishing THREE's convention for mouse input 
+		// ray specification)
+		if(this.mouse) {
 
-		// cpu raycast
-		this.raycaster.setFromCamera(mouse, this.camera);
-		const intersects = this.raycaster.intersectObjects(this.scene.children, true);
-		let lastCPURaycastLocation;
-		if(intersects.length) {
-
-			lastCPURaycastLocation = intersects[0].point;
-			// console.debug("raycast under mouse", lastCPURaycastLocation);
+			this.depthPickPass.position = this.mouse.clone();
 
 		}
-
-		// set mouse pos
-		this.depthPickPass.position = mouse.clone().multiplyScalar(0.5).addScalar(.5);
 
 	}
 
