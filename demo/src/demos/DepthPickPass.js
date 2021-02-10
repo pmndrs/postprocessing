@@ -39,7 +39,7 @@ export class DepthPickPass extends Pass {
 		this.needsSwap = false;
 		this.sceneCamera = camera;
 
-		this.renderTarget = new WebGLRenderTarget(1, 1, {
+		this.renderTarget = new WebGLRenderTarget(2, 2, {
 			// use RGBADepthPacking by default to get higher resolution on mobile devices.
 			type: depthPacking === RGBADepthPacking ? UnsignedByteType : FloatType,
 			minFilter: NearestFilter,
@@ -59,7 +59,9 @@ export class DepthPickPass extends Pass {
 	}
 
 	set position(value) {
+
 		this.material.position = value;
+
 	}
 
 	get texture() {
@@ -90,7 +92,7 @@ export class DepthPickPass extends Pass {
 		const pixelBuffer = new Uint8Array(4);
 		renderer.readRenderTargetPixels(this.renderTarget, 1, 1, 1, 1, pixelBuffer);
 
-		console.log(pixelBuffer);
+		console.debug(pixelBuffer, this.material.uniforms.vUv.value);
 
 	}
 

@@ -7,7 +7,9 @@ import {
 	PlaneGeometry,
 	DoubleSide,
 	MeshBasicMaterial,
-	Mesh
+	Mesh,
+	Vector2,
+	Raycaster
 } from "three";
 
 import { SpatialControls } from "spatial-controls";
@@ -196,6 +198,7 @@ export class DepthPickDemo extends PostProcessingDemo {
 			height: 480
 		});
 		const depthPickPass = new DepthPickPass(camera);
+		this.depthPickPass = depthPickPass;
 
 		const smaaEffect = new SMAAEffect(
 			assets.get("smaa-search"),
@@ -222,6 +225,16 @@ export class DepthPickDemo extends PostProcessingDemo {
 		composer.addPass(savePass);
 		composer.addPass(blurPass);
 		composer.addPass(texturePass);
+
+		this.raycaster = new Raycaster();
+
+		const me = this;
+		document.documentElement.addEventListener("mousemove", (ev) => {
+
+			me.x = ev.x;
+			me.y = ev.y;
+
+		});
 
 	}
 
@@ -250,6 +263,22 @@ export class DepthPickDemo extends PostProcessingDemo {
 			object.rotation.y -= PI2;
 
 		}
+
+		const mouse = new Vector2((this.x / window.innerWidth) * 2 - 1, -(this.y / window.innerHeight) * 2 + 1);
+
+		// cpu raycast
+		this.raycaster.setFromCamera(mouse, this.camera);
+		const intersects = this.raycaster.intersectObjects(this.scene.children, true);
+		let lastCPURaycastLocation;
+		if(intersects.length) {
+
+			lastCPURaycastLocation = intersects[0].point;
+			// console.debug("raycast under mouse", lastCPURaycastLocation);
+
+		}
+
+		// set mouse pos
+		this.depthPickPass.position = mouse.clone().multiplyScalar(0.5).addScalar(.5);
 
 	}
 
