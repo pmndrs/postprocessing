@@ -9,7 +9,7 @@ import {
 } from "three";
 
 import { Pass } from "../../../src/passes/Pass";
-import { DepthCopyMaterial } from "./DepthCopyMaterial";
+import { DepthPickMaterial } from "./DepthPickMaterial";
 
 const UnpackDownscale = 255 / 256;
 
@@ -31,8 +31,9 @@ export class DepthPickPass extends Pass {
 
 		super("DepthPickPass");
 
-		const material = new DepthCopyMaterial();
+		const material = new DepthPickMaterial();
 		material.outputDepthPacking = depthPacking;
+		this.material = material;
 		this.setFullscreenMaterial(material);
 		this.needsDepthTexture = true;
 		this.needsSwap = false;
@@ -53,13 +54,13 @@ export class DepthPickPass extends Pass {
 		// this.far = this.sceneCamera.projectionMatrix.elements[14] / (this.sceneCamera.projectionMatrix.elements[10] + 1.0);
 		// console.log("nearfar", this.near, this.far);
 
-		this.x = 0;
-		this.y = 0;
-
 		window.depthPickPass = this;
 
 	}
 
+	set position(value) {
+		this.material.position = value;
+	}
 
 	get texture() {
 
@@ -87,43 +88,14 @@ export class DepthPickPass extends Pass {
 		renderer.render(this.scene, this.camera);
 
 		const pixelBuffer = new Uint8Array(4);
-		renderer.readRenderTargetPixels(this.renderTarget, this.x, this.renderTarget.height - this.y, 1, 1, pixelBuffer);
+		renderer.readRenderTargetPixels(this.renderTarget, 1, 1, 1, 1, pixelBuffer);
 
-		// https://stackoverflow.com/a/56439173
-		// console.log("GPU depth", -perspectiveDepthToViewZ(unpackRGBAToDepth(pixelBuffer) / 255, this.sceneCamera.near, this.sceneCamera.far));
-
-		// console.log("GPU depth", unpackRGBAToDepth(pixelBuffer) / 255);
-		const gpuZ = -perspectiveDepthToViewZ(unpackRGBAToDepth(pixelBuffer), this.sceneCamera.near, this.sceneCamera.far);
-
-		const z = unpackRGBAToDepth(pixelBuffer);
-		// vec4: ndc x, y, z represented with w taking z
-		const world = new Vector3(mouse.x, mouse.y, z * 2 - 1).unproject(this.sceneCamera);
-		// const world = new Vector3(worldW.x / worldW.w, worldW.y / worldW.w, worldW.z / worldW.w);
-
-		this.gpuRaycastLocation = world;
-
-		const gpu = world.clone().sub(this.sceneCamera.position).length();
-
-		if(lastCPURaycastLocation) {
-
-			const cpu = lastCPURaycastLocation.clone().sub(this.sceneCamera.position).length();
-			// console.log("Raycast distance", 
-			// lastCPURaycastLocation.clone().sub(this.sceneCamera.position).length());
-			console.log("AAA", gpu, cpu, "absolute delta", gpu - cpu, "relative delta", (gpu - cpu) / Math.max(gpu, cpu), "COMPARE", this.gpuRaycastLocation, this.cpuRaycastLocation);
-
-		} else {
-
-			console.log("BBB", gpu, world);
-
-		}
+		console.log(pixelBuffer);
 
 	}
 
-	setSize(width, height) {
-
-		this.renderTarget.setSize(width, height);
-
-	}
+	// do nothing to keep the render buffer 1x1
+	setSize(width, height) { }
 
 }
 
