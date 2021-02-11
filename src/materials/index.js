@@ -5,6 +5,7 @@ export { ColorEdgesMaterial } from "./ColorEdgesMaterial";
 export { ConvolutionMaterial, KernelSize } from "./ConvolutionMaterial";
 export { CopyMaterial } from "./CopyMaterial";
 export { DepthComparisonMaterial } from "./DepthComparisonMaterial";
+export { DepthPickMaterial } from "./DepthPickMaterial";
 export { DepthDownsamplingMaterial } from "./DepthDownsamplingMaterial";
 export { DepthMaskMaterial } from "./DepthMaskMaterial";
 export { EdgeDetectionMaterial, EdgeDetectionMode, PredicationMode } from "./EdgeDetectionMaterial";

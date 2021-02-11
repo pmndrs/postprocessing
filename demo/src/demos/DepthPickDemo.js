@@ -25,13 +25,12 @@ import {
 	EffectPass,
 	KernelSize,
 	SavePass,
+	DepthPickPass,
 	SMAAEffect,
 	SMAAPreset,
 	SMAAImageLoader,
 	TextureEffect
 } from "../../../src";
-
-import { DepthPickPass } from "./DepthPickPass";
 
 /**
  * A demo setup adapted from the blur demo to test GPU depth reading for raycasting.

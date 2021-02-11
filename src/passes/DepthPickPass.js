@@ -4,12 +4,11 @@ import {
 	NearestFilter,
 	UnsignedByteType,
 	WebGLRenderTarget,
-	Vector3,
-	Raycaster
+	Vector3
 } from "three";
 
-import { Pass } from "../../../src/passes/Pass";
-import { DepthPickMaterial } from "./DepthPickMaterial";
+import { Pass } from "./Pass";
+import { DepthPickMaterial } from "../materials";
 
 const UnpackDownscale = 255 / 256;
 

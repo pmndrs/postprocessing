@@ -3,6 +3,7 @@ export { BlurPass } from "./BlurPass";
 export { ClearMaskPass } from "./ClearMaskPass";
 export { ClearPass } from "./ClearPass";
 export { DepthPass } from "./DepthPass";
+export { DepthPickPass } from "./DepthPickPass";
 export { DepthDownsamplingPass } from "./DepthDownsamplingPass";
 export { EffectPass } from "./EffectPass";
 export { LambdaPass } from "./LambdaPass";
