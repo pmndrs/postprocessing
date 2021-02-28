@@ -50,17 +50,17 @@ export class PostProcessingDemo extends Demo {
 	 * Renders this demo.
 	 *
 	 * @param {Number} deltaTime - The time since the last frame in seconds.
+	 * @param {Number} timestamp - The current time in milliseconds.
 	 */
 
-	render(deltaTime) {
+	render(deltaTime, timestamp) {
 
 		if(this.controls !== null) {
 
-			this.controls.update(deltaTime);
+			this.controls.update(timestamp);
 
 		}
 
-		// Let the effect composer take care of rendering.
 		this.composer.render(deltaTime);
 
 	}

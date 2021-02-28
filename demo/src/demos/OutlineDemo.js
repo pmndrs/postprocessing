@@ -19,7 +19,7 @@ import {
 	Vector2
 } from "three";
 
-import { SpatialControls } from "spatial-controls";
+import { ControlMode, SpatialControls } from "spatial-controls";
 import { ProgressManager } from "../utils/ProgressManager";
 import { PostProcessingDemo } from "./PostProcessingDemo";
 
@@ -265,18 +265,17 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		const aspect = window.innerWidth / window.innerHeight;
 		const camera = new PerspectiveCamera(50, aspect, 1, 2000);
-		camera.position.set(-4, 1.25, -5);
-		camera.lookAt(scene.position);
 		this.camera = camera;
 
 		// Controls
 
 		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
-		controls.settings.pointer.lock = false;
-		controls.settings.translation.enabled = false;
-		controls.settings.sensitivity.rotation = 2.2;
-		controls.settings.sensitivity.zoom = 1.0;
-		controls.lookAt(scene.position);
+		const settings = controls.settings;
+		settings.general.setMode(ControlMode.THIRD_PERSON);
+		settings.rotation.setSensitivity(2.2);
+		settings.translation.setEnabled(false);
+		settings.zoom.setSensitivity(1.0);
+		controls.setPosition(-4, 1.25, -5);
 		this.controls = controls;
 
 		// Sky
@@ -423,12 +422,13 @@ export class OutlineDemo extends PostProcessingDemo {
 	/**
 	 * Updates this demo.
 	 *
-	 * @param {Number} delta - The time since the last frame in seconds.
+	 * @param {Number} deltaTime - The time since the last frame in seconds.
+	 * @param {Number} timestamp - The current time in milliseconds.
 	 */
 
-	update(delta) {
+	update(deltaTime, timestamp) {
 
-		this.animationMixer.update(delta);
+		this.animationMixer.update(deltaTime);
 
 	}
 

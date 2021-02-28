@@ -409,9 +409,10 @@ export class PerformanceDemo extends PostProcessingDemo {
 	 * Updates this demo.
 	 *
 	 * @param {Number} deltaTime - The time since the last frame in seconds.
+	 * @param {Number} timestamp - The current time in milliseconds.
 	 */
 
-	update(deltaTime) {
+	update(deltaTime, timestamp) {
 
 		this.acc0 += deltaTime;
 		this.acc1 += deltaTime;
