@@ -43,7 +43,7 @@
 	"scripts": {
 		"ava": "ava",
 		"build": "run-s build:*",
-		"build:js": "cross-env NODE_ENV=production ts-node-script esbuild",
+		"build:js": "cross-env NODE_ENV=production node esbuild.mjs",
 		"clean": "del-cli build public tmp",
 		"copy": "cpy --cwd=demo/static --parents \"**/*\" \"../../public/demo\"",
 		"deploy": "run-s copy lint build doc",
@@ -55,7 +55,7 @@
 		"start": "hs -s",
 		"watch": "run-p watch:*",
 		"watch:eslint": "esw -w --ext .js --color src demo/src",
-		"watch:js": "ts-node-script esbuild -w"
+		"watch:js": "node esbuild.mjs -w"
 	},
 	"ava": {
 		"failFast": true,
