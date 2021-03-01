@@ -12,8 +12,6 @@ jobs:
     steps:
       - name: Git checkout
         uses: actions/checkout@v2
-        with:
-          persist-credentials: false
       - name: Install Node
         uses: actions/setup-node@v1
         with:
@@ -24,12 +22,11 @@ jobs:
         run: pnpm install --frozen-lockfile=false
       - name: Build and deploy
         run: pnpm run deploy
-      - uses: JamesIves/github-pages-deploy-action@3.7.1
+      - uses: JamesIves/github-pages-deploy-action@4.0.0
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
           folder: public
-          target_folder: public
-          single_commit: true
+          target-folder: public
+          single-commit: true
           silent: true
           clean: true
