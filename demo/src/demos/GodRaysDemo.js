@@ -321,6 +321,12 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 		});
 
+		if(window.innerWidth < 720) {
+
+			menu.close();
+
+		}
+
 	}
 
 }

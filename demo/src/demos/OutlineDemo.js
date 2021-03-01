@@ -540,6 +540,12 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		});
 
+		if(window.innerWidth < 720) {
+
+			menu.close();
+
+		}
+
 	}
 
 	/**

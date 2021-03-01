@@ -215,6 +215,12 @@ export class ShockWaveDemo extends PostProcessingDemo {
 
 		menu.add(effect, "explode");
 
+		if(window.innerWidth < 720) {
+
+			menu.close();
+
+		}
+
 	}
 
 }

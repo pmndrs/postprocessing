@@ -176,6 +176,12 @@ export class ColorDepthDemo extends PostProcessingDemo {
 
 		});
 
+		if(window.innerWidth < 720) {
+
+			menu.close();
+
+		}
+
 	}
 
 }

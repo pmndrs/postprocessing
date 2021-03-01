@@ -298,6 +298,12 @@ export class PatternDemo extends PostProcessingDemo {
 
 		folder.open();
 
+		if(window.innerWidth < 720) {
+
+			menu.close();
+
+		}
+
 	}
 
 }

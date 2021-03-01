@@ -424,6 +424,12 @@ export class AntialiasingDemo extends PostProcessingDemo {
 
 		folder.open();
 
+		if(window.innerWidth < 720) {
+
+			menu.close();
+
+		}
+
 	}
 
 }

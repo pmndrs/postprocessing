@@ -253,6 +253,12 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 		});
 
+		if(window.innerWidth < 720) {
+
+			menu.close();
+
+		}
+
 	}
 
 }

@@ -478,6 +478,12 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 		}
 
+		if(window.innerWidth < 720) {
+
+			menu.close();
+
+		}
+
 	}
 
 	/**
