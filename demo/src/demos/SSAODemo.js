@@ -325,7 +325,7 @@ export class SSAODemo extends PostProcessingDemo {
 
 		f.add(params.distanceScaling, "enabled").onChange((value) => {
 
-			ssaoEffect.distanceScaling = value.enabled;
+			ssaoEffect.distanceScaling = value;
 
 		});
 

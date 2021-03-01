@@ -115,7 +115,7 @@ export class ShockWaveDemo extends PostProcessingDemo {
 		settings.rotation.setSensitivity(2.2);
 		settings.translation.setSensitivity(3.0);
 		controls.setPosition(-8, 1, -0.25);
-		controls.setTarget(target);
+		controls.lookAt(target);
 		this.controls = controls;
 
 		// Sky
