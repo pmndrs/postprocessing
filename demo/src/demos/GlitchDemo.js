@@ -309,4 +309,20 @@ export class GlitchDemo extends PostProcessingDemo {
 
 	}
 
+	/**
+	 * Disposes this demo.
+	 */
+
+	dispose() {
+
+		const div = document.querySelector(".warning");
+
+		if(div !== null) {
+
+			div.remove();
+
+		}
+
+	}
+
 }
