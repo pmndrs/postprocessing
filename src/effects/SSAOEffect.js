@@ -44,6 +44,9 @@ const NOISE_TEXTURE_SIZE = 64;
  * "Depth-aware upsampling experiments" by Eleni Maria Stea:
  * https://research.nvidia.com/publication/scalable-ambient-obscurance
  * https://eleni.mutantstargoat.com/hikiko/on-depth-aware-upsampling
+ *
+ * The view position calculation is based on a shader by Norbert Nopper:
+ * https://github.com/McNopper/OpenGL/blob/master/Example28/shader/ssao.frag.glsl
  */
 
 export class SSAOEffect extends Effect {
