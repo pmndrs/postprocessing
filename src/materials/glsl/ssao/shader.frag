@@ -74,7 +74,7 @@ vec3 getViewPosition(const in vec2 screenPosition, const in float depth, const i
 	// viewPosition /= viewPosition.w; // Unproject.
 	// return viewPosition.xyz;
 
-	float clipW = projectionMatrix[2][3] * viewZ + projectionMatrix[3][3]
+	float clipW = projectionMatrix[2][3] * viewZ + projectionMatrix[3][3];
 	clipPosition *= clipW; // Unproject.
 
 	return (inverseProjectionMatrix * clipPosition).xyz;
