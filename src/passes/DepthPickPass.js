@@ -92,12 +92,20 @@ export class DepthPickPass extends Pass {
 			const pixelBuffer = new Uint8Array(4);
 			renderer.readRenderTargetPixels(this.renderTarget, 1, 1, 1, 1, pixelBuffer);
 			const z = unpackRGBAToDepth(pixelBuffer);
+			if(z === 255 / 256) {
 
-			// values we have need to be converted from the 0-1 cube (texcoord, texcoord, depth) back to 
-			// NDC space in preparation for camera unproject to obtain world space intersection position.
-			const world = new Vector3(this.material.uniforms.vUv.value.x, this.material.uniforms.vUv.value.y, z).multiplyScalar(2).subScalar(1).unproject(this.sceneCamera);
+				this.receivedCb(false);
 
-			this.receivedCb(world);
+			} else {
+
+				// values we have need to be converted from the 0-1 cube (texcoord, texcoord, depth) back
+				// to NDC space in preparation for camera unproject to obtain world space intersection
+				// position.
+				const world = new Vector3(this.material.uniforms.vUv.value.x, this.material.uniforms.vUv.value.y, z).multiplyScalar(2).subScalar(1).unproject(this.sceneCamera);
+
+				this.receivedCb(world);
+
+			}
 
 			this.receivedCb = false;
 
@@ -109,4 +117,3 @@ export class DepthPickPass extends Pass {
 	setSize(width, height) { }
 
 }
-

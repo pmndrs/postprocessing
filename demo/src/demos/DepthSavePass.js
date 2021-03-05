@@ -5,7 +5,6 @@ import {
 	UnsignedByteType,
 	WebGLRenderTarget,
 	Vector2,
-	Vector4,
 	Vector3,
 	Raycaster
 } from "three";
@@ -24,18 +23,6 @@ const
 function unpackRGBAToDepth(v) {
 
 	return (v[0] * UnpackFactorsX + v[1] * UnpackFactorsY + v[2] * UnpackFactorsZ + v[3]) / 256;
-
-}
-
-function viewZToPerspectiveDepth(viewZ, near, far) {
-
-	return ((near + viewZ) * far) / ((far - near) * viewZ);
-
-}
-
-function perspectiveDepthToViewZ(invClipZ, near, far) {
-
-	return (near * far) / ((far - near) * invClipZ - far);
 
 }
 
@@ -130,12 +117,6 @@ export class DepthSavePass extends Pass {
 		const pixelBuffer = new Uint8Array(4);
 		renderer.readRenderTargetPixels(this.renderTarget, this.x, this.renderTarget.height - this.y, 1, 1, pixelBuffer);
 
-		// https://stackoverflow.com/a/56439173
-		// console.log("GPU depth", -perspectiveDepthToViewZ(unpackRGBAToDepth(pixelBuffer) / 255, this.sceneCamera.near, this.sceneCamera.far));
-
-		// console.log("GPU depth", unpackRGBAToDepth(pixelBuffer) / 255);
-		const gpuZ = -perspectiveDepthToViewZ(unpackRGBAToDepth(pixelBuffer), this.sceneCamera.near, this.sceneCamera.far);
-
 		const z = unpackRGBAToDepth(pixelBuffer);
 		// vec4: ndc x, y, z represented with w taking z
 		const world = new Vector3(mouse.x, mouse.y, z * 2 - 1).unproject(this.sceneCamera);
@@ -148,7 +129,7 @@ export class DepthSavePass extends Pass {
 		if(lastCPURaycastLocation) {
 
 			const cpu = lastCPURaycastLocation.clone().sub(this.sceneCamera.position).length();
-			// console.log("Raycast distance", 
+			// console.log("Raycast distance",
 			// lastCPURaycastLocation.clone().sub(this.sceneCamera.position).length());
 			console.debug("AAA", gpu, cpu, "absolute delta", gpu - cpu, "relative delta", (gpu - cpu) / Math.max(gpu, cpu), "COMPARE", gpuRaycastLocation, cpuRaycastLocation);
 

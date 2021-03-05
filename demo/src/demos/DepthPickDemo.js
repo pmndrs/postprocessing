@@ -332,7 +332,7 @@ export class DepthPickDemo extends PostProcessingDemo {
 
 		}
 
-		// set mouse pos via the same NDC coords (establishing THREE's convention for mouse input 
+		// set mouse pos via the same NDC coords (establishing THREE's convention for mouse input
 		// ray specification)
 		if(this.mouseDown) {
 

@@ -195,7 +195,6 @@ export class DepthReadDemo extends PostProcessingDemo {
 		this.object = SphereCloud.create();
 		scene.add(this.object);
 
-		
 		const geometry = new PlaneGeometry(20, 20);
 		const material = new MeshBasicMaterial({ color: 0xffff00, side: DoubleSide });
 		const plane = new Mesh(geometry, material);
