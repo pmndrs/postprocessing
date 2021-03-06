@@ -101,11 +101,10 @@ export class ShockWaveDemo extends PostProcessingDemo {
 
 	async pickDepth(event) {
 
-		const renderer = this.composer.getRenderer();
-
 		ndc.x = (event.clientX / window.innerWidth) * 2.0 - 1.0;
 		ndc.y = -(event.clientY / window.innerHeight) * 2.0 + 1.0;
-		ndc.z = await this.depthPickingPass.readDepth(renderer, ndc);
+
+		ndc.z = await this.depthPickingPass.readDepth(ndc);
 		ndc.z = ndc.z * 2.0 - 1.0;
 
 		// Convert from NDC to world position.

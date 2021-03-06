@@ -114,22 +114,20 @@ export class DepthPickingPass extends DepthSavePass {
 	 *
 	 * @example
 	 * const ndc = new Vector3();
-	 * const renderer = composer.getRenderer();
 	 *
 	 * ndc.x = (pointerEvent.clientX / window.innerWidth) * 2.0 - 1.0;
 	 * ndc.y = -(pointerEvent.clientY / window.innerHeight) * 2.0 + 1.0;
 	 *
-	 * const depth = await depthPickingPass.readDepth(renderer, ndc);
+	 * const depth = await depthPickingPass.readDepth(ndc);
 	 * ndc.z = depth * 2.0 - 1.0;
 	 *
 	 * const worldPosition = ndc.unproject(camera);
 	 *
-	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Vector2|Vector3} ndc - Normalized device coordinates. Only X and Y are relevant.
 	 * @return {Promise<Number>} A promise that returns the depth on the next frame.
 	 */
 
-	readDepth(renderer, ndc) {
+	readDepth(ndc) {
 
 		this.screenPosition.set(ndc.x * 0.5 + 0.5, ndc.y * 0.5 + 0.5);
 
