@@ -86,7 +86,7 @@ export class DepthSavePass extends Pass {
 
 		const material = this.getFullscreenMaterial();
 		material.uniforms.depthBuffer.value = depthTexture;
-		material.inputDepthPacking = depthPacking;
+		material.setInputDepthPacking(depthPacking);
 
 	}
 
