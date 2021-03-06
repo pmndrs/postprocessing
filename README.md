@@ -103,6 +103,7 @@ _The total demo download size is about `60 MB`._
  - [Pixelation](https://vanruesc.github.io/postprocessing/public/demo/#pixelation)
  - [Outline](https://vanruesc.github.io/postprocessing/public/demo/#outline)
  - [Shock Wave](https://vanruesc.github.io/postprocessing/public/demo/#shock-wave)
+   - Depth Picking
  - [SSAO](https://vanruesc.github.io/postprocessing/public/demo/#ssao)
  - [Texture](https://vanruesc.github.io/postprocessing/public/demo/#texture)
  - [Tone Mapping](https://vanruesc.github.io/postprocessing/public/demo/#tone-mapping)
