@@ -1,3 +1,4 @@
+import { BasicDepthPacking } from "three";
 import { BlendFunction } from "../effects/blending";
 import { EffectAttribute } from "../effects/Effect";
 import { EffectMaterial, Section } from "../materials";
@@ -560,10 +561,10 @@ export class EffectPass extends Pass {
 	 * Sets the depth texture.
 	 *
 	 * @param {Texture} depthTexture - A depth texture.
-	 * @param {Number} [depthPacking=0] - The depth packing.
+	 * @param {Number} [depthPacking=BasicDepthPacking] - The depth packing.
 	 */
 
-	setDepthTexture(depthTexture, depthPacking = 0) {
+	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
 		const material = this.getFullscreenMaterial();
 		material.uniforms.depthBuffer.value = depthTexture;

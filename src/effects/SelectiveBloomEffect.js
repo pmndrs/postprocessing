@@ -1,4 +1,5 @@
 import {
+	BasicDepthPacking,
 	LinearFilter,
 	NotEqualDepth,
 	EqualDepth,
@@ -172,10 +173,10 @@ export class SelectiveBloomEffect extends BloomEffect {
 	 * Sets the depth texture.
 	 *
 	 * @param {Texture} depthTexture - A depth texture.
-	 * @param {Number} [depthPacking=0] - The depth packing.
+	 * @param {Number} [depthPacking=BasicDepthPacking] - The depth packing.
 	 */
 
-	setDepthTexture(depthTexture, depthPacking = 0) {
+	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
 		const material = this.depthMaskPass.getFullscreenMaterial();
 		material.uniforms.depthBuffer0.value = depthTexture;

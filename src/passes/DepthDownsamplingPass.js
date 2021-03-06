@@ -1,4 +1,9 @@
-import { FloatType, NearestFilter, WebGLRenderTarget } from "three";
+import {
+	BasicDepthPacking,
+	FloatType,
+	NearestFilter,
+	WebGLRenderTarget
+} from "three";
 
 import { Resizer } from "../core/Resizer";
 import { DepthDownsamplingMaterial } from "../materials";
@@ -91,10 +96,10 @@ export class DepthDownsamplingPass extends Pass {
 	 * Sets the depth texture.
 	 *
 	 * @param {Texture} depthTexture - A depth texture.
-	 * @param {Number} [depthPacking=0] - The depth packing.
+	 * @param {Number} [depthPacking=BasicDepthPacking] - The depth packing.
 	 */
 
-	setDepthTexture(depthTexture, depthPacking = 0) {
+	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
 		const material = this.getFullscreenMaterial();
 		material.uniforms.depthBuffer.value = depthTexture;
