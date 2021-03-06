@@ -104,7 +104,7 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * returns the depth copy mode.
+	 * Returns the depth copy mode.
 	 *
 	 * @return {DepthCopyMode} The depth copy mode.
 	 */
