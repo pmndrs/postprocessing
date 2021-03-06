@@ -37,18 +37,18 @@ import {
 } from "../../../src";
 
 /**
- * A mouse position.
+ * Normalized device coordinates.
  *
  * @type {Vector2}
  * @private
  */
 
-const mouse = new Vector2();
+const ndc = new Vector2();
 
 /**
  * An outline demo setup.
  *
- * @implements {EventListener}
+ * @implements {EventListenerObject}
  */
 
 export class OutlineDemo extends PostProcessingDemo {
@@ -113,17 +113,17 @@ export class OutlineDemo extends PostProcessingDemo {
 	/**
 	 * Raycasts the scene.
 	 *
-	 * @param {PointerEvent} event - A pointer event.
+	 * @param {PointerEvent} event - An event.
 	 */
 
 	raycast(event) {
 
 		const raycaster = this.raycaster;
 
-		mouse.x = (event.clientX / window.innerWidth) * 2.0 - 1.0;
-		mouse.y = -(event.clientY / window.innerHeight) * 2.0 + 1.0;
+		ndc.x = (event.clientX / window.innerWidth) * 2.0 - 1.0;
+		ndc.y = -(event.clientY / window.innerHeight) * 2.0 + 1.0;
 
-		raycaster.setFromCamera(mouse, this.camera);
+		raycaster.setFromCamera(ndc, this.camera);
 		const intersects = raycaster.intersectObjects(this.scene.children, true);
 
 		this.selectedObject = null;
@@ -170,7 +170,7 @@ export class OutlineDemo extends PostProcessingDemo {
 	}
 
 	/**
-	 * Raycasts on mouse move events.
+	 * Handles events.
 	 *
 	 * @param {Event} event - An event.
 	 */
