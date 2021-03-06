@@ -14,6 +14,7 @@ import { PostProcessingDemo } from "./PostProcessingDemo";
 import * as Sponza from "./objects/Sponza";
 
 import {
+	DepthPickingPass,
 	EdgeDetectionMode,
 	EffectPass,
 	ShockWaveEffect,
@@ -23,7 +24,18 @@ import {
 } from "../../../src";
 
 /**
+ * Normalized device coordinates.
+ *
+ * @type {Vector3}
+ * @private
+ */
+
+const ndc = new Vector3();
+
+/**
  * A shock wave demo setup.
+ *
+ * @implements {EventListenerObject}
  */
 
 export class ShockWaveDemo extends PostProcessingDemo {
@@ -46,6 +58,97 @@ export class ShockWaveDemo extends PostProcessingDemo {
 		 */
 
 		this.effect = null;
+
+		/**
+		 * A depth picking pass.
+		 *
+		 * @type {DepthPickingPass}
+		 * @private
+		 */
+
+		this.depthPickingPass = null;
+
+		/**
+		 * A cursor.
+		 *
+		 * @type {Mesh}
+		 * @private
+		 */
+
+		this.cursor = null;
+
+	}
+
+	/**
+	 * Triggers a shock wave.
+	 *
+	 * @private
+	 */
+
+	explode() {
+
+		this.effect.epicenter.copy(this.cursor.position);
+		this.effect.explode();
+
+	}
+
+	/**
+	 * Picks depth using the given pointer coordinates.
+	 *
+	 * @private
+	 * @param {PointerEvent} event - An event.
+	 */
+
+	async pickDepth(event) {
+
+		const renderer = this.composer.getRenderer();
+
+		ndc.x = (event.clientX / window.innerWidth) * 2.0 - 1.0;
+		ndc.y = -(event.clientY / window.innerHeight) * 2.0 + 1.0;
+		ndc.z = await this.depthPickingPass.readDepth(renderer, ndc);
+		ndc.z = ndc.z * 2.0 - 1.0;
+
+		// Convert from NDC to world position.
+		this.cursor.position.copy(ndc.unproject(this.camera));
+
+	}
+
+	/**
+	 * Handles keyboard events.
+	 *
+	 * @private
+	 * @param {Event} event - An event.
+	 */
+
+	handleKeyboardEvent(event) {
+
+		if(event.key === "e") {
+
+			this.explode();
+
+		}
+
+	}
+
+	/**
+	 * Handles events.
+	 *
+	 * @param {Event} event - An event.
+	 */
+
+	handleEvent(event) {
+
+		switch(event.type) {
+
+			case "mousemove":
+				void this.pickDepth(event);
+				break;
+
+			case "keyup":
+				this.handleKeyboardEvent(event);
+				break;
+
+		}
 
 	}
 
@@ -104,7 +207,7 @@ export class ShockWaveDemo extends PostProcessingDemo {
 		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
-		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
+		const camera = new PerspectiveCamera(50, aspect, 0.3, 2000);
 		this.camera = camera;
 
 		// Controls
@@ -130,15 +233,18 @@ export class ShockWaveDemo extends PostProcessingDemo {
 
 		scene.add(assets.get(Sponza.tag));
 
-		const geometry = new SphereBufferGeometry(1, 64, 64);
-		const material = new MeshBasicMaterial({
-			color: 0x000000,
-			transparent: true,
-			opacity: 0.25
-		});
+		const mesh = new Mesh(
+			new SphereBufferGeometry(0.2, 32, 32),
+			new MeshBasicMaterial({
+				color: 0x666666,
+				transparent: true,
+				depthWrite: false,
+				opacity: 0.3
+			})
+		);
 
-		const mesh = new Mesh(geometry, material);
 		mesh.position.copy(target);
+		this.cursor = mesh;
 		scene.add(mesh);
 
 		// Passes
@@ -152,7 +258,7 @@ export class ShockWaveDemo extends PostProcessingDemo {
 
 		smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.01);
 
-		const shockWaveEffect = new ShockWaveEffect(camera, mesh.position, {
+		const shockWaveEffect = new ShockWaveEffect(camera, target, {
 			speed: 1.25,
 			maxRadius: 0.5,
 			waveSize: 0.2,
@@ -161,11 +267,19 @@ export class ShockWaveDemo extends PostProcessingDemo {
 
 		const effectPass = new EffectPass(camera, shockWaveEffect);
 		const smaaPass = new EffectPass(camera, smaaEffect);
+		const depthPickingPass = new DepthPickingPass();
 
+		this.depthPickingPass = depthPickingPass;
 		this.effect = shockWaveEffect;
 
+		composer.addPass(depthPickingPass);
 		composer.addPass(effectPass);
 		composer.addPass(smaaPass);
+
+		// Depth picking
+
+		renderer.domElement.addEventListener("mousemove", this, { passive: true });
+		document.addEventListener("keyup", this);
 
 	}
 
@@ -184,7 +298,8 @@ export class ShockWaveDemo extends PostProcessingDemo {
 			"size": uniforms.get("size").value,
 			"extent": uniforms.get("maxRadius").value,
 			"waveSize": uniforms.get("waveSize").value,
-			"amplitude": uniforms.get("amplitude").value
+			"amplitude": uniforms.get("amplitude").value,
+			"explode (press E)": () => this.explode()
 		};
 
 		menu.add(effect, "speed").min(0.0).max(10.0).step(0.001);
@@ -213,13 +328,25 @@ export class ShockWaveDemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(effect, "explode");
+		menu.add(params, "explode (press E)");
 
 		if(window.innerWidth < 720) {
 
 			menu.close();
 
 		}
+
+	}
+
+	/**
+	 * Disposes this demo.
+	 */
+
+	dispose() {
+
+		const dom = this.composer.getRenderer().domElement;
+		dom.removeEventListener("mousemove", this);
+		document.removeEventListener("keyup", this);
 
 	}
 
