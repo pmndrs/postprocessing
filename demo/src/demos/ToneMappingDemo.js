@@ -1,4 +1,4 @@
-import { Color, PerspectiveCamera, Vector3 } from "three";
+import { Color, PerspectiveCamera } from "three";
 import { SpatialControls } from "spatial-controls";
 import { ProgressManager } from "../utils/ProgressManager";
 import { PostProcessingDemo } from "./PostProcessingDemo";
@@ -108,19 +108,16 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 		const aspect = window.innerWidth / window.innerHeight;
 		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
-		camera.position.set(-5.15, 8.1, -0.95);
 		this.camera = camera;
 
 		// Controls
 
-		const target = new Vector3(-4.4, 8.6, -0.5);
 		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
-		controls.settings.pointer.lock = false;
-		controls.settings.translation.enabled = true;
-		controls.settings.sensitivity.rotation = 2.2;
-		controls.settings.sensitivity.translation = 3.0;
-		controls.lookAt(target);
-		controls.setOrbitEnabled(false);
+		const settings = controls.settings;
+		settings.rotation.setSensitivity(2.2);
+		settings.translation.setSensitivity(3.0);
+		controls.setPosition(-5.15, 8.1, -0.95);
+		controls.lookAt(-4.4, 8.6, -0.5);
 		this.controls = controls;
 
 		// Sky
@@ -255,6 +252,12 @@ export class ToneMappingDemo extends PostProcessingDemo {
 			blendMode.setBlendFunction(Number(value));
 
 		});
+
+		if(window.innerWidth < 720) {
+
+			menu.close();
+
+		}
 
 	}
 

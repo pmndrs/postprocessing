@@ -1,4 +1,4 @@
-import { Color, PerspectiveCamera, Vector3 } from "three";
+import { Color, PerspectiveCamera } from "three";
 import { SpatialControls } from "spatial-controls";
 import { ProgressManager } from "../utils/ProgressManager";
 import { PostProcessingDemo } from "./PostProcessingDemo";
@@ -156,19 +156,16 @@ export class AntialiasingDemo extends PostProcessingDemo {
 
 		const aspect = window.innerWidth / window.innerHeight;
 		const camera = new PerspectiveCamera(50, aspect, 0.3, 2000);
-		camera.position.set(4, 8, 0.75);
 		this.camera = camera;
 
 		// Controls
 
-		const target = new Vector3(-0.5, 6.5, -0.25);
 		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
-		controls.settings.pointer.lock = false;
-		controls.settings.translation.enabled = true;
-		controls.settings.sensitivity.rotation = 2.2;
-		controls.settings.sensitivity.translation = 3.0;
-		controls.lookAt(target);
-		controls.setOrbitEnabled(false);
+		const settings = controls.settings;
+		settings.rotation.setSensitivity(2.2);
+		settings.translation.setSensitivity(3.0);
+		controls.setPosition(4, 8, 0.75);
+		controls.lookAt(-0.5, 6.5, -0.25);
 		this.controls = controls;
 
 		// Sky
@@ -244,9 +241,10 @@ export class AntialiasingDemo extends PostProcessingDemo {
 	 * Updates this demo.
 	 *
 	 * @param {Number} deltaTime - The time since the last frame in seconds.
+	 * @param {Number} timestamp - The current time in milliseconds.
 	 */
 
-	update(deltaTime) {
+	update(deltaTime, timestamp) {
 
 		if(this.rotate) {
 
@@ -425,6 +423,12 @@ export class AntialiasingDemo extends PostProcessingDemo {
 		});
 
 		folder.open();
+
+		if(window.innerWidth < 720) {
+
+			menu.close();
+
+		}
 
 	}
 

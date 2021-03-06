@@ -232,14 +232,16 @@ document.addEventListener("DOMContentLoaded", (event) => {
  * @param {KeyboardEvent} event - An event.
  */
 
-document.addEventListener("keydown", (event) => {
+document.addEventListener("keyup", (event) => {
 
-	const aside = document.getElementById("aside");
+	if(event.key === "h") {
 
-	if(aside !== null && event.key === "h") {
+		const aside = document.querySelector("aside");
+		const footer = document.querySelector("footer");
 
 		event.preventDefault();
 		aside.classList.toggle("hidden");
+		footer.classList.toggle("hidden");
 
 	} else if(camera !== undefined && event.key === "c") {
 

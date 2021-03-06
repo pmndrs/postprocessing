@@ -1,4 +1,5 @@
 import {
+	BasicDepthPacking,
 	Color,
 	LinearFilter,
 	RepeatWrapping,
@@ -44,6 +45,9 @@ const NOISE_TEXTURE_SIZE = 64;
  * "Depth-aware upsampling experiments" by Eleni Maria Stea:
  * https://research.nvidia.com/publication/scalable-ambient-obscurance
  * https://eleni.mutantstargoat.com/hikiko/on-depth-aware-upsampling
+ *
+ * The view position calculation is based on a shader by Norbert Nopper:
+ * https://github.com/McNopper/OpenGL/blob/master/Example28/shader/ssao.frag.glsl
  */
 
 export class SSAOEffect extends Effect {
@@ -474,10 +478,10 @@ export class SSAOEffect extends Effect {
 	 * Sets the depth texture.
 	 *
 	 * @param {Texture} depthTexture - A depth texture.
-	 * @param {Number} [depthPacking=0] - The depth packing.
+	 * @param {Number} [depthPacking=BasicDepthPacking] - The depth packing.
 	 */
 
-	setDepthTexture(depthTexture, depthPacking = 0) {
+	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
 		const material = this.ssaoMaterial;
 

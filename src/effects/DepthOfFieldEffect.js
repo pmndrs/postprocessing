@@ -1,6 +1,21 @@
-import { LinearFilter, RGBFormat, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
+import {
+	BasicDepthPacking,
+	LinearFilter,
+	RGBFormat,
+	Uniform,
+	UnsignedByteType,
+	WebGLRenderTarget
+} from "three";
+
+import {
+	BokehMaterial,
+	CircleOfConfusionMaterial,
+	KernelSize,
+	MaskFunction,
+	MaskMaterial
+} from "../materials";
+
 import { ColorChannel, Resizer } from "../core";
-import { BokehMaterial, CircleOfConfusionMaterial, KernelSize, MaskFunction, MaskMaterial } from "../materials";
 import { BlurPass, ShaderPass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect, EffectAttribute } from "./Effect";
@@ -305,10 +320,10 @@ export class DepthOfFieldEffect extends Effect {
 	 * Sets the depth texture.
 	 *
 	 * @param {Texture} depthTexture - A depth texture.
-	 * @param {Number} [depthPacking=0] - The depth packing.
+	 * @param {Number} [depthPacking=BasicDepthPacking] - The depth packing.
 	 */
 
-	setDepthTexture(depthTexture, depthPacking = 0) {
+	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
 		const material = this.circleOfConfusionMaterial;
 		material.uniforms.depthBuffer.value = depthTexture;

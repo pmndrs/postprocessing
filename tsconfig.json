@@ -1,12 +1,5 @@
 {
-	"ts-node": {
-		"transpileOnly": true,
-		"compilerOptions": {
-			"module": "CommonJS",
-			"resolveJsonModule": true
-		},
-		"include": ["./*.ts"]
-	},
+	"include": ["src", "demo/src"],
 	"compilerOptions": {
 		"rootDir": ".",
 		"moduleResolution": "node",
@@ -18,5 +11,4 @@
 		"skipLibCheck": true,
 		"strictNullChecks": false
 	},
-	"include": ["src", "demo/src"]
 }

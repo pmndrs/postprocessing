@@ -11,7 +11,7 @@ import { Pass } from "./Pass";
 import { RenderPass } from "./RenderPass";
 
 /**
- * A pass that renders the depth of a given scene into a color buffer.
+ * A pass that renders depth and packs it into an RGBA buffer.
  */
 
 export class DepthPass extends Pass {

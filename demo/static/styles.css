@@ -9,6 +9,7 @@ body {
 	font-family: sans-serif;
 	line-height: 150%;
 	margin: 0;
+	min-height: 100vh;
 }
 
 a {
@@ -129,7 +130,7 @@ p {
 	bottom: 100%;
 	color: rgb(90, 95, 90);
 	font-size: 75%;
-	max-width: 100vw;
+	max-width: calc(100vw - 12px);
 	position: absolute;
 	width: max-content;
 }
@@ -144,11 +145,6 @@ p {
 
 .dg {
 	user-select: none;
-}
-
-.dg.main > ul {
-	max-height: 72vh;
-	overflow-y: auto;
 }
 
 .dg select {

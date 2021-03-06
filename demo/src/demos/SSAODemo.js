@@ -1,4 +1,4 @@
-import { Color, PerspectiveCamera, Vector3 } from "three";
+import { Color, PerspectiveCamera } from "three";
 import { SpatialControls } from "spatial-controls";
 import { ProgressManager } from "../utils/ProgressManager";
 import { PostProcessingDemo } from "./PostProcessingDemo";
@@ -129,20 +129,17 @@ export class SSAODemo extends PostProcessingDemo {
 		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
-		const camera = new PerspectiveCamera(50, aspect, 0.5, 1000);
-		camera.position.set(9.45, 1.735, 0.75);
+		const camera = new PerspectiveCamera(50, aspect, 0.3, 1000);
 		this.camera = camera;
 
 		// Controls
 
-		const target = new Vector3(8.45, 1.65, 0.6);
 		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
-		controls.settings.pointer.lock = false;
-		controls.settings.translation.enabled = true;
-		controls.settings.sensitivity.rotation = 2.2;
-		controls.settings.sensitivity.translation = 2.0;
-		controls.lookAt(target);
-		controls.setOrbitEnabled(false);
+		const settings = controls.settings;
+		settings.rotation.setSensitivity(2.2);
+		settings.translation.setSensitivity(3.0);
+		controls.setPosition(9.45, 1.735, 0.75);
+		controls.lookAt(8.45, 1.65, 0.6);
 		this.controls = controls;
 
 		// Sky
@@ -328,7 +325,7 @@ export class SSAODemo extends PostProcessingDemo {
 
 		f.add(params.distanceScaling, "enabled").onChange((value) => {
 
-			ssaoEffect.distanceScaling = value.enabled;
+			ssaoEffect.distanceScaling = value;
 
 		});
 
@@ -428,6 +425,12 @@ export class SSAODemo extends PostProcessingDemo {
 			blendMode.setBlendFunction(Number(value));
 
 		});
+
+		if(window.innerWidth < 720) {
+
+			menu.close();
+
+		}
 
 	}
 

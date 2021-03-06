@@ -283,7 +283,7 @@ export class Pass {
 	setDepthTexture(depthTexture, depthPacking = 0) {}
 
 	/**
-	 * Renders the effect.
+	 * Renders this pass.
 	 *
 	 * This is an abstract method that must be overridden.
 	 *

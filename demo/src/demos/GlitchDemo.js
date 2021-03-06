@@ -1,4 +1,4 @@
-import { Color, PerspectiveCamera, TextureLoader, Vector3 } from "three";
+import { Color, PerspectiveCamera, TextureLoader } from "three";
 import { SpatialControls } from "spatial-controls";
 import { ProgressManager } from "../utils/ProgressManager";
 import { PostProcessingDemo } from "./PostProcessingDemo";
@@ -141,19 +141,16 @@ export class GlitchDemo extends PostProcessingDemo {
 
 		const aspect = window.innerWidth / window.innerHeight;
 		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
-		camera.position.set(-9, 0.5, 0);
 		this.camera = camera;
 
 		// Controls
 
-		const target = new Vector3(0, 3, -3.5);
 		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
-		controls.settings.pointer.lock = false;
-		controls.settings.translation.enabled = true;
-		controls.settings.sensitivity.rotation = 2.2;
-		controls.settings.sensitivity.translation = 3.0;
-		controls.lookAt(target);
-		controls.setOrbitEnabled(false);
+		const settings = controls.settings;
+		settings.rotation.setSensitivity(2.2);
+		settings.translation.setSensitivity(3.0);
+		controls.setPosition(-9, 0.5, 0);
+		controls.lookAt(0, 3, -3.5);
 		this.controls = controls;
 
 		// Sky
@@ -303,6 +300,28 @@ export class GlitchDemo extends PostProcessingDemo {
 			uniforms.get("columns").value = value;
 
 		});
+
+		if(window.innerWidth < 720) {
+
+			menu.close();
+
+		}
+
+	}
+
+	/**
+	 * Disposes this demo.
+	 */
+
+	dispose() {
+
+		const div = document.querySelector(".warning");
+
+		if(div !== null) {
+
+			div.remove();
+
+		}
 
 	}
 

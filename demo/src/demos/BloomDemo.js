@@ -8,7 +8,7 @@ import {
 	Vector2
 } from "three";
 
-import { SpatialControls } from "spatial-controls";
+import { ControlMode, SpatialControls } from "spatial-controls";
 import { ProgressManager } from "../utils/ProgressManager";
 import { PostProcessingDemo } from "./PostProcessingDemo";
 
@@ -28,18 +28,18 @@ import {
 } from "../../../src";
 
 /**
- * A mouse position.
+ * Normalized device coordinates.
  *
  * @type {Vector2}
  * @private
  */
 
-const mouse = new Vector2();
+const ndc = new Vector2();
 
 /**
  * A bloom demo setup.
  *
- * @implements {EventListener}
+ * @implements {EventListenerObject}
  */
 
 export class BloomDemo extends PostProcessingDemo {
@@ -122,17 +122,17 @@ export class BloomDemo extends PostProcessingDemo {
 	/**
 	 * Raycasts the scene.
 	 *
-	 * @param {PointerEvent} event - A pointer event.
+	 * @param {PointerEvent} event - An event.
 	 */
 
 	raycast(event) {
 
 		const raycaster = this.raycaster;
 
-		mouse.x = (event.clientX / window.innerWidth) * 2.0 - 1.0;
-		mouse.y = -(event.clientY / window.innerHeight) * 2.0 + 1.0;
+		ndc.x = (event.clientX / window.innerWidth) * 2.0 - 1.0;
+		ndc.y = -(event.clientY / window.innerHeight) * 2.0 + 1.0;
 
-		raycaster.setFromCamera(mouse, this.camera);
+		raycaster.setFromCamera(ndc, this.camera);
 		const intersects = raycaster.intersectObjects(this.object.children, true);
 
 		this.selectedObject = null;
@@ -179,7 +179,7 @@ export class BloomDemo extends PostProcessingDemo {
 	}
 
 	/**
-	 * Raycasts on mouse move events.
+	 * Handles events.
 	 *
 	 * @param {Event} event - An event.
 	 */
@@ -265,18 +265,17 @@ export class BloomDemo extends PostProcessingDemo {
 
 		const aspect = window.innerWidth / window.innerHeight;
 		const camera = new PerspectiveCamera(50, aspect, 1, 2000);
-		camera.position.set(-10, 6, 15);
-		camera.lookAt(scene.position);
 		this.camera = camera;
 
 		// Controls
 
 		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
-		controls.settings.pointer.lock = false;
-		controls.settings.translation.enabled = false;
-		controls.settings.sensitivity.rotation = 2.2;
-		controls.settings.sensitivity.zoom = 1.0;
-		controls.lookAt(scene.position);
+		const settings = controls.settings;
+		settings.general.setMode(ControlMode.THIRD_PERSON);
+		settings.rotation.setSensitivity(2.2);
+		settings.translation.setEnabled(false);
+		settings.zoom.setSensitivity(1.0);
+		controls.setPosition(-10, 6, 15);
 		this.controls = controls;
 
 		// Sky
@@ -350,16 +349,17 @@ export class BloomDemo extends PostProcessingDemo {
 	/**
 	 * Updates this demo.
 	 *
-	 * @param {Number} delta - The time since the last frame in seconds.
+	 * @param {Number} deltaTime - The time since the last frame in seconds.
+	 * @param {Number} timestamp - The current time in milliseconds.
 	 */
 
-	update(delta) {
+	update(deltaTime, timestamp) {
 
 		const object = this.object;
 		const PI2 = 2.0 * Math.PI;
 
-		object.rotation.x += 0.05 * delta;
-		object.rotation.y += 0.25 * delta;
+		object.rotation.x += 0.05 * deltaTime;
+		object.rotation.y += 0.25 * deltaTime;
 
 		if(object.rotation.x >= PI2) {
 
@@ -508,6 +508,12 @@ export class BloomDemo extends PostProcessingDemo {
 			passB.dithering = value;
 
 		});
+
+		if(window.innerWidth < 720) {
+
+			menu.close();
+
+		}
 
 	}
 
