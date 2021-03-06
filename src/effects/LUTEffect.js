@@ -151,7 +151,7 @@ export class LUTEffect extends Effect {
 
 		if(lut !== null) {
 
-			// The encoding of the input colors persists if the the LUT is linear.
+			// The encoding of the input colors persists if the LUT is linear.
 			this.outputEncoding = (lut.encoding === LinearEncoding) ? value : lut.encoding;
 
 			switch(this.outputEncoding) {
