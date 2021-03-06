@@ -52,7 +52,7 @@ export class DepthSavePass extends Pass {
 	}
 
 	/**
-	 * The depth texture.
+	 * The output depth texture.
 	 *
 	 * @type {Texture}
 	 */
