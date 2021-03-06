@@ -27,7 +27,7 @@ export class DepthSavePass extends Pass {
 		super("DepthSavePass");
 
 		const material = new DepthCopyMaterial();
-		material.outputDepthPacking = depthPacking;
+		material.setOutputDepthPacking(depthPacking);
 		this.setFullscreenMaterial(material);
 		this.needsDepthTexture = true;
 		this.needsSwap = false;
@@ -70,7 +70,7 @@ export class DepthSavePass extends Pass {
 
 	get depthPacking() {
 
-		return this.getFullscreenMaterial().outputDepthPacking;
+		return this.getFullscreenMaterial().getOutputDepthPacking();
 
 	}
 
