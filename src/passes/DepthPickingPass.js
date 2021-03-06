@@ -1,3 +1,4 @@
+import { FloatType, RGBADepthPacking } from "three";
 import { DepthCopyMode } from "../materials";
 import { DepthSavePass } from "./DepthSavePass";
 
@@ -60,11 +61,12 @@ export class DepthPickingPass extends DepthSavePass {
 		/**
 		 * An RGBA pixel buffer.
 		 *
-		 * @type {Uint8Array}
+		 * @type {TypedArray}
 		 * @private
 		 */
 
-		this.pixelBuffer = new Uint8Array(4);
+		this.pixelBuffer = (depthPacking === RGBADepthPacking) ?
+			new Uint8Array(4) : new Float32Array(4);
 
 		/**
 		 * A callback for picking results.
@@ -162,6 +164,7 @@ export class DepthPickingPass extends DepthSavePass {
 
 			const renderTarget = this.renderTarget;
 			const pixelBuffer = this.pixelBuffer;
+			const packed = (renderTarget.texture.type !== FloatType);
 
 			let x = 0, y = 0;
 
@@ -179,7 +182,7 @@ export class DepthPickingPass extends DepthSavePass {
 			}
 
 			renderer.readRenderTargetPixels(renderTarget, x, y, 1, 1, pixelBuffer);
-			this.callback(unpackRGBAToDepth(pixelBuffer));
+			this.callback(packed ? unpackRGBAToDepth(pixelBuffer) : pixelBuffer[0]);
 			this.callback = null;
 
 		}
