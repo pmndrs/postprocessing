@@ -18,10 +18,11 @@ export class DepthSavePass extends Pass {
 	/**
 	 * Constructs a new depth save pass.
 	 *
-	 * @param {Number} [depthPacking=RGBADepthPacking] - The output depth packing.
+	 * @param {Object} [options] - The options.
+	 * @param {Number} [options.depthPacking=RGBADepthPacking] - The output depth packing.
 	 */
 
-	constructor(depthPacking = RGBADepthPacking) {
+	constructor({ depthPacking = RGBADepthPacking } = {}) {
 
 		super("DepthSavePass");
 
