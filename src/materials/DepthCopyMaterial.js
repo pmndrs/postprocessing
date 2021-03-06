@@ -54,12 +54,12 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * The current input depth packing.
+	 * Returns the current input depth packing.
 	 *
-	 * @type {Number}
+	 * @return {Number} The input depth packing.
 	 */
 
-	get inputDepthPacking() {
+	getInputDepthPacking() {
 
 		return Number(this.defines.INPUT_DEPTH_PACKING);
 
@@ -68,10 +68,10 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	/**
 	 * Sets the input depth packing.
 	 *
-	 * @type {Number}
+	 * @param {Number} value - The new input depth packing.
 	 */
 
-	set inputDepthPacking(value) {
+	setInputDepthPacking(value) {
 
 		this.defines.INPUT_DEPTH_PACKING = value.toFixed(0);
 		this.needsUpdate = true;
@@ -79,12 +79,12 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * The current output depth packing.
+	 * Returns the current output depth packing.
 	 *
-	 * @type {Number}
+	 * @return {Number} The output depth packing.
 	 */
 
-	get outputDepthPacking() {
+	getOutputDepthPacking() {
 
 		return Number(this.defines.OUTPUT_DEPTH_PACKING);
 
@@ -93,10 +93,10 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	/**
 	 * Sets the output depth packing.
 	 *
-	 * @type {Number}
+	 * @param {Number} value - The new output depth packing.
 	 */
 
-	set outputDepthPacking(value) {
+	setOutputDepthPacking(value) {
 
 		this.defines.OUTPUT_DEPTH_PACKING = value.toFixed(0);
 		this.needsUpdate = true;
@@ -104,9 +104,9 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * The depth copy mode.
+	 * returns the depth copy mode.
 	 *
-	 * @type {DepthCopyMode}
+	 * @return {DepthCopyMode} The depth copy mode.
 	 */
 
 	getMode() {
@@ -118,13 +118,13 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	/**
 	 * Sets the depth copy mode.
 	 *
-	 * @type {DepthCopyMode}
+	 * @param {DepthCopyMode} value - The new mode.
 	 */
 
-	setMode(mode) {
+	setMode(value) {
 
-		this.mode = mode;
-		this.defines.DEPTH_COPY_MODE = mode.toFixed(0);
+		this.mode = value;
+		this.defines.DEPTH_COPY_MODE = value.toFixed(0);
 		this.needsUpdate = true;
 
 	}
