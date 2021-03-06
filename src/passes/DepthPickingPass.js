@@ -42,12 +42,17 @@ export class DepthPickingPass extends DepthSavePass {
 	/**
 	 * Constructs a new depth picking pass.
 	 *
-	 * @param [mode=DepthCopyMode.SINGLE] - The depth copy mode.
+	 * @param {Object} [options] - The options.
+	 * @param {Number} [options.depthPacking=RGBADepthPacking] - The depth packing.
+	 * @param {Number} [options.mode=DepthCopyMode.SINGLE] - The depth copy mode.
 	 */
 
-	constructor(mode = DepthCopyMode.SINGLE) {
+	constructor({
+		depthPacking = RGBADepthPacking,
+		mode = DepthCopyMode.SINGLE
+	} = {}) {
 
-		super();
+		super({ depthPacking });
 
 		this.name = "DepthPickingPass";
 		this.getFullscreenMaterial().setMode(mode);
