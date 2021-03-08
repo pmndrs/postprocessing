@@ -73,9 +73,9 @@ export class LuminancePass extends Pass {
 	/**
 	 * The luminance texture.
 	 *
-	 * If `colorOutput` is enabled, the scenes colors will multiplied by their
-	 * respective luminance values and stored as RGB. Luminance will be stored
-	 * as alpha.
+	 * If `colorOutput` is enabled, the scenes colors will be multiplied by their
+	 * respective luminance values and stored as RGB. The alpha channel always
+	 * contains the luminance value.
 	 *
 	 * @type {Texture}
 	 */
