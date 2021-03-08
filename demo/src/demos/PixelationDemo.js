@@ -132,7 +132,7 @@ export class PixelationDemo extends PostProcessingDemo {
 
 		smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.01);
 
-		const pixelationEffect = new PixelationEffect(5.0);
+		const pixelationEffect = new PixelationEffect(5);
 
 		const effectPass = new EffectPass(camera, pixelationEffect);
 		const smaaPass = new EffectPass(camera, smaaEffect);
@@ -158,7 +158,7 @@ export class PixelationDemo extends PostProcessingDemo {
 			"granularity": effect.getGranularity()
 		};
 
-		menu.add(params, "granularity").min(0.0).max(50.0).step(0.1).onChange((value) => {
+		menu.add(params, "granularity").min(0).max(50).step(1).onChange((value) => {
 
 			effect.setGranularity(value);
 
