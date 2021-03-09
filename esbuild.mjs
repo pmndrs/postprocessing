@@ -58,26 +58,26 @@ const demo = [{
 const lib = [{
 	entryPoints: ["src/index.js"],
 	outfile: `build/${pkg.name}.esm.js`,
+	banner: { js: banner },
 	format: "esm",
-	external,
-	banner
+	external
 }, {
 	entryPoints: ["src/index.js"],
 	outfile: `build/${pkg.name}.js`,
-	banner: `${banner}\n${requireShim}`,
+	banner: { js: `${banner}\n${requireShim}` },
+	footer: { js: footer },
 	format: "iife",
 	globalName,
-	external,
-	footer
+	external
 }, {
 	entryPoints: ["src/index.js"],
 	outfile: `build/${pkg.name}.min.js`,
-	banner: `${banner}\n${requireShim}`,
+	banner: { js: `${banner}\n${requireShim}` },
+	footer: { js: footer },
 	format: "iife",
 	minify: true,
 	globalName,
-	external,
-	footer
+	external
 }];
 
 for(const configs of [workers, demo, lib]) {
