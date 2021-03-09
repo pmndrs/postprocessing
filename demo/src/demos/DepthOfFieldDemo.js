@@ -199,7 +199,7 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 		const vignetteEffect = new VignetteEffect({
 			eskil: false,
 			offset: 0.35,
-			darkness: 0.75
+			darkness: 0.5
 		});
 
 		const cocTextureEffect = new TextureEffect({
