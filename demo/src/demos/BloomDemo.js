@@ -13,7 +13,7 @@ import { ProgressManager } from "../utils/ProgressManager";
 import { PostProcessingDemo } from "./PostProcessingDemo";
 
 import * as Cage from "./objects/Cage";
-import * as SphereCloud from "./objects/SphereCloud";
+import * as ObjectCloud from "./objects/ObjectCloud";
 
 import {
 	BlendFunction,
@@ -292,7 +292,7 @@ export class BloomDemo extends PostProcessingDemo {
 
 		// Objects
 
-		const cloud = SphereCloud.create();
+		const cloud = ObjectCloud.create();
 		cloud.scale.setScalar(0.4);
 		this.object = cloud;
 		scene.add(cloud);
