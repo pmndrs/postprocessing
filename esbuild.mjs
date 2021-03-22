@@ -26,6 +26,7 @@ const footer = `if(typeof module==="object"&&module.exports)module.exports=${glo
 
 const common = {
 	bundle: true,
+	logLevel: "info",
 	plugins: [glsl({ minify: production })],
 	loader: {
 		".worker": "text",
@@ -82,9 +83,7 @@ const lib = [{
 
 for(const configs of [workers, demo, lib]) {
 
-	const t0 = Date.now();
-	await Promise.all(configs.map(c => esbuild.build(Object.assign(c, common))
-		.then(() => console.log(`Built ${c.outfile} in ${Date.now() - t0}ms`))
-		.catch(() => process.exit(1))));
+	const promises = configs.map(c => esbuild.build(Object.assign(c, common)));
+	await Promise.all(promises);
 
 }
