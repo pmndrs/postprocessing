@@ -159,10 +159,23 @@ export class GodRaysDemo extends PostProcessingDemo {
 		const mainLight = new PointLight(0xffe3b1);
 		mainLight.position.set(-0.5, 3, -0.25);
 		mainLight.castShadow = true;
-		mainLight.shadow.mapSize.width = 1024;
-		mainLight.shadow.mapSize.height = 1024;
-		this.light = mainLight;
+		mainLight.shadow.bias = 0.0000125;
+		mainLight.shadow.mapSize.width = 2048;
+		mainLight.shadow.mapSize.height = 2048;
 
+		if(window.innerWidth < 720) {
+
+			mainLight.shadow.mapSize.width = 512;
+			mainLight.shadow.mapSize.height = 512;
+
+		} else if(window.innerWidth < 1280) {
+
+			mainLight.shadow.mapSize.width = 1024;
+			mainLight.shadow.mapSize.height = 1024;
+
+		}
+
+		this.light = mainLight;
 		scene.add(ambientLight, mainLight);
 
 		// Sun
