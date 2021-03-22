@@ -116,11 +116,11 @@ If you want to learn how to create custom effects or passes, please check the [W
 
 ## Contributing
 
-Please refer to the [contribution guidelines](https://github.com/vanruesc/postprocessing/blob/master/.github/CONTRIBUTING.md) for details.
+Please refer to the [contribution guidelines](https://github.com/vanruesc/postprocessing/blob/main/.github/CONTRIBUTING.md) for details.
 
 
 ## License
 
-This library is licensed under the [Zlib license](https://github.com/vanruesc/postprocessing/blob/master/LICENSE.md).
+This library is licensed under the [Zlib license](https://github.com/vanruesc/postprocessing/blob/main/LICENSE.md).
 
 The original code that this library is based on, was written by [mrdoob](https://mrdoob.com) and the [three.js contributors](https://github.com/mrdoob/three.js/graphs/contributors) and is licensed under the [MIT license](https://github.com/mrdoob/three.js/blob/master/LICENSE).

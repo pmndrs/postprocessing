@@ -26,6 +26,7 @@ const footer = `if(typeof module==="object"&&module.exports)module.exports=${glo
 
 const common = {
 	bundle: true,
+	logLevel: "info",
 	plugins: [glsl({ minify: production })],
 	loader: {
 		".worker": "text",
@@ -58,33 +59,31 @@ const demo = [{
 const lib = [{
 	entryPoints: ["src/index.js"],
 	outfile: `build/${pkg.name}.esm.js`,
+	banner: { js: banner },
 	format: "esm",
-	external,
-	banner
+	external
 }, {
 	entryPoints: ["src/index.js"],
 	outfile: `build/${pkg.name}.js`,
-	banner: `${banner}\n${requireShim}`,
+	banner: { js: `${banner}\n${requireShim}` },
+	footer: { js: footer },
 	format: "iife",
 	globalName,
-	external,
-	footer
+	external
 }, {
 	entryPoints: ["src/index.js"],
 	outfile: `build/${pkg.name}.min.js`,
-	banner: `${banner}\n${requireShim}`,
+	banner: { js: `${banner}\n${requireShim}` },
+	footer: { js: footer },
 	format: "iife",
 	minify: true,
 	globalName,
-	external,
-	footer
+	external
 }];
 
 for(const configs of [workers, demo, lib]) {
 
-	const t0 = Date.now();
-	await Promise.all(configs.map(c => esbuild.build(Object.assign(c, common))
-		.then(() => console.log(`Built ${c.outfile} in ${Date.now() - t0}ms`))
-		.catch(() => process.exit(1))));
+	const promises = configs.map(c => esbuild.build(Object.assign(c, common)));
+	await Promise.all(promises);
 
 }

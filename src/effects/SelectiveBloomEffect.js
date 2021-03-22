@@ -1,5 +1,6 @@
 import {
 	BasicDepthPacking,
+	Color,
 	LinearFilter,
 	NotEqualDepth,
 	EqualDepth,
@@ -66,6 +67,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 		 */
 
 		this.clearPass = new ClearPass(true, false, false);
+		this.clearPass.overrideClearColor = new Color(0x000000);
 
 		/**
 		 * A depth mask pass.

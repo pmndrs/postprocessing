@@ -10,7 +10,7 @@ import { ControlMode, SpatialControls } from "spatial-controls";
 import { ProgressManager } from "../utils/ProgressManager";
 import { PostProcessingDemo } from "./PostProcessingDemo";
 
-import * as SphereCloud from "./objects/SphereCloud";
+import * as ObjectCloud from "./objects/ObjectCloud";
 
 import {
 	BlurPass,
@@ -174,7 +174,7 @@ export class BlurDemo extends PostProcessingDemo {
 
 		// Objects
 
-		this.object = SphereCloud.create();
+		this.object = ObjectCloud.create();
 		scene.add(this.object);
 
 		// Passes

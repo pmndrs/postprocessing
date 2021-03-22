@@ -83,7 +83,6 @@ export class EffectComposer {
 			this.renderer.autoClear = false;
 			this.inputBuffer = this.createBuffer(depthBuffer, stencilBuffer, frameBufferType, multisampling);
 			this.outputBuffer = this.inputBuffer.clone();
-			this.enableExtensions();
 
 		}
 
@@ -178,8 +177,7 @@ export class EffectComposer {
 	/**
 	 * Returns the WebGL renderer.
 	 *
-	 * You may replace the renderer at any time by using
-	 * {@link EffectComposer#replaceRenderer}.
+	 * You can replace the renderer with {@link EffectComposer#replaceRenderer}.
 	 *
 	 * @return {WebGLRenderer} The renderer.
 	 */
@@ -187,34 +185,6 @@ export class EffectComposer {
 	getRenderer() {
 
 		return this.renderer;
-
-	}
-
-	/**
-	 * Explicitly enables required WebGL extensions.
-	 *
-	 * @private
-	 */
-
-	enableExtensions() {
-
-		const frameBufferType = this.inputBuffer.texture.type;
-		const capabilities = this.renderer.capabilities;
-		const context = this.renderer.getContext();
-
-		if(frameBufferType !== UnsignedByteType) {
-
-			if(capabilities.isWebGL2) {
-
-				context.getExtension("EXT_color_buffer_float");
-
-			} else {
-
-				context.getExtension("EXT_color_buffer_half_float");
-
-			}
-
-		}
 
 	}
 
@@ -258,8 +228,6 @@ export class EffectComposer {
 				parent.appendChild(renderer.domElement);
 
 			}
-
-			this.enableExtensions();
 
 		}
 
