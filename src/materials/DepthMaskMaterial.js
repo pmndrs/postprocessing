@@ -34,6 +34,7 @@ export class DepthMaskMaterial extends ShaderMaterial {
 			type: "DepthMaskMaterial",
 
 			defines: {
+				DEPTH_EPSILON: "0.00001",
 				DEPTH_PACKING_0: "0",
 				DEPTH_PACKING_1: "0",
 				KEEP_FAR: "1"
@@ -108,6 +109,34 @@ export class DepthMaskMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Returns the current error threshold for depth comparisons.
+	 *
+	 * This value is only used for `EqualDepth` and `NotEqualDepth`. The default
+	 * value is `1e-5`.
+	 *
+	 * @return {Number} The error threshold.
+	 */
+
+	getEpsilon() {
+
+		return Number(this.defines.DEPTH_EPSILON);
+
+	}
+
+	/**
+	 * Sets the depth comparison error threshold.
+	 *
+	 * @param {Number} value - The new error threshold.
+	 */
+
+	setEpsilon(value) {
+
+		this.defines.DEPTH_EPSILON = value.toFixed(16);
+		this.needsUpdate = true;
+
+	}
+
+	/**
 	 * Returns the current depth mode.
 	 *
 	 * @return {Number} The depth mode.
@@ -144,11 +173,11 @@ export class DepthMaskMaterial extends ShaderMaterial {
 				break;
 
 			case EqualDepth:
-				depthTest = "abs(d1 - d0) <= EPSILON";
+				depthTest = "abs(d1 - d0) <= DEPTH_EPSILON";
 				break;
 
 			case NotEqualDepth:
-				depthTest = "abs(d1 - d0) > EPSILON";
+				depthTest = "abs(d1 - d0) > DEPTH_EPSILON";
 				break;
 
 			case LessDepth:
