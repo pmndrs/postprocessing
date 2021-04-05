@@ -1,6 +1,6 @@
 import { LoadingManager } from "three";
 import { RawImageData } from "../RawImageData";
-import workerProgram from "../../../tmp/smaa.worker";
+import workerProgram from "../../../tmp/smaa/worker.txt";
 
 /**
  * Generates the SMAA data images.
