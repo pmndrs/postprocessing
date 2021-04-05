@@ -1,18 +1,14 @@
 import { createRequire } from "module";
-import { hideBin } from "yargs/helpers";
 import { glsl } from "esbuild-plugin-glsl";
 import esbuild from "esbuild";
-import yargs from "yargs";
 
 const require = createRequire(import.meta.url);
 const pkg = require("./package");
 const date = (new Date()).toDateString();
-const production = (process.env.NODE_ENV === "production");
-const globalName = pkg.name.replace(/-/g, "").toUpperCase();
-const external = Object.keys(pkg.peerDependencies);
-const { argv } = yargs(hideBin(process.argv))
-	.option("watch", { alias: "w", type: "boolean" });
-
+const external = Object.keys(pkg.peerDependencies || {});
+const minify = (process.env.NODE_ENV === "production");
+const watch = process.argv.includes("-w");
+const plugins = [glsl({ minify })];
 const banner = `/**
  * ${pkg.name} v${pkg.version} build ${date}
  * ${pkg.homepage}
@@ -20,70 +16,70 @@ const banner = `/**
  * @license ${pkg.license}
  */`;
 
-// @todo Remove in next major release.
-const requireShim = `if(typeof window === "object"&&!window.require)window.require=()=>window.THREE;`;
-const footer = `if(typeof module==="object"&&module.exports)module.exports=${globalName};`;
-
-const common = {
-	bundle: true,
+await esbuild.build({
+	entryPoints: [
+		"src/images/lut/worker.js",
+		"src/images/smaa/worker.js"
+	],
+	outExtension: { ".js": ".txt" },
+	outdir: "tmp",
 	logLevel: "info",
-	plugins: [glsl({ minify: production })],
-	loader: {
-		".worker": "text",
-		".png": "dataurl"
-	}
-};
-
-const workers = [{
-	entryPoints: ["src/images/lut/worker.js"],
-	outfile: "tmp/lut.worker",
 	format: "iife",
-	minify: production,
-	watch: argv.watch
-}, {
-	entryPoints: ["src/images/smaa/worker.js"],
-	outfile: "tmp/smaa.worker",
-	format: "iife",
-	minify: production,
-	watch: argv.watch
-}];
+	bundle: true,
+	minify,
+	watch
+}).catch(() => process.exit(1));
 
-const demo = [{
+await esbuild.build({
 	entryPoints: ["demo/src/index.js"],
-	outfile: "public/demo/index.js",
+	outdir: "public/demo",
+	logLevel: "info",
 	format: "iife",
-	minify: production,
-	watch: argv.watch
-}];
+	bundle: true,
+	plugins,
+	minify,
+	watch
+}).catch(() => process.exit(1));
 
-const lib = [{
+await esbuild.build({
 	entryPoints: ["src/index.js"],
 	outfile: `build/${pkg.name}.esm.js`,
 	banner: { js: banner },
+	logLevel: "info",
 	format: "esm",
-	external
-}, {
+	bundle: true,
+	external,
+	plugins
+}).catch(() => process.exit(1));
+
+// @todo Remove in next major release.
+const globalName = pkg.name.replace(/-/g, "").toUpperCase();
+const requireShim = `if(typeof window==="object"&&!window.require)window.require=()=>window.THREE;`;
+const footer = `if(typeof module==="object"&&module.exports)module.exports=${globalName};`;
+
+await esbuild.build({
 	entryPoints: ["src/index.js"],
 	outfile: `build/${pkg.name}.js`,
 	banner: { js: `${banner}\n${requireShim}` },
 	footer: { js: footer },
+	logLevel: "info",
 	format: "iife",
+	bundle: true,
 	globalName,
-	external
-}, {
+	external,
+	plugins
+}).catch(() => process.exit(1));
+
+await esbuild.build({
 	entryPoints: ["src/index.js"],
 	outfile: `build/${pkg.name}.min.js`,
 	banner: { js: `${banner}\n${requireShim}` },
 	footer: { js: footer },
+	logLevel: "info",
 	format: "iife",
-	minify: true,
+	bundle: true,
 	globalName,
-	external
-}];
-
-for(const configs of [workers, demo, lib]) {
-
-	const promises = configs.map(c => esbuild.build(Object.assign(c, common)));
-	await Promise.all(promises);
-
-}
+	external,
+	plugins,
+	minify
+}).catch(() => process.exit(1));
