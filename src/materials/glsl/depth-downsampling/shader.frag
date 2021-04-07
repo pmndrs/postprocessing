@@ -12,7 +12,7 @@
 
 #ifdef DOWNSAMPLE_NORMALS
 
-	uniform sampler2D normalBuffer;
+	uniform lowp sampler2D normalBuffer;
 
 #endif
 
