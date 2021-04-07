@@ -345,7 +345,8 @@ export class PerformanceDemo extends PostProcessingDemo {
 		const vignetteEffect = new VignetteEffect();
 
 		const lut = LookupTexture3D.createNeutral(8);
-		const lutEffect = capabilities.isWebGL2 ? new LUTEffect(lut) :
+		const lutEffect = capabilities.isWebGL2 ?
+			new LUTEffect(lut.convertToUint8()) :
 			new LUTEffect(lut.convertToUint8().toDataTexture());
 
 		colorAverageEffect.blendMode.opacity.value = 0.01;
