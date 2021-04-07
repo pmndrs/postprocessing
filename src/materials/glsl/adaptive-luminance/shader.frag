@@ -1,5 +1,5 @@
 uniform mediump sampler2D luminanceBuffer0;
-uniform sampler2D luminanceBuffer1;
+uniform lowp sampler2D luminanceBuffer1;
 
 uniform float minLuminance;
 uniform float deltaTime;

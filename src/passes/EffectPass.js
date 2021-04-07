@@ -1,4 +1,4 @@
-import { BasicDepthPacking } from "three";
+import { BasicDepthPacking, UnsignedByteType } from "three";
 import { BlendFunction } from "../effects/blending";
 import { EffectAttribute } from "../effects/Effect";
 import { EffectMaterial, Section } from "../materials";
@@ -657,6 +657,13 @@ export class EffectPass extends Pass {
 		// Initialize the fullscreen material.
 		this.updateMaterial();
 		this.verifyResources(renderer);
+
+		if(frameBufferType !== undefined && frameBufferType !== UnsignedByteType) {
+
+			const material = this.getFullscreenMaterial();
+			material.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+
+		}
 
 	}
 

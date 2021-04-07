@@ -1,4 +1,4 @@
-uniform sampler2D aoBuffer;
+uniform lowp sampler2D aoBuffer;
 uniform float luminanceInfluence;
 
 #ifdef DEPTH_AWARE_UPSAMPLING

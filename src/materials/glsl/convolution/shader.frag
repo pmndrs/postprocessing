@@ -1,7 +1,15 @@
 #include <common>
 #include <dithering_pars_fragment>
 
-uniform sampler2D inputBuffer;
+#ifdef FRAMEBUFFER_PRECISION_HIGH
+
+	uniform mediump sampler2D inputBuffer;
+
+#else
+
+	uniform lowp sampler2D inputBuffer;
+
+#endif
 
 varying vec2 vUv0;
 varying vec2 vUv1;

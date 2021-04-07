@@ -1,4 +1,4 @@
-uniform sampler2D perturbationMap;
+uniform lowp sampler2D perturbationMap;
 
 uniform bool active;
 uniform float columns;

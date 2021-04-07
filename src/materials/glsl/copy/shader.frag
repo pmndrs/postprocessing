@@ -1,4 +1,13 @@
-uniform sampler2D inputBuffer;
+#ifdef FRAMEBUFFER_PRECISION_HIGH
+
+	uniform mediump sampler2D inputBuffer;
+
+#else
+
+	uniform lowp sampler2D inputBuffer;
+
+#endif
+
 uniform float opacity;
 
 varying vec2 vUv;

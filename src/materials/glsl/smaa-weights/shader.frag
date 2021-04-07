@@ -6,9 +6,18 @@
 
 #endif
 
-uniform sampler2D inputBuffer;
-uniform sampler2D areaTexture;
-uniform sampler2D searchTexture;
+#ifdef FRAMEBUFFER_PRECISION_HIGH
+
+	uniform mediump sampler2D inputBuffer;
+
+#else
+
+	uniform lowp sampler2D inputBuffer;
+
+#endif
+
+uniform lowp sampler2D areaTexture;
+uniform lowp sampler2D searchTexture;
 
 uniform vec2 texelSize;
 uniform vec2 resolution;

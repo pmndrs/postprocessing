@@ -1,4 +1,11 @@
-import { LinearEncoding, Matrix3, sRGBEncoding, Uniform } from "three";
+import {
+	LinearEncoding,
+	Matrix3,
+	sRGBEncoding,
+	Uniform,
+	UnsignedByteType
+} from "three";
+
 import { ColorChannel } from "../core/ColorChannel";
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect } from "./Effect";
@@ -32,7 +39,7 @@ export class TextureEffect extends Effect {
 			]),
 
 			uniforms: new Map([
-				["texture", new Uniform(null)],
+				["map", new Uniform(null)],
 				["scale", new Uniform(1.0)],
 				["uvTransform", new Uniform(null)]
 			])
@@ -52,7 +59,7 @@ export class TextureEffect extends Effect {
 
 	get texture() {
 
-		return this.uniforms.get("texture").value;
+		return this.uniforms.get("map").value;
 
 	}
 
@@ -68,8 +75,8 @@ export class TextureEffect extends Effect {
 
 		if(currentTexture !== value) {
 
-			const previousEncoding = (currentTexture !== null) ? currentTexture.encoding : null;
-			this.uniforms.get("texture").value = value;
+			this.uniforms.get("map").value = value;
+			this.defines.delete("TEXTURE_PRECISION_HIGH");
 
 			if(value !== null) {
 
@@ -89,7 +96,15 @@ export class TextureEffect extends Effect {
 
 				}
 
-				if(previousEncoding !== value.encoding) {
+				if(value.type !== UnsignedByteType) {
+
+					this.defines.set("TEXTURE_PRECISION_HIGH", "1");
+
+				}
+
+				if(currentTexture === null ||
+					currentTexture.type !== value.type ||
+					currentTexture.encoding !== value.encoding) {
 
 					this.setChanged();
 
@@ -239,7 +254,7 @@ export class TextureEffect extends Effect {
 
 	update(renderer, inputBuffer, deltaTime) {
 
-		const texture = this.uniforms.get("texture").value;
+		const texture = this.uniforms.get("map").value;
 
 		if(this.uvTransform && texture.matrixAutoUpdate) {
 

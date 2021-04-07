@@ -1,5 +1,5 @@
-uniform sampler2D edgeTexture;
-uniform sampler2D maskTexture;
+uniform lowp sampler2D edgeTexture;
+uniform lowp sampler2D maskTexture;
 
 uniform vec3 visibleEdgeColor;
 uniform vec3 hiddenEdgeColor;
@@ -8,7 +8,7 @@ uniform float edgeStrength;
 
 #ifdef USE_PATTERN
 
-	uniform sampler2D patternTexture;
+	uniform lowp sampler2D patternTexture;
 	varying vec2 vUvPattern;
 
 #endif

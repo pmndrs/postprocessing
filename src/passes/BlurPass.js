@@ -1,4 +1,10 @@
-import { LinearFilter, RGBFormat, UnsignedByteType, WebGLRenderTarget } from "three";
+import {
+	LinearFilter,
+	RGBFormat,
+	UnsignedByteType,
+	WebGLRenderTarget
+} from "three";
+
 import { ConvolutionMaterial, KernelSize } from "../materials";
 import { Resizer } from "../core/Resizer";
 import { Pass } from "./Pass";
@@ -338,6 +344,15 @@ export class BlurPass extends Pass {
 
 			this.renderTargetA.texture.type = frameBufferType;
 			this.renderTargetB.texture.type = frameBufferType;
+
+			if(frameBufferType !== UnsignedByteType) {
+
+				const m0 = this.convolutionMaterial;
+				const m1 = this.ditheredConvolutionMaterial;
+				m0.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+				m1.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+
+			}
 
 		}
 

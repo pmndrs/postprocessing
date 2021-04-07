@@ -2,6 +2,7 @@ import {
 	LinearFilter,
 	LuminanceFormat,
 	RGBAFormat,
+	UnsignedByteType,
 	WebGLRenderTarget
 } from "three";
 
@@ -118,6 +119,25 @@ export class LuminancePass extends Pass {
 		resolution.base.set(width, height);
 
 		this.renderTarget.setSize(resolution.width, resolution.height);
+
+	}
+
+	/**
+	 * Performs initialization tasks.
+	 *
+	 * @param {WebGLRenderer} renderer - A renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel.
+	 * @param {Number} frameBufferType - The type of the main frame buffers.
+	 */
+
+	initialize(renderer, alpha, frameBufferType) {
+
+		if(frameBufferType !== undefined && frameBufferType !== UnsignedByteType) {
+
+			const material = this.getFullscreenMaterial();
+			material.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+
+		}
 
 	}
 
