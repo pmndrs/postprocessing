@@ -39,8 +39,6 @@ import {
 	SMAAImageLoader,
 	SMAAPreset,
 	TextureEffect,
-	ToneMappingEffect,
-	ToneMappingMode,
 	VignetteEffect
 } from "../../../src";
 
@@ -240,7 +238,7 @@ export class PerformanceDemo extends PostProcessingDemo {
 		// Lights
 
 		const ambientLight = new AmbientLight(0x323232);
-		const pointLight = new PointLight(0xffbbaa, 80, 12);
+		const pointLight = new PointLight(0xb6d4ff, 80, 10);
 
 		this.light = pointLight;
 		scene.add(ambientLight, pointLight);
@@ -276,7 +274,7 @@ export class PerformanceDemo extends PostProcessingDemo {
 		// Sun
 
 		const sunMaterial = new MeshBasicMaterial({
-			color: 0xffddaa,
+			color: pointLight.color,
 			transparent: true,
 			fog: false
 		});
@@ -328,16 +326,16 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 		const scanlineEffect = new ScanlineEffect({
 			blendFunction: BlendFunction.OVERLAY,
-			density: 1.04
+			density: 0.75
 		});
 
 		const textureEffect = new TextureEffect({
-			blendFunction: BlendFunction.REFLECT,
+			blendFunction: BlendFunction.COLOR_DODGE,
 			texture: assets.get("scratches-color")
 		});
 
 		const colorAverageEffect = new ColorAverageEffect(BlendFunction.COLOR_DODGE);
-		const colorDepthEffect = new ColorDepthEffect({ bits: 56 });
+		const colorDepthEffect = new ColorDepthEffect({ bits: 24 });
 		const sepiaEffect = new SepiaEffect({ blendFunction: BlendFunction.NORMAL });
 
 		const brightnessContrastEffect = new BrightnessContrastEffect({ contrast: 0.0 });
@@ -350,34 +348,29 @@ export class PerformanceDemo extends PostProcessingDemo {
 		const lutEffect = capabilities.isWebGL2 ? new LUTEffect(lut) :
 			new LUTEffect(lut.convertToUint8().toDataTexture());
 
-		const toneMappingEffect = new ToneMappingEffect({
-			mode: ToneMappingMode.REINHARD2_ADAPTIVE
-		});
-
 		colorAverageEffect.blendMode.opacity.value = 0.01;
 		sepiaEffect.blendMode.opacity.value = 0.01;
 		dotScreenEffect.blendMode.opacity.value = 0.01;
 		gridEffect.blendMode.opacity.value = 0.01;
-		scanlineEffect.blendMode.opacity.value = 0.01;
-		textureEffect.blendMode.opacity.value = 0.8;
+		scanlineEffect.blendMode.opacity.value = 0.05;
+		textureEffect.blendMode.opacity.value = 1.0;
 		noiseEffect.blendMode.opacity.value = 0.25;
 
 		const effects = [
 			smaaEffect,
 			bloomEffect,
 			godRaysEffect,
-			colorAverageEffect,
 			colorDepthEffect,
+			colorAverageEffect,
 			dotScreenEffect,
 			gridEffect,
 			scanlineEffect,
 			brightnessContrastEffect,
 			hueSaturationEffect,
 			sepiaEffect,
+			vignetteEffect,
 			textureEffect,
 			noiseEffect,
-			vignetteEffect,
-			toneMappingEffect,
 			lutEffect
 		];
 
