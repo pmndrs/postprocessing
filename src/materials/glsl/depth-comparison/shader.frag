@@ -21,7 +21,7 @@ void main() {
 
 	#include <clipping_planes_fragment>
 
-	// Transform into Cartesian coordinate (not mirrored).
+	// Transform into Cartesian coordinates (not mirrored).
 	vec2 projTexCoord = (vProjTexCoord.xy / vProjTexCoord.w) * 0.5 + 0.5;
 	projTexCoord = clamp(projTexCoord, 0.002, 0.998);
 

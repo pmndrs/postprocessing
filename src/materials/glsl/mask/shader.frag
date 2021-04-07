@@ -1,5 +1,22 @@
-uniform sampler2D maskTexture;
-uniform sampler2D inputBuffer;
+#ifdef FRAMEBUFFER_PRECISION_HIGH
+
+	uniform mediump sampler2D inputBuffer;
+
+#else
+
+	uniform lowp sampler2D inputBuffer;
+
+#endif
+
+#ifdef MASK_PRECISION_HIGH
+
+	uniform mediump sampler2D maskTexture;
+
+#else
+
+	uniform lowp sampler2D maskTexture;
+
+#endif
 
 #if MASK_FUNCTION != 0
 

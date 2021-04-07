@@ -155,33 +155,4 @@ export class AdaptiveLuminancePass extends Pass {
 
 	}
 
-	/**
-	 * Performs initialization tasks.
-	 *
-	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
-	 * @param {Number} frameBufferType - The type of the main frame buffers.
-	 */
-
-	initialize(renderer, alpha, frameBufferType) {
-
-		if(frameBufferType !== HalfFloatType) {
-
-			const capabilities = renderer.capabilities;
-			const context = renderer.getContext();
-
-			if(capabilities.isWebGL2) {
-
-				context.getExtension("EXT_color_buffer_float");
-
-			} else {
-
-				context.getExtension("EXT_color_buffer_half_float");
-
-			}
-
-		}
-
-	}
-
 }

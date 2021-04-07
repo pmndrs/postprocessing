@@ -13,7 +13,7 @@
 
 #ifndef NORMAL_DEPTH
 
-	uniform sampler2D normalBuffer;
+	uniform lowp sampler2D normalBuffer;
 
 	// The depth texture is bound to normalDepthBuffer.
 	float readDepth(const in vec2 uv) {
@@ -32,7 +32,7 @@
 
 #endif
 
-uniform sampler2D noiseTexture;
+uniform lowp sampler2D noiseTexture;
 
 uniform mat4 inverseProjectionMatrix;
 uniform mat4 projectionMatrix;

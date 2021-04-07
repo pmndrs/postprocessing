@@ -12,7 +12,7 @@
 
 #ifdef DOWNSAMPLE_NORMALS
 
-	uniform sampler2D normalBuffer;
+	uniform lowp sampler2D normalBuffer;
 
 #endif
 
@@ -44,10 +44,9 @@ int findBestDepth(const in float samples[4]) {
 	// Calculate the centroid.
 	float c = (samples[0] + samples[1] + samples[2] + samples[3]) / 4.0;
 
-	float distances[4] = float[](
-		abs(c - samples[0]), abs(c - samples[1]),
-		abs(c - samples[2]), abs(c - samples[3])
-	);
+	float distances[4];
+	distances[0] = abs(c - samples[0]); distances[1] = abs(c - samples[1]);
+	distances[2] = abs(c - samples[2]); distances[3] = abs(c - samples[3]);
 
 	float maxDistance = max(
 		max(distances[0], distances[1]),
@@ -116,16 +115,18 @@ int findBestDepth(const in float samples[4]) {
 void main() {
 
 	// Gather depth samples in a 2x2 neighborhood.
-	float d[4] = float[](
-		readDepth(vUv0), readDepth(vUv1),
-		readDepth(vUv2), readDepth(vUv3)
-	);
+	float d[4];
+	d[0] = readDepth(vUv0); d[1] = readDepth(vUv1);
+	d[2] = readDepth(vUv2); d[3] = readDepth(vUv3);
 
 	int index = findBestDepth(d);
 
 	#ifdef DOWNSAMPLE_NORMALS
 
-		vec2 uvs[4] = vec2[](vUv0, vUv1, vUv2, vUv3);
+		vec2 uvs[4];
+		uvs[0] = vUv0; uvs[1] = vUv1;
+		uvs[2] = vUv2; uvs[3] = vUv3;
+
 		vec3 n = texture2D(normalBuffer, uvs[index]).rgb;
 
 	#else

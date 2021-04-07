@@ -1,7 +1,16 @@
-uniform sampler2D nearColorBuffer;
-uniform sampler2D farColorBuffer;
-uniform sampler2D nearCoCBuffer;
+#ifdef FRAMEBUFFER_PRECISION_HIGH
 
+	uniform mediump sampler2D nearColorBuffer;
+	uniform mediump sampler2D farColorBuffer;
+
+#else
+
+	uniform lowp sampler2D nearColorBuffer;
+	uniform lowp sampler2D farColorBuffer;
+
+#endif
+
+uniform lowp sampler2D nearCoCBuffer;
 uniform float scale;
 
 void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth, out vec4 outputColor) {

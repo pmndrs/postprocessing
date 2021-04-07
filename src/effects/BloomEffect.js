@@ -50,7 +50,7 @@ export class BloomEffect extends Effect {
 			blendFunction,
 
 			uniforms: new Map([
-				["texture", new Uniform(null)],
+				["map", new Uniform(null)],
 				["intensity", new Uniform(intensity)]
 			])
 
@@ -73,7 +73,7 @@ export class BloomEffect extends Effect {
 		this.renderTarget.texture.name = "Bloom.Target";
 		this.renderTarget.texture.generateMipmaps = false;
 
-		this.uniforms.get("texture").value = this.renderTarget.texture;
+		this.uniforms.get("map").value = this.renderTarget.texture;
 
 		/**
 		 * A blur pass.

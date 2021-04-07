@@ -1,7 +1,16 @@
 #include <common>
 #include <dithering_pars_fragment>
 
-uniform sampler2D inputBuffer;
+#ifdef FRAMEBUFFER_PRECISION_HIGH
+
+	uniform mediump sampler2D inputBuffer;
+
+#else
+
+	uniform lowp sampler2D inputBuffer;
+
+#endif
+
 uniform vec2 lightPosition;
 uniform float exposure;
 uniform float decay;

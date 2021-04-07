@@ -474,7 +474,7 @@ export class EffectComposer {
 	}
 
 	/**
-	 * Removes all passes without deleting them.
+	 * Removes all passes.
 	 */
 
 	removeAllPasses() {

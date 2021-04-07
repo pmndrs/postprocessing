@@ -86,7 +86,7 @@ export class GodRaysEffect extends Effect {
 			attributes: EffectAttribute.DEPTH,
 
 			uniforms: new Map([
-				["texture", new Uniform(null)]
+				["map", new Uniform(null)]
 			])
 
 		});
@@ -154,7 +154,7 @@ export class GodRaysEffect extends Effect {
 
 		this.renderTargetB = this.renderTargetA.clone();
 		this.renderTargetB.texture.name = "GodRays.Target.B";
-		this.uniforms.get("texture").value = this.renderTargetB.texture;
+		this.uniforms.get("map").value = this.renderTargetB.texture;
 
 		/**
 		 * A render target for the light scene.

@@ -125,6 +125,7 @@ export class SMAAEffect extends Effect {
 
 		const areaTexture = new Texture(areaImage);
 		areaTexture.name = "SMAA.Area";
+		areaTexture.magFilter = LinearFilter;
 		areaTexture.minFilter = LinearFilter;
 		areaTexture.format = RGBAFormat;
 		areaTexture.generateMipmaps = false;

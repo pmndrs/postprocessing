@@ -1,6 +1,6 @@
 {
 	"name": "postprocessing",
-	"version": "6.21.2",
+	"version": "6.21.3",
 	"description": "A post processing library that provides the means to implement image filter effects for three.js.",
 	"homepage": "https://github.com/vanruesc/postprocessing",
 	"main": "build/postprocessing.js",
@@ -71,7 +71,7 @@
 		"extends": "aether"
 	},
 	"peerDependencies": {
-		"three": ">= 0.102.0 < 0.127.0"
+		"three": ">= 0.102.0 < 0.128.0"
 	},
 	"devDependencies": {
 		"@types/three": "0.x.x",
@@ -92,10 +92,9 @@
 		"http-server": "0.x.x",
 		"npm-run-all": "4.x.x",
 		"spatial-controls": "4.x.x",
-		"three": "0.x.x",
+		"three": "0.126.x",
 		"three-demo": "5.x.x",
 		"tslib": "2.x.x",
-		"typescript": "4.x.x",
-		"yargs": "16.x.x"
+		"typescript": "4.x.x"
 	}
 }

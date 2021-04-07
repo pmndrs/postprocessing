@@ -1,3 +1,4 @@
+import { UnsignedByteType } from "three";
 import { Pass } from "./Pass";
 
 /**
@@ -86,6 +87,25 @@ export class ShaderPass extends Pass {
 
 		renderer.setRenderTarget(this.renderToScreen ? null : outputBuffer);
 		renderer.render(this.scene, this.camera);
+
+	}
+
+	/**
+	 * Performs initialization tasks.
+	 *
+	 * @param {WebGLRenderer} renderer - A renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel.
+	 * @param {Number} frameBufferType - The type of the main frame buffers.
+	 */
+
+	initialize(renderer, alpha, frameBufferType) {
+
+		if(frameBufferType !== undefined && frameBufferType !== UnsignedByteType) {
+
+			const material = this.getFullscreenMaterial();
+			material.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+
+		}
 
 	}
 

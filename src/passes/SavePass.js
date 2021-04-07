@@ -1,4 +1,10 @@
-import { LinearFilter, RGBFormat, UnsignedByteType, WebGLRenderTarget } from "three";
+import {
+	LinearFilter,
+	RGBFormat,
+	UnsignedByteType,
+	WebGLRenderTarget
+} from "three";
+
 import { CopyMaterial } from "../materials";
 import { Pass } from "./Pass";
 
@@ -124,6 +130,13 @@ export class SavePass extends Pass {
 		if(frameBufferType !== undefined) {
 
 			this.renderTarget.texture.type = frameBufferType;
+
+			if(frameBufferType !== UnsignedByteType) {
+
+				const material = this.getFullscreenMaterial();
+				material.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+
+			}
 
 		}
 

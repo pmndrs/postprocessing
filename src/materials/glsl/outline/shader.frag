@@ -1,4 +1,4 @@
-uniform sampler2D inputBuffer;
+uniform lowp sampler2D inputBuffer;
 
 varying vec2 vUv0;
 varying vec2 vUv1;

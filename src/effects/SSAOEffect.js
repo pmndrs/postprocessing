@@ -109,6 +109,10 @@ export class SSAOEffect extends Effect {
 			blendFunction,
 			attributes: EffectAttribute.DEPTH,
 
+			defines: new Map([
+				["THRESHOLD", "0.997"]
+			]),
+
 			uniforms: new Map([
 				["aoBuffer", new Uniform(null)],
 				["normalDepthBuffer", new Uniform(null)],
@@ -193,7 +197,6 @@ export class SSAOEffect extends Effect {
 
 					this.depthAwareUpsampling = depthAwareUpsampling;
 					this.uniforms.get("normalDepthBuffer").value = normalDepthBuffer;
-					this.defines.set("THRESHOLD", "0.997");
 
 				}
 

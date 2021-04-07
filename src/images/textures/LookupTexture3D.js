@@ -15,7 +15,7 @@ import {
 
 import { RawImageData } from "../RawImageData";
 import { LUTOperation } from "../lut/LUTOperation";
-import workerProgram from "../../../tmp/lut.worker";
+import workerProgram from "../../../tmp/lut/worker.txt";
 
 /**
  * A color.

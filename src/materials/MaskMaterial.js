@@ -1,4 +1,4 @@
-import { NoBlending, ShaderMaterial, Uniform } from "three";
+import { NoBlending, ShaderMaterial, Uniform, UnsignedByteType } from "three";
 import { ColorChannel } from "../core/ColorChannel";
 
 import fragmentShader from "./glsl/mask/shader.frag";
@@ -56,6 +56,15 @@ export class MaskMaterial extends ShaderMaterial {
 	set maskTexture(value) {
 
 		this.uniforms.maskTexture.value = value;
+		delete this.defines.MASK_PRECISION_HIGH;
+
+		if(value.type !== UnsignedByteType) {
+
+			this.defines.MASK_PRECISION_HIGH = "1";
+
+		}
+
+		this.needsUpdate = true;
 
 	}
 
