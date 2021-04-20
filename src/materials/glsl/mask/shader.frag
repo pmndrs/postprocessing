@@ -72,7 +72,7 @@ void main() {
 
 		#ifdef INVERTED
 
-			mask = (1.0 - mask);
+			mask = 1.0 - mask;
 
 		#endif
 
