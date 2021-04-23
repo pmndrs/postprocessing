@@ -18,7 +18,7 @@ specifiers:
   http-server: 0.x.x
   npm-run-all: 4.x.x
   spatial-controls: 4.x.x
-  three: 0.126.x
+  three: 0.x.x
   three-demo: 5.x.x
   tslib: 2.x.x
   typescript: 4.x.x
@@ -29,8 +29,8 @@ devDependencies:
   cpy-cli: 3.1.1
   dat.gui: 0.7.7
   del-cli: 3.0.1
-  esbuild: 0.11.12
-  esbuild-plugin-glsl: 1.0.3_esbuild@0.11.12
+  esbuild: 0.11.13
+  esbuild-plugin-glsl: 1.0.3_esbuild@0.11.13
   esdoc: 1.1.0
   esdoc-importpath-plugin: 1.0.2
   esdoc-standard-plugin: 1.0.0
@@ -40,9 +40,9 @@ devDependencies:
   esm: 3.2.25
   http-server: 0.12.3
   npm-run-all: 4.1.5
-  spatial-controls: 4.0.1_three@0.126.1
-  three: 0.126.1
-  three-demo: 5.0.3_dat.gui@0.7.7+three@0.126.1
+  spatial-controls: 4.0.2_three@0.128.0
+  three: 0.128.0
+  three-demo: 5.0.4_dat.gui@0.7.7+three@0.128.0
   tslib: 2.2.0
   typescript: 4.2.4
 
@@ -412,7 +412,7 @@ packages:
       arrgv: 1.0.2
       arrify: 2.0.1
       callsites: 3.1.0
-      chalk: 4.1.0
+      chalk: 4.1.1
       chokidar: 3.5.1
       chunkd: 2.0.1
       ci-info: 2.0.0
@@ -440,7 +440,7 @@ packages:
       lodash: 4.17.21
       matcher: 3.0.0
       md5-hex: 3.0.1
-      mem: 8.1.0
+      mem: 8.1.1
       ms: 2.1.3
       ora: 5.4.0
       p-event: 4.2.0
@@ -608,7 +608,7 @@ packages:
     dependencies:
       ansi-align: 3.0.0
       camelcase: 6.2.0
-      chalk: 4.1.0
+      chalk: 4.1.1
       cli-boxes: 2.2.1
       string-width: 4.2.2
       type-fest: 0.20.2
@@ -745,8 +745,8 @@ packages:
       supports-color: 5.5.0
     dev: true
 
-  /chalk/4.1.0:
-    resolution: {integrity: sha512-qwx12AxXe2Q5xQ43Ac//I6v5aXTipYrSESdOgzrN+9XjgEpyjpKuvSGaN4qE93f7TQTlerQQ8S+EQ0EyDoVL1A==}
+  /chalk/4.1.1:
+    resolution: {integrity: sha512-diHzdDKxcU+bAsUboHLPEDQiw0qEe0qd7SYUn3HgcFlWgbDcfLGswOHYeGrHKzG9z6UYf01d9VFMfZxPM1xZSg==}
     engines: {node: '>=10'}
     dependencies:
       ansi-styles: 4.3.0
@@ -1008,8 +1008,8 @@ packages:
     requiresBuild: true
     dev: true
 
-  /core-js/3.10.2:
-    resolution: {integrity: sha512-W+2oVYeNghuBr3yTzZFQ5rfmjZtYB/Ubg87R5YOmlGrIb+Uw9f7qjUbhsj+/EkXhcV7eOD3jiM4+sgraX3FZUw==}
+  /core-js/3.11.0:
+    resolution: {integrity: sha512-bd79DPpx+1Ilh9+30aT5O1sgpQd4Ttg8oqkqi51ZzhedMM1omD2e6IOF48Z/DzDCZ2svp49tN/3vneTK6ZBkXw==}
     requiresBuild: true
     dev: true
 
@@ -1452,17 +1452,17 @@ packages:
       is-symbol: 1.0.3
     dev: true
 
-  /esbuild-plugin-glsl/1.0.3_esbuild@0.11.12:
+  /esbuild-plugin-glsl/1.0.3_esbuild@0.11.13:
     resolution: {integrity: sha512-wkoCLCnjoDn8QkClWJK9XnX3VDfId+clqlQ4tkKS32pGzAroAGnmnIpdID5jIDkHsjvHXRK76/1hhUrtLLnCsQ==}
     engines: {node: '>= 0.10.18'}
     peerDependencies:
       esbuild: 0.x.x
     dependencies:
-      esbuild: 0.11.12
+      esbuild: 0.11.13
     dev: true
 
-  /esbuild/0.11.12:
-    resolution: {integrity: sha512-c8cso/1RwVj+fbDvLtUgSG4ZJQ0y9Zdrl6Ot/GAjyy4pdMCHaFnDMts5gqFnWRPLajWtEnI+3hlET4R9fVoZng==}
+  /esbuild/0.11.13:
+    resolution: {integrity: sha512-d5coY4dd4rVWle0WzrR8+32ukKtZroVJ/wJzOwbBEmoSFB/H3QME0l+3IAN5Sf3LtuoUSivdv1/b5rD7OykXeg==}
     hasBin: true
     requiresBuild: true
     dev: true
@@ -1654,7 +1654,7 @@ packages:
       eslint: '>=7 <8.0.0'
     dependencies:
       chokidar: 3.5.1
-      core-js: 3.10.2
+      core-js: 3.11.0
       debug: 4.3.1
       eslint: 7.24.0
       execa: 4.1.0
@@ -1678,7 +1678,7 @@ packages:
       '@babel/code-frame': 7.12.11
       '@eslint/eslintrc': 0.4.0
       ajv: 6.12.6
-      chalk: 4.1.0
+      chalk: 4.1.1
       cross-spawn: 7.0.3
       debug: 4.3.1
       doctrine: 3.0.0
@@ -1709,7 +1709,7 @@ packages:
       semver: 7.3.5
       strip-ansi: 6.0.0
       strip-json-comments: 3.1.1
-      table: 6.3.0
+      table: 6.3.4
       text-table: 0.2.0
       v8-compile-cache: 2.3.0
     transitivePeerDependencies:
@@ -3033,7 +3033,7 @@ packages:
     resolution: {integrity: sha512-8XPvpAA8uyhfteu8pIvQxpJZ7SYYdpUivZpGy6sFsBuKRY/7rQGavedeB8aK+Zkyq6upMFVL/9AW6vOYzfRyLg==}
     engines: {node: '>=10'}
     dependencies:
-      chalk: 4.1.0
+      chalk: 4.1.1
       is-unicode-supported: 0.1.0
     dev: true
 
@@ -3117,8 +3117,8 @@ packages:
       blueimp-md5: 2.18.0
     dev: true
 
-  /mem/8.1.0:
-    resolution: {integrity: sha512-FIkgXo0kTi3XpvaznV5Muk6Y6w8SkdmRXcY7ZLonQesuYezp59UooLxAVBcGuN6PH2tXN84mR3vyzSc6oSMUfA==}
+  /mem/8.1.1:
+    resolution: {integrity: sha512-qFCFUDs7U3b8mBDPyz5EToEKoAkgCzqquIgi9nkkR9bixxOVOre+09lbuH7+9Kn2NFpm56M3GUWVbU2hQgdACA==}
     engines: {node: '>=10'}
     dependencies:
       map-age-cleaner: 0.1.3
@@ -3450,7 +3450,7 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       bl: 4.1.0
-      chalk: 4.1.0
+      chalk: 4.1.1
       cli-cursor: 3.1.0
       cli-spinners: 2.6.0
       is-interactive: 1.0.0
@@ -4219,13 +4219,13 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /spatial-controls/4.0.1_three@0.126.1:
-    resolution: {integrity: sha512-OJC+wZgIIqhnNUPpbxGxrIAAAHYpGX/oShjkYUmKxZ3y10mbfvlU1ZM2lV5fnVsyvDnsu/yCHbTfqCi8lajTrw==}
+  /spatial-controls/4.0.2_three@0.128.0:
+    resolution: {integrity: sha512-LPkv4ZubxL81ToeJSfMKbmhuSaN2pWftl64jjNfmHS6tbCt3yq8A8jvscls6xFNLEbMcWNRmqGAVysKS9M86hw==}
     engines: {node: '>= 0.14.0'}
     peerDependencies:
-      three: '>= 0.126.0 < 0.128.0'
+      three: '>= 0.126.0 < 0.129.0'
     dependencies:
-      three: 0.126.1
+      three: 0.128.0
     dev: true
 
   /spdx-correct/3.1.1:
@@ -4427,14 +4427,11 @@ packages:
     dev: true
     optional: true
 
-  /table/6.3.0:
-    resolution: {integrity: sha512-gM9kB7aNIuSagW89Fh+SdL49uhKnVSORxMcV72u/dfptFdqExInNn5M21wgq/Uf5UdJpsboFhNe/0SoNKjaxzg==}
+  /table/6.3.4:
+    resolution: {integrity: sha512-fhKcZ3+oAYG/ld3seJEZ9+fGSsy+yeoPzLQUrwbOzNYdhrU+6TzObhJ2Sp76ZfUGIrDTrxsXz5NSCZJIUOJb4Q==}
     engines: {node: '>=10.0.0'}
     dependencies:
       ajv: 8.1.0
-      is-boolean-object: 1.1.0
-      is-number-object: 1.0.4
-      is-string: 1.0.5
       lodash.clonedeep: 4.5.0
       lodash.flatten: 4.4.0
       lodash.truncate: 4.4.2
@@ -4459,19 +4456,19 @@ packages:
     resolution: {integrity: sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=}
     dev: true
 
-  /three-demo/5.0.3_dat.gui@0.7.7+three@0.126.1:
-    resolution: {integrity: sha512-rB0X+s92h+Xk4mp2G7J8dEBZMCo+z+n2E1T4Ibb+aCGAmNGlLLWIbALMXuhAuJ4Z+2vBuNG5Y8RfrFM+k+ilOQ==}
+  /three-demo/5.0.4_dat.gui@0.7.7+three@0.128.0:
+    resolution: {integrity: sha512-cVSvByeIpaMEEpbsTvPI57+mz3Aphv5mnNawMXNcXqUasPhv1UKfCcyq7TcpsSIqEvB3JTFtOcjfvoAj99MJug==}
     engines: {node: '>= 0.14.0'}
     peerDependencies:
       dat.gui: '>= 0.0.0 < 1.0.0'
-      three: '>= 0.126.0 < 0.128.0'
+      three: '>= 0.126.0 < 0.129.0'
     dependencies:
       dat.gui: 0.7.7
-      three: 0.126.1
+      three: 0.128.0
     dev: true
 
-  /three/0.126.1:
-    resolution: {integrity: sha512-eOEXnZeE1FDV0XgL1u08auIP13jxdN9LQBAEmlErYzMxtIIfuGIAZbijOyookALUhqVzVOx0Tywj6n192VM+nQ==}
+  /three/0.128.0:
+    resolution: {integrity: sha512-i0ap/E+OaSfzw7bD1TtYnPo3VEplkl70WX5fZqZnfZsE3k3aSFudqrrC9ldFZfYFkn1zwDmBcdGfiIm/hnbyZA==}
     dev: true
 
   /time-zone/1.0.0:
@@ -4669,7 +4666,7 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       boxen: 5.0.1
-      chalk: 4.1.0
+      chalk: 4.1.1
       configstore: 5.0.1
       has-yarn: 2.1.0
       import-lazy: 2.1.0
