@@ -198,7 +198,7 @@ export class AntialiasingDemo extends PostProcessingDemo {
 			EdgeDetectionMode.COLOR
 		);
 
-		smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.05);
+		smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.02);
 		smaaEffect.edgeDetectionMaterial.setPredicationMode(PredicationMode.DEPTH);
 		smaaEffect.edgeDetectionMaterial.setPredicationThreshold(0.002);
 		smaaEffect.edgeDetectionMaterial.setPredicationScale(1.0);
@@ -360,7 +360,7 @@ export class AntialiasingDemo extends PostProcessingDemo {
 		folder.add(params.smaa, "preset", SMAAPreset).onChange((value) => {
 
 			smaaEffect.applyPreset(Number(value));
-			params.edgeDetection.threshold = Number(edgeDetectionMaterial.defines.EDGE_THRESHOLD);
+			edgeDetectionMaterial.setEdgeDetectionThreshold(params.edgeDetection.threshold);
 
 		});
 
@@ -382,7 +382,7 @@ export class AntialiasingDemo extends PostProcessingDemo {
 
 			edgeDetectionMaterial.setEdgeDetectionThreshold(Number(value));
 
-		}).listen();
+		});
 
 		subfolder = folder.addFolder("Predicated Thresholding");
 

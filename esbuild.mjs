@@ -6,7 +6,7 @@ const require = createRequire(import.meta.url);
 const pkg = require("./package");
 const date = (new Date()).toDateString();
 const external = Object.keys(pkg.peerDependencies || {});
-const minify = (process.env.NODE_ENV === "production");
+const minify = process.argv.includes("-m");
 const watch = process.argv.includes("-w");
 const plugins = [glsl({ minify })];
 const banner = `/**

@@ -1,6 +1,6 @@
 {
 	"name": "postprocessing",
-	"version": "6.21.3",
+	"version": "6.21.4",
 	"description": "A post processing library that provides the means to implement image filter effects for three.js.",
 	"homepage": "https://github.com/vanruesc/postprocessing",
 	"main": "build/postprocessing.js",
@@ -43,7 +43,7 @@
 	"scripts": {
 		"ava": "ava",
 		"build": "run-s build:*",
-		"build:js": "cross-env NODE_ENV=production node esbuild.mjs",
+		"build:js": "node esbuild.mjs -m",
 		"clean": "del-cli build public tmp",
 		"copy": "cpy --cwd=demo/static --parents \"**/*\" \"../../public/demo\"",
 		"deploy": "run-s copy lint build doc",
@@ -71,13 +71,12 @@
 		"extends": "aether"
 	},
 	"peerDependencies": {
-		"three": ">= 0.102.0 < 0.128.0"
+		"three": ">= 0.102.0 < 0.129.0"
 	},
 	"devDependencies": {
 		"@types/three": "0.x.x",
 		"ava": "3.x.x",
 		"cpy-cli": "3.x.x",
-		"cross-env": "7.x.x",
 		"dat.gui": "0.x.x",
 		"del-cli": "3.x.x",
 		"esbuild": "0.x.x",
@@ -92,7 +91,7 @@
 		"http-server": "0.x.x",
 		"npm-run-all": "4.x.x",
 		"spatial-controls": "4.x.x",
-		"three": "0.126.x",
+		"three": "0.x.x",
 		"three-demo": "5.x.x",
 		"tslib": "2.x.x",
 		"typescript": "4.x.x"

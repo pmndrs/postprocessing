@@ -16,8 +16,8 @@ import fragmentShader from "./glsl/tone-mapping/shader.frag";
 /**
  * A tone mapping effect.
  *
- * Requires support for `EXT_shader_texture_lod` and
- * `EXT_color_buffer_half_float`.
+ * Note: `ToneMappingMode.REINHARD2_ADAPTIVE` requires support for
+ * `EXT_shader_texture_lod` and `EXT_color_buffer_half_float`.
  *
  * Reference:
  * GDC2007 - Wolfgang Engel, Post-Processing Pipeline

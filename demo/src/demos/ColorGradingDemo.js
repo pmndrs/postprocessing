@@ -188,6 +188,7 @@ export class ColorGradingDemo extends PostProcessingDemo {
 							t.magFilter = LinearFilter;
 							t.wrapS = ClampToEdgeWrapping;
 							t.wrapT = ClampToEdgeWrapping;
+							t.unpackAlignment = 1;
 							t.flipY = false;
 
 							assets.set(entry[0], t);

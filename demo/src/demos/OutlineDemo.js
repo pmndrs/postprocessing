@@ -328,6 +328,7 @@ export class OutlineDemo extends PostProcessingDemo {
 			})
 		);
 
+		mesh.rotation.y = 2.2;
 		scene.add(mesh);
 		meshes.push(mesh);
 		selection.push(mesh);

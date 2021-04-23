@@ -39,7 +39,7 @@ export class DepthOfFieldEffect extends Effect {
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
 	 * @param {Number} [options.focusDistance=0.0] - The normalized focus distance. Range is [0.0, 1.0].
-	 * @param {Number} [options.focalLength=0.05] - The focal length. Range is [0.0, 1.0].
+	 * @param {Number} [options.focalLength=0.1] - The focal length. Range is [0.0, 1.0].
 	 * @param {Number} [options.bokehScale=1.0] - The scale of the bokeh blur.
 	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
 	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
@@ -184,7 +184,7 @@ export class DepthOfFieldEffect extends Effect {
 
 		this.maskPass = new ShaderPass(new MaskMaterial(this.renderTargetCoC.texture));
 		const maskMaterial = this.maskPass.getFullscreenMaterial();
-		maskMaterial.maskFunction = MaskFunction.MULTIPLY_RGB_SET_ALPHA;
+		maskMaterial.maskFunction = MaskFunction.MULTIPLY;
 		maskMaterial.colorChannel = ColorChannel.GREEN;
 
 		/**
