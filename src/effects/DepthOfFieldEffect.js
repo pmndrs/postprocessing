@@ -184,7 +184,7 @@ export class DepthOfFieldEffect extends Effect {
 
 		this.maskPass = new ShaderPass(new MaskMaterial(this.renderTargetCoC.texture));
 		const maskMaterial = this.maskPass.getFullscreenMaterial();
-		maskMaterial.maskFunction = MaskFunction.MULTIPLY_RGB_SET_ALPHA;
+		maskMaterial.maskFunction = MaskFunction.MULTIPLY;
 		maskMaterial.colorChannel = ColorChannel.GREEN;
 
 		/**
@@ -455,10 +455,6 @@ export class DepthOfFieldEffect extends Effect {
 
 		// The blur pass operates on the CoC buffer.
 		this.blurPass.initialize(renderer, alpha, UnsignedByteType);
-
-		const maskMaterial = this.maskPass.getFullscreenMaterial();
-		maskMaterial.maskFunction = alpha ? MaskFunction.MULTIPLY :
-			MaskFunction.MULTIPLY_RGB_SET_ALPHA;
 
 		if(!alpha && frameBufferType === UnsignedByteType) {
 
