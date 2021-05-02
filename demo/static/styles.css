@@ -147,6 +147,12 @@ p {
 	user-select: none;
 }
 
+.dg ul {
+	max-height: 80vh;
+	overflow: auto;
+	scrollbar-width: thin;
+}
+
 .dg select {
 	max-width: 100%;
 }
