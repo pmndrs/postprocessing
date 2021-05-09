@@ -1,6 +1,7 @@
 import {
 	AmbientLight,
 	Color,
+	Fog,
 	Group,
 	Mesh,
 	MeshBasicMaterial,
@@ -151,6 +152,10 @@ export class GodRaysDemo extends PostProcessingDemo {
 		// Sky
 
 		scene.background = new Color(0x000000);
+
+		// Fog
+
+		scene.fog = new Fog(0x000000, 1, 30);
 
 		// Lights
 
