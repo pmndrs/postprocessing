@@ -40,7 +40,7 @@ export class OverrideMaterialManager {
 		this.originalMaterials = new Map();
 
 		/**
-		 * The override material.
+		 * The main override material.
 		 *
 		 * @type {Material}
 		 * @private
@@ -49,7 +49,7 @@ export class OverrideMaterialManager {
 		this.material = null;
 
 		/**
-		 * Override materials for meshes that use standard front side triangles.
+		 * Override materials for meshes with front side triangles.
 		 *
 		 * @type {Material[]}
 		 * @private
@@ -58,7 +58,7 @@ export class OverrideMaterialManager {
 		this.materials = null;
 
 		/**
-		 * Override materials for meshes that use back side triangles.
+		 * Override materials for meshes with back side triangles.
 		 *
 		 * @type {Material[]}
 		 * @private
@@ -67,13 +67,40 @@ export class OverrideMaterialManager {
 		this.materialsBackSide = null;
 
 		/**
-		 * Override materials for meshes that use double sided triangles.
+		 * Override materials for meshes with double sided triangles.
 		 *
 		 * @type {Material[]}
 		 * @private
 		 */
 
 		this.materialsDoubleSide = null;
+
+		/**
+		 * Override materials for flat shaded meshes with front side triangles.
+		 *
+		 * @type {Material[]}
+		 * @private
+		 */
+
+		this.materialsFlatShaded = null;
+
+		/**
+		 * Override materials for flat shaded meshes with back side triangles.
+		 *
+		 * @type {Material[]}
+		 * @private
+		 */
+
+		this.materialsFlatShadedBackSide = null;
+
+		/**
+		 * Override materials for flat shaded meshes with double sided triangles.
+		 *
+		 * @type {Material[]}
+		 * @private
+		 */
+
+		this.materialsFlatShadedDoubleSide = null;
 
 		this.setMaterial(material);
 
@@ -99,19 +126,41 @@ export class OverrideMaterialManager {
 
 				let materials;
 
-				switch(node.material.side) {
+				if(node.material.flatShading) {
 
-					case DoubleSide:
-						materials = this.materialsDoubleSide;
-						break;
+					switch(node.material.side) {
 
-					case BackSide:
-						materials = this.materialsBackSide;
-						break;
+						case DoubleSide:
+							materials = this.materialsFlatShadedDoubleSide;
+							break;
 
-					default:
-						materials = this.materials;
-						break;
+						case BackSide:
+							materials = this.materialsFlatShadedBackSide;
+							break;
+
+						default:
+							materials = this.materialsFlatShaded;
+							break;
+
+					}
+
+				} else {
+
+					switch(node.material.side) {
+
+						case DoubleSide:
+							materials = this.materialsDoubleSide;
+							break;
+
+						case BackSide:
+							materials = this.materialsBackSide;
+							break;
+
+						default:
+							materials = this.materials;
+							break;
+
+					}
 
 				}
 
@@ -152,13 +201,14 @@ export class OverrideMaterialManager {
 
 		if(material !== null) {
 
-			// Create materials for simple, skinned and instanced meshes.
+			// Create materials for simple, instanced and skinned meshes.
 			const materials = this.materials = [
 				material.clone(),
 				material.clone(),
 				material.clone()
 			];
 
+			// FrontSide
 			for(const m of materials) {
 
 				m.uniforms = Object.assign({}, material.uniforms);
@@ -168,7 +218,7 @@ export class OverrideMaterialManager {
 
 			materials[2].skinning = true;
 
-			// Create additional materials for meshes that use BackSide.
+			// BackSide
 			this.materialsBackSide = materials.map((m) => {
 
 				const c = m.clone();
@@ -178,11 +228,43 @@ export class OverrideMaterialManager {
 
 			});
 
-			// Create additional materials for meshes that use DoubleSide.
+			// DoubleSide
 			this.materialsDoubleSide = materials.map((m) => {
 
 				const c = m.clone();
 				c.uniforms = Object.assign({}, material.uniforms);
+				c.side = DoubleSide;
+				return c;
+
+			});
+
+			// FrontSide & flatShading
+			this.materialsFlatShaded = materials.map((m) => {
+
+				const c = m.clone();
+				c.uniforms = Object.assign({}, material.uniforms);
+				c.flatShading = true;
+				return c;
+
+			});
+
+			// BackSide & flatShading
+			this.materialsFlatShadedBackSide = materials.map((m) => {
+
+				const c = m.clone();
+				c.uniforms = Object.assign({}, material.uniforms);
+				c.flatShading = true;
+				c.side = BackSide;
+				return c;
+
+			});
+
+			// DoubleSide & flatShading
+			this.materialsFlatShadedDoubleSide = materials.map((m) => {
+
+				const c = m.clone();
+				c.uniforms = Object.assign({}, material.uniforms);
+				c.flatShading = true;
 				c.side = DoubleSide;
 				return c;
 
@@ -252,7 +334,10 @@ export class OverrideMaterialManager {
 
 			const materials = this.materials
 				.concat(this.materialsBackSide)
-				.concat(this.materialsDoubleSide);
+				.concat(this.materialsDoubleSide)
+				.concat(this.materialsFlatShaded)
+				.concat(this.materialsFlatShadedBackSide)
+				.concat(this.materialsFlatShadedDoubleSide);
 
 			for(const m of materials) {
 
