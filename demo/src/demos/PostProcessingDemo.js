@@ -19,7 +19,7 @@ export class PostProcessingDemo extends Demo {
 		super(id);
 
 		/**
-		 * Spatial controls
+		 * Spatial controls.
 		 *
 		 * @type {SpatialControls}
 		 * @protected

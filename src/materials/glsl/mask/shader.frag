@@ -50,19 +50,13 @@ void main() {
 
 		#ifdef INVERTED
 
-			if(mask > 0.0) {
-
-				discard;
-
-			}
+			// (mask > 0.0) ? 0.0 : 1.0;
+			mask = step(mask, 0.0);
 
 		#else
 
-			if(mask == 0.0) {
-
-				discard;
-
-			}
+			// (mask > 0.0) ? 1.0 : 0.0;
+			mask = 1.0 - step(mask, 0.0);
 
 		#endif
 
@@ -76,15 +70,17 @@ void main() {
 
 		#endif
 
-		#if MASK_FUNCTION == 1
+	#endif
 
-			gl_FragColor = mask * texture2D(inputBuffer, vUv);
+	#if MASK_FUNCTION == 2
 
-		#else
+		// MULTIPLY_RGB_SET_ALPHA
+		gl_FragColor = vec4(mask * texture2D(inputBuffer, vUv).rgb, mask);
 
-			gl_FragColor = vec4(mask * texture2D(inputBuffer, vUv).rgb, mask);
+	#else
 
-		#endif
+		// DISCARD / MULTIPLY
+		gl_FragColor = mask * texture2D(inputBuffer, vUv);
 
 	#endif
 

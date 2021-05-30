@@ -76,7 +76,7 @@ function render(timestamp) {
 
 window.addEventListener("load", (event) => {
 
-	const debug = (window.location.href.indexOf("localhost") !== -1);
+	const debug = (window.location.hostname === "localhost");
 	const viewport = document.getElementById("viewport");
 	const demoCache = new WeakSet();
 

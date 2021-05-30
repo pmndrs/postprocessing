@@ -148,7 +148,7 @@ p {
 }
 
 .dg ul {
-	max-height: 80vh;
+	max-height: calc(100vh - 20px);
 	overflow: auto;
 	scrollbar-width: thin;
 }
