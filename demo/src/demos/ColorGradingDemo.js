@@ -332,7 +332,9 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const capabilities = this.composer.getRenderer().capabilities;
+		const renderer = this.composer.getRenderer();
+		const context = renderer.getContext();
+		const capabilities = renderer.capabilities;
 		const assets = this.assets;
 		const luts = this.luts;
 
@@ -445,6 +447,13 @@ export class ColorGradingDemo extends PostProcessingDemo {
 				params.lut["base size"] = size;
 
 				if(capabilities.isWebGL2) {
+
+					if(context.getExtension("OES_texture_float_linear") === null) {
+
+						console.log("Linear float filtering not supported, converting to Uint8");
+						lut.convertToUint8();
+
+					}
 
 					lutEffect.setLUT(params.lut["3D texture"] ? lut : lut.toDataTexture());
 
