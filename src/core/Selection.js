@@ -27,6 +27,15 @@ export class Selection extends Set {
 
 		this.currentLayer = layer;
 
+		/**
+		 * Controls whether objects that are added to this selection should be
+		 * removed from all other layers.
+		 *
+		 * @type {Boolean}
+		 */
+
+		this.exclusive = false;
+
 		if(iterable !== undefined) {
 
 			this.set(iterable);
@@ -119,7 +128,7 @@ export class Selection extends Set {
 	 *
 	 * @param {Object3D} object - An object.
 	 * @return {Number} Returns 0 if the given object is currently selected, or -1 otherwise.
-	 * @deprecated Added for backward compatibility. Use has instead.
+	 * @deprecated Added for backward compatibility. Use `has` instead.
 	 */
 
 	indexOf(object) {
@@ -131,16 +140,26 @@ export class Selection extends Set {
 	/**
 	 * Adds an object to this selection.
 	 *
+	 * If {@link exclusive} is set to `true`, the object will also be removed from
+	 * all other layers.
+	 *
 	 * @param {Object3D} object - The object that should be selected.
 	 * @return {Selection} This selection.
 	 */
 
 	add(object) {
 
-		object.layers.enable(this.layer);
-		super.add(object);
+		if(this.exclusive) {
 
-		return this;
+			object.layers.set(this.layer);
+
+		} else {
+
+			object.layers.enable(this.layer);
+
+		}
+
+		return super.add(object);
 
 	}
 
