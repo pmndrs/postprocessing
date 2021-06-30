@@ -37,6 +37,7 @@ export class EffectComposer {
 	 * @param {Object} [options] - The options.
 	 * @param {Boolean} [options.depthBuffer=true] - Whether the main render targets should have a depth buffer.
 	 * @param {Boolean} [options.stencilBuffer=false] - Whether the main render targets should have a stencil buffer.
+	 * @param {Boolean} [options.alpha] - Whether the main render targets should always be RGBA buffers.
 	 * @param {Number} [options.multisampling=0] - The number of samples used for multisample antialiasing. Requires WebGL 2.
 	 * @param {Number} [options.frameBufferType] - The type of the internal frame buffers. It's recommended to use HalfFloatType if possible.
 	 */
@@ -44,6 +45,7 @@ export class EffectComposer {
 	constructor(renderer = null, {
 		depthBuffer = true,
 		stencilBuffer = false,
+		alpha = false,
 		multisampling = 0,
 		frameBufferType
 	} = {}) {
@@ -94,6 +96,15 @@ export class EffectComposer {
 		 */
 
 		this.copyPass = new ShaderPass(new CopyMaterial());
+
+		/**
+		 * Indicates whether the frame buffers should use `RGBAFormat`.
+		 *
+		 * @type {Boolean}
+		 * @private
+		 */
+
+		this.alpha = alpha;
 
 		/**
 		 * A depth texture.
@@ -301,7 +312,8 @@ export class EffectComposer {
 	 *
 	 * The created render target uses a linear filter for texel minification and
 	 * magnification. Its render texture format depends on whether the renderer
-	 * uses the alpha channel. Mipmaps are disabled.
+	 * uses the alpha channel, unless the `alpha` constructor parameter was set
+	 * to `true`. Mipmaps are disabled.
 	 *
 	 * Note: The buffer format will also be set to RGBA if the frame buffer type
 	 * is HalfFloatType because RGB16F buffers are not renderable.
@@ -315,8 +327,10 @@ export class EffectComposer {
 
 	createBuffer(depthBuffer, stencilBuffer, type, multisampling) {
 
-		const size = this.renderer.getDrawingBufferSize(new Vector2());
-		const alpha = this.renderer.getContext().getContextAttributes().alpha;
+		const renderer = this.renderer;
+		const context = renderer.getContext();
+		const size = renderer.getDrawingBufferSize(new Vector2());
+		const alpha = this.alpha || context.getContextAttributes().alpha;
 
 		const options = {
 			format: (!alpha && type === UnsignedByteType) ? RGBFormat : RGBAFormat,

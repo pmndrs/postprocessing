@@ -1,6 +1,6 @@
 {
 	"name": "postprocessing",
-	"version": "6.22.0",
+	"version": "6.22.1",
 	"description": "A post processing library that provides the means to implement image filter effects for three.js.",
 	"homepage": "https://github.com/vanruesc/postprocessing",
 	"main": "build/postprocessing.js",
@@ -50,9 +50,9 @@
 		"dev": "run-s clean copy && run-p start watch",
 		"doc": "esdoc",
 		"lint": "eslint --ext .js --fix src demo/src",
-		"prepublishOnly": "run-s clean test doc",
-		"test": "run-s lint build ava",
-		"start": "hs -s",
+		"prepublishOnly": "run-s test doc",
+		"test": "run-s lint clean build ava",
+		"start": "serve public",
 		"watch": "run-p watch:*",
 		"watch:eslint": "esw -w --ext .js --color src demo/src",
 		"watch:js": "node esbuild.mjs -w"
@@ -70,14 +70,14 @@
 		"extends": "aether"
 	},
 	"peerDependencies": {
-		"three": ">= 0.102.0 < 0.130.0"
+		"three": ">= 0.102.0 < 0.131.0"
 	},
 	"devDependencies": {
 		"@types/three": "0.x.x",
 		"ava": "3.x.x",
 		"cpy-cli": "3.x.x",
 		"dat.gui": "0.x.x",
-		"del-cli": "3.x.x",
+		"del-cli": "4.x.x",
 		"esbuild": "0.x.x",
 		"esbuild-plugin-glsl": "1.x.x",
 		"esdoc": "1.x.x",
@@ -87,8 +87,8 @@
 		"eslint-config-aether": "1.x.x",
 		"eslint-watch": "7.x.x",
 		"esm": "3.x.x",
-		"http-server": "0.x.x",
 		"npm-run-all": "4.x.x",
+		"serve": "12.x.x",
 		"spatial-controls": "4.x.x",
 		"three": "0.x.x",
 		"three-demo": "5.x.x",
