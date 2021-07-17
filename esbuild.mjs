@@ -23,6 +23,7 @@ await esbuild.build({
 	],
 	outExtension: { ".js": ".txt" },
 	outdir: "tmp",
+	target: "es6",
 	logLevel: "info",
 	format: "iife",
 	bundle: true,
@@ -33,6 +34,7 @@ await esbuild.build({
 await esbuild.build({
 	entryPoints: ["demo/src/index.js"],
 	outdir: "public/demo",
+	target: "es6",
 	logLevel: "info",
 	format: "iife",
 	bundle: true,
