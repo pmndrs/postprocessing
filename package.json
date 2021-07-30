@@ -40,6 +40,9 @@
 	"files": [
 		"build"
 	],
+	"engines": {
+		"node": ">= 0.13.2"
+	},
 	"scripts": {
 		"ava": "ava",
 		"build": "run-s build:*",
