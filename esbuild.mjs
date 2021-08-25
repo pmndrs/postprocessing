@@ -45,7 +45,7 @@ await esbuild.build({
 
 await esbuild.build({
 	entryPoints: ["src/index.js"],
-	outfile: `build/${pkg.name}.esm.js`,
+	outfile: `build/${pkg.name}.mjs`,
 	banner: { js: banner },
 	logLevel: "info",
 	format: "esm",
