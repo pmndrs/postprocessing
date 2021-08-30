@@ -46,13 +46,6 @@ export class PostProcessingDemo extends Demo {
 
 	}
 
-	/**
-	 * Renders this demo.
-	 *
-	 * @param {Number} deltaTime - The time since the last frame in seconds.
-	 * @param {Number} timestamp - The current time in milliseconds.
-	 */
-
 	render(deltaTime, timestamp) {
 
 		if(this.controls !== null) {
@@ -64,12 +57,6 @@ export class PostProcessingDemo extends Demo {
 		this.composer.render(deltaTime);
 
 	}
-
-	/**
-	 * Resets this demo.
-	 *
-	 * @return {Demo} This demo.
-	 */
 
 	reset() {
 

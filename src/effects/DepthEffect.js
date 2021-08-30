@@ -19,7 +19,10 @@ export class DepthEffect extends Effect {
 	 * @param {Boolean} [options.inverted=false] - Whether the depth values should be inverted.
 	 */
 
-	constructor({ blendFunction = BlendFunction.NORMAL, inverted = false } = {}) {
+	constructor({
+		blendFunction = BlendFunction.NORMAL,
+		inverted = false
+	} = {}) {
 
 		super("DepthEffect", fragmentShader, {
 

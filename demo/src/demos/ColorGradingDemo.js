@@ -9,6 +9,7 @@ import {
 } from "three";
 
 import { SpatialControls } from "spatial-controls";
+import { calculateVerticalFoV } from "three-demo";
 import { ProgressManager } from "../utils/ProgressManager";
 import { PostProcessingDemo } from "./PostProcessingDemo";
 
@@ -33,7 +34,7 @@ import {
 } from "../../../src";
 
 /**
- * A color grading demo setup.
+ * A color grading demo.
  */
 
 export class ColorGradingDemo extends PostProcessingDemo {
@@ -122,12 +123,6 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Loads scene assets.
-	 *
-	 * @return {Promise} A promise that returns a collection of assets.
-	 */
-
 	load() {
 
 		const luts = this.luts;
@@ -138,7 +133,8 @@ export class ColorGradingDemo extends PostProcessingDemo {
 		const lutCubeLoader = new LUTCubeLoader(loadingManager);
 		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
-		const anisotropy = Math.min(this.composer.getRenderer().capabilities.getMaxAnisotropy(), 8);
+		const anisotropy = Math.min(this.composer.getRenderer()
+			.capabilities.getMaxAnisotropy(), 8);
 
 		return new Promise((resolve, reject) => {
 
@@ -146,7 +142,7 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 				loadingManager.onLoad = () => setTimeout(resolve, 250);
 				loadingManager.onProgress = ProgressManager.updateProgress;
-				loadingManager.onError = (url) => console.error(`Failed to load ${url}`);
+				loadingManager.onError = url => console.error(`Failed to load ${url}`);
 
 				Sponza.load(assets, loadingManager, anisotropy);
 
@@ -216,30 +212,31 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Creates the scene.
-	 */
-
 	initialize() {
 
 		const scene = this.scene;
 		const assets = this.assets;
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
+		const domElement = renderer.domElement;
 		const capabilities = renderer.capabilities;
 
 		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
-		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
+		const vFoV = calculateVerticalFoV(90, Math.max(aspect, 16 / 9));
+		const camera = new PerspectiveCamera(vFoV, aspect, 0.3, 2000);
 		this.camera = camera;
 
 		// Controls
 
-		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
+		const { position, quaternion } = camera;
+		const controls = new SpatialControls(position, quaternion, domElement);
 		const settings = controls.settings;
 		settings.rotation.setSensitivity(2.2);
+		settings.rotation.setDamping(0.05);
 		settings.translation.setSensitivity(3.0);
+		settings.translation.setDamping(0.1);
 		controls.setPosition(-9, 0.5, 0);
 		controls.lookAt(0, 3, -3.5);
 		this.controls = controls;
@@ -324,12 +321,6 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Registers configuration options.
-	 *
-	 * @param {GUI} menu - A menu.
-	 */
-
 	registerOptions(menu) {
 
 		const renderer = this.composer.getRenderer();
@@ -390,7 +381,7 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 				// This is pretty fast.
 				const lut = LookupTexture3D.from(lutEffect.getLUT());
-				const image = lut.convertToUint8().convertToRGBA().toDataTexture().image;
+				const { image } = lut.convertToUint8().convertToRGBA().toDataTexture();
 				const rawImageData = RawImageData.from(image);
 
 				// This takes a while if the image is large.
@@ -450,12 +441,15 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 					if(context.getExtension("OES_texture_float_linear") === null) {
 
-						console.log("Linear float filtering not supported, converting to Uint8");
+						console.log("Linear float filtering not supported, " +
+							"converting to Uint8");
+
 						lut.convertToUint8();
 
 					}
 
-					lutEffect.setLUT(params.lut["3D texture"] ? lut : lut.toDataTexture());
+					lutEffect.setLUT(params.lut["3D texture"] ?
+						lut : lut.toDataTexture());
 
 				} else {
 
@@ -473,27 +467,28 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 		let f = menu.addFolder("Color Average");
 
-		f.add(params.colorAverage, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		f.add(params.colorAverage, "opacity", 0.0, 1.0, 0.01).onChange((value) => {
 
 			colorAverageEffect.blendMode.opacity.value = value;
 
 		});
 
-		f.add(params.colorAverage, "blend mode", BlendFunction).onChange((value) => {
+		f.add(params.colorAverage, "blend mode", BlendFunction)
+			.onChange((value) => {
 
-			colorAverageEffect.blendMode.setBlendFunction(Number(value));
+				colorAverageEffect.blendMode.setBlendFunction(Number(value));
 
-		});
+			});
 
 		f = menu.addFolder("Sepia");
 
-		f.add(params.sepia, "intensity").min(0.0).max(1.0).step(0.001).onChange((value) => {
+		f.add(params.sepia, "intensity", 0.0, 1.0, 0.001).onChange((value) => {
 
 			sepiaEffect.uniforms.get("intensity").value = value;
 
 		});
 
-		f.add(params.sepia, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		f.add(params.sepia, "opacity", 0.0, 1.0, 0.01).onChange((value) => {
 
 			sepiaEffect.blendMode.opacity.value = value;
 
@@ -507,55 +502,63 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 		f = menu.addFolder("Brightness & Contrast");
 
-		f.add(params.brightnessContrast, "brightness").min(-1.0).max(1.0).step(0.001).onChange((value) => {
+		f.add(params.brightnessContrast, "brightness", -1.0, 1.0, 0.001)
+			.onChange((value) => {
 
-			brightnessContrastEffect.uniforms.get("brightness").value = value;
+				brightnessContrastEffect.uniforms.get("brightness").value = value;
 
-		});
+			});
 
-		f.add(params.brightnessContrast, "contrast").min(-1.0).max(1.0).step(0.001).onChange((value) => {
+		f.add(params.brightnessContrast, "contrast", -1.0, 1.0, 0.001)
+			.onChange((value) => {
 
-			brightnessContrastEffect.uniforms.get("contrast").value = value;
+				brightnessContrastEffect.uniforms.get("contrast").value = value;
 
-		});
+			});
 
-		f.add(params.brightnessContrast, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		f.add(params.brightnessContrast, "opacity", 0.0, 1.0, 0.01)
+			.onChange((value) => {
 
-			brightnessContrastEffect.blendMode.opacity.value = value;
+				brightnessContrastEffect.blendMode.opacity.value = value;
 
-		});
+			});
 
-		f.add(params.brightnessContrast, "blend mode", BlendFunction).onChange((value) => {
+		f.add(params.brightnessContrast, "blend mode", BlendFunction)
+			.onChange((value) => {
 
-			brightnessContrastEffect.blendMode.setBlendFunction(Number(value));
+				brightnessContrastEffect.blendMode.setBlendFunction(Number(value));
 
-		});
+			});
 
 		f = menu.addFolder("Hue & Saturation");
 
-		f.add(params.hueSaturation, "hue").min(0.0).max(Math.PI * 2.0).step(0.001).onChange((value) => {
+		f.add(params.hueSaturation, "hue", 0.0, Math.PI * 2.0, 0.001)
+			.onChange((value) => {
 
-			hueSaturationEffect.setHue(value);
+				hueSaturationEffect.setHue(value);
 
-		});
+			});
 
-		f.add(params.hueSaturation, "saturation").min(-1.0).max(1.0).step(0.001).onChange((value) => {
+		f.add(params.hueSaturation, "saturation", -1.0, 1.0, 0.001)
+			.onChange((value) => {
 
-			hueSaturationEffect.uniforms.get("saturation").value = value;
+				hueSaturationEffect.uniforms.get("saturation").value = value;
 
-		});
+			});
 
-		f.add(params.hueSaturation, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		f.add(params.hueSaturation, "opacity", 0.0, 1.0, 0.01)
+			.onChange((value) => {
 
-			hueSaturationEffect.blendMode.opacity.value = value;
+				hueSaturationEffect.blendMode.opacity.value = value;
 
-		});
+			});
 
-		f.add(params.hueSaturation, "blend mode", BlendFunction).onChange((value) => {
+		f.add(params.hueSaturation, "blend mode", BlendFunction)
+			.onChange((value) => {
 
-			hueSaturationEffect.blendMode.setBlendFunction(Number(value));
+				hueSaturationEffect.blendMode.setBlendFunction(Number(value));
 
-		});
+			});
 
 		f = menu.addFolder("Lookup Texture 3D");
 
@@ -578,7 +581,7 @@ export class ColorGradingDemo extends PostProcessingDemo {
 		f.add(params.lut, "target size", [32, 48, 64, 96, 128]).onChange(changeLUT);
 		f.add(params.lut, "show LUT").onChange(updateLUTPreview);
 
-		f.add(params.lut, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		f.add(params.lut, "opacity", 0.0, 1.0, 0.01).onChange((value) => {
 
 			lutEffect.blendMode.opacity.value = value;
 
@@ -605,10 +608,6 @@ export class ColorGradingDemo extends PostProcessingDemo {
 		}
 
 	}
-
-	/**
-	 * Disposes this demo.
-	 */
 
 	dispose() {
 

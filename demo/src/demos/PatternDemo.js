@@ -1,5 +1,6 @@
 import { Color, PerspectiveCamera } from "three";
 import { SpatialControls } from "spatial-controls";
+import { calculateVerticalFoV } from "three-demo";
 import { ProgressManager } from "../utils/ProgressManager";
 import { PostProcessingDemo } from "./PostProcessingDemo";
 
@@ -18,7 +19,7 @@ import {
 } from "../../../src";
 
 /**
- * A pattern demo setup.
+ * A pattern demo.
  */
 
 export class PatternDemo extends PostProcessingDemo {
@@ -62,19 +63,14 @@ export class PatternDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Loads scene assets.
-	 *
-	 * @return {Promise} A promise that returns a collection of assets.
-	 */
-
 	load() {
 
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
-		const anisotropy = Math.min(this.composer.getRenderer().capabilities.getMaxAnisotropy(), 8);
+		const anisotropy = Math.min(this.composer.getRenderer()
+			.capabilities.getMaxAnisotropy(), 8);
 
 		return new Promise((resolve, reject) => {
 
@@ -82,7 +78,7 @@ export class PatternDemo extends PostProcessingDemo {
 
 				loadingManager.onLoad = () => setTimeout(resolve, 250);
 				loadingManager.onProgress = ProgressManager.updateProgress;
-				loadingManager.onError = (url) => console.error(`Failed to load ${url}`);
+				loadingManager.onError = url => console.error(`Failed to load ${url}`);
 
 				Sponza.load(assets, loadingManager, anisotropy);
 
@@ -103,29 +99,30 @@ export class PatternDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Creates the scene.
-	 */
-
 	initialize() {
 
 		const scene = this.scene;
 		const assets = this.assets;
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
+		const domElement = renderer.domElement;
 
 		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
-		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
+		const vFoV = calculateVerticalFoV(90, Math.max(aspect, 16 / 9));
+		const camera = new PerspectiveCamera(vFoV, aspect, 0.3, 2000);
 		this.camera = camera;
 
 		// Controls
 
-		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
+		const { position, quaternion } = camera;
+		const controls = new SpatialControls(position, quaternion, domElement);
 		const settings = controls.settings;
 		settings.rotation.setSensitivity(2.2);
+		settings.rotation.setDamping(0.05);
 		settings.translation.setSensitivity(3.0);
+		settings.translation.setDamping(0.1);
 		controls.setPosition(-9, 0.5, 0);
 		controls.lookAt(0, 3, -3.5);
 		this.controls = controls;
@@ -188,12 +185,6 @@ export class PatternDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Registers configuration options.
-	 *
-	 * @param {GUI} menu - A menu.
-	 */
-
 	registerOptions(menu) {
 
 		const dotScreenEffect = this.dotScreenEffect;
@@ -222,47 +213,49 @@ export class PatternDemo extends PostProcessingDemo {
 
 		let folder = menu.addFolder("Dot Screen");
 
-		folder.add(params.dotScreen, "angle").min(0.0).max(Math.PI).step(0.001).onChange((value) => {
+		folder.add(params.dotScreen, "angle", 0.0, Math.PI, 0.001)
+			.onChange((value) => {
 
-			dotScreenEffect.setAngle(value);
+				dotScreenEffect.setAngle(value);
 
-		});
+			});
 
-		folder.add(params.dotScreen, "scale").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		folder.add(params.dotScreen, "scale", 0.0, 1.0, 0.01).onChange((value) => {
 
 			dotScreenEffect.uniforms.get("scale").value = value;
 
 		});
 
-		folder.add(params.dotScreen, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		folder.add(params.dotScreen, "opacity", 0.0, 1.0, 0.01)
+			.onChange((value) => {
 
-			dotScreenEffect.blendMode.opacity.value = value;
+				dotScreenEffect.blendMode.opacity.value = value;
 
-		});
+			});
 
-		folder.add(params.dotScreen, "blend mode", BlendFunction).onChange((value) => {
+		folder.add(params.dotScreen, "blend mode", BlendFunction)
+			.onChange((value) => {
 
-			dotScreenEffect.blendMode.setBlendFunction(Number(value));
+				dotScreenEffect.blendMode.setBlendFunction(Number(value));
 
-		});
+			});
 
 		folder.open();
-
 		folder = menu.addFolder("Grid");
 
-		folder.add(params.grid, "scale").min(0.01).max(3.0).step(0.01).onChange((value) => {
+		folder.add(params.grid, "scale", 0.01, 3.0, 0.01).onChange((value) => {
 
 			gridEffect.setScale(value);
 
 		});
 
-		folder.add(params.grid, "line width").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		folder.add(params.grid, "line width", 0.0, 1.0, 0.01).onChange((value) => {
 
 			gridEffect.setLineWidth(value);
 
 		});
 
-		folder.add(params.grid, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		folder.add(params.grid, "opacity", 0.0, 1.0, 0.01).onChange((value) => {
 
 			gridEffect.blendMode.opacity.value = value;
 
@@ -275,26 +268,27 @@ export class PatternDemo extends PostProcessingDemo {
 		});
 
 		folder.open();
-
 		folder = menu.addFolder("Scanline");
 
-		folder.add(params.scanline, "density").min(0.001).max(2.0).step(0.001).onChange((value) => {
+		folder.add(params.scanline, "density", 0.001, 2.0, 0.001)
+			.onChange((value) => {
 
-			scanlineEffect.setDensity(value);
+				scanlineEffect.setDensity(value);
 
-		});
+			});
 
-		folder.add(params.scanline, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		folder.add(params.scanline, "opacity", 0.0, 1.0, 0.01).onChange((value) => {
 
 			scanlineEffect.blendMode.opacity.value = value;
 
 		});
 
-		folder.add(params.scanline, "blend mode", BlendFunction).onChange((value) => {
+		folder.add(params.scanline, "blend mode", BlendFunction)
+			.onChange((value) => {
 
-			scanlineEffect.blendMode.setBlendFunction(Number(value));
+				scanlineEffect.blendMode.setBlendFunction(Number(value));
 
-		});
+			});
 
 		folder.open();
 

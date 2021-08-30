@@ -26,7 +26,13 @@ export class BokehEffect extends Effect {
 	 * @param {Number} [options.maxBlur=1.0] - The maximum blur strength.
 	 */
 
-	constructor({ blendFunction = BlendFunction.NORMAL, focus = 0.5, dof = 0.02, aperture = 0.015, maxBlur = 1.0 } = {}) {
+	constructor({
+		blendFunction = BlendFunction.NORMAL,
+		focus = 0.5,
+		dof = 0.02,
+		aperture = 0.015,
+		maxBlur = 1.0
+	} = {}) {
 
 		super("BokehEffect", fragmentShader, {
 

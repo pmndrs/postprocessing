@@ -124,7 +124,8 @@ export class LUTCubeLoader extends Loader {
 
 		}
 
-		if(domainMin.x > domainMax.x || domainMin.y > domainMax.y || domainMin.z > domainMax.z) {
+		if(domainMin.x > domainMax.x || domainMin.y > domainMax.y ||
+			domainMin.z > domainMax.z) {
 
 			domainMin.set(0.0, 0.0, 0.0);
 			domainMax.set(1.0, 1.0, 1.0);

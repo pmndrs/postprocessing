@@ -173,7 +173,8 @@ export class ShockWaveEffect extends Effect {
 			if(uniformActive.value) {
 
 				// Scale the effect based on distance to the object.
-				uniforms.get("cameraDistance").value = camera.position.distanceTo(epicenter);
+				uniforms.get("cameraDistance").value = camera.position
+					.distanceTo(epicenter);
 
 				// Calculate the screen position of the epicenter.
 				v.copy(epicenter).project(camera);

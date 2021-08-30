@@ -1,5 +1,6 @@
 import { Color, PerspectiveCamera } from "three";
 import { SpatialControls } from "spatial-controls";
+import { calculateVerticalFoV } from "three-demo";
 import { ProgressManager } from "../utils/ProgressManager";
 import { PostProcessingDemo } from "./PostProcessingDemo";
 
@@ -20,7 +21,7 @@ import {
 } from "../../../src";
 
 /**
- * An antialiasing demo setup.
+ * An antialiasing demo.
  */
 
 export class AntialiasingDemo extends PostProcessingDemo {
@@ -100,19 +101,14 @@ export class AntialiasingDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Loads scene assets.
-	 *
-	 * @return {Promise} A promise that will be fulfilled as soon as all assets have been loaded.
-	 */
-
 	load() {
 
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
-		const anisotropy = Math.min(this.composer.getRenderer().capabilities.getMaxAnisotropy(), 8);
+		const anisotropy = Math.min(this.composer.getRenderer()
+			.capabilities.getMaxAnisotropy(), 8);
 
 		return new Promise((resolve, reject) => {
 
@@ -120,7 +116,7 @@ export class AntialiasingDemo extends PostProcessingDemo {
 
 				loadingManager.onLoad = () => setTimeout(resolve, 250);
 				loadingManager.onProgress = ProgressManager.updateProgress;
-				loadingManager.onError = (url) => console.error(`Failed to load ${url}`);
+				loadingManager.onError = url => console.error(`Failed to load ${url}`);
 
 				Sponza.load(assets, loadingManager, anisotropy);
 
@@ -141,36 +137,37 @@ export class AntialiasingDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Creates the scene.
-	 */
-
 	initialize() {
 
 		const scene = this.scene;
 		const assets = this.assets;
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
+		const domElement = renderer.domElement;
 
 		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
-		const camera = new PerspectiveCamera(50, aspect, 0.3, 2000);
+		const vFoV = calculateVerticalFoV(90, Math.max(aspect, 16 / 9));
+		const camera = new PerspectiveCamera(vFoV, aspect, 0.3, 2000);
 		this.camera = camera;
 
 		// Controls
 
-		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
+		const { position, quaternion } = camera;
+		const controls = new SpatialControls(position, quaternion, domElement);
 		const settings = controls.settings;
 		settings.rotation.setSensitivity(2.2);
+		settings.rotation.setDamping(0.05);
 		settings.translation.setSensitivity(3.0);
+		settings.translation.setDamping(0.1);
 		controls.setPosition(4, 8, 0.75);
 		controls.lookAt(-0.5, 6.5, -0.25);
 		this.controls = controls;
 
 		// Sky
 
-		scene.background = new Color(0xccccff);
+		scene.background = new Color(0xeeeeee);
 
 		// Lights
 
@@ -237,13 +234,6 @@ export class AntialiasingDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Updates this demo.
-	 *
-	 * @param {Number} deltaTime - The time since the last frame in seconds.
-	 * @param {Number} timestamp - The current time in milliseconds.
-	 */
-
 	update(deltaTime, timestamp) {
 
 		if(this.rotate) {
@@ -269,12 +259,6 @@ export class AntialiasingDemo extends PostProcessingDemo {
 		}
 
 	}
-
-	/**
-	 * Registers configuration options.
-	 *
-	 * @param {GUI} menu - A menu.
-	 */
 
 	registerOptions(menu) {
 
@@ -317,12 +301,14 @@ export class AntialiasingDemo extends PostProcessingDemo {
 			},
 			"edgeDetection": {
 				"mode": Number(edgeDetectionMaterial.defines.EDGE_DETECTION_MODE),
-				"contrast factor": Number(edgeDetectionMaterial.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR),
+				"contrast factor": Number(edgeDetectionMaterial.defines
+					.LOCAL_CONTRAST_ADAPTATION_FACTOR),
 				"threshold": Number(edgeDetectionMaterial.defines.EDGE_THRESHOLD)
 			},
 			"predication": {
 				"mode": Number(edgeDetectionMaterial.defines.PREDICATION_MODE),
-				"threshold": Number(edgeDetectionMaterial.defines.PREDICATION_THRESHOLD),
+				"threshold": Number(edgeDetectionMaterial.defines
+					.PREDICATION_THRESHOLD),
 				"strength": Number(edgeDetectionMaterial.defines.PREDICATION_STRENGTH),
 				"scale": Number(edgeDetectionMaterial.defines.PREDICATION_SCALE)
 			}
@@ -351,66 +337,83 @@ export class AntialiasingDemo extends PostProcessingDemo {
 
 			const mode = Number(value);
 
-			edgesTextureEffect.blendMode.setBlendFunction((mode === SMAAMode.SMAA_EDGES) ? BlendFunction.NORMAL : BlendFunction.SKIP);
-			weightsTextureEffect.blendMode.setBlendFunction((mode === SMAAMode.SMAA_WEIGHTS) ? BlendFunction.NORMAL : BlendFunction.SKIP);
-			effectPass.encodeOutput = (mode !== SMAAMode.SMAA_EDGES && mode !== SMAAMode.SMAA_WEIGHTS);
+			edgesTextureEffect.blendMode
+				.setBlendFunction((mode === SMAAMode.SMAA_EDGES) ?
+					BlendFunction.NORMAL : BlendFunction.SKIP);
+
+			weightsTextureEffect.blendMode
+				.setBlendFunction((mode === SMAAMode.SMAA_WEIGHTS) ?
+					BlendFunction.NORMAL : BlendFunction.SKIP);
+
+			effectPass.encodeOutput = (
+				mode !== SMAAMode.SMAA_EDGES &&
+				mode !== SMAAMode.SMAA_WEIGHTS
+			);
 
 		});
 
 		folder.add(params.smaa, "preset", SMAAPreset).onChange((value) => {
 
 			smaaEffect.applyPreset(Number(value));
-			edgeDetectionMaterial.setEdgeDetectionThreshold(params.edgeDetection.threshold);
+			edgeDetectionMaterial
+				.setEdgeDetectionThreshold(params.edgeDetection.threshold);
 
 		});
 
 		let subfolder = folder.addFolder("Edge Detection");
 
-		subfolder.add(params.edgeDetection, "mode", EdgeDetectionMode).onChange((value) => {
+		subfolder.add(params.edgeDetection, "mode", EdgeDetectionMode)
+			.onChange((value) => {
 
-			edgeDetectionMaterial.setEdgeDetectionMode(Number(value));
+				edgeDetectionMaterial.setEdgeDetectionMode(Number(value));
 
-		});
+			});
 
-		subfolder.add(params.edgeDetection, "contrast factor").min(1.0).max(3.0).step(0.01).onChange((value) => {
+		subfolder.add(params.edgeDetection, "contrast factor", 1.0, 3.0, 0.01)
+			.onChange((value) => {
 
-			edgeDetectionMaterial.setLocalContrastAdaptationFactor(Number(value));
+				edgeDetectionMaterial.setLocalContrastAdaptationFactor(Number(value));
 
-		});
+			});
 
-		subfolder.add(params.edgeDetection, "threshold").min(0.0).max(0.5).step(0.0001).onChange((value) => {
+		subfolder.add(params.edgeDetection, "threshold", 0.0, 0.5, 0.0001)
+			.onChange((value) => {
 
-			edgeDetectionMaterial.setEdgeDetectionThreshold(Number(value));
+				edgeDetectionMaterial.setEdgeDetectionThreshold(Number(value));
 
-		});
+			});
 
 		subfolder = folder.addFolder("Predicated Thresholding");
 
-		subfolder.add(params.predication, "mode", PredicationMode).onChange((value) => {
+		subfolder.add(params.predication, "mode", PredicationMode)
+			.onChange((value) => {
 
-			edgeDetectionMaterial.setPredicationMode(Number(value));
+				edgeDetectionMaterial.setPredicationMode(Number(value));
 
-		});
+			});
 
-		subfolder.add(params.predication, "threshold").min(0.0).max(0.5).step(0.0001).onChange((value) => {
+		subfolder.add(params.predication, "threshold", 0.0, 0.5, 0.0001)
+			.onChange((value) => {
 
-			edgeDetectionMaterial.setPredicationThreshold(Number(value));
+				edgeDetectionMaterial.setPredicationThreshold(Number(value));
 
-		});
+			});
 
-		subfolder.add(params.predication, "strength").min(0.0).max(1.0).step(0.0001).onChange((value) => {
+		subfolder.add(params.predication, "strength", 0.0, 1.0, 0.0001)
+			.onChange((value) => {
 
-			edgeDetectionMaterial.setPredicationStrength(Number(value));
+				edgeDetectionMaterial.setPredicationStrength(Number(value));
 
-		});
+			});
 
-		subfolder.add(params.predication, "scale").min(1.0).max(5.0).step(0.01).onChange((value) => {
+		subfolder.add(params.predication, "scale", 1.0, 5.0, 0.01)
+			.onChange((value) => {
 
-			edgeDetectionMaterial.setPredicationScale(Number(value));
+				edgeDetectionMaterial.setPredicationScale(Number(value));
 
-		});
+			});
 
-		folder.add(params.smaa, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		folder.add(params.smaa, "opacity", 0.0, 1.0, 0.01).onChange((value) => {
 
 			smaaEffect.blendMode.opacity.value = value;
 

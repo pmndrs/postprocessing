@@ -1,5 +1,6 @@
 import { Color, PerspectiveCamera } from "three";
 import { SpatialControls } from "spatial-controls";
+import { calculateVerticalFoV } from "three-demo";
 import { ProgressManager } from "../utils/ProgressManager";
 import { PostProcessingDemo } from "./PostProcessingDemo";
 
@@ -17,7 +18,7 @@ import {
 } from "../../../src";
 
 /**
- * A tone mapping demo setup.
+ * A tone mapping demo.
  */
 
 export class ToneMappingDemo extends PostProcessingDemo {
@@ -52,19 +53,14 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Loads scene assets.
-	 *
-	 * @return {Promise} A promise that returns a collection of assets.
-	 */
-
 	load() {
 
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
-		const anisotropy = Math.min(this.composer.getRenderer().capabilities.getMaxAnisotropy(), 8);
+		const anisotropy = Math.min(this.composer.getRenderer()
+			.capabilities.getMaxAnisotropy(), 8);
 
 		return new Promise((resolve, reject) => {
 
@@ -72,7 +68,7 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 				loadingManager.onLoad = () => setTimeout(resolve, 250);
 				loadingManager.onProgress = ProgressManager.updateProgress;
-				loadingManager.onError = (url) => console.error(`Failed to load ${url}`);
+				loadingManager.onError = url => console.error(`Failed to load ${url}`);
 
 				Sponza.load(assets, loadingManager, anisotropy);
 
@@ -93,29 +89,30 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Creates the scene.
-	 */
-
 	initialize() {
 
 		const scene = this.scene;
 		const assets = this.assets;
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
+		const domElement = renderer.domElement;
 
 		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
-		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
+		const vFoV = calculateVerticalFoV(90, Math.max(aspect, 16 / 9));
+		const camera = new PerspectiveCamera(vFoV, aspect, 0.3, 2000);
 		this.camera = camera;
 
 		// Controls
 
-		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
+		const { position, quaternion } = camera;
+		const controls = new SpatialControls(position, quaternion, domElement);
 		const settings = controls.settings;
 		settings.rotation.setSensitivity(2.2);
+		settings.rotation.setDamping(0.05);
 		settings.translation.setSensitivity(3.0);
+		settings.translation.setDamping(0.1);
 		controls.setPosition(-5.15, 8.1, -0.95);
 		controls.lookAt(-4.4, 8.6, -0.5);
 		this.controls = controls;
@@ -158,19 +155,14 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Registers configuration options.
-	 *
-	 * @param {GUI} menu - A menu.
-	 */
-
 	registerOptions(menu) {
 
 		const renderer = this.composer.getRenderer();
 		const effect = this.effect;
 		const blendMode = effect.blendMode;
 		const adaptiveLuminancePass = effect.adaptiveLuminancePass;
-		const adaptiveLuminanceMaterial = adaptiveLuminancePass.getFullscreenMaterial();
+		const adaptiveLuminanceMaterial = adaptiveLuminancePass
+			.getFullscreenMaterial();
 
 		const params = {
 			"mode": effect.getMode(),
@@ -191,7 +183,7 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(params, "exposure").min(0.0).max(2.0).step(0.001).onChange((value) => {
+		menu.add(params, "exposure", 0.0, 2.0, 0.001).onChange((value) => {
 
 			renderer.toneMappingExposure = value;
 
@@ -199,19 +191,19 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 		let f = menu.addFolder("Reinhard (Modified)");
 
-		f.add(params, "white point").min(2.0).max(32.0).step(0.01).onChange((value) => {
+		f.add(params, "white point", 2.0, 32.0, 0.01).onChange((value) => {
 
 			effect.uniforms.get("whitePoint").value = value;
 
 		});
 
-		f.add(params, "middle grey").min(0.0).max(1.0).step(0.0001).onChange((value) => {
+		f.add(params, "middle grey", 0.0, 1.0, 0.0001).onChange((value) => {
 
 			effect.uniforms.get("middleGrey").value = value;
 
 		});
 
-		f.add(params, "average lum").min(0.0001).max(1.0).step(0.0001).onChange((value) => {
+		f.add(params, "average lum", 0.0001, 1.0, 0.0001).onChange((value) => {
 
 			effect.uniforms.get("averageLuminance").value = value;
 
@@ -227,13 +219,13 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 		});
 
-		f.add(params, "adaptation rate").min(0.001).max(3.0).step(0.001).onChange((value) => {
+		f.add(params, "adaptation rate", 0.001, 3.0, 0.001).onChange((value) => {
 
 			adaptiveLuminancePass.adaptationRate = value;
 
 		});
 
-		f.add(params, "min lum").min(0.001).max(1.0).step(0.001).onChange((value) => {
+		f.add(params, "min lum", 0.001, 1.0, 0.001).onChange((value) => {
 
 			adaptiveLuminanceMaterial.uniforms.minLuminance.value = value;
 
@@ -241,7 +233,7 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 		f.open();
 
-		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		menu.add(params, "opacity", 0.0, 1.0, 0.01).onChange((value) => {
 
 			blendMode.opacity.value = value;
 

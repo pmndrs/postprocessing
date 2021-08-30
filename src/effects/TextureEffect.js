@@ -28,7 +28,11 @@ export class TextureEffect extends Effect {
 	 * @param {Boolean} [options.aspectCorrection=false] - Deprecated. Enable uvTransform instead and adjust the texture's offset, repeat and center.
 	 */
 
-	constructor({ blendFunction = BlendFunction.NORMAL, texture = null, aspectCorrection = false } = {}) {
+	constructor({
+		blendFunction = BlendFunction.NORMAL,
+		texture = null,
+		aspectCorrection = false
+	} = {}) {
 
 		super("TextureEffect", fragmentShader, {
 

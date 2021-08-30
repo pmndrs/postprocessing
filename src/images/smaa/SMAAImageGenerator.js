@@ -108,10 +108,15 @@ export class SMAAImageGenerator {
 				manager.onLoad = () => resolve([searchImage, areaImage]);
 				manager.onError = reject;
 
-				searchImage.addEventListener("error", (e) => manager.itemError("smaa-search"));
-				areaImage.addEventListener("error", (e) => manager.itemError("smaa-area"));
-				searchImage.addEventListener("load", () => manager.itemEnd("smaa-search"));
-				areaImage.addEventListener("load", () => manager.itemEnd("smaa-area"));
+				searchImage.addEventListener("error",
+					(e) => manager.itemError("smaa-search"));
+				areaImage.addEventListener("error",
+					(e) => manager.itemError("smaa-area"));
+
+				searchImage.addEventListener("load",
+					() => manager.itemEnd("smaa-search"));
+				areaImage.addEventListener("load",
+					() => manager.itemEnd("smaa-area"));
 
 				manager.itemStart("smaa-search");
 				manager.itemStart("smaa-area");

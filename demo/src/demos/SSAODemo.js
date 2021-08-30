@@ -1,5 +1,6 @@
 import { Color, PerspectiveCamera } from "three";
 import { SpatialControls } from "spatial-controls";
+import { calculateVerticalFoV } from "three-demo";
 import { ProgressManager } from "../utils/ProgressManager";
 import { PostProcessingDemo } from "./PostProcessingDemo";
 
@@ -20,7 +21,7 @@ import {
 } from "../../../src";
 
 /**
- * An SSAO demo setup.
+ * An SSAO demo.
  */
 
 export class SSAODemo extends PostProcessingDemo {
@@ -73,19 +74,14 @@ export class SSAODemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Loads scene assets.
-	 *
-	 * @return {Promise} A promise that returns a collection of assets.
-	 */
-
 	load() {
 
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
-		const anisotropy = Math.min(this.composer.getRenderer().capabilities.getMaxAnisotropy(), 8);
+		const anisotropy = Math.min(this.composer.getRenderer()
+			.capabilities.getMaxAnisotropy(), 8);
 
 		return new Promise((resolve, reject) => {
 
@@ -93,7 +89,7 @@ export class SSAODemo extends PostProcessingDemo {
 
 				loadingManager.onLoad = () => setTimeout(resolve, 250);
 				loadingManager.onProgress = ProgressManager.updateProgress;
-				loadingManager.onError = (url) => console.error(`Failed to load ${url}`);
+				loadingManager.onError = url => console.error(`Failed to load ${url}`);
 
 				Sponza.load(assets, loadingManager, anisotropy);
 
@@ -114,32 +110,33 @@ export class SSAODemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Creates the scene.
-	 */
-
 	initialize() {
 
 		const scene = this.scene;
 		const assets = this.assets;
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
+		const domElement = renderer.domElement;
 		const capabilities = renderer.capabilities;
 
 		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
-		const camera = new PerspectiveCamera(50, aspect, 0.3, 1000);
+		const vFoV = calculateVerticalFoV(90, Math.max(aspect, 16 / 9));
+		const camera = new PerspectiveCamera(vFoV, aspect, 0.3, 1000);
 		this.camera = camera;
 
 		// Controls
 
-		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
+		const { position, quaternion } = camera;
+		const controls = new SpatialControls(position, quaternion, domElement);
 		const settings = controls.settings;
 		settings.rotation.setSensitivity(2.2);
+		settings.rotation.setDamping(0.05);
 		settings.translation.setSensitivity(3.0);
-		controls.setPosition(9.45, 1.735, 0.75);
-		controls.lookAt(8.45, 1.65, 0.6);
+		settings.translation.setDamping(0.1);
+		controls.setPosition(9.5, 1.65, -0.25);
+		controls.lookAt(8.5, 1.65, -0.25);
 		this.controls = controls;
 
 		// Sky
@@ -225,12 +222,6 @@ export class SSAODemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Registers configuration options.
-	 *
-	 * @param {GUI} menu - A menu.
-	 */
-
 	registerOptions(menu) {
 
 		const color = new Color();
@@ -253,11 +244,13 @@ export class SSAODemo extends PostProcessingDemo {
 		const params = {
 			"distance": {
 				"threshold": uniforms.distanceCutoff.value.x,
-				"falloff": uniforms.distanceCutoff.value.y - uniforms.distanceCutoff.value.x
+				"falloff": (uniforms.distanceCutoff.value.y -
+					uniforms.distanceCutoff.value.x)
 			},
 			"proximity": {
 				"threshold": uniforms.proximityCutoff.value.x,
-				"falloff": uniforms.proximityCutoff.value.y - uniforms.proximityCutoff.value.x
+				"falloff": (uniforms.proximityCutoff.value.y -
+					uniforms.proximityCutoff.value.x)
 			},
 			"upsampling": {
 				"enabled": ssaoEffect.defines.has("DEPTH_AWARE_UPSAMPLING"),
@@ -310,16 +303,16 @@ export class SSAODemo extends PostProcessingDemo {
 
 		}
 
-		menu.add(params, "resolution").min(0.25).max(1.0).step(0.25).onChange((value) => {
+		menu.add(params, "resolution", 0.25, 1.0, 0.25).onChange((value) => {
 
 			ssaoEffect.resolution.scale = value;
 			depthDownsamplingPass.resolution.scale = value;
 
 		});
 
-		menu.add(ssaoEffect, "samples").min(1).max(32).step(1);
-		menu.add(ssaoEffect, "rings").min(1).max(16).step(1);
-		menu.add(ssaoEffect, "radius").min(1e-6).max(1.0).step(0.001);
+		menu.add(ssaoEffect, "samples", 1, 32, 1);
+		menu.add(ssaoEffect, "rings", 1, 16, 1);
+		menu.add(ssaoEffect, "radius", 1e-6, 1.0, 0.001);
 
 		let f = menu.addFolder("Distance Scaling");
 
@@ -329,11 +322,12 @@ export class SSAODemo extends PostProcessingDemo {
 
 		});
 
-		f.add(params.distanceScaling, "min scale").min(0.0).max(1.0).step(0.001).onChange((value) => {
+		f.add(params.distanceScaling, "min scale", 0.0, 1.0, 0.001)
+			.onChange((value) => {
 
-			uniforms.minRadiusScale.value = value;
+				uniforms.minRadiusScale.value = value;
 
-		});
+			});
 
 		if(capabilities.isWebGL2) {
 
@@ -345,25 +339,26 @@ export class SSAODemo extends PostProcessingDemo {
 
 			});
 
-			f.add(params.upsampling, "threshold").min(0.0).max(1.0).step(0.001).onChange((value) => {
+			f.add(params.upsampling, "threshold", 0.0, 1.0, 0.001)
+				.onChange((value) => {
 
-				// Note: This threshold is not really supposed to be changed.
-				ssaoEffect.defines.set("THRESHOLD", value.toFixed(3));
-				effectPass.recompile();
+					// Note: This threshold is not really supposed to be changed.
+					ssaoEffect.defines.set("THRESHOLD", value.toFixed(3));
+					effectPass.recompile();
 
-			});
+				});
 
 		}
 
 		f = menu.addFolder("Distance Cutoff");
 
-		f.add(params.distance, "threshold").min(0.0).max(1.0).step(0.0001).onChange((value) => {
+		f.add(params.distance, "threshold", 0.0, 1.0, 0.0001).onChange((value) => {
 
 			ssaoEffect.setDistanceCutoff(value, params.distance.falloff);
 
 		});
 
-		f.add(params.distance, "falloff").min(0.0).max(1.0).step(0.0001).onChange((value) => {
+		f.add(params.distance, "falloff", 0.0, 1.0, 0.0001).onChange((value) => {
 
 			ssaoEffect.setDistanceCutoff(params.distance.threshold, value);
 
@@ -371,37 +366,38 @@ export class SSAODemo extends PostProcessingDemo {
 
 		f = menu.addFolder("Proximity Cutoff");
 
-		f.add(params.proximity, "threshold").min(0.0).max(0.01).step(0.0001).onChange((value) => {
+		f.add(params.proximity, "threshold", 0.0, 0.01, 0.0001)
+			.onChange((value) => {
 
-			ssaoEffect.setProximityCutoff(value, params.proximity.falloff);
+				ssaoEffect.setProximityCutoff(value, params.proximity.falloff);
 
-		});
+			});
 
-		f.add(params.proximity, "falloff").min(0.0).max(0.01).step(0.0001).onChange((value) => {
+		f.add(params.proximity, "falloff", 0.0, 0.01, 0.0001).onChange((value) => {
 
 			ssaoEffect.setProximityCutoff(params.proximity.threshold, value);
 
 		});
 
-		menu.add(params, "bias").min(0.0).max(1.0).step(0.001).onChange((value) => {
+		menu.add(params, "bias", 0.0, 1.0, 0.001).onChange((value) => {
 
 			uniforms.bias.value = value;
 
 		});
 
-		menu.add(params, "fade").min(0.0).max(1.0).step(0.001).onChange((value) => {
+		menu.add(params, "fade", 0.0, 1.0, 0.001).onChange((value) => {
 
 			uniforms.fade.value = value;
 
 		});
 
-		menu.add(params, "lum influence").min(0.0).max(1.0).step(0.001).onChange((value) => {
+		menu.add(params, "lum influence", 0.0, 1.0, 0.001).onChange((value) => {
 
 			ssaoEffect.uniforms.get("luminanceInfluence").value = value;
 
 		});
 
-		menu.add(params, "intensity").min(1.0).max(4.0).step(0.01).onChange((value) => {
+		menu.add(params, "intensity", 1.0, 4.0, 0.01).onChange((value) => {
 
 			uniforms.intensity.value = value;
 
@@ -414,7 +410,7 @@ export class SSAODemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(params, "opacity").min(0.0).max(1.0).step(0.001).onChange((value) => {
+		menu.add(params, "opacity", 0.0, 1.0, 0.001).onChange((value) => {
 
 			blendMode.opacity.value = value;
 

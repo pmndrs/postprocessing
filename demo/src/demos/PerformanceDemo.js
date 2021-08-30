@@ -11,9 +11,11 @@ import {
 	SphereBufferGeometry,
 	sRGBEncoding,
 	TextureLoader,
-	TorusBufferGeometry
+	TorusBufferGeometry,
+	Vector3
 } from "three";
 
+import { calculateVerticalFoV } from "three-demo";
 import { ProgressManager } from "../utils/ProgressManager";
 import { PostProcessingDemo } from "./PostProcessingDemo";
 
@@ -43,7 +45,7 @@ import {
 } from "../../../src";
 
 /**
- * A performance demo setup.
+ * A performance demo.
  */
 
 export class PerformanceDemo extends PostProcessingDemo {
@@ -57,15 +59,6 @@ export class PerformanceDemo extends PostProcessingDemo {
 	constructor(composer) {
 
 		super("performance", composer);
-
-		/**
-		 * A renderer that uses a high-performance context.
-		 *
-		 * @type {WebGLRenderer}
-		 * @private
-		 */
-
-		this.renderer = null;
 
 		/**
 		 * A list of effect.
@@ -149,12 +142,6 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Loads scene assets.
-	 *
-	 * @return {Promise} A promise that returns a collection of assets.
-	 */
-
 	load() {
 
 		const assets = this.assets;
@@ -177,7 +164,7 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 				loadingManager.onLoad = () => setTimeout(resolve, 250);
 				loadingManager.onProgress = ProgressManager.updateProgress;
-				loadingManager.onError = (url) => console.error(`Failed to load ${url}`);
+				loadingManager.onError = url => console.error(`Failed to load ${url}`);
 
 				cubeTextureLoader.load(urls, (t) => {
 
@@ -225,10 +212,12 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 		// Camera
 
+		const target = new Vector3(0, 1, 0);
 		const aspect = window.innerWidth / window.innerHeight;
-		const camera = new PerspectiveCamera(50, aspect, 0.3, 2000);
+		const vFoV = calculateVerticalFoV(90, Math.max(aspect, 16 / 9));
+		const camera = new PerspectiveCamera(vFoV, aspect, 0.3, 2000);
 		camera.position.set(-10, 1.125, 0);
-		camera.lookAt(scene.position);
+		camera.lookAt(target);
 		this.camera = camera;
 
 		// Sky
@@ -334,11 +323,19 @@ export class PerformanceDemo extends PostProcessingDemo {
 			texture: assets.get("scratches-color")
 		});
 
-		const colorAverageEffect = new ColorAverageEffect(BlendFunction.COLOR_DODGE);
-		const colorDepthEffect = new ColorDepthEffect({ bits: 24 });
-		const sepiaEffect = new SepiaEffect({ blendFunction: BlendFunction.NORMAL });
+		const colorAverageEffect = new ColorAverageEffect(
+			BlendFunction.COLOR_DODGE
+		);
 
-		const brightnessContrastEffect = new BrightnessContrastEffect({ contrast: 0.0 });
+		const colorDepthEffect = new ColorDepthEffect({ bits: 24 });
+		const sepiaEffect = new SepiaEffect({
+			blendFunction: BlendFunction.NORMAL
+		});
+
+		const brightnessContrastEffect = new BrightnessContrastEffect({
+			contrast: 0.0
+		});
+
 		const hueSaturationEffect = new HueSaturationEffect({ saturation: 0.125 });
 
 		const noiseEffect = new NoiseEffect({ premultiply: true });
@@ -399,13 +396,6 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Updates this demo.
-	 *
-	 * @param {Number} deltaTime - The time since the last frame in seconds.
-	 * @param {Number} timestamp - The current time in milliseconds.
-	 */
-
 	update(deltaTime, timestamp) {
 
 		this.acc0 += deltaTime;
@@ -428,12 +418,6 @@ export class PerformanceDemo extends PostProcessingDemo {
 		this.light.position.copy(this.sun.position);
 
 	}
-
-	/**
-	 * Registers configuration options.
-	 *
-	 * @param {GUI} menu - A menu.
-	 */
 
 	registerOptions(menu) {
 
@@ -479,10 +463,6 @@ export class PerformanceDemo extends PostProcessingDemo {
 		}
 
 	}
-
-	/**
-	 * Disposes this demo.
-	 */
 
 	dispose() {
 

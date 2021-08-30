@@ -176,7 +176,9 @@ export class GodRaysEffect extends Effect {
 		 */
 
 		this.renderPassLight = new RenderPass(this.lightScene, camera);
-		this.renderPassLight.getClearPass().overrideClearColor = new Color(0x000000);
+		this.renderPassLight.getClearPass().overrideClearColor = new Color(
+			0x000000
+		);
 
 		/**
 		 * A clear pass.
@@ -196,7 +198,13 @@ export class GodRaysEffect extends Effect {
 		 * @type {BlurPass}
 		 */
 
-		this.blurPass = new BlurPass({ resolutionScale, width, height, kernelSize });
+		this.blurPass = new BlurPass({
+			resolutionScale,
+			width,
+			height,
+			kernelSize
+		});
+
 		this.blurPass.resolution.resizable = this;
 
 		/**
@@ -209,7 +217,8 @@ export class GodRaysEffect extends Effect {
 		this.depthMaskPass = new ShaderPass(new DepthMaskMaterial());
 
 		const depthMaskMaterial = this.depthMaskPass.getFullscreenMaterial();
-		depthMaskMaterial.uniforms.depthBuffer1.value = this.renderTargetLight.depthTexture;
+		depthMaskMaterial.uniforms.depthBuffer1.value = this.renderTargetLight
+			.depthTexture;
 
 		/**
 		 * A god rays blur pass.

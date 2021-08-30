@@ -200,7 +200,8 @@ function smoothArea(d) {
 }
 
 /**
- * Calculates the area under the line p1 -> p2, for the pixels (x, x + 1).
+ * Calculates the orthogonal area under the line p1 -> p2 for the pixels
+ * (x, x + 1).
  *
  * @private
  * @param {Number} p1X - The starting point of the line, X-component.
@@ -212,7 +213,7 @@ function smoothArea(d) {
  * @return {Float32Array} The area.
  */
 
-function calculateOrthogonalArea(p1X, p1Y, p2X, p2Y, x, result) {
+function getOrthArea(p1X, p1Y, p2X, p2Y, x, result) {
 
 	const dX = p2X - p1X;
 	const dY = p2Y - p1Y;
@@ -227,7 +228,8 @@ function calculateOrthogonalArea(p1X, p1Y, p2X, p2Y, x, result) {
 	if((x1 >= p1X && x1 < p2X) || (x2 > p1X && x2 <= p2X)) {
 
 		// Check if this is a trapezoid.
-		if(Math.sign(y1) === Math.sign(y2) || Math.abs(y1) < 1e-4 || Math.abs(y2) < 1e-4) {
+		if(Math.sign(y1) === Math.sign(y2) || Math.abs(y1) < 1e-4 ||
+			Math.abs(y2) < 1e-4) {
 
 			const a = (y1 + y2) / 2.0;
 
@@ -292,7 +294,7 @@ function calculateOrthogonalArea(p1X, p1Y, p2X, p2Y, x, result) {
  * @return {Float32Array} The orthogonal area.
  */
 
-function calculateOrthogonalAreaForPattern(pattern, left, right, offset, result) {
+function getOrthAreaForPattern(pattern, left, right, offset, result) {
 
 	const a1 = area[0];
 	const a2 = area[1];
@@ -333,7 +335,7 @@ function calculateOrthogonalAreaForPattern(pattern, left, right, offset, result)
 
 			if(left <= right) {
 
-				calculateOrthogonalArea(0.0, o2, d / 2.0, 0.0, left, result);
+				getOrthArea(0.0, o2, d / 2.0, 0.0, left, result);
 
 			} else {
 
@@ -354,7 +356,7 @@ function calculateOrthogonalAreaForPattern(pattern, left, right, offset, result)
 
 			if(left >= right) {
 
-				calculateOrthogonalArea(d / 2.0, 0.0, d, o2, left, result);
+				getOrthArea(d / 2.0, 0.0, d, o2, left, result);
 
 			} else {
 
@@ -373,8 +375,8 @@ function calculateOrthogonalAreaForPattern(pattern, left, right, offset, result)
 			 *   |      |
 			 */
 
-			calculateOrthogonalArea(0.0, o2, d / 2.0, 0.0, left, a1);
-			calculateOrthogonalArea(d / 2.0, 0.0, d, o2, left, a2);
+			getOrthArea(0.0, o2, d / 2.0, 0.0, left, a1);
+			getOrthArea(d / 2.0, 0.0, d, o2, left, a2);
 
 			smoothArea(d, area);
 
@@ -393,7 +395,7 @@ function calculateOrthogonalAreaForPattern(pattern, left, right, offset, result)
 
 			if(left <= right) {
 
-				calculateOrthogonalArea(0.0, o1, d / 2.0, 0.0, left, result);
+				getOrthArea(0.0, o1, d / 2.0, 0.0, left, result);
 
 			} else {
 
@@ -435,9 +437,9 @@ function calculateOrthogonalAreaForPattern(pattern, left, right, offset, result)
 
 			if(Math.abs(offset) > 0.0) {
 
-				calculateOrthogonalArea(0.0, o1, d, o2, left, a1);
-				calculateOrthogonalArea(0.0, o1, d / 2.0, 0.0, left, a2);
-				calculateOrthogonalArea(d / 2.0, 0.0, d, o2, left, result);
+				getOrthArea(0.0, o1, d, o2, left, a1);
+				getOrthArea(0.0, o1, d / 2.0, 0.0, left, a2);
+				getOrthArea(d / 2.0, 0.0, d, o2, left, result);
 
 				a2[0] = a2[0] + result[0];
 				a2[1] = a2[1] + result[1];
@@ -447,7 +449,7 @@ function calculateOrthogonalAreaForPattern(pattern, left, right, offset, result)
 
 			} else {
 
-				calculateOrthogonalArea(0.0, o1, d, o2, left, result);
+				getOrthArea(0.0, o1, d, o2, left, result);
 
 			}
 
@@ -462,7 +464,7 @@ function calculateOrthogonalAreaForPattern(pattern, left, right, offset, result)
 			 *   |      |
 			 */
 
-			calculateOrthogonalArea(0.0, o1, d, o2, left, result);
+			getOrthArea(0.0, o1, d, o2, left, result);
 
 			break;
 
@@ -476,7 +478,7 @@ function calculateOrthogonalAreaForPattern(pattern, left, right, offset, result)
 
 			if(left >= right) {
 
-				calculateOrthogonalArea(d / 2.0, 0.0, d, o1, left, result);
+				getOrthArea(d / 2.0, 0.0, d, o1, left, result);
 
 			} else {
 
@@ -498,9 +500,9 @@ function calculateOrthogonalAreaForPattern(pattern, left, right, offset, result)
 
 			if(Math.abs(offset) > 0.0) {
 
-				calculateOrthogonalArea(0.0, o2, d, o1, left, a1);
-				calculateOrthogonalArea(0.0, o2, d / 2.0, 0.0, left, a2);
-				calculateOrthogonalArea(d / 2.0, 0.0, d, o1, left, result);
+				getOrthArea(0.0, o2, d, o1, left, a1);
+				getOrthArea(0.0, o2, d / 2.0, 0.0, left, a2);
+				getOrthArea(d / 2.0, 0.0, d, o1, left, result);
 
 				a2[0] = a2[0] + result[0];
 				a2[1] = a2[1] + result[1];
@@ -510,7 +512,7 @@ function calculateOrthogonalAreaForPattern(pattern, left, right, offset, result)
 
 			} else {
 
-				calculateOrthogonalArea(0.0, o2, d, o1, left, result);
+				getOrthArea(0.0, o2, d, o1, left, result);
 
 			}
 
@@ -539,7 +541,7 @@ function calculateOrthogonalAreaForPattern(pattern, left, right, offset, result)
 			 *   |      |
 			 */
 
-			calculateOrthogonalArea(0.0, o2, d, o1, left, result);
+			getOrthArea(0.0, o2, d, o1, left, result);
 
 			break;
 
@@ -551,8 +553,8 @@ function calculateOrthogonalAreaForPattern(pattern, left, right, offset, result)
 			 *   `------´
 			 */
 
-			calculateOrthogonalArea(0.0, o1, d / 2.0, 0.0, left, a1);
-			calculateOrthogonalArea(d / 2.0, 0.0, d, o1, left, a2);
+			getOrthArea(0.0, o1, d / 2.0, 0.0, left, a1);
+			getOrthArea(d / 2.0, 0.0, d, o1, left, a2);
 
 			smoothArea(d, area);
 
@@ -570,7 +572,7 @@ function calculateOrthogonalAreaForPattern(pattern, left, right, offset, result)
 			 *   |
 			 */
 
-			calculateOrthogonalArea(0.0, o2, d, o1, left, result);
+			getOrthArea(0.0, o2, d, o1, left, result);
 
 			break;
 
@@ -583,7 +585,7 @@ function calculateOrthogonalAreaForPattern(pattern, left, right, offset, result)
 			 *          |
 			 */
 
-			calculateOrthogonalArea(0.0, o1, d, o2, left, result);
+			getOrthArea(0.0, o1, d, o2, left, result);
 
 			break;
 
@@ -645,8 +647,8 @@ function isInsideArea(a1X, a1Y, a2X, a2Y, x, y) {
 }
 
 /**
- * Calculates the area under the line p1 -> p2 for the pixel p using brute force
- * sampling.
+ * Calculates the diagonal area under the line p1 -> p2 for the pixel p using
+ * brute force sampling.
  *
  * @private
  * @param {Number} a1X - The lower bounds of the area, X-component.
@@ -658,7 +660,7 @@ function isInsideArea(a1X, a1Y, a2X, a2Y, x, y) {
  * @return {Number} The amount of pixels inside the area relative to the total amount of sampled pixels.
  */
 
-function calculateDiagonalAreaForPixel(a1X, a1Y, a2X, a2Y, pX, pY) {
+function getDiagAreaForPixel(a1X, a1Y, a2X, a2Y, pX, pY) {
 
 	let n = 0;
 
@@ -699,7 +701,7 @@ function calculateDiagonalAreaForPixel(a1X, a1Y, a2X, a2Y, pX, pY) {
  * @return {Float32Array} The area.
  */
 
-function calculateDiagonalArea(pattern, a1X, a1Y, a2X, a2Y, left, offset, result) {
+function getDiagArea(pattern, a1X, a1Y, a2X, a2Y, left, offset, result) {
 
 	const e = diagonalEdges[pattern];
 	const e1 = e[0];
@@ -719,8 +721,8 @@ function calculateDiagonalArea(pattern, a1X, a1Y, a2X, a2Y, left, offset, result
 
 	}
 
-	result[0] = 1.0 - calculateDiagonalAreaForPixel(a1X, a1Y, a2X, a2Y, 1.0 + left, 0.0 + left);
-	result[1] = calculateDiagonalAreaForPixel(a1X, a1Y, a2X, a2Y, 1.0 + left, 1.0 + left);
+	result[0] = 1.0 - getDiagAreaForPixel(a1X, a1Y, a2X, a2Y, 1.0 + left, 0.0 + left);
+	result[1] = getDiagAreaForPixel(a1X, a1Y, a2X, a2Y, 1.0 + left, 1.0 + left);
 
 	return result;
 
@@ -739,7 +741,7 @@ function calculateDiagonalArea(pattern, a1X, a1Y, a2X, a2Y, left, offset, result
  * @return {Float32Array} The orthogonal area.
  */
 
-function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
+function getDiagAreaForPattern(pattern, left, right, offset, result) {
 
 	const a1 = area[0];
 	const a2 = area[1];
@@ -766,10 +768,10 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			 */
 
 			// First possibility.
-			calculateDiagonalArea(pattern, 1.0, 1.0, 1.0 + d, 1.0 + d, left, offset, a1);
+			getDiagArea(pattern, 1.0, 1.0, 1.0 + d, 1.0 + d, left, offset, a1);
 
 			// Second possibility.
-			calculateDiagonalArea(pattern, 1.0, 0.0, 1.0 + d, 0.0 + d, left, offset, a2);
+			getDiagArea(pattern, 1.0, 0.0, 1.0 + d, 0.0 + d, left, offset, a2);
 
 			// Blend both possibilities together.
 			result[0] = (a1[0] + a2[0]) / 2.0;
@@ -789,8 +791,8 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			 *   |
 			 */
 
-			calculateDiagonalArea(pattern, 1.0, 0.0, 0.0 + d, 0.0 + d, left, offset, a1);
-			calculateDiagonalArea(pattern, 1.0, 0.0, 1.0 + d, 0.0 + d, left, offset, a2);
+			getDiagArea(pattern, 1.0, 0.0, 0.0 + d, 0.0 + d, left, offset, a1);
+			getDiagArea(pattern, 1.0, 0.0, 1.0 + d, 0.0 + d, left, offset, a2);
 
 			result[0] = (a1[0] + a2[0]) / 2.0;
 			result[1] = (a1[1] + a2[1]) / 2.0;
@@ -808,8 +810,8 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			 *   ´
 			 */
 
-			calculateDiagonalArea(pattern, 0.0, 0.0, 1.0 + d, 0.0 + d, left, offset, a1);
-			calculateDiagonalArea(pattern, 1.0, 0.0, 1.0 + d, 0.0 + d, left, offset, a2);
+			getDiagArea(pattern, 0.0, 0.0, 1.0 + d, 0.0 + d, left, offset, a1);
+			getDiagArea(pattern, 1.0, 0.0, 1.0 + d, 0.0 + d, left, offset, a2);
 
 			result[0] = (a1[0] + a2[0]) / 2.0;
 			result[1] = (a1[1] + a2[1]) / 2.0;
@@ -829,7 +831,7 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			 *   |
 			 */
 
-			calculateDiagonalArea(pattern, 1.0, 0.0, 1.0 + d, 0.0 + d, left, offset, result);
+			getDiagArea(pattern, 1.0, 0.0, 1.0 + d, 0.0 + d, left, offset, result);
 
 			break;
 
@@ -843,8 +845,8 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			 * ----´
 			 */
 
-			calculateDiagonalArea(pattern, 1.0, 1.0, 0.0 + d, 0.0 + d, left, offset, a1);
-			calculateDiagonalArea(pattern, 1.0, 1.0, 1.0 + d, 0.0 + d, left, offset, a2);
+			getDiagArea(pattern, 1.0, 1.0, 0.0 + d, 0.0 + d, left, offset, a1);
+			getDiagArea(pattern, 1.0, 1.0, 1.0 + d, 0.0 + d, left, offset, a2);
 
 			result[0] = (a1[0] + a2[0]) / 2.0;
 			result[1] = (a1[1] + a2[1]) / 2.0;
@@ -863,8 +865,8 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			 *   |
 			 */
 
-			calculateDiagonalArea(pattern, 1.0, 1.0, 0.0 + d, 0.0 + d, left, offset, a1);
-			calculateDiagonalArea(pattern, 1.0, 0.0, 1.0 + d, 0.0 + d, left, offset, a2);
+			getDiagArea(pattern, 1.0, 1.0, 0.0 + d, 0.0 + d, left, offset, a1);
+			getDiagArea(pattern, 1.0, 0.0, 1.0 + d, 0.0 + d, left, offset, a2);
 
 			result[0] = (a1[0] + a2[0]) / 2.0;
 			result[1] = (a1[1] + a2[1]) / 2.0;
@@ -881,7 +883,7 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			 * ----´
 			 */
 
-			calculateDiagonalArea(pattern, 1.0, 1.0, 1.0 + d, 0.0 + d, left, offset, result);
+			getDiagArea(pattern, 1.0, 1.0, 1.0 + d, 0.0 + d, left, offset, result);
 
 			break;
 
@@ -897,8 +899,8 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			 *   |
 			 */
 
-			calculateDiagonalArea(pattern, 1.0, 1.0, 1.0 + d, 0.0 + d, left, offset, a1);
-			calculateDiagonalArea(pattern, 1.0, 0.0, 1.0 + d, 0.0 + d, left, offset, a2);
+			getDiagArea(pattern, 1.0, 1.0, 1.0 + d, 0.0 + d, left, offset, a1);
+			getDiagArea(pattern, 1.0, 0.0, 1.0 + d, 0.0 + d, left, offset, a2);
 
 			result[0] = (a1[0] + a2[0]) / 2.0;
 			result[1] = (a1[1] + a2[1]) / 2.0;
@@ -917,8 +919,8 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			 *   ´
 			 */
 
-			calculateDiagonalArea(pattern, 0.0, 0.0, 1.0 + d, 1.0 + d, left, offset, a1);
-			calculateDiagonalArea(pattern, 1.0, 0.0, 1.0 + d, 1.0 + d, left, offset, a2);
+			getDiagArea(pattern, 0.0, 0.0, 1.0 + d, 1.0 + d, left, offset, a1);
+			getDiagArea(pattern, 1.0, 0.0, 1.0 + d, 1.0 + d, left, offset, a2);
 
 			result[0] = (a1[0] + a2[0]) / 2.0;
 			result[1] = (a1[1] + a2[1]) / 2.0;
@@ -938,8 +940,8 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			 *   |
 			 */
 
-			calculateDiagonalArea(pattern, 1.0, 0.0, 1.0 + d, 1.0 + d, left, offset, result);
-			calculateDiagonalArea(pattern, 1.0, 0.0, 1.0 + d, 1.0 + d, left, offset, result);
+			getDiagArea(pattern, 1.0, 0.0, 1.0 + d, 1.0 + d, left, offset, result);
+			getDiagArea(pattern, 1.0, 0.0, 1.0 + d, 1.0 + d, left, offset, result);
 
 			break;
 
@@ -955,8 +957,8 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			 *   ´
 			 */
 
-			calculateDiagonalArea(pattern, 0.0, 0.0, 1.0 + d, 1.0 + d, left, offset, a1);
-			calculateDiagonalArea(pattern, 1.0, 0.0, 1.0 + d, 0.0 + d, left, offset, a2);
+			getDiagArea(pattern, 0.0, 0.0, 1.0 + d, 1.0 + d, left, offset, a1);
+			getDiagArea(pattern, 1.0, 0.0, 1.0 + d, 0.0 + d, left, offset, a2);
 
 			result[0] = (a1[0] + a2[0]) / 2.0;
 			result[1] = (a1[1] + a2[1]) / 2.0;
@@ -976,8 +978,8 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			 *   |
 			 */
 
-			calculateDiagonalArea(pattern, 1.0, 0.0, 1.0 + d, 1.0 + d, left, offset, a1);
-			calculateDiagonalArea(pattern, 1.0, 0.0, 1.0 + d, 0.0 + d, left, offset, a2);
+			getDiagArea(pattern, 1.0, 0.0, 1.0 + d, 1.0 + d, left, offset, a1);
+			getDiagArea(pattern, 1.0, 0.0, 1.0 + d, 0.0 + d, left, offset, a2);
 
 			result[0] = (a1[0] + a2[0]) / 2.0;
 			result[1] = (a1[1] + a2[1]) / 2.0;
@@ -995,7 +997,7 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			 * ----´
 			 */
 
-			calculateDiagonalArea(pattern, 1.0, 1.0, 1.0 + d, 1.0 + d, left, offset, result);
+			getDiagArea(pattern, 1.0, 1.0, 1.0 + d, 1.0 + d, left, offset, result);
 
 			break;
 
@@ -1012,8 +1014,8 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			 *   |
 			 */
 
-			calculateDiagonalArea(pattern, 1.0, 1.0, 1.0 + d, 1.0 + d, left, offset, a1);
-			calculateDiagonalArea(pattern, 1.0, 0.0, 1.0 + d, 1.0 + d, left, offset, a2);
+			getDiagArea(pattern, 1.0, 1.0, 1.0 + d, 1.0 + d, left, offset, a1);
+			getDiagArea(pattern, 1.0, 0.0, 1.0 + d, 1.0 + d, left, offset, a2);
 
 			result[0] = (a1[0] + a2[0]) / 2.0;
 			result[1] = (a1[1] + a2[1]) / 2.0;
@@ -1031,8 +1033,8 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			 * ----´
 			 */
 
-			calculateDiagonalArea(pattern, 1.0, 1.0, 1.0 + d, 1.0 + d, left, offset, a1);
-			calculateDiagonalArea(pattern, 1.0, 1.0, 1.0 + d, 0.0 + d, left, offset, a2);
+			getDiagArea(pattern, 1.0, 1.0, 1.0 + d, 1.0 + d, left, offset, a1);
+			getDiagArea(pattern, 1.0, 1.0, 1.0 + d, 0.0 + d, left, offset, a2);
 
 			result[0] = (a1[0] + a2[0]) / 2.0;
 			result[1] = (a1[1] + a2[1]) / 2.0;
@@ -1052,8 +1054,8 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			 *   |
 			 */
 
-			calculateDiagonalArea(pattern, 1.0, 1.0, 1.0 + d, 1.0 + d, left, offset, a1);
-			calculateDiagonalArea(pattern, 1.0, 0.0, 1.0 + d, 0.0 + d, left, offset, a2);
+			getDiagArea(pattern, 1.0, 1.0, 1.0 + d, 1.0 + d, left, offset, a1);
+			getDiagArea(pattern, 1.0, 0.0, 1.0 + d, 0.0 + d, left, offset, a2);
 
 			result[0] = (a1[0] + a2[0]) / 2.0;
 			result[1] = (a1[1] + a2[1]) / 2.0;
@@ -1093,11 +1095,11 @@ function generatePatterns(patterns, offset, orthogonal) {
 
 				if(orthogonal) {
 
-					calculateOrthogonalAreaForPattern(i, x, y, offset, result);
+					getOrthAreaForPattern(i, x, y, offset, result);
 
 				} else {
 
-					calculateDiagonalAreaForPattern(i, x, y, offset, result);
+					getDiagAreaForPattern(i, x, y, offset, result);
 
 				}
 
@@ -1192,8 +1194,8 @@ export class SMAAAreaImageData {
 		const data = new Uint8ClampedArray(width * height * 4);
 		const result = new RawImageData(width, height, data);
 
-		const orthogonalPatternSize = Math.pow(ORTHOGONAL_SIZE - 1, 2) + 1;
-		const diagonalPatternSize = DIAGONAL_SIZE;
+		const orthPatternSize = Math.pow(ORTHOGONAL_SIZE - 1, 2) + 1;
+		const diagPatternSize = DIAGONAL_SIZE;
 
 		const orthogonalPatterns = [];
 		const diagonalPatterns = [];
@@ -1207,18 +1209,28 @@ export class SMAAAreaImageData {
 		// Prepare 16 image data sets for the orthogonal and diagonal subtextures.
 		for(let i = 0; i < 16; ++i) {
 
-			orthogonalPatterns.push(new RawImageData(orthogonalPatternSize, orthogonalPatternSize,
-				new Uint8ClampedArray(orthogonalPatternSize * orthogonalPatternSize * 2), 2));
+			orthogonalPatterns.push(new RawImageData(
+				orthPatternSize, orthPatternSize,
+				new Uint8ClampedArray(orthPatternSize * orthPatternSize * 2),
+				2
+			));
 
-			diagonalPatterns.push(new RawImageData(diagonalPatternSize, diagonalPatternSize,
-				new Uint8ClampedArray(diagonalPatternSize * diagonalPatternSize * 2), 2));
+			diagonalPatterns.push(new RawImageData(
+				diagPatternSize, diagPatternSize,
+				new Uint8ClampedArray(diagPatternSize * diagPatternSize * 2),
+				2
+			));
 
 		}
 
 		for(let i = 0, l = orthogonalSubsamplingOffsets.length; i < l; ++i) {
 
 			// Generate 16 orthogonal patterns for each offset.
-			generatePatterns(orthogonalPatterns, orthogonalSubsamplingOffsets[i], true);
+			generatePatterns(
+				orthogonalPatterns,
+				orthogonalSubsamplingOffsets[i],
+				true
+			);
 
 			// Assemble the orthogonal patterns and place them on the left side.
 			assemble(

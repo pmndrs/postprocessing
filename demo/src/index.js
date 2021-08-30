@@ -6,8 +6,9 @@ import {
 	WebGLRenderer
 } from "three";
 
-import { DemoManager } from "three-demo";
+import { calculateVerticalFoV, DemoManager } from "three-demo";
 import { EffectComposer, OverrideMaterialManager } from "../../src";
+import { ProgressManager } from "./utils/ProgressManager";
 
 import { AntialiasingDemo } from "./demos/AntialiasingDemo";
 import { BloomDemo } from "./demos/BloomDemo";
@@ -25,54 +26,6 @@ import { SSAODemo } from "./demos/SSAODemo";
 import { TextureDemo } from "./demos/TextureDemo";
 import { ToneMappingDemo } from "./demos/ToneMappingDemo";
 import { PerformanceDemo } from "./demos/PerformanceDemo";
-
-import { ProgressManager } from "./utils/ProgressManager";
-
-/**
- * A demo manager.
- *
- * @type {DemoManager}
- * @private
- */
-
-let manager;
-
-/**
- * A composer.
- *
- * @type {EffectComposer}
- * @private
- */
-
-let composer;
-
-/**
- * A camera.
- *
- * @type {Camera}
- * @private
- */
-
-let camera;
-
-/**
- * Renders the current demo.
- *
- * @param {DOMHighResTimeStamp} timestamp - The current time in seconds.
- */
-
-function render(timestamp) {
-
-	requestAnimationFrame(render);
-	manager.render(timestamp);
-
-}
-
-/**
- * Performs initialization tasks when the page has been fully loaded.
- *
- * @param {Event} event - An event.
- */
 
 window.addEventListener("load", (event) => {
 
@@ -103,12 +56,12 @@ window.addEventListener("load", (event) => {
 	OverrideMaterialManager.workaroundEnabled = true;
 
 	// Create the effect composer.
-	composer = new EffectComposer(renderer, {
+	const composer = new EffectComposer(renderer, {
 		frameBufferType: HalfFloatType
 	});
 
 	// Create the demo manager.
-	manager = new DemoManager(viewport, {
+	const manager = new DemoManager(viewport, {
 		aside: document.getElementById("aside"),
 		renderer
 	});
@@ -128,20 +81,71 @@ window.addEventListener("load", (event) => {
 	manager.addEventListener("load", (event) => {
 
 		const demo = event.demo;
-		camera = demo.camera;
+		const camera = demo.getCamera();
 		demo.renderPass.camera = camera;
 
 		if(!demoCache.has(demo)) {
 
 			// Prevent stuttering when new objects come into view.
-			demo.scene.traverse((node) => (node.frustumCulled = false));
+			demo.scene.traverse((node) => void (node.frustumCulled = false));
 			manager.render(0.0);
-			demo.scene.traverse((node) => (node.frustumCulled = true));
+			demo.scene.traverse((node) => void (node.frustumCulled = true));
 			demoCache.add(demo);
 
 		}
 
 		document.querySelector(".loading").classList.add("hidden");
+
+	});
+
+	window.addEventListener("resize", (event) => {
+
+		const width = window.innerWidth;
+		const height = window.innerHeight;
+		const demo = manager.getCurrentDemo();
+
+		if(demo !== null) {
+
+			const camera = demo.getCamera();
+			const aspect = Math.max(width / height, 16 / 9);
+			const vFoV = calculateVerticalFoV(90, aspect);
+			camera.fov = vFoV;
+
+		}
+
+		manager.setSize(width, height);
+		composer.setSize(width, height);
+
+	});
+
+	document.addEventListener("keyup", (event) => {
+
+		if(event.key === "h") {
+
+			const aside = document.querySelector("aside");
+			const footer = document.querySelector("footer");
+
+			event.preventDefault();
+			aside.classList.toggle("hidden");
+			footer.classList.toggle("hidden");
+
+		} else if(event.key === "c") {
+
+			const camera = manager.getCurrentDemo().getCamera();
+
+			if(camera !== null) {
+
+				const v = new Vector3();
+				console.log("Camera position", camera.position);
+				console.log("World direction", camera.getWorldDirection(v));
+				console.log("Target position", v.addVectors(
+					camera.position,
+					camera.getWorldDirection(v)
+				));
+
+			}
+
+		}
 
 	});
 
@@ -180,31 +184,14 @@ window.addEventListener("load", (event) => {
 
 	}
 
-	requestAnimationFrame(render);
+	requestAnimationFrame(function render(timestamp) {
+
+		requestAnimationFrame(render);
+		manager.render(timestamp);
+
+	});
 
 });
-
-/**
- * Handles browser resizing.
- *
- * @param {Event} event - An event.
- */
-
-window.addEventListener("resize", (event) => {
-
-	const width = window.innerWidth;
-	const height = window.innerHeight;
-	manager.setSize(width, height);
-	composer.setSize(width, height);
-
-});
-
-/**
- * Performs initialization tasks when the document is ready.
- *
- * @private
- * @param {Event} event - An event.
- */
 
 document.addEventListener("DOMContentLoaded", (event) => {
 
@@ -222,34 +209,5 @@ document.addEventListener("DOMContentLoaded", (event) => {
 	}
 
 	ProgressManager.initialize();
-
-});
-
-/**
- * Handles keyboard events.
- *
- * @private
- * @param {KeyboardEvent} event - An event.
- */
-
-document.addEventListener("keyup", (event) => {
-
-	if(event.key === "h") {
-
-		const aside = document.querySelector("aside");
-		const footer = document.querySelector("footer");
-
-		event.preventDefault();
-		aside.classList.toggle("hidden");
-		footer.classList.toggle("hidden");
-
-	} else if(camera !== undefined && event.key === "c") {
-
-		const v = new Vector3();
-		console.log("Camera position", camera.position);
-		console.log("World direction", camera.getWorldDirection(v));
-		console.log("Target position", v.addVectors(camera.position, camera.getWorldDirection(v)));
-
-	}
 
 });

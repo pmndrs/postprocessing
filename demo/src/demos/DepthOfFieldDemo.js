@@ -1,5 +1,6 @@
 import { Color, PerspectiveCamera } from "three";
 import { SpatialControls } from "spatial-controls";
+import { calculateVerticalFoV } from "three-demo";
 import { ProgressManager } from "../utils/ProgressManager";
 import { PostProcessingDemo } from "./PostProcessingDemo";
 
@@ -20,7 +21,7 @@ import {
 } from "../../../src";
 
 /**
- * A depth of field demo setup.
+ * A depth of field demo.
  */
 
 export class DepthOfFieldDemo extends PostProcessingDemo {
@@ -94,19 +95,14 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Loads scene assets.
-	 *
-	 * @return {Promise} A promise that returns a collection of assets.
-	 */
-
 	load() {
 
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
-		const anisotropy = Math.min(this.composer.getRenderer().capabilities.getMaxAnisotropy(), 8);
+		const anisotropy = Math.min(this.composer.getRenderer()
+			.capabilities.getMaxAnisotropy(), 8);
 
 		return new Promise((resolve, reject) => {
 
@@ -114,7 +110,7 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 
 				loadingManager.onLoad = () => setTimeout(resolve, 250);
 				loadingManager.onProgress = ProgressManager.updateProgress;
-				loadingManager.onError = (url) => console.error(`Failed to load ${url}`);
+				loadingManager.onError = url => console.error(`Failed to load ${url}`);
 
 				Sponza.load(assets, loadingManager, anisotropy);
 
@@ -135,29 +131,30 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Creates the scene.
-	 */
-
 	initialize() {
 
 		const scene = this.scene;
 		const assets = this.assets;
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
+		const domElement = renderer.domElement;
 
 		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
-		const camera = new PerspectiveCamera(50, aspect, 0.3, 30);
+		const vFoV = calculateVerticalFoV(90, Math.max(aspect, 16 / 9));
+		const camera = new PerspectiveCamera(vFoV, aspect, 0.3, 30);
 		this.camera = camera;
 
 		// Controls
 
-		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
+		const { position, quaternion } = camera;
+		const controls = new SpatialControls(position, quaternion, domElement);
 		const settings = controls.settings;
 		settings.rotation.setSensitivity(2.2);
+		settings.rotation.setDamping(0.05);
 		settings.translation.setSensitivity(3.0);
+		settings.translation.setDamping(0.1);
 		controls.setPosition(-2.3684, 0.5964, -1.3052);
 		controls.lookAt(-1.4265, 0.6513, -1.6365);
 		this.controls = controls;
@@ -207,7 +204,14 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 			texture: depthOfFieldEffect.renderTargetCoC.texture
 		});
 
-		const effectPass = new EffectPass(camera, depthOfFieldEffect, vignetteEffect, cocTextureEffect, depthEffect);
+		const effectPass = new EffectPass(
+			camera,
+			depthOfFieldEffect,
+			vignetteEffect,
+			cocTextureEffect,
+			depthEffect
+		);
+
 		const smaaPass = new EffectPass(camera, smaaEffect);
 
 		this.depthEffect = depthEffect;
@@ -222,12 +226,6 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 		composer.addPass(smaaPass);
 
 	}
-
-	/**
-	 * Registers configuration options.
-	 *
-	 * @param {GUI} menu - A menu.
-	 */
 
 	registerOptions(menu) {
 
@@ -270,9 +268,12 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 
 			const mode = Number(params["render mode"]);
 
-			depthEffect.blendMode.setBlendFunction((mode === RenderMode.DEPTH) ? BlendFunction.NORMAL : BlendFunction.SKIP);
-			cocTextureEffect.blendMode.setBlendFunction((mode === RenderMode.COC) ? BlendFunction.NORMAL : BlendFunction.SKIP);
-			vignetteEffect.blendMode.setBlendFunction((mode === RenderMode.DEFAULT && params.vignette.enabled) ? BlendFunction.NORMAL : BlendFunction.SKIP);
+			depthEffect.blendMode.setBlendFunction((mode === RenderMode.DEPTH) ?
+				BlendFunction.NORMAL : BlendFunction.SKIP);
+			cocTextureEffect.blendMode.setBlendFunction((mode === RenderMode.COC) ?
+				BlendFunction.NORMAL : BlendFunction.SKIP);
+			vignetteEffect.blendMode.setBlendFunction((mode === RenderMode.DEFAULT &&
+				params.vignette.enabled) ? BlendFunction.NORMAL : BlendFunction.SKIP);
 
 			smaaPass.enabled = (mode === RenderMode.DEFAULT);
 			effectPass.encodeOutput = (mode === RenderMode.DEFAULT);
@@ -288,7 +289,7 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(params, "bokeh scale").min(1.0).max(5.0).step(0.001).onChange((value) => {
+		menu.add(params, "bokeh scale", 1.0, 5.0, 0.001).onChange((value) => {
 
 			depthOfFieldEffect.bokehScale = value;
 
@@ -302,20 +303,20 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 
 		});
 
-		folder.add(params.coc, "focus").min(0.0).max(1.0).step(0.001).onChange((value) => {
+		folder.add(params.coc, "focus", 0.0, 1.0, 0.001).onChange((value) => {
 
 			cocMaterial.uniforms.focusDistance.value = value;
 
 		});
 
-		folder.add(params.coc, "focal length").min(0.0).max(1.0).step(0.0001).onChange((value) => {
+		folder.add(params.coc, "focal length", 0.0, 1.0, 0.0001)
+			.onChange((value) => {
 
-			cocMaterial.uniforms.focalLength.value = value;
+				cocMaterial.uniforms.focalLength.value = value;
 
-		});
+			});
 
 		folder.open();
-
 		folder = menu.addFolder("Vignette");
 
 		folder.add(params.vignette, "enabled").onChange((value) => {
@@ -326,19 +327,20 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 
 		folder.add(vignetteEffect, "eskil");
 
-		folder.add(params.vignette, "offset").min(0.0).max(1.0).step(0.001).onChange((value) => {
+		folder.add(params.vignette, "offset", 0.0, 1.0, 0.001).onChange((value) => {
 
 			vignetteEffect.uniforms.get("offset").value = value;
 
 		});
 
-		folder.add(params.vignette, "darkness").min(0.0).max(1.0).step(0.001).onChange((value) => {
+		folder.add(params.vignette, "darkness", 0.0, 1.0, 0.001)
+			.onChange((value) => {
 
-			vignetteEffect.uniforms.get("darkness").value = value;
+				vignetteEffect.uniforms.get("darkness").value = value;
 
-		});
+			});
 
-		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		menu.add(params, "opacity", 0.0, 1.0, 0.01).onChange((value) => {
 
 			blendMode.opacity.value = value;
 

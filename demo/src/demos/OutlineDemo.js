@@ -20,6 +20,7 @@ import {
 } from "three";
 
 import { ControlMode, SpatialControls } from "spatial-controls";
+import { calculateVerticalFoV } from "three-demo";
 import { ProgressManager } from "../utils/ProgressManager";
 import { PostProcessingDemo } from "./PostProcessingDemo";
 
@@ -46,7 +47,7 @@ import {
 const ndc = new Vector2();
 
 /**
- * An outline demo setup.
+ * An outline demo.
  *
  * @implements {EventListenerObject}
  */
@@ -169,17 +170,11 @@ export class OutlineDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Handles events.
-	 *
-	 * @param {Event} event - An event.
-	 */
-
 	handleEvent(event) {
 
 		switch(event.type) {
 
-			case "mousedown":
+			case "pointerdown":
 				this.raycast(event);
 				this.handleSelection();
 				break;
@@ -187,12 +182,6 @@ export class OutlineDemo extends PostProcessingDemo {
 		}
 
 	}
-
-	/**
-	 * Loads scene assets.
-	 *
-	 * @return {Promise} A promise that returns a collection of assets.
-	 */
 
 	load() {
 
@@ -216,7 +205,7 @@ export class OutlineDemo extends PostProcessingDemo {
 
 				loadingManager.onLoad = () => setTimeout(resolve, 250);
 				loadingManager.onProgress = ProgressManager.updateProgress;
-				loadingManager.onError = (url) => console.error(`Failed to load ${url}`);
+				loadingManager.onError = url => console.error(`Failed to load ${url}`);
 
 				cubeTextureLoader.load(urls, (t) => {
 
@@ -260,19 +249,23 @@ export class OutlineDemo extends PostProcessingDemo {
 		const assets = this.assets;
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
+		const domElement = renderer.domElement;
 
 		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
-		const camera = new PerspectiveCamera(50, aspect, 1, 2000);
+		const vFoV = calculateVerticalFoV(90, Math.max(aspect, 16 / 9));
+		const camera = new PerspectiveCamera(vFoV, aspect, 0.3, 2000);
 		this.camera = camera;
 
 		// Controls
 
-		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
+		const { position, quaternion } = camera;
+		const controls = new SpatialControls(position, quaternion, domElement);
 		const settings = controls.settings;
 		settings.general.setMode(ControlMode.THIRD_PERSON);
 		settings.rotation.setSensitivity(2.2);
+		settings.rotation.setDamping(0.05);
 		settings.translation.setEnabled(false);
 		settings.zoom.setSensitivity(1.0);
 		controls.setPosition(-4, 1.25, -5);
@@ -382,7 +375,7 @@ export class OutlineDemo extends PostProcessingDemo {
 		// Raycaster
 
 		this.raycaster = new Raycaster();
-		renderer.domElement.addEventListener("mousedown", this);
+		renderer.domElement.addEventListener("pointerdown", this);
 
 		// Passes
 
@@ -420,24 +413,11 @@ export class OutlineDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Updates this demo.
-	 *
-	 * @param {Number} deltaTime - The time since the last frame in seconds.
-	 * @param {Number} timestamp - The current time in milliseconds.
-	 */
-
 	update(deltaTime, timestamp) {
 
 		this.animationMixer.update(deltaTime);
 
 	}
-
-	/**
-	 * Registers configuration options.
-	 *
-	 * @param {GUI} menu - A menu.
-	 */
 
 	registerOptions(menu) {
 
@@ -456,22 +436,26 @@ export class OutlineDemo extends PostProcessingDemo {
 			"pattern scale": 60.0,
 			"pulse speed": effect.pulseSpeed,
 			"edge strength": uniforms.get("edgeStrength").value,
-			"visible edge": color.copyLinearToSRGB(uniforms.get("visibleEdgeColor").value).getHex(),
-			"hidden edge": color.copyLinearToSRGB(uniforms.get("hiddenEdgeColor").value).getHex(),
+			"visible edge": color.copyLinearToSRGB(
+				uniforms.get("visibleEdgeColor").value).getHex(),
+			"hidden edge": color.copyLinearToSRGB(
+				uniforms.get("hiddenEdgeColor").value).getHex(),
 			"x-ray": true,
 			"opacity": blendMode.opacity.value,
 			"blend mode": blendMode.blendFunction
 		};
 
-		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange((value) => {
+		menu.add(params, "resolution", [240, 360, 480, 720, 1080])
+			.onChange((value) => {
 
-			effect.resolution.height = Number(value);
+				effect.resolution.height = Number(value);
 
-		});
+			});
 
 		menu.add(pass, "dithering");
 
-		menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE + 1).step(1).onChange((value) => {
+		menu.add(params, "blurriness",
+			KernelSize.VERY_SMALL, KernelSize.HUGE + 1, 1).onChange((value) => {
 
 			effect.blur = (value > 0);
 			effect.blurPass.kernelSize = value - 1;
@@ -493,7 +477,7 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(params, "pattern scale").min(20.0).max(100.0).step(0.1).onChange((value) => {
+		menu.add(params, "pattern scale", 20.0, 100.0, 0.1).onChange((value) => {
 
 			if(uniforms.has("patternScale")) {
 
@@ -503,13 +487,13 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(params, "edge strength").min(0.0).max(10.0).step(0.01).onChange((value) => {
+		menu.add(params, "edge strength", 0.0, 10.0, 0.01).onChange((value) => {
 
 			uniforms.get("edgeStrength").value = value;
 
 		});
 
-		menu.add(params, "pulse speed").min(0.0).max(2.0).step(0.01).onChange((value) => {
+		menu.add(params, "pulse speed", 0.0, 2.0, 0.01).onChange((value) => {
 
 			effect.pulseSpeed = value;
 
@@ -517,19 +501,21 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		menu.addColor(params, "visible edge").onChange((value) => {
 
-			uniforms.get("visibleEdgeColor").value.setHex(value).convertSRGBToLinear();
+			uniforms.get("visibleEdgeColor").value.setHex(value)
+				.convertSRGBToLinear();
 
 		});
 
 		menu.addColor(params, "hidden edge").onChange((value) => {
 
-			uniforms.get("hiddenEdgeColor").value.setHex(value).convertSRGBToLinear();
+			uniforms.get("hiddenEdgeColor").value.setHex(value)
+				.convertSRGBToLinear();
 
 		});
 
 		menu.add(effect, "xRay");
 
-		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		menu.add(params, "opacity", 0.0, 1.0, 0.01).onChange((value) => {
 
 			blendMode.opacity.value = value;
 
@@ -549,14 +535,10 @@ export class OutlineDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Disposes this demo.
-	 */
-
 	dispose() {
 
 		const dom = this.composer.getRenderer().domElement;
-		dom.removeEventListener("mousedown", this);
+		dom.removeEventListener("pointerdown", this);
 
 	}
 

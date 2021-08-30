@@ -81,7 +81,13 @@ export class BloomEffect extends Effect {
 		 * @type {BlurPass}
 		 */
 
-		this.blurPass = new BlurPass({ resolutionScale, width, height, kernelSize });
+		this.blurPass = new BlurPass({
+			resolutionScale,
+			width,
+			height,
+			kernelSize
+		});
+
 		this.blurPass.resolution.resizable = this;
 
 		/**
@@ -251,7 +257,8 @@ export class BloomEffect extends Effect {
 
 	get distinction() {
 
-		console.warn(this.name, "The distinction field has been removed, use luminanceMaterial.threshold and luminanceMaterial.smoothing instead.");
+		console.warn(this.name, "The distinction field has been removed, " +
+			"use .threshold and .smoothing instead.");
 
 		return 1.0;
 
@@ -264,7 +271,8 @@ export class BloomEffect extends Effect {
 
 	set distinction(value) {
 
-		console.warn(this.name, "The distinction field has been removed, use luminanceMaterial.threshold and luminanceMaterial.smoothing instead.");
+		console.warn(this.name, "The distinction field has been removed, " +
+			"use .threshold and .smoothing instead.");
 
 	}
 

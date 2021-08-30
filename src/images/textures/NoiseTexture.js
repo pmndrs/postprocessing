@@ -81,7 +81,12 @@ export class NoiseTexture extends DataTexture {
 	 * @param {Number} [type=UnsignedByteType] - The texture type.
 	 */
 
-	constructor(width, height, format = LuminanceFormat, type = UnsignedByteType) {
+	constructor(
+		width,
+		height,
+		format = LuminanceFormat,
+		type = UnsignedByteType
+	) {
 
 		super(getNoise(width * height, format, type), width, height, format, type);
 

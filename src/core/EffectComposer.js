@@ -83,7 +83,14 @@ export class EffectComposer {
 		if(this.renderer !== null) {
 
 			this.renderer.autoClear = false;
-			this.inputBuffer = this.createBuffer(depthBuffer, stencilBuffer, frameBufferType, multisampling);
+
+			this.inputBuffer = this.createBuffer(
+				depthBuffer,
+				stencilBuffer,
+				frameBufferType,
+				multisampling
+			);
+
 			this.outputBuffer = this.inputBuffer.clone();
 
 		}
@@ -532,7 +539,13 @@ export class EffectComposer {
 
 			if(pass.enabled) {
 
-				pass.render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest);
+				pass.render(
+					renderer,
+					inputBuffer,
+					outputBuffer,
+					deltaTime,
+					stencilTest
+				);
 
 				if(pass.needsSwap) {
 
@@ -544,7 +557,15 @@ export class EffectComposer {
 
 						// Preserve the unaffected pixels.
 						stencil.setFunc(context.NOTEQUAL, 1, 0xffffffff);
-						copyPass.render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest);
+
+						copyPass.render(
+							renderer,
+							inputBuffer,
+							outputBuffer,
+							deltaTime,
+							stencilTest
+						);
+
 						stencil.setFunc(context.EQUAL, 1, 0xffffffff);
 
 					}
@@ -603,9 +624,11 @@ export class EffectComposer {
 
 		// The drawing buffer size takes the device pixel ratio into account.
 		const drawingBufferSize = renderer.getDrawingBufferSize(new Vector2());
+		const inputBuffer = this.inputBuffer;
+		const outputBuffer = this.outputBuffer;
 
-		this.inputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
-		this.outputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
+		inputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
+		outputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
 
 		for(const pass of this.passes) {
 
