@@ -9,8 +9,21 @@ import {
 } from "three";
 
 import { Resizer, Selection } from "../core";
-import { DepthComparisonMaterial, OutlineMaterial, KernelSize } from "../materials";
-import { BlurPass, ClearPass, DepthPass, RenderPass, ShaderPass } from "../passes";
+
+import {
+	DepthComparisonMaterial,
+	OutlineMaterial,
+	KernelSize
+} from "../materials";
+
+import {
+	BlurPass,
+	ClearPass,
+	DepthPass,
+	RenderPass,
+	ShaderPass
+} from "../passes";
+
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect } from "./Effect";
 
@@ -31,7 +44,7 @@ export class OutlineEffect extends Effect {
 	 * @param {Scene} scene - The main scene.
 	 * @param {Camera} camera - The main camera.
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function.  Set this to `BlendFunction.ALPHA` for dark outlines.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function. Set this to `BlendFunction.ALPHA` for dark outlines.
 	 * @param {Number} [options.patternTexture=null] - A pattern texture.
 	 * @param {Number} [options.edgeStrength=1.0] - The edge strength.
 	 * @param {Number} [options.pulseSpeed=0.0] - The pulse speed. A value of zero disables the pulse effect.
@@ -205,7 +218,8 @@ export class OutlineEffect extends Effect {
 		 */
 
 		this.outlinePass = new ShaderPass(new OutlineMaterial());
-		this.outlinePass.getFullscreenMaterial().uniforms.inputBuffer.value = this.renderTargetMask.texture;
+		const outlineMaterial = this.outlinePass.getFullscreenMaterial();
+		outlineMaterial.uniforms.inputBuffer.value = this.renderTargetMask.texture;
 
 		/**
 		 * The current animation time.
@@ -578,7 +592,9 @@ export class OutlineEffect extends Effect {
 
 			if(this.pulseSpeed > 0.0) {
 
-				pulse.value = 0.625 + Math.cos(this.time * this.pulseSpeed * 10.0) * 0.375;
+				pulse.value = (
+					Math.cos(this.time * this.pulseSpeed * 10.0) * 0.375 + 0.625
+				);
 
 			}
 
@@ -602,7 +618,8 @@ export class OutlineEffect extends Effect {
 
 			if(this.blur) {
 
-				this.blurPass.render(renderer, this.renderTargetOutline, this.renderTargetBlurredOutline);
+				this.blurPass.render(renderer, this.renderTargetOutline,
+					this.renderTargetBlurredOutline);
 
 			}
 

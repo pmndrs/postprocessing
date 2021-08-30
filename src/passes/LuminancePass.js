@@ -35,7 +35,11 @@ export class LuminancePass extends Pass {
 
 		super("LuminancePass");
 
-		this.setFullscreenMaterial(new LuminanceMaterial(colorOutput, luminanceRange));
+		this.setFullscreenMaterial(new LuminanceMaterial(
+			colorOutput,
+			luminanceRange
+		));
+
 		this.needsSwap = false;
 
 		/**

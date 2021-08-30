@@ -178,7 +178,11 @@ export class SSAOEffect extends Effect {
 
 		this.ssaoPass = new ShaderPass((() => {
 
-			const noiseTexture = new NoiseTexture(NOISE_TEXTURE_SIZE, NOISE_TEXTURE_SIZE);
+			const noiseTexture = new NoiseTexture(
+				NOISE_TEXTURE_SIZE,
+				NOISE_TEXTURE_SIZE
+			);
+
 			noiseTexture.wrapS = noiseTexture.wrapT = RepeatWrapping;
 
 			const material = new SSAOMaterial(camera);
@@ -533,8 +537,9 @@ export class SSAOEffect extends Effect {
 		const camera = this.camera;
 		const uniforms = this.ssaoMaterial.uniforms;
 		uniforms.noiseScale.value.set(w, h).divideScalar(NOISE_TEXTURE_SIZE);
-		uniforms.inverseProjectionMatrix.value.copy(camera.projectionMatrix).invert();
 		uniforms.projectionMatrix.value.copy(camera.projectionMatrix);
+		uniforms.inverseProjectionMatrix.value.copy(camera.projectionMatrix)
+			.invert();
 
 		// Update the absolute radius.
 		this.radius = this.r;

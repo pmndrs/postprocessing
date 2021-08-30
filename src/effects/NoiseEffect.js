@@ -17,7 +17,10 @@ export class NoiseEffect extends Effect {
 	 * @param {Boolean} [options.premultiply=false] - Whether the noise should be multiplied with the input color.
 	 */
 
-	constructor({ blendFunction = BlendFunction.SCREEN, premultiply = false } = {}) {
+	constructor({
+		blendFunction = BlendFunction.SCREEN,
+		premultiply = false
+	} = {}) {
 
 		super("NoiseEffect", fragmentShader, { blendFunction });
 

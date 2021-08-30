@@ -147,7 +147,8 @@ export class AdaptiveLuminancePass extends Pass {
 
 		// Use the frame delta time to chase after the current luminance.
 		this.getFullscreenMaterial().uniforms.deltaTime.value = deltaTime;
-		renderer.setRenderTarget(this.renderToScreen ? null : this.renderTargetAdapted);
+		renderer.setRenderTarget(this.renderToScreen ?
+			null : this.renderTargetAdapted);
 		renderer.render(this.scene, this.camera);
 
 		// Save the adapted luminance for the next frame.

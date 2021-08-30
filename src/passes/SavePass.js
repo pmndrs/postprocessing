@@ -84,7 +84,8 @@ export class SavePass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
-		this.getFullscreenMaterial().uniforms.inputBuffer.value = inputBuffer.texture;
+		const material = this.getFullscreenMaterial();
+		material.uniforms.inputBuffer.value = inputBuffer.texture;
 
 		renderer.setRenderTarget(this.renderToScreen ? null : this.renderTarget);
 		renderer.render(this.scene, this.camera);

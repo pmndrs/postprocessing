@@ -48,7 +48,8 @@ export class ToneMappingEffect extends Effect {
 	constructor({
 		blendFunction = BlendFunction.NORMAL,
 		adaptive = true,
-		mode = adaptive ? ToneMappingMode.REINHARD2_ADAPTIVE : ToneMappingMode.REINHARD2,
+		mode = adaptive ?
+			ToneMappingMode.REINHARD2_ADAPTIVE : ToneMappingMode.REINHARD2,
 		resolution = 256,
 		maxLuminance = 16.0,
 		whitePoint = maxLuminance,
@@ -81,7 +82,8 @@ export class ToneMappingEffect extends Effect {
 		 */
 
 		this.renderTargetLuminance = new WebGLRenderTarget(1, 1, {
-			minFilter: (LinearMipmapLinearFilter !== undefined) ? LinearMipmapLinearFilter : LinearMipMapLinearFilter,
+			minFilter: (LinearMipmapLinearFilter !== undefined) ?
+				LinearMipmapLinearFilter : LinearMipMapLinearFilter,
 			magFilter: LinearFilter,
 			stencilBuffer: false,
 			depthBuffer: false,
@@ -109,12 +111,16 @@ export class ToneMappingEffect extends Effect {
 		 * @private
 		 */
 
-		this.adaptiveLuminancePass = new AdaptiveLuminancePass(this.luminancePass.texture, {
-			minLuminance,
-			adaptationRate
-		});
+		this.adaptiveLuminancePass = new AdaptiveLuminancePass(
+			this.luminancePass.texture,
+			{
+				minLuminance,
+				adaptationRate
+			}
+		);
 
-		this.uniforms.get("luminanceBuffer").value = this.adaptiveLuminancePass.texture;
+		this.uniforms.get("luminanceBuffer").value =
+			this.adaptiveLuminancePass.texture;
 
 		/**
 		 * The current tone mapping mode.
@@ -160,15 +166,18 @@ export class ToneMappingEffect extends Effect {
 			switch(value) {
 
 				case ToneMappingMode.REINHARD:
-					this.defines.set("toneMapping(texel)", "ReinhardToneMapping(texel)");
+					this.defines.set("toneMapping(texel)",
+						"ReinhardToneMapping(texel)");
 					break;
 
 				case ToneMappingMode.OPTIMIZED_CINEON:
-					this.defines.set("toneMapping(texel)", "OptimizedCineonToneMapping(texel)");
+					this.defines.set("toneMapping(texel)",
+						"OptimizedCineonToneMapping(texel)");
 					break;
 
 				case ToneMappingMode.ACES_FILMIC:
-					this.defines.set("toneMapping(texel)", "ACESFilmicToneMapping(texel)");
+					this.defines.set("toneMapping(texel)",
+						"ACESFilmicToneMapping(texel)");
 					break;
 
 				default:
@@ -248,7 +257,8 @@ export class ToneMappingEffect extends Effect {
 
 	set adaptive(value) {
 
-		this.mode = value ? ToneMappingMode.REINHARD2_ADAPTIVE : ToneMappingMode.REINHARD2;
+		this.mode = value ?
+			ToneMappingMode.REINHARD2_ADAPTIVE : ToneMappingMode.REINHARD2;
 
 	}
 

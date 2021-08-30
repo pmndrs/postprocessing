@@ -39,7 +39,12 @@ export class SMAAEffect extends Effect {
 	 * @param {EdgeDetectionMode} [edgeDetectionMode=EdgeDetectionMode.COLOR] - The edge detection mode.
 	 */
 
-	constructor(searchImage, areaImage, preset = SMAAPreset.HIGH, edgeDetectionMode = EdgeDetectionMode.COLOR) {
+	constructor(
+		searchImage,
+		areaImage,
+		preset = SMAAPreset.HIGH,
+		edgeDetectionMode = EdgeDetectionMode.COLOR
+	) {
 
 		super("SMAAEffect", fragmentShader, {
 
@@ -188,7 +193,8 @@ export class SMAAEffect extends Effect {
 
 	setEdgeDetectionThreshold(threshold) {
 
-		this.edgeDetectionPass.getFullscreenMaterial().setEdgeDetectionThreshold(threshold);
+		this.edgeDetectionPass.getFullscreenMaterial()
+			.setEdgeDetectionThreshold(threshold);
 
 	}
 
@@ -282,8 +288,12 @@ export class SMAAEffect extends Effect {
 	update(renderer, inputBuffer, deltaTime) {
 
 		this.clearPass.render(renderer, this.renderTargetEdges);
-		this.edgeDetectionPass.render(renderer, inputBuffer, this.renderTargetEdges);
-		this.weightsPass.render(renderer, this.renderTargetEdges, this.renderTargetWeights);
+
+		this.edgeDetectionPass.render(renderer, inputBuffer,
+			this.renderTargetEdges);
+
+		this.weightsPass.render(renderer, this.renderTargetEdges,
+			this.renderTargetWeights);
 
 	}
 
@@ -296,15 +306,17 @@ export class SMAAEffect extends Effect {
 
 	setSize(width, height) {
 
-		const edgeDetectionMaterial = this.edgeDetectionPass.getFullscreenMaterial();
 		const weightsMaterial = this.weightsPass.getFullscreenMaterial();
+		const edgeDetectionMaterial = this.edgeDetectionPass
+			.getFullscreenMaterial();
 
 		this.renderTargetEdges.setSize(width, height);
 		this.renderTargetWeights.setSize(width, height);
 
 		weightsMaterial.uniforms.resolution.value.set(width, height);
 		weightsMaterial.uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
-		edgeDetectionMaterial.uniforms.texelSize.value.copy(weightsMaterial.uniforms.texelSize.value);
+		edgeDetectionMaterial.uniforms.texelSize.value.copy(
+			weightsMaterial.uniforms.texelSize.value);
 
 	}
 

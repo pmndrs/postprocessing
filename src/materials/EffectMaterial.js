@@ -23,7 +23,13 @@ export class EffectMaterial extends ShaderMaterial {
 	 * @param {Boolean} [dithering=false] - Whether dithering should be enabled.
 	 */
 
-	constructor(shaderParts = null, defines = null, uniforms = null, camera, dithering = false) {
+	constructor(
+		shaderParts = null,
+		defines = null,
+		uniforms = null,
+		camera,
+		dithering = false
+	) {
 
 		super({
 
@@ -115,13 +121,28 @@ export class EffectMaterial extends ShaderMaterial {
 	setShaderParts(shaderParts) {
 
 		this.fragmentShader = fragmentTemplate
-			.replace(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD))
-			.replace(Section.FRAGMENT_MAIN_UV, shaderParts.get(Section.FRAGMENT_MAIN_UV))
-			.replace(Section.FRAGMENT_MAIN_IMAGE, shaderParts.get(Section.FRAGMENT_MAIN_IMAGE));
+			.replace(
+				Section.FRAGMENT_HEAD,
+				shaderParts.get(Section.FRAGMENT_HEAD)
+			)
+			.replace(
+				Section.FRAGMENT_MAIN_UV,
+				shaderParts.get(Section.FRAGMENT_MAIN_UV)
+			)
+			.replace(
+				Section.FRAGMENT_MAIN_IMAGE,
+				shaderParts.get(Section.FRAGMENT_MAIN_IMAGE)
+			);
 
 		this.vertexShader = vertexTemplate
-			.replace(Section.VERTEX_HEAD, shaderParts.get(Section.VERTEX_HEAD))
-			.replace(Section.VERTEX_MAIN_SUPPORT, shaderParts.get(Section.VERTEX_MAIN_SUPPORT));
+			.replace(
+				Section.VERTEX_HEAD,
+				shaderParts.get(Section.VERTEX_HEAD)
+			)
+			.replace(
+				Section.VERTEX_MAIN_SUPPORT,
+				shaderParts.get(Section.VERTEX_MAIN_SUPPORT)
+			);
 
 		this.needsUpdate = true;
 

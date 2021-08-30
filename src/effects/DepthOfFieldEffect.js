@@ -152,7 +152,8 @@ export class DepthOfFieldEffect extends Effect {
 		this.renderTargetCoCBlurred = this.renderTargetCoC.clone();
 		this.renderTargetCoCBlurred.texture.name = "DoF.CoC.Blurred";
 
-		this.uniforms.get("nearCoCBuffer").value = this.renderTargetCoCBlurred.texture;
+		this.uniforms.get("nearCoCBuffer").value =
+			this.renderTargetCoCBlurred.texture;
 
 		/**
 		 * A circle of confusion pass.
@@ -172,7 +173,12 @@ export class DepthOfFieldEffect extends Effect {
 		 * @type {BlurPass}
 		 */
 
-		this.blurPass = new BlurPass({ width, height, kernelSize: KernelSize.MEDIUM });
+		this.blurPass = new BlurPass({
+			width,
+			height,
+			kernelSize: KernelSize.MEDIUM
+		});
+
 		this.blurPass.resolution.resizable = this;
 
 		/**
@@ -182,7 +188,8 @@ export class DepthOfFieldEffect extends Effect {
 		 * @private
 		 */
 
-		this.maskPass = new ShaderPass(new MaskMaterial(this.renderTargetCoC.texture));
+		this.maskPass = new ShaderPass(
+			new MaskMaterial(this.renderTargetCoC.texture));
 		const maskMaterial = this.maskPass.getFullscreenMaterial();
 		maskMaterial.maskFunction = MaskFunction.MULTIPLY;
 		maskMaterial.colorChannel = ColorChannel.GREEN;
@@ -372,12 +379,14 @@ export class DepthOfFieldEffect extends Effect {
 		this.maskPass.render(renderer, inputBuffer, renderTargetMasked);
 
 		// Use the sharp CoC buffer and render the background bokeh.
-		farBaseUniforms.cocBuffer.value = farFillUniforms.cocBuffer.value = renderTargetCoC.texture;
+		farBaseUniforms.cocBuffer.value = renderTargetCoC.texture;
+		farFillUniforms.cocBuffer.value = renderTargetCoC.texture;
 		bokehFarBasePass.render(renderer, renderTargetMasked, renderTarget);
 		bokehFarFillPass.render(renderer, renderTarget, this.renderTargetFar);
 
 		// Use the blurred CoC buffer and render the foreground bokeh.
-		nearBaseUniforms.cocBuffer.value = nearFillUniforms.cocBuffer.value = renderTargetCoCBlurred.texture;
+		nearBaseUniforms.cocBuffer.value = renderTargetCoCBlurred.texture;
+		nearFillUniforms.cocBuffer.value = renderTargetCoCBlurred.texture;
 		bokehNearBasePass.render(renderer, inputBuffer, renderTarget);
 		bokehNearFillPass.render(renderer, renderTarget, this.renderTargetNear);
 
@@ -428,7 +437,8 @@ export class DepthOfFieldEffect extends Effect {
 			this.bokehFarFillPass
 		];
 
-		passes.forEach((p) => p.getFullscreenMaterial().setTexelSize(1.0 / w, 1.0 / h));
+		passes.forEach((p) => p.getFullscreenMaterial()
+			.setTexelSize(1.0 / w, 1.0 / h));
 
 	}
 
@@ -451,7 +461,8 @@ export class DepthOfFieldEffect extends Effect {
 			this.bokehFarFillPass
 		];
 
-		initializables.forEach((i) => i.initialize(renderer, alpha, frameBufferType));
+		initializables.forEach((i) => i.initialize(
+			renderer, alpha, frameBufferType));
 
 		// The blur pass operates on the CoC buffer.
 		this.blurPass.initialize(renderer, alpha, UnsignedByteType);
