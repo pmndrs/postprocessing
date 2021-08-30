@@ -11,6 +11,7 @@ import {
 } from "three";
 
 import { SpatialControls } from "spatial-controls";
+import { calculateVerticalFoV } from "three-demo";
 import { ProgressManager } from "../utils/ProgressManager";
 import { PostProcessingDemo } from "./PostProcessingDemo";
 
@@ -28,7 +29,7 @@ import {
 } from "../../../src";
 
 /**
- * A god rays demo setup.
+ * A god rays demo.
  */
 
 export class GodRaysDemo extends PostProcessingDemo {
@@ -81,19 +82,14 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Loads scene assets.
-	 *
-	 * @return {Promise} A promise that returns a collection of assets.
-	 */
-
 	load() {
 
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
-		const anisotropy = Math.min(this.composer.getRenderer().capabilities.getMaxAnisotropy(), 8);
+		const anisotropy = Math.min(this.composer.getRenderer()
+			.capabilities.getMaxAnisotropy(), 8);
 
 		return new Promise((resolve, reject) => {
 
@@ -101,7 +97,7 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 				loadingManager.onLoad = () => setTimeout(resolve, 250);
 				loadingManager.onProgress = ProgressManager.updateProgress;
-				loadingManager.onError = (url) => console.error(`Failed to load ${url}`);
+				loadingManager.onError = url => console.error(`Failed to load ${url}`);
 
 				Sponza.load(assets, loadingManager, anisotropy);
 
@@ -122,29 +118,30 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Creates the scene.
-	 */
-
 	initialize() {
 
 		const scene = this.scene;
 		const assets = this.assets;
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
+		const domElement = renderer.domElement;
 
 		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
-		const camera = new PerspectiveCamera(50, aspect, 0.3, 2000);
+		const vFoV = calculateVerticalFoV(90, Math.max(aspect, 16 / 9));
+		const camera = new PerspectiveCamera(vFoV, aspect, 0.3, 2000);
 		this.camera = camera;
 
 		// Controls
 
-		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
+		const { position, quaternion } = camera;
+		const controls = new SpatialControls(position, quaternion, domElement);
 		const settings = controls.settings;
 		settings.rotation.setSensitivity(2.2);
+		settings.rotation.setDamping(0.05);
 		settings.translation.setSensitivity(3.0);
+		settings.translation.setDamping(0.1);
 		controls.setPosition(9.25, 2.4, 1);
 		controls.lookAt(8.4, 2.15, 0.5);
 		this.controls = controls;
@@ -198,7 +195,7 @@ export class GodRaysDemo extends PostProcessingDemo {
 		// sun.position.copy(this.light.position);
 		// sun.updateMatrix();
 
-		// Using a group to check if matrix updates work correctly.
+		// Using a group here to check if matrix updates work correctly.
 		const group = new Group();
 		group.position.copy(this.light.position);
 		group.add(sun);
@@ -241,12 +238,6 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Registers configuration options.
-	 *
-	 * @param {GUI} menu - A menu.
-	 */
-
 	registerOptions(menu) {
 
 		const color = new Color();
@@ -273,52 +264,54 @@ export class GodRaysDemo extends PostProcessingDemo {
 			"blend mode": blendMode.blendFunction
 		};
 
-		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange((value) => {
+		menu.add(params, "resolution", [240, 360, 480, 720, 1080])
+			.onChange((value) => {
 
-			effect.resolution.height = Number(value);
+				effect.resolution.height = Number(value);
 
-		});
+			});
 
 		menu.add(pass, "dithering");
 
-		menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE + 1).step(1).onChange((value) => {
+		menu.add(params, "blurriness",
+			KernelSize.VERY_SMALL, KernelSize.HUGE + 1, 1).onChange((value) => {
 
 			effect.blur = (value > 0);
 			effect.blurPass.kernelSize = value - 1;
 
 		});
 
-		menu.add(params, "density").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		menu.add(params, "density", 0.0, 1.0, 0.01).onChange((value) => {
 
 			uniforms.density.value = value;
 
 		});
 
-		menu.add(params, "decay").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		menu.add(params, "decay", 0.0, 1.0, 0.01).onChange((value) => {
 
 			uniforms.decay.value = value;
 
 		});
 
-		menu.add(params, "weight").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		menu.add(params, "weight", 0.0, 1.0, 0.01).onChange((value) => {
 
 			uniforms.weight.value = value;
 
 		});
 
-		menu.add(params, "exposure").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		menu.add(params, "exposure", 0.0, 1.0, 0.01).onChange((value) => {
 
 			uniforms.exposure.value = value;
 
 		});
 
-		menu.add(params, "clampMax").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		menu.add(params, "clampMax", 0.0, 1.0, 0.01).onChange((value) => {
 
 			uniforms.clampMax.value = value;
 
 		});
 
-		menu.add(effect, "samples").min(15).max(200).step(1);
+		menu.add(effect, "samples", 15, 200, 1);
 
 		menu.addColor(params, "color").onChange((value) => {
 
@@ -327,7 +320,7 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		menu.add(params, "opacity", 0.0, 1.0, 0.01).onChange((value) => {
 
 			blendMode.opacity.value = value;
 

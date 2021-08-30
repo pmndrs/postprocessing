@@ -1,5 +1,6 @@
 import { Color, PerspectiveCamera, TextureLoader } from "three";
 import { SpatialControls } from "spatial-controls";
+import { calculateVerticalFoV } from "three-demo";
 import { ProgressManager } from "../utils/ProgressManager";
 import { PostProcessingDemo } from "./PostProcessingDemo";
 
@@ -19,7 +20,7 @@ import {
 } from "../../../src";
 
 /**
- * A glitch demo setup.
+ * A glitch demo.
  */
 
 export class GlitchDemo extends PostProcessingDemo {
@@ -54,12 +55,6 @@ export class GlitchDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Loads scene assets.
-	 *
-	 * @return {Promise} A promise that returns a collection of assets.
-	 */
-
 	load() {
 
 		const assets = this.assets;
@@ -67,7 +62,8 @@ export class GlitchDemo extends PostProcessingDemo {
 		const textureLoader = new TextureLoader(loadingManager);
 		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
-		const anisotropy = Math.min(this.composer.getRenderer().capabilities.getMaxAnisotropy(), 8);
+		const anisotropy = Math.min(this.composer.getRenderer()
+			.capabilities.getMaxAnisotropy(), 8);
 
 		return new Promise((resolve, reject) => {
 
@@ -75,7 +71,7 @@ export class GlitchDemo extends PostProcessingDemo {
 
 				loadingManager.onLoad = () => setTimeout(resolve, 250);
 				loadingManager.onProgress = ProgressManager.updateProgress;
-				loadingManager.onError = (url) => console.error(`Failed to load ${url}`);
+				loadingManager.onError = url => console.error(`Failed to load ${url}`);
 
 				Sponza.load(assets, loadingManager, anisotropy);
 
@@ -102,16 +98,13 @@ export class GlitchDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Creates the scene.
-	 */
-
 	initialize() {
 
 		const scene = this.scene;
 		const assets = this.assets;
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
+		const domElement = renderer.domElement;
 
 		// Epilepsy warning
 
@@ -120,7 +113,7 @@ export class GlitchDemo extends PostProcessingDemo {
 			const div = document.createElement("div");
 			div.classList.add("warning");
 			const p = document.createElement("p");
-			p.innerText = "The following effect may trigger epileptic seizures or blackouts";
+			p.innerText = "This effect may trigger epileptic seizures or blackouts";
 			const a = document.createElement("a");
 			a.innerText = "Click here to continue";
 			a.href = "Click here to continue";
@@ -140,15 +133,19 @@ export class GlitchDemo extends PostProcessingDemo {
 		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
-		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
+		const vFoV = calculateVerticalFoV(90, Math.max(aspect, 16 / 9));
+		const camera = new PerspectiveCamera(vFoV, aspect, 0.3, 2000);
 		this.camera = camera;
 
 		// Controls
 
-		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
+		const { position, quaternion } = camera;
+		const controls = new SpatialControls(position, quaternion, domElement);
 		const settings = controls.settings;
 		settings.rotation.setSensitivity(2.2);
+		settings.rotation.setDamping(0.05);
 		settings.translation.setSensitivity(3.0);
+		settings.translation.setDamping(0.1);
 		controls.setPosition(-9, 0.5, 0);
 		controls.lookAt(0, 3, -3.5);
 		this.controls = controls;
@@ -201,12 +198,6 @@ export class GlitchDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Registers configuration options.
-	 *
-	 * @param {GUI} menu - A menu.
-	 */
-
 	registerOptions(menu) {
 
 		const effect = this.effect;
@@ -249,25 +240,25 @@ export class GlitchDemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(params, "min delay").min(0.0).max(2.0).step(0.001).onChange((value) => {
+		menu.add(params, "min delay", 0.0, 2.0, 0.001).onChange((value) => {
 
 			delay.x = value;
 
 		});
 
-		menu.add(params, "max delay").min(2.0).max(4.0).step(0.001).onChange((value) => {
+		menu.add(params, "max delay", 2.0, 4.0, 0.001).onChange((value) => {
 
 			delay.y = value;
 
 		});
 
-		menu.add(params, "min duration").min(0.0).max(0.6).step(0.001).onChange((value) => {
+		menu.add(params, "min duration", 0.0, 0.6, 0.001).onChange((value) => {
 
 			duration.x = value;
 
 		});
 
-		menu.add(params, "max duration").min(0.6).max(1.8).step(0.001).onChange((value) => {
+		menu.add(params, "max duration", 0.6, 1.8, 0.001).onChange((value) => {
 
 			duration.y = value;
 
@@ -275,13 +266,13 @@ export class GlitchDemo extends PostProcessingDemo {
 
 		const folder = menu.addFolder("Strength");
 
-		folder.add(params, "weak glitches").min(0.0).max(1.0).step(0.001).onChange((value) => {
+		folder.add(params, "weak glitches", 0.0, 1.0, 0.001).onChange((value) => {
 
 			strength.x = value;
 
 		});
 
-		folder.add(params, "strong glitches").min(0.0).max(1.0).step(0.001).onChange((value) => {
+		folder.add(params, "strong glitches", 0.0, 1.0, 0.001).onChange((value) => {
 
 			strength.y = value;
 
@@ -289,13 +280,13 @@ export class GlitchDemo extends PostProcessingDemo {
 
 		folder.open();
 
-		menu.add(params, "glitch ratio").min(0.0).max(1.0).step(0.001).onChange((value) => {
+		menu.add(params, "glitch ratio", 0.0, 1.0, 0.001).onChange((value) => {
 
 			effect.ratio = Number.parseFloat(value);
 
 		});
 
-		menu.add(params, "columns").min(0.0).max(0.5).step(0.001).onChange((value) => {
+		menu.add(params, "columns", 0.0, 0.5, 0.001).onChange((value) => {
 
 			uniforms.get("columns").value = value;
 
@@ -308,10 +299,6 @@ export class GlitchDemo extends PostProcessingDemo {
 		}
 
 	}
-
-	/**
-	 * Disposes this demo.
-	 */
 
 	dispose() {
 

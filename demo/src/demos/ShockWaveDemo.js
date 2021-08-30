@@ -8,6 +8,7 @@ import {
 } from "three";
 
 import { SpatialControls } from "spatial-controls";
+import { calculateVerticalFoV } from "three-demo";
 import { ProgressManager } from "../utils/ProgressManager";
 import { PostProcessingDemo } from "./PostProcessingDemo";
 
@@ -33,7 +34,7 @@ import {
 const ndc = new Vector3();
 
 /**
- * A shock wave demo setup.
+ * A shock wave demo.
  *
  * @implements {EventListenerObject}
  */
@@ -129,17 +130,11 @@ export class ShockWaveDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Handles events.
-	 *
-	 * @param {Event} event - An event.
-	 */
-
 	handleEvent(event) {
 
 		switch(event.type) {
 
-			case "mousemove":
+			case "pointermove":
 				void this.pickDepth(event);
 				break;
 
@@ -151,19 +146,14 @@ export class ShockWaveDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Loads scene assets.
-	 *
-	 * @return {Promise} A promise that will be fulfilled as soon as all assets have been loaded.
-	 */
-
 	load() {
 
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
-		const anisotropy = Math.min(this.composer.getRenderer().capabilities.getMaxAnisotropy(), 8);
+		const anisotropy = Math.min(this.composer.getRenderer()
+			.capabilities.getMaxAnisotropy(), 8);
 
 		return new Promise((resolve, reject) => {
 
@@ -171,7 +161,7 @@ export class ShockWaveDemo extends PostProcessingDemo {
 
 				loadingManager.onLoad = () => setTimeout(resolve, 250);
 				loadingManager.onProgress = ProgressManager.updateProgress;
-				loadingManager.onError = (url) => console.error(`Failed to load ${url}`);
+				loadingManager.onError = url => console.error(`Failed to load ${url}`);
 
 				Sponza.load(assets, loadingManager, anisotropy);
 
@@ -192,30 +182,31 @@ export class ShockWaveDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Creates the scene.
-	 */
-
 	initialize() {
 
 		const scene = this.scene;
 		const assets = this.assets;
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
+		const domElement = renderer.domElement;
 
 		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
-		const camera = new PerspectiveCamera(50, aspect, 0.3, 2000);
+		const vFoV = calculateVerticalFoV(90, Math.max(aspect, 16 / 9));
+		const camera = new PerspectiveCamera(vFoV, aspect, 0.3, 2000);
 		this.camera = camera;
 
 		// Controls
 
 		const target = new Vector3(-0.5, 3, -0.25);
-		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
+		const { position, quaternion } = camera;
+		const controls = new SpatialControls(position, quaternion, domElement);
 		const settings = controls.settings;
 		settings.rotation.setSensitivity(2.2);
+		settings.rotation.setDamping(0.05);
 		settings.translation.setSensitivity(3.0);
+		settings.translation.setDamping(0.1);
 		controls.setPosition(-8, 1, -0.25);
 		controls.lookAt(target);
 		this.controls = controls;
@@ -277,16 +268,12 @@ export class ShockWaveDemo extends PostProcessingDemo {
 
 		// Depth picking
 
-		renderer.domElement.addEventListener("mousemove", this, { passive: true });
 		document.addEventListener("keyup", this);
+		renderer.domElement.addEventListener("pointermove", this, {
+			passive: true
+		});
 
 	}
-
-	/**
-	 * Registers configuration options.
-	 *
-	 * @param {GUI} menu - A menu.
-	 */
 
 	registerOptions(menu) {
 
@@ -301,27 +288,27 @@ export class ShockWaveDemo extends PostProcessingDemo {
 			"explode (press E)": () => this.explode()
 		};
 
-		menu.add(effect, "speed").min(0.0).max(10.0).step(0.001);
+		menu.add(effect, "speed", 0.0, 10.0, 0.001);
 
-		menu.add(params, "size").min(0.01).max(2.0).step(0.001).onChange((value) => {
+		menu.add(params, "size", 0.01, 2.0, 0.001).onChange((value) => {
 
 			uniforms.get("size").value = value;
 
 		});
 
-		menu.add(params, "extent").min(0.0).max(10.0).step(0.001).onChange((value) => {
+		menu.add(params, "extent", 0.0, 10.0, 0.001).onChange((value) => {
 
 			uniforms.get("maxRadius").value = value;
 
 		});
 
-		menu.add(params, "waveSize").min(0.0).max(2.0).step(0.001).onChange((value) => {
+		menu.add(params, "waveSize", 0.0, 2.0, 0.001).onChange((value) => {
 
 			uniforms.get("waveSize").value = value;
 
 		});
 
-		menu.add(params, "amplitude").min(0.0).max(0.25).step(0.001).onChange((value) => {
+		menu.add(params, "amplitude", 0.0, 0.25, 0.001).onChange((value) => {
 
 			uniforms.get("amplitude").value = value;
 
@@ -337,14 +324,10 @@ export class ShockWaveDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Disposes this demo.
-	 */
-
 	dispose() {
 
 		const dom = this.composer.getRenderer().domElement;
-		dom.removeEventListener("mousemove", this);
+		dom.removeEventListener("pointermove", this);
 		document.removeEventListener("keyup", this);
 
 	}

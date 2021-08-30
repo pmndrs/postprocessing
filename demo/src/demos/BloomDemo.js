@@ -9,6 +9,7 @@ import {
 } from "three";
 
 import { ControlMode, SpatialControls } from "spatial-controls";
+import { calculateVerticalFoV } from "three-demo";
 import { ProgressManager } from "../utils/ProgressManager";
 import { PostProcessingDemo } from "./PostProcessingDemo";
 
@@ -37,7 +38,7 @@ import {
 const ndc = new Vector2();
 
 /**
- * A bloom demo setup.
+ * A bloom demo.
  *
  * @implements {EventListenerObject}
  */
@@ -178,17 +179,11 @@ export class BloomDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Handles events.
-	 *
-	 * @param {Event} event - An event.
-	 */
-
 	handleEvent(event) {
 
 		switch(event.type) {
 
-			case "mousedown":
+			case "pointerdown":
 				this.raycast(event);
 				this.handleSelection();
 				break;
@@ -196,12 +191,6 @@ export class BloomDemo extends PostProcessingDemo {
 		}
 
 	}
-
-	/**
-	 * Loads scene assets.
-	 *
-	 * @return {Promise} A promise that returns a collection of assets.
-	 */
 
 	load() {
 
@@ -224,7 +213,7 @@ export class BloomDemo extends PostProcessingDemo {
 
 				loadingManager.onLoad = () => setTimeout(resolve, 250);
 				loadingManager.onProgress = ProgressManager.updateProgress;
-				loadingManager.onError = (url) => console.error(`Failed to load ${url}`);
+				loadingManager.onError = url => console.error(`Failed to load ${url}`);
 
 				cubeTextureLoader.load(urls, (t) => {
 
@@ -250,29 +239,29 @@ export class BloomDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Creates the scene.
-	 */
-
 	initialize() {
 
 		const scene = this.scene;
 		const assets = this.assets;
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
+		const domElement = renderer.domElement;
 
 		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
-		const camera = new PerspectiveCamera(50, aspect, 1, 2000);
+		const vFoV = calculateVerticalFoV(90, Math.max(aspect, 16 / 9));
+		const camera = new PerspectiveCamera(vFoV, aspect, 0.3, 2000);
 		this.camera = camera;
 
 		// Controls
 
-		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
+		const { position, quaternion } = camera;
+		const controls = new SpatialControls(position, quaternion, domElement);
 		const settings = controls.settings;
 		settings.general.setMode(ControlMode.THIRD_PERSON);
 		settings.rotation.setSensitivity(2.2);
+		settings.rotation.setDamping(0.05);
 		settings.translation.setEnabled(false);
 		settings.zoom.setSensitivity(1.0);
 		controls.setPosition(-10, 6, 15);
@@ -325,14 +314,29 @@ export class BloomDemo extends PostProcessingDemo {
 		/* If you don't need to limit bloom to a subset of objects, consider using
 		the basic BloomEffect for better performance. */
 		const bloomEffect = new BloomEffect(bloomOptions);
-		const selectiveBloomEffect = new SelectiveBloomEffect(scene, camera, bloomOptions);
+
+		const selectiveBloomEffect = new SelectiveBloomEffect(
+			scene,
+			camera,
+			bloomOptions
+		);
+
 		selectiveBloomEffect.inverted = true;
 
 		this.effectA = bloomEffect;
 		this.effectB = selectiveBloomEffect;
 
-		const effectPassA = new EffectPass(camera, smaaEffect, bloomEffect);
-		const effectPassB = new EffectPass(camera, smaaEffect, selectiveBloomEffect);
+		const effectPassA = new EffectPass(
+			camera,
+			smaaEffect,
+			bloomEffect
+		);
+
+		const effectPassB = new EffectPass(
+			camera,
+			smaaEffect,
+			selectiveBloomEffect
+		);
 
 		this.passA = effectPassA;
 		this.passB = effectPassB;
@@ -345,13 +349,6 @@ export class BloomDemo extends PostProcessingDemo {
 		composer.addPass(effectPassB);
 
 	}
-
-	/**
-	 * Updates this demo.
-	 *
-	 * @param {Number} deltaTime - The time since the last frame in seconds.
-	 * @param {Number} timestamp - The current time in milliseconds.
-	 */
 
 	update(deltaTime, timestamp) {
 
@@ -374,12 +371,6 @@ export class BloomDemo extends PostProcessingDemo {
 		}
 
 	}
-
-	/**
-	 * Registers configuration options.
-	 *
-	 * @param {GUI} menu - A menu.
-	 */
 
 	registerOptions(menu) {
 
@@ -411,11 +402,12 @@ export class BloomDemo extends PostProcessingDemo {
 			"blend mode": blendModeA.blendFunction
 		};
 
-		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange((value) => {
+		menu.add(params, "resolution", [240, 360, 480, 720, 1080])
+			.onChange((value) => {
 
-			effectA.resolution.height = effectB.resolution.height = Number(value);
+				effectA.resolution.height = effectB.resolution.height = Number(value);
 
-		});
+			});
 
 		menu.add(params, "kernel size", KernelSize).onChange((value) => {
 
@@ -423,13 +415,13 @@ export class BloomDemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(params, "blur scale").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		menu.add(params, "blur scale", 0.0, 1.0, 0.01).onChange((value) => {
 
 			effectA.blurPass.scale = effectB.blurPass.scale = Number(value);
 
 		});
 
-		menu.add(params, "intensity").min(0.0).max(3.0).step(0.01).onChange((value) => {
+		menu.add(params, "intensity", 0.0, 3.0, 0.01).onChange((value) => {
 
 			effectA.intensity = effectB.intensity = Number(value);
 
@@ -443,20 +435,23 @@ export class BloomDemo extends PostProcessingDemo {
 
 		});
 
-		folder.add(params.luminance, "threshold").min(0.0).max(1.0).step(0.001).onChange((value) => {
+		folder.add(params.luminance, "threshold", 0.0, 1.0, 0.001)
+			.onChange((value) => {
 
-			effectA.luminanceMaterial.threshold = effectB.luminanceMaterial.threshold = Number(value);
+				effectA.luminanceMaterial.threshold = Number(value);
+				effectB.luminanceMaterial.threshold = Number(value);
 
-		});
+			});
 
-		folder.add(params.luminance, "smoothing").min(0.0).max(1.0).step(0.001).onChange((value) => {
+		folder.add(params.luminance, "smoothing", 0.0, 1.0, 0.001)
+			.onChange((value) => {
 
-			effectA.luminanceMaterial.smoothing = effectB.luminanceMaterial.smoothing = Number(value);
+				effectA.luminanceMaterial.smoothing = Number(value);
+				effectB.luminanceMaterial.smoothing = Number(value);
 
-		});
+			});
 
 		folder.open();
-
 		folder = menu.addFolder("Selection");
 
 		folder.add(params.selection, "enabled").onChange((value) => {
@@ -466,11 +461,11 @@ export class BloomDemo extends PostProcessingDemo {
 
 			if(passB.enabled) {
 
-				renderer.domElement.addEventListener("mousedown", this);
+				renderer.domElement.addEventListener("pointerdown", this);
 
 			} else {
 
-				renderer.domElement.removeEventListener("mousedown", this);
+				renderer.domElement.removeEventListener("pointerdown", this);
 
 			}
 
@@ -490,7 +485,7 @@ export class BloomDemo extends PostProcessingDemo {
 
 		folder.open();
 
-		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		menu.add(params, "opacity", 0.0, 1.0, 0.01).onChange((value) => {
 
 			blendModeA.opacity.value = blendModeB.opacity.value = value;
 
@@ -517,14 +512,10 @@ export class BloomDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Disposes this demo.
-	 */
-
 	dispose() {
 
 		const dom = this.composer.getRenderer().domElement;
-		dom.removeEventListener("mousedown", this);
+		dom.removeEventListener("pointerdown", this);
 
 	}
 

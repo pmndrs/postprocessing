@@ -7,6 +7,7 @@ import {
 } from "three";
 
 import { SpatialControls } from "spatial-controls";
+import { calculateVerticalFoV } from "three-demo";
 import { ProgressManager } from "../utils/ProgressManager";
 import { PostProcessingDemo } from "./PostProcessingDemo";
 
@@ -23,7 +24,7 @@ import {
 } from "../../../src";
 
 /**
- * A texture demo setup.
+ * A texture demo.
  */
 
 export class TextureDemo extends PostProcessingDemo {
@@ -49,12 +50,6 @@ export class TextureDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Loads scene assets.
-	 *
-	 * @return {Promise} A promise that returns a collection of assets.
-	 */
-
 	load() {
 
 		const assets = this.assets;
@@ -62,7 +57,8 @@ export class TextureDemo extends PostProcessingDemo {
 		const textureLoader = new TextureLoader(loadingManager);
 		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
-		const anisotropy = Math.min(this.composer.getRenderer().capabilities.getMaxAnisotropy(), 8);
+		const anisotropy = Math.min(this.composer.getRenderer()
+			.capabilities.getMaxAnisotropy(), 8);
 
 		return new Promise((resolve, reject) => {
 
@@ -70,7 +66,7 @@ export class TextureDemo extends PostProcessingDemo {
 
 				loadingManager.onLoad = () => setTimeout(resolve, 250);
 				loadingManager.onProgress = ProgressManager.updateProgress;
-				loadingManager.onError = (url) => console.error(`Failed to load ${url}`);
+				loadingManager.onError = url => console.error(`Failed to load ${url}`);
 
 				Sponza.load(assets, loadingManager, anisotropy);
 
@@ -99,29 +95,30 @@ export class TextureDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Creates the scene.
-	 */
-
 	initialize() {
 
 		const scene = this.scene;
 		const assets = this.assets;
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
+		const domElement = renderer.domElement;
 
 		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
-		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
+		const vFoV = calculateVerticalFoV(90, Math.max(aspect, 16 / 9));
+		const camera = new PerspectiveCamera(vFoV, aspect, 0.3, 2000);
 		this.camera = camera;
 
 		// Controls
 
-		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
+		const { position, quaternion } = camera;
+		const controls = new SpatialControls(position, quaternion, domElement);
 		const settings = controls.settings;
 		settings.rotation.setSensitivity(2.2);
+		settings.rotation.setDamping(0.05);
 		settings.translation.setSensitivity(3.0);
+		settings.translation.setDamping(0.1);
 		controls.setPosition(-9, 0.5, 0);
 		controls.lookAt(0, 3, -3.5);
 		this.controls = controls;
@@ -162,12 +159,6 @@ export class TextureDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Registers configuration options.
-	 *
-	 * @param {GUI} menu - A menu.
-	 */
-
 	registerOptions(menu) {
 
 		const effect = this.effect;
@@ -195,18 +186,18 @@ export class TextureDemo extends PostProcessingDemo {
 		folder.open();
 
 		let subFolder = folder.addFolder("Offset");
-		subFolder.add(offset, "x").min(0.0).max(1.0).step(0.001);
-		subFolder.add(offset, "y").min(0.0).max(1.0).step(0.001);
+		subFolder.add(offset, "x", 0.0, 1.0, 0.001);
+		subFolder.add(offset, "y", 0.0, 1.0, 0.001);
 
 		subFolder = folder.addFolder("Repeat");
-		subFolder.add(repeat, "x").min(0.0).max(2.0).step(0.001);
-		subFolder.add(repeat, "y").min(0.0).max(2.0).step(0.001);
+		subFolder.add(repeat, "x", 0.0, 2.0, 0.001);
+		subFolder.add(repeat, "y", 0.0, 2.0, 0.001);
 
 		subFolder = folder.addFolder("Center");
-		subFolder.add(center, "x").min(0.0).max(1.0).step(0.001);
-		subFolder.add(center, "y").min(0.0).max(1.0).step(0.001);
+		subFolder.add(center, "x", 0.0, 1.0, 0.001);
+		subFolder.add(center, "y", 0.0, 1.0, 0.001);
 
-		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		menu.add(params, "opacity", 0.0, 1.0, 0.01).onChange((value) => {
 
 			blendMode.opacity.value = value;
 

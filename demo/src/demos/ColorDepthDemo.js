@@ -1,5 +1,6 @@
 import { Color, PerspectiveCamera } from "three";
 import { SpatialControls } from "spatial-controls";
+import { calculateVerticalFoV } from "three-demo";
 import { ProgressManager } from "../utils/ProgressManager";
 import { PostProcessingDemo } from "./PostProcessingDemo";
 
@@ -16,7 +17,7 @@ import {
 } from "../../../src";
 
 /**
- * A color depth demo setup.
+ * A color depth demo.
  */
 
 export class ColorDepthDemo extends PostProcessingDemo {
@@ -42,19 +43,14 @@ export class ColorDepthDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Loads scene assets.
-	 *
-	 * @return {Promise} A promise that returns a collection of assets.
-	 */
-
 	load() {
 
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
-		const anisotropy = Math.min(this.composer.getRenderer().capabilities.getMaxAnisotropy(), 8);
+		const anisotropy = Math.min(this.composer.getRenderer()
+			.capabilities.getMaxAnisotropy(), 8);
 
 		return new Promise((resolve, reject) => {
 
@@ -62,7 +58,7 @@ export class ColorDepthDemo extends PostProcessingDemo {
 
 				loadingManager.onLoad = () => setTimeout(resolve, 250);
 				loadingManager.onProgress = ProgressManager.updateProgress;
-				loadingManager.onError = (url) => console.error(`Failed to load ${url}`);
+				loadingManager.onError = url => console.error(`Failed to load ${url}`);
 
 				Sponza.load(assets, loadingManager, anisotropy);
 
@@ -93,19 +89,24 @@ export class ColorDepthDemo extends PostProcessingDemo {
 		const assets = this.assets;
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
+		const domElement = renderer.domElement;
 
 		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
-		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
+		const vFoV = calculateVerticalFoV(90, Math.max(aspect, 16 / 9));
+		const camera = new PerspectiveCamera(vFoV, aspect, 0.3, 2000);
 		this.camera = camera;
 
 		// Controls
 
-		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
+		const { position, quaternion } = camera;
+		const controls = new SpatialControls(position, quaternion, domElement);
 		const settings = controls.settings;
 		settings.rotation.setSensitivity(2.2);
+		settings.rotation.setDamping(0.05);
 		settings.translation.setSensitivity(3.0);
+		settings.translation.setDamping(0.1);
 		controls.setPosition(-9, 0.5, 0);
 		controls.lookAt(0, 3, -3.5);
 		this.controls = controls;
@@ -158,13 +159,13 @@ export class ColorDepthDemo extends PostProcessingDemo {
 			"blend mode": blendMode.blendFunction
 		};
 
-		menu.add(params, "bits").min(1).max(32).step(1).onChange((value) => {
+		menu.add(params, "bits", 1, 32, 1).onChange((value) => {
 
 			effect.setBitDepth(value);
 
 		});
 
-		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		menu.add(params, "opacity", 0.0, 1.0, 0.01).onChange((value) => {
 
 			blendMode.opacity.value = value;
 

@@ -7,6 +7,7 @@ import {
 } from "three";
 
 import { ControlMode, SpatialControls } from "spatial-controls";
+import { calculateVerticalFoV } from "three-demo";
 import { ProgressManager } from "../utils/ProgressManager";
 import { PostProcessingDemo } from "./PostProcessingDemo";
 
@@ -25,7 +26,7 @@ import {
 } from "../../../src";
 
 /**
- * A blur demo setup.
+ * A blur demo.
  */
 
 export class BlurDemo extends PostProcessingDemo {
@@ -78,12 +79,6 @@ export class BlurDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Loads scene assets.
-	 *
-	 * @return {Promise} A promise that returns a collection of assets.
-	 */
-
 	load() {
 
 		const assets = this.assets;
@@ -105,7 +100,7 @@ export class BlurDemo extends PostProcessingDemo {
 
 				loadingManager.onLoad = () => setTimeout(resolve, 250);
 				loadingManager.onProgress = ProgressManager.updateProgress;
-				loadingManager.onError = (url) => console.error(`Failed to load ${url}`);
+				loadingManager.onError = url => console.error(`Failed to load ${url}`);
 
 				cubeTextureLoader.load(urls, (t) => {
 
@@ -131,29 +126,29 @@ export class BlurDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Creates the scene.
-	 */
-
 	initialize() {
 
 		const scene = this.scene;
 		const assets = this.assets;
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
+		const domElement = renderer.domElement;
 
 		// Camera
 
 		const aspect = window.innerWidth / window.innerHeight;
-		const camera = new PerspectiveCamera(50, aspect, 1, 2000);
+		const vFoV = calculateVerticalFoV(90, Math.max(aspect, 16 / 9));
+		const camera = new PerspectiveCamera(vFoV, aspect, 0.3, 2000);
 		this.camera = camera;
 
 		// Controls
 
-		const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
+		const { position, quaternion } = camera;
+		const controls = new SpatialControls(position, quaternion, domElement);
 		const settings = controls.settings;
 		settings.general.setMode(ControlMode.THIRD_PERSON);
 		settings.rotation.setSensitivity(2.2);
+		settings.rotation.setDamping(0.05);
 		settings.translation.setEnabled(false);
 		settings.zoom.setSensitivity(1.0);
 		controls.setPosition(-15, 0, -15);
@@ -211,13 +206,6 @@ export class BlurDemo extends PostProcessingDemo {
 
 	}
 
-	/**
-	 * Update this demo.
-	 *
-	 * @param {Number} deltaTime - The time since the last frame in seconds.
-	 * @param {Number} timestamp - The current time in milliseconds.
-	 */
-
 	update(deltaTime, timestamp) {
 
 		const object = this.object;
@@ -239,12 +227,6 @@ export class BlurDemo extends PostProcessingDemo {
 		}
 
 	}
-
-	/**
-	 * Registers configuration options.
-	 *
-	 * @param {GUI} menu - A menu.
-	 */
 
 	registerOptions(menu) {
 
@@ -273,7 +255,7 @@ export class BlurDemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		menu.add(params, "scale", 0.0, 1.0, 0.01).onChange((value) => {
 
 			blurPass.scale = Number(value);
 
@@ -282,7 +264,7 @@ export class BlurDemo extends PostProcessingDemo {
 		menu.add(blurPass, "enabled");
 		menu.add(texturePass, "dithering");
 
-		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange((value) => {
+		menu.add(params, "opacity", 0.0, 1.0, 0.01).onChange((value) => {
 
 			blendMode.opacity.value = 1.0 - value;
 
