@@ -49,7 +49,7 @@
 		"build:js": "node esbuild.mjs -m",
 		"clean": "del-cli build public tmp",
 		"copy": "cpy --cwd=demo/static --parents \"**/*\" \"../../public/demo\"",
-		"deploy": "run-s copy lint build doc",
+		"deploy": "run-s test copy doc",
 		"dev": "run-s clean copy && run-p start watch",
 		"doc": "esdoc",
 		"lint": "eslint --ext .js --fix src demo/src",
@@ -73,7 +73,7 @@
 		"extends": "aether"
 	},
 	"peerDependencies": {
-		"three": ">= 0.102.0 < 0.132.0"
+		"three": ">= 0.102.0 < 0.133.0"
 	},
 	"devDependencies": {
 		"@types/three": "0.x.x",
