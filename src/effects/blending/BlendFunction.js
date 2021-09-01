@@ -1,8 +1,12 @@
 /**
  * A blend function enumeration.
  *
+ * Important: Do not use `BlendFunction.SKIP` to disable effects. See
+ * [Enabling and Disabling Effects](https://github.com/vanruesc/postprocessing/wiki/Enabling-and-Disabling-Effects)
+ * for more information.
+ *
  * @type {Object}
- * @property {Number} SKIP - No blending. The effect will not be included in the final shader.
+ * @property {Number} SKIP - No blending. This does NOT fully disable the effect.
  * @property {Number} ADD - Additive blending. Fast, but may produce washed out results.
  * @property {Number} ALPHA - Alpha blending. Blends based on the alpha value of the new color.
  * @property {Number} AVERAGE - Average blending.
