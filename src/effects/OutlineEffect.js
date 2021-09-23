@@ -233,10 +233,13 @@ export class OutlineEffect extends Effect {
 		/**
 		 * A selection of objects that will be outlined.
 		 *
+		 * The default layer of this selection is 10.
+		 *
 		 * @type {Selection}
 		 */
 
 		this.selection = new Selection();
+		this.selection.layer = 10;
 
 		/**
 		 * The pulse speed. A value of zero disables the pulse effect.
