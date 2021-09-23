@@ -14,6 +14,7 @@ import {
 
 import { ClearMaskPass, MaskPass, ShaderPass } from "../passes";
 import { CopyMaterial } from "../materials";
+import { Timer } from "./Timer";
 
 /**
  * The EffectComposer may be used in place of a normal WebGLRenderer.
@@ -130,6 +131,14 @@ export class EffectComposer {
 		 */
 
 		this.passes = [];
+
+		/**
+		 * A timer.
+		 *
+		 * @type {Timer}
+		 */
+
+		this.timer = new Timer();
 
 		/**
 		 * Determines whether the last pass automatically renders to screen.
@@ -521,7 +530,7 @@ export class EffectComposer {
 	/**
 	 * Renders all enabled passes in the order in which they were added.
 	 *
-	 * @param {Number} deltaTime - The time since the last frame in seconds.
+	 * @param {Number} [deltaTime] - The time since the last frame in seconds.
 	 */
 
 	render(deltaTime) {
@@ -534,6 +543,12 @@ export class EffectComposer {
 
 		let stencilTest = false;
 		let context, stencil, buffer;
+
+		if(deltaTime === undefined) {
+
+			deltaTime = this.timer.update().getDelta();
+
+		}
 
 		for(const pass of this.passes) {
 
@@ -677,6 +692,7 @@ export class EffectComposer {
 
 		this.deleteDepthTexture();
 		this.copyPass.dispose();
+		this.timer.dispose();
 
 	}
 
