@@ -43,6 +43,14 @@ export class RenderPass extends Pass {
 		this.overrideMaterialManager = (overrideMaterial === null) ? null :
 			new OverrideMaterialManager(overrideMaterial);
 
+		/**
+		 * A selection of objects to render. Default is `null` (no restriction).
+		 *
+		 * @type {Selection}
+		 */
+
+		this.selection = null;
+
 	}
 
 	/**
@@ -79,7 +87,6 @@ export class RenderPass extends Pass {
 	get overrideMaterial() {
 
 		const manager = this.overrideMaterialManager;
-
 		return (manager !== null) ? manager.material : null;
 
 	}
@@ -165,8 +172,16 @@ export class RenderPass extends Pass {
 
 		const scene = this.scene;
 		const camera = this.camera;
+		const selection = this.selection;
+		const mask = camera.layers.mask;
 		const background = scene.background;
 		const renderTarget = this.renderToScreen ? null : inputBuffer;
+
+		if(selection !== null) {
+
+			camera.layers.set(selection.layer);
+
+		}
 
 		if(this.clear) {
 
@@ -199,6 +214,8 @@ export class RenderPass extends Pass {
 			scene.background = background;
 
 		}
+		// Restore original values.
+		camera.layers.mask = mask;
 
 	}
 
