@@ -37,18 +37,15 @@ The [EffectComposer](https://vanruesc.github.io/postprocessing/public/docs/class
 
 ```js
 import { BloomEffect, EffectComposer, EffectPass, RenderPass } from "postprocessing";
-import { Clock } from "three";
 
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
 composer.addPass(new EffectPass(camera, new BloomEffect()));
 
-const clock = new Clock();
-
 requestAnimationFrame(function render() {
 
 	requestAnimationFrame(render);
-	composer.render(clock.getDelta());
+	composer.render();
 
 });
 ```
