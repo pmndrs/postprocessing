@@ -44,6 +44,14 @@ export class RenderPass extends Pass {
 			new OverrideMaterialManager(overrideMaterial);
 
 		/**
+		 * Determines whether the scene background should be ignored.
+		 *
+		 * @type {Boolean}
+		 */
+
+		this.ignoreBackground = false;
+
+		/**
 		 * Determines whether the shadow map auto update should be skipped.
 		 *
 		 * @type {Boolean}
@@ -198,14 +206,13 @@ export class RenderPass extends Pass {
 
 		}
 
+		if(this.ignoreBackground || this.clearPass.overrideClearColor !== null) {
+
+			scene.background = null;
+
+		}
+
 		if(this.clear) {
-
-			if(this.clearPass.overrideClearColor !== null) {
-
-				// This clear color is important! Ignore the scene background.
-				scene.background = null;
-
-			}
 
 			this.clearPass.render(renderer, inputBuffer);
 
@@ -223,14 +230,9 @@ export class RenderPass extends Pass {
 
 		}
 
-		if(scene.background !== background) {
-
-			// Restore the background.
-			scene.background = background;
-
-		}
 		// Restore original values.
 		camera.layers.mask = mask;
+		scene.background = background;
 		renderer.shadowMap.autoUpdate = shadowMapAutoUpdate;
 
 	}
