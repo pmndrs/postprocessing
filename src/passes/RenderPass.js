@@ -44,6 +44,14 @@ export class RenderPass extends Pass {
 			new OverrideMaterialManager(overrideMaterial);
 
 		/**
+		 * Determines whether the shadow map auto update should be skipped.
+		 *
+		 * @type {Boolean}
+		 */
+
+		this.skipShadowMapUpdate = false;
+
+		/**
 		 * A selection of objects to render. Default is `null` (no restriction).
 		 *
 		 * @type {Selection}
@@ -175,11 +183,18 @@ export class RenderPass extends Pass {
 		const selection = this.selection;
 		const mask = camera.layers.mask;
 		const background = scene.background;
+		const shadowMapAutoUpdate = renderer.shadowMap.autoUpdate;
 		const renderTarget = this.renderToScreen ? null : inputBuffer;
 
 		if(selection !== null) {
 
 			camera.layers.set(selection.layer);
+
+		}
+
+		if(this.skipShadowMapUpdate) {
+
+			renderer.shadowMap.autoUpdate = false;
 
 		}
 
@@ -216,6 +231,7 @@ export class RenderPass extends Pass {
 		}
 		// Restore original values.
 		camera.layers.mask = mask;
+		renderer.shadowMap.autoUpdate = shadowMapAutoUpdate;
 
 	}
 
