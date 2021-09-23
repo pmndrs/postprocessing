@@ -48,7 +48,11 @@ export class NormalPass extends Pass {
 
 		this.renderPass = new RenderPass(scene, camera, new MeshNormalMaterial());
 
-		const clearPass = this.renderPass.getClearPass();
+		const renderPass = this.renderPass;
+		renderPass.skipShadowMapUpdate = true;
+		renderPass.ignoreBackground = true;
+
+		const clearPass = renderPass.getClearPass();
 		clearPass.overrideClearColor = new Color(0x7777ff);
 		clearPass.overrideClearAlpha = 1.0;
 
