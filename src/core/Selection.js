@@ -88,7 +88,7 @@ export class Selection extends Set {
 	 *
 	 * The current selection will be updated accordingly.
 	 *
-	 * @param {Number} layer - The layer. Range is [0, 31].
+	 * @param {Number} value - The layer. Range is [0, 31].
 	 */
 
 	setLayer(value) {
