@@ -62,9 +62,10 @@ export class RenderPass extends Pass {
 		this.shadowMapDisabled = false;
 
 		/**
-		 * A selection of objects to render. Default is `null` (no restriction).
+		 * A selection of objects to render.
 		 *
 		 * @type {Selection}
+		 * @private
 		 */
 
 		this.selection = null;
@@ -161,6 +162,30 @@ export class RenderPass extends Pass {
 	set clear(value) {
 
 		this.clearPass.enabled = value;
+
+	}
+
+	/**
+	 * Returns the selection. Default is `null` (no restriction).
+	 *
+	 * @return {Selection} The selection.
+	 */
+
+	getSelection() {
+
+		return this.selection;
+
+	}
+
+	/**
+	 * Sets the selection. Set to `null` to disable.
+	 *
+	 * @param {Selection} selection - The selection.
+	 */
+
+	setSelection(selection) {
+
+		this.selection = selection;
 
 	}
 
