@@ -49,6 +49,17 @@ export class Timer {
 		this.delta = 0;
 
 		/**
+		 * The fixed time step in milliseconds.
+		 *
+		 * Default is 16.667 (60 fps).
+		 *
+		 * @type {Number}
+		 * @private
+		 */
+
+		this.fixedDelta = 1000.0 / 60.0;
+
+		/**
 		 * The total elapsed time in milliseconds.
 		 *
 		 * @type {Number}
@@ -67,24 +78,13 @@ export class Timer {
 		this.timescale = 1.0;
 
 		/**
-		 * The fixed time step in milliseconds.
-		 *
-		 * Default is 16.667 (60 fps).
-		 *
-		 * @type {Number}
-		 * @private
-		 */
-
-		this.fixedDelta = 1000.0 / 60.0;
-
-		/**
 		 * Determines whether this timer should use a fixed time step.
 		 *
 		 * @type {Boolean}
 		 * @private
 		 */
 
-		this.useFixedDelta = false;
+		this.fixedDeltaEnabled = false;
 
 	}
 
@@ -97,7 +97,7 @@ export class Timer {
 
 	setFixedDeltaEnabled(enabled) {
 
-		this.useFixedDelta = enabled;
+		this.fixedDeltaEnabled = enabled;
 		return this;
 
 	}
@@ -110,15 +110,15 @@ export class Timer {
 	 * API is not supported.
 	 *
 	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API}
-	 * @param {Boolean} reset - Whether the timer should be reset on visibility change.
+	 * @param {Boolean} enabled - Whether the timer should be reset on visibility change.
 	 * @return {Timer} This timer.
 	 */
 
-	resetOnVisibilityChange(reset) {
+	setAutoResetEnabled(enabled) {
 
 		if(document !== undefined && document.hidden !== undefined) {
 
-			if(reset) {
+			if(enabled) {
 
 				document.addEventListener("visibilitychange", this);
 
@@ -147,18 +147,6 @@ export class Timer {
 	}
 
 	/**
-	 * Returns the elapsed time.
-	 *
-	 * @return {Number} The elapsed time in seconds.
-	 */
-
-	getElapsed() {
-
-		return this.elapsed * MILLISECONDS_TO_SECONDS;
-
-	}
-
-	/**
 	 * Returns the fixed delta time.
 	 *
 	 * @return {Number} The fixed delta time in seconds.
@@ -181,6 +169,18 @@ export class Timer {
 
 		this.fixedDelta = fixedDelta * SECONDS_TO_MILLISECONDS;
 		return this;
+
+	}
+
+	/**
+	 * Returns the elapsed time.
+	 *
+	 * @return {Number} The elapsed time in seconds.
+	 */
+
+	getElapsed() {
+
+		return this.elapsed * MILLISECONDS_TO_SECONDS;
 
 	}
 
@@ -219,7 +219,7 @@ export class Timer {
 
 	update(timestamp) {
 
-		if(this.useFixedDelta) {
+		if(this.fixedDeltaEnabled) {
 
 			this.delta = this.fixedDelta;
 
