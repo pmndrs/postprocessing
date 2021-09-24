@@ -116,7 +116,7 @@ export class Timer {
 
 	setAutoResetEnabled(enabled) {
 
-		if(document !== undefined && document.hidden !== undefined) {
+		if(typeof document !== "undefined" && document.hidden !== undefined) {
 
 			if(enabled) {
 
@@ -279,7 +279,11 @@ export class Timer {
 
 	dispose() {
 
-		document.removeEventListener("visibilitychange", this);
+		if(typeof document !== "undefined") {
+
+			document.removeEventListener("visibilitychange", this);
+
+		}
 
 	}
 
