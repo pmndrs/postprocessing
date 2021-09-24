@@ -239,7 +239,7 @@ export class OutlineEffect extends Effect {
 		 */
 
 		this.selection = new Selection();
-		this.selection.layer = 10;
+		this.selection.setLayer(10);
 
 		/**
 		 * The pulse speed. A value of zero disables the pulse effect.
@@ -609,7 +609,7 @@ export class OutlineEffect extends Effect {
 			selection.setVisible(true);
 
 			// Compare the depth of the selected objects with the depth texture.
-			camera.layers.set(selection.layer);
+			camera.layers.set(selection.getLayer());
 			this.maskPass.render(renderer, this.renderTargetMask);
 
 			// Restore the camera layer mask and the scene background.

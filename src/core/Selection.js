@@ -45,12 +45,10 @@ export class Selection extends Set {
 	}
 
 	/**
-	 * A dedicated render layer for selected objects.
-	 *
-	 * This layer is set to 10 by default. If this collides with your own custom
-	 * layers, please change it to a free layer before rendering!
+	 * The render layer for selected objects.
 	 *
 	 * @type {Number}
+	 * @deprecated Use getLayer() instead.
 	 */
 
 	get layer() {
@@ -60,14 +58,40 @@ export class Selection extends Set {
 	}
 
 	/**
-	 * Sets the render layer of selected objects.
-	 *
-	 * The current selection will be updated accordingly.
-	 *
 	 * @type {Number}
+	 * @deprecated Use setLayer() instead.
 	 */
 
 	set layer(value) {
+
+		this.setLayer(value);
+
+	}
+
+	/**
+	 * Returns the current render layer for selected objects.
+	 *
+	 * This layer is set to 10 by default. If this collides with your own custom
+	 * layers, please change it to a free layer before rendering!
+	 *
+	 * @return {Number} The layer
+	 */
+
+	getLayer() {
+
+		return this.currentLayer;
+
+	}
+
+	/**
+	 * Sets the render layer for selected objects.
+	 *
+	 * The current selection will be updated accordingly.
+	 *
+	 * @param {Number} layer - The layer. Range is [0, 31].
+	 */
+
+	setLayer(value) {
 
 		const currentLayer = this.currentLayer;
 

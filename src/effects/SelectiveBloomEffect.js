@@ -109,7 +109,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 		 */
 
 		this.selection = new Selection();
-		this.selection.layer = 11;
+		this.selection.setLayer(11);
 
 	}
 
@@ -151,7 +151,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 	}
 
 	/**
-	 * Indicates whether the background colors will be discarded.
+	 * Indicates whether the background colors will be ignored.
 	 *
 	 * @type {Boolean}
 	 */
@@ -163,8 +163,6 @@ export class SelectiveBloomEffect extends BloomEffect {
 	}
 
 	/**
-	 * If enabled, the background colors will be discarded.
-	 *
 	 * @type {Boolean}
 	 */
 
@@ -206,7 +204,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 		// Render depth of selected objects.
 		const mask = camera.layers.mask;
-		camera.layers.set(selection.layer);
+		camera.layers.set(selection.getLayer());
 		this.depthPass.render(renderer);
 		camera.layers.mask = mask;
 
