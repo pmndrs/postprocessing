@@ -63,7 +63,7 @@ export class PostProcessingDemo extends Demo {
 		super.reset();
 
 		const renderPass = new RenderPass(this.scene, null);
-		renderPass.enabled = this.renderPass.enabled;
+		renderPass.setEnabled(this.renderPass.isEnabled());
 		this.renderPass = renderPass;
 
 		return this;

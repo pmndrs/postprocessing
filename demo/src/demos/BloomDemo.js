@@ -343,7 +343,7 @@ export class BloomDemo extends PostProcessingDemo {
 
 		effectPassA.renderToScreen = true;
 		effectPassB.renderToScreen = true;
-		effectPassB.enabled = false;
+		effectPassB.setEnabled(false);
 
 		composer.addPass(effectPassA);
 		composer.addPass(effectPassB);
@@ -389,12 +389,12 @@ export class BloomDemo extends PostProcessingDemo {
 			"blur scale": effectA.blurPass.scale,
 			"intensity": effectA.intensity,
 			"luminance": {
-				"filter": effectA.luminancePass.enabled,
+				"filter": effectA.luminancePass.isEnabled(),
 				"threshold": effectA.luminanceMaterial.threshold,
 				"smoothing": effectA.luminanceMaterial.smoothing
 			},
 			"selection": {
-				"enabled": passB.enabled,
+				"enabled": passB.isEnabled(),
 				"inverted": effectB.inverted,
 				"ignore bg": effectB.ignoreBackground
 			},
@@ -431,7 +431,8 @@ export class BloomDemo extends PostProcessingDemo {
 
 		folder.add(params.luminance, "filter").onChange((value) => {
 
-			effectA.luminancePass.enabled = effectB.luminancePass.enabled = value;
+			effectA.luminancePass.setEnabled(value);
+			effectB.luminancePass.setEnabled(value);
 
 		});
 
@@ -456,10 +457,10 @@ export class BloomDemo extends PostProcessingDemo {
 
 		folder.add(params.selection, "enabled").onChange((value) => {
 
-			passB.enabled = value;
-			passA.enabled = !passB.enabled;
+			passB.setEnabled(value);
+			passA.setEnabled(!passB.isEnabled());
 
-			if(passB.enabled) {
+			if(passB.isEnabled()) {
 
 				renderer.domElement.addEventListener("pointerdown", this);
 

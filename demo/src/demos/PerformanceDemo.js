@@ -383,7 +383,7 @@ export class PerformanceDemo extends PostProcessingDemo {
 		// Add all passes to the composer.
 		for(const pass of passes) {
 
-			pass.enabled = false;
+			pass.setEnabled(false);
 			composer.addPass(pass);
 
 		}
@@ -434,11 +434,11 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 		menu.add(params, "merge effects").onChange((value) => {
 
-			this.effectPass.enabled = value;
+			this.effectPass.setEnabled(value);
 
 			for(const pass of this.passes) {
 
-				pass.enabled = !value;
+				pass.setEnabled(!value);
 
 			}
 

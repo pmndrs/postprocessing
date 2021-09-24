@@ -275,7 +275,7 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 			vignetteEffect.blendMode.setBlendFunction((mode === RenderMode.DEFAULT &&
 				params.vignette.enabled) ? BlendFunction.NORMAL : BlendFunction.SKIP);
 
-			smaaPass.enabled = (mode === RenderMode.DEFAULT);
+			smaaPass.setEnabled(mode === RenderMode.DEFAULT);
 			effectPass.encodeOutput = (mode === RenderMode.DEFAULT);
 			effectPass.renderToScreen = (mode !== RenderMode.DEFAULT);
 
@@ -321,7 +321,8 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 
 		folder.add(params.vignette, "enabled").onChange((value) => {
 
-			vignetteEffect.blendMode.setBlendFunction(value ? BlendFunction.NORMAL : BlendFunction.SKIP);
+			vignetteEffect.blendMode.setBlendFunction(value ?
+				BlendFunction.NORMAL : BlendFunction.SKIP);
 
 		});
 

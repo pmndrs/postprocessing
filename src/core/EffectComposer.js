@@ -552,7 +552,7 @@ export class EffectComposer {
 
 		for(const pass of this.passes) {
 
-			if(pass.enabled) {
+			if(pass.isEnabled()) {
 
 				pass.render(
 					renderer,

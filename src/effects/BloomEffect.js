@@ -338,7 +338,7 @@ export class BloomEffect extends Effect {
 
 		const renderTarget = this.renderTarget;
 
-		if(this.luminancePass.enabled) {
+		if(this.luminancePass.isEnabled()) {
 
 			this.luminancePass.render(renderer, inputBuffer, renderTarget);
 			this.blurPass.render(renderer, renderTarget, renderTarget);

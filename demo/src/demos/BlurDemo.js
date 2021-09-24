@@ -236,6 +236,7 @@ export class BlurDemo extends PostProcessingDemo {
 		const blendMode = textureEffect.blendMode;
 
 		const params = {
+			"enabled": blurPass.isEnabled(),
 			"resolution": blurPass.height,
 			"kernel size": blurPass.kernelSize,
 			"scale": blurPass.scale,
@@ -261,7 +262,7 @@ export class BlurDemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(blurPass, "enabled");
+		menu.add(params, "enabled").onChange((value) => blurPass.setEnabled(value));
 		menu.add(texturePass, "dithering");
 
 		menu.add(params, "opacity", 0.0, 1.0, 0.01).onChange((value) => {

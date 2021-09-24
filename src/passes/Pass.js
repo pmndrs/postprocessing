@@ -160,7 +160,7 @@ export class Pass {
 		this.needsDepthTexture = false;
 
 		/**
-		 * Indicates whether this pass should be executed.
+		 * Indicates whether this pass is enabled.
 		 *
 		 * @type {Boolean}
 		 */
@@ -205,6 +205,30 @@ export class Pass {
 			this.rtt = !value;
 
 		}
+
+	}
+
+	/**
+	 * Indicates whether this pass is enabled.
+	 *
+	 * @return {Boolean} Whether this pass is enabled.
+	 */
+
+	isEnabled() {
+
+		return this.enabled;
+
+	}
+
+	/**
+	 * Enables or disables this pass.
+	 *
+	 * @param {Boolean} enabled - Whether the pass should be enabled.
+	 */
+
+	setEnabled(enabled) {
+
+		this.enabled = enabled;
 
 	}
 

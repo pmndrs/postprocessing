@@ -369,7 +369,7 @@ export class GodRaysEffect extends Effect {
 
 	get blur() {
 
-		return this.blurPass.enabled;
+		return this.blurPass.isEnabled();
 
 	}
 
@@ -379,7 +379,7 @@ export class GodRaysEffect extends Effect {
 
 	set blur(value) {
 
-		this.blurPass.enabled = value;
+		this.blurPass.setEnabled(value);
 
 	}
 

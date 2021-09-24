@@ -225,7 +225,7 @@ export class AntialiasingDemo extends PostProcessingDemo {
 		this.copyPass = copyPass;
 		this.effectPass = effectPass;
 
-		copyPass.enabled = false;
+		copyPass.setEnabled(false);
 		copyPass.renderToScreen = true;
 		effectPass.renderToScreen = true;
 
@@ -323,8 +323,8 @@ export class AntialiasingDemo extends PostProcessingDemo {
 
 			const mode = Number(value);
 
-			effectPass.enabled = (mode === AAMode.SMAA);
-			copyPass.enabled = !effectPass.enabled;
+			effectPass.setEnabled(mode === AAMode.SMAA);
+			copyPass.setEnabled(!effectPass.isEnabled());
 
 			composer.multisampling = (mode !== AAMode.MSAA) ? 0 :
 				Math.min(4, context.getParameter(context.MAX_SAMPLES));

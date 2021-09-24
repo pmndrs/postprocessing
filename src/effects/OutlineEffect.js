@@ -397,7 +397,7 @@ export class OutlineEffect extends Effect {
 
 	get blur() {
 
-		return this.blurPass.enabled;
+		return this.blurPass.isEnabled();
 
 	}
 
@@ -407,7 +407,7 @@ export class OutlineEffect extends Effect {
 
 	set blur(value) {
 
-		this.blurPass.enabled = value;
+		this.blurPass.setEnabled(value);
 
 		this.uniforms.get("edgeTexture").value = value ?
 			this.renderTargetBlurredOutline.texture :
