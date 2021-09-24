@@ -163,6 +163,7 @@ export class Pass {
 		 * Indicates whether this pass is enabled.
 		 *
 		 * @type {Boolean}
+		 * @deprecated Use isEnabled() and setEnabled() instead.
 		 */
 
 		this.enabled = true;
