@@ -136,6 +136,7 @@ export class EffectComposer {
 		 * A timer.
 		 *
 		 * @type {Timer}
+		 * @private
 		 */
 
 		this.timer = new Timer();
@@ -198,6 +199,18 @@ export class EffectComposer {
 			this.outputBuffer = this.inputBuffer.clone();
 
 		}
+
+	}
+
+	/**
+	 * Returns the internal timer.
+	 *
+	 * @return {Timer} The timer.
+	 */
+
+	getTimer() {
+
+		return this.timer;
 
 	}
 
