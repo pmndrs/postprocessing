@@ -44,20 +44,22 @@ export class RenderPass extends Pass {
 			new OverrideMaterialManager(overrideMaterial);
 
 		/**
-		 * Determines whether the scene background should be ignored.
+		 * Indicates whether the scene background should be ignored.
 		 *
 		 * @type {Boolean}
+		 * @private
 		 */
 
-		this.ignoreBackground = false;
+		this.backgroundDisabled = false;
 
 		/**
-		 * Determines whether the shadow map auto update should be skipped.
+		 * Indicates whether the shadow map auto update should be skipped.
 		 *
 		 * @type {Boolean}
+		 * @private
 		 */
 
-		this.skipShadowMapUpdate = false;
+		this.shadowMapDisabled = false;
 
 		/**
 		 * A selection of objects to render. Default is `null` (no restriction).
@@ -163,6 +165,54 @@ export class RenderPass extends Pass {
 	}
 
 	/**
+	 * Indicates whether the scene background is enabled.
+	 *
+	 * @return {Boolean} Whether the scene background is enabled.
+	 */
+
+	isBackgroundDisabled() {
+
+		return this.backgroundDisabled;
+
+	}
+
+	/**
+	 * Enables or disables the scene background.
+	 *
+	 * @param {Boolean} disabled - Whether the scene background should be disabled.
+	 */
+
+	setBackgroundDisabled(disabled) {
+
+		this.backgroundDisabled = disabled;
+
+	}
+
+	/**
+	 * Indicates whether the shadow map auto update is disabled.
+	 *
+	 * @return {Boolean} Whether the shadow map update is disabled.
+	 */
+
+	isShadowMapDisabled() {
+
+		return this.shadowMapDisabled;
+
+	}
+
+	/**
+	 * Enables or disables the shadow map auto update.
+	 *
+	 * @param {Boolean} disabled - Whether the shadow map auto update should be disabled.
+	 */
+
+	setShadowMapDisabled(disabled) {
+
+		this.shadowMapDisabled = disabled;
+
+	}
+
+	/**
 	 * Returns the clear pass.
 	 *
 	 * @return {ClearPass} The clear pass.
@@ -196,17 +246,17 @@ export class RenderPass extends Pass {
 
 		if(selection !== null) {
 
-			camera.layers.set(selection.layer);
+			camera.layers.set(selection.getLayer());
 
 		}
 
-		if(this.skipShadowMapUpdate) {
+		if(this.shadowMapDisabled) {
 
 			renderer.shadowMap.autoUpdate = false;
 
 		}
 
-		if(this.ignoreBackground || this.clearPass.overrideClearColor !== null) {
+		if(this.backgroundDisabled || this.clearPass.overrideClearColor !== null) {
 
 			scene.background = null;
 

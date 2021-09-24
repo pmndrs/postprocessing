@@ -51,8 +51,8 @@ export class DepthPass extends Pass {
 		}));
 
 		const renderPass = this.renderPass;
-		renderPass.skipShadowMapUpdate = true;
-		renderPass.ignoreBackground = true;
+		renderPass.setBackgroundDisabled(true);
+		renderPass.setShadowMapDisabled(true);
 
 		const clearPass = renderPass.getClearPass();
 		clearPass.overrideClearColor = new Color(0xffffff);
