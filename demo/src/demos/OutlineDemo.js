@@ -216,6 +216,7 @@ export class OutlineDemo extends PostProcessingDemo {
 
 				textureLoader.load("textures/pattern.png", (t) => {
 
+					t.encoding = sRGBEncoding;
 					assets.set("pattern-color", t);
 
 				});
@@ -479,11 +480,7 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		menu.add(params, "pattern scale", 20.0, 100.0, 0.1).onChange((value) => {
 
-			if(uniforms.has("patternScale")) {
-
-				uniforms.get("patternScale").value = value;
-
-			}
+			uniforms.get("patternScale").value = value;
 
 		});
 
