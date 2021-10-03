@@ -1,12 +1,6 @@
-import {
-	LinearEncoding,
-	Matrix3,
-	sRGBEncoding,
-	Uniform,
-	UnsignedByteType
-} from "three";
-
+import { Matrix3, Uniform, UnsignedByteType } from "three";
 import { ColorChannel } from "../core/ColorChannel";
+import { getTextureDecoding } from "../utils/getTextureDecoding";
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect } from "./Effect";
 
@@ -53,6 +47,15 @@ export class TextureEffect extends Effect {
 		this.texture = texture;
 		this.aspectCorrection = aspectCorrection;
 
+		/**
+		 * Indicates whether the context is WebGL 2.
+		 *
+		 * @type {Boolean}
+		 * @private
+		 */
+
+		this.isWebGL2 = false;
+
 	}
 
 	/**
@@ -76,33 +79,21 @@ export class TextureEffect extends Effect {
 	set texture(value) {
 
 		const currentTexture = this.texture;
+		const defines = this.defines;
 
 		if(currentTexture !== value) {
 
 			this.uniforms.get("map").value = value;
-			this.defines.delete("TEXTURE_PRECISION_HIGH");
+			defines.delete("TEXTURE_PRECISION_HIGH");
+
+			const decoding = getTextureDecoding(value, this.isWebGL2);
+			defines.set("texelToLinear(texel)", decoding);
 
 			if(value !== null) {
 
-				switch(value.encoding) {
-
-					case sRGBEncoding:
-						this.defines.set("texelToLinear(texel)", "sRGBToLinear(texel)");
-						break;
-
-					case LinearEncoding:
-						this.defines.set("texelToLinear(texel)", "texel");
-						break;
-
-					default:
-						console.error("Unsupported encoding:", value.encoding);
-						break;
-
-				}
-
 				if(value.type !== UnsignedByteType) {
 
-					this.defines.set("TEXTURE_PRECISION_HIGH", "1");
+					defines.set("TEXTURE_PRECISION_HIGH", "1");
 
 				}
 
@@ -266,6 +257,22 @@ export class TextureEffect extends Effect {
 			this.uniforms.get("uvTransform").value.copy(texture.matrix);
 
 		}
+
+	}
+
+	/**
+	 * Performs initialization tasks.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 * @param {Number} frameBufferType - The type of the main frame buffers.
+	 */
+
+	initialize(renderer, alpha, frameBufferType) {
+
+		this.isWebGL2 = renderer.capabilities.isWebGL2;
+		const decoding = getTextureDecoding(this.texture, this.isWebGL2);
+		this.defines.set("texelToLinear(texel)", decoding);
 
 	}
 
