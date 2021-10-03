@@ -22,9 +22,9 @@ A proposed change should be focused and concise. Please adhere to the following 
 1. Create a feature branch based on the `dev` branch.
 2. Implement your patch or feature on that branch.
 3. Lint and test your changes. Maintain the existing coding style.
-3. Add unit tests for any new or changed functionality.
-3. Navigate to your fork on Github, select your feature branch and create a new Pull Request targeting the `dev` branch.
-4. Once your PR has been merged, you can safely remove your feature-branch.
+4. Add unit tests for any new or changed functionality.
+5. Navigate to your fork on Github, select your feature branch and create a new Pull Request targeting the `dev` branch.
+6. Once your PR has been merged, you can safely remove your feature-branch.
 
 
 ### Development :wrench:
@@ -38,8 +38,6 @@ The following table provides an overview of the most important scripts:
 | watch | Lints source files, builds the demo and listens for changes. |
 | dev   | Runs the watch script and serves files locally.              |
 | test  | Lints source files, builds all bundles and runs unit tests.  |
-
-__Note__: Setting `NODE_ENV` to `production` enables source code minification which slows down the build process. The `build` script does this automatically.
 
 
 ### Testing :heavy_check_mark:
