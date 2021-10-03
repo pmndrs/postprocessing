@@ -24,6 +24,7 @@ import {
 	ShaderPass
 } from "../passes";
 
+import { getTextureDecoding } from "../utils/getTextureDecoding";
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect } from "./Effect";
 
@@ -248,6 +249,15 @@ export class OutlineEffect extends Effect {
 		 */
 
 		this.pulseSpeed = pulseSpeed;
+
+		/**
+		 * Indicates whether the context is WebGL 2.
+		 *
+		 * @type {Boolean}
+		 * @private
+		 */
+
+		this.isWebGL2 = false;
 
 	}
 
@@ -477,6 +487,9 @@ export class OutlineEffect extends Effect {
 
 		}
 
+		const decoding = getTextureDecoding(texture, this.isWebGL2);
+		this.defines.set("texelToLinear(texel)", decoding);
+
 		this.setChanged();
 
 	}
@@ -666,6 +679,11 @@ export class OutlineEffect extends Effect {
 	 */
 
 	initialize(renderer, alpha, frameBufferType) {
+
+		this.isWebGL2 = renderer.capabilities.isWebGL2;
+		const texture = this.uniforms.get("patternTexture").value;
+		const decoding = getTextureDecoding(texture, this.isWebGL2);
+		this.defines.set("texelToLinear(texel)", decoding);
 
 		// No need for high precision: the blur pass operates on a mask texture.
 		this.blurPass.initialize(renderer, alpha, UnsignedByteType);

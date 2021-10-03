@@ -31,7 +31,7 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
 
 	#ifdef USE_PATTERN
 
-		vec4 patternColor = texture2D(patternTexture, vUvPattern);
+		vec4 patternColor = texelToLinear(texture2D(patternTexture, vUvPattern));
 
 		#ifdef X_RAY
 
