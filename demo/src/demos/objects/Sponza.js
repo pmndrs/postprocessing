@@ -79,6 +79,7 @@ export function load(assets, manager, anisotropy) {
 		});
 
 		TextureUtils.setAnisotropy(gltf.scene, anisotropy);
+		TextureUtils.setRGBFormat(gltf.scene);
 		assets.set(tag, gltf.scene);
 
 	});

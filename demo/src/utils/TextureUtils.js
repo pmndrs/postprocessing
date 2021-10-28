@@ -1,3 +1,5 @@
+import { Mesh, RGBFormat } from "three";
+
 /**
  * A collection of texture utility functions.
  */
@@ -15,7 +17,7 @@ export class TextureUtils {
 
 		object.traverse((node) => {
 
-			if(node.isMesh) {
+			if(node instanceof Mesh) {
 
 				const m = node.material;
 
@@ -49,7 +51,7 @@ export class TextureUtils {
 	}
 
 	/**
-	 * Sets the the anisotropy of the given object's textures.
+	 * Sets the anisotropy of the given object's textures.
 	 *
 	 * @param {Object3D} object - A 3D object.
 	 * @param {Number} anisotropy - The anisotropy.
@@ -59,7 +61,7 @@ export class TextureUtils {
 
 		object.traverse((node) => {
 
-			if(node.isMesh) {
+			if(node instanceof Mesh) {
 
 				const m = node.material;
 
@@ -78,6 +80,47 @@ export class TextureUtils {
 					if(map !== undefined && map !== null) {
 
 						map.anisotropy = anisotropy;
+
+					}
+
+				}
+
+			}
+
+		});
+
+	}
+
+	/**
+	 * Sets the format of the given object's opaque textures to RGBFormat.
+	 *
+	 * @param {Object3D} object - A 3D object.
+	 */
+
+	static setRGBFormat(object) {
+
+		object.traverse((node) => {
+
+			if(node instanceof Mesh) {
+
+				const m = node.material;
+				const transparent = (m.transparent || m.alphaTest > 0);
+
+				if(!transparent) {
+
+					const maps = [
+						m.map,
+						m.emissiveMap,
+						m.specularMap
+					];
+
+					for(const map of maps) {
+
+						if(map !== undefined && map !== null) {
+
+							map.format = RGBFormat;
+
+						}
 
 					}
 
