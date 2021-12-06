@@ -426,8 +426,14 @@ export class PerformanceDemo extends PostProcessingDemo {
 		const params = {
 			"effects": this.effectPass.effects.length,
 			"merge effects": true,
-			"firefox": () => window.open("https://www.google.com/search?q=firefox+layout.frame_rate", "_blank"),
-			"chrome": () => window.open("https://www.google.com/search?q=chrome+--disable-frame-rate-limit --disable-gpu-vsync", "_blank")
+			"firefox": () => window.open(
+				"https://www.google.com/search?q=firefox+layout.frame_rate",
+				"_blank"
+			),
+			"chrome": () => window.open(
+				"https://www.google.com/search?q=chrome+--disable-frame-rate-limit --disable-gpu-vsync",
+				"_blank"
+			)
 		};
 
 		infoOptions.push(menu.add(params, "effects"));
