@@ -21,13 +21,13 @@ export function getTextureDecoding(texture, isWebGL2) {
 
 	if(texture !== null) {
 
-		// Usage of SRGB8_ALPHA8 was introduced in three r133 and disabled in r135.
+		// Usage of SRGB8_ALPHA8 was introduced in three r133 and disabled temporarily in r135.
 		const revision = Number.parseInt(REVISION);
 
 		// Disable inline decoding for sRGB textures in WebGL 2.
 		const sRGB8Alpha8 = (
 			isWebGL2 &&
-			revision >= 133 && revision < 135 &&
+			revision >= 133 && revision !== 135 &&
 			texture.format === RGBAFormat &&
 			texture.type === UnsignedByteType &&
 			texture.encoding === sRGBEncoding
