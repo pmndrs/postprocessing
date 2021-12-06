@@ -234,7 +234,7 @@ export class Timer {
 		}
 
 		this.delta *= this.timescale;
-		this.elapsed += this.deltaTime;
+		this.elapsed += this.delta;
 
 		return this;
 
