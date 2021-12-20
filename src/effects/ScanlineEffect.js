@@ -24,13 +24,10 @@ export class ScanlineEffect extends Effect {
 	constructor({ blendFunction = BlendFunction.OVERLAY, density = 1.25 } = {}) {
 
 		super("ScanlineEffect", fragmentShader, {
-
 			blendFunction,
-
 			uniforms: new Map([
 				["count", new Uniform(0.0)]
 			])
-
 		});
 
 		/**

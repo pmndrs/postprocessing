@@ -21,13 +21,10 @@ export class SepiaEffect extends Effect {
 	constructor({ blendFunction = BlendFunction.NORMAL, intensity = 1.0 } = {}) {
 
 		super("SepiaEffect", fragmentShader, {
-
 			blendFunction,
-
 			uniforms: new Map([
 				["intensity", new Uniform(intensity)]
 			])
-
 		});
 
 	}

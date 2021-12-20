@@ -47,15 +47,12 @@ export class SMAAEffect extends Effect {
 	) {
 
 		super("SMAAEffect", fragmentShader, {
-
 			vertexShader,
 			blendFunction: BlendFunction.NORMAL,
 			attributes: EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH,
-
 			uniforms: new Map([
 				["weightMap", new Uniform(null)]
 			])
-
 		});
 
 		/**
@@ -106,9 +103,7 @@ export class SMAAEffect extends Effect {
 		 * @private
 		 */
 
-		this.edgeDetectionPass = new ShaderPass(
-			new EdgeDetectionMaterial(new Vector2(), edgeDetectionMode)
-		);
+		this.edgeDetectionPass = new ShaderPass(new EdgeDetectionMaterial(new Vector2(), edgeDetectionMode));
 
 		/**
 		 * An SMAA weights pass.
@@ -193,8 +188,7 @@ export class SMAAEffect extends Effect {
 
 	setEdgeDetectionThreshold(threshold) {
 
-		this.edgeDetectionPass.getFullscreenMaterial()
-			.setEdgeDetectionThreshold(threshold);
+		this.edgeDetectionPass.getFullscreenMaterial().setEdgeDetectionThreshold(threshold);
 
 	}
 
@@ -288,12 +282,8 @@ export class SMAAEffect extends Effect {
 	update(renderer, inputBuffer, deltaTime) {
 
 		this.clearPass.render(renderer, this.renderTargetEdges);
-
-		this.edgeDetectionPass.render(renderer, inputBuffer,
-			this.renderTargetEdges);
-
-		this.weightsPass.render(renderer, this.renderTargetEdges,
-			this.renderTargetWeights);
+		this.edgeDetectionPass.render(renderer, inputBuffer, this.renderTargetEdges);
+		this.weightsPass.render(renderer, this.renderTargetEdges, this.renderTargetWeights);
 
 	}
 
@@ -307,16 +297,14 @@ export class SMAAEffect extends Effect {
 	setSize(width, height) {
 
 		const weightsMaterial = this.weightsPass.getFullscreenMaterial();
-		const edgeDetectionMaterial = this.edgeDetectionPass
-			.getFullscreenMaterial();
+		const edgeDetectionMaterial = this.edgeDetectionPass.getFullscreenMaterial();
 
 		this.renderTargetEdges.setSize(width, height);
 		this.renderTargetWeights.setSize(width, height);
 
 		weightsMaterial.uniforms.resolution.value.set(width, height);
 		weightsMaterial.uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
-		edgeDetectionMaterial.uniforms.texelSize.value.copy(
-			weightsMaterial.uniforms.texelSize.value);
+		edgeDetectionMaterial.uniforms.texelSize.value.copy(weightsMaterial.uniforms.texelSize.value);
 
 	}
 

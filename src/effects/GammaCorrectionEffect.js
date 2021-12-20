@@ -26,13 +26,10 @@ export class GammaCorrectionEffect extends Effect {
 	} = {}) {
 
 		super("GammaCorrectionEffect", fragmentShader, {
-
 			blendFunction,
-
 			uniforms: new Map([
 				["gamma", new Uniform(gamma)]
 			])
-
 		});
 
 	}

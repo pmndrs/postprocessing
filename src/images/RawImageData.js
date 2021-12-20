@@ -10,11 +10,7 @@
 
 function createCanvas(width, height, data) {
 
-	const canvas = document.createElementNS(
-		"http://www.w3.org/1999/xhtml",
-		"canvas"
-	);
-
+	const canvas = document.createElementNS("http://www.w3.org/1999/xhtml", "canvas");
 	const context = canvas.getContext("2d");
 
 	canvas.width = width;
@@ -89,11 +85,8 @@ export class RawImageData {
 
 	toCanvas() {
 
-		return (typeof document === "undefined") ? null : createCanvas(
-			this.width,
-			this.height,
-			this.data
-		);
+		return (typeof document === "undefined") ?
+			null : createCanvas(this.width, this.height, this.data);
 
 	}
 

@@ -365,8 +365,7 @@ export class Pass {
 	initialize(renderer, alpha, frameBufferType) {}
 
 	/**
-	 * Performs a shallow search for disposable properties and deletes them. The
-	 * pass will be inoperative after this method was called!
+	 * Performs a shallow search for disposable properties and deletes them.
 	 *
 	 * The {@link EffectComposer} calls this method when it is being destroyed.
 	 * You may, however, use it independently to free memory when you are certain

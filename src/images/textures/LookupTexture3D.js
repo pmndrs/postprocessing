@@ -29,8 +29,7 @@ const c = new Color();
 /**
  * A 3D lookup texture (LUT).
  *
- * This texture can be used as-is in a WebGL 2 context. It can also be converted
- * into a regular 2D texture for backwards compatibility.
+ * This texture can be used as-is in a WebGL 2 context. It can also be converted into a 2D texture.
  */
 
 export class LookupTexture3D extends DataTexture3D {
@@ -203,8 +202,8 @@ export class LookupTexture3D extends DataTexture3D {
 	/**
 	 * Converts the LUT data into unsigned byte data.
 	 *
-	 * This is a lossy operation which should only be performed after all other
-	 * transformations have been applied.
+	 * This is a lossy operation which should only be performed after all other transformations have
+	 * been applied.
 	 *
 	 * @return {LookupTexture3D} This texture.
 	 */

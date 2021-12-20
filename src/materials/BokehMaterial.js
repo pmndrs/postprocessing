@@ -25,13 +25,10 @@ export class BokehMaterial extends ShaderMaterial {
 	constructor(fill = false, foreground = false) {
 
 		super({
-
-			type: "BokehMaterial",
-
+			name: "BokehMaterial",
 			defines: {
 				PASS: fill ? "2" : "1"
 			},
-
 			uniforms: {
 				kernel64: new Uniform(null),
 				kernel16: new Uniform(null),
@@ -40,14 +37,11 @@ export class BokehMaterial extends ShaderMaterial {
 				texelSize: new Uniform(new Vector2()),
 				scale: new Uniform(1.0)
 			},
-
-			fragmentShader,
-			vertexShader,
-
 			blending: NoBlending,
 			depthWrite: false,
-			depthTest: false
-
+			depthTest: false,
+			fragmentShader,
+			vertexShader
 		});
 
 		/** @ignore */

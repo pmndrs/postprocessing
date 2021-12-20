@@ -4,31 +4,8 @@ import { Effect } from "./Effect";
 import fragmentShader from "./glsl/shock-wave/shader.frag";
 import vertexShader from "./glsl/shock-wave/shader.vert";
 
-/**
- * Half PI.
- *
- * @type {Number}
- * @private
- */
-
 const HALF_PI = Math.PI * 0.5;
-
-/**
- * A vector.
- *
- * @type {Vector3}
- * @private
- */
-
 const v = new Vector3();
-
-/**
- * A vector.
- *
- * @type {Vector3}
- * @private
- */
-
 const ab = new Vector3();
 
 /**
@@ -36,8 +13,6 @@ const ab = new Vector3();
  *
  * Based on a Gist by Jean-Philippe Sarda:
  *  https://gist.github.com/jpsarda/33cea67a9f2ecb0a0eda
- *
- * Warning: This effect cannot be merged with convolution effects.
  */
 
 export class ShockWaveEffect extends Effect {
@@ -62,9 +37,7 @@ export class ShockWaveEffect extends Effect {
 	} = {}) {
 
 		super("ShockWaveEffect", fragmentShader, {
-
 			vertexShader,
-
 			uniforms: new Map([
 				["active", new Uniform(false)],
 				["center", new Uniform(new Vector2(0.5, 0.5))],
@@ -75,7 +48,6 @@ export class ShockWaveEffect extends Effect {
 				["waveSize", new Uniform(waveSize)],
 				["amplitude", new Uniform(amplitude)]
 			])
-
 		});
 
 		/**
@@ -173,8 +145,7 @@ export class ShockWaveEffect extends Effect {
 			if(uniformActive.value) {
 
 				// Scale the effect based on distance to the object.
-				uniforms.get("cameraDistance").value = camera.position
-					.distanceTo(epicenter);
+				uniforms.get("cameraDistance").value = camera.position.distanceTo(epicenter);
 
 				// Calculate the screen position of the epicenter.
 				v.copy(epicenter).project(camera);

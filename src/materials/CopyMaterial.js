@@ -16,21 +16,16 @@ export class CopyMaterial extends ShaderMaterial {
 	constructor() {
 
 		super({
-
-			type: "CopyMaterial",
-
+			name: "CopyMaterial",
 			uniforms: {
 				inputBuffer: new Uniform(null),
 				opacity: new Uniform(1.0)
 			},
-
-			fragmentShader,
-			vertexShader,
-
 			blending: NoBlending,
 			depthWrite: false,
-			depthTest: false
-
+			depthTest: false,
+			fragmentShader,
+			vertexShader
 		});
 
 		/** @ignore */

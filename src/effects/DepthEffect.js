@@ -25,10 +25,8 @@ export class DepthEffect extends Effect {
 	} = {}) {
 
 		super("DepthEffect", fragmentShader, {
-
 			blendFunction,
 			attributes: EffectAttribute.DEPTH
-
 		});
 
 		this.inverted = inverted;

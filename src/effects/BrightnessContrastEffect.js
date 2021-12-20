@@ -28,14 +28,11 @@ export class BrightnessContrastEffect extends Effect {
 	} = {}) {
 
 		super("BrightnessContrastEffect", fragmentShader, {
-
 			blendFunction,
-
 			uniforms: new Map([
 				["brightness", new Uniform(brightness)],
 				["contrast", new Uniform(contrast)]
 			])
-
 		});
 
 	}

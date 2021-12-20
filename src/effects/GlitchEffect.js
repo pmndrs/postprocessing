@@ -1,10 +1,4 @@
-import {
-	NearestFilter,
-	RepeatWrapping,
-	RGBFormat,
-	Uniform,
-	Vector2
-} from "three";
+import { NearestFilter, RepeatWrapping, RGBFormat, Uniform, Vector2 } from "three";
 
 import { NoiseTexture } from "../images/textures/NoiseTexture";
 import { BlendFunction } from "./blending/BlendFunction";
@@ -76,9 +70,7 @@ export class GlitchEffect extends Effect {
 	} = {}) {
 
 		super("GlitchEffect", fragmentShader, {
-
 			blendFunction,
-
 			uniforms: new Map([
 				["perturbationMap", new Uniform(null)],
 				["columns", new Uniform(columns)],
@@ -87,13 +79,10 @@ export class GlitchEffect extends Effect {
 				["seed", new Uniform(new Vector2())],
 				["distortion", new Uniform(new Vector2())]
 			])
-
 		});
 
 		this.setPerturbationMap((perturbationMap === null) ?
-			this.generatePerturbationMap(dtSize) :
-			perturbationMap
-		);
+			this.generatePerturbationMap(dtSize) : perturbationMap);
 
 		/**
 		 * The minimum and maximum delay between glitch activations in seconds.
@@ -167,9 +156,8 @@ export class GlitchEffect extends Effect {
 		this.strength = strength;
 
 		/**
-		 * The threshold for strong glitches, ranging from 0 to 1 where 0 means no
-		 * weak glitches and 1 means no strong ones. The default ratio of 0.85
-		 * offers a decent balance.
+		 * The threshold for strong glitches, ranging from 0 to 1 where 0 means no weak glitches and 1
+		 * means no strong ones. The default ratio of 0.85 offers a decent balance.
 		 *
 		 * @type {Number}
 		 */
@@ -247,7 +235,6 @@ export class GlitchEffect extends Effect {
 
 		const map = new NoiseTexture(size, size, RGBFormat);
 		map.name = tag;
-
 		return map;
 
 	}

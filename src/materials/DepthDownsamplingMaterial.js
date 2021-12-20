@@ -19,26 +19,20 @@ export class DepthDownsamplingMaterial extends ShaderMaterial {
 	constructor() {
 
 		super({
-
-			type: "DepthDownsamplingMaterial",
-
+			name: "DepthDownsamplingMaterial",
 			defines: {
 				DEPTH_PACKING: "0"
 			},
-
 			uniforms: {
 				depthBuffer: new Uniform(null),
 				normalBuffer: new Uniform(null),
 				texelSize: new Uniform(new Vector2())
 			},
-
-			fragmentShader,
-			vertexShader,
-
 			blending: NoBlending,
 			depthWrite: false,
-			depthTest: false
-
+			depthTest: false,
+			fragmentShader,
+			vertexShader
 		});
 
 		/** @ignore */

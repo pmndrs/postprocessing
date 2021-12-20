@@ -1,8 +1,7 @@
 /**
  * An object selection.
  *
- * Object selections use render layers to facilitate quick and efficient
- * visibility changes.
+ * Object selections use render layers to facilitate quick and efficient visibility changes.
  */
 
 export class Selection extends Set {
@@ -28,8 +27,8 @@ export class Selection extends Set {
 		this.currentLayer = layer;
 
 		/**
-		 * Controls whether objects that are added to this selection should be
-		 * removed from all other layers.
+		 * Controls whether objects that are added to this selection should be removed from all other
+		 * layers.
 		 *
 		 * @type {Boolean}
 		 */
@@ -71,8 +70,8 @@ export class Selection extends Set {
 	/**
 	 * Returns the current render layer for selected objects.
 	 *
-	 * This layer is set to 10 by default. If this collides with your own custom
-	 * layers, please change it to a free layer before rendering!
+	 * This layer is set to 10 by default. If this collides with your own custom layers, please change
+	 * it to a free layer before rendering!
 	 *
 	 * @return {Number} The layer
 	 */
@@ -164,8 +163,7 @@ export class Selection extends Set {
 	/**
 	 * Adds an object to this selection.
 	 *
-	 * If {@link exclusive} is set to `true`, the object will also be removed from
-	 * all other layers.
+	 * If {@link exclusive} is set to `true`, the object will also be removed from all other layers.
 	 *
 	 * @param {Object3D} object - The object that should be selected.
 	 * @return {Selection} This selection.

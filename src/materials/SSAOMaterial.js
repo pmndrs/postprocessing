@@ -25,9 +25,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	constructor(camera) {
 
 		super({
-
-			type: "SSAOMaterial",
-
+			name: "SSAOMaterial",
 			defines: {
 				SAMPLES_INT: "0",
 				SAMPLES_FLOAT: "0.0",
@@ -37,19 +35,15 @@ export class SSAOMaterial extends ShaderMaterial {
 				DISTANCE_SCALING: "1",
 				DEPTH_PACKING: "0"
 			},
-
 			uniforms: {
-
 				normalBuffer: new Uniform(null),
 				normalDepthBuffer: new Uniform(null),
 				noiseTexture: new Uniform(null),
-
 				inverseProjectionMatrix: new Uniform(new Matrix4()),
 				projectionMatrix: new Uniform(new Matrix4()),
 				texelSize: new Uniform(new Vector2()),
 				cameraNear: new Uniform(0.0),
 				cameraFar: new Uniform(0.0),
-
 				distanceCutoff: new Uniform(new Vector2()),
 				proximityCutoff: new Uniform(new Vector2()),
 				noiseScale: new Uniform(new Vector2()),
@@ -57,16 +51,12 @@ export class SSAOMaterial extends ShaderMaterial {
 				intensity: new Uniform(1.0),
 				fade: new Uniform(0.01),
 				bias: new Uniform(0.0)
-
 			},
-
-			fragmentShader,
-			vertexShader,
-
 			blending: NoBlending,
 			depthWrite: false,
-			depthTest: false
-
+			depthTest: false,
+			fragmentShader,
+			vertexShader
 		});
 
 		/** @ignore */

@@ -26,14 +26,11 @@ export class DotScreenEffect extends Effect {
 	} = {}) {
 
 		super("DotScreenEffect", fragmentShader, {
-
 			blendFunction,
-
 			uniforms: new Map([
 				["angle", new Uniform(new Vector2())],
 				["scale", new Uniform(scale)]
 			])
-
 		});
 
 		this.setAngle(angle);

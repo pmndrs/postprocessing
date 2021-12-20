@@ -23,7 +23,6 @@ export class NoiseEffect extends Effect {
 	} = {}) {
 
 		super("NoiseEffect", fragmentShader, { blendFunction });
-
 		this.premultiply = premultiply;
 
 	}

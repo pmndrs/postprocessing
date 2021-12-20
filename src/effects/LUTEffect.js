@@ -19,11 +19,11 @@ import fragmentShader from "./glsl/lut/shader.frag";
 /**
  * A LUT effect.
  *
- * The tetrahedral interpolation algorithm was inspired by an implementation
- * from OpenColorIO which is licensed under the BSD 3-Clause License.
+ * The tetrahedral interpolation algorithm was inspired by an implementation from OpenColorIO which
+ * is licensed under the BSD 3-Clause License.
  *
- * The manual trilinear interpolation algorithm is based on an implementation
- * by Garret Johnson which is licensed under the MIT License.
+ * The manual trilinear interpolation algorithm is based on an implementation by Garret Johnson
+ * which is licensed under the MIT License.
  *
  * References:
  * https://developer.nvidia.com/gpugems/gpugems2/part-iii-high-quality-rendering/chapter-24-using-lookup-tables-accelerate-color
@@ -49,9 +49,7 @@ export class LUTEffect extends Effect {
 	} = {}) {
 
 		super("LUTEffect", fragmentShader, {
-
 			blendFunction,
-
 			uniforms: new Map([
 				["lut", new Uniform(null)],
 				["scale", new Uniform(new Vector3())],
@@ -59,7 +57,6 @@ export class LUTEffect extends Effect {
 				["domainMin", new Uniform(null)],
 				["domainMax", new Uniform(null)]
 			])
-
 		});
 
 		/**

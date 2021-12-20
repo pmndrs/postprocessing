@@ -19,22 +19,17 @@ export class DepthComparisonMaterial extends ShaderMaterial {
 	constructor(depthTexture = null, camera) {
 
 		super({
-
-			type: "DepthComparisonMaterial",
-
+			name: "DepthComparisonMaterial",
 			uniforms: {
 				depthBuffer: new Uniform(depthTexture),
 				cameraNear: new Uniform(0.3),
 				cameraFar: new Uniform(1000)
 			},
-
-			fragmentShader,
-			vertexShader,
-
 			blending: NoBlending,
 			depthWrite: false,
-			depthTest: false
-
+			depthTest: false,
+			fragmentShader,
+			vertexShader
 		});
 
 		/** @ignore */

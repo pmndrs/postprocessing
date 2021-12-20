@@ -200,8 +200,7 @@ function smoothArea(d) {
 }
 
 /**
- * Calculates the orthogonal area under the line p1 -> p2 for the pixels
- * (x, x + 1).
+ * Calculates the orthogonal area under the line p1 -> p2 for the pixels (x, x + 1).
  *
  * @private
  * @param {Number} p1X - The starting point of the line, X-component.
@@ -228,8 +227,7 @@ function getOrthArea(p1X, p1Y, p2X, p2Y, x, result) {
 	if((x1 >= p1X && x1 < p2X) || (x2 > p1X && x2 <= p2X)) {
 
 		// Check if this is a trapezoid.
-		if(Math.sign(y1) === Math.sign(y2) || Math.abs(y1) < 1e-4 ||
-			Math.abs(y2) < 1e-4) {
+		if(Math.sign(y1) === Math.sign(y2) || Math.abs(y1) < 1e-4 || Math.abs(y2) < 1e-4) {
 
 			const a = (y1 + y2) / 2.0;
 
@@ -328,9 +326,8 @@ function getOrthAreaForPattern(pattern, left, right, offset, result) {
 			/*   .------
 			 *   |
 			 *
-			 * The offset is only applied to L patterns in the crossing edge side to
-			 * make it converge with the unfiltered pattern 0.
-			 * The pattern 0 must not be filtered to avoid artifacts.
+			 * The offset is only applied to L patterns in the crossing edge side to make it converge with
+			 * the unfiltered pattern 0. The pattern 0 must not be filtered to avoid artifacts.
 			 */
 
 			if(left <= right) {
@@ -428,10 +425,9 @@ function getOrthAreaForPattern(pattern, left, right, offset, result) {
 			 *   `------.
 			 *          |
 			 *
-			 * A problem of not offseting L patterns (see above) is that for certain
-			 * max search distances, the pixels in the center of a Z pattern will
-			 * detect the full Z pattern, while the pixels in the sides will detect an
-			 * L pattern. To avoid discontinuities, the full offsetted Z
+			 * A problem of not offseting L patterns (see above) is that for certain max search distances,
+			 * the pixels in the center of a Z pattern will detect the full Z pattern, while the pixels in
+			 * the sides will detect an L pattern. To avoid discontinuities, the full offsetted Z
 			 * revectorization is blended with partially offsetted L patterns.
 			 */
 
@@ -647,8 +643,7 @@ function isInsideArea(a1X, a1Y, a2X, a2Y, x, y) {
 }
 
 /**
- * Calculates the diagonal area under the line p1 -> p2 for the pixel p using
- * brute force sampling.
+ * Calculates the diagonal area under the line p1 -> p2 for the pixel p using brute force sampling.
  *
  * @private
  * @param {Number} a1X - The lower bounds of the area, X-component.
@@ -686,8 +681,7 @@ function getDiagAreaForPixel(a1X, a1Y, a2X, a2Y, pX, pY) {
 }
 
 /**
- * Calculates the area under the line p1 -> p2. This includes the pixel and its
- * opposite.
+ * Calculates the area under the line p1 -> p2. This includes the pixel and its opposite.
  *
  * @private
  * @param {Number} pattern - A pattern index.
@@ -729,8 +723,7 @@ function getDiagArea(pattern, a1X, a1Y, a2X, a2Y, left, offset, result) {
 }
 
 /**
- * Calculates the area for a given pattern and distances to the left and to the
- * right, biased by an offset.
+ * Calculates the area for a given pattern and distances to the left and right, biased by an offset.
  *
  * @private
  * @param {Number} pattern - A pattern index.
@@ -750,10 +743,10 @@ function getDiagAreaForPattern(pattern, left, right, offset, result) {
 
 	/* There is some Black Magic involved in the diagonal area calculations.
 	 *
-	 * Unlike orthogonal patterns, the "null" pattern (one without crossing edges)
-	 * must be filtered, and the ends of both the "null" and L patterns are not
-	 * known: L and U patterns have different endings, and the adjacent pattern is
-	 * unknown. Therefore, a blend of both possibilities is computed.
+	 * Unlike orthogonal patterns, the "null" pattern (one without crossing edges) must be filtered,
+	 * and the ends of both the "null" and L patterns are not known: L and U patterns have different
+	 * endings, and the adjacent pattern is unknown. Therefore, a blend of both possibilities is
+	 * computed.
 	 */
 
 	switch(pattern) {
@@ -1150,10 +1143,9 @@ function assemble(baseX, baseY, patterns, edges, size, orthogonal, target) {
 
 				const c = (pY * dstWidth + pX) * 4;
 
-				/* The texture coordinates of orthogonal patterns are compressed
-				quadratically to reach longer distances for a given texture size. */
-				const d = orthogonal ? ((y * y * srcWidth + x * x) * 2) :
-					((y * srcWidth + x) * 2);
+				/* The texture coordinates of orthogonal patterns are compressed quadratically to reach
+				longer distances for a given texture size. */
+				const d = orthogonal ? ((y * y * srcWidth + x * x) * 2) : ((y * srcWidth + x) * 2);
 
 				dstData[c] = srcData[d];
 				dstData[c + 1] = srcData[d + 1];
@@ -1171,8 +1163,8 @@ function assemble(baseX, baseY, patterns, edges, size, orthogonal, target) {
 /**
  * SMAA area image data.
  *
- * This texture allows to obtain the area for a certain pattern and distances
- * to the left and to the right of the identified line.
+ * This texture allows to obtain the area for a certain pattern and distances to the left and to the
+ * right of the identified line.
  *
  * Based on the official python scripts:
  *  https://github.com/iryoku/smaa/tree/master/Scripts
@@ -1226,11 +1218,7 @@ export class SMAAAreaImageData {
 		for(let i = 0, l = orthogonalSubsamplingOffsets.length; i < l; ++i) {
 
 			// Generate 16 orthogonal patterns for each offset.
-			generatePatterns(
-				orthogonalPatterns,
-				orthogonalSubsamplingOffsets[i],
-				true
-			);
+			generatePatterns(orthogonalPatterns, orthogonalSubsamplingOffsets[i], true);
 
 			// Assemble the orthogonal patterns and place them on the left side.
 			assemble(
