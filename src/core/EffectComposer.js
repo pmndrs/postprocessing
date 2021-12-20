@@ -61,6 +61,15 @@ export class EffectComposer {
 		this.renderer = renderer;
 
 		/**
+		 * Indicates whether the frame buffers should use `RGBAFormat`.
+		 *
+		 * @type {Boolean}
+		 * @private
+		 */
+
+		this.alpha = alpha;
+
+		/**
 		 * The input buffer.
 		 *
 		 * Reading from and writing to the same render target should be avoided. Therefore, two seperate
@@ -104,15 +113,6 @@ export class EffectComposer {
 		 */
 
 		this.copyPass = new ShaderPass(new CopyMaterial());
-
-		/**
-		 * Indicates whether the frame buffers should use `RGBAFormat`.
-		 *
-		 * @type {Boolean}
-		 * @private
-		 */
-
-		this.alpha = alpha;
 
 		/**
 		 * A depth texture.
