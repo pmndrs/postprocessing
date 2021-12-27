@@ -180,6 +180,8 @@ export class EffectComposer {
 
 			this.inputBuffer.samples = value;
 			this.outputBuffer.samples = value;
+			this.inputBuffer.dispose();
+			this.outputBuffer.dispose();
 
 		} else if(multisampling !== value) {
 
