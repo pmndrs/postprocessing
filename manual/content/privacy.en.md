@@ -48,7 +48,7 @@ Likewise, under Art. 21 GDPR, users and data subjects have the right to object t
 
 ## TLS and SSL
 
-SSL and TLS are encryption protocols that ensure a fully secured communication for all data exchanged. These systems are widely used to ensure fully secured communications over the internet. When your connection is secure, your browser will show `https://` instead of `http://` in the address bar.
+SSL and TLS are encryption protocols that ensure a fully secured communication for all data exchanged. These systems are widely used to ensure fully secured communications over the internet. When your connection is secure, your browser will show **https://** instead of **http://** in the address bar.
 
 ## Server Log Files
 
