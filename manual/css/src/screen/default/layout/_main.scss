@@ -11,6 +11,7 @@ main {
 	align-items: center;
 	display: flex;
 	flex-direction: column;
+	min-height: 100vh;
 	> div {
 		box-sizing: border-box;
 		max-width: calc(1024px + 2rem);
