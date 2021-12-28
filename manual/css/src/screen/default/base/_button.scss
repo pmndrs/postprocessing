@@ -1,0 +1,55 @@
+@use "durations";
+
+.button {
+	align-items: stretch;
+	background-color: var(--button-background-color);
+	border: 0;
+	box-sizing: border-box;
+	color: var(--button-foreground-color);
+	cursor: pointer;
+	display: inline-flex;
+	font-family: inherit;
+	font-size: 85%;
+	letter-spacing: 0.1em;
+	line-height: 1;
+	padding: 0;
+	text-transform: uppercase;
+	transition:
+		color durations.$short,
+		background-color durations.$short,
+		transform 0.1s ease-out;
+	width: auto;
+	figure {
+		align-items: center;
+		background-color: var(--button-background-color-darker);
+		display: flex;
+		margin: 0;
+		padding: 0 0.75em;
+		transition: background-color durations.$short;
+		img {
+			height: 1.25em;
+			opacity: 0.9;
+			transition: opacity durations.$short;
+		}
+	}
+	span {
+		align-items: center;
+		display: flex;
+		justify-content: center;
+		padding: 0.8em 1.5em;
+	}
+	&:active,
+	&:focus,
+	&:hover {
+		background-color: var(--button-background-color-focus);
+		figure {
+			background-color: var(--button-background-color-focus-darker);
+		}
+		img {
+			opacity: 1;
+		}
+	}
+	&:active {
+		transform: scale(0.95);
+	}
+}

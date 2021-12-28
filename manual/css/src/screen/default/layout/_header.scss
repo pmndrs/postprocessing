@@ -1,0 +1,22 @@
+@use "dimensions";
+
+header {
+	position: relative;
+}
+
+.page-header {
+	background-color: var(--page-header-background-color);
+	flex-grow: 0;
+	.page-title {
+		color: var(--page-title-foreground-color);
+		font-size: 90%;
+		font-weight: normal;
+		letter-spacing: 1px;
+		margin: 0;
+		padding: 0.75rem 2rem 0.75rem dimensions.$nav-padding;
+		text-transform: uppercase;
+		a {
+			color: var(--page-title-foreground-color);
+		}
+	}
+}

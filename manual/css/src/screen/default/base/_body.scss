@@ -1,0 +1,16 @@
+@use "colors";
+
+html {
+	height: 100%;
+	scrollbar-width: thin;
+	width: 100%;
+}
+
+body {
+	background: var(--body-background-color);
+	color: var(--foreground-color);
+	font-family: Roboto, sans-serif;
+	font-size: 14px;
+	font-weight: 400;
+	margin: 0;
+}

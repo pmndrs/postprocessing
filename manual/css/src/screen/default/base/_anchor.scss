@@ -1,0 +1,37 @@
+@use "durations";
+@use "layers";
+
+a {
+	color: var(--anchor-color);
+	text-decoration: none;
+	transition: color durations.$short, background-color durations.$short;
+	&:active,
+	&:focus,
+	&:hover {
+		color: var(--anchor-color-focus);
+	}
+}
+
+.skip-main {
+	display: block;
+	flex-shrink: 0;
+	font-size: 75%;
+	height: 1px;
+	left: -100%;
+	overflow: hidden;
+	position: absolute;
+	top: 0;
+	width: 1px;
+	z-index: layers.$hud;
+	&:active,
+	&:focus,
+	&:visited {
+		background: white;
+		color: black;
+		height: auto;
+		left: 0;
+		outline: 0;
+		padding: 0.25rem;
+		width: 100px;
+	}
+}

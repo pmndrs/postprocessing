@@ -1,0 +1,93 @@
+@use "layers";
+
+.loading {
+	align-items: center;
+	bottom: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	left: 0;
+	pointer-events: none;
+	position: absolute;
+	right: 0;
+	top: 0;
+	user-select: none;
+	z-index: layers.$foreground;
+	&.hidden {
+		display: none;
+	}
+}
+
+/**
+ * Requires the following markup:
+ *
+ * <div class="spinner cubemove">
+ *   <div></div><div></div>
+ * </div>
+ *
+ * <div class="spinner cubegrid">
+ *   <div></div><div></div><div></div>
+ *   <div></div><div></div><div></div>
+ *   <div></div><div></div><div></div>
+ * </div>
+ */
+
+.spinner {
+	position: relative;
+	div {
+		background-color: var(--spinner-background-color);
+	}
+	&.cubemove {
+		height: 40px;
+		width: 40px;
+		div {
+			animation: cubemove 1.8s infinite ease-in-out;
+			height: 15px;
+			left: 0;
+			position: absolute;
+			top: 0;
+			width: 15px;
+			&:nth-child(2) {
+				animation-delay: -0.9s;
+				background-color: var(--spinner-accent-color);
+			}
+		}
+	}
+	&.cubegrid {
+		height: 60px;
+		width: 60px;
+		div {
+			animation: cubegrid 1.3s infinite ease-in-out;
+			float: left;
+			height: calc(100% / 3);
+			width: calc(100% / 3);
+			&:nth-child(1) {
+				animation-delay: 0.2s;
+			}
+			&:nth-child(2) {
+				animation-delay: 0.3s;
+			}
+			&:nth-child(3) {
+				animation-delay: 0.4s;
+			}
+			&:nth-child(4) {
+				animation-delay: 0.1s;
+			}
+			&:nth-child(5) {
+				animation-delay: 0.2s;
+			}
+			&:nth-child(6) {
+				animation-delay: 0.3s;
+			}
+			&:nth-child(7) {
+				animation-delay: 0s;
+			}
+			&:nth-child(8) {
+				animation-delay: 0.1s;
+			}
+			&:nth-child(9) {
+				animation-delay: 0.2s;
+			}
+		}
+	}
+}

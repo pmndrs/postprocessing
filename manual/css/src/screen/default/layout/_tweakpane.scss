@@ -1,0 +1,9 @@
+@use "layers";
+
+.tp {
+	position: absolute;
+	right: 8px;
+	top: 8px;
+	width: 256px;
+	z-index: layers.$hud;
+}

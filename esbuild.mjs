@@ -1,5 +1,6 @@
 import { createRequire } from "module";
 import { glsl } from "esbuild-plugin-glsl";
+import glob from "glob-promise";
 import esbuild from "esbuild";
 
 const require = createRequire(import.meta.url);
@@ -17,10 +18,7 @@ const banner = `/**
  */`;
 
 await esbuild.build({
-	entryPoints: [
-		"src/images/lut/worker.js",
-		"src/images/smaa/worker.js"
-	],
+	entryPoints: await glob("src/**/worker.js"),
 	outExtension: { ".js": ".txt" },
 	outdir: "tmp",
 	target: "es6",
@@ -38,6 +36,30 @@ await esbuild.build({
 	logLevel: "info",
 	format: "iife",
 	bundle: true,
+	plugins,
+	minify,
+	watch
+}).catch(() => process.exit(1));
+
+await esbuild.build({
+	entryPoints: ["manual/js/libs/three.js"],
+	outdir: "manual/assets/js/libs",
+	globalName: "THREE",
+	target: "es6",
+	logLevel: "info",
+	format: "iife",
+	bundle: true,
+	minify: true
+}).catch(() => process.exit(1));
+
+await esbuild.build({
+	entryPoints: await glob("manual/js/src/*.js"),
+	outdir: "manual/assets/js",
+	logLevel: "info",
+	format: "iife",
+	target: "es6",
+	bundle: true,
+	external,
 	plugins,
 	minify,
 	watch

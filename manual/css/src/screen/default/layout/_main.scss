@@ -1,0 +1,23 @@
+main {
+	border: 0;
+	flex-grow: 1;
+	height: 100vh;
+	outline: none;
+	overflow-y: scroll;
+	scrollbar-width: thin;
+}
+
+.content {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	> div {
+		box-sizing: border-box;
+		max-width: calc(1024px + 2rem);
+		padding: 0.5rem 1rem 2rem 1rem;
+		width: 100%;
+	}
+	&:first-child {
+		padding-top: 3rem;
+	}
+}

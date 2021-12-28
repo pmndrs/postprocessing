@@ -1,0 +1,36 @@
+<article class="post">
+	<div class="summary">
+		<header>
+			<h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+			{{ $t := (time (.Date.Format "2006-01-02")) }}
+			{{ if not ($t.After now) }}
+				<time datetime="{{ $t }}">{{ .Date.Format (i18n "dateFormat" .) }}</time>
+			{{ end }}
+			<span>&nbsp;&middot;&nbsp;</span>
+			<ul class="categories">
+				{{ range (.GetTerms "categories") }}
+					<li>
+						<a href="{{ .Permalink }}" class="{{ .LinkTitle | lower }}">
+							{{ .LinkTitle }}
+						</a>
+					</li>
+				{{ end }}
+			</ul>
+		</header>
+		<div class="description">{{ .Description }}</div>
+		<footer>
+			<a href="{{ .RelPermalink }}">
+				{{ i18n "readMore" . }} &rarr;
+			</a>
+		</footer>
+	</div>
+	<ul class="tags">
+		{{ range (.GetTerms "tags") }}
+			<li>
+				<a draggable="false" href="{{ .Permalink }}" class="tag {{ .LinkTitle | lower }}">
+					{{ .LinkTitle }}
+				</a>
+			</li>
+		{{ end }}
+	</ul>
+</article>

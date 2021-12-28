@@ -1,0 +1,30 @@
+<ul class="menu{{ with .class }} {{ . }}{{ end }}">
+
+	{{ $currentPage := .currentPage }}
+	{{ $menuName := .menuName }}
+
+	{{ range .menu }}
+		{{ if .HasChildren }}
+
+			{{ $class := slice (path.Base .Page.RelPermalink) }}
+			{{ if $currentPage.HasMenuCurrent $menuName . }}
+				{{ $class = $class | append "active" }}
+			{{ end }}
+
+			<li class="{{ delimit $class ` ` }}">
+				<a href="#">{{ .Name }}</a>
+				<ul class="sub-menu">
+					{{ range .Children }}
+						{{ partial "menu-item.html" (dict "context" . "currentPage" $currentPage "menuName" $menuName) }}
+					{{ end }}
+				</ul>
+			</li>
+
+		{{ else }}
+
+			{{ partial "menu-item.html" (dict "context" . "currentPage" $currentPage "menuName" $menuName) }}
+
+		{{ end }}
+	{{ end }}
+
+</ul>
