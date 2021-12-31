@@ -93,6 +93,7 @@ export class EffectComposer {
 		if(this.renderer !== null) {
 
 			this.renderer.autoClear = false;
+			this.renderer.info.autoReset = false;
 
 			this.inputBuffer = this.createBuffer(
 				depthBuffer,
@@ -255,6 +256,7 @@ export class EffectComposer {
 
 			this.renderer = renderer;
 			this.renderer.autoClear = false;
+			this.renderer.info.autoReset = false;
 
 			if(!oldSize.equals(newSize)) {
 
@@ -562,6 +564,8 @@ export class EffectComposer {
 
 		}
 
+		renderer.info.reset();
+
 		for(const pass of this.passes) {
 
 			if(pass.isEnabled()) {
@@ -576,10 +580,10 @@ export class EffectComposer {
 						context = renderer.getContext();
 						stencil = renderer.state.buffers.stencil;
 
-						// Preserve the unaffected pixels.
-						stencil.setFunc(context.NOTEQUAL, 1, 0xffffffff);
+						// Preserve unaffected pixels.
+						stencil.setFunc(context.NOTEQUAL, 1, 0xFFFFFFFF);
 						copyPass.render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest);
-						stencil.setFunc(context.EQUAL, 1, 0xffffffff);
+						stencil.setFunc(context.EQUAL, 1, 0xFFFFFFFF);
 
 					}
 
