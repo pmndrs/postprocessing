@@ -54,6 +54,7 @@ export class LookupTexture3D extends DataTexture3D {
 		this.wrapT = ClampToEdgeWrapping;
 		this.wrapR = ClampToEdgeWrapping;
 		this.unpackAlignment = 1;
+		this.needsUpdate = true;
 
 		/**
 		 * The lower bounds of the input domain.
@@ -100,9 +101,7 @@ export class LookupTexture3D extends DataTexture3D {
 
 		if(size <= image.width) {
 
-			promise = Promise.reject(new Error(
-				"The target size must be greater than the current size"
-			));
+			promise = Promise.reject(new Error("The target size must be greater than the current size"));
 
 		} else {
 
@@ -383,6 +382,7 @@ export class LookupTexture3D extends DataTexture3D {
 		texture.wrapS = this.wrapS;
 		texture.wrapT = this.wrapT;
 		texture.generateMipmaps = false;
+		texture.needsUpdate = true;
 
 		return texture;
 

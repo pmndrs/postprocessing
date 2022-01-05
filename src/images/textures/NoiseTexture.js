@@ -12,7 +12,7 @@ import {
  * Generates noise.
  *
  * @private
- * @param {Number} size - The linear texture size.
+ * @param {Number} size - The linear texture size, i.e. total number of pixels.
  * @param {Number} format - The texture format.
  * @param {Number} type - The texture type.
  * @return {TypedArray} The noise data.
@@ -83,6 +83,7 @@ export class NoiseTexture extends DataTexture {
 	constructor(width, height, format = LuminanceFormat, type = UnsignedByteType) {
 
 		super(getNoise(width * height, format, type), width, height, format, type);
+		this.needsUpdate = true;
 
 	}
 
