@@ -6,7 +6,7 @@ footer {
 }
 
 .page-footer {
-	border-top: 1px solid rgba(black, 0.1);
+	border-top: 1px solid var(--footer-border-color);
 	display: flex;
 	flex-grow: 0;
 	justify-content: space-between;
@@ -55,6 +55,7 @@ footer {
 			cursor: pointer;
 			opacity: 0.6;
 			transition: opacity durations.$short;
+			vertical-align: middle;
 			&:focus,
 			&:hover {
 				opacity: 1;

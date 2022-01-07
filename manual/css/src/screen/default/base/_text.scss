@@ -13,3 +13,29 @@ p {
 strong {
 	font-weight: 600;
 }
+
+.error {
+	align-items: center;
+	display: flex;
+	height: 100%;
+	justify-content: center;
+	&::before {
+		background: no-repeat center/cover url("/img/svg/warning_black_24dp.svg");
+		content: "";
+		display: inline-block;
+		height: 24px;
+		margin: 0 0.3rem 1px 0;
+		opacity: 0.6;
+		width: 24px;
+	}
+}
+
+// Dark Mode
+
+.dark {
+	.error {
+		&::before {
+			background-image: url("/img/svg/warning_white_24dp.svg");
+		}
+	}
+}

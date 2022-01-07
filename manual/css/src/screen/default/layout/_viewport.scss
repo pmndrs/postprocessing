@@ -46,9 +46,6 @@
 			a {
 				color: var(--info-anchor-color);
 			}
-			p {
-				margin: 0;
-			}
 			div {
 				border: 1px solid var(--info-border-color);
 				border-radius: 3px;
@@ -61,10 +58,13 @@
 				left: -24px;
 				margin-bottom: 0.5rem;
 				max-width: calc(100vw - 12px);
-				padding: 0.5rem;
+				padding: 0.25rem 0.5rem;
 				position: absolute;
 				width: max-content;
 				z-index: layers.$hud;
+			}
+			p {
+				margin: 0.25rem 0;
 			}
 			&.active {
 				opacity: 1;
@@ -72,6 +72,16 @@
 					display: block;
 				}
 			}
+		}
+	}
+	.lut {
+		cursor: auto;
+		left: 1em;
+		max-height: 60vh;
+		position: absolute;
+		top: 1em;
+		&.hidden {
+			display: none;
 		}
 	}
 }
