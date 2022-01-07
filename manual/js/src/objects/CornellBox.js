@@ -119,7 +119,7 @@ export function createEnvironment(envMap = null) {
 	plane06.scale.set(2, 2, 1);
 	plane06.receiveShadow = true;
 
-	plane07.position.y = 1 - 1e-4;
+	plane07.position.y = 1 - 1e-3;
 	plane07.rotation.x = Math.PI * 0.5;
 	plane07.scale.set(0.4, 0.4, 1);
 
