@@ -13,7 +13,12 @@
 				<div class="icon info" title="{{ i18n `info` . }}">
 					<div>
 						{{ range . }}
-							{{ .asset | markdownify }} by {{ .author | markdownify }} ({{ .license | markdownify }})
+							<p>
+								{{ .asset | markdownify }} by {{ .author | markdownify }}
+								{{ with .license }}
+									({{ . | markdownify }})
+								{{ end }}
+							</p>
 						{{ end }}
 					</div>
 				</div>
