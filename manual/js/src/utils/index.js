@@ -1,2 +1,2 @@
 export * from "./CameraUtils";
-export { FPSMonitor } from "./FPSMonitor";
+export { FPSMeter } from "./FPSMeter";
