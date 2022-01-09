@@ -1,0 +1,15 @@
+<footer class="page-footer">
+
+	<div class="contentinfo">
+		{{ partial "menu.html" (dict "currentPage" . "menu" .Site.Menus.contentinfo "menuName" "contentinfo") }}
+	</div>
+
+	<div class="icons">
+		{{ range .Site.Params.FooterIcons }}
+			{{ with .url }}<a href="{{ . }}">{{ end }}
+				<div class="{{ .name | lower }}" title="{{ humanize .name }}"></div>
+			{{ with .url }}</a>{{ end }}
+		{{ end }}
+	</div>
+
+</footer>

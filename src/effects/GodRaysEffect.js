@@ -21,22 +21,7 @@ import { Effect, EffectAttribute } from "./Effect";
 
 import fragmentShader from "./glsl/god-rays/shader.frag";
 
-/**
- * A vector.
- *
- * @type {Vector3}
- * @private
- */
-
 const v = new Vector3();
-
-/**
- * A matrix.
- *
- * @type {Matrix4}
- * @private
- */
-
 const m = new Matrix4();
 
 /**
@@ -81,14 +66,11 @@ export class GodRaysEffect extends Effect {
 	} = {}) {
 
 		super("GodRaysEffect", fragmentShader, {
-
 			blendFunction,
 			attributes: EffectAttribute.DEPTH,
-
 			uniforms: new Map([
 				["map", new Uniform(null)]
 			])
-
 		});
 
 		/**

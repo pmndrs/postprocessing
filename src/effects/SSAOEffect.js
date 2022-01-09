@@ -29,20 +29,19 @@ const NOISE_TEXTURE_SIZE = 64;
 /**
  * A Screen Space Ambient Occlusion (SSAO) effect.
  *
- * For high quality visuals use two SSAO effect instances in a row with
- * different radii, one for rough AO and one for fine details.
+ * For high quality visuals use two SSAO effect instances in a row with different radii, one for
+ * rough AO and one for fine details.
  *
- * This effect supports depth-aware upsampling and should be rendered at a lower
- * resolution. The resolution should match that of the downsampled normals and
- * depth. If you intend to render SSAO at full resolution, do not provide a
- * downsampled `normalDepthBuffer` and make sure to disable
+ * This effect supports depth-aware upsampling and should be rendered at a lower resolution. The
+ * resolution should match that of the downsampled normals and depth. If you intend to render SSAO
+ * at full resolution, do not provide a downsampled `normalDepthBuffer` and make sure to disable
  * `depthAwareUpsampling`.
  *
- * It's recommended to specify a relative render resolution using the
- * `resolutionScale` constructor parameter to avoid undesired sampling patterns.
+ * It's recommended to specify a relative render resolution using the `resolutionScale` constructor
+ * parameter to avoid undesired sampling patterns.
  *
- * Based on "Scalable Ambient Obscurance" by Morgan McGuire et al. and
- * "Depth-aware upsampling experiments" by Eleni Maria Stea:
+ * Based on "Scalable Ambient Obscurance" by Morgan McGuire et al. and "Depth-aware upsampling
+ * experiments" by Eleni Maria Stea:
  * https://research.nvidia.com/publication/scalable-ambient-obscurance
  * https://eleni.mutantstargoat.com/hikiko/on-depth-aware-upsampling
  *
@@ -105,14 +104,11 @@ export class SSAOEffect extends Effect {
 	} = {}) {
 
 		super("SSAOEffect", fragmentShader, {
-
 			blendFunction,
 			attributes: EffectAttribute.DEPTH,
-
 			defines: new Map([
 				["THRESHOLD", "0.997"]
 			]),
-
 			uniforms: new Map([
 				["aoBuffer", new Uniform(null)],
 				["normalDepthBuffer", new Uniform(null)],
@@ -120,7 +116,6 @@ export class SSAOEffect extends Effect {
 				["color", new Uniform(null)],
 				["scale", new Uniform(0.0)] // Unused.
 			])
-
 		});
 
 		/**
@@ -178,11 +173,7 @@ export class SSAOEffect extends Effect {
 
 		this.ssaoPass = new ShaderPass((() => {
 
-			const noiseTexture = new NoiseTexture(
-				NOISE_TEXTURE_SIZE,
-				NOISE_TEXTURE_SIZE
-			);
-
+			const noiseTexture = new NoiseTexture(NOISE_TEXTURE_SIZE, NOISE_TEXTURE_SIZE, RGBFormat);
 			noiseTexture.wrapS = noiseTexture.wrapT = RepeatWrapping;
 
 			const material = new SSAOMaterial(camera);
@@ -538,8 +529,7 @@ export class SSAOEffect extends Effect {
 		const uniforms = this.ssaoMaterial.uniforms;
 		uniforms.noiseScale.value.set(w, h).divideScalar(NOISE_TEXTURE_SIZE);
 		uniforms.projectionMatrix.value.copy(camera.projectionMatrix);
-		uniforms.inverseProjectionMatrix.value.copy(camera.projectionMatrix)
-			.invert();
+		uniforms.inverseProjectionMatrix.value.copy(camera.projectionMatrix).invert();
 
 		// Update the absolute radius.
 		this.radius = this.r;

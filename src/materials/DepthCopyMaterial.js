@@ -16,27 +16,21 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	constructor() {
 
 		super({
-
-			type: "DepthCopyMaterial",
-
+			name: "DepthCopyMaterial",
 			defines: {
 				INPUT_DEPTH_PACKING: "0",
 				OUTPUT_DEPTH_PACKING: "0",
 				DEPTH_COPY_MODE: "0"
 			},
-
 			uniforms: {
 				depthBuffer: new Uniform(null),
 				screenPosition: new Uniform(new Vector2())
 			},
-
-			fragmentShader,
-			vertexShader,
-
 			blending: NoBlending,
 			depthWrite: false,
-			depthTest: false
-
+			depthTest: false,
+			fragmentShader,
+			vertexShader
 		});
 
 		/** @ignore */

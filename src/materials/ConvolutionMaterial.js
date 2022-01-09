@@ -30,9 +30,7 @@ export class ConvolutionMaterial extends ShaderMaterial {
 	constructor(texelSize = new Vector2()) {
 
 		super({
-
-			type: "ConvolutionMaterial",
-
+			name: "ConvolutionMaterial",
 			uniforms: {
 				inputBuffer: new Uniform(null),
 				texelSize: new Uniform(new Vector2()),
@@ -40,14 +38,11 @@ export class ConvolutionMaterial extends ShaderMaterial {
 				kernel: new Uniform(0.0),
 				scale: new Uniform(1.0)
 			},
-
-			fragmentShader,
-			vertexShader,
-
 			blending: NoBlending,
 			depthWrite: false,
-			depthTest: false
-
+			depthTest: false,
+			fragmentShader,
+			vertexShader
 		});
 
 		/** @ignore */

@@ -26,13 +26,10 @@ export class ColorDepthEffect extends Effect {
 	} = {}) {
 
 		super("ColorDepthEffect", fragmentShader, {
-
 			blendFunction,
-
 			uniforms: new Map([
 				["factor", new Uniform(1.0)]
 			])
-
 		});
 
 		/**

@@ -52,9 +52,9 @@ function generate(useCache = true) {
 /**
  * An SMAA image generator.
  *
- * This class uses a worker thread to generate the search and area images. The
- * Generated data URLs will be cached using localStorage, if available. To
- * disable caching use {@link SMAAImageGenerator.disableCache}.
+ * This class uses a worker thread to generate the search and area images. The generated data URLs
+ * will be cached using localStorage, if available. To disable caching use
+ * {@link SMAAImageGenerator.disableCache}.
  */
 
 export class SMAAImageGenerator {
@@ -108,19 +108,12 @@ export class SMAAImageGenerator {
 				manager.onLoad = () => resolve([searchImage, areaImage]);
 				manager.onError = reject;
 
-				searchImage.addEventListener("error",
-					(e) => manager.itemError("smaa-search"));
-				areaImage.addEventListener("error",
-					(e) => manager.itemError("smaa-area"));
-
-				searchImage.addEventListener("load",
-					() => manager.itemEnd("smaa-search"));
-				areaImage.addEventListener("load",
-					() => manager.itemEnd("smaa-area"));
-
+				searchImage.addEventListener("error", (e) => manager.itemError("smaa-search"));
+				areaImage.addEventListener("error", (e) => manager.itemError("smaa-area"));
+				searchImage.addEventListener("load", () => manager.itemEnd("smaa-search"));
+				areaImage.addEventListener("load", () => manager.itemEnd("smaa-area"));
 				manager.itemStart("smaa-search");
 				manager.itemStart("smaa-area");
-
 				searchImage.src = urls[0];
 				areaImage.src = urls[1];
 

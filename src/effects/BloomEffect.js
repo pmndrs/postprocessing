@@ -1,10 +1,4 @@
-import {
-	LinearFilter,
-	RGBFormat,
-	Uniform,
-	UnsignedByteType,
-	WebGLRenderTarget
-} from "three";
+import { LinearFilter, RGBFormat, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
 
 import { Resizer } from "../core/Resizer";
 import { KernelSize } from "../materials";
@@ -46,14 +40,11 @@ export class BloomEffect extends Effect {
 	} = {}) {
 
 		super("BloomEffect", fragmentShader, {
-
 			blendFunction,
-
 			uniforms: new Map([
 				["map", new Uniform(null)],
 				["intensity", new Uniform(intensity)]
 			])
-
 		});
 
 		/**

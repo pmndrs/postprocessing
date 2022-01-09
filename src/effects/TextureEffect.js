@@ -29,19 +29,15 @@ export class TextureEffect extends Effect {
 	} = {}) {
 
 		super("TextureEffect", fragmentShader, {
-
 			blendFunction,
-
 			defines: new Map([
 				["TEXEL", "texel"]
 			]),
-
 			uniforms: new Map([
 				["map", new Uniform(null)],
 				["scale", new Uniform(1.0)],
 				["uvTransform", new Uniform(null)]
 			])
-
 		});
 
 		this.texture = texture;

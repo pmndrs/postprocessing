@@ -32,14 +32,11 @@ export class GodRaysMaterial extends ShaderMaterial {
 	constructor(lightPosition) {
 
 		super({
-
-			type: "GodRaysMaterial",
-
+			name: "GodRaysMaterial",
 			defines: {
 				SAMPLES_INT: "60",
 				SAMPLES_FLOAT: "60.0"
 			},
-
 			uniforms: {
 				inputBuffer: new Uniform(null),
 				lightPosition: new Uniform(lightPosition),
@@ -49,14 +46,11 @@ export class GodRaysMaterial extends ShaderMaterial {
 				exposure: new Uniform(1.0),
 				clampMax: new Uniform(1.0)
 			},
-
-			fragmentShader,
-			vertexShader,
-
 			blending: NoBlending,
 			depthWrite: false,
-			depthTest: false
-
+			depthTest: false,
+			fragmentShader,
+			vertexShader
 		});
 
 		/** @ignore */

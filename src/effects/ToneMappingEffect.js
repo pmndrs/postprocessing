@@ -16,8 +16,8 @@ import fragmentShader from "./glsl/tone-mapping/shader.frag";
 /**
  * A tone mapping effect.
  *
- * Note: `ToneMappingMode.REINHARD2_ADAPTIVE` requires support for
- * `EXT_shader_texture_lod` and `EXT_color_buffer_half_float`.
+ * Note: `ToneMappingMode.REINHARD2_ADAPTIVE` requires support for `EXT_shader_texture_lod` and
+ * `EXT_color_buffer_half_float`.
  *
  * Reference:
  * GDC2007 - Wolfgang Engel, Post-Processing Pipeline
@@ -48,8 +48,7 @@ export class ToneMappingEffect extends Effect {
 	constructor({
 		blendFunction = BlendFunction.NORMAL,
 		adaptive = true,
-		mode = adaptive ?
-			ToneMappingMode.REINHARD2_ADAPTIVE : ToneMappingMode.REINHARD2,
+		mode = adaptive ? ToneMappingMode.REINHARD2_ADAPTIVE : ToneMappingMode.REINHARD2,
 		resolution = 256,
 		maxLuminance = 16.0,
 		whitePoint = maxLuminance,
@@ -60,9 +59,7 @@ export class ToneMappingEffect extends Effect {
 	} = {}) {
 
 		super("ToneMappingEffect", fragmentShader, {
-
 			blendFunction,
-
 			uniforms: new Map([
 				["luminanceBuffer", new Uniform(null)],
 				["maxLuminance", new Uniform(maxLuminance)], // Unused
@@ -70,7 +67,6 @@ export class ToneMappingEffect extends Effect {
 				["middleGrey", new Uniform(middleGrey)],
 				["averageLuminance", new Uniform(averageLuminance)]
 			])
-
 		});
 
 		/**
@@ -82,8 +78,7 @@ export class ToneMappingEffect extends Effect {
 		 */
 
 		this.renderTargetLuminance = new WebGLRenderTarget(1, 1, {
-			minFilter: (LinearMipmapLinearFilter !== undefined) ?
-				LinearMipmapLinearFilter : LinearMipMapLinearFilter,
+			minFilter: (LinearMipmapLinearFilter !== undefined) ? LinearMipmapLinearFilter : LinearMipMapLinearFilter,
 			magFilter: LinearFilter,
 			stencilBuffer: false,
 			depthBuffer: false,
@@ -111,16 +106,12 @@ export class ToneMappingEffect extends Effect {
 		 * @private
 		 */
 
-		this.adaptiveLuminancePass = new AdaptiveLuminancePass(
-			this.luminancePass.texture,
-			{
-				minLuminance,
-				adaptationRate
-			}
-		);
+		this.adaptiveLuminancePass = new AdaptiveLuminancePass(this.luminancePass.texture, {
+			minLuminance,
+			adaptationRate
+		});
 
-		this.uniforms.get("luminanceBuffer").value =
-			this.adaptiveLuminancePass.texture;
+		this.uniforms.get("luminanceBuffer").value = this.adaptiveLuminancePass.texture;
 
 		/**
 		 * The current tone mapping mode.
@@ -257,8 +248,7 @@ export class ToneMappingEffect extends Effect {
 
 	set adaptive(value) {
 
-		this.mode = value ?
-			ToneMappingMode.REINHARD2_ADAPTIVE : ToneMappingMode.REINHARD2;
+		this.mode = value ? ToneMappingMode.REINHARD2_ADAPTIVE : ToneMappingMode.REINHARD2;
 
 	}
 

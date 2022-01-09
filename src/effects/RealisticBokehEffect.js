@@ -55,10 +55,8 @@ export class RealisticBokehEffect extends Effect {
 	} = {}) {
 
 		super("RealisticBokehEffect", fragmentShader, {
-
 			blendFunction,
 			attributes: EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH,
-
 			uniforms: new Map([
 				["focus", new Uniform(focus)],
 				["focalLength", new Uniform(focalLength)],
@@ -70,7 +68,6 @@ export class RealisticBokehEffect extends Effect {
 				["maxBlur", new Uniform(maxBlur)],
 				["dof", new Uniform(null)]
 			])
-
 		});
 
 		this.rings = rings;

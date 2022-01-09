@@ -1,0 +1,30 @@
+{{ $currentPage := .currentPage }}
+{{ $menuName := .menuName }}
+
+{{ $class := slice }}
+{{ with .context.Page }}
+	{{ if ne .RelPermalink "/" }}
+		{{ $class = $class | append (path.Base .RelPermalink) }}
+	{{ end }}
+{{ end }}
+{{ if $currentPage.IsMenuCurrent $menuName .context }}
+	{{ $class = $class | append "active" }}
+{{ end }}
+
+<li class="{{ delimit $class ` ` }}">
+	<a href="{{ .context.URL | relLangURL }}"{{ if not .context.Page }} target="_blank"{{ end }}>
+		{{ .context.Pre }}
+
+		{{ $name := .context.Name }}
+		{{ with .context.Page }}
+			{{ with .Params.icon }}
+				{{ $icon := resources.Get . }}
+				<img src="{{ $icon.RelPermalink }}" alt="{{ $name }}">
+			{{ end }}
+		{{ end }}
+
+		<span>{{ .context.Name }}</span>
+
+		{{ .context.Post }}
+	</a>
+</li>

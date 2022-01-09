@@ -20,12 +20,10 @@ export class PixelationEffect extends Effect {
 	constructor(granularity = 30.0) {
 
 		super("PixelationEffect", fragmentShader, {
-
 			uniforms: new Map([
 				["active", new Uniform(false)],
 				["d", new Uniform(new Vector2())]
 			])
-
 		});
 
 		/**
@@ -80,9 +78,7 @@ export class PixelationEffect extends Effect {
 
 		const uniforms = this.uniforms;
 		uniforms.get("active").value = (granularity > 0.0);
-		uniforms.get("d").value.set(granularity, granularity)
-			.divide(this.resolution);
-
+		uniforms.get("d").value.set(granularity, granularity).divide(this.resolution);
 		this.granularity = granularity;
 
 	}

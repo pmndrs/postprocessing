@@ -26,14 +26,11 @@ export class GridEffect extends Effect {
 	} = {}) {
 
 		super("GridEffect", fragmentShader, {
-
 			blendFunction,
-
 			uniforms: new Map([
 				["scale", new Uniform(new Vector2())],
 				["lineWidth", new Uniform(lineWidth)]
 			])
-
 		});
 
 		/**

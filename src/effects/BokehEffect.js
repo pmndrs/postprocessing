@@ -35,17 +35,14 @@ export class BokehEffect extends Effect {
 	} = {}) {
 
 		super("BokehEffect", fragmentShader, {
-
 			blendFunction,
 			attributes: EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH,
-
 			uniforms: new Map([
 				["focus", new Uniform(focus)],
 				["dof", new Uniform(dof)],
 				["aperture", new Uniform(aperture)],
 				["maxBlur", new Uniform(maxBlur)]
 			])
-
 		});
 
 	}

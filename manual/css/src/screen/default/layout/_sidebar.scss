@@ -1,0 +1,73 @@
+@use "dimensions";
+@use "durations";
+@use "layers";
+
+.sidebar {
+	background-color: var(--sidebar-background-color);
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+	left: 0;
+	max-width: 400px;
+	min-width: 320px;
+	pointer-events: none;
+	position: relative;
+	position: absolute;
+	top: 0;
+	transform: translateX(-100%);
+	transition: transform durations.$short;
+	width: 15%;
+	z-index: layers.$hud + 1;
+	h1, h2, h3 {
+		font-size: 100%;
+	}
+	h2 {
+		margin: 2rem dimensions.$nav-padding 0.5rem dimensions.$nav-padding;
+	}
+	&.active {
+		pointer-events: initial;
+		transform: none;
+	}
+}
+
+.sidebar-button-open,
+.sidebar-button-close {
+	background: no-repeat center url("/img/svg/chevron_left_white_24dp.svg");
+	cursor: pointer;
+	display: block;
+	opacity: 0.5;
+	position: absolute;
+	transition: opacity durations.$short;
+	width: 32px;
+	z-index: layers.$hud;
+	&:focus,
+	&:hover {
+		opacity: 0.85;
+	}
+	&.hidden {
+		display: none;
+	}
+}
+
+.sidebar-button-open {
+	background-image: url("/img/svg/menu_open_black_24dp.svg");
+	height: 32px;
+	left: 0.5rem;
+	top: 1rem;
+	transform: rotate(180deg);
+}
+
+.sidebar-button-close {
+	height: 100%;
+	right: 0;
+	top: 0;
+}
+
+// Dark Mode
+
+.dark {
+	.sidebar-button-open {
+		background-image: url("/img/svg/menu_open_white_24dp.svg");
+	}
+}

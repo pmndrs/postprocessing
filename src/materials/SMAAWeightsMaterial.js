@@ -21,11 +21,8 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	constructor(texelSize = new Vector2(), resolution = new Vector2()) {
 
 		super({
-
-			type: "SMAAWeightsMaterial",
-
+			name: "SMAAWeightsMaterial",
 			defines: {
-
 				// Configurable settings:
 				MAX_SEARCH_STEPS_INT: "16",
 				MAX_SEARCH_STEPS_FLOAT: "16.0",
@@ -33,7 +30,6 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 				MAX_SEARCH_STEPS_DIAG_FLOAT: "8.0",
 				CORNER_ROUNDING: "25",
 				CORNER_ROUNDING_NORM: "0.25",
-
 				// Non-configurable settings:
 				AREATEX_MAX_DISTANCE: "16.0",
 				AREATEX_MAX_DISTANCE_DIAG: "20.0",
@@ -41,9 +37,7 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 				AREATEX_SUBTEX_SIZE: "(1.0 / 7.0)",
 				SEARCHTEX_SIZE: "vec2(66.0, 33.0)",
 				SEARCHTEX_PACKED_SIZE: "vec2(64.0, 16.0)"
-
 			},
-
 			uniforms: {
 				inputBuffer: new Uniform(null),
 				areaTexture: new Uniform(null),
@@ -51,14 +45,11 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 				texelSize: new Uniform(texelSize),
 				resolution: new Uniform(resolution)
 			},
-
-			fragmentShader,
-			vertexShader,
-
 			blending: NoBlending,
 			depthWrite: false,
-			depthTest: false
-
+			depthTest: false,
+			fragmentShader,
+			vertexShader
 		});
 
 		/** @ignore */

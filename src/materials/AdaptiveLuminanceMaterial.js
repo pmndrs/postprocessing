@@ -16,13 +16,10 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 	constructor() {
 
 		super({
-
-			type: "AdaptiveLuminanceMaterial",
-
+			name: "AdaptiveLuminanceMaterial",
 			defines: {
 				MIP_LEVEL_1X1: "0.0"
 			},
-
 			uniforms: {
 				luminanceBuffer0: new Uniform(null),
 				luminanceBuffer1: new Uniform(null),
@@ -30,18 +27,14 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 				deltaTime: new Uniform(0.0),
 				tau: new Uniform(1.0)
 			},
-
-			fragmentShader,
-			vertexShader,
-
+			extensions: {
+				shaderTextureLOD: true
+			},
 			blending: NoBlending,
 			depthWrite: false,
 			depthTest: false,
-
-			extensions: {
-				shaderTextureLOD: true
-			}
-
+			fragmentShader,
+			vertexShader
 		});
 
 		/** @ignore */

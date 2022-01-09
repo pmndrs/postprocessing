@@ -18,21 +18,16 @@ export class OutlineMaterial extends ShaderMaterial {
 	constructor(texelSize = new Vector2()) {
 
 		super({
-
-			type: "OutlineMaterial",
-
+			name: "OutlineMaterial",
 			uniforms: {
 				inputBuffer: new Uniform(null),
 				texelSize: new Uniform(new Vector2())
 			},
-
-			fragmentShader,
-			vertexShader,
-
 			blending: NoBlending,
 			depthWrite: false,
-			depthTest: false
-
+			depthTest: false,
+			fragmentShader,
+			vertexShader
 		});
 
 		/** @ignore */

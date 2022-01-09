@@ -1,0 +1,13 @@
+{{ define "title" }}
+	{{ i18n "archive" . }} &middot; {{ .Title }}
+{{ end }}
+
+{{ define "main" }}
+
+	<h1>{{ i18n "archive" . }}: {{ .Title }}</h1>
+	{{ .Content }}
+
+	{{ partial "contents.html" . }}
+	{{ partial "pagination.html" . }}
+
+{{ end }}

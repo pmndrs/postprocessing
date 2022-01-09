@@ -51,6 +51,7 @@ window.addEventListener("load", (event) => {
 	renderer.shadowMap.autoUpdate = false;
 	renderer.shadowMap.needsUpdate = true;
 	renderer.shadowMap.enabled = true;
+	renderer.info.autoReset = false;
 
 	// Enable the override material workaround.
 	OverrideMaterialManager.workaroundEnabled = true;
@@ -187,6 +188,7 @@ window.addEventListener("load", (event) => {
 	requestAnimationFrame(function render(timestamp) {
 
 		requestAnimationFrame(render);
+		renderer.info.reset();
 		manager.render(timestamp);
 
 	});

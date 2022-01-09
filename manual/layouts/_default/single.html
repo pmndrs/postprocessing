@@ -1,0 +1,16 @@
+{{ define "scripts" }}
+
+	{{ with .Params.script }}
+		{{ with resources.Get (printf "js/%s.js" .) }}
+			{{ $script := . | fingerprint }}
+			<script src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
+		{{ end }}
+	{{ end }}
+
+{{ end }}
+
+{{ define "main" }}
+
+	{{ .Content }}
+
+{{ end }}

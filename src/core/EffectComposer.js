@@ -19,11 +19,11 @@ import { Timer } from "./Timer";
 /**
  * The EffectComposer may be used in place of a normal WebGLRenderer.
  *
- * The auto clear behaviour of the provided renderer will be disabled to prevent
- * unnecessary clear operations.
+ * The auto clear behaviour of the provided renderer will be disabled to prevent unnecessary clear
+ * operations.
  *
- * It is common practice to use a {@link RenderPass} as the first pass to
- * automatically clear the buffers and render a scene for further processing.
+ * It is common practice to use a {@link RenderPass} as the first pass to automatically clear the
+ * buffers and render a scene for further processing.
  *
  * @implements {Resizable}
  * @implements {Disposable}
@@ -61,10 +61,19 @@ export class EffectComposer {
 		this.renderer = renderer;
 
 		/**
+		 * Indicates whether the frame buffers should use `RGBAFormat`.
+		 *
+		 * @type {Boolean}
+		 * @private
+		 */
+
+		this.alpha = alpha;
+
+		/**
 		 * The input buffer.
 		 *
-		 * Reading from and writing to the same render target should be avoided.
-		 * Therefore, two seperate yet identical buffers are used.
+		 * Reading from and writing to the same render target should be avoided. Therefore, two seperate
+		 * yet identical buffers are used.
 		 *
 		 * @type {WebGLRenderTarget}
 		 * @private
@@ -84,6 +93,7 @@ export class EffectComposer {
 		if(this.renderer !== null) {
 
 			this.renderer.autoClear = false;
+			this.renderer.info.autoReset = false;
 
 			this.inputBuffer = this.createBuffer(
 				depthBuffer,
@@ -104,15 +114,6 @@ export class EffectComposer {
 		 */
 
 		this.copyPass = new ShaderPass(new CopyMaterial());
-
-		/**
-		 * Indicates whether the frame buffers should use `RGBAFormat`.
-		 *
-		 * @type {Boolean}
-		 * @private
-		 */
-
-		this.alpha = alpha;
 
 		/**
 		 * A depth texture.
@@ -159,8 +160,7 @@ export class EffectComposer {
 
 	get multisampling() {
 
-		return (this.inputBuffer instanceof WebGLMultisampleRenderTarget) ?
-			this.inputBuffer.samples : 0;
+		return (this.inputBuffer instanceof WebGLMultisampleRenderTarget) ? this.inputBuffer.samples : 0;
 
 	}
 
@@ -181,6 +181,8 @@ export class EffectComposer {
 
 			this.inputBuffer.samples = value;
 			this.outputBuffer.samples = value;
+			this.inputBuffer.dispose();
+			this.outputBuffer.dispose();
 
 		} else if(multisampling !== value) {
 
@@ -231,12 +233,11 @@ export class EffectComposer {
 	/**
 	 * Replaces the current renderer with the given one.
 	 *
-	 * The auto clear mechanism of the provided renderer will be disabled. If the
-	 * new render size differs from the previous one, all passes will be updated.
+	 * The auto clear mechanism of the provided renderer will be disabled. If the new render size
+	 * differs from the previous one, all passes will be updated.
 	 *
-	 * By default, the DOM element of the current renderer will automatically be
-	 * removed from its parent node and the DOM element of the new renderer will
-	 * take its place.
+	 * By default, the DOM element of the current renderer will automatically be removed from its
+	 * parent node and the DOM element of the new renderer will take its place.
 	 *
 	 * @param {WebGLRenderer} renderer - The new renderer.
 	 * @param {Boolean} updateDOM - Indicates whether the old canvas should be replaced by the new one in the DOM.
@@ -255,6 +256,7 @@ export class EffectComposer {
 
 			this.renderer = renderer;
 			this.renderer.autoClear = false;
+			this.renderer.info.autoReset = false;
 
 			if(!oldSize.equals(newSize)) {
 
@@ -278,9 +280,9 @@ export class EffectComposer {
 	/**
 	 * Creates a depth texture attachment that will be provided to all passes.
 	 *
-	 * Note: When a shader reads from a depth texture and writes to a render
-	 * target that uses the same depth texture attachment, the depth information
-	 * will be lost. This happens even if `depthWrite` is disabled.
+	 * Note: When a shader reads from a depth texture and writes to a render target that uses the same
+	 * depth texture attachment, the depth information will be lost. This happens even if `depthWrite`
+	 * is disabled.
 	 *
 	 * @private
 	 * @return {DepthTexture} The depth texture.
@@ -339,13 +341,12 @@ export class EffectComposer {
 	/**
 	 * Creates a new render target by replicating the renderer's canvas.
 	 *
-	 * The created render target uses a linear filter for texel minification and
-	 * magnification. Its render texture format depends on whether the renderer
-	 * uses the alpha channel, unless the `alpha` constructor parameter was set
-	 * to `true`. Mipmaps are disabled.
+	 * The created render target uses a linear filter for texel minification and magnification. Its
+	 * render texture format depends on whether the renderer uses the alpha channel, unless the
+	 * `alpha` constructor parameter was set to `true`. Mipmaps are disabled.
 	 *
-	 * Note: The buffer format will also be set to RGBA if the frame buffer type
-	 * is HalfFloatType because RGB16F buffers are not renderable.
+	 * Note: The buffer format will also be set to RGBA if the frame buffer type is HalfFloatType
+	 * because RGB16F buffers are not renderable.
 	 *
 	 * @param {Boolean} depthBuffer - Whether the render target should have a depth buffer.
 	 * @param {Boolean} stencilBuffer - Whether the render target should have a stencil buffer.
@@ -563,17 +564,13 @@ export class EffectComposer {
 
 		}
 
+		renderer.info.reset();
+
 		for(const pass of this.passes) {
 
 			if(pass.isEnabled()) {
 
-				pass.render(
-					renderer,
-					inputBuffer,
-					outputBuffer,
-					deltaTime,
-					stencilTest
-				);
+				pass.render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest);
 
 				if(pass.needsSwap) {
 
@@ -583,18 +580,10 @@ export class EffectComposer {
 						context = renderer.getContext();
 						stencil = renderer.state.buffers.stencil;
 
-						// Preserve the unaffected pixels.
-						stencil.setFunc(context.NOTEQUAL, 1, 0xffffffff);
-
-						copyPass.render(
-							renderer,
-							inputBuffer,
-							outputBuffer,
-							deltaTime,
-							stencilTest
-						);
-
-						stencil.setFunc(context.EQUAL, 1, 0xffffffff);
+						// Preserve unaffected pixels.
+						stencil.setFunc(context.NOTEQUAL, 1, 0xFFFFFFFF);
+						copyPass.render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest);
+						stencil.setFunc(context.EQUAL, 1, 0xFFFFFFFF);
 
 					}
 
@@ -623,11 +612,9 @@ export class EffectComposer {
 	/**
 	 * Sets the size of the buffers and the renderer's output canvas.
 	 *
-	 * Every pass will be informed of the new size. It's up to each pass how that
-	 * information is used.
-	 *
-	 * If no width or height is specified, the render targets and passes will be
-	 * updated with the current size of the renderer.
+	 * Every pass will be informed of the new size. It's up to each pass how that information is used.
+	 * If no width or height is specified, the render targets and passes will be updated with the
+	 * current size of the renderer.
 	 *
 	 * @param {Number} [width] - The width.
 	 * @param {Number} [height] - The height.

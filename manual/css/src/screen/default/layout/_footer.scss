@@ -1,0 +1,87 @@
+@use "dimensions";
+@use "durations";
+
+footer {
+	position: relative;
+}
+
+.page-footer {
+	border-top: 1px solid var(--footer-border-color);
+	display: flex;
+	flex-grow: 0;
+	justify-content: space-between;
+	padding: 0.6rem dimensions.$nav-padding;
+	.menu {
+		font-size: 75%;
+		list-style: none;
+		margin: 0 0.25rem 0 0;
+		padding: 0;
+		li {
+			display: flex;
+			a {
+				color: var(--footer-anchor-color);
+			}
+			&::marker {
+				content: none;
+			}
+		}
+		li + li::before {
+			background-color: var(--footer-separator-color);
+			content: "";
+			display: inline-block;
+			margin: 0.1em 0.85em;
+			width: 1px;
+		}
+	}
+	.menu,
+	.contentinfo {
+		align-items: center;
+		display: flex;
+		flex-wrap: wrap;
+	}
+	.icons {
+		line-height: 1;
+		a, div {
+			display: inline-block;
+			height: 24px;
+			margin-right: 4px;
+			width: 24px;
+		}
+		div {
+			background: no-repeat center/cover transparent;
+			background-attachment: scroll;
+			background-origin: content-box;
+			box-sizing: border-box;
+			cursor: pointer;
+			opacity: 0.6;
+			transition: opacity durations.$short;
+			vertical-align: middle;
+			&:focus,
+			&:hover {
+				opacity: 1;
+			}
+		}
+		.dark-mode {
+			background-image: url("/img/svg/dark_mode_black_24dp.svg");
+		}
+		.repository {
+			background-image: url("/img/svg/github_black_24dp.svg");
+			padding: 2px;
+		}
+	}
+}
+
+// Dark Mode
+
+.dark {
+	.page-footer {
+		.icons {
+			.dark-mode {
+				background-image: url("/img/svg/dark_mode_white_24dp.svg");
+			}
+			.repository {
+				background-image: url("/img/svg/github_white_24dp.svg");
+			}
+		}
+	}
+}

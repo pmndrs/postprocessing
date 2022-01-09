@@ -30,16 +30,13 @@ export class DepthMaskMaterial extends ShaderMaterial {
 	constructor() {
 
 		super({
-
-			type: "DepthMaskMaterial",
-
+			name: "DepthMaskMaterial",
 			defines: {
 				DEPTH_EPSILON: "0.00001",
 				DEPTH_PACKING_0: "0",
 				DEPTH_PACKING_1: "0",
 				KEEP_FAR: "1"
 			},
-
 			uniforms: {
 				inputBuffer: new Uniform(null),
 				depthBuffer0: new Uniform(null),
@@ -47,14 +44,11 @@ export class DepthMaskMaterial extends ShaderMaterial {
 				bias0: new Uniform(0.0),
 				bias1: new Uniform(0.0)
 			},
-
-			fragmentShader,
-			vertexShader,
-
 			blending: NoBlending,
 			depthWrite: false,
-			depthTest: false
-
+			depthTest: false,
+			fragmentShader,
+			vertexShader
 		});
 
 		/** @ignore */

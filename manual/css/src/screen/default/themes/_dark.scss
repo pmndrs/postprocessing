@@ -1,0 +1,27 @@
+@use "colors";
+
+.dark {
+  color-scheme: dark;
+	--anchor-color: #{colors.$blue_grey};
+	--anchor-color-focus: #{colors.$grey_300};
+	--body-background-color: #{colors.$blind};
+	--button-background-color: #{colors.$grey_200};
+	--button-background-color-darker: #{colors.$grey_300};
+	--button-background-color-focus: #{colors.$grey_400};
+	--button-background-color-focus-darker: #{colors.$grey_500};
+	--button-foreground-color: #{colors.$grey_800};
+	--code-color: #{colors.$whimsical};
+	--foreground-color: #{colors.$grey_500};
+	--footer-anchor-color: #{colors.$grey_400};
+	--footer-border-color: #{colors.$grey_900};
+	--footer-separator-color: #{colors.$grey_500};
+	--info-foreground-color: #{colors.$grey_400};
+	--info-anchor-color: white;
+	--info-border-color: #{rgba(white, 0.1)};
+	--page-header-background-color: #{colors.$space};
+	--page-title-foreground-color: #{colors.$grey_100};
+	--nav-anchor-background-color-focus: #{colors.$blind};
+	--sidebar-background-color: #{colors.$coal};
+	--spinner-background-color: #{colors.$shiny};
+	--spinner-accent-color: #{colors.$space};
+}

@@ -18,13 +18,10 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 	constructor(camera) {
 
 		super({
-
-			type: "CircleOfConfusionMaterial",
-
+			name: "CircleOfConfusionMaterial",
 			defines: {
 				DEPTH_PACKING: "0"
 			},
-
 			uniforms: {
 				depthBuffer: new Uniform(null),
 				focusDistance: new Uniform(0.0),
@@ -32,14 +29,11 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 				cameraNear: new Uniform(0.3),
 				cameraFar: new Uniform(1000)
 			},
-
-			fragmentShader,
-			vertexShader,
-
 			blending: NoBlending,
 			depthWrite: false,
-			depthTest: false
-
+			depthTest: false,
+			fragmentShader,
+			vertexShader
 		});
 
 		/** @ignore */

@@ -28,14 +28,11 @@ export class HueSaturationEffect extends Effect {
 	} = {}) {
 
 		super("HueSaturationEffect", fragmentShader, {
-
 			blendFunction,
-
 			uniforms: new Map([
 				["hue", new Uniform(new Vector3())],
 				["saturation", new Uniform(saturation)]
 			])
-
 		});
 
 		this.setHue(hue);
@@ -52,9 +49,9 @@ export class HueSaturationEffect extends Effect {
 
 		const s = Math.sin(hue), c = Math.cos(hue);
 
-		this.uniforms.get("hue").value.set(
-			2.0 * c, -Math.sqrt(3.0) * s - c, Math.sqrt(3.0) * s - c
-		).addScalar(1.0).divideScalar(3.0);
+		this.uniforms.get("hue").value
+			.set(2.0 * c, -Math.sqrt(3.0) * s - c, Math.sqrt(3.0) * s - c)
+			.addScalar(1.0).divideScalar(3.0);
 
 	}
 

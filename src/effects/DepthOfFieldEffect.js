@@ -55,17 +55,14 @@ export class DepthOfFieldEffect extends Effect {
 	} = {}) {
 
 		super("DepthOfFieldEffect", fragmentShader, {
-
 			blendFunction,
 			attributes: EffectAttribute.DEPTH,
-
 			uniforms: new Map([
 				["nearColorBuffer", new Uniform(null)],
 				["farColorBuffer", new Uniform(null)],
 				["nearCoCBuffer", new Uniform(null)],
 				["scale", new Uniform(1.0)]
 			])
-
 		});
 
 		/**

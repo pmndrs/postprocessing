@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.Lang }}">
+	<head>
+
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+		<meta name="author" content="{{ .Site.Params.Author }}">
+		{{ with .Description }}<meta name="description" content="{{ . }}">{{ end }}
+		<meta name="generator" content="Hugo {{ hugo.Version }}">
+
+		<title>{{ block "title" . }}{{ .Title }}{{ end }} &middot; {{ .Site.Title }}</title>
+
+		{{ if not .IsHome }}<base href="{{ .RelPermalink | relLangURL }}">{{ end }}
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+		{{ $stylesheet := resources.Get "css/index.css" | fingerprint }}
+		<link rel="stylesheet" href="{{ $stylesheet.RelPermalink }}" integrity="{{ $stylesheet.Data.Integrity }}">
+		{{ block "styles" . }}{{ end }}
+		{{ $script := resources.Get "js/libs/three.js" | fingerprint }}
+		<script src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
+		{{ $script := resources.Get "js/index.js" | fingerprint }}
+		<script src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
+		{{ block "scripts" . }}{{ end }}
+
+	</head>
+
+	{{ if eq .Kind "home" -}}
+		{{ .Scratch.Set "class" "home" -}}
+	{{ else if eq .Kind "404" -}}
+		{{ .Scratch.Set "class" "error404" -}}
+	{{ else if eq .Kind "page" -}}
+		{{ .Scratch.Set "class" .Type -}}
+		{{ .Scratch.Add "class" " single" -}}
+	{{ else -}}
+		{{ .Scratch.Set "class" .Type -}}
+		{{ .Scratch.Add "class" " list" -}}
+	{{ end -}}
+
+	<body class="{{ .Scratch.Get `class` }}">
+
+		<div class="frame-content">
+			<div>
+				<a class="skip-main" href="#main">{{ i18n "skipToContent" . }}</a>
+				<div class="sidebar-button-open" aria-label="{{ i18n `openNav` . }}"></div>
+				<div class="sidebar">
+					{{ block "header" . }}{{ partial "header.html" . }}{{ end }}
+					{{ block "navigation" . }}{{ partial "navigation.html" . }}{{ end }}
+					{{ block "footer" . }}{{ partial "footer.html" . }}{{ end }}
+				</div>
+				<main id="main"{{ if not .IsHome }} class="{{ path.Base .RelPermalink -}}"{{ end }} tabindex="-1">
+					{{ partial "viewport.html" . }}
+					<div class="content">
+						<div>{{ block "main" . }}{{ end }}</div>
+					</div>
+				</main>
+			</div>
+		</div>
+
+	</body>
+</html>

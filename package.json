@@ -1,6 +1,6 @@
 {
 	"name": "postprocessing",
-	"version": "6.23.3",
+	"version": "6.23.4",
 	"description": "A post processing library that provides the means to implement image filter effects for three.js.",
 	"homepage": "https://github.com/vanruesc/postprocessing",
 	"main": "build/postprocessing.js",
@@ -46,18 +46,25 @@
 	"scripts": {
 		"ava": "ava",
 		"build": "run-s build:*",
+		"build:css": "sass -I manual/css/src/values manual/css/src:manual/assets/css",
 		"build:js": "node esbuild.mjs -m",
-		"clean": "del-cli build public tmp",
+		"build:manual": "hugo -s manual --minify",
+		"clean": "del-cli build tmp manual/resources public && mkdirp manual/assets/css",
 		"copy": "cpy --cwd=demo/static --parents \"**/*\" \"../../public/demo\"",
-		"deploy": "run-s test copy doc",
-		"dev": "run-s clean copy && run-p start watch",
+		"deploy": "run-s test copy doc gzip",
+		"dev": "run-s clean copy && run-p start watch:*",
 		"doc": "esdoc",
-		"lint": "eslint --ext .js --fix src demo/src",
+		"gzip": "gzipper c public",
+		"lint": "run-s lint:*",
+		"lint:css": "stylelint --fix manual/css/src",
+		"lint:js": "eslint --ext .js --fix src demo/src manual/js/src",
+		"postbuild:css": "postcss manual/assets/css/index.css -o manual/assets/css/index.css -c manual",
 		"prepublishOnly": "run-s test doc",
 		"test": "run-s lint clean build ava",
-		"start": "serve public",
+		"start": "hugo server -s manual",
 		"watch": "run-p watch:*",
-		"watch:eslint": "esw -w --ext .js --color src demo/src",
+		"watch:css": "sass -I manual/css/src/values manual/css/src:manual/assets/css --watch",
+		"watch:eslint": "esw -w --ext .js --color src demo/src manual/js/src",
 		"watch:js": "node esbuild.mjs -w"
 	},
 	"ava": {
@@ -73,11 +80,14 @@
 		"extends": "aether"
 	},
 	"peerDependencies": {
-		"three": ">= 0.102.0 < 0.136.0"
+		"three": ">= 0.102.0 < 0.137.0"
 	},
 	"devDependencies": {
+		"@tweakpane/core": "1.x.x",
 		"@types/three": "0.x.x",
+		"autoprefixer": "10.x.x",
 		"ava": "3.x.x",
+		"cssnano": "5.x.x",
 		"cpy-cli": "3.x.x",
 		"dat.gui": "0.x.x",
 		"del-cli": "4.x.x",
@@ -89,13 +99,25 @@
 		"eslint": "8.x.x",
 		"eslint-config-aether": "1.x.x",
 		"eslint-watch": "8.x.x",
+		"gzipper": "6.x.x",
 		"esm": "3.x.x",
+		"glob": "7.x.x",
+		"glob-promise": "4.x.x",
+		"hugo-bin": "0.x.x",
+		"mkdirp": "1.x.x",
 		"npm-run-all": "4.x.x",
-		"serve": "13.x.x",
+		"postcss": "8.x.x",
+		"postcss-cli": "9.x.x",
+		"postcss-preset-env": "7.x.x",
+		"sass": "1.x.x",
 		"spatial-controls": "5.x.x",
+		"stylelint": "14.x.x",
+		"stylelint-config-standard-scss": "3.x.x",
+		"stylelint-order": "5.x.x",
 		"three": "0.x.x",
 		"three-demo": "5.x.x",
 		"tslib": "2.x.x",
+		"tweakpane": "3.x.x",
 		"typescript": "4.x.x"
 	}
 }

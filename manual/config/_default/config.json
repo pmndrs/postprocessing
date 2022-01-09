@@ -1,0 +1,25 @@
+{
+	"baseURL": "",
+	"title": "Post Processing Manual",
+	"disableHugoGeneratorInject": true,
+	"enableRobotsTXT": true,
+	"googleAnalytics": "UA-123-45",
+	"disableLiveReload": true,
+	"buildFuture": true,
+	"publishDir": "../public/manual",
+	"markup": {
+		"goldmark": {
+			"renderer": {
+				"unsafe": true
+			}
+		},
+		"highlight": {
+			"noClasses": false
+		}
+	},
+	"languages": {
+		"en": {
+			"weight": 1
+		}
+	}
+}

@@ -22,9 +22,7 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	constructor(texelSize = new Vector2(), mode = EdgeDetectionMode.COLOR) {
 
 		super({
-
-			type: "EdgeDetectionMaterial",
-
+			name: "EdgeDetectionMaterial",
 			defines: {
 				LOCAL_CONTRAST_ADAPTATION_FACTOR: "2.0",
 				EDGE_THRESHOLD: "0.1",
@@ -35,21 +33,17 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 				PREDICATION_STRENGTH: "1.0",
 				DEPTH_PACKING: "0"
 			},
-
 			uniforms: {
 				inputBuffer: new Uniform(null),
 				depthBuffer: new Uniform(null),
 				predicationBuffer: new Uniform(null),
 				texelSize: new Uniform(texelSize)
 			},
-
-			fragmentShader,
-			vertexShader,
-
 			blending: NoBlending,
 			depthWrite: false,
-			depthTest: false
-
+			depthTest: false,
+			fragmentShader,
+			vertexShader
 		});
 
 		/** @ignore */

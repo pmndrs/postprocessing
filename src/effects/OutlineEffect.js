@@ -1,28 +1,8 @@
-import {
-	Color,
-	LinearFilter,
-	RepeatWrapping,
-	RGBFormat,
-	Uniform,
-	UnsignedByteType,
-	WebGLRenderTarget
-} from "three";
+import { Color, LinearFilter, RepeatWrapping, RGBFormat, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
 
 import { Resizer, Selection } from "../core";
-
-import {
-	DepthComparisonMaterial,
-	OutlineMaterial,
-	KernelSize
-} from "../materials";
-
-import {
-	BlurPass,
-	ClearPass,
-	DepthPass,
-	RenderPass,
-	ShaderPass
-} from "../passes";
+import { DepthComparisonMaterial, OutlineMaterial, KernelSize } from "../materials";
+import { BlurPass, ClearPass, DepthPass, RenderPass, ShaderPass } from "../passes";
 
 import { getTextureDecoding } from "../utils/getTextureDecoding";
 import { BlendFunction } from "./blending/BlendFunction";
@@ -75,7 +55,6 @@ export class OutlineEffect extends Effect {
 	} = {}) {
 
 		super("OutlineEffect", fragmentShader, {
-
 			uniforms: new Map([
 				["maskTexture", new Uniform(null)],
 				["edgeTexture", new Uniform(null)],
@@ -86,7 +65,6 @@ export class OutlineEffect extends Effect {
 				["patternScale", new Uniform(1.0)],
 				["patternTexture", new Uniform(null)]
 			])
-
 		});
 
 		// Handle alpha blending.
@@ -194,8 +172,7 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.maskPass = new RenderPass(scene, camera,
-			new DepthComparisonMaterial(this.depthPass.texture, camera));
+		this.maskPass = new RenderPass(scene, camera, new DepthComparisonMaterial(this.depthPass.texture, camera));
 
 		const clearPass = this.maskPass.getClearPass();
 		clearPass.overrideClearColor = new Color(0xffffff);

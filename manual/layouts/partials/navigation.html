@@ -1,0 +1,9 @@
+<nav class="navigation">
+
+	<h2>{{ i18n "start" . }}</h2>
+	{{ partial "menu.html" (dict "currentPage" . "menu" .Site.Menus.main "menuName" "main") }}
+
+	<h2>{{ i18n "demos" . }}</h2>
+	{{ partial "menu.html" (dict "currentPage" . "menu" .Site.Menus.demos "menuName" "demos") }}
+
+</nav>

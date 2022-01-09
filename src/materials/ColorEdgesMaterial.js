@@ -20,27 +20,21 @@ export class ColorEdgesMaterial extends ShaderMaterial {
 	constructor(texelSize = new Vector2()) {
 
 		super({
-
-			type: "ColorEdgesMaterial",
-
+			name: "ColorEdgesMaterial",
 			defines: {
 				EDGE_DETECTION_MODE: "2",
 				LOCAL_CONTRAST_ADAPTATION_FACTOR: "2.0",
 				EDGE_THRESHOLD: "0.1"
 			},
-
 			uniforms: {
 				inputBuffer: new Uniform(null),
 				texelSize: new Uniform(texelSize)
 			},
-
-			fragmentShader,
-			vertexShader,
-
 			blending: NoBlending,
 			depthWrite: false,
-			depthTest: false
-
+			depthTest: false,
+			fragmentShader,
+			vertexShader
 		});
 
 		/** @ignore */

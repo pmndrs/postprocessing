@@ -29,8 +29,7 @@ const c = new Color();
 /**
  * A 3D lookup texture (LUT).
  *
- * This texture can be used as-is in a WebGL 2 context. It can also be converted
- * into a regular 2D texture for backwards compatibility.
+ * This texture can be used as-is in a WebGL 2 context. It can also be converted into a 2D texture.
  */
 
 export class LookupTexture3D extends DataTexture3D {
@@ -55,6 +54,7 @@ export class LookupTexture3D extends DataTexture3D {
 		this.wrapT = ClampToEdgeWrapping;
 		this.wrapR = ClampToEdgeWrapping;
 		this.unpackAlignment = 1;
+		this.needsUpdate = true;
 
 		/**
 		 * The lower bounds of the input domain.
@@ -101,9 +101,7 @@ export class LookupTexture3D extends DataTexture3D {
 
 		if(size <= image.width) {
 
-			promise = Promise.reject(new Error(
-				"The target size must be greater than the current size"
-			));
+			promise = Promise.reject(new Error("The target size must be greater than the current size"));
 
 		} else {
 
@@ -203,8 +201,8 @@ export class LookupTexture3D extends DataTexture3D {
 	/**
 	 * Converts the LUT data into unsigned byte data.
 	 *
-	 * This is a lossy operation which should only be performed after all other
-	 * transformations have been applied.
+	 * This is a lossy operation which should only be performed after all other transformations have
+	 * been applied.
 	 *
 	 * @return {LookupTexture3D} This texture.
 	 */
@@ -384,6 +382,7 @@ export class LookupTexture3D extends DataTexture3D {
 		texture.wrapS = this.wrapS;
 		texture.wrapT = this.wrapT;
 		texture.generateMipmaps = false;
+		texture.needsUpdate = true;
 
 		return texture;
 

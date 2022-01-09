@@ -1,7 +1,11 @@
 {
-	"include": ["src", "demo/src"],
+	"include": ["src", "demo/src", "manual/js"],
 	"compilerOptions": {
 		"rootDir": ".",
+		"baseUrl": ".",
+		"paths": {
+			"postprocessing": ["src/*"]
+		},
 		"moduleResolution": "node",
 		"module": "ESNext",
 		"target": "ESNext",

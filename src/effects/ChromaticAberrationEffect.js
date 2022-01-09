@@ -25,15 +25,12 @@ export class ChromaticAberrationEffect extends Effect {
 	} = {}) {
 
 		super("ChromaticAberrationEffect", fragmentShader, {
-
 			vertexShader,
 			blendFunction,
 			attributes: EffectAttribute.CONVOLUTION,
-
 			uniforms: new Map([
 				["offset", new Uniform(offset)]
 			])
-
 		});
 
 	}

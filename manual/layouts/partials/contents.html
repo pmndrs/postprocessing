@@ -1,0 +1,15 @@
+<ul class="contents">
+
+  {{ $paginate := .Site.Params.paginate }}
+  {{ with .Params.paginate }}
+    {{ $paginate = . }}
+  {{ end }}
+
+  {{ $section := .Section }}
+  {{ $paginator := .Paginate .Pages $paginate }}
+  {{ range $paginator.Pages }}
+    {{ .Scratch.Set "section" $section }}
+    <li>{{ partial "summary.html" . }}</li>
+  {{ end }}
+
+</ul>

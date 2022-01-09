@@ -125,8 +125,7 @@ function deltaRight(left, top) {
 
 	}
 
-	/* If an edge was previously found, there is another edge and there are no
-	crossing edges, continue. */
+	// If an edge was previously found, there's another edge and there are no crossing edges.
 	if(d === 1 && top[2] === 1 && left[0] !== 1 && left[2] !== 1) {
 
 		d += 1;
@@ -140,8 +139,8 @@ function deltaRight(left, top) {
 /**
  * SMAA search image data.
  *
- * This image stores information about how many pixels the line search
- * algorithm must advance in the last step.
+ * This image stores information about how many pixels the line search algorithm must advance in the
+ * last step.
  *
  * Based on the official python scripts:
  *  https://github.com/iryoku/smaa/tree/master/Scripts

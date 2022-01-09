@@ -20,27 +20,22 @@ export class VignetteEffect extends Effect {
 	 * @param {Number} [options.darkness=0.5] - The vignette darkness.
 	 */
 
-	constructor(options = {}) {
-
-		const settings = Object.assign({
-			blendFunction: BlendFunction.NORMAL,
-			eskil: false,
-			offset: 0.5,
-			darkness: 0.5
-		}, options);
+	constructor({
+		blendFunction = BlendFunction.NORMAL,
+		eskil = false,
+		offset = 0.5,
+		darkness = 0.5
+	} = {}) {
 
 		super("VignetteEffect", fragmentShader, {
-
-			blendFunction: settings.blendFunction,
-
+			blendFunction: blendFunction,
 			uniforms: new Map([
-				["offset", new Uniform(settings.offset)],
-				["darkness", new Uniform(settings.darkness)]
+				["offset", new Uniform(offset)],
+				["darkness", new Uniform(darkness)]
 			])
-
 		});
 
-		this.eskil = settings.eskil;
+		this.eskil = eskil;
 
 	}
 

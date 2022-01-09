@@ -21,22 +21,17 @@ export class MaskMaterial extends ShaderMaterial {
 	constructor(maskTexture = null) {
 
 		super({
-
-			type: "MaskMaterial",
-
+			name: "MaskMaterial",
 			uniforms: {
 				maskTexture: new Uniform(maskTexture),
 				inputBuffer: new Uniform(null),
 				strength: new Uniform(1.0)
 			},
-
-			fragmentShader,
-			vertexShader,
-
 			blending: NoBlending,
 			depthWrite: false,
-			depthTest: false
-
+			depthTest: false,
+			fragmentShader,
+			vertexShader
 		});
 
 		/** @ignore */

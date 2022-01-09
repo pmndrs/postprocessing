@@ -37,23 +37,18 @@ export class LuminanceMaterial extends ShaderMaterial {
 		const useRange = (luminanceRange !== null);
 
 		super({
-
-			type: "LuminanceMaterial",
-
+			name: "LuminanceMaterial",
 			uniforms: {
 				inputBuffer: new Uniform(null),
 				threshold: new Uniform(0.0),
 				smoothing: new Uniform(1.0),
 				range: new Uniform(useRange ? luminanceRange : new Vector2())
 			},
-
-			fragmentShader,
-			vertexShader,
-
 			blending: NoBlending,
 			depthWrite: false,
-			depthTest: false
-
+			depthTest: false,
+			fragmentShader,
+			vertexShader
 		});
 
 		/** @ignore */
