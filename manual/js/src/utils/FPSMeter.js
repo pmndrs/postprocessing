@@ -1,11 +1,11 @@
 /**
- * An FPS monitor.
+ * An FPS meter.
  */
 
-export class FPSMonitor {
+export class FPSMeter {
 
 	/**
-	 * Constructs a new FPS monitor.
+	 * Constructs a new FPS meter.
 	 */
 
 	constructor() {
