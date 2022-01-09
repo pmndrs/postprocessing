@@ -1,15 +1,16 @@
 import {
 	ClampToEdgeWrapping,
-	CubeTextureLoader,
 	HalfFloatType,
 	LinearFilter,
 	LoadingManager,
 	PerspectiveCamera,
+	PlaneGeometry,
+	Mesh,
+	MeshBasicMaterial,
 	RGBFormat,
 	Scene,
 	sRGBEncoding,
 	TextureLoader,
-	VSMShadowMap,
 	WebGLRenderer
 } from "three";
 
@@ -28,7 +29,6 @@ import {
 import { Pane } from "tweakpane";
 import { ControlMode, SpatialControls } from "spatial-controls";
 import { calculateVerticalFoV, FPSMeter } from "./utils";
-import * as CornellBox from "./objects/CornellBox";
 
 const luts = new Map([
 	["neutral-2", null],
@@ -54,18 +54,9 @@ function load() {
 
 	const assets = new Map();
 	const loadingManager = new LoadingManager();
-	const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 	const textureLoader = new TextureLoader(loadingManager);
 	const lut3dlLoader = new LUT3dlLoader(loadingManager);
 	const lutCubeLoader = new LUTCubeLoader(loadingManager);
-
-	const path = "/img/textures/skies/sunset/";
-	const format = ".png";
-	const urls = [
-		path + "px" + format, path + "nx" + format,
-		path + "py" + format, path + "ny" + format,
-		path + "pz" + format, path + "nz" + format
-	];
 
 	const lutNeutral2 = LookupTexture3D.createNeutral(2);
 	lutNeutral2.name = "neutral-2";
@@ -84,10 +75,10 @@ function load() {
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(`Failed to load ${url}`);
 
-		cubeTextureLoader.load(urls, (t) => {
+		textureLoader.load("/img/textures/photos/GEDC0053.jpg", (t) => {
 
 			t.encoding = sRGBEncoding;
-			assets.set("sky", t);
+			assets.set("photo", t);
 
 		});
 
@@ -161,11 +152,6 @@ function initialize(assets) {
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.outputEncoding = sRGBEncoding;
 	renderer.setClearColor(0x000000, 1);
-	renderer.physicallyCorrectLights = true;
-	renderer.shadowMap.type = VSMShadowMap;
-	renderer.shadowMap.autoUpdate = false;
-	renderer.shadowMap.needsUpdate = true;
-	renderer.shadowMap.enabled = true;
 
 	// Camera & Controls
 
@@ -173,19 +159,24 @@ function initialize(assets) {
 	const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 	const settings = controls.settings;
 	settings.general.setMode(ControlMode.THIRD_PERSON);
-	settings.rotation.setSensitivity(2.2);
-	settings.rotation.setDamping(0.05);
+	settings.zoom.setSensitivity(0.05);
 	settings.zoom.setDamping(0.1);
+	settings.rotation.setSensitivity(0);
 	settings.translation.setEnabled(false);
-	controls.setPosition(0, 0, 5);
+	controls.setPosition(0, 0, 1.4);
 
-	// Scene, Lights, Objects
+	// Scene & Objects
 
 	const scene = new Scene();
-	scene.background = assets.get("sky");
-	scene.add(...CornellBox.createLights());
-	scene.add(CornellBox.createEnvironment());
-	scene.add(CornellBox.createActors());
+	const mesh = new Mesh(
+		new PlaneGeometry(),
+		new MeshBasicMaterial({
+			map: assets.get("photo")
+		})
+	);
+
+	mesh.scale.x = 2;
+	scene.add(mesh);
 
 	// LUT Preview
 
@@ -196,9 +187,7 @@ function initialize(assets) {
 
 	// Post Processing
 
-	const context = renderer.getContext();
 	const composer = new EffectComposer(renderer, {
-		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES)),
 		frameBufferType: HalfFloatType
 	});
 
@@ -218,12 +207,12 @@ function initialize(assets) {
 
 	const params = {
 		"lut": lutEffect.getLUT().name,
-		"base size": lutEffect.getLUT().image.width,
+		"show LUT": true,
 		"3D texture": true,
 		"tetrahedral filter": false,
+		"base size": lutEffect.getLUT().image.width,
 		"scale up": false,
 		"target size": 48,
-		"show LUT": false,
 		"opacity": lutEffect.blendMode.opacity.value,
 		"blend mode": lutEffect.blendMode.blendFunction
 	};
@@ -251,6 +240,8 @@ function initialize(assets) {
 		}
 
 	}
+
+	updateLUTPreview();
 
 	function changeLUT() {
 
@@ -288,7 +279,7 @@ function initialize(assets) {
 
 			if(renderer.capabilities.isWebGL2) {
 
-				if(context.getExtension("OES_texture_float_linear") === null) {
+				if(renderer.getContext().getExtension("OES_texture_float_linear") === null) {
 
 					console.log("Linear float filtering not supported, converting to Uint8");
 					lut.convertToUint8();
@@ -317,6 +308,7 @@ function initialize(assets) {
 	}
 
 	pane.addInput(params, "lut", { options: [...luts.keys()].reduce(reducer, {}) }).on("change", changeLUT);
+	pane.addInput(params, "show LUT").on("change", updateLUTPreview);
 
 	if(renderer.capabilities.isWebGL2) {
 
@@ -326,7 +318,7 @@ function initialize(assets) {
 
 	}
 
-	pane.addInput(params, "show LUT").on("change", updateLUTPreview);
+	pane.addMonitor(params, "base size", { format: (v) => v.toFixed(0) });
 	pane.addInput(params, "scale up").on("change", changeLUT);
 	pane.addInput(params, "target size", { options: [32, 48, 64, 96, 128].reduce(reducer, {}) }).on("change", changeLUT);
 
