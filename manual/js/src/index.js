@@ -131,7 +131,12 @@ window.addEventListener("DOMContentLoaded", () => {
 		// Info Box
 
 		const info = viewport.querySelector(".info");
-		info.addEventListener("click", () => info.classList.toggle("active"));
+
+		if(info !== null) {
+
+			info.addEventListener("click", () => info.classList.toggle("active"));
+
+		}
 
 		// Fullscreen
 
