@@ -21,32 +21,38 @@ window.require = (name) => {
 
 };
 
+window.addEventListener("load", () => {
+
+	document.body.classList.remove("preload");
+
+});
+
 window.addEventListener("DOMContentLoaded", () => {
 
 	// Dark Mode
 
-	if(localStorage.getItem("dark-mode") !== null) {
+	function setDarkModeEnabled(enabled) {
 
-		document.body.classList.add("dark");
+		if(enabled) {
+
+			localStorage.setItem("dark-mode", "1");
+			document.body.classList.add("dark");
+
+		} else {
+
+			localStorage.removeItem("dark-mode");
+			document.body.classList.remove("dark");
+
+		}
 
 	}
 
 	const darkModeSwitch = document.querySelector(".dark-mode");
-	darkModeSwitch.addEventListener("click", () => {
+	darkModeSwitch.addEventListener("click", () => setDarkModeEnabled(localStorage.getItem("dark-mode") === null));
 
-		document.body.classList.toggle("dark");
-
-		if(localStorage.getItem("dark-mode") !== null) {
-
-			localStorage.removeItem("dark-mode");
-
-		} else {
-
-			localStorage.setItem("dark-mode", "1");
-
-		}
-
-	});
+	const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+	mediaQuery.addEventListener("change", (e) => setDarkModeEnabled(e.matches));
+	setDarkModeEnabled(mediaQuery.matches || localStorage.getItem("dark-mode") !== null);
 
 	// Sidebar Drawer
 
