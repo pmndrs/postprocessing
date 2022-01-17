@@ -29,19 +29,20 @@
 
 	</head>
 
+	{{ $class := slice "preload" -}}
 	{{ if eq .Kind "home" -}}
-		{{ .Scratch.Set "class" "home" -}}
+		{{ $class = $class | append "home" -}}
 	{{ else if eq .Kind "404" -}}
-		{{ .Scratch.Set "class" "error404" -}}
+		{{ $class = $class | append "error404" -}}
 	{{ else if eq .Kind "page" -}}
-		{{ .Scratch.Set "class" .Type -}}
-		{{ .Scratch.Add "class" " single" -}}
+		{{ $class = $class | append .Type -}}
+		{{ $class = $class | append "single" -}}
 	{{ else -}}
-		{{ .Scratch.Set "class" .Type -}}
-		{{ .Scratch.Add "class" " list" -}}
+		{{ $class = $class | append .Type -}}
+		{{ $class = $class | append "list" -}}
 	{{ end -}}
 
-	<body class="{{ .Scratch.Get `class` }}">
+	<body class="{{ delimit $class ` ` }}">
 
 		<div class="frame-content">
 			<div>
