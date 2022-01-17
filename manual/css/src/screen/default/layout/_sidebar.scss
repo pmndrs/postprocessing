@@ -25,6 +25,11 @@
 	h2 {
 		margin: 2rem dimensions.$nav-padding 0.5rem dimensions.$nav-padding;
 	}
+	h3 {
+		font-size: 80%;
+		margin: 1.25rem dimensions.$nav-padding 0.25rem dimensions.$nav-padding;
+		opacity: 0.6;
+	}
 	&.active {
 		pointer-events: initial;
 		transform: none;
@@ -67,6 +72,9 @@
 // Dark Mode
 
 .dark {
+	h3 {
+		opacity: 1;
+	}
 	.sidebar-button-open {
 		background-image: url("/img/svg/menu_open_white_24dp.svg");
 	}

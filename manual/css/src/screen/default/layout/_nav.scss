@@ -20,11 +20,14 @@
 				background-color: var(--nav-anchor-background-color-focus);
 			}
 		}
-		&.active a {
+		&.active > a {
 			text-decoration: underline;
 		}
 		&::marker {
 			content: none;
 		}
+	}
+	.demos {
+		margin-bottom: 1.5rem;
 	}
 }

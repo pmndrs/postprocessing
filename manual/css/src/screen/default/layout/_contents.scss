@@ -1,0 +1,11 @@
+.contents {
+	list-style: none;
+	h2 {
+		margin: 0.5rem 0;
+	}
+	li {
+		&::marker {
+			content: none;
+		}
+	}
+}

@@ -21,7 +21,7 @@
 			display: inline-block;
 			height: 26px;
 			margin-right: 4px;
-			opacity: 0.6;
+			opacity: 0.8;
 			transition: opacity durations.$short;
 			width: 26px;
 			&:focus,
@@ -47,7 +47,8 @@
 				color: var(--info-anchor-color);
 			}
 			div {
-				border: 1px solid var(--info-border-color);
+				background-color: rgba(black, 0.8);
+				border: 1px solid rgba(white, 0.4);
 				border-radius: 3px;
 				bottom: 100%;
 				box-sizing: border-box;
