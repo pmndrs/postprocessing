@@ -3,7 +3,10 @@ layout: single
 collection: sections
 title: MSAA
 draft: false
-menu: demos
+menu:
+  demos:
+    parent: anti-aliasing
+    weight: 10
 script: msaa
 ---
 

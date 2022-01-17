@@ -3,7 +3,10 @@ layout: single
 collection: sections
 title: LUT
 draft: false
-menu: demos
+menu:
+  demos:
+    parent: color-grading
+    weight: 40
 script: lut
 credits:
   - asset: "[Cinematic LUT](https://www.freepresets.com/product/free-luts-cinematic/)"

@@ -3,7 +3,10 @@ layout: single
 collection: sections
 title: SMAA
 draft: false
-menu: demos
+menu:
+  demos:
+    parent: anti-aliasing
+    weight: 20
 script: smaa
 ---
 
