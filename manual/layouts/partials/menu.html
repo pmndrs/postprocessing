@@ -6,7 +6,7 @@
 	{{ range .menu }}
 		{{ if .HasChildren }}
 
-			{{ $class := slice (path.Base .Page.RelPermalink) " has-children" }}
+			{{ $class := slice (path.Base .Page.RelPermalink) }}
 			{{ if $currentPage.HasMenuCurrent $menuName . }}
 				{{ $class = $class | append "active" }}
 			{{ end }}
