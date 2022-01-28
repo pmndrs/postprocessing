@@ -1,22 +1,48 @@
-import {
-	LinearFilter,
-	RGBFormat,
-	UnsignedByteType,
-	WebGLRenderTarget
-} from "three";
-
-import { ConvolutionMaterial, KernelSize } from "../materials";
+import { LinearFilter, UnsignedByteType, WebGLRenderTarget } from "three";
+import { KawaseBlurMaterial } from "../materials";
 import { Resizer } from "../core/Resizer";
 import { Pass } from "./Pass";
+
+/**
+ * The Kawase blur kernel presets.
+ *
+ * @type {Float32Array[]}
+ * @private
+ */
+
+const kernelPresets = [
+	new Float32Array([0.0, 0.0]),
+	new Float32Array([0.0, 1.0, 1.0]),
+	new Float32Array([0.0, 1.0, 1.0, 2.0]),
+	new Float32Array([0.0, 1.0, 2.0, 2.0, 3.0]),
+	new Float32Array([0.0, 1.0, 2.0, 3.0, 4.0, 4.0, 5.0]),
+	new Float32Array([0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 7.0, 8.0, 9.0, 10.0])
+];
+
+/**
+ * A kernel size enumeration.
+ *
+ * @type {Object}
+ * @deprecated Use KawaseBlurPass.KernelSize instead.
+ */
+
+export const KernelSize = {
+	VERY_SMALL: 0,
+	SMALL: 1,
+	MEDIUM: 2,
+	LARGE: 3,
+	VERY_LARGE: 4,
+	HUGE: 5
+};
 
 /**
  * An efficient, incremental blur pass.
  */
 
-export class BlurPass extends Pass {
+export class KawaseBlurPass extends Pass {
 
 	/**
-	 * Constructs a new blur pass.
+	 * Constructs a new Kawase blur pass.
 	 *
 	 * @param {Object} [options] - The options.
 	 * @param {Number} [options.resolutionScale=0.5] - Deprecated. Adjust the height or width instead for consistent results.
@@ -32,7 +58,7 @@ export class BlurPass extends Pass {
 		kernelSize = KernelSize.LARGE
 	} = {}) {
 
-		super("BlurPass");
+		super("KawaseBlurPass");
 
 		/**
 		 * A render target.
@@ -63,8 +89,8 @@ export class BlurPass extends Pass {
 		/**
 		 * The render resolution.
 		 *
-		 * It's recommended to set the height or the width to an absolute value for
-		 * consistent results across different devices and resolutions.
+		 * It's recommended to set the render height or width to an absolute value for consistent results across different
+		 * devices and screen resolutions.
 		 *
 		 * @type {Resizer}
 		 */
@@ -72,23 +98,23 @@ export class BlurPass extends Pass {
 		this.resolution = new Resizer(this, width, height, resolutionScale);
 
 		/**
-		 * A convolution shader material.
+		 * A convolution material.
 		 *
-		 * @type {ConvolutionMaterial}
+		 * @type {KawaseBlurMaterial}
 		 * @private
 		 */
 
-		this.convolutionMaterial = new ConvolutionMaterial();
+		this.blurMaterial = new KawaseBlurMaterial();
 
 		/**
-		 * A convolution shader material that uses dithering.
+		 * A convolution material that uses dithering.
 		 *
-		 * @type {ConvolutionMaterial}
+		 * @type {KawaseBlurMaterial}
 		 * @private
 		 */
 
-		this.ditheredConvolutionMaterial = new ConvolutionMaterial();
-		this.ditheredConvolutionMaterial.dithering = true;
+		this.ditheredBlurMaterial = new KawaseBlurMaterial();
+		this.ditheredBlurMaterial.dithering = true;
 
 		/**
 		 * Whether the blurred result should also be dithered using noise.
@@ -98,6 +124,13 @@ export class BlurPass extends Pass {
 		 */
 
 		this.dithering = false;
+
+		/**
+		 * The kernel size.
+		 *
+		 * @type {KernelSize}
+		 * @deprecated Use getKernelSize and setKernelSize instead.
+		 */
 
 		this.kernelSize = kernelSize;
 
@@ -159,59 +192,80 @@ export class BlurPass extends Pass {
 	 * The current blur scale.
 	 *
 	 * @type {Number}
+	 * @deprecated Use getScale instead.
 	 */
 
 	get scale() {
 
-		return this.convolutionMaterial.uniforms.scale.value;
+		return this.getScale();
+
+	}
+
+	/**
+	 * @type {Number}
+	 * @deprecated Use setScale instead.
+	 */
+
+	set scale(value) {
+
+		this.setScale(value);
+
+	}
+
+	/**
+	 * Returns the current blur scale.
+	 *
+	 * @return {Number} The scale.
+	 */
+
+	getScale() {
+
+		return this.blurMaterial.uniforms.scale.value;
 
 	}
 
 	/**
 	 * Sets the blur scale.
 	 *
-	 * This value influences the overall blur strength and should not be greater
-	 * than 1. For larger blurs please increase the {@link kernelSize}!
+	 * This value influences the overall blur strength and should not be greater than 1. For larger blurs please increase
+	 * the kernel size via {@link setKernelSize}!
 	 *
-	 * Note that the blur strength is closely tied to the resolution. For a smooth
-	 * transition from no blur to full blur, set the width or the height to a high
-	 * enough value.
+	 * Note that the blur strength is closely tied to the resolution. For a smooth transition from no blur to full blur,
+	 * set the width or the height to a high enough value.
 	 *
-	 * @type {Number}
+	 * @param {Number} value - The scale.
 	 */
 
-	set scale(value) {
+	setScale(value) {
 
-		this.convolutionMaterial.uniforms.scale.value = value;
+		this.blurMaterial.uniforms.scale.value = value;
 		this.ditheredConvolutionMaterial.uniforms.scale.value = value;
 
 	}
 
 	/**
-	 * The kernel size.
+	 * Returns the kernel size.
 	 *
-	 * @type {KernelSize}
+	 * @return {KernelSize} The kernel size.
 	 */
 
-	get kernelSize() {
+	getKernelSize() {
 
-		return this.convolutionMaterial.kernelSize;
+		return this.kernelSize;
 
 	}
 
 	/**
 	 * Sets the kernel size.
 	 *
-	 * Larger kernels require more processing power but scale well with larger
-	 * render resolutions.
+	 * Larger kernels require more processing power but scale well with larger render resolutions.
 	 *
-	 * @type {KernelSize}
+	 * @param {KernelSize} value - The kernel size.
 	 */
 
-	set kernelSize(value) {
+	setKernelSize(value) {
 
-		this.convolutionMaterial.kernelSize = value;
-		this.ditheredConvolutionMaterial.kernelSize = value;
+		this.kernelSize = value;
 
 	}
 
@@ -242,8 +296,8 @@ export class BlurPass extends Pass {
 	}
 
 	/**
-	 * Blurs the input buffer and writes the result to the output buffer. The
-	 * input buffer remains intact, unless it's also the output buffer.
+	 * Blurs the input buffer and writes the result to the output buffer. The input buffer remains intact, unless it's
+	 * also used as the output buffer.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
@@ -259,42 +313,39 @@ export class BlurPass extends Pass {
 
 		const renderTargetA = this.renderTargetA;
 		const renderTargetB = this.renderTargetB;
+		const kernels = kernelPresets[this.kernelSize];
 
-		let material = this.convolutionMaterial;
+		let material = this.blurMaterial;
 		let uniforms = material.uniforms;
-		const kernel = material.getKernel();
-
-		let lastRT = inputBuffer;
-		let destRT;
+		let previousBuffer = inputBuffer;
 		let i, l;
 
 		this.setFullscreenMaterial(material);
 
 		// Apply the multi-pass blur.
-		for(i = 0, l = kernel.length - 1; i < l; ++i) {
+		for(i = 0, l = kernels.length - 1; i < l; ++i) {
 
 			// Alternate between targets.
-			destRT = ((i & 1) === 0) ? renderTargetA : renderTargetB;
+			const buffer = ((i & 1) === 0) ? renderTargetA : renderTargetB;
 
-			uniforms.kernel.value = kernel[i];
-			uniforms.inputBuffer.value = lastRT.texture;
-			renderer.setRenderTarget(destRT);
+			uniforms.kernel.value = kernels[i];
+			uniforms.inputBuffer.value = previousBuffer.texture;
+			renderer.setRenderTarget(buffer);
 			renderer.render(scene, camera);
-
-			lastRT = destRT;
+			previousBuffer = buffer;
 
 		}
 
 		if(this.dithering) {
 
-			material = this.ditheredConvolutionMaterial;
+			material = this.ditheredBlurMaterial;
 			uniforms = material.uniforms;
 			this.setFullscreenMaterial(material);
 
 		}
 
-		uniforms.kernel.value = kernel[i];
-		uniforms.inputBuffer.value = lastRT.texture;
+		uniforms.kernel.value = kernels[i];
+		uniforms.inputBuffer.value = previousBuffer.texture;
 		renderer.setRenderTarget(this.renderToScreen ? null : outputBuffer);
 		renderer.render(scene, camera);
 
@@ -318,8 +369,8 @@ export class BlurPass extends Pass {
 		this.renderTargetA.setSize(w, h);
 		this.renderTargetB.setSize(w, h);
 
-		this.convolutionMaterial.setTexelSize(1.0 / w, 1.0 / h);
-		this.ditheredConvolutionMaterial.setTexelSize(1.0 / w, 1.0 / h);
+		this.blurMaterial.setTexelSize(1.0 / w, 1.0 / h);
+		this.ditheredBlurMaterial.setTexelSize(1.0 / w, 1.0 / h);
 
 	}
 
@@ -333,13 +384,6 @@ export class BlurPass extends Pass {
 
 	initialize(renderer, alpha, frameBufferType) {
 
-		if(!alpha && frameBufferType === UnsignedByteType) {
-
-			this.renderTargetA.texture.format = RGBFormat;
-			this.renderTargetB.texture.format = RGBFormat;
-
-		}
-
 		if(frameBufferType !== undefined) {
 
 			this.renderTargetA.texture.type = frameBufferType;
@@ -347,10 +391,8 @@ export class BlurPass extends Pass {
 
 			if(frameBufferType !== UnsignedByteType) {
 
-				const m0 = this.convolutionMaterial;
-				const m1 = this.ditheredConvolutionMaterial;
-				m0.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
-				m1.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+				this.blurMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+				this.ditheredBlurMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
 			}
 
@@ -368,6 +410,24 @@ export class BlurPass extends Pass {
 	static get AUTO_SIZE() {
 
 		return Resizer.AUTO_SIZE;
+
+	}
+
+	/**
+	 * A kernel size enumeration.
+	 *
+	 * @type {Object}
+	 * @property {Number} VERY_SMALL - A very small kernel that matches a 7x7 Gauss blur kernel.
+	 * @property {Number} SMALL - A small kernel that matches a 15x15 Gauss blur kernel.
+	 * @property {Number} MEDIUM - A medium sized kernel that matches a 23x23 Gauss blur kernel.
+	 * @property {Number} LARGE - A large kernel that matches a 35x35 Gauss blur kernel.
+	 * @property {Number} VERY_LARGE - A very large kernel that matches a 63x63 Gauss blur kernel.
+	 * @property {Number} HUGE - A huge kernel that matches a 127x127 Gauss blur kernel.
+	 */
+
+	static get KernelSize() {
+
+		return KernelSize;
 
 	}
 
