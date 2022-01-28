@@ -1,18 +1,12 @@
-import {
-	LinearFilter,
-	RGBFormat,
-	UnsignedByteType,
-	WebGLRenderTarget
-} from "three";
-
+import { LinearFilter, UnsignedByteType, WebGLRenderTarget } from "three";
 import { CopyMaterial } from "../materials";
 import { Pass } from "./Pass";
 
 /**
- * A pass that renders the result from a previous pass to another render target.
+ * A pass that copies the contents of an input buffer to another render target.
  */
 
-export class SavePass extends Pass {
+export class CopyPass extends Pass {
 
 	/**
 	 * Constructs a new save pass.
@@ -23,7 +17,7 @@ export class SavePass extends Pass {
 
 	constructor(renderTarget, resize = true) {
 
-		super("SavePass");
+		super("CopyPass");
 
 		this.setFullscreenMaterial(new CopyMaterial());
 
@@ -46,7 +40,7 @@ export class SavePass extends Pass {
 				depthBuffer: false
 			});
 
-			this.renderTarget.texture.name = "SavePass.Target";
+			this.renderTarget.texture.name = "CopyPass.Target";
 
 		}
 
@@ -121,12 +115,6 @@ export class SavePass extends Pass {
 	 */
 
 	initialize(renderer, alpha, frameBufferType) {
-
-		if(!alpha && frameBufferType === UnsignedByteType) {
-
-			this.renderTarget.texture.format = RGBFormat;
-
-		}
 
 		if(frameBufferType !== undefined) {
 
