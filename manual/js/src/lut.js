@@ -7,7 +7,6 @@ import {
 	PlaneGeometry,
 	Mesh,
 	MeshBasicMaterial,
-	RGBFormat,
 	Scene,
 	sRGBEncoding,
 	TextureLoader,
@@ -111,14 +110,11 @@ function load() {
 				textureLoader.load(`/img/textures/lut/${entry[1]}`, (t) => {
 
 					t.name = entry[0];
-					t.format = RGBFormat;
-					t.encoding = sRGBEncoding;
 					t.generateMipmaps = false;
 					t.minFilter = LinearFilter;
 					t.magFilter = LinearFilter;
 					t.wrapS = ClampToEdgeWrapping;
 					t.wrapT = ClampToEdgeWrapping;
-					t.unpackAlignment = 1;
 					t.flipY = false;
 
 					assets.set(entry[0], t);
@@ -223,7 +219,7 @@ function initialize(assets) {
 		if(params["show LUT"]) {
 
 			const lut = LookupTexture3D.from(lutEffect.getLUT());
-			const { image } = lut.convertToUint8().convertToRGBA().toDataTexture();
+			const { image } = lut.convertToUint8().toDataTexture();
 			RawImageData.from(image).toCanvas().toBlob((blob) => {
 
 				objectURL = URL.createObjectURL(blob);
