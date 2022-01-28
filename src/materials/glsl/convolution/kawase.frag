@@ -33,6 +33,7 @@ void main() {
 	// Compute the average.
 	gl_FragColor = sum * 0.25;
 
+	#include <encodings_fragment>
 	#include <dithering_fragment>
 
 }
