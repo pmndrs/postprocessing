@@ -210,6 +210,18 @@ export class Pass {
 	}
 
 	/**
+	 * Sets the renderer
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 */
+
+	setRenderer(renderer) {
+
+		this.renderer = renderer;
+
+	}
+
+	/**
 	 * Indicates whether this pass is enabled.
 	 *
 	 * @return {Boolean} Whether this pass is enabled.
