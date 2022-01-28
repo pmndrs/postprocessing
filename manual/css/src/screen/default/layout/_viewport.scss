@@ -85,4 +85,14 @@
 			display: none;
 		}
 	}
+	&.loading {
+		.icons {
+			display: none;
+		}
+	}
+	&:not(.loading) {
+		.progress {
+			display: none;
+		}
+	}
 }

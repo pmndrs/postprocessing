@@ -3,8 +3,8 @@
 .dark {
 	color-scheme: dark;
 
-	--anchor-color: #{colors.$blue_grey};
-	--anchor-color-focus: #{colors.$grey_300};
+	--anchor-color: #{colors.$shiny};
+	--anchor-color-focus: #{colors.$grey_200};
 	--body-background-color: #{colors.$blind};
 	--button-background-color: #{colors.$grey_200};
 	--button-background-color-darker: #{colors.$grey_300};
@@ -22,7 +22,12 @@
 	--page-header-background-color: #{colors.$space};
 	--page-title-foreground-color: #{colors.$grey_100};
 	--nav-anchor-background-color-focus: #{colors.$blind};
+	--nav-anchor-color: #{colors.$grey_500};
+	--nav-anchor-color-active: #{colors.$grey_200};
+	--nav-anchor-color-focus: #{colors.$grey_300};
+	--nav-indicator-background-color: #{colors.$shiny};
 	--sidebar-background-color: #{colors.$coal};
+	--sidebar-heading-color: #{colors.$whimsical};
 	--spinner-background-color: #{colors.$shiny};
 	--spinner-accent-color: #{colors.$space};
 }

@@ -20,6 +20,7 @@
 	width: 15%;
 	z-index: layers.$hud + 1;
 	h1, h2, h3 {
+		color: var(--sidebar-heading-color);
 		font-size: 100%;
 	}
 	h2 {
@@ -28,7 +29,6 @@
 	h3 {
 		font-size: 80%;
 		margin: 1.25rem dimensions.$nav-padding 0.25rem dimensions.$nav-padding;
-		opacity: 0.6;
 	}
 	&.active {
 		pointer-events: initial;
