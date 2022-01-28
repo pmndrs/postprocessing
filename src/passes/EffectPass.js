@@ -1,7 +1,7 @@
 import { BasicDepthPacking, UnsignedByteType } from "three";
 import { BlendFunction } from "../effects/blending";
 import { EffectAttribute } from "../effects/Effect";
-import { EffectMaterial, Section } from "../materials";
+import { EffectMaterial } from "../materials";
 import { Pass } from "./Pass";
 
 /**
@@ -79,6 +79,7 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 	} else {
 
 		const functionRegExp = /(?:\w+\s+(\w+)\([\w\s,]*\)\s*{[^}]+})/g;
+		const Section = EffectMaterial.Section;
 
 		if(mainUvExists) {
 
@@ -355,6 +356,7 @@ export class EffectPass extends Pass {
 
 	updateMaterial() {
 
+		const Section = EffectMaterial.Section;
 		const shaderParts = new Map([
 			[Section.FRAGMENT_HEAD, ""],
 			[Section.FRAGMENT_MAIN_UV, ""],

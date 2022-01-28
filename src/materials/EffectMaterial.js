@@ -4,6 +4,21 @@ import fragmentTemplate from "./glsl/effect/shader.frag";
 import vertexTemplate from "./glsl/effect/shader.vert";
 
 /**
+ * An enumeration of shader code placeholders used by the {@link EffectPass}.
+ *
+ * @type {Object}
+ * @deprecated Use EffectMaterial.Section instead.
+ */
+
+export const Section = {
+	FRAGMENT_HEAD: "FRAGMENT_HEAD",
+	FRAGMENT_MAIN_UV: "FRAGMENT_MAIN_UV",
+	FRAGMENT_MAIN_IMAGE: "FRAGMENT_MAIN_IMAGE",
+	VERTEX_HEAD: "VERTEX_HEAD",
+	VERTEX_MAIN_SUPPORT: "VERTEX_MAIN_SUPPORT"
+};
+
+/**
  * An effect material for compound shaders.
  *
  * This material supports dithering.
@@ -208,25 +223,21 @@ export class EffectMaterial extends ShaderMaterial {
 
 	}
 
+	/**
+	 * An enumeration of shader code section placeholders used by the {@link EffectPass}.
+	 *
+	 * @type {Object}
+	 * @property {String} FRAGMENT_HEAD - A placeholder for function and variable declarations inside the fragment shader.
+	 * @property {String} FRAGMENT_MAIN_UV - A placeholder for UV transformations inside the fragment shader.
+	 * @property {String} FRAGMENT_MAIN_IMAGE - A placeholder for color calculations inside the fragment shader.
+	 * @property {String} VERTEX_HEAD - A placeholder for function and variable declarations inside the vertex shader.
+	 * @property {String} VERTEX_MAIN_SUPPORT - A placeholder for supporting calculations inside the vertex shader.
+	 */
+
+	static get Section() {
+
+		return Section;
+
+	}
+
 }
-
-/**
- * An enumeration of shader code placeholders used by the {@link EffectPass}.
- *
- * @type {Object}
- * @property {String} FRAGMENT_HEAD - A placeholder for function and variable declarations inside the fragment shader.
- * @property {String} FRAGMENT_MAIN_UV - A placeholder for UV transformations inside the fragment shader.
- * @property {String} FRAGMENT_MAIN_IMAGE - A placeholder for color calculations inside the fragment shader.
- * @property {String} VERTEX_HEAD - A placeholder for function and variable declarations inside the vertex shader.
- * @property {String} VERTEX_MAIN_SUPPORT - A placeholder for supporting calculations inside the vertex shader.
- */
-
-export const Section = {
-
-	FRAGMENT_HEAD: "FRAGMENT_HEAD",
-	FRAGMENT_MAIN_UV: "FRAGMENT_MAIN_UV",
-	FRAGMENT_MAIN_IMAGE: "FRAGMENT_MAIN_IMAGE",
-	VERTEX_HEAD: "VERTEX_HEAD",
-	VERTEX_MAIN_SUPPORT: "VERTEX_MAIN_SUPPORT"
-
-};
