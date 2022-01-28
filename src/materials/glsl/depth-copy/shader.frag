@@ -36,7 +36,7 @@ void main() {
 		#else
 
 			float depth = texture2D(depthBuffer, vUv).r;
-			gl_FragColor = packDepthToRGBA(depth);
+			gl_FragColor = (depth == 1.0) ? vec4(1.0) : packDepthToRGBA(depth);
 
 		#endif
 
