@@ -102,9 +102,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
 				if(mutation.type === "childList") {
 
-					// Remove the loading animation when the canvas is added to the viewport.
-					const loading = document.querySelector(".loading");
-					loading.classList.add("hidden");
+					// Stop the loading animation when the canvas is added to the viewport.
+					viewport.classList.remove("loading");
 					observer.disconnect();
 
 				}
