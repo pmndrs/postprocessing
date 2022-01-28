@@ -1,4 +1,4 @@
-import { BasicDepthPacking, UnsignedByteType } from "three";
+import { BasicDepthPacking, REVISION, UnsignedByteType } from "three";
 import { BlendFunction } from "../effects/blending";
 import { EffectAttribute } from "../effects/Effect";
 import { EffectMaterial } from "../materials";
@@ -614,9 +614,11 @@ export class EffectPass extends Pass {
 		this.updateMaterial();
 		this.verifyResources(renderer);
 
+		const material = this.getFullscreenMaterial();
+		material.defines.THREE_REVISION = REVISION;
+
 		if(frameBufferType !== undefined && frameBufferType !== UnsignedByteType) {
 
-			const material = this.getFullscreenMaterial();
 			material.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
 		}
