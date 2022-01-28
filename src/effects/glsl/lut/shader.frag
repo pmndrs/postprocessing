@@ -32,9 +32,8 @@ uniform vec3 offset;
 
 		#ifdef TETRAHEDRAL_INTERPOLATION
 
-			/* Strategy: Fetch the four corners (v1, v2, v3, v4) of the tetrahedron
-			that corresponds to the input coordinates, calculate the barycentric
-			weights and interpolate the nearest color samples. */
+			/* Strategy: Fetch the four corners (v1, v2, v3, v4) of the tetrahedron that corresponds to the input coordinates,
+			calculate the barycentric weights and interpolate the nearest color samples. */
 
 			vec3 p = floor(rgb);
 			vec3 f = rgb - p;
@@ -121,10 +120,8 @@ uniform vec3 offset;
 
 		#else
 
-			/* Built-in trilinear interpolation. Note that the fractional components
-			are quantized to 8 bits on common hardware, which introduces significant
-			error with small grid sizes. */
-
+			/* Built-in trilinear interpolation. Note that the fractional components are quantized to 8 bits on common
+			hardware, which introduces significant error with small grid sizes. */
 			return texture(lut, rgb);
 
 		#endif

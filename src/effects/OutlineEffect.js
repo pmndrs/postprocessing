@@ -130,16 +130,7 @@ export class OutlineEffect extends Effect {
 		this.renderTargetOutline = this.renderTargetMask.clone();
 		this.renderTargetOutline.texture.name = "Outline.Edges";
 		this.renderTargetOutline.depthBuffer = false;
-
-		/**
-		 * A render target for the blurred outline overlay.
-		 *
-		 * @type {WebGLRenderTarget}
-		 * @private
-		 */
-
-		this.renderTargetBlurredOutline = this.renderTargetOutline.clone();
-		this.renderTargetBlurredOutline.texture.name = "Outline.BlurredEdges";
+		this.uniforms.get("edgeTexture").value = this.renderTargetOutline.texture;
 
 		/**
 		 * A clear pass.
@@ -392,10 +383,6 @@ export class OutlineEffect extends Effect {
 
 		this.blurPass.setEnabled(value);
 
-		this.uniforms.get("edgeTexture").value = value ?
-			this.renderTargetBlurredOutline.texture :
-			this.renderTargetOutline.texture;
-
 	}
 
 	/**
@@ -569,7 +556,8 @@ export class OutlineEffect extends Effect {
 		const scene = this.scene;
 		const camera = this.camera;
 		const selection = this.selection;
-		const pulse = this.uniforms.get("pulse");
+		const uniforms = this.uniforms;
+		const pulse = uniforms.get("pulse");
 
 		const background = scene.background;
 		const mask = camera.layers.mask;
@@ -605,10 +593,9 @@ export class OutlineEffect extends Effect {
 			// Detect the outline.
 			this.outlinePass.render(renderer, null, this.renderTargetOutline);
 
-			if(this.blur) {
+			if(this.blurPass.isEnabled()) {
 
-				this.blurPass.render(renderer, this.renderTargetOutline,
-					this.renderTargetBlurredOutline);
+				this.blurPass.render(renderer, this.renderTargetOutline, this.renderTargetOutline);
 
 			}
 
@@ -638,7 +625,6 @@ export class OutlineEffect extends Effect {
 
 		this.depthPass.setSize(w, h);
 		this.renderTargetOutline.setSize(w, h);
-		this.renderTargetBlurredOutline.setSize(w, h);
 		this.outlinePass.getFullscreenMaterial().setTexelSize(1.0 / w, 1.0 / h);
 
 	}

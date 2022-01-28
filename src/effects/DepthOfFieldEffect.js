@@ -133,8 +133,7 @@ export class DepthOfFieldEffect extends Effect {
 		this.renderTargetCoCBlurred = this.renderTargetCoC.clone();
 		this.renderTargetCoCBlurred.texture.name = "DoF.CoC.Blurred";
 
-		this.uniforms.get("nearCoCBuffer").value =
-			this.renderTargetCoCBlurred.texture;
+		this.uniforms.get("nearCoCBuffer").value = this.renderTargetCoCBlurred.texture;
 
 		/**
 		 * A circle of confusion pass.
@@ -169,8 +168,7 @@ export class DepthOfFieldEffect extends Effect {
 		 * @private
 		 */
 
-		this.maskPass = new ShaderPass(
-			new MaskMaterial(this.renderTargetCoC.texture));
+		this.maskPass = new ShaderPass(new MaskMaterial(this.renderTargetCoC.texture));
 		const maskMaterial = this.maskPass.getFullscreenMaterial();
 		maskMaterial.maskFunction = MaskFunction.MULTIPLY;
 		maskMaterial.colorChannel = ColorChannel.GREEN;
@@ -276,11 +274,12 @@ export class DepthOfFieldEffect extends Effect {
 			this.bokehFarFillPass
 		];
 
-		passes.map((p) => p.getFullscreenMaterial().uniforms.scale).forEach((u) => {
+		for(const p of passes) {
 
-			u.value = value;
+			const m = p.getFullscreenMaterial();
+			m.uniforms.scale.value = value;
 
-		});
+		}
 
 		this.maskPass.getFullscreenMaterial().uniforms.strength.value = value;
 		this.uniforms.get("scale").value = value;
@@ -418,8 +417,7 @@ export class DepthOfFieldEffect extends Effect {
 			this.bokehFarFillPass
 		];
 
-		passes.forEach((p) => p.getFullscreenMaterial()
-			.setTexelSize(1.0 / w, 1.0 / h));
+		passes.forEach((p) => p.getFullscreenMaterial().setTexelSize(1.0 / w, 1.0 / h));
 
 	}
 
@@ -442,8 +440,7 @@ export class DepthOfFieldEffect extends Effect {
 			this.bokehFarFillPass
 		];
 
-		initializables.forEach((i) => i.initialize(
-			renderer, alpha, frameBufferType));
+		initializables.forEach((i) => i.initialize(renderer, alpha, frameBufferType));
 
 		// The blur pass operates on the CoC buffer.
 		this.blurPass.initialize(renderer, alpha, UnsignedByteType);

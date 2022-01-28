@@ -246,8 +246,7 @@ export class BloomEffect extends Effect {
 
 	get distinction() {
 
-		console.warn(this.name, "The distinction field has been removed, " +
-			"use .threshold and .smoothing instead.");
+		console.warn(this.name, "The distinction field was removed, use .threshold and .smoothing instead.");
 
 		return 1.0;
 
@@ -260,8 +259,7 @@ export class BloomEffect extends Effect {
 
 	set distinction(value) {
 
-		console.warn(this.name, "The distinction field has been removed, " +
-			"use .threshold and .smoothing instead.");
+		console.warn(this.name, "The distinction field was removed, use .threshold and .smoothing instead.");
 
 	}
 

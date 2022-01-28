@@ -156,9 +156,7 @@ export class GodRaysEffect extends Effect {
 		 */
 
 		this.renderPassLight = new RenderPass(this.lightScene, camera);
-		this.renderPassLight.getClearPass().overrideClearColor = new Color(
-			0x000000
-		);
+		this.renderPassLight.getClearPass().overrideClearColor = new Color(0x000000);
 
 		/**
 		 * A clear pass.
@@ -191,8 +189,7 @@ export class GodRaysEffect extends Effect {
 		this.depthMaskPass = new ShaderPass(new DepthMaskMaterial());
 
 		const depthMaskMaterial = this.depthMaskPass.getFullscreenMaterial();
-		depthMaskMaterial.uniforms.depthBuffer1.value = this.renderTargetLight
-			.depthTexture;
+		depthMaskMaterial.uniforms.depthBuffer1.value = this.renderTargetLight.depthTexture;
 
 		/**
 		 * A god rays blur pass.
@@ -218,8 +215,7 @@ export class GodRaysEffect extends Effect {
 	/**
 	 * A texture that contains the intermediate result of this effect.
 	 *
-	 * This texture will be applied to the scene colors unless the blend function
-	 * is set to `SKIP`.
+	 * This texture will be applied to the scene colors unless the blend function is set to `SKIP`.
 	 *
 	 * @type {Texture}
 	 */
@@ -518,7 +514,7 @@ export class GodRaysEffect extends Effect {
 			Math.min(Math.max((v.y + 1.0) * 0.5, -1.0), 2.0)
 		);
 
-		if(this.blur) {
+		if(this.blurPass.isEnabled()) {
 
 			// Blur the masked scene to reduce artifacts.
 			this.blurPass.render(renderer, renderTargetA, renderTargetA);

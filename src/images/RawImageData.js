@@ -85,8 +85,7 @@ export class RawImageData {
 
 	toCanvas() {
 
-		return (typeof document === "undefined") ?
-			null : createCanvas(this.width, this.height, this.data);
+		return (typeof document === "undefined") ? null : createCanvas(this.width, this.height, this.data);
 
 	}
 

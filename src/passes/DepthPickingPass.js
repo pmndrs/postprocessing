@@ -66,8 +66,7 @@ export class DepthPickingPass extends DepthSavePass {
 		 * @private
 		 */
 
-		this.pixelBuffer = (depthPacking === RGBADepthPacking) ?
-			new Uint8Array(4) : new Float32Array(4);
+		this.pixelBuffer = (depthPacking === RGBADepthPacking) ? new Uint8Array(4) : new Float32Array(4);
 
 		/**
 		 * A callback for picking results.

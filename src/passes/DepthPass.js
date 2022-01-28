@@ -81,9 +81,6 @@ export class DepthPass extends Pass {
 		/**
 		 * The desired render resolution.
 		 *
-		 * Use {@link Resizer.AUTO_SIZE} for the width or height to automatically
-		 * calculate it based on its counterpart and the original aspect ratio.
-		 *
 		 * @type {Resizer}
 		 */
 
