@@ -4,12 +4,10 @@ import {
 	DepthTexture,
 	LinearFilter,
 	Matrix4,
-	RGBFormat,
 	Scene,
 	Uniform,
 	Vector2,
 	Vector3,
-	UnsignedByteType,
 	WebGLRenderTarget
 } from "three";
 
@@ -569,14 +567,6 @@ export class GodRaysEffect extends Effect {
 		this.renderPassLight.initialize(renderer, alpha, frameBufferType);
 		this.depthMaskPass.initialize(renderer, alpha, frameBufferType);
 		this.godRaysPass.initialize(renderer, alpha, frameBufferType);
-
-		if(!alpha && frameBufferType === UnsignedByteType) {
-
-			this.renderTargetA.texture.format = RGBFormat;
-			this.renderTargetB.texture.format = RGBFormat;
-			this.renderTargetLight.texture.format = RGBFormat;
-
-		}
 
 		if(frameBufferType !== undefined) {
 

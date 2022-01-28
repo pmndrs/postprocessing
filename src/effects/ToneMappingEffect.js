@@ -2,7 +2,6 @@ import {
 	LinearFilter,
 	LinearMipMapLinearFilter,
 	LinearMipmapLinearFilter,
-	RGBFormat,
 	Uniform,
 	WebGLRenderTarget
 } from "three";
@@ -81,8 +80,7 @@ export class ToneMappingEffect extends Effect {
 			minFilter: (LinearMipmapLinearFilter !== undefined) ? LinearMipmapLinearFilter : LinearMipMapLinearFilter,
 			magFilter: LinearFilter,
 			stencilBuffer: false,
-			depthBuffer: false,
-			format: RGBFormat
+			depthBuffer: false
 		});
 
 		this.renderTargetLuminance.texture.name = "Luminance";

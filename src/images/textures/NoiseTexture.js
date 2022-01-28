@@ -3,7 +3,6 @@ import {
 	LuminanceFormat,
 	RedFormat,
 	RGFormat,
-	RGBFormat,
 	RGBAFormat,
 	UnsignedByteType
 } from "three";
@@ -24,7 +23,6 @@ function getNoise(size, format, type) {
 		[LuminanceFormat, 1],
 		[RedFormat, 1],
 		[RGFormat, 2],
-		[RGBFormat, 3],
 		[RGBAFormat, 4]
 	]);
 
@@ -71,7 +69,7 @@ export class NoiseTexture extends DataTexture {
 	/**
 	 * Constructs a new noise texture.
 	 *
-	 * The texture format can be either `LuminanceFormat`, `RGBFormat` or `RGBAFormat`. Additionally,
+	 * The texture format can be either `LuminanceFormat` or `RGBAFormat`. Additionally,
 	 * the formats `RedFormat` and `RGFormat` can be used in a WebGL 2 context.
 	 *
 	 * @param {Number} width - The width.

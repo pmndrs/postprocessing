@@ -5,8 +5,6 @@ import {
 	NotEqualDepth,
 	EqualDepth,
 	RGBADepthPacking,
-	RGBFormat,
-	UnsignedByteType,
 	WebGLRenderTarget
 } from "three";
 
@@ -251,12 +249,6 @@ export class SelectiveBloomEffect extends BloomEffect {
 		this.clearPass.initialize(renderer, alpha, frameBufferType);
 		this.depthPass.initialize(renderer, alpha, frameBufferType);
 		this.depthMaskPass.initialize(renderer, alpha, frameBufferType);
-
-		if(!alpha && frameBufferType === UnsignedByteType) {
-
-			this.renderTargetMasked.texture.format = RGBFormat;
-
-		}
 
 		if(frameBufferType !== undefined) {
 

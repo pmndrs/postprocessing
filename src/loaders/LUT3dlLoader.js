@@ -1,4 +1,4 @@
-import { FileLoader, Loader, LoadingManager, sRGBEncoding } from "three";
+import { FileLoader, Loader, LoadingManager } from "three";
 import { LookupTexture3D } from "../images/textures/LookupTexture3D";
 
 /**
@@ -100,6 +100,7 @@ export class LUT3dlLoader extends Loader {
 		const gridLines = result[0].trim().split(/\s+/g).map((n) => Number(n));
 		const gridStep = gridLines[1] - gridLines[0];
 		const size = gridLines.length;
+		const sizeSq = size ** 2;
 
 		for(let i = 1, l = gridLines.length; i < l; ++i) {
 
@@ -111,7 +112,7 @@ export class LUT3dlLoader extends Loader {
 
 		}
 
-		const data = new Float32Array(size ** 3 * 3);
+		const data = new Float32Array(size ** 3 * 4);
 		let maxValue = 0.0;
 		let index = 0;
 
@@ -125,13 +126,14 @@ export class LUT3dlLoader extends Loader {
 
 			const bLayer = index % size;
 			const gLayer = Math.floor(index / size) % size;
-			const rLayer = Math.floor(index / (size * size)) % size;
+			const rLayer = Math.floor(index / (sizeSq)) % size;
 
 			// b grows first, then g, then r.
-			const d3 = (bLayer * size * size + gLayer * size + rLayer) * 3;
-			data[d3 + 0] = r;
-			data[d3 + 1] = g;
-			data[d3 + 2] = b;
+			const d4 = (bLayer * sizeSq + gLayer * size + rLayer) * 4;
+			data[d4 + 0] = r;
+			data[d4 + 1] = g;
+			data[d4 + 2] = b;
+			data[d4 + 3] = 1.0;
 
 			++index;
 
@@ -141,16 +143,15 @@ export class LUT3dlLoader extends Loader {
 		const bits = Math.ceil(Math.log2(maxValue));
 		const maxBitValue = Math.pow(2, bits);
 
-		for(let i = 0, l = data.length; i < l; ++i) {
+		for(let i = 0, l = data.length; i < l; i += 4) {
 
-			data[i] /= maxBitValue;
+			data[i + 0] /= maxBitValue;
+			data[i + 1] /= maxBitValue;
+			data[i + 2] /= maxBitValue;
 
 		}
 
-		const lut = new LookupTexture3D(data, size, size, size);
-		lut.encoding = sRGBEncoding;
-
-		return lut;
+		return new LookupTexture3D(data, size, size, size);
 
 	}
 

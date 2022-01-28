@@ -4,7 +4,6 @@ import {
 	LinearFilter,
 	NearestFilter,
 	RGBAFormat,
-	RGBFormat,
 	Texture,
 	Uniform,
 	Vector2,
@@ -65,8 +64,7 @@ export class SMAAEffect extends Effect {
 		this.renderTargetEdges = new WebGLRenderTarget(1, 1, {
 			minFilter: LinearFilter,
 			stencilBuffer: false,
-			depthBuffer: false,
-			format: RGBFormat
+			depthBuffer: false
 		});
 
 		this.renderTargetEdges.texture.name = "SMAA.Edges";

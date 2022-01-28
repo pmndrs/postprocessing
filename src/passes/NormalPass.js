@@ -1,11 +1,4 @@
-import {
-	Color,
-	MeshNormalMaterial,
-	NearestFilter,
-	RGBFormat,
-	WebGLRenderTarget
-} from "three";
-
+import { Color, MeshNormalMaterial, NearestFilter, WebGLRenderTarget } from "three";
 import { Resizer } from "../core/Resizer";
 import { Pass } from "./Pass";
 import { RenderPass } from "./RenderPass";
@@ -69,7 +62,6 @@ export class NormalPass extends Pass {
 			this.renderTarget = new WebGLRenderTarget(1, 1, {
 				minFilter: NearestFilter,
 				magFilter: NearestFilter,
-				format: RGBFormat,
 				stencilBuffer: false
 			});
 

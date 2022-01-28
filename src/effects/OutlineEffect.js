@@ -1,5 +1,4 @@
-import { Color, LinearFilter, RepeatWrapping, RGBFormat, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
-
+import { Color, LinearFilter, RepeatWrapping, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
 import { Resizer, Selection } from "../core";
 import { DepthComparisonMaterial, OutlineMaterial } from "../materials";
 import { KawaseBlurPass, ClearPass, DepthPass, RenderPass, ShaderPass } from "../passes";
@@ -115,12 +114,10 @@ export class OutlineEffect extends Effect {
 		this.renderTargetMask = new WebGLRenderTarget(1, 1, {
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
-			stencilBuffer: false,
-			format: RGBFormat
+			stencilBuffer: false
 		});
 
 		this.renderTargetMask.texture.name = "Outline.Mask";
-
 		this.uniforms.get("maskTexture").value = this.renderTargetMask.texture;
 
 		/**

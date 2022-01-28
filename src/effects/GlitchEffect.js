@@ -1,5 +1,4 @@
-import { NearestFilter, RepeatWrapping, RGBFormat, Uniform, Vector2 } from "three";
-
+import { NearestFilter, RepeatWrapping, RGBAFormat, Uniform, Vector2 } from "three";
 import { NoiseTexture } from "../images/textures/NoiseTexture";
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect } from "./Effect";
@@ -233,7 +232,7 @@ export class GlitchEffect extends Effect {
 
 	generatePerturbationMap(size = 64) {
 
-		const map = new NoiseTexture(size, size, RGBFormat);
+		const map = new NoiseTexture(size, size, RGBAFormat);
 		map.name = tag;
 		return map;
 

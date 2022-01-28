@@ -3,7 +3,7 @@ import {
 	Color,
 	LinearFilter,
 	RepeatWrapping,
-	RGBFormat,
+	RGBAFormat,
 	Uniform,
 	WebGLRenderTarget
 } from "three";
@@ -129,8 +129,7 @@ export class SSAOEffect extends Effect {
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
 			stencilBuffer: false,
-			depthBuffer: false,
-			format: RGBFormat
+			depthBuffer: false
 		});
 
 		this.renderTargetAO.texture.name = "AO.Target";
@@ -173,7 +172,7 @@ export class SSAOEffect extends Effect {
 
 		this.ssaoPass = new ShaderPass((() => {
 
-			const noiseTexture = new NoiseTexture(NOISE_TEXTURE_SIZE, NOISE_TEXTURE_SIZE, RGBFormat);
+			const noiseTexture = new NoiseTexture(NOISE_TEXTURE_SIZE, NOISE_TEXTURE_SIZE, RGBAFormat);
 			noiseTexture.wrapS = noiseTexture.wrapT = RepeatWrapping;
 
 			const material = new SSAOMaterial(camera);

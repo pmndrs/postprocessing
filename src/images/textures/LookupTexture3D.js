@@ -6,7 +6,6 @@ import {
 	FloatType,
 	LinearFilter,
 	LinearEncoding,
-	RGBFormat,
 	RGBAFormat,
 	sRGBEncoding,
 	UnsignedByteType,
@@ -37,7 +36,7 @@ export class LookupTexture3D extends DataTexture3D {
 	/**
 	 * Constructs a cubic 3D lookup texture.
 	 *
-	 * @param {TypedArray} data - The data.
+	 * @param {TypedArray} data - The pixel data. The default format is RGBA.
 	 * @param {Number} size - The sidelength.
 	 */
 
@@ -46,7 +45,7 @@ export class LookupTexture3D extends DataTexture3D {
 		super(data, size, size, size);
 
 		this.type = FloatType;
-		this.format = RGBFormat;
+		this.format = RGBAFormat;
 		this.encoding = LinearEncoding;
 		this.minFilter = LinearFilter;
 		this.magFilter = LinearFilter;
@@ -105,14 +104,13 @@ export class LookupTexture3D extends DataTexture3D {
 
 		} else {
 
-			const workerURL = URL.createObjectURL(new Blob([workerProgram], {
-				type: "text/javascript"
-			}));
-
-			const worker = new Worker(workerURL);
-
 			promise = new Promise((resolve, reject) => {
 
+				const workerURL = URL.createObjectURL(new Blob([workerProgram], {
+					type: "text/javascript"
+				}));
+
+				const worker = new Worker(workerURL);
 				worker.addEventListener("error", (event) => reject(event.error));
 				worker.addEventListener("message", (event) => {
 
@@ -165,28 +163,29 @@ export class LookupTexture3D extends DataTexture3D {
 
 			console.error("Both LUTs must be FloatType textures");
 
-		} else if(lut.format !== RGBFormat || this.format !== RGBFormat) {
+		} else if(lut.format !== RGBAFormat || this.format !== RGBAFormat) {
 
-			console.error("Both LUTs must be RGB textures");
+			console.error("Both LUTs must be RGBA textures");
 
 		} else {
 
 			const data0 = img0.data;
 			const data1 = img1.data;
 			const size = size0;
+			const sizeSq = size ** 2;
 			const s = size - 1;
 
 			for(let i = 0, l = size ** 3; i < l; ++i) {
 
-				const i3 = i * 3;
-				const r = data0[i3 + 0] * s;
-				const g = data0[i3 + 1] * s;
-				const b = data0[i3 + 2] * s;
-				const iRGB = Math.round(r + g * size + b * size * size) * 3;
+				const i4 = i * 4;
+				const r = data0[i4 + 0] * s;
+				const g = data0[i4 + 1] * s;
+				const b = data0[i4 + 2] * s;
+				const iRGB = Math.round(r + g * size + b * sizeSq) * 4;
 
-				data0[i3 + 0] = data1[iRGB + 0];
-				data0[i3 + 1] = data1[iRGB + 1];
-				data0[i3 + 2] = data1[iRGB + 2];
+				data0[i4 + 0] = data1[iRGB + 0];
+				data0[i4 + 1] = data1[iRGB + 1];
+				data0[i4 + 2] = data1[iRGB + 2];
 
 			}
 
@@ -201,8 +200,7 @@ export class LookupTexture3D extends DataTexture3D {
 	/**
 	 * Converts the LUT data into unsigned byte data.
 	 *
-	 * This is a lossy operation which should only be performed after all other transformations have
-	 * been applied.
+	 * This is a lossy operation which should only be performed after all other transformations have been applied.
 	 *
 	 * @return {LookupTexture3D} This texture.
 	 */
@@ -260,6 +258,20 @@ export class LookupTexture3D extends DataTexture3D {
 	}
 
 	/**
+	 * Converts this LUT into RGBA data.
+	 *
+	 * @deprecated LUTs are RGBA by default since three r137.
+	 * @return {LookupTexture3D} This texture.
+	 */
+
+	convertToRGBA() {
+
+		console.warn("LookupTextur3D: convertToRGBA was removed (LUTs are RGBA by default)");
+		return this;
+
+	}
+
+	/**
 	 * Converts the output of this LUT into sRGB color space.
 	 *
 	 * @return {LookupTexture3D} This texture.
@@ -271,9 +283,7 @@ export class LookupTexture3D extends DataTexture3D {
 
 		if(this.type === FloatType) {
 
-			const stride = (this.format === RGBAFormat) ? 4 : 3;
-
-			for(let i = 0, l = data.length; i < l; i += stride) {
+			for(let i = 0, l = data.length; i < l; i += 4) {
 
 				c.fromArray(data, i).convertLinearToSRGB().toArray(data, i);
 
@@ -304,9 +314,7 @@ export class LookupTexture3D extends DataTexture3D {
 
 		if(this.type === FloatType) {
 
-			const stride = (this.format === RGBAFormat) ? 4 : 3;
-
-			for(let i = 0, l = data.length; i < l; i += stride) {
+			for(let i = 0, l = data.length; i < l; i += 4) {
 
 				c.fromArray(data, i).convertSRGBToLinear().toArray(data, i);
 
@@ -318,40 +326,6 @@ export class LookupTexture3D extends DataTexture3D {
 		} else {
 
 			console.error("Color space conversion requires FloatType data");
-
-		}
-
-		return this;
-
-	}
-
-	/**
-	 * Converts the LUT data into RGBA data.
-	 *
-	 * @return {LookupTexture3D} This texture.
-	 */
-
-	convertToRGBA() {
-
-		if(this.format === RGBFormat) {
-
-			const size = this.image.width;
-			const rgbData = this.image.data;
-			const rgbaData = new rgbData.constructor(size ** 3 * 4);
-			const maxValue = (this.type === FloatType) ? 1.0 : 255;
-
-			for(let i = 0, j = 0, l = rgbData.length; i < l; i += 3, j += 4) {
-
-				rgbaData[j + 0] = rgbData[i + 0];
-				rgbaData[j + 1] = rgbData[i + 1];
-				rgbaData[j + 2] = rgbData[i + 2];
-				rgbaData[j + 3] = maxValue;
-
-			}
-
-			this.image.data = rgbaData;
-			this.format = RGBAFormat;
-			this.needsUpdate = true;
 
 		}
 
@@ -409,13 +383,12 @@ export class LookupTexture3D extends DataTexture3D {
 
 			// Convert the image into RGBA Uint8 data.
 			const rawImageData = RawImageData.from(image);
-			data = rawImageData.data;
+			const src = rawImageData.data;
 
-			// Convert to 3D texture format (RGB).
-			const rearrangedData = new Uint8Array(size ** 3 * 3);
-
-			// Horizontal arrangement?
+			// Horizontal layout?
 			if(width > height) {
+
+				data = new Uint8Array(src.length);
 
 				// Slices -> Rows -> Columns.
 				for(let z = 0; z < size; ++z) {
@@ -424,15 +397,16 @@ export class LookupTexture3D extends DataTexture3D {
 
 						for(let x = 0; x < size; ++x) {
 
-							// Source: horizontal arrangement (RGBA). Swap Y and Z.
+							// Source: horizontal arrangement. Swap Y and Z.
 							const i4 = (x + z * size + y * size * size) * 4;
 
-							// Target: vertical arrangement (RGB).
-							const i3 = (x + y * size + z * size * size) * 3;
+							// Target: vertical arrangement.
+							const j4 = (x + y * size + z * size * size) * 4;
 
-							rearrangedData[i3 + 0] = data[i4 + 0];
-							rearrangedData[i3 + 1] = data[i4 + 1];
-							rearrangedData[i3 + 2] = data[i4 + 2];
+							data[j4 + 0] = src[i4 + 0];
+							data[j4 + 1] = src[i4 + 1];
+							data[j4 + 2] = src[i4 + 2];
+							data[j4 + 3] = src[i4 + 3];
 
 						}
 
@@ -442,21 +416,10 @@ export class LookupTexture3D extends DataTexture3D {
 
 			} else {
 
-				// Convert to RGB.
-				for(let i = 0, l = size ** 3; i < l; ++i) {
-
-					const i4 = i * 4;
-					const i3 = i * 3;
-
-					rearrangedData[i3 + 0] = data[i4 + 0];
-					rearrangedData[i3 + 1] = data[i4 + 1];
-					rearrangedData[i3 + 2] = data[i4 + 2];
-
-				}
+				// Same layout: convert from Uint8ClampedArray to Uint8Array.
+				data = new Uint8Array(src.buffer);
 
 			}
-
-			data = rearrangedData;
 
 		} else {
 
@@ -465,8 +428,8 @@ export class LookupTexture3D extends DataTexture3D {
 		}
 
 		const lut = new LookupTexture3D(data, size);
-		lut.type = texture.type;
 		lut.encoding = texture.encoding;
+		lut.type = texture.type;
 		lut.name = texture.name;
 
 		return lut;
@@ -482,7 +445,8 @@ export class LookupTexture3D extends DataTexture3D {
 
 	static createNeutral(size) {
 
-		const data = new Float32Array(size ** 3 * 3);
+		const data = new Float32Array(size ** 3 * 4);
+		const sizeSq = size ** 2;
 		const s = 1.0 / (size - 1.0);
 
 		for(let r = 0; r < size; ++r) {
@@ -491,10 +455,11 @@ export class LookupTexture3D extends DataTexture3D {
 
 				for(let b = 0; b < size; ++b) {
 
-					const i3 = (r + g * size + b * size * size) * 3;
-					data[i3 + 0] = r * s;
-					data[i3 + 1] = g * s;
-					data[i3 + 2] = b * s;
+					const i4 = (r + g * size + b * sizeSq) * 4;
+					data[i4 + 0] = r * s;
+					data[i4 + 1] = g * s;
+					data[i4 + 2] = b * s;
+					data[i4 + 3] = 1.0;
 
 				}
 

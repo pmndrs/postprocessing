@@ -1,20 +1,5 @@
-import {
-	BasicDepthPacking,
-	LinearFilter,
-	RGBFormat,
-	Uniform,
-	UnsignedByteType,
-	WebGLRenderTarget
-} from "three";
-
-import {
-	BokehMaterial,
-	CircleOfConfusionMaterial,
-	KernelSize,
-	MaskFunction,
-	MaskMaterial
-} from "../materials";
-
+import { BasicDepthPacking, LinearFilter, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
+import { BokehMaterial, CircleOfConfusionMaterial, MaskFunction, MaskMaterial } from "../materials";
 import { ColorChannel, Resizer } from "../core";
 import { KawaseBlurPass, ShaderPass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction";
@@ -136,7 +121,6 @@ export class DepthOfFieldEffect extends Effect {
 		 */
 
 		this.renderTargetCoC = this.renderTarget.clone();
-		this.renderTargetCoC.texture.format = RGBFormat;
 		this.renderTargetCoC.texture.name = "DoF.CoC";
 
 		/**
@@ -463,12 +447,6 @@ export class DepthOfFieldEffect extends Effect {
 
 		// The blur pass operates on the CoC buffer.
 		this.blurPass.initialize(renderer, alpha, UnsignedByteType);
-
-		if(!alpha && frameBufferType === UnsignedByteType) {
-
-			this.renderTargetNear.texture.type = RGBFormat;
-
-		}
 
 		if(frameBufferType !== undefined) {
 
