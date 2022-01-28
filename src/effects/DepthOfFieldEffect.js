@@ -16,7 +16,7 @@ import {
 } from "../materials";
 
 import { ColorChannel, Resizer } from "../core";
-import { BlurPass, ShaderPass } from "../passes";
+import { KawaseBlurPass, ShaderPass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect, EffectAttribute } from "./Effect";
 
@@ -170,10 +170,10 @@ export class DepthOfFieldEffect extends Effect {
 		 * @type {BlurPass}
 		 */
 
-		this.blurPass = new BlurPass({
+		this.blurPass = new KawaseBlurPass({
+			kernelSize: KawaseBlurPass.KernelSize.MEDIUM,
 			width,
-			height,
-			kernelSize: KernelSize.MEDIUM
+			height
 		});
 
 		this.blurPass.resolution.resizable = this;

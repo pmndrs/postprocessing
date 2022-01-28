@@ -1,9 +1,8 @@
 import { Color, LinearFilter, RepeatWrapping, RGBFormat, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
 
 import { Resizer, Selection } from "../core";
-import { DepthComparisonMaterial, OutlineMaterial, KernelSize } from "../materials";
-import { BlurPass, ClearPass, DepthPass, RenderPass, ShaderPass } from "../passes";
-
+import { DepthComparisonMaterial, OutlineMaterial } from "../materials";
+import { KawaseBlurPass, ClearPass, DepthPass, RenderPass, ShaderPass } from "../passes";
 import { getTextureDecoding } from "../utils/getTextureDecoding";
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect } from "./Effect";
@@ -34,7 +33,7 @@ export class OutlineEffect extends Effect {
 	 * @param {Number} [options.resolutionScale=0.5] - Deprecated. Use height or width instead.
 	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
 	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
-	 * @param {KernelSize} [options.kernelSize=KernelSize.VERY_SMALL] - The blur kernel size.
+	 * @param {KawaseBlurPass.KernelSize} [options.kernelSize=KernelSize.VERY_SMALL] - The blur kernel size.
 	 * @param {Boolean} [options.blur=false] - Whether the outline should be blurred.
 	 * @param {Boolean} [options.xRay=true] - Whether occluded parts of selected objects should be visible.
 	 */
@@ -49,7 +48,7 @@ export class OutlineEffect extends Effect {
 		resolutionScale = 0.5,
 		width = Resizer.AUTO_SIZE,
 		height = Resizer.AUTO_SIZE,
-		kernelSize = KernelSize.VERY_SMALL,
+		kernelSize = KawaseBlurPass.KernelSize.VERY_SMALL,
 		blur = false,
 		xRay = true
 	} = {}) {
@@ -181,10 +180,10 @@ export class OutlineEffect extends Effect {
 		/**
 		 * A blur pass.
 		 *
-		 * @type {BlurPass}
+		 * @type {KawaseBlurPass}
 		 */
 
-		this.blurPass = new BlurPass({ resolutionScale, width, height, kernelSize });
+		this.blurPass = new KawaseBlurPass({ resolutionScale, width, height, kernelSize });
 		this.blurPass.resolution.resizable = this;
 		this.blur = blur;
 
@@ -354,12 +353,12 @@ export class OutlineEffect extends Effect {
 	 * The blur kernel size.
 	 *
 	 * @type {KernelSize}
-	 * @deprecated Use blurPass.kernelSize instead.
+	 * @deprecated Use blurPass.getKernelSize instead.
 	 */
 
 	get kernelSize() {
 
-		return this.blurPass.kernelSize;
+		return this.blurPass.getKernelSize();
 
 	}
 
@@ -367,12 +366,12 @@ export class OutlineEffect extends Effect {
 	 * Sets the kernel size.
 	 *
 	 * @type {KernelSize}
-	 * @deprecated Use blurPass.kernelSize instead.
+	 * @deprecated Use blurPass.setKernelSize instead.
 	 */
 
 	set kernelSize(value) {
 
-		this.blurPass.kernelSize = value;
+		this.blurPass.setKernelSize(value);
 
 	}
 

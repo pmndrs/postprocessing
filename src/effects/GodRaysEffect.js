@@ -14,8 +14,8 @@ import {
 } from "three";
 
 import { Resizer } from "../core/Resizer";
-import { DepthMaskMaterial, KernelSize, GodRaysMaterial } from "../materials";
-import { BlurPass, ClearPass, RenderPass, ShaderPass } from "../passes";
+import { DepthMaskMaterial, GodRaysMaterial } from "../materials";
+import { KawaseBlurPass, ClearPass, RenderPass, ShaderPass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect, EffectAttribute } from "./Effect";
 
@@ -61,7 +61,7 @@ export class GodRaysEffect extends Effect {
 		resolutionScale = 0.5,
 		width = Resizer.AUTO_SIZE,
 		height = Resizer.AUTO_SIZE,
-		kernelSize = KernelSize.SMALL,
+		kernelSize = KawaseBlurPass.KernelSize.SMALL,
 		blur = true
 	} = {}) {
 
@@ -177,16 +177,10 @@ export class GodRaysEffect extends Effect {
 		 *
 		 * Disable this pass to improve performance.
 		 *
-		 * @type {BlurPass}
+		 * @type {KawaseBlurPass}
 		 */
 
-		this.blurPass = new BlurPass({
-			resolutionScale,
-			width,
-			height,
-			kernelSize
-		});
-
+		this.blurPass = new KawaseBlurPass({ resolutionScale, width, height, kernelSize });
 		this.blurPass.resolution.resizable = this;
 
 		/**
@@ -369,12 +363,12 @@ export class GodRaysEffect extends Effect {
 	 * The blur kernel size.
 	 *
 	 * @type {KernelSize}
-	 * @deprecated Use blurPass.kernelSize instead.
+	 * @deprecated Use blurPass.getKernelSize instead.
 	 */
 
 	get kernelSize() {
 
-		return this.blurPass.kernelSize;
+		return this.blurPass.getKernelSize();
 
 	}
 
@@ -382,12 +376,12 @@ export class GodRaysEffect extends Effect {
 	 * Sets the blur kernel size.
 	 *
 	 * @type {KernelSize}
-	 * @deprecated Use blurPass.kernelSize instead.
+	 * @deprecated Use blurPass.setKernelSize instead.
 	 */
 
 	set kernelSize(value) {
 
-		this.blurPass.kernelSize = value;
+		this.blurPass.setKernelSize(value);
 
 	}
 

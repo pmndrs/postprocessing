@@ -1,8 +1,7 @@
 import { LinearFilter, RGBFormat, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
 
 import { Resizer } from "../core/Resizer";
-import { KernelSize } from "../materials";
-import { BlurPass, LuminancePass } from "../passes";
+import { KawaseBlurPass, LuminancePass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect } from "./Effect";
 
@@ -25,7 +24,7 @@ export class BloomEffect extends Effect {
 	 * @param {Number} [options.intensity=1.0] - The intensity.
 	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
 	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
-	 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
+	 * @param {KawaseBlurPass.KernelSize} [options.kernelSize=KawaseBlurPass.KernelSize.LARGE] - The blur kernel size.
 	 */
 
 	constructor({
@@ -36,7 +35,7 @@ export class BloomEffect extends Effect {
 		intensity = 1.0,
 		width = Resizer.AUTO_SIZE,
 		height = Resizer.AUTO_SIZE,
-		kernelSize = KernelSize.LARGE
+		kernelSize = KawaseBlurPass.KernelSize.LARGE
 	} = {}) {
 
 		super("BloomEffect", fragmentShader, {
@@ -69,10 +68,10 @@ export class BloomEffect extends Effect {
 		/**
 		 * A blur pass.
 		 *
-		 * @type {BlurPass}
+		 * @type {KawaseBlurPass}
 		 */
 
-		this.blurPass = new BlurPass({
+		this.blurPass = new KawaseBlurPass({
 			resolutionScale,
 			width,
 			height,
@@ -221,7 +220,7 @@ export class BloomEffect extends Effect {
 	 * The blur kernel size.
 	 *
 	 * @type {KernelSize}
-	 * @deprecated Use blurPass.kernelSize instead.
+	 * @deprecated Use blurPass.getKernelSize instead.
 	 */
 
 	get kernelSize() {
@@ -232,7 +231,7 @@ export class BloomEffect extends Effect {
 
 	/**
 	 * @type {KernelSize}
-	 * @deprecated Use blurPass.kernelSize instead.
+	 * @deprecated Use blurPass.setKernelSize instead.
 	 */
 
 	set kernelSize(value) {
