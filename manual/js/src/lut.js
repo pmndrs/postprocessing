@@ -141,8 +141,7 @@ function initialize(assets) {
 		powerPreference: "high-performance",
 		antialias: false,
 		stencil: false,
-		depth: false,
-		alpha: true
+		depth: false
 	});
 
 	const container = document.querySelector(".viewport");
