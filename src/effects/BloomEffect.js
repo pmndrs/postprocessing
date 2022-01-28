@@ -267,9 +267,35 @@ export class BloomEffect extends Effect {
 	 * The bloom intensity.
 	 *
 	 * @type {Number}
+	 * @deprecated Use getIntensity instead.
 	 */
 
 	get intensity() {
+
+		return this.getIntensity();
+
+	}
+
+	/**
+	 * Sets the bloom intensity.
+	 *
+	 * @type {Number}
+	 * @deprecated Use setIntensity instead.
+	 */
+
+	set intensity(value) {
+
+		this.setIntensity(value);
+
+	}
+
+	/**
+	 * The bloom intensity.
+	 *
+	 * @return {Number} The intensity.
+	 */
+
+	getIntensity() {
 
 		return this.uniforms.get("intensity").value;
 
@@ -278,10 +304,10 @@ export class BloomEffect extends Effect {
 	/**
 	 * Sets the bloom intensity.
 	 *
-	 * @type {Number}
+	 * @param {Number} value - The intensity.
 	 */
 
-	set intensity(value) {
+	setIntensity(value) {
 
 		this.uniforms.get("intensity").value = value;
 

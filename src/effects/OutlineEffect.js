@@ -367,6 +367,7 @@ export class OutlineEffect extends Effect {
 	 * Indicates whether the outlines should be blurred.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use blurPass.isEnabled instead.
 	 */
 
 	get blur() {
@@ -377,6 +378,7 @@ export class OutlineEffect extends Effect {
 
 	/**
 	 * @type {Boolean}
+	 * @deprecated Use blurPass.setEnabled instead.
 	 */
 
 	set blur(value) {
@@ -389,9 +391,35 @@ export class OutlineEffect extends Effect {
 	 * Indicates whether X-Ray outlines are enabled.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use isXRayEnabled instead.
 	 */
 
 	get xRay() {
+
+		return this.isXRayEnabled();
+
+	}
+
+	/**
+	 * Enables or disables X-Ray outlines.
+	 *
+	 * @type {Boolean}
+	 * @deprecated Use setXRayEnabled instead.
+	 */
+
+	set xRay(value) {
+
+		this.setXRayEnabled(value);
+
+	}
+
+	/**
+	 * Indicates whether X-Ray outlines are enabled.
+	 *
+	 * @return {Boolean} Whether X-ray mode is enabled.
+	 */
+
+	isXRayEnabled() {
 
 		return this.defines.has("X_RAY");
 
@@ -400,10 +428,10 @@ export class OutlineEffect extends Effect {
 	/**
 	 * Enables or disables X-Ray outlines.
 	 *
-	 * @type {Boolean}
+	 * @param {Boolean} value - Whether X-ray should be enabled.
 	 */
 
-	set xRay(value) {
+	setXRayEnabled(value) {
 
 		if(this.xRay !== value) {
 

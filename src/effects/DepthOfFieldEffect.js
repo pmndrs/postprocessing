@@ -251,9 +251,33 @@ export class DepthOfFieldEffect extends Effect {
 	 * The current bokeh scale.
 	 *
 	 * @type {Number}
+	 * @deprecated Use getBokehScale instead.
 	 */
 
 	get bokehScale() {
+
+		return this.getBokehScale();
+
+	}
+
+	/**
+	 * @type {Number}
+	 * @deprecated Use setBokehScale instead.
+	 */
+
+	set bokehScale(value) {
+
+		this.setBokehScale(value);
+
+	}
+
+	/**
+	 * Returns the current bokeh scale.
+	 *
+	 * @return {Number} The scale.
+	 */
+
+	getBokehScale() {
 
 		return this.uniforms.get("scale").value;
 
@@ -262,10 +286,10 @@ export class DepthOfFieldEffect extends Effect {
 	/**
 	 * Sets the bokeh scale.
 	 *
-	 * @type {Number}
+	 * @param {Number} value - The scale.
 	 */
 
-	set bokehScale(value) {
+	setBokehScale(value) {
 
 		const passes = [
 			this.bokehNearBasePass,

@@ -335,6 +335,7 @@ export class GodRaysEffect extends Effect {
 	 * Indicates whether the god rays should be blurred to reduce artifacts.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use blurPass.isEnabled instead.
 	 */
 
 	get blur() {
@@ -345,6 +346,7 @@ export class GodRaysEffect extends Effect {
 
 	/**
 	 * @type {Boolean}
+	 * @deprecated Use blurPass.setEnabled instead.
 	 */
 
 	set blur(value) {
@@ -409,9 +411,35 @@ export class GodRaysEffect extends Effect {
 	 * The number of samples per pixel.
 	 *
 	 * @type {Number}
+	 * @deprecated Use getSamples instead.
 	 */
 
 	get samples() {
+
+		return this.getSamples();
+
+	}
+
+	/**
+	 * A higher sample count improves quality at the cost of performance.
+	 *
+	 * @type {Number}
+	 * @deprecated Use setSamples instead.
+	 */
+
+	set samples(value) {
+
+		this.setSamples(value);
+
+	}
+
+	/**
+	 * Returns the number of samples per pixel.
+	 *
+	 * @return {Number} The sample count.
+	 */
+
+	getSamples() {
 
 		return this.godRaysMaterial.samples;
 
@@ -420,10 +448,10 @@ export class GodRaysEffect extends Effect {
 	/**
 	 * A higher sample count improves quality at the cost of performance.
 	 *
-	 * @type {Number}
+	 * @param {Number} value - The sample count.
 	 */
 
-	set samples(value) {
+	setSamples(value) {
 
 		this.godRaysMaterial.samples = value;
 
