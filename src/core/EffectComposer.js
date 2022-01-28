@@ -12,8 +12,7 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { ClearMaskPass, MaskPass, ShaderPass } from "../passes";
-import { CopyMaterial } from "../materials";
+import { ClearMaskPass, CopyPass, MaskPass } from "../passes";
 import { Timer } from "./Timer";
 
 /**
@@ -108,11 +107,11 @@ export class EffectComposer {
 		/**
 		 * A copy pass used for copying masked scenes.
 		 *
-		 * @type {ShaderPass}
+		 * @type {CopyPass}
 		 * @private
 		 */
 
-		this.copyPass = new ShaderPass(new CopyMaterial());
+		this.copyPass = new CopyPass();
 
 		/**
 		 * A depth texture.

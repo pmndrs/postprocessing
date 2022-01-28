@@ -7,7 +7,7 @@ import {
 
 import { AdaptiveLuminanceMaterial } from "../materials";
 import { Pass } from "./Pass";
-import { SavePass } from "./SavePass";
+import { CopyPass } from "./CopyPass";
 
 /**
  * A pass that renders an adaptive luminance map.
@@ -72,11 +72,11 @@ export class AdaptiveLuminancePass extends Pass {
 		/**
 		 * A save pass.
 		 *
-		 * @type {SavePass}
+		 * @type {CopyPass}
 		 * @private
 		 */
 
-		this.savePass = new SavePass(this.renderTargetPrevious, false);
+		this.savePass = new CopyPass(this.renderTargetPrevious, false);
 
 		this.adaptationRate = adaptationRate;
 
