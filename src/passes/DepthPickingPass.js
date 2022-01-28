@@ -31,7 +31,7 @@ function unpackRGBAToDepth(packedDepth) {
 		packedDepth[1] * unpackFactors[1] +
 		packedDepth[2] * unpackFactors[2] +
 		packedDepth[3] * unpackFactors[3]
-	) / 256;
+	) / 255;
 
 }
 
