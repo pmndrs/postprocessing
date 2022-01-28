@@ -214,7 +214,7 @@ export class LookupTexture3D extends DataTexture3D {
 
 			for(let i = 0, l = floatData.length; i < l; ++i) {
 
-				uint8Data[i] = floatData[i] * 255;
+				uint8Data[i] = floatData[i] * 255 + 0.5;
 
 			}
 

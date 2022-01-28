@@ -40,7 +40,7 @@ function getNoise(size, format, type) {
 
 		for(let i = 0, l = data.length; i < l; ++i) {
 
-			data[i] = Math.random() * 255;
+			data[i] = Math.random() * 255 + 0.5;
 
 		}
 
