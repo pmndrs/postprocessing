@@ -11,7 +11,7 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { Resizer } from "../core/Resizer";
+import { KernelSize, Resizer } from "../core";
 import { DepthMaskMaterial, GodRaysMaterial } from "../materials";
 import { KawaseBlurPass, ClearPass, RenderPass, ShaderPass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction";
@@ -59,7 +59,7 @@ export class GodRaysEffect extends Effect {
 		resolutionScale = 0.5,
 		width = Resizer.AUTO_SIZE,
 		height = Resizer.AUTO_SIZE,
-		kernelSize = KawaseBlurPass.KernelSize.SMALL,
+		kernelSize = KernelSize.SMALL,
 		blur = true
 	} = {}) {
 

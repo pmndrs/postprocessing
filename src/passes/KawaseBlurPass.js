@@ -1,6 +1,6 @@
 import { LinearFilter, UnsignedByteType, WebGLRenderTarget } from "three";
 import { KawaseBlurMaterial } from "../materials";
-import { Resizer } from "../core/Resizer";
+import { KernelSize, Resizer } from "../core";
 import { Pass } from "./Pass";
 
 /**
@@ -18,22 +18,6 @@ const kernelPresets = [
 	new Float32Array([0.0, 1.0, 2.0, 3.0, 4.0, 4.0, 5.0]),
 	new Float32Array([0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 7.0, 8.0, 9.0, 10.0])
 ];
-
-/**
- * A kernel size enumeration.
- *
- * @type {Object}
- * @deprecated Use KawaseBlurPass.KernelSize instead.
- */
-
-export const KernelSize = {
-	VERY_SMALL: 0,
-	SMALL: 1,
-	MEDIUM: 2,
-	LARGE: 3,
-	VERY_LARGE: 4,
-	HUGE: 5
-};
 
 /**
  * An efficient, incremental blur pass.
@@ -410,24 +394,6 @@ export class KawaseBlurPass extends Pass {
 	static get AUTO_SIZE() {
 
 		return Resizer.AUTO_SIZE;
-
-	}
-
-	/**
-	 * A kernel size enumeration.
-	 *
-	 * @type {Object}
-	 * @property {Number} VERY_SMALL - A very small kernel that matches a 7x7 Gauss blur kernel.
-	 * @property {Number} SMALL - A small kernel that matches a 15x15 Gauss blur kernel.
-	 * @property {Number} MEDIUM - A medium sized kernel that matches a 23x23 Gauss blur kernel.
-	 * @property {Number} LARGE - A large kernel that matches a 35x35 Gauss blur kernel.
-	 * @property {Number} VERY_LARGE - A very large kernel that matches a 63x63 Gauss blur kernel.
-	 * @property {Number} HUGE - A huge kernel that matches a 127x127 Gauss blur kernel.
-	 */
-
-	static get KernelSize() {
-
-		return KernelSize;
 
 	}
 

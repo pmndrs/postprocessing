@@ -1,5 +1,5 @@
 import { Color, LinearFilter, RepeatWrapping, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
-import { Resizer, Selection } from "../core";
+import { KernelSize, Resizer, Selection } from "../core";
 import { DepthComparisonMaterial, OutlineMaterial } from "../materials";
 import { KawaseBlurPass, ClearPass, DepthPass, RenderPass, ShaderPass } from "../passes";
 import { getTextureDecoding } from "../utils/getTextureDecoding";
@@ -47,7 +47,7 @@ export class OutlineEffect extends Effect {
 		resolutionScale = 0.5,
 		width = Resizer.AUTO_SIZE,
 		height = Resizer.AUTO_SIZE,
-		kernelSize = KawaseBlurPass.KernelSize.VERY_SMALL,
+		kernelSize = KernelSize.VERY_SMALL,
 		blur = false,
 		xRay = true
 	} = {}) {

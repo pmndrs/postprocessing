@@ -1,5 +1,5 @@
 import { LinearFilter, Uniform, WebGLRenderTarget } from "three";
-import { Resizer } from "../core/Resizer";
+import { KernelSize, Resizer } from "../core";
 import { KawaseBlurPass, LuminancePass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect } from "./Effect";
@@ -23,7 +23,7 @@ export class BloomEffect extends Effect {
 	 * @param {Number} [options.intensity=1.0] - The intensity.
 	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
 	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
-	 * @param {KawaseBlurPass.KernelSize} [options.kernelSize=KawaseBlurPass.KernelSize.LARGE] - The blur kernel size.
+	 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
 	 */
 
 	constructor({
@@ -34,7 +34,7 @@ export class BloomEffect extends Effect {
 		intensity = 1.0,
 		width = Resizer.AUTO_SIZE,
 		height = Resizer.AUTO_SIZE,
-		kernelSize = KawaseBlurPass.KernelSize.LARGE
+		kernelSize = KernelSize.LARGE
 	} = {}) {
 
 		super("BloomEffect", fragmentShader, {
@@ -247,7 +247,6 @@ export class BloomEffect extends Effect {
 	get distinction() {
 
 		console.warn(this.name, "The distinction field was removed, use .threshold and .smoothing instead.");
-
 		return 1.0;
 
 	}

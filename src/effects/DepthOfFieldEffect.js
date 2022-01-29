@@ -1,6 +1,6 @@
 import { BasicDepthPacking, LinearFilter, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
 import { BokehMaterial, CircleOfConfusionMaterial, MaskFunction, MaskMaterial } from "../materials";
-import { ColorChannel, Resizer } from "../core";
+import { ColorChannel, KernelSize, Resizer } from "../core";
 import { KawaseBlurPass, ShaderPass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect, EffectAttribute } from "./Effect";
@@ -154,7 +154,7 @@ export class DepthOfFieldEffect extends Effect {
 		 */
 
 		this.blurPass = new KawaseBlurPass({
-			kernelSize: KawaseBlurPass.KernelSize.MEDIUM,
+			kernelSize: KernelSize.MEDIUM,
 			width,
 			height
 		});
