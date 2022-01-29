@@ -385,9 +385,9 @@ export class BloomDemo extends PostProcessingDemo {
 
 		const params = {
 			"resolution": effectA.resolution.height,
-			"kernel size": effectA.blurPass.kernelSize,
-			"blur scale": effectA.blurPass.scale,
-			"intensity": effectA.intensity,
+			"kernel size": effectA.blurPass.getKernelSize(),
+			"blur scale": effectA.blurPass.getScale(),
+			"intensity": effectA.getIntensity(),
 			"luminance": {
 				"filter": effectA.luminancePass.isEnabled(),
 				"threshold": effectA.luminanceMaterial.threshold,
@@ -402,28 +402,30 @@ export class BloomDemo extends PostProcessingDemo {
 			"blend mode": blendModeA.blendFunction
 		};
 
-		menu.add(params, "resolution", [240, 360, 480, 720, 1080])
-			.onChange((value) => {
+		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange((value) => {
 
-				effectA.resolution.height = effectB.resolution.height = Number(value);
+			effectA.resolution.height = effectB.resolution.height = Number(value);
 
-			});
+		});
 
 		menu.add(params, "kernel size", KernelSize).onChange((value) => {
 
-			effectA.blurPass.kernelSize = effectB.blurPass.kernelSize = Number(value);
+			effectA.blurPass.setKernelSize(Number(value));
+			effectB.blurPass.setKernelSize(Number(value));
 
 		});
 
 		menu.add(params, "blur scale", 0.0, 1.0, 0.01).onChange((value) => {
 
-			effectA.blurPass.scale = effectB.blurPass.scale = Number(value);
+			effectA.blurPass.setScale(Number(value));
+			effectB.blurPass.setScale(Number(value));
 
 		});
 
 		menu.add(params, "intensity", 0.0, 3.0, 0.01).onChange((value) => {
 
-			effectA.intensity = effectB.intensity = Number(value);
+			effectA.blurPass.setIntensity(Number(value));
+			effectB.blurPass.setIntensity(Number(value));
 
 		});
 
