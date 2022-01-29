@@ -3,8 +3,6 @@ import {
 	Color,
 	LinearFilter,
 	PerspectiveCamera,
-	RGBFormat,
-	sRGBEncoding,
 	TextureLoader
 } from "three";
 
@@ -177,14 +175,11 @@ export class ColorGradingDemo extends PostProcessingDemo {
 						textureLoader.load(`textures/lut/${entry[1]}`, (t) => {
 
 							t.name = entry[0];
-							t.format = RGBFormat;
-							t.encoding = sRGBEncoding;
 							t.generateMipmaps = false;
 							t.minFilter = LinearFilter;
 							t.magFilter = LinearFilter;
 							t.wrapS = ClampToEdgeWrapping;
 							t.wrapT = ClampToEdgeWrapping;
-							t.unpackAlignment = 1;
 							t.flipY = false;
 
 							assets.set(entry[0], t);
@@ -381,7 +376,7 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 				// This is pretty fast.
 				const lut = LookupTexture3D.from(lutEffect.getLUT());
-				const { image } = lut.convertToUint8().convertToRGBA().toDataTexture();
+				const { image } = lut.convertToUint8().toDataTexture();
 				const rawImageData = RawImageData.from(image);
 
 				// This takes a while if the image is large.
