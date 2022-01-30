@@ -101,9 +101,6 @@ export class BloomEffect extends Effect {
 	/**
 	 * A texture that contains the intermediate result of this effect.
 	 *
-	 * This texture will be applied to the scene colors unless the blend function
-	 * is set to `SKIP`.
-	 *
 	 * @type {Texture}
 	 */
 

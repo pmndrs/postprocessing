@@ -6,8 +6,6 @@ import vertexShader from "./glsl/common/shader.vert";
 /**
  * A crepuscular rays shader material.
  *
- * This material supports dithering.
- *
  * References:
  *
  * Thibaut Despoulain, 2012:

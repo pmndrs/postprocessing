@@ -167,9 +167,7 @@ export class MaskMaterial extends ShaderMaterial {
  */
 
 export const MaskFunction = {
-
 	DISCARD: 0,
 	MULTIPLY: 1,
 	MULTIPLY_RGB_SET_ALPHA: 2
-
 };

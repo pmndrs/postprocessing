@@ -1,17 +1,10 @@
-import {
-	Color,
-	MeshDepthMaterial,
-	NearestFilter,
-	RGBADepthPacking,
-	WebGLRenderTarget
-} from "three";
-
+import { Color, MeshDepthMaterial, NearestFilter, RGBADepthPacking, WebGLRenderTarget } from "three";
 import { Resizer } from "../core/Resizer";
 import { Pass } from "./Pass";
 import { RenderPass } from "./RenderPass";
 
 /**
- * A pass that renders depth and packs it into an RGBA buffer.
+ * A pass that renders depth into an RGBA buffer.
  */
 
 export class DepthPass extends Pass {

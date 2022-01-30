@@ -42,16 +42,18 @@ export class HueSaturationEffect extends Effect {
 	/**
 	 * Sets the hue.
 	 *
-	 * @param {Number} hue - The hue in radians.
+	 * @param {Number} value - The hue in radians.
 	 */
 
-	setHue(hue) {
+	setHue(value) {
 
-		const s = Math.sin(hue), c = Math.cos(hue);
+		const s = Math.sin(value), c = Math.cos(value);
 
-		this.uniforms.get("hue").value
-			.set(2.0 * c, -Math.sqrt(3.0) * s - c, Math.sqrt(3.0) * s - c)
-			.addScalar(1.0).divideScalar(3.0);
+		this.uniforms.get("hue").value.set(
+			(2.0 * c + 1.0) / 3.0,
+			(-Math.sqrt(3.0) * s - c + 1.0) / 3.0,
+			(Math.sqrt(3.0) * s - c + 1.0) / 3.0
+		);
 
 	}
 

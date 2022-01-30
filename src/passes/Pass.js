@@ -1,21 +1,6 @@
 import { BufferAttribute, BufferGeometry, Camera, Mesh, Scene } from "three";
 
-/**
- * A dummy camera
- *
- * @type {Camera}
- * @private
- */
-
 const dummyCamera = new Camera();
-
-/**
- * Shared fullscreen geometry.
- *
- * @type {BufferGeometry}
- * @private
- */
-
 let geometry = null;
 
 /**
@@ -229,12 +214,12 @@ export class Pass {
 	/**
 	 * Enables or disables this pass.
 	 *
-	 * @param {Boolean} enabled - Whether the pass should be enabled.
+	 * @param {Boolean} value - Whether the pass should be enabled.
 	 */
 
-	setEnabled(enabled) {
+	setEnabled(value) {
 
-		this.enabled = enabled;
+		this.enabled = value;
 
 	}
 
@@ -254,20 +239,20 @@ export class Pass {
 	 * Sets the fullscreen material.
 	 *
 	 * @protected
-	 * @param {Material} material - A fullscreen material.
+	 * @param {Material} value - A fullscreen material.
 	 */
 
-	setFullscreenMaterial(material) {
+	setFullscreenMaterial(value) {
 
 		let screen = this.screen;
 
 		if(screen !== null) {
 
-			screen.material = material;
+			screen.material = value;
 
 		} else {
 
-			screen = new Mesh(getFullscreenTriangle(), material);
+			screen = new Mesh(getFullscreenTriangle(), value);
 			screen.frustumCulled = false;
 
 			if(this.scene === null) {

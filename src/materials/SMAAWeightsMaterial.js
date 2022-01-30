@@ -58,19 +58,17 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the maximum amount of steps performed in the horizontal/vertical
-	 * pattern searches, at each side of the pixel.
+	 * Sets the maximum amount of steps performed in the horizontal/vertical pattern searches, at each side of the pixel.
 	 *
-	 * In number of pixels, it's actually the double. So the maximum line length
-	 * perfectly handled by, for example 16, is 64 (perfectly means that longer
-	 * lines won't look as good, but are still antialiased).
+	 * In number of pixels, it's actually the double. So the maximum line length perfectly handled by, for example 16, is
+	 * 64 (perfectly means that longer lines won't look as good, but are still antialiased).
 	 *
 	 * @param {Number} steps - The search steps. Range: [0, 112].
 	 */
 
-	setOrthogonalSearchSteps(steps) {
+	setOrthogonalSearchSteps(value) {
 
-		const s = Math.min(Math.max(steps, 0), 112);
+		const s = Math.min(Math.max(value, 0), 112);
 
 		this.defines.MAX_SEARCH_STEPS_INT = s.toFixed("0");
 		this.defines.MAX_SEARCH_STEPS_FLOAT = s.toFixed("1");
@@ -79,18 +77,18 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Specifies the maximum steps performed in the diagonal pattern searches, at
-	 * each side of the pixel. This search jumps one pixel at time.
+	 * Specifies the maximum steps performed in the diagonal pattern searches, at each side of the pixel. This search
+	 * jumps one pixel at a time.
 	 *
-	 * On high-end machines this search is cheap (between 0.8x and 0.9x slower for
-	 * 16 steps), but it can have a significant impact on older machines.
+	 * On high-end machines this search is cheap (between 0.8x and 0.9x slower for 16 steps), but it can have a
+	 * significant impact on older machines.
 	 *
-	 * @param {Number} steps - The search steps. Range: [0, 20].
+	 * @param {Number} value - The search steps. Range: [0, 20].
 	 */
 
-	setDiagonalSearchSteps(steps) {
+	setDiagonalSearchSteps(value) {
 
-		const s = Math.min(Math.max(steps, 0), 20);
+		const s = Math.min(Math.max(value, 0), 20);
 
 		this.defines.MAX_SEARCH_STEPS_DIAG_INT = s.toFixed("0");
 		this.defines.MAX_SEARCH_STEPS_DIAG_FLOAT = s.toFixed("1");
@@ -101,12 +99,12 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	/**
 	 * Specifies how much sharp corners will be rounded.
 	 *
-	 * @param {Number} rounding - The corner rounding amount. Range: [0, 100].
+	 * @param {Number} value - The corner rounding amount. Range: [0, 100].
 	 */
 
-	setCornerRounding(rounding) {
+	setCornerRounding(value) {
 
-		const r = Math.min(Math.max(rounding, 0), 100);
+		const r = Math.min(Math.max(value, 0), 100);
 
 		this.defines.CORNER_ROUNDING = r.toFixed("4");
 		this.defines.CORNER_ROUNDING_NORM = (r / 100.0).toFixed("4");

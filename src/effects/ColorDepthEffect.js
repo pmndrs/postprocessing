@@ -60,10 +60,8 @@ export class ColorDepthEffect extends Effect {
 	/**
 	 * Sets the virtual amount of color bits.
 	 *
-	 * Each color channel will use a third of the available bits. The alpha
-	 * channel remains unaffected.
-	 *
-	 * Note that the real color depth will not be altered by this effect.
+	 * Each color channel will use a third of the available bits. The alpha channel remains unaffected. Note that the real
+	 * color depth will not be altered by this effect.
 	 *
 	 * @param {Number} bits - The new color bit depth.
 	 */

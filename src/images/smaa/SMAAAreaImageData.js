@@ -743,10 +743,9 @@ function getDiagAreaForPattern(pattern, left, right, offset, result) {
 
 	/* There is some Black Magic involved in the diagonal area calculations.
 	 *
-	 * Unlike orthogonal patterns, the "null" pattern (one without crossing edges) must be filtered,
-	 * and the ends of both the "null" and L patterns are not known: L and U patterns have different
-	 * endings, and the adjacent pattern is unknown. Therefore, a blend of both possibilities is
-	 * computed.
+	 * Unlike orthogonal patterns, the "null" pattern (one without crossing edges) must be filtered, and the ends of both
+	 * the "null" and L patterns are not known: L and U patterns have different endings, and the adjacent pattern is
+	 * unknown. Therefore, a blend of both possibilities is computed.
 	 */
 
 	switch(pattern) {
@@ -1143,8 +1142,7 @@ function assemble(baseX, baseY, patterns, edges, size, orthogonal, target) {
 
 				const c = (pY * dstWidth + pX) * 4;
 
-				/* The texture coordinates of orthogonal patterns are compressed quadratically to reach
-				longer distances for a given texture size. */
+				// The texture coords of orthogonal patterns are compressed quadratically to reach longer distances.
 				const d = orthogonal ? ((y * y * srcWidth + x * x) * 2) : ((y * srcWidth + x) * 2);
 
 				dstData[c] = srcData[d];
@@ -1163,8 +1161,7 @@ function assemble(baseX, baseY, patterns, edges, size, orthogonal, target) {
 /**
  * SMAA area image data.
  *
- * This texture allows to obtain the area for a certain pattern and distances to the left and to the
- * right of the identified line.
+ * This texture allows to obtain the area for a certain pattern and distances to the left and right of identified lines.
  *
  * Based on the official python scripts:
  *  https://github.com/iryoku/smaa/tree/master/Scripts

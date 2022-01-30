@@ -86,8 +86,8 @@ export class Effect extends EventDispatcher {
 		/**
 		 * Shader uniforms.
 		 *
-		 * You may freely modify the values of these uniforms at runtime. However, uniforms should not
-		 * be removed or added after the effect was created.
+		 * You may freely modify the values of these uniforms at runtime. However, uniforms should not be removed or added
+		 * after the effect was created.
 		 *
 		 * Call {@link Effect.setChanged} after adding or removing uniforms.
 		 *
@@ -109,8 +109,7 @@ export class Effect extends EventDispatcher {
 		/**
 		 * The blend mode of this effect.
 		 *
-		 * The result of this effect will be blended with the result of the previous effect using this
-		 * blend mode.
+		 * The result of this effect will be blended with the result of the previous effect using this blend mode.
 		 *
 		 * @type {BlendMode}
 		 */
@@ -149,8 +148,8 @@ export class Effect extends EventDispatcher {
 	/**
 	 * Sets the effect attributes.
 	 *
-	 * Effects that have the same attributes will be executed in the order in which they were
-	 * registered. Some attributes imply a higher priority.
+	 * Effects that have the same attributes will be executed in the order in which they were registered. Some attributes
+	 * imply a higher priority.
 	 *
 	 * @protected
 	 * @param {EffectAttribute} attributes - The attributes.
@@ -218,8 +217,8 @@ export class Effect extends EventDispatcher {
 	/**
 	 * Sets the depth texture.
 	 *
-	 * You may override this method if your effect requires direct access to the depth texture that is
-	 * bound to the associated {@link EffectPass}.
+	 * You may override this method if your effect requires direct access to the depth texture that is bound to the
+	 * associated {@link EffectPass}.
 	 *
 	 * @param {Texture} depthTexture - A depth texture.
 	 * @param {Number} [depthPacking=0] - The depth packing.
@@ -230,11 +229,10 @@ export class Effect extends EventDispatcher {
 	/**
 	 * Updates this effect by performing supporting operations.
 	 *
-	 * This method is called by the {@link EffectPass} right before the main fullscreen render
-	 * operation, even if the blend function is set to `SKIP`.
+	 * This method is called by the {@link EffectPass} right before the main fullscreen render operation, even if the
+	 * blend function is set to `SKIP`.
 	 *
-	 * You may override this method if you need to update custom uniforms or render additional
-	 * off-screen textures.
+	 * You may override this method if you need to update custom uniforms or render additional off-screen textures.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
@@ -246,14 +244,11 @@ export class Effect extends EventDispatcher {
 	/**
 	 * Updates the size of this effect.
 	 *
-	 * You may override this method in case you want to be informed about the main render size.
-	 *
-	 * The {@link EffectPass} calls this method before this effect is initialized and every time its
-	 * own size is updated.
+	 * You may override this method if you want to be informed about the size of the backbuffer/canvas.
+	 * This method is called before {@link initialize} and every time the size of the {@link EffectComposer} changes.
 	 *
 	 * @param {Number} width - The width.
 	 * @param {Number} height - The height.
-	 * @example this.myRenderTarget.setSize(width, height);
 	 */
 
 	setSize(width, height) {}
@@ -261,14 +256,7 @@ export class Effect extends EventDispatcher {
 	/**
 	 * Performs initialization tasks.
 	 *
-	 * By overriding this method you gain access to the renderer. You'll also be able to configure
-	 * your custom render targets to use the appropriate format (RGB or RGBA).
-	 *
-	 * The provided renderer can be used to warm up special off-screen render targets by performing a
-	 * preliminary render operation.
-	 *
-	 * The {@link EffectPass} calls this method during its own initialization which happens after the
-	 * size has been set.
+	 * This method is called when the associated {@link EffectPass} is added to an {@link EffectComposer}.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
@@ -281,7 +269,7 @@ export class Effect extends EventDispatcher {
 	/**
 	 * Performs a shallow search for properties that define a dispose method and deletes them.
 	 *
-	 * This method is called by the {@link EffectPass} when it itself is being disposed.
+	 * The {@link EffectComposer} calls this method when it is being destroyed.
 	 */
 
 	dispose() {
@@ -322,11 +310,9 @@ export class Effect extends EventDispatcher {
  */
 
 export const EffectAttribute = {
-
 	NONE: 0,
 	DEPTH: 1,
 	CONVOLUTION: 2
-
 };
 
 /**
@@ -340,10 +326,8 @@ export const EffectAttribute = {
  */
 
 export const WebGLExtension = {
-
 	DERIVATIVES: "derivatives",
 	FRAG_DEPTH: "fragDepth",
 	DRAW_BUFFERS: "drawBuffers",
 	SHADER_TEXTURE_LOD: "shaderTextureLOD"
-
 };

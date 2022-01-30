@@ -1,13 +1,6 @@
 import { Color } from "three";
 import { Pass } from "./Pass";
 
-/**
- * Stores the original clear color of the renderer.
- *
- * @type {Color}
- * @private
- */
-
 const color = new Color();
 
 /**
@@ -55,9 +48,7 @@ export class ClearPass extends Pass {
 		this.stencil = stencil;
 
 		/**
-		 * An override clear color.
-		 *
-		 * The default value is null.
+		 * An override clear color. Default is null.
 		 *
 		 * @type {Color}
 		 */
@@ -65,9 +56,7 @@ export class ClearPass extends Pass {
 		this.overrideClearColor = null;
 
 		/**
-		 * An override clear alpha.
-		 *
-		 * The default value is -1.
+		 * An override clear alpha. Default is -1.
 		 *
 		 * @type {Number}
 		 */
@@ -97,11 +86,10 @@ export class ClearPass extends Pass {
 
 		if(hasOverrideClearColor) {
 
-			/* @todo Remove extra copy operation and raise peer dependency version:
+			/* TODO Remove extra copy operation and raise peer dependency version:
 			renderer.getClearColor() expects a target since three r124. */
 			color.copy(renderer.getClearColor(color));
-			renderer.setClearColor(overrideClearColor, hasOverrideClearAlpha ?
-				overrideClearAlpha : clearAlpha);
+			renderer.setClearColor(overrideClearColor, hasOverrideClearAlpha ? overrideClearAlpha : clearAlpha);
 
 		} else if(hasOverrideClearAlpha) {
 

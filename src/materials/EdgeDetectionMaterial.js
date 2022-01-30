@@ -6,7 +6,7 @@ import vertexShader from "./glsl/edge-detection/shader.vert";
 /**
  * An edge detection material.
  *
- * Mainly used for Subpixel Morphological Antialiasing.
+ * Mainly used for Subpixel Morphological Anti-Aliasing.
  */
 
 export class EdgeDetectionMaterial extends ShaderMaterial {
@@ -16,7 +16,7 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	 *
 	 * @param {Vector2} [texelSize] - The screen texel size.
 	 * @param {EdgeDetectionMode} [mode=EdgeDetectionMode.COLOR] - The edge detection mode.
-	 * @todo Remove texelSize parameter.
+	 * TODO Remove texelSize parameter.
 	 */
 
 	constructor(texelSize = new Vector2(), mode = EdgeDetectionMode.COLOR) {
@@ -92,15 +92,12 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the local contrast adaptation factor. Has no effect if the edge
-	 * detection mode is set to DEPTH.
+	 * Sets the local contrast adaptation factor. Has no effect if the edge detection mode is set to DEPTH.
 	 *
-	 * If there is a neighbor edge that has _factor_ times bigger contrast than
-	 * the current edge, the edge will be discarded.
+	 * If a neighbor edge has _factor_ times bigger contrast than the current edge, the edge will be discarded.
 	 *
-	 * This allows to eliminate spurious crossing edges and is based on the fact
-	 * that if there is too much contrast in a direction, the perceptual contrast
-	 * in the other neighbors will be hidden.
+	 * This allows to eliminate spurious crossing edges and is based on the fact that if there is too much contrast in a
+	 * direction, the perceptual contrast in the other neighbors will be hidden.
 	 *
 	 * @param {Number} factor - The local contrast adaptation factor. Default is 2.0.
 	 */
@@ -115,15 +112,12 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	/**
 	 * Sets the edge detection sensitivity.
 	 *
-	 * A lower value results in more edges being detected at the expense of
-	 * performance.
+	 * A lower value results in more edges being detected at the expense of performance.
 	 *
-	 * For luma- and chroma-based edge detection, 0.1 is a reasonable value and
-	 * allows to catch most visible edges. 0.05 is a rather overkill value that
-	 * allows to catch 'em all. Darker scenes may require an even lower threshold.
+	 * For luma- and chroma-based edge detection, 0.1 is a reasonable value and allows to catch most visible edges. 0.05
+	 * is a rather overkill value that allows to catch 'em all. Darker scenes may require an even lower threshold.
 	 *
-	 * If depth-based edge detection is used, the threshold will depend on the
-	 * scene depth.
+	 * If depth-based edge detection is used, the threshold will depend on the scene depth.
 	 *
 	 * @param {Number} threshold - The edge detection sensitivity. Range: [0.0, 0.5].
 	 */
@@ -139,9 +133,8 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	/**
 	 * Sets the predication mode.
 	 *
-	 * Predicated thresholding allows to better preserve texture details and to
-	 * improve edge detection using an additional buffer such as a light
-	 * accumulation or depth buffer.
+	 * Predicated thresholding allows to better preserve texture details and to improve edge detection using an additional
+	 * buffer such as a light accumulation or depth buffer.
 	 *
 	 * @param {PredicationMode} mode - The predication mode.
 	 */
@@ -181,8 +174,7 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	/**
 	 * Sets the predication scale.
 	 *
-	 * Determines how much the edge detection threshold should be scaled when
-	 * using predication.
+	 * Determines how much the edge detection threshold should be scaled when using predication.
 	 *
 	 * @param {Number} scale - The scale. Range: [1.0, 5.0].
 	 */
@@ -197,8 +189,7 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	/**
 	 * Sets the predication strength.
 	 *
-	 * Determines how much the edge detection threshold should be decreased
-	 * locally when using predication.
+	 * Determines how much the edge detection threshold should be decreased locally when using predication.
 	 *
 	 * @param {Number} strength - The strength. Range: [0.0, 1.0].
 	 */
@@ -222,11 +213,9 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
  */
 
 export const EdgeDetectionMode = {
-
 	DEPTH: 0,
 	LUMA: 1,
 	COLOR: 2
-
 };
 
 /**
@@ -239,9 +228,7 @@ export const EdgeDetectionMode = {
  */
 
 export const PredicationMode = {
-
 	DISABLED: 0,
 	DEPTH: 1,
 	CUSTOM: 2
-
 };

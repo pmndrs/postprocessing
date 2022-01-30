@@ -12,9 +12,8 @@ const AUTO_SIZE = -1;
 /**
  * A resizer that can be used to store a base and a target resolution.
  *
- * The attached resizeable will be updated with the base resolution when the
- * target resolution changes. The new calculated resolution can then be
- * retrieved via {@link Resizer.width} and {@link Resizer.height}.
+ * The attached resizeable will be updated with the base resolution when the target resolution changes. The new
+ * calculated resolution can then be retrieved via {@link Resizer.width} and {@link Resizer.height}.
  */
 
 export class Resizer {
@@ -41,8 +40,7 @@ export class Resizer {
 		/**
 		 * The base size.
 		 *
-		 * This size will be passed to the resizable object every time the target
-		 * width, height or scale is changed.
+		 * This size will be passed to the resizable object every time the target width, height or scale is changed.
 		 *
 		 * @type {Vector2}
 		 */
@@ -61,8 +59,7 @@ export class Resizer {
 		/**
 		 * A scale.
 		 *
-		 * If both the width and the height are set to {@link Resizer.AUTO_SIZE},
-		 * they will be scaled uniformly using this scalar.
+		 * If both width and height are set to {@link Resizer.AUTO_SIZE}, they will be scaled uniformly using this scalar.
 		 *
 		 * @type {Number}
 		 * @private
@@ -106,8 +103,7 @@ export class Resizer {
 	/**
 	 * The calculated width.
 	 *
-	 * If both the width and the height are set to {@link Resizer.AUTO_SIZE}, the
-	 * base width will be returned.
+	 * If both width and height are set to {@link Resizer.AUTO_SIZE}, the base width will be returned.
 	 *
 	 * @type {Number}
 	 */
@@ -140,8 +136,8 @@ export class Resizer {
 	/**
 	 * Sets the target width.
 	 *
-	 * Use {@link Resizer.AUTO_SIZE} to automatically calculate the width based
-	 * on the height and the original aspect ratio.
+	 * Use {@link Resizer.AUTO_SIZE} to automatically calculate the width based on the height and the original aspect
+	 * ratio.
 	 *
 	 * @type {Number}
 	 */
@@ -156,8 +152,7 @@ export class Resizer {
 	/**
 	 * The calculated height.
 	 *
-	 * If both the width and the height are set to {@link Resizer.AUTO_SIZE}, the
-	 * base height will be returned.
+	 * If both the width and height are set to {@link Resizer.AUTO_SIZE}, the base height will be returned.
 	 *
 	 * @type {Number}
 	 */
@@ -190,8 +185,8 @@ export class Resizer {
 	/**
 	 * Sets the target height.
 	 *
-	 * Use {@link Resizer.AUTO_SIZE} to automatically calculate the height based
-	 * on the width and the original aspect ratio.
+	 * Use {@link Resizer.AUTO_SIZE} to automatically calculate the height based on the width and the original aspect
+	 * ratio.
 	 *
 	 * @type {Number}
 	 */
@@ -206,8 +201,7 @@ export class Resizer {
 	/**
 	 * An auto sizing constant.
 	 *
-	 * Can be used to automatically calculate the width or height based on the
-	 * original aspect ratio.
+	 * Can be used to automatically calculate the width or height based on the original aspect ratio.
 	 *
 	 * @type {Number}
 	 */

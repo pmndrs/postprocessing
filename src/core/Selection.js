@@ -27,8 +27,7 @@ export class Selection extends Set {
 		this.currentLayer = layer;
 
 		/**
-		 * Controls whether objects that are added to this selection should be removed from all other
-		 * layers.
+		 * Controls whether objects that are added to this selection should be removed from all other layers.
 		 *
 		 * @type {Boolean}
 		 */
@@ -70,10 +69,9 @@ export class Selection extends Set {
 	/**
 	 * Returns the current render layer for selected objects.
 	 *
-	 * This layer is set to 10 by default. If this collides with your own custom layers, please change
-	 * it to a free layer before rendering!
+	 * The default layer is 10. If this collides with your own custom layers, please change it before rendering!
 	 *
-	 * @return {Number} The layer
+	 * @return {Number} The layer.
 	 */
 
 	getLayer() {

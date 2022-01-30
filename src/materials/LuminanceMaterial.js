@@ -6,17 +6,16 @@ import vertexShader from "./glsl/common/shader.vert";
 /**
  * A luminance shader material.
  *
- * This shader produces a greyscale luminance map that describes the absolute
- * amount of light emitted by a scene. It can also be configured to output
- * colours that are scaled with their respective luminance value. Additionally,
- * a range may be provided to mask out undesired texels.
+ * This shader produces a greyscale luminance map that describes the absolute amount of light emitted by a scene. It can
+ * also be configured to output colors that are scaled with their respective luminance value. Additionally, a range may
+ * be provided to mask out undesired texels.
  *
  * The alpha channel always contains the luminance value.
  *
  * On luminance coefficients:
  *  http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC9
  *
- * Coefficients for different colour spaces:
+ * Coefficients for different color spaces:
  *  https://hsto.org/getpro/habr/post_images/2ab/69d/084/2ab69d084f9a597e032624bcd74d57a7.png
  *
  * Luminance range reference:
@@ -252,15 +251,25 @@ export class LuminanceMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Enables or disables the luminance mask.
+	 * Enables or disables the luminance range.
 	 *
 	 * @deprecated Use luminanceRange instead.
-	 * @param {Boolean} enabled - Whether the luminance mask should be enabled.
+	 * @param {Boolean} value - Whether the luminance range should be enabled.
 	 */
 
-	setLuminanceRangeEnabled(enabled) {
+	setLuminanceRangeEnabled(value) {
 
-		this.useRange = enabled;
+		if(value) {
+
+			this.defines.RANGE = "1";
+
+		} else {
+
+			delete this.defines.RANGE;
+
+		}
+
+		this.needsUpdate = true;
 
 	}
 

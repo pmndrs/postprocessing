@@ -3,13 +3,6 @@ import { KawaseBlurMaterial } from "../materials";
 import { KernelSize, Resizer } from "../core";
 import { Pass } from "./Pass";
 
-/**
- * The Kawase blur kernel presets.
- *
- * @type {Float32Array[]}
- * @private
- */
-
 const kernelPresets = [
 	new Float32Array([0.0, 0.0]),
 	new Float32Array([0.0, 1.0, 1.0]),
@@ -20,7 +13,7 @@ const kernelPresets = [
 ];
 
 /**
- * An efficient, incremental blur pass.
+ * A Kawase blur pass.
  */
 
 export class KawaseBlurPass extends Pass {
@@ -61,7 +54,7 @@ export class KawaseBlurPass extends Pass {
 		this.renderTargetA.texture.name = "Blur.Target.A";
 
 		/**
-		 * A second render target.
+		 * A render target.
 		 *
 		 * @type {WebGLRenderTarget}
 		 * @private

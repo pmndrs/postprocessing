@@ -5,14 +5,7 @@ import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/glitch/shader.frag";
 
-/**
- * A label for generated data textures.
- *
- * @type {String}
- * @private
- */
-
-const tag = "Glitch.Generated";
+const textureTag = "Glitch.Generated";
 
 /**
  * Returns a random float in the specified range.
@@ -32,11 +25,9 @@ function randomFloat(low, high) {
 /**
  * A glitch effect.
  *
- * This effect can influence the {@link ChromaticAberrationEffect}.
+ * This effect can be used in conjunction with the {@link ChromaticAberrationEffect}.
  *
  * Reference: https://github.com/staffantan/unityglitch
- *
- * Warning: This effect cannot be merged with convolution effects.
  */
 
 export class GlitchEffect extends Effect {
@@ -80,8 +71,7 @@ export class GlitchEffect extends Effect {
 			])
 		});
 
-		this.setPerturbationMap((perturbationMap === null) ?
-			this.generatePerturbationMap(dtSize) : perturbationMap);
+		this.setPerturbationMap((perturbationMap === null) ? this.generatePerturbationMap(dtSize) : perturbationMap);
 
 		/**
 		 * The minimum and maximum delay between glitch activations in seconds.
@@ -209,7 +199,7 @@ export class GlitchEffect extends Effect {
 
 		const currentMap = this.getPerturbationMap();
 
-		if(currentMap !== null && currentMap.name === tag) {
+		if(currentMap !== null && currentMap.name === textureTag) {
 
 			currentMap.dispose();
 
@@ -233,7 +223,7 @@ export class GlitchEffect extends Effect {
 	generatePerturbationMap(size = 64) {
 
 		const map = new NoiseTexture(size, size, RGBAFormat);
-		map.name = tag;
+		map.name = textureTag;
 		return map;
 
 	}
@@ -338,10 +328,8 @@ export class GlitchEffect extends Effect {
  */
 
 export const GlitchMode = {
-
 	DISABLED: 0,
 	SPORADIC: 1,
 	CONSTANT_MILD: 2,
 	CONSTANT_WILD: 3
-
 };

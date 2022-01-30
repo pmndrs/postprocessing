@@ -1,12 +1,4 @@
-import {
-	Matrix4,
-	NoBlending,
-	PerspectiveCamera,
-	ShaderMaterial,
-	Uniform,
-	Vector2
-} from "three";
-
+import { Matrix4, NoBlending, PerspectiveCamera, ShaderMaterial, Uniform, Vector2 } from "three";
 import fragmentShader from "./glsl/ssao/shader.frag";
 import vertexShader from "./glsl/ssao/shader.vert";
 
@@ -67,7 +59,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * The depth packing of the source depth buffer.
+	 * The current depth packing.
 	 *
 	 * @type {Number}
 	 */

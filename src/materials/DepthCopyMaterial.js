@@ -48,9 +48,9 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Returns the current input depth packing.
+	 * Returns the current input depth packing strategy.
 	 *
-	 * @return {Number} The input depth packing.
+	 * @return {DepthPackingStrategies} The input depth packing strategy.
 	 */
 
 	getInputDepthPacking() {
@@ -60,9 +60,9 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the input depth packing.
+	 * Sets the input depth packing strategy.
 	 *
-	 * @param {Number} value - The new input depth packing.
+	 * @param {DepthPackingStrategies} value - The new input depth packing strategy.
 	 */
 
 	setInputDepthPacking(value) {
@@ -73,9 +73,9 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Returns the current output depth packing.
+	 * Returns the current output depth packing strategy.
 	 *
-	 * @return {Number} The output depth packing.
+	 * @return {DepthPackingStrategies} The output depth packing strategy.
 	 */
 
 	getOutputDepthPacking() {
@@ -85,9 +85,9 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the output depth packing.
+	 * Sets the output depth packing strategy.
 	 *
-	 * @param {Number} value - The new output depth packing.
+	 * @param {DepthPackingStrategies} value - The new output depth packing strategy.
 	 */
 
 	setOutputDepthPacking(value) {
@@ -134,8 +134,6 @@ export class DepthCopyMaterial extends ShaderMaterial {
  */
 
 export const DepthCopyMode = {
-
 	FULL: 0,
 	SINGLE: 1
-
 };

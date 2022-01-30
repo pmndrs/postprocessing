@@ -4,10 +4,8 @@ import { Pass } from "./Pass";
 /**
  * A shader pass.
  *
- * Renders any shader material as a fullscreen effect.
- *
- * This pass should not be used to create multiple chained effects. For a more
- * efficient solution, please refer to the {@link EffectPass}.
+ * Renders any shader material as a fullscreen effect. This pass should not be used to create multiple chained effects.
+ * For a more efficient solution, please refer to the {@link EffectPass}.
  */
 
 export class ShaderPass extends Pass {
@@ -40,9 +38,8 @@ export class ShaderPass extends Pass {
 	/**
 	 * Sets the name of the input buffer uniform.
 	 *
-	 * Most fullscreen materials modify texels from an input texture. This pass
-	 * automatically assigns the main input buffer to the uniform identified by
-	 * the given name.
+	 * Most fullscreen materials modify texels from an input texture. This pass automatically assigns the main input
+	 * buffer to the uniform identified by the given name.
 	 *
 	 * @param {String} input - The name of the input buffer uniform.
 	 */

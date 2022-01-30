@@ -24,7 +24,6 @@ function createCanvas(width, height, data) {
 
 		const imageData = context.createImageData(width, height);
 		imageData.data.set(data);
-
 		context.putImageData(imageData, 0, 0);
 
 	}

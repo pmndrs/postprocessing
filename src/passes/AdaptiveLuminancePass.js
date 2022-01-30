@@ -1,13 +1,7 @@
-import {
-	HalfFloatType,
-	NearestFilter,
-	RGBAFormat,
-	WebGLRenderTarget
-} from "three";
-
+import { HalfFloatType, NearestFilter, RGBAFormat, WebGLRenderTarget } from "three";
 import { AdaptiveLuminanceMaterial } from "../materials";
-import { Pass } from "./Pass";
 import { CopyPass } from "./CopyPass";
+import { Pass } from "./Pass";
 
 /**
  * A pass that renders an adaptive luminance map.
@@ -76,7 +70,7 @@ export class AdaptiveLuminancePass extends Pass {
 		 * @private
 		 */
 
-		this.savePass = new CopyPass(this.renderTargetPrevious, false);
+		this.copyPass = new CopyPass(this.renderTargetPrevious, false);
 
 		this.adaptationRate = adaptationRate;
 
@@ -97,8 +91,8 @@ export class AdaptiveLuminancePass extends Pass {
 	/**
 	 * Sets the 1x1 mipmap level.
 	 *
-	 * This level is used to identify the smallest mipmap of the main luminance
-	 * texture which contains the downsampled average scene luminance.
+	 * This level is used to identify the smallest mipmap of the main luminance texture which contains the downsampled
+	 * average scene luminance.
 	 *
 	 * @type {Number}
 	 */
@@ -147,12 +141,11 @@ export class AdaptiveLuminancePass extends Pass {
 
 		// Use the frame delta time to chase after the current luminance.
 		this.getFullscreenMaterial().uniforms.deltaTime.value = deltaTime;
-		renderer.setRenderTarget(this.renderToScreen ?
-			null : this.renderTargetAdapted);
+		renderer.setRenderTarget(this.renderToScreen ? null : this.renderTargetAdapted);
 		renderer.render(this.scene, this.camera);
 
 		// Save the adapted luminance for the next frame.
-		this.savePass.render(renderer, this.renderTargetAdapted);
+		this.copyPass.render(renderer, this.renderTargetAdapted);
 
 	}
 

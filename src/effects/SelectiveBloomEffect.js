@@ -19,8 +19,7 @@ import { EffectAttribute } from "./Effect";
  *
  * This effect applies bloom to selected objects only.
  *
- * Attention: If you don't need to limit bloom to a subset of objects, consider using the
- * {@link BloomEffect} instead for better performance.
+ * If you don't need to limit bloom to a subset of objects, consider using a {@link BloomEffect} for better performance.
  */
 
 export class SelectiveBloomEffect extends BloomEffect {

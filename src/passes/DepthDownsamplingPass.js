@@ -10,9 +10,8 @@ import { DepthDownsamplingMaterial } from "../materials";
 import { Pass } from "./Pass";
 
 /**
- * A pass that downsamples the scene depth by picking the most representative
- * depth in 2x2 texel neighborhoods. If a normal buffer is provided, the
- * corresponding normals will be stored as well.
+ * A pass that downsamples the scene depth by picking the most representative depth in 2x2 texel neighborhoods. If a
+ * normal buffer is provided, the corresponding normals will be stored as well.
  *
  * Attention: This pass requires WebGL 2.
  */
@@ -96,14 +95,14 @@ export class DepthDownsamplingPass extends Pass {
 	 * Sets the depth texture.
 	 *
 	 * @param {Texture} depthTexture - A depth texture.
-	 * @param {Number} [depthPacking=BasicDepthPacking] - The depth packing.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
 	 */
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
 		const material = this.getFullscreenMaterial();
 		material.uniforms.depthBuffer.value = depthTexture;
-		material.depthPacking = depthPacking;
+		material.setDepthPacking(depthPacking);
 
 	}
 

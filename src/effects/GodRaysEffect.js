@@ -171,7 +171,7 @@ export class GodRaysEffect extends Effect {
 		/**
 		 * A blur pass that reduces aliasing artifacts and makes the light softer.
 		 *
-		 * Disable this pass to improve performance.
+		 * You can disable this pass to improve performance.
 		 *
 		 * @type {KawaseBlurPass}
 		 */
@@ -214,8 +214,6 @@ export class GodRaysEffect extends Effect {
 
 	/**
 	 * A texture that contains the intermediate result of this effect.
-	 *
-	 * This texture will be applied to the scene colors unless the blend function is set to `SKIP`.
 	 *
 	 * @type {Texture}
 	 */

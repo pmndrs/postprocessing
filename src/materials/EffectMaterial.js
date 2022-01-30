@@ -19,9 +19,7 @@ export const Section = {
 };
 
 /**
- * An effect material for compound shaders.
- *
- * This material supports dithering.
+ * An effect material for compound shaders. Supports dithering.
  *
  * @implements {Resizable}
  */

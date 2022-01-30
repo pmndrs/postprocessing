@@ -95,7 +95,6 @@ export class DepthOfFieldEffect extends Effect {
 
 		this.renderTargetNear = this.renderTarget.clone();
 		this.renderTargetNear.texture.name = "DoF.Bokeh.Near";
-
 		this.uniforms.get("nearColorBuffer").value = this.renderTargetNear.texture;
 
 		/**
@@ -107,7 +106,6 @@ export class DepthOfFieldEffect extends Effect {
 
 		this.renderTargetFar = this.renderTarget.clone();
 		this.renderTargetFar.texture.name = "DoF.Bokeh.Far";
-
 		this.uniforms.get("farColorBuffer").value = this.renderTargetFar.texture;
 
 		/**
@@ -132,7 +130,6 @@ export class DepthOfFieldEffect extends Effect {
 
 		this.renderTargetCoCBlurred = this.renderTargetCoC.clone();
 		this.renderTargetCoCBlurred.texture.name = "DoF.CoC.Blurred";
-
 		this.uniforms.get("nearCoCBuffer").value = this.renderTargetCoCBlurred.texture;
 
 		/**
@@ -251,7 +248,7 @@ export class DepthOfFieldEffect extends Effect {
 	 * The current bokeh scale.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getBokehScale instead.
+	 * @deprecated Use getBokehScale() instead.
 	 */
 
 	get bokehScale() {
@@ -262,7 +259,7 @@ export class DepthOfFieldEffect extends Effect {
 
 	/**
 	 * @type {Number}
-	 * @deprecated Use setBokehScale instead.
+	 * @deprecated Use setBokehScale() instead.
 	 */
 
 	set bokehScale(value) {
@@ -307,6 +304,30 @@ export class DepthOfFieldEffect extends Effect {
 
 		this.maskPass.getFullscreenMaterial().uniforms.strength.value = value;
 		this.uniforms.get("scale").value = value;
+
+	}
+
+	/**
+	 * Returns the auto focus target.
+	 *
+	 * @return {Vector3} The target.
+	 */
+
+	getTarget() {
+
+		return this.target;
+
+	}
+
+	/**
+	 * Sets the auto focus target.
+	 *
+	 * @param {Vector3} value - The target.
+	 */
+
+	setTarget(value) {
+
+		this.target = value;
 
 	}
 

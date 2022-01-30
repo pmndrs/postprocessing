@@ -1,7 +1,7 @@
 import { Color, MeshNormalMaterial, NearestFilter, WebGLRenderTarget } from "three";
 import { Resizer } from "../core/Resizer";
-import { Pass } from "./Pass";
 import { RenderPass } from "./RenderPass";
+import { Pass } from "./Pass";
 
 /**
  * A pass that renders the normals of a given scene.
@@ -50,7 +50,7 @@ export class NormalPass extends Pass {
 		clearPass.overrideClearAlpha = 1.0;
 
 		/**
-		 * A render target that contains the scene normals.
+		 * A render target for the scene normals.
 		 *
 		 * @type {WebGLRenderTarget}
 		 */
@@ -71,9 +71,6 @@ export class NormalPass extends Pass {
 
 		/**
 		 * The desired render resolution.
-		 *
-		 * Use {@link Resizer.AUTO_SIZE} for the width or height to automatically
-		 * calculate it based on its counterpart and the original aspect ratio.
 		 *
 		 * @type {Resizer}
 		 */

@@ -4,8 +4,8 @@ import { Pass } from "./Pass";
 /**
  * A stencil mask pass.
  *
- * This pass requires that the input and output buffers have a stencil buffer.
- * You can enable the stencil buffer via the {@link EffectComposer} constructor.
+ * This pass requires that the input and output buffers have a stencil buffer. You can enable the stencil buffer via the
+ * {@link EffectComposer} constructor.
  */
 
 export class MaskPass extends Pass {

@@ -13,7 +13,6 @@ export class ClearMaskPass extends Pass {
 	constructor() {
 
 		super("ClearMaskPass", null, null);
-
 		this.needsSwap = false;
 
 	}
@@ -31,7 +30,6 @@ export class ClearMaskPass extends Pass {
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
 		const stencil = renderer.state.buffers.stencil;
-
 		stencil.setLocked(false);
 		stencil.setTest(false);
 

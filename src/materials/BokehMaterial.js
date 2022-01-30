@@ -4,13 +4,10 @@ import fragmentShader from "./glsl/bokeh/shader.frag";
 import vertexShader from "./glsl/common/shader.vert";
 
 /**
- * A bokeh blur material.
+ * A bokeh disc blur material.
  *
- * This material should be applied twice in a row, with `fill` mode enabled for
- * the second pass.
- *
- * Enabling the `foreground` option causes the shader to combine the near and
- * far CoC values around foreground objects.
+ * This material should be applied twice in a row, with `fill` mode enabled for the second pass. Enabling the
+ * `foreground` option causes the shader to combine the near and far CoC values around foreground objects.
  */
 
 export class BokehMaterial extends ShaderMaterial {
@@ -58,7 +55,7 @@ export class BokehMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Generates the blur kernels.
+	 * Generates the blur kernel.
 	 *
 	 * @private
 	 */

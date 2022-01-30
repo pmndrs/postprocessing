@@ -57,7 +57,7 @@ export class DepthMaskMaterial extends ShaderMaterial {
 		/**
 		 * The current depth mode.
 		 *
-		 * @type {Number}
+		 * @type {DepthModes}
 		 * @private
 		 */
 
@@ -67,9 +67,7 @@ export class DepthMaskMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Indicates whether the background should be preserved.
-	 *
-	 * Enabled by default.
+	 * Indicates whether maximum depth values should be preserved. Enabled by default.
 	 *
 	 * @type {Boolean}
 	 */
@@ -81,7 +79,7 @@ export class DepthMaskMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Controls whether the background will be preserved or discarded.
+	 * Controls whether maximum depth values should be preserved.
 	 *
 	 * @type {Boolean}
 	 */
@@ -134,7 +132,7 @@ export class DepthMaskMaterial extends ShaderMaterial {
 	/**
 	 * Returns the current depth mode.
 	 *
-	 * @return {Number} The depth mode.
+	 * @return {DepthModes} The depth mode. Default is `LessDepth`.
 	 */
 
 	getDepthMode() {
@@ -146,10 +144,8 @@ export class DepthMaskMaterial extends ShaderMaterial {
 	/**
 	 * Sets the depth mode.
 	 *
-	 * Default is `LessDepth`.
-	 *
 	 * @see https://threejs.org/docs/#api/en/constants/Materials
-	 * @param {Number} mode - The depth mode.
+	 * @param {DepthModes} mode - The depth mode.
 	 */
 
 	setDepthMode(mode) {

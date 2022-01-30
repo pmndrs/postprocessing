@@ -40,8 +40,7 @@ export class RenderPass extends Pass {
 		 * @private
 		 */
 
-		this.overrideMaterialManager = (overrideMaterial === null) ? null :
-			new OverrideMaterialManager(overrideMaterial);
+		this.overrideMaterialManager = (overrideMaterial === null) ? null : new OverrideMaterialManager(overrideMaterial);
 
 		/**
 		 * Indicates whether the scene background should be ignored.
@@ -149,7 +148,7 @@ export class RenderPass extends Pass {
 
 	get clear() {
 
-		return this.clearPass.enabled;
+		return this.clearPass.isEnabled();
 
 	}
 
@@ -161,7 +160,7 @@ export class RenderPass extends Pass {
 
 	set clear(value) {
 
-		this.clearPass.enabled = value;
+		this.clearPass.setEnabled(value);
 
 	}
 
@@ -190,9 +189,9 @@ export class RenderPass extends Pass {
 	}
 
 	/**
-	 * Indicates whether the scene background is enabled.
+	 * Indicates whether the scene background is disabled.
 	 *
-	 * @return {Boolean} Whether the scene background is enabled.
+	 * @return {Boolean} Whether the scene background is disabled.
 	 */
 
 	isBackgroundDisabled() {
@@ -287,7 +286,7 @@ export class RenderPass extends Pass {
 
 		}
 
-		if(this.clear) {
+		if(this.clearPass.isEnabled()) {
 
 			this.clearPass.render(renderer, inputBuffer);
 

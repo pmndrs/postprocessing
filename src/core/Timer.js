@@ -105,8 +105,8 @@ export class Timer {
 	/**
 	 * Enables or disables auto reset based on page visibility.
 	 *
-	 * If enabled, the timer will be reset when the page becomes visible. This effectively pauses the
-	 * timer when the page is hidden. Has no effect if the API is not supported.
+	 * If enabled, the timer will be reset when the page becomes visible. This effectively pauses the timer when the page
+	 * is hidden. Has no effect if the API is not supported.
 	 *
 	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API}
 	 * @param {Boolean} enabled - Whether the timer should be reset on visibility change.

@@ -174,9 +174,7 @@ export class EffectPass extends Pass {
 	/**
 	 * Constructs a new effect pass.
 	 *
-	 * The provided effects will be organized and merged for optimal performance.
-	 *
-	 * @param {Camera} camera - The main camera. The camera's type and settings will be available to all effects.
+	 * @param {Camera} camera - The main camera.
 	 * @param {...Effect} effects - The effects that will be rendered by this pass.
 	 */
 
@@ -477,8 +475,6 @@ export class EffectPass extends Pass {
 
 		}
 
-		this.needsUpdate = false;
-
 	}
 
 	/**
@@ -517,7 +513,7 @@ export class EffectPass extends Pass {
 	 * Sets the depth texture.
 	 *
 	 * @param {Texture} depthTexture - A depth texture.
-	 * @param {Number} [depthPacking=BasicDepthPacking] - The depth packing.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing.
 	 */
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
@@ -549,12 +545,6 @@ export class EffectPass extends Pass {
 
 		const material = this.getFullscreenMaterial();
 		const time = material.uniforms.time.value + deltaTime;
-
-		if(this.needsUpdate) {
-
-			this.recompile(renderer);
-
-		}
 
 		for(const effect of this.effects) {
 
@@ -652,7 +642,7 @@ export class EffectPass extends Pass {
 		switch(event.type) {
 
 			case "change":
-				this.needsUpdate = true;
+				this.recompile(this.renderer);
 				break;
 
 		}

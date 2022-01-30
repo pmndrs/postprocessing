@@ -1,11 +1,4 @@
-import {
-	LinearFilter,
-	LuminanceFormat,
-	RGBAFormat,
-	UnsignedByteType,
-	WebGLRenderTarget
-} from "three";
-
+import { LinearFilter, LuminanceFormat, RGBAFormat, UnsignedByteType, WebGLRenderTarget } from "three";
 import { LuminanceMaterial } from "../materials";
 import { Resizer } from "../core/Resizer";
 import { Pass } from "./Pass";
@@ -35,11 +28,7 @@ export class LuminancePass extends Pass {
 
 		super("LuminancePass");
 
-		this.setFullscreenMaterial(new LuminanceMaterial(
-			colorOutput,
-			luminanceRange
-		));
-
+		this.setFullscreenMaterial(new LuminanceMaterial(colorOutput, luminanceRange));
 		this.needsSwap = false;
 
 		/**
@@ -77,10 +66,6 @@ export class LuminancePass extends Pass {
 
 	/**
 	 * The luminance texture.
-	 *
-	 * If `colorOutput` is enabled, the scenes colors will be multiplied by their
-	 * respective luminance values and stored as RGB. The alpha channel always
-	 * contains the luminance value.
 	 *
 	 * @type {Texture}
 	 */

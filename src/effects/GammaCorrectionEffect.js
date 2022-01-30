@@ -7,7 +7,7 @@ import fragmentShader from "./glsl/gamma-correction/shader.frag";
 /**
  * A gamma correction effect.
  *
- * @deprecated Set WebGLRenderer.outputEncoding to sRGBEncoding or GammaEncoding instead.
+ * @deprecated Set WebGLRenderer.outputEncoding to sRGBEncoding instead.
  */
 
 export class GammaCorrectionEffect extends Effect {

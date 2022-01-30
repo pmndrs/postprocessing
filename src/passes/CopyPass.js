@@ -12,15 +12,14 @@ export class CopyPass extends Pass {
 	 * Constructs a new save pass.
 	 *
 	 * @param {WebGLRenderTarget} [renderTarget] - A render target.
-	 * @param {Boolean} [resize=true] - Whether the render target should adjust to the size of the input buffer.
+	 * @param {Boolean} [autoResize=true] - Whether the render target size should be updated automatically.
 	 */
 
-	constructor(renderTarget, resize = true) {
+	constructor(renderTarget, autoResize = true) {
 
 		super("CopyPass");
 
 		this.setFullscreenMaterial(new CopyMaterial());
-
 		this.needsSwap = false;
 
 		/**
@@ -50,7 +49,7 @@ export class CopyPass extends Pass {
 		 * @type {Boolean}
 		 */
 
-		this.resize = resize;
+		this.resize = autoResize;
 
 	}
 
