@@ -39,7 +39,7 @@ export class EffectMaterial extends ShaderMaterial {
 	constructor(shaderParts, defines, uniforms, camera, dithering = false) {
 
 		super({
-			type: "EffectMaterial",
+			name: "EffectMaterial",
 			defines: {
 				DEPTH_PACKING: "0",
 				ENCODE_OUTPUT: "1"
