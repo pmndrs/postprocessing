@@ -125,17 +125,15 @@ export class SSAOMaterial extends ShaderMaterial {
 	/**
 	 * Adopts the settings of the given camera.
 	 *
-	 * @param {Camera} [camera=null] - A camera.
+	 * @param {Camera} camera - A camera.
 	 */
 
-	adoptCameraSettings(camera = null) {
+	adoptCameraSettings(camera) {
 
-		if(camera !== null) {
+		if(camera) {
 
-			const uniforms = this.uniforms;
-
-			uniforms.cameraNear.value = camera.near;
-			uniforms.cameraFar.value = camera.far;
+			this.uniforms.cameraNear.value = camera.near;
+			this.uniforms.cameraFar.value = camera.far;
 
 			if(camera instanceof PerspectiveCamera) {
 

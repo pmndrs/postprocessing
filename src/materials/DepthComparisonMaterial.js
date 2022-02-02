@@ -42,12 +42,12 @@ export class DepthComparisonMaterial extends ShaderMaterial {
 	/**
 	 * Adopts the settings of the given camera.
 	 *
-	 * @param {Camera} [camera=null] - A camera.
+	 * @param {Camera} camera - A camera.
 	 */
 
-	adoptCameraSettings(camera = null) {
+	adoptCameraSettings(camera) {
 
-		if(camera !== null) {
+		if(camera) {
 
 			this.uniforms.cameraNear.value = camera.near;
 			this.uniforms.cameraFar.value = camera.far;
@@ -61,6 +61,8 @@ export class DepthComparisonMaterial extends ShaderMaterial {
 				delete this.defines.PERSPECTIVE_CAMERA;
 
 			}
+
+			this.needsUpdate = true;
 
 		}
 
