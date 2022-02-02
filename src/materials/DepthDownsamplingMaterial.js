@@ -41,24 +41,50 @@ export class DepthDownsamplingMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * The depth packing of the source depth buffer.
+	 * The current depth packing.
 	 *
-	 * @type {Number}
+	 * @type {DepthPackingStrategies}
+	 * @deprecated Use getDepthPacking() instead.
 	 */
 
 	get depthPacking() {
 
-		return Number(this.defines.DEPTH_PACKING);
+		return this.getDepthPacking();
 
 	}
 
 	/**
 	 * Sets the depth packing.
 	 *
-	 * @type {Number}
+	 * @type {DepthPackingStrategies}
+	 * @deprecated Use setDepthPacking() instead.
 	 */
 
 	set depthPacking(value) {
+
+		this.setDepthPacking(value);
+
+	}
+
+	/**
+	 * Returns the current depth packing strategy.
+	 *
+	 * @return {DepthPackingStrategies} The depth packing strategy.
+	 */
+
+	getDepthPacking() {
+
+		return Number(this.defines.DEPTH_PACKING);
+
+	}
+
+	/**
+	 * Sets the depth packing strategy.
+	 *
+	 * @param {DepthPackingStrategies} value - The depth packing strategy.
+	 */
+
+	setDepthPacking(value) {
 
 		this.defines.DEPTH_PACKING = value.toFixed(0);
 		this.needsUpdate = true;
