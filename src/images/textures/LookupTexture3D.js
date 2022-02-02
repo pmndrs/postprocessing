@@ -267,7 +267,7 @@ export class LookupTexture3D extends DataTexture3D {
 
 	convertToRGBA() {
 
-		console.warn("LookupTexture3D: convertToRGBA() was removed (LUTs are now RGBA by default)");
+		console.warn("LookupTexture3D", "convertToRGBA() is deprecated, LUTs are now RGBA by default");
 		return this;
 
 	}
