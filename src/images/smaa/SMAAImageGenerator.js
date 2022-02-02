@@ -68,9 +68,22 @@ export class SMAAImageGenerator {
 		 * Indicates whether data image caching is disabled.
 		 *
 		 * @type {Boolean}
+		 * @deprecated Use setCacheEnabled() instead.
 		 */
 
 		this.disableCache = false;
+
+	}
+
+	/**
+	 * Enables or disables caching via localStorage.
+	 *
+	 * @param {Boolean} value - Whether the cache should be enabled.
+	 */
+
+	setCacheEnabled(value) {
+
+		this.disableCache = !value;
 
 	}
 
