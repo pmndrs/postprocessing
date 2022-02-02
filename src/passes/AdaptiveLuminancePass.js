@@ -72,19 +72,32 @@ export class AdaptiveLuminancePass extends Pass {
 
 		this.copyPass = new CopyPass(this.renderTargetPrevious, false);
 
-		this.adaptationRate = adaptationRate;
+		this.setAdaptationRate(adaptationRate);
 
 	}
 
 	/**
-	 * The adapted luminance texture.
+	 * The adaptive luminance texture.
 	 *
 	 * @type {Texture}
+	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
 
-		return this.renderTargetAdapted.texture;
+		return this.getTexture();
+
+	}
+
+	/**
+	 * The adaptive luminance texture.
+	 *
+	 * @return {Texture} The texture.
+	 */
+
+	getTexture() {
+
+		return this.renderTarget.texture;
 
 	}
 
@@ -95,9 +108,25 @@ export class AdaptiveLuminancePass extends Pass {
 	 * average scene luminance.
 	 *
 	 * @type {Number}
+	 * @deprecated Use setMipLevel1x1() instead.
 	 */
 
 	set mipLevel1x1(value) {
+
+		this.setMipLevel1x1(value);
+
+	}
+
+	/**
+	 * Sets the 1x1 mipmap level.
+	 *
+	 * This level is used to identify the smallest mipmap of the main luminance texture which contains the downsampled
+	 * average scene luminance.
+	 *
+	 * @param {Number} The level.
+	 */
+
+	setMipLevel1x1(value) {
 
 		const material = this.getFullscreenMaterial();
 		material.defines.MIP_LEVEL_1X1 = value.toFixed(1);
@@ -113,7 +142,7 @@ export class AdaptiveLuminancePass extends Pass {
 
 	get adaptationRate() {
 
-		return this.getFullscreenMaterial().uniforms.tau.value;
+		return this.getAdaptationRate();
 
 	}
 
@@ -122,6 +151,30 @@ export class AdaptiveLuminancePass extends Pass {
 	 */
 
 	set adaptationRate(value) {
+
+		this.setAdaptationRate(value);
+
+	}
+
+	/**
+	 * Returns the luminance adaptation rate.
+	 *
+	 * @return {Number} The adaptation rate.
+	 */
+
+	getAdaptationRate() {
+
+		return this.getFullscreenMaterial().uniforms.tau.value;
+
+	}
+
+	/**
+	 * Sets the luminance adaptation rate.
+	 *
+	 * @param {Number} value - The adaptation rate.
+	 */
+
+	setAdaptationRate(value) {
 
 		this.getFullscreenMaterial().uniforms.tau.value = value;
 
