@@ -60,9 +60,35 @@ export class GodRaysMaterial extends ShaderMaterial {
 	 * The amount of samples per pixel.
 	 *
 	 * @type {Number}
+	 * @deprecated Use getSamples() instead.
 	 */
 
 	get samples() {
+
+		return this.getSamples();
+
+	}
+
+	/**
+	 * Sets the amount of samples per pixel.
+	 *
+	 * @type {Number}
+	 * @deprecated Use setSamples() instead.
+	 */
+
+	set samples(value) {
+
+		this.setSamples(value);
+
+	}
+
+	/**
+	 * Returns the amount of samples per pixel.
+	 *
+	 * @return {Number} The sample count.
+	 */
+
+	getSamples() {
 
 		return Number(this.defines.SAMPLES_INT);
 
@@ -71,13 +97,12 @@ export class GodRaysMaterial extends ShaderMaterial {
 	/**
 	 * Sets the amount of samples per pixel.
 	 *
-	 * @type {Number}
+	 * @param {Number} value - The sample count.
 	 */
 
-	set samples(value) {
+	setSamples(value) {
 
 		const s = Math.floor(value);
-
 		this.defines.SAMPLES_INT = s.toFixed(0);
 		this.defines.SAMPLES_FLOAT = s.toFixed(1);
 		this.needsUpdate = true;
