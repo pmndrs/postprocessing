@@ -30,6 +30,7 @@ export class Selection extends Set {
 		 * Controls whether objects that are added to this selection should be removed from all other layers.
 		 *
 		 * @type {Boolean}
+		 * @deprecated Use isExclusive() and setExclusive() instead.
 		 */
 
 		this.exclusive = false;
@@ -100,6 +101,30 @@ export class Selection extends Set {
 		}
 
 		this.currentLayer = value;
+
+	}
+
+	/**
+	 * Indicates whether objects that are added to this selection will be removed from all other layers.
+	 *
+	 * @return {Number} Whether this selection is exclusive. Default is false.
+	 */
+
+	isExclusive() {
+
+		return this.exclusive;
+
+	}
+
+	/**
+	 * Controls whether objects that are added to this selection should be removed from all other layers.
+	 *
+	 * @param {Number} value - Whether this selection should be exclusive.
+	 */
+
+	setExclusive(value) {
+
+		this.exclusive = value;
 
 	}
 
