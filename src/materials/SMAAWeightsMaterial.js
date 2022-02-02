@@ -116,9 +116,35 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	 * Indicates whether diagonal pattern detection is enabled.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use isDiagonalDetectionEnabled() instead.
 	 */
 
 	get diagonalDetection() {
+
+		return this.isDiagonalDetectionEnabled();
+
+	}
+
+	/**
+	 * Enables or disables diagonal pattern detection.
+	 *
+	 * @type {Boolean}
+	 * @deprecated Use setDiagonalDetectionEnabled() instead.
+	 */
+
+	set diagonalDetection(value) {
+
+		this.setDiagonalDetectionEnabled(value);
+
+	}
+
+	/**
+	 * Indicates whether diagonal pattern detection is enabled.
+	 *
+	 * @return {Boolean} Whether diagonal pattern detection is enabled.
+	 */
+
+	isDiagonalDetectionEnabled() {
 
 		return (this.defines.DISABLE_DIAG_DETECTION === undefined);
 
@@ -127,10 +153,10 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	/**
 	 * Enables or disables diagonal pattern detection.
 	 *
-	 * @type {Boolean}
+	 * @param {Boolean} value - Whether diagonal pattern detection should be enabled.
 	 */
 
-	set diagonalDetection(value) {
+	setDiagonalDetectionEnabled(value) {
 
 		if(value) {
 
@@ -150,9 +176,35 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	 * Indicates whether corner rounding is enabled.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use isCornerRoundingEnabled() instead.
 	 */
 
 	get cornerRounding() {
+
+		return this.isCornerRoundingEnabled();
+
+	}
+
+	/**
+	 * Enables or disables corner rounding.
+	 *
+	 * @type {Boolean}
+	 * @deprecated Use setCornerRoundingEnabled() instead.
+	 */
+
+	set cornerRounding(value) {
+
+		this.setCornerRoundingEnabled(value);
+
+	}
+
+	/**
+	 * Indicates whether corner rounding is enabled.
+	 *
+	 * @return {Boolean} Whether corner rounding is enabled.
+	 */
+
+	isCornerRoundingEnabled() {
 
 		return (this.defines.DISABLE_CORNER_DETECTION === undefined);
 
@@ -161,10 +213,10 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	/**
 	 * Enables or disables corner rounding.
 	 *
-	 * @type {Boolean}
+	 * @param {Boolean} value - Whether corner rounding should be enabled.
 	 */
 
-	set cornerRounding(value) {
+	setCornerRoundingEnabled(value) {
 
 		if(value) {
 
