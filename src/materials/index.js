@@ -1,14 +1,14 @@
 export { AdaptiveLuminanceMaterial } from "./AdaptiveLuminanceMaterial";
 export { BokehMaterial } from "./BokehMaterial";
 export { CircleOfConfusionMaterial } from "./CircleOfConfusionMaterial";
-export { ColorEdgesMaterial } from "./ColorEdgesMaterial";
 export { KawaseBlurMaterial, KawaseBlurMaterial as ConvolutionMaterial } from "./KawaseBlurMaterial";
 export { CopyMaterial } from "./CopyMaterial";
 export { DepthComparisonMaterial } from "./DepthComparisonMaterial";
 export { DepthCopyMaterial, DepthCopyMode } from "./DepthCopyMaterial";
 export { DepthDownsamplingMaterial } from "./DepthDownsamplingMaterial";
-export { EdgeDetectionMaterial, EdgeDetectionMode, PredicationMode } from "./EdgeDetectionMaterial";
 export { DepthMaskMaterial, MaxDepthStrategy } from "./DepthMaskMaterial";
+export { EdgeDetectionMaterial, EdgeDetectionMaterial as ColorEdgesMaterial } from "./EdgeDetectionMaterial";
+export { EdgeDetectionMode, PredicationMode } from "./EdgeDetectionMaterial";
 export { EffectMaterial, Section } from "./EffectMaterial";
 export { GodRaysMaterial } from "./GodRaysMaterial";
 export { LuminanceMaterial } from "./LuminanceMaterial";
