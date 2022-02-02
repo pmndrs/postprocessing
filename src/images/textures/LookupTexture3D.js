@@ -77,6 +77,7 @@ export class LookupTexture3D extends DataTexture3D {
 	 * Indicates that this is an instance of LookupTexture3D.
 	 *
 	 * @type {Boolean}
+	 * @deprecated
 	 */
 
 	get isLookupTexture3D() {
