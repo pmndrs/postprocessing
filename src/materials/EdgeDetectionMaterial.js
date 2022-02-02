@@ -4,6 +4,36 @@ import fragmentShader from "./glsl/edge-detection/shader.frag";
 import vertexShader from "./glsl/edge-detection/shader.vert";
 
 /**
+ * An enumeration of edge detection modes.
+ *
+ * @type {Object}
+ * @property {Number} DEPTH - Depth-based edge detection.
+ * @property {Number} LUMA - Luminance-based edge detection.
+ * @property {Number} COLOR - Chroma-based edge detection.
+ */
+
+export const EdgeDetectionMode = {
+	DEPTH: 0,
+	LUMA: 1,
+	COLOR: 2
+};
+
+/**
+ * An enumeration of predication modes.
+ *
+ * @type {Object}
+ * @property {Number} DISABLED - No predicated thresholding.
+ * @property {Number} DEPTH - Depth-based predicated thresholding.
+ * @property {Number} CUSTOM - Predicated thresholding using a custom buffer.
+ */
+
+export const PredicationMode = {
+	DISABLED: 0,
+	DEPTH: 1,
+	CUSTOM: 2
+};
+
+/**
  * An edge detection material.
  *
  * Mainly used for Subpixel Morphological Anti-Aliasing.
@@ -228,33 +258,3 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	}
 
 }
-
-/**
- * An enumeration of edge detection modes.
- *
- * @type {Object}
- * @property {Number} DEPTH - Depth-based edge detection.
- * @property {Number} LUMA - Luminance-based edge detection.
- * @property {Number} COLOR - Chroma-based edge detection.
- */
-
-export const EdgeDetectionMode = {
-	DEPTH: 0,
-	LUMA: 1,
-	COLOR: 2
-};
-
-/**
- * An enumeration of predication modes.
- *
- * @type {Object}
- * @property {Number} DISABLED - No predicated thresholding.
- * @property {Number} DEPTH - Depth-based predicated thresholding.
- * @property {Number} CUSTOM - Predicated thresholding using a custom buffer.
- */
-
-export const PredicationMode = {
-	DISABLED: 0,
-	DEPTH: 1,
-	CUSTOM: 2
-};
