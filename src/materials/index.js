@@ -13,6 +13,6 @@ export { EffectMaterial, Section } from "./EffectMaterial";
 export { GodRaysMaterial } from "./GodRaysMaterial";
 export { LuminanceMaterial } from "./LuminanceMaterial";
 export { MaskFunction, MaskMaterial } from "./MaskMaterial";
-export { OutlineMaterial, OutlineEdgesMaterial } from "./OutlineMaterial";
+export { OutlineMaterial, OutlineMaterial as OutlineEdgesMaterial } from "./OutlineMaterial";
 export { SMAAWeightsMaterial } from "./SMAAWeightsMaterial";
 export { SSAOMaterial } from "./SSAOMaterial";

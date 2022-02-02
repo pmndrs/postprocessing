@@ -54,11 +54,3 @@ export class OutlineMaterial extends ShaderMaterial {
 	}
 
 }
-
-/**
- * An outline shader material.
- *
- * @deprecated Use OutlineMaterial instead.
- */
-
-export const OutlineEdgesMaterial = OutlineMaterial;
