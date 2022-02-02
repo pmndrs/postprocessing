@@ -45,12 +45,19 @@ void main() {
 
 	depth = clamp(depth + vec2(bias0, bias1), 0.0, 1.0);
 
-	#ifdef KEEP_FAR
+	#if MAX_DEPTH_STRATEGY == 0
 
+		// Decide based on depth test.
+		bool keep = depthTest(depth.x, depth.y);
+
+	#elif MAX_DEPTH_STRATEGY == 1
+
+		// Always keep max depth.
 		bool keep = (depth.x == 1.0) || depthTest(depth.x, depth.y);
 
 	#else
 
+		// Always discard max depth.
 		bool keep = (depth.x != 1.0) && depthTest(depth.x, depth.y);
 
 	#endif

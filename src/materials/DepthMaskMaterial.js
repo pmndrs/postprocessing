@@ -16,6 +16,21 @@ import fragmentShader from "./glsl/depth-mask/shader.frag";
 import vertexShader from "./glsl/common/shader.vert";
 
 /**
+ * An enumeration of masking strategies for maximum depth values.
+ *
+ * @type {Object}
+ * @property {Number} TEST - Decide normally based on depth test.
+ * @property {Number} KEEP - Always keep max depth.
+ * @property {Number} DISCARD - Always discard max depth.
+ */
+
+export const MaxDepthStrategy = {
+	TEST: 0,
+	KEEP: 1,
+	DISCARD: 2
+};
+
+/**
  * A depth mask shader material.
  *
  * This material masks a color buffer by comparing two depth textures.
@@ -35,7 +50,7 @@ export class DepthMaskMaterial extends ShaderMaterial {
 				DEPTH_EPSILON: "0.00001",
 				DEPTH_PACKING_0: "0",
 				DEPTH_PACKING_1: "0",
-				KEEP_FAR: "1"
+				MAX_DEPTH_STRATEGY: MaxDepthStrategy.KEEP
 			},
 			uniforms: {
 				inputBuffer: new Uniform(null),
@@ -67,14 +82,15 @@ export class DepthMaskMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Indicates whether maximum depth values should be preserved. Enabled by default.
+	 * Indicates whether maximum depth values should be preserved.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use getMaxDepthStrategy() instead.
 	 */
 
 	get keepFar() {
 
-		return (this.defines.KEEP_FAR !== undefined);
+		return (this.getMaxDepthStrategy() === MaxDepthStrategy.KEEP);
 
 	}
 
@@ -82,30 +98,46 @@ export class DepthMaskMaterial extends ShaderMaterial {
 	 * Controls whether maximum depth values should be preserved.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use setMaxDepthStrategy(MaxDepthStrategy.KEEP) instead.
 	 */
 
 	set keepFar(value) {
 
-		if(value) {
+		this.setMaxDepthStrategy(value ? MaxDepthStrategy.KEEP : MaxDepthStrategy.DISCARD);
 
-			this.defines.KEEP_FAR = "1";
+	}
 
-		} else {
+	/**
+	 * Returns the strategy for dealing with maximum depth values.
+	 *
+	 * @return {MaxDepthStrategy} The strategy.
+	 */
 
-			delete this.defines.KEEP_FAR;
+	getMaxDepthStrategy() {
 
-		}
+		return Number(this.defines.MAX_DEPTH_STRATEGY);
 
+	}
+
+	/**
+	 * Sets the strategy for dealing with maximum depth values.
+	 *
+	 * @param {MaxDepthStrategy} value - The strategy.
+	 */
+
+	setMaxDepthStrategy(value) {
+
+		this.defines.MAX_DEPTH_STRATEGY = value.toFixed(0);
 		this.needsUpdate = true;
 
 	}
 
 	/**
-	 * Returns the current error threshold for depth comparisons.
+	 * Returns the current error threshold for depth comparisons. Default is `1e-5`.
 	 *
 	 * This value is only used for `EqualDepth` and `NotEqualDepth`.
 	 *
-	 * @return {Number} The error threshold. Default is `1e-5`.
+	 * @return {Number} The error threshold.
 	 */
 
 	getEpsilon() {
