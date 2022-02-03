@@ -77,6 +77,7 @@ export class Effect extends EventDispatcher {
 		 * The name of this effect.
 		 *
 		 * @type {String}
+		 * @private
 		 */
 
 		this.name = name;
