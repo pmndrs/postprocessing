@@ -352,7 +352,7 @@ export class DepthOfFieldEffect extends Effect {
 	 * Sets the depth texture.
 	 *
 	 * @param {Texture} depthTexture - A depth texture.
-	 * @param {Number} [depthPacking=BasicDepthPacking] - The depth packing.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing.
 	 */
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {

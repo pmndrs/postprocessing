@@ -106,7 +106,7 @@ export class KawaseBlurPass extends Pass {
 		 * The kernel size.
 		 *
 		 * @type {KernelSize}
-		 * @deprecated Use getKernelSize and setKernelSize instead.
+		 * @deprecated Use getKernelSize() and setKernelSize() instead.
 		 */
 
 		this.kernelSize = kernelSize;
@@ -169,7 +169,7 @@ export class KawaseBlurPass extends Pass {
 	 * The current blur scale.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getScale instead.
+	 * @deprecated Use getScale() instead.
 	 */
 
 	get scale() {
@@ -180,7 +180,7 @@ export class KawaseBlurPass extends Pass {
 
 	/**
 	 * @type {Number}
-	 * @deprecated Use setScale instead.
+	 * @deprecated Use setScale() instead.
 	 */
 
 	set scale(value) {

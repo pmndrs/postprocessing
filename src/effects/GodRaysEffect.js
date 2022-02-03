@@ -103,7 +103,7 @@ export class GodRaysEffect extends Effect {
 		/**
 		 * The light position in screen space.
 		 *
-		 * @type {Vector3}
+		 * @type {Vector2}
 		 * @private
 		 */
 
@@ -333,7 +333,7 @@ export class GodRaysEffect extends Effect {
 	 * Indicates whether the god rays should be blurred to reduce artifacts.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use blurPass.isEnabled instead.
+	 * @deprecated Use blurPass.isEnabled() instead.
 	 */
 
 	get blur() {
@@ -344,7 +344,7 @@ export class GodRaysEffect extends Effect {
 
 	/**
 	 * @type {Boolean}
-	 * @deprecated Use blurPass.setEnabled instead.
+	 * @deprecated Use blurPass.setEnabled() instead.
 	 */
 
 	set blur(value) {
@@ -357,7 +357,7 @@ export class GodRaysEffect extends Effect {
 	 * The blur kernel size.
 	 *
 	 * @type {KernelSize}
-	 * @deprecated Use blurPass.getKernelSize instead.
+	 * @deprecated Use blurPass.getKernelSize() instead.
 	 */
 
 	get kernelSize() {
@@ -370,7 +370,7 @@ export class GodRaysEffect extends Effect {
 	 * Sets the blur kernel size.
 	 *
 	 * @type {KernelSize}
-	 * @deprecated Use blurPass.setKernelSize instead.
+	 * @deprecated Use blurPass.setKernelSize() instead.
 	 */
 
 	set kernelSize(value) {

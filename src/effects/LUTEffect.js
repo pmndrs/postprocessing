@@ -339,10 +339,9 @@ export class LUTEffect extends Effect {
 	}
 
 	/**
-	 * Enables or disables tetrahedral interpolation. Requires a 3D LUT.
+	 * Enables or disables tetrahedral interpolation. Requires a 3D LUT, disabled by default.
 	 *
-	 * Tetrahedral interpolation produces highly accurate results but is slower than hardware interpolation. This feature
-	 * is disabled by default.
+	 * Tetrahedral interpolation produces highly accurate results but is slower than hardware interpolation.
 	 *
 	 * @param {Boolean} enabled - Whether tetrahedral interpolation should be enabled.
 	 */

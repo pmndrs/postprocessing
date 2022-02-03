@@ -16,7 +16,7 @@ export class DepthEffect extends Effect {
 	 *
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
-	 * @param {Boolean} [options.inverted=false] - Whether the depth values should be inverted.
+	 * @param {Boolean} [options.inverted=false] - Whether the depth should be inverted.
 	 */
 
 	constructor({

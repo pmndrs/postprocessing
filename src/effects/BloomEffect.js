@@ -216,7 +216,7 @@ export class BloomEffect extends Effect {
 	 * The blur kernel size.
 	 *
 	 * @type {KernelSize}
-	 * @deprecated Use blurPass.getKernelSize instead.
+	 * @deprecated Use blurPass.getKernelSize() instead.
 	 */
 
 	get kernelSize() {
@@ -227,7 +227,7 @@ export class BloomEffect extends Effect {
 
 	/**
 	 * @type {KernelSize}
-	 * @deprecated Use blurPass.setKernelSize instead.
+	 * @deprecated Use blurPass.setKernelSize() instead.
 	 */
 
 	set kernelSize(value) {
@@ -263,7 +263,7 @@ export class BloomEffect extends Effect {
 	 * The bloom intensity.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getIntensity instead.
+	 * @deprecated Use getIntensity() instead.
 	 */
 
 	get intensity() {
@@ -276,7 +276,7 @@ export class BloomEffect extends Effect {
 	 * Sets the bloom intensity.
 	 *
 	 * @type {Number}
-	 * @deprecated Use setIntensity instead.
+	 * @deprecated Use setIntensity() instead.
 	 */
 
 	set intensity(value) {
