@@ -55,6 +55,7 @@ export class DepthDownsamplingPass extends Pass {
 		 * Normals are stored as RGB and depth is stored as alpha.
 		 *
 		 * @type {WebGLRenderTarget}
+		 * @private
 		 */
 
 		this.renderTarget = new WebGLRenderTarget(1, 1, {
@@ -83,9 +84,22 @@ export class DepthDownsamplingPass extends Pass {
 	 * The normal(RGB) + depth(A) texture.
 	 *
 	 * @type {Texture}
+	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
+
+		return this.renderTarget.texture;
+
+	}
+
+	/**
+	 * The normal(RGB) + depth(A) texture.
+	 *
+	 * @return {Texture} The texture.
+	 */
+
+	getTexture() {
 
 		return this.renderTarget.texture;
 
