@@ -155,16 +155,64 @@ export class Effect extends EventDispatcher {
 	}
 
 	/**
-	 * Informs the associated {@link EffectPass} that this effect requires a shader recompilation.
+	 * Returns the name of this effect.
 	 *
-	 * Should be called after changing macros or extensions and after adding/removing uniforms.
-	 *
-	 * @protected
+	 * @return {String} The name.
 	 */
 
-	setChanged() {
+	getName() {
 
-		this.dispatchEvent({ type: "change" });
+		return this.name;
+
+	}
+
+	/**
+	 * Returns the preprocessor macro definitions.
+	 *
+	 * @return {Map<String, String>} The extensions.
+	 */
+
+	getDefines() {
+
+		return this.defines;
+
+	}
+
+	/**
+	 * Returns the uniforms of this effect.
+	 *
+	 * @return {Map<String, Uniform>} The extensions.
+	 */
+
+	getUniforms() {
+
+		return this.uniforms;
+
+	}
+
+	/**
+	 * Returns the WebGL extensions that are required by this effect.
+	 *
+	 * @return {Set<WebGLExtension>} The extensions.
+	 */
+
+	getExtensions() {
+
+		return this.extensions;
+
+	}
+
+	/**
+	 * Returns the blend mode.
+	 *
+	 * The result of this effect will be blended with the result of the previous effect using this blend mode.
+	 *
+	 * @return {BlendMode} The blend mode.
+	 */
+
+	getBlendMode() {
+
+		return this.blendMode;
 
 	}
 
@@ -246,6 +294,20 @@ export class Effect extends EventDispatcher {
 
 		this.vertexShader = vertexShader;
 		this.setChanged();
+
+	}
+
+	/**
+	 * Informs the associated {@link EffectPass} that this effect requires a shader recompilation.
+	 *
+	 * Should be called after changing macros or extensions and after adding/removing uniforms.
+	 *
+	 * @protected
+	 */
+
+	setChanged() {
+
+		this.dispatchEvent({ type: "change" });
 
 	}
 
