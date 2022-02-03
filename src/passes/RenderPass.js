@@ -100,9 +100,35 @@ export class RenderPass extends Pass {
 	 * The current override material.
 	 *
 	 * @type {Material}
+	 * @deprecated Use getOverrideMaterial() instead.
 	 */
 
 	get overrideMaterial() {
+
+		return this.getOverrideMaterial();
+
+	}
+
+	/**
+	 * Sets the override material.
+	 *
+	 * @type {Material}
+	 * @deprecated Use setOverrideMaterial() instead.
+	 */
+
+	set overrideMaterial(value) {
+
+		this.setOverrideMaterial(value);
+
+	}
+
+	/**
+	 * Returns the current override material.
+	 *
+	 * @return {Material} The material.
+	 */
+
+	getOverrideMaterial() {
 
 		const manager = this.overrideMaterialManager;
 		return (manager !== null) ? manager.material : null;
@@ -113,9 +139,10 @@ export class RenderPass extends Pass {
 	 * Sets the override material.
 	 *
 	 * @type {Material}
+	 * @return {Material} value - The material.
 	 */
 
-	set overrideMaterial(value) {
+	setOverrideMaterial(value) {
 
 		const manager = this.overrideMaterialManager;
 
@@ -144,6 +171,7 @@ export class RenderPass extends Pass {
 	 * Indicates whether the target buffer should be cleared before rendering.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use getClearPass().isEnabled() instead.
 	 */
 
 	get clear() {
@@ -156,6 +184,7 @@ export class RenderPass extends Pass {
 	 * Enables or disables auto clear.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use getClearPass().setEnabled() instead.
 	 */
 
 	set clear(value) {
