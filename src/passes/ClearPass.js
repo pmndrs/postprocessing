@@ -27,6 +27,7 @@ export class ClearPass extends Pass {
 		 * Indicates whether the color buffer should be cleared.
 		 *
 		 * @type {Boolean}
+		 * @deprecated Use setClearFlags() instead.
 		 */
 
 		this.color = color;
@@ -35,6 +36,7 @@ export class ClearPass extends Pass {
 		 * Indicates whether the depth buffer should be cleared.
 		 *
 		 * @type {Boolean}
+		 * @deprecated Use setClearFlags() instead.
 		 */
 
 		this.depth = depth;
@@ -43,6 +45,7 @@ export class ClearPass extends Pass {
 		 * Indicates whether the stencil buffer should be cleared.
 		 *
 		 * @type {Boolean}
+		 * @deprecated Use setClearFlags() instead.
 		 */
 
 		this.stencil = stencil;
@@ -51,6 +54,7 @@ export class ClearPass extends Pass {
 		 * An override clear color. Default is null.
 		 *
 		 * @type {Color}
+		 * @deprecated Use getOverrideClearColor() and setOverrideClearColor() instead.
 		 */
 
 		this.overrideClearColor = null;
@@ -59,9 +63,74 @@ export class ClearPass extends Pass {
 		 * An override clear alpha. Default is -1.
 		 *
 		 * @type {Number}
+		 * @deprecated Use getOverrideClearAlpha() and setOverrideClearAlpha() instead.
 		 */
 
 		this.overrideClearAlpha = -1.0;
+
+	}
+
+	/**
+	 * Sets the clear flags.
+	 *
+	 * @param {Boolean} color - Whether the color buffer should be cleared.
+	 * @param {Boolean} depth - Whether the depth buffer should be cleared.
+	 * @param {Boolean} stencil - Whether the stencil buffer should be cleared.
+	 */
+
+	setClearFlags(color, depth, stencil) {
+
+		this.color = color;
+		this.depth = depth;
+		this.stencil = stencil;
+
+	}
+
+	/**
+	 * Returns the override clear color. Default is null.
+	 *
+	 * @return {Color} The clear color.
+	 */
+
+	getOverrideClearColor() {
+
+		return this.overrideClearColor;
+
+	}
+
+	/**
+	 * Sets the override clear color.
+	 *
+	 * @param {Color} value - The clear color.
+	 */
+
+	setOverrideClearColor(value) {
+
+		this.overrideClearColor = value;
+
+	}
+
+	/**
+	 * Returns the override clear alpha. Default is -1.
+	 *
+	 * @return {Number} The clear alpha.
+	 */
+
+	getOverrideClearAlpha() {
+
+		return this.overrideClearAlpha;
+
+	}
+
+	/**
+	 * Sets the override clear alpha.
+	 *
+	 * @param {Number} value - The clear alpha.
+	 */
+
+	setOverrideClearAlpha(value) {
+
+		this.overrideClearAlpha = value;
 
 	}
 
