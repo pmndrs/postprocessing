@@ -1,5 +1,40 @@
-import { EventDispatcher, Scene } from "three";
+import { BasicDepthPacking, EventDispatcher, Scene } from "three";
 import { BlendFunction, BlendMode } from "./blending";
+
+/**
+ * An enumeration of effect attributes.
+ *
+ * Attributes can be concatenated using the bitwise OR operator.
+ *
+ * @type {Object}
+ * @property {Number} NONE - No attributes. Most effects don't need to specify any attributes.
+ * @property {Number} DEPTH - Describes effects that require a depth texture.
+ * @property {Number} CONVOLUTION - Describes effects that fetch additional samples from the input buffer. There cannot be more than one effect with this attribute per {@link EffectPass}.
+ * @example const attributes = EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH;
+ */
+
+export const EffectAttribute = {
+	NONE: 0,
+	DEPTH: 1,
+	CONVOLUTION: 2
+};
+
+/**
+ * An enumeration of WebGL extensions.
+ *
+ * @type {Object}
+ * @property {String} DERIVATIVES - Enables derivatives by adding the functions dFdx, dFdy and fwidth.
+ * @property {String} FRAG_DEPTH - Enables gl_FragDepthEXT to set a depth value of a fragment from within the fragment shader.
+ * @property {String} DRAW_BUFFERS - Enables multiple render targets (MRT) support.
+ * @property {String} SHADER_TEXTURE_LOD - Enables explicit control of texture LOD.
+ */
+
+export const WebGLExtension = {
+	DERIVATIVES: "derivatives",
+	FRAG_DEPTH: "fragDepth",
+	DRAW_BUFFERS: "drawBuffers",
+	SHADER_TEXTURE_LOD: "shaderTextureLOD"
+};
 
 /**
  * An abstract effect.
@@ -221,10 +256,10 @@ export class Effect extends EventDispatcher {
 	 * associated {@link EffectPass}.
 	 *
 	 * @param {Texture} depthTexture - A depth texture.
-	 * @param {Number} [depthPacking=0] - The depth packing.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing.
 	 */
 
-	setDepthTexture(depthTexture, depthPacking = 0) {}
+	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {}
 
 	/**
 	 * Updates this effect by performing supporting operations.
@@ -296,38 +331,3 @@ export class Effect extends EventDispatcher {
 	}
 
 }
-
-/**
- * An enumeration of effect attributes.
- *
- * Attributes can be concatenated using the bitwise OR operator.
- *
- * @type {Object}
- * @property {Number} NONE - No attributes. Most effects don't need to specify any attributes.
- * @property {Number} DEPTH - Describes effects that require a depth texture.
- * @property {Number} CONVOLUTION - Describes effects that fetch additional samples from the input buffer. There cannot be more than one effect with this attribute per {@link EffectPass}.
- * @example const attributes = EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH;
- */
-
-export const EffectAttribute = {
-	NONE: 0,
-	DEPTH: 1,
-	CONVOLUTION: 2
-};
-
-/**
- * An enumeration of WebGL extensions.
- *
- * @type {Object}
- * @property {String} DERIVATIVES - Enables derivatives by adding the functions dFdx, dFdy and fwidth.
- * @property {String} FRAG_DEPTH - Enables gl_FragDepthEXT to set a depth value of a fragment from within the fragment shader.
- * @property {String} DRAW_BUFFERS - Enables multiple render targets (MRT) support.
- * @property {String} SHADER_TEXTURE_LOD - Enables explicit control of texture LOD.
- */
-
-export const WebGLExtension = {
-	DERIVATIVES: "derivatives",
-	FRAG_DEPTH: "fragDepth",
-	DRAW_BUFFERS: "drawBuffers",
-	SHADER_TEXTURE_LOD: "shaderTextureLOD"
-};
