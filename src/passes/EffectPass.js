@@ -228,6 +228,7 @@ export class EffectPass extends Pass {
 		 * Elapsed time will start at this value.
 		 *
 		 * @type {Number}
+		 * @deprecated
 		 */
 
 		this.minTime = 1.0;
@@ -238,6 +239,7 @@ export class EffectPass extends Pass {
 		 * If the elapsed time exceeds this value, it will be reset.
 		 *
 		 * @type {Number}
+		 * @deprecated
 		 */
 
 		this.maxTime = Number.POSITIVE_INFINITY;
@@ -248,9 +250,35 @@ export class EffectPass extends Pass {
 	 * Indicates whether this pass encodes its output when rendering to screen.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use getOutputEncodingEnabled() instead.
 	 */
 
 	get encodeOutput() {
+
+		return this.isOutputEncodingEnabled();
+
+	}
+
+	/**
+	 * Enables or disables output encoding.
+	 *
+	 * @type {Boolean}
+	 * @deprecated Use setOutputEncodingEnabled() instead.
+	 */
+
+	set encodeOutput(value) {
+
+		this.setOutputEncodingEnabled(value);
+
+	}
+
+	/**
+	 * Indicates whether this pass encodes its output when rendering to screen.
+	 *
+	 * @return {Boolean} Whether output encoding is enabled.
+	 */
+
+	isOutputEncodingEnabled() {
 
 		return (this.getFullscreenMaterial().defines.ENCODE_OUTPUT !== undefined);
 
@@ -259,10 +287,10 @@ export class EffectPass extends Pass {
 	/**
 	 * Enables or disables output encoding.
 	 *
-	 * @type {Boolean}
+	 * @param {Boolean} value - Whether output encoding should be enabled.
 	 */
 
-	set encodeOutput(value) {
+	setOutputEncodingEnabled(value) {
 
 		if(this.encodeOutput !== value) {
 
@@ -289,9 +317,37 @@ export class EffectPass extends Pass {
 	 * Color quantization reduces banding artifacts but degrades performance.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use isDitheringEnabled() instead.
 	 */
 
 	get dithering() {
+
+		return this.isDitheringEnabled();
+
+	}
+
+	/**
+	 * Enables or disables dithering.
+	 *
+	 * @type {Boolean}
+	 * @deprecated Use setDitheringEnabled() instead.
+	 */
+
+	set dithering(value) {
+
+		this.setDitheringEnabled(value);
+
+	}
+
+	/**
+	 * Indicates whether dithering is enabled.
+	 *
+	 * Color quantization reduces banding artifacts but degrades performance.
+	 *
+	 * @return {Boolean} Whether dithering is enabled.
+	 */
+
+	isDitheringEnabled() {
 
 		return this.getFullscreenMaterial().dithering;
 
@@ -300,10 +356,10 @@ export class EffectPass extends Pass {
 	/**
 	 * Enables or disables dithering.
 	 *
-	 * @type {Boolean}
+	 * @param {Boolean} value - Whether dithering should enabled.
 	 */
 
-	set dithering(value) {
+	setDitheringEnabled(value) {
 
 		const material = this.getFullscreenMaterial();
 
@@ -555,7 +611,7 @@ export class EffectPass extends Pass {
 		if(!this.skipRendering || this.renderToScreen) {
 
 			material.uniforms.inputBuffer.value = inputBuffer.texture;
-			material.uniforms.time.value = (time <= this.maxTime) ? time : this.minTime;
+			material.uniforms.time.value = time;
 			renderer.setRenderTarget(this.renderToScreen ? null : outputBuffer);
 			renderer.render(this.scene, this.camera);
 
