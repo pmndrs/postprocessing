@@ -85,9 +85,22 @@ export class DepthPass extends Pass {
 	 * The depth texture.
 	 *
 	 * @type {Texture}
+	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
+
+		return this.getTexture();
+
+	}
+
+	/**
+	 * The depth texture.
+	 *
+	 * @return {Texture} The texture.
+	 */
+
+	getTexture() {
 
 		return this.renderTarget.texture;
 
