@@ -1,6 +1,6 @@
 import { FloatType, RGBADepthPacking } from "three";
 import { DepthCopyMode } from "../materials";
-import { DepthSavePass } from "./DepthSavePass";
+import { DepthCopyPass } from "./DepthCopyPass";
 
 const unpackFactors = new Float32Array([
 	(255 / 256) / (256 ** 3),
@@ -32,13 +32,13 @@ function unpackRGBAToDepth(packedDepth) {
  * A depth picking pass.
  */
 
-export class DepthPickingPass extends DepthSavePass {
+export class DepthPickingPass extends DepthCopyPass {
 
 	/**
 	 * Constructs a new depth picking pass.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {Number} [options.depthPacking=RGBADepthPacking] - The depth packing.
+	 * @param {DepthPackingStrategies} [options.depthPacking=RGBADepthPacking] - The depth packing.
 	 * @param {Number} [options.mode=DepthCopyMode.SINGLE] - The depth copy mode.
 	 */
 
@@ -75,9 +75,8 @@ export class DepthPickingPass extends DepthSavePass {
 	/**
 	 * Reads depth at a specific screen position.
 	 *
-	 * Only one depth value can be picked per frame. Calling this method multiple
-	 * times per frame will overwrite the picking coordinates. Unresolved promises
-	 * will be abandoned.
+	 * Only one depth value can be picked per frame. Calling this method multiple times per frame will overwrite the
+	 + picking coordinates. Unresolved promises will be abandoned.
 	 *
 	 * @example
 	 * const ndc = new Vector3();
