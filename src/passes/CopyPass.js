@@ -26,6 +26,7 @@ export class CopyPass extends Pass {
 		 * The render target.
 		 *
 		 * @type {WebGLRenderTarget}
+		 * @private
 		 */
 
 		this.renderTarget = renderTarget;
@@ -47,6 +48,7 @@ export class CopyPass extends Pass {
 		 * Indicates whether the render target should be resized automatically.
 		 *
 		 * @type {Boolean}
+		 * @deprecated Use setAutoResize() instead.
 		 */
 
 		this.resize = autoResize;
@@ -57,11 +59,36 @@ export class CopyPass extends Pass {
 	 * The saved texture.
 	 *
 	 * @type {Texture}
+	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
 
+		return this.getTexture();
+
+	}
+
+	/**
+	 * Returns the texture.
+	 *
+	 * @return {Texture} The texture.
+	 */
+
+	getTexture() {
+
 		return this.renderTarget.texture;
+
+	}
+
+	/**
+	 * Enables or disables auto resizing of the render target.
+	 *
+	 * @param {Boolean} value - Whether the render target size should be updated automatically.
+	 */
+
+	setAutoResize(value) {
+
+		this.resize = value;
 
 	}
 
