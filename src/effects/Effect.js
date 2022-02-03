@@ -115,6 +115,7 @@ export class Effect extends EventDispatcher {
 		 * Call {@link Effect.setChanged} after changing macro definitions.
 		 *
 		 * @type {Map<String, String>}
+		 * @protected
 		 */
 
 		this.defines = defines;
@@ -122,12 +123,10 @@ export class Effect extends EventDispatcher {
 		/**
 		 * Shader uniforms.
 		 *
-		 * You may freely modify the values of these uniforms at runtime. However, uniforms should not be removed or added
-		 * after the effect was created.
-		 *
 		 * Call {@link Effect.setChanged} after adding or removing uniforms.
 		 *
 		 * @type {Map<String, Uniform>}
+		 * @protected
 		 */
 
 		this.uniforms = uniforms;
@@ -138,6 +137,7 @@ export class Effect extends EventDispatcher {
 		 * Call {@link Effect.setChanged} after adding or removing extensions.
 		 *
 		 * @type {Set<WebGLExtension>}
+		 * @protected
 		 */
 
 		this.extensions = extensions;
@@ -145,9 +145,8 @@ export class Effect extends EventDispatcher {
 		/**
 		 * The blend mode of this effect.
 		 *
-		 * The result of this effect will be blended with the result of the previous effect using this blend mode.
-		 *
 		 * @type {BlendMode}
+		 * @protected
 		 */
 
 		this.blendMode = new BlendMode(blendFunction);
