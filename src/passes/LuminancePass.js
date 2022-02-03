@@ -35,6 +35,7 @@ export class LuminancePass extends Pass {
 		 * The luminance render target.
 		 *
 		 * @type {WebGLRenderTarget}
+		 * @private
 		 */
 
 		this.renderTarget = renderTarget;
@@ -68,9 +69,22 @@ export class LuminancePass extends Pass {
 	 * The luminance texture.
 	 *
 	 * @type {Texture}
+	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
+
+		return this.getTexture();
+
+	}
+
+	/**
+	 * The luminance texture.
+	 *
+	 * @return {Texture} The texture.
+	 */
+
+	getTexture() {
 
 		return this.renderTarget.texture;
 
