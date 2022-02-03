@@ -83,9 +83,22 @@ export class NormalPass extends Pass {
 	 * The normal texture.
 	 *
 	 * @type {Texture}
+	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
+
+		return this.getTexture();
+
+	}
+
+	/**
+	 * The normal texture.
+	 *
+	 * @return {Texture} The texture.
+	 */
+
+	getTexture() {
 
 		return this.renderTarget.texture;
 
