@@ -5,7 +5,7 @@ export { CopyPass, CopyPass as SavePass } from "./CopyPass";
 export { DepthPass } from "./DepthPass";
 export { DepthDownsamplingPass } from "./DepthDownsamplingPass";
 export { DepthPickingPass } from "./DepthPickingPass";
-export { DepthSavePass } from "./DepthSavePass";
+export { DepthCopyPass, DepthCopyPass as DepthSavePass } from "./DepthCopyPass";
 export { EffectPass } from "./EffectPass";
 export { KawaseBlurPass, KawaseBlurPass as BlurPass } from "./KawaseBlurPass";
 export { LambdaPass } from "./LambdaPass";

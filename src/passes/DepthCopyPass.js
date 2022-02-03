@@ -14,18 +14,18 @@ import { Pass } from "./Pass";
  * A pass that copies depth into a render target.
  */
 
-export class DepthSavePass extends Pass {
+export class DepthCopyPass extends Pass {
 
 	/**
 	 * Constructs a new depth save pass.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {Number} [options.depthPacking=RGBADepthPacking] - The output depth packing.
+	 * @param {DepthPackingStrategies} [options.depthPacking=RGBADepthPacking] - The output depth packing.
 	 */
 
 	constructor({ depthPacking = RGBADepthPacking } = {}) {
 
-		super("DepthSavePass");
+		super("DepthCopyPass");
 
 		const material = new DepthCopyMaterial();
 		material.setOutputDepthPacking(depthPacking);
@@ -37,6 +37,7 @@ export class DepthSavePass extends Pass {
 		 * The render target.
 		 *
 		 * @type {WebGLRenderTarget}
+		 * @private
 		 */
 
 		this.renderTarget = new WebGLRenderTarget(1, 1, {
@@ -47,7 +48,7 @@ export class DepthSavePass extends Pass {
 			depthBuffer: false
 		});
 
-		this.renderTarget.texture.name = "DepthSavePass.Target";
+		this.renderTarget.texture.name = "DepthCopyPass.Target";
 
 	}
 
@@ -55,9 +56,22 @@ export class DepthSavePass extends Pass {
 	 * The output depth texture.
 	 *
 	 * @type {Texture}
+	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
+
+		return this.getTexture();
+
+	}
+
+	/**
+	 * The output depth texture.
+	 *
+	 * @return {Texture} The texture.
+	 */
+
+	getTexture() {
 
 		return this.renderTarget.texture;
 
@@ -66,10 +80,23 @@ export class DepthSavePass extends Pass {
 	/**
 	 * The output depth packing.
 	 *
-	 * @type {Texture}
+	 * @type {DepthPackingStrategies}
+	 * @deprecated Use getDepthPacking() instead.
 	 */
 
 	get depthPacking() {
+
+		return this.getDepthPacking();
+
+	}
+
+	/**
+	 * Returns the output depth packing.
+	 *
+	 * @return {DepthPackingStrategies} The depth packing.
+	 */
+
+	getDepthPacking() {
 
 		return this.getFullscreenMaterial().getOutputDepthPacking();
 
@@ -79,7 +106,7 @@ export class DepthSavePass extends Pass {
 	 * Sets the depth texture.
 	 *
 	 * @param {Texture} depthTexture - A depth texture.
-	 * @param {Number} [depthPacking=BasicDepthPacking] - The depth packing.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing.
 	 */
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
