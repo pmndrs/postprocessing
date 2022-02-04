@@ -38,9 +38,21 @@ export class DotScreenEffect extends Effect {
 	}
 
 	/**
+	 * Returns the pattern angle.
+	 *
+	 * @return {Number} The angle in radians.
+	 */
+
+	getAngle(angle) {
+
+		return Math.acos(this.uniforms.get("angle").value.y);
+
+	}
+
+	/**
 	 * Sets the pattern angle.
 	 *
-	 * @param {Number} [angle] - The angle of the dot pattern.
+	 * @param {Number} angle - The angle in radians.
 	 */
 
 	setAngle(angle) {
