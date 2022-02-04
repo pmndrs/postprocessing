@@ -32,7 +32,7 @@ export class OutlineEffect extends Effect {
 	 * @param {Number} [options.resolutionScale=0.5] - Deprecated. Use height or width instead.
 	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
 	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
-	 * @param {KawaseBlurPass.KernelSize} [options.kernelSize=KernelSize.VERY_SMALL] - The blur kernel size.
+	 * @param {KernelSize} [options.kernelSize=KernelSize.VERY_SMALL] - The blur kernel size.
 	 * @param {Boolean} [options.blur=false] - Whether the outline should be blurred.
 	 * @param {Boolean} [options.xRay=true] - Whether occluded parts of selected objects should be visible.
 	 */
@@ -84,7 +84,7 @@ export class OutlineEffect extends Effect {
 
 		this.blendMode.setBlendFunction(blendFunction);
 		this.setPatternTexture(patternTexture);
-		this.xRay = xRay;
+		this.setXRayEnabled(xRay);
 
 		/**
 		 * The main scene.
@@ -169,11 +169,12 @@ export class OutlineEffect extends Effect {
 		 * A blur pass.
 		 *
 		 * @type {KawaseBlurPass}
+		 * @deprecated Use getBlurPass() instead.
 		 */
 
 		this.blurPass = new KawaseBlurPass({ resolutionScale, width, height, kernelSize });
 		this.blurPass.resolution.resizable = this;
-		this.blur = blur;
+		this.blurPass.setEnabled(blur);
 
 		/**
 		 * An outline detection pass.
@@ -201,6 +202,7 @@ export class OutlineEffect extends Effect {
 		 * The default layer of this selection is 10.
 		 *
 		 * @type {Selection}
+		 * @deprecated Use getSelection() instead.
 		 */
 
 		this.selection = new Selection();
@@ -210,6 +212,7 @@ export class OutlineEffect extends Effect {
 		 * The pulse speed. A value of zero disables the pulse effect.
 		 *
 		 * @type {Number}
+		 * @deprecated Use getPulseSpeed() and setPulseSpeed() instead.
 		 */
 
 		this.pulseSpeed = pulseSpeed;
@@ -229,11 +232,72 @@ export class OutlineEffect extends Effect {
 	 * The resolution of this effect.
 	 *
 	 * @type {Resizer}
+	 * @deprecated Use getResolution() instead.
 	 */
 
 	get resolution() {
 
-		return this.blurPass.resolution;
+		return this.getResolution();
+
+	}
+
+	/**
+	 * Returns the resolution.
+	 *
+	 * @return {Resizer} The resolution.
+	 */
+
+	getResolution() {
+
+		return this.blurPass.getResolution();
+
+	}
+
+	/**
+	 * Returns the blur pass.
+	 *
+	 * @return {KawaseBlurPass} The blur pass.
+	 */
+
+	getBlurPass() {
+
+		return this.blurPass;
+
+	}
+
+	/**
+	 * Returns the selection.
+	 *
+	 * @return {Selection} The selection.
+	 */
+
+	getSelection() {
+
+		return this.selection;
+
+	}
+
+	/**
+	 * Returns the pulse speed.
+	 *
+	 * @return {Number} The speed.
+	 */
+
+	getPulseSpeed() {
+
+		return this.pulseSpeed;
+
+	}
+
+	/**
+	 * Sets the pulse speed. Set to zero to disable.
+	 *
+	 * @param {Number} value - The speed.
+	 */
+
+	setPulseSpeed(value) {
+
+		this.pulseSpeed = value;
 
 	}
 
@@ -291,23 +355,23 @@ export class OutlineEffect extends Effect {
 
 	/**
 	 * @type {Number}
-	 * @deprecated Use selection.layer instead.
+	 * @deprecated Use getSelection().getLayer() instead.
 	 */
 
 	get selectionLayer() {
 
-		return this.selection.layer;
+		return this.selection.getLayer();
 
 	}
 
 	/**
 	 * @type {Number}
-	 * @deprecated Use selection.layer instead.
+	 * @deprecated Use getSelection().setLayer() instead.
 	 */
 
 	set selectionLayer(value) {
 
-		this.selection.layer = value;
+		this.selection.setLayer(value);
 
 	}
 
@@ -341,7 +405,7 @@ export class OutlineEffect extends Effect {
 	 * The blur kernel size.
 	 *
 	 * @type {KernelSize}
-	 * @deprecated Use blurPass.getKernelSize instead.
+	 * @deprecated Use getBlurPass().getKernelSize() instead.
 	 */
 
 	get kernelSize() {
@@ -354,7 +418,7 @@ export class OutlineEffect extends Effect {
 	 * Sets the kernel size.
 	 *
 	 * @type {KernelSize}
-	 * @deprecated Use blurPass.setKernelSize instead.
+	 * @deprecated Use blurPass.setKernelSize() instead.
 	 */
 
 	set kernelSize(value) {
@@ -367,7 +431,7 @@ export class OutlineEffect extends Effect {
 	 * Indicates whether the outlines should be blurred.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use blurPass.isEnabled instead.
+	 * @deprecated Use getBlurPass().isEnabled() instead.
 	 */
 
 	get blur() {
@@ -378,7 +442,7 @@ export class OutlineEffect extends Effect {
 
 	/**
 	 * @type {Boolean}
-	 * @deprecated Use blurPass.setEnabled instead.
+	 * @deprecated Use getBlurPass().setEnabled() instead.
 	 */
 
 	set blur(value) {
@@ -391,7 +455,7 @@ export class OutlineEffect extends Effect {
 	 * Indicates whether X-Ray outlines are enabled.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use isXRayEnabled instead.
+	 * @deprecated Use isXRayEnabled() instead.
 	 */
 
 	get xRay() {
@@ -404,7 +468,7 @@ export class OutlineEffect extends Effect {
 	 * Enables or disables X-Ray outlines.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use setXRayEnabled instead.
+	 * @deprecated Use setXRayEnabled() instead.
 	 */
 
 	set xRay(value) {
@@ -414,7 +478,7 @@ export class OutlineEffect extends Effect {
 	}
 
 	/**
-	 * Indicates whether X-Ray outlines are enabled.
+	 * Indicates whether X-ray mode is enabled.
 	 *
 	 * @return {Boolean} Whether X-ray mode is enabled.
 	 */
@@ -426,7 +490,7 @@ export class OutlineEffect extends Effect {
 	}
 
 	/**
-	 * Enables or disables X-Ray outlines.
+	 * Enables or disables X-ray outlines.
 	 *
 	 * @param {Boolean} value - Whether X-ray should be enabled.
 	 */
@@ -513,13 +577,12 @@ export class OutlineEffect extends Effect {
 	 *
 	 * @param {Object3D[]} objects - The objects that should be outlined. This array will be copied.
 	 * @return {OutlinePass} This pass.
-	 * @deprecated Use selection.set instead.
+	 * @deprecated Use getSelection().set() instead.
 	 */
 
 	setSelection(objects) {
 
 		this.selection.set(objects);
-
 		return this;
 
 	}
@@ -528,13 +591,12 @@ export class OutlineEffect extends Effect {
 	 * Clears the list of selected objects.
 	 *
 	 * @return {OutlinePass} This pass.
-	 * @deprecated Use selection.clear instead.
+	 * @deprecated Use getSelection().clear() instead.
 	 */
 
 	clearSelection() {
 
 		this.selection.clear();
-
 		return this;
 
 	}
@@ -544,13 +606,12 @@ export class OutlineEffect extends Effect {
 	 *
 	 * @param {Object3D} object - The object that should be outlined.
 	 * @return {OutlinePass} This pass.
-	 * @deprecated Use selection.add instead.
+	 * @deprecated Use getSelection().add() instead.
 	 */
 
 	selectObject(object) {
 
 		this.selection.add(object);
-
 		return this;
 
 	}
@@ -560,13 +621,12 @@ export class OutlineEffect extends Effect {
 	 *
 	 * @param {Object3D} object - The object that should no longer be outlined.
 	 * @return {OutlinePass} This pass.
-	 * @deprecated Use selection.delete instead.
+	 * @deprecated Use getSelection().delete() instead.
 	 */
 
 	deselectObject(object) {
 
 		this.selection.delete(object);
-
 		return this;
 
 	}
