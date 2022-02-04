@@ -40,6 +40,43 @@ export class HueSaturationEffect extends Effect {
 	}
 
 	/**
+	 * Returns the saturation.
+	 *
+	 * @return {Number} The saturation.
+	 */
+
+	getSaturation(value) {
+
+		return this.uniforms.get("saturation").value;
+
+	}
+
+	/**
+	 * Sets the saturation.
+	 *
+	 * @param {Number} value - The saturation.
+	 */
+
+	setSaturation(value) {
+
+		this.uniforms.get("saturation").value = value;
+
+	}
+
+	/**
+	 * Returns the hue.
+	 *
+	 * @return {Number} The hue in radians.
+	 */
+
+	getHue(value) {
+
+		const hue = this.uniforms.get("hue").value;
+		return Math.acos((hue.x * 3.0 - 1.0) / 2.0);
+
+	}
+
+	/**
 	 * Sets the hue.
 	 *
 	 * @param {Number} value - The hue in radians.
