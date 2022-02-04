@@ -122,6 +122,21 @@ export class Resolution extends EventDispatcher {
 	}
 
 	/**
+	 * Copies the given resolution.
+	 *
+	 * @param {Resolution} resolution - The resolution.
+	 */
+
+	copy(resolution) {
+
+		this.base.set(resolution.getBaseWidth(), resolution.getBaseHeight());
+		this.preferred.set(resolution.getPreferredWidth(), resolution.getPreferredHeight());
+		this.dispatchEvent({ type: "change" });
+		this.resizable.setSize(this.base.width, this.base.height);
+
+	}
+
+	/**
 	 * Returns the effective width.
 	 *
 	 * If the preferred width and height are set to {@link Resizer.AUTO_SIZE}, the base width will be returned.
