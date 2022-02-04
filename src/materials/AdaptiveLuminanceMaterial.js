@@ -42,4 +42,79 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 
 	}
 
+	/**
+	 * Sets the primary luminance buffer which contains the downsampled average luminance.
+	 *
+	 * @param {Texture} value - The buffer.
+	 */
+
+	setLuminanceBuffer0(value) {
+
+		this.uniforms.luminanceBuffer0.value = value;
+
+	}
+
+	/**
+	 * Sets the secondary luminance buffer.
+	 *
+	 * @param {Texture} value - The buffer.
+	 */
+
+	setLuminanceBuffer1(value) {
+
+		this.uniforms.luminanceBuffer1.value = value;
+
+	}
+
+	/**
+	 * Sets the 1x1 mipmap level.
+	 *
+	 * This level is used to identify the smallest mipmap of the primary luminance buffer.
+	 *
+	 * @param {Number} value - The level.
+	 */
+
+	setMipLevel1x1(value) {
+
+		this.defines.MIP_LEVEL_1X1 = value.toFixed(1);
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Sets the delta time.
+	 *
+	 * @param {Number} value - The delta time.
+	 */
+
+	setDeltaTime(value) {
+
+		this.uniforms.deltaTime.value = value;
+
+	}
+
+	/**
+	 * Returns the luminance adaptation rate.
+	 *
+	 * @return {Number} The adaptation rate.
+	 */
+
+	getAdaptationRate() {
+
+		return this.uniforms.tau.value;
+
+	}
+
+	/**
+	 * Sets the luminance adaptation rate.
+	 *
+	 * @param {Number} value - The adaptation rate.
+	 */
+
+	setAdaptationRate(value) {
+
+		this.uniforms.tau.value = value;
+
+	}
+
 }
