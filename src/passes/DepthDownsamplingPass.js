@@ -73,6 +73,7 @@ export class DepthDownsamplingPass extends Pass {
 		 * The resolution of this effect.
 		 *
 		 * @type {Resizer}
+		 * @deprecated Use getResolution() instead.
 		 */
 
 		this.resolution = new Resizer(this, width, height);
@@ -102,6 +103,18 @@ export class DepthDownsamplingPass extends Pass {
 	getTexture() {
 
 		return this.renderTarget.texture;
+
+	}
+
+	/**
+	 * Returns the resolution settings.
+	 *
+	 * @return {Resolution} The resolution.
+	 */
+
+	getResolution() {
+
+		return this.resolution;
 
 	}
 
