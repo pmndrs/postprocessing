@@ -14,48 +14,71 @@ export class NoiseEffect extends Effect {
 	 *
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
-	 * @param {Boolean} [options.premultiply=false] - Whether the noise should be multiplied with the input color.
+	 * @param {Boolean} [options.premultiplied=false] - Whether the noise should be multiplied with the input colors prior to blending.
 	 */
 
-	constructor({
-		blendFunction = BlendFunction.SCREEN,
-		premultiply = false
-	} = {}) {
+	constructor({ blendFunction = BlendFunction.SCREEN, premultiplied = false } = {}) {
 
 		super("NoiseEffect", fragmentShader, { blendFunction });
-		this.premultiply = premultiply;
+		this.setPremultiplied(premultiplied);
 
 	}
 
 	/**
-	 * Indicates whether the noise should be multiplied with the input color.
+	 * Indicates whether noise will be multiplied with the input colors prior to blending.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use isPremultiplied() instead.
 	 */
 
 	get premultiply() {
 
-		return this.defines.has("PREMULTIPLY");
+		return this.isPremultiplied();
 
 	}
 
 	/**
-	 * Enables or disables noise premultiplication.
+	 * Controls whether noise should be multiplied with the input colors prior to blending.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use setPremultiplied() instead.
 	 */
 
 	set premultiply(value) {
 
-		if(this.premultiply !== value) {
+		this.setPremultiplied(value);
+
+	}
+
+	/**
+	 * Indicates whether noise will be multiplied with the input colors prior to blending.
+	 *
+	 * @return {Boolean} Whether noise is premultiplied.
+	 */
+
+	isPremultiplied() {
+
+		return Number(this.defines.has("PREMULTIPLIED"));
+
+	}
+
+	/**
+	 * Controls whether noise should be multiplied with the input colors prior to blending.
+	 *
+	 * @param {Boolean} value - Whether noise should be premultiplied.
+	 */
+
+	setPremultiplied(value) {
+
+		if(this.isPremultiplied() !== value) {
 
 			if(value) {
 
-				this.defines.set("PREMULTIPLY", "1");
+				this.defines.set("PREMULTIPLIED", "1");
 
 			} else {
 
-				this.defines.delete("PREMULTIPLY");
+				this.defines.delete("PREMULTIPLIED");
 
 			}
 
