@@ -70,6 +70,7 @@ export class KawaseBlurPass extends Pass {
 		 * devices and screen resolutions.
 		 *
 		 * @type {Resizer}
+		 * @deprecated Use getResolution() instead.
 		 */
 
 		this.resolution = new Resizer(this, width, height, resolutionScale);
@@ -110,6 +111,18 @@ export class KawaseBlurPass extends Pass {
 		 */
 
 		this.kernelSize = kernelSize;
+
+	}
+
+	/**
+	 * Returns the resolution settings.
+	 *
+	 * @return {Resolution} The resolution.
+	 */
+
+	getResolution() {
+
+		return this.resolution;
 
 	}
 
