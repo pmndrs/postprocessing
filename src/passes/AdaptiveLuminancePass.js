@@ -44,10 +44,11 @@ export class AdaptiveLuminancePass extends Pass {
 
 		this.renderTargetPrevious.texture.name = "Luminance.Previous";
 
-		const uniforms = this.getFullscreenMaterial().uniforms;
-		uniforms.luminanceBuffer0.value = this.renderTargetPrevious.texture;
-		uniforms.luminanceBuffer1.value = luminanceBuffer;
-		uniforms.minLuminance.value = minLuminance;
+		const material = this.getFullscreenMaterial();
+		material.setLuminanceBuffer0(this.renderTargetPrevious.texture);
+		material.setLuminanceBuffer1(luminanceBuffer);
+		material.setMinLuminance(minLuminance);
+		material.setAdaptationRate(adaptationRate);
 
 		/**
 		 * A 1x1 render target that stores the adapted average luminance.
@@ -67,8 +68,6 @@ export class AdaptiveLuminancePass extends Pass {
 		 */
 
 		this.copyPass = new CopyPass(this.renderTargetPrevious, false);
-
-		this.setAdaptationRate(adaptationRate);
 
 	}
 
@@ -104,29 +103,12 @@ export class AdaptiveLuminancePass extends Pass {
 	 * average scene luminance.
 	 *
 	 * @type {Number}
-	 * @deprecated Use setMipLevel1x1() instead.
+	 * @deprecated Use getFullscreenMaterial().setMipLevel1x1() instead.
 	 */
 
 	set mipLevel1x1(value) {
 
-		this.setMipLevel1x1(value);
-
-	}
-
-	/**
-	 * Sets the 1x1 mipmap level.
-	 *
-	 * This level is used to identify the smallest mipmap of the main luminance texture which contains the downsampled
-	 * average scene luminance.
-	 *
-	 * @param {Number} The level.
-	 */
-
-	setMipLevel1x1(value) {
-
-		const material = this.getFullscreenMaterial();
-		material.defines.MIP_LEVEL_1X1 = value.toFixed(1);
-		material.needsUpdate = true;
+		this.getFullscreenMaterial().setMipLevel1x1(value);
 
 	}
 
@@ -134,45 +116,23 @@ export class AdaptiveLuminancePass extends Pass {
 	 * The luminance adaptation rate.
 	 *
 	 * @type {Number}
+	 * @deprecated Use getFullscreenMaterial().getAdaptationRate() instead.
 	 */
 
 	get adaptationRate() {
 
-		return this.getAdaptationRate();
+		return this.getFullscreenMaterial().getAdaptationRate();
 
 	}
 
 	/**
 	 * @type {Number}
+	 * @deprecated Use getFullscreenMaterial().setAdaptationRate() instead.
 	 */
 
 	set adaptationRate(value) {
 
-		this.setAdaptationRate(value);
-
-	}
-
-	/**
-	 * Returns the luminance adaptation rate.
-	 *
-	 * @return {Number} The adaptation rate.
-	 */
-
-	getAdaptationRate() {
-
-		return this.getFullscreenMaterial().uniforms.tau.value;
-
-	}
-
-	/**
-	 * Sets the luminance adaptation rate.
-	 *
-	 * @param {Number} value - The adaptation rate.
-	 */
-
-	setAdaptationRate(value) {
-
-		this.getFullscreenMaterial().uniforms.tau.value = value;
+		this.getFullscreenMaterial().setAdaptationRate(value);
 
 	}
 
@@ -189,7 +149,7 @@ export class AdaptiveLuminancePass extends Pass {
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
 		// Use the frame delta time to chase after the current luminance.
-		this.getFullscreenMaterial().uniforms.deltaTime.value = deltaTime;
+		this.getFullscreenMaterial().setDeltaTime(deltaTime);
 		renderer.setRenderTarget(this.renderToScreen ? null : this.renderTargetAdapted);
 		renderer.render(this.scene, this.camera);
 
