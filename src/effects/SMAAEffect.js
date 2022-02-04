@@ -159,11 +159,12 @@ export class SMAAEffect extends Effect {
 	 * The internal edge detection material.
 	 *
 	 * @type {EdgeDetectionMaterial}
+	 * @deprecated Use getEdgeDetectionMaterial() instead.
 	 */
 
 	get edgeDetectionMaterial() {
 
-		return this.edgeDetectionPass.getFullscreenMaterial();
+		return this.getEdgeDetectionMaterial();
 
 	}
 
@@ -171,12 +172,24 @@ export class SMAAEffect extends Effect {
 	 * The internal edge detection material.
 	 *
 	 * @type {EdgeDetectionMaterial}
-	 * @deprecated Use edgeDetectionMaterial instead.
+	 * @deprecated Use getEdgeDetectionMaterial() instead.
 	 */
 
 	get colorEdgesMaterial() {
 
-		return this.edgeDetectionMaterial;
+		return this.getEdgeDetectionMaterial();
+
+	}
+
+	/**
+	 * Returns the edge detection material.
+	 *
+	 * @return {EdgeDetectionMaterial} The material.
+	 */
+
+	getEdgeDetectionMaterial() {
+
+		return this.edgeDetectionPass.getFullscreenMaterial();
 
 	}
 
@@ -184,9 +197,22 @@ export class SMAAEffect extends Effect {
 	 * The internal edge weights material.
 	 *
 	 * @type {SMAAWeightsMaterial}
+	 * @deprecated Use getWeightsMaterial() instead.
 	 */
 
 	get weightsMaterial() {
+
+		return this.weightsPass.getFullscreenMaterial();
+
+	}
+
+	/**
+	 * Returns the edge weights material.
+	 *
+	 * @return {SMAAWeightsMaterial} The material.
+	 */
+
+	getWeightsMaterial() {
 
 		return this.weightsPass.getFullscreenMaterial();
 
@@ -197,13 +223,13 @@ export class SMAAEffect extends Effect {
 	 *
 	 * See {@link EdgeDetectionMaterial#setEdgeDetectionThreshold} for more details.
 	 *
-	 * @deprecated Use applyPreset or edgeDetectionMaterial instead.
+	 * @deprecated Use applyPreset() or getEdgeDetectionMaterial() instead.
 	 * @param {Number} threshold - The edge detection sensitivity. Range: [0.05, 0.5].
 	 */
 
 	setEdgeDetectionThreshold(threshold) {
 
-		this.edgeDetectionPass.getFullscreenMaterial().setEdgeDetectionThreshold(threshold);
+		this.getEdgeDetectionMaterial().setEdgeDetectionThreshold(threshold);
 
 	}
 
@@ -212,13 +238,13 @@ export class SMAAEffect extends Effect {
 	 *
 	 * See {@link SMAAWeightsMaterial#setOrthogonalSearchSteps} for more details.
 	 *
-	 * @deprecated Use applyPreset or weightsMaterial instead.
+	 * @deprecated Use applyPreset() or getWeightsMaterial() instead.
 	 * @param {Number} steps - The search steps. Range: [0, 112].
 	 */
 
 	setOrthogonalSearchSteps(steps) {
 
-		this.weightsPass.getFullscreenMaterial().setOrthogonalSearchSteps(steps);
+		this.getWeightsMaterial().setOrthogonalSearchSteps(steps);
 
 	}
 
