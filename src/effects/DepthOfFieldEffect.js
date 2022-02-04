@@ -147,14 +147,11 @@ export class DepthOfFieldEffect extends Effect {
 		/**
 		 * This pass blurs the foreground CoC buffer to soften edges.
 		 *
-		 * @type {BlurPass}
+		 * @type {KawaseBlurPass}
+		 * @deprecated Use getBlurPass() instead.
 		 */
 
-		this.blurPass = new KawaseBlurPass({
-			kernelSize: KernelSize.MEDIUM,
-			width,
-			height
-		});
+		this.blurPass = new KawaseBlurPass({ kernelSize: KernelSize.MEDIUM, width, height });
 
 		this.blurPass.resolution.resizable = this;
 
@@ -214,6 +211,7 @@ export class DepthOfFieldEffect extends Effect {
 		 * Set this to `null` to disable auto focus.
 		 *
 		 * @type {Vector3}
+		 * @deprecated Use getTarget() and setTarget() instead.
 		 */
 
 		this.target = null;
@@ -224,23 +222,61 @@ export class DepthOfFieldEffect extends Effect {
 	 * The circle of confusion material.
 	 *
 	 * @type {CircleOfConfusionMaterial}
+	 * @deprecated Use getCircleOfConfusionMaterial() instead.
 	 */
 
 	get circleOfConfusionMaterial() {
+
+		return this.getCircleOfConfusionMaterial();
+
+	}
+
+	/**
+	 * Returns the circle of confusion material.
+	 *
+	 * @return {CircleOfConfusionMaterial} The material.
+	 */
+
+	getCircleOfConfusionMaterial() {
 
 		return this.cocPass.getFullscreenMaterial();
 
 	}
 
 	/**
+	 * Returns the pass that blurs the foreground CoC buffer to soften edges.
+	 *
+	 * @return {KawaseBlurPass} The blur pass.
+	 */
+
+	getBlurPass() {
+
+		return this.blurPass;
+
+	}
+
+	/**
 	 * The resolution of this effect.
 	 *
-	 * @type {Resizer}
+	 * @type {Resolution}
+	 * @deprecated Use getResolution() instead.
 	 */
 
 	get resolution() {
 
-		return this.blurPass.resolution;
+		return this.getResolution();
+
+	}
+
+	/**
+	 * Returns the resolution settings.
+	 *
+	 * @return {Resolution} The resolution.
+	 */
+
+	getResolution() {
+
+		return this.blurPass.getResolution();
 
 	}
 
@@ -426,7 +462,7 @@ export class DepthOfFieldEffect extends Effect {
 
 	setSize(width, height) {
 
-		const resolution = this.resolution;
+		const resolution = this.getResolution();
 
 		let resizables = [
 			this.cocPass,
