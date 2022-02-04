@@ -21,7 +21,7 @@ export class ShockWaveEffect extends Effect {
 	 * Constructs a new shock wave effect.
 	 *
 	 * @param {Camera} camera - The main camera.
-	 * @param {Vector3} [epicenter] - The world position of the shock wave epicenter.
+	 * @param {Vector3} [position] - The world position of the shock wave.
 	 * @param {Object} [options] - The options.
 	 * @param {Number} [options.speed=2.0] - The animation speed.
 	 * @param {Number} [options.maxRadius=1.0] - The extent of the shock wave.
@@ -29,7 +29,7 @@ export class ShockWaveEffect extends Effect {
 	 * @param {Number} [options.amplitude=0.05] - The distortion amplitude.
 	 */
 
-	constructor(camera, epicenter = new Vector3(), {
+	constructor(camera, position = new Vector3(), {
 		speed = 2.0,
 		maxRadius = 1.0,
 		waveSize = 0.2,
@@ -54,18 +54,20 @@ export class ShockWaveEffect extends Effect {
 		 * The main camera.
 		 *
 		 * @type {Camera}
+		 * @private
 		 */
 
 		this.camera = camera;
 
 		/**
-		 * The epicenter.
+		 * The position of the shock wave.
 		 *
+		 * TODO Rename to position.
 		 * @type {Vector3}
-		 * @example shockWavePass.epicenter = myMesh.position;
+		 * @deprecated Use getPosition() and setPosition() instead.
 		 */
 
-		this.epicenter = epicenter;
+		this.epicenter = position;
 
 		/**
 		 * The object position in screen space.
@@ -80,6 +82,7 @@ export class ShockWaveEffect extends Effect {
 		 * The speed of the shock wave animation.
 		 *
 		 * @type {Number}
+		 * @deprecated Use getSpeed() and setSpeed() instead.
 		 */
 
 		this.speed = speed;
@@ -105,6 +108,54 @@ export class ShockWaveEffect extends Effect {
 	}
 
 	/**
+	 * Returns the position of the shock wave.
+	 *
+	 * @return {Vector3} The position.
+	 */
+
+	getPosition() {
+
+		return this.epicenter;
+
+	}
+
+	/**
+	 * Sets the position of the shock wave.
+	 *
+	 * @param {Vector3} value - The position.
+	 */
+
+	setPosition(value) {
+
+		this.epicenter = value;
+
+	}
+
+	/**
+	 * Returns the speed of the shock wave.
+	 *
+	 * @return {Number} The speed.
+	 */
+
+	getSpeed() {
+
+		return this.speed;
+
+	}
+
+	/**
+	 * Sets the speed of the shock wave.
+	 *
+	 * @param {Number} value - The speed.
+	 */
+
+	setSpeed(value) {
+
+		this.speed = value;
+
+	}
+
+	/**
 	 * Emits the shock wave.
 	 */
 
@@ -126,7 +177,7 @@ export class ShockWaveEffect extends Effect {
 
 	update(renderer, inputBuffer, delta) {
 
-		const epicenter = this.epicenter;
+		const position = this.getPosition();
 		const camera = this.camera;
 		const uniforms = this.uniforms;
 		const uniformActive = uniforms.get("active");
@@ -137,7 +188,7 @@ export class ShockWaveEffect extends Effect {
 
 			// Calculate direction vectors.
 			camera.getWorldDirection(v);
-			ab.copy(camera.position).sub(epicenter);
+			ab.copy(camera.position).sub(position);
 
 			// Don't render the effect if the object is behind the camera.
 			uniformActive.value = (v.angleTo(ab) > HALF_PI);
@@ -145,10 +196,10 @@ export class ShockWaveEffect extends Effect {
 			if(uniformActive.value) {
 
 				// Scale the effect based on distance to the object.
-				uniforms.get("cameraDistance").value = camera.position.distanceTo(epicenter);
+				uniforms.get("cameraDistance").value = camera.position.distanceTo(position);
 
-				// Calculate the screen position of the epicenter.
-				v.copy(epicenter).project(camera);
+				// Calculate the screen position of the shock wave.
+				v.copy(position).project(camera);
 				this.screenPosition.set((v.x + 1.0) * 0.5, (v.y + 1.0) * 0.5);
 
 			}
