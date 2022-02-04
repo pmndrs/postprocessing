@@ -169,11 +169,10 @@ export class GodRaysEffect extends Effect {
 		this.clearPass.overrideClearColor = new Color(0x000000);
 
 		/**
-		 * A blur pass that reduces aliasing artifacts and makes the light softer.
-		 *
-		 * You can disable this pass to improve performance.
+		 * A blur pass.
 		 *
 		 * @type {KawaseBlurPass}
+		 * @deprectaed Use getBlurPass() instead.
 		 */
 
 		this.blurPass = new KawaseBlurPass({ resolutionScale, width, height, kernelSize });
@@ -207,8 +206,19 @@ export class GodRaysEffect extends Effect {
 		godRaysMaterial.uniforms.exposure.value = exposure;
 		godRaysMaterial.uniforms.clampMax.value = clampMax;
 
-		this.samples = samples;
-		this.blur = blur;
+	}
+
+	/**
+	 * Returns the blur pass that reduces aliasing artifacts and makes the light softer.
+	 *
+	 * You can disable this pass to improve performance.
+	 *
+	 * @return {KawaseBlurPass} The blur pass.
+	 */
+
+	getBlurPass() {
+
+		return this.blurPass;
 
 	}
 
@@ -216,9 +226,22 @@ export class GodRaysEffect extends Effect {
 	 * A texture that contains the intermediate result of this effect.
 	 *
 	 * @type {Texture}
+	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
+
+		return this.getTexture();
+
+	}
+
+	/**
+	 * Returns the god rays texture.
+	 *
+	 * @return {Texture} The texture.
+	 */
+
+	getTexture() {
 
 		return this.renderTargetB.texture;
 
@@ -228,9 +251,22 @@ export class GodRaysEffect extends Effect {
 	 * The internal god rays material.
 	 *
 	 * @type {GodRaysMaterial}
+	 * @deprecated Use getGodRaysMaterial() instead.
 	 */
 
 	get godRaysMaterial() {
+
+		return this.getGodRaysMaterial();
+
+	}
+
+	/**
+	 * Returns the god rays material.
+	 *
+	 * @return {GodRaysMaterial} The material.
+	 */
+
+	getGodRaysMaterial() {
 
 		return this.godRaysPass.getFullscreenMaterial();
 
@@ -240,11 +276,24 @@ export class GodRaysEffect extends Effect {
 	 * The resolution of this effect.
 	 *
 	 * @type {Resizer}
+	 * @deprecated Use getResolution() instead.
 	 */
 
 	get resolution() {
 
-		return this.blurPass.resolution;
+		return this.getResolution();
+
+	}
+
+	/**
+	 * Returns the resolution of this effect.
+	 *
+	 * @return {GodRaysMaterial} The material.
+	 */
+
+	getResolution() {
+
+		return this.blurPass.getResolution();
 
 	}
 
@@ -309,7 +358,7 @@ export class GodRaysEffect extends Effect {
 
 	get dithering() {
 
-		return this.godRaysMaterial.dithering;
+		return this.getGodRaysMaterial().dithering;
 
 	}
 
@@ -322,8 +371,7 @@ export class GodRaysEffect extends Effect {
 
 	set dithering(value) {
 
-		const material = this.godRaysMaterial;
-
+		const material = this.getGodRaysMaterial();
 		material.dithering = value;
 		material.needsUpdate = true;
 
@@ -409,12 +457,12 @@ export class GodRaysEffect extends Effect {
 	 * The number of samples per pixel.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getSamples instead.
+	 * @deprecated Use getGodRaysMaterial().getSamples() instead.
 	 */
 
 	get samples() {
 
-		return this.getSamples();
+		return this.getGodRaysMaterial().getSamples();
 
 	}
 
@@ -422,36 +470,12 @@ export class GodRaysEffect extends Effect {
 	 * A higher sample count improves quality at the cost of performance.
 	 *
 	 * @type {Number}
-	 * @deprecated Use setSamples instead.
+	 * @deprecated Use getGodRaysMaterial().setSamples() instead.
 	 */
 
 	set samples(value) {
 
-		this.setSamples(value);
-
-	}
-
-	/**
-	 * Returns the number of samples per pixel.
-	 *
-	 * @return {Number} The sample count.
-	 */
-
-	getSamples() {
-
-		return this.godRaysMaterial.samples;
-
-	}
-
-	/**
-	 * A higher sample count improves quality at the cost of performance.
-	 *
-	 * @param {Number} value - The sample count.
-	 */
-
-	setSamples(value) {
-
-		this.godRaysMaterial.samples = value;
+		this.getGodRaysMaterial().setSamples(value);
 
 	}
 
