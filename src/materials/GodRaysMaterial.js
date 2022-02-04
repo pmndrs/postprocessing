@@ -57,6 +57,126 @@ export class GodRaysMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Returns the density.
+	 *
+	 * @return {Number} The density.
+	 */
+
+	getDensity() {
+
+		return this.uniforms.density.value;
+
+	}
+
+	/**
+	 * Sets the density.
+	 *
+	 * @param {Number} value - The density.
+	 */
+
+	setDensity(value) {
+
+		this.uniforms.density.value = value;
+
+	}
+
+	/**
+	 * Returns the decay.
+	 *
+	 * @return {Number} The decay.
+	 */
+
+	getDecay() {
+
+		return this.uniforms.decay.value;
+
+	}
+
+	/**
+	 * Sets the decay.
+	 *
+	 * @param {Number} value - The decay.
+	 */
+
+	setDecay(value) {
+
+		this.uniforms.decay.value = value;
+
+	}
+
+	/**
+	 * Returns the weight.
+	 *
+	 * @return {Number} The weight.
+	 */
+
+	getWeight() {
+
+		return this.uniforms.weight.value;
+
+	}
+
+	/**
+	 * Sets the weight.
+	 *
+	 * @param {Number} value - The weight.
+	 */
+
+	setWeight(value) {
+
+		this.uniforms.weight.value = value;
+
+	}
+
+	/**
+	 * Returns the exposure.
+	 *
+	 * @return {Number} The exposure.
+	 */
+
+	getExposure() {
+
+		return this.uniforms.exposure.value;
+
+	}
+
+	/**
+	 * Sets the exposure.
+	 *
+	 * @param {Number} value - The exposure.
+	 */
+
+	setExposure(value) {
+
+		this.uniforms.exposure.value = value;
+
+	}
+
+	/**
+	 * Returns the maximum light intensity.
+	 *
+	 * @return {Number} The maximum light intensity.
+	 */
+
+	getMaxIntensity() {
+
+		return this.uniforms.clampMax.value;
+
+	}
+
+	/**
+	 * Sets the maximum light intensity.
+	 *
+	 * @param {Number} value - The maximum light intensity.
+	 */
+
+	setMaxIntensity(value) {
+
+		this.uniforms.clampMax.value = value;
+
+	}
+
+	/**
 	 * The amount of samples per pixel.
 	 *
 	 * @type {Number}
