@@ -73,6 +73,7 @@ export class NormalPass extends Pass {
 		 * The desired render resolution.
 		 *
 		 * @type {Resizer}
+		 * @deprecated Use getResolution() instead.
 		 */
 
 		this.resolution = new Resizer(this, width, height, resolutionScale);
@@ -101,6 +102,18 @@ export class NormalPass extends Pass {
 	getTexture() {
 
 		return this.renderTarget.texture;
+
+	}
+
+	/**
+	 * Returns the resolution settings.
+	 *
+	 * @return {Resolution} The resolution.
+	 */
+
+	getResolution() {
+
+		return this.resolution;
 
 	}
 
