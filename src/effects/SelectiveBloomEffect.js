@@ -103,6 +103,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 		 * The default layer of this selection is 11.
 		 *
 		 * @type {Selection}
+		 * @deprecated Use getSelection() instead.
 		 */
 
 		this.selection = new Selection();
@@ -111,13 +112,25 @@ export class SelectiveBloomEffect extends BloomEffect {
 	}
 
 	/**
-	 * The depth mask material.
+	 * Returns the selection.
 	 *
-	 * @type {DepthMaskMaterial}
+	 * @return {Selection} The selection.
+	 */
+
+	getSelection() {
+
+		return this.selection;
+
+	}
+
+	/**
+	 * Returns the depth mask material.
+	 *
+	 * @return {DepthMaskMaterial} The material.
 	 * @private
 	 */
 
-	get depthMaskMaterial() {
+	getDepthMaskMaterial() {
 
 		return this.depthMaskPass.getFullscreenMaterial();
 
@@ -127,11 +140,12 @@ export class SelectiveBloomEffect extends BloomEffect {
 	 * Indicates whether the selection should be considered inverted.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use isInverted() instead.
 	 */
 
 	get inverted() {
 
-		return (this.depthMaskMaterial.getDepthMode() === NotEqualDepth);
+		return this.isInverted;
 
 	}
 
@@ -139,11 +153,36 @@ export class SelectiveBloomEffect extends BloomEffect {
 	 * Inverts the selection.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use setInverted() instead.
 	 */
 
 	set inverted(value) {
 
-		this.depthMaskMaterial.setDepthMode(value ? NotEqualDepth : EqualDepth);
+		this.setInverted(value);
+
+	}
+
+	/**
+	 * Indicates whether the mask is inverted.
+	 *
+	 * @return {Boolean} Whether the mask is inverted.
+	 */
+
+	isInverted() {
+
+		return (this.getDepthMaskMaterial().getDepthMode() === NotEqualDepth);
+
+	}
+
+	/**
+	 * Enables or disable mask inversion.
+	 *
+	 * @param {Boolean} value - Whether the mask should be inverted.
+	 */
+
+	setInverted(value) {
+
+		this.getDepthMaskMaterial().setDepthMode(value ? NotEqualDepth : EqualDepth);
 
 	}
 
@@ -151,21 +190,47 @@ export class SelectiveBloomEffect extends BloomEffect {
 	 * Indicates whether the background colors will be ignored.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use isBackgroundDisabled() instead.
 	 */
 
 	get ignoreBackground() {
 
-		return !this.depthMaskMaterial.keepFar;
+		return this.isBackgroundDisabled();
 
 	}
 
 	/**
 	 * @type {Boolean}
+	 * @deprecated Use setBackgroundDisabled() instead.
 	 */
 
 	set ignoreBackground(value) {
 
-		this.depthMaskMaterial.keepFar = !value;
+		this.setBackgroundDisabled(value);
+
+	}
+
+	/**
+	 * Indicates whether the background is disabled.
+	 *
+	 * @return {Boolean} Whether the background is disabled.
+	 */
+
+	isBackgroundDisabled() {
+
+		return (this.getDepthMaskMaterial().getMaxDepthStrategy() === MaxDepthStrategy.DISCARD);
+
+	}
+
+	/**
+	 * Enables or disables the background.
+	 *
+	 * @param {Boolean} value - Whether the background should be disabled.
+	 */
+
+	setBackgroundDisabled(value) {
+
+		this.getDepthMaskMaterial().setMaxDepthStrategy(value ? MaxDepthStrategy.DISCARD : MaxDepthStrategy.KEEP);
 
 	}
 
