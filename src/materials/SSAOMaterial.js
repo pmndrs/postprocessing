@@ -439,6 +439,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	/**
 	 * Sets the texel size.
 	 *
+	 * @deprecated Use setSize() instead.
 	 * @param {Number} x - The texel width.
 	 * @param {Number} y - The texel height.
 	 */
@@ -461,6 +462,8 @@ export class SSAOMaterial extends ShaderMaterial {
 
 			this.uniforms.cameraNear.value = camera.near;
 			this.uniforms.cameraFar.value = camera.far;
+			this.uniforms.projectionMatrix.value.copy(camera.projectionMatrix);
+			this.uniforms.inverseProjectionMatrix.value.copy(camera.projectionMatrix).invert();
 
 			if(camera instanceof PerspectiveCamera) {
 
@@ -475,6 +478,33 @@ export class SSAOMaterial extends ShaderMaterial {
 			this.needsUpdate = true;
 
 		}
+
+	}
+
+	/**
+	 * Sets the size of this object.
+	 *
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		const uniforms = this.uniforms;
+		const noiseTexture = uniforms.noiseTexture.value;
+
+		if(noiseTexture !== null) {
+
+			uniforms.noiseScale.value.set(
+				width / noiseTexture.image.width,
+				height / noiseTexture.image.height
+			);
+
+		}
+
+		uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
+		this.resolution.set(width, height);
+		this.setRadius(this.radius);
 
 	}
 
