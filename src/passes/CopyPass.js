@@ -48,7 +48,7 @@ export class CopyPass extends Pass {
 		 * Indicates whether the render target should be resized automatically.
 		 *
 		 * @type {Boolean}
-		 * @deprecated Use setAutoResize() instead.
+		 * @deprecated Use setAutoResizeEnabled() instead.
 		 */
 
 		this.resize = autoResize;
@@ -86,7 +86,7 @@ export class CopyPass extends Pass {
 	 * @param {Boolean} value - Whether the render target size should be updated automatically.
 	 */
 
-	setAutoResize(value) {
+	setAutoResizeEnabled(value) {
 
 		this.resize = value;
 
