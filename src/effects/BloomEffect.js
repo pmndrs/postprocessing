@@ -61,7 +61,6 @@ export class BloomEffect extends Effect {
 
 		this.renderTarget.texture.name = "Bloom.Target";
 		this.renderTarget.texture.generateMipmaps = false;
-
 		this.uniforms.get("map").value = this.renderTarget.texture;
 
 		/**
@@ -85,6 +84,7 @@ export class BloomEffect extends Effect {
 		 * You may disable this pass to deactivate luminance filtering.
 		 *
 		 * @type {LuminancePass}
+		 * @deprecated Use getLuminancePass() instead.
 		 */
 
 		this.luminancePass = new LuminancePass({
@@ -102,6 +102,7 @@ export class BloomEffect extends Effect {
 	 * A texture that contains the intermediate result of this effect.
 	 *
 	 * @type {Texture}
+	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
@@ -111,9 +112,71 @@ export class BloomEffect extends Effect {
 	}
 
 	/**
+	 * Returns the generated bloom texture.
+	 *
+	 * @return {Texture} The texture.
+	 */
+
+	getTexture() {
+
+		return this.renderTarget.texture;
+
+	}
+
+	/**
+	 * The resolution of this effect.
+	 *
+	 * @type {Resolution}
+	 * @deprecated Use getResolution() instead.
+	 */
+
+	get resolution() {
+
+		return this.getResolution();
+
+	}
+
+	/**
+	 * Returns the resolution settings.
+	 *
+	 * @return {Resolution} The resolution.
+	 */
+
+	getResolution() {
+
+		return this.blurPass.getResolution();
+
+	}
+
+	/**
+	 * Returns the blur pass.
+	 *
+	 * @return {KawaseBlurPass} The blur pass.
+	 */
+
+	getBlurPass() {
+
+		return this.blurPass;
+
+	}
+
+	/**
+	 * Returns the luminance pass.
+	 *
+	 * @return {LuminancePass} The luminance pass.
+	 */
+
+	getLuminancePass() {
+
+		return this.luminancePass;
+
+	}
+
+	/**
 	 * The luminance material.
 	 *
 	 * @type {LuminanceMaterial}
+	 * @deprecated Use getLuminanceMaterial() instead.
 	 */
 
 	get luminanceMaterial() {
@@ -123,14 +186,14 @@ export class BloomEffect extends Effect {
 	}
 
 	/**
-	 * The resolution of this effect.
+	 * Returns the luminance material.
 	 *
-	 * @type {Resizer}
+	 * @return {LuminanceMaterial} The material.
 	 */
 
-	get resolution() {
+	getLuminanceMaterial() {
 
-		return this.blurPass.resolution;
+		return this.luminancePass.getFullscreenMaterial();
 
 	}
 
@@ -216,46 +279,49 @@ export class BloomEffect extends Effect {
 	 * The blur kernel size.
 	 *
 	 * @type {KernelSize}
-	 * @deprecated Use blurPass.getKernelSize() instead.
+	 * @deprecated Use getBlurPass().getKernelSize() instead.
 	 */
 
 	get kernelSize() {
 
-		return this.blurPass.kernelSize;
+		return this.blurPass.getKernelSize();
 
 	}
 
 	/**
 	 * @type {KernelSize}
-	 * @deprecated Use blurPass.setKernelSize() instead.
+	 * @deprecated Use getBlurPass().setKernelSize() instead.
 	 */
 
 	set kernelSize(value) {
 
-		this.blurPass.kernelSize = value;
+		this.blurPass.setKernelSize(value);
 
 	}
 
 	/**
 	 * @type {Number}
-	 * @deprecated Use luminanceMaterial.threshold and luminanceMaterial.smoothing instead.
+	 * @deprecated Use getLuminanceMaterial().getThreshold() and ...getSmoothingFactor() instead.
 	 */
 
 	get distinction() {
 
-		console.warn(this.name, "The distinction field was removed, use .threshold and .smoothing instead.");
+		console.warn(this.name, "distinction was removed, use getLuminanceMaterial().getThreshold() and " +
+			"getLuminanceMaterial().getSmoothingFactor() instead.");
+
 		return 1.0;
 
 	}
 
 	/**
 	 * @type {Number}
-	 * @deprecated Use luminanceMaterial.threshold and luminanceMaterial.smoothing instead.
+	 * @deprecated Use getLuminanceMaterial().setThreshold() and ...setSmoothingFactor() instead.
 	 */
 
 	set distinction(value) {
 
-		console.warn(this.name, "The distinction field was removed, use .threshold and .smoothing instead.");
+		console.warn(this.name, "distinction was removed, use getLuminanceMaterial().setThreshold() and " +
+			"getLuminanceMaterial().setSmoothingFactor() instead.");
 
 	}
 
