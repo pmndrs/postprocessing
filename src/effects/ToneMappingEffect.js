@@ -140,7 +140,7 @@ export class ToneMappingEffect extends Effect {
 		this.mode = null;
 		this.setMode(mode);
 
-		this.resolution = resolution;
+		this.setResolution(resolution);
 
 	}
 
@@ -214,14 +214,27 @@ export class ToneMappingEffect extends Effect {
 	}
 
 	/**
+	 * Returns the adaptive luminance material.
+	 *
+	 * @return {AdaptiveLuminanceMaterial} The material.
+	 */
+
+	getAdaptiveLuminanceMaterial() {
+
+		return this.adaptiveLuminancePass.getFullscreenMaterial();
+
+	}
+
+	/**
 	 * The resolution of the render targets.
 	 *
 	 * @type {Number}
+	 * @deprecated Use getResolution() instead.
 	 */
 
 	get resolution() {
 
-		return this.luminancePass.resolution.width;
+		return this.getResolution();
 
 	}
 
@@ -229,17 +242,41 @@ export class ToneMappingEffect extends Effect {
 	 * Sets the resolution of the luminance texture. Must be a power of two.
 	 *
 	 * @type {Number}
+	 * @deprecated Use setResolution() instead.
 	 */
 
 	set resolution(value) {
+
+		this.setResolution(value);
+
+	}
+
+	/**
+	 * Returns the resolution of the luminance texture.
+	 *
+	 * @return {Number} The resolution.
+	 */
+
+	getResolution() {
+
+		return this.luminancePass.getResolution().getWidth();
+
+	}
+
+	/**
+	 * Sets the resolution of the luminance texture. Must be a power of two.
+	 *
+	 * @param {Number} value - The resolution.
+	 */
+
+	setResolution(value) {
 
 		// Round the given value to the next power of two.
 		const exponent = Math.max(0, Math.ceil(Math.log2(value)));
 		const size = Math.pow(2, exponent);
 
-		this.luminancePass.resolution.width = size;
-		this.luminancePass.resolution.height = size;
-		this.adaptiveLuminancePass.mipLevel1x1 = exponent;
+		this.luminancePass.getResolution().setPreferredSize(size, size);
+		this.getAdaptiveLuminanceMaterial().setMipLevel1x1(exponent);
 
 	}
 
@@ -247,7 +284,7 @@ export class ToneMappingEffect extends Effect {
 	 * Indicates whether this pass uses adaptive luminance.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use mode instead.
+	 * @deprecated Use getMode() instead.
 	 */
 
 	get adaptive() {
@@ -260,7 +297,7 @@ export class ToneMappingEffect extends Effect {
 	 * Enables or disables adaptive luminance.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Set mode to ToneMappingMode.REINHARD2_ADAPTIVE instead.
+	 * @deprecated Uset setMode(ToneMappingMode.REINHARD2_ADAPTIVE) instead.
 	 */
 
 	set adaptive(value) {
@@ -273,23 +310,23 @@ export class ToneMappingEffect extends Effect {
 	 * The luminance adaptation rate.
 	 *
 	 * @type {Number}
-	 * @deprecated Use adaptiveLuminancePass.adaptationRate instead.
+	 * @deprecated Use getAdaptiveLuminanceMaterial().getAdaptationRate() instead.
 	 */
 
 	get adaptationRate() {
 
-		return this.adaptiveLuminancePass.adaptationRate;
+		return this.getAdaptiveLuminanceMaterial().getAdaptationRate();
 
 	}
 
 	/**
 	 * @type {Number}
-	 * @deprecated Use adaptiveLuminancePass.adaptationRate instead.
+	 * @deprecated Use getAdaptiveLuminanceMaterial().setAdaptationRate() instead.
 	 */
 
 	set adaptationRate(value) {
 
-		this.adaptiveLuminancePass.adaptationRate = value;
+		this.getAdaptiveLuminanceMaterial().setAdaptationRate(value);
 
 	}
 
@@ -300,8 +337,7 @@ export class ToneMappingEffect extends Effect {
 
 	get distinction() {
 
-		console.warn(this.name, "The distinction field has been removed.");
-
+		console.warn(this.name, "distinction was removed.");
 		return 1.0;
 
 	}
@@ -313,7 +349,7 @@ export class ToneMappingEffect extends Effect {
 
 	set distinction(value) {
 
-		console.warn(this.name, "The distinction field has been removed.");
+		console.warn(this.name, "distinction was removed.");
 
 	}
 
