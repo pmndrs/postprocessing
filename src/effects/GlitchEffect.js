@@ -574,6 +574,20 @@ export class GlitchEffect extends Effect {
 
 	}
 
+	/**
+	 * Deletes generated resources.
+	 */
+
+	dispose() {
+
+		const map = this.getPerturbationMap();
+
+		if(map !== null && map.name === textureTag) {
+
+			map.dispose();
+
+		}
+
+	}
+
 }
-
-
