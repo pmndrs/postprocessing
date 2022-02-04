@@ -1,6 +1,6 @@
 import { BasicDepthPacking, LinearFilter, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
 import { BokehMaterial, CircleOfConfusionMaterial, MaskFunction, MaskMaterial } from "../materials";
-import { ColorChannel, KernelSize, Resizer } from "../core";
+import { ColorChannel, KernelSize, Resolution } from "../core";
 import { KawaseBlurPass, ShaderPass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect, EffectAttribute } from "./Effect";
@@ -26,8 +26,8 @@ export class DepthOfFieldEffect extends Effect {
 	 * @param {Number} [options.focusDistance=0.0] - The normalized focus distance. Range is [0.0, 1.0].
 	 * @param {Number} [options.focalLength=0.1] - The focal length. Range is [0.0, 1.0].
 	 * @param {Number} [options.bokehScale=1.0] - The scale of the bokeh blur.
-	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
-	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
+	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - The render width.
+	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - The render height.
 	 */
 
 	constructor(camera, {
@@ -35,8 +35,8 @@ export class DepthOfFieldEffect extends Effect {
 		focusDistance = 0.0,
 		focalLength = 0.1,
 		bokehScale = 1.0,
-		width = Resizer.AUTO_SIZE,
-		height = Resizer.AUTO_SIZE
+		width = Resolution.AUTO_SIZE,
+		height = Resolution.AUTO_SIZE
 	} = {}) {
 
 		super("DepthOfFieldEffect", fragmentShader, {
@@ -153,7 +153,11 @@ export class DepthOfFieldEffect extends Effect {
 
 		this.blurPass = new KawaseBlurPass({ kernelSize: KernelSize.MEDIUM, width, height });
 
-		this.blurPass.resolution.resizable = this;
+		const resolution = this.blurPass.getResolution();
+		resolution.addEventListener("change", (e) => this.setSize(
+			resolution.getBaseWidth(),
+			resolution.getBaseHeight()
+		));
 
 		/**
 		 * A mask pass.
@@ -164,8 +168,8 @@ export class DepthOfFieldEffect extends Effect {
 
 		this.maskPass = new ShaderPass(new MaskMaterial(this.renderTargetCoC.texture));
 		const maskMaterial = this.maskPass.getFullscreenMaterial();
-		maskMaterial.maskFunction = MaskFunction.MULTIPLY;
-		maskMaterial.colorChannel = ColorChannel.GREEN;
+		maskMaterial.setMaskFunction(MaskFunction.MULTIPLY);
+		maskMaterial.setColorChannel(ColorChannel.GREEN);
 
 		/**
 		 * A bokeh blur pass for the foreground colors.
@@ -203,8 +207,6 @@ export class DepthOfFieldEffect extends Effect {
 
 		this.bokehFarFillPass = new ShaderPass(new BokehMaterial(true, false));
 
-		this.bokehScale = bokehScale;
-
 		/**
 		 * A target position that should be kept in focus.
 		 *
@@ -215,6 +217,8 @@ export class DepthOfFieldEffect extends Effect {
 		 */
 
 		this.target = null;
+
+		this.setBokehScale(bokehScale);
 
 	}
 
@@ -344,7 +348,7 @@ export class DepthOfFieldEffect extends Effect {
 	}
 
 	/**
-	 * Returns the auto focus target.
+	 * Returns the current auto focus target.
 	 *
 	 * @return {Vector3} The target.
 	 */
@@ -395,7 +399,7 @@ export class DepthOfFieldEffect extends Effect {
 
 		const material = this.circleOfConfusionMaterial;
 		material.uniforms.depthBuffer.value = depthTexture;
-		material.depthPacking = depthPacking;
+		material.setDepthPacking(depthPacking);
 
 	}
 
@@ -478,8 +482,8 @@ export class DepthOfFieldEffect extends Effect {
 		resizables.push(this.renderTargetCoC, this.renderTargetMasked);
 		resizables.forEach((r) => r.setSize(width, height));
 
-		const w = resolution.width;
-		const h = resolution.height;
+		const w = resolution.getWidth();
+		const h = resolution.getHeight();
 
 		resizables = [
 			this.renderTarget,

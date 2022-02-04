@@ -208,12 +208,12 @@ export class RenderPass extends Pass {
 	/**
 	 * Sets the selection. Set to `null` to disable.
 	 *
-	 * @param {Selection} selection - The selection.
+	 * @param {Selection} value - The selection.
 	 */
 
-	setSelection(selection) {
+	setSelection(value) {
 
-		this.selection = selection;
+		this.selection = value;
 
 	}
 
@@ -232,12 +232,12 @@ export class RenderPass extends Pass {
 	/**
 	 * Enables or disables the scene background.
 	 *
-	 * @param {Boolean} disabled - Whether the scene background should be disabled.
+	 * @param {Boolean} value - Whether the scene background should be disabled.
 	 */
 
-	setBackgroundDisabled(disabled) {
+	setBackgroundDisabled(value) {
 
-		this.backgroundDisabled = disabled;
+		this.backgroundDisabled = value;
 
 	}
 
@@ -256,12 +256,12 @@ export class RenderPass extends Pass {
 	/**
 	 * Enables or disables the shadow map auto update.
 	 *
-	 * @param {Boolean} disabled - Whether the shadow map auto update should be disabled.
+	 * @param {Boolean} value - Whether the shadow map auto update should be disabled.
 	 */
 
-	setShadowMapDisabled(disabled) {
+	setShadowMapDisabled(value) {
 
-		this.shadowMapDisabled = disabled;
+		this.shadowMapDisabled = value;
 
 	}
 

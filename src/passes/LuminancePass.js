@@ -1,6 +1,6 @@
-import { LinearFilter, LuminanceFormat, RGBAFormat, UnsignedByteType, WebGLRenderTarget } from "three";
+import { LinearFilter, UnsignedByteType, WebGLRenderTarget } from "three";
 import { LuminanceMaterial } from "../materials";
-import { Resizer } from "../core/Resizer";
+import { Resolution } from "../core/Resolution";
 import { Pass } from "./Pass";
 
 /**
@@ -13,14 +13,14 @@ export class LuminancePass extends Pass {
 	 * Constructs a new luminance pass.
 	 *
 	 * @param {Object} [options] - The options. See {@link LuminanceMaterial} for additional options.
-	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
-	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
+	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - The render width.
+	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - The render height.
 	 * @param {WebGLRenderTarget} [options.renderTarget] - A custom render target.
 	 */
 
 	constructor({
-		width = Resizer.AUTO_SIZE,
-		height = Resizer.AUTO_SIZE,
+		width = Resolution.AUTO_SIZE,
+		height = Resolution.AUTO_SIZE,
 		renderTarget,
 		luminanceRange,
 		colorOutput
@@ -45,7 +45,6 @@ export class LuminancePass extends Pass {
 			this.renderTarget = new WebGLRenderTarget(1, 1, {
 				minFilter: LinearFilter,
 				magFilter: LinearFilter,
-				format: colorOutput ? RGBAFormat : LuminanceFormat,
 				stencilBuffer: false,
 				depthBuffer: false
 			});
@@ -58,11 +57,15 @@ export class LuminancePass extends Pass {
 		/**
 		 * The resolution.
 		 *
-		 * @type {Resizer}
+		 * @type {Resolution}
 		 * @deprecated Use getResolution() instead.
 		 */
 
-		this.resolution = new Resizer(this, width, height);
+		this.resolution = new Resolution(this, width, height, resolutionScale);
+		this.resolution.addEventListener("change", (e) => this.setSize(
+			this.resolution.getBaseWidth(),
+			this.resolution.getBaseHeight()
+		));
 
 	}
 
@@ -80,7 +83,7 @@ export class LuminancePass extends Pass {
 	}
 
 	/**
-	 * The luminance texture.
+	 * Returns the luminance texture.
 	 *
 	 * @return {Texture} The texture.
 	 */
@@ -132,9 +135,8 @@ export class LuminancePass extends Pass {
 	setSize(width, height) {
 
 		const resolution = this.resolution;
-		resolution.base.set(width, height);
-
-		this.renderTarget.setSize(resolution.width, resolution.height);
+		resolution.setBaseSize(width, height);
+		this.renderTarget.setSize(resolution.getWidth(), resolution.getHeight());
 
 	}
 

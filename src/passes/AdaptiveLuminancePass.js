@@ -1,4 +1,4 @@
-import { HalfFloatType, NearestFilter, RGBAFormat, WebGLRenderTarget } from "three";
+import { HalfFloatType, NearestFilter, WebGLRenderTarget } from "three";
 import { AdaptiveLuminanceMaterial } from "../materials";
 import { CopyPass } from "./CopyPass";
 import { Pass } from "./Pass";
@@ -20,10 +20,7 @@ export class AdaptiveLuminancePass extends Pass {
 	 * @param {Number} [options.adaptationRate=1.0] - The luminance adaptation rate.
 	 */
 
-	constructor(luminanceBuffer, {
-		minLuminance = 0.01,
-		adaptationRate = 1.0
-	} = {}) {
+	constructor(luminanceBuffer, { minLuminance = 0.01, adaptationRate = 1.0 } = {}) {
 
 		super("AdaptiveLuminancePass");
 
@@ -42,8 +39,7 @@ export class AdaptiveLuminancePass extends Pass {
 			magFilter: NearestFilter,
 			type: HalfFloatType,
 			stencilBuffer: false,
-			depthBuffer: false,
-			format: RGBAFormat
+			depthBuffer: false
 		});
 
 		this.renderTargetPrevious.texture.name = "Luminance.Previous";
@@ -90,7 +86,7 @@ export class AdaptiveLuminancePass extends Pass {
 	}
 
 	/**
-	 * The adaptive luminance texture.
+	 * Returns the adaptive 1x1 luminance texture.
 	 *
 	 * @return {Texture} The texture.
 	 */

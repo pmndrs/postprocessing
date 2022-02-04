@@ -104,19 +104,19 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 		// Assemble all names while ignoring parameters of function-like macros.
 		names = names.concat([...shaders.get("fragment").matchAll(functionRegExp)].map(m => m[1]));
-		names = names.concat([...effect.defines.keys()].map((s) => s.replace(/\([\w\s,]*\)/g, "")));
-		names = names.concat([...effect.uniforms.keys()]);
+		names = names.concat([...effect.getDefines().keys()].map((s) => s.replace(/\([\w\s,]*\)/g, "")));
+		names = names.concat([...effect.getUniforms().keys()]);
 
 		// Store prefixed uniforms and macros.
-		effect.uniforms.forEach((value, key) => uniforms.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), value));
-		effect.defines.forEach((value, key) => defines.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), value));
+		effect.getUniforms().forEach((val, key) => uniforms.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), val));
+		effect.getDefines().forEach((val, key) => defines.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), val));
 
 		// Prefix varyings, functions, uniforms and macro values.
 		prefixSubstrings(prefix, names, defines);
 		prefixSubstrings(prefix, names, shaders);
 
 		// Collect unique blend modes.
-		const blendMode = effect.blendMode;
+		const blendMode = effect.getBlendMode();
 		blendModes.set(blendMode.blendFunction, blendMode);
 
 		if(mainImageExists) {
@@ -376,12 +376,11 @@ export class EffectPass extends Pass {
 	 * Compares required resources with device capabilities.
 	 *
 	 * @private
-	 * @param {WebGLRenderer} renderer - The renderer.
 	 */
 
-	verifyResources(renderer) {
+	verifyResources() {
 
-		const capabilities = renderer.capabilities;
+		const capabilities = this.renderer.capabilities;
 		let max = Math.min(capabilities.maxFragmentUniforms, capabilities.maxVertexUniforms);
 
 		if(this.uniformCount > max) {
@@ -429,7 +428,7 @@ export class EffectPass extends Pass {
 
 		for(const effect of this.effects) {
 
-			if(effect.blendMode.getBlendFunction() === BlendFunction.SKIP) {
+			if(effect.getBlendMode().getBlendFunction() === BlendFunction.SKIP) {
 
 				// Check if this effect relies on depth and continue.
 				attributes |= (effect.getAttributes() & EffectAttribute.DEPTH);
@@ -447,10 +446,10 @@ export class EffectPass extends Pass {
 				transformedUv = transformedUv || result.transformedUv;
 				readDepth = readDepth || result.readDepth;
 
-				if(effect.extensions !== null) {
+				if(effect.getExtensions() !== null) {
 
 					// Collect the WebGL extensions that are required by this effect.
-					for(const extension of effect.extensions) {
+					for(const extension of effect.getExtensions()) {
 
 						extensions.add(extension);
 
@@ -538,18 +537,14 @@ export class EffectPass extends Pass {
 	 *
 	 * Warning: This method triggers a relatively expensive shader recompilation.
 	 *
+	 * TODO Remove renderer param.
 	 * @param {WebGLRenderer} [renderer] - The renderer.
 	 */
 
 	recompile(renderer) {
 
 		this.updateMaterial();
-
-		if(renderer !== undefined) {
-
-			this.verifyResources(renderer);
-
-		}
+		this.verifyResources();
 
 	}
 
@@ -576,7 +571,7 @@ export class EffectPass extends Pass {
 
 		const material = this.getFullscreenMaterial();
 		material.uniforms.depthBuffer.value = depthTexture;
-		material.depthPacking = depthPacking;
+		material.setDepthPacking(depthPacking);
 		material.needsUpdate = true;
 
 		for(const effect of this.effects) {

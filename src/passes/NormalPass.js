@@ -1,5 +1,5 @@
 import { Color, MeshNormalMaterial, NearestFilter, WebGLRenderTarget } from "three";
-import { Resizer } from "../core/Resizer";
+import { Resolution } from "../core/Resolution";
 import { RenderPass } from "./RenderPass";
 import { Pass } from "./Pass";
 
@@ -16,15 +16,15 @@ export class NormalPass extends Pass {
 	 * @param {Camera} camera - The camera to use to render the scene.
 	 * @param {Object} [options] - The options.
 	 * @param {Number} [options.resolutionScale=1.0] - Deprecated. Adjust the height or width instead for consistent results.
-	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
-	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
+	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - The render width.
+	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - The render height.
 	 * @param {WebGLRenderTarget} [options.renderTarget] - A custom render target.
 	 */
 
 	constructor(scene, camera, {
 		resolutionScale = 1.0,
-		width = Resizer.AUTO_SIZE,
-		height = Resizer.AUTO_SIZE,
+		width = Resolution.AUTO_SIZE,
+		height = Resolution.AUTO_SIZE,
 		renderTarget
 	} = {}) {
 
@@ -46,8 +46,8 @@ export class NormalPass extends Pass {
 		renderPass.setShadowMapDisabled(true);
 
 		const clearPass = renderPass.getClearPass();
-		clearPass.overrideClearColor = new Color(0x7777ff);
-		clearPass.overrideClearAlpha = 1.0;
+		clearPass.setOverrideClearColor(new Color(0x7777ff));
+		clearPass.setOverrideClearAlpha(1.0);
 
 		/**
 		 * A render target for the scene normals.
@@ -70,13 +70,17 @@ export class NormalPass extends Pass {
 		}
 
 		/**
-		 * The desired render resolution.
+		 * The resolution.
 		 *
-		 * @type {Resizer}
+		 * @type {Resolution}
 		 * @deprecated Use getResolution() instead.
 		 */
 
-		this.resolution = new Resizer(this, width, height, resolutionScale);
+		this.resolution = new Resolution(this, width, height, resolutionScale);
+		this.resolution.addEventListener("change", (e) => this.setSize(
+			this.resolution.getBaseWidth(),
+			this.resolution.getBaseHeight()
+		));
 
 	}
 
@@ -121,12 +125,12 @@ export class NormalPass extends Pass {
 	 * Returns the current resolution scale.
 	 *
 	 * @return {Number} The resolution scale.
-	 * @deprecated Adjust the fixed resolution width or height instead.
+	 * @deprecated Use getResolution().setPreferredWidth() or getResolution().setPreferredHeight() instead.
 	 */
 
 	getResolutionScale() {
 
-		return this.resolutionScale;
+		return this.resolution.getScale();
 
 	}
 
@@ -134,13 +138,12 @@ export class NormalPass extends Pass {
 	 * Sets the resolution scale.
 	 *
 	 * @param {Number} scale - The new resolution scale.
-	 * @deprecated Adjust the fixed resolution width or height instead.
+	 * @deprecated Use getResolution().setPreferredWidth() or getResolution().setPreferredHeight() instead.
 	 */
 
 	setResolutionScale(scale) {
 
-		this.resolutionScale = scale;
-		this.setSize(this.resolution.base.x, this.resolution.base.y);
+		this.resolution.setScale(scale);
 
 	}
 
@@ -171,9 +174,8 @@ export class NormalPass extends Pass {
 	setSize(width, height) {
 
 		const resolution = this.resolution;
-		resolution.base.set(width, height);
-
-		this.renderTarget.setSize(resolution.width, resolution.height);
+		resolution.setBaseSize(width, height);
+		this.renderTarget.setSize(resolution.getWidth(), resolution.getHeight());
 
 	}
 

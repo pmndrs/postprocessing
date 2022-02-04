@@ -1,11 +1,4 @@
-import {
-	LinearFilter,
-	LinearMipMapLinearFilter,
-	LinearMipmapLinearFilter,
-	Uniform,
-	WebGLRenderTarget
-} from "three";
-
+import { LinearFilter, LinearMipMapLinearFilter, LinearMipmapLinearFilter, Uniform, WebGLRenderTarget } from "three";
 import { AdaptiveLuminancePass, LuminancePass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect } from "./Effect";
@@ -49,7 +42,7 @@ export class ToneMappingEffect extends Effect {
 	 *
 	 * The additional parameters only affect the Reinhard2 operator.
 	 *
-	 * @todo Remove deprecated params and change default white point to 4.
+	 * TODO Remove deprecated params and change default mode to ACES_FILMIC and white point to 4.
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
 	 * @param {Boolean} [options.adaptive=true] - Deprecated. Use mode instead.
@@ -92,7 +85,7 @@ export class ToneMappingEffect extends Effect {
 		 *
 		 * @type {WebGLRenderTarget}
 		 * @private
-		 * @todo Remove LinearMipMapLinearFilter in next major release.
+		 * TODO Remove LinearMipMapLinearFilter in next major release.
 		 */
 
 		this.renderTargetLuminance = new WebGLRenderTarget(1, 1, {
@@ -128,7 +121,7 @@ export class ToneMappingEffect extends Effect {
 			adaptationRate
 		});
 
-		this.uniforms.get("luminanceBuffer").value = this.adaptiveLuminancePass.texture;
+		this.uniforms.get("luminanceBuffer").value = this.adaptiveLuminancePass.getTexture();
 
 		/**
 		 * The current tone mapping mode.
@@ -174,18 +167,15 @@ export class ToneMappingEffect extends Effect {
 			switch(value) {
 
 				case ToneMappingMode.REINHARD:
-					this.defines.set("toneMapping(texel)",
-						"ReinhardToneMapping(texel)");
+					this.defines.set("toneMapping(texel)", "ReinhardToneMapping(texel)");
 					break;
 
 				case ToneMappingMode.OPTIMIZED_CINEON:
-					this.defines.set("toneMapping(texel)",
-						"OptimizedCineonToneMapping(texel)");
+					this.defines.set("toneMapping(texel)", "OptimizedCineonToneMapping(texel)");
 					break;
 
 				case ToneMappingMode.ACES_FILMIC:
-					this.defines.set("toneMapping(texel)",
-						"ACESFilmicToneMapping(texel)");
+					this.defines.set("toneMapping(texel)", "ACESFilmicToneMapping(texel)");
 					break;
 
 				default:

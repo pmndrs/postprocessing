@@ -1,6 +1,6 @@
 import { LinearFilter, UnsignedByteType, WebGLRenderTarget } from "three";
 import { KawaseBlurMaterial } from "../materials";
-import { KernelSize, Resizer } from "../core";
+import { KernelSize, Resolution } from "../core";
 import { Pass } from "./Pass";
 
 const kernelPresets = [
@@ -23,15 +23,15 @@ export class KawaseBlurPass extends Pass {
 	 *
 	 * @param {Object} [options] - The options.
 	 * @param {Number} [options.resolutionScale=0.5] - Deprecated. Adjust the height or width instead for consistent results.
-	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The blur render width.
-	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The blur render height.
+	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - The blur render width.
+	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - The blur render height.
 	 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
 	 */
 
 	constructor({
 		resolutionScale = 0.5,
-		width = Resizer.AUTO_SIZE,
-		height = Resizer.AUTO_SIZE,
+		width = Resolution.AUTO_SIZE,
+		height = Resolution.AUTO_SIZE,
 		kernelSize = KernelSize.LARGE
 	} = {}) {
 
@@ -73,7 +73,11 @@ export class KawaseBlurPass extends Pass {
 		 * @deprecated Use getResolution() instead.
 		 */
 
-		this.resolution = new Resizer(this, width, height, resolutionScale);
+		this.resolution = new Resolution(this, width, height, resolutionScale);
+		this.resolution.addEventListener("change", (e) => this.setSize(
+			this.resolution.getBaseWidth(),
+			this.resolution.getBaseHeight()
+		));
 
 		/**
 		 * A convolution material.
@@ -130,12 +134,12 @@ export class KawaseBlurPass extends Pass {
 	 * The current width of the internal render targets.
 	 *
 	 * @type {Number}
-	 * @deprecated Use resolution.width instead.
+	 * @deprecated Use getResolution().getWidth() instead.
 	 */
 
 	get width() {
 
-		return this.resolution.width;
+		return this.resolution.getWidth();
 
 	}
 
@@ -143,12 +147,12 @@ export class KawaseBlurPass extends Pass {
 	 * Sets the render width.
 	 *
 	 * @type {Number}
-	 * @deprecated Use resolution.width instead.
+	 * @deprecated Use getResolution().setPreferredWidth() instead.
 	 */
 
 	set width(value) {
 
-		this.resolution.width = value;
+		this.resolution.setPreferredWidth(value);
 
 	}
 
@@ -156,12 +160,12 @@ export class KawaseBlurPass extends Pass {
 	 * The current height of the internal render targets.
 	 *
 	 * @type {Number}
-	 * @deprecated Use resolution.height instead.
+	 * @deprecated Use getResolution().getHeight() instead.
 	 */
 
 	get height() {
 
-		return this.resolution.height;
+		return this.resolution.getHeight();
 
 	}
 
@@ -169,12 +173,12 @@ export class KawaseBlurPass extends Pass {
 	 * Sets the render height.
 	 *
 	 * @type {Number}
-	 * @deprecated Use resolution.height instead.
+	 * @deprecated Use getResolution().setPreferredHeight() instead.
 	 */
 
 	set height(value) {
 
-		this.resolution.height = value;
+		this.resolution.setPreferredHeight(value);
 
 	}
 

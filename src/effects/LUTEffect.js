@@ -43,10 +43,7 @@ export class LUTEffect extends Effect {
 	 * @param {Boolean} [options.tetrahedralInterpolation=false] - Enables or disables tetrahedral interpolation.
 	 */
 
-	constructor(lut, {
-		blendFunction = BlendFunction.NORMAL,
-		tetrahedralInterpolation = false
-	} = {}) {
+	constructor(lut, { blendFunction = BlendFunction.NORMAL, tetrahedralInterpolation = false } = {}) {
 
 		super("LUTEffect", fragmentShader, {
 			blendFunction,
@@ -84,7 +81,7 @@ export class LUTEffect extends Effect {
 		 * @private
 		 */
 
-		this.outputEncoding = this.inputEncoding;
+		this.outputEncoding = sRGBEncoding;
 
 		this.setInputEncoding(sRGBEncoding);
 		this.setLUT(lut);

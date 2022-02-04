@@ -19,11 +19,7 @@ export class DotScreenEffect extends Effect {
 	 * @param {Number} [options.scale=1.0] - The scale of the dot pattern.
 	 */
 
-	constructor({
-		blendFunction = BlendFunction.NORMAL,
-		angle = Math.PI * 0.5,
-		scale = 1.0
-	} = {}) {
+	constructor({ blendFunction = BlendFunction.NORMAL, angle = Math.PI * 0.5, scale = 1.0 } = {}) {
 
 		super("DotScreenEffect", fragmentShader, {
 			blendFunction,

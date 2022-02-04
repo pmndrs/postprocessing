@@ -66,7 +66,7 @@ export class DepthCopyPass extends Pass {
 	}
 
 	/**
-	 * The output depth texture.
+	 * Returns the output depth texture.
 	 *
 	 * @return {Texture} The texture.
 	 */

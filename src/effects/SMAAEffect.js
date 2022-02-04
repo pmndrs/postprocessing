@@ -3,7 +3,6 @@ import {
 	Color,
 	LinearFilter,
 	NearestFilter,
-	RGBAFormat,
 	Texture,
 	Uniform,
 	Vector2,
@@ -55,12 +54,7 @@ export class SMAAEffect extends Effect {
 	 * @param {EdgeDetectionMode} [edgeDetectionMode=EdgeDetectionMode.COLOR] - The edge detection mode.
 	 */
 
-	constructor(
-		searchImage,
-		areaImage,
-		preset = SMAAPreset.HIGH,
-		edgeDetectionMode = EdgeDetectionMode.COLOR
-	) {
+	constructor(searchImage, areaImage, preset = SMAAPreset.HIGH, edgeDetectionMode = EdgeDetectionMode.COLOR) {
 
 		super("SMAAEffect", fragmentShader, {
 			vertexShader,
@@ -94,10 +88,8 @@ export class SMAAEffect extends Effect {
 		 */
 
 		this.renderTargetWeights = this.renderTargetEdges.clone();
-
 		this.renderTargetWeights.texture.name = "SMAA.Weights";
 		this.renderTargetWeights.texture.format = RGBAFormat;
-
 		this.uniforms.get("weightMap").value = this.renderTargetWeights.texture;
 
 		/**
@@ -108,8 +100,8 @@ export class SMAAEffect extends Effect {
 		 */
 
 		this.clearPass = new ClearPass(true, false, false);
-		this.clearPass.overrideClearColor = new Color(0x000000);
-		this.clearPass.overrideClearAlpha = 1.0;
+		this.clearPass.setOverrideClearColor(new Color(0x000000));
+		this.clearPass.setOverrideClearAlpha(1.0);
 
 		/**
 		 * An edge detection pass.
@@ -133,7 +125,6 @@ export class SMAAEffect extends Effect {
 		searchTexture.name = "SMAA.Search";
 		searchTexture.magFilter = NearestFilter;
 		searchTexture.minFilter = NearestFilter;
-		searchTexture.format = RGBAFormat;
 		searchTexture.generateMipmaps = false;
 		searchTexture.needsUpdate = true;
 		searchTexture.flipY = true;
@@ -142,7 +133,6 @@ export class SMAAEffect extends Effect {
 		areaTexture.name = "SMAA.Area";
 		areaTexture.magFilter = LinearFilter;
 		areaTexture.minFilter = LinearFilter;
-		areaTexture.format = RGBAFormat;
 		areaTexture.generateMipmaps = false;
 		areaTexture.needsUpdate = true;
 		areaTexture.flipY = false;
@@ -301,14 +291,14 @@ export class SMAAEffect extends Effect {
 	 * Sets the depth texture.
 	 *
 	 * @param {Texture} depthTexture - A depth texture.
-	 * @param {Number} [depthPacking=BasicDepthPacking] - The depth packing.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing.
 	 */
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
 		const material = this.edgeDetectionMaterial;
 		material.uniforms.depthBuffer.value = depthTexture;
-		material.depthPacking = depthPacking;
+		material.setDepthPacking(depthPacking);
 
 	}
 
@@ -366,8 +356,7 @@ export class SMAAEffect extends Effect {
 	/**
 	 * The SMAA search image, encoded as a base64 data URL.
 	 *
-	 * Use this image data to create an Image instance and use it together with
-	 * the area image to create an {@link SMAAEffect}.
+	 * Use this image data to create an Image instance for the {@link SMAAEffect}.
 	 *
 	 * @type {String}
 	 * @deprecated Use SMAAImageLoader instead.
@@ -386,8 +375,7 @@ export class SMAAEffect extends Effect {
 	/**
 	 * The SMAA area image, encoded as a base64 data URL.
 	 *
-	 * Use this image data to create an Image instance and use it together with
-	 * the search image to create an {@link SMAAEffect}.
+	 * Use this image data to create an Image instance for the {@link SMAAEffect}.
 	 *
 	 * @type {String}
 	 * @deprecated Use SMAAImageLoader instead.

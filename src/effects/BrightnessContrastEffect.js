@@ -21,11 +21,7 @@ export class BrightnessContrastEffect extends Effect {
 	 * @param {Number} [options.contrast=0.0] - The contrast factor, ranging from -1 to 1, where 0 means no change.
 	 */
 
-	constructor({
-		blendFunction = BlendFunction.NORMAL,
-		brightness = 0.0,
-		contrast = 0.0
-	} = {}) {
+	constructor({ blendFunction = BlendFunction.NORMAL, brightness = 0.0, contrast = 0.0 } = {}) {
 
 		super("BrightnessContrastEffect", fragmentShader, {
 			blendFunction,

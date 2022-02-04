@@ -1,11 +1,5 @@
-import {
-	BasicDepthPacking,
-	FloatType,
-	NearestFilter,
-	WebGLRenderTarget
-} from "three";
-
-import { Resizer } from "../core/Resizer";
+import { BasicDepthPacking, FloatType, NearestFilter, WebGLRenderTarget } from "three";
+import { Resolution } from "../core/Resolution";
 import { DepthDownsamplingMaterial } from "../materials";
 import { Pass } from "./Pass";
 
@@ -24,15 +18,15 @@ export class DepthDownsamplingPass extends Pass {
 	 * @param {Object} [options] - The options.
 	 * @param {Texture} [options.normalBuffer=null] - A texture that contains view space normals. See {@link NormalPass}.
 	 * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
-	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
-	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
+	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - The render width.
+	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - The render height.
 	 */
 
 	constructor({
 		normalBuffer = null,
 		resolutionScale = 0.5,
-		width = Resizer.AUTO_SIZE,
-		height = Resizer.AUTO_SIZE
+		width = Resolution.AUTO_SIZE,
+		height = Resolution.AUTO_SIZE
 	} = {}) {
 
 		super("DepthDownsamplingPass");
@@ -52,7 +46,7 @@ export class DepthDownsamplingPass extends Pass {
 		/**
 		 * A render target that contains the downsampled normals and depth.
 		 *
-		 * Normals are stored as RGB and depth is stored as alpha.
+		 * Normals are stored as RGB and depth as alpha.
 		 *
 		 * @type {WebGLRenderTarget}
 		 * @private
@@ -70,14 +64,17 @@ export class DepthDownsamplingPass extends Pass {
 		this.renderTarget.texture.generateMipmaps = false;
 
 		/**
-		 * The resolution of this effect.
+		 * The resolution.
 		 *
-		 * @type {Resizer}
+		 * @type {Resolution}
 		 * @deprecated Use getResolution() instead.
 		 */
 
-		this.resolution = new Resizer(this, width, height);
-		this.resolution.scale = resolutionScale;
+		this.resolution = new Resolution(this, width, height, resolutionScale);
+		this.resolution.addEventListener("change", (e) => this.setSize(
+			this.resolution.getBaseWidth(),
+			this.resolution.getBaseHeight()
+		));
 
 	}
 
@@ -95,7 +92,7 @@ export class DepthDownsamplingPass extends Pass {
 	}
 
 	/**
-	 * The normal(RGB) + depth(A) texture.
+	 * Returns the normal(RGB) + depth(A) texture.
 	 *
 	 * @return {Texture} The texture.
 	 */
@@ -159,13 +156,12 @@ export class DepthDownsamplingPass extends Pass {
 
 	setSize(width, height) {
 
-		const resolution = this.resolution;
-		resolution.base.set(width, height);
-
 		// Use the full resolution to calculate the depth/normal buffer texel size.
 		this.getFullscreenMaterial().setTexelSize(1.0 / width, 1.0 / height);
 
-		this.renderTarget.setSize(resolution.width, resolution.height);
+		const resolution = this.resolution;
+		resolution.setBaseSize(width, height);
+		this.renderTarget.setSize(resolution.getWidth(), resolution.getHeight());
 
 	}
 

@@ -1,5 +1,5 @@
 import { Color, LinearFilter, RepeatWrapping, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
-import { KernelSize, Resizer, Selection } from "../core";
+import { KernelSize, Resolution, Selection } from "../core";
 import { DepthComparisonMaterial, OutlineMaterial } from "../materials";
 import { KawaseBlurPass, ClearPass, DepthPass, RenderPass, ShaderPass } from "../passes";
 import { getTextureDecoding } from "../utils/getTextureDecoding";
@@ -23,15 +23,15 @@ export class OutlineEffect extends Effect {
 	 * @param {Scene} scene - The main scene.
 	 * @param {Camera} camera - The main camera.
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function. Set this to `BlendFunction.ALPHA` for dark outlines.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function. Use `BlendFunction.ALPHA` for dark outlines.
 	 * @param {Number} [options.patternTexture=null] - A pattern texture.
 	 * @param {Number} [options.edgeStrength=1.0] - The edge strength.
 	 * @param {Number} [options.pulseSpeed=0.0] - The pulse speed. A value of zero disables the pulse effect.
 	 * @param {Number} [options.visibleEdgeColor=0xffffff] - The color of visible edges.
 	 * @param {Number} [options.hiddenEdgeColor=0x22090a] - The color of hidden edges.
 	 * @param {Number} [options.resolutionScale=0.5] - Deprecated. Use height or width instead.
-	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
-	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
+	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - The render width.
+	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - The render height.
 	 * @param {KernelSize} [options.kernelSize=KernelSize.VERY_SMALL] - The blur kernel size.
 	 * @param {Boolean} [options.blur=false] - Whether the outline should be blurred.
 	 * @param {Boolean} [options.xRay=true] - Whether occluded parts of selected objects should be visible.
@@ -45,8 +45,8 @@ export class OutlineEffect extends Effect {
 		visibleEdgeColor = 0xffffff,
 		hiddenEdgeColor = 0x22090a,
 		resolutionScale = 0.5,
-		width = Resizer.AUTO_SIZE,
-		height = Resizer.AUTO_SIZE,
+		width = Resolution.AUTO_SIZE,
+		height = Resolution.AUTO_SIZE,
 		kernelSize = KernelSize.VERY_SMALL,
 		blur = false,
 		xRay = true
@@ -140,8 +140,8 @@ export class OutlineEffect extends Effect {
 		 */
 
 		this.clearPass = new ClearPass();
-		this.clearPass.overrideClearColor = new Color(0x000000);
-		this.clearPass.overrideClearAlpha = 1.0;
+		this.clearPass.setOverrideClearColor(new Color(0x000000));
+		this.clearPass.setOverrideClearAlpha(1.0);
 
 		/**
 		 * A depth pass.
@@ -162,8 +162,8 @@ export class OutlineEffect extends Effect {
 		this.maskPass = new RenderPass(scene, camera, new DepthComparisonMaterial(this.depthPass.texture, camera));
 
 		const clearPass = this.maskPass.getClearPass();
-		clearPass.overrideClearColor = new Color(0xffffff);
-		clearPass.overrideClearAlpha = 1.0;
+		clearPass.setOverrideClearColor(new Color(0xffffff));
+		clearPass.setOverrideClearAlpha(1.0);
 
 		/**
 		 * A blur pass.
@@ -173,8 +173,13 @@ export class OutlineEffect extends Effect {
 		 */
 
 		this.blurPass = new KawaseBlurPass({ resolutionScale, width, height, kernelSize });
-		this.blurPass.resolution.resizable = this;
 		this.blurPass.setEnabled(blur);
+
+		const resolution = this.blurPass.getResolution();
+		resolution.addEventListener("change", (e) => this.setSize(
+			resolution.getBaseWidth(),
+			resolution.getBaseHeight()
+		));
 
 		/**
 		 * An outline detection pass.
@@ -216,15 +221,6 @@ export class OutlineEffect extends Effect {
 		 */
 
 		this.pulseSpeed = pulseSpeed;
-
-		/**
-		 * Indicates whether the context is WebGL 2.
-		 *
-		 * @type {Boolean}
-		 * @private
-		 */
-
-		this.isWebGL2 = false;
 
 	}
 
@@ -305,12 +301,12 @@ export class OutlineEffect extends Effect {
 	 * The current width of the internal render targets.
 	 *
 	 * @type {Number}
-	 * @deprecated Use resolution.width instead.
+	 * @deprecated Use getResolution().getWidth() instead.
 	 */
 
 	get width() {
 
-		return this.resolution.width;
+		return this.getResolution().getWidth();
 
 	}
 
@@ -318,12 +314,12 @@ export class OutlineEffect extends Effect {
 	 * Sets the render width.
 	 *
 	 * @type {Number}
-	 * @deprecated Use resolution.width instead.
+	 * @deprecated Use getResolution().setPreferredWidth() instead.
 	 */
 
 	set width(value) {
 
-		this.resolution.width = value;
+		this.getResolution().setPreferredWidth(value);
 
 	}
 
@@ -331,12 +327,12 @@ export class OutlineEffect extends Effect {
 	 * The current height of the internal render targets.
 	 *
 	 * @type {Number}
-	 * @deprecated Use resolution.height instead.
+	 * @deprecated Use getResolution().getHeight() instead.
 	 */
 
 	get height() {
 
-		return this.resolution.height;
+		return this.getResolution().getHeight();
 
 	}
 
@@ -344,12 +340,12 @@ export class OutlineEffect extends Effect {
 	 * Sets the render height.
 	 *
 	 * @type {Number}
-	 * @deprecated Use resolution.height instead.
+	 * @deprecated Use getResolution().setPreferredHeight() instead.
 	 */
 
 	set height(value) {
 
-		this.resolution.height = value;
+		this.getResolution().setPreferredHeight(value);
 
 	}
 
@@ -539,7 +535,7 @@ export class OutlineEffect extends Effect {
 
 		}
 
-		const decoding = getTextureDecoding(texture, this.isWebGL2);
+		const decoding = getTextureDecoding(texture, this.renderer.capabilities.isWebGL2);
 		this.defines.set("texelToLinear(texel)", decoding);
 
 		this.setChanged();
@@ -550,12 +546,12 @@ export class OutlineEffect extends Effect {
 	 * Returns the current resolution scale.
 	 *
 	 * @return {Number} The resolution scale.
-	 * @deprecated Adjust the fixed resolution width or height instead.
+	 * @deprecated Use getResolution().setPreferredWidth() or getResolution().setPreferredHeight() instead.
 	 */
 
 	getResolutionScale() {
 
-		return this.resolution.scale;
+		return this.getResolution().getScale();
 
 	}
 
@@ -563,12 +559,12 @@ export class OutlineEffect extends Effect {
 	 * Sets the resolution scale.
 	 *
 	 * @param {Number} scale - The new resolution scale.
-	 * @deprecated Adjust the fixed resolution width or height instead.
+	 * @deprecated Use getResolution().setPreferredWidth() or getResolution().setPreferredHeight() instead.
 	 */
 
 	setResolutionScale(scale) {
 
-		this.resolution.scale = scale;
+		this.getResolution().setScale(scale);
 
 	}
 
@@ -657,9 +653,7 @@ export class OutlineEffect extends Effect {
 
 			if(this.pulseSpeed > 0.0) {
 
-				pulse.value = (
-					Math.cos(this.time * this.pulseSpeed * 10.0) * 0.375 + 0.625
-				);
+				pulse.value = Math.cos(this.time * this.pulseSpeed * 10.0) * 0.375 + 0.625;
 
 			}
 
@@ -708,8 +702,9 @@ export class OutlineEffect extends Effect {
 		this.blurPass.setSize(width, height);
 		this.renderTargetMask.setSize(width, height);
 
-		const w = this.resolution.width;
-		const h = this.resolution.height;
+		const resolution = this.getResolution();
+		const w = resolution.getWidth();
+		const h = resolution.getHeight();
 
 		this.depthPass.setSize(w, h);
 		this.renderTargetOutline.setSize(w, h);
@@ -727,9 +722,8 @@ export class OutlineEffect extends Effect {
 
 	initialize(renderer, alpha, frameBufferType) {
 
-		this.isWebGL2 = renderer.capabilities.isWebGL2;
 		const texture = this.uniforms.get("patternTexture").value;
-		const decoding = getTextureDecoding(texture, this.isWebGL2);
+		const decoding = getTextureDecoding(texture, this.renderer.capabilities.isWebGL2);
 		this.defines.set("texelToLinear(texel)", decoding);
 
 		// No need for high precision: the blur pass operates on a mask texture.

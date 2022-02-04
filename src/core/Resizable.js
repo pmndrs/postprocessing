@@ -11,8 +11,8 @@ export class Resizable {
 	/**
 	 * Sets the size of this object.
 	 *
-	 * @param {Number} width - The new width.
-	 * @param {Number} height - The new height.
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
 	 */
 
 	setSize(width, height) {}

@@ -9,7 +9,7 @@ import {
 } from "three";
 
 import { Selection } from "../core/Selection";
-import { DepthMaskMaterial } from "../materials";
+import { DepthMaskMaterial, MaxDepthStrategy } from "../materials";
 import { ClearPass, DepthPass, ShaderPass } from "../passes";
 import { BloomEffect } from "./BloomEffect";
 import { EffectAttribute } from "./Effect";
@@ -18,8 +18,6 @@ import { EffectAttribute } from "./Effect";
  * A selective bloom effect.
  *
  * This effect applies bloom to selected objects only.
- *
- * If you don't need to limit bloom to a subset of objects, consider using a {@link BloomEffect} for better performance.
  */
 
 export class SelectiveBloomEffect extends BloomEffect {
@@ -64,7 +62,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 		 */
 
 		this.clearPass = new ClearPass(true, false, false);
-		this.clearPass.overrideClearColor = new Color(0x000000);
+		this.clearPass.setOverrideClearColor(new Color(0x000000));
 
 		/**
 		 * A depth mask pass.
@@ -238,7 +236,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 	 * Sets the depth texture.
 	 *
 	 * @param {Texture} depthTexture - A depth texture.
-	 * @param {Number} [depthPacking=BasicDepthPacking] - The depth packing.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing.
 	 */
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {

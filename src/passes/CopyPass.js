@@ -69,7 +69,7 @@ export class CopyPass extends Pass {
 	}
 
 	/**
-	 * Returns the texture.
+	 * Returns the saved texture.
 	 *
 	 * @return {Texture} The texture.
 	 */
@@ -123,10 +123,7 @@ export class CopyPass extends Pass {
 
 		if(this.resize) {
 
-			const w = Math.max(width, 1);
-			const h = Math.max(height, 1);
-
-			this.renderTarget.setSize(w, h);
+			this.renderTarget.setSize(width, height);
 
 		}
 

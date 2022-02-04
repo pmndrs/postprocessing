@@ -44,15 +44,6 @@ export class TextureEffect extends Effect {
 		this.setTexture(texture);
 		this.aspectCorrection = aspectCorrection;
 
-		/**
-		 * Indicates whether the context is WebGL 2.
-		 *
-		 * @type {Boolean}
-		 * @private
-		 */
-
-		this.isWebGL2 = false;
-
 	}
 
 	/**
@@ -209,8 +200,7 @@ export class TextureEffect extends Effect {
 	}
 
 	/**
-	 * Sets the swizzles that will be applied to the `r`, `g`, `b`, and `a`
-	 * components of a texel before it is written to the output color.
+	 * Sets the swizzles that will be applied to the components of a texel before it is written to the output color.
 	 *
 	 * @param {ColorChannel} r - The swizzle for the `r` component.
 	 * @param {ColorChannel} [g=r] - The swizzle for the `g` component.
@@ -223,8 +213,7 @@ export class TextureEffect extends Effect {
 		const rgba = "rgba";
 		let swizzle = "";
 
-		if(r !== ColorChannel.RED || g !== ColorChannel.GREEN ||
-			b !== ColorChannel.BLUE || a !== ColorChannel.ALPHA) {
+		if(r !== ColorChannel.RED || g !== ColorChannel.GREEN || b !== ColorChannel.BLUE || a !== ColorChannel.ALPHA) {
 
 			swizzle = [".", rgba[r], rgba[g], rgba[b], rgba[a]].join("");
 
@@ -265,8 +254,7 @@ export class TextureEffect extends Effect {
 
 	initialize(renderer, alpha, frameBufferType) {
 
-		this.isWebGL2 = renderer.capabilities.isWebGL2;
-		const decoding = getTextureDecoding(this.texture, this.isWebGL2);
+		const decoding = getTextureDecoding(this.getTexture(), this.renderer.capabilities.isWebGL2);
 		this.defines.set("texelToLinear(texel)", decoding);
 
 	}

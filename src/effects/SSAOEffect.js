@@ -9,7 +9,7 @@ import {
 } from "three";
 
 import { BlendFunction } from "./blending/BlendFunction";
-import { Resizer } from "../core/Resizer";
+import { Resolution } from "../core/Resolution";
 import { NoiseTexture } from "../images/textures/NoiseTexture";
 import { SSAOMaterial } from "../materials";
 import { ShaderPass } from "../passes";
@@ -17,31 +17,23 @@ import { Effect, EffectAttribute } from "./Effect";
 
 import fragmentShader from "./glsl/ssao/shader.frag";
 
-/**
- * The size of the generated noise texture.
- *
- * @type {Number}
- * @private
- */
-
 const NOISE_TEXTURE_SIZE = 64;
 
 /**
  * A Screen Space Ambient Occlusion (SSAO) effect.
  *
- * For high quality visuals use two SSAO effect instances in a row with different radii, one for
- * rough AO and one for fine details.
+ * For high quality visuals use two SSAO effect instances in a row with different radii, one for rough AO and one for
+ * fine details.
  *
- * This effect supports depth-aware upsampling and should be rendered at a lower resolution. The
- * resolution should match that of the downsampled normals and depth. If you intend to render SSAO
- * at full resolution, do not provide a downsampled `normalDepthBuffer` and make sure to disable
- * `depthAwareUpsampling`.
+ * This effect supports depth-aware upsampling and should be rendered at a lower resolution. The resolution should match
+ * that of the downsampled normals and depth. If you intend to render SSAO at full resolution, do not provide a
+ * downsampled `normalDepthBuffer`.
  *
- * It's recommended to specify a relative render resolution using the `resolutionScale` constructor
- * parameter to avoid undesired sampling patterns.
+ * It's recommended to specify a relative render resolution using the `resolutionScale` constructor parameter to avoid
+ * undesired sampling patterns.
  *
- * Based on "Scalable Ambient Obscurance" by Morgan McGuire et al. and "Depth-aware upsampling
- * experiments" by Eleni Maria Stea:
+ * Based on "Scalable Ambient Obscurance" by Morgan McGuire et al. and "Depth-aware upsampling experiments" by Eleni
+ * Maria Stea:
  * https://research.nvidia.com/publication/scalable-ambient-obscurance
  * https://eleni.mutantstargoat.com/hikiko/on-depth-aware-upsampling
  *
@@ -70,14 +62,14 @@ export class SSAOEffect extends Effect {
 	 * @param {Number} [options.rangeFalloff=0.001] - The occlusion range falloff. Influences the smoothness of the proximity cutoff. Range [0.0, 1.0].
 	 * @param {Number} [options.minRadiusScale=0.33] - The minimum radius scale. Has no effect if distance scaling is disabled.
 	 * @param {Number} [options.luminanceInfluence=0.7] - Determines how much the luminance of the scene influences the ambient occlusion.
-	 * @param {Number} [options.radius=0.1825] - The occlusion sampling radius, expressed as a resolution independent scale. Range [1e-6, 1.0].
+	 * @param {Number} [options.radius=0.1825] - The occlusion sampling radius, expressed as a scale relative to the resolution. Range [1e-6, 1.0].
 	 * @param {Number} [options.intensity=1.0] - The intensity of the ambient occlusion.
 	 * @param {Number} [options.bias=0.025] - An occlusion bias. Eliminates artifacts caused by depth discontinuities.
 	 * @param {Number} [options.fade=0.01] - Influences the smoothness of the shadows. A lower value results in higher contrast.
 	 * @param {Color} [options.color=null] - The color of the ambient occlusion.
 	 * @param {Number} [options.resolutionScale=1.0] - The resolution scale.
-	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
-	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
+	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - The render width.
+	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - The render height.
 	 */
 
 	constructor(camera, normalBuffer, {
@@ -99,8 +91,8 @@ export class SSAOEffect extends Effect {
 		fade = 0.01,
 		color = null,
 		resolutionScale = 1.0,
-		width = Resizer.AUTO_SIZE,
-		height = Resizer.AUTO_SIZE
+		width = Resolution.AUTO_SIZE,
+		height = Resolution.AUTO_SIZE
 	} = {}) {
 
 		super("SSAOEffect", fragmentShader, {
@@ -134,17 +126,20 @@ export class SSAOEffect extends Effect {
 
 		this.renderTargetAO.texture.name = "AO.Target";
 		this.renderTargetAO.texture.generateMipmaps = false;
-
 		this.uniforms.get("aoBuffer").value = this.renderTargetAO.texture;
 
 		/**
 		 * The resolution.
 		 *
-		 * @type {Resizer}
+		 * @type {Resolution}
 		 * @deprecated Use getResolution() instead.
 		 */
 
-		this.resolution = new Resizer(this, width, height, resolutionScale);
+		this.resolution = new Resolution(this, width, height, resolutionScale);
+		this.resolution.addEventListener("change", (e) => this.setSize(
+			this.resolution.getBaseWidth(),
+			this.resolution.getBaseHeight()
+		));
 
 		/**
 		 * The main camera.
@@ -513,19 +508,14 @@ export class SSAOEffect extends Effect {
 	 * Sets the depth texture.
 	 *
 	 * @param {Texture} depthTexture - A depth texture.
-	 * @param {Number} [depthPacking=BasicDepthPacking] - The depth packing.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing.
 	 */
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
-		const material = this.ssaoMaterial;
-
-		if(material.defines.NORMAL_DEPTH === undefined) {
-
-			material.uniforms.normalDepthBuffer.value = depthTexture;
-			material.depthPacking = depthPacking;
-
-		}
+		const material = this.getSSAOMaterial();
+		material.setDepthBuffer(depthTexture);
+		material.setDepthPacking(depthPacking);
 
 	}
 
@@ -544,8 +534,7 @@ export class SSAOEffect extends Effect {
 	}
 
 	/**
-	 * Updates the camera projection matrix uniforms and the size of internal
-	 * render targets.
+	 * Sets the size.
 	 *
 	 * @param {Number} width - The width.
 	 * @param {Number} height - The height.
@@ -553,11 +542,11 @@ export class SSAOEffect extends Effect {
 
 	setSize(width, height) {
 
-		const resolution = this.resolution;
-		resolution.base.set(width, height);
+		const resolution = this.getResolution();
+		resolution.setBaseSize(width, height);
 
-		const w = resolution.width;
-		const h = resolution.height;
+		const w = resolution.getWidth();
+		const h = resolution.getHeight();
 
 		const material = this.getSSAOMaterial();
 		material.adoptCameraSettings(this.camera);

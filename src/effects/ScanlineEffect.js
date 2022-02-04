@@ -71,7 +71,7 @@ export class ScanlineEffect extends Effect {
 	setDensity(density) {
 
 		this.density = density;
-		this.setSize(this.resolution.x, this.resolution.y);
+		this.setSize(this.resolution.width, this.resolution.height);
 
 	}
 
