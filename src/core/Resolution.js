@@ -212,6 +212,7 @@ export class Resolution extends EventDispatcher {
 			this.scale = value;
 			this.preferred.setScalar(AUTO_SIZE);
 			this.dispatchEvent({ type: "change" });
+			this.resizable.setSize(this.base.width, this.base.height);
 
 		}
 
@@ -241,6 +242,7 @@ export class Resolution extends EventDispatcher {
 
 			this.base.width = value;
 			this.dispatchEvent({ type: "change" });
+			this.resizable.setSize(this.base.width, this.base.height);
 
 		}
 
@@ -270,6 +272,7 @@ export class Resolution extends EventDispatcher {
 
 			this.base.height = value;
 			this.dispatchEvent({ type: "change" });
+			this.resizable.setSize(this.base.width, this.base.height);
 
 		}
 
@@ -288,6 +291,7 @@ export class Resolution extends EventDispatcher {
 
 			this.base.set(width, height);
 			this.dispatchEvent({ type: "change" });
+			this.resizable.setSize(this.base.width, this.base.height);
 
 		}
 
@@ -307,6 +311,7 @@ export class Resolution extends EventDispatcher {
 
 			this.preferred.width = value;
 			this.dispatchEvent({ type: "change" });
+			this.resizable.setSize(this.base.width, this.base.height);
 
 		}
 
@@ -326,6 +331,7 @@ export class Resolution extends EventDispatcher {
 
 			this.preferred.height = value;
 			this.dispatchEvent({ type: "change" });
+			this.resizable.setSize(this.base.width, this.base.height);
 
 		}
 
@@ -344,6 +350,7 @@ export class Resolution extends EventDispatcher {
 
 			this.preferred.set(width, height);
 			this.dispatchEvent({ type: "change" });
+			this.resizable.setSize(this.base.width, this.base.height);
 
 		}
 
