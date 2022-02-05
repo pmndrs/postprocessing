@@ -56,7 +56,7 @@ export class CopyPass extends Pass {
 	}
 
 	/**
-	 * The saved texture.
+	 * The output texture.
 	 *
 	 * @type {Texture}
 	 * @deprecated Use getTexture() instead.
@@ -69,7 +69,7 @@ export class CopyPass extends Pass {
 	}
 
 	/**
-	 * Returns the saved texture.
+	 * Returns the output texture.
 	 *
 	 * @return {Texture} The texture.
 	 */
@@ -104,9 +104,7 @@ export class CopyPass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
-		const material = this.getFullscreenMaterial();
-		material.uniforms.inputBuffer.value = inputBuffer.texture;
-
+		this.getFullscreenMaterial().setInputBuffer(inputBuffer.texture);
 		renderer.setRenderTarget(this.renderToScreen ? null : this.renderTarget);
 		renderer.render(this.scene, this.camera);
 
@@ -145,8 +143,7 @@ export class CopyPass extends Pass {
 
 			if(frameBufferType !== UnsignedByteType) {
 
-				const material = this.getFullscreenMaterial();
-				material.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+				this.getFullscreenMaterial().defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
 			}
 

@@ -119,7 +119,7 @@ export class LuminancePass extends Pass {
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
 		const material = this.getFullscreenMaterial();
-		material.uniforms.inputBuffer.value = inputBuffer.texture;
+		material.setInputBuffer(inputBuffer.texture);
 		renderer.setRenderTarget(this.renderToScreen ? null : this.renderTarget);
 		renderer.render(this.scene, this.camera);
 
@@ -152,8 +152,7 @@ export class LuminancePass extends Pass {
 
 		if(frameBufferType !== undefined && frameBufferType !== UnsignedByteType) {
 
-			const material = this.getFullscreenMaterial();
-			material.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+			this.getFullscreenMaterial().defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
 		}
 

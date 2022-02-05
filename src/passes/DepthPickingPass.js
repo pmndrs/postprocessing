@@ -42,10 +42,7 @@ export class DepthPickingPass extends DepthCopyPass {
 	 * @param {Number} [options.mode=DepthCopyMode.SINGLE] - The depth copy mode.
 	 */
 
-	constructor({
-		depthPacking = RGBADepthPacking,
-		mode = DepthCopyMode.SINGLE
-	} = {}) {
+	constructor({ depthPacking = RGBADepthPacking, mode = DepthCopyMode.SINGLE } = {}) {
 
 		super({ depthPacking });
 
@@ -76,7 +73,7 @@ export class DepthPickingPass extends DepthCopyPass {
 	 * Reads depth at a specific screen position.
 	 *
 	 * Only one depth value can be picked per frame. Calling this method multiple times per frame will overwrite the
-	 + picking coordinates. Unresolved promises will be abandoned.
+	 * picking coordinates. Unresolved promises will be abandoned.
 	 *
 	 * @example
 	 * const ndc = new Vector3();
@@ -95,8 +92,7 @@ export class DepthPickingPass extends DepthCopyPass {
 
 	readDepth(ndc) {
 
-		const screenPosition = this.getFullscreenMaterial().uniforms.screenPosition.value;
-		screenPosition.set(ndc.x * 0.5 + 0.5, ndc.y * 0.5 + 0.5);
+		this.getFullscreenMaterial().getTexelPosition().set(ndc.x * 0.5 + 0.5, ndc.y * 0.5 + 0.5);
 
 		return new Promise((resolve) => {
 
@@ -143,9 +139,9 @@ export class DepthPickingPass extends DepthCopyPass {
 
 			} else {
 
-				const screenPosition = material.uniforms.screenPosition.value;
-				x = Math.round(screenPosition.x * renderTarget.width);
-				y = Math.round(screenPosition.y * renderTarget.height);
+				const texelPosition = material.getTexelPosition();
+				x = Math.round(texelPosition.x * renderTarget.width);
+				y = Math.round(texelPosition.y * renderTarget.height);
 
 			}
 

@@ -214,7 +214,7 @@ export class KawaseBlurPass extends Pass {
 
 	getScale() {
 
-		return this.blurMaterial.uniforms.scale.value;
+		return this.blurMaterial.getScale();
 
 	}
 
@@ -232,8 +232,8 @@ export class KawaseBlurPass extends Pass {
 
 	setScale(value) {
 
-		this.blurMaterial.uniforms.scale.value = value;
-		this.ditheredConvolutionMaterial.uniforms.scale.value = value;
+		this.blurMaterial.setScale(value);
+		this.ditheredConvolutionMaterial.setScale(value);
 
 	}
 
@@ -310,7 +310,6 @@ export class KawaseBlurPass extends Pass {
 		const kernels = kernelPresets[this.kernelSize];
 
 		let material = this.blurMaterial;
-		let uniforms = material.uniforms;
 		let previousBuffer = inputBuffer;
 		let i, l;
 
@@ -322,8 +321,8 @@ export class KawaseBlurPass extends Pass {
 			// Alternate between targets.
 			const buffer = ((i & 1) === 0) ? renderTargetA : renderTargetB;
 
-			uniforms.kernel.value = kernels[i];
-			uniforms.inputBuffer.value = previousBuffer.texture;
+			material.setKernel(kernels[i]);
+			material.setInputBuffer(previousBuffer.texture);
 			renderer.setRenderTarget(buffer);
 			renderer.render(scene, camera);
 			previousBuffer = buffer;
@@ -333,13 +332,12 @@ export class KawaseBlurPass extends Pass {
 		if(this.dithering) {
 
 			material = this.ditheredBlurMaterial;
-			uniforms = material.uniforms;
 			this.setFullscreenMaterial(material);
 
 		}
 
-		uniforms.kernel.value = kernels[i];
-		uniforms.inputBuffer.value = previousBuffer.texture;
+		material.setKernel(kernels[i]);
+		material.setInputBuffer(previousBuffer.texture);
 		renderer.setRenderTarget(this.renderToScreen ? null : outputBuffer);
 		renderer.render(scene, camera);
 
@@ -355,16 +353,15 @@ export class KawaseBlurPass extends Pass {
 	setSize(width, height) {
 
 		const resolution = this.resolution;
-		resolution.base.set(width, height);
+		resolution.setBaseSize(width, height);
 
-		const w = resolution.width;
-		const h = resolution.height;
+		const w = resolution.getWidth();
+		const h = resolution.getHeight();
 
 		this.renderTargetA.setSize(w, h);
 		this.renderTargetB.setSize(w, h);
-
-		this.blurMaterial.setTexelSize(1.0 / w, 1.0 / h);
-		this.ditheredBlurMaterial.setTexelSize(1.0 / w, 1.0 / h);
+		this.blurMaterial.setSize(w, h);
+		this.ditheredBlurMaterial.setSize(w, h);
 
 	}
 

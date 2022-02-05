@@ -441,22 +441,11 @@ export class EffectPass extends Pass {
 		this.skipRendering = (id === 0);
 		this.needsSwap = !this.skipRendering;
 
-		const material = this.getFullscreenMaterial();
-		material.setShaderParts(shaderParts);
-		material.setDefines(defines);
-		material.setUniforms(uniforms);
-		material.extensions = {};
-
-		if(extensions.size > 0) {
-
-			// Enable required WebGL extensions.
-			for(const extension of extensions) {
-
-				material.extensions[extension] = true;
-
-			}
-
-		}
+		this.getFullscreenMaterial()
+			.setShaderParts(shaderParts)
+			.setExtensions(extensions)
+			.setUniforms(uniforms)
+			.setDefines(defines);
 
 	}
 
@@ -497,10 +486,7 @@ export class EffectPass extends Pass {
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
-		const material = this.getFullscreenMaterial();
-		material.uniforms.depthBuffer.value = depthTexture;
-		material.setDepthPacking(depthPacking);
-		material.needsUpdate = true;
+		this.getFullscreenMaterial().setDepthBuffer(depthTexture, depthPacking);
 
 		for(const effect of this.effects) {
 
@@ -522,9 +508,6 @@ export class EffectPass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
-		const material = this.getFullscreenMaterial();
-		const time = material.uniforms.time.value + deltaTime;
-
 		for(const effect of this.effects) {
 
 			effect.update(renderer, inputBuffer, deltaTime);
@@ -533,8 +516,10 @@ export class EffectPass extends Pass {
 
 		if(!this.skipRendering || this.renderToScreen) {
 
-			material.uniforms.inputBuffer.value = inputBuffer.texture;
-			material.uniforms.time.value = time;
+			const material = this.getFullscreenMaterial();
+			material.setInputBuffer(inputBuffer.texture);
+			material.setDeltaTime(deltaTime);
+
 			renderer.setRenderTarget(this.renderToScreen ? null : outputBuffer);
 			renderer.render(this.scene, this.camera);
 
@@ -618,7 +603,7 @@ export class EffectPass extends Pass {
 		switch(event.type) {
 
 			case "change":
-				this.recompile(this.renderer);
+				this.recompile();
 				break;
 
 		}

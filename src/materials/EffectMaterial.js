@@ -311,12 +311,10 @@ export class EffectMaterial extends ShaderMaterial {
 
 	setSize(width, height) {
 
-		const w = Math.max(width, 1);
-		const h = Math.max(height, 1);
-
-		this.uniforms.resolution.value.set(w, h);
-		this.uniforms.texelSize.value.set(1.0 / w, 1.0 / h);
-		this.uniforms.aspect.value = w / h;
+		const uniforms = this.uniforms;
+		uniforms.resolution.value.set(width, height);
+		uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
+		uniforms.aspect.value = width / height;
 
 	}
 

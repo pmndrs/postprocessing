@@ -111,9 +111,7 @@ export class DepthCopyPass extends Pass {
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
-		const material = this.getFullscreenMaterial();
-		material.uniforms.depthBuffer.value = depthTexture;
-		material.setInputDepthPacking(depthPacking);
+		this.getFullscreenMaterial().setDepthBuffer(depthTexture, depthPacking);
 
 	}
 

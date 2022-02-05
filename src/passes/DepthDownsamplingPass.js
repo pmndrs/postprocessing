@@ -31,17 +31,11 @@ export class DepthDownsamplingPass extends Pass {
 
 		super("DepthDownsamplingPass");
 
-		this.setFullscreenMaterial(new DepthDownsamplingMaterial());
+		const material = new DepthDownsamplingMaterial();
+		material.setNormalBuffer(normalBuffer);
+		this.setFullscreenMaterial(material);
 		this.needsDepthTexture = true;
 		this.needsSwap = false;
-
-		if(normalBuffer !== null) {
-
-			const material = this.getFullscreenMaterial();
-			material.uniforms.normalBuffer.value = normalBuffer;
-			material.defines.DOWNSAMPLE_NORMALS = "1";
-
-		}
 
 		/**
 		 * A render target that contains the downsampled normals and depth.
@@ -124,9 +118,7 @@ export class DepthDownsamplingPass extends Pass {
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
-		const material = this.getFullscreenMaterial();
-		material.uniforms.depthBuffer.value = depthTexture;
-		material.setDepthPacking(depthPacking);
+		this.getFullscreenMaterial().setDepthBuffer(depthTexture, depthPacking);
 
 	}
 
@@ -157,7 +149,7 @@ export class DepthDownsamplingPass extends Pass {
 	setSize(width, height) {
 
 		// Use the full resolution to calculate the depth/normal buffer texel size.
-		this.getFullscreenMaterial().setTexelSize(1.0 / width, 1.0 / height);
+		this.getFullscreenMaterial().setSize(width, height);
 
 		const resolution = this.resolution;
 		resolution.setBaseSize(width, height);
