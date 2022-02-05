@@ -1,4 +1,4 @@
-import { NoBlending, PerspectiveCamera, ShaderMaterial, Uniform, Vector2 } from "three";
+import { NoBlending, PerspectiveCamera, REVISION, ShaderMaterial, Uniform, Vector2 } from "three";
 
 import fragmentTemplate from "./glsl/effect/shader.frag";
 import vertexTemplate from "./glsl/effect/shader.vert";
@@ -41,6 +41,7 @@ export class EffectMaterial extends ShaderMaterial {
 		super({
 			name: "EffectMaterial",
 			defines: {
+				THREE_REVISION: REVISION,
 				DEPTH_PACKING: "0",
 				ENCODE_OUTPUT: "1"
 			},
