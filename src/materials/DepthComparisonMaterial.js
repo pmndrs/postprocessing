@@ -40,6 +40,21 @@ export class DepthComparisonMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Sets the depth buffer.
+	 *
+	 * @param {Texture} buffer - The depth texture.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 */
+
+	setDepthBuffer(buffer, depthPacking = BasicDepthPacking) {
+
+		this.uniforms.depthBuffer.value = buffer;
+		this.defines.DEPTH_PACKING = depthPacking.toFixed(0);
+		this.needsUpdate = true;
+
+	}
+
+	/**
 	 * Adopts the settings of the given camera.
 	 *
 	 * @param {Camera} camera - A camera.
