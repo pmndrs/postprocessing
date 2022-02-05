@@ -60,6 +60,32 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Sets the input buffer.
+	 *
+	 * @param {Texture} value - The input buffer.
+	 */
+
+	setInputBuffer(value) {
+
+		this.uniforms.inputBuffer.value = value;
+
+	}
+
+	/**
+	 * Sets the area and search lookup textures.
+	 *
+	 * @param {Texture} area - The area lookup texture.
+	 * @param {Texture} search - The search lookup texture.
+	 */
+
+	setLookupTextures(area, search) {
+
+		this.uniforms.areaTexture.value = area;
+		this.uniforms.searchTexture.value = search;
+
+	}
+
+	/**
 	 * Sets the maximum amount of steps performed in the horizontal/vertical pattern searches, at each side of the pixel.
 	 *
 	 * In number of pixels, it's actually the double. So the maximum line length perfectly handled by, for example 16, is
