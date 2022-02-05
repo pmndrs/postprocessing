@@ -44,9 +44,9 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	/**
 	 * Constructs a new edge detection material.
 	 *
+	 * TODO Remove parameters.
 	 * @param {Vector2} [texelSize] - The screen texel size.
 	 * @param {EdgeDetectionMode} [mode=EdgeDetectionMode.COLOR] - The edge detection mode.
-	 * TODO Remove texelSize parameter.
 	 */
 
 	constructor(texelSize = new Vector2(), mode = EdgeDetectionMode.COLOR) {
@@ -84,15 +84,30 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Sets the depth buffer.
+	 *
+	 * @param {Texture} buffer - The depth texture.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 */
+
+	setDepthBuffer(buffer, depthPacking = BasicDepthPacking) {
+
+		this.uniforms.depthBuffer.value = buffer;
+		this.defines.DEPTH_PACKING = depthPacking.toFixed(0);
+		this.needsUpdate = true;
+
+	}
+
+	/**
 	 * The current depth packing.
 	 *
 	 * @type {DepthPackingStrategies}
-	 * @deprecated Use getDepthPacking() instead.
+	 * @deprecated Removed without replacement.
 	 */
 
 	get depthPacking() {
 
-		return this.getDepthPacking();
+		return Number(this.defines.DEPTH_PACKING);
 
 	}
 
@@ -100,37 +115,25 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	 * Sets the depth packing.
 	 *
 	 * @type {DepthPackingStrategies}
-	 * @deprecated Use setDepthPacking() instead.
+	 * @deprecated Use setDepthBuffer() instead.
 	 */
 
 	set depthPacking(value) {
 
-		this.setDepthPacking(value);
-
-	}
-
-	/**
-	 * Returns the current depth packing strategy.
-	 *
-	 * @return {DepthPackingStrategies} The depth packing strategy.
-	 */
-
-	getDepthPacking() {
-
-		return Number(this.defines.DEPTH_PACKING);
-
-	}
-
-	/**
-	 * Sets the depth packing strategy.
-	 *
-	 * @param {DepthPackingStrategies} value - The depth packing strategy.
-	 */
-
-	setDepthPacking(value) {
-
 		this.defines.DEPTH_PACKING = value.toFixed(0);
 		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Returns the edge detection mode.
+	 *
+	 * @return {EdgeDetectionMode} The mode.
+	 */
+
+	getEdgeDetectionMode() {
+
+		return Number(this.defines.EDGE_DETECTION_MODE);
 
 	}
 
@@ -144,6 +147,18 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 
 		this.defines.EDGE_DETECTION_MODE = mode.toFixed(0);
 		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Returns the local contrast adaptation factor.
+	 *
+	 * @return {Number} The factor.
+	 */
+
+	getLocalContrastAdaptationFactor() {
+
+		return Number(this.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR);
 
 	}
 
@@ -166,7 +181,19 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the edge detection sensitivity.
+	 * Returns the edge detection threshold.
+	 *
+	 * @return {Number} The threshold.
+	 */
+
+	getEdgeDetectionThreshold() {
+
+		return Number(this.defines.EDGE_THRESHOLD);
+
+	}
+
+	/**
+	 * Sets the edge detection threshold.
 	 *
 	 * A lower value results in more edges being detected at the expense of performance.
 	 *
@@ -175,7 +202,7 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	 *
 	 * If depth-based edge detection is used, the threshold will depend on the scene depth.
 	 *
-	 * @param {Number} threshold - The edge detection sensitivity. Range: [0.0, 0.5].
+	 * @param {Number} threshold - The edge detection threshold. Range: [0.0, 0.5].
 	 */
 
 	setEdgeDetectionThreshold(threshold) {
@@ -183,6 +210,18 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 		this.defines.EDGE_THRESHOLD = threshold.toFixed("6");
 		this.defines.DEPTH_THRESHOLD = (threshold * 0.1).toFixed("6");
 		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Returns the predication mode.
+	 *
+	 * @return {PredicationMode} The mode.
+	 */
+
+	getPredicationMode() {
+
+		return Number(this.defines.PREDICATION_MODE);
 
 	}
 
@@ -215,6 +254,18 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Returns the predication threshold.
+	 *
+	 * @return {Number} The threshold.
+	 */
+
+	getPredicationThreshold() {
+
+		return Number(this.defines.PREDICATION_THRESHOLD);
+
+	}
+
+	/**
 	 * Sets the predication threshold.
 	 *
 	 * @param {Number} threshold - The threshold.
@@ -224,6 +275,18 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 
 		this.defines.PREDICATION_THRESHOLD = threshold.toFixed("6");
 		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Returns the predication scale.
+	 *
+	 * @return {Number} The scale.
+	 */
+
+	getPredicationScale() {
+
+		return Number(this.defines.PREDICATION_SCALE);
 
 	}
 
@@ -239,6 +302,18 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 
 		this.defines.PREDICATION_SCALE = scale.toFixed("6");
 		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Returns the predication strength.
+	 *
+	 * @return {Number} The strength.
+	 */
+
+	getPredicationStrength() {
+
+		return Number(this.defines.PREDICATION_STRENGTH);
 
 	}
 
