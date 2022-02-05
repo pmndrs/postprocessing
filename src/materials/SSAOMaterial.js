@@ -81,82 +81,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the normal buffer.
-	 *
-	 * @param {Number} value - The buffer.
-	 */
-
-	setNormalBuffer(value) {
-
-		this.uniforms.normalBuffer.value = value;
-
-	}
-
-	/**
-	 * Sets the depth buffer.
-	 *
-	 * @param {Number} value - The buffer.
-	 */
-
-	setDepthBuffer(value) {
-
-		this.uniforms.depthBuffer.value = value;
-
-	}
-
-	/**
-	 * The current depth packing.
-	 *
-	 * @type {DepthPackingStrategies}
-	 * @deprecated Use getDepthPacking() instead.
-	 */
-
-	get depthPacking() {
-
-		return this.getDepthPacking();
-
-	}
-
-	/**
-	 * Sets the depth packing.
-	 *
-	 * @type {DepthPackingStrategies}
-	 * @deprecated Use setDepthPacking() instead.
-	 */
-
-	set depthPacking(value) {
-
-		this.setDepthPacking(value);
-
-	}
-
-	/**
-	 * Returns the current depth packing strategy.
-	 *
-	 * @return {DepthPackingStrategies} The depth packing strategy.
-	 */
-
-	getDepthPacking() {
-
-		return Number(this.defines.DEPTH_PACKING);
-
-	}
-
-	/**
-	 * Sets the depth packing strategy.
-	 *
-	 * @param {DepthPackingStrategies} value - The depth packing strategy.
-	 */
-
-	setDepthPacking(value) {
-
-		this.defines.DEPTH_PACKING = value.toFixed(0);
-		this.needsUpdate = true;
-
-	}
-
-	/**
-	 * Sets the normal-depth buffer.
+	 * Sets the combined normal-depth buffer.
 	 *
 	 * @param {Number} value - The buffer.
 	 */
@@ -175,6 +100,60 @@ export class SSAOMaterial extends ShaderMaterial {
 
 		}
 
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Sets the normal buffer.
+	 *
+	 * @param {Number} value - The buffer.
+	 */
+
+	setNormalBuffer(value) {
+
+		this.uniforms.normalBuffer.value = value;
+
+	}
+
+	/**
+	 * Sets the depth buffer.
+	 *
+	 * @param {Texture} buffer - The depth texture.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 */
+
+	setDepthBuffer(buffer, depthPacking = BasicDepthPacking) {
+
+		this.uniforms.depthBuffer.value = buffer;
+		this.defines.DEPTH_PACKING = depthPacking.toFixed(0);
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * The current depth packing.
+	 *
+	 * @type {DepthPackingStrategies}
+	 * @deprecated Removed without replacement.
+	 */
+
+	get depthPacking() {
+
+		return Number(this.defines.DEPTH_PACKING);
+
+	}
+
+	/**
+	 * Sets the depth packing.
+	 *
+	 * @type {DepthPackingStrategies}
+	 * @deprecated Use setDepthBuffer() instead.
+	 */
+
+	set depthPacking(value) {
+
+		this.defines.DEPTH_PACKING = value.toFixed(0);
 		this.needsUpdate = true;
 
 	}
