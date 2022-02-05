@@ -250,12 +250,12 @@ export class EffectPass extends Pass {
 	 * Indicates whether this pass encodes its output when rendering to screen.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use getOutputEncodingEnabled() instead.
+	 * @deprecated Use getFullscreenMaterial().isOutputEncodingEnabled() instead.
 	 */
 
 	get encodeOutput() {
 
-		return this.isOutputEncodingEnabled();
+		return this.getFullscreenMaterial().isOutputEncodingEnabled();
 
 	}
 
@@ -263,51 +263,12 @@ export class EffectPass extends Pass {
 	 * Enables or disables output encoding.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use setOutputEncodingEnabled() instead.
+	 * @deprecated Use getFullscreenMaterial().setOutputEncodingEnabled() instead.
 	 */
 
 	set encodeOutput(value) {
 
-		this.setOutputEncodingEnabled(value);
-
-	}
-
-	/**
-	 * Indicates whether this pass encodes its output when rendering to screen.
-	 *
-	 * @return {Boolean} Whether output encoding is enabled.
-	 */
-
-	isOutputEncodingEnabled() {
-
-		return (this.getFullscreenMaterial().defines.ENCODE_OUTPUT !== undefined);
-
-	}
-
-	/**
-	 * Enables or disables output encoding.
-	 *
-	 * @param {Boolean} value - Whether output encoding should be enabled.
-	 */
-
-	setOutputEncodingEnabled(value) {
-
-		if(this.encodeOutput !== value) {
-
-			const material = this.getFullscreenMaterial();
-			material.needsUpdate = true;
-
-			if(value) {
-
-				material.defines.ENCODE_OUTPUT = "1";
-
-			} else {
-
-				delete material.defines.ENCODE_OUTPUT;
-
-			}
-
-		}
+		this.getFullscreenMaterial().setOutputEncodingEnabled(value);
 
 	}
 
@@ -317,7 +278,7 @@ export class EffectPass extends Pass {
 	 * Color quantization reduces banding artifacts but degrades performance.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use isDitheringEnabled() instead.
+	 * @deprecated Use getFullscreenMaterial().dithering instead.
 	 */
 
 	get dithering() {
@@ -330,45 +291,12 @@ export class EffectPass extends Pass {
 	 * Enables or disables dithering.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use setDitheringEnabled() instead.
+	 * @deprecated Use getFullscreenMaterial().dithering instead.
 	 */
 
 	set dithering(value) {
 
 		this.setDitheringEnabled(value);
-
-	}
-
-	/**
-	 * Indicates whether dithering is enabled.
-	 *
-	 * Color quantization reduces banding artifacts but degrades performance.
-	 *
-	 * @return {Boolean} Whether dithering is enabled.
-	 */
-
-	isDitheringEnabled() {
-
-		return this.getFullscreenMaterial().dithering;
-
-	}
-
-	/**
-	 * Enables or disables dithering.
-	 *
-	 * @param {Boolean} value - Whether dithering should enabled.
-	 */
-
-	setDitheringEnabled(value) {
-
-		const material = this.getFullscreenMaterial();
-
-		if(material.dithering !== value) {
-
-			material.dithering = value;
-			material.needsUpdate = true;
-
-		}
 
 	}
 
