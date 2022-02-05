@@ -94,6 +94,30 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Returns the lowest possible luminance value.
+	 *
+	 * @return {Number} The minimum luminance.
+	 */
+
+	getMinLuminance() {
+
+		return this.uniforms.minLuminance.value;
+
+	}
+
+	/**
+	 * Sets the minimum luminance.
+	 *
+	 * @param {Number} value - The minimum luminance.
+	 */
+
+	setMinLuminance(value) {
+
+		this.uniforms.minLuminance.value = value;
+
+	}
+
+	/**
 	 * Returns the luminance adaptation rate.
 	 *
 	 * @return {Number} The adaptation rate.
