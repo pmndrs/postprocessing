@@ -2,7 +2,7 @@ varying vec2 vUv;
 
 #if DEPTH_COPY_MODE == 1
 
-	uniform vec2 screenPosition;
+	uniform vec2 texelPosition;
 
 #endif
 
@@ -10,7 +10,7 @@ void main() {
 
 	#if DEPTH_COPY_MODE == 1
 
-		vUv = screenPosition;
+		vUv = texelPosition;
 
 	#else
 

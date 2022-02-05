@@ -37,7 +37,7 @@ export class DepthCopyMaterial extends ShaderMaterial {
 			},
 			uniforms: {
 				depthBuffer: new Uniform(null),
-				screenPosition: new Uniform(new Vector2())
+				texelPosition: new Uniform(new Vector2())
 			},
 			blending: NoBlending,
 			depthWrite: false,
@@ -126,15 +126,26 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the screen position of the texel to copy.
+	 * Returns the screen space position used for single-texel copy operations.
 	 *
-	 * @param {Number} x - The X-coordinate.
-	 * @param {Number} y - The X-coordinate.
+	 * @return {Vector2} The position.
 	 */
 
-	setScreenPosition(x, y) {
+	getTexelPosition() {
 
-		this.uniforms.screenPosition.value.set(x, y);
+		return this.uniforms.texelPosition.value;
+
+	}
+
+	/**
+	 * Sets the screen space position used for single-texel copy operations.
+	 *
+	 * @param {Vector2} value - The position.
+	 */
+
+	setTexelPosition(value) {
+
+		this.uniforms.texelPosition.value = value;
 
 	}
 
