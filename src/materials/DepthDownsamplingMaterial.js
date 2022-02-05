@@ -85,6 +85,30 @@ export class DepthDownsamplingMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Sets the normal buffer.
+	 *
+	 * @param {Texture} value - The normal buffer.
+	 */
+
+	setNormalBuffer(value) {
+
+		this.uniforms.depthBuffer.value = value;
+
+		if(value !== null) {
+
+			this.defines.DOWNSAMPLE_NORMALS = "1";
+
+		} else {
+
+			delete this.defines.DOWNSAMPLE_NORMALS;
+
+		}
+
+		this.needsUpdate = true;
+
+	}
+
+	/**
 	 * Sets the texel size.
 	 *
 	 * @deprecated Use setSize() instead.
