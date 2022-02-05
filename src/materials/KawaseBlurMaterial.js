@@ -96,7 +96,19 @@ export class KawaseBlurMaterial extends ShaderMaterial {
 
 	getKernel() {
 
-		return 0.0;
+		return null;
+
+	}
+
+	/**
+	 * Sets the current kernel.
+	 *
+	 * @param {Number} value - The kernel.
+	 */
+
+	setKernel(value) {
+
+		this.uniforms.kernel.value = value;
 
 	}
 
