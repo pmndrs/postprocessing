@@ -8,6 +8,8 @@ import vertexShader from "./glsl/common/shader.vert";
  *
  * This material should be applied twice in a row, with `fill` mode enabled for the second pass. Enabling the
  * `foreground` option causes the shader to combine the near and far CoC values around foreground objects.
+ *
+ * @implements {Resizable}
  */
 
 export class BokehMaterial extends ShaderMaterial {
@@ -166,6 +168,7 @@ export class BokehMaterial extends ShaderMaterial {
 	/**
 	 * Sets the texel size.
 	 *
+	 * @deprecated Use setSize() instead.
 	 * @param {Number} x - The texel width.
 	 * @param {Number} y - The texel height.
 	 */
@@ -173,6 +176,19 @@ export class BokehMaterial extends ShaderMaterial {
 	setTexelSize(x, y) {
 
 		this.uniforms.texelSize.value.set(x, y);
+
+	}
+
+	/**
+	 * Sets the size of this object.
+	 *
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		this.uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
 
 	}
 

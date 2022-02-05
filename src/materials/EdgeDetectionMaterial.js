@@ -37,6 +37,8 @@ export const PredicationMode = {
  * An edge detection material.
  *
  * Mainly used for Subpixel Morphological Anti-Aliasing.
+ *
+ * @implements {Resizable}
  */
 
 export class EdgeDetectionMaterial extends ShaderMaterial {
@@ -329,6 +331,19 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 
 		this.defines.PREDICATION_STRENGTH = strength.toFixed("6");
 		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Sets the size of this object.
+	 *
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		this.uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
 
 	}
 

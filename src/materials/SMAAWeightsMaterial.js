@@ -7,6 +7,8 @@ import vertexShader from "./glsl/smaa-weights/shader.vert";
  * Subpixel Morphological Antialiasing.
  *
  * This material computes weights for detected edges.
+ *
+ * @implements {Resizable}
  */
 
 export class SMAAWeightsMaterial extends ShaderMaterial {
@@ -42,8 +44,8 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 				inputBuffer: new Uniform(null),
 				areaTexture: new Uniform(null),
 				searchTexture: new Uniform(null),
-				texelSize: new Uniform(texelSize),
-				resolution: new Uniform(resolution)
+				resolution: new Uniform(resolution),
+				texelSize: new Uniform(texelSize)
 			},
 			blending: NoBlending,
 			depthWrite: false,
@@ -229,6 +231,21 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 		}
 
 		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Sets the size of this object.
+	 *
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		const uniforms = this.uniforms;
+		uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
+		uniforms.resolution.value.set(width, height);
 
 	}
 

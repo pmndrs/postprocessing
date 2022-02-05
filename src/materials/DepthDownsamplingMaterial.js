@@ -8,6 +8,8 @@ import vertexShader from "./glsl/depth-downsampling/shader.vert";
  *
  * Based on an article by Eleni Maria Stea:
  * https://eleni.mutantstargoat.com/hikiko/depth-aware-upsampling-6
+ *
+ * @implements {Resizable}
  */
 
 export class DepthDownsamplingMaterial extends ShaderMaterial {
@@ -85,6 +87,7 @@ export class DepthDownsamplingMaterial extends ShaderMaterial {
 	/**
 	 * Sets the texel size.
 	 *
+	 * @deprecated Use setSize() instead.
 	 * @param {Number} x - The texel width.
 	 * @param {Number} y - The texel height.
 	 */
@@ -92,6 +95,19 @@ export class DepthDownsamplingMaterial extends ShaderMaterial {
 	setTexelSize(x, y) {
 
 		this.uniforms.texelSize.value.set(x, y);
+
+	}
+
+	/**
+	 * Sets the size of this object.
+	 *
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		this.uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
 
 	}
 

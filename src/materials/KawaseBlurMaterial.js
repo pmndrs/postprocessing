@@ -14,6 +14,7 @@ import vertexShader from "./glsl/convolution/kawase.vert";
  * Further modified according to Apple's [Best Practices for Shaders](https://goo.gl/lmRoM5).
  *
  * @todo Remove dithering code from fragment shader.
+ * @implements {Resizable}
  */
 
 export class KawaseBlurMaterial extends ShaderMaterial {
@@ -21,7 +22,8 @@ export class KawaseBlurMaterial extends ShaderMaterial {
 	/**
 	 * Constructs a new convolution material.
 	 *
-	 * @param {Vector2} [texelSize] - Deprecated. Use setTexelSize isntead.
+	 * TODO Remove texelSize param.
+	 * @param {Vector2} [texelSize] - Deprecated.
 	 */
 
 	constructor(texelSize = new Vector2()) {
@@ -65,6 +67,7 @@ export class KawaseBlurMaterial extends ShaderMaterial {
 	/**
 	 * Sets the texel size.
 	 *
+	 * @deprecated Use setSize() instead.
 	 * @param {Number} x - The texel width.
 	 * @param {Number} y - The texel height.
 	 */
@@ -73,6 +76,21 @@ export class KawaseBlurMaterial extends ShaderMaterial {
 
 		this.uniforms.texelSize.value.set(x, y);
 		this.uniforms.halfTexelSize.value.set(x, y).multiplyScalar(0.5);
+
+	}
+
+	/**
+	 * Sets the size of this object.
+	 *
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		const uniforms = this.uniforms;
+		uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
+		uniforms.halfTexelSize.value.copy(uniforms.texelSize.value).multiplyScalar(0.5);
 
 	}
 
