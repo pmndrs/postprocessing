@@ -52,6 +52,42 @@ export class KawaseBlurMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Sets the input buffer.
+	 *
+	 * @param {Texture} value - The input buffer.
+	 */
+
+	setInputBuffer(value) {
+
+		this.uniforms.inputBuffer.value = value;
+
+	}
+
+	/**
+	 * Returns the blur scale.
+	 *
+	 * @return {Number} The scale.
+	 */
+
+	getScale() {
+
+		return this.uniforms.scale.value;
+
+	}
+
+	/**
+	 * Sets the blur scale.
+	 *
+	 * @return {Number} value - The scale.
+	 */
+
+	setScale(value) {
+
+		this.uniforms.scale.value = value;
+
+	}
+
+	/**
 	 * Returns the kernel.
 	 *
 	 * @return {Float32Array} The kernel.
