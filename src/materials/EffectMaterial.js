@@ -87,15 +87,42 @@ export class EffectMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Sets the input buffer.
+	 *
+	 * @param {Texture} value - The input buffer.
+	 */
+
+	setInputBuffer(value) {
+
+		this.uniforms.inputBuffer.value = value;
+
+	}
+
+	/**
+	 * Sets the depth buffer.
+	 *
+	 * @param {Texture} buffer - The depth texture.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 */
+
+	setDepthBuffer(buffer, depthPacking = BasicDepthPacking) {
+
+		this.uniforms.depthBuffer.value = buffer;
+		this.defines.DEPTH_PACKING = depthPacking.toFixed(0);
+		this.needsUpdate = true;
+
+	}
+
+	/**
 	 * The current depth packing.
 	 *
 	 * @type {DepthPackingStrategies}
-	 * @deprecated Use getDepthPacking() instead.
+	 * @deprecated Removed without replacement.
 	 */
 
 	get depthPacking() {
 
-		return this.getDepthPacking();
+		return Number(this.defines.DEPTH_PACKING);
 
 	}
 
@@ -103,34 +130,10 @@ export class EffectMaterial extends ShaderMaterial {
 	 * Sets the depth packing.
 	 *
 	 * @type {DepthPackingStrategies}
-	 * @deprecated Use setDepthPacking() instead.
+	 * @deprecated Use setDepthBuffer() instead.
 	 */
 
 	set depthPacking(value) {
-
-		this.setDepthPacking(value);
-
-	}
-
-	/**
-	 * Returns the current depth packing strategy.
-	 *
-	 * @return {DepthPackingStrategies} The depth packing strategy.
-	 */
-
-	getDepthPacking() {
-
-		return Number(this.defines.DEPTH_PACKING);
-
-	}
-
-	/**
-	 * Sets the depth packing strategy.
-	 *
-	 * @param {DepthPackingStrategies} value - The depth packing strategy.
-	 */
-
-	setDepthPacking(value) {
 
 		this.defines.DEPTH_PACKING = value.toFixed(0);
 		this.needsUpdate = true;
@@ -196,6 +199,77 @@ export class EffectMaterial extends ShaderMaterial {
 		}
 
 		return this;
+
+	}
+
+	/**
+	 * Sets the required shader extensions.
+	 *
+	 * @param {Set<WebGLExtension>} extensions - A collection of extensions.
+	 * @return {EffectMaterial} This material.
+	 */
+
+	setExtensions(extensions) {
+
+		this.extensions = {};
+
+		for(const extension of extensions) {
+
+			this.extensions[extension] = true;
+
+		}
+
+		return this;
+
+	}
+
+	/**
+	 * Indicates whether output encoding is enabled.
+	 *
+	 * @return {Boolean} Whether output encoding is enabled.
+	 */
+
+	isOutputEncodingEnabled(value) {
+
+		return (this.defines.ENCODE_OUTPUT !== undefined);
+
+	}
+
+	/**
+	 * Enables or disables output encoding.
+	 *
+	 * @param {Boolean} value - Whether output encoding should be enabled.
+	 */
+
+	setOutputEncodingEnabled(value) {
+
+		if(this.isOutputEncodingEnabled() !== value) {
+
+			if(value) {
+
+				this.defines.ENCODE_OUTPUT = "1";
+
+			} else {
+
+				delete this.defines.ENCODE_OUTPUT;
+
+			}
+
+			this.needsUpdate = true;
+
+		}
+
+	}
+
+	/**
+	 * Sets the delta time.
+	 *
+	 * @param {Number} value - The delta time in seconds.
+	 */
+
+	setDeltaTime(value) {
+
+		this.uniforms.time.value += value;
 
 	}
 
