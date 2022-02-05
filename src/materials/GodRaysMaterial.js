@@ -24,7 +24,8 @@ export class GodRaysMaterial extends ShaderMaterial {
 	/**
 	 * Constructs a new god rays material.
 	 *
-	 * @param {Vector2} lightPosition - The light position in screen space.
+	 * TODO Remove lightPosition param.
+	 * @param {Vector2} lightPosition - Deprecated.
 	 */
 
 	constructor(lightPosition) {
@@ -53,6 +54,42 @@ export class GodRaysMaterial extends ShaderMaterial {
 
 		/** @ignore */
 		this.toneMapped = false;
+
+	}
+
+	/**
+	 * Sets the input buffer.
+	 *
+	 * @param {Texture} value - The input buffer.
+	 */
+
+	setInputBuffer(value) {
+
+		this.uniforms.inputBuffer.value = value;
+
+	}
+
+	/**
+	 * Returns the screen space position of the light source.
+	 *
+	 * @return {Vector2} The position.
+	 */
+
+	getLightPosition() {
+
+		return this.uniforms.lightPosition.value;
+
+	}
+
+	/**
+	 * Sets the screen space position of the light source.
+	 *
+	 * @param {Vector2} value - The position.
+	 */
+
+	setLightPosition(value) {
+
+		this.uniforms.lightPosition.value = value;
 
 	}
 
