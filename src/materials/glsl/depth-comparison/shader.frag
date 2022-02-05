@@ -25,7 +25,15 @@ void main() {
 	vec2 projTexCoord = (vProjTexCoord.xy / vProjTexCoord.w) * 0.5 + 0.5;
 	projTexCoord = clamp(projTexCoord, 0.002, 0.998);
 
-	float fragCoordZ = unpackRGBAToDepth(texture2D(depthBuffer, projTexCoord));
+	#if DEPTH_PACKING == 3201
+
+		float fragCoordZ = unpackRGBAToDepth(texture2D(depthBuffer, projTexCoord));
+
+	#else
+
+		float fragCoordZ = texture2D(depthBuffer, projTexCoord).r;
+
+	#endif
 
 	#ifdef PERSPECTIVE_CAMERA
 
