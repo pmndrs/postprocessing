@@ -16,18 +16,18 @@ import fragmentShader from "./glsl/depth-mask/shader.frag";
 import vertexShader from "./glsl/common/shader.vert";
 
 /**
- * An enumeration of masking strategies for maximum depth values.
+ * An enumeration of depth test strategies.
  *
  * @type {Object}
- * @property {Number} TEST - Decide normally based on depth test.
- * @property {Number} KEEP - Always keep max depth.
- * @property {Number} DISCARD - Always discard max depth.
+ * @property {Number} DEFAULT - Perform depth test only.
+ * @property {Number} KEEP_MAX_DEPTH - Always keep max depth.
+ * @property {Number} DISCARD_MAX_DEPTH - Always discard max depth.
  */
 
-export const MaxDepthStrategy = {
-	TEST: 0,
-	KEEP: 1,
-	DISCARD: 2
+export const DepthTestStrategy = {
+	DEFAULT: 0,
+	KEEP_MAX_DEPTH: 1,
+	DISCARD_MAX_DEPTH: 2
 };
 
 /**
@@ -50,14 +50,12 @@ export class DepthMaskMaterial extends ShaderMaterial {
 				DEPTH_EPSILON: "0.00001",
 				DEPTH_PACKING_0: "0",
 				DEPTH_PACKING_1: "0",
-				MAX_DEPTH_STRATEGY: MaxDepthStrategy.KEEP
+				DEPTH_TEST_STRATEGY: DepthTestStrategy.KEEP_MAX_DEPTH
 			},
 			uniforms: {
 				inputBuffer: new Uniform(null),
 				depthBuffer0: new Uniform(null),
-				depthBuffer1: new Uniform(null),
-				bias0: new Uniform(0.0),
-				bias1: new Uniform(0.0)
+				depthBuffer1: new Uniform(null)
 			},
 			blending: NoBlending,
 			depthWrite: false,
@@ -90,7 +88,7 @@ export class DepthMaskMaterial extends ShaderMaterial {
 
 	get keepFar() {
 
-		return (this.getMaxDepthStrategy() === MaxDepthStrategy.KEEP);
+		return (this.getMaxDepthStrategy() === DepthTestStrategy.KEEP);
 
 	}
 
@@ -98,36 +96,36 @@ export class DepthMaskMaterial extends ShaderMaterial {
 	 * Controls whether maximum depth values should be preserved.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use setMaxDepthStrategy(MaxDepthStrategy.KEEP) instead.
+	 * @deprecated Use setMaxDepthStrategy(DepthTestStrategy.KEEP_MAX_DEPTH) instead.
 	 */
 
 	set keepFar(value) {
 
-		this.setMaxDepthStrategy(value ? MaxDepthStrategy.KEEP : MaxDepthStrategy.DISCARD);
+		this.setMaxDepthStrategy(value ? DepthTestStrategy.KEEP_MAX_DEPTH : DepthTestStrategy.DISCARD_MAX_DEPTH);
 
 	}
 
 	/**
 	 * Returns the strategy for dealing with maximum depth values.
 	 *
-	 * @return {MaxDepthStrategy} The strategy.
+	 * @return {DepthTestStrategy} The strategy.
 	 */
 
 	getMaxDepthStrategy() {
 
-		return Number(this.defines.MAX_DEPTH_STRATEGY);
+		return Number(this.defines.DEPTH_TEST_STRATEGY);
 
 	}
 
 	/**
 	 * Sets the strategy for dealing with maximum depth values.
 	 *
-	 * @param {MaxDepthStrategy} value - The strategy.
+	 * @param {DepthTestStrategy} value - The strategy.
 	 */
 
 	setMaxDepthStrategy(value) {
 
-		this.defines.MAX_DEPTH_STRATEGY = value.toFixed(0);
+		this.defines.DEPTH_TEST_STRATEGY = value.toFixed(0);
 		this.needsUpdate = true;
 
 	}
