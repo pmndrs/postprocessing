@@ -80,6 +80,36 @@ export class DepthMaskMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Sets the base depth buffer.
+	 *
+	 * @param {Texture} buffer - The depth texture.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 */
+
+	setDepthBuffer0(buffer, depthPacking = BasicDepthPacking) {
+
+		this.uniforms.depthBuffer0.value = buffer;
+		this.defines.DEPTH_PACKING_0 = depthPacking.toFixed(0);
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Sets the depth buffer that will be compared with the base depth buffer.
+	 *
+	 * @param {Texture} buffer - The depth texture.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 */
+
+	setDepthBuffer1(buffer, depthPacking = BasicDepthPacking) {
+
+		this.uniforms.depthBuffer1.value = buffer;
+		this.defines.DEPTH_PACKING_1 = depthPacking.toFixed(0);
+		this.needsUpdate = true;
+
+	}
+
+	/**
 	 * Indicates whether maximum depth values should be preserved.
 	 *
 	 * @type {Boolean}
