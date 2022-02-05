@@ -44,6 +44,18 @@ export class OutlineMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Sets the input buffer.
+	 *
+	 * @param {Texture} value - The input buffer.
+	 */
+
+	setInputBuffer(value) {
+
+		this.uniforms.inputBuffer.value = value;
+
+	}
+
+	/**
 	 * Sets the texel size.
 	 *
 	 * @deprecated Use setSize() instead.
