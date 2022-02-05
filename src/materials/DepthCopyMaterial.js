@@ -111,6 +111,19 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Sets the screen position of the texel to copy.
+	 *
+	 * @param {Number} x - The X-coordinate.
+	 * @param {Number} y - The X-coordinate.
+	 */
+
+	setScreenPosition(x, y) {
+
+		this.uniforms.screenPosition.value.set(x, y);
+
+	}
+
+	/**
 	 * Returns the depth copy mode.
 	 *
 	 * @return {DepthCopyMode} The depth copy mode.
