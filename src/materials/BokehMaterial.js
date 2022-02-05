@@ -55,6 +55,54 @@ export class BokehMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Sets the input buffer.
+	 *
+	 * @param {Number} value - The buffer.
+	 */
+
+	setInputBuffer(value) {
+
+		this.uniforms.inputBuffer.value = value;
+
+	}
+
+	/**
+	 * Sets the circle of confusion buffer.
+	 *
+	 * @param {Number} value - The buffer.
+	 */
+
+	setCircleOfConfusionBuffer(value) {
+
+		this.uniforms.cocBuffer.value = value;
+
+	}
+
+	/**
+	 * Returns the blur scale.
+	 *
+	 * @return {Number} The scale.
+	 */
+
+	getScale(value) {
+
+		return this.uniforms.scale.value = value;
+
+	}
+
+	/**
+	 * Sets the blur scale.
+	 *
+	 * @param {Number} value - The scale.
+	 */
+
+	setScale(value) {
+
+		this.uniforms.scale.value = value;
+
+	}
+
+	/**
 	 * Generates the blur kernel.
 	 *
 	 * @private
