@@ -61,6 +61,21 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Sets the input depth buffer.
+	 *
+	 * @param {Texture} buffer - The depth texture.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 */
+
+	setDepthBuffer(buffer, depthPacking = BasicDepthPacking) {
+
+		this.uniforms.depthBuffer.value = buffer;
+		this.defines.INPUT_DEPTH_PACKING = depthPacking.toFixed(0);
+		this.needsUpdate = true;
+
+	}
+
+	/**
 	 * Returns the current input depth packing strategy.
 	 *
 	 * @return {DepthPackingStrategies} The input depth packing strategy.
