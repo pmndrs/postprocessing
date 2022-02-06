@@ -91,7 +91,7 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	 * In number of pixels, it's actually the double. So the maximum line length perfectly handled by, for example 16, is
 	 * 64 (perfectly means that longer lines won't look as good, but are still antialiased).
 	 *
-	 * @param {Number} steps - The search steps. Range: [0, 112].
+	 * @param {Number} value - The search steps. Range: [0, 112].
 	 */
 
 	setOrthogonalSearchSteps(value) {
