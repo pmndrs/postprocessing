@@ -74,7 +74,7 @@ export class BokehMaterial extends ShaderMaterial {
 	 * @param {Number} value - The buffer.
 	 */
 
-	setCircleOfConfusionBuffer(value) {
+	setCoCBuffer(value) {
 
 		this.uniforms.cocBuffer.value = value;
 
