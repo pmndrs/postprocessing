@@ -208,8 +208,8 @@ function initialize(assets) {
 		"base size": lutEffect.getLUT().image.width,
 		"scale up": false,
 		"target size": 48,
-		"opacity": lutEffect.blendMode.opacity.value,
-		"blend mode": lutEffect.blendMode.blendFunction
+		"opacity": lutEffect.getBlendMode().getOpacity(),
+		"blend mode": lutEffect.getBlendMode().getBlendFunction()
 	};
 
 	let objectURL = null;
@@ -242,8 +242,7 @@ function initialize(assets) {
 
 		const original = assets.get(params.lut);
 		const size = Math.min(original.image.width, original.image.height);
-		const targetSize = params["target size"];
-		const scaleUp = params["scale up"] && (targetSize > size);
+		const scaleUp = params["scale up"] && (params["target size"] > size);
 
 		let promise;
 
@@ -251,7 +250,7 @@ function initialize(assets) {
 
 			const lut = original.isLookupTexture3D ? original : LookupTexture3D.from(original);
 			console.time("Tetrahedral Upscaling");
-			promise = lut.scaleUp(targetSize, false);
+			promise = lut.scaleUp(params["target size"], false);
 			document.body.classList.add("progress");
 
 		} else {
@@ -317,9 +316,10 @@ function initialize(assets) {
 	pane.addInput(params, "scale up").on("change", changeLUT);
 	pane.addInput(params, "target size", { options: [32, 48, 64, 96, 128].reduce(reducer, {}) }).on("change", changeLUT);
 
-	pane.addInput(lutEffect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
-	pane.addInput(lutEffect.blendMode, "blendFunction", { label: "blend mode", options: BlendFunction })
-		.on("change", (e) => lutEffect.blendMode.setBlendFunction(e.value));
+	pane.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
+		.on("change", (e) => lutEffect.getBlendMode().setOpacity(e.value));
+	pane.addInput(params, "blend mode", { options: BlendFunction })
+		.on("change", (e) => lutEffect.getBlendMode().setBlendFunction(e.value));
 
 	// Resize Handler
 

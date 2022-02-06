@@ -11,7 +11,8 @@ import {
 
 import {
 	EffectComposer,
-	BlurPass,
+	KawaseBlurPass,
+	KernelSize,
 	RenderPass
 } from "../../../src";
 
@@ -102,8 +103,9 @@ function initialize(assets) {
 		frameBufferType: HalfFloatType
 	});
 
+	const kawaseBlurPass = new KawaseBlurPass({ height: 480 });
 	composer.addPass(new RenderPass(scene, camera));
-	composer.addPass(new BlurPass());
+	composer.addPass(kawaseBlurPass);
 
 	// Settings
 
@@ -111,6 +113,26 @@ function initialize(assets) {
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 	pane.addSeparator();
+
+	const params = {
+		"resolution": kawaseBlurPass.getResolution().getHeight(),
+		"kernel size": kawaseBlurPass.getKernelSize(),
+		"scale": kawaseBlurPass.getScale()
+	};
+
+	function reducer(a, b) {
+
+		a[b] = b;
+		return a;
+
+	}
+
+	pane.addInput(params, "resolution", { options: [360, 480, 720, 1080].reduce(reducer, {}) })
+		.on("change", (e) => kawaseBlurPass.getResolution().setPreferredHeight(e.value));
+	pane.addInput(params, "kernel size", { options: KernelSize })
+		.on("change", (e) => kawaseBlurPass.setKernelSize(e.value));
+	pane.addInput(params, "scale", { min: 0, max: 1, step: 0.01 })
+		.on("change", (e) => kawaseBlurPass.setScale(e.value));
 
 	// Resize Handler
 
