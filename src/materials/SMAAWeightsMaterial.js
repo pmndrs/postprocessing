@@ -42,8 +42,8 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 			},
 			uniforms: {
 				inputBuffer: new Uniform(null),
-				areaTexture: new Uniform(null),
 				searchTexture: new Uniform(null),
+				areaTexture: new Uniform(null),
 				resolution: new Uniform(resolution),
 				texelSize: new Uniform(texelSize)
 			},
@@ -72,16 +72,16 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the area and search lookup textures.
+	 * Sets the search and area lookup textures.
 	 *
-	 * @param {Texture} area - The area lookup texture.
 	 * @param {Texture} search - The search lookup texture.
+	 * @param {Texture} area - The area lookup texture.
 	 */
 
-	setLookupTextures(area, search) {
+	setLookupTextures(search, area) {
 
-		this.uniforms.areaTexture.value = area;
 		this.uniforms.searchTexture.value = search;
+		this.uniforms.areaTexture.value = area;
 
 	}
 
