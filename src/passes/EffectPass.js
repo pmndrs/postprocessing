@@ -466,6 +466,24 @@ export class EffectPass extends Pass {
 	}
 
 	/**
+	 * Sets the renderer
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 */
+
+	setRenderer(renderer) {
+
+		super.setRenderer(renderer);
+
+		for(const effect of this.effects) {
+
+			effect.setRenderer(renderer);
+
+		}
+
+	}
+
+	/**
 	 * Returns the current depth texture.
 	 *
 	 * @return {Texture} The current depth texture, or null if there is none.
