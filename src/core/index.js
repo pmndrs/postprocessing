@@ -7,3 +7,4 @@ export { OverrideMaterialManager } from "./OverrideMaterialManager";
 export { Resizable } from "./Resizable";
 export { Resolution, Resolution as Resizer } from "./Resolution";
 export { Selection } from "./Selection";
+export { Timer } from "./Timer";

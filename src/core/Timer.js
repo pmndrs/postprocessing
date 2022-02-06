@@ -6,9 +6,7 @@ const SECONDS_TO_MILLISECONDS = 1e3;
  *
  * Original implementation by Michael Herzog (Mugen87).
  *
- * @todo Remove if Timer replaces Clock in three.js.
- * @see {@link https://github.com/mrdoob/three.js/pull/17912}
- *
+ * @experimental Temporary substitute for {@link https://github.com/mrdoob/three.js/pull/17912}
  * @implements {EventListenerObject}
  * @implements {Disposable}
  */
