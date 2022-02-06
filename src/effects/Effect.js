@@ -83,6 +83,15 @@ export class Effect extends EventDispatcher {
 		this.name = name;
 
 		/**
+		 * The renderer.
+		 *
+		 * @type {WebGLRenderer}
+		 * @protected
+		 */
+
+		this.renderer = null;
+
+		/**
 		 * The effect attributes.
 		 *
 		 * @type {EffectAttribute}
@@ -163,6 +172,18 @@ export class Effect extends EventDispatcher {
 	getName() {
 
 		return this.name;
+
+	}
+
+	/**
+	 * Sets the renderer
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 */
+
+	setRenderer(renderer) {
+
+		this.renderer = renderer;
 
 	}
 
