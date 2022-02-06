@@ -96,8 +96,12 @@ export class TextureEffect extends Effect {
 			this.uniforms.get("uvTransform").value = value.matrix;
 			this.defines.delete("TEXTURE_PRECISION_HIGH");
 
-			const decoding = getTextureDecoding(value, this.renderer.capabilities.isWebGL2);
-			this.defines.set("texelToLinear(texel)", decoding);
+			if(this.renderer !== null) {
+
+				const decoding = getTextureDecoding(value, this.renderer.capabilities.isWebGL2);
+				this.defines.set("texelToLinear(texel)", decoding);
+
+			}
 
 			if(value !== null) {
 

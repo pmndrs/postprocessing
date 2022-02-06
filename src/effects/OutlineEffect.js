@@ -535,8 +535,12 @@ export class OutlineEffect extends Effect {
 
 		}
 
-		const decoding = getTextureDecoding(texture, this.renderer.capabilities.isWebGL2);
-		this.defines.set("texelToLinear(texel)", decoding);
+		if(this.renderer !== null) {
+
+			const decoding = getTextureDecoding(texture, this.renderer.capabilities.isWebGL2);
+			this.defines.set("texelToLinear(texel)", decoding);
+
+		}
 
 		this.setChanged();
 

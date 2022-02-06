@@ -1,5 +1,6 @@
 import {
 	AlwaysDepth,
+	BasicDepthPacking,
 	EqualDepth,
 	GreaterDepth,
 	GreaterEqualDepth,

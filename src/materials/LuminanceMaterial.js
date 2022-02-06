@@ -52,7 +52,6 @@ export class LuminanceMaterial extends ShaderMaterial {
 		this.toneMapped = false;
 
 		this.setColorOutputEnabled(colorOutput);
-		this.setThresholdEnabled(true);
 		this.setLuminanceRange(luminanceRange);
 
 	}

@@ -89,7 +89,6 @@ export class SMAAEffect extends Effect {
 
 		this.renderTargetWeights = this.renderTargetEdges.clone();
 		this.renderTargetWeights.texture.name = "SMAA.Weights";
-		this.renderTargetWeights.texture.format = RGBAFormat;
 		this.uniforms.get("weightMap").value = this.renderTargetWeights.texture;
 
 		/**

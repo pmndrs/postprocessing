@@ -78,7 +78,7 @@ export class BloomEffect extends Effect {
 		});
 
 		this.luminanceMaterial.setThreshold(luminanceThreshold);
-		this.luminanceMaterial.setSmoothing(luminanceSmoothing);
+		this.luminanceMaterial.setSmoothingFactor(luminanceSmoothing);
 
 		/**
 		 * A blur pass.

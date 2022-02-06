@@ -92,18 +92,6 @@ export class GlitchEffect extends Effect {
 		this.setPerturbationMap((perturbationMap === null) ? this.generatePerturbationMap(dtSize) : perturbationMap);
 
 		/**
-		 * A random glitch break point.
-		 *
-		 * @type {Number}
-		 * @private
-		 */
-
-		this.breakPoint = new Vector2(
-			randomFloat(this.delay.x, this.delay.y),
-			randomFloat(this.duration.x, this.duration.y)
-		);
-
-		/**
 		 * A time accumulator.
 		 *
 		 * @type {Number}
@@ -138,6 +126,18 @@ export class GlitchEffect extends Effect {
 		 */
 
 		this.duration = duration;
+
+		/**
+		 * A random glitch break point.
+		 *
+		 * @type {Number}
+		 * @private
+		 */
+
+		this.breakPoint = new Vector2(
+			randomFloat(this.delay.x, this.delay.y),
+			randomFloat(this.duration.x, this.duration.y)
+		);
 
 		/**
 		 * The strength of weak and strong glitches.

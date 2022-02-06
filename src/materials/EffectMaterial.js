@@ -1,4 +1,4 @@
-import { NoBlending, PerspectiveCamera, REVISION, ShaderMaterial, Uniform, Vector2 } from "three";
+import { BasicDepthPacking, NoBlending, PerspectiveCamera, REVISION, ShaderMaterial, Uniform, Vector2 } from "three";
 
 import fragmentTemplate from "./glsl/effect/shader.frag";
 import vertexTemplate from "./glsl/effect/shader.vert";

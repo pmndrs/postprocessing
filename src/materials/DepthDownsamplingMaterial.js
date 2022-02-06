@@ -1,4 +1,4 @@
-import { NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
+import { BasicDepthPacking, NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
 
 import fragmentShader from "./glsl/depth-downsampling/shader.frag";
 import vertexShader from "./glsl/depth-downsampling/shader.vert";

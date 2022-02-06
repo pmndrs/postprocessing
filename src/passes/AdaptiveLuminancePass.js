@@ -92,7 +92,7 @@ export class AdaptiveLuminancePass extends Pass {
 
 	getTexture() {
 
-		return this.renderTarget.texture;
+		return this.renderTargetAdapted.texture;
 
 	}
 

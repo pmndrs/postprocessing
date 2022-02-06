@@ -116,7 +116,7 @@ export class ToneMappingEffect extends Effect {
 		 * @private
 		 */
 
-		this.adaptiveLuminancePass = new AdaptiveLuminancePass(this.luminancePass.texture, {
+		this.adaptiveLuminancePass = new AdaptiveLuminancePass(this.luminancePass.getTexture(), {
 			minLuminance,
 			adaptationRate
 		});

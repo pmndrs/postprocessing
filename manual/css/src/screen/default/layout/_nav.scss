@@ -21,12 +21,12 @@
 			position: relative;
 			&:focus,
 			&:hover {
-				color: var(--nav-anchor-color-focus);
 				background-color: var(--nav-anchor-background-color-focus);
+				color: var(--nav-anchor-color-focus);
 			}
 		}
 		&.active {
-			 > a {
+			> a {
 				color: var(--nav-anchor-color-active);
 				transition: background-color durations.$short;
 				&::before {

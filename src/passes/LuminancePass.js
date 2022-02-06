@@ -61,7 +61,7 @@ export class LuminancePass extends Pass {
 		 * @deprecated Use getResolution() instead.
 		 */
 
-		this.resolution = new Resolution(this, width, height, resolutionScale);
+		this.resolution = new Resolution(this, width, height);
 		this.resolution.addEventListener("change", (e) => this.setSize(
 			this.resolution.getBaseWidth(),
 			this.resolution.getBaseHeight()

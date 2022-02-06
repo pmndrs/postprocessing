@@ -9,7 +9,7 @@ import {
 } from "three";
 
 import { Selection } from "../core/Selection";
-import { DepthMaskMaterial, MaxDepthStrategy } from "../materials";
+import { DepthMaskMaterial, DepthTestStrategy } from "../materials";
 import { ClearPass, DepthPass, ShaderPass } from "../passes";
 import { BloomEffect } from "./BloomEffect";
 import { EffectAttribute } from "./Effect";
@@ -73,7 +73,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 		this.depthMaskPass = new ShaderPass(new DepthMaskMaterial());
 
-		const depthMaskMaterial = this.depthMaskMaterial;
+		const depthMaskMaterial = this.depthMaskPass.getFullscreenMaterial();
 		depthMaskMaterial.setDepthBuffer1(this.depthPass.getTexture(), RGBADepthPacking);
 		depthMaskMaterial.setDepthMode(EqualDepth);
 
@@ -215,7 +215,8 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 	isBackgroundDisabled() {
 
-		return (this.getDepthMaskMaterial().getMaxDepthStrategy() === MaxDepthStrategy.DISCARD);
+		const material = this.getDepthMaskMaterial();
+		return (material.getMaxDepthStrategy() === DepthTestStrategy.DISCARD_MAX_DEPTH);
 
 	}
 
@@ -227,7 +228,8 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 	setBackgroundDisabled(value) {
 
-		this.getDepthMaskMaterial().setMaxDepthStrategy(value ? MaxDepthStrategy.DISCARD : MaxDepthStrategy.KEEP);
+		const material = this.getDepthMaskMaterial();
+		material.setMaxDepthStrategy(value ? DepthTestStrategy.DISCARD_MAX_DEPTH : DepthTestStrategy.KEEP_MAX_DEPTH);
 
 	}
 

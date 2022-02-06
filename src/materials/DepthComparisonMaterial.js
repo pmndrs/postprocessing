@@ -1,4 +1,4 @@
-import { NoBlending, PerspectiveCamera, ShaderMaterial, Uniform } from "three";
+import { BasicDepthPacking, NoBlending, PerspectiveCamera, ShaderMaterial, Uniform } from "three";
 
 import fragmentShader from "./glsl/depth-comparison/shader.frag";
 import vertexShader from "./glsl/depth-comparison/shader.vert";

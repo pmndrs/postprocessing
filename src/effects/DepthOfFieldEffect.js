@@ -179,7 +179,7 @@ export class DepthOfFieldEffect extends Effect {
 		 */
 
 		this.bokehNearBasePass = new ShaderPass(new BokehMaterial(false, true));
-		this.bokehNearBasePass.getFullscreenMaterial().setCoCBuffer(renderTargetCoCBlurred.texture);
+		this.bokehNearBasePass.getFullscreenMaterial().setCoCBuffer(this.renderTargetCoCBlurred.texture);
 
 		/**
 		 * A bokeh fill pass for the foreground colors.
@@ -189,7 +189,7 @@ export class DepthOfFieldEffect extends Effect {
 		 */
 
 		this.bokehNearFillPass = new ShaderPass(new BokehMaterial(true, true));
-		this.bokehNearFillPass.getFullscreenMaterial().setCoCBuffer(renderTargetCoCBlurred.texture);
+		this.bokehNearFillPass.getFullscreenMaterial().setCoCBuffer(this.renderTargetCoCBlurred.texture);
 
 		/**
 		 * A bokeh blur pass for the background colors.
@@ -199,7 +199,7 @@ export class DepthOfFieldEffect extends Effect {
 		 */
 
 		this.bokehFarBasePass = new ShaderPass(new BokehMaterial(false, false));
-		this.bokehFarBasePass.getFullscreenMaterial().setCoCBuffer(renderTargetCoC.texture);
+		this.bokehFarBasePass.getFullscreenMaterial().setCoCBuffer(this.renderTargetCoC.texture);
 
 		/**
 		 * A bokeh fill pass for the background colors.
@@ -209,7 +209,7 @@ export class DepthOfFieldEffect extends Effect {
 		 */
 
 		this.bokehFarFillPass = new ShaderPass(new BokehMaterial(true, false));
-		this.bokehFarFillPass.getFullscreenMaterial().setCoCBuffer(renderTargetCoC.texture);
+		this.bokehFarFillPass.getFullscreenMaterial().setCoCBuffer(this.renderTargetCoC.texture);
 
 
 		/**

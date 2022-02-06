@@ -395,12 +395,12 @@ export class KawaseBlurPass extends Pass {
 	 * An auto sizing flag.
 	 *
 	 * @type {Number}
-	 * @deprecated Use {@link Resizer.AUTO_SIZE} instead.
+	 * @deprecated Use {@link Resolution.AUTO_SIZE} instead.
 	 */
 
 	static get AUTO_SIZE() {
 
-		return Resizer.AUTO_SIZE;
+		return Resolution.AUTO_SIZE;
 
 	}
 

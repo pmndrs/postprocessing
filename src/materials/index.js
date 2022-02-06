@@ -6,7 +6,7 @@ export { CopyMaterial } from "./CopyMaterial";
 export { DepthComparisonMaterial } from "./DepthComparisonMaterial";
 export { DepthCopyMaterial, DepthCopyMode } from "./DepthCopyMaterial";
 export { DepthDownsamplingMaterial } from "./DepthDownsamplingMaterial";
-export { DepthMaskMaterial, MaxDepthStrategy } from "./DepthMaskMaterial";
+export { DepthMaskMaterial, DepthTestStrategy } from "./DepthMaskMaterial";
 export { EdgeDetectionMaterial, EdgeDetectionMaterial as ColorEdgesMaterial } from "./EdgeDetectionMaterial";
 export { EdgeDetectionMode, PredicationMode } from "./EdgeDetectionMaterial";
 export { EffectMaterial, Section } from "./EffectMaterial";
