@@ -74,8 +74,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 		this.depthMaskPass = new ShaderPass(new DepthMaskMaterial());
 
 		const depthMaskMaterial = this.depthMaskMaterial;
-		depthMaskMaterial.uniforms.depthBuffer1.value = this.depthPass.texture;
-		depthMaskMaterial.defines.DEPTH_PACKING_1 = RGBADepthPacking.toFixed(0);
+		depthMaskMaterial.setDepthBuffer1(this.depthPass.getTexture(), RGBADepthPacking);
 		depthMaskMaterial.setDepthMode(EqualDepth);
 
 		/**
@@ -98,8 +97,6 @@ export class SelectiveBloomEffect extends BloomEffect {
 		/**
 		 * A selection of objects.
 		 *
-		 * The default layer of this selection is 11.
-		 *
 		 * @type {Selection}
 		 * @deprecated Use getSelection() instead.
 		 */
@@ -111,6 +108,8 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 	/**
 	 * Returns the selection.
+	 *
+	 * The default layer of this selection is 11.
 	 *
 	 * @return {Selection} The selection.
 	 */
@@ -241,10 +240,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
-		const material = this.depthMaskPass.getFullscreenMaterial();
-		material.uniforms.depthBuffer0.value = depthTexture;
-		material.defines.DEPTH_PACKING_0 = depthPacking.toFixed(0);
-		material.needsUpdate = true;
+		this.depthMaskPass.getFullscreenMaterial().setDepthBuffer0(depthTexture, depthPacking);
 
 	}
 

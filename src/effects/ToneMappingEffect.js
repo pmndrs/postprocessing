@@ -131,8 +131,8 @@ export class ToneMappingEffect extends Effect {
 		 */
 
 		this.mode = null;
-		this.setMode(mode);
 
+		this.setMode(mode);
 		this.setResolution(resolution);
 
 	}

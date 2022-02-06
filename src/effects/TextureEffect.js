@@ -22,11 +22,7 @@ export class TextureEffect extends Effect {
 	 * @param {Boolean} [options.aspectCorrection=false] - Deprecated. Adjust the texture's offset, repeat and center instead.
 	 */
 
-	constructor({
-		blendFunction = BlendFunction.NORMAL,
-		texture = null,
-		aspectCorrection = false
-	} = {}) {
+	constructor({ blendFunction = BlendFunction.NORMAL, texture = null, aspectCorrection = false } = {}) {
 
 		super("TextureEffect", fragmentShader, {
 			blendFunction,
@@ -93,22 +89,21 @@ export class TextureEffect extends Effect {
 	setTexture(value) {
 
 		const prevTexture = this.getTexture();
-		const defines = this.defines;
 
 		if(prevTexture !== value) {
 
 			this.uniforms.get("map").value = value;
 			this.uniforms.get("uvTransform").value = value.matrix;
-			defines.delete("TEXTURE_PRECISION_HIGH");
+			this.defines.delete("TEXTURE_PRECISION_HIGH");
 
 			const decoding = getTextureDecoding(value, this.renderer.capabilities.isWebGL2);
-			defines.set("texelToLinear(texel)", decoding);
+			this.defines.set("texelToLinear(texel)", decoding);
 
 			if(value !== null) {
 
 				if(value.type !== UnsignedByteType) {
 
-					defines.set("TEXTURE_PRECISION_HIGH", "1");
+					this.defines.set("TEXTURE_PRECISION_HIGH", "1");
 
 				}
 

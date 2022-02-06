@@ -194,7 +194,7 @@ export class GodRaysEffect extends Effect {
 		this.depthMaskPass = new ShaderPass(new DepthMaskMaterial());
 
 		const depthMaskMaterial = this.depthMaskPass.getFullscreenMaterial();
-		depthMaskMaterial.uniforms.depthBuffer1.value = this.renderTargetLight.depthTexture;
+		depthMaskMaterial.setDepthBuffer1(this.renderTargetLight.depthTexture);
 
 		/**
 		 * A god rays blur pass.
@@ -495,10 +495,7 @@ export class GodRaysEffect extends Effect {
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
-		const material = this.depthMaskPass.getFullscreenMaterial();
-		material.uniforms.depthBuffer0.value = depthTexture;
-		material.defines.DEPTH_PACKING_0 = depthPacking.toFixed(0);
-		material.needsUpdate = true;
+		this.depthMaskPass.getFullscreenMaterial().setDepthBuffer0(depthTexture, depthPacking);
 
 	}
 

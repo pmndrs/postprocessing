@@ -159,7 +159,7 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.maskPass = new RenderPass(scene, camera, new DepthComparisonMaterial(this.depthPass.texture, camera));
+		this.maskPass = new RenderPass(scene, camera, new DepthComparisonMaterial(this.depthPass.getTexture(), camera));
 
 		const clearPass = this.maskPass.getClearPass();
 		clearPass.setOverrideClearColor(new Color(0xffffff));
@@ -190,7 +190,7 @@ export class OutlineEffect extends Effect {
 
 		this.outlinePass = new ShaderPass(new OutlineMaterial());
 		const outlineMaterial = this.outlinePass.getFullscreenMaterial();
-		outlineMaterial.uniforms.inputBuffer.value = this.renderTargetMask.texture;
+		outlineMaterial.setInputBuffer(this.renderTargetMask.texture);
 
 		/**
 		 * The current animation time.
@@ -203,8 +203,6 @@ export class OutlineEffect extends Effect {
 
 		/**
 		 * A selection of objects that will be outlined.
-		 *
-		 * The default layer of this selection is 10.
 		 *
 		 * @type {Selection}
 		 * @deprecated Use getSelection() instead.
@@ -263,6 +261,8 @@ export class OutlineEffect extends Effect {
 
 	/**
 	 * Returns the selection.
+	 *
+	 * The default layer of this selection is 10.
 	 *
 	 * @return {Selection} The selection.
 	 */
@@ -708,7 +708,7 @@ export class OutlineEffect extends Effect {
 
 		this.depthPass.setSize(w, h);
 		this.renderTargetOutline.setSize(w, h);
-		this.outlinePass.getFullscreenMaterial().setTexelSize(1.0 / w, 1.0 / h);
+		this.outlinePass.getFullscreenMaterial().setSize(w, h);
 
 	}
 

@@ -138,8 +138,7 @@ export class SMAAEffect extends Effect {
 		areaTexture.flipY = false;
 
 		const weightsMaterial = this.weightsPass.getFullscreenMaterial();
-		weightsMaterial.uniforms.searchTexture.value = searchTexture;
-		weightsMaterial.uniforms.areaTexture.value = areaTexture;
+		weightsMaterial.setLookupTextures(searchTexture, areaTexture);
 
 		this.applyPreset(preset);
 
@@ -254,15 +253,15 @@ export class SMAAEffect extends Effect {
 			case SMAAPreset.LOW:
 				edgeDetectionMaterial.setEdgeDetectionThreshold(0.15);
 				weightsMaterial.setOrthogonalSearchSteps(4);
-				weightsMaterial.diagonalDetection = false;
-				weightsMaterial.cornerRounding = false;
+				weightsMaterial.setDiagonalDetectionEnabled(false);
+				weightsMaterial.setCornerRoundingEnabled(false);
 				break;
 
 			case SMAAPreset.MEDIUM:
 				edgeDetectionMaterial.setEdgeDetectionThreshold(0.1);
 				weightsMaterial.setOrthogonalSearchSteps(8);
-				weightsMaterial.diagonalDetection = false;
-				weightsMaterial.cornerRounding = false;
+				weightsMaterial.setDiagonalDetectionEnabled(false);
+				weightsMaterial.setCornerRoundingEnabled(false);
 				break;
 
 			case SMAAPreset.HIGH:
@@ -270,8 +269,8 @@ export class SMAAEffect extends Effect {
 				weightsMaterial.setOrthogonalSearchSteps(16);
 				weightsMaterial.setDiagonalSearchSteps(8);
 				weightsMaterial.setCornerRounding(25);
-				weightsMaterial.diagonalDetection = true;
-				weightsMaterial.cornerRounding = true;
+				weightsMaterial.setDiagonalDetectionEnabled(true);
+				weightsMaterial.setCornerRoundingEnabled(true);
 				break;
 
 			case SMAAPreset.ULTRA:
@@ -279,8 +278,8 @@ export class SMAAEffect extends Effect {
 				weightsMaterial.setOrthogonalSearchSteps(32);
 				weightsMaterial.setDiagonalSearchSteps(16);
 				weightsMaterial.setCornerRounding(25);
-				weightsMaterial.diagonalDetection = true;
-				weightsMaterial.cornerRounding = true;
+				weightsMaterial.setDiagonalDetectionEnabled(true);
+				weightsMaterial.setCornerRoundingEnabled(true);
 				break;
 
 		}
@@ -296,9 +295,7 @@ export class SMAAEffect extends Effect {
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
-		const material = this.edgeDetectionMaterial;
-		material.uniforms.depthBuffer.value = depthTexture;
-		material.setDepthPacking(depthPacking);
+		this.edgeDetectionMaterial.setDepthBuffer(depthTexture, depthPacking);
 
 	}
 
@@ -327,15 +324,14 @@ export class SMAAEffect extends Effect {
 
 	setSize(width, height) {
 
-		const weightsMaterial = this.weightsPass.getFullscreenMaterial();
 		const edgeDetectionMaterial = this.edgeDetectionPass.getFullscreenMaterial();
+		const weightsMaterial = this.weightsPass.getFullscreenMaterial();
+
+		edgeDetectionMaterial.setSize(width, height);
+		weightsMaterial.setSize(width, height);
 
 		this.renderTargetEdges.setSize(width, height);
 		this.renderTargetWeights.setSize(width, height);
-
-		weightsMaterial.uniforms.resolution.value.set(width, height);
-		weightsMaterial.uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
-		edgeDetectionMaterial.uniforms.texelSize.value.copy(weightsMaterial.uniforms.texelSize.value);
 
 	}
 
