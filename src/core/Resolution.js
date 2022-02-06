@@ -339,6 +339,18 @@ export class Resolution extends EventDispatcher {
 	}
 
 	/**
+	 * Returns the preferred width.
+	 *
+	 * @return {Number} The preferred width.
+	 */
+
+	getPreferredWidth() {
+
+		return this.preferred.width;
+
+	}
+
+	/**
 	 * Sets the preferred width.
 	 *
 	 * Use {@link Resizer.AUTO_SIZE} to automatically calculate the width based on the height and aspect ratio.
@@ -355,6 +367,18 @@ export class Resolution extends EventDispatcher {
 			this.resizable.setSize(this.base.width, this.base.height);
 
 		}
+
+	}
+
+	/**
+	 * Returns the preferred height.
+	 *
+	 * @return {Number} The preferred height.
+	 */
+
+	getPreferredHeight() {
+
+		return this.preferred.height;
 
 	}
 
