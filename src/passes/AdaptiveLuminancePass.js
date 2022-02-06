@@ -1,18 +1,10 @@
-import {
-	HalfFloatType,
-	NearestFilter,
-	RGBAFormat,
-	WebGLRenderTarget
-} from "three";
-
+import { NearestFilter, WebGLRenderTarget } from "three";
 import { AdaptiveLuminanceMaterial } from "../materials";
+import { CopyPass } from "./CopyPass";
 import { Pass } from "./Pass";
-import { SavePass } from "./SavePass";
 
 /**
  * A pass that renders an adaptive luminance map.
- *
- * Requires support for `EXT_color_buffer_half_float`.
  */
 
 export class AdaptiveLuminancePass extends Pass {
@@ -26,10 +18,7 @@ export class AdaptiveLuminancePass extends Pass {
 	 * @param {Number} [options.adaptationRate=1.0] - The luminance adaptation rate.
 	 */
 
-	constructor(luminanceBuffer, {
-		minLuminance = 0.01,
-		adaptationRate = 1.0
-	} = {}) {
+	constructor(luminanceBuffer, { minLuminance = 0.01, adaptationRate = 1.0 } = {}) {
 
 		super("AdaptiveLuminancePass");
 
@@ -46,18 +35,17 @@ export class AdaptiveLuminancePass extends Pass {
 		this.renderTargetPrevious = new WebGLRenderTarget(1, 1, {
 			minFilter: NearestFilter,
 			magFilter: NearestFilter,
-			type: HalfFloatType,
 			stencilBuffer: false,
-			depthBuffer: false,
-			format: RGBAFormat
+			depthBuffer: false
 		});
 
 		this.renderTargetPrevious.texture.name = "Luminance.Previous";
 
-		const uniforms = this.getFullscreenMaterial().uniforms;
-		uniforms.luminanceBuffer0.value = this.renderTargetPrevious.texture;
-		uniforms.luminanceBuffer1.value = luminanceBuffer;
-		uniforms.minLuminance.value = minLuminance;
+		const material = this.getFullscreenMaterial();
+		material.setLuminanceBuffer0(this.renderTargetPrevious.texture);
+		material.setLuminanceBuffer1(luminanceBuffer);
+		material.setMinLuminance(minLuminance);
+		material.setAdaptationRate(adaptationRate);
 
 		/**
 		 * A 1x1 render target that stores the adapted average luminance.
@@ -72,23 +60,34 @@ export class AdaptiveLuminancePass extends Pass {
 		/**
 		 * A save pass.
 		 *
-		 * @type {SavePass}
+		 * @type {CopyPass}
 		 * @private
 		 */
 
-		this.savePass = new SavePass(this.renderTargetPrevious, false);
-
-		this.adaptationRate = adaptationRate;
+		this.copyPass = new CopyPass(this.renderTargetPrevious, false);
 
 	}
 
 	/**
-	 * The adapted luminance texture.
+	 * The adaptive luminance texture.
 	 *
 	 * @type {Texture}
+	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
+
+		return this.getTexture();
+
+	}
+
+	/**
+	 * Returns the adaptive 1x1 luminance texture.
+	 *
+	 * @return {Texture} The texture.
+	 */
+
+	getTexture() {
 
 		return this.renderTargetAdapted.texture;
 
@@ -97,17 +96,16 @@ export class AdaptiveLuminancePass extends Pass {
 	/**
 	 * Sets the 1x1 mipmap level.
 	 *
-	 * This level is used to identify the smallest mipmap of the main luminance
-	 * texture which contains the downsampled average scene luminance.
+	 * This level is used to identify the smallest mipmap of the main luminance texture which contains the downsampled
+	 * average scene luminance.
 	 *
 	 * @type {Number}
+	 * @deprecated Use getFullscreenMaterial().setMipLevel1x1() instead.
 	 */
 
 	set mipLevel1x1(value) {
 
-		const material = this.getFullscreenMaterial();
-		material.defines.MIP_LEVEL_1X1 = value.toFixed(1);
-		material.needsUpdate = true;
+		this.getFullscreenMaterial().setMipLevel1x1(value);
 
 	}
 
@@ -115,21 +113,23 @@ export class AdaptiveLuminancePass extends Pass {
 	 * The luminance adaptation rate.
 	 *
 	 * @type {Number}
+	 * @deprecated Use getFullscreenMaterial().getAdaptationRate() instead.
 	 */
 
 	get adaptationRate() {
 
-		return this.getFullscreenMaterial().uniforms.tau.value;
+		return this.getFullscreenMaterial().getAdaptationRate();
 
 	}
 
 	/**
 	 * @type {Number}
+	 * @deprecated Use getFullscreenMaterial().setAdaptationRate() instead.
 	 */
 
 	set adaptationRate(value) {
 
-		this.getFullscreenMaterial().uniforms.tau.value = value;
+		this.getFullscreenMaterial().setAdaptationRate(value);
 
 	}
 
@@ -146,13 +146,12 @@ export class AdaptiveLuminancePass extends Pass {
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
 		// Use the frame delta time to chase after the current luminance.
-		this.getFullscreenMaterial().uniforms.deltaTime.value = deltaTime;
-		renderer.setRenderTarget(this.renderToScreen ?
-			null : this.renderTargetAdapted);
+		this.getFullscreenMaterial().setDeltaTime(deltaTime);
+		renderer.setRenderTarget(this.renderToScreen ? null : this.renderTargetAdapted);
 		renderer.render(this.scene, this.camera);
 
 		// Save the adapted luminance for the next frame.
-		this.savePass.render(renderer, this.renderTargetAdapted);
+		this.copyPass.render(renderer, this.renderTargetAdapted);
 
 	}
 

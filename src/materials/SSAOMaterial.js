@@ -1,17 +1,12 @@
-import {
-	Matrix4,
-	NoBlending,
-	PerspectiveCamera,
-	ShaderMaterial,
-	Uniform,
-	Vector2
-} from "three";
+import { BasicDepthPacking, Matrix4, NoBlending, PerspectiveCamera, ShaderMaterial, Uniform, Vector2 } from "three";
 
 import fragmentShader from "./glsl/ssao/shader.frag";
 import vertexShader from "./glsl/ssao/shader.vert";
 
 /**
  * A Screen Space Ambient Occlusion (SSAO) shader material.
+ *
+ * @implements {Resizable}
  */
 
 export class SSAOMaterial extends ShaderMaterial {
@@ -36,6 +31,7 @@ export class SSAOMaterial extends ShaderMaterial {
 				DEPTH_PACKING: "0"
 			},
 			uniforms: {
+				depthBuffer: new Uniform(null),
 				normalBuffer: new Uniform(null),
 				normalDepthBuffer: new Uniform(null),
 				noiseTexture: new Uniform(null),
@@ -64,12 +60,82 @@ export class SSAOMaterial extends ShaderMaterial {
 
 		this.adoptCameraSettings(camera);
 
+		/**
+		 * The resolution.
+		 *
+		 * @type {Vector2}
+		 * @private
+		 */
+
+		this.resolution = new Vector2();
+
+		/**
+		 * The relative sampling radius.
+		 *
+		 * @type {Number}
+		 * @private
+		 */
+
+		this.radius = 1.0;
+
 	}
 
 	/**
-	 * The depth packing of the source depth buffer.
+	 * Sets the combined normal-depth buffer.
 	 *
-	 * @type {Number}
+	 * @param {Number} value - The buffer.
+	 */
+
+	setNormalDepthBuffer(value) {
+
+		this.uniforms.normalDepthBuffer.value = value;
+
+		if(value !== null) {
+
+			this.defines.NORMAL_DEPTH = "1";
+
+		} else {
+
+			delete this.defines.NORMAL_DEPTH;
+
+		}
+
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Sets the normal buffer.
+	 *
+	 * @param {Number} value - The buffer.
+	 */
+
+	setNormalBuffer(value) {
+
+		this.uniforms.normalBuffer.value = value;
+
+	}
+
+	/**
+	 * Sets the depth buffer.
+	 *
+	 * @param {Texture} buffer - The depth texture.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 */
+
+	setDepthBuffer(buffer, depthPacking = BasicDepthPacking) {
+
+		this.uniforms.depthBuffer.value = buffer;
+		this.defines.DEPTH_PACKING = depthPacking.toFixed(0);
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * The current depth packing.
+	 *
+	 * @type {DepthPackingStrategies}
+	 * @deprecated Removed without replacement.
 	 */
 
 	get depthPacking() {
@@ -81,7 +147,8 @@ export class SSAOMaterial extends ShaderMaterial {
 	/**
 	 * Sets the depth packing.
 	 *
-	 * @type {Number}
+	 * @type {DepthPackingStrategies}
+	 * @deprecated Use setDepthBuffer() instead.
 	 */
 
 	set depthPacking(value) {
@@ -92,8 +159,266 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Sets the noise texture.
+	 *
+	 * @param {Number} value - The texture.
+	 */
+
+	setNoiseTexture(value) {
+
+		this.uniforms.noiseTexture.value = value;
+
+	}
+
+	/**
+	 * Returns the amount of occlusion samples per pixel.
+	 *
+	 * @return {Number} The sample count.
+	 */
+
+	getSamples() {
+
+		return Number(this.defines.SAMPLES_INT);
+
+	}
+
+	/**
+	 * Sets the amount of occlusion samples per pixel.
+	 *
+	 * @param {Number} value - The sample count.
+	 */
+
+	setSamples(value) {
+
+		this.defines.SAMPLES_INT = value.toFixed(0);
+		this.defines.SAMPLES_FLOAT = value.toFixed(1);
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Returns the amount of spiral turns in the occlusion sampling pattern.
+	 *
+	 * @return {Number} The radius.
+	 */
+
+	getRings() {
+
+		return Number(this.defines.SPIRAL_TURNS);
+
+	}
+
+	/**
+	 * Sets the amount of spiral turns in the occlusion sampling pattern.
+	 *
+	 * @param {Number} value - The radius.
+	 */
+
+	setRings(value) {
+
+		this.defines.SPIRAL_TURNS = value.toFixed(1);
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Returns the intensity.
+	 *
+	 * @return {Number} The intensity.
+	 */
+
+	getIntensity() {
+
+		return this.uniforms.intensity.value;
+
+	}
+
+	/**
+	 * Sets the intensity.
+	 *
+	 * @param {Number} value - The intensity.
+	 */
+
+	setIntensity(value) {
+
+		this.uniforms.intensity.value = value;
+
+	}
+
+	/**
+	 * Returns the depth fade factor.
+	 *
+	 * @return {Number} The fade factor.
+	 */
+
+	getFade() {
+
+		return this.uniforms.fade.value;
+
+	}
+
+	/**
+	 * Sets the depth fade factor.
+	 *
+	 * @param {Number} value - The fade factor.
+	 */
+
+	setFade(value) {
+
+		this.uniforms.bias.value = value;
+
+	}
+
+	/**
+	 * Returns the depth bias.
+	 *
+	 * @return {Number} The bias.
+	 */
+
+	getBias() {
+
+		return this.uniforms.bias.value;
+
+	}
+
+	/**
+	 * Sets the depth bias.
+	 *
+	 * @param {Number} value - The bias.
+	 */
+
+	setBias(value) {
+
+		this.uniforms.bias.value = value;
+
+	}
+
+	/**
+	 * Returns the minimum radius scale for distance scaling.
+	 *
+	 * @return {Number} The minimum radius scale.
+	 */
+
+	getMinRadiusScale() {
+
+		return this.uniforms.minRadiusScale.value;
+
+	}
+
+	/**
+	 * Sets the minimum radius scale for distance scaling.
+	 *
+	 * @param {Number} value - The minimum radius scale.
+	 */
+
+	setMinRadiusScale(value) {
+
+		this.uniforms.minRadiusScale.value = value;
+
+	}
+
+	/**
+	 * Returns the occlusion sampling radius.
+	 *
+	 * @return {Number} The radius.
+	 */
+
+	getRadius() {
+
+		return this.radius;
+
+	}
+
+	/**
+	 * Sets the occlusion sampling radius.
+	 *
+	 * @param {Number} value - The radius. Range [1e-6, 1.0].
+	 */
+
+	setRadius(value) {
+
+		this.radius = Math.min(Math.max(value, 1e-6), 1.0);
+		const radius = this.radius * this.resolution.height;
+		this.defines.RADIUS = radius.toFixed(11);
+		this.defines.RADIUS_SQ = (radius * radius).toFixed(11);
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Indicates whether distance-based radius scaling is enabled.
+	 *
+	 * @return {Boolean} Whether distance scaling is enabled.
+	 */
+
+	isDistanceScalingEnabled() {
+
+		return (this.defines.DISTANCE_SCALING !== undefined);
+
+	}
+
+	/**
+	 * Enables or disables distance-based radius scaling.
+	 *
+	 * @param {Boolean} value - Whether distance scaling should be enabled.
+	 */
+
+	setDistanceScalingEnabled(value) {
+
+		if(this.isDistanceScalingEnabled() !== value) {
+
+			if(value) {
+
+				this.defines.DISTANCE_SCALING = "1";
+
+			} else {
+
+				delete this.defines.DISTANCE_SCALING;
+
+			}
+
+			this.needsUpdate = true;
+
+		}
+
+	}
+
+	/**
+	 * Sets the occlusion distance cutoff.
+	 *
+	 * @param {Number} threshold - The distance threshold. Range [0.0, 1.0].
+	 * @param {Number} falloff - The falloff. Range [0.0, 1.0].
+	 */
+
+	setDistanceCutoff(threshold, falloff) {
+
+		this.uniforms.distanceCutoff.value.set(
+			Math.min(Math.max(threshold, 0.0), 1.0),
+			Math.min(Math.max(threshold + falloff, 0.0), 1.0)
+		);
+
+	}
+
+	/**
+	 * Sets the occlusion proximity cutoff.
+	 *
+	 * @param {Number} threshold - The range threshold. Range [0.0, 1.0].
+	 * @param {Number} falloff - The falloff. Range [0.0, 1.0].
+	 */
+
+	setProximityCutoff(threshold, falloff) {
+
+		this.uniforms.proximityCutoff.value.set(
+			Math.min(Math.max(threshold, 0.0), 1.0),
+			Math.min(Math.max(threshold + falloff, 0.0), 1.0)
+		);
+
+	}
+
+	/**
 	 * Sets the texel size.
 	 *
+	 * @deprecated Use setSize() instead.
 	 * @param {Number} x - The texel width.
 	 * @param {Number} y - The texel height.
 	 */
@@ -107,17 +432,17 @@ export class SSAOMaterial extends ShaderMaterial {
 	/**
 	 * Adopts the settings of the given camera.
 	 *
-	 * @param {Camera} [camera=null] - A camera.
+	 * @param {Camera} camera - A camera.
 	 */
 
-	adoptCameraSettings(camera = null) {
+	adoptCameraSettings(camera) {
 
-		if(camera !== null) {
+		if(camera) {
 
-			const uniforms = this.uniforms;
-
-			uniforms.cameraNear.value = camera.near;
-			uniforms.cameraFar.value = camera.far;
+			this.uniforms.cameraNear.value = camera.near;
+			this.uniforms.cameraFar.value = camera.far;
+			this.uniforms.projectionMatrix.value.copy(camera.projectionMatrix);
+			this.uniforms.inverseProjectionMatrix.value.copy(camera.projectionMatrix).invert();
 
 			if(camera instanceof PerspectiveCamera) {
 
@@ -132,6 +457,33 @@ export class SSAOMaterial extends ShaderMaterial {
 			this.needsUpdate = true;
 
 		}
+
+	}
+
+	/**
+	 * Sets the size of this object.
+	 *
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		const uniforms = this.uniforms;
+		const noiseTexture = uniforms.noiseTexture.value;
+
+		if(noiseTexture !== null) {
+
+			uniforms.noiseScale.value.set(
+				width / noiseTexture.image.width,
+				height / noiseTexture.image.height
+			);
+
+		}
+
+		uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
+		this.resolution.set(width, height);
+		this.setRadius(this.radius);
 
 	}
 

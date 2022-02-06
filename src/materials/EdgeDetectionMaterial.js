@@ -1,12 +1,44 @@
-import { NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
+import { BasicDepthPacking, NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
 
 import fragmentShader from "./glsl/edge-detection/shader.frag";
 import vertexShader from "./glsl/edge-detection/shader.vert";
 
 /**
+ * An enumeration of edge detection modes.
+ *
+ * @type {Object}
+ * @property {Number} DEPTH - Depth-based edge detection.
+ * @property {Number} LUMA - Luminance-based edge detection.
+ * @property {Number} COLOR - Chroma-based edge detection.
+ */
+
+export const EdgeDetectionMode = {
+	DEPTH: 0,
+	LUMA: 1,
+	COLOR: 2
+};
+
+/**
+ * An enumeration of predication modes.
+ *
+ * @type {Object}
+ * @property {Number} DISABLED - No predicated thresholding.
+ * @property {Number} DEPTH - Depth-based predicated thresholding.
+ * @property {Number} CUSTOM - Predicated thresholding using a custom buffer.
+ */
+
+export const PredicationMode = {
+	DISABLED: 0,
+	DEPTH: 1,
+	CUSTOM: 2
+};
+
+/**
  * An edge detection material.
  *
- * Mainly used for Subpixel Morphological Antialiasing.
+ * Mainly used for Subpixel Morphological Anti-Aliasing.
+ *
+ * @implements {Resizable}
  */
 
 export class EdgeDetectionMaterial extends ShaderMaterial {
@@ -14,9 +46,9 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	/**
 	 * Constructs a new edge detection material.
 	 *
+	 * TODO Remove parameters.
 	 * @param {Vector2} [texelSize] - The screen texel size.
 	 * @param {EdgeDetectionMode} [mode=EdgeDetectionMode.COLOR] - The edge detection mode.
-	 * @todo Remove texelSize parameter.
 	 */
 
 	constructor(texelSize = new Vector2(), mode = EdgeDetectionMode.COLOR) {
@@ -54,9 +86,25 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Sets the depth buffer.
+	 *
+	 * @param {Texture} buffer - The depth texture.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 */
+
+	setDepthBuffer(buffer, depthPacking = BasicDepthPacking) {
+
+		this.uniforms.depthBuffer.value = buffer;
+		this.defines.DEPTH_PACKING = depthPacking.toFixed(0);
+		this.needsUpdate = true;
+
+	}
+
+	/**
 	 * The current depth packing.
 	 *
-	 * @type {Number}
+	 * @type {DepthPackingStrategies}
+	 * @deprecated Removed without replacement.
 	 */
 
 	get depthPacking() {
@@ -68,13 +116,26 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	/**
 	 * Sets the depth packing.
 	 *
-	 * @type {Number}
+	 * @type {DepthPackingStrategies}
+	 * @deprecated Use setDepthBuffer() instead.
 	 */
 
 	set depthPacking(value) {
 
 		this.defines.DEPTH_PACKING = value.toFixed(0);
 		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Returns the edge detection mode.
+	 *
+	 * @return {EdgeDetectionMode} The mode.
+	 */
+
+	getEdgeDetectionMode() {
+
+		return Number(this.defines.EDGE_DETECTION_MODE);
 
 	}
 
@@ -92,15 +153,24 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the local contrast adaptation factor. Has no effect if the edge
-	 * detection mode is set to DEPTH.
+	 * Returns the local contrast adaptation factor.
 	 *
-	 * If there is a neighbor edge that has _factor_ times bigger contrast than
-	 * the current edge, the edge will be discarded.
+	 * @return {Number} The factor.
+	 */
+
+	getLocalContrastAdaptationFactor() {
+
+		return Number(this.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR);
+
+	}
+
+	/**
+	 * Sets the local contrast adaptation factor. Has no effect if the edge detection mode is set to DEPTH.
 	 *
-	 * This allows to eliminate spurious crossing edges and is based on the fact
-	 * that if there is too much contrast in a direction, the perceptual contrast
-	 * in the other neighbors will be hidden.
+	 * If a neighbor edge has _factor_ times bigger contrast than the current edge, the edge will be discarded.
+	 *
+	 * This allows to eliminate spurious crossing edges and is based on the fact that if there is too much contrast in a
+	 * direction, the perceptual contrast in the other neighbors will be hidden.
 	 *
 	 * @param {Number} factor - The local contrast adaptation factor. Default is 2.0.
 	 */
@@ -113,19 +183,28 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the edge detection sensitivity.
+	 * Returns the edge detection threshold.
 	 *
-	 * A lower value results in more edges being detected at the expense of
-	 * performance.
+	 * @return {Number} The threshold.
+	 */
+
+	getEdgeDetectionThreshold() {
+
+		return Number(this.defines.EDGE_THRESHOLD);
+
+	}
+
+	/**
+	 * Sets the edge detection threshold.
 	 *
-	 * For luma- and chroma-based edge detection, 0.1 is a reasonable value and
-	 * allows to catch most visible edges. 0.05 is a rather overkill value that
-	 * allows to catch 'em all. Darker scenes may require an even lower threshold.
+	 * A lower value results in more edges being detected at the expense of performance.
 	 *
-	 * If depth-based edge detection is used, the threshold will depend on the
-	 * scene depth.
+	 * For luma- and chroma-based edge detection, 0.1 is a reasonable value and allows to catch most visible edges. 0.05
+	 * is a rather overkill value that allows to catch 'em all. Darker scenes may require an even lower threshold.
 	 *
-	 * @param {Number} threshold - The edge detection sensitivity. Range: [0.0, 0.5].
+	 * If depth-based edge detection is used, the threshold will depend on the scene depth.
+	 *
+	 * @param {Number} threshold - The edge detection threshold. Range: [0.0, 0.5].
 	 */
 
 	setEdgeDetectionThreshold(threshold) {
@@ -137,11 +216,22 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Returns the predication mode.
+	 *
+	 * @return {PredicationMode} The mode.
+	 */
+
+	getPredicationMode() {
+
+		return Number(this.defines.PREDICATION_MODE);
+
+	}
+
+	/**
 	 * Sets the predication mode.
 	 *
-	 * Predicated thresholding allows to better preserve texture details and to
-	 * improve edge detection using an additional buffer such as a light
-	 * accumulation or depth buffer.
+	 * Predicated thresholding allows to better preserve texture details and to improve edge detection using an additional
+	 * buffer such as a light accumulation or depth buffer.
 	 *
 	 * @param {PredicationMode} mode - The predication mode.
 	 */
@@ -166,6 +256,18 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Returns the predication threshold.
+	 *
+	 * @return {Number} The threshold.
+	 */
+
+	getPredicationThreshold() {
+
+		return Number(this.defines.PREDICATION_THRESHOLD);
+
+	}
+
+	/**
 	 * Sets the predication threshold.
 	 *
 	 * @param {Number} threshold - The threshold.
@@ -179,10 +281,21 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Returns the predication scale.
+	 *
+	 * @return {Number} The scale.
+	 */
+
+	getPredicationScale() {
+
+		return Number(this.defines.PREDICATION_SCALE);
+
+	}
+
+	/**
 	 * Sets the predication scale.
 	 *
-	 * Determines how much the edge detection threshold should be scaled when
-	 * using predication.
+	 * Determines how much the edge detection threshold should be scaled when using predication.
 	 *
 	 * @param {Number} scale - The scale. Range: [1.0, 5.0].
 	 */
@@ -195,10 +308,21 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Returns the predication strength.
+	 *
+	 * @return {Number} The strength.
+	 */
+
+	getPredicationStrength() {
+
+		return Number(this.defines.PREDICATION_STRENGTH);
+
+	}
+
+	/**
 	 * Sets the predication strength.
 	 *
-	 * Determines how much the edge detection threshold should be decreased
-	 * locally when using predication.
+	 * Determines how much the edge detection threshold should be decreased locally when using predication.
 	 *
 	 * @param {Number} strength - The strength. Range: [0.0, 1.0].
 	 */
@@ -210,38 +334,17 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 
 	}
 
+	/**
+	 * Sets the size of this object.
+	 *
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		this.uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
+
+	}
+
 }
-
-/**
- * An enumeration of edge detection modes.
- *
- * @type {Object}
- * @property {Number} DEPTH - Depth-based edge detection.
- * @property {Number} LUMA - Luminance-based edge detection.
- * @property {Number} COLOR - Chroma-based edge detection.
- */
-
-export const EdgeDetectionMode = {
-
-	DEPTH: 0,
-	LUMA: 1,
-	COLOR: 2
-
-};
-
-/**
- * An enumeration of predication modes.
- *
- * @type {Object}
- * @property {Number} DISABLED - No predicated thresholding.
- * @property {Number} DEPTH - Depth-based predicated thresholding.
- * @property {Number} CUSTOM - Predicated thresholding using a custom buffer.
- */
-
-export const PredicationMode = {
-
-	DISABLED: 0,
-	DEPTH: 1,
-	CUSTOM: 2
-
-};

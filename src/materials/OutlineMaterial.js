@@ -5,6 +5,8 @@ import vertexShader from "./glsl/outline/shader.vert";
 
 /**
  * An outline shader material.
+ *
+ * @implements {Resizable}
  */
 
 export class OutlineMaterial extends ShaderMaterial {
@@ -12,6 +14,7 @@ export class OutlineMaterial extends ShaderMaterial {
 	/**
 	 * Constructs a new outline material.
 	 *
+	 * TODO Remove texelSize param.
 	 * @param {Vector2} [texelSize] - The screen texel size.
 	 */
 
@@ -41,8 +44,21 @@ export class OutlineMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Sets the input buffer.
+	 *
+	 * @param {Texture} value - The input buffer.
+	 */
+
+	setInputBuffer(value) {
+
+		this.uniforms.inputBuffer.value = value;
+
+	}
+
+	/**
 	 * Sets the texel size.
 	 *
+	 * @deprecated Use setSize() instead.
 	 * @param {Number} x - The texel width.
 	 * @param {Number} y - The texel height.
 	 */
@@ -53,12 +69,17 @@ export class OutlineMaterial extends ShaderMaterial {
 
 	}
 
+	/**
+	 * Sets the size of this object.
+	 *
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		this.uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
+
+	}
+
 }
-
-/**
- * An outline shader material.
- *
- * @deprecated Use OutlineMaterial instead.
- */
-
-export const OutlineEdgesMaterial = OutlineMaterial;

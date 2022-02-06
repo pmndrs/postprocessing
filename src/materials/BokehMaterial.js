@@ -4,13 +4,12 @@ import fragmentShader from "./glsl/bokeh/shader.frag";
 import vertexShader from "./glsl/common/shader.vert";
 
 /**
- * A bokeh blur material.
+ * A bokeh disc blur material.
  *
- * This material should be applied twice in a row, with `fill` mode enabled for
- * the second pass.
+ * This material should be applied twice in a row, with `fill` mode enabled for the second pass. Enabling the
+ * `foreground` option causes the shader to combine the near and far CoC values around foreground objects.
  *
- * Enabling the `foreground` option causes the shader to combine the near and
- * far CoC values around foreground objects.
+ * @implements {Resizable}
  */
 
 export class BokehMaterial extends ShaderMaterial {
@@ -58,7 +57,55 @@ export class BokehMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Generates the blur kernels.
+	 * Sets the input buffer.
+	 *
+	 * @param {Number} value - The buffer.
+	 */
+
+	setInputBuffer(value) {
+
+		this.uniforms.inputBuffer.value = value;
+
+	}
+
+	/**
+	 * Sets the circle of confusion buffer.
+	 *
+	 * @param {Number} value - The buffer.
+	 */
+
+	setCoCBuffer(value) {
+
+		this.uniforms.cocBuffer.value = value;
+
+	}
+
+	/**
+	 * Returns the blur scale.
+	 *
+	 * @return {Number} The scale.
+	 */
+
+	getScale(value) {
+
+		return this.uniforms.scale.value = value;
+
+	}
+
+	/**
+	 * Sets the blur scale.
+	 *
+	 * @param {Number} value - The scale.
+	 */
+
+	setScale(value) {
+
+		this.uniforms.scale.value = value;
+
+	}
+
+	/**
+	 * Generates the blur kernel.
 	 *
 	 * @private
 	 */
@@ -121,6 +168,7 @@ export class BokehMaterial extends ShaderMaterial {
 	/**
 	 * Sets the texel size.
 	 *
+	 * @deprecated Use setSize() instead.
 	 * @param {Number} x - The texel width.
 	 * @param {Number} y - The texel height.
 	 */
@@ -128,6 +176,19 @@ export class BokehMaterial extends ShaderMaterial {
 	setTexelSize(x, y) {
 
 		this.uniforms.texelSize.value.set(x, y);
+
+	}
+
+	/**
+	 * Sets the size of this object.
+	 *
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		this.uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
 
 	}
 

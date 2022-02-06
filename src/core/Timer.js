@@ -6,9 +6,7 @@ const SECONDS_TO_MILLISECONDS = 1e3;
  *
  * Original implementation by Michael Herzog (Mugen87).
  *
- * @todo Remove if Timer replaces Clock in three.js.
- * @see {@link https://github.com/mrdoob/three.js/pull/17912}
- *
+ * @experimental Temporary substitute for {@link https://github.com/mrdoob/three.js/pull/17912}
  * @implements {EventListenerObject}
  * @implements {Disposable}
  */
@@ -105,8 +103,8 @@ export class Timer {
 	/**
 	 * Enables or disables auto reset based on page visibility.
 	 *
-	 * If enabled, the timer will be reset when the page becomes visible. This effectively pauses the
-	 * timer when the page is hidden. Has no effect if the API is not supported.
+	 * If enabled, the timer will be reset when the page becomes visible. This effectively pauses the timer when the page
+	 * is hidden. Has no effect if the API is not supported.
 	 *
 	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API}
 	 * @param {Boolean} enabled - Whether the timer should be reset on visibility change.

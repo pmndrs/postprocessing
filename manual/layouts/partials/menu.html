@@ -12,7 +12,7 @@
 			{{ end }}
 
 			<li class="{{ delimit $class ` ` }}">
-				<a href="#">{{ .Name }}</a>
+				<h3>{{ .Name }}</h3>
 				<ul class="sub-menu">
 					{{ range .Children }}
 						{{ partial "menu-item.html" (dict "context" . "currentPage" $currentPage "menuName" $menuName) }}

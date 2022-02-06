@@ -1,4 +1,4 @@
-import { Matrix3, Uniform, UnsignedByteType } from "three";
+import { Uniform, UnsignedByteType } from "three";
 import { ColorChannel } from "../core/ColorChannel";
 import { getTextureDecoding } from "../utils/getTextureDecoding";
 import { BlendFunction } from "./blending/BlendFunction";
@@ -19,17 +19,14 @@ export class TextureEffect extends Effect {
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
 	 * @param {Texture} [options.texture] - A texture.
-	 * @param {Boolean} [options.aspectCorrection=false] - Deprecated. Enable uvTransform instead and adjust the texture's offset, repeat and center.
+	 * @param {Boolean} [options.aspectCorrection=false] - Deprecated. Adjust the texture's offset, repeat and center instead.
 	 */
 
-	constructor({
-		blendFunction = BlendFunction.NORMAL,
-		texture = null,
-		aspectCorrection = false
-	} = {}) {
+	constructor({ blendFunction = BlendFunction.NORMAL, texture = null, aspectCorrection = false } = {}) {
 
 		super("TextureEffect", fragmentShader, {
 			blendFunction,
+			vertexShader,
 			defines: new Map([
 				["TEXEL", "texel"]
 			]),
@@ -40,17 +37,8 @@ export class TextureEffect extends Effect {
 			])
 		});
 
-		this.texture = texture;
+		this.setTexture(texture);
 		this.aspectCorrection = aspectCorrection;
-
-		/**
-		 * Indicates whether the context is WebGL 2.
-		 *
-		 * @type {Boolean}
-		 * @private
-		 */
-
-		this.isWebGL2 = false;
 
 	}
 
@@ -58,9 +46,35 @@ export class TextureEffect extends Effect {
 	 * The texture.
 	 *
 	 * @type {Texture}
+	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
+
+		return this.getTexture();
+
+	}
+
+	/**
+	 * Sets the texture.
+	 *
+	 * @type {Texture}
+	 * @deprecated Use setTexture() instead.
+	 */
+
+	set texture(value) {
+
+		this.setTexture(value);
+
+	}
+
+	/**
+	 * Returns the texture.
+	 *
+	 * @return {Texture} The texture.
+	 */
+
+	getTexture() {
 
 		return this.uniforms.get("map").value;
 
@@ -69,33 +83,35 @@ export class TextureEffect extends Effect {
 	/**
 	 * Sets the texture.
 	 *
-	 * @type {Texture}
+	 * @param {Texture} value - The texture.
 	 */
 
-	set texture(value) {
+	setTexture(value) {
 
-		const currentTexture = this.texture;
-		const defines = this.defines;
+		const prevTexture = this.getTexture();
 
-		if(currentTexture !== value) {
+		if(prevTexture !== value) {
 
 			this.uniforms.get("map").value = value;
-			defines.delete("TEXTURE_PRECISION_HIGH");
+			this.uniforms.get("uvTransform").value = value.matrix;
+			this.defines.delete("TEXTURE_PRECISION_HIGH");
 
-			const decoding = getTextureDecoding(value, this.isWebGL2);
-			defines.set("texelToLinear(texel)", decoding);
+			if(this.renderer !== null) {
+
+				const decoding = getTextureDecoding(value, this.renderer.capabilities.isWebGL2);
+				this.defines.set("texelToLinear(texel)", decoding);
+
+			}
 
 			if(value !== null) {
 
 				if(value.type !== UnsignedByteType) {
 
-					defines.set("TEXTURE_PRECISION_HIGH", "1");
+					this.defines.set("TEXTURE_PRECISION_HIGH", "1");
 
 				}
 
-				if(currentTexture === null ||
-					currentTexture.type !== value.type ||
-					currentTexture.encoding !== value.encoding) {
+				if(prevTexture === null || prevTexture.type !== value.type || prevTexture.encoding !== value.encoding) {
 
 					this.setChanged();
 
@@ -113,7 +129,7 @@ export class TextureEffect extends Effect {
 	 * If enabled, the texture can be scaled using the `scale` uniform.
 	 *
 	 * @type {Number}
-	 * @deprecated Use uvTransform instead for full control over the texture coordinates.
+	 * @deprecated Adjust the texture's offset, repeat and center instead.
 	 */
 
 	get aspectCorrection() {
@@ -126,7 +142,7 @@ export class TextureEffect extends Effect {
 	 * Enables or disables aspect correction.
 	 *
 	 * @type {Number}
-	 * @deprecated Use uvTransform instead for full control over the texture coordinates.
+	 * @deprecated Adjust the texture's offset, repeat and center instead.
 	 */
 
 	set aspectCorrection(value) {
@@ -135,19 +151,11 @@ export class TextureEffect extends Effect {
 
 			if(value) {
 
-				if(this.uvTransform) {
-
-					this.uvTransform = false;
-
-				}
-
 				this.defines.set("ASPECT_CORRECTION", "1");
-				this.setVertexShader(vertexShader);
 
 			} else {
 
 				this.defines.delete("ASPECT_CORRECTION");
-				this.setVertexShader(null);
 
 			}
 
@@ -158,17 +166,16 @@ export class TextureEffect extends Effect {
 	}
 
 	/**
-	 * Indicates whether the texture UV coordinates will be transformed using the
-	 * transformation matrix of the texture.
-	 *
-	 * Cannot be used if aspect correction is enabled.
+	 * Indicates whether the texture UV coordinates will be transformed using the transformation matrix of the texture.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use texture.matrixAutoUpdate instead.
 	 */
 
 	get uvTransform() {
 
-		return this.defines.has("UV_TRANSFORM");
+		const texture = this.getTexture();
+		return (texture !== null && texture.matrixAutoUpdate);
 
 	}
 
@@ -176,41 +183,23 @@ export class TextureEffect extends Effect {
 	 * Enables or disables texture UV transformation.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Set texture.matrixAutoUpdate instead.
 	 */
 
 	set uvTransform(value) {
 
-		if(this.uvTransform !== value) {
+		const texture = this.getTexture();
 
-			if(value) {
+		if(texture !== null) {
 
-				if(this.aspectCorrection) {
-
-					this.aspectCorrection = false;
-
-				}
-
-				this.defines.set("UV_TRANSFORM", "1");
-				this.uniforms.get("uvTransform").value = new Matrix3();
-				this.setVertexShader(vertexShader);
-
-			} else {
-
-				this.defines.delete("UV_TRANSFORM");
-				this.uniforms.get("uvTransform").value = null;
-				this.setVertexShader(null);
-
-			}
-
-			this.setChanged();
+			texture.matrixAutoUpdate = value;
 
 		}
 
 	}
 
 	/**
-	 * Sets the swizzles that will be applied to the `r`, `g`, `b`, and `a`
-	 * components of a texel before it is written to the output color.
+	 * Sets the swizzles that will be applied to the components of a texel before it is written to the output color.
 	 *
 	 * @param {ColorChannel} r - The swizzle for the `r` component.
 	 * @param {ColorChannel} [g=r] - The swizzle for the `g` component.
@@ -223,8 +212,7 @@ export class TextureEffect extends Effect {
 		const rgba = "rgba";
 		let swizzle = "";
 
-		if(r !== ColorChannel.RED || g !== ColorChannel.GREEN ||
-			b !== ColorChannel.BLUE || a !== ColorChannel.ALPHA) {
+		if(r !== ColorChannel.RED || g !== ColorChannel.GREEN || b !== ColorChannel.BLUE || a !== ColorChannel.ALPHA) {
 
 			swizzle = [".", rgba[r], rgba[g], rgba[b], rgba[a]].join("");
 
@@ -247,10 +235,9 @@ export class TextureEffect extends Effect {
 
 		const texture = this.uniforms.get("map").value;
 
-		if(this.uvTransform && texture.matrixAutoUpdate) {
+		if(texture.matrixAutoUpdate) {
 
 			texture.updateMatrix();
-			this.uniforms.get("uvTransform").value.copy(texture.matrix);
 
 		}
 
@@ -266,8 +253,7 @@ export class TextureEffect extends Effect {
 
 	initialize(renderer, alpha, frameBufferType) {
 
-		this.isWebGL2 = renderer.capabilities.isWebGL2;
-		const decoding = getTextureDecoding(this.texture, this.isWebGL2);
+		const decoding = getTextureDecoding(this.getTexture(), this.renderer.capabilities.isWebGL2);
 		this.defines.set("texelToLinear(texel)", decoding);
 
 	}

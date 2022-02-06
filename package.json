@@ -1,12 +1,12 @@
 {
 	"name": "postprocessing",
-	"version": "6.23.5",
+	"version": "6.24.0",
 	"description": "A post processing library that provides the means to implement image filter effects for three.js.",
 	"homepage": "https://github.com/vanruesc/postprocessing",
 	"main": "build/postprocessing.js",
-	"module": "build/postprocessing.esm.js",
+	"module": "build/postprocessing.mjs",
 	"exports": {
-		"import": "./build/postprocessing.esm.js",
+		"import": "./build/postprocessing.mjs",
 		"require": "./build/postprocessing.js"
 	},
 	"sideEffects": false,
@@ -70,23 +70,20 @@
 	"ava": {
 		"failFast": true,
 		"files": [
-			"test/**/*.js"
-		],
-		"require": [
-			"esm"
+			"test/**/*"
 		]
 	},
 	"eslintConfig": {
 		"extends": "aether"
 	},
 	"peerDependencies": {
-		"three": ">= 0.102.0 < 0.137.0"
+		"three": ">= 0.102.0 < 0.138.0"
 	},
 	"devDependencies": {
 		"@tweakpane/core": "1.x.x",
 		"@types/three": "0.x.x",
 		"autoprefixer": "10.x.x",
-		"ava": "3.x.x",
+		"ava": "4.x.x",
 		"cssnano": "5.x.x",
 		"cpy-cli": "3.x.x",
 		"dat.gui": "0.x.x",
@@ -99,8 +96,7 @@
 		"eslint": "8.x.x",
 		"eslint-config-aether": "1.x.x",
 		"eslint-watch": "8.x.x",
-		"gzipper": "6.x.x",
-		"esm": "3.x.x",
+		"gzipper": "7.x.x",
 		"glob": "7.x.x",
 		"glob-promise": "4.x.x",
 		"hugo-bin": "0.x.x",

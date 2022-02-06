@@ -1,5 +1,6 @@
 import {
 	AlwaysDepth,
+	BasicDepthPacking,
 	EqualDepth,
 	GreaterDepth,
 	GreaterEqualDepth,
@@ -14,6 +15,21 @@ import {
 
 import fragmentShader from "./glsl/depth-mask/shader.frag";
 import vertexShader from "./glsl/common/shader.vert";
+
+/**
+ * An enumeration of depth test strategies.
+ *
+ * @type {Object}
+ * @property {Number} DEFAULT - Perform depth test only.
+ * @property {Number} KEEP_MAX_DEPTH - Always keep max depth.
+ * @property {Number} DISCARD_MAX_DEPTH - Always discard max depth.
+ */
+
+export const DepthTestStrategy = {
+	DEFAULT: 0,
+	KEEP_MAX_DEPTH: 1,
+	DISCARD_MAX_DEPTH: 2
+};
 
 /**
  * A depth mask shader material.
@@ -35,14 +51,12 @@ export class DepthMaskMaterial extends ShaderMaterial {
 				DEPTH_EPSILON: "0.00001",
 				DEPTH_PACKING_0: "0",
 				DEPTH_PACKING_1: "0",
-				KEEP_FAR: "1"
+				DEPTH_TEST_STRATEGY: DepthTestStrategy.KEEP_MAX_DEPTH
 			},
 			uniforms: {
 				inputBuffer: new Uniform(null),
 				depthBuffer0: new Uniform(null),
-				depthBuffer1: new Uniform(null),
-				bias0: new Uniform(0.0),
-				bias1: new Uniform(0.0)
+				depthBuffer1: new Uniform(null)
 			},
 			blending: NoBlending,
 			depthWrite: false,
@@ -57,7 +71,7 @@ export class DepthMaskMaterial extends ShaderMaterial {
 		/**
 		 * The current depth mode.
 		 *
-		 * @type {Number}
+		 * @type {DepthModes}
 		 * @private
 		 */
 
@@ -67,47 +81,92 @@ export class DepthMaskMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Indicates whether the background should be preserved.
+	 * Sets the base depth buffer.
 	 *
-	 * Enabled by default.
-	 *
-	 * @type {Boolean}
+	 * @param {Texture} buffer - The depth texture.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
 	 */
 
-	get keepFar() {
+	setDepthBuffer0(buffer, depthPacking = BasicDepthPacking) {
 
-		return (this.defines.KEEP_FAR !== undefined);
-
-	}
-
-	/**
-	 * Controls whether the background will be preserved or discarded.
-	 *
-	 * @type {Boolean}
-	 */
-
-	set keepFar(value) {
-
-		if(value) {
-
-			this.defines.KEEP_FAR = "1";
-
-		} else {
-
-			delete this.defines.KEEP_FAR;
-
-		}
-
+		this.uniforms.depthBuffer0.value = buffer;
+		this.defines.DEPTH_PACKING_0 = depthPacking.toFixed(0);
 		this.needsUpdate = true;
 
 	}
 
 	/**
-	 * Returns the current error threshold for depth comparisons.
+	 * Sets the depth buffer that will be compared with the base depth buffer.
+	 *
+	 * @param {Texture} buffer - The depth texture.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 */
+
+	setDepthBuffer1(buffer, depthPacking = BasicDepthPacking) {
+
+		this.uniforms.depthBuffer1.value = buffer;
+		this.defines.DEPTH_PACKING_1 = depthPacking.toFixed(0);
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Indicates whether maximum depth values should be preserved.
+	 *
+	 * @type {Boolean}
+	 * @deprecated Use getMaxDepthStrategy() instead.
+	 */
+
+	get keepFar() {
+
+		return (this.getMaxDepthStrategy() === DepthTestStrategy.KEEP);
+
+	}
+
+	/**
+	 * Controls whether maximum depth values should be preserved.
+	 *
+	 * @type {Boolean}
+	 * @deprecated Use setMaxDepthStrategy(DepthTestStrategy.KEEP_MAX_DEPTH) instead.
+	 */
+
+	set keepFar(value) {
+
+		this.setMaxDepthStrategy(value ? DepthTestStrategy.KEEP_MAX_DEPTH : DepthTestStrategy.DISCARD_MAX_DEPTH);
+
+	}
+
+	/**
+	 * Returns the strategy for dealing with maximum depth values.
+	 *
+	 * @return {DepthTestStrategy} The strategy.
+	 */
+
+	getMaxDepthStrategy() {
+
+		return Number(this.defines.DEPTH_TEST_STRATEGY);
+
+	}
+
+	/**
+	 * Sets the strategy for dealing with maximum depth values.
+	 *
+	 * @param {DepthTestStrategy} value - The strategy.
+	 */
+
+	setMaxDepthStrategy(value) {
+
+		this.defines.DEPTH_TEST_STRATEGY = value.toFixed(0);
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Returns the current error threshold for depth comparisons. Default is `1e-5`.
 	 *
 	 * This value is only used for `EqualDepth` and `NotEqualDepth`.
 	 *
-	 * @return {Number} The error threshold. Default is `1e-5`.
+	 * @return {Number} The error threshold.
 	 */
 
 	getEpsilon() {
@@ -134,7 +193,7 @@ export class DepthMaskMaterial extends ShaderMaterial {
 	/**
 	 * Returns the current depth mode.
 	 *
-	 * @return {Number} The depth mode.
+	 * @return {DepthModes} The depth mode. Default is `LessDepth`.
 	 */
 
 	getDepthMode() {
@@ -146,10 +205,8 @@ export class DepthMaskMaterial extends ShaderMaterial {
 	/**
 	 * Sets the depth mode.
 	 *
-	 * Default is `LessDepth`.
-	 *
 	 * @see https://threejs.org/docs/#api/en/constants/Materials
-	 * @param {Number} mode - The depth mode.
+	 * @param {DepthModes} mode - The depth mode.
 	 */
 
 	setDepthMode(mode) {

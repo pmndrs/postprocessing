@@ -21,11 +21,7 @@ export class BrightnessContrastEffect extends Effect {
 	 * @param {Number} [options.contrast=0.0] - The contrast factor, ranging from -1 to 1, where 0 means no change.
 	 */
 
-	constructor({
-		blendFunction = BlendFunction.NORMAL,
-		brightness = 0.0,
-		contrast = 0.0
-	} = {}) {
+	constructor({ blendFunction = BlendFunction.NORMAL, brightness = 0.0, contrast = 0.0 } = {}) {
 
 		super("BrightnessContrastEffect", fragmentShader, {
 			blendFunction,
@@ -34,6 +30,54 @@ export class BrightnessContrastEffect extends Effect {
 				["contrast", new Uniform(contrast)]
 			])
 		});
+
+	}
+
+	/**
+	 * Returns the brightness.
+	 *
+	 * @return {Number} The brightness.
+	 */
+
+	getBrightness(value) {
+
+		return this.uniforms.get("brightness").value;
+
+	}
+
+	/**
+	 * Sets the brightness.
+	 *
+	 * @param {Number} value - The brightness.
+	 */
+
+	setBrightness(value) {
+
+		this.uniforms.get("brightness").value = value;
+
+	}
+
+	/**
+	 * Returns the contrast.
+	 *
+	 * @return {Number} The contrast.
+	 */
+
+	getContrast(value) {
+
+		return this.uniforms.get("contrast").value;
+
+	}
+
+	/**
+	 * Sets the contrast.
+	 *
+	 * @param {Number} value - The contrast.
+	 */
+
+	setContrast(value) {
+
+		this.uniforms.get("contrast").value = value;
 
 	}
 

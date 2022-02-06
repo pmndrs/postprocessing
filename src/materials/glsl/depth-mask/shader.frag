@@ -14,8 +14,6 @@
 #endif
 
 uniform sampler2D inputBuffer;
-uniform float bias0;
-uniform float bias1;
 
 varying vec2 vUv;
 
@@ -43,14 +41,21 @@ void main() {
 
 	#endif
 
-	depth = clamp(depth + vec2(bias0, bias1), 0.0, 1.0);
+	depth = clamp(depth, 0.0, 1.0);
 
-	#ifdef KEEP_FAR
+	#if DEPTH_TEST_STRATEGY == 0
 
+		// Decide based on depth test.
+		bool keep = depthTest(depth.x, depth.y);
+
+	#elif DEPTH_TEST_STRATEGY == 1
+
+		// Always keep max depth.
 		bool keep = (depth.x == 1.0) || depthTest(depth.x, depth.y);
 
 	#else
 
+		// Always discard max depth.
 		bool keep = (depth.x != 1.0) && depthTest(depth.x, depth.y);
 
 	#endif

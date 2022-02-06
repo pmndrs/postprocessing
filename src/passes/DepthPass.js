@@ -1,17 +1,10 @@
-import {
-	Color,
-	MeshDepthMaterial,
-	NearestFilter,
-	RGBADepthPacking,
-	WebGLRenderTarget
-} from "three";
-
-import { Resizer } from "../core/Resizer";
+import { Color, MeshDepthMaterial, NearestFilter, RGBADepthPacking, WebGLRenderTarget } from "three";
+import { Resolution } from "../core/Resolution";
 import { Pass } from "./Pass";
 import { RenderPass } from "./RenderPass";
 
 /**
- * A pass that renders depth and packs it into an RGBA buffer.
+ * A pass that renders depth into an RGBA buffer.
  */
 
 export class DepthPass extends Pass {
@@ -23,15 +16,15 @@ export class DepthPass extends Pass {
 	 * @param {Camera} camera - The camera to use to render the scene.
 	 * @param {Object} [options] - The options.
 	 * @param {Number} [options.resolutionScale=1.0] - Deprecated. Adjust the height or width instead for consistent results.
-	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
-	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
+	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - The render width.
+	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - The render height.
 	 * @param {WebGLRenderTarget} [options.renderTarget] - A custom render target.
 	 */
 
 	constructor(scene, camera, {
 		resolutionScale = 1.0,
-		width = Resizer.AUTO_SIZE,
-		height = Resizer.AUTO_SIZE,
+		width = Resolution.AUTO_SIZE,
+		height = Resolution.AUTO_SIZE,
 		renderTarget
 	} = {}) {
 
@@ -55,13 +48,14 @@ export class DepthPass extends Pass {
 		renderPass.setShadowMapDisabled(true);
 
 		const clearPass = renderPass.getClearPass();
-		clearPass.overrideClearColor = new Color(0xffffff);
-		clearPass.overrideClearAlpha = 1.0;
+		clearPass.setOverrideClearColor(new Color(0xffffff));
+		clearPass.setOverrideClearAlpha(1.0);
 
 		/**
 		 * A render target that contains the scene depth.
 		 *
 		 * @type {WebGLRenderTarget}
+		 * @private
 		 */
 
 		this.renderTarget = renderTarget;
@@ -79,15 +73,17 @@ export class DepthPass extends Pass {
 		}
 
 		/**
-		 * The desired render resolution.
+		 * The resolution.
 		 *
-		 * Use {@link Resizer.AUTO_SIZE} for the width or height to automatically
-		 * calculate it based on its counterpart and the original aspect ratio.
-		 *
-		 * @type {Resizer}
+		 * @type {Resolution}
+		 * @deprecated Use getResolution() instead.
 		 */
 
-		this.resolution = new Resizer(this, width, height, resolutionScale);
+		this.resolution = new Resolution(this, width, height, resolutionScale);
+		this.resolution.addEventListener("change", (e) => this.setSize(
+			this.resolution.getBaseWidth(),
+			this.resolution.getBaseHeight()
+		));
 
 	}
 
@@ -95,11 +91,36 @@ export class DepthPass extends Pass {
 	 * The depth texture.
 	 *
 	 * @type {Texture}
+	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
 
+		return this.getTexture();
+
+	}
+
+	/**
+	 * Returns the depth texture.
+	 *
+	 * @return {Texture} The texture.
+	 */
+
+	getTexture() {
+
 		return this.renderTarget.texture;
+
+	}
+
+	/**
+	 * Returns the resolution settings.
+	 *
+	 * @return {Resolution} The resolution.
+	 */
+
+	getResolution() {
+
+		return this.resolution;
 
 	}
 
@@ -107,12 +128,12 @@ export class DepthPass extends Pass {
 	 * Returns the current resolution scale.
 	 *
 	 * @return {Number} The resolution scale.
-	 * @deprecated Adjust the fixed resolution width or height instead.
+	 * @deprecated Use getResolution().setPreferredWidth() or getResolution().setPreferredHeight() instead.
 	 */
 
 	getResolutionScale() {
 
-		return this.resolutionScale;
+		return this.resolution.getScale();
 
 	}
 
@@ -120,13 +141,12 @@ export class DepthPass extends Pass {
 	 * Sets the resolution scale.
 	 *
 	 * @param {Number} scale - The new resolution scale.
-	 * @deprecated Adjust the fixed resolution width or height instead.
+	 * @deprecated Use getResolution().setPreferredWidth() or getResolution().setPreferredHeight() instead.
 	 */
 
 	setResolutionScale(scale) {
 
-		this.resolutionScale = scale;
-		this.setSize(this.resolution.base.x, this.resolution.base.y);
+		this.resolution.setScale(scale);
 
 	}
 
@@ -157,9 +177,8 @@ export class DepthPass extends Pass {
 	setSize(width, height) {
 
 		const resolution = this.resolution;
-		resolution.base.set(width, height);
-
-		this.renderTarget.setSize(resolution.width, resolution.height);
+		resolution.setBaseSize(width, height);
+		this.renderTarget.setSize(resolution.getWidth(), resolution.getHeight());
 
 	}
 

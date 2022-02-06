@@ -1,7 +1,20 @@
-import { NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
+import { BasicDepthPacking, NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
 
 import fragmentShader from "./glsl/depth-copy/shader.frag";
 import vertexShader from "./glsl/depth-copy/shader.vert";
+
+/**
+ * An enumeration of depth copy modes.
+ *
+ * @type {Object}
+ * @property {Number} FULL - Copies the full depth texture every frame.
+ * @property {Number} SINGLE - Copies a single texel from the depth texture on demand.
+ */
+
+export const DepthCopyMode = {
+	FULL: 0,
+	SINGLE: 1
+};
 
 /**
  * A depth copy shader material.
@@ -24,7 +37,7 @@ export class DepthCopyMaterial extends ShaderMaterial {
 			},
 			uniforms: {
 				depthBuffer: new Uniform(null),
-				screenPosition: new Uniform(new Vector2())
+				texelPosition: new Uniform(new Vector2())
 			},
 			blending: NoBlending,
 			depthWrite: false,
@@ -48,9 +61,24 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Returns the current input depth packing.
+	 * Sets the input depth buffer.
 	 *
-	 * @return {Number} The input depth packing.
+	 * @param {Texture} buffer - The depth texture.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 */
+
+	setDepthBuffer(buffer, depthPacking = BasicDepthPacking) {
+
+		this.uniforms.depthBuffer.value = buffer;
+		this.defines.INPUT_DEPTH_PACKING = depthPacking.toFixed(0);
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Returns the current input depth packing strategy.
+	 *
+	 * @return {DepthPackingStrategies} The input depth packing strategy.
 	 */
 
 	getInputDepthPacking() {
@@ -60,9 +88,9 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the input depth packing.
+	 * Sets the input depth packing strategy.
 	 *
-	 * @param {Number} value - The new input depth packing.
+	 * @param {DepthPackingStrategies} value - The new input depth packing strategy.
 	 */
 
 	setInputDepthPacking(value) {
@@ -73,9 +101,9 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Returns the current output depth packing.
+	 * Returns the current output depth packing strategy.
 	 *
-	 * @return {Number} The output depth packing.
+	 * @return {DepthPackingStrategies} The output depth packing strategy.
 	 */
 
 	getOutputDepthPacking() {
@@ -85,15 +113,39 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the output depth packing.
+	 * Sets the output depth packing strategy.
 	 *
-	 * @param {Number} value - The new output depth packing.
+	 * @param {DepthPackingStrategies} value - The new output depth packing strategy.
 	 */
 
 	setOutputDepthPacking(value) {
 
 		this.defines.OUTPUT_DEPTH_PACKING = value.toFixed(0);
 		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Returns the screen space position used for single-texel copy operations.
+	 *
+	 * @return {Vector2} The position.
+	 */
+
+	getTexelPosition() {
+
+		return this.uniforms.texelPosition.value;
+
+	}
+
+	/**
+	 * Sets the screen space position used for single-texel copy operations.
+	 *
+	 * @param {Vector2} value - The position.
+	 */
+
+	setTexelPosition(value) {
+
+		this.uniforms.texelPosition.value = value;
 
 	}
 
@@ -124,18 +176,3 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	}
 
 }
-
-/**
- * An enumeration of depth copy modes.
- *
- * @type {Object}
- * @property {Number} FULL - Copies the full depth texture every frame.
- * @property {Number} SINGLE - Copies a single texel from the depth texture on demand.
- */
-
-export const DepthCopyMode = {
-
-	FULL: 0,
-	SINGLE: 1
-
-};

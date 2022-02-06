@@ -79,9 +79,34 @@ export class BlendMode extends EventDispatcher {
 		 * The opacity of the color that will be blended with the base color.
 		 *
 		 * @type {Uniform}
+		 * @private
 		 */
 
 		this.opacity = new Uniform(opacity);
+
+	}
+
+	/**
+	 * Returns the opacity.
+	 *
+	 * @return {Number} The opacity.
+	 */
+
+	getOpacity() {
+
+		return this.opacity.value;
+
+	}
+
+	/**
+	 * Sets the opacity.
+	 *
+	 * @param {Number} value - The opacity.
+	 */
+
+	setOpacity(value) {
+
+		this.opacity.value = value;
 
 	}
 

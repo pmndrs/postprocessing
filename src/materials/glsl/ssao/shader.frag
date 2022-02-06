@@ -1,30 +1,41 @@
 #include <common>
 #include <packing>
 
-#ifdef GL_FRAGMENT_PRECISION_HIGH
+#ifdef NORMAL_DEPTH
 
-	uniform highp sampler2D normalDepthBuffer;
+	#ifdef GL_FRAGMENT_PRECISION_HIGH
+
+		uniform highp sampler2D normalDepthBuffer;
+
+	#else
+
+		uniform mediump sampler2D normalDepthBuffer;
+
+	#endif
 
 #else
 
-	uniform mediump sampler2D normalDepthBuffer;
-
-#endif
-
-#ifndef NORMAL_DEPTH
-
 	uniform lowp sampler2D normalBuffer;
 
-	// The depth texture is bound to normalDepthBuffer.
+	#ifdef GL_FRAGMENT_PRECISION_HIGH
+
+		uniform highp sampler2D depthBuffer;
+
+	#else
+
+		uniform mediump sampler2D depthBuffer;
+
+	#endif
+
 	float readDepth(const in vec2 uv) {
 
 		#if DEPTH_PACKING == 3201
 
-			return unpackRGBAToDepth(texture2D(normalDepthBuffer, uv));
+			return unpackRGBAToDepth(texture2D(depthBuffer, uv));
 
 		#else
 
-			return texture2D(normalDepthBuffer, uv).r;
+			return texture2D(depthBuffer, uv).r;
 
 		#endif
 

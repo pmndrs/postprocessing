@@ -33,4 +33,40 @@ export class CopyMaterial extends ShaderMaterial {
 
 	}
 
+	/**
+	 * Sets the input buffer.
+	 *
+	 * @param {Number} value - The buffer.
+	 */
+
+	setInputBuffer(value) {
+
+		this.uniforms.inputBuffer.value = value;
+
+	}
+
+	/**
+	 * Returns the opacity.
+	 *
+	 * @return {Number} The opacity.
+	 */
+
+	getOpacity(value) {
+
+		return this.uniforms.opacity.value;
+
+	}
+
+	/**
+	 * Sets the opacity.
+	 *
+	 * @param {Number} value - The opacity.
+	 */
+
+	setOpacity(value) {
+
+		this.uniforms.opacity.value = value;
+
+	}
+
 }

@@ -1,12 +1,4 @@
-import {
-	LinearFilter,
-	LinearMipMapLinearFilter,
-	LinearMipmapLinearFilter,
-	RGBFormat,
-	Uniform,
-	WebGLRenderTarget
-} from "three";
-
+import { LinearFilter, LinearMipMapLinearFilter, LinearMipmapLinearFilter, Uniform, WebGLRenderTarget } from "three";
 import { AdaptiveLuminancePass, LuminancePass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect } from "./Effect";
@@ -14,10 +6,28 @@ import { Effect } from "./Effect";
 import fragmentShader from "./glsl/tone-mapping/shader.frag";
 
 /**
+ * A tone mapping mode enumeration.
+ *
+ * @type {Object}
+ * @property {Number} REINHARD - Simple Reinhard tone mapping.
+ * @property {Number} REINHARD2 - Modified Reinhard tone mapping.
+ * @property {Number} REINHARD2_ADAPTIVE - Simulates the optic nerve responding to the amount of light it is receiving.
+ * @property {Number} OPTIMIZED_CINEON - Optimized filmic operator by Jim Hejl and Richard Burgess-Dawson.
+ * @property {Number} ACES_FILMIC - ACES tone mapping with a scale of 1.0/0.6.
+ */
+
+export const ToneMappingMode = {
+	REINHARD: 0,
+	REINHARD2: 1,
+	REINHARD2_ADAPTIVE: 2,
+	OPTIMIZED_CINEON: 3,
+	ACES_FILMIC: 4
+};
+
+/**
  * A tone mapping effect.
  *
- * Note: `ToneMappingMode.REINHARD2_ADAPTIVE` requires support for `EXT_shader_texture_lod` and
- * `EXT_color_buffer_half_float`.
+ * Note: `ToneMappingMode.REINHARD2_ADAPTIVE` requires support for `EXT_shader_texture_lod`.
  *
  * Reference:
  * GDC2007 - Wolfgang Engel, Post-Processing Pipeline
@@ -31,7 +41,7 @@ export class ToneMappingEffect extends Effect {
 	 *
 	 * The additional parameters only affect the Reinhard2 operator.
 	 *
-	 * @todo Remove deprecated params and change default white point to 4.
+	 * TODO Remove deprecated params and change default mode to ACES_FILMIC and white point to 4.
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
 	 * @param {Boolean} [options.adaptive=true] - Deprecated. Use mode instead.
@@ -74,15 +84,14 @@ export class ToneMappingEffect extends Effect {
 		 *
 		 * @type {WebGLRenderTarget}
 		 * @private
-		 * @todo Remove LinearMipMapLinearFilter in next major release.
+		 * TODO Remove LinearMipMapLinearFilter in next major release.
 		 */
 
 		this.renderTargetLuminance = new WebGLRenderTarget(1, 1, {
 			minFilter: (LinearMipmapLinearFilter !== undefined) ? LinearMipmapLinearFilter : LinearMipMapLinearFilter,
 			magFilter: LinearFilter,
 			stencilBuffer: false,
-			depthBuffer: false,
-			format: RGBFormat
+			depthBuffer: false
 		});
 
 		this.renderTargetLuminance.texture.name = "Luminance";
@@ -106,12 +115,12 @@ export class ToneMappingEffect extends Effect {
 		 * @private
 		 */
 
-		this.adaptiveLuminancePass = new AdaptiveLuminancePass(this.luminancePass.texture, {
+		this.adaptiveLuminancePass = new AdaptiveLuminancePass(this.luminancePass.getTexture(), {
 			minLuminance,
 			adaptationRate
 		});
 
-		this.uniforms.get("luminanceBuffer").value = this.adaptiveLuminancePass.texture;
+		this.uniforms.get("luminanceBuffer").value = this.adaptiveLuminancePass.getTexture();
 
 		/**
 		 * The current tone mapping mode.
@@ -121,9 +130,9 @@ export class ToneMappingEffect extends Effect {
 		 */
 
 		this.mode = null;
-		this.setMode(mode);
 
-		this.resolution = resolution;
+		this.setMode(mode);
+		this.setResolution(resolution);
 
 	}
 
@@ -157,18 +166,15 @@ export class ToneMappingEffect extends Effect {
 			switch(value) {
 
 				case ToneMappingMode.REINHARD:
-					this.defines.set("toneMapping(texel)",
-						"ReinhardToneMapping(texel)");
+					this.defines.set("toneMapping(texel)", "ReinhardToneMapping(texel)");
 					break;
 
 				case ToneMappingMode.OPTIMIZED_CINEON:
-					this.defines.set("toneMapping(texel)",
-						"OptimizedCineonToneMapping(texel)");
+					this.defines.set("toneMapping(texel)", "OptimizedCineonToneMapping(texel)");
 					break;
 
 				case ToneMappingMode.ACES_FILMIC:
-					this.defines.set("toneMapping(texel)",
-						"ACESFilmicToneMapping(texel)");
+					this.defines.set("toneMapping(texel)", "ACESFilmicToneMapping(texel)");
 					break;
 
 				default:
@@ -197,14 +203,27 @@ export class ToneMappingEffect extends Effect {
 	}
 
 	/**
+	 * Returns the adaptive luminance material.
+	 *
+	 * @return {AdaptiveLuminanceMaterial} The material.
+	 */
+
+	getAdaptiveLuminanceMaterial() {
+
+		return this.adaptiveLuminancePass.getFullscreenMaterial();
+
+	}
+
+	/**
 	 * The resolution of the render targets.
 	 *
 	 * @type {Number}
+	 * @deprecated Use getResolution() instead.
 	 */
 
 	get resolution() {
 
-		return this.luminancePass.resolution.width;
+		return this.getResolution();
 
 	}
 
@@ -212,17 +231,41 @@ export class ToneMappingEffect extends Effect {
 	 * Sets the resolution of the luminance texture. Must be a power of two.
 	 *
 	 * @type {Number}
+	 * @deprecated Use setResolution() instead.
 	 */
 
 	set resolution(value) {
+
+		this.setResolution(value);
+
+	}
+
+	/**
+	 * Returns the resolution of the luminance texture.
+	 *
+	 * @return {Number} The resolution.
+	 */
+
+	getResolution() {
+
+		return this.luminancePass.getResolution().getWidth();
+
+	}
+
+	/**
+	 * Sets the resolution of the luminance texture. Must be a power of two.
+	 *
+	 * @param {Number} value - The resolution.
+	 */
+
+	setResolution(value) {
 
 		// Round the given value to the next power of two.
 		const exponent = Math.max(0, Math.ceil(Math.log2(value)));
 		const size = Math.pow(2, exponent);
 
-		this.luminancePass.resolution.width = size;
-		this.luminancePass.resolution.height = size;
-		this.adaptiveLuminancePass.mipLevel1x1 = exponent;
+		this.luminancePass.getResolution().setPreferredSize(size, size);
+		this.getAdaptiveLuminanceMaterial().setMipLevel1x1(exponent);
 
 	}
 
@@ -230,7 +273,7 @@ export class ToneMappingEffect extends Effect {
 	 * Indicates whether this pass uses adaptive luminance.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use mode instead.
+	 * @deprecated Use getMode() instead.
 	 */
 
 	get adaptive() {
@@ -243,7 +286,7 @@ export class ToneMappingEffect extends Effect {
 	 * Enables or disables adaptive luminance.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Set mode to ToneMappingMode.REINHARD2_ADAPTIVE instead.
+	 * @deprecated Uset setMode(ToneMappingMode.REINHARD2_ADAPTIVE) instead.
 	 */
 
 	set adaptive(value) {
@@ -256,23 +299,23 @@ export class ToneMappingEffect extends Effect {
 	 * The luminance adaptation rate.
 	 *
 	 * @type {Number}
-	 * @deprecated Use adaptiveLuminancePass.adaptationRate instead.
+	 * @deprecated Use getAdaptiveLuminanceMaterial().getAdaptationRate() instead.
 	 */
 
 	get adaptationRate() {
 
-		return this.adaptiveLuminancePass.adaptationRate;
+		return this.getAdaptiveLuminanceMaterial().getAdaptationRate();
 
 	}
 
 	/**
 	 * @type {Number}
-	 * @deprecated Use adaptiveLuminancePass.adaptationRate instead.
+	 * @deprecated Use getAdaptiveLuminanceMaterial().setAdaptationRate() instead.
 	 */
 
 	set adaptationRate(value) {
 
-		this.adaptiveLuminancePass.adaptationRate = value;
+		this.getAdaptiveLuminanceMaterial().setAdaptationRate(value);
 
 	}
 
@@ -283,8 +326,7 @@ export class ToneMappingEffect extends Effect {
 
 	get distinction() {
 
-		console.warn(this.name, "The distinction field has been removed.");
-
+		console.warn(this.name, "distinction was removed.");
 		return 1.0;
 
 	}
@@ -296,7 +338,7 @@ export class ToneMappingEffect extends Effect {
 
 	set distinction(value) {
 
-		console.warn(this.name, "The distinction field has been removed.");
+		console.warn(this.name, "distinction was removed.");
 
 	}
 
@@ -334,24 +376,3 @@ export class ToneMappingEffect extends Effect {
 	}
 
 }
-
-/**
- * A tone mapping mode enumeration.
- *
- * @type {Object}
- * @property {Number} REINHARD - Simple Reinhard tone mapping.
- * @property {Number} REINHARD2 - Modified Reinhard tone mapping.
- * @property {Number} REINHARD2_ADAPTIVE - Simulates the optic nerve responding to the amount of light it is receiving.
- * @property {Number} OPTIMIZED_CINEON - Optimized filmic operator by Jim Hejl and Richard Burgess-Dawson.
- * @property {Number} ACES_FILMIC - ACES tone mapping with a scale of 1.0/0.6.
- */
-
-export const ToneMappingMode = {
-
-	REINHARD: 0,
-	REINHARD2: 1,
-	REINHARD2_ADAPTIVE: 2,
-	OPTIMIZED_CINEON: 3,
-	ACES_FILMIC: 4
-
-};

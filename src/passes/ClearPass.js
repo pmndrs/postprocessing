@@ -1,13 +1,6 @@
 import { Color } from "three";
 import { Pass } from "./Pass";
 
-/**
- * Stores the original clear color of the renderer.
- *
- * @type {Color}
- * @private
- */
-
 const color = new Color();
 
 /**
@@ -34,6 +27,7 @@ export class ClearPass extends Pass {
 		 * Indicates whether the color buffer should be cleared.
 		 *
 		 * @type {Boolean}
+		 * @deprecated Use setClearFlags() instead.
 		 */
 
 		this.color = color;
@@ -42,6 +36,7 @@ export class ClearPass extends Pass {
 		 * Indicates whether the depth buffer should be cleared.
 		 *
 		 * @type {Boolean}
+		 * @deprecated Use setClearFlags() instead.
 		 */
 
 		this.depth = depth;
@@ -50,29 +45,92 @@ export class ClearPass extends Pass {
 		 * Indicates whether the stencil buffer should be cleared.
 		 *
 		 * @type {Boolean}
+		 * @deprecated Use setClearFlags() instead.
 		 */
 
 		this.stencil = stencil;
 
 		/**
-		 * An override clear color.
-		 *
-		 * The default value is null.
+		 * An override clear color. Default is null.
 		 *
 		 * @type {Color}
+		 * @deprecated Use getOverrideClearColor() and setOverrideClearColor() instead.
 		 */
 
 		this.overrideClearColor = null;
 
 		/**
-		 * An override clear alpha.
-		 *
-		 * The default value is -1.
+		 * An override clear alpha. Default is -1.
 		 *
 		 * @type {Number}
+		 * @deprecated Use getOverrideClearAlpha() and setOverrideClearAlpha() instead.
 		 */
 
 		this.overrideClearAlpha = -1.0;
+
+	}
+
+	/**
+	 * Sets the clear flags.
+	 *
+	 * @param {Boolean} color - Whether the color buffer should be cleared.
+	 * @param {Boolean} depth - Whether the depth buffer should be cleared.
+	 * @param {Boolean} stencil - Whether the stencil buffer should be cleared.
+	 */
+
+	setClearFlags(color, depth, stencil) {
+
+		this.color = color;
+		this.depth = depth;
+		this.stencil = stencil;
+
+	}
+
+	/**
+	 * Returns the override clear color. Default is null.
+	 *
+	 * @return {Color} The clear color.
+	 */
+
+	getOverrideClearColor() {
+
+		return this.overrideClearColor;
+
+	}
+
+	/**
+	 * Sets the override clear color.
+	 *
+	 * @param {Color} value - The clear color.
+	 */
+
+	setOverrideClearColor(value) {
+
+		this.overrideClearColor = value;
+
+	}
+
+	/**
+	 * Returns the override clear alpha. Default is -1.
+	 *
+	 * @return {Number} The clear alpha.
+	 */
+
+	getOverrideClearAlpha() {
+
+		return this.overrideClearAlpha;
+
+	}
+
+	/**
+	 * Sets the override clear alpha.
+	 *
+	 * @param {Number} value - The clear alpha.
+	 */
+
+	setOverrideClearAlpha(value) {
+
+		this.overrideClearAlpha = value;
 
 	}
 
@@ -97,11 +155,10 @@ export class ClearPass extends Pass {
 
 		if(hasOverrideClearColor) {
 
-			/* @todo Remove extra copy operation and raise peer dependency version:
+			/* TODO Remove extra copy operation and raise peer dependency version:
 			renderer.getClearColor() expects a target since three r124. */
 			color.copy(renderer.getClearColor(color));
-			renderer.setClearColor(overrideClearColor, hasOverrideClearAlpha ?
-				overrideClearAlpha : clearAlpha);
+			renderer.setClearColor(overrideClearColor, hasOverrideClearAlpha ? overrideClearAlpha : clearAlpha);
 
 		} else if(hasOverrideClearAlpha) {
 

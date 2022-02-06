@@ -1,5 +1,5 @@
 import { AmbientLight, CameraHelper, DirectionalLight } from "three";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { TextureUtils } from "../../utils/TextureUtils";
 
 /**
@@ -79,7 +79,6 @@ export function load(assets, manager, anisotropy) {
 		});
 
 		TextureUtils.setAnisotropy(gltf.scene, anisotropy);
-		TextureUtils.setRGBFormat(gltf.scene);
 		assets.set(tag, gltf.scene);
 
 	});

@@ -1,5 +1,40 @@
-import { EventDispatcher, Scene } from "three";
+import { BasicDepthPacking, EventDispatcher, Scene } from "three";
 import { BlendFunction, BlendMode } from "./blending";
+
+/**
+ * An enumeration of effect attributes.
+ *
+ * Attributes can be concatenated using the bitwise OR operator.
+ *
+ * @type {Object}
+ * @property {Number} NONE - No attributes. Most effects don't need to specify any attributes.
+ * @property {Number} DEPTH - Describes effects that require a depth texture.
+ * @property {Number} CONVOLUTION - Describes effects that fetch additional samples from the input buffer. There cannot be more than one effect with this attribute per {@link EffectPass}.
+ * @example const attributes = EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH;
+ */
+
+export const EffectAttribute = {
+	NONE: 0,
+	DEPTH: 1,
+	CONVOLUTION: 2
+};
+
+/**
+ * An enumeration of WebGL extensions.
+ *
+ * @type {Object}
+ * @property {String} DERIVATIVES - Enables derivatives by adding the functions dFdx, dFdy and fwidth.
+ * @property {String} FRAG_DEPTH - Enables gl_FragDepthEXT to set a depth value of a fragment from within the fragment shader.
+ * @property {String} DRAW_BUFFERS - Enables multiple render targets (MRT) support.
+ * @property {String} SHADER_TEXTURE_LOD - Enables explicit control of texture LOD.
+ */
+
+export const WebGLExtension = {
+	DERIVATIVES: "derivatives",
+	FRAG_DEPTH: "fragDepth",
+	DRAW_BUFFERS: "drawBuffers",
+	SHADER_TEXTURE_LOD: "shaderTextureLOD"
+};
 
 /**
  * An abstract effect.
@@ -42,9 +77,19 @@ export class Effect extends EventDispatcher {
 		 * The name of this effect.
 		 *
 		 * @type {String}
+		 * @private
 		 */
 
 		this.name = name;
+
+		/**
+		 * The renderer.
+		 *
+		 * @type {WebGLRenderer}
+		 * @protected
+		 */
+
+		this.renderer = null;
 
 		/**
 		 * The effect attributes.
@@ -79,6 +124,7 @@ export class Effect extends EventDispatcher {
 		 * Call {@link Effect.setChanged} after changing macro definitions.
 		 *
 		 * @type {Map<String, String>}
+		 * @protected
 		 */
 
 		this.defines = defines;
@@ -86,12 +132,10 @@ export class Effect extends EventDispatcher {
 		/**
 		 * Shader uniforms.
 		 *
-		 * You may freely modify the values of these uniforms at runtime. However, uniforms should not
-		 * be removed or added after the effect was created.
-		 *
 		 * Call {@link Effect.setChanged} after adding or removing uniforms.
 		 *
 		 * @type {Map<String, Uniform>}
+		 * @protected
 		 */
 
 		this.uniforms = uniforms;
@@ -102,6 +146,7 @@ export class Effect extends EventDispatcher {
 		 * Call {@link Effect.setChanged} after adding or removing extensions.
 		 *
 		 * @type {Set<WebGLExtension>}
+		 * @protected
 		 */
 
 		this.extensions = extensions;
@@ -109,10 +154,8 @@ export class Effect extends EventDispatcher {
 		/**
 		 * The blend mode of this effect.
 		 *
-		 * The result of this effect will be blended with the result of the previous effect using this
-		 * blend mode.
-		 *
 		 * @type {BlendMode}
+		 * @protected
 		 */
 
 		this.blendMode = new BlendMode(blendFunction);
@@ -121,16 +164,76 @@ export class Effect extends EventDispatcher {
 	}
 
 	/**
-	 * Informs the associated {@link EffectPass} that this effect requires a shader recompilation.
+	 * Returns the name of this effect.
 	 *
-	 * Should be called after changing macros or extensions and after adding/removing uniforms.
-	 *
-	 * @protected
+	 * @return {String} The name.
 	 */
 
-	setChanged() {
+	getName() {
 
-		this.dispatchEvent({ type: "change" });
+		return this.name;
+
+	}
+
+	/**
+	 * Sets the renderer
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 */
+
+	setRenderer(renderer) {
+
+		this.renderer = renderer;
+
+	}
+
+	/**
+	 * Returns the preprocessor macro definitions.
+	 *
+	 * @return {Map<String, String>} The extensions.
+	 */
+
+	getDefines() {
+
+		return this.defines;
+
+	}
+
+	/**
+	 * Returns the uniforms of this effect.
+	 *
+	 * @return {Map<String, Uniform>} The extensions.
+	 */
+
+	getUniforms() {
+
+		return this.uniforms;
+
+	}
+
+	/**
+	 * Returns the WebGL extensions that are required by this effect.
+	 *
+	 * @return {Set<WebGLExtension>} The extensions.
+	 */
+
+	getExtensions() {
+
+		return this.extensions;
+
+	}
+
+	/**
+	 * Returns the blend mode.
+	 *
+	 * The result of this effect will be blended with the result of the previous effect using this blend mode.
+	 *
+	 * @return {BlendMode} The blend mode.
+	 */
+
+	getBlendMode() {
+
+		return this.blendMode;
 
 	}
 
@@ -149,8 +252,8 @@ export class Effect extends EventDispatcher {
 	/**
 	 * Sets the effect attributes.
 	 *
-	 * Effects that have the same attributes will be executed in the order in which they were
-	 * registered. Some attributes imply a higher priority.
+	 * Effects that have the same attributes will be executed in the order in which they were registered. Some attributes
+	 * imply a higher priority.
 	 *
 	 * @protected
 	 * @param {EffectAttribute} attributes - The attributes.
@@ -216,25 +319,38 @@ export class Effect extends EventDispatcher {
 	}
 
 	/**
-	 * Sets the depth texture.
+	 * Informs the associated {@link EffectPass} that this effect requires a shader recompilation.
 	 *
-	 * You may override this method if your effect requires direct access to the depth texture that is
-	 * bound to the associated {@link EffectPass}.
+	 * Should be called after changing macros or extensions and after adding/removing uniforms.
 	 *
-	 * @param {Texture} depthTexture - A depth texture.
-	 * @param {Number} [depthPacking=0] - The depth packing.
+	 * @protected
 	 */
 
-	setDepthTexture(depthTexture, depthPacking = 0) {}
+	setChanged() {
+
+		this.dispatchEvent({ type: "change" });
+
+	}
+
+	/**
+	 * Sets the depth texture.
+	 *
+	 * You may override this method if your effect requires direct access to the depth texture that is bound to the
+	 * associated {@link EffectPass}.
+	 *
+	 * @param {Texture} depthTexture - A depth texture.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing.
+	 */
+
+	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {}
 
 	/**
 	 * Updates this effect by performing supporting operations.
 	 *
-	 * This method is called by the {@link EffectPass} right before the main fullscreen render
-	 * operation, even if the blend function is set to `SKIP`.
+	 * This method is called by the {@link EffectPass} right before the main fullscreen render operation, even if the
+	 * blend function is set to `SKIP`.
 	 *
-	 * You may override this method if you need to update custom uniforms or render additional
-	 * off-screen textures.
+	 * You may override this method if you need to update custom uniforms or render additional off-screen textures.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
@@ -246,14 +362,11 @@ export class Effect extends EventDispatcher {
 	/**
 	 * Updates the size of this effect.
 	 *
-	 * You may override this method in case you want to be informed about the main render size.
-	 *
-	 * The {@link EffectPass} calls this method before this effect is initialized and every time its
-	 * own size is updated.
+	 * You may override this method if you want to be informed about the size of the backbuffer/canvas.
+	 * This method is called before {@link initialize} and every time the size of the {@link EffectComposer} changes.
 	 *
 	 * @param {Number} width - The width.
 	 * @param {Number} height - The height.
-	 * @example this.myRenderTarget.setSize(width, height);
 	 */
 
 	setSize(width, height) {}
@@ -261,14 +374,7 @@ export class Effect extends EventDispatcher {
 	/**
 	 * Performs initialization tasks.
 	 *
-	 * By overriding this method you gain access to the renderer. You'll also be able to configure
-	 * your custom render targets to use the appropriate format (RGB or RGBA).
-	 *
-	 * The provided renderer can be used to warm up special off-screen render targets by performing a
-	 * preliminary render operation.
-	 *
-	 * The {@link EffectPass} calls this method during its own initialization which happens after the
-	 * size has been set.
+	 * This method is called when the associated {@link EffectPass} is added to an {@link EffectComposer}.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
@@ -281,7 +387,7 @@ export class Effect extends EventDispatcher {
 	/**
 	 * Performs a shallow search for properties that define a dispose method and deletes them.
 	 *
-	 * This method is called by the {@link EffectPass} when it itself is being disposed.
+	 * The {@link EffectComposer} calls this method when it is being destroyed.
 	 */
 
 	dispose() {
@@ -308,42 +414,3 @@ export class Effect extends EventDispatcher {
 	}
 
 }
-
-/**
- * An enumeration of effect attributes.
- *
- * Attributes can be concatenated using the bitwise OR operator.
- *
- * @type {Object}
- * @property {Number} NONE - No attributes. Most effects don't need to specify any attributes.
- * @property {Number} DEPTH - Describes effects that require a depth texture.
- * @property {Number} CONVOLUTION - Describes effects that fetch additional samples from the input buffer. There cannot be more than one effect with this attribute per {@link EffectPass}.
- * @example const attributes = EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH;
- */
-
-export const EffectAttribute = {
-
-	NONE: 0,
-	DEPTH: 1,
-	CONVOLUTION: 2
-
-};
-
-/**
- * An enumeration of WebGL extensions.
- *
- * @type {Object}
- * @property {String} DERIVATIVES - Enables derivatives by adding the functions dFdx, dFdy and fwidth.
- * @property {String} FRAG_DEPTH - Enables gl_FragDepthEXT to set a depth value of a fragment from within the fragment shader.
- * @property {String} DRAW_BUFFERS - Enables multiple render targets (MRT) support.
- * @property {String} SHADER_TEXTURE_LOD - Enables explicit control of texture LOD.
- */
-
-export const WebGLExtension = {
-
-	DERIVATIVES: "derivatives",
-	FRAG_DEPTH: "fragDepth",
-	DRAW_BUFFERS: "drawBuffers",
-	SHADER_TEXTURE_LOD: "shaderTextureLOD"
-
-};

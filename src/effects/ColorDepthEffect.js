@@ -20,10 +20,7 @@ export class ColorDepthEffect extends Effect {
 	 * @param {Number} [options.bits=16] - The color bit depth.
 	 */
 
-	constructor({
-		blendFunction = BlendFunction.NORMAL,
-		bits = 16
-	} = {}) {
+	constructor({ blendFunction = BlendFunction.NORMAL, bits = 16 } = {}) {
 
 		super("ColorDepthEffect", fragmentShader, {
 			blendFunction,
@@ -40,7 +37,6 @@ export class ColorDepthEffect extends Effect {
 		 */
 
 		this.bits = 0;
-
 		this.setBitDepth(bits);
 
 	}
@@ -48,7 +44,7 @@ export class ColorDepthEffect extends Effect {
 	/**
 	 * Returns the current color bit depth.
 	 *
-	 * @return {Number} The color bit depth.
+	 * @return {Number} The bit depth.
 	 */
 
 	getBitDepth() {
@@ -60,18 +56,16 @@ export class ColorDepthEffect extends Effect {
 	/**
 	 * Sets the virtual amount of color bits.
 	 *
-	 * Each color channel will use a third of the available bits. The alpha
-	 * channel remains unaffected.
+	 * Each color channel will use a third of the available bits. The alpha channel remains unaffected. Note that the real
+	 * color depth will not be altered by this effect.
 	 *
-	 * Note that the real color depth will not be altered by this effect.
-	 *
-	 * @param {Number} bits - The new color bit depth.
+	 * @param {Number} value - The bit depth.
 	 */
 
-	setBitDepth(bits) {
+	setBitDepth(value) {
 
-		this.bits = bits;
-		this.uniforms.get("factor").value = Math.pow(2.0, bits / 3.0);
+		this.bits = value;
+		this.uniforms.get("factor").value = Math.pow(2.0, value / 3.0);
 
 	}
 

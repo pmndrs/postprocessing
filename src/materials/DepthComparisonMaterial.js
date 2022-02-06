@@ -1,4 +1,4 @@
-import { NoBlending, PerspectiveCamera, ShaderMaterial, Uniform } from "three";
+import { BasicDepthPacking, NoBlending, PerspectiveCamera, ShaderMaterial, Uniform } from "three";
 
 import fragmentShader from "./glsl/depth-comparison/shader.frag";
 import vertexShader from "./glsl/depth-comparison/shader.vert";
@@ -21,7 +21,7 @@ export class DepthComparisonMaterial extends ShaderMaterial {
 		super({
 			name: "DepthComparisonMaterial",
 			uniforms: {
-				depthBuffer: new Uniform(depthTexture),
+				depthBuffer: new Uniform(null),
 				cameraNear: new Uniform(0.3),
 				cameraFar: new Uniform(1000)
 			},
@@ -35,19 +35,35 @@ export class DepthComparisonMaterial extends ShaderMaterial {
 		/** @ignore */
 		this.toneMapped = false;
 
+		this.setDepthBuffer(depthTexture);
 		this.adoptCameraSettings(camera);
+
+	}
+
+	/**
+	 * Sets the depth buffer.
+	 *
+	 * @param {Texture} buffer - The depth texture.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 */
+
+	setDepthBuffer(buffer, depthPacking = BasicDepthPacking) {
+
+		this.uniforms.depthBuffer.value = buffer;
+		this.defines.DEPTH_PACKING = depthPacking.toFixed(0);
+		this.needsUpdate = true;
 
 	}
 
 	/**
 	 * Adopts the settings of the given camera.
 	 *
-	 * @param {Camera} [camera=null] - A camera.
+	 * @param {Camera} camera - A camera.
 	 */
 
-	adoptCameraSettings(camera = null) {
+	adoptCameraSettings(camera) {
 
-		if(camera !== null) {
+		if(camera) {
 
 			this.uniforms.cameraNear.value = camera.near;
 			this.uniforms.cameraFar.value = camera.far;
@@ -61,6 +77,8 @@ export class DepthComparisonMaterial extends ShaderMaterial {
 				delete this.defines.PERSPECTIVE_CAMERA;
 
 			}
+
+			this.needsUpdate = true;
 
 		}
 

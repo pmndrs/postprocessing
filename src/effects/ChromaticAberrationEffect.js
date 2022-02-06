@@ -19,10 +19,7 @@ export class ChromaticAberrationEffect extends Effect {
 	 * @param {Vector2} [options.offset] - The color offset.
 	 */
 
-	constructor({
-		blendFunction = BlendFunction.NORMAL,
-		offset = new Vector2(0.001, 0.0005)
-	} = {}) {
+	constructor({ blendFunction = BlendFunction.NORMAL, offset = new Vector2(0.001, 0.0005) } = {}) {
 
 		super("ChromaticAberrationEffect", fragmentShader, {
 			vertexShader,
@@ -39,43 +36,47 @@ export class ChromaticAberrationEffect extends Effect {
 	 * The color offset.
 	 *
 	 * @type {Vector2}
+	 * @deprecated Use getOffset() instead.
 	 */
 
 	get offset() {
+
+		return this.getOffset();
+
+	}
+
+	/**
+	 * @type {Vector2}
+	 * @deprecated Use setOffset() instead.
+	 */
+
+	set offset(value) {
+
+		this.setOffset(value);
+
+	}
+
+	/**
+	 * Returns the color offset vector.
+	 *
+	 * @return {Vector2} The offset.
+	 */
+
+	getOffset() {
 
 		return this.uniforms.get("offset").value;
 
 	}
 
 	/**
-	 * @type {Vector2}
+	 * Sets the color offset vector.
+	 *
+	 * @param {Vector2} value - The offset.
 	 */
 
-	set offset(value) {
+	setOffset(value) {
 
 		this.uniforms.get("offset").value = value;
-
-	}
-
-	/**
-	 * Performs initialization tasks.
-	 *
-	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
-	 * @param {Number} frameBufferType - The type of the main frame buffers.
-	 */
-
-	initialize(renderer, alpha, frameBufferType) {
-
-		if(alpha) {
-
-			this.defines.set("ALPHA", "1");
-
-		} else {
-
-			this.defines.delete("ALPHA");
-
-		}
 
 	}
 

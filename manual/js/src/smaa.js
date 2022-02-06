@@ -73,8 +73,7 @@ function initialize(assets) {
 		powerPreference: "high-performance",
 		antialias: false,
 		stencil: false,
-		depth: false,
-		alpha: false
+		depth: false
 	});
 
 	const container = document.querySelector(".viewport");
@@ -83,7 +82,7 @@ function initialize(assets) {
 	renderer.setSize(container.clientWidth, container.clientHeight);
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.outputEncoding = sRGBEncoding;
-	renderer.setClearColor(0x000000, 1);
+	renderer.setClearColor(0x000000, 0);
 	renderer.physicallyCorrectLights = true;
 	renderer.shadowMap.type = VSMShadowMap;
 	renderer.shadowMap.autoUpdate = false;
@@ -123,7 +122,7 @@ function initialize(assets) {
 		EdgeDetectionMode.COLOR
 	);
 
-	const edgeDetectionMaterial = smaaEffect.edgeDetectionMaterial;
+	const edgeDetectionMaterial = smaaEffect.getEdgeDetectionMaterial();
 	edgeDetectionMaterial.setEdgeDetectionThreshold(0.02);
 	edgeDetectionMaterial.setPredicationMode(PredicationMode.DEPTH);
 	edgeDetectionMaterial.setPredicationThreshold(0.002);
@@ -132,20 +131,20 @@ function initialize(assets) {
 	const smaaPass = new EffectPass(camera, smaaEffect);
 
 	const smaaEdgesDebugPass = new EffectPass(camera, smaaEffect, new TextureEffect({
-		texture: smaaEffect.renderTargetEdges.texture
+		texture: smaaEffect.getEdgesTexture()
 	}));
 
 	const smaaWeightsDebugPass = new EffectPass(camera, smaaEffect, new TextureEffect({
-		texture: smaaEffect.renderTargetWeights.texture
+		texture: smaaEffect.getWeightsTexture()
 	}));
 
 	smaaPass.renderToScreen = true;
 	smaaEdgesDebugPass.renderToScreen = true;
 	smaaWeightsDebugPass.renderToScreen = true;
-	smaaEdgesDebugPass.encodeOutput = false;
-	smaaWeightsDebugPass.encodeOutput = false;
 	smaaEdgesDebugPass.setEnabled(false);
 	smaaWeightsDebugPass.setEnabled(false);
+	smaaEdgesDebugPass.getFullscreenMaterial().setOutputEncodingEnabled(false);
+	smaaWeightsDebugPass.getFullscreenMaterial().setOutputEncodingEnabled(false);
 
 	composer.addPass(new RenderPass(scene, camera));
 	composer.addPass(smaaPass);
@@ -163,18 +162,19 @@ function initialize(assets) {
 	delete PredicationMode.CUSTOM; // disable for this demo
 
 	const params = {
-		preset: SMAAPreset.MEDIUM,
-		debug: SMAADebug.OFF,
-		blendMode: smaaEffect.blendMode.blendFunction,
+		"preset": SMAAPreset.MEDIUM,
+		"debug": SMAADebug.OFF,
+		"opacity": smaaEffect.getBlendMode().getOpacity(),
+		"blend mode": smaaEffect.getBlendMode().getBlendFunction(),
 		edgeDetection: {
-			mode: Number(edgeDetectionMaterial.defines.EDGE_DETECTION_MODE),
-			threshold: Number(edgeDetectionMaterial.defines.EDGE_THRESHOLD)
+			"mode": Number(edgeDetectionMaterial.defines.EDGE_DETECTION_MODE),
+			"threshold": Number(edgeDetectionMaterial.defines.EDGE_THRESHOLD)
 		},
 		predication: {
-			mode: Number(edgeDetectionMaterial.defines.PREDICATION_MODE),
-			threshold: Number(edgeDetectionMaterial.defines.PREDICATION_THRESHOLD),
-			strength: Number(edgeDetectionMaterial.defines.PREDICATION_STRENGTH),
-			scale: Number(edgeDetectionMaterial.defines.PREDICATION_SCALE)
+			"mode": Number(edgeDetectionMaterial.defines.PREDICATION_MODE),
+			"threshold": Number(edgeDetectionMaterial.defines.PREDICATION_THRESHOLD),
+			"strength": Number(edgeDetectionMaterial.defines.PREDICATION_STRENGTH),
+			"scale": Number(edgeDetectionMaterial.defines.PREDICATION_SCALE)
 		}
 	};
 
@@ -208,9 +208,10 @@ function initialize(assets) {
 
 	});
 
-	pane.addInput(smaaEffect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
-	pane.addInput(smaaEffect.blendMode, "blendFunction", { label: "blend mode", options: BlendFunction })
-		.on("change", (e) => smaaEffect.blendMode.setBlendFunction(e.value));
+	pane.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
+		.on("change", (e) => smaaEffect.getBlendMode().setOpacity(e.value));
+	pane.addInput(params, "blend mode", { options: BlendFunction })
+		.on("change", (e) => smaaEffect.getBlendMode().setBlendFunction(e.value));
 
 	// Resize Handler
 

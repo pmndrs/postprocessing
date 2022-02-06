@@ -1,4 +1,3 @@
-@use "colors";
 @use "durations";
 @use "layers";
 
@@ -21,7 +20,7 @@
 			display: inline-block;
 			height: 26px;
 			margin-right: 4px;
-			opacity: 0.6;
+			opacity: 0.8;
 			transition: opacity durations.$short;
 			width: 26px;
 			&:focus,
@@ -47,7 +46,8 @@
 				color: var(--info-anchor-color);
 			}
 			div {
-				border: 1px solid var(--info-border-color);
+				background-color: rgba(black, 0.8);
+				border: 1px solid rgba(white, 0.4);
 				border-radius: 3px;
 				bottom: 100%;
 				box-sizing: border-box;
@@ -76,11 +76,21 @@
 	}
 	.lut {
 		cursor: auto;
-		left: 1em;
+		left: 8px;
 		max-height: 60vh;
 		position: absolute;
-		top: 1em;
+		top: 8px;
 		&.hidden {
+			display: none;
+		}
+	}
+	&.loading {
+		.icons {
+			display: none;
+		}
+	}
+	&:not(.loading) {
+		.progress {
 			display: none;
 		}
 	}

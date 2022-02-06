@@ -9,7 +9,9 @@
   {{ $paginator := .Paginate .Pages $paginate }}
   {{ range $paginator.Pages }}
     {{ .Scratch.Set "section" $section }}
-    <li>{{ partial "summary.html" . }}</li>
+    <li>
+			<h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+		</li>
   {{ end }}
 
 </ul>

@@ -6,7 +6,5 @@
  */
 
 export const LUTOperation = {
-
 	SCALE_UP: "lut.scaleup"
-
 };

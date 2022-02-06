@@ -14,9 +14,9 @@ import { PostProcessingDemo } from "./PostProcessingDemo";
 import * as ObjectCloud from "./objects/ObjectCloud";
 
 import {
-	BlurPass,
 	EdgeDetectionMode,
 	EffectPass,
+	KawaseBlurPass,
 	KernelSize,
 	SavePass,
 	SMAAEffect,
@@ -175,7 +175,7 @@ export class BlurDemo extends PostProcessingDemo {
 		// Passes
 
 		const savePass = new SavePass();
-		const blurPass = new BlurPass({
+		const blurPass = new KawaseBlurPass({
 			height: 480
 		});
 
@@ -237,9 +237,9 @@ export class BlurDemo extends PostProcessingDemo {
 
 		const params = {
 			"enabled": blurPass.isEnabled(),
-			"resolution": blurPass.height,
-			"kernel size": blurPass.kernelSize,
-			"scale": blurPass.scale,
+			"resolution": blurPass.resolution.height,
+			"kernel size": blurPass.getKernelSize(),
+			"scale": blurPass.getScale(),
 			"opacity": 1.0 - blendMode.opacity.value,
 			"blend mode": blendMode.blendFunction
 		};
@@ -252,13 +252,13 @@ export class BlurDemo extends PostProcessingDemo {
 
 		menu.add(params, "kernel size", KernelSize).onChange((value) => {
 
-			blurPass.kernelSize = Number(value);
+			blurPass.setKernelSize(Number(value));
 
 		});
 
 		menu.add(params, "scale", 0.0, 1.0, 0.01).onChange((value) => {
 
-			blurPass.scale = Number(value);
+			blurPass.setScale(Number(value));
 
 		});
 

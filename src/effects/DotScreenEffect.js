@@ -19,11 +19,7 @@ export class DotScreenEffect extends Effect {
 	 * @param {Number} [options.scale=1.0] - The scale of the dot pattern.
 	 */
 
-	constructor({
-		blendFunction = BlendFunction.NORMAL,
-		angle = Math.PI * 0.5,
-		scale = 1.0
-	} = {}) {
+	constructor({ blendFunction = BlendFunction.NORMAL, angle = Math.PI * 0.5, scale = 1.0 } = {}) {
 
 		super("DotScreenEffect", fragmentShader, {
 			blendFunction,
@@ -38,9 +34,21 @@ export class DotScreenEffect extends Effect {
 	}
 
 	/**
+	 * Returns the pattern angle.
+	 *
+	 * @return {Number} The angle in radians.
+	 */
+
+	getAngle(angle) {
+
+		return Math.acos(this.uniforms.get("angle").value.y);
+
+	}
+
+	/**
 	 * Sets the pattern angle.
 	 *
-	 * @param {Number} [angle] - The angle of the dot pattern.
+	 * @param {Number} angle - The angle in radians.
 	 */
 
 	setAngle(angle) {

@@ -29,4 +29,28 @@ export class SepiaEffect extends Effect {
 
 	}
 
+	/**
+	 * Returns the current sepia intensity.
+	 *
+	 * @return {Number} The intensity.
+	 */
+
+	getIntensity() {
+
+		return this.uniforms.get("intensity").value;
+
+	}
+
+	/**
+	 * Sets the sepia intensity.
+	 *
+	 * @param {Number} value - The intensity.
+	 */
+
+	setIntensity(value) {
+
+		this.uniforms.get("intensity").value = value;
+
+	}
+
 }

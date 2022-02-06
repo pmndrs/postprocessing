@@ -27,10 +27,10 @@ export class Selection extends Set {
 		this.currentLayer = layer;
 
 		/**
-		 * Controls whether objects that are added to this selection should be removed from all other
-		 * layers.
+		 * Controls whether objects that are added to this selection should be removed from all other layers.
 		 *
 		 * @type {Boolean}
+		 * @deprecated Use isExclusive() and setExclusive() instead.
 		 */
 
 		this.exclusive = false;
@@ -70,10 +70,9 @@ export class Selection extends Set {
 	/**
 	 * Returns the current render layer for selected objects.
 	 *
-	 * This layer is set to 10 by default. If this collides with your own custom layers, please change
-	 * it to a free layer before rendering!
+	 * The default layer is 10. If this collides with your own custom layers, please change it before rendering!
 	 *
-	 * @return {Number} The layer
+	 * @return {Number} The layer.
 	 */
 
 	getLayer() {
@@ -106,6 +105,30 @@ export class Selection extends Set {
 	}
 
 	/**
+	 * Indicates whether objects that are added to this selection will be removed from all other layers.
+	 *
+	 * @return {Number} Whether this selection is exclusive. Default is false.
+	 */
+
+	isExclusive() {
+
+		return this.exclusive;
+
+	}
+
+	/**
+	 * Controls whether objects that are added to this selection should be removed from all other layers.
+	 *
+	 * @param {Number} value - Whether this selection should be exclusive.
+	 */
+
+	setExclusive(value) {
+
+		this.exclusive = value;
+
+	}
+
+	/**
 	 * Clears this selection.
 	 *
 	 * @return {Selection} This selection.
@@ -128,7 +151,7 @@ export class Selection extends Set {
 	/**
 	 * Clears this selection and adds the given objects.
 	 *
-	 * @param {Iterable<Object3D>} objects - The objects that should be selected. This array will be copied.
+	 * @param {Iterable<Object3D>} objects - The objects that should be selected.
 	 * @return {Selection} This selection.
 	 */
 

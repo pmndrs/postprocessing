@@ -112,7 +112,7 @@ function calculateTetrahedronVolume(a, b, c, d) {
  * Samples the given data.
  *
  * @private
- * @param {TypedArray} data - The source data.
+ * @param {TypedArray} data - The source data (RGBA).
  * @param {Number} size - The size of the source texture.
  * @param {Number} x - The X coordinate.
  * @param {Number} y - The Y coordinate.
@@ -122,10 +122,10 @@ function calculateTetrahedronVolume(a, b, c, d) {
 
 function sample(data, size, x, y, z, color) {
 
-	const i3 = (x + y * size + z * size * size) * 3;
-	color[0] = data[i3 + 0];
-	color[1] = data[i3 + 1];
-	color[2] = data[i3 + 2];
+	const i4 = (x + y * size + z * size * size) * 4;
+	color[0] = data[i4 + 0];
+	color[1] = data[i4 + 1];
+	color[2] = data[i4 + 2];
 
 }
 
@@ -254,17 +254,19 @@ export class TetrahedralUpscaler {
 	/**
 	 * Expands the given data to the target size.
 	 *
-	 * @param {TypedArray} data - The input RGB data. Assumed to be cubic.
+	 * @param {TypedArray} data - The input RGBA data. Assumed to be cubic.
 	 * @param {Number} size - The target size.
 	 * @return {TypedArray} The new data.
 	 */
 
 	static expand(data, size) {
 
-		const originalSize = Math.cbrt(data.length / 3);
+		const originalSize = Math.cbrt(data.length / 4);
 
 		const rgb = new Float32Array(3);
-		const array = new data.constructor(size ** 3 * 3);
+		const array = new data.constructor(size ** 3 * 4);
+		const maxValue = (data instanceof Uint8Array) ? 255 : 1.0;
+		const sizeSq = size ** 2;
 		const s = 1.0 / (size - 1.0);
 
 		for(let z = 0; z < size; ++z) {
@@ -276,13 +278,14 @@ export class TetrahedralUpscaler {
 					const u = x * s;
 					const v = y * s;
 					const w = z * s;
-					const i3 = Math.round(x + y * size + z * size * size) * 3;
+					const i4 = Math.round(x + y * size + z * sizeSq) * 4;
 
 					tetrahedralSample(data, originalSize, u, v, w, rgb);
 
-					array[i3 + 0] = rgb[0];
-					array[i3 + 1] = rgb[1];
-					array[i3 + 2] = rgb[2];
+					array[i4 + 0] = rgb[0];
+					array[i4 + 1] = rgb[1];
+					array[i4 + 2] = rgb[2];
+					array[i4 + 3] = maxValue;
 
 				}
 

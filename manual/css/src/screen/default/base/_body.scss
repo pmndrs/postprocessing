@@ -13,6 +13,9 @@ body {
 	font-size: 14px;
 	font-weight: 400;
 	margin: 0;
+	&.preload * {
+		transition: none !important;
+	}
 }
 
 .progress {

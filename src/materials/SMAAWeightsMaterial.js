@@ -7,6 +7,8 @@ import vertexShader from "./glsl/smaa-weights/shader.vert";
  * Subpixel Morphological Antialiasing.
  *
  * This material computes weights for detected edges.
+ *
+ * @implements {Resizable}
  */
 
 export class SMAAWeightsMaterial extends ShaderMaterial {
@@ -40,10 +42,10 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 			},
 			uniforms: {
 				inputBuffer: new Uniform(null),
-				areaTexture: new Uniform(null),
 				searchTexture: new Uniform(null),
-				texelSize: new Uniform(texelSize),
-				resolution: new Uniform(resolution)
+				areaTexture: new Uniform(null),
+				resolution: new Uniform(resolution),
+				texelSize: new Uniform(texelSize)
 			},
 			blending: NoBlending,
 			depthWrite: false,
@@ -58,19 +60,43 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the maximum amount of steps performed in the horizontal/vertical
-	 * pattern searches, at each side of the pixel.
+	 * Sets the input buffer.
 	 *
-	 * In number of pixels, it's actually the double. So the maximum line length
-	 * perfectly handled by, for example 16, is 64 (perfectly means that longer
-	 * lines won't look as good, but are still antialiased).
-	 *
-	 * @param {Number} steps - The search steps. Range: [0, 112].
+	 * @param {Texture} value - The input buffer.
 	 */
 
-	setOrthogonalSearchSteps(steps) {
+	setInputBuffer(value) {
 
-		const s = Math.min(Math.max(steps, 0), 112);
+		this.uniforms.inputBuffer.value = value;
+
+	}
+
+	/**
+	 * Sets the search and area lookup textures.
+	 *
+	 * @param {Texture} search - The search lookup texture.
+	 * @param {Texture} area - The area lookup texture.
+	 */
+
+	setLookupTextures(search, area) {
+
+		this.uniforms.searchTexture.value = search;
+		this.uniforms.areaTexture.value = area;
+
+	}
+
+	/**
+	 * Sets the maximum amount of steps performed in the horizontal/vertical pattern searches, at each side of the pixel.
+	 *
+	 * In number of pixels, it's actually the double. So the maximum line length perfectly handled by, for example 16, is
+	 * 64 (perfectly means that longer lines won't look as good, but are still antialiased).
+	 *
+	 * @param {Number} value - The search steps. Range: [0, 112].
+	 */
+
+	setOrthogonalSearchSteps(value) {
+
+		const s = Math.min(Math.max(value, 0), 112);
 
 		this.defines.MAX_SEARCH_STEPS_INT = s.toFixed("0");
 		this.defines.MAX_SEARCH_STEPS_FLOAT = s.toFixed("1");
@@ -79,18 +105,18 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Specifies the maximum steps performed in the diagonal pattern searches, at
-	 * each side of the pixel. This search jumps one pixel at time.
+	 * Specifies the maximum steps performed in the diagonal pattern searches, at each side of the pixel. This search
+	 * jumps one pixel at a time.
 	 *
-	 * On high-end machines this search is cheap (between 0.8x and 0.9x slower for
-	 * 16 steps), but it can have a significant impact on older machines.
+	 * On high-end machines this search is cheap (between 0.8x and 0.9x slower for 16 steps), but it can have a
+	 * significant impact on older machines.
 	 *
-	 * @param {Number} steps - The search steps. Range: [0, 20].
+	 * @param {Number} value - The search steps. Range: [0, 20].
 	 */
 
-	setDiagonalSearchSteps(steps) {
+	setDiagonalSearchSteps(value) {
 
-		const s = Math.min(Math.max(steps, 0), 20);
+		const s = Math.min(Math.max(value, 0), 20);
 
 		this.defines.MAX_SEARCH_STEPS_DIAG_INT = s.toFixed("0");
 		this.defines.MAX_SEARCH_STEPS_DIAG_FLOAT = s.toFixed("1");
@@ -101,12 +127,12 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	/**
 	 * Specifies how much sharp corners will be rounded.
 	 *
-	 * @param {Number} rounding - The corner rounding amount. Range: [0, 100].
+	 * @param {Number} value - The corner rounding amount. Range: [0, 100].
 	 */
 
-	setCornerRounding(rounding) {
+	setCornerRounding(value) {
 
-		const r = Math.min(Math.max(rounding, 0), 100);
+		const r = Math.min(Math.max(value, 0), 100);
 
 		this.defines.CORNER_ROUNDING = r.toFixed("4");
 		this.defines.CORNER_ROUNDING_NORM = (r / 100.0).toFixed("4");
@@ -118,9 +144,35 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	 * Indicates whether diagonal pattern detection is enabled.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use isDiagonalDetectionEnabled() instead.
 	 */
 
 	get diagonalDetection() {
+
+		return this.isDiagonalDetectionEnabled();
+
+	}
+
+	/**
+	 * Enables or disables diagonal pattern detection.
+	 *
+	 * @type {Boolean}
+	 * @deprecated Use setDiagonalDetectionEnabled() instead.
+	 */
+
+	set diagonalDetection(value) {
+
+		this.setDiagonalDetectionEnabled(value);
+
+	}
+
+	/**
+	 * Indicates whether diagonal pattern detection is enabled.
+	 *
+	 * @return {Boolean} Whether diagonal pattern detection is enabled.
+	 */
+
+	isDiagonalDetectionEnabled() {
 
 		return (this.defines.DISABLE_DIAG_DETECTION === undefined);
 
@@ -129,10 +181,10 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	/**
 	 * Enables or disables diagonal pattern detection.
 	 *
-	 * @type {Boolean}
+	 * @param {Boolean} value - Whether diagonal pattern detection should be enabled.
 	 */
 
-	set diagonalDetection(value) {
+	setDiagonalDetectionEnabled(value) {
 
 		if(value) {
 
@@ -152,9 +204,35 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	 * Indicates whether corner rounding is enabled.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use isCornerRoundingEnabled() instead.
 	 */
 
 	get cornerRounding() {
+
+		return this.isCornerRoundingEnabled();
+
+	}
+
+	/**
+	 * Enables or disables corner rounding.
+	 *
+	 * @type {Boolean}
+	 * @deprecated Use setCornerRoundingEnabled() instead.
+	 */
+
+	set cornerRounding(value) {
+
+		this.setCornerRoundingEnabled(value);
+
+	}
+
+	/**
+	 * Indicates whether corner rounding is enabled.
+	 *
+	 * @return {Boolean} Whether corner rounding is enabled.
+	 */
+
+	isCornerRoundingEnabled() {
 
 		return (this.defines.DISABLE_CORNER_DETECTION === undefined);
 
@@ -163,10 +241,10 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	/**
 	 * Enables or disables corner rounding.
 	 *
-	 * @type {Boolean}
+	 * @param {Boolean} value - Whether corner rounding should be enabled.
 	 */
 
-	set cornerRounding(value) {
+	setCornerRoundingEnabled(value) {
 
 		if(value) {
 
@@ -179,6 +257,21 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 		}
 
 		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Sets the size of this object.
+	 *
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		const uniforms = this.uniforms;
+		uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
+		uniforms.resolution.value.set(width, height);
 
 	}
 

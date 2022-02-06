@@ -19,11 +19,7 @@ export class GridEffect extends Effect {
 	 * @param {Number} [options.lineWidth=0.0] - The line width of the grid pattern.
 	 */
 
-	constructor({
-		blendFunction = BlendFunction.OVERLAY,
-		scale = 1.0,
-		lineWidth = 0.0
-	} = {}) {
+	constructor({ blendFunction = BlendFunction.OVERLAY, scale = 1.0, lineWidth = 0.0 } = {}) {
 
 		super("GridEffect", fragmentShader, {
 			blendFunction,
@@ -83,7 +79,7 @@ export class GridEffect extends Effect {
 	setScale(scale) {
 
 		this.scale = scale;
-		this.setSize(this.resolution.x, this.resolution.y);
+		this.setSize(this.resolution.width, this.resolution.height);
 
 	}
 
@@ -108,7 +104,7 @@ export class GridEffect extends Effect {
 	setLineWidth(lineWidth) {
 
 		this.lineWidth = lineWidth;
-		this.setSize(this.resolution.x, this.resolution.y);
+		this.setSize(this.resolution.width, this.resolution.height);
 
 	}
 

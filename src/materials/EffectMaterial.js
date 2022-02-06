@@ -1,12 +1,25 @@
-import { NoBlending, PerspectiveCamera, ShaderMaterial, Uniform, Vector2 } from "three";
+import { BasicDepthPacking, NoBlending, PerspectiveCamera, REVISION, ShaderMaterial, Uniform, Vector2 } from "three";
 
 import fragmentTemplate from "./glsl/effect/shader.frag";
 import vertexTemplate from "./glsl/effect/shader.vert";
 
 /**
- * An effect material for compound shaders.
+ * An enumeration of shader code placeholders used by the {@link EffectPass}.
  *
- * This material supports dithering.
+ * @type {Object}
+ * @deprecated Use EffectMaterial.Section instead.
+ */
+
+export const Section = {
+	FRAGMENT_HEAD: "FRAGMENT_HEAD",
+	FRAGMENT_MAIN_UV: "FRAGMENT_MAIN_UV",
+	FRAGMENT_MAIN_IMAGE: "FRAGMENT_MAIN_IMAGE",
+	VERTEX_HEAD: "VERTEX_HEAD",
+	VERTEX_MAIN_SUPPORT: "VERTEX_MAIN_SUPPORT"
+};
+
+/**
+ * An effect material for compound shaders. Supports dithering.
  *
  * @implements {Resizable}
  */
@@ -26,8 +39,9 @@ export class EffectMaterial extends ShaderMaterial {
 	constructor(shaderParts, defines, uniforms, camera, dithering = false) {
 
 		super({
-			type: "EffectMaterial",
+			name: "EffectMaterial",
 			defines: {
+				THREE_REVISION: REVISION,
 				DEPTH_PACKING: "0",
 				ENCODE_OUTPUT: "1"
 			},
@@ -73,9 +87,37 @@ export class EffectMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Sets the input buffer.
+	 *
+	 * @param {Texture} value - The input buffer.
+	 */
+
+	setInputBuffer(value) {
+
+		this.uniforms.inputBuffer.value = value;
+
+	}
+
+	/**
+	 * Sets the depth buffer.
+	 *
+	 * @param {Texture} buffer - The depth texture.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 */
+
+	setDepthBuffer(buffer, depthPacking = BasicDepthPacking) {
+
+		this.uniforms.depthBuffer.value = buffer;
+		this.defines.DEPTH_PACKING = depthPacking.toFixed(0);
+		this.needsUpdate = true;
+
+	}
+
+	/**
 	 * The current depth packing.
 	 *
-	 * @type {Number}
+	 * @type {DepthPackingStrategies}
+	 * @deprecated Removed without replacement.
 	 */
 
 	get depthPacking() {
@@ -87,9 +129,8 @@ export class EffectMaterial extends ShaderMaterial {
 	/**
 	 * Sets the depth packing.
 	 *
-	 * Use `BasicDepthPacking` or `RGBADepthPacking` if your depth texture contains packed depth.
-	 *
-	 * @type {Number}
+	 * @type {DepthPackingStrategies}
+	 * @deprecated Use setDepthBuffer() instead.
 	 */
 
 	set depthPacking(value) {
@@ -162,14 +203,85 @@ export class EffectMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Adopts the settings of the given camera.
+	 * Sets the required shader extensions.
 	 *
-	 * @param {Camera} [camera=null] - A camera.
+	 * @param {Set<WebGLExtension>} extensions - A collection of extensions.
+	 * @return {EffectMaterial} This material.
 	 */
 
-	adoptCameraSettings(camera = null) {
+	setExtensions(extensions) {
 
-		if(camera !== null) {
+		this.extensions = {};
+
+		for(const extension of extensions) {
+
+			this.extensions[extension] = true;
+
+		}
+
+		return this;
+
+	}
+
+	/**
+	 * Indicates whether output encoding is enabled.
+	 *
+	 * @return {Boolean} Whether output encoding is enabled.
+	 */
+
+	isOutputEncodingEnabled(value) {
+
+		return (this.defines.ENCODE_OUTPUT !== undefined);
+
+	}
+
+	/**
+	 * Enables or disables output encoding.
+	 *
+	 * @param {Boolean} value - Whether output encoding should be enabled.
+	 */
+
+	setOutputEncodingEnabled(value) {
+
+		if(this.isOutputEncodingEnabled() !== value) {
+
+			if(value) {
+
+				this.defines.ENCODE_OUTPUT = "1";
+
+			} else {
+
+				delete this.defines.ENCODE_OUTPUT;
+
+			}
+
+			this.needsUpdate = true;
+
+		}
+
+	}
+
+	/**
+	 * Sets the delta time.
+	 *
+	 * @param {Number} value - The delta time in seconds.
+	 */
+
+	setDeltaTime(value) {
+
+		this.uniforms.time.value += value;
+
+	}
+
+	/**
+	 * Adopts the settings of the given camera.
+	 *
+	 * @param {Camera} camera - A camera.
+	 */
+
+	adoptCameraSettings(camera) {
+
+		if(camera) {
 
 			this.uniforms.cameraNear.value = camera.near;
 			this.uniforms.cameraFar.value = camera.far;
@@ -199,34 +311,28 @@ export class EffectMaterial extends ShaderMaterial {
 
 	setSize(width, height) {
 
-		const w = Math.max(width, 1);
-		const h = Math.max(height, 1);
+		const uniforms = this.uniforms;
+		uniforms.resolution.value.set(width, height);
+		uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
+		uniforms.aspect.value = width / height;
 
-		this.uniforms.resolution.value.set(w, h);
-		this.uniforms.texelSize.value.set(1.0 / w, 1.0 / h);
-		this.uniforms.aspect.value = w / h;
+	}
+
+	/**
+	 * An enumeration of shader code section placeholders used by the {@link EffectPass}.
+	 *
+	 * @type {Object}
+	 * @property {String} FRAGMENT_HEAD - A placeholder for function and variable declarations inside the fragment shader.
+	 * @property {String} FRAGMENT_MAIN_UV - A placeholder for UV transformations inside the fragment shader.
+	 * @property {String} FRAGMENT_MAIN_IMAGE - A placeholder for color calculations inside the fragment shader.
+	 * @property {String} VERTEX_HEAD - A placeholder for function and variable declarations inside the vertex shader.
+	 * @property {String} VERTEX_MAIN_SUPPORT - A placeholder for supporting calculations inside the vertex shader.
+	 */
+
+	static get Section() {
+
+		return Section;
 
 	}
 
 }
-
-/**
- * An enumeration of shader code placeholders used by the {@link EffectPass}.
- *
- * @type {Object}
- * @property {String} FRAGMENT_HEAD - A placeholder for function and variable declarations inside the fragment shader.
- * @property {String} FRAGMENT_MAIN_UV - A placeholder for UV transformations inside the fragment shader.
- * @property {String} FRAGMENT_MAIN_IMAGE - A placeholder for color calculations inside the fragment shader.
- * @property {String} VERTEX_HEAD - A placeholder for function and variable declarations inside the vertex shader.
- * @property {String} VERTEX_MAIN_SUPPORT - A placeholder for supporting calculations inside the vertex shader.
- */
-
-export const Section = {
-
-	FRAGMENT_HEAD: "FRAGMENT_HEAD",
-	FRAGMENT_MAIN_UV: "FRAGMENT_MAIN_UV",
-	FRAGMENT_MAIN_IMAGE: "FRAGMENT_MAIN_IMAGE",
-	VERTEX_HEAD: "VERTEX_HEAD",
-	VERTEX_MAIN_SUPPORT: "VERTEX_MAIN_SUPPORT"
-
-};

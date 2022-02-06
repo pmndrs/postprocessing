@@ -1,19 +1,11 @@
-import { NearestFilter, RepeatWrapping, RGBFormat, Uniform, Vector2 } from "three";
-
+import { NearestFilter, RepeatWrapping, RGBAFormat, Uniform, Vector2 } from "three";
 import { NoiseTexture } from "../images/textures/NoiseTexture";
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/glitch/shader.frag";
 
-/**
- * A label for generated data textures.
- *
- * @type {String}
- * @private
- */
-
-const tag = "Glitch.Generated";
+const textureTag = "Glitch.Generated";
 
 /**
  * Returns a random float in the specified range.
@@ -31,13 +23,28 @@ function randomFloat(low, high) {
 }
 
 /**
+ * A glitch mode enumeration.
+ *
+ * @type {Object}
+ * @property {Number} DISABLED - No glitches.
+ * @property {Number} SPORADIC - Sporadic glitches.
+ * @property {Number} CONSTANT_MILD - Constant mild glitches.
+ * @property {Number} CONSTANT_WILD - Constant wild glitches.
+ */
+
+export const GlitchMode = {
+	DISABLED: 0,
+	SPORADIC: 1,
+	CONSTANT_MILD: 2,
+	CONSTANT_WILD: 3
+};
+
+/**
  * A glitch effect.
  *
- * This effect can influence the {@link ChromaticAberrationEffect}.
+ * This effect can be used in conjunction with the {@link ChromaticAberrationEffect}.
  *
  * Reference: https://github.com/staffantan/unityglitch
- *
- * Warning: This effect cannot be merged with convolution effects.
  */
 
 export class GlitchEffect extends Effect {
@@ -45,6 +52,7 @@ export class GlitchEffect extends Effect {
 	/**
 	 * Constructs a new glitch effect.
 	 *
+	 * TODO Change ratio to 0.15.
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
 	 * @param {Vector2} [options.chromaticAberrationOffset] - A chromatic aberration offset. If provided, the glitch effect will influence this offset.
@@ -76,18 +84,36 @@ export class GlitchEffect extends Effect {
 				["columns", new Uniform(columns)],
 				["active", new Uniform(false)],
 				["random", new Uniform(1.0)],
-				["seed", new Uniform(new Vector2())],
+				["seeds", new Uniform(new Vector2())],
 				["distortion", new Uniform(new Vector2())]
 			])
 		});
 
-		this.setPerturbationMap((perturbationMap === null) ?
-			this.generatePerturbationMap(dtSize) : perturbationMap);
+		this.setPerturbationMap((perturbationMap === null) ? this.generatePerturbationMap(dtSize) : perturbationMap);
+
+		/**
+		 * A time accumulator.
+		 *
+		 * @type {Number}
+		 * @private
+		 */
+
+		this.time = 0;
+
+		/**
+		 * A distortion vector.
+		 *
+		 * @type {Vector2}
+		 * @private
+		 */
+
+		this.distortion = this.uniforms.get("distortion").value;
 
 		/**
 		 * The minimum and maximum delay between glitch activations in seconds.
 		 *
 		 * @type {Vector2}
+		 * @deprecated Use getMinDelay(), setMinDelay(), getMaxDelay() and setMaxDelay() instead.
 		 */
 
 		this.delay = delay;
@@ -96,6 +122,7 @@ export class GlitchEffect extends Effect {
 		 * The minimum and maximum duration of a glitch in seconds.
 		 *
 		 * @type {Vector2}
+		 * @deprecated Use getMinDuration(), setMinDuration(), getMaxDuration() and setMaxDuration() instead.
 		 */
 
 		this.duration = duration;
@@ -113,53 +140,28 @@ export class GlitchEffect extends Effect {
 		);
 
 		/**
-		 * A time accumulator.
-		 *
-		 * @type {Number}
-		 * @private
-		 */
-
-		this.time = 0;
-
-		/**
-		 * Random seeds.
-		 *
-		 * @type {Vector2}
-		 * @private
-		 */
-
-		this.seed = this.uniforms.get("seed").value;
-
-		/**
-		 * A distortion vector.
-		 *
-		 * @type {Vector2}
-		 * @private
-		 */
-
-		this.distortion = this.uniforms.get("distortion").value;
-
-		/**
-		 * The effect mode.
-		 *
-		 * @type {GlitchMode}
-		 */
-
-		this.mode = GlitchMode.SPORADIC;
-
-		/**
 		 * The strength of weak and strong glitches.
 		 *
 		 * @type {Vector2}
+		 * @deprecated Use getMinStrength(), setMinStrength(), getMaxStrength() and setMaxStrength() instead.
 		 */
 
 		this.strength = strength;
 
 		/**
-		 * The threshold for strong glitches, ranging from 0 to 1 where 0 means no weak glitches and 1
-		 * means no strong ones. The default ratio of 0.85 offers a decent balance.
+		 * The effect mode.
+		 *
+		 * @type {GlitchMode}
+		 * @deprecated Use getMode() and setMode() instead.
+		 */
+
+		this.mode = GlitchMode.SPORADIC;
+
+		/**
+		 * The glitch ratio (currently inverted / treated as a threshold for strong glitches).
 		 *
 		 * @type {Number}
+		 * @deprecated Use getGlitchRatio() and setGlitchRatio() instead.
 		 */
 
 		this.ratio = ratio;
@@ -168,6 +170,7 @@ export class GlitchEffect extends Effect {
 		 * The chromatic aberration offset.
 		 *
 		 * @type {Vector2}
+		 * @deprecated Use getChromaticAberrationOffset() and setChromaticAberrationOffset() instead.
 		 */
 
 		this.chromaticAberrationOffset = chromaticAberrationOffset;
@@ -175,14 +178,258 @@ export class GlitchEffect extends Effect {
 	}
 
 	/**
+	 * Random number seeds.
+	 *
+	 * @type {Vector2}
+	 * @private
+	 */
+
+	get seeds() {
+
+		return this.uniforms.get("seeds").value;
+
+	}
+
+	/**
 	 * Indicates whether the glitch effect is currently active.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use isActive() instead.
 	 */
 
 	get active() {
 
+		return this.isActive();
+
+	}
+
+	/**
+	 * Indicates whether the glitch effect is currently active.
+	 *
+	 * @return {Boolean} Whether the glitch effect is active.
+	 */
+
+	isActive() {
+
 		return this.uniforms.get("active").value;
+
+	}
+
+	/**
+	 * Returns the minimum delay between glitch activations.
+	 *
+	 * @return {Number} The minimum delay in seconds.
+	 */
+
+	getMinDelay() {
+
+		return this.delay.x;
+
+	}
+
+	/**
+	 * Sets the minimum delay between glitch activations.
+	 *
+	 * @param {Number} value - The minimum delay in seconds.
+	 */
+
+	setMinDelay(value) {
+
+		this.delay.x = value;
+
+	}
+
+	/**
+	 * Returns the maximum delay between glitch activations.
+	 *
+	 * @return {Number} The maximum delay in seconds.
+	 */
+
+	getMaxDelay() {
+
+		return this.delay.y;
+
+	}
+
+	/**
+	 * Sets the maximum delay between glitch activations.
+	 *
+	 * @param {Number} value - The maximum delay in seconds.
+	 */
+
+	setMaxDelay(value) {
+
+		this.delay.y = value;
+
+	}
+
+	/**
+	 * Returns the minimum duration of sporadic glitches.
+	 *
+	 * @return {Number} The minimum duration in seconds.
+	 */
+
+	getMinDuration() {
+
+		return this.duration.x;
+
+	}
+
+	/**
+	 * Sets the minimum duration of sporadic glitches.
+	 *
+	 * @param {Number} value - The minimum duration in seconds.
+	 */
+
+	setMinDuration(value) {
+
+		this.duration.x = value;
+
+	}
+
+	/**
+	 * Returns the maximum duration of sporadic glitches.
+	 *
+	 * @return {Number} The maximum duration in seconds.
+	 */
+
+	getMaxDuration() {
+
+		return this.duration.y;
+
+	}
+
+	/**
+	 * Sets the maximum duration of sporadic glitches.
+	 *
+	 * @param {Number} value - The maximum duration in seconds.
+	 */
+
+	setMaxDuration(value) {
+
+		this.duration.y = value;
+
+	}
+
+	/**
+	 * Returns the strength of weak glitches.
+	 *
+	 * @return {Number} The strength.
+	 */
+
+	getMinStrength() {
+
+		return this.strength.x;
+
+	}
+
+	/**
+	 * Sets the strength of weak glitches.
+	 *
+	 * @param {Number} value - The strength.
+	 */
+
+	setMinStrength(value) {
+
+		this.strength.x = value;
+
+	}
+
+	/**
+	 * Returns the strength of strrong glitches.
+	 *
+	 * @return {Number} The strength.
+	 */
+
+	getMaxStrength() {
+
+		return this.strength.y;
+
+	}
+
+	/**
+	 * Sets the strength of strong glitches.
+	 *
+	 * @param {Number} value - The strength.
+	 */
+
+	setMaxStrength(value) {
+
+		this.strength.y = value;
+
+	}
+
+	/**
+	 * Returns the current glitch mode.
+	 *
+	 * @return {GlitchMode} The mode.
+	 */
+
+	getMode() {
+
+		return this.mode;
+
+	}
+
+	/**
+	 * Sets the current glitch mode.
+	 *
+	 * @param {GlitchMode} value - The mode.
+	 */
+
+	setMode(value) {
+
+		this.mode = value;
+
+	}
+
+	/**
+	 * Returns the glitch ratio.
+	 *
+	 * TODO Remove inversion.
+	 * @return {Number} The ratio.
+	 */
+
+	getGlitchRatio() {
+
+		return (1.0 - this.ratio);
+
+	}
+
+	/**
+	 * Sets the ratio of weak (0.0) and strong (1.0) glitches.
+	 *
+	 * TODO Remove inversion.
+	 * @param {Number} value - The ratio. Range is [0.0, 1.0].
+	 */
+
+	setGlitchRatio(value) {
+
+		this.ratio = Math.min(Math.max(1.0 - value, 0.0), 1.0);
+
+	}
+
+	/**
+	 * Returns the chromatic aberration offset.
+	 *
+	 * @return {Vector2} The offset.
+	 */
+
+	getChromaticAberrationOffset() {
+
+		return this.chromaticAberrationOffset;
+
+	}
+
+	/**
+	 * Sets the chromatic aberration offset.
+	 *
+	 * @param {Vector2} value - The offset.
+	 */
+
+	setChromaticAberrationOffset(value) {
+
+		this.chromaticAberrationOffset = value;
 
 	}
 
@@ -203,38 +450,38 @@ export class GlitchEffect extends Effect {
 	 *
 	 * The current map will be disposed if it was generated by this effect.
 	 *
-	 * @param {Texture} map - The new perturbation map.
+	 * @param {Texture} value - The new perturbation map.
 	 */
 
-	setPerturbationMap(map) {
+	setPerturbationMap(value) {
 
 		const currentMap = this.getPerturbationMap();
 
-		if(currentMap !== null && currentMap.name === tag) {
+		if(currentMap !== null && currentMap.name === textureTag) {
 
 			currentMap.dispose();
 
 		}
 
-		map.minFilter = map.magFilter = NearestFilter;
-		map.wrapS = map.wrapT = RepeatWrapping;
-		map.generateMipmaps = false;
+		value.minFilter = value.magFilter = NearestFilter;
+		value.wrapS = value.wrapT = RepeatWrapping;
+		value.generateMipmaps = false;
 
-		this.uniforms.get("perturbationMap").value = map;
+		this.uniforms.get("perturbationMap").value = value;
 
 	}
 
 	/**
 	 * Generates a perturbation map.
 	 *
-	 * @param {Number} [size=64] - The texture size.
+	 * @param {Number} [value=64] - The texture size.
 	 * @return {DataTexture} The perturbation map.
 	 */
 
-	generatePerturbationMap(size = 64) {
+	generatePerturbationMap(value = 64) {
 
-		const map = new NoiseTexture(size, size, RGBFormat);
-		map.name = tag;
+		const map = new NoiseTexture(value, value, RGBAFormat);
+		map.name = textureTag;
 		return map;
 
 	}
@@ -282,6 +529,7 @@ export class GlitchEffect extends Effect {
 			r = Math.random();
 			this.uniforms.get("random").value = r;
 
+			// TODO change > to <.
 			if((trigger && r > this.ratio) || mode === GlitchMode.CONSTANT_WILD) {
 
 				active = true;
@@ -289,7 +537,7 @@ export class GlitchEffect extends Effect {
 				r *= s.y * 0.03;
 				a = randomFloat(-Math.PI, Math.PI);
 
-				this.seed.set(randomFloat(-s.y, s.y), randomFloat(-s.y, s.y));
+				this.seeds.set(randomFloat(-s.y, s.y), randomFloat(-s.y, s.y));
 				this.distortion.set(randomFloat(0.0, 1.0), randomFloat(0.0, 1.0));
 
 			} else if(trigger || mode === GlitchMode.CONSTANT_MILD) {
@@ -299,7 +547,7 @@ export class GlitchEffect extends Effect {
 				r *= s.x * 0.03;
 				a = randomFloat(-Math.PI, Math.PI);
 
-				this.seed.set(randomFloat(-s.x, s.x), randomFloat(-s.x, s.x));
+				this.seeds.set(randomFloat(-s.x, s.x), randomFloat(-s.x, s.x));
 				this.distortion.set(randomFloat(0.0, 1.0), randomFloat(0.0, 1.0));
 
 			}
@@ -326,23 +574,20 @@ export class GlitchEffect extends Effect {
 
 	}
 
+	/**
+	 * Deletes generated resources.
+	 */
+
+	dispose() {
+
+		const map = this.getPerturbationMap();
+
+		if(map !== null && map.name === textureTag) {
+
+			map.dispose();
+
+		}
+
+	}
+
 }
-
-/**
- * A glitch mode enumeration.
- *
- * @type {Object}
- * @property {Number} DISABLED - No glitches.
- * @property {Number} SPORADIC - Sporadic glitches.
- * @property {Number} CONSTANT_MILD - Constant mild glitches.
- * @property {Number} CONSTANT_WILD - Constant wild glitches.
- */
-
-export const GlitchMode = {
-
-	DISABLED: 0,
-	SPORADIC: 1,
-	CONSTANT_MILD: 2,
-	CONSTANT_WILD: 3
-
-};

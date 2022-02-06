@@ -4,8 +4,8 @@ import { Pass } from "./Pass";
 /**
  * A stencil mask pass.
  *
- * This pass requires that the input and output buffers have a stencil buffer.
- * You can enable the stencil buffer via the {@link EffectComposer} constructor.
+ * This pass requires that the input and output buffers have a stencil buffer. You can enable the stencil buffer via the
+ * {@link EffectComposer} constructor.
  */
 
 export class MaskPass extends Pass {
@@ -36,6 +36,7 @@ export class MaskPass extends Pass {
 		 * Inverse flag.
 		 *
 		 * @type {Boolean}
+		 * @deprecated Use setInverted() instead.
 		 */
 
 		this.inverse = false;
@@ -46,11 +47,12 @@ export class MaskPass extends Pass {
 	 * Indicates whether this pass should clear the stencil buffer.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use getClearPass().isEnabled() instead.
 	 */
 
 	get clear() {
 
-		return this.clearPass.enabled;
+		return this.clearPass.isEnabled();
 
 	}
 
@@ -58,11 +60,48 @@ export class MaskPass extends Pass {
 	 * Enables or disables auto clear.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use getClearPass().setEnabled() instead.
 	 */
 
 	set clear(value) {
 
 		this.clearPass.enabled = value;
+
+	}
+
+	/**
+	 * Returns the internal clear pass.
+	 *
+	 * @return {ClearPass} The clear pass.
+	 */
+
+	getClearPass() {
+
+		return this.clearPass;
+
+	}
+
+	/**
+	 * Indicates whether the mask is inverted.
+	 *
+	 * @return {Boolean} Whether the mask is inverted.
+	 */
+
+	isInverted() {
+
+		return this.inverse;
+
+	}
+
+	/**
+	 * Enables or disable mask inversion.
+	 *
+	 * @param {Boolean} value - Whether the mask should be inverted.
+	 */
+
+	setInverted(value) {
+
+		this.inverse = value;
 
 	}
 

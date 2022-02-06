@@ -1,7 +1,7 @@
 import { BasicDepthPacking, UnsignedByteType } from "three";
 import { BlendFunction } from "../effects/blending";
 import { EffectAttribute } from "../effects/Effect";
-import { EffectMaterial, Section } from "../materials";
+import { EffectMaterial } from "../materials";
 import { Pass } from "./Pass";
 
 /**
@@ -79,6 +79,7 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 	} else {
 
 		const functionRegExp = /(?:\w+\s+(\w+)\([\w\s,]*\)\s*{[^}]+})/g;
+		const Section = EffectMaterial.Section;
 
 		if(mainUvExists) {
 
@@ -103,19 +104,19 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 		// Assemble all names while ignoring parameters of function-like macros.
 		names = names.concat([...shaders.get("fragment").matchAll(functionRegExp)].map(m => m[1]));
-		names = names.concat([...effect.defines.keys()].map((s) => s.replace(/\([\w\s,]*\)/g, "")));
-		names = names.concat([...effect.uniforms.keys()]);
+		names = names.concat([...effect.getDefines().keys()].map((s) => s.replace(/\([\w\s,]*\)/g, "")));
+		names = names.concat([...effect.getUniforms().keys()]);
 
 		// Store prefixed uniforms and macros.
-		effect.uniforms.forEach((value, key) => uniforms.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), value));
-		effect.defines.forEach((value, key) => defines.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), value));
+		effect.getUniforms().forEach((val, key) => uniforms.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), val));
+		effect.getDefines().forEach((val, key) => defines.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), val));
 
 		// Prefix varyings, functions, uniforms and macro values.
 		prefixSubstrings(prefix, names, defines);
 		prefixSubstrings(prefix, names, shaders);
 
 		// Collect unique blend modes.
-		const blendMode = effect.blendMode;
+		const blendMode = effect.getBlendMode();
 		blendModes.set(blendMode.blendFunction, blendMode);
 
 		if(mainImageExists) {
@@ -173,9 +174,7 @@ export class EffectPass extends Pass {
 	/**
 	 * Constructs a new effect pass.
 	 *
-	 * The provided effects will be organized and merged for optimal performance.
-	 *
-	 * @param {Camera} camera - The main camera. The camera's type and settings will be available to all effects.
+	 * @param {Camera} camera - The main camera.
 	 * @param {...Effect} effects - The effects that will be rendered by this pass.
 	 */
 
@@ -229,6 +228,7 @@ export class EffectPass extends Pass {
 		 * Elapsed time will start at this value.
 		 *
 		 * @type {Number}
+		 * @deprecated
 		 */
 
 		this.minTime = 1.0;
@@ -239,6 +239,7 @@ export class EffectPass extends Pass {
 		 * If the elapsed time exceeds this value, it will be reset.
 		 *
 		 * @type {Number}
+		 * @deprecated
 		 */
 
 		this.maxTime = Number.POSITIVE_INFINITY;
@@ -249,11 +250,12 @@ export class EffectPass extends Pass {
 	 * Indicates whether this pass encodes its output when rendering to screen.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use getFullscreenMaterial().isOutputEncodingEnabled() instead.
 	 */
 
 	get encodeOutput() {
 
-		return (this.getFullscreenMaterial().defines.ENCODE_OUTPUT !== undefined);
+		return this.getFullscreenMaterial().isOutputEncodingEnabled();
 
 	}
 
@@ -261,26 +263,12 @@ export class EffectPass extends Pass {
 	 * Enables or disables output encoding.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use getFullscreenMaterial().setOutputEncodingEnabled() instead.
 	 */
 
 	set encodeOutput(value) {
 
-		if(this.encodeOutput !== value) {
-
-			const material = this.getFullscreenMaterial();
-			material.needsUpdate = true;
-
-			if(value) {
-
-				material.defines.ENCODE_OUTPUT = "1";
-
-			} else {
-
-				delete material.defines.ENCODE_OUTPUT;
-
-			}
-
-		}
+		this.getFullscreenMaterial().setOutputEncodingEnabled(value);
 
 	}
 
@@ -290,6 +278,7 @@ export class EffectPass extends Pass {
 	 * Color quantization reduces banding artifacts but degrades performance.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use getFullscreenMaterial().dithering instead.
 	 */
 
 	get dithering() {
@@ -302,18 +291,14 @@ export class EffectPass extends Pass {
 	 * Enables or disables dithering.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use getFullscreenMaterial().dithering instead.
 	 */
 
 	set dithering(value) {
 
 		const material = this.getFullscreenMaterial();
-
-		if(material.dithering !== value) {
-
-			material.dithering = value;
-			material.needsUpdate = true;
-
-		}
+		material.dithering = value;
+		material.needsUpdate = true;
 
 	}
 
@@ -321,12 +306,11 @@ export class EffectPass extends Pass {
 	 * Compares required resources with device capabilities.
 	 *
 	 * @private
-	 * @param {WebGLRenderer} renderer - The renderer.
 	 */
 
-	verifyResources(renderer) {
+	verifyResources() {
 
-		const capabilities = renderer.capabilities;
+		const capabilities = this.renderer.capabilities;
 		let max = Math.min(capabilities.maxFragmentUniforms, capabilities.maxVertexUniforms);
 
 		if(this.uniformCount > max) {
@@ -355,6 +339,7 @@ export class EffectPass extends Pass {
 
 	updateMaterial() {
 
+		const Section = EffectMaterial.Section;
 		const shaderParts = new Map([
 			[Section.FRAGMENT_HEAD, ""],
 			[Section.FRAGMENT_MAIN_UV, ""],
@@ -373,7 +358,7 @@ export class EffectPass extends Pass {
 
 		for(const effect of this.effects) {
 
-			if(effect.blendMode.getBlendFunction() === BlendFunction.SKIP) {
+			if(effect.getBlendMode().getBlendFunction() === BlendFunction.SKIP) {
 
 				// Check if this effect relies on depth and continue.
 				attributes |= (effect.getAttributes() & EffectAttribute.DEPTH);
@@ -391,10 +376,10 @@ export class EffectPass extends Pass {
 				transformedUv = transformedUv || result.transformedUv;
 				readDepth = readDepth || result.readDepth;
 
-				if(effect.extensions !== null) {
+				if(effect.getExtensions() !== null) {
 
 					// Collect the WebGL extensions that are required by this effect.
-					for(const extension of effect.extensions) {
+					for(const extension of effect.getExtensions()) {
 
 						extensions.add(extension);
 
@@ -458,24 +443,11 @@ export class EffectPass extends Pass {
 		this.skipRendering = (id === 0);
 		this.needsSwap = !this.skipRendering;
 
-		const material = this.getFullscreenMaterial();
-		material.setShaderParts(shaderParts);
-		material.setDefines(defines);
-		material.setUniforms(uniforms);
-		material.extensions = {};
-
-		if(extensions.size > 0) {
-
-			// Enable required WebGL extensions.
-			for(const extension of extensions) {
-
-				material.extensions[extension] = true;
-
-			}
-
-		}
-
-		this.needsUpdate = false;
+		this.getFullscreenMaterial()
+			.setShaderParts(shaderParts)
+			.setExtensions(extensions)
+			.setUniforms(uniforms)
+			.setDefines(defines);
 
 	}
 
@@ -484,16 +456,30 @@ export class EffectPass extends Pass {
 	 *
 	 * Warning: This method triggers a relatively expensive shader recompilation.
 	 *
+	 * TODO Remove renderer param.
 	 * @param {WebGLRenderer} [renderer] - The renderer.
 	 */
 
 	recompile(renderer) {
 
 		this.updateMaterial();
+		this.verifyResources();
 
-		if(renderer !== undefined) {
+	}
 
-			this.verifyResources(renderer);
+	/**
+	 * Sets the renderer
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 */
+
+	setRenderer(renderer) {
+
+		super.setRenderer(renderer);
+
+		for(const effect of this.effects) {
+
+			effect.setRenderer(renderer);
 
 		}
 
@@ -515,15 +501,12 @@ export class EffectPass extends Pass {
 	 * Sets the depth texture.
 	 *
 	 * @param {Texture} depthTexture - A depth texture.
-	 * @param {Number} [depthPacking=BasicDepthPacking] - The depth packing.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing.
 	 */
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
-		const material = this.getFullscreenMaterial();
-		material.uniforms.depthBuffer.value = depthTexture;
-		material.depthPacking = depthPacking;
-		material.needsUpdate = true;
+		this.getFullscreenMaterial().setDepthBuffer(depthTexture, depthPacking);
 
 		for(const effect of this.effects) {
 
@@ -545,15 +528,6 @@ export class EffectPass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
-		const material = this.getFullscreenMaterial();
-		const time = material.uniforms.time.value + deltaTime;
-
-		if(this.needsUpdate) {
-
-			this.recompile(renderer);
-
-		}
-
 		for(const effect of this.effects) {
 
 			effect.update(renderer, inputBuffer, deltaTime);
@@ -562,8 +536,10 @@ export class EffectPass extends Pass {
 
 		if(!this.skipRendering || this.renderToScreen) {
 
-			material.uniforms.inputBuffer.value = inputBuffer.texture;
-			material.uniforms.time.value = (time <= this.maxTime) ? time : this.minTime;
+			const material = this.getFullscreenMaterial();
+			material.setInputBuffer(inputBuffer.texture);
+			material.setDeltaTime(deltaTime);
+
 			renderer.setRenderTarget(this.renderToScreen ? null : outputBuffer);
 			renderer.render(this.scene, this.camera);
 
@@ -614,8 +590,7 @@ export class EffectPass extends Pass {
 
 		if(frameBufferType !== undefined && frameBufferType !== UnsignedByteType) {
 
-			const material = this.getFullscreenMaterial();
-			material.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+			this.getFullscreenMaterial().defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
 		}
 
@@ -648,7 +623,7 @@ export class EffectPass extends Pass {
 		switch(event.type) {
 
 			case "change":
-				this.needsUpdate = true;
+				this.recompile();
 				break;
 
 		}

@@ -1,8 +1,8 @@
 import { RawImageData } from "../RawImageData";
 
 /**
- * This dictionary returns which edges are active for a certain bilinear fetch:
- * it's the reverse lookup of the bilinear function.
+ * This dictionary returns which edges are active for a certain bilinear fetch: it's the reverse lookup of the bilinear
+ * function.
  *
  * @type {Map<Number, Float32Array>}
  * @private
@@ -93,8 +93,7 @@ function deltaLeft(left, top) {
 
 	}
 
-	/* If an edge was previously found, there is another edge and there are no
-	crossing edges, continue. */
+	// If an edge was previously found, there's another edge and no crossing edges, continue.
 	if(d === 1 && top[2] === 1 && left[1] !== 1 && left[3] !== 1) {
 
 		d += 1;
@@ -139,8 +138,7 @@ function deltaRight(left, top) {
 /**
  * SMAA search image data.
  *
- * This image stores information about how many pixels the line search algorithm must advance in the
- * last step.
+ * This image stores information about how many pixels the line search algorithm must advance in the last step.
  *
  * Based on the official python scripts:
  *  https://github.com/iryoku/smaa/tree/master/Scripts

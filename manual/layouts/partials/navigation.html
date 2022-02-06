@@ -1,9 +1,12 @@
 <nav class="navigation">
 
-	<h2>{{ i18n "start" . }}</h2>
-	{{ partial "menu.html" (dict "currentPage" . "menu" .Site.Menus.main "menuName" "main") }}
+	{{ $currentPage := . }}
+	{{ range $menuName := .Site.Params.sidebarMenus }}
 
-	<h2>{{ i18n "demos" . }}</h2>
-	{{ partial "menu.html" (dict "currentPage" . "menu" .Site.Menus.demos "menuName" "demos") }}
+		<h2 class="{{ $menuName }}">{{ i18n $menuName . }}</h2>
+		{{ $menu := index $.Site.Menus $menuName }}
+		{{ partial "menu.html" (dict "currentPage" $currentPage "menu" $menu "menuName" $menuName) }}
+
+	{{ end }}
 
 </nav>

@@ -2,7 +2,7 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
 
 	vec3 noise = vec3(rand(uv * time));
 
-	#ifdef PREMULTIPLY
+	#ifdef PREMULTIPLIED
 
 		outputColor = vec4(min(inputColor.rgb * noise, vec3(1.0)), inputColor.a);
 

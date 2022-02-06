@@ -53,8 +53,7 @@ function initialize(assets) {
 		powerPreference: "high-performance",
 		antialias: false,
 		stencil: false,
-		depth: false,
-		alpha: false
+		depth: false
 	});
 
 	const container = document.querySelector(".viewport");
@@ -63,7 +62,7 @@ function initialize(assets) {
 	renderer.setSize(container.clientWidth, container.clientHeight);
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.outputEncoding = sRGBEncoding;
-	renderer.setClearColor(0x000000, 1);
+	renderer.setClearColor(0x000000, 0);
 	renderer.physicallyCorrectLights = true;
 	renderer.shadowMap.type = VSMShadowMap;
 	renderer.shadowMap.autoUpdate = false;

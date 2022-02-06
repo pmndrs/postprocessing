@@ -24,7 +24,6 @@ function createCanvas(width, height, data) {
 
 		const imageData = context.createImageData(width, height);
 		imageData.data.set(data);
-
 		context.putImageData(imageData, 0, 0);
 
 	}
@@ -85,8 +84,7 @@ export class RawImageData {
 
 	toCanvas() {
 
-		return (typeof document === "undefined") ?
-			null : createCanvas(this.width, this.height, this.data);
+		return (typeof document === "undefined") ? null : createCanvas(this.width, this.height, this.data);
 
 	}
 

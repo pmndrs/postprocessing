@@ -20,6 +20,9 @@ footer {
 			display: flex;
 			a {
 				color: var(--footer-anchor-color);
+				&:active, &:focus, &:hover {
+					color: var(--anchor-color-focus);
+				}
 			}
 			&::marker {
 				content: none;

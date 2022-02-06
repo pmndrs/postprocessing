@@ -92,15 +92,6 @@ export class OutlineDemo extends PostProcessingDemo {
 		this.effect = null;
 
 		/**
-		 * A pass.
-		 *
-		 * @type {Pass}
-		 * @private
-		 */
-
-		this.pass = null;
-
-		/**
 		 * An animation mixer.
 		 *
 		 * @type {AnimationMixer}
@@ -406,7 +397,6 @@ export class OutlineDemo extends PostProcessingDemo {
 		const outlinePass = new EffectPass(camera, outlineEffect);
 
 		this.effect = outlineEffect;
-		this.pass = outlinePass;
 
 		// The outline effect uses mask textures which produce aliasing artifacts.
 		composer.addPass(outlinePass);
@@ -425,7 +415,6 @@ export class OutlineDemo extends PostProcessingDemo {
 		const color = new Color();
 
 		const assets = this.assets;
-		const pass = this.pass;
 		const effect = this.effect;
 		const uniforms = effect.uniforms;
 		const blendMode = effect.blendMode;
@@ -452,8 +441,6 @@ export class OutlineDemo extends PostProcessingDemo {
 				effect.resolution.height = Number(value);
 
 			});
-
-		menu.add(pass, "dithering");
 
 		menu.add(params, "blurriness",
 			KernelSize.VERY_SMALL, KernelSize.HUGE + 1, 1).onChange((value) => {

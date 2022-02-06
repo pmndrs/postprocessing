@@ -9,6 +9,7 @@ body {
 	--button-background-color-focus: #{colors.$teal_500};
 	--button-background-color-focus-darker: #{colors.$teal_600};
 	--button-foreground-color: white;
+	--canvas-background-color: #{colors.$grey_300};
 	--code-color: #{colors.$deep_orange_800};
 	--foreground-color: #{colors.$mine-shaft};
 	--footer-anchor-color: #{colors.$grey_600};
@@ -16,11 +17,15 @@ body {
 	--footer-separator-color: #{colors.$grey_500};
 	--info-foreground-color: #{colors.$grey_400};
 	--info-anchor-color: white;
-	--info-border-color: #{rgba(white, 0.1)};
 	--page-header-background-color: #{colors.$grey_900};
 	--page-title-foreground-color: #{colors.$grey_100};
 	--nav-anchor-background-color-focus: #{colors.$grey_200};
+	--nav-anchor-color: #{colors.$grey_800};
+	--nav-anchor-color-active: black;
+	--nav-anchor-color-focus: #{colors.$grey_A100};
+	--nav-indicator-background-color: #{colors.$whimsical};
 	--sidebar-background-color: #{colors.$grey_100};
+	--sidebar-heading-color: #{colors.$cyan_800};
 	--spinner-background-color: #{colors.$mine-shaft};
 	--spinner-accent-color: #{colors.$shiny};
 }

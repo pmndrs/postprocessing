@@ -1,4 +1,4 @@
-import { FileLoader, Loader, LoadingManager, sRGBEncoding, Vector3 } from "three";
+import { FileLoader, Loader, LoadingManager, Vector3 } from "three";
 import { LookupTexture3D } from "../images/textures/LookupTexture3D";
 
 /**
@@ -103,7 +103,7 @@ export class LUTCubeLoader extends Loader {
 		}
 
 		const size = Number(result[1]);
-		const data = new Float32Array(size ** 3 * 3);
+		const data = new Float32Array(size ** 3 * 4);
 
 		const domainMin = new Vector3(0.0, 0.0, 0.0);
 		const domainMax = new Vector3(1.0, 1.0, 1.0);
@@ -140,11 +140,11 @@ export class LUTCubeLoader extends Loader {
 			data[i++] = Number(result[1]);
 			data[i++] = Number(result[2]);
 			data[i++] = Number(result[3]);
+			data[i++] = 1.0;
 
 		}
 
 		const lut = new LookupTexture3D(data, size, size, size);
-		lut.encoding = sRGBEncoding;
 		lut.domainMin.copy(domainMin);
 		lut.domainMax.copy(domainMax);
 

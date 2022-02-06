@@ -4,10 +4,8 @@ import { Pass } from "./Pass";
 /**
  * A shader pass.
  *
- * Renders any shader material as a fullscreen effect.
- *
- * This pass should not be used to create multiple chained effects. For a more
- * efficient solution, please refer to the {@link EffectPass}.
+ * Renders any shader material as a fullscreen effect. This pass should not be used to create multiple chained effects.
+ * For a more efficient solution, please refer to the {@link EffectPass}.
  */
 
 export class ShaderPass extends Pass {
@@ -32,7 +30,7 @@ export class ShaderPass extends Pass {
 		 * @private
 		 */
 
-		this.uniform = null;
+		this.inputBufferUniform = null;
 		this.setInput(input);
 
 	}
@@ -40,9 +38,8 @@ export class ShaderPass extends Pass {
 	/**
 	 * Sets the name of the input buffer uniform.
 	 *
-	 * Most fullscreen materials modify texels from an input texture. This pass
-	 * automatically assigns the main input buffer to the uniform identified by
-	 * the given name.
+	 * Most fullscreen materials modify texels from an input texture. This pass automatically assigns the main input
+	 * buffer to the uniform identified by the given name.
 	 *
 	 * @param {String} input - The name of the input buffer uniform.
 	 */
@@ -51,7 +48,7 @@ export class ShaderPass extends Pass {
 
 		const material = this.getFullscreenMaterial();
 
-		this.uniform = null;
+		this.inputBufferUniform = null;
 
 		if(material !== null) {
 
@@ -59,7 +56,7 @@ export class ShaderPass extends Pass {
 
 			if(uniforms !== undefined && uniforms[input] !== undefined) {
 
-				this.uniform = uniforms[input];
+				this.inputBufferUniform = uniforms[input];
 
 			}
 
@@ -79,9 +76,9 @@ export class ShaderPass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
-		if(this.uniform !== null && inputBuffer !== null) {
+		if(this.inputBufferUniform !== null && inputBuffer !== null) {
 
-			this.uniform.value = inputBuffer.texture;
+			this.inputBufferUniform.value = inputBuffer.texture;
 
 		}
 
@@ -102,8 +99,7 @@ export class ShaderPass extends Pass {
 
 		if(frameBufferType !== undefined && frameBufferType !== UnsignedByteType) {
 
-			const material = this.getFullscreenMaterial();
-			material.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+			this.getFullscreenMaterial().defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
 		}
 

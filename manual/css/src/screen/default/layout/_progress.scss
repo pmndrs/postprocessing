@@ -1,6 +1,6 @@
 @use "layers";
 
-.loading {
+.progress {
 	align-items: center;
 	bottom: 0;
 	display: flex;
@@ -13,9 +13,6 @@
 	top: 0;
 	user-select: none;
 	z-index: layers.$foreground;
-	&.hidden {
-		display: none;
-	}
 }
 
 /**

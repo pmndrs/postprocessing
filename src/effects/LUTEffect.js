@@ -19,11 +19,11 @@ import fragmentShader from "./glsl/lut/shader.frag";
 /**
  * A LUT effect.
  *
- * The tetrahedral interpolation algorithm was inspired by an implementation from OpenColorIO which
- * is licensed under the BSD 3-Clause License.
+ * The tetrahedral interpolation algorithm was inspired by an implementation from OpenColorIO which is licensed under
+ * the BSD 3-Clause License.
  *
- * The manual trilinear interpolation algorithm is based on an implementation by Garret Johnson
- * which is licensed under the MIT License.
+ * The manual trilinear interpolation algorithm is based on an implementation by Garret Johnson which is licensed under
+ * the MIT License.
  *
  * References:
  * https://developer.nvidia.com/gpugems/gpugems2/part-iii-high-quality-rendering/chapter-24-using-lookup-tables-accelerate-color
@@ -43,10 +43,7 @@ export class LUTEffect extends Effect {
 	 * @param {Boolean} [options.tetrahedralInterpolation=false] - Enables or disables tetrahedral interpolation.
 	 */
 
-	constructor(lut, {
-		blendFunction = BlendFunction.NORMAL,
-		tetrahedralInterpolation = false
-	} = {}) {
+	constructor(lut, { blendFunction = BlendFunction.NORMAL, tetrahedralInterpolation = false } = {}) {
 
 		super("LUTEffect", fragmentShader, {
 			blendFunction,
@@ -84,7 +81,7 @@ export class LUTEffect extends Effect {
 		 * @private
 		 */
 
-		this.outputEncoding = this.inputEncoding;
+		this.outputEncoding = sRGBEncoding;
 
 		this.setInputEncoding(sRGBEncoding);
 		this.setLUT(lut);
@@ -148,9 +145,8 @@ export class LUTEffect extends Effect {
 
 		if(lut !== null) {
 
-			// The encoding of the input colors persists if the LUT is linear.
-			this.outputEncoding = (lut.encoding === LinearEncoding) ?
-				value : lut.encoding;
+			// The encoding of the input colors carries over if the LUT is linear.
+			this.outputEncoding = (lut.encoding === LinearEncoding) ? value : lut.encoding;
 
 			switch(this.outputEncoding) {
 
@@ -207,7 +203,6 @@ export class LUTEffect extends Effect {
 			const image = lut.image;
 
 			defines.clear();
-
 			defines.set("LUT_SIZE", Math.min(image.width, image.height).toFixed(16));
 			defines.set("LUT_TEXEL_WIDTH", (1.0 / image.width).toFixed(16));
 			defines.set("LUT_TEXEL_HEIGHT", (1.0 / image.height).toFixed(16));
@@ -289,12 +284,9 @@ export class LUTEffect extends Effect {
 
 			if(this.defines.has("CUSTOM_INPUT_DOMAIN")) {
 
-				const domainScale = lut.domainMax.clone().sub(lut.domainMin)
-					.multiplyScalar(size);
-
+				const domainScale = lut.domainMax.clone().sub(lut.domainMin).multiplyScalar(size);
 				scale.setScalar(size - 1.0).divide(domainScale);
-				offset.copy(lut.domainMin).negate().multiply(scale)
-					.addScalar(1.0 / (2.0 * size));
+				offset.copy(lut.domainMin).negate().multiply(scale).addScalar(1.0 / (2.0 * size));
 
 			} else {
 
@@ -344,10 +336,9 @@ export class LUTEffect extends Effect {
 	}
 
 	/**
-	 * Enables or disables tetrahedral interpolation. Requires a 3D LUT.
+	 * Enables or disables tetrahedral interpolation. Requires a 3D LUT, disabled by default.
 	 *
-	 * Tetrahedral interpolation produces highly accurate results, but is slower
-	 * than hardware interpolation. This feature is disabled by default.
+	 * Tetrahedral interpolation produces highly accurate results but is slower than hardware interpolation.
 	 *
 	 * @param {Boolean} enabled - Whether tetrahedral interpolation should be enabled.
 	 */

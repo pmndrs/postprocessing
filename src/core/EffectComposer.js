@@ -2,9 +2,6 @@ import {
 	DepthStencilFormat,
 	DepthTexture,
 	LinearFilter,
-	RGBAFormat,
-	RGBFormat,
-	UnsignedByteType,
 	UnsignedIntType,
 	UnsignedInt248Type,
 	Vector2,
@@ -12,18 +9,16 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { ClearMaskPass, MaskPass, ShaderPass } from "../passes";
-import { CopyMaterial } from "../materials";
+import { ClearMaskPass, CopyPass, MaskPass } from "../passes";
 import { Timer } from "./Timer";
 
 /**
  * The EffectComposer may be used in place of a normal WebGLRenderer.
  *
- * The auto clear behaviour of the provided renderer will be disabled to prevent unnecessary clear
- * operations.
+ * The auto clear behaviour of the provided renderer will be disabled to prevent unnecessary clear operations.
  *
- * It is common practice to use a {@link RenderPass} as the first pass to automatically clear the
- * buffers and render a scene for further processing.
+ * It is common practice to use a {@link RenderPass} as the first pass to automatically clear the buffers and render a
+ * scene for further processing.
  *
  * @implements {Resizable}
  * @implements {Disposable}
@@ -38,7 +33,7 @@ export class EffectComposer {
 	 * @param {Object} [options] - The options.
 	 * @param {Boolean} [options.depthBuffer=true] - Whether the main render targets should have a depth buffer.
 	 * @param {Boolean} [options.stencilBuffer=false] - Whether the main render targets should have a stencil buffer.
-	 * @param {Boolean} [options.alpha] - Whether the main render targets should always be RGBA buffers.
+	 * @param {Boolean} [options.alpha] - Deprecated. Buffers are always RGBA since three r137.
 	 * @param {Number} [options.multisampling=0] - The number of samples used for multisample antialiasing. Requires WebGL 2.
 	 * @param {Number} [options.frameBufferType] - The type of the internal frame buffers. It's recommended to use HalfFloatType if possible.
 	 */
@@ -46,7 +41,6 @@ export class EffectComposer {
 	constructor(renderer = null, {
 		depthBuffer = true,
 		stencilBuffer = false,
-		alpha = false,
 		multisampling = 0,
 		frameBufferType
 	} = {}) {
@@ -58,28 +52,18 @@ export class EffectComposer {
 		 * @private
 		 */
 
-		this.renderer = renderer;
-
-		/**
-		 * Indicates whether the frame buffers should use `RGBAFormat`.
-		 *
-		 * @type {Boolean}
-		 * @private
-		 */
-
-		this.alpha = alpha;
+		this.renderer = null;
 
 		/**
 		 * The input buffer.
 		 *
-		 * Reading from and writing to the same render target should be avoided. Therefore, two seperate
-		 * yet identical buffers are used.
+		 * Two identical buffers are used to avoid reading from and writing to the same render target.
 		 *
 		 * @type {WebGLRenderTarget}
 		 * @private
 		 */
 
-		this.inputBuffer = null;
+		this.inputBuffer = this.createBuffer(depthBuffer, stencilBuffer, frameBufferType, multisampling);
 
 		/**
 		 * The output buffer.
@@ -88,31 +72,16 @@ export class EffectComposer {
 		 * @private
 		 */
 
-		this.outputBuffer = null;
-
-		if(this.renderer !== null) {
-
-			this.renderer.autoClear = false;
-
-			this.inputBuffer = this.createBuffer(
-				depthBuffer,
-				stencilBuffer,
-				frameBufferType,
-				multisampling
-			);
-
-			this.outputBuffer = this.inputBuffer.clone();
-
-		}
+		this.outputBuffer = this.inputBuffer.clone();
 
 		/**
 		 * A copy pass used for copying masked scenes.
 		 *
-		 * @type {ShaderPass}
+		 * @type {CopyPass}
 		 * @private
 		 */
 
-		this.copyPass = new ShaderPass(new CopyMaterial());
+		this.copyPass = new CopyPass();
 
 		/**
 		 * A depth texture.
@@ -149,10 +118,12 @@ export class EffectComposer {
 
 		this.autoRenderToScreen = true;
 
+		this.setRenderer(renderer);
+
 	}
 
 	/**
-	 * The current amount of samples used for multisample antialiasing.
+	 * The current amount of samples used for multisample anti-aliasing.
 	 *
 	 * @type {Number}
 	 */
@@ -216,9 +187,7 @@ export class EffectComposer {
 	}
 
 	/**
-	 * Returns the WebGL renderer.
-	 *
-	 * You can replace the renderer with {@link EffectComposer#replaceRenderer}.
+	 * Returns the renderer.
 	 *
 	 * @return {WebGLRenderer} The renderer.
 	 */
@@ -230,14 +199,45 @@ export class EffectComposer {
 	}
 
 	/**
+	 * Sets the renderer.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 */
+
+	setRenderer(renderer) {
+
+		this.renderer = renderer;
+
+		if(renderer !== null) {
+
+			const size = renderer.getSize(new Vector2());
+			const alpha = renderer.getContext().getContextAttributes().alpha;
+			const frameBufferType = this.inputBuffer.texture.type;
+
+			renderer.autoClear = false;
+			this.setSize(size.width, size.height);
+
+			for(const pass of this.passes) {
+
+				pass.setRenderer(renderer);
+				pass.initialize(renderer, alpha, frameBufferType);
+
+			}
+
+		}
+
+	}
+
+	/**
 	 * Replaces the current renderer with the given one.
 	 *
-	 * The auto clear mechanism of the provided renderer will be disabled. If the new render size
-	 * differs from the previous one, all passes will be updated.
+	 * The auto clear mechanism of the provided renderer will be disabled. If the new render size differs from the
+	 * previous one, all passes will be updated.
 	 *
-	 * By default, the DOM element of the current renderer will automatically be removed from its
-	 * parent node and the DOM element of the new renderer will take its place.
+	 * By default, the DOM element of the current renderer will automatically be removed from its parent node and the DOM
+	 * element of the new renderer will take its place.
 	 *
+	 * @deprecated Use setRenderer instead.
 	 * @param {WebGLRenderer} renderer - The new renderer.
 	 * @param {Boolean} updateDOM - Indicates whether the old canvas should be replaced by the new one in the DOM.
 	 * @return {WebGLRenderer} The old renderer.
@@ -246,28 +246,14 @@ export class EffectComposer {
 	replaceRenderer(renderer, updateDOM = true) {
 
 		const oldRenderer = this.renderer;
+		const parent = oldRenderer.domElement.parentNode;
 
-		if(oldRenderer !== null && oldRenderer !== renderer) {
+		this.setRenderer(renderer);
 
-			const oldSize = oldRenderer.getSize(new Vector2());
-			const newSize = renderer.getSize(new Vector2());
-			const parent = oldRenderer.domElement.parentNode;
+		if(updateDOM && parent !== null) {
 
-			this.renderer = renderer;
-			this.renderer.autoClear = false;
-
-			if(!oldSize.equals(newSize)) {
-
-				this.setSize();
-
-			}
-
-			if(updateDOM && parent !== null) {
-
-				parent.removeChild(oldRenderer.domElement);
-				parent.appendChild(renderer.domElement);
-
-			}
+			parent.removeChild(oldRenderer.domElement);
+			parent.appendChild(renderer.domElement);
 
 		}
 
@@ -278,9 +264,8 @@ export class EffectComposer {
 	/**
 	 * Creates a depth texture attachment that will be provided to all passes.
 	 *
-	 * Note: When a shader reads from a depth texture and writes to a render target that uses the same
-	 * depth texture attachment, the depth information will be lost. This happens even if `depthWrite`
-	 * is disabled.
+	 * Note: When a shader reads from a depth texture and writes to a render target that uses the same depth texture
+	 * attachment, the depth information will be lost. This happens even if `depthWrite` is disabled.
 	 *
 	 * @private
 	 * @return {DepthTexture} The depth texture.
@@ -337,15 +322,9 @@ export class EffectComposer {
 	}
 
 	/**
-	 * Creates a new render target by replicating the renderer's canvas.
+	 * Creates a new render target.
 	 *
-	 * The created render target uses a linear filter for texel minification and magnification. Its
-	 * render texture format depends on whether the renderer uses the alpha channel, unless the
-	 * `alpha` constructor parameter was set to `true`. Mipmaps are disabled.
-	 *
-	 * Note: The buffer format will also be set to RGBA if the frame buffer type is HalfFloatType
-	 * because RGB16F buffers are not renderable.
-	 *
+	 * @deprecated Create buffers manually via WebGLRenderTarget instead.
 	 * @param {Boolean} depthBuffer - Whether the render target should have a depth buffer.
 	 * @param {Boolean} stencilBuffer - Whether the render target should have a stencil buffer.
 	 * @param {Number} type - The frame buffer type.
@@ -355,13 +334,10 @@ export class EffectComposer {
 
 	createBuffer(depthBuffer, stencilBuffer, type, multisampling) {
 
-		const renderer = this.renderer;
-		const context = renderer.getContext();
-		const size = renderer.getDrawingBufferSize(new Vector2());
-		const alpha = this.alpha || context.getContextAttributes().alpha;
+		const size = (this.renderer === null) ? new Vector2() :
+			this.renderer.getDrawingBufferSize(new Vector2());
 
 		const options = {
-			format: (!alpha && type === UnsignedByteType) ? RGBFormat : RGBAFormat,
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
 			stencilBuffer,
@@ -402,6 +378,7 @@ export class EffectComposer {
 		const alpha = renderer.getContext().getContextAttributes().alpha;
 		const frameBufferType = this.inputBuffer.texture.type;
 
+		pass.setRenderer(renderer);
 		pass.setSize(drawingBufferSize.width, drawingBufferSize.height);
 		pass.initialize(renderer, alpha, frameBufferType);
 
@@ -606,14 +583,10 @@ export class EffectComposer {
 	}
 
 	/**
-	 * Sets the size of the buffers and the renderer's output canvas.
+	 * Sets the size of the buffers, passes and the renderer.
 	 *
-	 * Every pass will be informed of the new size. It's up to each pass how that information is used.
-	 * If no width or height is specified, the render targets and passes will be updated with the
-	 * current size of the renderer.
-	 *
-	 * @param {Number} [width] - The width.
-	 * @param {Number} [height] - The height.
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
 	 * @param {Boolean} [updateStyle] - Determines whether the style of the canvas should be updated.
 	 */
 
@@ -626,20 +599,15 @@ export class EffectComposer {
 			const size = renderer.getSize(new Vector2());
 			width = size.width; height = size.height;
 
-		} else {
-
-			// Update the logical render size.
-			renderer.setSize(width, height, updateStyle);
-
 		}
+
+		// Update the logical render size.
+		renderer.setSize(width, height, updateStyle);
 
 		// The drawing buffer size takes the device pixel ratio into account.
 		const drawingBufferSize = renderer.getDrawingBufferSize(new Vector2());
-		const inputBuffer = this.inputBuffer;
-		const outputBuffer = this.outputBuffer;
-
-		inputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
-		outputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
+		this.inputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
+		this.outputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
 
 		for(const pass of this.passes) {
 

@@ -21,11 +21,7 @@ export class HueSaturationEffect extends Effect {
 	 * @param {Number} [options.saturation=0.0] - The saturation factor, ranging from -1 to 1, where 0 means no change.
 	 */
 
-	constructor({
-		blendFunction = BlendFunction.NORMAL,
-		hue = 0.0,
-		saturation = 0.0
-	} = {}) {
+	constructor({ blendFunction = BlendFunction.NORMAL, hue = 0.0, saturation = 0.0 } = {}) {
 
 		super("HueSaturationEffect", fragmentShader, {
 			blendFunction,
@@ -40,18 +36,57 @@ export class HueSaturationEffect extends Effect {
 	}
 
 	/**
-	 * Sets the hue.
+	 * Returns the saturation.
 	 *
-	 * @param {Number} hue - The hue in radians.
+	 * @return {Number} The saturation.
 	 */
 
-	setHue(hue) {
+	getSaturation(value) {
 
-		const s = Math.sin(hue), c = Math.cos(hue);
+		return this.uniforms.get("saturation").value;
 
-		this.uniforms.get("hue").value
-			.set(2.0 * c, -Math.sqrt(3.0) * s - c, Math.sqrt(3.0) * s - c)
-			.addScalar(1.0).divideScalar(3.0);
+	}
+
+	/**
+	 * Sets the saturation.
+	 *
+	 * @param {Number} value - The saturation.
+	 */
+
+	setSaturation(value) {
+
+		this.uniforms.get("saturation").value = value;
+
+	}
+
+	/**
+	 * Returns the hue.
+	 *
+	 * @return {Number} The hue in radians.
+	 */
+
+	getHue(value) {
+
+		const hue = this.uniforms.get("hue").value;
+		return Math.acos((hue.x * 3.0 - 1.0) / 2.0);
+
+	}
+
+	/**
+	 * Sets the hue.
+	 *
+	 * @param {Number} value - The hue in radians.
+	 */
+
+	setHue(value) {
+
+		const s = Math.sin(value), c = Math.cos(value);
+
+		this.uniforms.get("hue").value.set(
+			(2.0 * c + 1.0) / 3.0,
+			(-Math.sqrt(3.0) * s - c + 1.0) / 3.0,
+			(Math.sqrt(3.0) * s - c + 1.0) / 3.0
+		);
 
 	}
 

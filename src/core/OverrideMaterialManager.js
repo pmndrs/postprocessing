@@ -12,9 +12,9 @@ let workaroundEnabled = false;
 /**
  * An override material manager.
  *
- * Includes a workaround that fixes override materials for skinned meshes and instancing. Doesn't
- * fix uniforms such as normal maps and displacement maps. Using the workaround may have a negative
- * impact on performance if the scene contains a lot of meshes.
+ * Includes a workaround that fixes override materials for skinned meshes and instancing. Doesn't fix uniforms such as
+ * normal maps and displacement maps. Using the workaround may have a negative impact on performance if the scene
+ * contains a lot of meshes.
  *
  * @implements {Disposable}
  */

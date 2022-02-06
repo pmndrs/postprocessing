@@ -52,9 +52,8 @@ function generate(useCache = true) {
 /**
  * An SMAA image generator.
  *
- * This class uses a worker thread to generate the search and area images. The generated data URLs
- * will be cached using localStorage, if available. To disable caching use
- * {@link SMAAImageGenerator.disableCache}.
+ * This class uses a worker thread to generate the search and area images. The generated data URLs will be cached using
+ * localStorage, if available. To disable caching use {@link SMAAImageGenerator.setCacheEnabled}.
  */
 
 export class SMAAImageGenerator {
@@ -69,9 +68,22 @@ export class SMAAImageGenerator {
 		 * Indicates whether data image caching is disabled.
 		 *
 		 * @type {Boolean}
+		 * @deprecated Use setCacheEnabled() instead.
 		 */
 
 		this.disableCache = false;
+
+	}
+
+	/**
+	 * Enables or disables caching via localStorage.
+	 *
+	 * @param {Boolean} value - Whether the cache should be enabled.
+	 */
+
+	setCacheEnabled(value) {
+
+		this.disableCache = !value;
 
 	}
 

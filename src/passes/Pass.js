@@ -1,34 +1,12 @@
-import {
-	BufferAttribute,
-	BufferGeometry,
-	Camera,
-	Mesh,
-	Scene
-} from "three";
-
-/**
- * A dummy camera
- *
- * @type {Camera}
- * @private
- */
+import { BufferAttribute, BufferGeometry, Camera, Mesh, Scene } from "three";
 
 const dummyCamera = new Camera();
-
-/**
- * Shared fullscreen geometry.
- *
- * @type {BufferGeometry}
- * @private
- */
-
 let geometry = null;
 
 /**
  * Returns a shared fullscreen triangle.
  *
- * The size of the screen is 2x2 units (NDC). A triangle that fills the screen
- * needs to be 4 units wide and 4 units tall.
+ * The screen size is 2x2 units (NDC). A triangle needs to be 4x4 units to fill the screen.
  *
  * @private
  * @return {BufferGeometry} The fullscreen geometry.
@@ -64,9 +42,6 @@ function getFullscreenTriangle() {
 /**
  * An abstract pass.
  *
- * Passes that do not rely on the depth buffer should explicitly disable the
- * depth test and depth write flags of their fullscreen shader material.
- *
  * Fullscreen passes use a shared fullscreen triangle:
  * https://michaldrobot.com/2014/04/01/gcn-execution-patterns-in-full-screen-passes/
  *
@@ -94,6 +69,15 @@ export class Pass {
 		 */
 
 		this.name = name;
+
+		/**
+		 * The renderer.
+		 *
+		 * @type {WebGLRenderer}
+		 * @protected
+		 */
+
+		this.renderer = null;
 
 		/**
 		 * The scene to render.
@@ -134,11 +118,9 @@ export class Pass {
 		/**
 		 * Only relevant for subclassing.
 		 *
-		 * Indicates whether the {@link EffectComposer} should swap the frame
-		 * buffers after this pass has finished rendering.
-		 *
-		 * Set this to `false` if this pass doesn't render to the output buffer or
-		 * the screen. Otherwise, the contents of the input buffer will be lost.
+		 * Indicates whether the {@link EffectComposer} should swap the frame buffers after this pass has finished
+		 * rendering. Set this to `false` if this pass doesn't render to the output buffer or the screen. Otherwise, the
+		 * contents of the input buffer will be lost.
 		 *
 		 * @type {Boolean}
 		 */
@@ -148,11 +130,8 @@ export class Pass {
 		/**
 		 * Only relevant for subclassing.
 		 *
-		 * Indicates whether the {@link EffectComposer} should prepare a depth
-		 * texture for this pass.
-		 *
-		 * Set this to `true` if this pass relies on depth information from a
-		 * preceding {@link RenderPass}.
+		 * Indicates whether the {@link EffectComposer} should prepare a depth texture for this pass.
+		 * Set this to `true` if this pass relies on depth information from a preceding {@link RenderPass}.
 		 *
 		 * @type {Boolean}
 		 */
@@ -185,8 +164,7 @@ export class Pass {
 	/**
 	 * Sets the render to screen flag.
 	 *
-	 * If the flag is changed to a different value, the fullscreen material will
-	 * be updated as well.
+	 * If this flag is changed, the fullscreen material will be updated as well.
 	 *
 	 * @type {Boolean}
 	 */
@@ -210,6 +188,18 @@ export class Pass {
 	}
 
 	/**
+	 * Sets the renderer
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 */
+
+	setRenderer(renderer) {
+
+		this.renderer = renderer;
+
+	}
+
+	/**
 	 * Indicates whether this pass is enabled.
 	 *
 	 * @return {Boolean} Whether this pass is enabled.
@@ -224,12 +214,12 @@ export class Pass {
 	/**
 	 * Enables or disables this pass.
 	 *
-	 * @param {Boolean} enabled - Whether the pass should be enabled.
+	 * @param {Boolean} value - Whether the pass should be enabled.
 	 */
 
-	setEnabled(enabled) {
+	setEnabled(value) {
 
-		this.enabled = enabled;
+		this.enabled = value;
 
 	}
 
@@ -248,24 +238,21 @@ export class Pass {
 	/**
 	 * Sets the fullscreen material.
 	 *
-	 * The material will be assigned to a mesh that fills the screen. The mesh
-	 * will be created once a material is assigned via this method.
-	 *
 	 * @protected
-	 * @param {Material} material - A fullscreen material.
+	 * @param {Material} value - A fullscreen material.
 	 */
 
-	setFullscreenMaterial(material) {
+	setFullscreenMaterial(value) {
 
 		let screen = this.screen;
 
 		if(screen !== null) {
 
-			screen.material = material;
+			screen.material = value;
 
 		} else {
 
-			screen = new Mesh(getFullscreenTriangle(), material);
+			screen = new Mesh(getFullscreenTriangle(), value);
 			screen.frustumCulled = false;
 
 			if(this.scene === null) {
@@ -297,9 +284,7 @@ export class Pass {
 	 * Sets the depth texture.
 	 *
 	 * This method will be called automatically by the {@link EffectComposer}.
-	 *
-	 * You may override this method if your pass relies on the depth information
-	 * of a preceding {@link RenderPass}.
+	 * You may override this method if your pass relies on the depth information of a preceding {@link RenderPass}.
 	 *
 	 * @param {Texture} depthTexture - A depth texture.
 	 * @param {Number} [depthPacking=0] - The depth packing.
@@ -328,17 +313,13 @@ export class Pass {
 	}
 
 	/**
-	 * Updates this pass with the renderer's size.
+	 * Sets the size.
 	 *
-	 * You may override this method in case you want to be informed about the size
-	 * of the main frame buffer.
+	 * You may override this method if you want to be informed about the size of the backbuffer/canvas.
+	 * This method is called before {@link initialize} and every time the size of the {@link EffectComposer} changes.
 	 *
-	 * The {@link EffectComposer} calls this method before this pass is
-	 * initialized and every time its own size is updated.
-	 *
-	 * @param {Number} width - The renderer's width.
-	 * @param {Number} height - The renderer's height.
-	 * @example this.myRenderTarget.setSize(width, height);
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
 	 */
 
 	setSize(width, height) {}
@@ -346,20 +327,11 @@ export class Pass {
 	/**
 	 * Performs initialization tasks.
 	 *
-	 * By overriding this method you gain access to the renderer. You'll also be
-	 * able to configure your custom render targets to use the appropriate format
-	 * (RGB or RGBA).
-	 *
-	 * The provided renderer can be used to warm up special off-screen render
-	 * targets by performing a preliminary render operation.
-	 *
-	 * The {@link EffectComposer} calls this method when this pass is added to its
-	 * queue, but not before its size has been set.
+	 * This method is called when this pass is added to an {@link EffectComposer}.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
 	 * @param {Number} frameBufferType - The type of the main frame buffers.
-	 * @example if(!alpha && frameBufferType === UnsignedByteType) { this.myRenderTarget.texture.format = RGBFormat; }
 	 */
 
 	initialize(renderer, alpha, frameBufferType) {}
@@ -367,9 +339,8 @@ export class Pass {
 	/**
 	 * Performs a shallow search for disposable properties and deletes them.
 	 *
-	 * The {@link EffectComposer} calls this method when it is being destroyed.
-	 * You may, however, use it independently to free memory when you are certain
-	 * that you don't need this pass anymore.
+	 * The {@link EffectComposer} calls this method when it is being destroyed. You can use it independently to free
+	 * memory when you're certain that you don't need this pass anymore.
 	 */
 
 	dispose() {

@@ -1,4 +1,4 @@
-import { NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
+import { BasicDepthPacking, NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
 
 import fragmentShader from "./glsl/depth-downsampling/shader.frag";
 import vertexShader from "./glsl/depth-downsampling/shader.vert";
@@ -8,6 +8,8 @@ import vertexShader from "./glsl/depth-downsampling/shader.vert";
  *
  * Based on an article by Eleni Maria Stea:
  * https://eleni.mutantstargoat.com/hikiko/depth-aware-upsampling-6
+ *
+ * @implements {Resizable}
  */
 
 export class DepthDownsamplingMaterial extends ShaderMaterial {
@@ -41,9 +43,25 @@ export class DepthDownsamplingMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * The depth packing of the source depth buffer.
+	 * Sets the depth buffer.
 	 *
-	 * @type {Number}
+	 * @param {Texture} buffer - The depth texture.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 */
+
+	setDepthBuffer(buffer, depthPacking = BasicDepthPacking) {
+
+		this.uniforms.depthBuffer.value = buffer;
+		this.defines.DEPTH_PACKING = depthPacking.toFixed(0);
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * The current depth packing.
+	 *
+	 * @type {DepthPackingStrategies}
+	 * @deprecated Removed without replacement.
 	 */
 
 	get depthPacking() {
@@ -55,7 +73,8 @@ export class DepthDownsamplingMaterial extends ShaderMaterial {
 	/**
 	 * Sets the depth packing.
 	 *
-	 * @type {Number}
+	 * @type {DepthPackingStrategies}
+	 * @deprecated Use setDepthBuffer() instead.
 	 */
 
 	set depthPacking(value) {
@@ -66,8 +85,33 @@ export class DepthDownsamplingMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Sets the normal buffer.
+	 *
+	 * @param {Texture} value - The normal buffer.
+	 */
+
+	setNormalBuffer(value) {
+
+		this.uniforms.normalBuffer.value = value;
+
+		if(value !== null) {
+
+			this.defines.DOWNSAMPLE_NORMALS = "1";
+
+		} else {
+
+			delete this.defines.DOWNSAMPLE_NORMALS;
+
+		}
+
+		this.needsUpdate = true;
+
+	}
+
+	/**
 	 * Sets the texel size.
 	 *
+	 * @deprecated Use setSize() instead.
 	 * @param {Number} x - The texel width.
 	 * @param {Number} y - The texel height.
 	 */
@@ -75,6 +119,19 @@ export class DepthDownsamplingMaterial extends ShaderMaterial {
 	setTexelSize(x, y) {
 
 		this.uniforms.texelSize.value.set(x, y);
+
+	}
+
+	/**
+	 * Sets the size of this object.
+	 *
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		this.uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
 
 	}
 

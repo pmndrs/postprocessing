@@ -5,6 +5,19 @@ import { Effect } from "./Effect";
 import fragmentShader from "./glsl/vignette/shader.frag";
 
 /**
+ * An enumeration of vignette techniques.
+ *
+ * @type {Object}
+ * @property {Number} DEFAULT - Produces a dusty look.
+ * @property {Number} ESKIL - Produces a burned look.
+ */
+
+export const VignetteTechnique = {
+	DEFAULT: 0,
+	ESKIL: 1
+};
+
+/**
  * A vignette effect.
  */
 
@@ -15,13 +28,15 @@ export class VignetteEffect extends Effect {
 	 *
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
-	 * @param {Boolean} [options.eskil=false] - Enables Eskil's vignette technique.
+	 * @param {VignetteTechnique} [options.technique=VignetteTechnique.DEFAULT] - The vignette technique.
+	 * @param {Boolean} [options.eskil=false] - Deprecated. Use technique instead.
 	 * @param {Number} [options.offset=0.5] - The vignette offset.
 	 * @param {Number} [options.darkness=0.5] - The vignette darkness.
 	 */
 
 	constructor({
 		blendFunction = BlendFunction.NORMAL,
+		technique = VignetteTechnique.DEFAULT,
 		eskil = false,
 		offset = 0.5,
 		darkness = 0.5
@@ -29,13 +44,14 @@ export class VignetteEffect extends Effect {
 
 		super("VignetteEffect", fragmentShader, {
 			blendFunction: blendFunction,
+			defines: new Map([
+				["VIGNETTE_TECHNIQUE", technique.toFixed(0)]
+			]),
 			uniforms: new Map([
 				["offset", new Uniform(offset)],
 				["darkness", new Uniform(darkness)]
 			])
 		});
-
-		this.eskil = eskil;
 
 	}
 
@@ -43,37 +59,102 @@ export class VignetteEffect extends Effect {
 	 * Indicates whether Eskil's vignette technique is enabled.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use getTechnique() instead.
 	 */
 
 	get eskil() {
 
-		return this.defines.has("ESKIL");
+		return (this.getTechnique() === VignetteTechnique.ESKIL);
 
 	}
 
 	/**
-	 * Enables or disables Eskil's vignette technique.
+	 * Indicates whether Eskil's vignette technique is enabled.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use setTechnique(VignetteTechnique.ESKIL) instead.
 	 */
 
 	set eskil(value) {
 
-		if(this.eskil !== value) {
+		this.setTechnique(value ? VignetteTechnique.ESKIL : VignetteTechnique.DEFAULT);
 
-			if(value) {
+	}
 
-				this.defines.set("ESKIL", "1");
+	/**
+	 * Returns the vignette technique.
+	 *
+	 * @return {VignetteTechnique} The technique.
+	 */
 
-			} else {
+	getTechnique() {
 
-				this.defines.delete("ESKIL");
+		return Number(this.defines.get("VIGNETTE_TECHNIQUE"));
 
-			}
+	}
 
+	/**
+	 * Sets the vignette technique.
+	 *
+	 * @param {VignetteTechnique} value - The technique.
+	 */
+
+	setTechnique(value) {
+
+		if(this.getTechnique() !== value) {
+
+			this.defines.set("VIGNETTE_TECHNIQUE", value.toFixed(0));
 			this.setChanged();
 
 		}
+
+	}
+
+	/**
+	 * Returns the vignette offset.
+	 *
+	 * @return {Number} The offset.
+	 */
+
+	getOffset() {
+
+		return this.uniforms.get("offset").value;
+
+	}
+
+	/**
+	 * Sets the vignette offset.
+	 *
+	 * @param {Number} value - The offset.
+	 */
+
+	setOffset(value) {
+
+		this.uniforms.get("offset").value = value;
+
+	}
+
+	/**
+	 * Returns the vignette darkness.
+	 *
+	 * @return {Number} The darkness.
+	 */
+
+	getDarkness() {
+
+		return this.uniforms.get("darkness").value;
+
+	}
+
+	/**
+	 * Sets the vignette darkness.
+	 *
+	 * @param {Number} value - The darkness.
+	 */
+
+	setDarkness(value) {
+
+		this.uniforms.get("darkness").value = value;
 
 	}
 

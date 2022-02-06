@@ -1,4 +1,4 @@
-import { NoBlending, PerspectiveCamera, ShaderMaterial, Uniform } from "three";
+import { BasicDepthPacking, NoBlending, PerspectiveCamera, ShaderMaterial, Uniform } from "three";
 
 import fragmentShader from "./glsl/circle-of-confusion/shader.frag";
 import vertexShader from "./glsl/common/shader.vert";
@@ -44,9 +44,25 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Sets the depth buffer.
+	 *
+	 * @param {Texture} buffer - The depth texture.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 */
+
+	setDepthBuffer(buffer, depthPacking = BasicDepthPacking) {
+
+		this.uniforms.depthBuffer.value = buffer;
+		this.defines.DEPTH_PACKING = depthPacking.toFixed(0);
+		this.needsUpdate = true;
+
+	}
+
+	/**
 	 * The current depth packing.
 	 *
-	 * @type {Number}
+	 * @type {DepthPackingStrategies}
+	 * @deprecated Removed without replacement.
 	 */
 
 	get depthPacking() {
@@ -58,7 +74,8 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 	/**
 	 * Sets the depth packing.
 	 *
-	 * @type {Number}
+	 * @type {DepthPackingStrategies}
+	 * @deprecated Use setDepthBuffer() instead.
 	 */
 
 	set depthPacking(value) {
@@ -69,14 +86,62 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Adopts the settings of the given camera.
+	 * Returns the focus distance.
 	 *
-	 * @param {Camera} [camera=null] - A camera.
+	 * @return {Number} The focus distance.
 	 */
 
-	adoptCameraSettings(camera = null) {
+	getFocusDistance(value) {
 
-		if(camera !== null) {
+		this.uniforms.focusDistance.value = value;
+
+	}
+
+	/**
+	 * Sets the focus distance.
+	 *
+	 * @param {Number} value - The focus distance.
+	 */
+
+	setFocusDistance(value) {
+
+		this.uniforms.focusDistance.value = value;
+
+	}
+
+	/**
+	 * Returns the focal length.
+	 *
+	 * @return {Number} The focal length.
+	 */
+
+	getFocalLength(value) {
+
+		this.uniforms.focalLength.value = value;
+
+	}
+
+	/**
+	 * Sets the focal length.
+	 *
+	 * @param {Number} value - The focal length.
+	 */
+
+	setFocalLength(value) {
+
+		this.uniforms.focalLength.value = value;
+
+	}
+
+	/**
+	 * Adopts the settings of the given camera.
+	 *
+	 * @param {Camera} camera - A camera.
+	 */
+
+	adoptCameraSettings(camera) {
+
+		if(camera) {
 
 			this.uniforms.cameraNear.value = camera.near;
 			this.uniforms.cameraFar.value = camera.far;

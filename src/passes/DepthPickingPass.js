@@ -1,13 +1,6 @@
 import { FloatType, RGBADepthPacking } from "three";
 import { DepthCopyMode } from "../materials";
-import { DepthSavePass } from "./DepthSavePass";
-
-/**
- * Unpack factors for RGBA-encoded depth.
- *
- * @type {Float32Array}
- * @private
- */
+import { DepthCopyPass } from "./DepthCopyPass";
 
 const unpackFactors = new Float32Array([
 	(255 / 256) / (256 ** 3),
@@ -31,7 +24,7 @@ function unpackRGBAToDepth(packedDepth) {
 		packedDepth[1] * unpackFactors[1] +
 		packedDepth[2] * unpackFactors[2] +
 		packedDepth[3] * unpackFactors[3]
-	) / 256;
+	) / 255;
 
 }
 
@@ -39,20 +32,17 @@ function unpackRGBAToDepth(packedDepth) {
  * A depth picking pass.
  */
 
-export class DepthPickingPass extends DepthSavePass {
+export class DepthPickingPass extends DepthCopyPass {
 
 	/**
 	 * Constructs a new depth picking pass.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {Number} [options.depthPacking=RGBADepthPacking] - The depth packing.
+	 * @param {DepthPackingStrategies} [options.depthPacking=RGBADepthPacking] - The depth packing.
 	 * @param {Number} [options.mode=DepthCopyMode.SINGLE] - The depth copy mode.
 	 */
 
-	constructor({
-		depthPacking = RGBADepthPacking,
-		mode = DepthCopyMode.SINGLE
-	} = {}) {
+	constructor({ depthPacking = RGBADepthPacking, mode = DepthCopyMode.SINGLE } = {}) {
 
 		super({ depthPacking });
 
@@ -66,8 +56,7 @@ export class DepthPickingPass extends DepthSavePass {
 		 * @private
 		 */
 
-		this.pixelBuffer = (depthPacking === RGBADepthPacking) ?
-			new Uint8Array(4) : new Float32Array(4);
+		this.pixelBuffer = (depthPacking === RGBADepthPacking) ? new Uint8Array(4) : new Float32Array(4);
 
 		/**
 		 * A callback for picking results.
@@ -81,37 +70,10 @@ export class DepthPickingPass extends DepthSavePass {
 	}
 
 	/**
-	 * The depth copy mode.
-	 *
-	 * @type {DepthCopyMode}
-	 * @private
-	 */
-
-	get mode() {
-
-		return this.getFullscreenMaterial().getMode();
-
-	}
-
-	/**
-	 * A screen position.
-	 *
-	 * @type {Vector2}
-	 * @private
-	 */
-
-	get screenPosition() {
-
-		return this.getFullscreenMaterial().uniforms.screenPosition.value;
-
-	}
-
-	/**
 	 * Reads depth at a specific screen position.
 	 *
-	 * Only one depth value can be picked per frame. Calling this method multiple
-	 * times per frame will overwrite the picking coordinates. Unresolved promises
-	 * will be abandoned.
+	 * Only one depth value can be picked per frame. Calling this method multiple times per frame will overwrite the
+	 * picking coordinates. Unresolved promises will be abandoned.
 	 *
 	 * @example
 	 * const ndc = new Vector3();
@@ -130,7 +92,7 @@ export class DepthPickingPass extends DepthSavePass {
 
 	readDepth(ndc) {
 
-		this.screenPosition.set(ndc.x * 0.5 + 0.5, ndc.y * 0.5 + 0.5);
+		this.getFullscreenMaterial().getTexelPosition().set(ndc.x * 0.5 + 0.5, ndc.y * 0.5 + 0.5);
 
 		return new Promise((resolve) => {
 
@@ -152,7 +114,10 @@ export class DepthPickingPass extends DepthSavePass {
 
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
-		if(this.mode === DepthCopyMode.FULL) {
+		const material = this.getFullscreenMaterial();
+		const mode = material.getMode();
+
+		if(mode === DepthCopyMode.FULL) {
 
 			// Always copy the full depth texture.
 			super.render(renderer);
@@ -167,16 +132,16 @@ export class DepthPickingPass extends DepthSavePass {
 
 			let x = 0, y = 0;
 
-			if(this.mode === DepthCopyMode.SINGLE) {
+			if(mode === DepthCopyMode.SINGLE) {
 
 				// Copy a specific depth value.
 				super.render(renderer);
 
 			} else {
 
-				const screenPosition = this.screenPosition;
-				x = Math.round(screenPosition.x * renderTarget.width);
-				y = Math.round(screenPosition.y * renderTarget.height);
+				const texelPosition = material.getTexelPosition();
+				x = Math.round(texelPosition.x * renderTarget.width);
+				y = Math.round(texelPosition.y * renderTarget.height);
 
 			}
 
@@ -197,7 +162,7 @@ export class DepthPickingPass extends DepthSavePass {
 
 	setSize(width, height) {
 
-		if(this.mode === DepthCopyMode.FULL) {
+		if(this.getFullscreenMaterial().getMode() === DepthCopyMode.FULL) {
 
 			super.setSize(width, height);
 
