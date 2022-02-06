@@ -3,6 +3,7 @@ import { LUT3dlLoader } from "postprocessing";
 
 test("can be created", t => {
 
-	t.truthy(new LUT3dlLoader());
+	const object = new LUT3dlLoader();
+	t.pass();
 
 });

@@ -3,6 +3,7 @@ import { DepthMaskMaterial } from "postprocessing";
 
 test("can be created", t => {
 
-	t.truthy(new DepthMaskMaterial());
+	const object = new DepthMaskMaterial();
+	t.pass();
 
 });

@@ -3,6 +3,7 @@ import { CopyMaterial } from "postprocessing";
 
 test("can be created", t => {
 
-	t.truthy(new CopyMaterial());
+	const object = new CopyMaterial();
+	t.pass();
 
 });

@@ -1,7 +1,7 @@
 import test from "ava";
 import { LookupTexture3D, TetrahedralUpscaler } from "postprocessing";
 
-test("generates accurate data", t => {
+test("generates accurate upscaled data", t => {
 
 	const lutNeutral4 = LookupTexture3D.createNeutral(4);
 	const expected = LookupTexture3D.createNeutral(32);

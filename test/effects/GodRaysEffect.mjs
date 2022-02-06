@@ -1,13 +1,10 @@
 import test from "ava";
+import { Mesh } from "three";
 import { GodRaysEffect } from "postprocessing";
 
 test("can be created and destroyed", t => {
 
-	const lightSource = {
-		material: {}
-	};
-
-	const object = new GodRaysEffect(null, lightSource);
+	const object = new GodRaysEffect(null, new Mesh());
 	object.dispose();
 
 	t.pass();

@@ -3,6 +3,7 @@ import { MaskMaterial } from "postprocessing";
 
 test("can be created", t => {
 
-	t.truthy(new MaskMaterial());
+	const object = new MaskMaterial();
+	t.pass();
 
 });

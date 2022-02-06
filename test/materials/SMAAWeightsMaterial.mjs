@@ -3,6 +3,7 @@ import { SMAAWeightsMaterial } from "postprocessing";
 
 test("can be created", t => {
 
-	t.truthy(new SMAAWeightsMaterial());
+	const object = new SMAAWeightsMaterial();
+	t.pass();
 
 });

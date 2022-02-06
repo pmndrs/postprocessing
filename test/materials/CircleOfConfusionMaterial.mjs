@@ -3,6 +3,7 @@ import { CircleOfConfusionMaterial } from "postprocessing";
 
 test("can be created", t => {
 
-	t.truthy(new CircleOfConfusionMaterial());
+	const object = new CircleOfConfusionMaterial();
+	t.pass();
 
 });

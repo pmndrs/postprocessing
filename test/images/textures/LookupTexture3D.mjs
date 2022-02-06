@@ -3,7 +3,8 @@ import { LookupTexture3D } from "postprocessing";
 
 test("can be created", t => {
 
-	t.truthy(new LookupTexture3D());
+	const object = new LookupTexture3D();
+	t.pass();
 
 });
 

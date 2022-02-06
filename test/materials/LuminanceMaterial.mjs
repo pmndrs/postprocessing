@@ -3,6 +3,7 @@ import { LuminanceMaterial } from "postprocessing";
 
 test("can be created", t => {
 
-	t.truthy(new LuminanceMaterial());
+	const object = new LuminanceMaterial();
+	t.pass();
 
 });

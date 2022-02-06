@@ -1,9 +1,9 @@
 import test from "ava";
-import { BlurPass } from "postprocessing";
+import { CopyPass } from "postprocessing";
 
 test("can be created and destroyed", t => {
 
-	const object = new BlurPass();
+	const object = new CopyPass();
 	object.dispose();
 
 	t.pass();

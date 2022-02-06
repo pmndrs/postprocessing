@@ -1,13 +1,10 @@
 import test from "ava";
+import { Scene } from "three";
 import { SelectiveBloomEffect } from "postprocessing";
 
 test("can be created and destroyed", t => {
 
-	const scene = {
-		background: null
-	};
-
-	const object = new SelectiveBloomEffect(scene, null);
+	const object = new SelectiveBloomEffect(new Scene(), null);
 	object.dispose();
 
 	t.pass();

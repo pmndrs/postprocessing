@@ -3,6 +3,7 @@ import { BokehMaterial } from "postprocessing";
 
 test("can be created", t => {
 
-	t.truthy(new BokehMaterial());
+	const object = new BokehMaterial();
+	t.pass();
 
 });

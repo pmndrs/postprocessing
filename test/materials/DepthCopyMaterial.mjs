@@ -3,6 +3,7 @@ import { DepthCopyMaterial } from "postprocessing";
 
 test("can be created", t => {
 
-	t.truthy(new DepthCopyMaterial());
+	const object = new DepthCopyMaterial();
+	t.pass();
 
 });

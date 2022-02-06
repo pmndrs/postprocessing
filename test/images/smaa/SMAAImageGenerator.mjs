@@ -3,6 +3,7 @@ import { SMAAImageGenerator } from "postprocessing";
 
 test("can be created", t => {
 
-	t.truthy(new SMAAImageGenerator());
+	const object = new SMAAImageGenerator();
+	t.pass();
 
 });

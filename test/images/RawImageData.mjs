@@ -3,6 +3,7 @@ import { RawImageData } from "postprocessing";
 
 test("can be created", t => {
 
-	t.truthy(new RawImageData());
+	const object = new RawImageData();
+	t.pass();
 
 });

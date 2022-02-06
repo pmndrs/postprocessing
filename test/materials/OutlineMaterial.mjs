@@ -3,6 +3,7 @@ import { OutlineMaterial } from "postprocessing";
 
 test("can be created", t => {
 
-	t.truthy(new OutlineMaterial());
+	const object = new OutlineMaterial();
+	t.pass();
 
 });

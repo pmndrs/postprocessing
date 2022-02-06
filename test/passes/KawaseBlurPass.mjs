@@ -1,9 +1,9 @@
 import test from "ava";
-import { DepthSavePass } from "postprocessing";
+import { KawaseBlurPass } from "postprocessing";
 
 test("can be created and destroyed", t => {
 
-	const object = new DepthSavePass();
+	const object = new KawaseBlurPass();
 	object.dispose();
 
 	t.pass();

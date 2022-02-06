@@ -3,6 +3,7 @@ import { SSAOMaterial } from "postprocessing";
 
 test("can be created", t => {
 
-	t.truthy(new SSAOMaterial());
+	const object = new SSAOMaterial();
+	t.pass();
 
 });

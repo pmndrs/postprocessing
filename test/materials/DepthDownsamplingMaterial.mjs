@@ -3,6 +3,7 @@ import { DepthDownsamplingMaterial } from "postprocessing";
 
 test("can be created", t => {
 
-	t.truthy(new DepthDownsamplingMaterial());
+	const object = new DepthDownsamplingMaterial();
+	t.pass();
 
 });

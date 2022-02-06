@@ -3,6 +3,7 @@ import { LUTCubeLoader } from "postprocessing";
 
 test("can be created", t => {
 
-	t.truthy(new LUTCubeLoader());
+	const object = new LUTCubeLoader();
+	t.pass();
 
 });

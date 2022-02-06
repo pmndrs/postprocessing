@@ -3,6 +3,7 @@ import { DepthComparisonMaterial } from "postprocessing";
 
 test("can be created", t => {
 
-	t.truthy(new DepthComparisonMaterial());
+	const object = new DepthComparisonMaterial();
+	t.pass();
 
 });

@@ -1,5 +1,5 @@
 import test from "ava";
-import { DotScreenEffect, EffectPass } from "postprocessing";
+import { EffectPass, TextureEffect } from "postprocessing";
 
 test("can be created and destroyed", t => {
 
@@ -12,6 +12,6 @@ test("can be created and destroyed", t => {
 
 test("can create a compound shader material", t => {
 
-	t.truthy(new EffectPass(null, new DotScreenEffect()));
+	t.truthy(new EffectPass(null, new TextureEffect()));
 
 });
