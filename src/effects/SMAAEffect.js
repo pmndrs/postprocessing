@@ -144,6 +144,30 @@ export class SMAAEffect extends Effect {
 	}
 
 	/**
+	 * Returns the edges texture for debugging purposes.
+	 *
+	 * @return {Texture} The texture.
+	 */
+
+	getEdgesTexture() {
+
+		return this.renderTargetEdges.texture;
+
+	}
+
+	/**
+	 * Returns the edge weights texture for debugging purposes.
+	 *
+	 * @return {Texture} The texture.
+	 */
+
+	getWeightsTexture() {
+
+		return this.renderTargetWeights.texture;
+
+	}
+
+	/**
 	 * The internal edge detection material.
 	 *
 	 * @type {EdgeDetectionMaterial}
