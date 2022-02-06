@@ -2,6 +2,9 @@
 #include <packing>
 #include <dithering_pars_fragment>
 
+#define packFloatToRGBA(v) packDepthToRGBA(v)
+#define unpackRGBAToFloat(v) unpackRGBAToDepth(v)
+
 #ifdef FRAMEBUFFER_PRECISION_HIGH
 
 	uniform mediump sampler2D inputBuffer;

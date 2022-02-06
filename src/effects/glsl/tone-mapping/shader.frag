@@ -20,7 +20,7 @@ vec3 Reinhard2ToneMapping(vec3 color) {
 	#ifdef ADAPTIVE
 
 		// Get the average luminance from the adaptive 1x1 buffer.
-		float lumAvg = texture2D(luminanceBuffer, vec2(0.5)).r;
+		float lumAvg = unpackRGBAToFloat(texture2D(luminanceBuffer, vec2(0.5)));
 
 	#else
 

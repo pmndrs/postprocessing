@@ -1,4 +1,9 @@
-uniform mediump sampler2D luminanceBuffer0;
+#include <packing>
+
+#define packFloatToRGBA(v) packDepthToRGBA(v)
+#define unpackRGBAToFloat(v) unpackRGBAToDepth(v)
+
+uniform lowp sampler2D luminanceBuffer0;
 uniform lowp sampler2D luminanceBuffer1;
 
 uniform float minLuminance;
@@ -10,7 +15,7 @@ varying vec2 vUv;
 void main() {
 
 	// This 1x1 buffer contains the previous luminance.
-	float l0 = texture2D(luminanceBuffer0, vUv).r;
+	float l0 = unpackRGBAToFloat(texture2D(luminanceBuffer0, vUv));
 
 	// Get the current average scene luminance.
 	#if __VERSION__ < 300
@@ -29,6 +34,6 @@ void main() {
 	// Adapt the luminance using Pattanaik's technique.
 	float adaptedLum = l0 + (l1 - l0) * (1.0 - exp(-deltaTime * tau));
 
-	gl_FragColor.r = adaptedLum;
+	gl_FragColor = (adaptedLum == 1.0) ? vec4(1.0) : packFloatToRGBA(adaptedLum);
 
 }

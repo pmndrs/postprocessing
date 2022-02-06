@@ -1,12 +1,10 @@
-import { HalfFloatType, NearestFilter, WebGLRenderTarget } from "three";
+import { NearestFilter, WebGLRenderTarget } from "three";
 import { AdaptiveLuminanceMaterial } from "../materials";
 import { CopyPass } from "./CopyPass";
 import { Pass } from "./Pass";
 
 /**
  * A pass that renders an adaptive luminance map.
- *
- * Requires support for `EXT_color_buffer_half_float`.
  */
 
 export class AdaptiveLuminancePass extends Pass {
@@ -37,7 +35,6 @@ export class AdaptiveLuminancePass extends Pass {
 		this.renderTargetPrevious = new WebGLRenderTarget(1, 1, {
 			minFilter: NearestFilter,
 			magFilter: NearestFilter,
-			type: HalfFloatType,
 			stencilBuffer: false,
 			depthBuffer: false
 		});
