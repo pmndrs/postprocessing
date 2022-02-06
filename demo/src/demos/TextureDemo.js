@@ -169,31 +169,23 @@ export class TextureDemo extends PostProcessingDemo {
 		const center = effect.texture.center;
 
 		const params = {
-			"uv": {
-				"enabled": effect.uvTransform
-			},
 			"opacity": blendMode.opacity.value,
 			"blend mode": blendMode.blendFunction
 		};
 
 		const folder = menu.addFolder("UV Transformation");
-		folder.add(params.uv, "enabled").onChange((value) => {
-
-			effect.uvTransform = value;
-
-		});
-
+		folder.add(effect.texture, "rotation", 0.0, 2.0 * Math.PI, 0.001);
 		folder.open();
 
-		let subFolder = folder.addFolder("Offset");
+		let subFolder = folder.addFolder("offset");
 		subFolder.add(offset, "x", 0.0, 1.0, 0.001);
 		subFolder.add(offset, "y", 0.0, 1.0, 0.001);
 
-		subFolder = folder.addFolder("Repeat");
+		subFolder = folder.addFolder("repeat");
 		subFolder.add(repeat, "x", 0.0, 2.0, 0.001);
 		subFolder.add(repeat, "y", 0.0, 2.0, 0.001);
 
-		subFolder = folder.addFolder("Center");
+		subFolder = folder.addFolder("center");
 		subFolder.add(center, "x", 0.0, 1.0, 0.001);
 		subFolder.add(center, "y", 0.0, 1.0, 0.001);
 

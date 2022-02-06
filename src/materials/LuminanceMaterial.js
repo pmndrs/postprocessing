@@ -137,7 +137,7 @@ export class LuminanceMaterial extends ShaderMaterial {
 
 	get smoothing() {
 
-		return this.getSmoothing();
+		return this.getSmoothingFactor();
 
 	}
 
@@ -150,7 +150,7 @@ export class LuminanceMaterial extends ShaderMaterial {
 
 	set smoothing(value) {
 
-		this.setSmoothing(value);
+		this.setSmoothingFactor(value);
 
 	}
 

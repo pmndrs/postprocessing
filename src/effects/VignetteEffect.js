@@ -53,14 +53,31 @@ export class VignetteEffect extends Effect {
 			])
 		});
 
-		/**
-		 * Indicates whether Eskil's vignette technique is enabled.
-		 *
-		 * @type {Boolean}
-		 * @deprecated Use setTechnique(VignetteTechnique.ESKIL) instead.
-		 */
+	}
 
-		this.eskil = eskil;
+	/**
+	 * Indicates whether Eskil's vignette technique is enabled.
+	 *
+	 * @type {Boolean}
+	 * @deprecated Use getTechnique() instead.
+	 */
+
+	get eskil() {
+
+		return (this.getTechnique() === VignetteTechnique.ESKIL);
+
+	}
+
+	/**
+	 * Indicates whether Eskil's vignette technique is enabled.
+	 *
+	 * @type {Boolean}
+	 * @deprecated Use setTechnique(VignetteTechnique.ESKIL) instead.
+	 */
+
+	set eskil(value) {
+
+		this.setTechnique(value ? VignetteTechnique.ESKIL : VignetteTechnique.DEFAULT);
 
 	}
 

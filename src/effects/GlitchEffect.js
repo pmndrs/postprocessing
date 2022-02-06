@@ -84,7 +84,7 @@ export class GlitchEffect extends Effect {
 				["columns", new Uniform(columns)],
 				["active", new Uniform(false)],
 				["random", new Uniform(1.0)],
-				["seed", new Uniform(new Vector2())],
+				["seeds", new Uniform(new Vector2())],
 				["distortion", new Uniform(new Vector2())]
 			])
 		});

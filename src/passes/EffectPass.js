@@ -283,7 +283,7 @@ export class EffectPass extends Pass {
 
 	get dithering() {
 
-		return this.isDitheringEnabled();
+		return this.getFullscreenMaterial().dithering;
 
 	}
 
@@ -296,7 +296,9 @@ export class EffectPass extends Pass {
 
 	set dithering(value) {
 
-		this.setDitheringEnabled(value);
+		const material = this.getFullscreenMaterial();
+		material.dithering = value;
+		material.needsUpdate = true;
 
 	}
 

@@ -325,7 +325,7 @@ export class SSAOMaterial extends ShaderMaterial {
 
 	getRadius() {
 
-		return Number(this.defines.RADIUS);
+		return this.radius;
 
 	}
 

@@ -142,7 +142,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 	get inverted() {
 
-		return this.isInverted;
+		return this.isInverted();
 
 	}
 

@@ -424,8 +424,8 @@ export class BloomDemo extends PostProcessingDemo {
 
 		menu.add(params, "intensity", 0.0, 3.0, 0.01).onChange((value) => {
 
-			effectA.blurPass.setIntensity(Number(value));
-			effectB.blurPass.setIntensity(Number(value));
+			effectA.setIntensity(Number(value));
+			effectB.setIntensity(Number(value));
 
 		});
 

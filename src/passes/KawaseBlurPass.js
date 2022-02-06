@@ -99,10 +99,10 @@ export class KawaseBlurPass extends Pass {
 		this.ditheredBlurMaterial.dithering = true;
 
 		/**
-		 * Whether the blurred result should also be dithered using noise.
+		 * Indicates whether dithering is enabled.
 		 *
 		 * @type {Boolean}
-		 * @deprecated Set the frameBufferType of the EffectComposer to HalfFloatType instead.
+		 * @deprecated Use EffectPass.getFullscreenMaterial().dithering instead.
 		 */
 
 		this.dithering = false;
@@ -233,7 +233,7 @@ export class KawaseBlurPass extends Pass {
 	setScale(value) {
 
 		this.blurMaterial.setScale(value);
-		this.ditheredConvolutionMaterial.setScale(value);
+		this.ditheredBlurMaterial.setScale(value);
 
 	}
 

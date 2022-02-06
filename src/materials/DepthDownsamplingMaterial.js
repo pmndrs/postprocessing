@@ -92,7 +92,7 @@ export class DepthDownsamplingMaterial extends ShaderMaterial {
 
 	setNormalBuffer(value) {
 
-		this.uniforms.depthBuffer.value = value;
+		this.uniforms.normalBuffer.value = value;
 
 		if(value !== null) {
 

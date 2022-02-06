@@ -65,7 +65,33 @@ export class Resolution extends EventDispatcher {
 		 * @private
 		 */
 
-		this.scale = scale;
+		this.s = scale;
+
+	}
+
+	/**
+	 * The resolution scale.
+	 *
+	 * @type {Number}
+	 * @deprecated Use getScale() instead.
+	 */
+
+	get scale() {
+
+		return this.getScale();
+
+	}
+
+	/**
+	 * Sets the resolution scale.
+	 *
+	 * @type {Number}
+	 * @deprecated Use setScale() instead.
+	 */
+
+	set scale(value) {
+
+		this.setScale(value);
 
 	}
 
@@ -83,19 +109,6 @@ export class Resolution extends EventDispatcher {
 	}
 
 	/**
-	 * The effective height.
-	 *
-	 * @type {Number}
-	 * @deprecated Use getHeight() instead.
-	 */
-
-	get height() {
-
-		return this.getHeight();
-
-	}
-
-	/**
 	 * Sets the preferred width.
 	 *
 	 * @type {Number}
@@ -105,6 +118,19 @@ export class Resolution extends EventDispatcher {
 	set width(value) {
 
 		this.setPreferredWidth(value);
+
+	}
+
+	/**
+	 * The effective height.
+	 *
+	 * @type {Number}
+	 * @deprecated Use getHeight() instead.
+	 */
+
+	get height() {
+
+		return this.getHeight();
 
 	}
 
@@ -208,7 +234,7 @@ export class Resolution extends EventDispatcher {
 
 	getScale() {
 
-		return this.scale;
+		return this.s;
 
 	}
 
@@ -222,9 +248,9 @@ export class Resolution extends EventDispatcher {
 
 	setScale(value) {
 
-		if(this.scale !== value) {
+		if(this.s !== value) {
 
-			this.scale = value;
+			this.s = value;
 			this.preferred.setScalar(AUTO_SIZE);
 			this.dispatchEvent({ type: "change" });
 			this.resizable.setSize(this.base.width, this.base.height);

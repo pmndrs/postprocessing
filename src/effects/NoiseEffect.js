@@ -14,13 +14,13 @@ export class NoiseEffect extends Effect {
 	 *
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
-	 * @param {Boolean} [options.premultiplied=false] - Whether the noise should be multiplied with the input colors prior to blending.
+	 * @param {Boolean} [options.premultiply=false] - Whether the noise should be multiplied with the input colors prior to blending.
 	 */
 
-	constructor({ blendFunction = BlendFunction.SCREEN, premultiplied = false } = {}) {
+	constructor({ blendFunction = BlendFunction.SCREEN, premultiply = false } = {}) {
 
 		super("NoiseEffect", fragmentShader, { blendFunction });
-		this.setPremultiplied(premultiplied);
+		this.setPremultiplied(premultiply);
 
 	}
 
@@ -58,7 +58,7 @@ export class NoiseEffect extends Effect {
 
 	isPremultiplied() {
 
-		return Number(this.defines.has("PREMULTIPLIED"));
+		return this.defines.has("PREMULTIPLIED");
 
 	}
 
