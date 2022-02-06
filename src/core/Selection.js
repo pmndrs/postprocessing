@@ -151,7 +151,7 @@ export class Selection extends Set {
 	/**
 	 * Clears this selection and adds the given objects.
 	 *
-	 * @param {Iterable<Object3D>} objects - The objects that should be selected. This array will be copied.
+	 * @param {Iterable<Object3D>} objects - The objects that should be selected.
 	 * @return {Selection} This selection.
 	 */
 
