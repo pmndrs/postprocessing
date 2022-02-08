@@ -27,7 +27,7 @@ function load() {
 	const loadingManager = new LoadingManager();
 	const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
-	const path = "/img/textures/skies/sunset/";
+	const path = document.baseURI + "img/textures/skies/sunset/";
 	const format = ".png";
 	const urls = [
 		path + "px" + format, path + "nx" + format,
