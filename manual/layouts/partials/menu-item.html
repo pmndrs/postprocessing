@@ -12,7 +12,7 @@
 {{ end }}
 
 <li class="{{ delimit $class ` ` }}">
-	<a href="{{ .context.URL | relLangURL }}"{{ if not .context.Page }} target="_blank"{{ end }}>
+	<a href="{{ .context.URL }}"{{ if not .context.Page }} target="_blank"{{ end }}>
 		{{ .context.Pre }}
 
 		{{ $name := .context.Name }}
