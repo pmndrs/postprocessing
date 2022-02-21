@@ -2,6 +2,7 @@ import {
 	DepthStencilFormat,
 	DepthTexture,
 	LinearFilter,
+	REVISION,
 	UnsignedIntType,
 	UnsignedInt248Type,
 	Vector2,
@@ -130,7 +131,8 @@ export class EffectComposer {
 
 	get multisampling() {
 
-		return (this.inputBuffer instanceof WebGLMultisampleRenderTarget) ? this.inputBuffer.samples : 0;
+		// TODO Raise min three version to 138 and remove || 0.
+		return this.inputBuffer.samples || 0;
 
 	}
 
@@ -345,13 +347,19 @@ export class EffectComposer {
 			type
 		};
 
-		const renderTarget = (multisampling > 0) ?
-			new WebGLMultisampleRenderTarget(size.width, size.height, options) :
-			new WebGLRenderTarget(size.width, size.height, options);
+		let renderTarget;
 
 		if(multisampling > 0) {
 
+			renderTarget = (Number(REVISION.replace(/\D+/g, "")) < 138) ?
+				new WebGLMultisampleRenderTarget(size.width, size.height, options) :
+				new WebGLRenderTarget(size.width, size.height, options);
+
 			renderTarget.samples = multisampling;
+
+		} else {
+
+			renderTarget = new WebGLRenderTarget(size.width, size.height, options);
 
 		}
 
