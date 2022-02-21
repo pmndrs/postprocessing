@@ -145,16 +145,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
 		});
 
-		// Info Box
-
-		const info = viewport.querySelector(".info");
-
-		if(info !== null) {
-
-			info.addEventListener("click", () => info.classList.toggle("active"));
-
-		}
-
 		// Fullscreen
 
 		const fullscreen = viewport.querySelector(".fullscreen");
