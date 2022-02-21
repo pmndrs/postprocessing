@@ -1,5 +1,5 @@
 import test from "ava";
-import { AdaptiveLuminanceMaterial } from "postprocessing";
+import { AdaptiveLuminanceMaterial } from "postprocessing/module";
 
 test("can be created", t => {
 

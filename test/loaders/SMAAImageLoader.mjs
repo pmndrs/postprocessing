@@ -1,5 +1,5 @@
 import test from "ava";
-import { SMAAImageLoader } from "postprocessing";
+import { SMAAImageLoader } from "postprocessing/module";
 
 test("can be created", t => {
 

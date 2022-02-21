@@ -1,5 +1,5 @@
 import test from "ava";
-import { NormalPass } from "postprocessing";
+import { NormalPass } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

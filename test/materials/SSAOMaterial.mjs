@@ -1,5 +1,5 @@
 import test from "ava";
-import { SSAOMaterial } from "postprocessing";
+import { SSAOMaterial } from "postprocessing/module";
 
 test("can be created", t => {
 

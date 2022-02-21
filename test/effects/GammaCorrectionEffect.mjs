@@ -1,5 +1,5 @@
 import test from "ava";
-import { GammaCorrectionEffect } from "postprocessing";
+import { GammaCorrectionEffect } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

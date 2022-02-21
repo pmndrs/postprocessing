@@ -29,49 +29,14 @@
 			}
 		}
 		.fullscreen {
-			background-image: url("/img/svg/fullscreen_white_24dp.svg");
+			background-image: url("../img/svg/fullscreen_white_24dp.svg");
 			&.active {
-				background-image: url("/img/svg/fullscreen_exit_white_24dp.svg");
+				background-image: url("../img/svg/fullscreen_exit_white_24dp.svg");
 			}
 		}
 		.code {
-			background-image: url("/img/svg/code_white_24dp.svg");
+			background-image: url("../img/svg/code_white_24dp.svg");
 			padding: 2px;
-		}
-		.info {
-			background-image: url("/img/svg/info_white_24dp.svg");
-			padding: 2px;
-			position: relative;
-			a {
-				color: var(--info-anchor-color);
-			}
-			div {
-				background-color: rgba(black, 0.8);
-				border: 1px solid rgba(white, 0.4);
-				border-radius: 3px;
-				bottom: 100%;
-				box-sizing: border-box;
-				color: var(--info-foreground-color);
-				cursor: auto;
-				display: none;
-				font-size: 75%;
-				left: -24px;
-				margin-bottom: 0.5rem;
-				max-width: calc(100vw - 12px);
-				padding: 0.25rem 0.5rem;
-				position: absolute;
-				width: max-content;
-				z-index: layers.$hud;
-			}
-			p {
-				margin: 0.25rem 0;
-			}
-			&.active {
-				opacity: 1;
-				div {
-					display: block;
-				}
-			}
 		}
 	}
 	.lut {

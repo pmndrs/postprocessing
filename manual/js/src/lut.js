@@ -72,9 +72,9 @@ function load() {
 	return new Promise((resolve, reject) => {
 
 		loadingManager.onLoad = () => resolve(assets);
-		loadingManager.onError = (url) => reject(`Failed to load ${url}`);
+		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		textureLoader.load("/img/textures/photos/GEDC0053.jpg", (t) => {
+		textureLoader.load(document.baseURI + "img/textures/photos/GEDC0053.jpg", (t) => {
 
 			t.encoding = sRGBEncoding;
 			assets.set("photo", t);
@@ -89,7 +89,7 @@ function load() {
 
 			} else if(/.3dl$/im.test(entry[1])) {
 
-				lut3dlLoader.load(`/img/textures/lut/${entry[1]}`, (t) => {
+				lut3dlLoader.load(`${document.baseURI}img/textures/lut/${entry[1]}`, (t) => {
 
 					t.name = entry[0];
 					assets.set(entry[0], t);
@@ -98,7 +98,7 @@ function load() {
 
 			} else if(/.cube$/im.test(entry[1])) {
 
-				lutCubeLoader.load(`/img/textures/lut/${entry[1]}`, (t) => {
+				lutCubeLoader.load(`${document.baseURI}img/textures/lut/${entry[1]}`, (t) => {
 
 					t.name = entry[0];
 					assets.set(entry[0], t);
@@ -107,7 +107,7 @@ function load() {
 
 			} else {
 
-				textureLoader.load(`/img/textures/lut/${entry[1]}`, (t) => {
+				textureLoader.load(`${document.baseURI}img/textures/lut/${entry[1]}`, (t) => {
 
 					t.name = entry[0];
 					t.generateMipmaps = false;
@@ -129,7 +129,7 @@ function load() {
 
 }
 
-function initialize(assets) {
+window.addEventListener("load", () => load().then((assets) => {
 
 	// Renderer
 
@@ -346,16 +346,5 @@ function initialize(assets) {
 		requestAnimationFrame(render);
 
 	});
-
-}
-
-window.addEventListener("load", () => load().then(initialize).catch((e) => {
-
-	const container = document.querySelector(".viewport");
-	const message = document.createElement("p");
-	message.classList.add("error");
-	message.innerText = e.toString();
-	container.append(message);
-	console.error(e);
 
 }));

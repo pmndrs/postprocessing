@@ -1,5 +1,5 @@
 import test from "ava";
-import { ChromaticAberrationEffect } from "postprocessing";
+import { ChromaticAberrationEffect } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

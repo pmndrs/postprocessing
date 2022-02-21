@@ -34,7 +34,7 @@ function load() {
 	const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 	const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
-	const path = "/img/textures/skies/sunset/";
+	const path = document.baseURI + "img/textures/skies/sunset/";
 	const format = ".png";
 	const urls = [
 		path + "px" + format, path + "nx" + format,
@@ -45,7 +45,7 @@ function load() {
 	return new Promise((resolve, reject) => {
 
 		loadingManager.onLoad = () => resolve(assets);
-		loadingManager.onError = (url) => reject(`Failed to load ${url}`);
+		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
 		cubeTextureLoader.load(urls, (t) => {
 
@@ -65,7 +65,7 @@ function load() {
 
 }
 
-function initialize(assets) {
+window.addEventListener("load", () => load().then((assets) => {
 
 	// Renderer
 
@@ -130,13 +130,11 @@ function initialize(assets) {
 
 	const smaaPass = new EffectPass(camera, smaaEffect);
 
-	const smaaEdgesDebugPass = new EffectPass(camera, smaaEffect, new TextureEffect({
-		texture: smaaEffect.getEdgesTexture()
-	}));
-
-	const smaaWeightsDebugPass = new EffectPass(camera, smaaEffect, new TextureEffect({
-		texture: smaaEffect.getWeightsTexture()
-	}));
+	// BEGIN DEBUG
+	const smaaEdgesDebugPass = new EffectPass(camera, smaaEffect,
+		new TextureEffect({ texture: smaaEffect.getEdgesTexture() }));
+	const smaaWeightsDebugPass = new EffectPass(camera, smaaEffect,
+		new TextureEffect({ texture: smaaEffect.getWeightsTexture() }));
 
 	smaaPass.renderToScreen = true;
 	smaaEdgesDebugPass.renderToScreen = true;
@@ -145,6 +143,7 @@ function initialize(assets) {
 	smaaWeightsDebugPass.setEnabled(false);
 	smaaEdgesDebugPass.getFullscreenMaterial().setOutputEncodingEnabled(false);
 	smaaWeightsDebugPass.getFullscreenMaterial().setOutputEncodingEnabled(false);
+	// END DEBUG
 
 	composer.addPass(new RenderPass(scene, camera));
 	composer.addPass(smaaPass);
@@ -238,16 +237,5 @@ function initialize(assets) {
 		requestAnimationFrame(render);
 
 	});
-
-}
-
-window.addEventListener("load", () => load().then(initialize).catch((e) => {
-
-	const container = document.querySelector(".viewport");
-	const message = document.createElement("p");
-	message.classList.add("error");
-	message.innerText = e.toString();
-	container.append(message);
-	console.error(e);
 
 }));

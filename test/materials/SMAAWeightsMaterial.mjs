@@ -1,5 +1,5 @@
 import test from "ava";
-import { SMAAWeightsMaterial } from "postprocessing";
+import { SMAAWeightsMaterial } from "postprocessing/module";
 
 test("can be created", t => {
 

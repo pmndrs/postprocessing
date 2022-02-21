@@ -26,7 +26,6 @@ export class TextureEffect extends Effect {
 
 		super("TextureEffect", fragmentShader, {
 			blendFunction,
-			vertexShader,
 			defines: new Map([
 				["TEXEL", "texel"]
 			]),
@@ -89,25 +88,39 @@ export class TextureEffect extends Effect {
 	setTexture(value) {
 
 		const prevTexture = this.getTexture();
+		const uniforms = this.uniforms;
+		const defines = this.defines;
 
 		if(prevTexture !== value) {
 
-			this.uniforms.get("map").value = value;
-			this.uniforms.get("uvTransform").value = value.matrix;
-			this.defines.delete("TEXTURE_PRECISION_HIGH");
+			uniforms.get("map").value = value;
+			uniforms.get("uvTransform").value = value.matrix;
+			defines.delete("TEXTURE_PRECISION_HIGH");
 
 			if(this.renderer !== null) {
 
 				const decoding = getTextureDecoding(value, this.renderer.capabilities.isWebGL2);
-				this.defines.set("texelToLinear(texel)", decoding);
+				defines.set("texelToLinear(texel)", decoding);
 
 			}
 
 			if(value !== null) {
 
+				if(value.matrixAutoUpdate) {
+
+					defines.set("UV_TRANSFORM", "1");
+					this.setVertexShader(vertexShader);
+
+				} else {
+
+					defines.delete("UV_TRANSFORM");
+					this.setVertexShader(null);
+
+				}
+
 				if(value.type !== UnsignedByteType) {
 
-					this.defines.set("TEXTURE_PRECISION_HIGH", "1");
+					defines.set("TEXTURE_PRECISION_HIGH", "1");
 
 				}
 

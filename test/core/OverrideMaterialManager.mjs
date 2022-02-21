@@ -1,5 +1,5 @@
 import test from "ava";
-import { OverrideMaterialManager } from "postprocessing";
+import { OverrideMaterialManager } from "postprocessing/module";
 
 test("can be instantiated and disposed", t => {
 

@@ -1,5 +1,5 @@
 import test from "ava";
-import { OutlineEffect } from "postprocessing";
+import { OutlineEffect } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

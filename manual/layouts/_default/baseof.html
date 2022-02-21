@@ -10,7 +10,7 @@
 
 		<title>{{ block "title" . }}{{ .Title }}{{ end }} &middot; {{ .Site.Title }}</title>
 
-		{{ if not .IsHome }}<base href="{{ .RelPermalink | relLangURL }}">{{ end }}
+		<base href="{{ .Site.BaseURL }}">
 		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 		{{ with resources.Get "css/index.css" }}
 			{{ $stylesheet := . | fingerprint }}

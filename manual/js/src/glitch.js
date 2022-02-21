@@ -2,21 +2,22 @@ import {
 	CubeTextureLoader,
 	HalfFloatType,
 	LoadingManager,
-	Mesh,
-	MeshBasicMaterial,
 	PerspectiveCamera,
+	RGBAFormat,
 	Scene,
-	SphereBufferGeometry,
 	sRGBEncoding,
-	Vector3,
+	TextureLoader,
 	VSMShadowMap,
 	WebGLRenderer
 } from "three";
 
 import {
-	CopyPass,
-	DepthPickingPass,
+	ChromaticAberrationEffect,
 	EffectComposer,
+	EffectPass,
+	GlitchEffect,
+	GlitchMode,
+	NoiseTexture,
 	RenderPass
 } from "../../../src";
 
@@ -29,6 +30,7 @@ function load() {
 
 	const assets = new Map();
 	const loadingManager = new LoadingManager();
+	const textureLoader = new TextureLoader(loadingManager);
 	const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
 	const path = document.baseURI + "img/textures/skies/sunset/";
@@ -43,6 +45,12 @@ function load() {
 
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
+
+		textureLoader.load(document.baseURI + "img/textures/perturb.jpg", (t) => {
+
+			assets.set("noise", t);
+
+		});
 
 		cubeTextureLoader.load(urls, (t) => {
 
@@ -99,18 +107,6 @@ window.addEventListener("load", () => load().then((assets) => {
 	scene.add(CornellBox.createEnvironment());
 	scene.add(CornellBox.createActors());
 
-	const cursor = new Mesh(
-		new SphereBufferGeometry(0.2, 32, 32),
-		new MeshBasicMaterial({
-			color: 0x666666,
-			transparent: true,
-			depthWrite: false,
-			opacity: 0.5
-		})
-	);
-
-	scene.add(cursor);
-
 	// Post Processing
 
 	const context = renderer.getContext();
@@ -119,36 +115,60 @@ window.addEventListener("load", () => load().then((assets) => {
 		frameBufferType: HalfFloatType
 	});
 
-	const depthPickingPass = new DepthPickingPass();
+	const chromaticAberrationEffect = new ChromaticAberrationEffect();
+	const glitchEffect = new GlitchEffect({
+		perturbationMap: assets.get("noise"),
+		chromaticAberrationOffset: chromaticAberrationEffect.getOffset() // optional
+	});
+
 	composer.addPass(new RenderPass(scene, camera));
-	composer.addPass(depthPickingPass);
-	composer.addPass(new CopyPass());
-
-	const ndc = new Vector3();
-
-	async function pickDepth(event) {
-
-		const clientRect = container.getBoundingClientRect();
-		const clientX = event.clientX - clientRect.left;
-		const clientY = event.clientY - clientRect.top;
-		ndc.x = (clientX / container.clientWidth) * 2.0 - 1.0;
-		ndc.y = -(clientY / container.clientHeight) * 2.0 + 1.0;
-
-		ndc.z = await depthPickingPass.readDepth(ndc);
-		ndc.z = ndc.z * 2.0 - 1.0;
-
-		// Convert from NDC to world position.
-		cursor.position.copy(ndc.unproject(camera));
-
-	}
-
-	container.addEventListener("pointermove", (e) => void pickDepth(e), { passive: true });
+	composer.addPass(new EffectPass(camera, glitchEffect));
+	composer.addPass(new EffectPass(camera, chromaticAberrationEffect));
 
 	// Settings
 
 	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.addSeparator();
+
+	const noiseTexture = new NoiseTexture(64, 64, RGBAFormat);
+
+	const params = {
+		"glitch mode": glitchEffect.getMode(),
+		"custom pattern": true,
+		"min delay": glitchEffect.getMinDelay(),
+		"max delay": glitchEffect.getMaxDelay(),
+		"min duration": glitchEffect.getMinDuration(),
+		"max duration": glitchEffect.getMaxDuration(),
+		"min strength": glitchEffect.getMinStrength(),
+		"max strength": glitchEffect.getMaxStrength(),
+		"glitch ratio": glitchEffect.getGlitchRatio(),
+		"glitch columns": glitchEffect.getGlitchColumns(),
+		"opacity": glitchEffect.getBlendMode().getOpacity(),
+		"blend mode": glitchEffect.getBlendMode().getBlendFunction()
+	};
+
+	pane.addInput(params, "glitch mode", { options: GlitchMode }).on("change", (e) => glitchEffect.setMode(e.value));
+	pane.addInput(params, "custom pattern")
+		.on("change", (e) => glitchEffect.setPerturbationMap(e.value ? assets.get("noise") : noiseTexture));
+
+	pane.addInput(params, "min delay", { min: 0, max: 2, step: 0.01 })
+		.on("change", (e) => glitchEffect.setMinDelay(e.value));
+	pane.addInput(params, "max delay", { min: 2, max: 4, step: 0.01 })
+		.on("change", (e) => glitchEffect.setMaxDelay(e.value));
+	pane.addInput(params, "min duration", { min: 0, max: 0.6, step: 0.01 })
+		.on("change", (e) => glitchEffect.setMinDuration(e.value));
+	pane.addInput(params, "max duration", { min: 0.6, max: 1.8, step: 0.01 })
+		.on("change", (e) => glitchEffect.setMaxDuration(e.value));
+	pane.addInput(params, "min strength", { min: 0, max: 1, step: 0.01 })
+		.on("change", (e) => glitchEffect.setMinStrength(e.value));
+	pane.addInput(params, "max strength", { min: 0, max: 1, step: 0.01 })
+		.on("change", (e) => glitchEffect.setMaxStrength(e.value));
+	pane.addInput(params, "glitch ratio", { min: 0, max: 1, step: 0.01 })
+		.on("change", (e) => glitchEffect.setGlitchRatio(e.value));
+	pane.addInput(params, "glitch columns", { min: 0, max: 0.5, step: 0.01 })
+		.on("change", (e) => glitchEffect.setGlitchColumns(e.value));
 
 	// Resize Handler
 

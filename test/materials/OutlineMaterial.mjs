@@ -1,5 +1,5 @@
 import test from "ava";
-import { OutlineMaterial } from "postprocessing";
+import { OutlineMaterial } from "postprocessing/module";
 
 test("can be created", t => {
 

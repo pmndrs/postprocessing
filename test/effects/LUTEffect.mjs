@@ -1,5 +1,5 @@
 import test from "ava";
-import { LUTEffect } from "postprocessing";
+import { LUTEffect } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

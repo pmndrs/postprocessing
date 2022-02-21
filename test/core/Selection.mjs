@@ -1,5 +1,5 @@
 import test from "ava";
-import { Selection } from "postprocessing";
+import { Selection } from "postprocessing/module";
 
 test("can be instantiated", t => {
 

@@ -1,5 +1,5 @@
 import test from "ava";
-import { DepthDownsamplingMaterial } from "postprocessing";
+import { DepthDownsamplingMaterial } from "postprocessing/module";
 
 test("can be created", t => {
 

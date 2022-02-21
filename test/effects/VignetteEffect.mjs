@@ -1,5 +1,5 @@
 import test from "ava";
-import { VignetteEffect } from "postprocessing";
+import { VignetteEffect } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

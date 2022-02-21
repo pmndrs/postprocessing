@@ -1,5 +1,5 @@
 import test from "ava";
-import { BokehEffect } from "postprocessing";
+import { BokehEffect } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

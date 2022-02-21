@@ -1,5 +1,5 @@
 import test from "ava";
-import { NoiseTexture } from "postprocessing";
+import { NoiseTexture } from "postprocessing/module";
 
 test("can be created", t => {
 

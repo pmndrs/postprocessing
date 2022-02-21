@@ -13,7 +13,7 @@ const plugins = [glsl({ minify })];
 const banner = `/**
  * ${pkg.name} v${pkg.version} build ${date}
  * ${pkg.homepage}
- * Copyright ${date.slice(-4)} ${pkg.author.name}
+ * Copyright 2015-${date.slice(-4)} ${pkg.author.name}
  * @license ${pkg.license}
  */`;
 
@@ -63,6 +63,17 @@ await esbuild.build({
 	plugins,
 	minify,
 	watch
+}).catch(() => process.exit(1));
+
+await esbuild.build({
+	entryPoints: ["src/index.js"],
+	outfile: `build/${pkg.name}.esm.js`,
+	banner: { js: banner },
+	logLevel: "info",
+	format: "esm",
+	bundle: true,
+	external,
+	plugins
 }).catch(() => process.exit(1));
 
 await esbuild.build({

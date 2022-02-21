@@ -19,8 +19,13 @@ strong {
 	display: flex;
 	height: 100%;
 	justify-content: center;
+	left: 0;
+	margin: 0;
+	position: absolute;
+	right: 0;
+	top: 0;
 	&::before {
-		background: no-repeat center/cover url("/img/svg/warning_black_24dp.svg");
+		background: no-repeat center/cover url("../img/svg/warning_black_24dp.svg");
 		content: "";
 		display: inline-block;
 		height: 24px;

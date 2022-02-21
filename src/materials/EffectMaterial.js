@@ -41,7 +41,7 @@ export class EffectMaterial extends ShaderMaterial {
 		super({
 			name: "EffectMaterial",
 			defines: {
-				THREE_REVISION: REVISION,
+				THREE_REVISION: REVISION.replace(/\D+/g, ""),
 				DEPTH_PACKING: "0",
 				ENCODE_OUTPUT: "1"
 			},

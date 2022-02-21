@@ -1,6 +1,6 @@
 import test from "ava";
 import { Mesh } from "three";
-import { GodRaysEffect } from "postprocessing";
+import { GodRaysEffect } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

@@ -1,5 +1,5 @@
 import test from "ava";
-import { ShockWaveEffect } from "postprocessing";
+import { ShockWaveEffect } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

@@ -1,5 +1,5 @@
 import test from "ava";
-import { RawImageData } from "postprocessing";
+import { RawImageData } from "postprocessing/module";
 
 test("can be created", t => {
 

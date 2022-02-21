@@ -1,5 +1,5 @@
 import test from "ava";
-import { KawaseBlurMaterial } from "postprocessing";
+import { KawaseBlurMaterial } from "postprocessing/module";
 
 test("can be created", t => {
 

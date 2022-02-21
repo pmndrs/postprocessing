@@ -1,5 +1,5 @@
 import test from "ava";
-import { SMAAImageGenerator } from "postprocessing";
+import { SMAAImageGenerator } from "postprocessing/module";
 
 test("can be created", t => {
 

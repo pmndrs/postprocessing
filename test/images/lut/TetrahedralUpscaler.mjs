@@ -1,5 +1,5 @@
 import test from "ava";
-import { LookupTexture3D, TetrahedralUpscaler } from "postprocessing";
+import { LookupTexture3D, TetrahedralUpscaler } from "postprocessing/module";
 
 test("generates accurate upscaled data", t => {
 

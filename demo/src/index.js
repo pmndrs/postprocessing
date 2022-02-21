@@ -108,9 +108,14 @@ window.addEventListener("load", (event) => {
 		if(demo !== null) {
 
 			const camera = demo.getCamera();
-			const aspect = Math.max(width / height, 16 / 9);
-			const vFoV = calculateVerticalFoV(90, aspect);
-			camera.fov = vFoV;
+
+			if(camera !== null) {
+
+				const aspect = Math.max(width / height, 16 / 9);
+				const vFoV = calculateVerticalFoV(90, aspect);
+				camera.fov = vFoV;
+
+			}
 
 		}
 

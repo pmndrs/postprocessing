@@ -1,5 +1,5 @@
 import test from "ava";
-import { GodRaysMaterial } from "postprocessing";
+import { GodRaysMaterial } from "postprocessing/module";
 
 test("can be created", t => {
 

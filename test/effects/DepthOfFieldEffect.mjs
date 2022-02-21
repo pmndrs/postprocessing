@@ -1,5 +1,5 @@
 import test from "ava";
-import { DepthOfFieldEffect } from "postprocessing";
+import { DepthOfFieldEffect } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

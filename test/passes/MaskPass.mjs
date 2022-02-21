@@ -1,5 +1,5 @@
 import test from "ava";
-import { MaskPass } from "postprocessing";
+import { MaskPass } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

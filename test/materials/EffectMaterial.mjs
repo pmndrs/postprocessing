@@ -1,5 +1,5 @@
 import test from "ava";
-import { EffectMaterial } from "postprocessing";
+import { EffectMaterial } from "postprocessing/module";
 
 test("can be created", t => {
 

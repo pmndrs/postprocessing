@@ -9,20 +9,6 @@
 		</div>
 		<div class="icons">
 			<div class="icon fullscreen" title="{{ i18n `fullscreen` . }}"></div>
-			{{ with .Params.credits }}
-				<div class="icon info" title="{{ i18n `info` . }}">
-					<div>
-						{{ range . }}
-							<p>
-								{{ .asset | markdownify }} by {{ .author | markdownify }}
-								{{ with .license }}
-									({{ . | markdownify }})
-								{{ end }}
-							</p>
-						{{ end }}
-					</div>
-				</div>
-			{{ end }}
 			{{ $src := printf "%s/js/src/%s.js" .Site.Params.ManualURL .Params.script }}
 			<a class="icon" href="{{ $src }}" target="_blank"  title="{{ i18n `code` . }}">
 				<div class="icon code"></div>

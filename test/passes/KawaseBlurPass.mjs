@@ -1,5 +1,5 @@
 import test from "ava";
-import { KawaseBlurPass } from "postprocessing";
+import { KawaseBlurPass } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

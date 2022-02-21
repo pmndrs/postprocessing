@@ -1,5 +1,5 @@
 import test from "ava";
-import { BlendFunction, BlendMode } from "postprocessing";
+import { BlendFunction, BlendMode } from "postprocessing/module";
 
 test("can be created", t => {
 

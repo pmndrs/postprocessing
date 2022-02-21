@@ -435,4 +435,10 @@ export class AntialiasingDemo extends PostProcessingDemo {
 
 	}
 
+	dispose() {
+
+		this.composer.multisampling = 0;
+
+	}
+
 }

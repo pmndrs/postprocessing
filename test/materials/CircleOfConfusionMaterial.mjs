@@ -1,5 +1,5 @@
 import test from "ava";
-import { CircleOfConfusionMaterial } from "postprocessing";
+import { CircleOfConfusionMaterial } from "postprocessing/module";
 
 test("can be created", t => {
 

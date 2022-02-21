@@ -1,5 +1,5 @@
 import test from "ava";
-import { DepthDownsamplingPass } from "postprocessing";
+import { DepthDownsamplingPass } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

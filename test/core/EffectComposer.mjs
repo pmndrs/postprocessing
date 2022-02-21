@@ -1,5 +1,5 @@
 import test from "ava";
-import { EffectComposer } from "postprocessing";
+import { EffectComposer } from "postprocessing/module";
 
 test("can be instantiated and disposed", t => {
 

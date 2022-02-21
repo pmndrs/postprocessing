@@ -1,5 +1,5 @@
 import test from "ava";
-import { HueSaturationEffect } from "postprocessing";
+import { HueSaturationEffect } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 
