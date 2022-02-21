@@ -67,6 +67,17 @@ await esbuild.build({
 
 await esbuild.build({
 	entryPoints: ["src/index.js"],
+	outfile: `build/${pkg.name}.esm.js`,
+	banner: { js: banner },
+	logLevel: "info",
+	format: "esm",
+	bundle: true,
+	external,
+	plugins
+}).catch(() => process.exit(1));
+
+await esbuild.build({
+	entryPoints: ["src/index.js"],
 	outfile: `build/${pkg.name}.mjs`,
 	banner: { js: banner },
 	logLevel: "info",

@@ -6,8 +6,11 @@
 	"main": "build/postprocessing.js",
 	"module": "build/postprocessing.mjs",
 	"exports": {
-		"import": "./build/postprocessing.mjs",
-		"require": "./build/postprocessing.js"
+		".": {
+			"import": "./build/postprocessing.esm.js",
+			"require": "./build/postprocessing.js"
+		},
+		"./module": "./build/postprocessing.mjs"
 	},
 	"sideEffects": false,
 	"license": "Zlib",
