@@ -1,5 +1,5 @@
 import test from "ava";
-import { BokehMaterial } from "postprocessing";
+import { BokehMaterial } from "postprocessing/module";
 
 test("can be created", t => {
 

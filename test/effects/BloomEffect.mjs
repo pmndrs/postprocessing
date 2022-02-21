@@ -1,5 +1,5 @@
 import test from "ava";
-import { BloomEffect } from "postprocessing";
+import { BloomEffect } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

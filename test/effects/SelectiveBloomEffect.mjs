@@ -1,6 +1,6 @@
 import test from "ava";
 import { Scene } from "three";
-import { SelectiveBloomEffect } from "postprocessing";
+import { SelectiveBloomEffect } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

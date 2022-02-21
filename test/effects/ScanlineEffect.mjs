@@ -1,5 +1,5 @@
 import test from "ava";
-import { ScanlineEffect } from "postprocessing";
+import { ScanlineEffect } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

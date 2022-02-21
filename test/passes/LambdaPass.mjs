@@ -1,5 +1,5 @@
 import test from "ava";
-import { LambdaPass } from "postprocessing";
+import { LambdaPass } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

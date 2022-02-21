@@ -1,5 +1,5 @@
 import test from "ava";
-import { DepthComparisonMaterial } from "postprocessing";
+import { DepthComparisonMaterial } from "postprocessing/module";
 
 test("can be created", t => {
 

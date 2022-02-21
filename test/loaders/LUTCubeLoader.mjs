@@ -1,5 +1,5 @@
 import test from "ava";
-import { LUTCubeLoader } from "postprocessing";
+import { LUTCubeLoader } from "postprocessing/module";
 
 test("can be created", t => {
 

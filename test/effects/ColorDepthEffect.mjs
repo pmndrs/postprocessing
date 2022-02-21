@@ -1,5 +1,5 @@
 import test from "ava";
-import { ColorDepthEffect } from "postprocessing";
+import { ColorDepthEffect } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

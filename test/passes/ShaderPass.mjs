@@ -1,5 +1,5 @@
 import test from "ava";
-import { ShaderPass } from "postprocessing";
+import { ShaderPass } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

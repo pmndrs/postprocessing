@@ -1,5 +1,5 @@
 import test from "ava";
-import { SepiaEffect } from "postprocessing";
+import { SepiaEffect } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

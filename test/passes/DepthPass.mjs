@@ -1,5 +1,5 @@
 import test from "ava";
-import { DepthPass } from "postprocessing";
+import { DepthPass } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

@@ -1,5 +1,5 @@
 import test from "ava";
-import { ToneMappingEffect } from "postprocessing";
+import { ToneMappingEffect } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

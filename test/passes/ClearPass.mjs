@@ -1,5 +1,5 @@
 import test from "ava";
-import { ClearPass } from "postprocessing";
+import { ClearPass } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

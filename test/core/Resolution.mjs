@@ -1,5 +1,5 @@
 import test from "ava";
-import { Resolution } from "postprocessing";
+import { Resolution } from "postprocessing/module";
 
 test("can be instantiated", t => {
 

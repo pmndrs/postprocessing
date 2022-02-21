@@ -1,5 +1,5 @@
 import test from "ava";
-import { LookupTexture3D } from "postprocessing";
+import { LookupTexture3D } from "postprocessing/module";
 
 test("can be created", t => {
 

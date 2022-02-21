@@ -1,5 +1,5 @@
 import test from "ava";
-import { SMAAEffect } from "postprocessing";
+import { SMAAEffect } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

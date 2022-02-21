@@ -1,5 +1,5 @@
 import test from "ava";
-import { DepthMaskMaterial } from "postprocessing";
+import { DepthMaskMaterial } from "postprocessing/module";
 
 test("can be created", t => {
 

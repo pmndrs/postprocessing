@@ -1,5 +1,5 @@
 import test from "ava";
-import { AdaptiveLuminancePass } from "postprocessing";
+import { AdaptiveLuminancePass } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

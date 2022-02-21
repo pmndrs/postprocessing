@@ -1,5 +1,5 @@
 import test from "ava";
-import { CopyMaterial } from "postprocessing";
+import { CopyMaterial } from "postprocessing/module";
 
 test("can be created", t => {
 

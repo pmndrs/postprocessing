@@ -1,5 +1,5 @@
 import test from "ava";
-import { EffectPass, TextureEffect } from "postprocessing";
+import { EffectPass, TextureEffect } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 

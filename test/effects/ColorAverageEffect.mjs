@@ -1,5 +1,5 @@
 import test from "ava";
-import { ColorAverageEffect } from "postprocessing";
+import { ColorAverageEffect } from "postprocessing/module";
 
 test("can be created and destroyed", t => {
 
