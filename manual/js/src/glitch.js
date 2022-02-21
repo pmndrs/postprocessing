@@ -12,7 +12,6 @@ import {
 } from "three";
 
 import {
-	BlendFunction,
 	ChromaticAberrationEffect,
 	EffectComposer,
 	EffectPass,
