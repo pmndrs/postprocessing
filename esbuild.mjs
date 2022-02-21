@@ -13,7 +13,7 @@ const plugins = [glsl({ minify })];
 const banner = `/**
  * ${pkg.name} v${pkg.version} build ${date}
  * ${pkg.homepage}
- * Copyright ${date.slice(-4)} ${pkg.author.name}
+ * Copyright 2015-${date.slice(-4)} ${pkg.author.name}
  * @license ${pkg.license}
  */`;
 
