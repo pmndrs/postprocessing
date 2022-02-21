@@ -130,13 +130,11 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const smaaPass = new EffectPass(camera, smaaEffect);
 
-	const smaaEdgesDebugPass = new EffectPass(camera, smaaEffect, new TextureEffect({
-		texture: smaaEffect.getEdgesTexture()
-	}));
-
-	const smaaWeightsDebugPass = new EffectPass(camera, smaaEffect, new TextureEffect({
-		texture: smaaEffect.getWeightsTexture()
-	}));
+	// BEGIN DEBUG
+	const smaaEdgesDebugPass = new EffectPass(camera, smaaEffect,
+		new TextureEffect({ texture: smaaEffect.getEdgesTexture() }));
+	const smaaWeightsDebugPass = new EffectPass(camera, smaaEffect,
+		new TextureEffect({ texture: smaaEffect.getWeightsTexture() }));
 
 	smaaPass.renderToScreen = true;
 	smaaEdgesDebugPass.renderToScreen = true;
@@ -145,6 +143,7 @@ window.addEventListener("load", () => load().then((assets) => {
 	smaaWeightsDebugPass.setEnabled(false);
 	smaaEdgesDebugPass.getFullscreenMaterial().setOutputEncodingEnabled(false);
 	smaaWeightsDebugPass.getFullscreenMaterial().setOutputEncodingEnabled(false);
+	// END DEBUG
 
 	composer.addPass(new RenderPass(scene, camera));
 	composer.addPass(smaaPass);
