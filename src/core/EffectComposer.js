@@ -355,6 +355,7 @@ export class EffectComposer {
 				new WebGLMultisampleRenderTarget(size.width, size.height, options) :
 				new WebGLRenderTarget(size.width, size.height, options);
 
+			renderTarget.ignoreDepthForMultisampleCopy = false;
 			renderTarget.samples = multisampling;
 
 		} else {
