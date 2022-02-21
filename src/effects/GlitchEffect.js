@@ -410,6 +410,30 @@ export class GlitchEffect extends Effect {
 	}
 
 	/**
+	 * Returns the glitch column size.
+	 *
+	 * @return {Number} The glitch column size.
+	 */
+
+	getGlitchColumns() {
+
+		return this.uniforms.get("columns").value;
+
+	}
+
+	/**
+	 * Sets the glitch column size.
+	 *
+	 * @param {Number} value - The glitch column size.
+	 */
+
+	setGlitchColumns(value) {
+
+		this.uniforms.get("columns").value = value;
+
+	}
+
+	/**
 	 * Returns the chromatic aberration offset.
 	 *
 	 * @return {Vector2} The offset.
