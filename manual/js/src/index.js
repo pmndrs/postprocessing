@@ -94,6 +94,18 @@ window.addEventListener("DOMContentLoaded", () => {
 
 	if(viewport !== null) {
 
+		// Error Handling
+
+		window.addEventListener("unhandledrejection", (event) => {
+
+			const container = document.querySelector(".viewport");
+			const message = document.createElement("p");
+			message.classList.add("error");
+			message.innerText = event.reason.message;
+			container.append(message);
+
+		});
+
 		// Loading Animation
 
 		const observer = new MutationObserver((mutationsList, observer) => {

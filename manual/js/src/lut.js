@@ -72,7 +72,7 @@ function load() {
 	return new Promise((resolve, reject) => {
 
 		loadingManager.onLoad = () => resolve(assets);
-		loadingManager.onError = (url) => reject(`Failed to load ${url}`);
+		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
 		textureLoader.load(document.baseURI + "img/textures/photos/GEDC0053.jpg", (t) => {
 
@@ -129,7 +129,7 @@ function load() {
 
 }
 
-function initialize(assets) {
+window.addEventListener("load", () => load().then((assets) => {
 
 	// Renderer
 
@@ -346,16 +346,5 @@ function initialize(assets) {
 		requestAnimationFrame(render);
 
 	});
-
-}
-
-window.addEventListener("load", () => load().then(initialize).catch((e) => {
-
-	const container = document.querySelector(".viewport");
-	const message = document.createElement("p");
-	message.classList.add("error");
-	message.innerText = e.toString();
-	container.append(message);
-	console.error(e);
 
 }));
