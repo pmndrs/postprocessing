@@ -64,7 +64,7 @@
 		"postbuild:css": "postcss manual/assets/css/index.css -o manual/assets/css/index.css -c manual",
 		"prepublishOnly": "run-s test doc",
 		"test": "run-s lint clean build ava",
-		"start": "hugo server -s manual",
+		"start": "hugo server -s manual -e development",
 		"watch": "run-p watch:*",
 		"watch:css": "sass --no-source-map -I manual/css/src/values manual/css/src:manual/assets/css --watch",
 		"watch:eslint": "esw -w --ext .js --color src demo/src manual/js/src",
