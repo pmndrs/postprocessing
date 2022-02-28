@@ -24,7 +24,7 @@ draft: false
 
 #### Lens Dirt
 
-[Lens Dirt](https://www.inscapedigital.com/lens-dirt) by Javert Valbarr. Licensed under the [CC BY 4.0 License](http://creativecommons.org/licenses/by/4.0/).
+[Lens Dirt](https://www.inscapedigital.com/lens-dirt) by Javert Valbarr. Licensed under [CC BY 4.0](http://creativecommons.org/licenses/by/4.0/).
 
 #### Material design icons
 
