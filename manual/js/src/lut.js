@@ -18,7 +18,7 @@ import {
 	LUTEffect,
 	EffectComposer,
 	EffectPass,
-	LookupTexture3D,
+	LookupTexture,
 	LUT3dlLoader,
 	LUTCubeLoader,
 	RawImageData,
@@ -57,15 +57,15 @@ function load() {
 	const lut3dlLoader = new LUT3dlLoader(loadingManager);
 	const lutCubeLoader = new LUTCubeLoader(loadingManager);
 
-	const lutNeutral2 = LookupTexture3D.createNeutral(2);
+	const lutNeutral2 = LookupTexture.createNeutral(2);
 	lutNeutral2.name = "neutral-2";
 	assets.set(lutNeutral2.name, lutNeutral2);
 
-	const lutNeutral4 = LookupTexture3D.createNeutral(4);
+	const lutNeutral4 = LookupTexture.createNeutral(4);
 	lutNeutral4.name = "neutral-4";
 	assets.set(lutNeutral4.name, lutNeutral4);
 
-	const lutNeutral8 = LookupTexture3D.createNeutral(8);
+	const lutNeutral8 = LookupTexture.createNeutral(8);
 	lutNeutral8.name = "neutral-8";
 	assets.set(lutNeutral8.name, lutNeutral8);
 
@@ -186,7 +186,7 @@ window.addEventListener("load", () => load().then((assets) => {
 		frameBufferType: HalfFloatType
 	});
 
-	const lut = LookupTexture3D.from(assets.get("png/filmic1"));
+	const lut = LookupTexture.from(assets.get("png/filmic1"));
 	const lutEffect = renderer.capabilities.isWebGL2 ? new LUTEffect(lut) :
 		new LUTEffect(lut.convertToUint8().toDataTexture());
 
@@ -218,7 +218,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 		if(params["show LUT"]) {
 
-			const lut = LookupTexture3D.from(lutEffect.getLUT());
+			const lut = LookupTexture.from(lutEffect.getLUT());
 			const { image } = lut.convertToUint8().toDataTexture();
 			RawImageData.from(image).toCanvas().toBlob((blob) => {
 
@@ -248,14 +248,14 @@ window.addEventListener("load", () => load().then((assets) => {
 
 		if(scaleUp) {
 
-			const lut = original.isLookupTexture3D ? original : LookupTexture3D.from(original);
+			const lut = (original instanceof LookupTexture) ? original : LookupTexture.from(original);
 			console.time("Tetrahedral Upscaling");
 			promise = lut.scaleUp(params["target size"], false);
 			document.body.classList.add("progress");
 
 		} else {
 
-			promise = Promise.resolve(LookupTexture3D.from(original));
+			promise = Promise.resolve(LookupTexture.from(original));
 
 		}
 
