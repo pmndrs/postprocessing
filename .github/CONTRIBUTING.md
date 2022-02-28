@@ -7,8 +7,8 @@ Thank you for considering to contribute! :speech_balloon:
 
 1. Search the issue tracker for similar bug reports before submitting a new one.
 2. Specify the version of the library where the bug occurred.
-3. Specify your browser version, operating system, and graphics card  
-   (e.g. `Chrome 0.0.0.0 (64-bit), Windows 10 (64-bit), NVIDIA GTX 1050`).
+3. Specify your browser version, operating system, and graphics card manufacturer  
+   (e.g. `Chrome, Windows, NVIDIA`).
 4. Describe the problem in detail. Explain what happened, and what you expected would happen.
 5. Provide a minimal test case (http://jsfiddle.net) or a link to a live version of your application.
 6. If applicable, include a screenshot. Consider annotating the screenshot for clarity.
@@ -32,17 +32,17 @@ A proposed change should be focused and concise. Please adhere to the following 
 This project contains scripts that will help you during development. All scripts can be executed with `npm run [script]`.
 The following table provides an overview of the most important scripts:
 
-| Task  | Description                                                  |
-|-------|--------------------------------------------------------------|
-| build | Builds and minifies all bundles.                             |
-| watch | Lints source files, builds the demo and listens for changes. |
-| dev   | Runs the watch script and serves files locally.              |
-| test  | Lints source files, builds all bundles and runs unit tests.  |
+| Task  | Description                                                    |
+|-------|----------------------------------------------------------------|
+| build | Builds and minifies all bundles.                               |
+| watch | Lints source files, builds the manual and listens for changes. |
+| dev   | Runs the watch script and serves files locally.                |
+| test  | Lints source files, builds all bundles and runs unit tests.    |
 
 
 ### Testing :heavy_check_mark:
 
-Use the script `npm run dev` to run an HTTP server, build the demo bundle and watch files for changes. Open your web browser and navigate to http://localhost:5000/demo/index.html. Extend one of the existing demos or create a new one depending on the kind of feature you wish to implement. Make sure that your changes don't break the existing demos.
+Use the script `npm run dev` to run an HTTP server, build the demo bundle and watch files for changes. Open your web browser and navigate to http://localhost:1313. Extend one of the existing demos or create a new one depending on the kind of feature you wish to implement. Make sure that your changes don't break the existing demos.
 
 __Hint__: Open the development tools in your browser and make sure that the cache is disabled while it's open.
 
