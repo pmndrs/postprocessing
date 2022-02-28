@@ -29,19 +29,19 @@ If applicable, add screenshots to help explain your problem.
 
 ### Library versions used
 
- - Three: [e.g. 0.119.0]
- - Post Processing: [e.g. 6.0.0]
+ - Three: [e.g. X.XXX.X]
+ - Post Processing: [e.g. X.X.X]
 
 
 ### Desktop
 
- - OS: [e.g. Windows 10]
- - Browser [e.g. Chrome 0.0.0.0]
- - Graphics hardware: [e.g. NVIDIA GTX 1050]
+ - OS: [e.g. Windows]
+ - Browser [e.g. Chrome X.X.X.X]
+ - Graphics hardware: [e.g. NVIDIA]
 
 
 ### Mobile
 
- - Device: [e.g. iPhone6]
- - OS: [e.g. Android 10]
- - Browser [e.g. Firefox 68.11.0]
+ - Device: [e.g. iPhone]
+ - OS: [e.g. Android]
+ - Browser [e.g. Firefox X.X.X]
