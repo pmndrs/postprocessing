@@ -29,9 +29,11 @@ const c = new Color();
  * A 3D lookup texture (LUT).
  *
  * This texture can be used as-is in a WebGL 2 context. It can also be converted into a 2D texture.
+ *
+ * TODO Extend Data3DTexture.
  */
 
-export class LookupTexture3D extends DataTexture3D {
+export class LookupTexture extends DataTexture3D {
 
 	/**
 	 * Constructs a cubic 3D lookup texture.
@@ -91,7 +93,7 @@ export class LookupTexture3D extends DataTexture3D {
 	 *
 	 * @param {Number} size - The target sidelength.
 	 * @param {Boolean} [transferData=true] - Extra fast mode. Set to false to keep the original data intact.
-	 * @return {Promise<LookupTexture3D>} A promise that resolves with a new LUT upon completion.
+	 * @return {Promise<LookupTexture>} A promise that resolves with a new LUT upon completion.
 	 */
 
 	scaleUp(size, transferData = true) {
@@ -115,7 +117,7 @@ export class LookupTexture3D extends DataTexture3D {
 				worker.addEventListener("error", (event) => reject(event.error));
 				worker.addEventListener("message", (event) => {
 
-					const lut = new LookupTexture3D(event.data, size);
+					const lut = new LookupTexture(event.data, size);
 					lut.encoding = this.encoding;
 					lut.type = this.type;
 					lut.name = this.name;
@@ -144,8 +146,8 @@ export class LookupTexture3D extends DataTexture3D {
 	/**
 	 * Applies the given LUT to this one.
 	 *
-	 * @param {LookupTexture3D} lut - A LUT. Must have the same dimensions, type and format as this LUT.
-	 * @return {LookupTexture3D} This texture.
+	 * @param {LookupTexture} lut - A LUT. Must have the same dimensions, type and format as this LUT.
+	 * @return {LookupTexture} This texture.
 	 */
 
 	applyLUT(lut) {
@@ -203,7 +205,7 @@ export class LookupTexture3D extends DataTexture3D {
 	 *
 	 * This is a lossy operation which should only be performed after all other transformations have been applied.
 	 *
-	 * @return {LookupTexture3D} This texture.
+	 * @return {LookupTexture} This texture.
 	 */
 
 	convertToUint8() {
@@ -232,7 +234,7 @@ export class LookupTexture3D extends DataTexture3D {
 	/**
 	 * Converts the LUT data into float data.
 	 *
-	 * @return {LookupTexture3D} This texture.
+	 * @return {LookupTexture} This texture.
 	 */
 
 	convertToFloat() {
@@ -262,12 +264,12 @@ export class LookupTexture3D extends DataTexture3D {
 	 * Converts this LUT into RGBA data.
 	 *
 	 * @deprecated LUTs are RGBA by default since three r137.
-	 * @return {LookupTexture3D} This texture.
+	 * @return {LookupTexture} This texture.
 	 */
 
 	convertToRGBA() {
 
-		console.warn("LookupTexture3D", "convertToRGBA() is deprecated, LUTs are now RGBA by default");
+		console.warn("LookupTexture", "convertToRGBA() is deprecated, LUTs are now RGBA by default");
 		return this;
 
 	}
@@ -275,7 +277,7 @@ export class LookupTexture3D extends DataTexture3D {
 	/**
 	 * Converts the output of this LUT into sRGB color space.
 	 *
-	 * @return {LookupTexture3D} This texture.
+	 * @return {LookupTexture} This texture.
 	 */
 
 	convertLinearToSRGB() {
@@ -306,7 +308,7 @@ export class LookupTexture3D extends DataTexture3D {
 	/**
 	 * Converts the output of this LUT into linear color space.
 	 *
-	 * @return {LookupTexture3D} This texture.
+	 * @return {LookupTexture} This texture.
 	 */
 
 	convertSRGBToLinear() {
@@ -369,7 +371,7 @@ export class LookupTexture3D extends DataTexture3D {
 	 * Common image-based textures will be converted into 3D data textures.
 	 *
 	 * @param {Texture} texture - The LUT. Assumed to be cubic.
-	 * @return {LookupTexture3D} A new 3D LUT.
+	 * @return {LookupTexture} A new 3D LUT.
 	 */
 
 	static from(texture) {
@@ -428,7 +430,7 @@ export class LookupTexture3D extends DataTexture3D {
 
 		}
 
-		const lut = new LookupTexture3D(data, size);
+		const lut = new LookupTexture(data, size);
 		lut.encoding = texture.encoding;
 		lut.type = texture.type;
 		lut.name = texture.name;
@@ -441,7 +443,7 @@ export class LookupTexture3D extends DataTexture3D {
 	 * Creates a neutral 3D LUT.
 	 *
 	 * @param {Number} size - The sidelength.
-	 * @return {LookupTexture3D} A neutral 3D LUT.
+	 * @return {LookupTexture} A neutral 3D LUT.
 	 */
 
 	static createNeutral(size) {
@@ -468,7 +470,7 @@ export class LookupTexture3D extends DataTexture3D {
 
 		}
 
-		const lut = new LookupTexture3D(data, size);
+		const lut = new LookupTexture(data, size);
 		lut.name = "neutral";
 
 		return lut;

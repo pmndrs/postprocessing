@@ -10,7 +10,7 @@ import {
 	Vector3
 } from "three";
 
-import { LookupTexture3D } from "../images/textures/LookupTexture3D";
+import { LookupTexture } from "../images/textures/LookupTexture";
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect } from "./Effect";
 
@@ -227,13 +227,12 @@ export class LUTEffect extends Effect {
 
 			}
 
-			if(lut instanceof LookupTexture3D) {
+			if(lut instanceof LookupTexture) {
 
 				const min = lut.domainMin;
 				const max = lut.domainMax;
 
-				if(min.x !== 0.0 || min.y !== 0.0 || min.z !== 0.0 ||
-					max.x !== 1.0 || max.y !== 1.0 || max.z !== 1.0) {
+				if(min.x !== 0.0 || min.y !== 0.0 || min.z !== 0.0 || max.x !== 1.0 || max.y !== 1.0 || max.z !== 1.0) {
 
 					defines.set("CUSTOM_INPUT_DOMAIN", "1");
 					uniforms.get("domainMin").value = min.clone();
@@ -331,7 +330,12 @@ export class LUTEffect extends Effect {
 
 		}
 
-		lut.needsUpdate = true;
+		// TODO Added for compatibility with r138. Fully remove later.
+		if(lut.source === undefined) {
+
+			lut.needsUpdate = true;
+
+		}
 
 	}
 

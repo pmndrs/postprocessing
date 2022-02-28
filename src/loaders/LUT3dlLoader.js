@@ -1,5 +1,5 @@
 import { FileLoader, Loader, LoadingManager } from "three";
-import { LookupTexture3D } from "../images/textures/LookupTexture3D";
+import { LookupTexture } from "../images/textures/LookupTexture";
 
 /**
  * A 3D LUT loader that supports the .3dl file format.
@@ -20,7 +20,7 @@ export class LUT3dlLoader extends Loader {
 	 * @param {Function} [onLoad] - A callback that receives the loaded lookup texture.
 	 * @param {Function} [onProgress] - A progress callback that receives the XMLHttpRequest instance.
 	 * @param {Function} [onError] - An error callback that receives the URL of the file that failed to load.
-	 * @return {Promise<LookupTexture3D>} A promise that returns the lookup texture.
+	 * @return {Promise<LookupTexture>} A promise that returns the lookup texture.
 	 */
 
 	load(url, onLoad = () => {}, onProgress = () => {}, onError = null) {
@@ -79,7 +79,7 @@ export class LUT3dlLoader extends Loader {
 	 * Parses the given data.
 	 *
 	 * @param {String} input - The LUT data.
-	 * @return {LookupTexture3D} The lookup texture.
+	 * @return {LookupTexture} The lookup texture.
 	 * @throws {Error} Fails if the data is invalid.
 	 */
 
@@ -151,7 +151,7 @@ export class LUT3dlLoader extends Loader {
 
 		}
 
-		return new LookupTexture3D(data, size, size, size);
+		return new LookupTexture(data, size, size, size);
 
 	}
 
