@@ -1,3 +1,5 @@
+@use "durations";
+
 main {
 	border: 0;
 	flex-grow: 1;
@@ -16,12 +18,13 @@ main {
 	padding-bottom: 3rem;
 	h1, h2, h3, h4, h5, h6 {
 		a {
-			visibility: hidden;
+			opacity: 0;
+			transition: color durations.$short, opacity durations.$short;
 		}
 		&:focus,
 		&:hover {
 			a {
-				visibility: visible;
+				opacity: 1;
 			}
 		}
 	}

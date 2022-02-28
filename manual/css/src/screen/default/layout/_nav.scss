@@ -6,6 +6,38 @@
 	overflow-y: auto;
 	padding-bottom: 1.5rem;
 	position: relative;
+	a {
+		align-items: center;
+		color: var(--nav-anchor-color);
+		display: flex;
+		padding: 0.5rem dimensions.$nav-padding;
+		position: relative;
+		&:focus,
+		&:hover {
+			background-color: var(--nav-anchor-background-color-focus);
+			color: var(--nav-anchor-color-focus);
+		}
+		&[target="_blank"] {
+			&::after {
+				background: no-repeat center/cover url("../img/svg/open_in_new_black_24dp.svg");
+				background-attachment: scroll;
+				background-origin: content-box;
+				content: "";
+				display: inline-block;
+				height: 1rem;
+				margin-left: 0.5rem;
+				opacity: 0;
+				transition: opacity durations.$short;
+				width: 1rem;
+			}
+			&:focus,
+			&:hover {
+				&::after {
+					opacity: 1;
+				}
+			}
+		}
+	}
 	ul {
 		list-style: none;
 		margin: 0;
@@ -14,17 +46,6 @@
 	li {
 		margin: 0;
 		padding: 0;
-		a {
-			color: var(--nav-anchor-color);
-			display: block;
-			padding: 0.5rem dimensions.$nav-padding;
-			position: relative;
-			&:focus,
-			&:hover {
-				background-color: var(--nav-anchor-background-color-focus);
-				color: var(--nav-anchor-color-focus);
-			}
-		}
 		&.active {
 			> a {
 				color: var(--nav-anchor-color-active);
@@ -47,5 +68,17 @@
 	}
 	.demos {
 		margin-bottom: 1.5rem;
+	}
+}
+
+// Dark Mode
+
+.dark {
+	.navigation {
+		li {
+			a[target="_blank"]::after {
+				background-image: url("../img/svg/open_in_new_white_24dp.svg");
+			}
+		}
 	}
 }
