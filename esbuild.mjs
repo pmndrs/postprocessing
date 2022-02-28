@@ -49,7 +49,7 @@ await esbuild.build({
 	logLevel: "info",
 	format: "iife",
 	bundle: true,
-	minify: true
+	minify
 }).catch(() => process.exit(1));
 
 await esbuild.build({
