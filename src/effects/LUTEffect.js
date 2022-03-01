@@ -30,6 +30,8 @@ import fragmentShader from "./glsl/lut/shader.frag";
  * https://www.nvidia.com/content/GTC/posters/2010/V01-Real-Time-Color-Space-Conversion-for-High-Resolution-Video.pdf
  * https://github.com/AcademySoftwareFoundation/OpenColorIO/blob/master/src/OpenColorIO/ops/lut3d/
  * https://github.com/gkjohnson/threejs-sandbox/tree/master/3d-lut
+ *
+ * TODO Replace DataTexture3D with Data3DTexture.
  */
 
 export class LUTEffect extends Effect {
