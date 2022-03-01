@@ -1,15 +1,15 @@
 ---
 layout: single
 collection: sections
-title: Texture
+title: Outline
 draft: false
 menu:
   demos:
     parent: utility
-    weight: 40
-script: texture
+    weight: 30
+script: outline
 ---
 
-# Texture
+# Outline
 
 ### External Resources
