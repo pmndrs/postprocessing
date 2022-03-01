@@ -1,19 +1,19 @@
 import {
 	AmbientLight,
-	BoxBufferGeometry,
+	BoxGeometry,
 	DirectionalLight,
 	Group,
 	Mesh,
 	MeshStandardMaterial,
-	PlaneBufferGeometry,
+	PlaneGeometry,
 	PointLight,
-	SphereBufferGeometry
+	SphereGeometry
 } from "three";
 
 /**
  * Creates lights.
  *
- * @return {Array} The lights.
+ * @return {Group} The lights.
  */
 
 export function createLights() {
@@ -36,23 +36,24 @@ export function createLights() {
 	lightGreen.position.set(1, 0, 0);
 	lightGreen.target.position.set(0, 0, 0);
 
-	return [lightCeiling, lightRed, lightGreen, ambientLight];
+	const lights = new Group();
+	lights.add(lightCeiling, lightRed, lightGreen, ambientLight);
+
+	return lights;
 
 }
 
 /**
- * Creates the cornell box environment.
+ * Creates the environment.
  *
- * @param {CubeTexture} envMap - An environment map.
- * @return {Group} The cornell box environment.
+ * @return {Group} The environment.
  */
 
-export function createEnvironment(envMap = null) {
+export function createEnvironment() {
 
-	const planeGeometry = new PlaneBufferGeometry();
+	const planeGeometry = new PlaneGeometry();
 	const planeMaterial = new MeshStandardMaterial({
-		color: 0xFFFFFF,
-		envMap
+		color: 0xFFFFFF
 	});
 
 	const plane00 = new Mesh(planeGeometry, planeMaterial);
@@ -87,16 +88,14 @@ export function createEnvironment(envMap = null) {
 	const plane05 = new Mesh(
 		planeGeometry,
 		new MeshStandardMaterial({
-			color: 0xFF0000,
-			envMap
+			color: 0xFF0000
 		})
 	);
 
 	const plane06 = new Mesh(
 		planeGeometry,
 		new MeshStandardMaterial({
-			color: 0x00FF00,
-			envMap
+			color: 0x00FF00
 		})
 	);
 
@@ -104,8 +103,7 @@ export function createEnvironment(envMap = null) {
 		planeGeometry,
 		new MeshStandardMaterial({
 			color: 0xFFFFFF,
-			emissive: 0xFFFFFF,
-			envMap
+			emissive: 0xFFFFFF
 		})
 	);
 
@@ -134,22 +132,20 @@ export function createEnvironment(envMap = null) {
 }
 
 /**
- * Creates the cornell box actors.
+ * Creates the scene actors.
  *
- * @param {CubeTexture} envMap - An environment map.
- * @return {Group} The cornell box actors.
+ * @return {Group} The actors.
  */
 
-export function createActors(envMap = null) {
+export function createActors() {
 
 	const actorMaterial = new MeshStandardMaterial({
-		color: 0xFFFFFF,
-		envMap
+		color: 0xFFFFFF
 	});
 
-	const box01 = new Mesh(new BoxBufferGeometry(1, 1, 1), actorMaterial);
-	const box02 = new Mesh(new BoxBufferGeometry(1, 1, 1), actorMaterial);
-	const sphere01 = new Mesh(new SphereBufferGeometry(1, 32, 32), actorMaterial);
+	const box01 = new Mesh(new BoxGeometry(1, 1, 1), actorMaterial);
+	const box02 = new Mesh(new BoxGeometry(1, 1, 1), actorMaterial);
+	const sphere01 = new Mesh(new SphereGeometry(1, 32, 32), actorMaterial);
 
 	box01.position.set(-0.35, -0.4, -0.3);
 	box01.rotation.y = Math.PI * 0.1;

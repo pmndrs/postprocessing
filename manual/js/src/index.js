@@ -9,6 +9,7 @@ window.require = (name) => {
 	switch(name) {
 
 		case "three":
+		case "three/examples/jsm/loaders/GLTFLoader.js":
 			module = window.THREE;
 			break;
 

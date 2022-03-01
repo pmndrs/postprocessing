@@ -91,7 +91,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const scene = new Scene();
 	scene.background = assets.get("sky");
-	scene.add(...CornellBox.createLights());
+	scene.add(CornellBox.createLights());
 	scene.add(CornellBox.createEnvironment());
 	scene.add(CornellBox.createActors());
 
