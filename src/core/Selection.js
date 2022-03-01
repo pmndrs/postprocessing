@@ -228,6 +228,33 @@ export class Selection extends Set {
 	}
 
 	/**
+	 * Removes an existing object from the selection. If the object doesn't exist it's added instead.
+	 *
+	 * @param {Object3D} object - The object.
+	 * @return {Boolean} Returns true if the object is added, false otherwise.
+	 */
+
+	toggle(object) {
+
+		let result;
+
+		if(this.has(object)) {
+
+			this.delete(object);
+			result = false;
+
+		} else {
+
+			this.add(object);
+			result = true;
+
+		}
+
+		return result;
+
+	}
+
+	/**
 	 * Sets the visibility of all selected objects.
 	 *
 	 * This method enables or disables render layer 0 of all selected objects.
