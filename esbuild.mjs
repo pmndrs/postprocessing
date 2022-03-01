@@ -54,7 +54,7 @@ await esbuild.build({
 }).catch(() => process.exit(1));
 
 await esbuild.build({
-	entryPoints: await glob("manual/js/src/*.js"),
+	entryPoints: ["manual/js/src/index.js"].concat(await glob("manual/js/src/demos/*.js")),
 	outdir: "manual/assets/js",
 	logLevel: "info",
 	format: "iife",

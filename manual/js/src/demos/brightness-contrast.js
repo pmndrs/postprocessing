@@ -9,11 +9,18 @@ import {
 	WebGLRenderer
 } from "three";
 
+import {
+	BlendFunction,
+	BrightnessContrastEffect,
+	EffectComposer,
+	EffectPass,
+	RenderPass
+} from "postprocessing";
+
 import { Pane } from "tweakpane";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { EffectComposer, RenderPass, SavePass } from "../../../src";
-import { calculateVerticalFoV, FPSMeter } from "./utils";
-import * as CornellBox from "./objects/CornellBox";
+import { calculateVerticalFoV, FPSMeter } from "../utils";
+import * as CornellBox from "../objects/CornellBox";
 
 function load() {
 
@@ -92,15 +99,14 @@ window.addEventListener("load", () => load().then((assets) => {
 	// Post Processing
 
 	const context = renderer.getContext();
-	const multisampling = Math.min(4, context.getParameter(context.MAX_SAMPLES));
-
 	const composer = new EffectComposer(renderer, {
-		frameBufferType: HalfFloatType,
-		multisampling
+		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES)),
+		frameBufferType: HalfFloatType
 	});
 
+	const brightnessContrastEffect = new BrightnessContrastEffect();
 	composer.addPass(new RenderPass(scene, camera));
-	composer.addPass(new SavePass());
+	composer.addPass(new EffectPass(camera, brightnessContrastEffect));
 
 	// Settings
 
@@ -108,15 +114,23 @@ window.addEventListener("load", () => load().then((assets) => {
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 	pane.addSeparator();
-	pane.addInput(composer, "multisampling", {
-		label: "MSAA",
-		options: {
-			off: 0,
-			low: Math.min(2, context.getParameter(context.MAX_SAMPLES)),
-			medium: Math.min(4, context.getParameter(context.MAX_SAMPLES)),
-			high: Math.min(8, context.getParameter(context.MAX_SAMPLES))
-		}
-	});
+
+	const params = {
+		"brightness": brightnessContrastEffect.getBrightness(),
+		"contrast": brightnessContrastEffect.getContrast(),
+		"opacity": brightnessContrastEffect.getBlendMode().getOpacity(),
+		"blend mode": brightnessContrastEffect.getBlendMode().getBlendFunction()
+	};
+
+	pane.addInput(params, "brightness", { min: -1, max: 1, step: 1e-4 })
+		.on("change", (e) => brightnessContrastEffect.setBrightness(e.value));
+	pane.addInput(params, "contrast", { min: -1, max: 1, step: 1e-4 })
+		.on("change", (e) => brightnessContrastEffect.setContrast(e.value));
+
+	pane.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
+		.on("change", (e) => brightnessContrastEffect.getBlendMode().setOpacity(e.value));
+	pane.addInput(params, "blend mode", { options: BlendFunction })
+		.on("change", (e) => brightnessContrastEffect.getBlendMode().setBlendFunction(e.value));
 
 	// Resize Handler
 

@@ -2,33 +2,33 @@ import {
 	CubeTextureLoader,
 	HalfFloatType,
 	LoadingManager,
-	Mesh,
-	MeshBasicMaterial,
 	PerspectiveCamera,
+	RepeatWrapping,
 	Scene,
-	SphereBufferGeometry,
 	sRGBEncoding,
-	Vector3,
+	TextureLoader,
 	VSMShadowMap,
 	WebGLRenderer
 } from "three";
 
 import {
-	CopyPass,
-	DepthPickingPass,
+	BlendFunction,
 	EffectComposer,
-	RenderPass
-} from "../../../src";
+	EffectPass,
+	RenderPass,
+	TextureEffect
+} from "postprocessing";
 
 import { Pane } from "tweakpane";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, FPSMeter } from "./utils";
-import * as CornellBox from "./objects/CornellBox";
+import { calculateVerticalFoV, FPSMeter } from "../utils";
+import * as CornellBox from "../objects/CornellBox";
 
 function load() {
 
 	const assets = new Map();
 	const loadingManager = new LoadingManager();
+	const textureLoader = new TextureLoader(loadingManager);
 	const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
 	const path = document.baseURI + "img/textures/skies/sunset/";
@@ -43,6 +43,14 @@ function load() {
 
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
+
+		textureLoader.load(document.baseURI + "img/textures/lens-dirt/scratches.jpg", (t) => {
+
+			t.encoding = sRGBEncoding;
+			t.wrapS = t.wrapT = RepeatWrapping;
+			assets.set("scratches", t);
+
+		});
 
 		cubeTextureLoader.load(urls, (t) => {
 
@@ -99,18 +107,6 @@ window.addEventListener("load", () => load().then((assets) => {
 	scene.add(CornellBox.createEnvironment());
 	scene.add(CornellBox.createActors());
 
-	const cursor = new Mesh(
-		new SphereBufferGeometry(0.2, 32, 32),
-		new MeshBasicMaterial({
-			color: 0x666666,
-			transparent: true,
-			depthWrite: false,
-			opacity: 0.5
-		})
-	);
-
-	scene.add(cursor);
-
 	// Post Processing
 
 	const context = renderer.getContext();
@@ -119,36 +115,46 @@ window.addEventListener("load", () => load().then((assets) => {
 		frameBufferType: HalfFloatType
 	});
 
-	const depthPickingPass = new DepthPickingPass();
+	const textureEffect = new TextureEffect({
+		blendFunction: BlendFunction.COLOR_DODGE,
+		texture: assets.get("scratches")
+	});
+
 	composer.addPass(new RenderPass(scene, camera));
-	composer.addPass(depthPickingPass);
-	composer.addPass(new CopyPass());
-
-	const ndc = new Vector3();
-
-	async function pickDepth(event) {
-
-		const clientRect = container.getBoundingClientRect();
-		const clientX = event.clientX - clientRect.left;
-		const clientY = event.clientY - clientRect.top;
-		ndc.x = (clientX / container.clientWidth) * 2.0 - 1.0;
-		ndc.y = -(clientY / container.clientHeight) * 2.0 + 1.0;
-
-		ndc.z = await depthPickingPass.readDepth(ndc);
-		ndc.z = ndc.z * 2.0 - 1.0;
-
-		// Convert from NDC to world position.
-		cursor.position.copy(ndc.unproject(camera));
-
-	}
-
-	container.addEventListener("pointermove", (e) => void pickDepth(e), { passive: true });
+	composer.addPass(new EffectPass(camera, textureEffect));
 
 	// Settings
 
 	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.addSeparator();
+
+	const texture = textureEffect.getTexture();
+	const params = {
+		"opacity": textureEffect.getBlendMode().getOpacity(),
+		"blend mode": textureEffect.getBlendMode().getBlendFunction()
+	};
+
+	const folder = pane.addFolder({ title: "UV Transform", expanded: false });
+	folder.addInput(texture, "rotation", { min: 0, max: 2 * Math.PI, step: 0.001 });
+
+	let subFolder = folder.addFolder({ title: "offset" });
+	subFolder.addInput(texture.offset, "x", { min: 0, max: 1, step: 0.001 });
+	subFolder.addInput(texture.offset, "y", { min: 0, max: 1, step: 0.001 });
+
+	subFolder = folder.addFolder({ title: "repeat" });
+	subFolder.addInput(texture.repeat, "x", { min: 0, max: 2, step: 0.001 });
+	subFolder.addInput(texture.repeat, "y", { min: 0, max: 2, step: 0.001 });
+
+	subFolder = folder.addFolder({ title: "center" });
+	subFolder.addInput(texture.center, "x", { min: 0, max: 1, step: 0.001 });
+	subFolder.addInput(texture.center, "y", { min: 0, max: 1, step: 0.001 });
+
+	pane.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
+		.on("change", (e) => textureEffect.getBlendMode().setOpacity(e.value));
+	pane.addInput(params, "blend mode", { options: BlendFunction })
+		.on("change", (e) => textureEffect.getBlendMode().setBlendFunction(e.value));
 
 	// Resize Handler
 

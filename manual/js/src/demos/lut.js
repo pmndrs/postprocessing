@@ -23,11 +23,11 @@ import {
 	LUTCubeLoader,
 	RawImageData,
 	RenderPass
-} from "../../../src";
+} from "postprocessing";
 
 import { Pane } from "tweakpane";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, FPSMeter } from "./utils";
+import { calculateVerticalFoV, FPSMeter } from "../utils";
 
 const luts = new Map([
 	["neutral-2", null],

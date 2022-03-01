@@ -3,7 +3,7 @@ import {
 	HalfFloatType,
 	LoadingManager,
 	PerspectiveCamera,
-	RepeatWrapping,
+	RGBAFormat,
 	Scene,
 	sRGBEncoding,
 	TextureLoader,
@@ -12,17 +12,19 @@ import {
 } from "three";
 
 import {
-	BlendFunction,
+	ChromaticAberrationEffect,
 	EffectComposer,
 	EffectPass,
-	RenderPass,
-	TextureEffect
-} from "../../../src";
+	GlitchEffect,
+	GlitchMode,
+	NoiseTexture,
+	RenderPass
+} from "postprocessing";
 
 import { Pane } from "tweakpane";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, FPSMeter } from "./utils";
-import * as CornellBox from "./objects/CornellBox";
+import { calculateVerticalFoV, FPSMeter } from "../utils";
+import * as CornellBox from "../objects/CornellBox";
 
 function load() {
 
@@ -44,11 +46,9 @@ function load() {
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		textureLoader.load(document.baseURI + "img/textures/lens-dirt/scratches.jpg", (t) => {
+		textureLoader.load(document.baseURI + "img/textures/perturb.jpg", (t) => {
 
-			t.encoding = sRGBEncoding;
-			t.wrapS = t.wrapT = RepeatWrapping;
-			assets.set("scratches", t);
+			assets.set("noise", t);
 
 		});
 
@@ -115,13 +115,15 @@ window.addEventListener("load", () => load().then((assets) => {
 		frameBufferType: HalfFloatType
 	});
 
-	const textureEffect = new TextureEffect({
-		blendFunction: BlendFunction.COLOR_DODGE,
-		texture: assets.get("scratches")
+	const chromaticAberrationEffect = new ChromaticAberrationEffect();
+	const glitchEffect = new GlitchEffect({
+		perturbationMap: assets.get("noise"),
+		chromaticAberrationOffset: chromaticAberrationEffect.getOffset() // optional
 	});
 
 	composer.addPass(new RenderPass(scene, camera));
-	composer.addPass(new EffectPass(camera, textureEffect));
+	composer.addPass(new EffectPass(camera, glitchEffect));
+	composer.addPass(new EffectPass(camera, chromaticAberrationEffect));
 
 	// Settings
 
@@ -130,31 +132,43 @@ window.addEventListener("load", () => load().then((assets) => {
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 	pane.addSeparator();
 
-	const texture = textureEffect.getTexture();
+	const noiseTexture = new NoiseTexture(64, 64, RGBAFormat);
+
 	const params = {
-		"opacity": textureEffect.getBlendMode().getOpacity(),
-		"blend mode": textureEffect.getBlendMode().getBlendFunction()
+		"glitch mode": glitchEffect.getMode(),
+		"custom pattern": true,
+		"min delay": glitchEffect.getMinDelay(),
+		"max delay": glitchEffect.getMaxDelay(),
+		"min duration": glitchEffect.getMinDuration(),
+		"max duration": glitchEffect.getMaxDuration(),
+		"min strength": glitchEffect.getMinStrength(),
+		"max strength": glitchEffect.getMaxStrength(),
+		"glitch ratio": glitchEffect.getGlitchRatio(),
+		"glitch columns": glitchEffect.getGlitchColumns(),
+		"opacity": glitchEffect.getBlendMode().getOpacity(),
+		"blend mode": glitchEffect.getBlendMode().getBlendFunction()
 	};
 
-	const folder = pane.addFolder({ title: "UV Transform", expanded: false });
-	folder.addInput(texture, "rotation", { min: 0, max: 2 * Math.PI, step: 0.001 });
+	pane.addInput(params, "glitch mode", { options: GlitchMode }).on("change", (e) => glitchEffect.setMode(e.value));
+	pane.addInput(params, "custom pattern")
+		.on("change", (e) => glitchEffect.setPerturbationMap(e.value ? assets.get("noise") : noiseTexture));
 
-	let subFolder = folder.addFolder({ title: "offset" });
-	subFolder.addInput(texture.offset, "x", { min: 0, max: 1, step: 0.001 });
-	subFolder.addInput(texture.offset, "y", { min: 0, max: 1, step: 0.001 });
-
-	subFolder = folder.addFolder({ title: "repeat" });
-	subFolder.addInput(texture.repeat, "x", { min: 0, max: 2, step: 0.001 });
-	subFolder.addInput(texture.repeat, "y", { min: 0, max: 2, step: 0.001 });
-
-	subFolder = folder.addFolder({ title: "center" });
-	subFolder.addInput(texture.center, "x", { min: 0, max: 1, step: 0.001 });
-	subFolder.addInput(texture.center, "y", { min: 0, max: 1, step: 0.001 });
-
-	pane.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
-		.on("change", (e) => textureEffect.getBlendMode().setOpacity(e.value));
-	pane.addInput(params, "blend mode", { options: BlendFunction })
-		.on("change", (e) => textureEffect.getBlendMode().setBlendFunction(e.value));
+	pane.addInput(params, "min delay", { min: 0, max: 2, step: 0.01 })
+		.on("change", (e) => glitchEffect.setMinDelay(e.value));
+	pane.addInput(params, "max delay", { min: 2, max: 4, step: 0.01 })
+		.on("change", (e) => glitchEffect.setMaxDelay(e.value));
+	pane.addInput(params, "min duration", { min: 0, max: 0.6, step: 0.01 })
+		.on("change", (e) => glitchEffect.setMinDuration(e.value));
+	pane.addInput(params, "max duration", { min: 0.6, max: 1.8, step: 0.01 })
+		.on("change", (e) => glitchEffect.setMaxDuration(e.value));
+	pane.addInput(params, "min strength", { min: 0, max: 1, step: 0.01 })
+		.on("change", (e) => glitchEffect.setMinStrength(e.value));
+	pane.addInput(params, "max strength", { min: 0, max: 1, step: 0.01 })
+		.on("change", (e) => glitchEffect.setMaxStrength(e.value));
+	pane.addInput(params, "glitch ratio", { min: 0, max: 1, step: 0.01 })
+		.on("change", (e) => glitchEffect.setGlitchRatio(e.value));
+	pane.addInput(params, "glitch columns", { min: 0, max: 0.5, step: 0.01 })
+		.on("change", (e) => glitchEffect.setGlitchColumns(e.value));
 
 	// Resize Handler
 

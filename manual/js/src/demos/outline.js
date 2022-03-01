@@ -21,13 +21,13 @@ import {
 	EffectPass,
 	KernelSize,
 	RenderPass
-} from "../../../src";
+} from "postprocessing";
 
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { Pane } from "tweakpane";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, FPSMeter } from "./utils";
-import * as Shapes from "./objects/Shapes";
+import { calculateVerticalFoV, FPSMeter } from "../utils";
+import * as Shapes from "../objects/Shapes";
 
 function load() {
 
