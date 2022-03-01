@@ -1,5 +1,6 @@
 import { createRequire } from "module";
 import { glsl } from "esbuild-plugin-glsl";
+import tsPaths from "esbuild-ts-paths";
 import glob from "glob-promise";
 import esbuild from "esbuild";
 
@@ -9,7 +10,7 @@ const date = (new Date()).toDateString();
 const external = Object.keys(pkg.peerDependencies || {});
 const minify = process.argv.includes("-m");
 const watch = process.argv.includes("-w");
-const plugins = [glsl({ minify })];
+const plugins = [glsl({ minify }), tsPaths()];
 const banner = `/**
  * ${pkg.name} v${pkg.version} build ${date}
  * ${pkg.homepage}
