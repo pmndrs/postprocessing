@@ -85,6 +85,7 @@ window.addEventListener("load", () => load().then((assets) => {
 	renderer.shadowMap.enabled = true;
 
 	const container = document.querySelector(".viewport");
+	container.dataset.epilepsyWarning = "1";
 	container.append(renderer.domElement);
 
 	// Camera & Controls
