@@ -6,8 +6,39 @@
 
 export class ViewportManager {
 
+	constructor() {
+
+		/**
+		 * The viewport.
+		 *
+		 * @private
+		 * @type {HTMLElement}
+		 */
+
+		this.viewport = null;
+
+		/**
+		 * A fullscreen button.
+		 *
+		 * @private
+		 * @type {HTMLElement}
+		 */
+
+		this.fullscreenButton = null;
+
+		/**
+		 * Indicates whether scrolling should currently be prevented.
+		 *
+		 * @private
+		 * @type {Boolean}
+		 */
+
+		this.preventScrolling = false;
+
+	}
+
 	/**
-	 * Shows n error message.
+	 * Shows an error message.
 	 *
 	 * @private
 	 * @param {String} message - The error message.
@@ -15,17 +46,114 @@ export class ViewportManager {
 
 	showErrorMessage(message) {
 
-		const container = document.querySelector(".viewport");
-		const p = document.createElement("p");
-		p.classList.add("error");
+		const viewport = this.viewport;
+		const canvas = viewport.querySelector("canvas");
+		const warning = viewport.querySelector(".warning");
+		const error = viewport.querySelector(".error");
+		const p = error.querySelector("p");
 		p.innerText = message;
-		container.append(p);
+
+		viewport.classList.remove("loading");
+		warning.classList.add("hidden");
+		canvas.classList.add("hidden");
+		error.classList.remove("hidden");
+
+	}
+
+	/**
+	 * Shows an epilepsy warning.
+	 *
+	 * @private
+	 */
+
+	showEpilepsyWarning() {
+
+		const viewport = this.viewport;
+		const canvas = viewport.querySelector("canvas");
+		const warning = viewport.querySelector(".warning");
+		const tp = viewport.querySelector(".tp");
+		const a = warning.querySelector("a");
+
+		tp.classList.toggle("hidden");
+		canvas.classList.toggle("hidden");
+		warning.classList.toggle("hidden");
+
+		a.addEventListener("click", (event) => {
+
+			event.preventDefault();
+			sessionStorage.setItem("epilepsy-warning", "1");
+			warning.classList.toggle("hidden");
+			canvas.classList.toggle("hidden");
+			tp.classList.toggle("hidden");
+
+		});
+
+	}
+
+	/**
+	 * Handles scroll events.
+	 *
+	 * @private
+	 * @param {Event} event - The event.
+	 */
+
+	handleScroll(event) {
+
+		if(this.preventScrolling) {
+
+			event.preventDefault();
+
+		}
+
+	}
+
+	/**
+	 * Toggles fullscreen mode.
+	 *
+	 * @private
+	 */
+
+	toggleFullscreen() {
+
+		if(document.fullscreenEnabled) {
+
+			if(document.fullscreenElement !== null) {
+
+				document.exitFullscreen();
+
+			} else {
+
+				this.viewport.requestFullscreen();
+
+			}
+
+		}
 
 	}
 
 	handleEvent(event) {
 
 		switch(event.type) {
+
+			case "mouseenter":
+				this.preventScrolling = true;
+				break;
+
+			case "mouseleave":
+				this.preventScrolling = false;
+				break;
+
+			case "wheel":
+				this.handleScroll(event);
+				break;
+
+			case "click":
+				this.toggleFullscreen();
+				break;
+
+			case "fullscreenchange":
+				this.fullscreenButton.classList.toggle("active");
+				break;
 
 			case "unhandledrejection":
 				this.showErrorMessage(event.reason.message);
@@ -37,13 +165,26 @@ export class ViewportManager {
 
 	initialize() {
 
-		const viewport = document.querySelector(".viewport");
+		const viewport = this.viewport = document.querySelector(".viewport");
 
 		if(viewport !== null) {
 
 			// Error Handling
 
 			window.addEventListener("unhandledrejection", this);
+
+			// Scrolling
+
+			const main = document.getElementById("main");
+			main.addEventListener("wheel", this);
+			viewport.addEventListener("mouseenter", this);
+			viewport.addEventListener("mouseleave", this);
+
+			// Fullscreen
+
+			const fullscreenButton = this.fullscreenButton = viewport.querySelector(".fullscreen");
+			fullscreenButton.addEventListener("click", this);
+			document.addEventListener("fullscreenchange", this);
 
 			// Loading Animation
 
@@ -55,6 +196,16 @@ export class ViewportManager {
 
 						// Stop the loading animation when something is added to the viewport.
 						viewport.classList.remove("loading");
+
+						// Show an epilepsy warning if applicable.
+						const alreadyShown = (sessionStorage.getItem("epilepsy-warning") !== null);
+
+						if(viewport.dataset.epilepsyWarning && !alreadyShown) {
+
+							this.showEpilepsyWarning();
+
+						}
+
 						observer.disconnect();
 
 					}
@@ -64,48 +215,6 @@ export class ViewportManager {
 			});
 
 			observer.observe(viewport, { childList: true });
-
-			// Scrolling
-
-			let preventScrolling = false;
-			viewport.addEventListener("mouseenter", () => void (preventScrolling = true));
-			viewport.addEventListener("mouseleave", () => void (preventScrolling = false));
-
-			const main = document.getElementById("main");
-			main.addEventListener("wheel", (e) => {
-
-				if(preventScrolling) {
-
-					e.preventDefault();
-
-				}
-
-				return !preventScrolling;
-
-			});
-
-			// Fullscreen
-
-			const fullscreen = viewport.querySelector(".fullscreen");
-			fullscreen.addEventListener("click", () => {
-
-				if(document.fullscreenEnabled) {
-
-					fullscreen.classList.toggle("active");
-
-					if(document.fullscreenElement !== null) {
-
-						document.exitFullscreen();
-
-					} else {
-
-						viewport.requestFullscreen();
-
-					}
-
-				}
-
-			});
 
 		}
 
