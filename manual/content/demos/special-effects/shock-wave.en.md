@@ -1,15 +1,15 @@
 ---
 layout: single
 collection: sections
-title: Glitch
-draft: false
+title: Shock Wave
+draft: true
 menu:
   demos:
     parent: special-effects
-    weight: 50
-script: glitch
+    weight: 100
+script: shock-wave
 ---
 
-# Glitch
+# Shock Wave
 
 ### External Resources

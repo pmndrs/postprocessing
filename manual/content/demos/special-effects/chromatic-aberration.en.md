@@ -1,15 +1,15 @@
 ---
 layout: single
 collection: sections
-title: Glitch
-draft: false
+title: Chromatic Aberration
+draft: true
 menu:
   demos:
     parent: special-effects
-    weight: 50
-script: glitch
+    weight: 10
+script: chromatic-aberration
 ---
 
-# Glitch
+# Chromatic Aberration
 
 ### External Resources

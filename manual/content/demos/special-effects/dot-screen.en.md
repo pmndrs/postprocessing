@@ -1,15 +1,15 @@
 ---
 layout: single
 collection: sections
-title: Glitch
-draft: false
+title: Dot Screen
+draft: true
 menu:
   demos:
     parent: special-effects
-    weight: 50
-script: glitch
+    weight: 40
+script: dot-screen
 ---
 
-# Glitch
+# Dot Screen
 
 ### External Resources

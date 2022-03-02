@@ -1,15 +1,15 @@
 ---
 layout: single
 collection: sections
-title: Glitch
-draft: false
+title: Scanlines
+draft: true
 menu:
   demos:
     parent: special-effects
-    weight: 50
-script: glitch
+    weight: 90
+script: scanlines
 ---
 
-# Glitch
+# Scanlines
 
 ### External Resources

@@ -1,15 +1,15 @@
 ---
 layout: single
 collection: sections
-title: Glitch
-draft: false
+title: Vignette
+draft: true
 menu:
   demos:
     parent: special-effects
-    weight: 50
-script: glitch
+    weight: 200
+script: vignette
 ---
 
-# Glitch
+# Vignette
 
 ### External Resources

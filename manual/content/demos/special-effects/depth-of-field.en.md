@@ -1,15 +1,15 @@
 ---
 layout: single
 collection: sections
-title: Glitch
-draft: false
+title: Depth of Field
+draft: true
 menu:
   demos:
     parent: special-effects
-    weight: 50
-script: glitch
+    weight: 30
+script: dof
 ---
 
-# Glitch
+# Depth of Field
 
 ### External Resources

@@ -1,15 +1,15 @@
 ---
 layout: single
 collection: sections
-title: Glitch
-draft: false
+title: Pixelation
+draft: true
 menu:
   demos:
     parent: special-effects
-    weight: 50
-script: glitch
+    weight: 80
+script: pixelation
 ---
 
-# Glitch
+# Pixelation
 
 ### External Resources

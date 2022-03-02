@@ -1,15 +1,15 @@
 ---
 layout: single
 collection: sections
-title: Glitch
-draft: false
+title: Sepia
+draft: true
 menu:
   demos:
-    parent: special-effects
+    parent: color-grading
     weight: 50
-script: glitch
+script: sepia
 ---
 
-# Glitch
+# Sepia
 
 ### External Resources
