@@ -107,8 +107,9 @@ window.addEventListener("load", () => load().then((assets) => {
 	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
-	pane.addSeparator();
-	pane.addInput(composer, "multisampling", {
+
+	const folder = pane.addFolder({ title: "Settings" });
+	folder.addInput(composer, "multisampling", {
 		label: "MSAA",
 		options: {
 			off: 0,

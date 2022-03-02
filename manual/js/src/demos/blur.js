@@ -112,7 +112,6 @@ window.addEventListener("load", () => load().then((assets) => {
 	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
-	pane.addSeparator();
 
 	const params = {
 		"resolution": kawaseBlurPass.getResolution().getHeight(),
@@ -127,11 +126,12 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	}
 
-	pane.addInput(params, "resolution", { options: [360, 480, 720, 1080].reduce(reducer, {}) })
+	const folder = pane.addFolder({ title: "Settings" });
+	folder.addInput(params, "resolution", { options: [360, 480, 720, 1080].reduce(reducer, {}) })
 		.on("change", (e) => kawaseBlurPass.getResolution().setPreferredHeight(e.value));
-	pane.addInput(params, "kernel size", { options: KernelSize })
+	folder.addInput(params, "kernel size", { options: KernelSize })
 		.on("change", (e) => kawaseBlurPass.setKernelSize(e.value));
-	pane.addInput(params, "scale", { min: 0, max: 1, step: 0.01 })
+	folder.addInput(params, "scale", { min: 0, max: 1, step: 0.01 })
 		.on("change", (e) => kawaseBlurPass.setScale(e.value));
 
 	// Resize Handler

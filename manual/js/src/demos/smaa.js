@@ -155,7 +155,6 @@ window.addEventListener("load", () => load().then((assets) => {
 	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
-	pane.addSeparator();
 
 	const SMAADebug = { OFF: 0, EDGES: 1, WEIGHTS: 2 };
 	delete PredicationMode.CUSTOM; // disable for this demo
@@ -177,19 +176,20 @@ window.addEventListener("load", () => load().then((assets) => {
 		}
 	};
 
-	pane.addInput(params, "preset", { options: SMAAPreset }).on("change", (e) => {
+	const folder = pane.addFolder({ title: "Settings" });
+	folder.addInput(params, "preset", { options: SMAAPreset }).on("change", (e) => {
 
 		smaaEffect.applyPreset(e.value);
 		edgeDetectionMaterial.setEdgeDetectionThreshold(params.edgeDetection.threshold);
 
 	});
 
-	const folder = pane.addFolder({ title: "Edge Detection", expanded: false });
-	folder.addInput(params.edgeDetection, "mode", { options: EdgeDetectionMode })
+	let subfolder = folder.addFolder({ title: "Edge Detection", expanded: false });
+	subfolder.addInput(params.edgeDetection, "mode", { options: EdgeDetectionMode })
 		.on("change", (e) => edgeDetectionMaterial.setEdgeDetectionMode(e.value));
-	folder.addInput(params.edgeDetection, "threshold", { min: 0.01, max: 0.3, step: 0.0001 })
+	subfolder.addInput(params.edgeDetection, "threshold", { min: 0.01, max: 0.3, step: 0.0001 })
 		.on("change", (e) => edgeDetectionMaterial.setEdgeDetectionThreshold(e.value));
-	const subfolder = folder.addFolder({ title: "Predicated Thresholding", expanded: false });
+	subfolder = subfolder.addFolder({ title: "Predicated Thresholding" });
 	subfolder.addInput(params.predication, "mode", { options: PredicationMode })
 		.on("change", (e) => edgeDetectionMaterial.setPredicationMode(e.value));
 	subfolder.addInput(params.predication, "threshold", { min: 0.0004, max: 0.01, step: 0.0001 })
@@ -199,7 +199,7 @@ window.addEventListener("load", () => load().then((assets) => {
 	subfolder.addInput(params.predication, "scale", { min: 1, max: 2, step: 0.01 })
 		.on("change", (e) => edgeDetectionMaterial.setPredicationScale(e.value));
 
-	pane.addInput(params, "debug", { options: SMAADebug }).on("change", (e) => {
+	folder.addInput(params, "debug", { options: SMAADebug }).on("change", (e) => {
 
 		smaaPass.setEnabled(e.value === SMAADebug.OFF);
 		smaaEdgesDebugPass.setEnabled(e.value === SMAADebug.EDGES);
@@ -207,9 +207,9 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	});
 
-	pane.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
+	folder.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
 		.on("change", (e) => smaaEffect.getBlendMode().setOpacity(e.value));
-	pane.addInput(params, "blend mode", { options: BlendFunction })
+	folder.addInput(params, "blend mode", { options: BlendFunction })
 		.on("change", (e) => smaaEffect.getBlendMode().setBlendFunction(e.value));
 
 	// Resize Handler

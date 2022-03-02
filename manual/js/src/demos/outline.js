@@ -202,7 +202,6 @@ window.addEventListener("load", () => load().then((assets) => {
 	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
-	pane.addSeparator();
 
 	const params = {
 		"resolution": outlineEffect.resolution.height,
@@ -226,28 +225,29 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	}
 
-	pane.addInput(params, "resolution", { options: [360, 480, 720, 1080].reduce(reducer, {}) })
+	const folder = pane.addFolder({ title: "Settings" });
+	folder.addInput(params, "resolution", { options: [360, 480, 720, 1080].reduce(reducer, {}) })
 		.on("change", (e) => outlineEffect.resolution.setPreferredHeight(e.value));
-	pane.addInput(params, "kernel size", { options: KernelSize })
+	folder.addInput(params, "kernel size", { options: KernelSize })
 		.on("change", (e) => outlineEffect.getBlurPass().setKernelSize(e.value));
-	pane.addInput(params, "blur").on("change", (e) => outlineEffect.getBlurPass().setEnabled(e.value));
-	pane.addInput(params, "use pattern")
+	folder.addInput(params, "blur").on("change", (e) => outlineEffect.getBlurPass().setEnabled(e.value));
+	folder.addInput(params, "use pattern")
 		.on("change", (e) => outlineEffect.setPatternTexture(e.value ? assets.get("pattern") : null));
-	pane.addInput(params, "pattern scale", { min: 20, max: 100, step: 0.1 })
+	folder.addInput(params, "pattern scale", { min: 20, max: 100, step: 0.1 })
 		.on("change", (e) => (outlineEffect.patternScale = e.value));
-	pane.addInput(params, "edge strength", { min: 0, max: 10, step: 0.01 })
+	folder.addInput(params, "edge strength", { min: 0, max: 10, step: 0.01 })
 		.on("change", (e) => (outlineEffect.edgeStrength = e.value));
-	pane.addInput(params, "pulse speed", { min: 0, max: 2, step: 0.01 })
+	folder.addInput(params, "pulse speed", { min: 0, max: 2, step: 0.01 })
 		.on("change", (e) => (outlineEffect.pulseSpeed = e.value));
-	pane.addInput(params, "visible edge", { view: "color" })
+	folder.addInput(params, "visible edge", { view: "color" })
 		.on("change", (e) => outlineEffect.visibleEdgeColor.setHex(e.value));
-	pane.addInput(params, "hidden edge", { view: "color" })
+	folder.addInput(params, "hidden edge", { view: "color" })
 		.on("change", (e) => outlineEffect.hiddenEdgeColor.setHex(e.value));
-	pane.addInput(params, "x-ray").on("change", (e) => outlineEffect.xRay = e.value);
+	folder.addInput(params, "x-ray").on("change", (e) => outlineEffect.xRay = e.value);
 
-	pane.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
+	folder.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
 		.on("change", (e) => outlineEffect.getBlendMode().setOpacity(e.value));
-	pane.addInput(params, "blend mode", { options: BlendFunction })
+	folder.addInput(params, "blend mode", { options: BlendFunction })
 		.on("change", (e) => outlineEffect.getBlendMode().setBlendFunction(e.value));
 
 	// Resize Handler

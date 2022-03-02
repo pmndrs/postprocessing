@@ -198,7 +198,6 @@ window.addEventListener("load", () => load().then((assets) => {
 	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
-	pane.addSeparator();
 
 	const params = {
 		"lut": lutEffect.getLUT().name,
@@ -301,24 +300,25 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	}
 
-	pane.addInput(params, "lut", { options: [...luts.keys()].reduce(reducer, {}) }).on("change", changeLUT);
-	pane.addInput(params, "show LUT").on("change", updateLUTPreview);
+	const folder = pane.addFolder({ title: "Settings" });
+	folder.addInput(params, "lut", { options: [...luts.keys()].reduce(reducer, {}) }).on("change", changeLUT);
+	folder.addInput(params, "show LUT").on("change", updateLUTPreview);
 
 	if(renderer.capabilities.isWebGL2) {
 
-		pane.addInput(params, "3D texture").on("change", changeLUT);
-		pane.addInput(params, "tetrahedral filter")
+		folder.addInput(params, "3D texture").on("change", changeLUT);
+		folder.addInput(params, "tetrahedral filter")
 			.on("change", (e) => lutEffect.setTetrahedralInterpolationEnabled(e.value));
 
 	}
 
-	pane.addMonitor(params, "base size", { format: (v) => v.toFixed(0) });
-	pane.addInput(params, "scale up").on("change", changeLUT);
-	pane.addInput(params, "target size", { options: [32, 48, 64, 96, 128].reduce(reducer, {}) }).on("change", changeLUT);
+	folder.addMonitor(params, "base size", { format: (v) => v.toFixed(0) });
+	folder.addInput(params, "scale up").on("change", changeLUT);
+	folder.addInput(params, "target size", { options: [32, 48, 64, 128].reduce(reducer, {}) }).on("change", changeLUT);
 
-	pane.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
+	folder.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
 		.on("change", (e) => lutEffect.getBlendMode().setOpacity(e.value));
-	pane.addInput(params, "blend mode", { options: BlendFunction })
+	folder.addInput(params, "blend mode", { options: BlendFunction })
 		.on("change", (e) => lutEffect.getBlendMode().setBlendFunction(e.value));
 
 	// Resize Handler

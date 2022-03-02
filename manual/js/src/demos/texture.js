@@ -128,7 +128,6 @@ window.addEventListener("load", () => load().then((assets) => {
 	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
-	pane.addSeparator();
 
 	const texture = textureEffect.getTexture();
 	const params = {
@@ -136,7 +135,7 @@ window.addEventListener("load", () => load().then((assets) => {
 		"blend mode": textureEffect.getBlendMode().getBlendFunction()
 	};
 
-	const folder = pane.addFolder({ title: "UV Transform", expanded: false });
+	const folder = pane.addFolder({ title: "Settings" });
 	folder.addInput(texture, "rotation", { min: 0, max: 2 * Math.PI, step: 0.001 });
 
 	let subFolder = folder.addFolder({ title: "offset" });
@@ -151,9 +150,9 @@ window.addEventListener("load", () => load().then((assets) => {
 	subFolder.addInput(texture.center, "x", { min: 0, max: 1, step: 0.001 });
 	subFolder.addInput(texture.center, "y", { min: 0, max: 1, step: 0.001 });
 
-	pane.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
+	folder.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
 		.on("change", (e) => textureEffect.getBlendMode().setOpacity(e.value));
-	pane.addInput(params, "blend mode", { options: BlendFunction })
+	folder.addInput(params, "blend mode", { options: BlendFunction })
 		.on("change", (e) => textureEffect.getBlendMode().setBlendFunction(e.value));
 
 	// Resize Handler
