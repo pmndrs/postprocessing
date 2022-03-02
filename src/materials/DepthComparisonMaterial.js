@@ -1,4 +1,4 @@
-import { BasicDepthPacking, NoBlending, PerspectiveCamera, ShaderMaterial, Uniform } from "three";
+import { NoBlending, PerspectiveCamera, RGBADepthPacking, ShaderMaterial, Uniform } from "three";
 
 import fragmentShader from "./glsl/depth-comparison/shader.frag";
 import vertexShader from "./glsl/depth-comparison/shader.vert";
@@ -44,10 +44,10 @@ export class DepthComparisonMaterial extends ShaderMaterial {
 	 * Sets the depth buffer.
 	 *
 	 * @param {Texture} buffer - The depth texture.
-	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 * @param {DepthPackingStrategies} [depthPacking=RGBADepthPacking] - The depth packing strategy.
 	 */
 
-	setDepthBuffer(buffer, depthPacking = BasicDepthPacking) {
+	setDepthBuffer(buffer, depthPacking = RGBADepthPacking) {
 
 		this.uniforms.depthBuffer.value = buffer;
 		this.defines.DEPTH_PACKING = depthPacking.toFixed(0);
