@@ -2,9 +2,12 @@
 
 .tp {
 	position: absolute;
-	right: 8px;
-	top: 8px;
+	right: 5px;
+	top: 5px;
 	user-select: none;
-	width: 256px;
+	width: 275px;
 	z-index: layers.$hud;
+	&.hidden {
+		visibility: hidden;
+	}
 }
