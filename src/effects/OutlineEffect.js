@@ -25,6 +25,7 @@ export class OutlineEffect extends Effect {
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function. Use `BlendFunction.ALPHA` for dark outlines.
 	 * @param {Number} [options.patternTexture=null] - A pattern texture.
+	 * @param {Number} [options.patternScale=1.0] - The pattern scale.
 	 * @param {Number} [options.edgeStrength=1.0] - The edge strength.
 	 * @param {Number} [options.pulseSpeed=0.0] - The pulse speed. A value of zero disables the pulse effect.
 	 * @param {Number} [options.visibleEdgeColor=0xffffff] - The color of visible edges.
@@ -40,6 +41,7 @@ export class OutlineEffect extends Effect {
 	constructor(scene, camera, {
 		blendFunction = BlendFunction.SCREEN,
 		patternTexture = null,
+		patternScale = 1.0,
 		edgeStrength = 1.0,
 		pulseSpeed = 0.0,
 		visibleEdgeColor = 0xffffff,
@@ -60,7 +62,7 @@ export class OutlineEffect extends Effect {
 				["visibleEdgeColor", new Uniform(new Color(visibleEdgeColor))],
 				["hiddenEdgeColor", new Uniform(new Color(hiddenEdgeColor))],
 				["pulse", new Uniform(1.0)],
-				["patternScale", new Uniform(1.0)],
+				["patternScale", new Uniform(patternScale)],
 				["patternTexture", new Uniform(null)]
 			])
 		});
