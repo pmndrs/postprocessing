@@ -13,7 +13,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
 	const components = [
 		new SidebarManager(),
 		new ThemeManager(),
-		new ViewportManager(),
+		new ViewportManager()
 	];
 
 	for(const component of components) {
