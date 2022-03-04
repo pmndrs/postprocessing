@@ -1,4 +1,4 @@
-import { LinearFilter, UnsignedByteType, WebGLRenderTarget } from "three";
+import { LinearFilter, sRGBEncoding, UnsignedByteType, WebGLRenderTarget } from "three";
 import { CopyMaterial } from "../materials";
 import { Pass } from "./Pass";
 
@@ -144,6 +144,10 @@ export class CopyPass extends Pass {
 			if(frameBufferType !== UnsignedByteType) {
 
 				this.getFullscreenMaterial().defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+
+			} else if(this.renderer.outputEncoding === sRGBEncoding) {
+
+				this.renderTarget.texture.encoding = sRGBEncoding;
 
 			}
 

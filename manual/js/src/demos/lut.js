@@ -1,6 +1,5 @@
 import {
 	ClampToEdgeWrapping,
-	HalfFloatType,
 	LinearFilter,
 	LoadingManager,
 	PerspectiveCamera,
@@ -182,9 +181,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	// Post Processing
 
-	const composer = new EffectComposer(renderer, {
-		frameBufferType: HalfFloatType
-	});
+	const composer = new EffectComposer(renderer);
 
 	const lut = LookupTexture.from(assets.get("png/filmic1"));
 	const lutEffect = renderer.capabilities.isWebGL2 ? new LUTEffect(lut) :

@@ -5,6 +5,7 @@ import {
 	NotEqualDepth,
 	EqualDepth,
 	RGBADepthPacking,
+	sRGBEncoding,
 	WebGLRenderTarget
 } from "three";
 
@@ -313,6 +314,12 @@ export class SelectiveBloomEffect extends BloomEffect {
 		if(frameBufferType !== undefined) {
 
 			this.renderTargetMasked.texture.type = frameBufferType;
+
+			if(this.renderer.outputEncoding === sRGBEncoding) {
+
+				this.renderTargetMasked.texture.encoding = sRGBEncoding;
+
+			}
 
 		}
 

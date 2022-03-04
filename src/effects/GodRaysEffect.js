@@ -5,6 +5,7 @@ import {
 	LinearFilter,
 	Matrix4,
 	Scene,
+	sRGBEncoding,
 	Uniform,
 	Vector2,
 	Vector3,
@@ -624,6 +625,14 @@ export class GodRaysEffect extends Effect {
 			this.renderTargetA.texture.type = frameBufferType;
 			this.renderTargetB.texture.type = frameBufferType;
 			this.renderTargetLight.texture.type = frameBufferType;
+
+			if(this.renderer.outputEncoding === sRGBEncoding) {
+
+				this.renderTargetA.texture.encoding = sRGBEncoding;
+				this.renderTargetB.texture.encoding = sRGBEncoding;
+				this.renderTargetLight.texture.encoding = sRGBEncoding;
+
+			}
 
 		}
 

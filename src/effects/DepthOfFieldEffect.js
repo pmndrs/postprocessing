@@ -1,4 +1,4 @@
-import { BasicDepthPacking, LinearFilter, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
+import { BasicDepthPacking, LinearFilter, sRGBEncoding, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
 import { BokehMaterial, CircleOfConfusionMaterial, MaskFunction, MaskMaterial } from "../materials";
 import { ColorChannel, KernelSize, Resolution } from "../core";
 import { KawaseBlurPass, ShaderPass } from "../passes";
@@ -524,6 +524,15 @@ export class DepthOfFieldEffect extends Effect {
 			this.renderTargetNear.texture.type = frameBufferType;
 			this.renderTargetFar.texture.type = frameBufferType;
 			this.renderTargetMasked.texture.type = frameBufferType;
+
+			if(this.renderer.outputEncoding === sRGBEncoding) {
+
+				this.renderTarget.texture.encoding = sRGBEncoding;
+				this.renderTargetNear.texture.encoding = sRGBEncoding;
+				this.renderTargetFar.texture.encoding = sRGBEncoding;
+				this.renderTargetMasked.texture.encoding = sRGBEncoding;
+
+			}
 
 		}
 

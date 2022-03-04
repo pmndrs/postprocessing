@@ -1,4 +1,4 @@
-import { LinearFilter, UnsignedByteType, WebGLRenderTarget } from "three";
+import { LinearFilter, sRGBEncoding, UnsignedByteType, WebGLRenderTarget } from "three";
 import { KawaseBlurMaterial } from "../materials";
 import { KernelSize, Resolution } from "../core";
 import { Pass } from "./Pass";
@@ -384,6 +384,11 @@ export class KawaseBlurPass extends Pass {
 
 				this.blurMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 				this.ditheredBlurMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+
+			} else if(this.renderer.outputEncoding === sRGBEncoding) {
+
+				this.renderTargetA.texture.encoding = sRGBEncoding;
+				this.renderTargetB.texture.encoding = sRGBEncoding;
 
 			}
 

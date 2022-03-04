@@ -1,6 +1,5 @@
 import {
 	CubeTextureLoader,
-	HalfFloatType,
 	LoadingManager,
 	PerspectiveCamera,
 	Scene,
@@ -92,11 +91,8 @@ window.addEventListener("load", () => load().then((assets) => {
 	// Post Processing
 
 	const context = renderer.getContext();
-	const multisampling = Math.min(4, context.getParameter(context.MAX_SAMPLES));
-
 	const composer = new EffectComposer(renderer, {
-		frameBufferType: HalfFloatType,
-		multisampling
+		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
 	});
 
 	composer.addPass(new RenderPass(scene, camera));

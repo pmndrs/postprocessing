@@ -1,4 +1,4 @@
-import { LinearFilter, Uniform, WebGLRenderTarget } from "three";
+import { LinearFilter, sRGBEncoding, Uniform, WebGLRenderTarget } from "three";
 import { KernelSize, Resolution } from "../core";
 import { KawaseBlurPass, LuminancePass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction";
@@ -456,6 +456,12 @@ export class BloomEffect extends Effect {
 		if(frameBufferType !== undefined) {
 
 			this.renderTarget.texture.type = frameBufferType;
+
+			if(this.renderer.outputEncoding === sRGBEncoding) {
+
+				this.renderTarget.texture.encoding = sRGBEncoding;
+
+			}
 
 		}
 

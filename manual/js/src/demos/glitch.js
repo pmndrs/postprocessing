@@ -1,6 +1,5 @@
 import {
 	CubeTextureLoader,
-	HalfFloatType,
 	LoadingManager,
 	PerspectiveCamera,
 	RGBAFormat,
@@ -112,8 +111,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const context = renderer.getContext();
 	const composer = new EffectComposer(renderer, {
-		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES)),
-		frameBufferType: HalfFloatType
+		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
 	});
 
 	const chromaticAberrationEffect = new ChromaticAberrationEffect();

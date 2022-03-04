@@ -1,6 +1,5 @@
 import {
 	CubeTextureLoader,
-	HalfFloatType,
 	LoadingManager,
 	PerspectiveCamera,
 	Scene,
@@ -111,9 +110,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	// Post Processing
 
-	const composer = new EffectComposer(renderer, {
-		frameBufferType: HalfFloatType
-	});
+	const composer = new EffectComposer(renderer);
 
 	const smaaEffect = new SMAAEffect(
 		assets.get("smaa-search"),

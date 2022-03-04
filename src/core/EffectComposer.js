@@ -3,6 +3,8 @@ import {
 	DepthTexture,
 	LinearFilter,
 	REVISION,
+	sRGBEncoding,
+	UnsignedByteType,
 	UnsignedIntType,
 	UnsignedInt248Type,
 	Vector2,
@@ -215,6 +217,15 @@ export class EffectComposer {
 			const size = renderer.getSize(new Vector2());
 			const alpha = renderer.getContext().getContextAttributes().alpha;
 			const frameBufferType = this.inputBuffer.texture.type;
+
+			if(frameBufferType === UnsignedByteType && renderer.outputEncoding === sRGBEncoding) {
+
+				this.inputBuffer.texture.encoding = sRGBEncoding;
+				this.outputBuffer.texture.encoding = sRGBEncoding;
+				this.inputBuffer.dispose();
+				this.outputBuffer.dispose();
+
+			}
 
 			renderer.autoClear = false;
 			this.setSize(size.width, size.height);
