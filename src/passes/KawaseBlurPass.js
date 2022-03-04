@@ -385,7 +385,7 @@ export class KawaseBlurPass extends Pass {
 				this.blurMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 				this.ditheredBlurMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
-			} else if(this.renderer.outputEncoding === sRGBEncoding) {
+			} else if(renderer.outputEncoding === sRGBEncoding) {
 
 				this.renderTargetA.texture.encoding = sRGBEncoding;
 				this.renderTargetB.texture.encoding = sRGBEncoding;

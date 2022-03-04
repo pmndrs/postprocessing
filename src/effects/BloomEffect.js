@@ -457,7 +457,7 @@ export class BloomEffect extends Effect {
 
 			this.renderTarget.texture.type = frameBufferType;
 
-			if(this.renderer.outputEncoding === sRGBEncoding) {
+			if(renderer.outputEncoding === sRGBEncoding) {
 
 				this.renderTarget.texture.encoding = sRGBEncoding;
 

@@ -315,7 +315,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 			this.renderTargetMasked.texture.type = frameBufferType;
 
-			if(this.renderer.outputEncoding === sRGBEncoding) {
+			if(renderer.outputEncoding === sRGBEncoding) {
 
 				this.renderTargetMasked.texture.encoding = sRGBEncoding;
 

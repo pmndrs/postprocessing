@@ -626,7 +626,7 @@ export class GodRaysEffect extends Effect {
 			this.renderTargetB.texture.type = frameBufferType;
 			this.renderTargetLight.texture.type = frameBufferType;
 
-			if(this.renderer.outputEncoding === sRGBEncoding) {
+			if(renderer.outputEncoding === sRGBEncoding) {
 
 				this.renderTargetA.texture.encoding = sRGBEncoding;
 				this.renderTargetB.texture.encoding = sRGBEncoding;

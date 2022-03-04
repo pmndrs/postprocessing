@@ -266,7 +266,7 @@ export class TextureEffect extends Effect {
 
 	initialize(renderer, alpha, frameBufferType) {
 
-		const decoding = getTextureDecoding(this.getTexture(), this.renderer.capabilities.isWebGL2);
+		const decoding = getTextureDecoding(this.getTexture(), renderer.capabilities.isWebGL2);
 		this.defines.set("texelToLinear(texel)", decoding);
 
 	}
