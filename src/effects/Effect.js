@@ -176,7 +176,7 @@ export class Effect extends EventDispatcher {
 	}
 
 	/**
-	 * Sets the renderer
+	 * Sets the renderer.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 */
