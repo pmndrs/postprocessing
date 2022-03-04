@@ -359,7 +359,7 @@ export class Pass {
 
 			if(property !== null && typeof property.dispose === "function") {
 
-				if(property instanceof Scene) {
+				if(property instanceof Scene || property === this.renderer) {
 
 					continue;
 
