@@ -632,8 +632,10 @@ export class EffectComposer {
 
 	reset() {
 
+		const autoReset = this.timer.isAutoResetEnabled();
 		this.dispose();
 		this.autoRenderToScreen = true;
+		this.timer.setAutoResetEnabled(autoReset);
 
 	}
 
