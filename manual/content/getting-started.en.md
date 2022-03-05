@@ -9,4 +9,12 @@ weight: 20
 
 # Getting Started
 
-WIP
+[![Version](https://badgen.net/npm/v/postprocessing)](https://www.npmjs.com/package/postprocessing)
+
+## Installation
+
+This library requires the peer dependency [three](https://github.com/mrdoob/three.js/). Check the [release notes](https://github.com/vanruesc/postprocessing/releases) for supported versions.
+
+```sh
+npm install three postprocessing
+```
