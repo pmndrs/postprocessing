@@ -30,7 +30,6 @@ export class Selection extends Set {
 		 * Controls whether objects that are added to this selection should be removed from all other layers.
 		 *
 		 * @type {Boolean}
-		 * @deprecated Use isExclusive() and setExclusive() instead.
 		 */
 
 		this.exclusive = false;
@@ -47,7 +46,6 @@ export class Selection extends Set {
 	 * The render layer for selected objects.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getLayer() instead.
 	 */
 
 	get layer() {
@@ -58,38 +56,9 @@ export class Selection extends Set {
 
 	/**
 	 * @type {Number}
-	 * @deprecated Use setLayer() instead.
 	 */
 
 	set layer(value) {
-
-		this.setLayer(value);
-
-	}
-
-	/**
-	 * Returns the current render layer for selected objects.
-	 *
-	 * The default layer is 10. If this collides with your own custom layers, please change it before rendering!
-	 *
-	 * @return {Number} The layer.
-	 */
-
-	getLayer() {
-
-		return this.currentLayer;
-
-	}
-
-	/**
-	 * Sets the render layer for selected objects.
-	 *
-	 * The current selection will be updated accordingly.
-	 *
-	 * @param {Number} value - The layer. Range is [0, 31].
-	 */
-
-	setLayer(value) {
 
 		const currentLayer = this.currentLayer;
 
@@ -105,8 +74,39 @@ export class Selection extends Set {
 	}
 
 	/**
+	 * Returns the current render layer for selected objects.
+	 *
+	 * The default layer is 10. If this collides with your own custom layers, please change it before rendering!
+	 *
+	 * @deprecated Use layer instead.
+	 * @return {Number} The layer.
+	 */
+
+	getLayer() {
+
+		return this.layer;
+
+	}
+
+	/**
+	 * Sets the render layer for selected objects.
+	 *
+	 * The current selection will be updated accordingly.
+	 *
+	 * @deprecated Use layer instead.
+	 * @param {Number} value - The layer. Range is [0, 31].
+	 */
+
+	setLayer(value) {
+
+		this.layer = value;
+
+	}
+
+	/**
 	 * Indicates whether objects that are added to this selection will be removed from all other layers.
 	 *
+	 * @deprecated Use exclusive instead.
 	 * @return {Number} Whether this selection is exclusive. Default is false.
 	 */
 
@@ -119,6 +119,7 @@ export class Selection extends Set {
 	/**
 	 * Controls whether objects that are added to this selection should be removed from all other layers.
 	 *
+	 * @deprecated Use exclusive instead.
 	 * @param {Number} value - Whether this selection should be exclusive.
 	 */
 
@@ -174,7 +175,7 @@ export class Selection extends Set {
 	 *
 	 * @param {Object3D} object - An object.
 	 * @return {Number} Returns 0 if the given object is currently selected, or -1 otherwise.
-	 * @deprecated Added for backward compatibility. Use `has` instead.
+	 * @deprecated Added for backward-compatibility.
 	 */
 
 	indexOf(object) {
