@@ -26,7 +26,7 @@ export class Resolution extends EventDispatcher {
 		 * A resizable object.
 		 *
 		 * @type {Resizable}
-		 * @deprecated Use an event listener instead.
+		 * @deprecated Use an event listener for "change" events instead.
 		 */
 
 		this.resizable = resizable;
@@ -53,7 +53,7 @@ export class Resolution extends EventDispatcher {
 		 * The preferred resolution.
 		 *
 		 * @type {Vector2}
-		 * @deprecated
+		 * @deprecated Added for backward-compatibility.
 		 */
 
 		this.target = this.preferred;
@@ -70,107 +70,14 @@ export class Resolution extends EventDispatcher {
 	}
 
 	/**
-	 * The resolution scale.
-	 *
-	 * @type {Number}
-	 * @deprecated Use getScale() instead.
-	 */
-
-	get scale() {
-
-		return this.getScale();
-
-	}
-
-	/**
-	 * Sets the resolution scale.
-	 *
-	 * @type {Number}
-	 * @deprecated Use setScale() instead.
-	 */
-
-	set scale(value) {
-
-		this.setScale(value);
-
-	}
-
-	/**
 	 * The effective width.
-	 *
-	 * @type {Number}
-	 * @deprecated Use getWidth() instead.
-	 */
-
-	get width() {
-
-		return this.getWidth();
-
-	}
-
-	/**
-	 * Sets the preferred width.
-	 *
-	 * @type {Number}
-	 * @deprecated Use setPreferredWidth() instead.
-	 */
-
-	set width(value) {
-
-		this.setPreferredWidth(value);
-
-	}
-
-	/**
-	 * The effective height.
-	 *
-	 * @type {Number}
-	 * @deprecated Use getHeight() instead.
-	 */
-
-	get height() {
-
-		return this.getHeight();
-
-	}
-
-	/**
-	 * Sets the preferred height.
-	 *
-	 * @type {Number}
-	 * @deprecated Use setPreferredHeight() instead.
-	 */
-
-	set height(value) {
-
-		this.setPreferredHeight(value);
-
-	}
-
-	/**
-	 * Copies the given resolution.
-	 *
-	 * @param {Resolution} resolution - The resolution.
-	 */
-
-	copy(resolution) {
-
-		this.base.set(resolution.getBaseWidth(), resolution.getBaseHeight());
-		this.preferred.set(resolution.getPreferredWidth(), resolution.getPreferredHeight());
-		this.dispatchEvent({ type: "change" });
-		this.resizable.setSize(this.base.width, this.base.height);
-
-	}
-
-	/**
-	 * Returns the effective width.
 	 *
 	 * If the preferred width and height are set to {@link Resizer.AUTO_SIZE}, the base width will be returned.
 	 *
-	 * @return {Number} The effective width.
+	 * @type {Number}
 	 */
 
-	getWidth() {
+	get width() {
 
 		const { base, preferred, scale } = this;
 
@@ -194,15 +101,21 @@ export class Resolution extends EventDispatcher {
 
 	}
 
+	set width(value) {
+
+		this.preferredWidth = value;
+
+	}
+
 	/**
-	 * Returns the effective height.
+	 * The effective height.
 	 *
 	 * If the preferred width and height are set to {@link Resizer.AUTO_SIZE}, the base height will be returned.
 	 *
-	 * @return {Number} The effective height.
+	 * @type {Number}
 	 */
 
-	getHeight() {
+	get height() {
 
 		const { base, preferred, scale } = this;
 
@@ -226,27 +139,55 @@ export class Resolution extends EventDispatcher {
 
 	}
 
+	set height(value) {
+
+		this.preferredHeight = value;
+
+	}
+
 	/**
-	 * Returns the current resolution scale.
+	 * Returns the effective width.
 	 *
-	 * @return {Number} The scale.
+	 * If the preferred width and height are set to {@link Resizer.AUTO_SIZE}, the base width will be returned.
+	 *
+	 * @deprecated Use width instead.
+	 * @return {Number} The effective width.
 	 */
 
-	getScale() {
+	getWidth() {
+
+		return this.width;
+
+	}
+
+	/**
+	 * Returns the effective height.
+	 *
+	 * If the preferred width and height are set to {@link Resizer.AUTO_SIZE}, the base height will be returned.
+	 *
+	 * @deprecated Use height instead.
+	 * @return {Number} The effective height.
+	 */
+
+	getHeight() {
+
+		return this.height;
+
+	}
+
+	/**
+	 * The resolution scale.
+	 *
+	 * @type {Number}
+	 */
+
+	get scale() {
 
 		return this.s;
 
 	}
 
-	/**
-	 * Sets the resolution scale.
-	 *
-	 * Also sets the preferred resolution to {@link Resizer.AUTO_SIZE}.
-	 *
-	 * @param {Number} value - The scale.
-	 */
-
-	setScale(value) {
+	set scale(value) {
 
 		if(this.s !== value) {
 
@@ -260,8 +201,61 @@ export class Resolution extends EventDispatcher {
 	}
 
 	/**
+	 * Returns the current resolution scale.
+	 *
+	 * @deprecated Use scale instead.
+	 * @return {Number} The scale.
+	 */
+
+	getScale() {
+
+		return this.scale;
+
+	}
+
+	/**
+	 * Sets the resolution scale.
+	 *
+	 * Also sets the preferred resolution to {@link Resizer.AUTO_SIZE}.
+	 *
+	 * @deprecated Use scale instead.
+	 * @param {Number} value - The scale.
+	 */
+
+	setScale(value) {
+
+		this.scale = value;
+
+	}
+
+	/**
+	 * The base width.
+	 *
+	 * @type {Number}
+	 */
+
+	get baseWidth() {
+
+		return this.base.width;
+
+	}
+
+	set baseWidth(value) {
+
+		if(this.base.width !== value) {
+
+			this.base.width = value;
+			this.dispatchEvent({ type: "change" });
+			this.resizable.setSize(this.base.width, this.base.height);
+
+		}
+
+	}
+
+	/**
 	 * Returns the base width.
 	 *
+	 * @deprecated Use baseWidth instead.
 	 * @return {Number} The base width.
 	 */
 
@@ -274,6 +268,7 @@ export class Resolution extends EventDispatcher {
 	/**
 	 * Sets the base width.
 	 *
+	 * @deprecated Use baseWidth instead.
 	 * @param {Number} value - The width.
 	 */
 
@@ -290,24 +285,18 @@ export class Resolution extends EventDispatcher {
 	}
 
 	/**
-	 * Returns the base height.
+	 * The base height.
 	 *
-	 * @return {Number} The base height.
+	 * @type {Number}
 	 */
 
-	getBaseHeight() {
+	get baseHeight() {
 
 		return this.base.height;
 
 	}
 
-	/**
-	 * Sets the base height.
-	 *
-	 * @param {Number} value - The height.
-	 */
-
-	setBaseHeight(value) {
+	set baseHeight(value) {
 
 		if(this.base.height !== value) {
 
@@ -316,6 +305,32 @@ export class Resolution extends EventDispatcher {
 			this.resizable.setSize(this.base.width, this.base.height);
 
 		}
+
+	}
+
+	/**
+	 * Returns the base height.
+	 *
+	 * @deprecated Use baseHeight instead.
+	 * @return {Number} The base height.
+	 */
+
+	getBaseHeight() {
+
+		return this.baseHeight;
+
+	}
+
+	/**
+	 * Sets the base height.
+	 *
+	 * @deprecated Use baseHeight instead.
+	 * @param {Number} value - The height.
+	 */
+
+	setBaseHeight(value) {
+
+		this.baseHeight = value;
 
 	}
 
@@ -339,26 +354,18 @@ export class Resolution extends EventDispatcher {
 	}
 
 	/**
-	 * Returns the preferred width.
+	 * The preferred width.
 	 *
-	 * @return {Number} The preferred width.
+	 * @type {Number}
 	 */
 
-	getPreferredWidth() {
+	get preferredWidth() {
 
 		return this.preferred.width;
 
 	}
 
-	/**
-	 * Sets the preferred width.
-	 *
-	 * Use {@link Resizer.AUTO_SIZE} to automatically calculate the width based on the height and aspect ratio.
-	 *
-	 * @param {Number} value - The width.
-	 */
-
-	setPreferredWidth(value) {
+	set preferredWidth(value) {
 
 		if(this.preferred.width !== value) {
 
@@ -371,26 +378,46 @@ export class Resolution extends EventDispatcher {
 	}
 
 	/**
-	 * Returns the preferred height.
+	 * Returns the preferred width.
 	 *
-	 * @return {Number} The preferred height.
+	 * @deprecated Use preferredWidth instead.
+	 * @return {Number} The preferred width.
 	 */
 
-	getPreferredHeight() {
+	getPreferredWidth() {
+
+		return this.preferredWidth;
+
+	}
+
+	/**
+	 * Sets the preferred width.
+	 *
+	 * Use {@link Resizer.AUTO_SIZE} to automatically calculate the width based on the height and aspect ratio.
+	 *
+	 * @deprecated Use preferredWidth instead.
+	 * @param {Number} value - The width.
+	 */
+
+	setPreferredWidth(value) {
+
+		this.preferredWidth = value;
+
+	}
+
+	/**
+	 * The preferred height.
+	 *
+	 * @type {Number}
+	 */
+
+	get preferredHeight() {
 
 		return this.preferred.height;
 
 	}
 
-	/**
-	 * Sets the preferred height.
-	 *
-	 * Use {@link Resizer.AUTO_SIZE} to automatically calculate the height based on the width and aspect ratio.
-	 *
-	 * @param {Number} value - The height.
-	 */
-
-	setPreferredHeight(value) {
+	set preferredHeight(value) {
 
 		if(this.preferred.height !== value) {
 
@@ -399,6 +426,34 @@ export class Resolution extends EventDispatcher {
 			this.resizable.setSize(this.base.width, this.base.height);
 
 		}
+
+	}
+
+	/**
+	 * Returns the preferred height.
+	 *
+	 * @deprecated Use preferredHeight instead.
+	 * @return {Number} The preferred height.
+	 */
+
+	getPreferredHeight() {
+
+		return this.preferredHeight;
+
+	}
+
+	/**
+	 * Sets the preferred height.
+	 *
+	 * Use {@link Resizer.AUTO_SIZE} to automatically calculate the height based on the width and aspect ratio.
+	 *
+	 * @deprecated Use preferredHeight instead.
+	 * @param {Number} value - The height.
+	 */
+
+	setPreferredHeight(value) {
+
+		this.preferredHeight = value;
 
 	}
 
@@ -418,6 +473,21 @@ export class Resolution extends EventDispatcher {
 			this.resizable.setSize(this.base.width, this.base.height);
 
 		}
+
+	}
+
+	/**
+	 * Copies the given resolution.
+	 *
+	 * @param {Resolution} resolution - The resolution.
+	 */
+
+	copy(resolution) {
+
+		this.base.set(resolution.getBaseWidth(), resolution.getBaseHeight());
+		this.preferred.set(resolution.getPreferredWidth(), resolution.getPreferredHeight());
+		this.dispatchEvent({ type: "change" });
+		this.resizable.setSize(this.base.width, this.base.height);
 
 	}
 
