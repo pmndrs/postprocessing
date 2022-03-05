@@ -5,7 +5,8 @@ varying vec2 vUvB;
 
 void mainSupport(const in vec2 uv) {
 
-	vUvR = uv + offset * vec2(1.0, aspect);
-	vUvB = uv - offset * vec2(1.0, aspect);
+	vec2 shift = offset * vec2(1.0, aspect);
+	vUvR = uv + shift;
+	vUvB = uv - shift;
 
 }
