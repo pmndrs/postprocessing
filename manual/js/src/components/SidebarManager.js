@@ -40,6 +40,10 @@ export class SidebarManager {
 
 		});
 
+		const nav = document.querySelector(".navigation");
+		nav.scrollTop = Number(sessionStorage.getItem("nav-scroll"));
+		nav.addEventListener("scroll", () => sessionStorage.setItem("nav-scroll", nav.scrollTop.toFixed(0)));
+
 	}
 
 }
