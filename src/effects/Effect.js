@@ -87,6 +87,7 @@ export class Effect extends EventDispatcher {
 		 *
 		 * @type {WebGLRenderer}
 		 * @protected
+		 * @deprecated
 		 */
 
 		this.renderer = null;
@@ -178,6 +179,7 @@ export class Effect extends EventDispatcher {
 	/**
 	 * Sets the renderer.
 	 *
+	 * @deprecated
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 */
 

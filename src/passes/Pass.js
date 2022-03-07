@@ -73,6 +73,7 @@ export class Pass {
 		/**
 		 * The renderer.
 		 *
+		 * @deprecated
 		 * @type {WebGLRenderer}
 		 * @protected
 		 */
@@ -190,6 +191,7 @@ export class Pass {
 	/**
 	 * Sets the renderer
 	 *
+	 * @deprecated
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 */
 
