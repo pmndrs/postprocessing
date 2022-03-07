@@ -60,8 +60,21 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The input buffer.
+	 *
+	 * @type {Texture}
+	 */
+
+	set inputBuffer(value) {
+
+		this.uniforms.inputBuffer.value = value;
+
+	}
+
+	/**
 	 * Sets the input buffer.
 	 *
+	 * @deprecated Use inputBuffer instead.
 	 * @param {Texture} value - The input buffer.
 	 */
 
@@ -72,32 +85,63 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The search lookup texture.
+	 *
+	 * @type {Texture}
+	 */
+
+	set searchTexture(value) {
+
+		this.uniforms.searchTexture.value = value;
+
+	}
+
+	/**
+	 * The area lookup texture.
+	 *
+	 * @type {Texture}
+	 */
+
+	set searchTexture(value) {
+
+		this.uniforms.searchTexture.value = value;
+
+	}
+
+	/**
 	 * Sets the search and area lookup textures.
 	 *
+	 * @deprecated Use searchTexture and areaTexture instead.
 	 * @param {Texture} search - The search lookup texture.
 	 * @param {Texture} area - The area lookup texture.
 	 */
 
 	setLookupTextures(search, area) {
 
-		this.uniforms.searchTexture.value = search;
-		this.uniforms.areaTexture.value = area;
+		this.searchTexture = search;
+		this.areaTexture = area;
 
 	}
 
 	/**
-	 * Sets the maximum amount of steps performed in the horizontal/vertical pattern searches, at each side of the pixel.
+	 * The maximum amount of steps performed in the horizontal/vertical pattern searches, at each side of the pixel.
+	 * Range: [0, 112].
 	 *
 	 * In number of pixels, it's actually the double. So the maximum line length perfectly handled by, for example 16, is
 	 * 64 (perfectly means that longer lines won't look as good, but are still antialiased).
 	 *
-	 * @param {Number} value - The search steps. Range: [0, 112].
+	 * @type {Number}
 	 */
 
-	setOrthogonalSearchSteps(value) {
+	get orthogonalSearchSteps() {
+
+		return Number(this.defines.MAX_SEARCH_STEPS_INT);
+
+	}
+
+	set orthogonalSearchSteps(value) {
 
 		const s = Math.min(Math.max(value, 0), 112);
-
 		this.defines.MAX_SEARCH_STEPS_INT = s.toFixed("0");
 		this.defines.MAX_SEARCH_STEPS_FLOAT = s.toFixed("1");
 		this.needsUpdate = true;
@@ -105,19 +149,37 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Specifies the maximum steps performed in the diagonal pattern searches, at each side of the pixel. This search
-	 * jumps one pixel at a time.
+	 * Sets the maximum amount of steps performed in the horizontal/vertical pattern searches, at each side of the pixel.
+	 *
+	 * @deprecated Use orthogonalSearchSteps instead.
+	 * @param {Number} value - The search steps. Range: [0, 112].
+	 */
+
+	setOrthogonalSearchSteps(value) {
+
+		this.orthogonalSearchSteps = value;
+
+	}
+
+	/**
+	 * The maximum steps performed in the diagonal pattern searches, at each side of the pixel. This search
+	 * jumps one pixel at a time. Range: [0, 20].
 	 *
 	 * On high-end machines this search is cheap (between 0.8x and 0.9x slower for 16 steps), but it can have a
 	 * significant impact on older machines.
 	 *
-	 * @param {Number} value - The search steps. Range: [0, 20].
+	 * @type {Number}
 	 */
 
-	setDiagonalSearchSteps(value) {
+	get diagonalSearchSteps() {
+
+		return Number(this.defines.MAX_SEARCH_STEPS_DIAG_INT);
+
+	}
+
+	set diagonalSearchSteps(value) {
 
 		const s = Math.min(Math.max(value, 0), 20);
-
 		this.defines.MAX_SEARCH_STEPS_DIAG_INT = s.toFixed("0");
 		this.defines.MAX_SEARCH_STEPS_DIAG_FLOAT = s.toFixed("1");
 		this.needsUpdate = true;
@@ -125,18 +187,15 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Specifies how much sharp corners will be rounded.
+	 * Specifies the maximum steps performed in the diagonal pattern searches, at each side of the pixel.
 	 *
-	 * @param {Number} value - The corner rounding amount. Range: [0, 100].
+	 * @deprecated Use diagonalSearchSteps instead.
+	 * @param {Number} value - The search steps. Range: [0, 20].
 	 */
 
-	setCornerRounding(value) {
+	setDiagonalSearchSteps(value) {
 
-		const r = Math.min(Math.max(value, 0), 100);
-
-		this.defines.CORNER_ROUNDING = r.toFixed("4");
-		this.defines.CORNER_ROUNDING_NORM = (r / 100.0).toFixed("4");
-		this.needsUpdate = true;
+		this.diagonalSearchSteps = value;
 
 	}
 
@@ -144,47 +203,15 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	 * Indicates whether diagonal pattern detection is enabled.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use isDiagonalDetectionEnabled() instead.
 	 */
 
 	get diagonalDetection() {
-
-		return this.isDiagonalDetectionEnabled();
-
-	}
-
-	/**
-	 * Enables or disables diagonal pattern detection.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Use setDiagonalDetectionEnabled() instead.
-	 */
-
-	set diagonalDetection(value) {
-
-		this.setDiagonalDetectionEnabled(value);
-
-	}
-
-	/**
-	 * Indicates whether diagonal pattern detection is enabled.
-	 *
-	 * @return {Boolean} Whether diagonal pattern detection is enabled.
-	 */
-
-	isDiagonalDetectionEnabled() {
 
 		return (this.defines.DISABLE_DIAG_DETECTION === undefined);
 
 	}
 
-	/**
-	 * Enables or disables diagonal pattern detection.
-	 *
-	 * @param {Boolean} value - Whether diagonal pattern detection should be enabled.
-	 */
-
-	setDiagonalDetectionEnabled(value) {
+	set diagonalDetection(value) {
 
 		if(value) {
 
@@ -201,50 +228,78 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Indicates whether corner rounding is enabled.
+	 * Indicates whether diagonal pattern detection is enabled.
 	 *
-	 * @type {Boolean}
-	 * @deprecated Use isCornerRoundingEnabled() instead.
+	 * @deprecated Use diagonalDetection instead.
+	 * @return {Boolean} Whether diagonal pattern detection is enabled.
+	 */
+
+	isDiagonalDetectionEnabled() {
+
+		return this.diagonalDetection;
+
+	}
+
+	/**
+	 * Enables or disables diagonal pattern detection.
+	 *
+	 * @deprecated Use diagonalDetection instead.
+	 * @param {Boolean} value - Whether diagonal pattern detection should be enabled.
+	 */
+
+	setDiagonalDetectionEnabled(value) {
+
+		this.diagonalDetection = value;
+
+	}
+
+	/**
+	 * Specifies how much sharp corners will be rounded. Range: [0, 100].
+	 *
+	 * @type {Number}
 	 */
 
 	get cornerRounding() {
 
-		return this.isCornerRoundingEnabled();
+		return Number(this.defines.CORNER_ROUNDING);
 
 	}
-
-	/**
-	 * Enables or disables corner rounding.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Use setCornerRoundingEnabled() instead.
-	 */
 
 	set cornerRounding(value) {
 
-		this.setCornerRoundingEnabled(value);
+		const r = Math.min(Math.max(value, 0), 100);
+		this.defines.CORNER_ROUNDING = r.toFixed("4");
+		this.defines.CORNER_ROUNDING_NORM = (r / 100.0).toFixed("4");
+		this.needsUpdate = true;
 
 	}
 
 	/**
-	 * Indicates whether corner rounding is enabled.
+	 * Specifies how much sharp corners will be rounded.
 	 *
-	 * @return {Boolean} Whether corner rounding is enabled.
+	 * @deprecated Use cornerRounding instead.
+	 * @param {Number} value - The corner rounding amount. Range: [0, 100].
 	 */
 
-	isCornerRoundingEnabled() {
+	setCornerRounding(value) {
+
+		this.cornerRounding = value;
+
+	}
+
+	/**
+	 * Indicates whether corner detection is enabled.
+	 *
+	 * @type {Number}
+	 */
+
+	get cornerDetection() {
 
 		return (this.defines.DISABLE_CORNER_DETECTION === undefined);
 
 	}
 
-	/**
-	 * Enables or disables corner rounding.
-	 *
-	 * @param {Boolean} value - Whether corner rounding should be enabled.
-	 */
-
-	setCornerRoundingEnabled(value) {
+	set cornerDetection(value) {
 
 		if(value) {
 
@@ -256,6 +311,33 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 
 		}
 
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Indicates whether corner rounding is enabled.
+	 *
+	 * @deprecated Use cornerDetection instead.
+	 * @return {Boolean} Whether corner rounding is enabled.
+	 */
+
+	isCornerRoundingEnabled() {
+
+		return this.cornerDetection;
+
+	}
+
+	/**
+	 * Enables or disables corner rounding.
+	 *
+	 * @deprecated Use cornerDetection instead.
+	 * @param {Boolean} value - Whether corner rounding should be enabled.
+	 */
+
+	setCornerRoundingEnabled(value) {
+
+		this.cornerDetection = value;
 		this.needsUpdate = true;
 
 	}

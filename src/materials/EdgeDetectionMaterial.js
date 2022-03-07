@@ -86,38 +86,21 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the depth buffer.
+	 * The depth buffer.
 	 *
-	 * @param {Texture} buffer - The depth texture.
-	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 * @type {Texture}
 	 */
 
-	setDepthBuffer(buffer, depthPacking = BasicDepthPacking) {
+	set depthBuffer(value) {
 
-		this.uniforms.depthBuffer.value = buffer;
-		this.defines.DEPTH_PACKING = depthPacking.toFixed(0);
-		this.needsUpdate = true;
+		this.uniforms.depthBuffer.value = value;
 
 	}
 
 	/**
-	 * The current depth packing.
+	 * The depth packing strategy.
 	 *
 	 * @type {DepthPackingStrategies}
-	 * @deprecated Removed without replacement.
-	 */
-
-	get depthPacking() {
-
-		return Number(this.defines.DEPTH_PACKING);
-
-	}
-
-	/**
-	 * Sets the depth packing.
-	 *
-	 * @type {DepthPackingStrategies}
-	 * @deprecated Use setDepthBuffer() instead.
 	 */
 
 	set depthPacking(value) {
@@ -128,26 +111,85 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Sets the depth buffer.
+	 *
+	 * @deprecated Use depthBuffer and depthPacking instead.
+	 * @param {Texture} buffer - The depth texture.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 */
+
+	setDepthBuffer(buffer, depthPacking = BasicDepthPacking) {
+
+		this.depthBuffer = buffer;
+		this.depthPacking = depthPacking;
+
+	}
+
+	/**
+	 * The edge detection mode.
+	 *
+	 * @type {EdgeDetectionMode}
+	 */
+
+	get edgeDetectionMode() {
+
+		return Number(this.defines.EDGE_DETECTION_MODE);
+
+	}
+
+	set edgeDetectionMode(value) {
+
+		this.defines.EDGE_DETECTION_MODE = value.toFixed(0);
+		this.needsUpdate = true;
+
+	}
+
+	/**
 	 * Returns the edge detection mode.
 	 *
+	 * @deprecated Use edgeDetectionMode instead.
 	 * @return {EdgeDetectionMode} The mode.
 	 */
 
 	getEdgeDetectionMode() {
 
-		return Number(this.defines.EDGE_DETECTION_MODE);
+		return this.edgeDetectionMode;
 
 	}
 
 	/**
 	 * Sets the edge detection mode.
 	 *
-	 * @param {EdgeDetectionMode} mode - The edge detection mode.
+	 * @deprecated Use edgeDetectionMode instead.
+	 * @param {EdgeDetectionMode} value - The edge detection mode.
 	 */
 
-	setEdgeDetectionMode(mode) {
+	setEdgeDetectionMode(value) {
 
-		this.defines.EDGE_DETECTION_MODE = mode.toFixed(0);
+		this.edgeDetectionMode = value;
+
+	}
+
+	/**
+	 * The local contrast adaptation factor. Has no effect if the edge detection mode is set to DEPTH. Default is 2.0.
+	 *
+	 * If a neighbor edge has _factor_ times bigger contrast than the current edge, the edge will be discarded.
+	 *
+	 * This allows to eliminate spurious crossing edges and is based on the fact that if there is too much contrast in a
+	 * direction, the perceptual contrast in the other neighbors will be hidden.
+	 *
+	 * @type {Number}
+	 */
+
+	get localContrastAdaptationFactor() {
+
+		return Number(this.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR);
+
+	}
+
+	set localContrastAdaptationFactor(value) {
+
+		this.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR = value.toFixed("6");
 		this.needsUpdate = true;
 
 	}
@@ -155,47 +197,31 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	/**
 	 * Returns the local contrast adaptation factor.
 	 *
+	 * @deprecated Use localContrastAdaptationFactor instead.
 	 * @return {Number} The factor.
 	 */
 
 	getLocalContrastAdaptationFactor() {
 
-		return Number(this.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR);
+		return this.localContrastAdaptationFactor;
 
 	}
 
 	/**
 	 * Sets the local contrast adaptation factor. Has no effect if the edge detection mode is set to DEPTH.
 	 *
-	 * If a neighbor edge has _factor_ times bigger contrast than the current edge, the edge will be discarded.
-	 *
-	 * This allows to eliminate spurious crossing edges and is based on the fact that if there is too much contrast in a
-	 * direction, the perceptual contrast in the other neighbors will be hidden.
-	 *
-	 * @param {Number} factor - The local contrast adaptation factor. Default is 2.0.
+	 * @deprecated Use localContrastAdaptationFactor instead.
+	 * @param {Number} value - The local contrast adaptation factor. Default is 2.0.
 	 */
 
-	setLocalContrastAdaptationFactor(factor) {
+	setLocalContrastAdaptationFactor(value) {
 
-		this.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR = factor.toFixed("6");
-		this.needsUpdate = true;
+		this.localContrastAdaptationFactor = value;
 
 	}
 
 	/**
-	 * Returns the edge detection threshold.
-	 *
-	 * @return {Number} The threshold.
-	 */
-
-	getEdgeDetectionThreshold() {
-
-		return Number(this.defines.EDGE_THRESHOLD);
-
-	}
-
-	/**
-	 * Sets the edge detection threshold.
+	 * The edge detection threshold. Range: [0.0, 0.5].
 	 *
 	 * A lower value results in more edges being detected at the expense of performance.
 	 *
@@ -204,13 +230,67 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	 *
 	 * If depth-based edge detection is used, the threshold will depend on the scene depth.
 	 *
-	 * @param {Number} threshold - The edge detection threshold. Range: [0.0, 0.5].
+	 * @type {Number}
 	 */
 
-	setEdgeDetectionThreshold(threshold) {
+	get edgeDetectionThreshold() {
 
-		this.defines.EDGE_THRESHOLD = threshold.toFixed("6");
-		this.defines.DEPTH_THRESHOLD = (threshold * 0.1).toFixed("6");
+		return Number(this.defines.EDGE_THRESHOLD);
+
+	}
+
+	set edgeDetectionThreshold(value) {
+
+		this.defines.EDGE_THRESHOLD = value.toFixed("6");
+		this.defines.DEPTH_THRESHOLD = (value * 0.1).toFixed("6");
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Returns the edge detection threshold.
+	 *
+	 * @deprecated Use edgeDetectionThreshold instead.
+	 * @return {Number} The threshold.
+	 */
+
+	getEdgeDetectionThreshold() {
+
+		return this.edgeDetectionThreshold;
+
+	}
+
+	/**
+	 * Sets the edge detection threshold.
+	 *
+	 * @deprecated Use edgeDetectionThreshold instead.
+	 * @param {Number} value - The edge detection threshold. Range: [0.0, 0.5].
+	 */
+
+	setEdgeDetectionThreshold(value) {
+
+		this.edgeDetectionThreshold = value;
+
+	}
+
+	/**
+	 * The predication mode.
+	 *
+	 * Predicated thresholding allows to better preserve texture details and to improve edge detection using an additional
+	 * buffer such as a light accumulation or depth buffer.
+	 *
+	 * @type {PredicationMode}
+	 */
+
+	get predicationMode() {
+
+		return Number(this.defines.PREDICATION_MODE);
+
+	}
+
+	set predicationMode(value) {
+
+		this.defines.PREDICATION_MODE = value.toFixed(0);
 		this.needsUpdate = true;
 
 	}
@@ -218,64 +298,116 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	/**
 	 * Returns the predication mode.
 	 *
+	 * @deprecated Use predicationMode instead.
 	 * @return {PredicationMode} The mode.
 	 */
 
 	getPredicationMode() {
 
-		return Number(this.defines.PREDICATION_MODE);
+		return this.predicationMode;
 
 	}
 
 	/**
 	 * Sets the predication mode.
 	 *
-	 * Predicated thresholding allows to better preserve texture details and to improve edge detection using an additional
-	 * buffer such as a light accumulation or depth buffer.
-	 *
-	 * @param {PredicationMode} mode - The predication mode.
+	 * @deprecated Use predicationMode instead.
+	 * @param {PredicationMode} value - The predication mode.
 	 */
 
-	setPredicationMode(mode) {
+	setPredicationMode(value) {
 
-		this.defines.PREDICATION_MODE = mode.toFixed(0);
-		this.needsUpdate = true;
+		this.predicationMode = value;
+
+	}
+
+	/**
+	 * The predication buffer.
+	 *
+	 * @type {Texture}
+	 */
+
+	set predicationBuffer(value) {
+
+		this.uniforms.predicationBuffer.value = value;
 
 	}
 
 	/**
 	 * Sets a custom predication buffer.
 	 *
-	 * @param {Texture} predicationBuffer - The predication buffer.
+	 * @deprecated Use predicationBuffer instead.
+	 * @param {Texture} value - The predication buffer.
 	 */
 
-	setPredicationBuffer(predicationBuffer) {
+	setPredicationBuffer(value) {
 
-		this.uniforms.predicationBuffer.value = predicationBuffer;
+		this.uniforms.predicationBuffer.value = value;
+
+	}
+
+	/**
+	 * The predication threshold.
+	 *
+	 * @type {Number}
+	 */
+
+	get predicationThreshold() {
+
+		return Number(this.defines.PREDICATION_THRESHOLD);
+
+	}
+
+	set predicationThreshold(value) {
+
+		this.defines.PREDICATION_THRESHOLD = value.toFixed("6");
+		this.needsUpdate = true;
 
 	}
 
 	/**
 	 * Returns the predication threshold.
 	 *
+	 * @deprecated Use predicationThreshold instead.
 	 * @return {Number} The threshold.
 	 */
 
 	getPredicationThreshold() {
 
-		return Number(this.defines.PREDICATION_THRESHOLD);
+		return this.predicationThreshold;
 
 	}
 
 	/**
 	 * Sets the predication threshold.
 	 *
+	 * @deprecated Use predicationThreshold instead.
 	 * @param {Number} threshold - The threshold.
 	 */
 
-	setPredicationThreshold(threshold) {
+	setPredicationThreshold(value) {
 
-		this.defines.PREDICATION_THRESHOLD = threshold.toFixed("6");
+		this.predicationThreshold = value;
+
+	}
+
+	/**
+	 * The predication scale. Range: [1.0, 5.0].
+	 *
+	 * Determines how much the edge detection threshold should be scaled when using predication.
+	 *
+	 * @type {Boolean|Texture|Number}
+	 */
+
+	get predicationScale() {
+
+		return Number(this.defines.PREDICATION_SCALE);
+
+	}
+
+	set predicationScale(value) {
+
+		this.defines.PREDICATION_SCALE = value.toFixed("6");
 		this.needsUpdate = true;
 
 	}
@@ -283,26 +415,46 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	/**
 	 * Returns the predication scale.
 	 *
+	 * @deprecated Use predicationScale instead.
 	 * @return {Number} The scale.
 	 */
 
 	getPredicationScale() {
 
-		return Number(this.defines.PREDICATION_SCALE);
+		return this.predicationScale;
 
 	}
 
 	/**
 	 * Sets the predication scale.
 	 *
-	 * Determines how much the edge detection threshold should be scaled when using predication.
-	 *
-	 * @param {Number} scale - The scale. Range: [1.0, 5.0].
+	 * @deprecated Use XXXX instead.
+	 * @param {Number} value - The scale. Range: [1.0, 5.0].
 	 */
 
-	setPredicationScale(scale) {
+	setPredicationScale(value) {
 
-		this.defines.PREDICATION_SCALE = scale.toFixed("6");
+		this.predicationScale = value;
+
+	}
+
+	/**
+	 * The predication strength. Range: [0.0, 1.0].
+	 *
+	 * Determines how much the edge detection threshold should be decreased locally when using predication.
+	 *
+	 * @type {Number}
+	 */
+
+	get predicationStrength() {
+
+		return Number(this.defines.PREDICATION_STRENGTH);
+
+	}
+
+	set predicationStrength(value) {
+
+		this.defines.PREDICATION_STRENGTH = value.toFixed("6");
 		this.needsUpdate = true;
 
 	}
@@ -310,27 +462,26 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	/**
 	 * Returns the predication strength.
 	 *
+	 * @deprecated Use predicationStrength instead.
 	 * @return {Number} The strength.
 	 */
 
 	getPredicationStrength() {
 
-		return Number(this.defines.PREDICATION_STRENGTH);
+		return this.predicationStrength;
 
 	}
 
 	/**
 	 * Sets the predication strength.
 	 *
-	 * Determines how much the edge detection threshold should be decreased locally when using predication.
-	 *
-	 * @param {Number} strength - The strength. Range: [0.0, 1.0].
+	 * @deprecated Use predicationStrength instead.
+	 * @param {Number} value - The strength. Range: [0.0, 1.0].
 	 */
 
-	setPredicationStrength(strength) {
+	setPredicationStrength(value) {
 
-		this.defines.PREDICATION_STRENGTH = strength.toFixed("6");
-		this.needsUpdate = true;
+		this.predicationStrength = value;
 
 	}
 

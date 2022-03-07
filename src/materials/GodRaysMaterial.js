@@ -58,8 +58,21 @@ export class GodRaysMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The input buffer.
+	 *
+	 * @type {Texture}
+	 */
+
+	set inputBuffer(value) {
+
+		this.uniforms.inputBuffer.value = value;
+
+	}
+
+	/**
 	 * Sets the input buffer.
 	 *
+	 * @deprecated Use inputBuffer instead.
 	 * @param {Texture} value - The input buffer.
 	 */
 
@@ -70,8 +83,21 @@ export class GodRaysMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The screen space position of the light source.
+	 *
+	 * @type {Vector2}
+	 */
+
+	get lightPosition() {
+
+		return this.uniforms.lightPosition.value;
+
+	}
+
+	/**
 	 * Returns the screen space position of the light source.
 	 *
+	 * @deprecated Use lightPosition instead.
 	 * @return {Vector2} The position.
 	 */
 
@@ -84,6 +110,7 @@ export class GodRaysMaterial extends ShaderMaterial {
 	/**
 	 * Sets the screen space position of the light source.
 	 *
+	 * @deprecated Use lightPosition instead.
 	 * @param {Vector2} value - The position.
 	 */
 
@@ -94,8 +121,27 @@ export class GodRaysMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The density.
+	 *
+	 * @type {Number}
+	 */
+
+	get density() {
+
+		return this.uniforms.density.value;
+
+	}
+
+	set density(value) {
+
+		this.uniforms.density.value = value;
+
+	}
+
+	/**
 	 * Returns the density.
 	 *
+	 * @deprecated Use density instead.
 	 * @return {Number} The density.
 	 */
 
@@ -108,6 +154,7 @@ export class GodRaysMaterial extends ShaderMaterial {
 	/**
 	 * Sets the density.
 	 *
+	 * @deprecated Use density instead.
 	 * @param {Number} value - The density.
 	 */
 
@@ -118,8 +165,27 @@ export class GodRaysMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The decay.
+	 *
+	 * @type {Number}
+	 */
+
+	get decay() {
+
+		return this.uniforms.decay.value;
+
+	}
+
+	set decay(value) {
+
+		this.uniforms.decay.value = value;
+
+	}
+
+	/**
 	 * Returns the decay.
 	 *
+	 * @deprecated Use decay instead.
 	 * @return {Number} The decay.
 	 */
 
@@ -132,6 +198,7 @@ export class GodRaysMaterial extends ShaderMaterial {
 	/**
 	 * Sets the decay.
 	 *
+	 * @deprecated Use decay instead.
 	 * @param {Number} value - The decay.
 	 */
 
@@ -142,8 +209,27 @@ export class GodRaysMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The weight.
+	 *
+	 * @type {Number}
+	 */
+
+	get weight() {
+
+		return this.uniforms.weight.value;
+
+	}
+
+	set weight(value) {
+
+		this.uniforms.weight.value = value;
+
+	}
+
+	/**
 	 * Returns the weight.
 	 *
+	 * @deprecated Use weight instead.
 	 * @return {Number} The weight.
 	 */
 
@@ -156,6 +242,7 @@ export class GodRaysMaterial extends ShaderMaterial {
 	/**
 	 * Sets the weight.
 	 *
+	 * @deprecated Use weight instead.
 	 * @param {Number} value - The weight.
 	 */
 
@@ -166,8 +253,27 @@ export class GodRaysMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The exposure.
+	 *
+	 * @type {Number}
+	 */
+
+	get exposure() {
+
+		return this.uniforms.exposure.value;
+
+	}
+
+	set exposure(value) {
+
+		this.uniforms.exposure.value = value;
+
+	}
+
+	/**
 	 * Returns the exposure.
 	 *
+	 * @deprecated Use exposure instead.
 	 * @return {Number} The exposure.
 	 */
 
@@ -180,6 +286,7 @@ export class GodRaysMaterial extends ShaderMaterial {
 	/**
 	 * Sets the exposure.
 	 *
+	 * @deprecated Use exposure instead.
 	 * @param {Number} value - The exposure.
 	 */
 
@@ -190,8 +297,27 @@ export class GodRaysMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The maximum light intensity.
+	 *
+	 * @type {Number}
+	 */
+
+	get maxIntensity() {
+
+		return this.uniforms.clampMax.value;
+
+	}
+
+	set maxIntensity(value) {
+
+		this.uniforms.clampMax.value = value;
+
+	}
+
+	/**
 	 * Returns the maximum light intensity.
 	 *
+	 * @deprecated Use maxIntensity instead.
 	 * @return {Number} The maximum light intensity.
 	 */
 
@@ -204,6 +330,7 @@ export class GodRaysMaterial extends ShaderMaterial {
 	/**
 	 * Sets the maximum light intensity.
 	 *
+	 * @deprecated Use maxIntensity instead.
 	 * @param {Number} value - The maximum light intensity.
 	 */
 
@@ -217,52 +344,46 @@ export class GodRaysMaterial extends ShaderMaterial {
 	 * The amount of samples per pixel.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getSamples() instead.
 	 */
 
 	get samples() {
 
-		return this.getSamples();
+		return Number(this.defines.SAMPLES_INT);
 
 	}
 
-	/**
-	 * Sets the amount of samples per pixel.
-	 *
-	 * @type {Number}
-	 * @deprecated Use setSamples() instead.
-	 */
-
 	set samples(value) {
 
-		this.setSamples(value);
+		const s = Math.floor(value);
+		this.defines.SAMPLES_INT = s.toFixed(0);
+		this.defines.SAMPLES_FLOAT = s.toFixed(1);
+		this.needsUpdate = true;
 
 	}
 
 	/**
 	 * Returns the amount of samples per pixel.
 	 *
+	 * @deprecated Use samples instead.
 	 * @return {Number} The sample count.
 	 */
 
 	getSamples() {
 
-		return Number(this.defines.SAMPLES_INT);
+		return this.samples;
 
 	}
 
 	/**
 	 * Sets the amount of samples per pixel.
 	 *
+	 * @deprecated Use samples instead.
 	 * @param {Number} value - The sample count.
 	 */
 
 	setSamples(value) {
 
-		const s = Math.floor(value);
-		this.defines.SAMPLES_INT = s.toFixed(0);
-		this.defines.SAMPLES_FLOAT = s.toFixed(1);
-		this.needsUpdate = true;
+		this.samples = value
 
 	}
 

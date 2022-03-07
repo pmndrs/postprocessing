@@ -52,20 +52,52 @@ export class KawaseBlurMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the input buffer.
+	 * The input buffer.
 	 *
-	 * @param {Texture} value - The input buffer.
+	 * @type {Texture}
 	 */
 
-	setInputBuffer(value) {
+	set inputBuffer(value) {
 
 		this.uniforms.inputBuffer.value = value;
 
 	}
 
 	/**
+	 * Sets the input buffer.
+	 *
+	 * @deprecated Use inputBuffer instead.
+	 * @param {Texture} value - The input buffer.
+	 */
+
+	setInputBuffer(value) {
+
+		this.inputBuffer = value;
+
+	}
+
+	/**
+	 * The blur scale.
+	 *
+	 * @type {Number}
+	 */
+
+	get scale() {
+
+		return this.uniforms.scale.value;
+
+	}
+
+	set scale(value) {
+
+		this.uniforms.scale.value = value;
+
+	}
+
+	/**
 	 * Returns the blur scale.
 	 *
+	 * @deprecated Use scale instead.
 	 * @return {Number} The scale.
 	 */
 
@@ -78,6 +110,7 @@ export class KawaseBlurMaterial extends ShaderMaterial {
 	/**
 	 * Sets the blur scale.
 	 *
+	 * @deprecated Use scale instead.
 	 * @return {Number} value - The scale.
 	 */
 
@@ -101,14 +134,33 @@ export class KawaseBlurMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The current kernel.
+	 *
+	 * @type {Number}
+	 */
+
+	get kernel() {
+
+		return this.uniforms.kernel.value;
+
+	}
+
+	set kernel(value) {
+
+		this.uniforms.kernel.value = value;
+
+	}
+
+	/**
 	 * Sets the current kernel.
 	 *
+	 * @deprecated Use kernel instead.
 	 * @param {Number} value - The kernel.
 	 */
 
 	setKernel(value) {
 
-		this.uniforms.kernel.value = value;
+		this.kernel = value;
 
 	}
 

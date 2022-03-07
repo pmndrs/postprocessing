@@ -50,34 +50,79 @@ export class DepthCopyMaterial extends ShaderMaterial {
 		this.toneMapped = false;
 
 		/**
-		 * The depth copy mode.
+		 * The current depth copy mode.
 		 *
 		 * @type {DepthCopyMode}
 		 * @private
 		 */
 
-		this.mode = DepthCopyMode.FULL;
+		this.depthCopyMode = DepthCopyMode.FULL;
+
+	}
+
+	/**
+	 * The input depth buffer.
+	 *
+	 * @type {Texture}
+	 */
+
+	set depthBuffer(value) {
+
+		this.uniforms.depthBuffer.value = value;
+
+	}
+
+	/**
+	 * The input depth packing strategy.
+	 *
+	 * @type {DepthPackingStrategies}
+	 */
+
+	set inputDepthPacking(value) {
+
+		this.defines.INPUT_DEPTH_PACKING = value.toFixed(0);
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * The output depth packing strategy.
+	 *
+	 * @type {DepthPackingStrategies}
+	 */
+
+	get outputDepthPacking() {
+
+		return Number(this.defines.OUTPUT_DEPTH_PACKING);
+
+	}
+
+	set outputDepthPacking(value) {
+
+		this.defines.OUTPUT_DEPTH_PACKING = value.toFixed(0);
+		this.needsUpdate = true;
 
 	}
 
 	/**
 	 * Sets the input depth buffer.
 	 *
+	 * @deprecated Use depthBuffer and inputDepthPacking instead.
 	 * @param {Texture} buffer - The depth texture.
 	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
 	 */
 
 	setDepthBuffer(buffer, depthPacking = BasicDepthPacking) {
 
-		this.uniforms.depthBuffer.value = buffer;
-		this.defines.INPUT_DEPTH_PACKING = depthPacking.toFixed(0);
-		this.needsUpdate = true;
+		this.depthBuffer = buffer;
+		this.inputDepthPacking = depthPacking;
 
 	}
 
 	/**
 	 * Returns the current input depth packing strategy.
 	 *
+	 * @deprecated
 	 * @return {DepthPackingStrategies} The input depth packing strategy.
 	 */
 
@@ -90,6 +135,7 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	/**
 	 * Sets the input depth packing strategy.
 	 *
+	 * @deprecated Use inputDepthPacking instead.
 	 * @param {DepthPackingStrategies} value - The new input depth packing strategy.
 	 */
 
@@ -103,6 +149,7 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	/**
 	 * Returns the current output depth packing strategy.
 	 *
+	 * @deprecated Use outputDepthPacking instead.
 	 * @return {DepthPackingStrategies} The output depth packing strategy.
 	 */
 
@@ -115,6 +162,7 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	/**
 	 * Sets the output depth packing strategy.
 	 *
+	 * @deprecated Use outputDepthPacking instead.
 	 * @param {DepthPackingStrategies} value - The new output depth packing strategy.
 	 */
 
@@ -126,8 +174,21 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The screen space position used for single-texel copy operations.
+	 *
+	 * @type {Vector2}
+	 */
+
+	get texelPosition() {
+
+		return this.uniforms.texelPosition.value;
+
+	}
+
+	/**
 	 * Returns the screen space position used for single-texel copy operations.
 	 *
+	 * @deprecated Use texelPosition instead.
 	 * @return {Vector2} The position.
 	 */
 
@@ -140,6 +201,7 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	/**
 	 * Sets the screen space position used for single-texel copy operations.
 	 *
+	 * @deprecated
 	 * @param {Vector2} value - The position.
 	 */
 
@@ -150,8 +212,29 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The depth copy mode.
+	 *
+	 * @type {DepthCopyMode}
+	 */
+
+	get mode() {
+
+		return this.depthCopyMode;
+
+	}
+
+	set mode(value) {
+
+		this.depthCopyMode = value;
+		this.defines.DEPTH_COPY_MODE = value.toFixed(0);
+		this.needsUpdate = true;
+
+	}
+
+	/**
 	 * Returns the depth copy mode.
 	 *
+	 * @deprecated Use mode instead.
 	 * @return {DepthCopyMode} The depth copy mode.
 	 */
 
@@ -164,14 +247,13 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	/**
 	 * Sets the depth copy mode.
 	 *
+	 * @deprecated Use mode instead.
 	 * @param {DepthCopyMode} value - The new mode.
 	 */
 
 	setMode(value) {
 
 		this.mode = value;
-		this.defines.DEPTH_COPY_MODE = value.toFixed(0);
-		this.needsUpdate = true;
 
 	}
 

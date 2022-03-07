@@ -34,8 +34,21 @@ export class CopyMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The input buffer.
+	 *
+	 * @type {Texture}
+	 */
+
+	set inputBuffer(value) {
+
+		this.uniforms.inputBuffer.value = value;
+
+	}
+
+	/**
 	 * Sets the input buffer.
 	 *
+	 * @deprecated Use inputBuffer instead.
 	 * @param {Number} value - The buffer.
 	 */
 
@@ -46,8 +59,27 @@ export class CopyMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The opacity.
+	 *
+	 * @type {Number}
+	 */
+
+	get opacity() {
+
+		return this.uniforms.opacity.value;
+
+	}
+
+	set opacity(value) {
+
+		this.uniforms.opacity.value = value;
+
+	}
+
+	/**
 	 * Returns the opacity.
 	 *
+	 * @deprecated Use opacity instead.
 	 * @return {Number} The opacity.
 	 */
 
@@ -60,6 +92,7 @@ export class CopyMaterial extends ShaderMaterial {
 	/**
 	 * Sets the opacity.
 	 *
+	 * @deprecated Use opacity instead.
 	 * @param {Number} value - The opacity.
 	 */
 

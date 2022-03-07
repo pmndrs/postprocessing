@@ -87,8 +87,21 @@ export class EffectMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The input buffer.
+	 *
+	 * @type {Texture}
+	 */
+
+	set inputBuffer(value) {
+
+		this.uniforms.inputBuffer.value = value;
+
+	}
+
+	/**
 	 * Sets the input buffer.
 	 *
+	 * @deprecated Use inputBuffer instead.
 	 * @param {Texture} value - The input buffer.
 	 */
 
@@ -99,44 +112,42 @@ export class EffectMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the depth buffer.
+	 * The depth buffer.
 	 *
-	 * @param {Texture} buffer - The depth texture.
-	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 * @type {Texture}
 	 */
 
-	setDepthBuffer(buffer, depthPacking = BasicDepthPacking) {
+	set depthBuffer(value) {
 
-		this.uniforms.depthBuffer.value = buffer;
-		this.defines.DEPTH_PACKING = depthPacking.toFixed(0);
-		this.needsUpdate = true;
+		this.uniforms.depthBuffer.value = value;
 
 	}
 
 	/**
-	 * The current depth packing.
+	 * The depth packing strategy.
 	 *
 	 * @type {DepthPackingStrategies}
-	 * @deprecated Removed without replacement.
-	 */
-
-	get depthPacking() {
-
-		return Number(this.defines.DEPTH_PACKING);
-
-	}
-
-	/**
-	 * Sets the depth packing.
-	 *
-	 * @type {DepthPackingStrategies}
-	 * @deprecated Use setDepthBuffer() instead.
 	 */
 
 	set depthPacking(value) {
 
 		this.defines.DEPTH_PACKING = value.toFixed(0);
 		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Sets the depth buffer.
+	 *
+	 * @deprecated Use depthBuffer and depthPacking instead.
+	 * @param {Texture} buffer - The depth texture.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 */
+
+	setDepthBuffer(buffer, depthPacking = BasicDepthPacking) {
+
+		this.depthBuffer = buffer;
+		this.depthPacking = depthPacking;
 
 	}
 
@@ -226,24 +237,18 @@ export class EffectMaterial extends ShaderMaterial {
 	/**
 	 * Indicates whether output encoding is enabled.
 	 *
-	 * @return {Boolean} Whether output encoding is enabled.
+	 * @type {Boolean}
 	 */
 
-	isOutputEncodingEnabled(value) {
+	get encodeOutput() {
 
 		return (this.defines.ENCODE_OUTPUT !== undefined);
 
 	}
 
-	/**
-	 * Enables or disables output encoding.
-	 *
-	 * @param {Boolean} value - Whether output encoding should be enabled.
-	 */
+	set encodeOutput(value) {
 
-	setOutputEncodingEnabled(value) {
-
-		if(this.isOutputEncodingEnabled() !== value) {
+		if(this.encodeOutput !== value) {
 
 			if(value) {
 
@@ -262,8 +267,53 @@ export class EffectMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Indicates whether output encoding is enabled.
+	 *
+	 * @deprecated Use encodeOutput instead.
+	 * @return {Boolean} Whether output encoding is enabled.
+	 */
+
+	isOutputEncodingEnabled(value) {
+
+		return this.encodeOutput;
+
+	}
+
+	/**
+	 * Enables or disables output encoding.
+	 *
+	 * @deprecated Use encodeOutput instead.
+	 * @param {Boolean} value - Whether output encoding should be enabled.
+	 */
+
+	setOutputEncodingEnabled(value) {
+
+		this.encodeOutput = value;
+
+	}
+
+	/**
+	 * The time in seconds.
+	 *
+	 * @type {Number}
+	 */
+
+	get time() {
+
+		return this.uniforms.time.value;
+
+	}
+
+	set time(value) {
+
+		this.uniforms.time.value = value;
+
+	}
+
+	/**
 	 * Sets the delta time.
 	 *
+	 * @deprecated Use time instead.
 	 * @param {Number} value - The delta time in seconds.
 	 */
 

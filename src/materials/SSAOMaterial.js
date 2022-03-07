@@ -76,17 +76,17 @@ export class SSAOMaterial extends ShaderMaterial {
 		 * @private
 		 */
 
-		this.radius = 1.0;
+		this.r = 1.0;
 
 	}
 
 	/**
-	 * Sets the combined normal-depth buffer.
+	 * The combined normal-depth buffer.
 	 *
-	 * @param {Number} value - The buffer.
+	 * @type {Texture}
 	 */
 
-	setNormalDepthBuffer(value) {
+	set normalDepthBuffer() {
 
 		this.uniforms.normalDepthBuffer.value = value;
 
@@ -105,8 +105,34 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Sets the combined normal-depth buffer.
+	 *
+	 * @deprecated Use normalDepthBuffer instead.
+	 * @param {Number} value - The buffer.
+	 */
+
+	setNormalDepthBuffer(value) {
+
+		this.normalDepthBuffer = value;
+
+	}
+
+	/**
+	 * The normal buffer.
+	 *
+	 * @type {Texture}
+	 */
+
+	set normalBuffer(value) {
+
+		this.uniforms.normalBuffer.value = value;
+
+	}
+
+	/**
 	 * Sets the normal buffer.
 	 *
+	 * @deprecated Use normalBuffer instead.
 	 * @param {Number} value - The buffer.
 	 */
 
@@ -117,38 +143,21 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the depth buffer.
+	 * The depth buffer.
 	 *
-	 * @param {Texture} buffer - The depth texture.
-	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 * @type {Texture}
 	 */
 
-	setDepthBuffer(buffer, depthPacking = BasicDepthPacking) {
+	set depthBuffer(value) {
 
-		this.uniforms.depthBuffer.value = buffer;
-		this.defines.DEPTH_PACKING = depthPacking.toFixed(0);
-		this.needsUpdate = true;
+		this.uniforms.depthBuffer.value = value;
 
 	}
 
 	/**
-	 * The current depth packing.
+	 * The depth packing strategy.
 	 *
 	 * @type {DepthPackingStrategies}
-	 * @deprecated Removed without replacement.
-	 */
-
-	get depthPacking() {
-
-		return Number(this.defines.DEPTH_PACKING);
-
-	}
-
-	/**
-	 * Sets the depth packing.
-	 *
-	 * @type {DepthPackingStrategies}
-	 * @deprecated Use setDepthBuffer() instead.
 	 */
 
 	set depthPacking(value) {
@@ -159,8 +168,36 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Sets the depth buffer.
+	 *
+	 * @deprecated Use depthBuffer and depthPacking instead.
+	 * @param {Texture} buffer - The depth texture.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 */
+
+	setDepthBuffer(buffer, depthPacking = BasicDepthPacking) {
+
+		this.depthBuffer = buffer;
+		this.depthPacking = depthPacking;
+
+	}
+
+	/**
+	 * The noise texture.
+	 *
+	 * @type {Texture}
+	 */
+
+	set noiseTexture(value) {
+
+		this.uniforms.noiseTexture.value = value;
+
+	}
+
+	/**
 	 * Sets the noise texture.
 	 *
+	 * @deprecated Use noiseTexture instead.
 	 * @param {Number} value - The texture.
 	 */
 
@@ -171,24 +208,18 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Returns the amount of occlusion samples per pixel.
+	 * The sample count.
 	 *
-	 * @return {Number} The sample count.
+	 * @type {Number}
 	 */
 
-	getSamples() {
+	get samples() {
 
 		return Number(this.defines.SAMPLES_INT);
 
 	}
 
-	/**
-	 * Sets the amount of occlusion samples per pixel.
-	 *
-	 * @param {Number} value - The sample count.
-	 */
-
-	setSamples(value) {
+	set samples(value) {
 
 		this.defines.SAMPLES_INT = value.toFixed(0);
 		this.defines.SAMPLES_FLOAT = value.toFixed(1);
@@ -197,24 +228,44 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Returns the amount of spiral turns in the occlusion sampling pattern.
+	 * Returns the amount of occlusion samples per pixel.
 	 *
-	 * @return {Number} The radius.
+	 * @deprecated Use samples instead.
+	 * @return {Number} The sample count.
 	 */
 
-	getRings() {
+	getSamples() {
+
+		return this.samples;
+
+	}
+
+	/**
+	 * Sets the amount of occlusion samples per pixel.
+	 *
+	 * @deprecated Use samples instead.
+	 * @param {Number} value - The sample count.
+	 */
+
+	setSamples(value) {
+
+		this.samples = value;
+
+	}
+
+	/**
+	 * The sampling spiral ring count.
+	 *
+	 * @type {Number}
+	 */
+
+	get rings() {
 
 		return Number(this.defines.SPIRAL_TURNS);
 
 	}
 
-	/**
-	 * Sets the amount of spiral turns in the occlusion sampling pattern.
-	 *
-	 * @param {Number} value - The radius.
-	 */
-
-	setRings(value) {
+	set rings(value) {
 
 		this.defines.SPIRAL_TURNS = value.toFixed(1);
 		this.needsUpdate = true;
@@ -222,8 +273,53 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Returns the amount of spiral turns in the occlusion sampling pattern.
+	 *
+	 * @deprecated Use rings instead.
+	 * @return {Number} The radius.
+	 */
+
+	getRings() {
+
+		return this.rings;
+
+	}
+
+	/**
+	 * Sets the amount of spiral turns in the occlusion sampling pattern.
+	 *
+	 * @deprecated Use rings instead.
+	 * @param {Number} value - The radius.
+	 */
+
+	setRings(value) {
+
+		this.rings = value;
+
+	}
+
+	/**
+	 * The intensity.
+	 *
+	 * @type {Number}
+	 */
+
+	get intensity() {
+
+		return this.uniforms.intensity.value;
+
+	}
+
+	set intensity(value) {
+
+		this.uniforms.intensity.value = value;
+
+	}
+
+	/**
 	 * Returns the intensity.
 	 *
+	 * @deprecated Use intensity instead.
 	 * @return {Number} The intensity.
 	 */
 
@@ -236,6 +332,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	/**
 	 * Sets the intensity.
 	 *
+	 * @deprecated Use intensity instead.
 	 * @param {Number} value - The intensity.
 	 */
 
@@ -246,8 +343,27 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The depth fade factor.
+	 *
+	 * @type {Number}
+	 */
+
+	get fade() {
+
+		return this.uniforms.fade.value;
+
+	}
+
+	set fade(value) {
+
+		this.uniforms.fade.value = value;
+
+	}
+
+	/**
 	 * Returns the depth fade factor.
 	 *
+	 * @deprecated Use fade instead.
 	 * @return {Number} The fade factor.
 	 */
 
@@ -260,10 +376,29 @@ export class SSAOMaterial extends ShaderMaterial {
 	/**
 	 * Sets the depth fade factor.
 	 *
+	 * @deprecated Use fade instead.
 	 * @param {Number} value - The fade factor.
 	 */
 
 	setFade(value) {
+
+		this.uniforms.fade.value = value;
+
+	}
+
+	/**
+	 * The depth bias.
+	 *
+	 * @type {Number}
+	 */
+
+	get bias() {
+
+		return this.uniforms.bias.value;
+
+	}
+
+	set bias(value) {
 
 		this.uniforms.bias.value = value;
 
@@ -272,6 +407,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	/**
 	 * Returns the depth bias.
 	 *
+	 * @deprecated Use bias instead.
 	 * @return {Number} The bias.
 	 */
 
@@ -284,6 +420,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	/**
 	 * Sets the depth bias.
 	 *
+	 * @deprecated Use bias instead.
 	 * @param {Number} value - The bias.
 	 */
 
@@ -294,8 +431,27 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The minimum radius scale for distance scaling.
+	 *
+	 * @type {Number}
+	 */
+
+	get minRadiusScale() {
+
+		return this.uniforms.minRadiusScale.value;
+
+	}
+
+	set minRadiusScale(value) {
+
+		this.uniforms.minRadiusScale.value = value;
+
+	}
+
+	/**
 	 * Returns the minimum radius scale for distance scaling.
 	 *
+	 * @deprecated Use minRadiusScale instead.
 	 * @return {Number} The minimum radius scale.
 	 */
 
@@ -308,6 +464,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	/**
 	 * Sets the minimum radius scale for distance scaling.
 	 *
+	 * @deprecated Use minRadiusScale instead.
 	 * @param {Number} value - The minimum radius scale.
 	 */
 
@@ -318,8 +475,31 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The occlusion sampling radius.
+	 *
+	 * @type {Number}
+	 */
+
+	get radius() {
+
+		return this.r;
+
+	}
+
+	set radius(value) {
+
+		this.r = Math.min(Math.max(value, 1e-6), 1.0);
+		const radius = this.r * this.resolution.height;
+		this.defines.RADIUS = radius.toFixed(11);
+		this.defines.RADIUS_SQ = (radius * radius).toFixed(11);
+		this.needsUpdate = true;
+
+	}
+
+	/**
 	 * Returns the occlusion sampling radius.
 	 *
+	 * @deprecated Use radius instead.
 	 * @return {Number} The radius.
 	 */
 
@@ -332,38 +512,29 @@ export class SSAOMaterial extends ShaderMaterial {
 	/**
 	 * Sets the occlusion sampling radius.
 	 *
+	 * @deprecated Use radius instead.
 	 * @param {Number} value - The radius. Range [1e-6, 1.0].
 	 */
 
 	setRadius(value) {
 
-		this.radius = Math.min(Math.max(value, 1e-6), 1.0);
-		const radius = this.radius * this.resolution.height;
-		this.defines.RADIUS = radius.toFixed(11);
-		this.defines.RADIUS_SQ = (radius * radius).toFixed(11);
-		this.needsUpdate = true;
+		this.radius = value;
 
 	}
 
 	/**
 	 * Indicates whether distance-based radius scaling is enabled.
 	 *
-	 * @return {Boolean} Whether distance scaling is enabled.
+	 * @type {Boolean}
 	 */
 
-	isDistanceScalingEnabled() {
+	get distanceScaling() {
 
 		return (this.defines.DISTANCE_SCALING !== undefined);
 
 	}
 
-	/**
-	 * Enables or disables distance-based radius scaling.
-	 *
-	 * @param {Boolean} value - Whether distance scaling should be enabled.
-	 */
-
-	setDistanceScalingEnabled(value) {
+	set distanceScaling(value) {
 
 		if(this.isDistanceScalingEnabled() !== value) {
 
@@ -380,6 +551,32 @@ export class SSAOMaterial extends ShaderMaterial {
 			this.needsUpdate = true;
 
 		}
+
+	}
+
+	/**
+	 * Indicates whether distance-based radius scaling is enabled.
+	 *
+	 * @deprecated Use distanceScaling instead.
+	 * @return {Boolean} Whether distance scaling is enabled.
+	 */
+
+	isDistanceScalingEnabled() {
+
+		return this.distanceScaling;
+
+	}
+
+	/**
+	 * Enables or disables distance-based radius scaling.
+	 *
+	 * @deprecated Use distanceScaling instead.
+	 * @param {Boolean} value - Whether distance scaling should be enabled.
+	 */
+
+	setDistanceScalingEnabled(value) {
+
+		this.distanceScaling = value;
 
 	}
 

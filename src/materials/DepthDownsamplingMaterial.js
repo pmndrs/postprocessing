@@ -43,38 +43,21 @@ export class DepthDownsamplingMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the depth buffer.
+	 * The depth buffer.
 	 *
-	 * @param {Texture} buffer - The depth texture.
-	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 * @type {Texture}
 	 */
 
-	setDepthBuffer(buffer, depthPacking = BasicDepthPacking) {
+	set depthBuffer(value) {
 
-		this.uniforms.depthBuffer.value = buffer;
-		this.defines.DEPTH_PACKING = depthPacking.toFixed(0);
-		this.needsUpdate = true;
+		this.uniforms.depthBuffer.value = value;
 
 	}
 
 	/**
-	 * The current depth packing.
+	 * The depth packing strategy.
 	 *
 	 * @type {DepthPackingStrategies}
-	 * @deprecated Removed without replacement.
-	 */
-
-	get depthPacking() {
-
-		return Number(this.defines.DEPTH_PACKING);
-
-	}
-
-	/**
-	 * Sets the depth packing.
-	 *
-	 * @type {DepthPackingStrategies}
-	 * @deprecated Use setDepthBuffer() instead.
 	 */
 
 	set depthPacking(value) {
@@ -85,12 +68,27 @@ export class DepthDownsamplingMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the normal buffer.
+	 * Sets the depth buffer.
 	 *
-	 * @param {Texture} value - The normal buffer.
+	 * @deprecated Use depthBuffer and depthPacking instead.
+	 * @param {Texture} buffer - The depth texture.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
 	 */
 
-	setNormalBuffer(value) {
+	setDepthBuffer(buffer, depthPacking = BasicDepthPacking) {
+
+		this.depthBuffer = buffer;
+		this.depthPacking = depthPacking;
+
+	}
+
+	/**
+	 * The normal buffer.
+	 *
+	 * @type {Texture}
+	 */
+
+	set normalBuffer(value) {
 
 		this.uniforms.normalBuffer.value = value;
 
@@ -105,6 +103,19 @@ export class DepthDownsamplingMaterial extends ShaderMaterial {
 		}
 
 		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Sets the normal buffer.
+	 *
+	 * @deprecated Use normalBuffer instead.
+	 * @param {Texture} value - The normal buffer.
+	 */
+
+	setNormalBuffer(value) {
+
+		this.normalBuffer = value;
 
 	}
 
