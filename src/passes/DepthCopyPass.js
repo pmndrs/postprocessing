@@ -81,7 +81,6 @@ export class DepthCopyPass extends Pass {
 	 * The output depth packing.
 	 *
 	 * @type {DepthPackingStrategies}
-	 * @deprecated Use getDepthPacking() instead.
 	 */
 
 	get depthPacking() {
@@ -93,6 +92,7 @@ export class DepthCopyPass extends Pass {
 	/**
 	 * Returns the output depth packing.
 	 *
+	 * @deprecated Use depthPacking instead.
 	 * @return {DepthPackingStrategies} The depth packing.
 	 */
 
