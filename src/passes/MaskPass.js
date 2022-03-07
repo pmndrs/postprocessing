@@ -27,7 +27,6 @@ export class MaskPass extends Pass {
 		 * A clear pass.
 		 *
 		 * @type {ClearPass}
-		 * @private
 		 */
 
 		this.clearPass = new ClearPass(false, false, true);
@@ -36,7 +35,7 @@ export class MaskPass extends Pass {
 		 * Inverse flag.
 		 *
 		 * @type {Boolean}
-		 * @deprecated Use setInverted() instead.
+		 * @deprecated Use inverted instead.
 		 */
 
 		this.inverse = false;
@@ -44,24 +43,35 @@ export class MaskPass extends Pass {
 	}
 
 	/**
-	 * Indicates whether this pass should clear the stencil buffer.
+	 * Indicates whether the mask should be inverted.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use getClearPass().isEnabled() instead.
 	 */
 
-	get clear() {
+	get inverted() {
 
-		return this.clearPass.isEnabled();
+		return this.inverse;
+
+	}
+
+	set inverted(value) {
+
+		this.inverse = value;
 
 	}
 
 	/**
-	 * Enables or disables auto clear.
+	 * Indicates whether this pass should clear the stencil buffer.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use getClearPass().setEnabled() instead.
+	 * @deprecated Use clearPass.enabled instead.
 	 */
+
+	get clear() {
+
+		return this.clearPass.enabled;
+
+	}
 
 	set clear(value) {
 
@@ -72,6 +82,7 @@ export class MaskPass extends Pass {
 	/**
 	 * Returns the internal clear pass.
 	 *
+	 * @deprecated Use clearPass.enabled instead.
 	 * @return {ClearPass} The clear pass.
 	 */
 
@@ -84,24 +95,26 @@ export class MaskPass extends Pass {
 	/**
 	 * Indicates whether the mask is inverted.
 	 *
+	 * @deprecated Use inverted instead.
 	 * @return {Boolean} Whether the mask is inverted.
 	 */
 
 	isInverted() {
 
-		return this.inverse;
+		return this.inverted;
 
 	}
 
 	/**
 	 * Enables or disable mask inversion.
 	 *
+	 * @deprecated Use inverted instead.
 	 * @param {Boolean} value - Whether the mask should be inverted.
 	 */
 
 	setInverted(value) {
 
-		this.inverse = value;
+		this.inverted = value;
 
 	}
 
@@ -124,7 +137,7 @@ export class MaskPass extends Pass {
 		const camera = this.camera;
 		const clearPass = this.clearPass;
 
-		const writeValue = this.inverse ? 0 : 1;
+		const writeValue = this.inverted ? 0 : 1;
 		const clearValue = 1 - writeValue;
 
 		// Don't update color or depth.
