@@ -368,14 +368,6 @@ export class Pass {
 
 	dispose() {
 
-		const material = this.getFullscreenMaterial();
-
-		if(material !== null) {
-
-			material.dispose();
-
-		}
-
 		for(const key of Object.keys(this)) {
 
 			const property = this[key];
