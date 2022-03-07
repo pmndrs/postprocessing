@@ -59,18 +59,18 @@ export class CopyPass extends Pass {
 	 * The output texture.
 	 *
 	 * @type {Texture}
-	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
 
-		return this.getTexture();
+		return this.renderTarget.texture;
 
 	}
 
 	/**
 	 * Returns the output texture.
 	 *
+	 * @deprecated Use texture instead.
 	 * @return {Texture} The texture.
 	 */
 

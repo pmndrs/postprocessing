@@ -72,18 +72,18 @@ export class AdaptiveLuminancePass extends Pass {
 	 * The adaptive luminance texture.
 	 *
 	 * @type {Texture}
-	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
 
-		return this.getTexture();
+		return this.renderTargetAdapted.texture;
 
 	}
 
 	/**
 	 * Returns the adaptive 1x1 luminance texture.
 	 *
+	 * @deprecated Use texture instead.
 	 * @return {Texture} The texture.
 	 */
 

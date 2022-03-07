@@ -73,7 +73,6 @@ export class DepthDownsamplingPass extends Pass {
 	 * The normal(RGB) + depth(A) texture.
 	 *
 	 * @type {Texture}
-	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
@@ -85,6 +84,7 @@ export class DepthDownsamplingPass extends Pass {
 	/**
 	 * Returns the normal(RGB) + depth(A) texture.
 	 *
+	 * @deprecated Use texture instead.
 	 * @return {Texture} The texture.
 	 */
 

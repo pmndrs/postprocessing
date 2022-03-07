@@ -70,7 +70,6 @@ export class LuminancePass extends Pass {
 	 * The luminance texture.
 	 *
 	 * @type {Texture}
-	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
@@ -82,6 +81,7 @@ export class LuminancePass extends Pass {
 	/**
 	 * Returns the luminance texture.
 	 *
+	 * @deprecated Use texture instead.
 	 * @return {Texture} The texture.
 	 */
 

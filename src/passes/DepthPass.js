@@ -88,7 +88,6 @@ export class DepthPass extends Pass {
 	 * The depth texture.
 	 *
 	 * @type {Texture}
-	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
@@ -100,6 +99,7 @@ export class DepthPass extends Pass {
 	/**
 	 * Returns the depth texture.
 	 *
+	 * @deprecated Use texture instead.
 	 * @return {Texture} The texture.
 	 */
 

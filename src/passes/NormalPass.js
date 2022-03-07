@@ -86,7 +86,6 @@ export class NormalPass extends Pass {
 	 * The normal texture.
 	 *
 	 * @type {Texture}
-	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
@@ -98,6 +97,7 @@ export class NormalPass extends Pass {
 	/**
 	 * The normal texture.
 	 *
+	 * @deprecated Use texture instead.
 	 * @return {Texture} The texture.
 	 */
 
