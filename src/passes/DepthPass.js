@@ -44,12 +44,12 @@ export class DepthPass extends Pass {
 		}));
 
 		const renderPass = this.renderPass;
-		renderPass.setBackgroundDisabled(true);
-		renderPass.setShadowMapDisabled(true);
+		renderPass.skipShadowMapUpdate = true;
+		renderPass.ignoreBackground = true;
 
 		const clearPass = renderPass.getClearPass();
-		clearPass.setOverrideClearColor(new Color(0xffffff));
-		clearPass.setOverrideClearAlpha(1.0);
+		clearPass.overrideClearColor = new Color(0xffffff);
+		clearPass.overrideClearAlpha = 1;
 
 		/**
 		 * A render target that contains the scene depth.
@@ -79,11 +79,8 @@ export class DepthPass extends Pass {
 		 * @deprecated Use getResolution() instead.
 		 */
 
-		this.resolution = new Resolution(this, width, height, resolutionScale);
-		this.resolution.addEventListener("change", (e) => this.setSize(
-			this.resolution.getBaseWidth(),
-			this.resolution.getBaseHeight()
-		));
+		const resolution = this.resolution = new Resolution(this, width, height, resolutionScale);
+		resolution.addEventListener("change", (e) => this.setSize(resolution.baseWidth, resolution.baseHeight));
 
 	}
 
@@ -96,7 +93,7 @@ export class DepthPass extends Pass {
 
 	get texture() {
 
-		return this.getTexture();
+		return this.renderTarget.texture;
 
 	}
 
@@ -133,7 +130,7 @@ export class DepthPass extends Pass {
 
 	getResolutionScale() {
 
-		return this.resolution.getScale();
+		return this.resolution.scale;
 
 	}
 
@@ -146,7 +143,7 @@ export class DepthPass extends Pass {
 
 	setResolutionScale(scale) {
 
-		this.resolution.setScale(scale);
+		this.resolution.scale = scale;
 
 	}
 
@@ -178,7 +175,7 @@ export class DepthPass extends Pass {
 
 		const resolution = this.resolution;
 		resolution.setBaseSize(width, height);
-		this.renderTarget.setSize(resolution.getWidth(), resolution.getHeight());
+		this.renderTarget.setSize(resolution.width, resolution.height);
 
 	}
 

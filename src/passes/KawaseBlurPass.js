@@ -69,18 +69,15 @@ export class KawaseBlurPass extends Pass {
 		 * It's recommended to set the render height or width to an absolute value for consistent results across different
 		 * devices and screen resolutions.
 		 *
-		 * @type {Resizer}
 		 * @deprecated Use getResolution() instead.
+		 * @type {Resolution}
 		 */
 
-		this.resolution = new Resolution(this, width, height, resolutionScale);
-		this.resolution.addEventListener("change", (e) => this.setSize(
-			this.resolution.getBaseWidth(),
-			this.resolution.getBaseHeight()
-		));
+		const resolution = this.resolution = new Resolution(this, width, height, resolutionScale);
+		resolution.addEventListener("change", (e) => this.setSize(resolution.baseWidth, resolution.baseHeight));
 
 		/**
-		 * A convolution material.
+		 * The blur material.
 		 *
 		 * @type {KawaseBlurMaterial}
 		 * @private
@@ -89,20 +86,21 @@ export class KawaseBlurPass extends Pass {
 		this.blurMaterial = new KawaseBlurMaterial();
 
 		/**
-		 * A convolution material that uses dithering.
+		 * A second blur material that uses dithering.
 		 *
 		 * @type {KawaseBlurMaterial}
 		 * @private
 		 */
 
 		this.ditheredBlurMaterial = new KawaseBlurMaterial();
+		this.ditheredBlurMaterial.uniforms.scale = this.blurMaterial.uniforms.scale;
 		this.ditheredBlurMaterial.dithering = true;
 
 		/**
 		 * Indicates whether dithering is enabled.
 		 *
 		 * @type {Boolean}
-		 * @deprecated Use EffectPass.getFullscreenMaterial().dithering instead.
+		 * @deprecated
 		 */
 
 		this.dithering = false;
@@ -139,7 +137,7 @@ export class KawaseBlurPass extends Pass {
 
 	get width() {
 
-		return this.resolution.getWidth();
+		return this.resolution.width;
 
 	}
 
@@ -152,7 +150,7 @@ export class KawaseBlurPass extends Pass {
 
 	set width(value) {
 
-		this.resolution.setPreferredWidth(value);
+		this.resolution.preferredWidth = value;
 
 	}
 
@@ -165,7 +163,7 @@ export class KawaseBlurPass extends Pass {
 
 	get height() {
 
-		return this.resolution.getHeight();
+		return this.resolution.height;
 
 	}
 
@@ -178,7 +176,7 @@ export class KawaseBlurPass extends Pass {
 
 	set height(value) {
 
-		this.resolution.setPreferredHeight(value);
+		this.resolution.preferredHeight = value;
 
 	}
 
@@ -191,7 +189,7 @@ export class KawaseBlurPass extends Pass {
 
 	get scale() {
 
-		return this.getScale();
+		return this.blurMaterial.scale;
 
 	}
 
@@ -202,7 +200,7 @@ export class KawaseBlurPass extends Pass {
 
 	set scale(value) {
 
-		this.setScale(value);
+		this.blurMaterial.scale = value;
 
 	}
 
@@ -214,7 +212,7 @@ export class KawaseBlurPass extends Pass {
 
 	getScale() {
 
-		return this.blurMaterial.getScale();
+		return this.blurMaterial.scale;
 
 	}
 
@@ -232,8 +230,7 @@ export class KawaseBlurPass extends Pass {
 
 	setScale(value) {
 
-		this.blurMaterial.setScale(value);
-		this.ditheredBlurMaterial.setScale(value);
+		this.blurMaterial.scale = value;
 
 	}
 
@@ -321,8 +318,8 @@ export class KawaseBlurPass extends Pass {
 			// Alternate between targets.
 			const buffer = ((i & 1) === 0) ? renderTargetA : renderTargetB;
 
-			material.setKernel(kernels[i]);
-			material.setInputBuffer(previousBuffer.texture);
+			material.kernel = kernels[i];
+			material.inputBuffer = previousBuffer.texture;
 			renderer.setRenderTarget(buffer);
 			renderer.render(scene, camera);
 			previousBuffer = buffer;
@@ -336,8 +333,8 @@ export class KawaseBlurPass extends Pass {
 
 		}
 
-		material.setKernel(kernels[i]);
-		material.setInputBuffer(previousBuffer.texture);
+		material.kernel = kernels[i];
+		material.inputBuffer = previousBuffer.texture;
 		renderer.setRenderTarget(this.renderToScreen ? null : outputBuffer);
 		renderer.render(scene, camera);
 
@@ -354,9 +351,7 @@ export class KawaseBlurPass extends Pass {
 
 		const resolution = this.resolution;
 		resolution.setBaseSize(width, height);
-
-		const w = resolution.getWidth();
-		const h = resolution.getHeight();
+		const w = resolution.width, h = resolution.height;
 
 		this.renderTargetA.setSize(w, h);
 		this.renderTargetB.setSize(w, h);

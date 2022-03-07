@@ -143,7 +143,7 @@ export class MaskPass extends Pass {
 		buffers.stencil.setLocked(true);
 
 		// Clear the stencil.
-		if(this.clear) {
+		if(this.clearPass.enabled) {
 
 			if(this.renderToScreen) {
 

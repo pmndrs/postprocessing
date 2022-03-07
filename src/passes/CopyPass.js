@@ -45,7 +45,7 @@ export class CopyPass extends Pass {
 		}
 
 		/**
-		 * Indicates whether the render target should be resized automatically.
+		 * Enables or disables auto resizing of the render target.
 		 *
 		 * @type {Boolean}
 		 * @deprecated Use setAutoResizeEnabled() instead.
@@ -145,7 +145,7 @@ export class CopyPass extends Pass {
 
 				this.fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
-			} else if(this.renderer.outputEncoding === sRGBEncoding) {
+			} else if(renderer.outputEncoding === sRGBEncoding) {
 
 				this.renderTarget.texture.encoding = sRGBEncoding;
 

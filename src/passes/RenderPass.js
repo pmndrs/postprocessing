@@ -71,23 +71,11 @@ export class RenderPass extends Pass {
 
 	}
 
-	/**
-	 * Indicates whether this pass should render to screen.
-	 *
-	 * @type {Boolean}
-	 */
-
 	get renderToScreen() {
 
 		return super.renderToScreen;
 
 	}
-
-	/**
-	 * Sets the render to screen flag.
-	 *
-	 * @type {Boolean}
-	 */
 
 	set renderToScreen(value) {
 

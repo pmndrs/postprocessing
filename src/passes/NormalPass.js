@@ -77,11 +77,8 @@ export class NormalPass extends Pass {
 		 * @deprecated Use getResolution() instead.
 		 */
 
-		this.resolution = new Resolution(this, width, height, resolutionScale);
-		this.resolution.addEventListener("change", (e) => this.setSize(
-			this.resolution.getBaseWidth(),
-			this.resolution.getBaseHeight()
-		));
+		const resolution = this.resolution = new Resolution(this, width, height, resolutionScale);
+		resolution.addEventListener("change", (e) => this.setSize(resolution.baseWidth, resolution.baseHeight));
 
 	}
 
@@ -94,7 +91,7 @@ export class NormalPass extends Pass {
 
 	get texture() {
 
-		return this.getTexture();
+		return this.renderTarget.texture;
 
 	}
 
@@ -131,7 +128,7 @@ export class NormalPass extends Pass {
 
 	getResolutionScale() {
 
-		return this.resolution.getScale();
+		return this.resolution.scale;
 
 	}
 
@@ -144,7 +141,7 @@ export class NormalPass extends Pass {
 
 	setResolutionScale(scale) {
 
-		this.resolution.setScale(scale);
+		this.resolution.scale = scale;
 
 	}
 
@@ -176,7 +173,7 @@ export class NormalPass extends Pass {
 
 		const resolution = this.resolution;
 		resolution.setBaseSize(width, height);
-		this.renderTarget.setSize(resolution.getWidth(), resolution.getHeight());
+		this.renderTarget.setSize(resolution.width, resolution.height);
 
 	}
 

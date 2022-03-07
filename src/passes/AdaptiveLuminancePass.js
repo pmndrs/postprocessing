@@ -41,11 +41,11 @@ export class AdaptiveLuminancePass extends Pass {
 
 		this.renderTargetPrevious.texture.name = "Luminance.Previous";
 
-		material.setLuminanceBuffer0(this.renderTargetPrevious.texture);
-		material.setLuminanceBuffer1(luminanceBuffer);
-		material.setMinLuminance(minLuminance);
-		material.setAdaptationRate(adaptationRate);
 		const material = this.fullscreenMaterial;
+		material.luminanceBuffer0 = this.renderTargetPrevious.texture;
+		material.luminanceBuffer1 = luminanceBuffer;
+		material.minLuminance = minLuminance;
+		material.adaptationRate = adaptationRate;
 
 		/**
 		 * A 1x1 render target that stores the adapted average luminance.

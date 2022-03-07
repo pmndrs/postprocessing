@@ -66,7 +66,7 @@ export class ClearPass extends Pass {
 		 * @deprecated Use getOverrideClearAlpha() and setOverrideClearAlpha() instead.
 		 */
 
-		this.overrideClearAlpha = -1.0;
+		this.overrideClearAlpha = -1;
 
 	}
 
@@ -151,7 +151,7 @@ export class ClearPass extends Pass {
 		const clearAlpha = renderer.getClearAlpha();
 
 		const hasOverrideClearColor = (overrideClearColor !== null);
-		const hasOverrideClearAlpha = (overrideClearAlpha >= 0.0);
+		const hasOverrideClearAlpha = (overrideClearAlpha >= 0);
 
 		if(hasOverrideClearColor) {
 

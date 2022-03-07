@@ -114,8 +114,8 @@ export class DepthPickingPass extends DepthCopyPass {
 
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
-		const mode = material.getMode();
 		const material = this.fullscreenMaterial;
+		const mode = material.mode;
 
 		if(mode === DepthCopyMode.FULL) {
 
@@ -139,7 +139,7 @@ export class DepthPickingPass extends DepthCopyPass {
 
 			} else {
 
-				const texelPosition = material.getTexelPosition();
+				const texelPosition = material.texelPosition;
 				x = Math.round(texelPosition.x * renderTarget.width);
 				y = Math.round(texelPosition.y * renderTarget.height);
 
