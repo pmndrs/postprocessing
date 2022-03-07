@@ -226,25 +226,18 @@ export class Pass {
 	}
 
 	/**
-	 * Returns the current fullscreen material.
+	 * The fullscreen material.
 	 *
-	 * @return {Material} The current fullscreen material, or null if there is none.
+	 * @type {Material}
 	 */
 
-	getFullscreenMaterial() {
+	get fullscreenMaterial() {
 
 		return (this.screen !== null) ? this.screen.material : null;
 
 	}
 
-	/**
-	 * Sets the fullscreen material.
-	 *
-	 * @protected
-	 * @param {Material} value - A fullscreen material.
-	 */
-
-	setFullscreenMaterial(value) {
+	set fullscreenMaterial(value) {
 
 		let screen = this.screen;
 
@@ -267,6 +260,33 @@ export class Pass {
 			this.screen = screen;
 
 		}
+
+	}
+
+	/**
+	 * Returns the current fullscreen material.
+	 *
+	 * @deprecated Use fullscreenMaterial instead.
+	 * @return {Material} The current fullscreen material, or null if there is none.
+	 */
+
+	getFullscreenMaterial() {
+
+		return this.fullscreenMaterial;
+
+	}
+
+	/**
+	 * Sets the fullscreen material.
+	 *
+	 * @deprecated Use fullscreenMaterial instead.
+	 * @protected
+	 * @param {Material} value - A fullscreen material.
+	 */
+
+	setFullscreenMaterial(value) {
+
+		this.fullscreenMaterial = value;
 
 	}
 
