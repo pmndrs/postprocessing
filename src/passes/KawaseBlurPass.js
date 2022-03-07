@@ -107,7 +107,6 @@ export class KawaseBlurPass extends Pass {
 		 * The kernel size.
 		 *
 		 * @type {KernelSize}
-		 * @deprecated Use getKernelSize() and setKernelSize() instead.
 		 */
 
 		this.kernelSize = kernelSize;
@@ -233,6 +232,7 @@ export class KawaseBlurPass extends Pass {
 	/**
 	 * Returns the kernel size.
 	 *
+	 * @deprecated Use kernelSize instead.
 	 * @return {KernelSize} The kernel size.
 	 */
 
@@ -247,6 +247,7 @@ export class KawaseBlurPass extends Pass {
 	 *
 	 * Larger kernels require more processing power but scale well with larger render resolutions.
 	 *
+	 * @deprecated Use kernelSize instead.
 	 * @param {KernelSize} value - The kernel size.
 	 */
 
