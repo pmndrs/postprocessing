@@ -48,10 +48,28 @@ export class CopyPass extends Pass {
 		 * Enables or disables auto resizing of the render target.
 		 *
 		 * @type {Boolean}
-		 * @deprecated Use setAutoResizeEnabled() instead.
 		 */
 
-		this.resize = autoResize;
+		this.autoResize = autoResize;
+
+	}
+
+	/**
+	 * Enables or disables auto resizing of the render target.
+	 *
+	 * @deprecated Use autoResize instead.
+	 * @type {Boolean}
+	 */
+
+	get resize() {
+
+		return this.autoResize;
+
+	}
+
+	set resize(value) {
+
+		this.autoResize = value;
 
 	}
 
@@ -83,12 +101,13 @@ export class CopyPass extends Pass {
 	/**
 	 * Enables or disables auto resizing of the render target.
 	 *
+	 * @deprecated Use autoResize instead.
 	 * @param {Boolean} value - Whether the render target size should be updated automatically.
 	 */
 
 	setAutoResizeEnabled(value) {
 
-		this.resize = value;
+		this.autoResize = value;
 
 	}
 
@@ -119,7 +138,7 @@ export class CopyPass extends Pass {
 
 	setSize(width, height) {
 
-		if(this.resize) {
+		if(this.autoResize) {
 
 			this.renderTarget.setSize(width, height);
 
