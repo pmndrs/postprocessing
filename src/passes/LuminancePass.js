@@ -58,7 +58,6 @@ export class LuminancePass extends Pass {
 		 * The resolution.
 		 *
 		 * @type {Resolution}
-		 * @deprecated Use getResolution() instead.
 		 */
 
 		const resolution = this.resolution = new Resolution(this, width, height);
@@ -94,6 +93,7 @@ export class LuminancePass extends Pass {
 	/**
 	 * Returns the resolution settings.
 	 *
+	 * @deprecated Use resolution instead.
 	 * @return {Resolution} The resolution.
 	 */
 

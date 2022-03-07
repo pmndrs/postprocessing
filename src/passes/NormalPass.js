@@ -74,7 +74,6 @@ export class NormalPass extends Pass {
 		 * The resolution.
 		 *
 		 * @type {Resolution}
-		 * @deprecated Use getResolution() instead.
 		 */
 
 		const resolution = this.resolution = new Resolution(this, width, height, resolutionScale);
@@ -110,6 +109,7 @@ export class NormalPass extends Pass {
 	/**
 	 * Returns the resolution settings.
 	 *
+	 * @deprecated Use resolution instead.
 	 * @return {Resolution} The resolution.
 	 */
 
@@ -123,7 +123,7 @@ export class NormalPass extends Pass {
 	 * Returns the current resolution scale.
 	 *
 	 * @return {Number} The resolution scale.
-	 * @deprecated Use getResolution().setPreferredWidth() or getResolution().setPreferredHeight() instead.
+	 * @deprecated Use resolution.preferredWidth or resolution.preferredHeight instead.
 	 */
 
 	getResolutionScale() {
@@ -136,7 +136,7 @@ export class NormalPass extends Pass {
 	 * Sets the resolution scale.
 	 *
 	 * @param {Number} scale - The new resolution scale.
-	 * @deprecated Use getResolution().setPreferredWidth() or getResolution().setPreferredHeight() instead.
+	 * @deprecated Use resolution.preferredWidth or resolution.preferredHeight instead.
 	 */
 
 	setResolutionScale(scale) {

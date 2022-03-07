@@ -69,7 +69,6 @@ export class KawaseBlurPass extends Pass {
 		 * It's recommended to set the render height or width to an absolute value for consistent results across different
 		 * devices and screen resolutions.
 		 *
-		 * @deprecated Use getResolution() instead.
 		 * @type {Resolution}
 		 */
 
@@ -119,6 +118,7 @@ export class KawaseBlurPass extends Pass {
 	/**
 	 * Returns the resolution settings.
 	 *
+	 * @deprecated Use resolution instead.
 	 * @return {Resolution} The resolution.
 	 */
 
@@ -132,7 +132,7 @@ export class KawaseBlurPass extends Pass {
 	 * The current width of the internal render targets.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getResolution().getWidth() instead.
+	 * @deprecated Use resolution.width instead.
 	 */
 
 	get width() {
@@ -145,7 +145,7 @@ export class KawaseBlurPass extends Pass {
 	 * Sets the render width.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getResolution().setPreferredWidth() instead.
+	 * @deprecated Use resolution.preferredWidth instead.
 	 */
 
 	set width(value) {
@@ -158,7 +158,7 @@ export class KawaseBlurPass extends Pass {
 	 * The current height of the internal render targets.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getResolution().getHeight() instead.
+	 * @deprecated Use resolution.height instead.
 	 */
 
 	get height() {
@@ -171,7 +171,7 @@ export class KawaseBlurPass extends Pass {
 	 * Sets the render height.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getResolution().setPreferredHeight() instead.
+	 * @deprecated Use resolution.preferredHeight instead.
 	 */
 
 	set height(value) {
@@ -264,7 +264,7 @@ export class KawaseBlurPass extends Pass {
 	 * Returns the current resolution scale.
 	 *
 	 * @return {Number} The resolution scale.
-	 * @deprecated Adjust the fixed resolution width or height instead.
+	 * @deprecated Use resolution instead.
 	 */
 
 	getResolutionScale() {
@@ -277,7 +277,7 @@ export class KawaseBlurPass extends Pass {
 	 * Sets the resolution scale.
 	 *
 	 * @param {Number} scale - The new resolution scale.
-	 * @deprecated Adjust the fixed resolution width or height instead.
+	 * @deprecated Use resolution instead.
 	 */
 
 	setResolutionScale(scale) {
