@@ -19,7 +19,7 @@ export class CopyPass extends Pass {
 
 		super("CopyPass");
 
-		this.setFullscreenMaterial(new CopyMaterial());
+		this.fullscreenMaterial = new CopyMaterial();
 		this.needsSwap = false;
 
 		/**
@@ -104,7 +104,7 @@ export class CopyPass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
-		this.getFullscreenMaterial().setInputBuffer(inputBuffer.texture);
+		this.fullscreenMaterial.inputBuffer = inputBuffer.texture;
 		renderer.setRenderTarget(this.renderToScreen ? null : this.renderTarget);
 		renderer.render(this.scene, this.camera);
 
@@ -143,7 +143,7 @@ export class CopyPass extends Pass {
 
 			if(frameBufferType !== UnsignedByteType) {
 
-				this.getFullscreenMaterial().defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+				this.fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
 			} else if(this.renderer.outputEncoding === sRGBEncoding) {
 

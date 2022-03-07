@@ -182,7 +182,7 @@ export class EffectPass extends Pass {
 
 		super("EffectPass");
 
-		this.setFullscreenMaterial(new EffectMaterial(null, null, null, camera));
+		this.fullscreenMaterial = new EffectMaterial(null, null, null, camera);
 
 		/**
 		 * The effects, sorted by attribute priority, DESC.
@@ -278,25 +278,18 @@ export class EffectPass extends Pass {
 	 * Color quantization reduces banding artifacts but degrades performance.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use getFullscreenMaterial().dithering instead.
+	 * @deprecated Use fullscreenMaterial.dithering instead.
 	 */
 
 	get dithering() {
 
-		return this.getFullscreenMaterial().dithering;
+		return this.fullscreenMaterial.dithering;
 
 	}
 
-	/**
-	 * Enables or disables dithering.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Use getFullscreenMaterial().dithering instead.
-	 */
-
 	set dithering(value) {
 
-		const material = this.getFullscreenMaterial();
+		const material = this.fullscreenMaterial;
 		material.dithering = value;
 		material.needsUpdate = true;
 
@@ -443,7 +436,7 @@ export class EffectPass extends Pass {
 		this.skipRendering = (id === 0);
 		this.needsSwap = !this.skipRendering;
 
-		this.getFullscreenMaterial()
+		this.fullscreenMaterial
 			.setShaderParts(shaderParts)
 			.setExtensions(extensions)
 			.setUniforms(uniforms)
@@ -493,7 +486,7 @@ export class EffectPass extends Pass {
 
 	getDepthTexture() {
 
-		return this.getFullscreenMaterial().uniforms.depthBuffer.value;
+		return this.fullscreenMaterial.uniforms.depthBuffer.value;
 
 	}
 
@@ -506,7 +499,8 @@ export class EffectPass extends Pass {
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
-		this.getFullscreenMaterial().setDepthBuffer(depthTexture, depthPacking);
+		this.fullscreenMaterial.depthBuffer = depthTexture;
+		this.fullscreenMaterial.depthPacking = depthPacking;
 
 		for(const effect of this.effects) {
 
@@ -536,9 +530,9 @@ export class EffectPass extends Pass {
 
 		if(!this.skipRendering || this.renderToScreen) {
 
-			const material = this.getFullscreenMaterial();
 			material.setInputBuffer(inputBuffer.texture);
 			material.setDeltaTime(deltaTime);
+			const material = this.fullscreenMaterial;
 
 			renderer.setRenderTarget(this.renderToScreen ? null : outputBuffer);
 			renderer.render(this.scene, this.camera);
@@ -556,7 +550,7 @@ export class EffectPass extends Pass {
 
 	setSize(width, height) {
 
-		this.getFullscreenMaterial().setSize(width, height);
+		this.fullscreenMaterial.setSize(width, height);
 
 		for(const effect of this.effects) {
 
@@ -590,7 +584,7 @@ export class EffectPass extends Pass {
 
 		if(frameBufferType !== undefined && frameBufferType !== UnsignedByteType) {
 
-			this.getFullscreenMaterial().defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+			this.fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
 		}
 

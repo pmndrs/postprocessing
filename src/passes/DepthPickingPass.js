@@ -47,7 +47,7 @@ export class DepthPickingPass extends DepthCopyPass {
 		super({ depthPacking });
 
 		this.name = "DepthPickingPass";
-		this.getFullscreenMaterial().setMode(mode);
+		this.fullscreenMaterial.mode = mode;
 
 		/**
 		 * An RGBA pixel buffer.
@@ -92,7 +92,7 @@ export class DepthPickingPass extends DepthCopyPass {
 
 	readDepth(ndc) {
 
-		this.getFullscreenMaterial().getTexelPosition().set(ndc.x * 0.5 + 0.5, ndc.y * 0.5 + 0.5);
+		this.fullscreenMaterial.texelPosition.set(ndc.x * 0.5 + 0.5, ndc.y * 0.5 + 0.5);
 
 		return new Promise((resolve) => {
 
@@ -114,8 +114,8 @@ export class DepthPickingPass extends DepthCopyPass {
 
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
-		const material = this.getFullscreenMaterial();
 		const mode = material.getMode();
+		const material = this.fullscreenMaterial;
 
 		if(mode === DepthCopyMode.FULL) {
 
@@ -162,7 +162,7 @@ export class DepthPickingPass extends DepthCopyPass {
 
 	setSize(width, height) {
 
-		if(this.getFullscreenMaterial().getMode() === DepthCopyMode.FULL) {
+		if(this.fullscreenMaterial.mode === DepthCopyMode.FULL) {
 
 			super.setSize(width, height);
 

@@ -28,7 +28,7 @@ export class LuminancePass extends Pass {
 
 		super("LuminancePass");
 
-		this.setFullscreenMaterial(new LuminanceMaterial(colorOutput, luminanceRange));
+		this.fullscreenMaterial = new LuminanceMaterial(colorOutput, luminanceRange);
 		this.needsSwap = false;
 
 		/**
@@ -118,8 +118,8 @@ export class LuminancePass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
-		const material = this.getFullscreenMaterial();
 		material.setInputBuffer(inputBuffer.texture);
+		const material = this.fullscreenMaterial;
 		renderer.setRenderTarget(this.renderToScreen ? null : this.renderTarget);
 		renderer.render(this.scene, this.camera);
 
@@ -152,7 +152,7 @@ export class LuminancePass extends Pass {
 
 		if(frameBufferType !== undefined && frameBufferType !== UnsignedByteType) {
 
-			this.getFullscreenMaterial().defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+			this.fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
 		}
 

@@ -313,7 +313,7 @@ export class KawaseBlurPass extends Pass {
 		let previousBuffer = inputBuffer;
 		let i, l;
 
-		this.setFullscreenMaterial(material);
+		this.fullscreenMaterial = material;
 
 		// Apply the multi-pass blur.
 		for(i = 0, l = kernels.length - 1; i < l; ++i) {
@@ -332,7 +332,7 @@ export class KawaseBlurPass extends Pass {
 		if(this.dithering) {
 
 			material = this.ditheredBlurMaterial;
-			this.setFullscreenMaterial(material);
+			this.fullscreenMaterial = material;
 
 		}
 

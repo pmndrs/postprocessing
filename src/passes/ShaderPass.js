@@ -21,7 +21,7 @@ export class ShaderPass extends Pass {
 
 		super("ShaderPass");
 
-		this.setFullscreenMaterial(material);
+		this.fullscreenMaterial = material;
 
 		/**
 		 * The input buffer uniform.
@@ -46,13 +46,11 @@ export class ShaderPass extends Pass {
 
 	setInput(input) {
 
-		const material = this.getFullscreenMaterial();
-
 		this.inputBufferUniform = null;
 
-		if(material !== null) {
+		if(this.fullscreenMaterial !== null) {
 
-			const uniforms = material.uniforms;
+			const uniforms = this.fullscreenMaterial.uniforms;
 
 			if(uniforms !== undefined && uniforms[input] !== undefined) {
 
@@ -99,7 +97,7 @@ export class ShaderPass extends Pass {
 
 		if(frameBufferType !== undefined && frameBufferType !== UnsignedByteType) {
 
-			this.getFullscreenMaterial().defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+			this.fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
 		}
 

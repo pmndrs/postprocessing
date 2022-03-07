@@ -29,7 +29,7 @@ export class DepthCopyPass extends Pass {
 
 		const material = new DepthCopyMaterial();
 		material.setOutputDepthPacking(depthPacking);
-		this.setFullscreenMaterial(material);
+		this.fullscreenMaterial = material;
 		this.needsDepthTexture = true;
 		this.needsSwap = false;
 
@@ -86,7 +86,7 @@ export class DepthCopyPass extends Pass {
 
 	get depthPacking() {
 
-		return this.getDepthPacking();
+		return this.fullscreenMaterial.outputDepthPacking;
 
 	}
 
@@ -98,7 +98,7 @@ export class DepthCopyPass extends Pass {
 
 	getDepthPacking() {
 
-		return this.getFullscreenMaterial().getOutputDepthPacking();
+		return this.fullscreenMaterial.outputDepthPacking;
 
 	}
 
@@ -111,7 +111,8 @@ export class DepthCopyPass extends Pass {
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
-		this.getFullscreenMaterial().setDepthBuffer(depthTexture, depthPacking);
+		this.fullscreenMaterial.depthBuffer = depthTexture;
+		this.fullscreenMaterial.inputDepthPacking = depthPacking;
 
 	}
 
