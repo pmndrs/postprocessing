@@ -143,7 +143,6 @@ export class Pass {
 		 * Indicates whether this pass is enabled.
 		 *
 		 * @type {Boolean}
-		 * @deprecated Use isEnabled() and setEnabled() instead.
 		 */
 
 		this.enabled = true;
@@ -204,6 +203,7 @@ export class Pass {
 	/**
 	 * Indicates whether this pass is enabled.
 	 *
+	 * @deprecated Use enabled instead.
 	 * @return {Boolean} Whether this pass is enabled.
 	 */
 
@@ -216,6 +216,7 @@ export class Pass {
 	/**
 	 * Enables or disables this pass.
 	 *
+	 * @deprecated Use enabled instead.
 	 * @param {Boolean} value - Whether the pass should be enabled.
 	 */
 
