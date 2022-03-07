@@ -250,18 +250,18 @@ export class EffectPass extends Pass {
 	 * Indicates whether this pass encodes its output when rendering to screen.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use getFullscreenMaterial().isOutputEncodingEnabled() instead.
+	 * @deprecated Use fullscreenMaterial.encodeOutput instead.
 	 */
 
 	get encodeOutput() {
 
-		return this.getFullscreenMaterial().isOutputEncodingEnabled();
+		return this.fullscreenMaterial.encodeOutput;
 
 	}
 
 	set encodeOutput(value) {
 
-		this.getFullscreenMaterial().setOutputEncodingEnabled(value);
+		this.fullscreenMaterial.encodeOutput = value;
 
 	}
 
