@@ -1,4 +1,4 @@
-import { BufferAttribute, BufferGeometry, Camera, Mesh, Scene } from "three";
+import { BasicDepthPacking, BufferAttribute, BufferGeometry, Camera, Mesh, Scene } from "three";
 
 const dummyCamera = new Camera();
 let geometry = null;
@@ -289,10 +289,10 @@ export class Pass {
 	 * You may override this method if your pass relies on the depth information of a preceding {@link RenderPass}.
 	 *
 	 * @param {Texture} depthTexture - A depth texture.
-	 * @param {Number} [depthPacking=0] - The depth packing.
+	 * @param {DepthPackingStrategy} [depthPacking=BasicDepthPacking] - The depth packing.
 	 */
 
-	setDepthTexture(depthTexture, depthPacking = 0) {}
+	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {}
 
 	/**
 	 * Renders this pass.
