@@ -79,7 +79,6 @@ export class KawaseBlurPass extends Pass {
 		 * The blur material.
 		 *
 		 * @type {KawaseBlurMaterial}
-		 * @private
 		 */
 
 		this.blurMaterial = new KawaseBlurMaterial();
@@ -184,7 +183,7 @@ export class KawaseBlurPass extends Pass {
 	 * The current blur scale.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getScale() instead.
+	 * @deprecated Use blurMaterial.scale instead.
 	 */
 
 	get scale() {
@@ -192,11 +191,6 @@ export class KawaseBlurPass extends Pass {
 		return this.blurMaterial.scale;
 
 	}
-
-	/**
-	 * @type {Number}
-	 * @deprecated Use setScale() instead.
-	 */
 
 	set scale(value) {
 
@@ -207,6 +201,7 @@ export class KawaseBlurPass extends Pass {
 	/**
 	 * Returns the current blur scale.
 	 *
+	 * @deprecated Use blurMaterial.scale instead.
 	 * @return {Number} The scale.
 	 */
 
@@ -225,6 +220,7 @@ export class KawaseBlurPass extends Pass {
 	 * Note that the blur strength is closely tied to the resolution. For a smooth transition from no blur to full blur,
 	 * set the width or the height to a high enough value.
 	 *
+	 * @deprecated Use blurMaterial.scale instead.
 	 * @param {Number} value - The scale.
 	 */
 
