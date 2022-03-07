@@ -58,7 +58,7 @@ export class BlendMode extends EventDispatcher {
 	/**
 	 * Constructs a new blend mode.
 	 *
-	 * @param {BlendFunction} blendFunction - The blend function to use.
+	 * @param {BlendFunction} blendFunction - The blend function.
 	 * @param {Number} opacity - The opacity of the color that will be blended with the base color.
 	 */
 
