@@ -160,7 +160,7 @@ window.addEventListener("load", () => load().then((assets) => {
 		"preset": SMAAPreset.MEDIUM,
 		"debug": SMAADebug.OFF,
 		"opacity": smaaEffect.blendMode.getOpacity(),
-		"blend mode": smaaEffect.blendMode.getBlendFunction()
+		"blend mode": smaaEffect.blendMode.getBlendFunction(),
 		edgeDetection: {
 			"mode": edgeDetectionMaterial.edgeDetectionMode,
 			"threshold": edgeDetectionMaterial.edgeDetectionThreshold
