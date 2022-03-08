@@ -59,24 +59,6 @@ export class CopyMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * The opacity.
-	 *
-	 * @type {Number}
-	 */
-
-	get opacity() {
-
-		return this.uniforms.opacity.value;
-
-	}
-
-	set opacity(value) {
-
-		this.uniforms.opacity.value = value;
-
-	}
-
-	/**
 	 * Returns the opacity.
 	 *
 	 * @deprecated Use opacity instead.
