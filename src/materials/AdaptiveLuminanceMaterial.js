@@ -48,7 +48,7 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 	 * @type {Texture}
 	 */
 
-	set luminanceBuffer0() {
+	set luminanceBuffer0(value) {
 
 		this.uniforms.luminanceBuffer0.value = value;
 
@@ -73,7 +73,7 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 	 * @type {Texture}
 	 */
 
-	set luminanceBuffer1() {
+	set luminanceBuffer1(value) {
 
 		this.uniforms.luminanceBuffer1.value = value;
 
@@ -100,7 +100,7 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 	 * @type {Number}
 	 */
 
-	set mipLevel1x1() {
+	set mipLevel1x1(value) {
 
 		this.defines.MIP_LEVEL_1X1 = value.toFixed(1);
 		this.needsUpdate = true;

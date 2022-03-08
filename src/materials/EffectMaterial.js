@@ -117,6 +117,12 @@ export class EffectMaterial extends ShaderMaterial {
 	 * @type {Texture}
 	 */
 
+	get depthBuffer() {
+
+		return this.uniforms.depthBuffer.value;
+
+	}
+
 	set depthBuffer(value) {
 
 		this.uniforms.depthBuffer.value = value;
@@ -128,6 +134,12 @@ export class EffectMaterial extends ShaderMaterial {
 	 *
 	 * @type {DepthPackingStrategies}
 	 */
+
+	get depthPacking() {
+
+		return Number(this.defines.DEPTH_PACKING);
+
+	}
 
 	set depthPacking(value) {
 

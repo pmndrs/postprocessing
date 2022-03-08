@@ -7,7 +7,7 @@ import fragmentShader from "./glsl/color-depth/shader.frag";
 /**
  * A color depth effect.
  *
- * Simulates a hardware limitation to achieve a retro feel.
+ * Simulates a hardware limitation to achieve a retro feel. The real color depth will not be altered by this effect.
  */
 
 export class ColorDepthEffect extends Effect {
@@ -55,9 +55,6 @@ export class ColorDepthEffect extends Effect {
 
 	/**
 	 * Sets the virtual amount of color bits.
-	 *
-	 * Each color channel will use a third of the available bits. The alpha channel remains unaffected. Note that the real
-	 * color depth will not be altered by this effect.
 	 *
 	 * @param {Number} value - The bit depth.
 	 */

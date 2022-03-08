@@ -157,7 +157,7 @@ export class GodRaysEffect extends Effect {
 		 */
 
 		this.renderPassLight = new RenderPass(this.lightScene, camera);
-		this.renderPassLight.getClearPass().setOverrideClearColor(new Color(0x000000));
+		this.renderPassLight.clearPass.overrideClearColor = new Color(0x000000);
 
 		/**
 		 * A clear pass.
@@ -167,23 +167,21 @@ export class GodRaysEffect extends Effect {
 		 */
 
 		this.clearPass = new ClearPass(true, false, false);
-		this.clearPass.setOverrideClearColor(new Color(0x000000));
+		this.clearPass.overrideClearColor = new Color(0x000000);
 
 		/**
-		 * A blur pass.
+		 * A blur pass that reduces aliasing artifacts and makes the light softer.
+		 *
+		 * This pass can be disabled to improve performance.
 		 *
 		 * @type {KawaseBlurPass}
 		 * @deprectaed Use getBlurPass() instead.
 		 */
 
 		this.blurPass = new KawaseBlurPass({ resolutionScale, width, height, kernelSize });
-		this.blurPass.setEnabled(blur);
-
-		const resolution = this.blurPass.getResolution();
-		resolution.addEventListener("change", (e) => this.setSize(
-			resolution.getBaseWidth(),
-			resolution.getBaseHeight()
-		));
+		this.blurPass.enabled = blur;
+		const resolution = this.blurPass.resolution;
+		resolution.addEventListener("change", (e) => this.setSize(resolution.baseWidth, resolution.baseHeight));
 
 		/**
 		 * A depth mask pass.
@@ -193,9 +191,8 @@ export class GodRaysEffect extends Effect {
 		 */
 
 		this.depthMaskPass = new ShaderPass(new DepthMaskMaterial());
-
-		const depthMaskMaterial = this.depthMaskPass.getFullscreenMaterial();
-		depthMaskMaterial.setDepthBuffer1(this.renderTargetLight.depthTexture);
+		const depthMaskMaterial = this.depthMaskPass.fullscreenMaterial;
+		depthMaskMaterial.depthBuffer1 = this.renderTargetLight.depthTexture;
 
 		/**
 		 * A god rays blur pass.
@@ -205,21 +202,18 @@ export class GodRaysEffect extends Effect {
 		 */
 
 		this.godRaysPass = new ShaderPass(new GodRaysMaterial(this.screenPosition));
-
-		const godRaysMaterial = this.godRaysPass.getFullscreenMaterial();
-		godRaysMaterial.setDensity(density);
-		godRaysMaterial.setDecay(decay);
-		godRaysMaterial.setWeight(weight);
-		godRaysMaterial.setExposure(exposure);
-		godRaysMaterial.setMaxIntensity(clampMax);
-		godRaysMaterial.setSamples(samples);
+		const godRaysMaterial = this.godRaysPass.fullscreenMaterial;
+		godRaysMaterial.density = density;
+		godRaysMaterial.decay = decay;
+		godRaysMaterial.weight = weight;
+		godRaysMaterial.exposure = exposure;
+		godRaysMaterial.maxIntensity = clampMax;
+		godRaysMaterial.samples = samples;
 
 	}
 
 	/**
 	 * Returns the blur pass that reduces aliasing artifacts and makes the light softer.
-	 *
-	 * You can disable this pass to improve performance.
 	 *
 	 * @return {KawaseBlurPass} The blur pass.
 	 */
@@ -239,7 +233,7 @@ export class GodRaysEffect extends Effect {
 
 	get texture() {
 
-		return this.getTexture();
+		return this.renderTargetB.texture;
 
 	}
 
@@ -251,7 +245,7 @@ export class GodRaysEffect extends Effect {
 
 	getTexture() {
 
-		return this.renderTargetB.texture;
+		return this.texture;
 
 	}
 
@@ -264,7 +258,7 @@ export class GodRaysEffect extends Effect {
 
 	get godRaysMaterial() {
 
-		return this.getGodRaysMaterial();
+		return this.godRaysPass.fullscreenMaterial;
 
 	}
 
@@ -276,7 +270,7 @@ export class GodRaysEffect extends Effect {
 
 	getGodRaysMaterial() {
 
-		return this.godRaysPass.getFullscreenMaterial();
+		return this.godRaysMaterial;
 
 	}
 
@@ -289,7 +283,7 @@ export class GodRaysEffect extends Effect {
 
 	get resolution() {
 
-		return this.getResolution();
+		return this.blurPass.resolution;
 
 	}
 
@@ -301,7 +295,7 @@ export class GodRaysEffect extends Effect {
 
 	getResolution() {
 
-		return this.blurPass.getResolution();
+		return this.resolution;
 
 	}
 
@@ -314,20 +308,13 @@ export class GodRaysEffect extends Effect {
 
 	get width() {
 
-		return this.getResolution().getWidth();
+		return this.resolution.width;
 
 	}
 
-	/**
-	 * Sets the render width.
-	 *
-	 * @type {Number}
-	 * @deprecated Use getResolution().setPreferredWidth() instead.
-	 */
-
 	set width(value) {
 
-		this.getResolution().setPreferredWidth(value);
+		this.resolution.preferredWidth = value;
 
 	}
 
@@ -340,7 +327,7 @@ export class GodRaysEffect extends Effect {
 
 	get height() {
 
-		return this.getResolution().getHeight();
+		return this.resolution.height;
 
 	}
 
@@ -353,7 +340,7 @@ export class GodRaysEffect extends Effect {
 
 	set height(value) {
 
-		this.getResolution().setPreferredHeight(value);
+		this.resolution.preferredHeight = value;
 
 	}
 
@@ -366,20 +353,13 @@ export class GodRaysEffect extends Effect {
 
 	get dithering() {
 
-		return this.getGodRaysMaterial().dithering;
+		return this.godRaysMaterial.dithering;
 
 	}
 
-	/**
-	 * Enables or disables dithering.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Use EffectPass.getFullscreenMaterial().dithering instead.
-	 */
-
 	set dithering(value) {
 
-		const material = this.getGodRaysMaterial();
+		const material = this.godRaysMaterial;
 		material.dithering = value;
 		material.needsUpdate = true;
 
@@ -394,18 +374,13 @@ export class GodRaysEffect extends Effect {
 
 	get blur() {
 
-		return this.blurPass.isEnabled();
+		return this.blurPass.enabled;
 
 	}
 
-	/**
-	 * @type {Boolean}
-	 * @deprecated Use getBlurPass().setEnabled() instead.
-	 */
-
 	set blur(value) {
 
-		this.blurPass.setEnabled(value);
+		this.blurPass.enabled = value;
 
 	}
 
@@ -418,20 +393,13 @@ export class GodRaysEffect extends Effect {
 
 	get kernelSize() {
 
-		return this.blurPass.getKernelSize();
+		return this.blurPass.kernelSize;
 
 	}
 
-	/**
-	 * Sets the blur kernel size.
-	 *
-	 * @type {KernelSize}
-	 * @deprecated Use getBlurPass().setKernelSize() instead.
-	 */
-
 	set kernelSize(value) {
 
-		this.blurPass.setKernelSize(value);
+		this.blurPass.kernelSize = value;
 
 	}
 
@@ -444,7 +412,7 @@ export class GodRaysEffect extends Effect {
 
 	getResolutionScale() {
 
-		return this.getResolution().getScale();
+		return this.resolution.scale;
 
 	}
 
@@ -457,7 +425,7 @@ export class GodRaysEffect extends Effect {
 
 	setResolutionScale(scale) {
 
-		this.getResolution().setScale(scale);
+		this.resolution.scale = scale;
 
 	}
 
@@ -470,7 +438,7 @@ export class GodRaysEffect extends Effect {
 
 	get samples() {
 
-		return this.getGodRaysMaterial().getSamples();
+		return this.godRaysMaterial.samples;
 
 	}
 
@@ -483,7 +451,7 @@ export class GodRaysEffect extends Effect {
 
 	set samples(value) {
 
-		this.getGodRaysMaterial().setSamples(value);
+		this.godRaysMaterial.samples = value;
 
 	}
 
@@ -496,7 +464,8 @@ export class GodRaysEffect extends Effect {
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
-		this.depthMaskPass.getFullscreenMaterial().setDepthBuffer0(depthTexture, depthPacking);
+		this.depthMaskPass.fullscreenMaterial.depthBuffer0 = depthTexture;
+		this.depthMaskPass.fullscreenMaterial.depthPacking0 = depthPacking;
 
 	}
 
@@ -569,7 +538,7 @@ export class GodRaysEffect extends Effect {
 			Math.min(Math.max((v.y + 1.0) * 0.5, -1.0), 2.0)
 		);
 
-		if(this.blurPass.isEnabled()) {
+		if(this.blurPass.enabled) {
 
 			// Blur the masked scene to reduce artifacts.
 			this.blurPass.render(renderer, renderTargetA, renderTargetA);
@@ -595,9 +564,9 @@ export class GodRaysEffect extends Effect {
 		this.depthMaskPass.setSize(width, height);
 		this.godRaysPass.setSize(width, height);
 
-		const resolution = this.getResolution();
-		const w = resolution.getWidth();
-		const h = resolution.getHeight();
+		const resolution = this.resolution;
+		resolution.setBaseSize(width, height);
+		const w = resolution.width, h = resolution.height;
 
 		this.renderTargetA.setSize(w, h);
 		this.renderTargetB.setSize(w, h);

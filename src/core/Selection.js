@@ -24,7 +24,7 @@ export class Selection extends Set {
 		 * @private
 		 */
 
-		this.currentLayer = layer;
+		this.l = layer;
 
 		/**
 		 * Controls whether objects that are added to this selection should be removed from all other layers.
@@ -50,17 +50,13 @@ export class Selection extends Set {
 
 	get layer() {
 
-		return this.currentLayer;
+		return this.l;
 
 	}
 
-	/**
-	 * @type {Number}
-	 */
-
 	set layer(value) {
 
-		const currentLayer = this.currentLayer;
+		const currentLayer = this.l;
 
 		for(const object of this) {
 
@@ -69,7 +65,7 @@ export class Selection extends Set {
 
 		}
 
-		this.currentLayer = value;
+		this.l = value;
 
 	}
 

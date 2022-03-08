@@ -38,7 +38,7 @@ export class DepthComparisonMaterial extends ShaderMaterial {
 		/** @ignore */
 		this.toneMapped = false;
 
-		this.depthBuffer = buffer;
+		this.depthBuffer = depthTexture;
 		this.depthPacking = RGBADepthPacking;
 		this.adoptCameraSettings(camera);
 

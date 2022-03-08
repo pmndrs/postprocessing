@@ -5,7 +5,6 @@ import {
 	NearestFilter,
 	Texture,
 	Uniform,
-	Vector2,
 	WebGLRenderTarget
 } from "three";
 
@@ -99,8 +98,8 @@ export class SMAAEffect extends Effect {
 		 */
 
 		this.clearPass = new ClearPass(true, false, false);
-		this.clearPass.setOverrideClearColor(new Color(0x000000));
-		this.clearPass.setOverrideClearAlpha(1.0);
+		this.clearPass.overrideClearColor = new Color(0x000000);
+		this.clearPass.overrideClearAlpha = 1;
 
 		/**
 		 * An edge detection pass.
@@ -109,7 +108,8 @@ export class SMAAEffect extends Effect {
 		 * @private
 		 */
 
-		this.edgeDetectionPass = new ShaderPass(new EdgeDetectionMaterial(new Vector2(), edgeDetectionMode));
+		this.edgeDetectionPass = new ShaderPass(new EdgeDetectionMaterial());
+		this.edgeDetectionPass.edgeDetectionMode = edgeDetectionMode;
 
 		/**
 		 * An SMAA weights pass.
@@ -136,8 +136,9 @@ export class SMAAEffect extends Effect {
 		areaTexture.needsUpdate = true;
 		areaTexture.flipY = false;
 
-		const weightsMaterial = this.weightsPass.getFullscreenMaterial();
-		weightsMaterial.setLookupTextures(searchTexture, areaTexture);
+		const weightsMaterial = this.weightsPass.fullscreenMaterial;
+		weightsMaterial.searchTexture = searchTexture;
+		weightsMaterial.areaTexture = areaTexture;
 
 		this.applyPreset(preset);
 
@@ -156,7 +157,7 @@ export class SMAAEffect extends Effect {
 	}
 
 	/**
-	 * Returns the edge weights texture for debugging purposes.
+	 * Returns the edge weights texture.
 	 *
 	 * @return {Texture} The texture.
 	 */
@@ -168,7 +169,7 @@ export class SMAAEffect extends Effect {
 	}
 
 	/**
-	 * The internal edge detection material.
+	 * The edge detection material.
 	 *
 	 * @type {EdgeDetectionMaterial}
 	 * @deprecated Use getEdgeDetectionMaterial() instead.
@@ -181,7 +182,7 @@ export class SMAAEffect extends Effect {
 	}
 
 	/**
-	 * The internal edge detection material.
+	 * The edge detection material.
 	 *
 	 * @type {EdgeDetectionMaterial}
 	 * @deprecated Use getEdgeDetectionMaterial() instead.
@@ -189,7 +190,7 @@ export class SMAAEffect extends Effect {
 
 	get colorEdgesMaterial() {
 
-		return this.getEdgeDetectionMaterial();
+		return this.edgeDetectionMaterial;
 
 	}
 
@@ -201,12 +202,12 @@ export class SMAAEffect extends Effect {
 
 	getEdgeDetectionMaterial() {
 
-		return this.edgeDetectionPass.getFullscreenMaterial();
+		return this.edgeDetectionMaterial;
 
 	}
 
 	/**
-	 * The internal edge weights material.
+	 * The edge weights material.
 	 *
 	 * @type {SMAAWeightsMaterial}
 	 * @deprecated Use getWeightsMaterial() instead.
@@ -214,7 +215,7 @@ export class SMAAEffect extends Effect {
 
 	get weightsMaterial() {
 
-		return this.weightsPass.getFullscreenMaterial();
+		return this.weightsPass.fullscreenMaterial;
 
 	}
 
@@ -226,7 +227,7 @@ export class SMAAEffect extends Effect {
 
 	getWeightsMaterial() {
 
-		return this.weightsPass.getFullscreenMaterial();
+		return this.weightsMaterial;
 
 	}
 
@@ -241,7 +242,7 @@ export class SMAAEffect extends Effect {
 
 	setEdgeDetectionThreshold(threshold) {
 
-		this.getEdgeDetectionMaterial().setEdgeDetectionThreshold(threshold);
+		this.edgeDetectionMaterial.edgeDetectionThreshold = threshold;
 
 	}
 
@@ -256,7 +257,7 @@ export class SMAAEffect extends Effect {
 
 	setOrthogonalSearchSteps(steps) {
 
-		this.getWeightsMaterial().setOrthogonalSearchSteps(steps);
+		this.weightsMaterial.orthogonalSearchSteps = steps;
 
 	}
 
@@ -274,35 +275,35 @@ export class SMAAEffect extends Effect {
 		switch(preset) {
 
 			case SMAAPreset.LOW:
-				edgeDetectionMaterial.setEdgeDetectionThreshold(0.15);
-				weightsMaterial.setOrthogonalSearchSteps(4);
-				weightsMaterial.setDiagonalDetectionEnabled(false);
-				weightsMaterial.setCornerRoundingEnabled(false);
+				edgeDetectionMaterial.edgeDetectionThreshold = 0.15;
+				weightsMaterial.orthogonalSearchSteps = 4;
+				weightsMaterial.diagonalDetection = false;
+				weightsMaterial.cornerDetection = false;
 				break;
 
 			case SMAAPreset.MEDIUM:
-				edgeDetectionMaterial.setEdgeDetectionThreshold(0.1);
-				weightsMaterial.setOrthogonalSearchSteps(8);
-				weightsMaterial.setDiagonalDetectionEnabled(false);
-				weightsMaterial.setCornerRoundingEnabled(false);
+				edgeDetectionMaterial.edgeDetectionThreshold = 0.1;
+				weightsMaterial.orthogonalSearchSteps = 8;
+				weightsMaterial.diagonalDetection = false;
+				weightsMaterial.cornerDetection = false;
 				break;
 
 			case SMAAPreset.HIGH:
-				edgeDetectionMaterial.setEdgeDetectionThreshold(0.1);
-				weightsMaterial.setOrthogonalSearchSteps(16);
-				weightsMaterial.setDiagonalSearchSteps(8);
-				weightsMaterial.setCornerRounding(25);
-				weightsMaterial.setDiagonalDetectionEnabled(true);
-				weightsMaterial.setCornerRoundingEnabled(true);
+				edgeDetectionMaterial.edgeDetectionThreshold = 0.1;
+				weightsMaterial.orthogonalSearchSteps = 16;
+				weightsMaterial.diagonalSearchSteps = 8;
+				weightsMaterial.cornerRounding = 25;
+				weightsMaterial.diagonalDetection = true;
+				weightsMaterial.cornerDetection = true;
 				break;
 
 			case SMAAPreset.ULTRA:
-				edgeDetectionMaterial.setEdgeDetectionThreshold(0.05);
-				weightsMaterial.setOrthogonalSearchSteps(32);
-				weightsMaterial.setDiagonalSearchSteps(16);
-				weightsMaterial.setCornerRounding(25);
-				weightsMaterial.setDiagonalDetectionEnabled(true);
-				weightsMaterial.setCornerRoundingEnabled(true);
+				edgeDetectionMaterial.edgeDetectionThreshold = 0.05;
+				weightsMaterial.orthogonalSearchSteps = 32;
+				weightsMaterial.diagonalSearchSteps = 16;
+				weightsMaterial.cornerRounding = 25;
+				weightsMaterial.diagonalDetection = true;
+				weightsMaterial.cornerDetection = true;
 				break;
 
 		}
@@ -318,7 +319,8 @@ export class SMAAEffect extends Effect {
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
-		this.edgeDetectionMaterial.setDepthBuffer(depthTexture, depthPacking);
+		this.edgeDetectionMaterial.depthBuffer = depthTexture;
+		this.edgeDetectionMaterial.depthPacking = depthPacking;
 
 	}
 
@@ -347,12 +349,8 @@ export class SMAAEffect extends Effect {
 
 	setSize(width, height) {
 
-		const edgeDetectionMaterial = this.edgeDetectionPass.getFullscreenMaterial();
-		const weightsMaterial = this.weightsPass.getFullscreenMaterial();
-
-		edgeDetectionMaterial.setSize(width, height);
-		weightsMaterial.setSize(width, height);
-
+		this.edgeDetectionMaterial.setSize(width, height);
+		this.weightsMaterial.setSize(width, height);
 		this.renderTargetEdges.setSize(width, height);
 		this.renderTargetWeights.setSize(width, height);
 
@@ -364,9 +362,8 @@ export class SMAAEffect extends Effect {
 
 	dispose() {
 
-		const uniforms = this.weightsPass.getFullscreenMaterial().uniforms;
-		uniforms.searchTexture.value.dispose();
-		uniforms.areaTexture.value.dispose();
+		this.weightsMaterial.searchTexture.dispose();
+		this.weightsMaterial.areaTexture.dispose();
 
 		super.dispose();
 

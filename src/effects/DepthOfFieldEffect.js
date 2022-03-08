@@ -140,7 +140,7 @@ export class DepthOfFieldEffect extends Effect {
 		 */
 
 		this.cocPass = new ShaderPass(new CircleOfConfusionMaterial(camera));
-		const cocMaterial = this.cocPass.getFullscreenMaterial();
+		const cocMaterial = this.cocPass.fullscreenMaterial;
 		cocMaterial.setFocusDistance(focusDistance);
 		cocMaterial.setFocalLength(focalLength);
 
@@ -167,9 +167,9 @@ export class DepthOfFieldEffect extends Effect {
 		 */
 
 		this.maskPass = new ShaderPass(new MaskMaterial(this.renderTargetCoC.texture));
-		const maskMaterial = this.maskPass.getFullscreenMaterial();
-		maskMaterial.setMaskFunction(MaskFunction.MULTIPLY);
-		maskMaterial.setColorChannel(ColorChannel.GREEN);
+		const maskMaterial = this.maskPass.fullscreenMaterial;
+		maskMaterial.maskFunction = MaskFunction.MULTIPLY;
+		maskMaterial.colorChannel = ColorChannel.GREEN;
 
 		/**
 		 * A bokeh blur pass for the foreground colors.
@@ -179,7 +179,7 @@ export class DepthOfFieldEffect extends Effect {
 		 */
 
 		this.bokehNearBasePass = new ShaderPass(new BokehMaterial(false, true));
-		this.bokehNearBasePass.getFullscreenMaterial().setCoCBuffer(this.renderTargetCoCBlurred.texture);
+		this.bokehNearBasePass.fullscreenMaterial.cocBuffer = this.renderTargetCoCBlurred.texture;
 
 		/**
 		 * A bokeh fill pass for the foreground colors.
@@ -189,7 +189,7 @@ export class DepthOfFieldEffect extends Effect {
 		 */
 
 		this.bokehNearFillPass = new ShaderPass(new BokehMaterial(true, true));
-		this.bokehNearFillPass.getFullscreenMaterial().setCoCBuffer(this.renderTargetCoCBlurred.texture);
+		this.bokehNearFillPass.fullscreenMaterial.cocBuffer = this.renderTargetCoCBlurred.texture;
 
 		/**
 		 * A bokeh blur pass for the background colors.
@@ -199,7 +199,7 @@ export class DepthOfFieldEffect extends Effect {
 		 */
 
 		this.bokehFarBasePass = new ShaderPass(new BokehMaterial(false, false));
-		this.bokehFarBasePass.getFullscreenMaterial().setCoCBuffer(this.renderTargetCoC.texture);
+		this.bokehFarBasePass.fullscreenMaterial.cocBuffer = this.renderTargetCoC.texture;
 
 		/**
 		 * A bokeh fill pass for the background colors.
@@ -209,13 +209,11 @@ export class DepthOfFieldEffect extends Effect {
 		 */
 
 		this.bokehFarFillPass = new ShaderPass(new BokehMaterial(true, false));
-		this.bokehFarFillPass.getFullscreenMaterial().setCoCBuffer(this.renderTargetCoC.texture);
+		this.bokehFarFillPass.fullscreenMaterial.cocBuffer = this.renderTargetCoC.texture;
 
 
 		/**
-		 * A target position that should be kept in focus.
-		 *
-		 * Set this to `null` to disable auto focus.
+		 * A target position that should be kept in focus. Set to `null` to disable auto focus.
 		 *
 		 * @type {Vector3}
 		 * @deprecated Use getTarget() and setTarget() instead.
@@ -223,7 +221,7 @@ export class DepthOfFieldEffect extends Effect {
 
 		this.target = null;
 
-		this.setBokehScale(bokehScale);
+		this.bokehScale = bokehScale;
 
 	}
 
@@ -236,7 +234,7 @@ export class DepthOfFieldEffect extends Effect {
 
 	get circleOfConfusionMaterial() {
 
-		return this.getCircleOfConfusionMaterial();
+		return this.cocPass.fullscreenMaterial;
 
 	}
 
@@ -248,7 +246,7 @@ export class DepthOfFieldEffect extends Effect {
 
 	getCircleOfConfusionMaterial() {
 
-		return this.cocPass.getFullscreenMaterial();
+		return this.circleOfConfusionMaterial;
 
 	}
 
@@ -273,7 +271,7 @@ export class DepthOfFieldEffect extends Effect {
 
 	get resolution() {
 
-		return this.getResolution();
+		return this.blurPass.getResolution();
 
 	}
 
@@ -298,18 +296,27 @@ export class DepthOfFieldEffect extends Effect {
 
 	get bokehScale() {
 
-		return this.getBokehScale();
+		return this.uniforms.get("scale").value;
 
 	}
 
-	/**
-	 * @type {Number}
-	 * @deprecated Use setBokehScale() instead.
-	 */
-
 	set bokehScale(value) {
 
-		this.setBokehScale(value);
+		const passes = [
+			this.bokehNearBasePass,
+			this.bokehNearFillPass,
+			this.bokehFarBasePass,
+			this.bokehFarFillPass
+		];
+
+		for(const p of passes) {
+
+			p.fullscreenMaterial.setScale(value);
+
+		}
+
+		this.maskPass.fullscreenMaterial.setStrength(value);
+		this.uniforms.get("scale").value = value;
 
 	}
 
@@ -321,7 +328,7 @@ export class DepthOfFieldEffect extends Effect {
 
 	getBokehScale() {
 
-		return this.uniforms.get("scale").value;
+		return this.bokehScale;
 
 	}
 
@@ -333,21 +340,7 @@ export class DepthOfFieldEffect extends Effect {
 
 	setBokehScale(value) {
 
-		const passes = [
-			this.bokehNearBasePass,
-			this.bokehNearFillPass,
-			this.bokehFarBasePass,
-			this.bokehFarFillPass
-		];
-
-		for(const p of passes) {
-
-			p.getFullscreenMaterial().setScale(value);
-
-		}
-
-		this.maskPass.getFullscreenMaterial().setStrength(value);
-		this.uniforms.get("scale").value = value;
+		this.bokehScale = value;
 
 	}
 
@@ -401,7 +394,8 @@ export class DepthOfFieldEffect extends Effect {
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
-		this.circleOfConfusionMaterial.setDepthBuffer(depthTexture, depthPacking);
+		this.circleOfConfusionMaterial.depthBuffer = depthTexture;
+		this.circleOfConfusionMaterial.depthPacking = depthPacking;
 
 	}
 
@@ -424,7 +418,7 @@ export class DepthOfFieldEffect extends Effect {
 		if(this.target !== null) {
 
 			const distance = this.calculateFocusDistance(this.target);
-			this.circleOfConfusionMaterial.setFocusDistance(distance);
+			this.circleOfConfusionMaterial.focusDistance = distance;
 
 		}
 
@@ -454,7 +448,9 @@ export class DepthOfFieldEffect extends Effect {
 
 	setSize(width, height) {
 
-		const resolution = this.getResolution();
+		const resolution = this.resolution;
+		resolution.setBaseSize(width, height);
+		const w = resolution.width, h = resolution.height;
 
 		let resizables = [
 			this.cocPass,
@@ -469,9 +465,6 @@ export class DepthOfFieldEffect extends Effect {
 		// These buffers require full resolution to prevent bleeding artifacts.
 		resizables.push(this.renderTargetCoC, this.renderTargetMasked);
 		resizables.forEach((r) => r.setSize(width, height));
-
-		const w = resolution.getWidth();
-		const h = resolution.getHeight();
 
 		resizables = [
 			this.renderTarget,
@@ -490,7 +483,7 @@ export class DepthOfFieldEffect extends Effect {
 			this.bokehFarFillPass
 		];
 
-		passes.forEach((p) => p.getFullscreenMaterial().setSize(w, h));
+		passes.forEach((p) => p.fullscreenMaterial.setSize(w, h));
 
 	}
 
@@ -525,7 +518,7 @@ export class DepthOfFieldEffect extends Effect {
 			this.renderTargetFar.texture.type = frameBufferType;
 			this.renderTargetMasked.texture.type = frameBufferType;
 
-			if(this.renderer.outputEncoding === sRGBEncoding) {
+			if(renderer.outputEncoding === sRGBEncoding) {
 
 				this.renderTarget.texture.encoding = sRGBEncoding;
 				this.renderTargetNear.texture.encoding = sRGBEncoding;

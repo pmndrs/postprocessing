@@ -101,7 +101,7 @@ export class GlitchEffect extends Effect {
 		this.time = 0;
 
 		/**
-		 * A distortion vector.
+		 * A shortcut to the distortion vector.
 		 *
 		 * @type {Vector2}
 		 * @private
@@ -158,7 +158,9 @@ export class GlitchEffect extends Effect {
 		this.mode = GlitchMode.SPORADIC;
 
 		/**
-		 * The glitch ratio (currently inverted / treated as a threshold for strong glitches).
+		 * The ratio between weak (0.0) and strong (1.0) glitches. Range is [0.0, 1.0].
+		 *
+		 * This value is currently being treated as a threshold for strong glitches, i.e. it's inverted.
 		 *
 		 * @type {Number}
 		 * @deprecated Use getGlitchRatio() and setGlitchRatio() instead.
@@ -199,7 +201,7 @@ export class GlitchEffect extends Effect {
 
 	get active() {
 
-		return this.isActive();
+		return this.uniforms.get("active").value;
 
 	}
 
@@ -211,7 +213,7 @@ export class GlitchEffect extends Effect {
 
 	isActive() {
 
-		return this.uniforms.get("active").value;
+		return this.active;
 
 	}
 

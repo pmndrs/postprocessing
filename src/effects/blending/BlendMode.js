@@ -76,7 +76,7 @@ export class BlendMode extends EventDispatcher {
 		this.blendFunction = blendFunction;
 
 		/**
-		 * This uniform controls the opacity of the color that will be blended with the base color.
+		 * A uniform that controls the opacity of this blend mode.
 		 *
 		 * @type {Uniform}
 		 */
@@ -86,7 +86,7 @@ export class BlendMode extends EventDispatcher {
 	}
 
 	/**
-	 * The opacity uniform.
+	 * The opacity.
 	 *
 	 * @deprecated Use opacityUniform instead.
 	 * @type {Uniform}

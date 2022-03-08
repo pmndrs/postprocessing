@@ -232,7 +232,6 @@ export class EffectComposer {
 
 			for(const pass of this.passes) {
 
-				pass.setRenderer(renderer);
 				pass.initialize(renderer, alpha, frameBufferType);
 
 			}
@@ -347,8 +346,8 @@ export class EffectComposer {
 
 	createBuffer(depthBuffer, stencilBuffer, type, multisampling) {
 
-		const size = (this.renderer === null) ? new Vector2() :
-			this.renderer.getDrawingBufferSize(new Vector2());
+		const renderer = this.renderer;
+		const size = (renderer === null) ? new Vector2() : renderer.getDrawingBufferSize(new Vector2());
 
 		const options = {
 			minFilter: LinearFilter,
@@ -561,7 +560,7 @@ export class EffectComposer {
 
 		for(const pass of this.passes) {
 
-			if(pass.isEnabled()) {
+			if(pass.enabled) {
 
 				pass.render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest);
 

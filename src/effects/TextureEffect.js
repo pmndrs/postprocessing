@@ -36,7 +36,7 @@ export class TextureEffect extends Effect {
 			])
 		});
 
-		this.setTexture(texture);
+		this.texture = texture;
 		this.aspectCorrection = aspectCorrection;
 
 	}
@@ -87,7 +87,7 @@ export class TextureEffect extends Effect {
 
 	setTexture(value) {
 
-		const prevTexture = this.getTexture();
+		const prevTexture = this.texture;
 		const uniforms = this.uniforms;
 		const defines = this.defines;
 
@@ -187,21 +187,14 @@ export class TextureEffect extends Effect {
 
 	get uvTransform() {
 
-		const texture = this.getTexture();
+		const texture = this.texture;
 		return (texture !== null && texture.matrixAutoUpdate);
 
 	}
 
-	/**
-	 * Enables or disables texture UV transformation.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Set texture.matrixAutoUpdate instead.
-	 */
-
 	set uvTransform(value) {
 
-		const texture = this.getTexture();
+		const texture = this.texture;
 
 		if(texture !== null) {
 
@@ -246,11 +239,9 @@ export class TextureEffect extends Effect {
 
 	update(renderer, inputBuffer, deltaTime) {
 
-		const texture = this.uniforms.get("map").value;
+		if(this.texture.matrixAutoUpdate) {
 
-		if(texture.matrixAutoUpdate) {
-
-			texture.updateMatrix();
+			this.texture.updateMatrix();
 
 		}
 
@@ -266,8 +257,9 @@ export class TextureEffect extends Effect {
 
 	initialize(renderer, alpha, frameBufferType) {
 
-		const decoding = getTextureDecoding(this.getTexture(), renderer.capabilities.isWebGL2);
+		const decoding = getTextureDecoding(this.texture, renderer.capabilities.isWebGL2);
 		this.defines.set("texelToLinear(texel)", decoding);
+		this.renderer = renderer;
 
 	}
 

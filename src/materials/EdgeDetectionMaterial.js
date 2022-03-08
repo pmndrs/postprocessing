@@ -81,7 +81,7 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 		/** @ignore */
 		this.toneMapped = false;
 
-		this.setEdgeDetectionMode(mode);
+		this.edgeDetectionMode = mode;
 
 	}
 
@@ -428,7 +428,7 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	/**
 	 * Sets the predication scale.
 	 *
-	 * @deprecated Use XXXX instead.
+	 * @deprecated Use predicationScale instead.
 	 * @param {Number} value - The scale. Range: [1.0, 5.0].
 	 */
 

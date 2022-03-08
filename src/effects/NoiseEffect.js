@@ -20,7 +20,7 @@ export class NoiseEffect extends Effect {
 	constructor({ blendFunction = BlendFunction.SCREEN, premultiply = false } = {}) {
 
 		super("NoiseEffect", fragmentShader, { blendFunction });
-		this.setPremultiplied(premultiply);
+		this.premultiply = premultiply;
 
 	}
 
@@ -33,20 +33,27 @@ export class NoiseEffect extends Effect {
 
 	get premultiply() {
 
-		return this.isPremultiplied();
+		return this.defines.has("PREMULTIPLY");
 
 	}
 
-	/**
-	 * Controls whether noise should be multiplied with the input colors prior to blending.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Use setPremultiplied() instead.
-	 */
-
 	set premultiply(value) {
 
-		this.setPremultiplied(value);
+		if(this.premultiply !== value) {
+
+			if(value) {
+
+				this.defines.set("PREMULTIPLY", "1");
+
+			} else {
+
+				this.defines.delete("PREMULTIPLY");
+
+			}
+
+			this.setChanged();
+
+		}
 
 	}
 
@@ -58,7 +65,7 @@ export class NoiseEffect extends Effect {
 
 	isPremultiplied() {
 
-		return this.defines.has("PREMULTIPLIED");
+		return this.premultiply;
 
 	}
 
@@ -70,21 +77,7 @@ export class NoiseEffect extends Effect {
 
 	setPremultiplied(value) {
 
-		if(this.isPremultiplied() !== value) {
-
-			if(value) {
-
-				this.defines.set("PREMULTIPLIED", "1");
-
-			} else {
-
-				this.defines.delete("PREMULTIPLIED");
-
-			}
-
-			this.setChanged();
-
-		}
+		this.premultiply = value;
 
 	}
 

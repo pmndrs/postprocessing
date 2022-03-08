@@ -83,7 +83,7 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 		if(mainUvExists) {
 
-			const code = "\t" + prefix + "MainUv(UV);\n";
+			const code = `\t${prefix}MainUv(UV);\n`;
 			shaderParts.set(Section.FRAGMENT_MAIN_UV, shaderParts.get(Section.FRAGMENT_MAIN_UV) + code);
 			transformedUv = true;
 
@@ -92,7 +92,7 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 		if(shaders.get("vertex") !== null && /mainSupport/.test(shaders.get("vertex"))) {
 
 			// Build the mainSupport call (with optional uv parameter).
-			let string = "\t" + prefix + "MainSupport(";
+			let string = `\t${prefix}MainSupport(`;
 			string += /mainSupport *\([\w\s]*?uv\s*?\)/.test(shaders.get("vertex")) ? "vUv);\n" : ");\n";
 			shaderParts.set(Section.VERTEX_MAIN_SUPPORT, shaderParts.get(Section.VERTEX_MAIN_SUPPORT) + string);
 
@@ -117,12 +117,12 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 		// Collect unique blend modes.
 		const blendMode = effect.blendMode;
-		blendModes.set(blendMode.getBlendFunction(), blendMode);
+		blendModes.set(blendMode.blendFunction, blendMode);
 
 		if(mainImageExists) {
 
 			const depthParamRegExp = /MainImage *\([\w\s,]*?depth[\w\s,]*?\)/;
-			let string = prefix + "MainImage(color0, UV, ";
+			let string = `${prefix}MainImage(color0, UV, `;
 
 			// The effect may sample depth in a different shader.
 			if((attributes & EffectAttribute.DEPTH) !== 0 && depthParamRegExp.test(shaders.get("fragment"))) {
@@ -139,9 +139,9 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 			uniforms.set(blendOpacity, blendMode.opacityUniform);
 
 			// Blend the result of this effect with the input color.
-			string += "color0 = blend" + blendMode.getBlendFunction() + "(color0, color1, " + blendOpacity + ");\n\n\t";
+			string += `color0 = blend${blendMode.blendFunction}(color0, color1, ${blendOpacity});\n\n\t`;
 			shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, shaderParts.get(Section.FRAGMENT_MAIN_IMAGE) + string);
-			string = "uniform float " + blendOpacity + ";\n\n";
+			string = `uniform float ${blendOpacity};\n\n`;
 			shaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) + string);
 
 		}
@@ -344,7 +344,7 @@ export class EffectPass extends Pass {
 
 		for(const effect of this.effects) {
 
-			if(effect.blendMode.getBlendFunction() === BlendFunction.SKIP) {
+			if(effect.blendMode.blendFunction === BlendFunction.SKIP) {
 
 				// Check if this effect relies on depth and continue.
 				attributes |= (effect.getAttributes() & EffectAttribute.DEPTH);
@@ -357,7 +357,8 @@ export class EffectPass extends Pass {
 
 				attributes |= effect.getAttributes();
 
-				const result = integrateEffect(("e" + id++), effect, shaderParts, blendModes, defines, uniforms, attributes);
+				const prefix = ("e" + id++);
+				const result = integrateEffect(prefix, effect, shaderParts, blendModes, defines, uniforms, attributes);
 				varyings += result.varyings.length;
 				transformedUv = transformedUv || result.transformedUv;
 				readDepth = readDepth || result.readDepth;
@@ -382,7 +383,7 @@ export class EffectPass extends Pass {
 
 		for(const blendMode of blendModes.values()) {
 
-			const code = blendMode.getShaderCode().replace(blendRegExp, "blend" + blendMode.getBlendFunction());
+			const code = blendMode.getShaderCode().replace(blendRegExp, `blend${blendMode.blendFunction}`);
 			shaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) + code + "\n");
 
 		}
@@ -456,7 +457,7 @@ export class EffectPass extends Pass {
 
 	getDepthTexture() {
 
-		return this.fullscreenMaterial.uniforms.depthBuffer.value;
+		return this.fullscreenMaterial.depthBuffer;
 
 	}
 

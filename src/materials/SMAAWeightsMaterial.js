@@ -90,6 +90,12 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	 * @type {Texture}
 	 */
 
+	get searchTexture() {
+
+		return this.uniforms.searchTexture.value;
+
+	}
+
 	set searchTexture(value) {
 
 		this.uniforms.searchTexture.value = value;
@@ -102,9 +108,15 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	 * @type {Texture}
 	 */
 
-	set searchTexture(value) {
+	get areaTexture() {
 
-		this.uniforms.searchTexture.value = value;
+		return this.uniforms.areaTexture.value;
+
+	}
+
+	set areaTexture(value) {
+
+		this.uniforms.areaTexture.value = value;
 
 	}
 
@@ -338,7 +350,6 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	setCornerRoundingEnabled(value) {
 
 		this.cornerDetection = value;
-		this.needsUpdate = true;
 
 	}
 

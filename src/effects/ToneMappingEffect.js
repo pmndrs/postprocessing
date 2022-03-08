@@ -41,7 +41,7 @@ export class ToneMappingEffect extends Effect {
 	 *
 	 * The additional parameters only affect the Reinhard2 operator.
 	 *
-	 * TODO Remove deprecated params and change default mode to ACES_FILMIC and white point to 4.
+	 * TODO Change default mode to ACES_FILMIC and white point to 4.
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
 	 * @param {Boolean} [options.adaptive=true] - Deprecated. Use mode instead.
@@ -115,24 +115,15 @@ export class ToneMappingEffect extends Effect {
 		 * @private
 		 */
 
-		this.adaptiveLuminancePass = new AdaptiveLuminancePass(this.luminancePass.getTexture(), {
+		this.adaptiveLuminancePass = new AdaptiveLuminancePass(this.luminancePass.texture, {
 			minLuminance,
 			adaptationRate
 		});
 
-		this.uniforms.get("luminanceBuffer").value = this.adaptiveLuminancePass.getTexture();
+		this.uniforms.get("luminanceBuffer").value = this.adaptiveLuminancePass.texture;
 
-		/**
-		 * The current tone mapping mode.
-		 *
-		 * @type {ToneMappingMode}
-		 * @private
-		 */
-
-		this.mode = null;
-
-		this.setMode(mode);
-		this.setResolution(resolution);
+		this.resolution = resolution;
+		this.mode = mode;
 
 	}
 
@@ -210,7 +201,7 @@ export class ToneMappingEffect extends Effect {
 
 	getAdaptiveLuminanceMaterial() {
 
-		return this.adaptiveLuminancePass.getFullscreenMaterial();
+		return this.adaptiveLuminancePass.fullscreenMaterial;
 
 	}
 
@@ -278,16 +269,9 @@ export class ToneMappingEffect extends Effect {
 
 	get adaptive() {
 
-		return this.defines.has("ADAPTIVE");
+		return (this.mode === ToneMappingMode.REINHARD2_ADAPTIVE);
 
 	}
-
-	/**
-	 * Enables or disables adaptive luminance.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Uset setMode(ToneMappingMode.REINHARD2_ADAPTIVE) instead.
-	 */
 
 	set adaptive(value) {
 
@@ -304,18 +288,13 @@ export class ToneMappingEffect extends Effect {
 
 	get adaptationRate() {
 
-		return this.getAdaptiveLuminanceMaterial().getAdaptationRate();
+		return this.adaptiveLuminanceMaterial.adaptationRate;
 
 	}
 
-	/**
-	 * @type {Number}
-	 * @deprecated Use getAdaptiveLuminanceMaterial().setAdaptationRate() instead.
-	 */
-
 	set adaptationRate(value) {
 
-		this.getAdaptiveLuminanceMaterial().setAdaptationRate(value);
+		this.adaptiveLuminanceMaterial.adaptationRate = value;
 
 	}
 
@@ -330,11 +309,6 @@ export class ToneMappingEffect extends Effect {
 		return 1.0;
 
 	}
-
-	/**
-	 * @type {Number}
-	 * @deprecated
-	 */
 
 	set distinction(value) {
 
@@ -352,7 +326,7 @@ export class ToneMappingEffect extends Effect {
 
 	update(renderer, inputBuffer, deltaTime) {
 
-		if(this.mode === ToneMappingMode.REINHARD2_ADAPTIVE) {
+		if(this.adaptiveLuminancePass.enabled) {
 
 			this.luminancePass.render(renderer, inputBuffer);
 			this.adaptiveLuminancePass.render(renderer, null, null, deltaTime);

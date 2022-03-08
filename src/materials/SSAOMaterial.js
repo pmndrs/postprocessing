@@ -86,7 +86,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	 * @type {Texture}
 	 */
 
-	set normalDepthBuffer() {
+	set normalDepthBuffer(value) {
 
 		this.uniforms.normalDepthBuffer.value = value;
 
@@ -475,6 +475,21 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Updates the absolute radius.
+	 *
+	 * @private
+	 */
+
+	updateRadius() {
+
+		const radius = this.r * this.resolution.height;
+		this.defines.RADIUS = radius.toFixed(11);
+		this.defines.RADIUS_SQ = (radius * radius).toFixed(11);
+		this.needsUpdate = true;
+
+	}
+
+	/**
 	 * The occlusion sampling radius.
 	 *
 	 * @type {Number}
@@ -489,10 +504,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	set radius(value) {
 
 		this.r = Math.min(Math.max(value, 1e-6), 1.0);
-		const radius = this.r * this.resolution.height;
-		this.defines.RADIUS = radius.toFixed(11);
-		this.defines.RADIUS_SQ = (radius * radius).toFixed(11);
-		this.needsUpdate = true;
+		this.updateRadius();
 
 	}
 
@@ -680,7 +692,7 @@ export class SSAOMaterial extends ShaderMaterial {
 
 		uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
 		this.resolution.set(width, height);
-		this.setRadius(this.radius);
+		this.updateRadius();
 
 	}
 

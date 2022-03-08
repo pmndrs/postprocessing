@@ -383,7 +383,7 @@ export class GodRaysMaterial extends ShaderMaterial {
 
 	setSamples(value) {
 
-		this.samples = value
+		this.samples = value;
 
 	}
 

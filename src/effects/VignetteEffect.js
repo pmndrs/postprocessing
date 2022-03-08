@@ -5,7 +5,7 @@ import { Effect } from "./Effect";
 import fragmentShader from "./glsl/vignette/shader.frag";
 
 /**
- * An enumeration of vignette techniques.
+ * An enumeration of Vignette techniques.
  *
  * @type {Object}
  * @property {Number} DEFAULT - Produces a dusty look.
@@ -18,20 +18,20 @@ export const VignetteTechnique = {
 };
 
 /**
- * A vignette effect.
+ * A Vignette effect.
  */
 
 export class VignetteEffect extends Effect {
 
 	/**
-	 * Constructs a new vignette effect.
+	 * Constructs a new Vignette effect.
 	 *
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
-	 * @param {VignetteTechnique} [options.technique=VignetteTechnique.DEFAULT] - The vignette technique.
+	 * @param {VignetteTechnique} [options.technique=VignetteTechnique.DEFAULT] - The Vignette technique.
 	 * @param {Boolean} [options.eskil=false] - Deprecated. Use technique instead.
-	 * @param {Number} [options.offset=0.5] - The vignette offset.
-	 * @param {Number} [options.darkness=0.5] - The vignette darkness.
+	 * @param {Number} [options.offset=0.5] - The Vignette offset.
+	 * @param {Number} [options.darkness=0.5] - The Vignette darkness.
 	 */
 
 	constructor({
@@ -69,7 +69,7 @@ export class VignetteEffect extends Effect {
 	}
 
 	/**
-	 * Indicates whether Eskil's vignette technique is enabled.
+	 * Indicates whether Eskil's Vignette technique is enabled.
 	 *
 	 * @type {Boolean}
 	 * @deprecated Use setTechnique(VignetteTechnique.ESKIL) instead.
@@ -82,7 +82,7 @@ export class VignetteEffect extends Effect {
 	}
 
 	/**
-	 * Returns the vignette technique.
+	 * Returns the Vignette technique.
 	 *
 	 * @return {VignetteTechnique} The technique.
 	 */
@@ -94,7 +94,7 @@ export class VignetteEffect extends Effect {
 	}
 
 	/**
-	 * Sets the vignette technique.
+	 * Sets the Vignette technique.
 	 *
 	 * @param {VignetteTechnique} value - The technique.
 	 */
@@ -111,7 +111,7 @@ export class VignetteEffect extends Effect {
 	}
 
 	/**
-	 * Returns the vignette offset.
+	 * Returns the Vignette offset.
 	 *
 	 * @return {Number} The offset.
 	 */
@@ -123,7 +123,7 @@ export class VignetteEffect extends Effect {
 	}
 
 	/**
-	 * Sets the vignette offset.
+	 * Sets the Vignette offset.
 	 *
 	 * @param {Number} value - The offset.
 	 */
@@ -135,7 +135,7 @@ export class VignetteEffect extends Effect {
 	}
 
 	/**
-	 * Returns the vignette darkness.
+	 * Returns the Vignette darkness.
 	 *
 	 * @return {Number} The darkness.
 	 */
@@ -147,7 +147,7 @@ export class VignetteEffect extends Effect {
 	}
 
 	/**
-	 * Sets the vignette darkness.
+	 * Sets the Vignette darkness.
 	 *
 	 * @param {Number} value - The darkness.
 	 */

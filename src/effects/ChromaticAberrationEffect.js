@@ -41,18 +41,13 @@ export class ChromaticAberrationEffect extends Effect {
 
 	get offset() {
 
-		return this.getOffset();
+		return this.uniforms.get("offset").value;
 
 	}
 
-	/**
-	 * @type {Vector2}
-	 * @deprecated Use setOffset() instead.
-	 */
-
 	set offset(value) {
 
-		this.setOffset(value);
+		this.uniforms.get("offset").value = value;
 
 	}
 
@@ -64,7 +59,7 @@ export class ChromaticAberrationEffect extends Effect {
 
 	getOffset() {
 
-		return this.uniforms.get("offset").value;
+		return this.offset;
 
 	}
 
@@ -76,7 +71,7 @@ export class ChromaticAberrationEffect extends Effect {
 
 	setOffset(value) {
 
-		this.uniforms.get("offset").value = value;
+		this.offset = value;
 
 	}
 
