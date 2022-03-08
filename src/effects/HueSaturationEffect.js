@@ -31,54 +31,68 @@ export class HueSaturationEffect extends Effect {
 			])
 		});
 
-		this.setHue(hue);
+		this.hue = hue;
 
 	}
 
 	/**
-	 * Returns the saturation.
+	 * The saturation.
 	 *
-	 * @return {Number} The saturation.
+	 * @type {Number}
 	 */
 
-	getSaturation(value) {
+	get saturation() {
 
 		return this.uniforms.get("saturation").value;
 
 	}
 
-	/**
-	 * Sets the saturation.
-	 *
-	 * @param {Number} value - The saturation.
-	 */
-
-	setSaturation(value) {
+	set saturation(value) {
 
 		this.uniforms.get("saturation").value = value;
 
 	}
 
 	/**
-	 * Returns the hue.
+	 * Returns the saturation.
 	 *
-	 * @return {Number} The hue in radians.
+	 * @deprecated Use saturation instead.
+	 * @return {Number} The saturation.
 	 */
 
-	getHue(value) {
+	getSaturation() {
+
+		return this.saturation;
+
+	}
+
+	/**
+	 * Sets the saturation.
+	 *
+	 * @deprecated Use saturation instead.
+	 * @param {Number} value - The saturation.
+	 */
+
+	setSaturation(value) {
+
+		this.saturation = value;
+
+	}
+
+	/**
+	 * The hue.
+	 *
+	 * @type {Number}
+	 */
+
+	get hue() {
 
 		const hue = this.uniforms.get("hue").value;
 		return Math.acos((hue.x * 3.0 - 1.0) / 2.0);
 
 	}
 
-	/**
-	 * Sets the hue.
-	 *
-	 * @param {Number} value - The hue in radians.
-	 */
-
-	setHue(value) {
+	set hue(value) {
 
 		const s = Math.sin(value), c = Math.cos(value);
 
@@ -87,6 +101,32 @@ export class HueSaturationEffect extends Effect {
 			(-Math.sqrt(3.0) * s - c + 1.0) / 3.0,
 			(Math.sqrt(3.0) * s - c + 1.0) / 3.0
 		);
+
+	}
+
+	/**
+	 * Returns the hue.
+	 *
+	 * @deprecated Use hue instead.
+	 * @return {Number} The hue in radians.
+	 */
+
+	getHue() {
+
+		return this.hue;
+
+	}
+
+	/**
+	 * Sets the hue.
+	 *
+	 * @deprecated Use hue instead.
+	 * @param {Number} value - The hue in radians.
+	 */
+
+	setHue(value) {
+
+		this.hue = value;
 
 	}
 

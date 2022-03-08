@@ -28,7 +28,6 @@ export class NoiseEffect extends Effect {
 	 * Indicates whether noise will be multiplied with the input colors prior to blending.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use isPremultiplied() instead.
 	 */
 
 	get premultiply() {
@@ -60,6 +59,7 @@ export class NoiseEffect extends Effect {
 	/**
 	 * Indicates whether noise will be multiplied with the input colors prior to blending.
 	 *
+	 * @deprecated Use premultiply instead.
 	 * @return {Boolean} Whether noise is premultiplied.
 	 */
 
@@ -72,6 +72,7 @@ export class NoiseEffect extends Effect {
 	/**
 	 * Controls whether noise should be multiplied with the input colors prior to blending.
 	 *
+	 * @deprecated Use premultiply instead.
 	 * @param {Boolean} value - Whether noise should be premultiplied.
 	 */
 

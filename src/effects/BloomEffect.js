@@ -69,7 +69,6 @@ export class BloomEffect extends Effect {
 		 * This pass can be disabled to skip luminance filtering.
 		 *
 		 * @type {LuminancePass}
-		 * @deprecated Use getLuminancePass() instead.
 		 */
 
 		this.luminancePass = new LuminancePass({
@@ -84,7 +83,6 @@ export class BloomEffect extends Effect {
 		 * A blur pass.
 		 *
 		 * @type {KawaseBlurPass}
-		 * @deprecated Use getBlurPass() instead.
 		 */
 
 		this.blurPass = new KawaseBlurPass({ resolutionScale, width, height, kernelSize });
@@ -98,7 +96,6 @@ export class BloomEffect extends Effect {
 	 * A texture that contains the intermediate result of this effect.
 	 *
 	 * @type {Texture}
-	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
@@ -110,6 +107,7 @@ export class BloomEffect extends Effect {
 	/**
 	 * Returns the generated bloom texture.
 	 *
+	 * @deprecated Use texture instead.
 	 * @return {Texture} The texture.
 	 */
 
@@ -123,7 +121,6 @@ export class BloomEffect extends Effect {
 	 * The resolution of this effect.
 	 *
 	 * @type {Resolution}
-	 * @deprecated Use getResolution() instead.
 	 */
 
 	get resolution() {
@@ -135,6 +132,7 @@ export class BloomEffect extends Effect {
 	/**
 	 * Returns the resolution settings.
 	 *
+	 * @deprecated Use resolution instead.
 	 * @return {Resolution} The resolution.
 	 */
 
@@ -147,6 +145,7 @@ export class BloomEffect extends Effect {
 	/**
 	 * Returns the blur pass.
 	 *
+	 * @deprecated Use blurPass instead.
 	 * @return {KawaseBlurPass} The blur pass.
 	 */
 
@@ -159,6 +158,7 @@ export class BloomEffect extends Effect {
 	/**
 	 * Returns the luminance pass.
 	 *
+	 * @deprecated Use luminancePass instead.
 	 * @return {LuminancePass} The luminance pass.
 	 */
 
@@ -172,7 +172,6 @@ export class BloomEffect extends Effect {
 	 * The luminance material.
 	 *
 	 * @type {LuminanceMaterial}
-	 * @deprecated Use getLuminanceMaterial() instead.
 	 */
 
 	get luminanceMaterial() {
@@ -184,6 +183,7 @@ export class BloomEffect extends Effect {
 	/**
 	 * Returns the luminance material.
 	 *
+	 * @deprecated Use luminanceMaterial instead.
 	 * @return {LuminanceMaterial} The material.
 	 */
 
@@ -197,7 +197,7 @@ export class BloomEffect extends Effect {
 	 * The current width of the internal render targets.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getResolution().getWidth() instead.
+	 * @deprecated Use resolution.width instead.
 	 */
 
 	get width() {
@@ -216,7 +216,7 @@ export class BloomEffect extends Effect {
 	 * The current height of the internal render targets.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getResolution().getHeight() instead.
+	 * @deprecated Use resolution.height instead.
 	 */
 
 	get height() {
@@ -254,7 +254,7 @@ export class BloomEffect extends Effect {
 	 * The blur kernel size.
 	 *
 	 * @type {KernelSize}
-	 * @deprecated Use getBlurPass().getKernelSize() instead.
+	 * @deprecated Use blurPass.kernelSize instead.
 	 */
 
 	get kernelSize() {
@@ -271,7 +271,7 @@ export class BloomEffect extends Effect {
 
 	/**
 	 * @type {Number}
-	 * @deprecated Use getLuminanceMaterial().getThreshold() and ...getSmoothingFactor() instead.
+	 * @deprecated Use luminanceMaterial instead.
 	 */
 
 	get distinction() {
@@ -291,7 +291,6 @@ export class BloomEffect extends Effect {
 	 * The bloom intensity.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getIntensity() instead.
 	 */
 
 	get intensity() {
@@ -309,6 +308,7 @@ export class BloomEffect extends Effect {
 	/**
 	 * The bloom intensity.
 	 *
+	 * @deprecated Use intensity instead.
 	 * @return {Number} The intensity.
 	 */
 
@@ -321,6 +321,7 @@ export class BloomEffect extends Effect {
 	/**
 	 * Sets the bloom intensity.
 	 *
+	 * @deprecated Use intensity instead.
 	 * @param {Number} value - The intensity.
 	 */
 
@@ -334,7 +335,7 @@ export class BloomEffect extends Effect {
 	 * Returns the current resolution scale.
 	 *
 	 * @return {Number} The resolution scale.
-	 * @deprecated Use getResolution().setPreferredWidth() or getResolution().setPreferredHeight() instead.
+	 * @deprecated Use resolution instead.
 	 */
 
 	getResolutionScale() {
@@ -347,7 +348,7 @@ export class BloomEffect extends Effect {
 	 * Sets the resolution scale.
 	 *
 	 * @param {Number} scale - The new resolution scale.
-	 * @deprecated Use getResolution().setPreferredWidth() or getResolution().setPreferredHeight() instead.
+	 * @deprecated Use resolution instead.
 	 */
 
 	setResolutionScale(scale) {

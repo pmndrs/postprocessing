@@ -175,7 +175,6 @@ export class GodRaysEffect extends Effect {
 		 * This pass can be disabled to improve performance.
 		 *
 		 * @type {KawaseBlurPass}
-		 * @deprectaed Use getBlurPass() instead.
 		 */
 
 		this.blurPass = new KawaseBlurPass({ resolutionScale, width, height, kernelSize });
@@ -215,6 +214,7 @@ export class GodRaysEffect extends Effect {
 	/**
 	 * Returns the blur pass that reduces aliasing artifacts and makes the light softer.
 	 *
+	 * @deprecated Use blurPass instead.
 	 * @return {KawaseBlurPass} The blur pass.
 	 */
 
@@ -228,7 +228,6 @@ export class GodRaysEffect extends Effect {
 	 * A texture that contains the intermediate result of this effect.
 	 *
 	 * @type {Texture}
-	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
@@ -240,6 +239,7 @@ export class GodRaysEffect extends Effect {
 	/**
 	 * Returns the god rays texture.
 	 *
+	 * @deprecated Use texture instead.
 	 * @return {Texture} The texture.
 	 */
 
@@ -253,7 +253,6 @@ export class GodRaysEffect extends Effect {
 	 * The internal god rays material.
 	 *
 	 * @type {GodRaysMaterial}
-	 * @deprecated Use getGodRaysMaterial() instead.
 	 */
 
 	get godRaysMaterial() {
@@ -265,6 +264,7 @@ export class GodRaysEffect extends Effect {
 	/**
 	 * Returns the god rays material.
 	 *
+	 * @deprecated Use godRaysMaterial instead.
 	 * @return {GodRaysMaterial} The material.
 	 */
 
@@ -278,7 +278,6 @@ export class GodRaysEffect extends Effect {
 	 * The resolution of this effect.
 	 *
 	 * @type {Resizer}
-	 * @deprecated Use getResolution() instead.
 	 */
 
 	get resolution() {
@@ -290,6 +289,7 @@ export class GodRaysEffect extends Effect {
 	/**
 	 * Returns the resolution of this effect.
 	 *
+	 * @deprecated Use resolution instead.
 	 * @return {GodRaysMaterial} The material.
 	 */
 
@@ -303,7 +303,7 @@ export class GodRaysEffect extends Effect {
 	 * The current width of the internal render targets.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getResolution().getWidth() instead.
+	 * @deprecated Use resolution.width instead.
 	 */
 
 	get width() {
@@ -322,7 +322,7 @@ export class GodRaysEffect extends Effect {
 	 * The current height of the internal render targets.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getResolution().getHeight() instead.
+	 * @deprecated Use resolution.height instead.
 	 */
 
 	get height() {
@@ -330,13 +330,6 @@ export class GodRaysEffect extends Effect {
 		return this.resolution.height;
 
 	}
-
-	/**
-	 * Sets the render height.
-	 *
-	 * @type {Number}
-	 * @deprecated Use getResolution().setPreferredHeight() instead.
-	 */
 
 	set height(value) {
 
@@ -348,7 +341,7 @@ export class GodRaysEffect extends Effect {
 	 * Indicates whether dithering is enabled.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use EffectPass.getFullscreenMaterial().dithering instead.
+	 * @deprecated
 	 */
 
 	get dithering() {
@@ -369,7 +362,7 @@ export class GodRaysEffect extends Effect {
 	 * Indicates whether the god rays should be blurred to reduce artifacts.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use getBlurPass().isEnabled() instead.
+	 * @deprecated Use blurPass.enabled instead.
 	 */
 
 	get blur() {
@@ -388,7 +381,7 @@ export class GodRaysEffect extends Effect {
 	 * The blur kernel size.
 	 *
 	 * @type {KernelSize}
-	 * @deprecated Use getBlurPass().getKernelSize() instead.
+	 * @deprecated Use blurPass.kernelSize instead.
 	 */
 
 	get kernelSize() {
@@ -407,7 +400,7 @@ export class GodRaysEffect extends Effect {
 	 * Returns the current resolution scale.
 	 *
 	 * @return {Number} The resolution scale.
-	 * @deprecated Use getResolution().setPreferredWidth() or getResolution().setPreferredHeight() instead.
+	 * @deprecated Use resolution instead.
 	 */
 
 	getResolutionScale() {
@@ -420,7 +413,7 @@ export class GodRaysEffect extends Effect {
 	 * Sets the resolution scale.
 	 *
 	 * @param {Number} scale - The new resolution scale.
-	 * @deprecated Use getResolution().setPreferredWidth() or getResolution().setPreferredHeight() instead.
+	 * @deprecated Use resolution instead.
 	 */
 
 	setResolutionScale(scale) {
@@ -433,7 +426,7 @@ export class GodRaysEffect extends Effect {
 	 * The number of samples per pixel.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getGodRaysMaterial().getSamples() instead.
+	 * @deprecated Use godRaysMaterial.samples instead.
 	 */
 
 	get samples() {
@@ -446,7 +439,7 @@ export class GodRaysEffect extends Effect {
 	 * A higher sample count improves quality at the cost of performance.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getGodRaysMaterial().setSamples() instead.
+	 * @deprecated Use godRaysMaterial.samples instead.
 	 */
 
 	set samples(value) {

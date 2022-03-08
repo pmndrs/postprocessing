@@ -128,30 +128,23 @@ export class ToneMappingEffect extends Effect {
 	}
 
 	/**
-	 * Returns the current tone mapping mode.
+	 * The tone mapping mode.
 	 *
-	 * @return {ToneMappingMode} The tone mapping mode.
+	 * @type {ToneMappingMode}
 	 */
 
-	getMode() {
+	get mode() {
 
-		return this.mode;
+		return Number(this.defines.get("TONE_MAPPING_MODE"));
 
 	}
 
-	/**
-	 * Sets the tone mapping mode.
-	 *
-	 * @param {ToneMappingMode} value - The tone mapping mode.
-	 */
+	set mode(value) {
 
-	setMode(value) {
-
-		const currentMode = this.mode;
-
-		if(currentMode !== value) {
+		if(this.mode !== value) {
 
 			this.defines.clear();
+			this.defines.set("TONE_MAPPING_MODE", value.toFixed(0));
 
 			// Use one of the built-in tone mapping operators.
 			switch(value) {
@@ -174,19 +167,7 @@ export class ToneMappingEffect extends Effect {
 
 			}
 
-			// Use a custom Reinhard operator.
-			if(value === ToneMappingMode.REINHARD2) {
-
-				this.defines.set("REINHARD2", "1");
-
-			} else if(value === ToneMappingMode.REINHARD2_ADAPTIVE) {
-
-				this.defines.set("REINHARD2", "1");
-				this.defines.set("ADAPTIVE", "1");
-
-			}
-
-			this.mode = value;
+			this.adaptiveLuminancePass.enabled = (value === ToneMappingMode.REINHARD2_ADAPTIVE);
 			this.setChanged();
 
 		}
@@ -194,46 +175,83 @@ export class ToneMappingEffect extends Effect {
 	}
 
 	/**
-	 * Returns the adaptive luminance material.
+	 * Returns the current tone mapping mode.
 	 *
-	 * @return {AdaptiveLuminanceMaterial} The material.
+	 * @deprecated Use mode instead.
+	 * @return {ToneMappingMode} The tone mapping mode.
 	 */
 
-	getAdaptiveLuminanceMaterial() {
+	getMode() {
+
+		return this.mode;
+
+	}
+
+	/**
+	 * Sets the tone mapping mode.
+	 *
+	 * @deprecated Use mode instead.
+	 * @param {ToneMappingMode} value - The tone mapping mode.
+	 */
+
+	setMode(value) {
+
+		this.mode = value;
+
+	}
+
+	/**
+	 * The adaptive luminance material.
+	 *
+	 * @type {AdaptiveLuminanceMaterial}
+	 */
+
+	get adaptiveLuminanceMaterial() {
 
 		return this.adaptiveLuminancePass.fullscreenMaterial;
 
 	}
 
 	/**
-	 * The resolution of the render targets.
+	 * Returns the adaptive luminance material.
 	 *
-	 * @type {Number}
-	 * @deprecated Use getResolution() instead.
+	 * @deprecated Use adaptiveLuminanceMaterial instead.
+	 * @return {AdaptiveLuminanceMaterial} The material.
 	 */
 
-	get resolution() {
+	getAdaptiveLuminanceMaterial() {
 
-		return this.getResolution();
+		return this.adaptiveLuminanceMaterial;
 
 	}
 
 	/**
-	 * Sets the resolution of the luminance texture. Must be a power of two.
+	 * The resolution of the luminance texture. Must be a power of two.
 	 *
 	 * @type {Number}
-	 * @deprecated Use setResolution() instead.
 	 */
+
+	get resolution() {
+
+		return this.luminancePass.getResolution().getWidth();
+
+	}
 
 	set resolution(value) {
 
-		this.setResolution(value);
+		// Round the given value to the next power of two.
+		const exponent = Math.max(0, Math.ceil(Math.log2(value)));
+		const size = Math.pow(2, exponent);
+
+		this.luminancePass.resolution.setPreferredSize(size, size);
+		this.adaptiveLuminanceMaterial.mipLevel1x1 = exponent;
 
 	}
 
 	/**
 	 * Returns the resolution of the luminance texture.
 	 *
+	 * @deprecated Use resolution instead.
 	 * @return {Number} The resolution.
 	 */
 
@@ -246,6 +264,7 @@ export class ToneMappingEffect extends Effect {
 	/**
 	 * Sets the resolution of the luminance texture. Must be a power of two.
 	 *
+	 * @deprecated Use resolution instead.
 	 * @param {Number} value - The resolution.
 	 */
 
@@ -264,7 +283,7 @@ export class ToneMappingEffect extends Effect {
 	 * Indicates whether this pass uses adaptive luminance.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use getMode() instead.
+	 * @deprecated Use mode instead.
 	 */
 
 	get adaptive() {
@@ -283,7 +302,7 @@ export class ToneMappingEffect extends Effect {
 	 * The luminance adaptation rate.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getAdaptiveLuminanceMaterial().getAdaptationRate() instead.
+	 * @deprecated Use adaptiveLuminanceMaterial.adaptationRate instead.
 	 */
 
 	get adaptationRate() {

@@ -36,7 +36,6 @@ export class ChromaticAberrationEffect extends Effect {
 	 * The color offset.
 	 *
 	 * @type {Vector2}
-	 * @deprecated Use getOffset() instead.
 	 */
 
 	get offset() {
@@ -54,6 +53,7 @@ export class ChromaticAberrationEffect extends Effect {
 	/**
 	 * Returns the color offset vector.
 	 *
+	 * @deprecated Use offset instead.
 	 * @return {Vector2} The offset.
 	 */
 
@@ -66,6 +66,7 @@ export class ChromaticAberrationEffect extends Effect {
 	/**
 	 * Sets the color offset vector.
 	 *
+	 * @deprecated Use offset instead.
 	 * @param {Vector2} value - The offset.
 	 */
 

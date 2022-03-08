@@ -102,7 +102,6 @@ export class SelectiveBloomEffect extends BloomEffect {
 		 * The default layer of this selection is 11.
 		 *
 		 * @type {Selection}
-		 * @deprecated Use getSelection() instead.
 		 */
 
 		this.selection = new Selection();
@@ -113,6 +112,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 	/**
 	 * Returns the selection.
 	 *
+	 * @deprecated Use selection instead.
 	 * @return {Selection} The selection.
 	 */
 
@@ -123,13 +123,13 @@ export class SelectiveBloomEffect extends BloomEffect {
 	}
 
 	/**
-	 * Returns the depth mask material.
+	 * The depth mask material.
 	 *
-	 * @return {DepthMaskMaterial} The material.
+	 * @type {DepthMaskMaterial}
 	 * @private
 	 */
 
-	getDepthMaskMaterial() {
+	get depthMaskMaterial() {
 
 		return this.depthMaskPass.fullscreenMaterial;
 
@@ -139,7 +139,6 @@ export class SelectiveBloomEffect extends BloomEffect {
 	 * Indicates whether the selection should be considered inverted.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use isInverted() instead.
 	 */
 
 	get inverted() {
@@ -147,13 +146,6 @@ export class SelectiveBloomEffect extends BloomEffect {
 		return (this.depthMaskMaterial.depthMode === NotEqualDepth);
 
 	}
-
-	/**
-	 * Inverts the selection.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Use setInverted() instead.
-	 */
 
 	set inverted(value) {
 
@@ -164,6 +156,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 	/**
 	 * Indicates whether the mask is inverted.
 	 *
+	 * @deprecated Use inverted instead.
 	 * @return {Boolean} Whether the mask is inverted.
 	 */
 
@@ -176,6 +169,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 	/**
 	 * Enables or disable mask inversion.
 	 *
+	 * @deprecated Use inverted instead.
 	 * @param {Boolean} value - Whether the mask should be inverted.
 	 */
 
@@ -189,7 +183,6 @@ export class SelectiveBloomEffect extends BloomEffect {
 	 * Indicates whether the background colors will be ignored.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use isBackgroundDisabled() instead.
 	 */
 
 	get ignoreBackground() {
@@ -197,11 +190,6 @@ export class SelectiveBloomEffect extends BloomEffect {
 		return (this.depthMaskMaterial.maxDepthStrategy === DepthTestStrategy.DISCARD_MAX_DEPTH);
 
 	}
-
-	/**
-	 * @type {Boolean}
-	 * @deprecated Use setBackgroundDisabled() instead.
-	 */
 
 	set ignoreBackground(value) {
 
@@ -214,6 +202,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 	/**
 	 * Indicates whether the background is disabled.
 	 *
+	 * @deprecated Use ignoreBackground instead.
 	 * @return {Boolean} Whether the background is disabled.
 	 */
 
@@ -226,6 +215,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 	/**
 	 * Enables or disables the background.
 	 *
+	 * @deprecated Use ignoreBackground instead.
 	 * @param {Boolean} value - Whether the background should be disabled.
 	 */
 

@@ -34,7 +34,6 @@ export class DepthEffect extends Effect {
 	 * Indicates whether depth should be inverted.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use isInverted() instead.
 	 */
 
 	get inverted() {
@@ -66,6 +65,7 @@ export class DepthEffect extends Effect {
 	/**
 	 * Indicates whether the rendered depth is inverted.
 	 *
+	 * @deprecated Use inverted instead.
 	 * @return {Boolean} Whether the rendered depth is inverted.
 	 */
 
@@ -78,6 +78,7 @@ export class DepthEffect extends Effect {
 	/**
 	 * Enables or disables depth inversion.
 	 *
+	 * @deprecated Use inverted instead.
 	 * @param {Boolean} value - Whether depth should be inverted.
 	 */
 

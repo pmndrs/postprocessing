@@ -216,7 +216,6 @@ export class DepthOfFieldEffect extends Effect {
 		 * A target position that should be kept in focus. Set to `null` to disable auto focus.
 		 *
 		 * @type {Vector3}
-		 * @deprecated Use getTarget() and setTarget() instead.
 		 */
 
 		this.target = null;
@@ -229,7 +228,6 @@ export class DepthOfFieldEffect extends Effect {
 	 * The circle of confusion material.
 	 *
 	 * @type {CircleOfConfusionMaterial}
-	 * @deprecated Use getCircleOfConfusionMaterial() instead.
 	 */
 
 	get circleOfConfusionMaterial() {
@@ -241,6 +239,7 @@ export class DepthOfFieldEffect extends Effect {
 	/**
 	 * Returns the circle of confusion material.
 	 *
+	 * @deprecated Use circleOfConfusionMaterial instead.
 	 * @return {CircleOfConfusionMaterial} The material.
 	 */
 
@@ -253,6 +252,7 @@ export class DepthOfFieldEffect extends Effect {
 	/**
 	 * Returns the pass that blurs the foreground CoC buffer to soften edges.
 	 *
+	 * @deprecated Use blurPass instead.
 	 * @return {KawaseBlurPass} The blur pass.
 	 */
 
@@ -266,7 +266,6 @@ export class DepthOfFieldEffect extends Effect {
 	 * The resolution of this effect.
 	 *
 	 * @type {Resolution}
-	 * @deprecated Use getResolution() instead.
 	 */
 
 	get resolution() {
@@ -278,6 +277,7 @@ export class DepthOfFieldEffect extends Effect {
 	/**
 	 * Returns the resolution settings.
 	 *
+	 * @deprecated Use resolution instead.
 	 * @return {Resolution} The resolution.
 	 */
 
@@ -291,7 +291,6 @@ export class DepthOfFieldEffect extends Effect {
 	 * The current bokeh scale.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getBokehScale() instead.
 	 */
 
 	get bokehScale() {
@@ -323,6 +322,7 @@ export class DepthOfFieldEffect extends Effect {
 	/**
 	 * Returns the current bokeh scale.
 	 *
+	 * @deprecated Use bokehScale instead.
 	 * @return {Number} The scale.
 	 */
 
@@ -335,6 +335,7 @@ export class DepthOfFieldEffect extends Effect {
 	/**
 	 * Sets the bokeh scale.
 	 *
+	 * @deprecated Use bokehScale instead.
 	 * @param {Number} value - The scale.
 	 */
 
@@ -347,6 +348,7 @@ export class DepthOfFieldEffect extends Effect {
 	/**
 	 * Returns the current auto focus target.
 	 *
+	 * @deprecated Use target instead.
 	 * @return {Vector3} The target.
 	 */
 
@@ -359,6 +361,7 @@ export class DepthOfFieldEffect extends Effect {
 	/**
 	 * Sets the auto focus target.
 	 *
+	 * @deprecated Use target instead.
 	 * @param {Vector3} value - The target.
 	 */
 

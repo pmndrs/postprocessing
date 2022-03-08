@@ -132,7 +132,6 @@ export class SSAOEffect extends Effect {
 		 * The resolution.
 		 *
 		 * @type {Resolution}
-		 * @deprecated Use getResolution() instead.
 		 */
 
 		const resolution = this.resolution = new Resolution(this, width, height, resolutionScale);
@@ -198,6 +197,7 @@ export class SSAOEffect extends Effect {
 	/**
 	 * Returns the resolution settings.
 	 *
+	 * @deprecated Use resolution instead.
 	 * @return {Resolution} The resolution.
 	 */
 
@@ -211,7 +211,6 @@ export class SSAOEffect extends Effect {
 	 * The SSAO material.
 	 *
 	 * @type {SSAOMaterial}
-	 * @deprecated Use getSSAOMaterial() instead.
 	 */
 
 	get ssaoMaterial() {
@@ -223,6 +222,7 @@ export class SSAOEffect extends Effect {
 	/**
 	 * Returns the SSAO material.
 	 *
+	 * @deprecated Use ssaoMaterial instead.
 	 * @return {SSAOMaterial} The material.
 	 */
 
@@ -236,7 +236,7 @@ export class SSAOEffect extends Effect {
 	 * The amount of occlusion samples per pixel.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getSSAOMaterial().getSamples() instead.
+	 * @deprecated Use ssaoMaterial.samples instead.
 	 */
 
 	get samples() {
@@ -255,7 +255,7 @@ export class SSAOEffect extends Effect {
 	 * The amount of spiral turns in the occlusion sampling pattern.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getSSAOMaterial().getRings() instead.
+	 * @deprecated Use ssaoMaterial.rings instead.
 	 */
 
 	get rings() {
@@ -274,7 +274,7 @@ export class SSAOEffect extends Effect {
 	 * The occlusion sampling radius.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getSSAOMaterial().getRadius() instead.
+	 * @deprecated Use ssaoMaterial.radius instead.
 	 */
 
 	get radius() {
@@ -293,47 +293,15 @@ export class SSAOEffect extends Effect {
 	 * Indicates whether depth-aware upsampling is enabled.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use isDepthAwareUpsamplingEnabled() instead.
 	 */
 
 	get depthAwareUpsampling() {
-
-		return this.isDepthAwareUpsamplingEnabled();
-
-	}
-
-	/**
-	 * Enables or disables depth-aware upsampling.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Use setDepthAwareUpsamplingEnabled() instead.
-	 */
-
-	set depthAwareUpsampling(value) {
-
-		this.setDepthAwareUpsamplingEnabled(value);
-
-	}
-
-	/**
-	 * Indicates whether depth-aware upsampling is enabled.
-	 *
-	 * @return {Boolean} Whether depth-aware upsampling is enabled.
-	 */
-
-	isDepthAwareUpsamplingEnabled() {
 
 		return this.defines.has("DEPTH_AWARE_UPSAMPLING");
 
 	}
 
-	/**
-	 * Enables or disables depth-aware upsampling.
-	 *
-	 * @param {Boolean} value - Whether depth-aware upsampling should be enabled.
-	 */
-
-	setDepthAwareUpsamplingEnabled(value) {
+	set depthAwareUpsampling(value) {
 
 		if(this.depthAwareUpsampling !== value) {
 
@@ -354,78 +322,63 @@ export class SSAOEffect extends Effect {
 	}
 
 	/**
+	 * Indicates whether depth-aware upsampling is enabled.
+	 *
+	 * @deprecated Use depthAwareUpsampling instead.
+	 * @return {Boolean} Whether depth-aware upsampling is enabled.
+	 */
+
+	isDepthAwareUpsamplingEnabled() {
+
+		return this.depthAwareUpsampling;
+
+	}
+
+	/**
+	 * Enables or disables depth-aware upsampling.
+	 *
+	 * @deprecated Use depthAwareUpsampling instead.
+	 * @param {Boolean} value - Whether depth-aware upsampling should be enabled.
+	 */
+
+	setDepthAwareUpsamplingEnabled(value) {
+
+		this.depthAwareUpsampling = value;
+
+	}
+
+	/**
 	 * Indicates whether distance-based radius scaling is enabled.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use getSSAOMaterial().isDistanceScalingEnabled() instead.
+	 * @deprecated Use ssaoMaterial.distanceScaling instead.
 	 */
 
 	get distanceScaling() {
 
-		return this.getSSAOMaterial().isDistanceScalingEnabled();
+		return this.ssaoMaterial.distanceScaling;
 
 	}
-
-	/**
-	 * Enables or disables distance-based radius scaling.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Use getSSAOMaterial().setDistanceScalingEnabled() instead.
-	 */
 
 	set distanceScaling(value) {
 
-		this.getSSAOMaterial().setDistanceScalingEnabled(value);
+		this.ssaoMaterial.distanceScaling = value;
 
 	}
 
 	/**
-	 * The color of the ambient occlusion.
+	 * The color of the ambient occlusion. Set to `null` to disable.
 	 *
 	 * @type {Color}
-	 * @deprecated Use getColor() instead.
 	 */
 
 	get color() {
-
-		return this.getColor();
-
-	}
-
-	/**
-	 * Sets the color of the ambient occlusion.
-	 *
-	 * Set to `null` to disable colorization.
-	 *
-	 * @type {Color}
-	 * @deprecated Use setColor() instead.
-	 */
-
-	set color(value) {
-
-		this.setColor(value);
-
-	}
-
-	/**
-	 * Returns the color of the ambient occlusion.
-	 *
-	 * @return {Color} The color.
-	 */
-
-	getColor() {
 
 		return this.uniforms.get("color").value;
 
 	}
 
-	/**
-	 * Sets the color of the ambient occlusion. Set to `null` to disable colorization.
-	 *
-	 * @param {Color} value - The color.
-	 */
-
-	setColor(value) {
+	set color(value) {
 
 		const uniforms = this.uniforms;
 		const defines = this.defines;
@@ -455,9 +408,35 @@ export class SSAOEffect extends Effect {
 	}
 
 	/**
+	 * Returns the color of the ambient occlusion.
+	 *
+	 * @deprecated Use color instead.
+	 * @return {Color} The color.
+	 */
+
+	getColor() {
+
+		return this.color;
+
+	}
+
+	/**
+	 * Sets the color of the ambient occlusion. Set to `null` to disable colorization.
+	 *
+	 * @deprecated Use color instead.
+	 * @param {Color} value - The color.
+	 */
+
+	setColor(value) {
+
+		this.color = value;
+
+	}
+
+	/**
 	 * Sets the occlusion distance cutoff.
 	 *
-	 * @deprecated Use getSSAOMaterial().setDistanceCutoff() instead.
+	 * @deprecated Use ssaoMaterial instead.
 	 * @param {Number} threshold - The distance threshold. Range [0.0, 1.0].
 	 * @param {Number} falloff - The falloff. Range [0.0, 1.0].
 	 */

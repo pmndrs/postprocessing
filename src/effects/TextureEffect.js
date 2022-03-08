@@ -45,47 +45,15 @@ export class TextureEffect extends Effect {
 	 * The texture.
 	 *
 	 * @type {Texture}
-	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
-
-		return this.getTexture();
-
-	}
-
-	/**
-	 * Sets the texture.
-	 *
-	 * @type {Texture}
-	 * @deprecated Use setTexture() instead.
-	 */
-
-	set texture(value) {
-
-		this.setTexture(value);
-
-	}
-
-	/**
-	 * Returns the texture.
-	 *
-	 * @return {Texture} The texture.
-	 */
-
-	getTexture() {
 
 		return this.uniforms.get("map").value;
 
 	}
 
-	/**
-	 * Sets the texture.
-	 *
-	 * @param {Texture} value - The texture.
-	 */
-
-	setTexture(value) {
+	set texture(value) {
 
 		const prevTexture = this.texture;
 		const uniforms = this.uniforms;
@@ -137,12 +105,36 @@ export class TextureEffect extends Effect {
 	}
 
 	/**
+	 * Returns the texture.
+	 *
+	 * @deprecated Use texture instead.
+	 * @return {Texture} The texture.
+	 */
+
+	getTexture() {
+
+		return this.texture;
+
+	}
+
+	/**
+	 * Sets the texture.
+	 *
+	 * @deprecated Use texture instead.
+	 * @param {Texture} value - The texture.
+	 */
+
+	setTexture(value) {
+
+		this.texture = value;
+
+	}
+
+	/**
 	 * Indicates whether aspect correction is enabled.
 	 *
-	 * If enabled, the texture can be scaled using the `scale` uniform.
-	 *
 	 * @type {Number}
-	 * @deprecated Adjust the texture's offset, repeat and center instead.
+	 * @deprecated Adjust the texture's offset, repeat, rotation and center instead.
 	 */
 
 	get aspectCorrection() {
@@ -150,13 +142,6 @@ export class TextureEffect extends Effect {
 		return this.defines.has("ASPECT_CORRECTION");
 
 	}
-
-	/**
-	 * Enables or disables aspect correction.
-	 *
-	 * @type {Number}
-	 * @deprecated Adjust the texture's offset, repeat and center instead.
-	 */
 
 	set aspectCorrection(value) {
 

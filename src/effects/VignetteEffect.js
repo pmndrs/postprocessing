@@ -56,52 +56,20 @@ export class VignetteEffect extends Effect {
 	}
 
 	/**
-	 * Indicates whether Eskil's vignette technique is enabled.
+	 * The Vignette technique.
 	 *
-	 * @type {Boolean}
-	 * @deprecated Use getTechnique() instead.
+	 * @type {VignetteTechnique}
 	 */
 
-	get eskil() {
-
-		return (this.getTechnique() === VignetteTechnique.ESKIL);
-
-	}
-
-	/**
-	 * Indicates whether Eskil's Vignette technique is enabled.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Use setTechnique(VignetteTechnique.ESKIL) instead.
-	 */
-
-	set eskil(value) {
-
-		this.setTechnique(value ? VignetteTechnique.ESKIL : VignetteTechnique.DEFAULT);
-
-	}
-
-	/**
-	 * Returns the Vignette technique.
-	 *
-	 * @return {VignetteTechnique} The technique.
-	 */
-
-	getTechnique() {
+	get technique() {
 
 		return Number(this.defines.get("VIGNETTE_TECHNIQUE"));
 
 	}
 
-	/**
-	 * Sets the Vignette technique.
-	 *
-	 * @param {VignetteTechnique} value - The technique.
-	 */
+	set technique(value) {
 
-	setTechnique(value) {
-
-		if(this.getTechnique() !== value) {
+		if(this.technique !== value) {
 
 			this.defines.set("VIGNETTE_TECHNIQUE", value.toFixed(0));
 			this.setChanged();
@@ -111,50 +79,142 @@ export class VignetteEffect extends Effect {
 	}
 
 	/**
-	 * Returns the Vignette offset.
+	 * Indicates whether Eskil's Vignette technique is enabled.
 	 *
-	 * @return {Number} The offset.
+	 * @type {Boolean}
+	 * @deprecated Use technique instead.
 	 */
 
-	getOffset() {
+	get eskil() {
+
+		return (this.technique === VignetteTechnique.ESKIL);
+
+	}
+
+	/**
+	 * Indicates whether Eskil's Vignette technique is enabled.
+	 *
+	 * @type {Boolean}
+	 * @deprecated Use technique instead.
+	 */
+
+	set eskil(value) {
+
+		this.technique = value ? VignetteTechnique.ESKIL : VignetteTechnique.DEFAULT;
+
+	}
+
+	/**
+	 * Returns the Vignette technique.
+	 *
+	 * @deprecated Use technique instead.
+	 * @return {VignetteTechnique} The technique.
+	 */
+
+	getTechnique() {
+
+		return this.technique;
+
+	}
+
+	/**
+	 * Sets the Vignette technique.
+	 *
+	 * @deprecated Use technique instead.
+	 * @param {VignetteTechnique} value - The technique.
+	 */
+
+	setTechnique(value) {
+
+		this.technique = value;
+
+	}
+
+	/**
+	 * The Vignette offset.
+	 *
+	 * @type {Number}
+	 */
+
+	get offset() {
 
 		return this.uniforms.get("offset").value;
 
 	}
 
-	/**
-	 * Sets the Vignette offset.
-	 *
-	 * @param {Number} value - The offset.
-	 */
-
-	setOffset(value) {
+	set offset(value) {
 
 		this.uniforms.get("offset").value = value;
 
 	}
 
 	/**
+	 * Returns the Vignette offset.
+	 *
+	 * @deprecated Use offset instead.
+	 * @return {Number} The offset.
+	 */
+
+	getOffset() {
+
+		return this.offset;
+
+	}
+
+	/**
+	 * Sets the Vignette offset.
+	 *
+	 * @deprecated Use offset instead.
+	 * @param {Number} value - The offset.
+	 */
+
+	setOffset(value) {
+
+		this.offset = value;
+
+	}
+
+	/**
+	 * The Vignette darkness.
+	 *
+	 * @type {Number}
+	 */
+
+	get darkness() {
+
+		return this.uniforms.get("darkness").value;
+
+	}
+
+	set darkness(value) {
+
+		this.uniforms.get("darkness").value = value;
+
+	}
+
+	/**
 	 * Returns the Vignette darkness.
 	 *
+	 * @deprecated Use darkness instead.
 	 * @return {Number} The darkness.
 	 */
 
 	getDarkness() {
 
-		return this.uniforms.get("darkness").value;
+		return this.darkness;
 
 	}
 
 	/**
 	 * Sets the Vignette darkness.
 	 *
+	 * @deprecated Use darkness instead.
 	 * @param {Number} value - The darkness.
 	 */
 
 	setDarkness(value) {
 
-		this.uniforms.get("darkness").value = value;
+		this.darkness = value;
 
 	}
 

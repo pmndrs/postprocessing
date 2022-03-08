@@ -593,8 +593,48 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The occlusion distance threshold.
+	 *
+	 * @type {Number}
+	 */
+
+	get distanceThreshold() {
+
+		return this.uniforms.distanceCutoff.value.x;
+
+	}
+
+	set distanceThreshold(value) {
+
+		this.uniforms.distanceCutoff.value.set(
+			Math.min(Math.max(value, 0.0), 1.0),
+			Math.min(Math.max(value + this.distanceFalloff, 0.0), 1.0)
+		);
+
+	}
+
+	/**
+	 * The occlusion distance falloff.
+	 *
+	 * @type {Number}
+	 */
+
+	get distanceFalloff() {
+
+		return this.uniforms.distanceCutoff.value.y - this.distanceThreshold;
+
+	}
+
+	set distanceFalloff(value) {
+
+		this.uniforms.distanceCutoff.value.y = Math.min(Math.max(this.distanceThreshold + value, 0.0), 1.0);
+
+	}
+
+	/**
 	 * Sets the occlusion distance cutoff.
 	 *
+	 * @deprecated Use distanceThreshold and distanceFalloff instead.
 	 * @param {Number} threshold - The distance threshold. Range [0.0, 1.0].
 	 * @param {Number} falloff - The falloff. Range [0.0, 1.0].
 	 */
@@ -609,8 +649,48 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The occlusion proximity threshold.
+	 *
+	 * @type {Number}
+	 */
+
+	get proximityThreshold() {
+
+		return this.uniforms.proximityCutoff.value.x;
+
+	}
+
+	set proximityThreshold(value) {
+
+		this.uniforms.proximityCutoff.value.set(
+			Math.min(Math.max(value, 0.0), 1.0),
+			Math.min(Math.max(value + this.proximityFalloff, 0.0), 1.0)
+		);
+
+	}
+
+	/**
+	 * The occlusion proximity falloff.
+	 *
+	 * @type {Number}
+	 */
+
+	get proximityFalloff() {
+
+		return this.uniforms.proximityCutoff.value.y - this.proximityThreshold;
+
+	}
+
+	set proximityFalloff(value) {
+
+		this.uniforms.proximityCutoff.value.y = Math.min(Math.max(this.proximityThreshold + value, 0.0), 1.0);
+
+	}
+
+	/**
 	 * Sets the occlusion proximity cutoff.
 	 *
+	 * @deprecated Use proximityThreshold and proximityFalloff instead.
 	 * @param {Number} threshold - The range threshold. Range [0.0, 1.0].
 	 * @param {Number} falloff - The falloff. Range [0.0, 1.0].
 	 */

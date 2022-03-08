@@ -28,7 +28,7 @@ WIP
 
 ## Output Encoding
 
-It's recommended to follow a [linear workflow](https://docs.unity3d.com/Manual/LinearRendering-LinearOrGammaWorkflow.html) for color management and `postprocessing` supports this automatically. Simply set `WebGLRenderer.outputEncoding` to `sRGBEncoding` and `postprocessing` will follow suit. Built-in passes automatically encode colors when they render to screen and internal render operations are always performed in linear color space.
+New applications should follow a [linear workflow](https://docs.unity3d.com/Manual/LinearRendering-LinearOrGammaWorkflow.html) for color management and `postprocessing` supports this automatically. Simply set `WebGLRenderer.outputEncoding` to `sRGBEncoding` and `postprocessing` will follow suit. Built-in passes automatically encode colors when they render to screen and internal render operations are always performed in linear color space.
 
 ## Performance
 

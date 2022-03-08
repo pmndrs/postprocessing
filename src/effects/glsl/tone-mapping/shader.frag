@@ -4,7 +4,7 @@ uniform lowp sampler2D luminanceBuffer;
 uniform float whitePoint;
 uniform float middleGrey;
 
-#ifndef ADAPTIVE
+#if TONE_MAPPING_MODE != 2
 
 	uniform float averageLuminance;
 
@@ -17,7 +17,7 @@ vec3 Reinhard2ToneMapping(vec3 color) {
 	// Calculate the luminance of the current pixel.
 	float l = linearToRelativeLuminance(color);
 
-	#ifdef ADAPTIVE
+	#if TONE_MAPPING_MODE == 2
 
 		// Get the average luminance from the adaptive 1x1 buffer.
 		float lumAvg = unpackRGBAToFloat(texture2D(luminanceBuffer, vec2(0.5)));
@@ -38,7 +38,7 @@ vec3 Reinhard2ToneMapping(vec3 color) {
 
 void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
 
-	#ifdef REINHARD2
+	#if TONE_MAPPING_MODE == 1
 
 		outputColor = vec4(Reinhard2ToneMapping(inputColor.rgb), inputColor.a);
 

@@ -68,15 +68,7 @@ export class DepthMaskMaterial extends ShaderMaterial {
 		/** @ignore */
 		this.toneMapped = false;
 
-		/**
-		 * The current depth mode.
-		 *
-		 * @type {DepthModes}
-		 * @private
-		 */
-
 		this.depthMode = LessDepth;
-		this.setDepthMode(LessDepth);
 
 	}
 
@@ -270,30 +262,24 @@ export class DepthMaskMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Returns the current depth mode.
+	 * The depth mode.
 	 *
-	 * @return {DepthModes} The depth mode. Default is `LessDepth`.
+	 * @see https://threejs.org/docs/#api/en/constants/Materials
+	 * @type {DepthModes}
 	 */
 
-	getDepthMode() {
+	get depthMode() {
 
-		return this.depthMode;
+		return Number(this.defines.DEPTH_MODE);
 
 	}
 
-	/**
-	 * Sets the depth mode.
-	 *
-	 * @see https://threejs.org/docs/#api/en/constants/Materials
-	 * @param {DepthModes} mode - The depth mode.
-	 */
-
-	setDepthMode(mode) {
+	set depthMode(value) {
 
 		// If the depth test fails, the texel will be discarded.
 		let depthTest;
 
-		switch(mode) {
+		switch(value) {
 
 			case NeverDepth:
 				depthTest = "false";
@@ -330,9 +316,35 @@ export class DepthMaskMaterial extends ShaderMaterial {
 
 		}
 
-		this.depthMode = mode;
+		this.defines.DEPTH_MODE = value.toFixed(0);
 		this.defines["depthTest(d0, d1)"] = depthTest;
 		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Returns the current depth mode.
+	 *
+	 * @deprecated Use depthMode instead.
+	 * @return {DepthModes} The depth mode. Default is `LessDepth`.
+	 */
+
+	getDepthMode() {
+
+		return this.depthMode;
+
+	}
+
+	/**
+	 * Sets the depth mode.
+	 *
+	 * @deprecated Use depthMode instead.
+	 * @param {DepthModes} mode - The depth mode.
+	 */
+
+	setDepthMode(mode) {
+
+		this.depthMode = mode;
 
 	}
 

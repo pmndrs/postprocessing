@@ -42,13 +42,45 @@ export class PixelationEffect extends Effect {
 		 * @private
 		 */
 
+		this.d = 0;
 		this.granularity = granularity;
+
+	}
+
+	/**
+	 * The pixel granularity.
+	 *
+	 * A higher value yields coarser visuals.
+	 *
+	 * @type {Number}
+	 */
+
+	get granularity() {
+
+		return this.d;
+
+	}
+
+	set granularity(value) {
+
+		let d = Math.floor(value);
+
+		if(d % 2 > 0) {
+
+			d += 1;
+
+		}
+
+		this.d = d;
+		this.uniforms.get("active").value = (d > 0);
+		this.setSize(this.resolution.width, this.resolution.height);
 
 	}
 
 	/**
 	 * Returns the pixel granularity.
 	 *
+	 * @deprecated Use granularity instead.
 	 * @return {Number} The granularity.
 	 */
 
@@ -61,25 +93,13 @@ export class PixelationEffect extends Effect {
 	/**
 	 * Sets the pixel granularity.
 	 *
-	 * A higher value yields coarser visuals.
-	 *
-	 * @param {Number} granularity - The new granularity.
+	 * @deprecated Use granularity instead.
+	 * @param {Number} value - The new granularity.
 	 */
 
-	setGranularity(granularity) {
+	setGranularity(value) {
 
-		granularity = Math.floor(granularity);
-
-		if(granularity % 2 > 0) {
-
-			granularity += 1;
-
-		}
-
-		const uniforms = this.uniforms;
-		uniforms.get("active").value = (granularity > 0.0);
-		uniforms.get("d").value.set(granularity, granularity).divide(this.resolution);
-		this.granularity = granularity;
+		this.granularity = value;
 
 	}
 
@@ -93,7 +113,7 @@ export class PixelationEffect extends Effect {
 	setSize(width, height) {
 
 		this.resolution.set(width, height);
-		this.setGranularity(this.granularity);
+		this.uniforms.get("d").value.setScalar(this.d).divide(this.resolution);
 
 	}
 

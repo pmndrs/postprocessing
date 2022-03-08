@@ -37,7 +37,28 @@ export class ColorDepthEffect extends Effect {
 		 */
 
 		this.bits = 0;
-		this.setBitDepth(bits);
+		this.bitDepth = bits;
+
+	}
+
+	/**
+	 * The virtual amount of color bits.
+	 *
+	 * Each color channel effectively uses a fourth of the total amount of bits. Alpha remains unaffected.
+	 *
+	 * @type {Number}
+	 */
+
+	get bitDepth() {
+
+		return this.bits;
+
+	}
+
+	set bitDepth(value) {
+
+		this.bits = value;
+		this.uniforms.get("factor").value = Math.pow(2.0, value / 3.0);
 
 	}
 
@@ -49,7 +70,7 @@ export class ColorDepthEffect extends Effect {
 
 	getBitDepth() {
 
-		return this.bits;
+		return this.bitDepth;
 
 	}
 
@@ -61,8 +82,7 @@ export class ColorDepthEffect extends Effect {
 
 	setBitDepth(value) {
 
-		this.bits = value;
-		this.uniforms.get("factor").value = Math.pow(2.0, value / 3.0);
+		this.bitDepth = value;
 
 	}
 

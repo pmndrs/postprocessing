@@ -29,31 +29,69 @@ export class DotScreenEffect extends Effect {
 			])
 		});
 
-		this.setAngle(angle);
+		this.angle = angle;
+
+	}
+
+	/**
+	 * The angle.
+	 *
+	 * @type {Number}
+	 */
+
+	get angle() {
+
+		return Math.acos(this.uniforms.get("angle").value.y);
+
+	}
+
+	set angle(value) {
+
+		this.uniforms.get("angle").value.set(Math.sin(value), Math.cos(value));
 
 	}
 
 	/**
 	 * Returns the pattern angle.
 	 *
+	 * @deprecated Use angle instead.
 	 * @return {Number} The angle in radians.
 	 */
 
-	getAngle(angle) {
+	getAngle() {
 
-		return Math.acos(this.uniforms.get("angle").value.y);
+		return this.angle;
 
 	}
 
 	/**
 	 * Sets the pattern angle.
 	 *
-	 * @param {Number} angle - The angle in radians.
+	 * @deprecated Use angle instead.
+	 * @param {Number} value - The angle in radians.
 	 */
 
-	setAngle(angle) {
+	setAngle(value) {
 
-		this.uniforms.get("angle").value.set(Math.sin(angle), Math.cos(angle));
+		this.angle = value;
+
+	}
+
+	/**
+	 * The scale.
+	 *
+	 * @type {Number}
+	 */
+
+	get scale() {
+
+		return this.uniforms.get("scale").value;
+
+	}
+
+	set scale(value) {
+
+		this.uniforms.get("scale").value = value;
 
 	}
 

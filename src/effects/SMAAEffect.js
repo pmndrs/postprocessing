@@ -145,39 +145,52 @@ export class SMAAEffect extends Effect {
 	}
 
 	/**
-	 * Returns the edges texture for debugging purposes.
+	 * The edges texture.
 	 *
-	 * @return {Texture} The texture.
+	 * @type {Texture}
 	 */
 
-	getEdgesTexture() {
+	get edgesTexture() {
 
 		return this.renderTargetEdges.texture;
 
 	}
 
 	/**
-	 * Returns the edge weights texture.
+	 * Returns the edges texture.
 	 *
+	 * @deprecated Use edgesTexture instead.
 	 * @return {Texture} The texture.
 	 */
 
-	getWeightsTexture() {
+	getEdgesTexture() {
+
+		return this.edgesTexture;
+
+	}
+
+	/**
+	 * The edge weights texture.
+	 *
+	 * @type {Texture}
+	 */
+
+	get weightsTexture() {
 
 		return this.renderTargetWeights.texture;
 
 	}
 
 	/**
-	 * The edge detection material.
+	 * Returns the edge weights texture.
 	 *
-	 * @type {EdgeDetectionMaterial}
-	 * @deprecated Use getEdgeDetectionMaterial() instead.
+	 * @deprecated Use weightsTexture instead.
+	 * @return {Texture} The texture.
 	 */
 
-	get edgeDetectionMaterial() {
+	getWeightsTexture() {
 
-		return this.getEdgeDetectionMaterial();
+		return this.weightsTexture;
 
 	}
 
@@ -185,7 +198,19 @@ export class SMAAEffect extends Effect {
 	 * The edge detection material.
 	 *
 	 * @type {EdgeDetectionMaterial}
-	 * @deprecated Use getEdgeDetectionMaterial() instead.
+	 */
+
+	get edgeDetectionMaterial() {
+
+		return this.edgeDetectionPass.fullscreenMaterial;
+
+	}
+
+	/**
+	 * The edge detection material.
+	 *
+	 * @type {EdgeDetectionMaterial}
+	 * @deprecated Use edgeDetectionMaterial instead.
 	 */
 
 	get colorEdgesMaterial() {
@@ -197,6 +222,7 @@ export class SMAAEffect extends Effect {
 	/**
 	 * Returns the edge detection material.
 	 *
+	 * @deprecated Use edgeDetectionMaterial instead.
 	 * @return {EdgeDetectionMaterial} The material.
 	 */
 
@@ -210,7 +236,6 @@ export class SMAAEffect extends Effect {
 	 * The edge weights material.
 	 *
 	 * @type {SMAAWeightsMaterial}
-	 * @deprecated Use getWeightsMaterial() instead.
 	 */
 
 	get weightsMaterial() {
@@ -222,6 +247,7 @@ export class SMAAEffect extends Effect {
 	/**
 	 * Returns the edge weights material.
 	 *
+	 * @deprecated Use weightsMaterial instead.
 	 * @return {SMAAWeightsMaterial} The material.
 	 */
 
@@ -236,7 +262,7 @@ export class SMAAEffect extends Effect {
 	 *
 	 * See {@link EdgeDetectionMaterial#setEdgeDetectionThreshold} for more details.
 	 *
-	 * @deprecated Use applyPreset() or getEdgeDetectionMaterial() instead.
+	 * @deprecated Use edgeDetectionMaterial instead.
 	 * @param {Number} threshold - The edge detection sensitivity. Range: [0.05, 0.5].
 	 */
 
@@ -251,7 +277,7 @@ export class SMAAEffect extends Effect {
 	 *
 	 * See {@link SMAAWeightsMaterial#setOrthogonalSearchSteps} for more details.
 	 *
-	 * @deprecated Use applyPreset() or getWeightsMaterial() instead.
+	 * @deprecated Use weightsMaterial instead.
 	 * @param {Number} steps - The search steps. Range: [0, 112].
 	 */
 
