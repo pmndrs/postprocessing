@@ -2,9 +2,9 @@
 @use "layers";
 
 .viewport {
+	border-bottom: 1px solid var(--viewport-separator-color);
 	box-sizing: border-box;
 	height: calc(100vh - 10rem);
-	border-bottom: 1px solid var(--viewport-separator-color);
 	position: relative;
 	.icons {
 		bottom: 4px;
