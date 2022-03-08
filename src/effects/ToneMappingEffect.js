@@ -232,7 +232,7 @@ export class ToneMappingEffect extends Effect {
 
 	get resolution() {
 
-		return this.luminancePass.getResolution().getWidth();
+		return this.luminancePass.resolution.width;
 
 	}
 
@@ -256,7 +256,7 @@ export class ToneMappingEffect extends Effect {
 
 	getResolution() {
 
-		return this.luminancePass.getResolution().getWidth();
+		return this.resolution;
 
 	}
 
@@ -269,12 +269,7 @@ export class ToneMappingEffect extends Effect {
 
 	setResolution(value) {
 
-		// Round the given value to the next power of two.
-		const exponent = Math.max(0, Math.ceil(Math.log2(value)));
-		const size = Math.pow(2, exponent);
-
-		this.luminancePass.getResolution().setPreferredSize(size, size);
-		this.getAdaptiveLuminanceMaterial().setMipLevel1x1(exponent);
+		this.resolution = value;
 
 	}
 
