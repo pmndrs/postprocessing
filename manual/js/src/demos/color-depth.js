@@ -113,19 +113,19 @@ window.addEventListener("load", () => load().then((assets) => {
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
 	const params = {
-		"bits": colorDepthEffect.getBitDepth(),
-		"opacity": colorDepthEffect.getBlendMode().getOpacity(),
-		"blend mode": colorDepthEffect.getBlendMode().getBlendFunction()
+		"bits": colorDepthEffect.bitDepth,
+		"opacity": colorDepthEffect.blendMode.getOpacity(),
+		"blend mode": colorDepthEffect.blendMode.getBlendFunction()
 	};
 
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addInput(params, "bits", { min: 1, max: 32, step: 1 })
-		.on("change", (e) => colorDepthEffect.setBitDepth(e.value));
+		.on("change", (e) => colorDepthEffect.bitDepth = e.value);
 
 	folder.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
-		.on("change", (e) => colorDepthEffect.getBlendMode().setOpacity(e.value));
+		.on("change", (e) => colorDepthEffect.blendMode.setOpacity(e.value));
 	folder.addInput(params, "blend mode", { options: BlendFunction })
-		.on("change", (e) => colorDepthEffect.getBlendMode().setBlendFunction(e.value));
+		.on("change", (e) => colorDepthEffect.blendMode.setBlendFunction(e.value));
 
 	// Resize Handler
 

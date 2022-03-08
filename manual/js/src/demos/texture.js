@@ -127,10 +127,10 @@ window.addEventListener("load", () => load().then((assets) => {
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
-	const texture = textureEffect.getTexture();
+	const texture = textureEffect.texture;
 	const params = {
-		"opacity": textureEffect.getBlendMode().getOpacity(),
-		"blend mode": textureEffect.getBlendMode().getBlendFunction()
+		"opacity": textureEffect.blendMode.getOpacity(),
+		"blend mode": textureEffect.blendMode.getBlendFunction()
 	};
 
 	const folder = pane.addFolder({ title: "Settings" });
@@ -149,9 +149,9 @@ window.addEventListener("load", () => load().then((assets) => {
 	subFolder.addInput(texture.center, "y", { min: 0, max: 1, step: 0.001 });
 
 	folder.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
-		.on("change", (e) => textureEffect.getBlendMode().setOpacity(e.value));
+		.on("change", (e) => textureEffect.blendMode.setOpacity(e.value));
 	folder.addInput(params, "blend mode", { options: BlendFunction })
-		.on("change", (e) => textureEffect.getBlendMode().setBlendFunction(e.value));
+		.on("change", (e) => textureEffect.blendMode.setBlendFunction(e.value));
 
 	// Resize Handler
 

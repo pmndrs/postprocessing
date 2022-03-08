@@ -113,22 +113,22 @@ window.addEventListener("load", () => load().then((assets) => {
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
 	const params = {
-		"brightness": brightnessContrastEffect.getBrightness(),
-		"contrast": brightnessContrastEffect.getContrast(),
-		"opacity": brightnessContrastEffect.getBlendMode().getOpacity(),
-		"blend mode": brightnessContrastEffect.getBlendMode().getBlendFunction()
+		"brightness": brightnessContrastEffect.brightness,
+		"contrast": brightnessContrastEffect.contrast,
+		"opacity": brightnessContrastEffect.blendMode.getOpacity(),
+		"blend mode": brightnessContrastEffect.blendMode.getBlendFunction()
 	};
 
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addInput(params, "brightness", { min: -1, max: 1, step: 1e-4 })
-		.on("change", (e) => brightnessContrastEffect.setBrightness(e.value));
+		.on("change", (e) => brightnessContrastEffect.brightness = e.value);
 	folder.addInput(params, "contrast", { min: -1, max: 1, step: 1e-4 })
-		.on("change", (e) => brightnessContrastEffect.setContrast(e.value));
+		.on("change", (e) => brightnessContrastEffect.contrast = e.value);
 
 	folder.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
-		.on("change", (e) => brightnessContrastEffect.getBlendMode().setOpacity(e.value));
+		.on("change", (e) => brightnessContrastEffect.blendMode.setOpacity(e.value));
 	folder.addInput(params, "blend mode", { options: BlendFunction })
-		.on("change", (e) => brightnessContrastEffect.getBlendMode().setBlendFunction(e.value));
+		.on("change", (e) => brightnessContrastEffect.blendMode.setBlendFunction(e.value));
 
 	// Resize Handler
 

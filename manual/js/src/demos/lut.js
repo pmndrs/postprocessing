@@ -115,7 +115,6 @@ function load() {
 					t.wrapS = ClampToEdgeWrapping;
 					t.wrapT = ClampToEdgeWrapping;
 					t.flipY = false;
-
 					assets.set(entry[0], t);
 
 				});
@@ -197,15 +196,15 @@ window.addEventListener("load", () => load().then((assets) => {
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
 	const params = {
-		"lut": lutEffect.getLUT().name,
+		"lut": lutEffect.lut.name,
 		"show LUT": true,
 		"3D texture": true,
 		"tetrahedral filter": false,
-		"base size": lutEffect.getLUT().image.width,
+		"base size": lutEffect.lut.image.width,
 		"scale up": false,
 		"target size": 48,
-		"opacity": lutEffect.getBlendMode().getOpacity(),
-		"blend mode": lutEffect.getBlendMode().getBlendFunction()
+		"opacity": lutEffect.blendMode.getOpacity(),
+		"blend mode": lutEffect.blendMode.getBlendFunction()
 	};
 
 	let objectURL = null;
@@ -214,7 +213,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 		if(params["show LUT"]) {
 
-			const lut = LookupTexture.from(lutEffect.getLUT());
+			const lut = LookupTexture.from(lutEffect.lut);
 			const { image } = lut.convertToUint8().toDataTexture();
 			RawImageData.from(image).toCanvas().toBlob((blob) => {
 
@@ -264,7 +263,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 			}
 
-			lutEffect.getLUT().dispose();
+			lutEffect.lut.dispose();
 			params["base size"] = size;
 
 			if(renderer.capabilities.isWebGL2) {
@@ -276,11 +275,11 @@ window.addEventListener("load", () => load().then((assets) => {
 
 				}
 
-				lutEffect.setLUT(params["3D texture"] ? lut : lut.toDataTexture());
+				lutEffect.lut = (params["3D texture"] ? lut : lut.toDataTexture());
 
 			} else {
 
-				lutEffect.setLUT(lut.convertToUint8().toDataTexture());
+				lutEffect.lut = lut.convertToUint8().toDataTexture();
 
 			}
 
@@ -305,7 +304,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 		folder.addInput(params, "3D texture").on("change", changeLUT);
 		folder.addInput(params, "tetrahedral filter")
-			.on("change", (e) => lutEffect.setTetrahedralInterpolationEnabled(e.value));
+			.on("change", (e) => lutEffect.tetrahedralInterpolation = e.value);
 
 	}
 
@@ -314,9 +313,9 @@ window.addEventListener("load", () => load().then((assets) => {
 	folder.addInput(params, "target size", { options: [32, 48, 64, 128].reduce(reducer, {}) }).on("change", changeLUT);
 
 	folder.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
-		.on("change", (e) => lutEffect.getBlendMode().setOpacity(e.value));
+		.on("change", (e) => lutEffect.blendMode.setOpacity(e.value));
 	folder.addInput(params, "blend mode", { options: BlendFunction })
-		.on("change", (e) => lutEffect.getBlendMode().setBlendFunction(e.value));
+		.on("change", (e) => lutEffect.blendMode.setBlendFunction(e.value));
 
 	// Resize Handler
 

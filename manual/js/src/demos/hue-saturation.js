@@ -113,22 +113,22 @@ window.addEventListener("load", () => load().then((assets) => {
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
 	const params = {
-		"hue": hueSaturationEffect.getHue(),
-		"saturation": hueSaturationEffect.getSaturation(),
-		"opacity": hueSaturationEffect.getBlendMode().getOpacity(),
-		"blend mode": hueSaturationEffect.getBlendMode().getBlendFunction()
+		"hue": hueSaturationEffect.hue,
+		"saturation": hueSaturationEffect.saturation,
+		"opacity": hueSaturationEffect.blendMode.getOpacity(),
+		"blend mode": hueSaturationEffect.blendMode.getBlendFunction()
 	};
 
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addInput(params, "hue", { min: 0, max: 2 * Math.PI, step: 1e-3 })
-		.on("change", (e) => hueSaturationEffect.setHue(e.value));
+		.on("change", (e) => hueSaturationEffect.hue = e.value);
 	folder.addInput(params, "saturation", { min: -1, max: 1, step: 1e-3 })
-		.on("change", (e) => hueSaturationEffect.setSaturation(e.value));
+		.on("change", (e) => hueSaturationEffect.saturation = e.value);
 
 	folder.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
-		.on("change", (e) => hueSaturationEffect.getBlendMode().setOpacity(e.value));
+		.on("change", (e) => hueSaturationEffect.blendMode.setOpacity(e.value));
 	folder.addInput(params, "blend mode", { options: BlendFunction })
-		.on("change", (e) => hueSaturationEffect.getBlendMode().setBlendFunction(e.value));
+		.on("change", (e) => hueSaturationEffect.blendMode.setBlendFunction(e.value));
 
 	// Resize Handler
 

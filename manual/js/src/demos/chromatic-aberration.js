@@ -112,9 +112,7 @@ window.addEventListener("load", () => load().then((assets) => {
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
 	const params = {
-		"offset": chromaticAberrationEffect.getOffset(),
-		"opacity": chromaticAberrationEffect.getBlendMode().getOpacity(),
-		"blend mode": chromaticAberrationEffect.getBlendMode().getBlendFunction()
+		"offset": chromaticAberrationEffect.offset
 	};
 
 	const folder = pane.addFolder({ title: "Settings" });

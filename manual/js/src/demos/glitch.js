@@ -131,43 +131,41 @@ window.addEventListener("load", () => load().then((assets) => {
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
 	const noiseTexture = new NoiseTexture(64, 64, RGBAFormat);
-
 	const params = {
-		"glitch mode": glitchEffect.getMode(),
+		"glitch mode": glitchEffect.mode,
 		"custom pattern": true,
-		"min delay": glitchEffect.getMinDelay(),
-		"max delay": glitchEffect.getMaxDelay(),
-		"min duration": glitchEffect.getMinDuration(),
-		"max duration": glitchEffect.getMaxDuration(),
-		"min strength": glitchEffect.getMinStrength(),
-		"max strength": glitchEffect.getMaxStrength(),
-		"glitch ratio": glitchEffect.getGlitchRatio(),
-		"glitch columns": glitchEffect.getGlitchColumns(),
-		"opacity": glitchEffect.getBlendMode().getOpacity(),
-		"blend mode": glitchEffect.getBlendMode().getBlendFunction()
+		"min delay": glitchEffect.minDelay,
+		"max delay": glitchEffect.maxDelay,
+		"min duration": glitchEffect.minDuration,
+		"max duration": glitchEffect.maxDuration,
+		"min strength": glitchEffect.minStrength,
+		"max strength": glitchEffect.maxStrength,
+		"glitch ratio": 1.0 - glitchEffect.ratio,
+		"glitch columns": glitchEffect.columns
 	};
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(params, "glitch mode", { options: GlitchMode }).on("change", (e) => glitchEffect.setMode(e.value));
+	folder.addInput(params, "glitch mode", { options: GlitchMode })
+		.on("change", (e) => glitchEffect.mode = e.value);
 	folder.addInput(params, "custom pattern")
-		.on("change", (e) => glitchEffect.setPerturbationMap(e.value ? assets.get("noise") : noiseTexture));
+		.on("change", (e) => glitchEffect.perturbationMap = (e.value ? assets.get("noise") : noiseTexture));
 
 	folder.addInput(params, "min delay", { min: 0, max: 2, step: 0.01 })
-		.on("change", (e) => glitchEffect.setMinDelay(e.value));
+		.on("change", (e) => glitchEffect.minDelay = e.value);
 	folder.addInput(params, "max delay", { min: 2, max: 4, step: 0.01 })
-		.on("change", (e) => glitchEffect.setMaxDelay(e.value));
+		.on("change", (e) => glitchEffect.maxDelay = e.value);
 	folder.addInput(params, "min duration", { min: 0, max: 0.6, step: 0.01 })
-		.on("change", (e) => glitchEffect.setMinDuration(e.value));
+		.on("change", (e) => glitchEffect.minDuration = e.value);
 	folder.addInput(params, "max duration", { min: 0.6, max: 1.8, step: 0.01 })
-		.on("change", (e) => glitchEffect.setMaxDuration(e.value));
+		.on("change", (e) => glitchEffect.maxDuration = e.value);
 	folder.addInput(params, "min strength", { min: 0, max: 1, step: 0.01 })
-		.on("change", (e) => glitchEffect.setMinStrength(e.value));
+		.on("change", (e) => glitchEffect.minStrength = e.value);
 	folder.addInput(params, "max strength", { min: 0, max: 1, step: 0.01 })
-		.on("change", (e) => glitchEffect.setMaxStrength(e.value));
+		.on("change", (e) => glitchEffect.maxStrength = e.value);
 	folder.addInput(params, "glitch ratio", { min: 0, max: 1, step: 0.01 })
-		.on("change", (e) => glitchEffect.setGlitchRatio(e.value));
+		.on("change", (e) => glitchEffect.ratio = 1.0 - e.value);
 	folder.addInput(params, "glitch columns", { min: 0, max: 0.5, step: 0.01 })
-		.on("change", (e) => glitchEffect.setGlitchColumns(e.value));
+		.on("change", (e) => glitchEffect.columns = e.value);
 
 	// Resize Handler
 

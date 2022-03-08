@@ -160,14 +160,14 @@ window.addEventListener("load", () => load().then((assets) => {
 	const outlineEffect = new OutlineEffect(scene, camera, {
 		blendFunction: BlendFunction.SCREEN,
 		patternScale: 40,
-		visibleEdgeColor: 0xFFFFFF,
-		hiddenEdgeColor: 0x22090A,
+		visibleEdgeColor: 0xffffff,
+		hiddenEdgeColor: 0x22090a,
 		height: 480,
 		blur: false,
 		xRay: true
 	});
 
-	outlineEffect.selection.add(actors.children[0]); // Select an object.
+	outlineEffect.selection.add(actors.children[0]);
 
 	composer.addPass(new RenderPass(scene, camera));
 	composer.addPass(new EffectPass(camera, outlineEffect));
@@ -183,7 +183,6 @@ window.addEventListener("load", () => load().then((assets) => {
 		const clientY = event.clientY - clientRect.top;
 		ndc.x = (clientX / container.clientWidth) * 2.0 - 1.0;
 		ndc.y = -(clientY / container.clientHeight) * 2.0 + 1.0;
-
 		raycaster.setFromCamera(ndc, camera);
 		const intersects = raycaster.intersectObjects(scene.children, true);
 
@@ -203,8 +202,8 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const params = {
 		"resolution": outlineEffect.resolution.height,
-		"blur": outlineEffect.getBlurPass().isEnabled(),
-		"kernel size": outlineEffect.getBlurPass().getKernelSize(),
+		"blur": outlineEffect.blurPass.enabled,
+		"kernel size": outlineEffect.blurPass.kernelSize,
 		"use pattern": false,
 		"pattern scale": outlineEffect.patternScale,
 		"pulse speed": outlineEffect.pulseSpeed,
@@ -212,8 +211,8 @@ window.addEventListener("load", () => load().then((assets) => {
 		"visible edge": outlineEffect.visibleEdgeColor.getHex(),
 		"hidden edge": outlineEffect.hiddenEdgeColor.getHex(),
 		"x-ray": outlineEffect.xRay,
-		"opacity": outlineEffect.getBlendMode().getOpacity(),
-		"blend mode": outlineEffect.getBlendMode().getBlendFunction()
+		"opacity": outlineEffect.blendMode.getOpacity(),
+		"blend mode": outlineEffect.blendMode.getBlendFunction()
 	};
 
 	function reducer(a, b) {
@@ -225,18 +224,18 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addInput(params, "resolution", { options: [360, 480, 720, 1080].reduce(reducer, {}) })
-		.on("change", (e) => outlineEffect.resolution.setPreferredHeight(e.value));
+		.on("change", (e) => outlineEffect.resolution.preferredHeight = e.value);
 	folder.addInput(params, "kernel size", { options: KernelSize })
-		.on("change", (e) => outlineEffect.getBlurPass().setKernelSize(e.value));
-	folder.addInput(params, "blur").on("change", (e) => outlineEffect.getBlurPass().setEnabled(e.value));
+		.on("change", (e) => outlineEffect.blurPass.kernelSize = e.value);
+	folder.addInput(params, "blur").on("change", (e) => outlineEffect.blurPass.enabled = e.value);
 	folder.addInput(params, "use pattern")
-		.on("change", (e) => outlineEffect.setPatternTexture(e.value ? assets.get("pattern") : null));
+		.on("change", (e) => outlineEffect.patternTexture = (e.value ? assets.get("pattern") : null));
 	folder.addInput(params, "pattern scale", { min: 20, max: 100, step: 0.1 })
-		.on("change", (e) => (outlineEffect.patternScale = e.value));
+		.on("change", (e) => outlineEffect.patternScale = e.value);
 	folder.addInput(params, "edge strength", { min: 0, max: 10, step: 0.01 })
-		.on("change", (e) => (outlineEffect.edgeStrength = e.value));
+		.on("change", (e) => outlineEffect.edgeStrength = e.value);
 	folder.addInput(params, "pulse speed", { min: 0, max: 2, step: 0.01 })
-		.on("change", (e) => (outlineEffect.pulseSpeed = e.value));
+		.on("change", (e) => outlineEffect.pulseSpeed = e.value);
 	folder.addInput(params, "visible edge", { view: "color" })
 		.on("change", (e) => outlineEffect.visibleEdgeColor.setHex(e.value));
 	folder.addInput(params, "hidden edge", { view: "color" })
@@ -244,9 +243,9 @@ window.addEventListener("load", () => load().then((assets) => {
 	folder.addInput(params, "x-ray").on("change", (e) => outlineEffect.xRay = e.value);
 
 	folder.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
-		.on("change", (e) => outlineEffect.getBlendMode().setOpacity(e.value));
+		.on("change", (e) => outlineEffect.blendMode.setOpacity(e.value));
 	folder.addInput(params, "blend mode", { options: BlendFunction })
-		.on("change", (e) => outlineEffect.getBlendMode().setBlendFunction(e.value));
+		.on("change", (e) => outlineEffect.blendMode.setBlendFunction(e.value));
 
 	// Resize Handler
 
