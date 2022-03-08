@@ -10,7 +10,17 @@ weight: 10
 
 [![CI](https://github.com/vanruesc/postprocessing/actions/workflows/ci.yml/badge.svg)](https://github.com/vanruesc/postprocessing/actions/workflows/ci.yml)
 
-The purpose of `postprocessing` is to provide a package of advanced, well maintained and fully documented filter effects for the popular 3D library [three.js](https://threejs.org/). It was originally created based on the [three.js examples](https://threejs.org/examples/?q=postprocessing) in the context of a research project in 2015 and continues to evolve as an independent third-party library. Please note that this library is not compatible with the postprocessing examples from `three` due to API differences.
+Welcome to the `postprocessing` manual!
+
+## About
+
+The purpose of `postprocessing` is to provide a package of advanced, well maintained and fully documented filter effects for the popular 3D library [three.js](https://threejs.org/). It was originally created based on the [three.js examples](https://threejs.org/examples/?q=postprocessing) in the context of a student project in 2015 and continues to evolve as a free, open-source library.
+
+## Compatibility
+
+The compatibility policy of `postprocessing` is to support the 6 most recent releases of `three`. The release schedule of this library is not strictly tied to `three`, meaning that official support for the latest release can lag behind by a few days. Releases follow [semantic versioning](https://semver.org/).
+
+_Please note that this library is not compatible with the postprocessing examples from `three` due to API differences._
 
 ## Concepts
 
@@ -18,7 +28,7 @@ WIP
 
 ## Output Encoding
 
-Simply set `WebGLRenderer.outputEncoding` to the desired target color space and `postprocessing` will follow suit. Built-in passes automatically encode colors when they render to screen and internal render operations are always performed in linear color space.
+It's recommended to follow a [linear workflow](https://docs.unity3d.com/Manual/LinearRendering-LinearOrGammaWorkflow.html) for color management and `postprocessing` supports this automatically. Simply set `WebGLRenderer.outputEncoding` to `sRGBEncoding` and `postprocessing` will follow suit. Built-in passes automatically encode colors when they render to screen and internal render operations are always performed in linear color space.
 
 ## Performance
 
