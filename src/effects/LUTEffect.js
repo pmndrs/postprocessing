@@ -186,55 +186,60 @@ export class LUTEffect extends Effect {
 
 		if(this.lut !== value) {
 
-			const image = value.image;
-
-			// Remember settings that are backed by defines.
-			const tetrahedralInterpolation = this.tetrahedralInterpolation;
-			const inputEncoding = this.inputEncoding;
-
-			defines.clear();
-			defines.set("LUT_SIZE", Math.min(image.width, image.height).toFixed(16));
-			defines.set("LUT_TEXEL_WIDTH", (1.0 / image.width).toFixed(16));
-			defines.set("LUT_TEXEL_HEIGHT", (1.0 / image.height).toFixed(16));
-
 			uniforms.get("lut").value = value;
-			uniforms.get("domainMin").value = null;
-			uniforms.get("domainMax").value = null;
 
-			if(value.type === FloatType || value.type === HalfFloatType) {
+			if(value !== null) {
 
-				defines.set("LUT_PRECISION_HIGH", "1");
+				const image = value.image;
 
-			}
+				// Remember settings that are backed by defines.
+				const tetrahedralInterpolation = this.tetrahedralInterpolation;
+				const inputEncoding = this.inputEncoding;
 
-			if(image.width > image.height) {
+				defines.clear();
+				defines.set("LUT_SIZE", Math.min(image.width, image.height).toFixed(16));
+				defines.set("LUT_TEXEL_WIDTH", (1.0 / image.width).toFixed(16));
+				defines.set("LUT_TEXEL_HEIGHT", (1.0 / image.height).toFixed(16));
 
-				defines.set("LUT_STRIP_HORIZONTAL", "1");
+				uniforms.get("domainMin").value = null;
+				uniforms.get("domainMax").value = null;
 
-			} else if(value instanceof DataTexture3D) {
+				if(value.type === FloatType || value.type === HalfFloatType) {
 
-				defines.set("LUT_3D", "1");
-
-			}
-
-			if(value instanceof LookupTexture) {
-
-				const min = value.domainMin;
-				const max = value.domainMax;
-
-				if(min.x !== 0 || min.y !== 0 || min.z !== 0 || max.x !== 1 || max.y !== 1 || max.z !== 1) {
-
-					defines.set("CUSTOM_INPUT_DOMAIN", "1");
-					uniforms.get("domainMin").value = min.clone();
-					uniforms.get("domainMax").value = max.clone();
+					defines.set("LUT_PRECISION_HIGH", "1");
 
 				}
 
-			}
+				if(image.width > image.height) {
 
-			// Refresh settings that depend on and affect the LUT.
-			this.tetrahedralInterpolation = tetrahedralInterpolation;
-			this.inputEncoding = inputEncoding;
+					defines.set("LUT_STRIP_HORIZONTAL", "1");
+
+				} else if(value instanceof DataTexture3D) {
+
+					defines.set("LUT_3D", "1");
+
+				}
+
+				if(value instanceof LookupTexture) {
+
+					const min = value.domainMin;
+					const max = value.domainMax;
+
+					if(min.x !== 0 || min.y !== 0 || min.z !== 0 || max.x !== 1 || max.y !== 1 || max.z !== 1) {
+
+						defines.set("CUSTOM_INPUT_DOMAIN", "1");
+						uniforms.get("domainMin").value = min.clone();
+						uniforms.get("domainMax").value = max.clone();
+
+					}
+
+				}
+
+				// Refresh settings that depend on and affect the LUT.
+				this.tetrahedralInterpolation = tetrahedralInterpolation;
+				this.inputEncoding = inputEncoding;
+
+			}
 
 		}
 
@@ -275,37 +280,42 @@ export class LUTEffect extends Effect {
 	updateScaleOffset() {
 
 		const lut = this.lut;
-		const size = Math.min(lut.image.width, lut.image.height);
-		const scale = this.uniforms.get("scale").value;
-		const offset = this.uniforms.get("offset").value;
 
-		if(this.tetrahedralInterpolation) {
+		if(lut !== null) {
 
-			if(this.defines.has("CUSTOM_INPUT_DOMAIN")) {
+			const size = Math.min(lut.image.width, lut.image.height);
+			const scale = this.uniforms.get("scale").value;
+			const offset = this.uniforms.get("offset").value;
 
-				const domainScale = lut.domainMax.clone().sub(lut.domainMin);
-				scale.setScalar(size - 1).divide(domainScale);
-				offset.copy(lut.domainMin).negate().multiply(scale);
+			if(this.tetrahedralInterpolation) {
 
-			} else {
+				if(this.defines.has("CUSTOM_INPUT_DOMAIN")) {
 
-				scale.setScalar(size - 1);
-				offset.setScalar(0);
+					const domainScale = lut.domainMax.clone().sub(lut.domainMin);
+					scale.setScalar(size - 1).divide(domainScale);
+					offset.copy(lut.domainMin).negate().multiply(scale);
 
-			}
+				} else {
 
-		} else {
+					scale.setScalar(size - 1);
+					offset.setScalar(0);
 
-			if(this.defines.has("CUSTOM_INPUT_DOMAIN")) {
-
-				const domainScale = lut.domainMax.clone().sub(lut.domainMin).multiplyScalar(size);
-				scale.setScalar(size - 1).divide(domainScale);
-				offset.copy(lut.domainMin).negate().multiply(scale).addScalar(1.0 / (2.0 * size));
+				}
 
 			} else {
 
-				scale.setScalar((size - 1) / size);
-				offset.setScalar(1.0 / (2.0 * size));
+				if(this.defines.has("CUSTOM_INPUT_DOMAIN")) {
+
+					const domainScale = lut.domainMax.clone().sub(lut.domainMin).multiplyScalar(size);
+					scale.setScalar(size - 1).divide(domainScale);
+					offset.copy(lut.domainMin).negate().multiply(scale).addScalar(1.0 / (2.0 * size));
+
+				} else {
+
+					scale.setScalar((size - 1) / size);
+					offset.setScalar(1.0 / (2.0 * size));
+
+				}
 
 			}
 
@@ -322,29 +332,34 @@ export class LUTEffect extends Effect {
 	configureTetrahedralInterpolation() {
 
 		const lut = this.lut;
-		lut.minFilter = LinearFilter;
-		lut.magFilter = LinearFilter;
 
-		if(this.tetrahedralInterpolation && lut !== null) {
+		if(lut !== null) {
 
-			if(lut instanceof DataTexture3D) {
+			lut.minFilter = LinearFilter;
+			lut.magFilter = LinearFilter;
 
-				// Interpolate samples manually.
-				lut.minFilter = NearestFilter;
-				lut.magFilter = NearestFilter;
+			if(this.tetrahedralInterpolation) {
 
-			} else {
+				if(lut instanceof DataTexture3D) {
 
-				console.warn("Tetrahedral interpolation requires a 3D texture");
+					// Interpolate samples manually.
+					lut.minFilter = NearestFilter;
+					lut.magFilter = NearestFilter;
+
+				} else {
+
+					console.warn("Tetrahedral interpolation requires a 3D texture");
+
+				}
 
 			}
 
-		}
+			// TODO Added for compatibility with r138. Remove later.
+			if(lut.source === undefined) {
 
-		// TODO Added for compatibility with r138. Remove later.
-		if(lut.source === undefined) {
+				lut.needsUpdate = true;
 
-			lut.needsUpdate = true;
+			}
 
 		}
 
