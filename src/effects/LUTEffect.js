@@ -73,7 +73,7 @@ export class LUTEffect extends Effect {
 
 	getOutputEncoding() {
 
-		return null;
+		return Number(this.defines.get("OUTPUT_ENCODING"));
 
 	}
 
@@ -117,6 +117,7 @@ export class LUTEffect extends Effect {
 
 			// The encoding of the input colors carries over if the LUT is linear.
 			const outputEncoding = (lut.encoding === LinearEncoding) ? value : lut.encoding;
+			defines.set("OUTPUT_ENCODING", outputEncoding.toFixed(0));
 
 			switch(outputEncoding) {
 
