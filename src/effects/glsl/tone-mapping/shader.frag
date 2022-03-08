@@ -38,7 +38,7 @@ vec3 Reinhard2ToneMapping(vec3 color) {
 
 void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
 
-	#if TONE_MAPPING_MODE == 1
+	#if TONE_MAPPING_MODE == 1 || TONE_MAPPING_MODE == 2
 
 		outputColor = vec4(Reinhard2ToneMapping(inputColor.rgb), inputColor.a);
 
