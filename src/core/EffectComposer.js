@@ -374,6 +374,12 @@ export class EffectComposer {
 
 		}
 
+		if(type === UnsignedByteType && renderer !== null && renderer.outputEncoding === sRGBEncoding) {
+
+			renderTarget.texture.encoding = sRGBEncoding;
+
+		}
+
 		renderTarget.texture.name = "EffectComposer.Buffer";
 		renderTarget.texture.generateMipmaps = false;
 
