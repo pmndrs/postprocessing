@@ -43,8 +43,21 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the primary luminance buffer which contains the downsampled average luminance.
+	 * The primary luminance buffer that contains the downsampled average luminance.
 	 *
+	 * @type {Texture}
+	 */
+
+	set luminanceBuffer0(value) {
+
+		this.uniforms.luminanceBuffer0.value = value;
+
+	}
+
+	/**
+	 * Sets the primary luminance buffer that contains the downsampled average luminance.
+	 *
+	 * @deprecated Use luminanceBuffer0 instead.
 	 * @param {Texture} value - The buffer.
 	 */
 
@@ -55,8 +68,21 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The secondary luminance buffer.
+	 *
+	 * @type {Texture}
+	 */
+
+	set luminanceBuffer1(value) {
+
+		this.uniforms.luminanceBuffer1.value = value;
+
+	}
+
+	/**
 	 * Sets the secondary luminance buffer.
 	 *
+	 * @deprecated Use luminanceBuffer1 instead.
 	 * @param {Texture} value - The buffer.
 	 */
 
@@ -67,14 +93,14 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the 1x1 mipmap level.
+	 * The 1x1 mipmap level.
 	 *
 	 * This level is used to identify the smallest mipmap of the primary luminance buffer.
 	 *
-	 * @param {Number} value - The level.
+	 * @type {Number}
 	 */
 
-	setMipLevel1x1(value) {
+	set mipLevel1x1(value) {
 
 		this.defines.MIP_LEVEL_1X1 = value.toFixed(1);
 		this.needsUpdate = true;
@@ -82,8 +108,34 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Sets the 1x1 mipmap level.
+	 *
+	 * @deprecated Use mipLevel1x1 instead.
+	 * @param {Number} value - The level.
+	 */
+
+	setMipLevel1x1(value) {
+
+		this.mipLevel1x1 = value;
+
+	}
+
+	/**
+	 * The delta time.
+	 *
+	 * @type {Number}
+	 */
+
+	set deltaTime(value) {
+
+		this.uniforms.deltaTime.value = value;
+
+	}
+
+	/**
 	 * Sets the delta time.
 	 *
+	 * @deprecated Use deltaTime instead.
 	 * @param {Number} value - The delta time.
 	 */
 
@@ -94,8 +146,27 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The lowest possible luminance value.
+	 *
+	 * @type {Number}
+	 */
+
+	get minLuminance() {
+
+		return this.uniforms.minLuminance.value;
+
+	}
+
+	set minLuminance(value) {
+
+		this.uniforms.minLuminance.value = value;
+
+	}
+
+	/**
 	 * Returns the lowest possible luminance value.
 	 *
+	 * @deprecated Use minLuminance instead.
 	 * @return {Number} The minimum luminance.
 	 */
 
@@ -108,6 +179,7 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 	/**
 	 * Sets the minimum luminance.
 	 *
+	 * @deprecated Use minLuminance instead.
 	 * @param {Number} value - The minimum luminance.
 	 */
 
@@ -118,8 +190,27 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The luminance adaptation rate.
+	 *
+	 * @type {Number}
+	 */
+
+	get adaptationRate() {
+
+		return this.uniforms.tau.value;
+
+	}
+
+	set adaptationRate(value) {
+
+		this.uniforms.tau.value = value;
+
+	}
+
+	/**
 	 * Returns the luminance adaptation rate.
 	 *
+	 * @deprecated Use adaptationRate instead.
 	 * @return {Number} The adaptation rate.
 	 */
 
@@ -132,6 +223,7 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 	/**
 	 * Sets the luminance adaptation rate.
 	 *
+	 * @deprecated Use adaptationRate instead.
 	 * @param {Number} value - The adaptation rate.
 	 */
 

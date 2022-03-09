@@ -44,38 +44,21 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the depth buffer.
+	 * The depth buffer.
 	 *
-	 * @param {Texture} buffer - The depth texture.
-	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 * @type {Texture}
 	 */
 
-	setDepthBuffer(buffer, depthPacking = BasicDepthPacking) {
+	set depthBuffer(value) {
 
-		this.uniforms.depthBuffer.value = buffer;
-		this.defines.DEPTH_PACKING = depthPacking.toFixed(0);
-		this.needsUpdate = true;
+		this.uniforms.depthBuffer.value = value;
 
 	}
 
 	/**
-	 * The current depth packing.
+	 * The depth packing strategy.
 	 *
 	 * @type {DepthPackingStrategies}
-	 * @deprecated Removed without replacement.
-	 */
-
-	get depthPacking() {
-
-		return Number(this.defines.DEPTH_PACKING);
-
-	}
-
-	/**
-	 * Sets the depth packing.
-	 *
-	 * @type {DepthPackingStrategies}
-	 * @deprecated Use setDepthBuffer() instead.
 	 */
 
 	set depthPacking(value) {
@@ -86,8 +69,42 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Sets the depth buffer.
+	 *
+	 * @deprecated Use depthBuffer and depthPacking instead.
+	 * @param {Texture} buffer - The depth texture.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 */
+
+	setDepthBuffer(buffer, depthPacking = BasicDepthPacking) {
+
+		this.depthBuffer = buffer;
+		this.depthPacking = depthPacking;
+
+	}
+
+	/**
+	 * The focus distance.
+	 *
+	 * @type {Number}
+	 */
+
+	get focusDistance() {
+
+		return this.uniforms.focusDistance.value;
+
+	}
+
+	set focusDistance(value) {
+
+		this.uniforms.focusDistance.value = value;
+
+	}
+
+	/**
 	 * Returns the focus distance.
 	 *
+	 * @deprecated Use focusDistance instead.
 	 * @return {Number} The focus distance.
 	 */
 
@@ -100,6 +117,7 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 	/**
 	 * Sets the focus distance.
 	 *
+	 * @deprecated Use focusDistance instead.
 	 * @param {Number} value - The focus distance.
 	 */
 
@@ -110,8 +128,27 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The focal length.
+	 *
+	 * @type {Number}
+	 */
+
+	get focalLength() {
+
+		return this.uniforms.focalLength.value;
+
+	}
+
+	set focalLength(value) {
+
+		this.uniforms.focalLength.value = value;
+
+	}
+
+	/**
 	 * Returns the focal length.
 	 *
+	 * @deprecated Use focalLength instead.
 	 * @return {Number} The focal length.
 	 */
 
@@ -124,6 +161,7 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 	/**
 	 * Sets the focal length.
 	 *
+	 * @deprecated Use focalLength instead.
 	 * @param {Number} value - The focal length.
 	 */
 

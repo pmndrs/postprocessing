@@ -5,6 +5,7 @@ import {
 	NotEqualDepth,
 	EqualDepth,
 	RGBADepthPacking,
+	sRGBEncoding,
 	WebGLRenderTarget
 } from "three";
 
@@ -62,7 +63,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 		 */
 
 		this.clearPass = new ClearPass(true, false, false);
-		this.clearPass.setOverrideClearColor(new Color(0x000000));
+		this.clearPass.overrideClearColor = new Color(0x000000);
 
 		/**
 		 * A depth mask pass.
@@ -73,9 +74,10 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 		this.depthMaskPass = new ShaderPass(new DepthMaskMaterial());
 
-		const depthMaskMaterial = this.depthMaskPass.getFullscreenMaterial();
-		depthMaskMaterial.setDepthBuffer1(this.depthPass.getTexture(), RGBADepthPacking);
-		depthMaskMaterial.setDepthMode(EqualDepth);
+		const depthMaskMaterial = this.depthMaskMaterial;
+		depthMaskMaterial.depthBuffer1 = this.depthPass.texture;
+		depthMaskMaterial.depthPacking1 = RGBADepthPacking;
+		depthMaskMaterial.depthMode = EqualDepth;
 
 		/**
 		 * A render target.
@@ -97,20 +99,20 @@ export class SelectiveBloomEffect extends BloomEffect {
 		/**
 		 * A selection of objects.
 		 *
+		 * The default layer of this selection is 11.
+		 *
 		 * @type {Selection}
-		 * @deprecated Use getSelection() instead.
 		 */
 
 		this.selection = new Selection();
-		this.selection.setLayer(11);
+		this.selection.layer = 11;
 
 	}
 
 	/**
 	 * Returns the selection.
 	 *
-	 * The default layer of this selection is 11.
-	 *
+	 * @deprecated Use selection instead.
 	 * @return {Selection} The selection.
 	 */
 
@@ -121,15 +123,15 @@ export class SelectiveBloomEffect extends BloomEffect {
 	}
 
 	/**
-	 * Returns the depth mask material.
+	 * The depth mask material.
 	 *
-	 * @return {DepthMaskMaterial} The material.
+	 * @type {DepthMaskMaterial}
 	 * @private
 	 */
 
-	getDepthMaskMaterial() {
+	get depthMaskMaterial() {
 
-		return this.depthMaskPass.getFullscreenMaterial();
+		return this.depthMaskPass.fullscreenMaterial;
 
 	}
 
@@ -137,49 +139,43 @@ export class SelectiveBloomEffect extends BloomEffect {
 	 * Indicates whether the selection should be considered inverted.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use isInverted() instead.
 	 */
 
 	get inverted() {
 
-		return this.isInverted();
+		return (this.depthMaskMaterial.depthMode === NotEqualDepth);
 
 	}
 
-	/**
-	 * Inverts the selection.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Use setInverted() instead.
-	 */
-
 	set inverted(value) {
 
-		this.setInverted(value);
+		this.depthMaskMaterial.depthMode = value ? NotEqualDepth : EqualDepth;
 
 	}
 
 	/**
 	 * Indicates whether the mask is inverted.
 	 *
+	 * @deprecated Use inverted instead.
 	 * @return {Boolean} Whether the mask is inverted.
 	 */
 
 	isInverted() {
 
-		return (this.getDepthMaskMaterial().getDepthMode() === NotEqualDepth);
+		return this.inverted;
 
 	}
 
 	/**
 	 * Enables or disable mask inversion.
 	 *
+	 * @deprecated Use inverted instead.
 	 * @param {Boolean} value - Whether the mask should be inverted.
 	 */
 
 	setInverted(value) {
 
-		this.getDepthMaskMaterial().setDepthMode(value ? NotEqualDepth : EqualDepth);
+		this.inverted = value;
 
 	}
 
@@ -187,49 +183,45 @@ export class SelectiveBloomEffect extends BloomEffect {
 	 * Indicates whether the background colors will be ignored.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use isBackgroundDisabled() instead.
 	 */
 
 	get ignoreBackground() {
 
-		return this.isBackgroundDisabled();
+		return (this.depthMaskMaterial.maxDepthStrategy === DepthTestStrategy.DISCARD_MAX_DEPTH);
 
 	}
 
-	/**
-	 * @type {Boolean}
-	 * @deprecated Use setBackgroundDisabled() instead.
-	 */
-
 	set ignoreBackground(value) {
 
-		this.setBackgroundDisabled(value);
+		this.depthMaskMaterial.maxDepthStrategy = value ?
+			DepthTestStrategy.DISCARD_MAX_DEPTH :
+			DepthTestStrategy.KEEP_MAX_DEPTH;
 
 	}
 
 	/**
 	 * Indicates whether the background is disabled.
 	 *
+	 * @deprecated Use ignoreBackground instead.
 	 * @return {Boolean} Whether the background is disabled.
 	 */
 
 	isBackgroundDisabled() {
 
-		const material = this.getDepthMaskMaterial();
-		return (material.getMaxDepthStrategy() === DepthTestStrategy.DISCARD_MAX_DEPTH);
+		return this.ignoreBackground;
 
 	}
 
 	/**
 	 * Enables or disables the background.
 	 *
+	 * @deprecated Use ignoreBackground instead.
 	 * @param {Boolean} value - Whether the background should be disabled.
 	 */
 
 	setBackgroundDisabled(value) {
 
-		const material = this.getDepthMaskMaterial();
-		material.setMaxDepthStrategy(value ? DepthTestStrategy.DISCARD_MAX_DEPTH : DepthTestStrategy.KEEP_MAX_DEPTH);
+		this.ignoreBackground = value;
 
 	}
 
@@ -242,7 +234,8 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
-		this.depthMaskPass.getFullscreenMaterial().setDepthBuffer0(depthTexture, depthPacking);
+		this.depthMaskMaterial.depthBuffer0 = depthTexture;
+		this.depthMaskMaterial.depthPacking0 = depthPacking;
 
 	}
 
@@ -258,17 +251,22 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 		const camera = this.camera;
 		const selection = this.selection;
-		const renderTarget = this.renderTargetMasked;
+		let renderTarget = inputBuffer;
 
-		// Render depth of selected objects.
-		const mask = camera.layers.mask;
-		camera.layers.set(selection.getLayer());
-		this.depthPass.render(renderer);
-		camera.layers.mask = mask;
+		if(selection.size > 0) {
 
-		// Discard colors based on depth.
-		this.clearPass.render(renderer, renderTarget);
-		this.depthMaskPass.render(renderer, inputBuffer, renderTarget);
+			// Render depth of selected objects.
+			const mask = camera.layers.mask;
+			camera.layers.set(selection.layer);
+			this.depthPass.render(renderer);
+			camera.layers.mask = mask;
+
+			// Discard colors based on depth.
+			renderTarget = this.renderTargetMasked;
+			this.clearPass.render(renderer, renderTarget);
+			this.depthMaskPass.render(renderer, inputBuffer, renderTarget);
+
+		}
 
 		// Render the bloom texture as usual.
 		super.update(renderer, renderTarget, deltaTime);
@@ -289,7 +287,6 @@ export class SelectiveBloomEffect extends BloomEffect {
 		this.clearPass.setSize(width, height);
 		this.depthPass.setSize(width, height);
 		this.depthMaskPass.setSize(width, height);
-
 		this.renderTargetMasked.setSize(width, height);
 
 	}
@@ -313,6 +310,12 @@ export class SelectiveBloomEffect extends BloomEffect {
 		if(frameBufferType !== undefined) {
 
 			this.renderTargetMasked.texture.type = frameBufferType;
+
+			if(renderer.outputEncoding === sRGBEncoding) {
+
+				this.renderTargetMasked.texture.encoding = sRGBEncoding;
+
+			}
 
 		}
 

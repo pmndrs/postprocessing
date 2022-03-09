@@ -9,4 +9,6 @@ weight: 30
 
 # Migration Guide
 
+## v6 &rarr; v7
+
 WIP

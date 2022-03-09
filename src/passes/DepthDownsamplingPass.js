@@ -7,7 +7,7 @@ import { Pass } from "./Pass";
  * A pass that downsamples the scene depth by picking the most representative depth in 2x2 texel neighborhoods. If a
  * normal buffer is provided, the corresponding normals will be stored as well.
  *
- * Attention: This pass requires WebGL 2.
+ * This pass requires WebGL 2.
  */
 
 export class DepthDownsamplingPass extends Pass {
@@ -32,8 +32,8 @@ export class DepthDownsamplingPass extends Pass {
 		super("DepthDownsamplingPass");
 
 		const material = new DepthDownsamplingMaterial();
-		material.setNormalBuffer(normalBuffer);
-		this.setFullscreenMaterial(material);
+		material.normalBuffer = normalBuffer;
+		this.fullscreenMaterial = material;
 		this.needsDepthTexture = true;
 		this.needsSwap = false;
 
@@ -61,14 +61,10 @@ export class DepthDownsamplingPass extends Pass {
 		 * The resolution.
 		 *
 		 * @type {Resolution}
-		 * @deprecated Use getResolution() instead.
 		 */
 
-		this.resolution = new Resolution(this, width, height, resolutionScale);
-		this.resolution.addEventListener("change", (e) => this.setSize(
-			this.resolution.getBaseWidth(),
-			this.resolution.getBaseHeight()
-		));
+		const resolution = this.resolution = new Resolution(this, width, height, resolutionScale);
+		resolution.addEventListener("change", (e) => this.setSize(resolution.baseWidth, resolution.baseHeight));
 
 	}
 
@@ -76,7 +72,6 @@ export class DepthDownsamplingPass extends Pass {
 	 * The normal(RGB) + depth(A) texture.
 	 *
 	 * @type {Texture}
-	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
@@ -88,6 +83,7 @@ export class DepthDownsamplingPass extends Pass {
 	/**
 	 * Returns the normal(RGB) + depth(A) texture.
 	 *
+	 * @deprecated Use texture instead.
 	 * @return {Texture} The texture.
 	 */
 
@@ -100,6 +96,7 @@ export class DepthDownsamplingPass extends Pass {
 	/**
 	 * Returns the resolution settings.
 	 *
+	 * @deprecated Use resolution instead.
 	 * @return {Resolution} The resolution.
 	 */
 
@@ -118,7 +115,8 @@ export class DepthDownsamplingPass extends Pass {
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
-		this.getFullscreenMaterial().setDepthBuffer(depthTexture, depthPacking);
+		this.fullscreenMaterial.depthBuffer = depthTexture;
+		this.fullscreenMaterial.depthPacking = depthPacking;
 
 	}
 
@@ -149,11 +147,11 @@ export class DepthDownsamplingPass extends Pass {
 	setSize(width, height) {
 
 		// Use the full resolution to calculate the depth/normal buffer texel size.
-		this.getFullscreenMaterial().setSize(width, height);
+		this.fullscreenMaterial.setSize(width, height);
 
 		const resolution = this.resolution;
 		resolution.setBaseSize(width, height);
-		this.renderTarget.setSize(resolution.getWidth(), resolution.getHeight());
+		this.renderTarget.setSize(resolution.width, resolution.height);
 
 	}
 

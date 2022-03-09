@@ -89,7 +89,17 @@ export class GlitchEffect extends Effect {
 			])
 		});
 
-		this.setPerturbationMap((perturbationMap === null) ? this.generatePerturbationMap(dtSize) : perturbationMap);
+		if(perturbationMap === null) {
+
+			const map = new NoiseTexture(dtSize, dtSize, RGBAFormat);
+			map.name = textureTag;
+			this.perturbationMap = map;
+
+		} else {
+
+			this.perturbationMap = perturbationMap;
+
+		}
 
 		/**
 		 * A time accumulator.
@@ -101,7 +111,7 @@ export class GlitchEffect extends Effect {
 		this.time = 0;
 
 		/**
-		 * A distortion vector.
+		 * A shortcut to the distortion vector.
 		 *
 		 * @type {Vector2}
 		 * @private
@@ -113,7 +123,7 @@ export class GlitchEffect extends Effect {
 		 * The minimum and maximum delay between glitch activations in seconds.
 		 *
 		 * @type {Vector2}
-		 * @deprecated Use getMinDelay(), setMinDelay(), getMaxDelay() and setMaxDelay() instead.
+		 * @deprecated Use minDelay and maxDelay instead.
 		 */
 
 		this.delay = delay;
@@ -122,7 +132,7 @@ export class GlitchEffect extends Effect {
 		 * The minimum and maximum duration of a glitch in seconds.
 		 *
 		 * @type {Vector2}
-		 * @deprecated Use getMinDuration(), setMinDuration(), getMaxDuration() and setMaxDuration() instead.
+		 * @deprecated Use minDuration and maxDuration instead.
 		 */
 
 		this.duration = duration;
@@ -143,7 +153,7 @@ export class GlitchEffect extends Effect {
 		 * The strength of weak and strong glitches.
 		 *
 		 * @type {Vector2}
-		 * @deprecated Use getMinStrength(), setMinStrength(), getMaxStrength() and setMaxStrength() instead.
+		 * @deprecated Use minStrength and maxStrength instead.
 		 */
 
 		this.strength = strength;
@@ -152,16 +162,17 @@ export class GlitchEffect extends Effect {
 		 * The effect mode.
 		 *
 		 * @type {GlitchMode}
-		 * @deprecated Use getMode() and setMode() instead.
 		 */
 
 		this.mode = GlitchMode.SPORADIC;
 
 		/**
-		 * The glitch ratio (currently inverted / treated as a threshold for strong glitches).
+		 * The ratio between weak (0.0) and strong (1.0) glitches. Range is [0.0, 1.0].
 		 *
+		 * This value is currently being treated as a threshold for strong glitches, i.e. it's inverted.
+		 *
+		 * TODO Resolve inversion.
 		 * @type {Number}
-		 * @deprecated Use getGlitchRatio() and setGlitchRatio() instead.
 		 */
 
 		this.ratio = ratio;
@@ -170,7 +181,6 @@ export class GlitchEffect extends Effect {
 		 * The chromatic aberration offset.
 		 *
 		 * @type {Vector2}
-		 * @deprecated Use getChromaticAberrationOffset() and setChromaticAberrationOffset() instead.
 		 */
 
 		this.chromaticAberrationOffset = chromaticAberrationOffset;
@@ -194,30 +204,49 @@ export class GlitchEffect extends Effect {
 	 * Indicates whether the glitch effect is currently active.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use isActive() instead.
 	 */
 
 	get active() {
-
-		return this.isActive();
-
-	}
-
-	/**
-	 * Indicates whether the glitch effect is currently active.
-	 *
-	 * @return {Boolean} Whether the glitch effect is active.
-	 */
-
-	isActive() {
 
 		return this.uniforms.get("active").value;
 
 	}
 
 	/**
+	 * Indicates whether the glitch effect is currently active.
+	 *
+	 * @deprecated Use active instead.
+	 * @return {Boolean} Whether the glitch effect is active.
+	 */
+
+	isActive() {
+
+		return this.active;
+
+	}
+
+	/**
+	 * The minimum delay between glitch activations.
+	 *
+	 * @type {Number}
+	 */
+
+	get minDelay() {
+
+		return this.delay.x;
+
+	}
+
+	set minDelay(value) {
+
+		this.delay.x = value;
+
+	}
+
+	/**
 	 * Returns the minimum delay between glitch activations.
 	 *
+	 * @deprecated Use minDelay instead.
 	 * @return {Number} The minimum delay in seconds.
 	 */
 
@@ -230,6 +259,7 @@ export class GlitchEffect extends Effect {
 	/**
 	 * Sets the minimum delay between glitch activations.
 	 *
+	 * @deprecated Use minDelay instead.
 	 * @param {Number} value - The minimum delay in seconds.
 	 */
 
@@ -240,8 +270,27 @@ export class GlitchEffect extends Effect {
 	}
 
 	/**
+	 * The maximum delay between glitch activations.
+	 *
+	 * @type {Number}
+	 */
+
+	get maxDelay() {
+
+		return this.delay.y;
+
+	}
+
+	set maxDelay(value) {
+
+		this.delay.y = value;
+
+	}
+
+	/**
 	 * Returns the maximum delay between glitch activations.
 	 *
+	 * @deprecated Use maxDelay instead.
 	 * @return {Number} The maximum delay in seconds.
 	 */
 
@@ -254,6 +303,7 @@ export class GlitchEffect extends Effect {
 	/**
 	 * Sets the maximum delay between glitch activations.
 	 *
+	 * @deprecated Use maxDelay instead.
 	 * @param {Number} value - The maximum delay in seconds.
 	 */
 
@@ -264,8 +314,27 @@ export class GlitchEffect extends Effect {
 	}
 
 	/**
+	 * The minimum duration of sporadic glitches.
+	 *
+	 * @type {Number}
+	 */
+
+	get minDuration() {
+
+		return this.duration.x;
+
+	}
+
+	set minDuration(value) {
+
+		this.duration.x = value;
+
+	}
+
+	/**
 	 * Returns the minimum duration of sporadic glitches.
 	 *
+	 * @deprecated Use minDuration instead.
 	 * @return {Number} The minimum duration in seconds.
 	 */
 
@@ -278,6 +347,7 @@ export class GlitchEffect extends Effect {
 	/**
 	 * Sets the minimum duration of sporadic glitches.
 	 *
+	 * @deprecated Use minDuration instead.
 	 * @param {Number} value - The minimum duration in seconds.
 	 */
 
@@ -288,8 +358,27 @@ export class GlitchEffect extends Effect {
 	}
 
 	/**
+	 * The maximum duration of sporadic glitches.
+	 *
+	 * @type {Number}
+	 */
+
+	get maxDuration() {
+
+		return this.duration.y;
+
+	}
+
+	set maxDuration(value) {
+
+		this.duration.y = value;
+
+	}
+
+	/**
 	 * Returns the maximum duration of sporadic glitches.
 	 *
+	 * @deprecated Use maxDuration instead.
 	 * @return {Number} The maximum duration in seconds.
 	 */
 
@@ -302,6 +391,7 @@ export class GlitchEffect extends Effect {
 	/**
 	 * Sets the maximum duration of sporadic glitches.
 	 *
+	 * @deprecated Use maxDuration instead.
 	 * @param {Number} value - The maximum duration in seconds.
 	 */
 
@@ -312,8 +402,27 @@ export class GlitchEffect extends Effect {
 	}
 
 	/**
+	 * The strength of weak glitches.
+	 *
+	 * @type {Number}
+	 */
+
+	get minStrength() {
+
+		return this.strength.x;
+
+	}
+
+	set minStrength(value) {
+
+		this.strength.x = value;
+
+	}
+
+	/**
 	 * Returns the strength of weak glitches.
 	 *
+	 * @deprecated Use minStrength instead.
 	 * @return {Number} The strength.
 	 */
 
@@ -326,6 +435,7 @@ export class GlitchEffect extends Effect {
 	/**
 	 * Sets the strength of weak glitches.
 	 *
+	 * @deprecated Use minStrength instead.
 	 * @param {Number} value - The strength.
 	 */
 
@@ -336,8 +446,27 @@ export class GlitchEffect extends Effect {
 	}
 
 	/**
-	 * Returns the strength of strrong glitches.
+	 * The strength of strong glitches.
 	 *
+	 * @type {Number}
+	 */
+
+	get maxStrength() {
+
+		return this.strength.y;
+
+	}
+
+	set maxStrength(value) {
+
+		this.strength.y = value;
+
+	}
+
+	/**
+	 * Returns the strength of strong glitches.
+	 *
+	 * @deprecated Use maxStrength instead.
 	 * @return {Number} The strength.
 	 */
 
@@ -350,6 +479,7 @@ export class GlitchEffect extends Effect {
 	/**
 	 * Sets the strength of strong glitches.
 	 *
+	 * @deprecated Use maxStrength instead.
 	 * @param {Number} value - The strength.
 	 */
 
@@ -362,6 +492,7 @@ export class GlitchEffect extends Effect {
 	/**
 	 * Returns the current glitch mode.
 	 *
+	 * @deprecated Use mode instead.
 	 * @return {GlitchMode} The mode.
 	 */
 
@@ -374,6 +505,7 @@ export class GlitchEffect extends Effect {
 	/**
 	 * Sets the current glitch mode.
 	 *
+	 * @deprecated Use mode instead.
 	 * @param {GlitchMode} value - The mode.
 	 */
 
@@ -386,7 +518,7 @@ export class GlitchEffect extends Effect {
 	/**
 	 * Returns the glitch ratio.
 	 *
-	 * TODO Remove inversion.
+	 * @deprecated Use ratio instead.
 	 * @return {Number} The ratio.
 	 */
 
@@ -399,7 +531,7 @@ export class GlitchEffect extends Effect {
 	/**
 	 * Sets the ratio of weak (0.0) and strong (1.0) glitches.
 	 *
-	 * TODO Remove inversion.
+	 * @deprecated Use ratio instead.
 	 * @param {Number} value - The ratio. Range is [0.0, 1.0].
 	 */
 
@@ -410,32 +542,53 @@ export class GlitchEffect extends Effect {
 	}
 
 	/**
-	 * Returns the glitch column size.
+	 * The glitch column size.
 	 *
-	 * @return {Number} The glitch column size.
+	 * @type {Number}
 	 */
 
-	getGlitchColumns() {
+	get columns() {
 
 		return this.uniforms.get("columns").value;
 
 	}
 
-	/**
-	 * Sets the glitch column size.
-	 *
-	 * @param {Number} value - The glitch column size.
-	 */
-
-	setGlitchColumns(value) {
+	set columns(value) {
 
 		this.uniforms.get("columns").value = value;
 
 	}
 
 	/**
+	 * Returns the glitch column size.
+	 *
+	 * @deprecated Use columns instead.
+	 * @return {Number} The glitch column size.
+	 */
+
+	getGlitchColumns() {
+
+		return this.columns;
+
+	}
+
+	/**
+	 * Sets the glitch column size.
+	 *
+	 * @deprecated Use columns instead.
+	 * @param {Number} value - The glitch column size.
+	 */
+
+	setGlitchColumns(value) {
+
+		this.columns = value;
+
+	}
+
+	/**
 	 * Returns the chromatic aberration offset.
 	 *
+	 * @deprecated Use chromaticAberrationOffset instead.
 	 * @return {Vector2} The offset.
 	 */
 
@@ -448,6 +601,7 @@ export class GlitchEffect extends Effect {
 	/**
 	 * Sets the chromatic aberration offset.
 	 *
+	 * @deprecated Use chromaticAberrationOffset instead.
 	 * @param {Vector2} value - The offset.
 	 */
 
@@ -458,28 +612,20 @@ export class GlitchEffect extends Effect {
 	}
 
 	/**
-	 * Returns the current perturbation map.
+	 * The perturbation map.
 	 *
-	 * @return {Texture} The current perturbation map.
+	 * @type {Texture}
 	 */
 
-	getPerturbationMap() {
+	get perturbationMap() {
 
 		return this.uniforms.get("perturbationMap").value;
 
 	}
 
-	/**
-	 * Replaces the current perturbation map with the given one.
-	 *
-	 * The current map will be disposed if it was generated by this effect.
-	 *
-	 * @param {Texture} value - The new perturbation map.
-	 */
+	set perturbationMap(value) {
 
-	setPerturbationMap(value) {
-
-		const currentMap = this.getPerturbationMap();
+		const currentMap = this.perturbationMap;
 
 		if(currentMap !== null && currentMap.name === textureTag) {
 
@@ -496,8 +642,37 @@ export class GlitchEffect extends Effect {
 	}
 
 	/**
+	 * Returns the current perturbation map.
+	 *
+	 * @deprecated Use perturbationMap instead.
+	 * @return {Texture} The current perturbation map.
+	 */
+
+	getPerturbationMap() {
+
+		return this.perturbationMap;
+
+	}
+
+	/**
+	 * Replaces the current perturbation map with the given one.
+	 *
+	 * The current map will be disposed if it was generated by this effect.
+	 *
+	 * @deprecated Use perturbationMap instead.
+	 * @param {Texture} value - The new perturbation map.
+	 */
+
+	setPerturbationMap(value) {
+
+		this.perturbationMap = value;
+
+	}
+
+	/**
 	 * Generates a perturbation map.
 	 *
+	 * @deprecated Use NoiseTexture instead.
 	 * @param {Number} [value=64] - The texture size.
 	 * @return {DataTexture} The perturbation map.
 	 */
@@ -604,7 +779,7 @@ export class GlitchEffect extends Effect {
 
 	dispose() {
 
-		const map = this.getPerturbationMap();
+		const map = this.perturbationMap;
 
 		if(map !== null && map.name === textureTag) {
 

@@ -51,6 +51,22 @@ export class ShockWaveEffect extends Effect {
 		});
 
 		/**
+		 * The position of the shock wave.
+		 *
+		 * @type {Vector3}
+		 */
+
+		this.position = position;
+
+		/**
+		 * The speed of the shock wave animation.
+		 *
+		 * @type {Number}
+		 */
+
+		this.speed = speed;
+
+		/**
 		 * The main camera.
 		 *
 		 * @type {Camera}
@@ -60,16 +76,6 @@ export class ShockWaveEffect extends Effect {
 		this.camera = camera;
 
 		/**
-		 * The position of the shock wave.
-		 *
-		 * TODO Rename to position.
-		 * @type {Vector3}
-		 * @deprecated Use getPosition() and setPosition() instead.
-		 */
-
-		this.epicenter = position;
-
-		/**
 		 * The object position in screen space.
 		 *
 		 * @type {Vector3}
@@ -77,15 +83,6 @@ export class ShockWaveEffect extends Effect {
 		 */
 
 		this.screenPosition = this.uniforms.get("center").value;
-
-		/**
-		 * The speed of the shock wave animation.
-		 *
-		 * @type {Number}
-		 * @deprecated Use getSpeed() and setSpeed() instead.
-		 */
-
-		this.speed = speed;
 
 		/**
 		 * A time accumulator.
@@ -108,32 +105,108 @@ export class ShockWaveEffect extends Effect {
 	}
 
 	/**
+	 * The amplitude.
+	 *
+	 * @type {Number}
+	 */
+
+	get amplitude() {
+
+		return this.uniforms.get("amplitude").value;
+
+	}
+
+	set amplitude(value) {
+
+		this.uniforms.get("amplitude").value = value;
+
+	}
+
+	/**
+	 * The wave size.
+	 *
+	 * @type {Number}
+	 */
+
+	get waveSize() {
+
+		return this.uniforms.get("waveSize").value;
+
+	}
+
+	set waveSize(value) {
+
+		this.uniforms.get("waveSize").value = value;
+
+	}
+
+	/**
+	 * The maximum radius.
+	 *
+	 * @type {Number}
+	 */
+
+	get maxRadius() {
+
+		return this.uniforms.get("maxRadius").value;
+
+	}
+
+	set maxRadius(value) {
+
+		this.uniforms.get("maxRadius").value = value;
+
+	}
+
+	/**
+	 * The position of the shock wave.
+	 *
+	 * @type {Vector3}
+	 * @deprecated Use position instead.
+	 */
+
+	get epicenter() {
+
+		return this.position;
+
+	}
+
+	set epicenter(value) {
+
+		this.position = value;
+
+	}
+
+	/**
 	 * Returns the position of the shock wave.
 	 *
+	 * @deprecated Use position instead.
 	 * @return {Vector3} The position.
 	 */
 
 	getPosition() {
 
-		return this.epicenter;
+		return this.position;
 
 	}
 
 	/**
 	 * Sets the position of the shock wave.
 	 *
+	 * @deprecated Use position instead.
 	 * @param {Vector3} value - The position.
 	 */
 
 	setPosition(value) {
 
-		this.epicenter = value;
+		this.position = value;
 
 	}
 
 	/**
 	 * Returns the speed of the shock wave.
 	 *
+	 * @deprecated Use speed instead.
 	 * @return {Number} The speed.
 	 */
 
@@ -146,6 +219,7 @@ export class ShockWaveEffect extends Effect {
 	/**
 	 * Sets the speed of the shock wave.
 	 *
+	 * @deprecated Use speed instead.
 	 * @param {Number} value - The speed.
 	 */
 
@@ -177,10 +251,10 @@ export class ShockWaveEffect extends Effect {
 
 	update(renderer, inputBuffer, delta) {
 
-		const position = this.getPosition();
+		const position = this.position;
 		const camera = this.camera;
 		const uniforms = this.uniforms;
-		const uniformActive = uniforms.get("active");
+		const uActive = uniforms.get("active");
 
 		if(this.active) {
 
@@ -191,9 +265,9 @@ export class ShockWaveEffect extends Effect {
 			ab.copy(camera.position).sub(position);
 
 			// Don't render the effect if the object is behind the camera.
-			uniformActive.value = (v.angleTo(ab) > HALF_PI);
+			uActive.value = (v.angleTo(ab) > HALF_PI);
 
-			if(uniformActive.value) {
+			if(uActive.value) {
 
 				// Scale the effect based on distance to the object.
 				uniforms.get("cameraDistance").value = camera.position.distanceTo(position);
@@ -212,7 +286,7 @@ export class ShockWaveEffect extends Effect {
 			if(radius >= (uniforms.get("maxRadius").value + waveSize) * 2.0) {
 
 				this.active = false;
-				uniformActive.value = false;
+				uActive.value = false;
 
 			}
 

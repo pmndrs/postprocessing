@@ -54,7 +54,6 @@ export class ClearPass extends Pass {
 		 * An override clear color. Default is null.
 		 *
 		 * @type {Color}
-		 * @deprecated Use getOverrideClearColor() and setOverrideClearColor() instead.
 		 */
 
 		this.overrideClearColor = null;
@@ -63,10 +62,9 @@ export class ClearPass extends Pass {
 		 * An override clear alpha. Default is -1.
 		 *
 		 * @type {Number}
-		 * @deprecated Use getOverrideClearAlpha() and setOverrideClearAlpha() instead.
 		 */
 
-		this.overrideClearAlpha = -1.0;
+		this.overrideClearAlpha = -1;
 
 	}
 
@@ -89,6 +87,7 @@ export class ClearPass extends Pass {
 	/**
 	 * Returns the override clear color. Default is null.
 	 *
+	 * @deprecated Use overrideClearColor instead.
 	 * @return {Color} The clear color.
 	 */
 
@@ -101,6 +100,7 @@ export class ClearPass extends Pass {
 	/**
 	 * Sets the override clear color.
 	 *
+	 * @deprecated Use overrideClearColor instead.
 	 * @param {Color} value - The clear color.
 	 */
 
@@ -113,6 +113,7 @@ export class ClearPass extends Pass {
 	/**
 	 * Returns the override clear alpha. Default is -1.
 	 *
+	 * @deprecated Use overrideClearAlpha instead.
 	 * @return {Number} The clear alpha.
 	 */
 
@@ -125,6 +126,7 @@ export class ClearPass extends Pass {
 	/**
 	 * Sets the override clear alpha.
 	 *
+	 * @deprecated Use overrideClearAlpha instead.
 	 * @param {Number} value - The clear alpha.
 	 */
 
@@ -151,7 +153,7 @@ export class ClearPass extends Pass {
 		const clearAlpha = renderer.getClearAlpha();
 
 		const hasOverrideClearColor = (overrideClearColor !== null);
-		const hasOverrideClearAlpha = (overrideClearAlpha >= 0.0);
+		const hasOverrideClearAlpha = (overrideClearAlpha >= 0);
 
 		if(hasOverrideClearColor) {
 

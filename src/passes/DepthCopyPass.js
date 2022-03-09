@@ -28,8 +28,8 @@ export class DepthCopyPass extends Pass {
 		super("DepthCopyPass");
 
 		const material = new DepthCopyMaterial();
-		material.setOutputDepthPacking(depthPacking);
-		this.setFullscreenMaterial(material);
+		material.outputDepthPacking = depthPacking;
+		this.fullscreenMaterial = material;
 		this.needsDepthTexture = true;
 		this.needsSwap = false;
 
@@ -56,18 +56,18 @@ export class DepthCopyPass extends Pass {
 	 * The output depth texture.
 	 *
 	 * @type {Texture}
-	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
 
-		return this.getTexture();
+		return this.renderTarget.texture;
 
 	}
 
 	/**
 	 * Returns the output depth texture.
 	 *
+	 * @deprecated Use texture instead.
 	 * @return {Texture} The texture.
 	 */
 
@@ -81,24 +81,24 @@ export class DepthCopyPass extends Pass {
 	 * The output depth packing.
 	 *
 	 * @type {DepthPackingStrategies}
-	 * @deprecated Use getDepthPacking() instead.
 	 */
 
 	get depthPacking() {
 
-		return this.getDepthPacking();
+		return this.fullscreenMaterial.outputDepthPacking;
 
 	}
 
 	/**
 	 * Returns the output depth packing.
 	 *
+	 * @deprecated Use depthPacking instead.
 	 * @return {DepthPackingStrategies} The depth packing.
 	 */
 
 	getDepthPacking() {
 
-		return this.getFullscreenMaterial().getOutputDepthPacking();
+		return this.fullscreenMaterial.outputDepthPacking;
 
 	}
 
@@ -111,7 +111,8 @@ export class DepthCopyPass extends Pass {
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
-		this.getFullscreenMaterial().setDepthBuffer(depthTexture, depthPacking);
+		this.fullscreenMaterial.depthBuffer = depthTexture;
+		this.fullscreenMaterial.inputDepthPacking = depthPacking;
 
 	}
 

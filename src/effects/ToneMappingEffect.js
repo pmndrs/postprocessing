@@ -1,4 +1,4 @@
-import { LinearFilter, LinearMipMapLinearFilter, LinearMipmapLinearFilter, Uniform, WebGLRenderTarget } from "three";
+import { LinearFilter, LinearMipmapLinearFilter, Uniform, WebGLRenderTarget } from "three";
 import { AdaptiveLuminancePass, LuminancePass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect } from "./Effect";
@@ -41,7 +41,7 @@ export class ToneMappingEffect extends Effect {
 	 *
 	 * The additional parameters only affect the Reinhard2 operator.
 	 *
-	 * TODO Remove deprecated params and change default mode to ACES_FILMIC and white point to 4.
+	 * TODO Change default mode to ACES_FILMIC and white point to 4.
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
 	 * @param {Boolean} [options.adaptive=true] - Deprecated. Use mode instead.
@@ -84,11 +84,10 @@ export class ToneMappingEffect extends Effect {
 		 *
 		 * @type {WebGLRenderTarget}
 		 * @private
-		 * TODO Remove LinearMipMapLinearFilter in next major release.
 		 */
 
 		this.renderTargetLuminance = new WebGLRenderTarget(1, 1, {
-			minFilter: (LinearMipmapLinearFilter !== undefined) ? LinearMipmapLinearFilter : LinearMipMapLinearFilter,
+			minFilter: LinearMipmapLinearFilter,
 			magFilter: LinearFilter,
 			stencilBuffer: false,
 			depthBuffer: false
@@ -115,52 +114,36 @@ export class ToneMappingEffect extends Effect {
 		 * @private
 		 */
 
-		this.adaptiveLuminancePass = new AdaptiveLuminancePass(this.luminancePass.getTexture(), {
+		this.adaptiveLuminancePass = new AdaptiveLuminancePass(this.luminancePass.texture, {
 			minLuminance,
 			adaptationRate
 		});
 
-		this.uniforms.get("luminanceBuffer").value = this.adaptiveLuminancePass.getTexture();
+		this.uniforms.get("luminanceBuffer").value = this.adaptiveLuminancePass.texture;
 
-		/**
-		 * The current tone mapping mode.
-		 *
-		 * @type {ToneMappingMode}
-		 * @private
-		 */
-
-		this.mode = null;
-
-		this.setMode(mode);
-		this.setResolution(resolution);
+		this.resolution = resolution;
+		this.mode = mode;
 
 	}
 
 	/**
-	 * Returns the current tone mapping mode.
+	 * The tone mapping mode.
 	 *
-	 * @return {ToneMappingMode} The tone mapping mode.
+	 * @type {ToneMappingMode}
 	 */
 
-	getMode() {
+	get mode() {
 
-		return this.mode;
+		return Number(this.defines.get("TONE_MAPPING_MODE"));
 
 	}
 
-	/**
-	 * Sets the tone mapping mode.
-	 *
-	 * @param {ToneMappingMode} value - The tone mapping mode.
-	 */
+	set mode(value) {
 
-	setMode(value) {
-
-		const currentMode = this.mode;
-
-		if(currentMode !== value) {
+		if(this.mode !== value) {
 
 			this.defines.clear();
+			this.defines.set("TONE_MAPPING_MODE", value.toFixed(0));
 
 			// Use one of the built-in tone mapping operators.
 			switch(value) {
@@ -183,19 +166,7 @@ export class ToneMappingEffect extends Effect {
 
 			}
 
-			// Use a custom Reinhard operator.
-			if(value === ToneMappingMode.REINHARD2) {
-
-				this.defines.set("REINHARD2", "1");
-
-			} else if(value === ToneMappingMode.REINHARD2_ADAPTIVE) {
-
-				this.defines.set("REINHARD2", "1");
-				this.defines.set("ADAPTIVE", "1");
-
-			}
-
-			this.mode = value;
+			this.adaptiveLuminancePass.enabled = (value === ToneMappingMode.REINHARD2_ADAPTIVE);
 			this.setChanged();
 
 		}
@@ -203,69 +174,102 @@ export class ToneMappingEffect extends Effect {
 	}
 
 	/**
+	 * Returns the current tone mapping mode.
+	 *
+	 * @deprecated Use mode instead.
+	 * @return {ToneMappingMode} The tone mapping mode.
+	 */
+
+	getMode() {
+
+		return this.mode;
+
+	}
+
+	/**
+	 * Sets the tone mapping mode.
+	 *
+	 * @deprecated Use mode instead.
+	 * @param {ToneMappingMode} value - The tone mapping mode.
+	 */
+
+	setMode(value) {
+
+		this.mode = value;
+
+	}
+
+	/**
+	 * The adaptive luminance material.
+	 *
+	 * @type {AdaptiveLuminanceMaterial}
+	 */
+
+	get adaptiveLuminanceMaterial() {
+
+		return this.adaptiveLuminancePass.fullscreenMaterial;
+
+	}
+
+	/**
 	 * Returns the adaptive luminance material.
 	 *
+	 * @deprecated Use adaptiveLuminanceMaterial instead.
 	 * @return {AdaptiveLuminanceMaterial} The material.
 	 */
 
 	getAdaptiveLuminanceMaterial() {
 
-		return this.adaptiveLuminancePass.getFullscreenMaterial();
+		return this.adaptiveLuminanceMaterial;
 
 	}
 
 	/**
-	 * The resolution of the render targets.
+	 * The resolution of the luminance texture. Must be a power of two.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getResolution() instead.
 	 */
 
 	get resolution() {
 
-		return this.getResolution();
+		return this.luminancePass.resolution.width;
 
 	}
 
-	/**
-	 * Sets the resolution of the luminance texture. Must be a power of two.
-	 *
-	 * @type {Number}
-	 * @deprecated Use setResolution() instead.
-	 */
-
 	set resolution(value) {
 
-		this.setResolution(value);
+		// Round the given value to the next power of two.
+		const exponent = Math.max(0, Math.ceil(Math.log2(value)));
+		const size = Math.pow(2, exponent);
+
+		this.luminancePass.resolution.setPreferredSize(size, size);
+		this.adaptiveLuminanceMaterial.mipLevel1x1 = exponent;
 
 	}
 
 	/**
 	 * Returns the resolution of the luminance texture.
 	 *
+	 * @deprecated Use resolution instead.
 	 * @return {Number} The resolution.
 	 */
 
 	getResolution() {
 
-		return this.luminancePass.getResolution().getWidth();
+		return this.resolution;
 
 	}
 
 	/**
 	 * Sets the resolution of the luminance texture. Must be a power of two.
 	 *
+	 * @deprecated Use resolution instead.
 	 * @param {Number} value - The resolution.
 	 */
 
 	setResolution(value) {
 
-		// Round the given value to the next power of two.
-		const exponent = Math.max(0, Math.ceil(Math.log2(value)));
-		const size = Math.pow(2, exponent);
-
-		this.luminancePass.getResolution().setPreferredSize(size, size);
-		this.getAdaptiveLuminanceMaterial().setMipLevel1x1(exponent);
+		this.resolution = value;
 
 	}
 
@@ -273,21 +277,14 @@ export class ToneMappingEffect extends Effect {
 	 * Indicates whether this pass uses adaptive luminance.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use getMode() instead.
+	 * @deprecated Use mode instead.
 	 */
 
 	get adaptive() {
 
-		return this.defines.has("ADAPTIVE");
+		return (this.mode === ToneMappingMode.REINHARD2_ADAPTIVE);
 
 	}
-
-	/**
-	 * Enables or disables adaptive luminance.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Uset setMode(ToneMappingMode.REINHARD2_ADAPTIVE) instead.
-	 */
 
 	set adaptive(value) {
 
@@ -299,23 +296,18 @@ export class ToneMappingEffect extends Effect {
 	 * The luminance adaptation rate.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getAdaptiveLuminanceMaterial().getAdaptationRate() instead.
+	 * @deprecated Use adaptiveLuminanceMaterial.adaptationRate instead.
 	 */
 
 	get adaptationRate() {
 
-		return this.getAdaptiveLuminanceMaterial().getAdaptationRate();
+		return this.adaptiveLuminanceMaterial.adaptationRate;
 
 	}
 
-	/**
-	 * @type {Number}
-	 * @deprecated Use getAdaptiveLuminanceMaterial().setAdaptationRate() instead.
-	 */
-
 	set adaptationRate(value) {
 
-		this.getAdaptiveLuminanceMaterial().setAdaptationRate(value);
+		this.adaptiveLuminanceMaterial.adaptationRate = value;
 
 	}
 
@@ -330,11 +322,6 @@ export class ToneMappingEffect extends Effect {
 		return 1.0;
 
 	}
-
-	/**
-	 * @type {Number}
-	 * @deprecated
-	 */
 
 	set distinction(value) {
 
@@ -352,7 +339,7 @@ export class ToneMappingEffect extends Effect {
 
 	update(renderer, inputBuffer, deltaTime) {
 
-		if(this.mode === ToneMappingMode.REINHARD2_ADAPTIVE) {
+		if(this.adaptiveLuminancePass.enabled) {
 
 			this.luminancePass.render(renderer, inputBuffer);
 			this.adaptiveLuminancePass.render(renderer, null, null, deltaTime);

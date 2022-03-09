@@ -36,47 +36,43 @@ export class ChromaticAberrationEffect extends Effect {
 	 * The color offset.
 	 *
 	 * @type {Vector2}
-	 * @deprecated Use getOffset() instead.
 	 */
 
 	get offset() {
 
-		return this.getOffset();
+		return this.uniforms.get("offset").value;
 
 	}
 
-	/**
-	 * @type {Vector2}
-	 * @deprecated Use setOffset() instead.
-	 */
-
 	set offset(value) {
 
-		this.setOffset(value);
+		this.uniforms.get("offset").value = value;
 
 	}
 
 	/**
 	 * Returns the color offset vector.
 	 *
+	 * @deprecated Use offset instead.
 	 * @return {Vector2} The offset.
 	 */
 
 	getOffset() {
 
-		return this.uniforms.get("offset").value;
+		return this.offset;
 
 	}
 
 	/**
 	 * Sets the color offset vector.
 	 *
+	 * @deprecated Use offset instead.
 	 * @param {Vector2} value - The offset.
 	 */
 
 	setOffset(value) {
 
-		this.uniforms.get("offset").value = value;
+		this.offset = value;
 
 	}
 

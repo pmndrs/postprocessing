@@ -12,22 +12,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Git checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Install Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14
+        uses: actions/setup-node@v3
       - name: Install PNPM
         run: npm install -g pnpm
       - name: Install dependencies
         run: pnpm install --frozen-lockfile=false
       - name: Build and deploy
         run: pnpm run deploy
-      - uses: JamesIves/github-pages-deploy-action@4.1.8
+      - uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: public
           target-folder: public
           single-commit: true
-          silent: true
-          clean: true

@@ -58,7 +58,7 @@ export class BlendMode extends EventDispatcher {
 	/**
 	 * Constructs a new blend mode.
 	 *
-	 * @param {BlendFunction} blendFunction - The blend function to use.
+	 * @param {BlendFunction} blendFunction - The blend function.
 	 * @param {Number} opacity - The opacity of the color that will be blended with the base color.
 	 */
 
@@ -76,10 +76,10 @@ export class BlendMode extends EventDispatcher {
 		this.blendFunction = blendFunction;
 
 		/**
-		 * The opacity of the color that will be blended with the base color.
+		 * A uniform that controls the opacity of this blend mode.
 		 *
+		 * TODO Add opacity accessors for uniform value.
 		 * @type {Uniform}
-		 * @private
 		 */
 
 		this.opacity = new Uniform(opacity);
@@ -125,12 +125,12 @@ export class BlendMode extends EventDispatcher {
 	/**
 	 * Sets the blend function.
 	 *
-	 * @param {BlendFunction} blendFunction - The blend function.
+	 * @param {BlendFunction} value - The blend function.
 	 */
 
-	setBlendFunction(blendFunction) {
+	setBlendFunction(value) {
 
-		this.blendFunction = blendFunction;
+		this.blendFunction = value;
 		this.dispatchEvent({ type: "change" });
 
 	}

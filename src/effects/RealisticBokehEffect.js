@@ -90,12 +90,6 @@ export class RealisticBokehEffect extends Effect {
 
 	}
 
-	/**
-	 * Sets the amount of blur iterations.
-	 *
-	 * @type {Number}
-	 */
-
 	set rings(value) {
 
 		const r = Math.floor(value);
@@ -118,12 +112,6 @@ export class RealisticBokehEffect extends Effect {
 
 	}
 
-	/**
-	 * Sets the amount of blur samples per ring.
-	 *
-	 * @type {Number}
-	 */
-
 	set samples(value) {
 
 		const s = Math.floor(value);
@@ -145,12 +133,6 @@ export class RealisticBokehEffect extends Effect {
 		return this.defines.has("SHOW_FOCUS");
 
 	}
-
-	/**
-	 * Enables or disables focal point highlighting.
-	 *
-	 * @type {Boolean}
-	 */
 
 	set showFocus(value) {
 
@@ -186,12 +168,6 @@ export class RealisticBokehEffect extends Effect {
 
 	}
 
-	/**
-	 * Enables or disables manual Depth of Field.
-	 *
-	 * @type {Boolean}
-	 */
-
 	set manualDoF(value) {
 
 		if(this.manualDoF !== value) {
@@ -225,12 +201,6 @@ export class RealisticBokehEffect extends Effect {
 		return this.defines.has("PENTAGON");
 
 	}
-
-	/**
-	 * Enables or disables pentagonal blur.
-	 *
-	 * @type {Boolean}
-	 */
 
 	set pentagon(value) {
 

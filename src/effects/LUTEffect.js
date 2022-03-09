@@ -10,7 +10,7 @@ import {
 	Vector3
 } from "three";
 
-import { LookupTexture3D } from "../images/textures/LookupTexture3D";
+import { LookupTexture } from "../images/textures/LookupTexture";
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect } from "./Effect";
 
@@ -30,6 +30,8 @@ import fragmentShader from "./glsl/lut/shader.frag";
  * https://www.nvidia.com/content/GTC/posters/2010/V01-Real-Time-Color-Space-Conversion-for-High-Resolution-Video.pdf
  * https://github.com/AcademySoftwareFoundation/OpenColorIO/blob/master/src/OpenColorIO/ops/lut3d/
  * https://github.com/gkjohnson/threejs-sandbox/tree/master/3d-lut
+ *
+ * TODO Replace DataTexture3D with Data3DTexture.
  */
 
 export class LUTEffect extends Effect {
@@ -56,76 +58,44 @@ export class LUTEffect extends Effect {
 			])
 		});
 
-		/**
-		 * Indicates whether tetrahedral interpolation is enabled.
-		 *
-		 * @type {Boolean}
-		 * @private
-		 */
-
 		this.tetrahedralInterpolation = tetrahedralInterpolation;
-
-		/**
-		 * The input encoding.
-		 *
-		 * @type {Number}
-		 * @private
-		 */
-
 		this.inputEncoding = sRGBEncoding;
-
-		/**
-		 * The output encoding.
-		 *
-		 * @type {Number}
-		 * @private
-		 */
-
-		this.outputEncoding = sRGBEncoding;
-
-		this.setInputEncoding(sRGBEncoding);
-		this.setLUT(lut);
+		this.lut = lut;
 
 	}
 
 	/**
-	 * Returns the current output encoding.
+	 * Returns the output encoding.
 	 *
-	 * @return {Number} The encoding.
+	 * @deprecated
+	 * @return {TextureEncoding} The encoding.
 	 */
 
 	getOutputEncoding() {
 
-		return this.outputEncoding;
+		return Number(this.defines.get("OUTPUT_ENCODING"));
 
 	}
 
 	/**
-	 * Returns the input encoding.
-	 *
-	 * This is set to `sRGBEncoding` by default since most LUTs expect sRGB input.
-	 *
-	 * @return {Number} The encoding.
-	 */
-
-	getInputEncoding() {
-
-		return this.inputEncoding;
-
-	}
-
-	/**
-	 * Sets the input encoding.
+	 * The input encoding. Default is `sRGBEncoding`.
 	 *
 	 * Set this to `LinearEncoding` if your LUT expects linear color input.
 	 *
-	 * @param {Number} value - The encoding.
+	 * @type {TextureEncoding}
 	 */
 
-	setInputEncoding(value) {
+	get inputEncoding() {
 
+		return Number(this.defines.get("INPUT_ENCODING"));
+
+	}
+
+	set inputEncoding(value) {
+
+		const lut = this.lut;
 		const defines = this.defines;
-		const lut = this.getLUT();
+		defines.set("INPUT_ENCODING", value.toFixed(0));
 
 		switch(value) {
 
@@ -146,9 +116,10 @@ export class LUTEffect extends Effect {
 		if(lut !== null) {
 
 			// The encoding of the input colors carries over if the LUT is linear.
-			this.outputEncoding = (lut.encoding === LinearEncoding) ? value : lut.encoding;
+			const outputEncoding = (lut.encoding === LinearEncoding) ? value : lut.encoding;
+			defines.set("OUTPUT_ENCODING", outputEncoding.toFixed(0));
 
-			switch(this.outputEncoding) {
+			switch(outputEncoding) {
 
 				case sRGBEncoding:
 					defines.set("texelToLinear(texel)", "sRGBToLinear(texel)");
@@ -159,17 +130,116 @@ export class LUTEffect extends Effect {
 					break;
 
 				default:
-					console.error("Unsupported LUT encoding:", lut.encoding);
+					console.error("Unsupported output encoding:", outputEncoding);
 					break;
 
 			}
 
 		}
 
-		if(this.inputEncoding !== value) {
+		this.setChanged();
 
-			this.inputEncoding = value;
-			this.setChanged();
+	}
+
+	/**
+	 * Returns the input encoding.
+	 *
+	 * @deprecated Use inputEncoding instead.
+	 * @return {TextureEncoding} The encoding.
+	 */
+
+	getInputEncoding() {
+
+		return this.inputEncoding;
+
+	}
+
+	/**
+	 * Sets the input encoding.
+	 *
+	 * @deprecated Use inputEncoding instead.
+	 * @param {TextureEncoding} value - The encoding.
+	 */
+
+	setInputEncoding(value) {
+
+		this.inputEncoding = value;
+
+	}
+
+	/**
+	 * The LUT.
+	 *
+	 * @type {Texture}
+	 */
+
+	get lut() {
+
+		return this.uniforms.get("lut").value;
+
+	}
+
+	set lut(value) {
+
+		const defines = this.defines;
+		const uniforms = this.uniforms;
+
+		if(this.lut !== value) {
+
+			uniforms.get("lut").value = value;
+
+			if(value !== null) {
+
+				const image = value.image;
+
+				// Remember settings that are backed by defines.
+				const tetrahedralInterpolation = this.tetrahedralInterpolation;
+				const inputEncoding = this.inputEncoding;
+
+				defines.clear();
+				defines.set("LUT_SIZE", Math.min(image.width, image.height).toFixed(16));
+				defines.set("LUT_TEXEL_WIDTH", (1.0 / image.width).toFixed(16));
+				defines.set("LUT_TEXEL_HEIGHT", (1.0 / image.height).toFixed(16));
+
+				uniforms.get("domainMin").value = null;
+				uniforms.get("domainMax").value = null;
+
+				if(value.type === FloatType || value.type === HalfFloatType) {
+
+					defines.set("LUT_PRECISION_HIGH", "1");
+
+				}
+
+				if(image.width > image.height) {
+
+					defines.set("LUT_STRIP_HORIZONTAL", "1");
+
+				} else if(value instanceof DataTexture3D) {
+
+					defines.set("LUT_3D", "1");
+
+				}
+
+				if(value instanceof LookupTexture) {
+
+					const min = value.domainMin;
+					const max = value.domainMax;
+
+					if(min.x !== 0 || min.y !== 0 || min.z !== 0 || max.x !== 1 || max.y !== 1 || max.z !== 1) {
+
+						defines.set("CUSTOM_INPUT_DOMAIN", "1");
+						uniforms.get("domainMin").value = min.clone();
+						uniforms.get("domainMax").value = max.clone();
+
+					}
+
+				}
+
+				// Refresh settings that depend on and affect the LUT.
+				this.tetrahedralInterpolation = tetrahedralInterpolation;
+				this.inputEncoding = inputEncoding;
+
+			}
 
 		}
 
@@ -178,77 +248,26 @@ export class LUTEffect extends Effect {
 	/**
 	 * Returns the current LUT.
 	 *
+	 * @deprecated Use lut instead.
 	 * @return {Texture} The LUT.
 	 */
 
 	getLUT() {
 
-		return this.uniforms.get("lut").value;
+		return this.lut;
 
 	}
 
 	/**
 	 * Sets the LUT.
 	 *
-	 * @param {Texture} lut - The LUT.
+	 * @deprecated Use lut instead.
+	 * @param {Texture} value - The LUT.
 	 */
 
-	setLUT(lut) {
+	setLUT(value) {
 
-		const defines = this.defines;
-		const uniforms = this.uniforms;
-
-		if(this.getLUT() !== lut) {
-
-			const image = lut.image;
-
-			defines.clear();
-			defines.set("LUT_SIZE", Math.min(image.width, image.height).toFixed(16));
-			defines.set("LUT_TEXEL_WIDTH", (1.0 / image.width).toFixed(16));
-			defines.set("LUT_TEXEL_HEIGHT", (1.0 / image.height).toFixed(16));
-
-			uniforms.get("lut").value = lut;
-			uniforms.get("domainMin").value = null;
-			uniforms.get("domainMax").value = null;
-
-			if(lut.type === FloatType || lut.type === HalfFloatType) {
-
-				defines.set("LUT_PRECISION_HIGH", "1");
-
-			}
-
-			if(image.width > image.height) {
-
-				defines.set("LUT_STRIP_HORIZONTAL", "1");
-
-			} else if(lut instanceof DataTexture3D) {
-
-				defines.set("LUT_3D", "1");
-
-			}
-
-			if(lut instanceof LookupTexture3D) {
-
-				const min = lut.domainMin;
-				const max = lut.domainMax;
-
-				if(min.x !== 0.0 || min.y !== 0.0 || min.z !== 0.0 ||
-					max.x !== 1.0 || max.y !== 1.0 || max.z !== 1.0) {
-
-					defines.set("CUSTOM_INPUT_DOMAIN", "1");
-					uniforms.get("domainMin").value = min.clone();
-					uniforms.get("domainMax").value = max.clone();
-
-				}
-
-			}
-
-			this.configureTetrahedralInterpolation();
-			this.updateScaleOffset();
-			this.setInputEncoding(this.inputEncoding);
-			this.setChanged();
-
-		}
+		this.lut = value;
 
 	}
 
@@ -260,38 +279,43 @@ export class LUTEffect extends Effect {
 
 	updateScaleOffset() {
 
-		const lut = this.getLUT();
-		const size = Math.min(lut.image.width, lut.image.height);
-		const scale = this.uniforms.get("scale").value;
-		const offset = this.uniforms.get("offset").value;
+		const lut = this.lut;
 
-		if(this.defines.has("TETRAHEDRAL_INTERPOLATION")) {
+		if(lut !== null) {
 
-			if(this.defines.has("CUSTOM_INPUT_DOMAIN")) {
+			const size = Math.min(lut.image.width, lut.image.height);
+			const scale = this.uniforms.get("scale").value;
+			const offset = this.uniforms.get("offset").value;
 
-				const domainScale = lut.domainMax.clone().sub(lut.domainMin);
-				scale.setScalar(size - 1.0).divide(domainScale);
-				offset.copy(lut.domainMin).negate().multiply(scale);
+			if(this.tetrahedralInterpolation && lut instanceof DataTexture3D) {
 
-			} else {
+				if(this.defines.has("CUSTOM_INPUT_DOMAIN")) {
 
-				scale.setScalar(size - 1.0);
-				offset.setScalar(0.0);
+					const domainScale = lut.domainMax.clone().sub(lut.domainMin);
+					scale.setScalar(size - 1).divide(domainScale);
+					offset.copy(lut.domainMin).negate().multiply(scale);
 
-			}
+				} else {
 
-		} else {
+					scale.setScalar(size - 1);
+					offset.setScalar(0);
 
-			if(this.defines.has("CUSTOM_INPUT_DOMAIN")) {
-
-				const domainScale = lut.domainMax.clone().sub(lut.domainMin).multiplyScalar(size);
-				scale.setScalar(size - 1.0).divide(domainScale);
-				offset.copy(lut.domainMin).negate().multiply(scale).addScalar(1.0 / (2.0 * size));
+				}
 
 			} else {
 
-				scale.setScalar((size - 1.0) / size);
-				offset.setScalar(1.0 / (2.0 * size));
+				if(this.defines.has("CUSTOM_INPUT_DOMAIN")) {
+
+					const domainScale = lut.domainMax.clone().sub(lut.domainMin).multiplyScalar(size);
+					scale.setScalar(size - 1).divide(domainScale);
+					offset.copy(lut.domainMin).negate().multiply(scale).addScalar(1.0 / (2.0 * size));
+
+				} else {
+
+					scale.setScalar((size - 1) / size);
+					offset.setScalar(1.0 / (2.0 * size));
+
+				}
 
 			}
 
@@ -307,48 +331,82 @@ export class LUTEffect extends Effect {
 
 	configureTetrahedralInterpolation() {
 
-		const lut = this.getLUT();
-		lut.minFilter = LinearFilter;
-		lut.magFilter = LinearFilter;
+		const lut = this.lut;
 
-		this.defines.delete("TETRAHEDRAL_INTERPOLATION");
+		if(lut !== null) {
 
-		if(this.tetrahedralInterpolation && lut !== null) {
+			lut.minFilter = LinearFilter;
+			lut.magFilter = LinearFilter;
 
-			if(lut instanceof DataTexture3D) {
+			if(this.tetrahedralInterpolation) {
 
-				this.defines.set("TETRAHEDRAL_INTERPOLATION", "1");
+				if(lut instanceof DataTexture3D) {
 
-				// Interpolate samples manually.
-				lut.minFilter = NearestFilter;
-				lut.magFilter = NearestFilter;
+					// Interpolate samples manually.
+					lut.minFilter = NearestFilter;
+					lut.magFilter = NearestFilter;
 
-			} else {
+				} else {
 
-				console.warn("Tetrahedral interpolation requires a 3D texture");
+					console.warn("Tetrahedral interpolation requires a 3D texture");
+
+				}
+
+			}
+
+			// TODO Added for compatibility with r138. Remove later.
+			if(lut.source === undefined) {
+
+				lut.needsUpdate = true;
 
 			}
 
 		}
 
-		lut.needsUpdate = true;
+	}
+
+	/**
+	 * Indicates whether tetrahedral interpolation is enabled. Requires a 3D LUT, disabled by default.
+	 *
+	 * Tetrahedral interpolation produces highly accurate results but is slower than hardware interpolation.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get tetrahedralInterpolation() {
+
+		return this.defines.has("TETRAHEDRAL_INTERPOLATION");
+
+	}
+
+	set tetrahedralInterpolation(value) {
+
+		if(value) {
+
+			this.defines.set("TETRAHEDRAL_INTERPOLATION", "1");
+
+		} else {
+
+			this.defines.delete("TETRAHEDRAL_INTERPOLATION");
+
+		}
+
+		this.configureTetrahedralInterpolation();
+		this.updateScaleOffset();
+		this.setChanged();
 
 	}
 
 	/**
-	 * Enables or disables tetrahedral interpolation. Requires a 3D LUT, disabled by default.
+	 * Enables or disables tetrahedral interpolation.
 	 *
-	 * Tetrahedral interpolation produces highly accurate results but is slower than hardware interpolation.
-	 *
-	 * @param {Boolean} enabled - Whether tetrahedral interpolation should be enabled.
+	 * @deprecated Use tetrahedralInterpolation instead.
+	 * @param {Boolean} value - Whether tetrahedral interpolation should be enabled.
 	 */
 
-	setTetrahedralInterpolationEnabled(enabled) {
+	setTetrahedralInterpolationEnabled(value) {
 
-		this.tetrahedralInterpolation = enabled;
-		this.configureTetrahedralInterpolation();
-		this.updateScaleOffset();
-		this.setChanged();
+		this.tetrahedralInterpolation = value;
 
 	}
 

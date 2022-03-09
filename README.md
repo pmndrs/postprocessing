@@ -52,15 +52,7 @@ requestAnimationFrame(function render() {
 
 ## Output Encoding
 
-Simply set `WebGLRenderer.outputEncoding` to the desired target color space and `postprocessing` will follow suit. Built-in passes automatically encode colors when they render to screen and internal render operations are always performed in linear color space. It's [recommended](https://blog.demofox.org/2018/03/10/dont-convert-srgb-u8-to-linear-u8/) to enable high precision frame buffers when using `sRGBEncoding`:
-
-```js
-import { HalfFloatType } from "three";
-
-const composer = new EffectComposer(renderer, {
-	frameBufferType: HalfFloatType
-});
-```
+Simply set `WebGLRenderer.outputEncoding` to the desired target color space and `postprocessing` will follow suit. Built-in passes automatically encode colors when they render to screen and internal render operations are always performed in linear color space.
 
 
 ## Performance
@@ -70,6 +62,7 @@ This library provides an [EffectPass](https://vanruesc.github.io/postprocessing/
 All fullscreen render operations also use a [single triangle](https://michaldrobot.com/2014/04/01/gcn-execution-patterns-in-full-screen-passes/) that fills the screen. Compared to using a quad, this approach harmonizes with modern GPU rasterization patterns and eliminates unnecessary fragment calculations along the screen diagonal. This is especially beneficial for GPGPU passes and effects that use complex fragment shaders.
 
 [Performance Test](https://vanruesc.github.io/postprocessing/public/demo/#performance)
+
 
 ## Included Effects
 

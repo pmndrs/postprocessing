@@ -26,7 +26,7 @@ export class DepthEffect extends Effect {
 			attributes: EffectAttribute.DEPTH
 		});
 
-		this.setInverted(inverted);
+		this.inverted = inverted;
 
 	}
 
@@ -34,47 +34,15 @@ export class DepthEffect extends Effect {
 	 * Indicates whether depth should be inverted.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use isInverted() instead.
 	 */
 
 	get inverted() {
-
-		return this.isInverted;
-
-	}
-
-	/**
-	 * Enables or disables depth inversion.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Use setInverted() instead.
-	 */
-
-	set inverted(value) {
-
-		this.setInverted(value);
-
-	}
-
-	/**
-	 * Indicates whether the rendered depth is inverted.
-	 *
-	 * @return {Boolean} Whether the rendered depth is inverted.
-	 */
-
-	isInverted() {
 
 		return this.defines.has("INVERTED");
 
 	}
 
-	/**
-	 * Enables or disables depth inversion.
-	 *
-	 * @param {Boolean} value - Whether depth should be inverted.
-	 */
-
-	setInverted(value) {
+	set inverted(value) {
 
 		if(this.inverted !== value) {
 
@@ -91,6 +59,32 @@ export class DepthEffect extends Effect {
 			this.setChanged();
 
 		}
+
+	}
+
+	/**
+	 * Indicates whether the rendered depth is inverted.
+	 *
+	 * @deprecated Use inverted instead.
+	 * @return {Boolean} Whether the rendered depth is inverted.
+	 */
+
+	isInverted() {
+
+		return this.inverted;
+
+	}
+
+	/**
+	 * Enables or disables depth inversion.
+	 *
+	 * @deprecated Use inverted instead.
+	 * @param {Boolean} value - Whether depth should be inverted.
+	 */
+
+	setInverted(value) {
+
+		this.inverted = value;
 
 	}
 

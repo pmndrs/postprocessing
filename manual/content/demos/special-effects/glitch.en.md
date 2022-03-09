@@ -6,7 +6,7 @@ draft: false
 menu:
   demos:
     parent: special-effects
-    weight: 10
+    weight: 50
 script: glitch
 ---
 

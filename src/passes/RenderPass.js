@@ -28,7 +28,6 @@ export class RenderPass extends Pass {
 		 * A clear pass.
 		 *
 		 * @type {ClearPass}
-		 * @private
 		 */
 
 		this.clearPass = new ClearPass();
@@ -46,48 +45,33 @@ export class RenderPass extends Pass {
 		 * Indicates whether the scene background should be ignored.
 		 *
 		 * @type {Boolean}
-		 * @private
 		 */
 
-		this.backgroundDisabled = false;
+		this.ignoreBackground = false;
 
 		/**
 		 * Indicates whether the shadow map auto update should be skipped.
 		 *
 		 * @type {Boolean}
-		 * @private
 		 */
 
-		this.shadowMapDisabled = false;
+		this.skipShadowMapUpdate = false;
 
 		/**
 		 * A selection of objects to render.
 		 *
 		 * @type {Selection}
-		 * @private
 		 */
 
 		this.selection = null;
 
 	}
 
-	/**
-	 * Indicates whether this pass should render to screen.
-	 *
-	 * @type {Boolean}
-	 */
-
 	get renderToScreen() {
 
 		return super.renderToScreen;
 
 	}
-
-	/**
-	 * Sets the render to screen flag.
-	 *
-	 * @type {Boolean}
-	 */
 
 	set renderToScreen(value) {
 
@@ -100,49 +84,16 @@ export class RenderPass extends Pass {
 	 * The current override material.
 	 *
 	 * @type {Material}
-	 * @deprecated Use getOverrideMaterial() instead.
 	 */
 
 	get overrideMaterial() {
-
-		return this.getOverrideMaterial();
-
-	}
-
-	/**
-	 * Sets the override material.
-	 *
-	 * @type {Material}
-	 * @deprecated Use setOverrideMaterial() instead.
-	 */
-
-	set overrideMaterial(value) {
-
-		this.setOverrideMaterial(value);
-
-	}
-
-	/**
-	 * Returns the current override material.
-	 *
-	 * @return {Material} The material.
-	 */
-
-	getOverrideMaterial() {
 
 		const manager = this.overrideMaterialManager;
 		return (manager !== null) ? manager.material : null;
 
 	}
 
-	/**
-	 * Sets the override material.
-	 *
-	 * @type {Material}
-	 * @return {Material} value - The material.
-	 */
-
-	setOverrideMaterial(value) {
+	set overrideMaterial(value) {
 
 		const manager = this.overrideMaterialManager;
 
@@ -168,34 +119,54 @@ export class RenderPass extends Pass {
 	}
 
 	/**
-	 * Indicates whether the target buffer should be cleared before rendering.
+	 * Returns the current override material.
 	 *
-	 * @type {Boolean}
-	 * @deprecated Use getClearPass().isEnabled() instead.
+	 * @deprecated Use overrideMaterial instead.
+	 * @return {Material} The material.
 	 */
 
-	get clear() {
+	getOverrideMaterial() {
 
-		return this.clearPass.isEnabled();
+		return this.overrideMaterial;
 
 	}
 
 	/**
-	 * Enables or disables auto clear.
+	 * Sets the override material.
+	 *
+	 * @deprecated Use overrideMaterial instead.
+	 * @return {Material} value - The material.
+	 */
+
+	setOverrideMaterial(value) {
+
+		this.overrideMaterial = value;
+
+	}
+
+	/**
+	 * Indicates whether the target buffer should be cleared before rendering.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use getClearPass().setEnabled() instead.
+	 * @deprecated Use clearPass.enabled instead.
 	 */
+
+	get clear() {
+
+		return this.clearPass.enabled;
+
+	}
 
 	set clear(value) {
 
-		this.clearPass.setEnabled(value);
+		this.clearPass.enabled = value;
 
 	}
 
 	/**
 	 * Returns the selection. Default is `null` (no restriction).
 	 *
+	 * @deprecated Use selection instead.
 	 * @return {Selection} The selection.
 	 */
 
@@ -208,6 +179,7 @@ export class RenderPass extends Pass {
 	/**
 	 * Sets the selection. Set to `null` to disable.
 	 *
+	 * @deprecated Use selection instead.
 	 * @param {Selection} value - The selection.
 	 */
 
@@ -220,54 +192,59 @@ export class RenderPass extends Pass {
 	/**
 	 * Indicates whether the scene background is disabled.
 	 *
+	 * @deprecated Use ignoreBackground instead.
 	 * @return {Boolean} Whether the scene background is disabled.
 	 */
 
 	isBackgroundDisabled() {
 
-		return this.backgroundDisabled;
+		return this.ignoreBackground;
 
 	}
 
 	/**
 	 * Enables or disables the scene background.
 	 *
+	 * @deprecated Use ignoreBackground instead.
 	 * @param {Boolean} value - Whether the scene background should be disabled.
 	 */
 
 	setBackgroundDisabled(value) {
 
-		this.backgroundDisabled = value;
+		this.ignoreBackground = value;
 
 	}
 
 	/**
 	 * Indicates whether the shadow map auto update is disabled.
 	 *
+	 * @deprecated Use skipShadowMapUpdate instead.
 	 * @return {Boolean} Whether the shadow map update is disabled.
 	 */
 
 	isShadowMapDisabled() {
 
-		return this.shadowMapDisabled;
+		return this.skipShadowMapUpdate;
 
 	}
 
 	/**
 	 * Enables or disables the shadow map auto update.
 	 *
+	 * @deprecated Use skipShadowMapUpdate instead.
 	 * @param {Boolean} value - Whether the shadow map auto update should be disabled.
 	 */
 
 	setShadowMapDisabled(value) {
 
-		this.shadowMapDisabled = value;
+		this.skipShadowMapUpdate = value;
 
 	}
 
 	/**
 	 * Returns the clear pass.
 	 *
+	 * @deprecated Use clearPass.enabled instead.
 	 * @return {ClearPass} The clear pass.
 	 */
 
@@ -303,19 +280,19 @@ export class RenderPass extends Pass {
 
 		}
 
-		if(this.shadowMapDisabled) {
+		if(this.skipShadowMapUpdate) {
 
 			renderer.shadowMap.autoUpdate = false;
 
 		}
 
-		if(this.backgroundDisabled || this.clearPass.overrideClearColor !== null) {
+		if(this.ignoreBackground || this.clearPass.overrideClearColor !== null) {
 
 			scene.background = null;
 
 		}
 
-		if(this.clearPass.isEnabled()) {
+		if(this.clearPass.enabled) {
 
 			this.clearPass.render(renderer, inputBuffer);
 

@@ -84,6 +84,15 @@ export class Timer {
 
 		this.fixedDeltaEnabled = false;
 
+		/**
+		 * Indicates whether auto reset is enabled.
+		 *
+		 * @type {Boolean}
+		 * @private
+		 */
+
+		this.autoReset = false;
+
 	}
 
 	/**
@@ -97,6 +106,19 @@ export class Timer {
 
 		this.fixedDeltaEnabled = enabled;
 		return this;
+
+	}
+
+	/**
+	 * Indicates whether auto reset is enabled.
+	 *
+	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API}
+	 * @return {Boolean} Whether the timer will be reset on visibility change.
+	 */
+
+	isAutoResetEnabled(enabled) {
+
+		return this.autoReset;
 
 	}
 
@@ -124,6 +146,8 @@ export class Timer {
 				document.removeEventListener("visibilitychange", this);
 
 			}
+
+			this.autoReset = enabled;
 
 		}
 
@@ -274,11 +298,7 @@ export class Timer {
 
 	dispose() {
 
-		if(typeof document !== "undefined") {
-
-			document.removeEventListener("visibilitychange", this);
-
-		}
+		this.setAutoResetEnabled(false);
 
 	}
 

@@ -1,4 +1,4 @@
-import { LinearFilter, UnsignedByteType, WebGLRenderTarget } from "three";
+import { LinearFilter, sRGBEncoding, UnsignedByteType, WebGLRenderTarget } from "three";
 import { CopyMaterial } from "../materials";
 import { Pass } from "./Pass";
 
@@ -19,7 +19,7 @@ export class CopyPass extends Pass {
 
 		super("CopyPass");
 
-		this.setFullscreenMaterial(new CopyMaterial());
+		this.fullscreenMaterial = new CopyMaterial();
 		this.needsSwap = false;
 
 		/**
@@ -45,13 +45,31 @@ export class CopyPass extends Pass {
 		}
 
 		/**
-		 * Indicates whether the render target should be resized automatically.
+		 * Enables or disables auto resizing of the render target.
 		 *
 		 * @type {Boolean}
-		 * @deprecated Use setAutoResizeEnabled() instead.
 		 */
 
-		this.resize = autoResize;
+		this.autoResize = autoResize;
+
+	}
+
+	/**
+	 * Enables or disables auto resizing of the render target.
+	 *
+	 * @deprecated Use autoResize instead.
+	 * @type {Boolean}
+	 */
+
+	get resize() {
+
+		return this.autoResize;
+
+	}
+
+	set resize(value) {
+
+		this.autoResize = value;
 
 	}
 
@@ -59,18 +77,18 @@ export class CopyPass extends Pass {
 	 * The output texture.
 	 *
 	 * @type {Texture}
-	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
 
-		return this.getTexture();
+		return this.renderTarget.texture;
 
 	}
 
 	/**
 	 * Returns the output texture.
 	 *
+	 * @deprecated Use texture instead.
 	 * @return {Texture} The texture.
 	 */
 
@@ -83,12 +101,13 @@ export class CopyPass extends Pass {
 	/**
 	 * Enables or disables auto resizing of the render target.
 	 *
+	 * @deprecated Use autoResize instead.
 	 * @param {Boolean} value - Whether the render target size should be updated automatically.
 	 */
 
 	setAutoResizeEnabled(value) {
 
-		this.resize = value;
+		this.autoResize = value;
 
 	}
 
@@ -104,7 +123,7 @@ export class CopyPass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
-		this.getFullscreenMaterial().setInputBuffer(inputBuffer.texture);
+		this.fullscreenMaterial.inputBuffer = inputBuffer.texture;
 		renderer.setRenderTarget(this.renderToScreen ? null : this.renderTarget);
 		renderer.render(this.scene, this.camera);
 
@@ -119,7 +138,7 @@ export class CopyPass extends Pass {
 
 	setSize(width, height) {
 
-		if(this.resize) {
+		if(this.autoResize) {
 
 			this.renderTarget.setSize(width, height);
 
@@ -143,7 +162,11 @@ export class CopyPass extends Pass {
 
 			if(frameBufferType !== UnsignedByteType) {
 
-				this.getFullscreenMaterial().defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+				this.fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+
+			} else if(renderer.outputEncoding === sRGBEncoding) {
+
+				this.renderTarget.texture.encoding = sRGBEncoding;
 
 			}
 

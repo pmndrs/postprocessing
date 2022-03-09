@@ -1,7 +1,7 @@
 {{ define "scripts" }}
 
 	{{ with .Params.script }}
-		{{ with resources.Get (printf "js/%s.js" .) }}
+		{{ with resources.Get (printf "js/demos/%s.js" .) }}
 			{{ $script := . | fingerprint }}
 			<script src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
 		{{ end }}

@@ -20,7 +20,7 @@ export class NoiseEffect extends Effect {
 	constructor({ blendFunction = BlendFunction.SCREEN, premultiply = false } = {}) {
 
 		super("NoiseEffect", fragmentShader, { blendFunction });
-		this.setPremultiplied(premultiply);
+		this.premultiply = premultiply;
 
 	}
 
@@ -28,63 +28,57 @@ export class NoiseEffect extends Effect {
 	 * Indicates whether noise will be multiplied with the input colors prior to blending.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use isPremultiplied() instead.
 	 */
 
 	get premultiply() {
 
-		return this.isPremultiplied();
+		return this.defines.has("PREMULTIPLY");
 
 	}
-
-	/**
-	 * Controls whether noise should be multiplied with the input colors prior to blending.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Use setPremultiplied() instead.
-	 */
 
 	set premultiply(value) {
 
-		this.setPremultiplied(value);
-
-	}
-
-	/**
-	 * Indicates whether noise will be multiplied with the input colors prior to blending.
-	 *
-	 * @return {Boolean} Whether noise is premultiplied.
-	 */
-
-	isPremultiplied() {
-
-		return this.defines.has("PREMULTIPLIED");
-
-	}
-
-	/**
-	 * Controls whether noise should be multiplied with the input colors prior to blending.
-	 *
-	 * @param {Boolean} value - Whether noise should be premultiplied.
-	 */
-
-	setPremultiplied(value) {
-
-		if(this.isPremultiplied() !== value) {
+		if(this.premultiply !== value) {
 
 			if(value) {
 
-				this.defines.set("PREMULTIPLIED", "1");
+				this.defines.set("PREMULTIPLY", "1");
 
 			} else {
 
-				this.defines.delete("PREMULTIPLIED");
+				this.defines.delete("PREMULTIPLY");
 
 			}
 
 			this.setChanged();
 
 		}
+
+	}
+
+	/**
+	 * Indicates whether noise will be multiplied with the input colors prior to blending.
+	 *
+	 * @deprecated Use premultiply instead.
+	 * @return {Boolean} Whether noise is premultiplied.
+	 */
+
+	isPremultiplied() {
+
+		return this.premultiply;
+
+	}
+
+	/**
+	 * Controls whether noise should be multiplied with the input colors prior to blending.
+	 *
+	 * @deprecated Use premultiply instead.
+	 * @param {Boolean} value - Whether noise should be premultiplied.
+	 */
+
+	setPremultiplied(value) {
+
+		this.premultiply = value;
 
 	}
 

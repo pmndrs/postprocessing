@@ -1,17 +1,33 @@
+@use "durations";
+
 main {
 	border: 0;
 	flex-grow: 1;
 	height: 100vh;
 	outline: none;
 	overflow-y: scroll;
-	scrollbar-width: thin;
 }
 
 .content {
 	align-items: center;
+	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
+	line-height: 1.5;
 	min-height: 100vh;
+	padding-bottom: 3rem;
+	h1, h2, h3, h4, h5, h6 {
+		a {
+			opacity: 0;
+			transition: color durations.$short, opacity durations.$short;
+		}
+		&:focus,
+		&:hover {
+			a {
+				opacity: 1;
+			}
+		}
+	}
 	> div {
 		box-sizing: border-box;
 		max-width: calc(1024px + 2rem);
@@ -19,6 +35,6 @@ main {
 		width: 100%;
 	}
 	&:first-child {
-		padding-top: 3rem;
+		padding: 3rem 0;
 	}
 }

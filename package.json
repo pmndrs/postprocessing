@@ -1,6 +1,6 @@
 {
 	"name": "postprocessing",
-	"version": "6.24.1",
+	"version": "6.25.0",
 	"description": "A post processing library that provides the means to implement image filter effects for three.js.",
 	"homepage": "https://github.com/vanruesc/postprocessing",
 	"main": "build/postprocessing.js",
@@ -53,7 +53,7 @@
 		"build:js": "node esbuild.mjs -m",
 		"build:manual": "hugo -s manual --minify",
 		"clean": "del-cli build tmp manual/resources public && mkdirp manual/assets/css",
-		"copy": "cpy --cwd=demo/static --parents \"**/*\" \"../../public/demo\"",
+		"copy": "copyfiles -u 2 \"demo/static/**/*\" public/demo",
 		"deploy": "run-s test copy doc gzip",
 		"dev": "run-s clean copy && run-p start watch:*",
 		"doc": "esdoc",
@@ -64,7 +64,7 @@
 		"postbuild:css": "postcss manual/assets/css/index.css -o manual/assets/css/index.css -c manual",
 		"prepublishOnly": "run-s test doc",
 		"test": "run-s lint clean build ava",
-		"start": "hugo server -s manual",
+		"start": "hugo server -s manual -e development",
 		"watch": "run-p watch:*",
 		"watch:css": "sass --no-source-map -I manual/css/src/values manual/css/src:manual/assets/css --watch",
 		"watch:eslint": "esw -w --ext .js --color src demo/src manual/js/src",
@@ -80,19 +80,20 @@
 		"extends": "aether"
 	},
 	"peerDependencies": {
-		"three": ">= 0.102.0 < 0.138.0"
+		"three": ">= 0.107.0 < 0.139.0"
 	},
 	"devDependencies": {
 		"@tweakpane/core": "1.x.x",
 		"@types/three": "0.x.x",
 		"autoprefixer": "10.x.x",
 		"ava": "4.x.x",
+		"copyfiles": "2.x.x",
 		"cssnano": "5.x.x",
-		"cpy-cli": "3.x.x",
 		"dat.gui": "0.x.x",
 		"del-cli": "4.x.x",
 		"esbuild": "0.x.x",
 		"esbuild-plugin-glsl": "1.x.x",
+		"esbuild-ts-paths": "1.x.x",
 		"esdoc": "1.x.x",
 		"esdoc-importpath-plugin": "1.x.x",
 		"esdoc-standard-plugin": "1.x.x",
@@ -113,7 +114,7 @@
 		"stylelint": "14.x.x",
 		"stylelint-config-standard-scss": "3.x.x",
 		"stylelint-order": "5.x.x",
-		"three": "0.x.x",
+		"three": "0.137.x",
 		"three-demo": "5.x.x",
 		"tslib": "2.x.x",
 		"tweakpane": "3.x.x",

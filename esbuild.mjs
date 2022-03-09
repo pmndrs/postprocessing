@@ -1,5 +1,6 @@
 import { createRequire } from "module";
 import { glsl } from "esbuild-plugin-glsl";
+import tsPaths from "esbuild-ts-paths";
 import glob from "glob-promise";
 import esbuild from "esbuild";
 
@@ -9,7 +10,7 @@ const date = (new Date()).toDateString();
 const external = Object.keys(pkg.peerDependencies || {});
 const minify = process.argv.includes("-m");
 const watch = process.argv.includes("-w");
-const plugins = [glsl({ minify })];
+const plugins = [glsl({ minify }), tsPaths()];
 const banner = `/**
  * ${pkg.name} v${pkg.version} build ${date}
  * ${pkg.homepage}
@@ -49,11 +50,11 @@ await esbuild.build({
 	logLevel: "info",
 	format: "iife",
 	bundle: true,
-	minify: true
+	minify
 }).catch(() => process.exit(1));
 
 await esbuild.build({
-	entryPoints: await glob("manual/js/src/*.js"),
+	entryPoints: ["manual/js/src/index.js"].concat(await glob("manual/js/src/demos/*.js")),
 	outdir: "manual/assets/js",
 	logLevel: "info",
 	format: "iife",

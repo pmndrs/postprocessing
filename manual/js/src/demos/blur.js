@@ -1,6 +1,5 @@
 import {
 	CubeTextureLoader,
-	HalfFloatType,
 	LoadingManager,
 	PerspectiveCamera,
 	Scene,
@@ -14,12 +13,12 @@ import {
 	KawaseBlurPass,
 	KernelSize,
 	RenderPass
-} from "../../../src";
+} from "postprocessing";
 
 import { Pane } from "tweakpane";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, FPSMeter } from "./utils";
-import * as CornellBox from "./objects/CornellBox";
+import { calculateVerticalFoV, FPSMeter } from "../utils";
+import * as CornellBox from "../objects/CornellBox";
 
 function load() {
 
@@ -62,10 +61,7 @@ window.addEventListener("load", () => load().then((assets) => {
 		depth: false
 	});
 
-	const container = document.querySelector(".viewport");
-	container.append(renderer.domElement);
 	renderer.debug.checkShaderErrors = (window.location.hostname === "localhost");
-	renderer.setSize(container.clientWidth, container.clientHeight);
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.outputEncoding = sRGBEncoding;
 	renderer.setClearColor(0x000000, 0);
@@ -74,6 +70,9 @@ window.addEventListener("load", () => load().then((assets) => {
 	renderer.shadowMap.autoUpdate = false;
 	renderer.shadowMap.needsUpdate = true;
 	renderer.shadowMap.enabled = true;
+
+	const container = document.querySelector(".viewport");
+	container.append(renderer.domElement);
 
 	// Camera & Controls
 
@@ -91,7 +90,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const scene = new Scene();
 	scene.background = assets.get("sky");
-	scene.add(...CornellBox.createLights());
+	scene.add(CornellBox.createLights());
 	scene.add(CornellBox.createEnvironment());
 	scene.add(CornellBox.createActors());
 
@@ -99,8 +98,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const context = renderer.getContext();
 	const composer = new EffectComposer(renderer, {
-		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES)),
-		frameBufferType: HalfFloatType
+		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
 	});
 
 	const kawaseBlurPass = new KawaseBlurPass({ height: 480 });
@@ -112,12 +110,11 @@ window.addEventListener("load", () => load().then((assets) => {
 	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
-	pane.addSeparator();
 
 	const params = {
-		"resolution": kawaseBlurPass.getResolution().getHeight(),
-		"kernel size": kawaseBlurPass.getKernelSize(),
-		"scale": kawaseBlurPass.getScale()
+		"resolution": kawaseBlurPass.resolution.height,
+		"kernel size": kawaseBlurPass.kernelSize,
+		"scale": kawaseBlurPass.scale
 	};
 
 	function reducer(a, b) {
@@ -127,12 +124,13 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	}
 
-	pane.addInput(params, "resolution", { options: [360, 480, 720, 1080].reduce(reducer, {}) })
-		.on("change", (e) => kawaseBlurPass.getResolution().setPreferredHeight(e.value));
-	pane.addInput(params, "kernel size", { options: KernelSize })
-		.on("change", (e) => kawaseBlurPass.setKernelSize(e.value));
-	pane.addInput(params, "scale", { min: 0, max: 1, step: 0.01 })
-		.on("change", (e) => kawaseBlurPass.setScale(e.value));
+	const folder = pane.addFolder({ title: "Settings" });
+	folder.addInput(params, "resolution", { options: [360, 480, 720, 1080].reduce(reducer, {}) })
+		.on("change", (e) => kawaseBlurPass.resolution.preferredHeight = e.value);
+	folder.addInput(params, "kernel size", { options: KernelSize })
+		.on("change", (e) => kawaseBlurPass.kernelSize = e.value);
+	folder.addInput(params, "scale", { min: 0, max: 1, step: 0.01 })
+		.on("change", (e) => kawaseBlurPass.scale = e.value);
 
 	// Resize Handler
 

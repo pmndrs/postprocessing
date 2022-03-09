@@ -34,50 +34,90 @@ export class BrightnessContrastEffect extends Effect {
 	}
 
 	/**
-	 * Returns the brightness.
+	 * The brightness.
 	 *
-	 * @return {Number} The brightness.
+	 * @type {Number}
 	 */
 
-	getBrightness(value) {
+	get brightness() {
 
 		return this.uniforms.get("brightness").value;
 
 	}
 
-	/**
-	 * Sets the brightness.
-	 *
-	 * @param {Number} value - The brightness.
-	 */
-
-	setBrightness(value) {
+	set brightness(value) {
 
 		this.uniforms.get("brightness").value = value;
 
 	}
 
 	/**
+	 * Returns the brightness.
+	 *
+	 * @deprecated Use brightness instead.
+	 * @return {Number} The brightness.
+	 */
+
+	getBrightness(value) {
+
+		return this.brightness;
+
+	}
+
+	/**
+	 * Sets the brightness.
+	 *
+	 * @deprecated Use brightness instead.
+	 * @param {Number} value - The brightness.
+	 */
+
+	setBrightness(value) {
+
+		this.brightness = value;
+
+	}
+
+	/**
+	 * The contrast.
+	 *
+	 * @type {Number}
+	 */
+
+	get contrast() {
+
+		return this.uniforms.get("contrast").value;
+
+	}
+
+	set contrast(value) {
+
+		this.uniforms.get("contrast").value = value;
+
+	}
+
+	/**
 	 * Returns the contrast.
 	 *
+	 * @deprecated Use contrast instead.
 	 * @return {Number} The contrast.
 	 */
 
 	getContrast(value) {
 
-		return this.uniforms.get("contrast").value;
+		return this.contrast;
 
 	}
 
 	/**
 	 * Sets the contrast.
 	 *
+	 * @deprecated Use contrast instead.
 	 * @param {Number} value - The contrast.
 	 */
 
 	setContrast(value) {
 
-		this.uniforms.get("contrast").value = value;
+		this.contrast = value;
 
 	}
 

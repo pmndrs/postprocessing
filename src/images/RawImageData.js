@@ -10,7 +10,7 @@
 
 function createCanvas(width, height, data) {
 
-	const canvas = document.createElementNS("http://www.w3.org/1999/xhtml", "canvas");
+	const canvas = document.createElement("canvas");
 	const context = canvas.getContext("2d");
 
 	canvas.width = width;

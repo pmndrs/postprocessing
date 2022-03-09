@@ -57,9 +57,22 @@ export class BokehMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The input buffer.
+	 *
+	 * @type {Texture}
+	 */
+
+	set inputBuffer(value) {
+
+		this.uniforms.inputBuffer.value = value;
+
+	}
+
+	/**
 	 * Sets the input buffer.
 	 *
-	 * @param {Number} value - The buffer.
+	 * @deprecated Use inputBuffer instead.
+	 * @param {Texture} value - The buffer.
 	 */
 
 	setInputBuffer(value) {
@@ -69,9 +82,22 @@ export class BokehMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The circle of confusion buffer.
+	 *
+	 * @type {Texture}
+	 */
+
+	set cocBuffer(value) {
+
+		this.uniforms.cocBuffer.value = value;
+
+	}
+
+	/**
 	 * Sets the circle of confusion buffer.
 	 *
-	 * @param {Number} value - The buffer.
+	 * @deprecated Use cocBuffer instead.
+	 * @param {Texture} value - The buffer.
 	 */
 
 	setCoCBuffer(value) {
@@ -81,8 +107,27 @@ export class BokehMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The blur scale.
+	 *
+	 * @type {Number}
+	 */
+
+	get scale() {
+
+		return this.uniforms.scale.value;
+
+	}
+
+	set scale(value) {
+
+		this.uniforms.scale.value = value;
+
+	}
+
+	/**
 	 * Returns the blur scale.
 	 *
+	 * @deprecated Use scale instead.
 	 * @return {Number} The scale.
 	 */
 
@@ -95,6 +140,7 @@ export class BokehMaterial extends ShaderMaterial {
 	/**
 	 * Sets the blur scale.
 	 *
+	 * @deprecated Use scale instead.
 	 * @param {Number} value - The scale.
 	 */
 

@@ -45,7 +45,8 @@ export class GridEffect extends Effect {
 		 * @private
 		 */
 
-		this.scale = Math.max(scale, 1e-6);
+		this.s = 0;
+		this.scale = scale;
 
 		/**
 		 * The grid line width.
@@ -54,13 +55,34 @@ export class GridEffect extends Effect {
 		 * @private
 		 */
 
-		this.lineWidth = Math.max(lineWidth, 0.0);
+		this.l = 0;
+		this.lineWidth = lineWidth;
+
+	}
+
+	/**
+	 * The scale.
+	 *
+	 * @type {Number}
+	 */
+
+	get scale() {
+
+		return this.s;
+
+	}
+
+	set scale(value) {
+
+		this.s = Math.max(value, 1e-6);
+		this.setSize(this.resolution.width, this.resolution.height);
 
 	}
 
 	/**
 	 * Returns the current grid scale.
 	 *
+	 * @deprecated Use scale instead.
 	 * @return {Number} The grid scale.
 	 */
 
@@ -73,12 +95,31 @@ export class GridEffect extends Effect {
 	/**
 	 * Sets the grid scale.
 	 *
-	 * @param {Number} scale - The new grid scale.
+	 * @deprecated Use scale instead.
+	 * @param {Number} value - The new grid scale.
 	 */
 
-	setScale(scale) {
+	setScale(value) {
 
-		this.scale = scale;
+		this.scale = value;
+
+	}
+
+	/**
+	 * The line width.
+	 *
+	 * @type {Number}
+	 */
+
+	get lineWidth() {
+
+		return this.l;
+
+	}
+
+	set lineWidth(value) {
+
+		this.l = value;
 		this.setSize(this.resolution.width, this.resolution.height);
 
 	}
@@ -86,6 +127,7 @@ export class GridEffect extends Effect {
 	/**
 	 * Returns the current grid line width.
 	 *
+	 * @deprecated Use lineWidth instead.
 	 * @return {Number} The grid line width.
 	 */
 
@@ -98,13 +140,13 @@ export class GridEffect extends Effect {
 	/**
 	 * Sets the grid line width.
 	 *
-	 * @param {Number} lineWidth - The new grid line width.
+	 * @deprecated Use lineWidth instead.
+	 * @param {Number} value - The new grid line width.
 	 */
 
-	setLineWidth(lineWidth) {
+	setLineWidth(value) {
 
-		this.lineWidth = lineWidth;
-		this.setSize(this.resolution.width, this.resolution.height);
+		this.lineWidth = value;
 
 	}
 

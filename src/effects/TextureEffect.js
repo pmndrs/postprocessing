@@ -36,7 +36,7 @@ export class TextureEffect extends Effect {
 			])
 		});
 
-		this.setTexture(texture);
+		this.texture = texture;
 		this.aspectCorrection = aspectCorrection;
 
 	}
@@ -45,49 +45,17 @@ export class TextureEffect extends Effect {
 	 * The texture.
 	 *
 	 * @type {Texture}
-	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
-
-		return this.getTexture();
-
-	}
-
-	/**
-	 * Sets the texture.
-	 *
-	 * @type {Texture}
-	 * @deprecated Use setTexture() instead.
-	 */
-
-	set texture(value) {
-
-		this.setTexture(value);
-
-	}
-
-	/**
-	 * Returns the texture.
-	 *
-	 * @return {Texture} The texture.
-	 */
-
-	getTexture() {
 
 		return this.uniforms.get("map").value;
 
 	}
 
-	/**
-	 * Sets the texture.
-	 *
-	 * @param {Texture} value - The texture.
-	 */
+	set texture(value) {
 
-	setTexture(value) {
-
-		const prevTexture = this.getTexture();
+		const prevTexture = this.texture;
 		const uniforms = this.uniforms;
 		const defines = this.defines;
 
@@ -137,12 +105,36 @@ export class TextureEffect extends Effect {
 	}
 
 	/**
+	 * Returns the texture.
+	 *
+	 * @deprecated Use texture instead.
+	 * @return {Texture} The texture.
+	 */
+
+	getTexture() {
+
+		return this.texture;
+
+	}
+
+	/**
+	 * Sets the texture.
+	 *
+	 * @deprecated Use texture instead.
+	 * @param {Texture} value - The texture.
+	 */
+
+	setTexture(value) {
+
+		this.texture = value;
+
+	}
+
+	/**
 	 * Indicates whether aspect correction is enabled.
 	 *
-	 * If enabled, the texture can be scaled using the `scale` uniform.
-	 *
 	 * @type {Number}
-	 * @deprecated Adjust the texture's offset, repeat and center instead.
+	 * @deprecated Adjust the texture's offset, repeat, rotation and center instead.
 	 */
 
 	get aspectCorrection() {
@@ -150,13 +142,6 @@ export class TextureEffect extends Effect {
 		return this.defines.has("ASPECT_CORRECTION");
 
 	}
-
-	/**
-	 * Enables or disables aspect correction.
-	 *
-	 * @type {Number}
-	 * @deprecated Adjust the texture's offset, repeat and center instead.
-	 */
 
 	set aspectCorrection(value) {
 
@@ -187,21 +172,14 @@ export class TextureEffect extends Effect {
 
 	get uvTransform() {
 
-		const texture = this.getTexture();
+		const texture = this.texture;
 		return (texture !== null && texture.matrixAutoUpdate);
 
 	}
 
-	/**
-	 * Enables or disables texture UV transformation.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Set texture.matrixAutoUpdate instead.
-	 */
-
 	set uvTransform(value) {
 
-		const texture = this.getTexture();
+		const texture = this.texture;
 
 		if(texture !== null) {
 
@@ -246,11 +224,9 @@ export class TextureEffect extends Effect {
 
 	update(renderer, inputBuffer, deltaTime) {
 
-		const texture = this.uniforms.get("map").value;
+		if(this.texture.matrixAutoUpdate) {
 
-		if(texture.matrixAutoUpdate) {
-
-			texture.updateMatrix();
+			this.texture.updateMatrix();
 
 		}
 
@@ -266,8 +242,9 @@ export class TextureEffect extends Effect {
 
 	initialize(renderer, alpha, frameBufferType) {
 
-		const decoding = getTextureDecoding(this.getTexture(), this.renderer.capabilities.isWebGL2);
+		const decoding = getTextureDecoding(this.texture, renderer.capabilities.isWebGL2);
 		this.defines.set("texelToLinear(texel)", decoding);
+		this.renderer = renderer;
 
 	}
 

@@ -1,29 +1,25 @@
 import {
 	CubeTextureLoader,
-	HalfFloatType,
 	LoadingManager,
-	Mesh,
-	MeshBasicMaterial,
 	PerspectiveCamera,
 	Scene,
-	SphereBufferGeometry,
 	sRGBEncoding,
-	Vector3,
 	VSMShadowMap,
 	WebGLRenderer
 } from "three";
 
 import {
-	CopyPass,
-	DepthPickingPass,
+	BlendFunction,
+	HueSaturationEffect,
 	EffectComposer,
+	EffectPass,
 	RenderPass
-} from "../../../src";
+} from "postprocessing";
 
 import { Pane } from "tweakpane";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, FPSMeter } from "./utils";
-import * as CornellBox from "./objects/CornellBox";
+import { calculateVerticalFoV, FPSMeter } from "../utils";
+import * as CornellBox from "../objects/CornellBox";
 
 function load() {
 
@@ -66,10 +62,7 @@ window.addEventListener("load", () => load().then((assets) => {
 		depth: false
 	});
 
-	const container = document.querySelector(".viewport");
-	container.append(renderer.domElement);
 	renderer.debug.checkShaderErrors = (window.location.hostname === "localhost");
-	renderer.setSize(container.clientWidth, container.clientHeight);
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.outputEncoding = sRGBEncoding;
 	renderer.setClearColor(0x000000, 0);
@@ -78,6 +71,9 @@ window.addEventListener("load", () => load().then((assets) => {
 	renderer.shadowMap.autoUpdate = false;
 	renderer.shadowMap.needsUpdate = true;
 	renderer.shadowMap.enabled = true;
+
+	const container = document.querySelector(".viewport");
+	container.append(renderer.domElement);
 
 	// Camera & Controls
 
@@ -95,60 +91,44 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const scene = new Scene();
 	scene.background = assets.get("sky");
-	scene.add(...CornellBox.createLights());
+	scene.add(CornellBox.createLights());
 	scene.add(CornellBox.createEnvironment());
 	scene.add(CornellBox.createActors());
-
-	const cursor = new Mesh(
-		new SphereBufferGeometry(0.2, 32, 32),
-		new MeshBasicMaterial({
-			color: 0x666666,
-			transparent: true,
-			depthWrite: false,
-			opacity: 0.5
-		})
-	);
-
-	scene.add(cursor);
 
 	// Post Processing
 
 	const context = renderer.getContext();
 	const composer = new EffectComposer(renderer, {
-		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES)),
-		frameBufferType: HalfFloatType
+		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
 	});
 
-	const depthPickingPass = new DepthPickingPass();
+	const hueSaturationEffect = new HueSaturationEffect();
 	composer.addPass(new RenderPass(scene, camera));
-	composer.addPass(depthPickingPass);
-	composer.addPass(new CopyPass());
-
-	const ndc = new Vector3();
-
-	async function pickDepth(event) {
-
-		const clientRect = container.getBoundingClientRect();
-		const clientX = event.clientX - clientRect.left;
-		const clientY = event.clientY - clientRect.top;
-		ndc.x = (clientX / container.clientWidth) * 2.0 - 1.0;
-		ndc.y = -(clientY / container.clientHeight) * 2.0 + 1.0;
-
-		ndc.z = await depthPickingPass.readDepth(ndc);
-		ndc.z = ndc.z * 2.0 - 1.0;
-
-		// Convert from NDC to world position.
-		cursor.position.copy(ndc.unproject(camera));
-
-	}
-
-	container.addEventListener("pointermove", (e) => void pickDepth(e), { passive: true });
+	composer.addPass(new EffectPass(camera, hueSaturationEffect));
 
 	// Settings
 
 	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+
+	const params = {
+		"hue": hueSaturationEffect.hue,
+		"saturation": hueSaturationEffect.saturation,
+		"opacity": hueSaturationEffect.blendMode.getOpacity(),
+		"blend mode": hueSaturationEffect.blendMode.getBlendFunction()
+	};
+
+	const folder = pane.addFolder({ title: "Settings" });
+	folder.addInput(params, "hue", { min: 0, max: 2 * Math.PI, step: 1e-3 })
+		.on("change", (e) => hueSaturationEffect.hue = e.value);
+	folder.addInput(params, "saturation", { min: -1, max: 1, step: 1e-3 })
+		.on("change", (e) => hueSaturationEffect.saturation = e.value);
+
+	folder.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
+		.on("change", (e) => hueSaturationEffect.blendMode.setOpacity(e.value));
+	folder.addInput(params, "blend mode", { options: BlendFunction })
+		.on("change", (e) => hueSaturationEffect.blendMode.setBlendFunction(e.value));
 
 	// Resize Handler
 

@@ -68,29 +68,71 @@ export class DepthMaskMaterial extends ShaderMaterial {
 		/** @ignore */
 		this.toneMapped = false;
 
-		/**
-		 * The current depth mode.
-		 *
-		 * @type {DepthModes}
-		 * @private
-		 */
-
 		this.depthMode = LessDepth;
-		this.setDepthMode(LessDepth);
+
+	}
+
+	/**
+	 * The primary depth buffer.
+	 *
+	 * @type {Texture}
+	 */
+
+	set depthBuffer0(value) {
+
+		this.uniforms.depthBuffer0.value = value;
+
+	}
+
+	/**
+	 * The primary depth packing strategy.
+	 *
+	 * @type {DepthPackingStrategies}
+	 */
+
+	set depthPacking0(value) {
+
+		this.defines.DEPTH_PACKING_0 = value.toFixed(0);
+		this.needsUpdate = true;
 
 	}
 
 	/**
 	 * Sets the base depth buffer.
 	 *
+	 * @deprecated Use depthBuffer0 and depthPacking0 instead.
 	 * @param {Texture} buffer - The depth texture.
 	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
 	 */
 
 	setDepthBuffer0(buffer, depthPacking = BasicDepthPacking) {
 
-		this.uniforms.depthBuffer0.value = buffer;
-		this.defines.DEPTH_PACKING_0 = depthPacking.toFixed(0);
+		this.depthBuffer0 = buffer;
+		this.depthPacking0 = depthPacking;
+
+	}
+
+	/**
+	 * The secondary depth buffer.
+	 *
+	 * @type {Texture}
+	 */
+
+	set depthBuffer1(value) {
+
+		this.uniforms.depthBuffer1.value = value;
+
+	}
+
+	/**
+	 * The secondary depth packing strategy.
+	 *
+	 * @type {DepthPackingStrategies}
+	 */
+
+	set depthPacking1(value) {
+
+		this.defines.DEPTH_PACKING_1 = value.toFixed(0);
 		this.needsUpdate = true;
 
 	}
@@ -98,14 +140,33 @@ export class DepthMaskMaterial extends ShaderMaterial {
 	/**
 	 * Sets the depth buffer that will be compared with the base depth buffer.
 	 *
+	 * @deprecated Use depthBuffer1 and depthPacking1 instead.
 	 * @param {Texture} buffer - The depth texture.
 	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
 	 */
 
 	setDepthBuffer1(buffer, depthPacking = BasicDepthPacking) {
 
-		this.uniforms.depthBuffer1.value = buffer;
-		this.defines.DEPTH_PACKING_1 = depthPacking.toFixed(0);
+		this.depthBuffer1 = buffer;
+		this.depthPacking1 = depthPacking;
+
+	}
+
+	/**
+	 * The strategy for handling maximum depth.
+	 *
+	 * @type {DepthTestStrategy}
+	 */
+
+	get maxDepthStrategy() {
+
+		return Number(this.defines.DEPTH_TEST_STRATEGY);
+
+	}
+
+	set maxDepthStrategy(value) {
+
+		this.defines.DEPTH_TEST_STRATEGY = value.toFixed(0);
 		this.needsUpdate = true;
 
 	}
@@ -114,76 +175,60 @@ export class DepthMaskMaterial extends ShaderMaterial {
 	 * Indicates whether maximum depth values should be preserved.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use getMaxDepthStrategy() instead.
+	 * @deprecated Use maxDepthStrategy instead.
 	 */
 
 	get keepFar() {
 
-		return (this.getMaxDepthStrategy() === DepthTestStrategy.KEEP);
+		return this.maxDepthStrategy;
 
 	}
 
-	/**
-	 * Controls whether maximum depth values should be preserved.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Use setMaxDepthStrategy(DepthTestStrategy.KEEP_MAX_DEPTH) instead.
-	 */
-
 	set keepFar(value) {
 
-		this.setMaxDepthStrategy(value ? DepthTestStrategy.KEEP_MAX_DEPTH : DepthTestStrategy.DISCARD_MAX_DEPTH);
+		this.maxDepthStrategy = value ? DepthTestStrategy.KEEP_MAX_DEPTH : DepthTestStrategy.DISCARD_MAX_DEPTH;
 
 	}
 
 	/**
 	 * Returns the strategy for dealing with maximum depth values.
 	 *
+	 * @deprecated Use maxDepthStrategy instead.
 	 * @return {DepthTestStrategy} The strategy.
 	 */
 
 	getMaxDepthStrategy() {
 
-		return Number(this.defines.DEPTH_TEST_STRATEGY);
+		return this.maxDepthStrategy;
 
 	}
 
 	/**
 	 * Sets the strategy for dealing with maximum depth values.
 	 *
+	 * @deprecated Use maxDepthStrategy instead.
 	 * @param {DepthTestStrategy} value - The strategy.
 	 */
 
 	setMaxDepthStrategy(value) {
 
-		this.defines.DEPTH_TEST_STRATEGY = value.toFixed(0);
-		this.needsUpdate = true;
+		this.maxDepthStrategy = value;
 
 	}
 
 	/**
-	 * Returns the current error threshold for depth comparisons. Default is `1e-5`.
+	 * A small error threshold that is used for `EqualDepth` and `NotEqualDepth` tests. Default is `1e-5`.
 	 *
-	 * This value is only used for `EqualDepth` and `NotEqualDepth`.
-	 *
-	 * @return {Number} The error threshold.
+	 * @type {Number}
 	 */
 
-	getEpsilon() {
+	get epsilon() {
 
 		return Number(this.defines.DEPTH_EPSILON);
 
 	}
 
-	/**
-	 * Sets the depth comparison error threshold.
-	 *
-	 * This value is only used for `EqualDepth` and `NotEqualDepth`.
-	 *
-	 * @param {Number} value - The new error threshold.
-	 */
-
-	setEpsilon(value) {
+	set epsilon(value) {
 
 		this.defines.DEPTH_EPSILON = value.toFixed(16);
 		this.needsUpdate = true;
@@ -191,30 +236,50 @@ export class DepthMaskMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Returns the current depth mode.
+	 * Returns the current error threshold for depth comparisons. Default is `1e-5`.
 	 *
-	 * @return {DepthModes} The depth mode. Default is `LessDepth`.
+	 * @deprecated Use epsilon instead.
+	 * @return {Number} The error threshold.
 	 */
 
-	getDepthMode() {
+	getEpsilon() {
 
-		return this.depthMode;
+		return this.epsilon;
 
 	}
 
 	/**
-	 * Sets the depth mode.
+	 * Sets the depth comparison error threshold.
 	 *
-	 * @see https://threejs.org/docs/#api/en/constants/Materials
-	 * @param {DepthModes} mode - The depth mode.
+	 * @deprecated Use epsilon instead.
+	 * @param {Number} value - The new error threshold.
 	 */
 
-	setDepthMode(mode) {
+	setEpsilon(value) {
+
+		this.epsilon = value;
+
+	}
+
+	/**
+	 * The depth mode.
+	 *
+	 * @see https://threejs.org/docs/#api/en/constants/Materials
+	 * @type {DepthModes}
+	 */
+
+	get depthMode() {
+
+		return Number(this.defines.DEPTH_MODE);
+
+	}
+
+	set depthMode(value) {
 
 		// If the depth test fails, the texel will be discarded.
 		let depthTest;
 
-		switch(mode) {
+		switch(value) {
 
 			case NeverDepth:
 				depthTest = "false";
@@ -251,9 +316,35 @@ export class DepthMaskMaterial extends ShaderMaterial {
 
 		}
 
-		this.depthMode = mode;
+		this.defines.DEPTH_MODE = value.toFixed(0);
 		this.defines["depthTest(d0, d1)"] = depthTest;
 		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Returns the current depth mode.
+	 *
+	 * @deprecated Use depthMode instead.
+	 * @return {DepthModes} The depth mode. Default is `LessDepth`.
+	 */
+
+	getDepthMode() {
+
+		return this.depthMode;
+
+	}
+
+	/**
+	 * Sets the depth mode.
+	 *
+	 * @deprecated Use depthMode instead.
+	 * @param {DepthModes} mode - The depth mode.
+	 */
+
+	setDepthMode(mode) {
+
+		this.depthMode = mode;
 
 	}
 

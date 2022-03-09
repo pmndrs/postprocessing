@@ -83,7 +83,7 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 		if(mainUvExists) {
 
-			const code = "\t" + prefix + "MainUv(UV);\n";
+			const code = `\t${prefix}MainUv(UV);\n`;
 			shaderParts.set(Section.FRAGMENT_MAIN_UV, shaderParts.get(Section.FRAGMENT_MAIN_UV) + code);
 			transformedUv = true;
 
@@ -92,7 +92,7 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 		if(shaders.get("vertex") !== null && /mainSupport/.test(shaders.get("vertex"))) {
 
 			// Build the mainSupport call (with optional uv parameter).
-			let string = "\t" + prefix + "MainSupport(";
+			let string = `\t${prefix}MainSupport(`;
 			string += /mainSupport *\([\w\s]*?uv\s*?\)/.test(shaders.get("vertex")) ? "vUv);\n" : ");\n";
 			shaderParts.set(Section.VERTEX_MAIN_SUPPORT, shaderParts.get(Section.VERTEX_MAIN_SUPPORT) + string);
 
@@ -104,25 +104,25 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 		// Assemble all names while ignoring parameters of function-like macros.
 		names = names.concat([...shaders.get("fragment").matchAll(functionRegExp)].map(m => m[1]));
-		names = names.concat([...effect.getDefines().keys()].map((s) => s.replace(/\([\w\s,]*\)/g, "")));
-		names = names.concat([...effect.getUniforms().keys()]);
+		names = names.concat([...effect.defines.keys()].map((s) => s.replace(/\([\w\s,]*\)/g, "")));
+		names = names.concat([...effect.uniforms.keys()]);
 
 		// Store prefixed uniforms and macros.
-		effect.getUniforms().forEach((val, key) => uniforms.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), val));
-		effect.getDefines().forEach((val, key) => defines.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), val));
+		effect.uniforms.forEach((val, key) => uniforms.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), val));
+		effect.defines.forEach((val, key) => defines.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), val));
 
 		// Prefix varyings, functions, uniforms and macro values.
 		prefixSubstrings(prefix, names, defines);
 		prefixSubstrings(prefix, names, shaders);
 
 		// Collect unique blend modes.
-		const blendMode = effect.getBlendMode();
-		blendModes.set(blendMode.blendFunction, blendMode);
+		const blendMode = effect.blendMode;
+		blendModes.set(blendMode.getBlendFunction(), blendMode);
 
 		if(mainImageExists) {
 
 			const depthParamRegExp = /MainImage *\([\w\s,]*?depth[\w\s,]*?\)/;
-			let string = prefix + "MainImage(color0, UV, ";
+			let string = `${prefix}MainImage(color0, UV, `;
 
 			// The effect may sample depth in a different shader.
 			if((attributes & EffectAttribute.DEPTH) !== 0 && depthParamRegExp.test(shaders.get("fragment"))) {
@@ -139,9 +139,9 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 			uniforms.set(blendOpacity, blendMode.opacity);
 
 			// Blend the result of this effect with the input color.
-			string += "color0 = blend" + blendMode.getBlendFunction() + "(color0, color1, " + blendOpacity + ");\n\n\t";
+			string += `color0 = blend${blendMode.getBlendFunction()}(color0, color1, ${blendOpacity});\n\n\t`;
 			shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, shaderParts.get(Section.FRAGMENT_MAIN_IMAGE) + string);
-			string = "uniform float " + blendOpacity + ";\n\n";
+			string = `uniform float ${blendOpacity};\n\n`;
 			shaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) + string);
 
 		}
@@ -182,7 +182,7 @@ export class EffectPass extends Pass {
 
 		super("EffectPass");
 
-		this.setFullscreenMaterial(new EffectMaterial(null, null, null, camera));
+		this.fullscreenMaterial = new EffectMaterial(null, null, null, camera);
 
 		/**
 		 * The effects, sorted by attribute priority, DESC.
@@ -250,25 +250,18 @@ export class EffectPass extends Pass {
 	 * Indicates whether this pass encodes its output when rendering to screen.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use getFullscreenMaterial().isOutputEncodingEnabled() instead.
+	 * @deprecated Use fullscreenMaterial.encodeOutput instead.
 	 */
 
 	get encodeOutput() {
 
-		return this.getFullscreenMaterial().isOutputEncodingEnabled();
+		return this.fullscreenMaterial.encodeOutput;
 
 	}
 
-	/**
-	 * Enables or disables output encoding.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Use getFullscreenMaterial().setOutputEncodingEnabled() instead.
-	 */
-
 	set encodeOutput(value) {
 
-		this.getFullscreenMaterial().setOutputEncodingEnabled(value);
+		this.fullscreenMaterial.encodeOutput = value;
 
 	}
 
@@ -278,25 +271,18 @@ export class EffectPass extends Pass {
 	 * Color quantization reduces banding artifacts but degrades performance.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use getFullscreenMaterial().dithering instead.
+	 * @deprecated Use fullscreenMaterial.dithering instead.
 	 */
 
 	get dithering() {
 
-		return this.getFullscreenMaterial().dithering;
+		return this.fullscreenMaterial.dithering;
 
 	}
 
-	/**
-	 * Enables or disables dithering.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Use getFullscreenMaterial().dithering instead.
-	 */
-
 	set dithering(value) {
 
-		const material = this.getFullscreenMaterial();
+		const material = this.fullscreenMaterial;
 		material.dithering = value;
 		material.needsUpdate = true;
 
@@ -358,7 +344,7 @@ export class EffectPass extends Pass {
 
 		for(const effect of this.effects) {
 
-			if(effect.getBlendMode().getBlendFunction() === BlendFunction.SKIP) {
+			if(effect.blendMode.getBlendFunction() === BlendFunction.SKIP) {
 
 				// Check if this effect relies on depth and continue.
 				attributes |= (effect.getAttributes() & EffectAttribute.DEPTH);
@@ -371,15 +357,16 @@ export class EffectPass extends Pass {
 
 				attributes |= effect.getAttributes();
 
-				const result = integrateEffect(("e" + id++), effect, shaderParts, blendModes, defines, uniforms, attributes);
+				const prefix = ("e" + id++);
+				const result = integrateEffect(prefix, effect, shaderParts, blendModes, defines, uniforms, attributes);
 				varyings += result.varyings.length;
 				transformedUv = transformedUv || result.transformedUv;
 				readDepth = readDepth || result.readDepth;
 
-				if(effect.getExtensions() !== null) {
+				if(effect.extensions !== null) {
 
 					// Collect the WebGL extensions that are required by this effect.
-					for(const extension of effect.getExtensions()) {
+					for(const extension of effect.extensions) {
 
 						extensions.add(extension);
 
@@ -396,7 +383,7 @@ export class EffectPass extends Pass {
 
 		for(const blendMode of blendModes.values()) {
 
-			const code = blendMode.getShaderCode().replace(blendRegExp, "blend" + blendMode.getBlendFunction());
+			const code = blendMode.getShaderCode().replace(blendRegExp, `blend${blendMode.getBlendFunction()}`);
 			shaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) + code + "\n");
 
 		}
@@ -443,7 +430,7 @@ export class EffectPass extends Pass {
 		this.skipRendering = (id === 0);
 		this.needsSwap = !this.skipRendering;
 
-		this.getFullscreenMaterial()
+		this.fullscreenMaterial
 			.setShaderParts(shaderParts)
 			.setExtensions(extensions)
 			.setUniforms(uniforms)
@@ -452,36 +439,13 @@ export class EffectPass extends Pass {
 	}
 
 	/**
-	 * Updates the shader material.
-	 *
-	 * Warning: This method triggers a relatively expensive shader recompilation.
-	 *
-	 * TODO Remove renderer param.
-	 * @param {WebGLRenderer} [renderer] - The renderer.
+	 * Rebuilds the shader material.
 	 */
 
-	recompile(renderer) {
+	recompile() {
 
 		this.updateMaterial();
 		this.verifyResources();
-
-	}
-
-	/**
-	 * Sets the renderer
-	 *
-	 * @param {WebGLRenderer} renderer - The renderer.
-	 */
-
-	setRenderer(renderer) {
-
-		super.setRenderer(renderer);
-
-		for(const effect of this.effects) {
-
-			effect.setRenderer(renderer);
-
-		}
 
 	}
 
@@ -493,7 +457,7 @@ export class EffectPass extends Pass {
 
 	getDepthTexture() {
 
-		return this.getFullscreenMaterial().uniforms.depthBuffer.value;
+		return this.fullscreenMaterial.depthBuffer;
 
 	}
 
@@ -506,7 +470,8 @@ export class EffectPass extends Pass {
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
-		this.getFullscreenMaterial().setDepthBuffer(depthTexture, depthPacking);
+		this.fullscreenMaterial.depthBuffer = depthTexture;
+		this.fullscreenMaterial.depthPacking = depthPacking;
 
 		for(const effect of this.effects) {
 
@@ -536,9 +501,9 @@ export class EffectPass extends Pass {
 
 		if(!this.skipRendering || this.renderToScreen) {
 
-			const material = this.getFullscreenMaterial();
-			material.setInputBuffer(inputBuffer.texture);
-			material.setDeltaTime(deltaTime);
+			const material = this.fullscreenMaterial;
+			material.inputBuffer = inputBuffer.texture;
+			material.time += deltaTime;
 
 			renderer.setRenderTarget(this.renderToScreen ? null : outputBuffer);
 			renderer.render(this.scene, this.camera);
@@ -556,7 +521,7 @@ export class EffectPass extends Pass {
 
 	setSize(width, height) {
 
-		this.getFullscreenMaterial().setSize(width, height);
+		this.fullscreenMaterial.setSize(width, height);
 
 		for(const effect of this.effects) {
 
@@ -576,6 +541,8 @@ export class EffectPass extends Pass {
 
 	initialize(renderer, alpha, frameBufferType) {
 
+		this.renderer = renderer;
+
 		// Initialize effects before building the shader.
 		for(const effect of this.effects) {
 
@@ -586,11 +553,11 @@ export class EffectPass extends Pass {
 
 		// Initialize the fullscreen material.
 		this.updateMaterial();
-		this.verifyResources(renderer);
+		this.verifyResources();
 
 		if(frameBufferType !== undefined && frameBufferType !== UnsignedByteType) {
 
-			this.getFullscreenMaterial().defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+			this.fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
 		}
 

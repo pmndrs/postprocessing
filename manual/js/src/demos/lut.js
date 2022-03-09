@@ -1,6 +1,5 @@
 import {
 	ClampToEdgeWrapping,
-	HalfFloatType,
 	LinearFilter,
 	LoadingManager,
 	PerspectiveCamera,
@@ -18,16 +17,16 @@ import {
 	LUTEffect,
 	EffectComposer,
 	EffectPass,
-	LookupTexture3D,
+	LookupTexture,
 	LUT3dlLoader,
 	LUTCubeLoader,
 	RawImageData,
 	RenderPass
-} from "../../../src";
+} from "postprocessing";
 
 import { Pane } from "tweakpane";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, FPSMeter } from "./utils";
+import { calculateVerticalFoV, FPSMeter } from "../utils";
 
 const luts = new Map([
 	["neutral-2", null],
@@ -57,15 +56,15 @@ function load() {
 	const lut3dlLoader = new LUT3dlLoader(loadingManager);
 	const lutCubeLoader = new LUTCubeLoader(loadingManager);
 
-	const lutNeutral2 = LookupTexture3D.createNeutral(2);
+	const lutNeutral2 = LookupTexture.createNeutral(2);
 	lutNeutral2.name = "neutral-2";
 	assets.set(lutNeutral2.name, lutNeutral2);
 
-	const lutNeutral4 = LookupTexture3D.createNeutral(4);
+	const lutNeutral4 = LookupTexture.createNeutral(4);
 	lutNeutral4.name = "neutral-4";
 	assets.set(lutNeutral4.name, lutNeutral4);
 
-	const lutNeutral8 = LookupTexture3D.createNeutral(8);
+	const lutNeutral8 = LookupTexture.createNeutral(8);
 	lutNeutral8.name = "neutral-8";
 	assets.set(lutNeutral8.name, lutNeutral8);
 
@@ -116,7 +115,6 @@ function load() {
 					t.wrapS = ClampToEdgeWrapping;
 					t.wrapT = ClampToEdgeWrapping;
 					t.flipY = false;
-
 					assets.set(entry[0], t);
 
 				});
@@ -140,13 +138,13 @@ window.addEventListener("load", () => load().then((assets) => {
 		depth: false
 	});
 
-	const container = document.querySelector(".viewport");
-	container.append(renderer.domElement);
 	renderer.debug.checkShaderErrors = (window.location.hostname === "localhost");
-	renderer.setSize(container.clientWidth, container.clientHeight);
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.outputEncoding = sRGBEncoding;
 	renderer.setClearColor(0x000000, 0);
+
+	const container = document.querySelector(".viewport");
+	container.append(renderer.domElement);
 
 	// Camera & Controls
 
@@ -182,11 +180,9 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	// Post Processing
 
-	const composer = new EffectComposer(renderer, {
-		frameBufferType: HalfFloatType
-	});
+	const composer = new EffectComposer(renderer);
 
-	const lut = LookupTexture3D.from(assets.get("png/filmic1"));
+	const lut = LookupTexture.from(assets.get("png/filmic1"));
 	const lutEffect = renderer.capabilities.isWebGL2 ? new LUTEffect(lut) :
 		new LUTEffect(lut.convertToUint8().toDataTexture());
 
@@ -198,18 +194,17 @@ window.addEventListener("load", () => load().then((assets) => {
 	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
-	pane.addSeparator();
 
 	const params = {
-		"lut": lutEffect.getLUT().name,
+		"lut": lutEffect.lut.name,
 		"show LUT": true,
 		"3D texture": true,
 		"tetrahedral filter": false,
-		"base size": lutEffect.getLUT().image.width,
+		"base size": lutEffect.lut.image.width,
 		"scale up": false,
 		"target size": 48,
-		"opacity": lutEffect.getBlendMode().getOpacity(),
-		"blend mode": lutEffect.getBlendMode().getBlendFunction()
+		"opacity": lutEffect.blendMode.getOpacity(),
+		"blend mode": lutEffect.blendMode.getBlendFunction()
 	};
 
 	let objectURL = null;
@@ -218,7 +213,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 		if(params["show LUT"]) {
 
-			const lut = LookupTexture3D.from(lutEffect.getLUT());
+			const lut = LookupTexture.from(lutEffect.lut);
 			const { image } = lut.convertToUint8().toDataTexture();
 			RawImageData.from(image).toCanvas().toBlob((blob) => {
 
@@ -248,14 +243,14 @@ window.addEventListener("load", () => load().then((assets) => {
 
 		if(scaleUp) {
 
-			const lut = original.isLookupTexture3D ? original : LookupTexture3D.from(original);
+			const lut = (original instanceof LookupTexture) ? original : LookupTexture.from(original);
 			console.time("Tetrahedral Upscaling");
 			promise = lut.scaleUp(params["target size"], false);
 			document.body.classList.add("progress");
 
 		} else {
 
-			promise = Promise.resolve(LookupTexture3D.from(original));
+			promise = Promise.resolve(LookupTexture.from(original));
 
 		}
 
@@ -268,7 +263,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 			}
 
-			lutEffect.getLUT().dispose();
+			lutEffect.lut.dispose();
 			params["base size"] = size;
 
 			if(renderer.capabilities.isWebGL2) {
@@ -280,11 +275,11 @@ window.addEventListener("load", () => load().then((assets) => {
 
 				}
 
-				lutEffect.setLUT(params["3D texture"] ? lut : lut.toDataTexture());
+				lutEffect.lut = (params["3D texture"] ? lut : lut.toDataTexture());
 
 			} else {
 
-				lutEffect.setLUT(lut.convertToUint8().toDataTexture());
+				lutEffect.lut = lut.convertToUint8().toDataTexture();
 
 			}
 
@@ -301,25 +296,26 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	}
 
-	pane.addInput(params, "lut", { options: [...luts.keys()].reduce(reducer, {}) }).on("change", changeLUT);
-	pane.addInput(params, "show LUT").on("change", updateLUTPreview);
+	const folder = pane.addFolder({ title: "Settings" });
+	folder.addInput(params, "lut", { options: [...luts.keys()].reduce(reducer, {}) }).on("change", changeLUT);
+	folder.addInput(params, "show LUT").on("change", updateLUTPreview);
 
 	if(renderer.capabilities.isWebGL2) {
 
-		pane.addInput(params, "3D texture").on("change", changeLUT);
-		pane.addInput(params, "tetrahedral filter")
-			.on("change", (e) => lutEffect.setTetrahedralInterpolationEnabled(e.value));
+		folder.addInput(params, "3D texture").on("change", changeLUT);
+		folder.addInput(params, "tetrahedral filter")
+			.on("change", (e) => lutEffect.tetrahedralInterpolation = e.value);
 
 	}
 
-	pane.addMonitor(params, "base size", { format: (v) => v.toFixed(0) });
-	pane.addInput(params, "scale up").on("change", changeLUT);
-	pane.addInput(params, "target size", { options: [32, 48, 64, 96, 128].reduce(reducer, {}) }).on("change", changeLUT);
+	folder.addMonitor(params, "base size", { format: (v) => v.toFixed(0) });
+	folder.addInput(params, "scale up").on("change", changeLUT);
+	folder.addInput(params, "target size", { options: [32, 48, 64, 128].reduce(reducer, {}) }).on("change", changeLUT);
 
-	pane.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
-		.on("change", (e) => lutEffect.getBlendMode().setOpacity(e.value));
-	pane.addInput(params, "blend mode", { options: BlendFunction })
-		.on("change", (e) => lutEffect.getBlendMode().setBlendFunction(e.value));
+	folder.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
+		.on("change", (e) => lutEffect.blendMode.setOpacity(e.value));
+	folder.addInput(params, "blend mode", { options: BlendFunction })
+		.on("change", (e) => lutEffect.blendMode.setBlendFunction(e.value));
 
 	// Resize Handler
 

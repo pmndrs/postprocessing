@@ -28,7 +28,7 @@ export class LuminancePass extends Pass {
 
 		super("LuminancePass");
 
-		this.setFullscreenMaterial(new LuminanceMaterial(colorOutput, luminanceRange));
+		this.fullscreenMaterial = new LuminanceMaterial(colorOutput, luminanceRange);
 		this.needsSwap = false;
 
 		/**
@@ -58,14 +58,10 @@ export class LuminancePass extends Pass {
 		 * The resolution.
 		 *
 		 * @type {Resolution}
-		 * @deprecated Use getResolution() instead.
 		 */
 
-		this.resolution = new Resolution(this, width, height);
-		this.resolution.addEventListener("change", (e) => this.setSize(
-			this.resolution.getBaseWidth(),
-			this.resolution.getBaseHeight()
-		));
+		const resolution = this.resolution = new Resolution(this, width, height);
+		resolution.addEventListener("change", (e) => this.setSize(resolution.baseWidth, resolution.baseHeight));
 
 	}
 
@@ -73,18 +69,18 @@ export class LuminancePass extends Pass {
 	 * The luminance texture.
 	 *
 	 * @type {Texture}
-	 * @deprecated Use getTexture() instead.
 	 */
 
 	get texture() {
 
-		return this.getTexture();
+		return this.renderTarget.texture;
 
 	}
 
 	/**
 	 * Returns the luminance texture.
 	 *
+	 * @deprecated Use texture instead.
 	 * @return {Texture} The texture.
 	 */
 
@@ -97,6 +93,7 @@ export class LuminancePass extends Pass {
 	/**
 	 * Returns the resolution settings.
 	 *
+	 * @deprecated Use resolution instead.
 	 * @return {Resolution} The resolution.
 	 */
 
@@ -118,8 +115,8 @@ export class LuminancePass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
-		const material = this.getFullscreenMaterial();
-		material.setInputBuffer(inputBuffer.texture);
+		const material = this.fullscreenMaterial;
+		material.inputBuffer = inputBuffer.texture;
 		renderer.setRenderTarget(this.renderToScreen ? null : this.renderTarget);
 		renderer.render(this.scene, this.camera);
 
@@ -136,7 +133,7 @@ export class LuminancePass extends Pass {
 
 		const resolution = this.resolution;
 		resolution.setBaseSize(width, height);
-		this.renderTarget.setSize(resolution.getWidth(), resolution.getHeight());
+		this.renderTarget.setSize(resolution.width, resolution.height);
 
 	}
 
@@ -152,7 +149,7 @@ export class LuminancePass extends Pass {
 
 		if(frameBufferType !== undefined && frameBufferType !== UnsignedByteType) {
 
-			this.getFullscreenMaterial().defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+			this.fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
 		}
 

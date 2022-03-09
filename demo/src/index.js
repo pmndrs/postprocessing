@@ -38,7 +38,6 @@ window.addEventListener("load", (event) => {
 		powerPreference: "high-performance",
 		antialias: false,
 		stencil: false,
-		alpha: false,
 		depth: false
 	});
 

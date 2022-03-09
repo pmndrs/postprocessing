@@ -58,8 +58,21 @@ export class MaskMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The input buffer.
+	 *
+	 * @type {Texture}
+	 */
+
+	set inputBuffer(value) {
+
+		this.uniforms.inputBuffer.value = value;
+
+	}
+
+	/**
 	 * Sets the input buffer.
 	 *
+	 * @deprecated Use inputBuffer instead.
 	 * @param {Texture} value - The input buffer.
 	 */
 
@@ -70,25 +83,12 @@ export class MaskMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the mask texture.
+	 * The mask texture.
 	 *
 	 * @type {Texture}
-	 * @deprecated Use setMaskTexture() instead.
 	 */
 
 	set maskTexture(value) {
-
-		this.setMaskTexture(value);
-
-	}
-
-	/**
-	 * Sets the mask texture.
-	 *
-	 * @param {Texture} value - The texture.
-	 */
-
-	setMaskTexture(value) {
 
 		this.uniforms.maskTexture.value = value;
 		delete this.defines.MASK_PRECISION_HIGH;
@@ -104,25 +104,25 @@ export class MaskMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the color channel to use for masking. Default is `ColorChannel.RED`.
+	 * Sets the mask texture.
 	 *
-	 * @type {ColorChannel}
-	 * @deprecated Use setColorChannel() instead.
+	 * @deprecated Use maskTexture instead.
+	 * @param {Texture} value - The texture.
 	 */
 
-	set colorChannel(value) {
+	setMaskTexture(value) {
 
-		this.setColorChannel(value);
+		this.maskTexture = value;
 
 	}
 
 	/**
 	 * Sets the color channel to use for masking. Default is `ColorChannel.RED`.
 	 *
-	 * @param {ColorChannel} value - The channel.
+	 * @type {ColorChannel}
 	 */
 
-	setColorChannel(value) {
+	set colorChannel(value) {
 
 		this.defines.COLOR_CHANNEL = value.toFixed(0);
 		this.needsUpdate = true;
@@ -130,25 +130,25 @@ export class MaskMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the masking technique. Default is `MaskFunction.DISCARD`.
+	 * Sets the color channel to use for masking. Default is `ColorChannel.RED`.
 	 *
-	 * @type {MaskFunction}
-	 * @deprecated Use setMaskFunction() instead.
+	 * @deprecated Use colorChannel instead.
+	 * @param {ColorChannel} value - The channel.
 	 */
 
-	set maskFunction(value) {
+	setColorChannel(value) {
 
-		this.setMaskFunction(value);
+		this.colorChannel = value;
 
 	}
 
 	/**
-	 * Sets the masking technique. Default is `MaskFunction.DISCARD`.
+	 * The masking technique. Default is `MaskFunction.DISCARD`.
 	 *
-	 * @param {MaskFunction} value - The function.
+	 * @type {MaskFunction}
 	 */
 
-	setMaskFunction(value) {
+	set maskFunction(value) {
 
 		this.defines.MASK_FUNCTION = value.toFixed(0);
 		this.needsUpdate = true;
@@ -156,50 +156,31 @@ export class MaskMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Sets the masking technique. Default is `MaskFunction.DISCARD`.
+	 *
+	 * @deprecated Use maskFunction instead.
+	 * @param {MaskFunction} value - The function.
+	 */
+
+	setMaskFunction(value) {
+
+		this.maskFunction = value;
+
+	}
+
+	/**
 	 * Indicates whether the masking is inverted.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use isInverted() instead.
 	 */
 
 	get inverted() {
-
-		return this.isInverted();
-
-	}
-
-	/**
-	 * Determines whether the masking should be inverted.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Use setInverted() instead.
-	 */
-
-	set inverted(value) {
-
-		this.setInverted(value);
-
-	}
-
-	/**
-	 * Indicates whether the masking is inverted.
-	 *
-	 * @return {Boolean} Whether the masking is inverted.
-	 */
-
-	isInverted() {
 
 		return (this.defines.INVERTED !== undefined);
 
 	}
 
-	/**
-	 * Determines whether the masking should be inverted.
-	 *
-	 * @param {Boolean} value - Whether the masking should be inverted.
-	 */
-
-	setInverted(value) {
+	set inverted(value) {
 
 		if(this.inverted && !value) {
 
@@ -216,46 +197,61 @@ export class MaskMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * The current mask strength.
+	 * Indicates whether the masking is inverted.
 	 *
-	 * Individual mask values will be clamped to [0.0, 1.0].
-	 *
-	 * @type {Number}
-	 * @deprecated Use getStrength() instead.
+	 * @deprecated Use inverted instead.
+	 * @return {Boolean} Whether the masking is inverted.
 	 */
 
-	get strength() {
+	isInverted() {
 
-		return this.getStrength();
+		return this.inverted;
 
 	}
 
 	/**
-	 * Sets the mask strength.
+	 * Determines whether the masking should be inverted.
 	 *
-	 * Has no effect when the mask function is set to `DISCARD`.
+	 * @deprecated Use inverted instead.
+	 * @param {Boolean} value - Whether the masking should be inverted.
+	 */
+
+	setInverted(value) {
+
+		this.inverted = value;
+
+	}
+
+	/**
+	 * The current mask strength.
+	 *
+	 * Individual mask values will be clamped to [0.0, 1.0]. Has no effect when the mask function is set to `DISCARD`.
 	 *
 	 * @type {Number}
-	 * @deprecated Use setStrength() instead.
 	 */
+
+	get strength() {
+
+		return this.uniforms.strength.value;
+
+	}
 
 	set strength(value) {
 
-		this.setStrength(value);
+		this.uniforms.strength.value = value;
 
 	}
 
 	/**
 	 * Returns the current mask strength.
 	 *
-	 * Individual mask values will be clamped to [0.0, 1.0].
-	 *
+	 * @deprecated Use strength instead.
 	 * @return {Number} The mask strength.
 	 */
 
 	getStrength() {
 
-		return this.uniforms.strength.value;
+		return this.strength;
 
 	}
 
@@ -264,12 +260,13 @@ export class MaskMaterial extends ShaderMaterial {
 	 *
 	 * Has no effect when the mask function is set to `DISCARD`.
 	 *
+	 * @deprecated Use strength instead.
 	 * @param {Number} value - The mask strength.
 	 */
 
 	setStrength(value) {
 
-		this.uniforms.strength.value = value;
+		this.strength = value;
 
 	}
 

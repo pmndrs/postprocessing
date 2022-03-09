@@ -51,14 +51,27 @@ export class LuminanceMaterial extends ShaderMaterial {
 		/** @ignore */
 		this.toneMapped = false;
 
-		this.setColorOutputEnabled(colorOutput);
-		this.setLuminanceRange(luminanceRange);
+		this.colorOutput = colorOutput;
+		this.luminanceRange = luminanceRange;
+
+	}
+
+	/**
+	 * The input buffer.
+	 *
+	 * @type {Texture}
+	 */
+
+	set inputBuffer(value) {
+
+		this.uniforms.inputBuffer.value = value;
 
 	}
 
 	/**
 	 * Sets the input buffer.
 	 *
+	 * @deprecated Use inputBuffer instead.
 	 * @param {Texture} value - The input buffer.
 	 */
 
@@ -72,49 +85,17 @@ export class LuminanceMaterial extends ShaderMaterial {
 	 * The luminance threshold.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getThreshold() instead.
 	 */
 
 	get threshold() {
-
-		return this.getThreshold();
-
-	}
-
-	/**
-	 * Sets the luminance threshold.
-	 *
-	 * @type {Number}
-	 * @deprecated Use setThreshold() instead.
-	 */
-
-	set threshold(value) {
-
-		this.setThreshold(value);
-
-	}
-
-	/**
-	 * Returns the luminance threshold.
-	 *
-	 * @return {Number} The threshold.
-	 */
-
-	getThreshold() {
 
 		return this.uniforms.threshold.value;
 
 	}
 
-	/**
-	 * Sets the luminance threshold.
-	 *
-	 * @param {Number} value - The threshold.
-	 */
+	set threshold(value) {
 
-	setThreshold(value) {
-
-		if(this.getSmoothingFactor() > 0 || value > 0) {
+		if(this.smoothing > 0 || value > 0) {
 
 			this.defines.THRESHOLD = "1";
 
@@ -129,52 +110,46 @@ export class LuminanceMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Returns the luminance threshold.
+	 *
+	 * @deprecated Use threshold instead.
+	 * @return {Number} The threshold.
+	 */
+
+	getThreshold() {
+
+		return this.threshold;
+
+	}
+
+	/**
+	 * Sets the luminance threshold.
+	 *
+	 * @deprecated Use threshold instead.
+	 * @param {Number} value - The threshold.
+	 */
+
+	setThreshold(value) {
+
+		this.threshold = value;
+
+	}
+
+	/**
 	 * The luminance threshold smoothing.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getSmoothingFactor() instead.
 	 */
 
 	get smoothing() {
-
-		return this.getSmoothingFactor();
-
-	}
-
-	/**
-	 * Sets the luminance threshold smoothing.
-	 *
-	 * @type {Number}
-	 * @deprecated Use setSmoothingFactor() instead.
-	 */
-
-	set smoothing(value) {
-
-		this.setSmoothingFactor(value);
-
-	}
-
-	/**
-	 * Returns the luminance threshold smoothing factor.
-	 *
-	 * @return {Number} The smoothing factor.
-	 */
-
-	getSmoothingFactor() {
 
 		return this.uniforms.smoothing.value;
 
 	}
 
-	/**
-	 * Sets the luminance threshold smoothing factor.
-	 *
-	 * @param {Number} value - The smoothing factor.
-	 */
+	set smoothing(value) {
 
-	setSmoothingFactor(value) {
-
-		if(this.getThreshold() > 0 || value > 0) {
+		if(this.threshold > 0 || value > 0) {
 
 			this.defines.THRESHOLD = "1";
 
@@ -189,6 +164,32 @@ export class LuminanceMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Returns the luminance threshold smoothing factor.
+	 *
+	 * @deprecated Use smoothing instead.
+	 * @return {Number} The smoothing factor.
+	 */
+
+	getSmoothingFactor() {
+
+		return this.smoothing;
+
+	}
+
+	/**
+	 * Sets the luminance threshold smoothing factor.
+	 *
+	 * @deprecated Use smoothing instead.
+	 * @param {Number} value - The smoothing factor.
+	 */
+
+	setSmoothingFactor(value) {
+
+		this.smoothing = value;
+
+	}
+
+	/**
 	 * Indicates whether the luminance threshold is enabled.
 	 *
 	 * @type {Boolean}
@@ -197,68 +198,25 @@ export class LuminanceMaterial extends ShaderMaterial {
 
 	get useThreshold() {
 
-		return this.isThresholdEnabled();
+		return (this.threshold > 0 || this.smoothing > 0);
 
 	}
 
-	/**
-	 * Enables or disables the luminance threshold.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Adjust the threshold or smoothing factor instead.
-	 */
-
-	set useThreshold(value) {
-
-		this.setThresholdEnabled(value);
-
-	}
+	set useThreshold(value) {}
 
 	/**
 	 * Indicates whether color output is enabled.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use isColorOutputEnabled() instead.
 	 */
 
 	get colorOutput() {
-
-		return this.isColorOutputEnabled();
-
-	}
-
-	/**
-	 * Enables or disables color output.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Use setColorOutputEnabled() instead.
-	 */
-
-	set colorOutput(value) {
-
-		this.setColorOutputEnabled(value);
-
-	}
-
-	/**
-	 * Indicates whether color output is enabled.
-	 *
-	 * @return {Boolean} Whether color output is enabled.
-	 */
-
-	isColorOutputEnabled(value) {
 
 		return (this.defines.COLOR !== undefined);
 
 	}
 
-	/**
-	 * Enables or disables color output.
-	 *
-	 * @param {Boolean} value - Whether color output should be enabled.
-	 */
-
-	setColorOutputEnabled(value) {
+	set colorOutput(value) {
 
 		if(value) {
 
@@ -275,74 +233,63 @@ export class LuminanceMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Indicates whether color output is enabled.
+	 *
+	 * @deprecated Use colorOutput instead.
+	 * @return {Boolean} Whether color output is enabled.
+	 */
+
+	isColorOutputEnabled(value) {
+
+		return this.colorOutput;
+
+	}
+
+	/**
+	 * Enables or disables color output.
+	 *
+	 * @deprecated Use colorOutput instead.
+	 * @param {Boolean} value - Whether color output should be enabled.
+	 */
+
+	setColorOutputEnabled(value) {
+
+		this.colorOutput = value;
+
+	}
+
+	/**
 	 * Indicates whether luminance masking is enabled.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use getLuminanceRange() instead.
+	 * @deprecated
 	 */
 
 	get useRange() {
 
-		return this.isLuminanceRangeEnabled();
+		return (this.luminanceRange !== null);
 
 	}
-
-	/**
-	 * Enables or disables luminance masking.
-	 *
-	 * If enabled, the threshold will be ignored.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Use setLuminanceRange() instead.
-	 */
 
 	set useRange(value) {
 
-		this.setLuminanceRangeEnabled(value);
+		this.luminanceRange = null;
 
 	}
 
 	/**
-	 * Indicates whether luminance masking is enabled.
+	 * The luminance range. Set to null to disable.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use getLuminanceRange() instead.
 	 */
 
 	get luminanceRange() {
-
-		return (this.getLuminanceRange() !== null);
-
-	}
-
-	/**
-	 * Enables or disables luminance masking.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Use setLuminanceRange() instead.
-	 */
-
-	set luminanceRange(value) {}
-
-	/**
-	 * Returns the current luminance range.
-	 *
-	 * @return {Vector2} The luminance range.
-	 */
-
-	getLuminanceRange() {
 
 		return this.uniforms.range.value;
 
 	}
 
-	/**
-	 * Sets a luminance range. Set to null to disable.
-	 *
-	 * @param {Vector2} value - The luminance range.
-	 */
-
-	setLuminanceRange(value) {
+	set luminanceRange(value) {
 
 		if(value !== null) {
 
@@ -356,6 +303,32 @@ export class LuminanceMaterial extends ShaderMaterial {
 
 		this.uniforms.range.value = value;
 		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Returns the current luminance range.
+	 *
+	 * @deprecated Use luminanceRange instead.
+	 * @return {Vector2} The luminance range.
+	 */
+
+	getLuminanceRange() {
+
+		return this.luminanceRange;
+
+	}
+
+	/**
+	 * Sets a luminance range. Set to null to disable.
+	 *
+	 * @deprecated Use luminanceRange instead.
+	 * @param {Vector2} value - The luminance range.
+	 */
+
+	setLuminanceRange(value) {
+
+		this.luminanceRange = value;
 
 	}
 

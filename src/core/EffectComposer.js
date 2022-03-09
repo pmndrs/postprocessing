@@ -3,6 +3,8 @@ import {
 	DepthTexture,
 	LinearFilter,
 	REVISION,
+	sRGBEncoding,
+	UnsignedByteType,
 	UnsignedIntType,
 	UnsignedInt248Type,
 	Vector2,
@@ -216,12 +218,20 @@ export class EffectComposer {
 			const alpha = renderer.getContext().getContextAttributes().alpha;
 			const frameBufferType = this.inputBuffer.texture.type;
 
+			if(frameBufferType === UnsignedByteType && renderer.outputEncoding === sRGBEncoding) {
+
+				this.inputBuffer.texture.encoding = sRGBEncoding;
+				this.outputBuffer.texture.encoding = sRGBEncoding;
+				this.inputBuffer.dispose();
+				this.outputBuffer.dispose();
+
+			}
+
 			renderer.autoClear = false;
 			this.setSize(size.width, size.height);
 
 			for(const pass of this.passes) {
 
-				pass.setRenderer(renderer);
 				pass.initialize(renderer, alpha, frameBufferType);
 
 			}
@@ -336,8 +346,8 @@ export class EffectComposer {
 
 	createBuffer(depthBuffer, stencilBuffer, type, multisampling) {
 
-		const size = (this.renderer === null) ? new Vector2() :
-			this.renderer.getDrawingBufferSize(new Vector2());
+		const renderer = this.renderer;
+		const size = (renderer === null) ? new Vector2() : renderer.getDrawingBufferSize(new Vector2());
 
 		const options = {
 			minFilter: LinearFilter,
@@ -361,6 +371,12 @@ export class EffectComposer {
 		} else {
 
 			renderTarget = new WebGLRenderTarget(size.width, size.height, options);
+
+		}
+
+		if(type === UnsignedByteType && renderer !== null && renderer.outputEncoding === sRGBEncoding) {
+
+			renderTarget.texture.encoding = sRGBEncoding;
 
 		}
 
@@ -550,7 +566,7 @@ export class EffectComposer {
 
 		for(const pass of this.passes) {
 
-			if(pass.isEnabled()) {
+			if(pass.enabled) {
 
 				pass.render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest);
 
@@ -632,8 +648,10 @@ export class EffectComposer {
 
 	reset() {
 
+		const autoReset = this.timer.isAutoResetEnabled();
 		this.dispose();
 		this.autoRenderToScreen = true;
+		this.timer.setAutoResetEnabled(autoReset);
 
 	}
 

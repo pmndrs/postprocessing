@@ -1,4 +1,4 @@
-import { BufferAttribute, BufferGeometry, Camera, Mesh, Scene } from "three";
+import { BasicDepthPacking, BufferAttribute, BufferGeometry, Camera, Mesh, Scene } from "three";
 
 const dummyCamera = new Camera();
 let geometry = null;
@@ -73,6 +73,7 @@ export class Pass {
 		/**
 		 * The renderer.
 		 *
+		 * @deprecated
 		 * @type {WebGLRenderer}
 		 * @protected
 		 */
@@ -142,7 +143,6 @@ export class Pass {
 		 * Indicates whether this pass is enabled.
 		 *
 		 * @type {Boolean}
-		 * @deprecated Use isEnabled() and setEnabled() instead.
 		 */
 
 		this.enabled = true;
@@ -190,6 +190,7 @@ export class Pass {
 	/**
 	 * Sets the renderer
 	 *
+	 * @deprecated
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 */
 
@@ -202,6 +203,7 @@ export class Pass {
 	/**
 	 * Indicates whether this pass is enabled.
 	 *
+	 * @deprecated Use enabled instead.
 	 * @return {Boolean} Whether this pass is enabled.
 	 */
 
@@ -214,6 +216,7 @@ export class Pass {
 	/**
 	 * Enables or disables this pass.
 	 *
+	 * @deprecated Use enabled instead.
 	 * @param {Boolean} value - Whether the pass should be enabled.
 	 */
 
@@ -224,25 +227,18 @@ export class Pass {
 	}
 
 	/**
-	 * Returns the current fullscreen material.
+	 * The fullscreen material.
 	 *
-	 * @return {Material} The current fullscreen material, or null if there is none.
+	 * @type {Material}
 	 */
 
-	getFullscreenMaterial() {
+	get fullscreenMaterial() {
 
 		return (this.screen !== null) ? this.screen.material : null;
 
 	}
 
-	/**
-	 * Sets the fullscreen material.
-	 *
-	 * @protected
-	 * @param {Material} value - A fullscreen material.
-	 */
-
-	setFullscreenMaterial(value) {
+	set fullscreenMaterial(value) {
 
 		let screen = this.screen;
 
@@ -269,6 +265,33 @@ export class Pass {
 	}
 
 	/**
+	 * Returns the current fullscreen material.
+	 *
+	 * @deprecated Use fullscreenMaterial instead.
+	 * @return {Material} The current fullscreen material, or null if there is none.
+	 */
+
+	getFullscreenMaterial() {
+
+		return this.fullscreenMaterial;
+
+	}
+
+	/**
+	 * Sets the fullscreen material.
+	 *
+	 * @deprecated Use fullscreenMaterial instead.
+	 * @protected
+	 * @param {Material} value - A fullscreen material.
+	 */
+
+	setFullscreenMaterial(value) {
+
+		this.fullscreenMaterial = value;
+
+	}
+
+	/**
 	 * Returns the current depth texture.
 	 *
 	 * @return {Texture} The current depth texture, or null if there is none.
@@ -287,10 +310,10 @@ export class Pass {
 	 * You may override this method if your pass relies on the depth information of a preceding {@link RenderPass}.
 	 *
 	 * @param {Texture} depthTexture - A depth texture.
-	 * @param {Number} [depthPacking=0] - The depth packing.
+	 * @param {DepthPackingStrategy} [depthPacking=BasicDepthPacking] - The depth packing.
 	 */
 
-	setDepthTexture(depthTexture, depthPacking = 0) {}
+	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {}
 
 	/**
 	 * Renders this pass.
@@ -345,21 +368,13 @@ export class Pass {
 
 	dispose() {
 
-		const material = this.getFullscreenMaterial();
-
-		if(material !== null) {
-
-			material.dispose();
-
-		}
-
 		for(const key of Object.keys(this)) {
 
 			const property = this[key];
 
 			if(property !== null && typeof property.dispose === "function") {
 
-				if(property instanceof Scene) {
+				if(property instanceof Scene || property === this.renderer) {
 
 					continue;
 

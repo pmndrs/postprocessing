@@ -18,13 +18,12 @@ export class OutlineEffect extends Effect {
 	/**
 	 * Constructs a new outline effect.
 	 *
-	 * If you want dark outlines, remember to use an appropriate blend function.
-	 *
 	 * @param {Scene} scene - The main scene.
 	 * @param {Camera} camera - The main camera.
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function. Use `BlendFunction.ALPHA` for dark outlines.
 	 * @param {Number} [options.patternTexture=null] - A pattern texture.
+	 * @param {Number} [options.patternScale=1.0] - The pattern scale.
 	 * @param {Number} [options.edgeStrength=1.0] - The edge strength.
 	 * @param {Number} [options.pulseSpeed=0.0] - The pulse speed. A value of zero disables the pulse effect.
 	 * @param {Number} [options.visibleEdgeColor=0xffffff] - The color of visible edges.
@@ -40,6 +39,7 @@ export class OutlineEffect extends Effect {
 	constructor(scene, camera, {
 		blendFunction = BlendFunction.SCREEN,
 		patternTexture = null,
+		patternScale = 1.0,
 		edgeStrength = 1.0,
 		pulseSpeed = 0.0,
 		visibleEdgeColor = 0xffffff,
@@ -60,7 +60,7 @@ export class OutlineEffect extends Effect {
 				["visibleEdgeColor", new Uniform(new Color(visibleEdgeColor))],
 				["hiddenEdgeColor", new Uniform(new Color(hiddenEdgeColor))],
 				["pulse", new Uniform(1.0)],
-				["patternScale", new Uniform(1.0)],
+				["patternScale", new Uniform(patternScale)],
 				["patternTexture", new Uniform(null)]
 			])
 		});
@@ -83,8 +83,8 @@ export class OutlineEffect extends Effect {
 		});
 
 		this.blendMode.setBlendFunction(blendFunction);
-		this.setPatternTexture(patternTexture);
-		this.setXRayEnabled(xRay);
+		this.patternTexture = patternTexture;
+		this.xRay = xRay;
 
 		/**
 		 * The main scene.
@@ -140,8 +140,8 @@ export class OutlineEffect extends Effect {
 		 */
 
 		this.clearPass = new ClearPass();
-		this.clearPass.setOverrideClearColor(new Color(0x000000));
-		this.clearPass.setOverrideClearAlpha(1.0);
+		this.clearPass.overrideClearColor = new Color(0x000000);
+		this.clearPass.overrideClearAlpha = 1;
 
 		/**
 		 * A depth pass.
@@ -159,27 +159,21 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.maskPass = new RenderPass(scene, camera, new DepthComparisonMaterial(this.depthPass.getTexture(), camera));
-
-		const clearPass = this.maskPass.getClearPass();
-		clearPass.setOverrideClearColor(new Color(0xffffff));
-		clearPass.setOverrideClearAlpha(1.0);
+		this.maskPass = new RenderPass(scene, camera, new DepthComparisonMaterial(this.depthPass.texture, camera));
+		const clearPass = this.maskPass.clearPass;
+		clearPass.overrideClearColor = new Color(0xffffff);
+		clearPass.overrideClearAlpha = 1;
 
 		/**
 		 * A blur pass.
 		 *
 		 * @type {KawaseBlurPass}
-		 * @deprecated Use getBlurPass() instead.
 		 */
 
 		this.blurPass = new KawaseBlurPass({ resolutionScale, width, height, kernelSize });
-		this.blurPass.setEnabled(blur);
-
-		const resolution = this.blurPass.getResolution();
-		resolution.addEventListener("change", (e) => this.setSize(
-			resolution.getBaseWidth(),
-			resolution.getBaseHeight()
-		));
+		this.blurPass.enabled = blur;
+		const resolution = this.blurPass.resolution;
+		resolution.addEventListener("change", (e) => this.setSize(resolution.baseWidth, resolution.baseHeight));
 
 		/**
 		 * An outline detection pass.
@@ -189,8 +183,8 @@ export class OutlineEffect extends Effect {
 		 */
 
 		this.outlinePass = new ShaderPass(new OutlineMaterial());
-		const outlineMaterial = this.outlinePass.getFullscreenMaterial();
-		outlineMaterial.setInputBuffer(this.renderTargetMask.texture);
+		const outlineMaterial = this.outlinePass.fullscreenMaterial;
+		outlineMaterial.inputBuffer = this.renderTargetMask.texture;
 
 		/**
 		 * The current animation time.
@@ -199,23 +193,23 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.time = 0.0;
+		this.time = 0;
 
 		/**
 		 * A selection of objects that will be outlined.
 		 *
+		 * The default layer of this selection is 10.
+		 *
 		 * @type {Selection}
-		 * @deprecated Use getSelection() instead.
 		 */
 
 		this.selection = new Selection();
-		this.selection.setLayer(10);
+		this.selection.layer = 10;
 
 		/**
-		 * The pulse speed. A value of zero disables the pulse effect.
+		 * The pulse speed. Set to 0 to disable.
 		 *
 		 * @type {Number}
-		 * @deprecated Use getPulseSpeed() and setPulseSpeed() instead.
 		 */
 
 		this.pulseSpeed = pulseSpeed;
@@ -225,13 +219,12 @@ export class OutlineEffect extends Effect {
 	/**
 	 * The resolution of this effect.
 	 *
-	 * @type {Resizer}
-	 * @deprecated Use getResolution() instead.
+	 * @type {Resolution}
 	 */
 
 	get resolution() {
 
-		return this.getResolution();
+		return this.blurPass.resolution;
 
 	}
 
@@ -248,8 +241,81 @@ export class OutlineEffect extends Effect {
 	}
 
 	/**
+	 * The pattern scale.
+	 *
+	 * @type {Number}
+	 */
+
+	get patternScale() {
+
+		return this.uniforms.get("patternScale").value;
+
+	}
+
+	set patternScale(value) {
+
+		this.uniforms.get("patternScale").value = value;
+
+	}
+
+	/**
+	 * The edge strength.
+	 *
+	 * @type {Number}
+	 */
+
+	get edgeStrength() {
+
+		return this.uniforms.get("edgeStrength").value;
+
+	}
+
+	set edgeStrength(value) {
+
+		this.uniforms.get("edgeStrength").value = value;
+
+	}
+
+	/**
+	 * The visible edge color.
+	 *
+	 * @type {Color}
+	 */
+
+	get visibleEdgeColor() {
+
+		return this.uniforms.get("visibleEdgeColor").value;
+
+	}
+
+	set visibleEdgeColor(value) {
+
+		this.uniforms.get("visibleEdgeColor").value = value;
+
+	}
+
+	/**
+	 * The hidden edge color.
+	 *
+	 * @type {Color}
+	 */
+
+	get hiddenEdgeColor() {
+
+		return this.uniforms.get("hiddenEdgeColor").value;
+
+	}
+
+	set hiddenEdgeColor(value) {
+
+		this.uniforms.get("hiddenEdgeColor").value = value;
+
+	}
+
+	/**
 	 * Returns the blur pass.
 	 *
+	 * @deprecated Use blurPass instead.
 	 * @return {KawaseBlurPass} The blur pass.
 	 */
 
@@ -262,8 +328,7 @@ export class OutlineEffect extends Effect {
 	/**
 	 * Returns the selection.
 	 *
-	 * The default layer of this selection is 10.
-	 *
+	 * @deprecated Use selection instead.
 	 * @return {Selection} The selection.
 	 */
 
@@ -276,6 +341,7 @@ export class OutlineEffect extends Effect {
 	/**
 	 * Returns the pulse speed.
 	 *
+	 * @deprecated Use pulseSpeed instead.
 	 * @return {Number} The speed.
 	 */
 
@@ -288,6 +354,7 @@ export class OutlineEffect extends Effect {
 	/**
 	 * Sets the pulse speed. Set to zero to disable.
 	 *
+	 * @deprecated Use pulseSpeed instead.
 	 * @param {Number} value - The speed.
 	 */
 
@@ -301,25 +368,18 @@ export class OutlineEffect extends Effect {
 	 * The current width of the internal render targets.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getResolution().getWidth() instead.
+	 * @deprecated Use resolution.width instead.
 	 */
 
 	get width() {
 
-		return this.getResolution().getWidth();
+		return this.resolution.width;
 
 	}
 
-	/**
-	 * Sets the render width.
-	 *
-	 * @type {Number}
-	 * @deprecated Use getResolution().setPreferredWidth() instead.
-	 */
-
 	set width(value) {
 
-		this.getResolution().setPreferredWidth(value);
+		this.resolution.preferredWidth = value;
 
 	}
 
@@ -327,47 +387,37 @@ export class OutlineEffect extends Effect {
 	 * The current height of the internal render targets.
 	 *
 	 * @type {Number}
-	 * @deprecated Use getResolution().getHeight() instead.
+	 * @deprecated Use resolution.height instead.
 	 */
 
 	get height() {
 
-		return this.getResolution().getHeight();
+		return this.resolution.height;
 
 	}
-
-	/**
-	 * Sets the render height.
-	 *
-	 * @type {Number}
-	 * @deprecated Use getResolution().setPreferredHeight() instead.
-	 */
 
 	set height(value) {
 
-		this.getResolution().setPreferredHeight(value);
+		this.resolution.preferredHeight = value;
 
 	}
 
 	/**
+	 * The selection layer.
+	 *
 	 * @type {Number}
-	 * @deprecated Use getSelection().getLayer() instead.
+	 * @deprecated Use selection.layer instead.
 	 */
 
 	get selectionLayer() {
 
-		return this.selection.getLayer();
+		return this.selection.layer;
 
 	}
 
-	/**
-	 * @type {Number}
-	 * @deprecated Use getSelection().setLayer() instead.
-	 */
-
 	set selectionLayer(value) {
 
-		this.selection.setLayer(value);
+		this.selection.layer = value;
 
 	}
 
@@ -375,7 +425,7 @@ export class OutlineEffect extends Effect {
 	 * Indicates whether dithering is enabled.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use EffectPass.getFullscreenMaterial().dithering instead.
+	 * @deprecated
 	 */
 
 	get dithering() {
@@ -383,13 +433,6 @@ export class OutlineEffect extends Effect {
 		return this.blurPass.dithering;
 
 	}
-
-	/**
-	 * Enables or disables dithering.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Use EffectPass.getFullscreenMaterial().dithering instead.
-	 */
 
 	set dithering(value) {
 
@@ -401,25 +444,18 @@ export class OutlineEffect extends Effect {
 	 * The blur kernel size.
 	 *
 	 * @type {KernelSize}
-	 * @deprecated Use getBlurPass().getKernelSize() instead.
+	 * @deprecated Use blurPass.kernelSize instead.
 	 */
 
 	get kernelSize() {
 
-		return this.blurPass.getKernelSize();
+		return this.blurPass.kernelSize;
 
 	}
 
-	/**
-	 * Sets the kernel size.
-	 *
-	 * @type {KernelSize}
-	 * @deprecated Use blurPass.setKernelSize() instead.
-	 */
-
 	set kernelSize(value) {
 
-		this.blurPass.setKernelSize(value);
+		this.blurPass.kernelSize = value;
 
 	}
 
@@ -427,71 +463,34 @@ export class OutlineEffect extends Effect {
 	 * Indicates whether the outlines should be blurred.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use getBlurPass().isEnabled() instead.
+	 * @deprecated Use blurPass.enabled instead.
 	 */
 
 	get blur() {
 
-		return this.blurPass.isEnabled();
+		return this.blurPass.enabled;
 
 	}
-
-	/**
-	 * @type {Boolean}
-	 * @deprecated Use getBlurPass().setEnabled() instead.
-	 */
 
 	set blur(value) {
 
-		this.blurPass.setEnabled(value);
-
-	}
-
-	/**
-	 * Indicates whether X-Ray outlines are enabled.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Use isXRayEnabled() instead.
-	 */
-
-	get xRay() {
-
-		return this.isXRayEnabled();
-
-	}
-
-	/**
-	 * Enables or disables X-Ray outlines.
-	 *
-	 * @type {Boolean}
-	 * @deprecated Use setXRayEnabled() instead.
-	 */
-
-	set xRay(value) {
-
-		this.setXRayEnabled(value);
+		this.blurPass.enabled = value;
 
 	}
 
 	/**
 	 * Indicates whether X-ray mode is enabled.
 	 *
-	 * @return {Boolean} Whether X-ray mode is enabled.
+	 * @type {Boolean}
 	 */
 
-	isXRayEnabled() {
+	get xRay() {
 
 		return this.defines.has("X_RAY");
 
 	}
 
-	/**
-	 * Enables or disables X-ray outlines.
-	 *
-	 * @param {Boolean} value - Whether X-ray should be enabled.
-	 */
-
-	setXRayEnabled(value) {
+	set xRay(value) {
 
 		if(this.xRay !== value) {
 
@@ -512,37 +511,80 @@ export class OutlineEffect extends Effect {
 	}
 
 	/**
-	 * Sets the pattern texture.
+	 * Indicates whether X-ray mode is enabled.
 	 *
-	 * @param {Texture} texture - The new texture.
+	 * @deprecated Use xRay instead.
+	 * @return {Boolean} Whether X-ray mode is enabled.
 	 */
 
-	setPatternTexture(texture) {
+	isXRayEnabled() {
 
-		if(texture !== null) {
+		return this.xRay;
 
-			texture.wrapS = texture.wrapT = RepeatWrapping;
+	}
 
+	/**
+	 * Enables or disables X-ray outlines.
+	 *
+	 * @deprecated Use xRay instead.
+	 * @param {Boolean} value - Whether X-ray should be enabled.
+	 */
+
+	setXRayEnabled(value) {
+
+		this.xRay = value;
+
+	}
+
+	/**
+	 * The pattern texture. Set to `null` to disable.
+	 *
+	 * @type {Texture}
+	 */
+
+	get patternTexture() {
+
+		return this.uniforms.get("patternTexture").value;
+
+	}
+
+	set patternTexture(value) {
+
+		if(value !== null) {
+
+			value.wrapS = value.wrapT = RepeatWrapping;
 			this.defines.set("USE_PATTERN", "1");
-			this.uniforms.get("patternTexture").value = texture;
 			this.setVertexShader(vertexShader);
 
 		} else {
 
 			this.defines.delete("USE_PATTERN");
-			this.uniforms.get("patternTexture").value = null;
 			this.setVertexShader(null);
 
 		}
 
 		if(this.renderer !== null) {
 
-			const decoding = getTextureDecoding(texture, this.renderer.capabilities.isWebGL2);
+			const decoding = getTextureDecoding(value, this.renderer.capabilities.isWebGL2);
 			this.defines.set("texelToLinear(texel)", decoding);
 
 		}
 
+		this.uniforms.get("patternTexture").value = value;
 		this.setChanged();
+
+	}
+
+	/**
+	 * Sets the pattern texture.
+	 *
+	 * @deprecated Use patternTexture instead.
+	 * @param {Texture} value - The new texture.
+	 */
+
+	setPatternTexture(value) {
+
+		this.patternTexture = value;
 
 	}
 
@@ -550,12 +592,12 @@ export class OutlineEffect extends Effect {
 	 * Returns the current resolution scale.
 	 *
 	 * @return {Number} The resolution scale.
-	 * @deprecated Use getResolution().setPreferredWidth() or getResolution().setPreferredHeight() instead.
+	 * @deprecated Use resolution instead.
 	 */
 
 	getResolutionScale() {
 
-		return this.getResolution().getScale();
+		return this.resolution.scale;
 
 	}
 
@@ -563,12 +605,12 @@ export class OutlineEffect extends Effect {
 	 * Sets the resolution scale.
 	 *
 	 * @param {Number} scale - The new resolution scale.
-	 * @deprecated Use getResolution().setPreferredWidth() or getResolution().setPreferredHeight() instead.
+	 * @deprecated Use resolution instead.
 	 */
 
 	setResolutionScale(scale) {
 
-		this.getResolution().setScale(scale);
+		this.resolution.scale = scale;
 
 	}
 
@@ -577,7 +619,7 @@ export class OutlineEffect extends Effect {
 	 *
 	 * @param {Object3D[]} objects - The objects that should be outlined. This array will be copied.
 	 * @return {OutlinePass} This pass.
-	 * @deprecated Use getSelection().set() instead.
+	 * @deprecated Use selection.set() instead.
 	 */
 
 	setSelection(objects) {
@@ -591,7 +633,7 @@ export class OutlineEffect extends Effect {
 	 * Clears the list of selected objects.
 	 *
 	 * @return {OutlinePass} This pass.
-	 * @deprecated Use getSelection().clear() instead.
+	 * @deprecated Use selection.clear() instead.
 	 */
 
 	clearSelection() {
@@ -606,7 +648,7 @@ export class OutlineEffect extends Effect {
 	 *
 	 * @param {Object3D} object - The object that should be outlined.
 	 * @return {OutlinePass} This pass.
-	 * @deprecated Use getSelection().add() instead.
+	 * @deprecated Use selection.add() instead.
 	 */
 
 	selectObject(object) {
@@ -621,7 +663,7 @@ export class OutlineEffect extends Effect {
 	 *
 	 * @param {Object3D} object - The object that should no longer be outlined.
 	 * @return {OutlinePass} This pass.
-	 * @deprecated Use getSelection().delete() instead.
+	 * @deprecated Use selection.delete() instead.
 	 */
 
 	deselectObject(object) {
@@ -653,9 +695,9 @@ export class OutlineEffect extends Effect {
 		if(selection.size > 0) {
 
 			scene.background = null;
-			pulse.value = 1.0;
+			pulse.value = 1;
 
-			if(this.pulseSpeed > 0.0) {
+			if(this.pulseSpeed > 0) {
 
 				pulse.value = Math.cos(this.time * this.pulseSpeed * 10.0) * 0.375 + 0.625;
 
@@ -669,7 +711,7 @@ export class OutlineEffect extends Effect {
 			selection.setVisible(true);
 
 			// Compare the depth of the selected objects with the depth texture.
-			camera.layers.set(selection.getLayer());
+			camera.layers.set(selection.layer);
 			this.maskPass.render(renderer, this.renderTargetMask);
 
 			// Restore the camera layer mask and the scene background.
@@ -679,16 +721,16 @@ export class OutlineEffect extends Effect {
 			// Detect the outline.
 			this.outlinePass.render(renderer, null, this.renderTargetOutline);
 
-			if(this.blurPass.isEnabled()) {
+			if(this.blurPass.enabled) {
 
 				this.blurPass.render(renderer, this.renderTargetOutline, this.renderTargetOutline);
 
 			}
 
-		} else if(this.time > 0.0) {
+		} else if(this.time > 0) {
 
 			this.clearPass.render(renderer, this.renderTargetMask);
-			this.time = 0.0;
+			this.time = 0;
 
 		}
 
@@ -706,13 +748,13 @@ export class OutlineEffect extends Effect {
 		this.blurPass.setSize(width, height);
 		this.renderTargetMask.setSize(width, height);
 
-		const resolution = this.getResolution();
-		const w = resolution.getWidth();
-		const h = resolution.getHeight();
+		const resolution = this.resolution;
+		resolution.setBaseSize(width, height);
+		const w = resolution.width, h = resolution.height;
 
 		this.depthPass.setSize(w, h);
 		this.renderTargetOutline.setSize(w, h);
-		this.outlinePass.getFullscreenMaterial().setSize(w, h);
+		this.outlinePass.fullscreenMaterial.setSize(w, h);
 
 	}
 
@@ -726,8 +768,8 @@ export class OutlineEffect extends Effect {
 
 	initialize(renderer, alpha, frameBufferType) {
 
-		const texture = this.uniforms.get("patternTexture").value;
-		const decoding = getTextureDecoding(texture, this.renderer.capabilities.isWebGL2);
+		const texture = this.patternTexture;
+		const decoding = getTextureDecoding(texture, renderer.capabilities.isWebGL2);
 		this.defines.set("texelToLinear(texel)", decoding);
 
 		// No need for high precision: the blur pass operates on a mask texture.

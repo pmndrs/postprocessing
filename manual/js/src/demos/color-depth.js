@@ -1,6 +1,5 @@
 import {
 	CubeTextureLoader,
-	HalfFloatType,
 	LoadingManager,
 	PerspectiveCamera,
 	Scene,
@@ -11,16 +10,16 @@ import {
 
 import {
 	BlendFunction,
-	BrightnessContrastEffect,
+	ColorDepthEffect,
 	EffectComposer,
 	EffectPass,
 	RenderPass
-} from "../../../src";
+} from "postprocessing";
 
 import { Pane } from "tweakpane";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, FPSMeter } from "./utils";
-import * as CornellBox from "./objects/CornellBox";
+import { calculateVerticalFoV, FPSMeter } from "../utils";
+import * as CornellBox from "../objects/CornellBox";
 
 function load() {
 
@@ -63,10 +62,7 @@ window.addEventListener("load", () => load().then((assets) => {
 		depth: false
 	});
 
-	const container = document.querySelector(".viewport");
-	container.append(renderer.domElement);
 	renderer.debug.checkShaderErrors = (window.location.hostname === "localhost");
-	renderer.setSize(container.clientWidth, container.clientHeight);
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.outputEncoding = sRGBEncoding;
 	renderer.setClearColor(0x000000, 0);
@@ -75,6 +71,9 @@ window.addEventListener("load", () => load().then((assets) => {
 	renderer.shadowMap.autoUpdate = false;
 	renderer.shadowMap.needsUpdate = true;
 	renderer.shadowMap.enabled = true;
+
+	const container = document.querySelector(".viewport");
+	container.append(renderer.domElement);
 
 	// Camera & Controls
 
@@ -92,7 +91,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const scene = new Scene();
 	scene.background = assets.get("sky");
-	scene.add(...CornellBox.createLights());
+	scene.add(CornellBox.createLights());
 	scene.add(CornellBox.createEnvironment());
 	scene.add(CornellBox.createActors());
 
@@ -100,37 +99,33 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const context = renderer.getContext();
 	const composer = new EffectComposer(renderer, {
-		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES)),
-		frameBufferType: HalfFloatType
+		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
 	});
 
-	const brightnessContrastEffect = new BrightnessContrastEffect();
+	const colorDepthEffect = new ColorDepthEffect({ bits: 16 });
 	composer.addPass(new RenderPass(scene, camera));
-	composer.addPass(new EffectPass(camera, brightnessContrastEffect));
+	composer.addPass(new EffectPass(camera, colorDepthEffect));
 
 	// Settings
 
 	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
-	pane.addSeparator();
 
 	const params = {
-		"brightness": brightnessContrastEffect.getBrightness(),
-		"contrast": brightnessContrastEffect.getContrast(),
-		"opacity": brightnessContrastEffect.getBlendMode().getOpacity(),
-		"blend mode": brightnessContrastEffect.getBlendMode().getBlendFunction()
+		"bits": colorDepthEffect.bitDepth,
+		"opacity": colorDepthEffect.blendMode.getOpacity(),
+		"blend mode": colorDepthEffect.blendMode.getBlendFunction()
 	};
 
-	pane.addInput(params, "brightness", { min: -1, max: 1, step: 1e-4 })
-		.on("change", (e) => brightnessContrastEffect.setBrightness(e.value));
-	pane.addInput(params, "contrast", { min: -1, max: 1, step: 1e-4 })
-		.on("change", (e) => brightnessContrastEffect.setContrast(e.value));
+	const folder = pane.addFolder({ title: "Settings" });
+	folder.addInput(params, "bits", { min: 1, max: 32, step: 1 })
+		.on("change", (e) => colorDepthEffect.bitDepth = e.value);
 
-	pane.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
-		.on("change", (e) => brightnessContrastEffect.getBlendMode().setOpacity(e.value));
-	pane.addInput(params, "blend mode", { options: BlendFunction })
-		.on("change", (e) => brightnessContrastEffect.getBlendMode().setBlendFunction(e.value));
+	folder.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
+		.on("change", (e) => colorDepthEffect.blendMode.setOpacity(e.value));
+	folder.addInput(params, "blend mode", { options: BlendFunction })
+		.on("change", (e) => colorDepthEffect.blendMode.setBlendFunction(e.value));
 
 	// Resize Handler
 

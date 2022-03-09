@@ -2,6 +2,7 @@
 @use "layers";
 
 .viewport {
+	border-bottom: 1px solid var(--viewport-separator-color);
 	box-sizing: border-box;
 	height: calc(100vh - 10rem);
 	position: relative;
@@ -12,32 +13,32 @@
 		line-height: 1;
 		position: absolute;
 		z-index: layers.$hud;
-		.icon {
-			background: no-repeat center/cover transparent;
-			background-origin: content-box;
-			box-sizing: border-box;
-			cursor: pointer;
-			display: inline-block;
-			height: 26px;
-			margin-right: 4px;
-			opacity: 0.8;
-			transition: opacity durations.$short;
-			width: 26px;
-			&:focus,
-			&:hover {
-				opacity: 1;
-			}
+	}
+	.icon {
+		background: no-repeat center/cover transparent;
+		background-origin: content-box;
+		box-sizing: border-box;
+		cursor: pointer;
+		display: inline-block;
+		height: 26px;
+		margin-right: 4px;
+		opacity: 0.8;
+		transition: opacity durations.$short;
+		width: 26px;
+		&:focus,
+		&:hover {
+			opacity: 1;
 		}
-		.fullscreen {
-			background-image: url("../img/svg/fullscreen_white_24dp.svg");
-			&.active {
-				background-image: url("../img/svg/fullscreen_exit_white_24dp.svg");
-			}
+	}
+	.fullscreen {
+		background-image: url("../img/svg/fullscreen_white_24dp.svg");
+		&.active {
+			background-image: url("../img/svg/fullscreen_exit_white_24dp.svg");
 		}
-		.code {
-			background-image: url("../img/svg/code_white_24dp.svg");
-			padding: 2px;
-		}
+	}
+	.code {
+		background-image: url("../img/svg/code_white_24dp.svg");
+		padding: 2px;
 	}
 	.lut {
 		cursor: auto;
@@ -55,8 +56,69 @@
 		}
 	}
 	&:not(.loading) {
+		border-bottom-color: transparent;
 		.progress {
 			display: none;
+		}
+	}
+}
+
+.warning,
+.error {
+	align-items: center;
+	border-bottom: 1px solid var(--viewport-separator-color);
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	justify-content: center;
+	left: 0;
+	margin: 0;
+	position: absolute;
+	right: 0;
+	text-align: center;
+	top: 0;
+	a {
+		cursor: pointer;
+	}
+	p {
+		max-width: 500px;
+	}
+	h4 {
+		align-items: center;
+		display: flex;
+		margin: 0;
+		&::before {
+			background: no-repeat center/cover url("../img/svg/warning_black_24dp.svg");
+			content: "";
+			display: inline-block;
+			height: 24px;
+			margin: 0 0.3rem 1px 0;
+			opacity: 0.6;
+			width: 24px;
+		}
+	}
+	&.hidden {
+		display: none;
+	}
+}
+
+.error {
+	h4::before {
+		background-image: url("../img/svg/error_black_24dp.svg");
+	}
+}
+
+// Dark Mode
+
+.dark {
+	.warning {
+		h4::before {
+			background-image: url("/img/svg/warning_white_24dp.svg");
+		}
+	}
+	.error {
+		h4::before {
+			background-image: url("/img/svg/error_white_24dp.svg");
 		}
 	}
 }

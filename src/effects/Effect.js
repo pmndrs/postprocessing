@@ -77,7 +77,6 @@ export class Effect extends EventDispatcher {
 		 * The name of this effect.
 		 *
 		 * @type {String}
-		 * @private
 		 */
 
 		this.name = name;
@@ -87,6 +86,7 @@ export class Effect extends EventDispatcher {
 		 *
 		 * @type {WebGLRenderer}
 		 * @protected
+		 * @deprecated
 		 */
 
 		this.renderer = null;
@@ -124,7 +124,6 @@ export class Effect extends EventDispatcher {
 		 * Call {@link Effect.setChanged} after changing macro definitions.
 		 *
 		 * @type {Map<String, String>}
-		 * @protected
 		 */
 
 		this.defines = defines;
@@ -135,7 +134,6 @@ export class Effect extends EventDispatcher {
 		 * Call {@link Effect.setChanged} after adding or removing uniforms.
 		 *
 		 * @type {Map<String, Uniform>}
-		 * @protected
 		 */
 
 		this.uniforms = uniforms;
@@ -146,7 +144,6 @@ export class Effect extends EventDispatcher {
 		 * Call {@link Effect.setChanged} after adding or removing extensions.
 		 *
 		 * @type {Set<WebGLExtension>}
-		 * @protected
 		 */
 
 		this.extensions = extensions;
@@ -155,7 +152,6 @@ export class Effect extends EventDispatcher {
 		 * The blend mode of this effect.
 		 *
 		 * @type {BlendMode}
-		 * @protected
 		 */
 
 		this.blendMode = new BlendMode(blendFunction);
@@ -166,6 +162,7 @@ export class Effect extends EventDispatcher {
 	/**
 	 * Returns the name of this effect.
 	 *
+	 * @deprecated Use name instead.
 	 * @return {String} The name.
 	 */
 
@@ -176,8 +173,9 @@ export class Effect extends EventDispatcher {
 	}
 
 	/**
-	 * Sets the renderer
+	 * Sets the renderer.
 	 *
+	 * @deprecated
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 */
 
@@ -190,6 +188,7 @@ export class Effect extends EventDispatcher {
 	/**
 	 * Returns the preprocessor macro definitions.
 	 *
+	 * @deprecated Use defines instead.
 	 * @return {Map<String, String>} The extensions.
 	 */
 
@@ -202,6 +201,7 @@ export class Effect extends EventDispatcher {
 	/**
 	 * Returns the uniforms of this effect.
 	 *
+	 * @deprecated Use uniforms instead.
 	 * @return {Map<String, Uniform>} The extensions.
 	 */
 
@@ -214,6 +214,7 @@ export class Effect extends EventDispatcher {
 	/**
 	 * Returns the WebGL extensions that are required by this effect.
 	 *
+	 * @deprecated Use extensions instead.
 	 * @return {Set<WebGLExtension>} The extensions.
 	 */
 
@@ -228,6 +229,7 @@ export class Effect extends EventDispatcher {
 	 *
 	 * The result of this effect will be blended with the result of the previous effect using this blend mode.
 	 *
+	 * @deprecated Use blendMode instead.
 	 * @return {BlendMode} The blend mode.
 	 */
 
@@ -398,7 +400,7 @@ export class Effect extends EventDispatcher {
 
 			if(property !== null && typeof property.dispose === "function") {
 
-				if(property instanceof Scene) {
+				if(property instanceof Scene || property === this.renderer) {
 
 					continue;
 

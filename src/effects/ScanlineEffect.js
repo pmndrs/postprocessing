@@ -46,13 +46,33 @@ export class ScanlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.density = density;
+		this.d = density;
+
+	}
+
+	/**
+	 * The scanline density.
+	 *
+	 * @type {Number}
+	 */
+
+	get density() {
+
+		return this.d;
+
+	}
+
+	set density(value) {
+
+		this.d = value;
+		this.setSize(this.resolution.width, this.resolution.height);
 
 	}
 
 	/**
 	 * Returns the current scanline density.
 	 *
+	 * @deprecated Use density instead.
 	 * @return {Number} The scanline density.
 	 */
 
@@ -65,13 +85,13 @@ export class ScanlineEffect extends Effect {
 	/**
 	 * Sets the scanline density.
 	 *
-	 * @param {Number} density - The new scanline density.
+	 * @deprecated Use density instead.
+	 * @param {Number} value - The new scanline density.
 	 */
 
-	setDensity(density) {
+	setDensity(value) {
 
-		this.density = density;
-		this.setSize(this.resolution.width, this.resolution.height);
+		this.density = value;
 
 	}
 

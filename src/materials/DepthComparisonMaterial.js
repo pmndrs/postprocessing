@@ -1,4 +1,4 @@
-import { BasicDepthPacking, NoBlending, PerspectiveCamera, ShaderMaterial, Uniform } from "three";
+import { NoBlending, PerspectiveCamera, RGBADepthPacking, ShaderMaterial, Uniform } from "three";
 
 import fragmentShader from "./glsl/depth-comparison/shader.frag";
 import vertexShader from "./glsl/depth-comparison/shader.vert";
@@ -20,6 +20,9 @@ export class DepthComparisonMaterial extends ShaderMaterial {
 
 		super({
 			name: "DepthComparisonMaterial",
+			defines: {
+				DEPTH_PACKING: "0"
+			},
 			uniforms: {
 				depthBuffer: new Uniform(null),
 				cameraNear: new Uniform(0.3),
@@ -35,23 +38,49 @@ export class DepthComparisonMaterial extends ShaderMaterial {
 		/** @ignore */
 		this.toneMapped = false;
 
-		this.setDepthBuffer(depthTexture);
+		this.depthBuffer = depthTexture;
+		this.depthPacking = RGBADepthPacking;
 		this.adoptCameraSettings(camera);
+
+	}
+
+	/**
+	 * The depth buffer.
+	 *
+	 * @type {Texture}
+	 */
+
+	set depthBuffer(value) {
+
+		this.uniforms.depthBuffer.value = value;
+
+	}
+
+	/**
+	 * The depth packing strategy.
+	 *
+	 * @type {DepthPackingStrategies}
+	 */
+
+	set depthPacking(value) {
+
+		this.defines.DEPTH_PACKING = value.toFixed(0);
+		this.needsUpdate = true;
 
 	}
 
 	/**
 	 * Sets the depth buffer.
 	 *
+	 * @deprecated Use depthBuffer and depthPacking instead.
 	 * @param {Texture} buffer - The depth texture.
-	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
+	 * @param {DepthPackingStrategies} [depthPacking=RGBADepthPacking] - The depth packing strategy.
 	 */
 
-	setDepthBuffer(buffer, depthPacking = BasicDepthPacking) {
+	setDepthBuffer(buffer, depthPacking = RGBADepthPacking) {
 
-		this.uniforms.depthBuffer.value = buffer;
-		this.defines.DEPTH_PACKING = depthPacking.toFixed(0);
-		this.needsUpdate = true;
+		this.depthBuffer = buffer;
+		this.depthPacking = depthPacking;
 
 	}
 
