@@ -8,11 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Git checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Install Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14
+        uses: actions/setup-node@v3
       - name: Install PNPM
         run: npm install -g pnpm
       - name: Install and test
