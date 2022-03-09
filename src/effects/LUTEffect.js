@@ -401,7 +401,7 @@ export class LUTEffect extends Effect {
 	 * Enables or disables tetrahedral interpolation.
 	 *
 	 * @deprecated Use tetrahedralInterpolation instead.
-	 * @param {Boolean} enabled - Whether tetrahedral interpolation should be enabled.
+	 * @param {Boolean} value - Whether tetrahedral interpolation should be enabled.
 	 */
 
 	setTetrahedralInterpolationEnabled(value) {

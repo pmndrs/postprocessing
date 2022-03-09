@@ -382,7 +382,7 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	 * Sets the predication threshold.
 	 *
 	 * @deprecated Use predicationThreshold instead.
-	 * @param {Number} threshold - The threshold.
+	 * @param {Number} value - The threshold.
 	 */
 
 	setPredicationThreshold(value) {
