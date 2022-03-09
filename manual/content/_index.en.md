@@ -12,7 +12,7 @@ weight: 10
 
 Welcome to the `postprocessing` manual!
 
-## Background
+## Motivation
 
 The purpose of `postprocessing` is to provide a package of advanced, well maintained and fully documented filter effects for the popular 3D library [three.js](https://threejs.org/). It was originally created based on the [three.js examples](https://threejs.org/examples/?q=postprocessing) in the context of a university research project in 2015 and continues to evolve as a free, open-source library.
 
