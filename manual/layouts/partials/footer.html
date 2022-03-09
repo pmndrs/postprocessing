@@ -6,7 +6,7 @@
 
 	<div class="icons">
 		{{ range .Site.Params.FooterIcons }}
-			{{ with .url }}<a href="{{ . }}">{{ end }}
+			{{ with .url }}<a href="{{ . }}" target="_blank">{{ end }}
 				<div class="{{ .name | lower }}" title="{{ humanize .name }}"></div>
 			{{ with .url }}</a>{{ end }}
 		{{ end }}
