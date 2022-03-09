@@ -287,7 +287,7 @@ export class LUTEffect extends Effect {
 			const scale = this.uniforms.get("scale").value;
 			const offset = this.uniforms.get("offset").value;
 
-			if(this.tetrahedralInterpolation) {
+			if(this.tetrahedralInterpolation && lut instanceof DataTexture3D) {
 
 				if(this.defines.has("CUSTOM_INPUT_DOMAIN")) {
 
