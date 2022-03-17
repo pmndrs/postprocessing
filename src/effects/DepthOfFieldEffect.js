@@ -140,9 +140,9 @@ export class DepthOfFieldEffect extends Effect {
 		 */
 
 		this.cocPass = new ShaderPass(new CircleOfConfusionMaterial(camera));
-		const cocMaterial = this.cocPass.fullscreenMaterial;
-		cocMaterial.setFocusDistance(focusDistance);
-		cocMaterial.setFocalLength(focalLength);
+		const cocMaterial = this.cocMaterial;
+		cocMaterial.focusDistance = focusDistance;
+		cocMaterial.focalLength = focalLength;
 
 		/**
 		 * This pass blurs the foreground CoC buffer to soften edges.
