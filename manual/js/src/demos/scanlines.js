@@ -115,6 +115,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addInput(effect, "density", { min: 0, max: 2, step: 1e-3 });
+	folder.addInput(effect, "scrollSpeed", { min: -0.02, max: 0.02, step: 1e-3 });
 	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
 	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
 
