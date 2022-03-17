@@ -113,25 +113,20 @@ window.addEventListener("load", () => load().then((assets) => {
 		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
 	});
 
-	const textureEffect = new TextureEffect({
+	const effect = new TextureEffect({
 		blendFunction: BlendFunction.COLOR_DODGE,
 		texture: assets.get("scratches")
 	});
 
 	composer.addPass(new RenderPass(scene, camera));
-	composer.addPass(new EffectPass(camera, textureEffect));
+	composer.addPass(new EffectPass(camera, effect));
 
 	// Settings
 
 	const fpsMeter = new FPSMeter();
+	const texture = effect.texture;
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
-
-	const texture = textureEffect.texture;
-	const params = {
-		"opacity": textureEffect.blendMode.getOpacity(),
-		"blend mode": textureEffect.blendMode.getBlendFunction()
-	};
 
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addInput(texture, "rotation", { min: 0, max: 2 * Math.PI, step: 0.001 });
@@ -139,19 +134,15 @@ window.addEventListener("load", () => load().then((assets) => {
 	let subFolder = folder.addFolder({ title: "offset" });
 	subFolder.addInput(texture.offset, "x", { min: 0, max: 1, step: 0.001 });
 	subFolder.addInput(texture.offset, "y", { min: 0, max: 1, step: 0.001 });
-
 	subFolder = folder.addFolder({ title: "repeat" });
 	subFolder.addInput(texture.repeat, "x", { min: 0, max: 2, step: 0.001 });
 	subFolder.addInput(texture.repeat, "y", { min: 0, max: 2, step: 0.001 });
-
 	subFolder = folder.addFolder({ title: "center" });
 	subFolder.addInput(texture.center, "x", { min: 0, max: 1, step: 0.001 });
 	subFolder.addInput(texture.center, "y", { min: 0, max: 1, step: 0.001 });
 
-	folder.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
-		.on("change", (e) => textureEffect.blendMode.setOpacity(e.value));
-	folder.addInput(params, "blend mode", { options: BlendFunction })
-		.on("change", (e) => textureEffect.blendMode.setBlendFunction(e.value));
+	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
+	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 

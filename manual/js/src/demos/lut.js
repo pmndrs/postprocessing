@@ -26,7 +26,7 @@ import {
 
 import { Pane } from "tweakpane";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, FPSMeter } from "../utils";
+import { calculateVerticalFoV, FPSMeter, toRecord } from "../utils";
 
 const luts = new Map([
 	["neutral-2", null],
@@ -183,11 +183,11 @@ window.addEventListener("load", () => load().then((assets) => {
 	const composer = new EffectComposer(renderer);
 
 	const lut = LookupTexture.from(assets.get("png/filmic1"));
-	const lutEffect = renderer.capabilities.isWebGL2 ? new LUTEffect(lut) :
+	const effect = renderer.capabilities.isWebGL2 ? new LUTEffect(lut) :
 		new LUTEffect(lut.convertToUint8().toDataTexture());
 
 	composer.addPass(new RenderPass(scene, camera));
-	composer.addPass(new EffectPass(camera, lutEffect));
+	composer.addPass(new EffectPass(camera, effect));
 
 	// Settings
 
@@ -196,38 +196,26 @@ window.addEventListener("load", () => load().then((assets) => {
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
 	const params = {
-		"lut": lutEffect.lut.name,
-		"show LUT": true,
+		"lut": effect.lut.name,
 		"3D texture": true,
-		"tetrahedral filter": false,
-		"base size": lutEffect.lut.image.width,
+		"base size": effect.lut.image.width,
 		"scale up": false,
-		"target size": 48,
-		"opacity": lutEffect.blendMode.getOpacity(),
-		"blend mode": lutEffect.blendMode.getBlendFunction()
+		"target size": 48
 	};
 
 	let objectURL = null;
 
 	function updateLUTPreview() {
 
-		if(params["show LUT"]) {
+		const lut = LookupTexture.from(effect.lut);
+		const { image } = lut.convertToUint8().toDataTexture();
+		RawImageData.from(image).toCanvas().toBlob((blob) => {
 
-			const lut = LookupTexture.from(lutEffect.lut);
-			const { image } = lut.convertToUint8().toDataTexture();
-			RawImageData.from(image).toCanvas().toBlob((blob) => {
+			objectURL = URL.createObjectURL(blob);
+			img.src = objectURL;
+			img.classList.remove("hidden");
 
-				objectURL = URL.createObjectURL(blob);
-				img.src = objectURL;
-				img.classList.remove("hidden");
-
-			});
-
-		} else {
-
-			img.classList.add("hidden");
-
-		}
+		});
 
 	}
 
@@ -263,7 +251,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 			}
 
-			lutEffect.lut.dispose();
+			effect.lut.dispose();
 			params["base size"] = size;
 
 			if(renderer.capabilities.isWebGL2) {
@@ -275,11 +263,11 @@ window.addEventListener("load", () => load().then((assets) => {
 
 				}
 
-				lutEffect.lut = (params["3D texture"] ? lut : lut.toDataTexture());
+				effect.lut = (params["3D texture"] ? lut : lut.toDataTexture());
 
 			} else {
 
-				lutEffect.lut = lut.convertToUint8().toDataTexture();
+				effect.lut = lut.convertToUint8().toDataTexture();
 
 			}
 
@@ -289,33 +277,21 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	}
 
-	function reducer(a, b) {
-
-		a[b] = b;
-		return a;
-
-	}
-
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(params, "lut", { options: [...luts.keys()].reduce(reducer, {}) }).on("change", changeLUT);
-	folder.addInput(params, "show LUT").on("change", updateLUTPreview);
+	folder.addInput(params, "lut", { options: [...luts.keys()].reduce(toRecord, {}) }).on("change", changeLUT);
 
 	if(renderer.capabilities.isWebGL2) {
 
 		folder.addInput(params, "3D texture").on("change", changeLUT);
-		folder.addInput(params, "tetrahedral filter")
-			.on("change", (e) => lutEffect.tetrahedralInterpolation = e.value);
+		folder.addInput(effect, "tetrahedralInterpolation");
 
 	}
 
 	folder.addMonitor(params, "base size", { format: (v) => v.toFixed(0) });
 	folder.addInput(params, "scale up").on("change", changeLUT);
-	folder.addInput(params, "target size", { options: [32, 48, 64, 128].reduce(reducer, {}) }).on("change", changeLUT);
-
-	folder.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
-		.on("change", (e) => lutEffect.blendMode.setOpacity(e.value));
-	folder.addInput(params, "blend mode", { options: BlendFunction })
-		.on("change", (e) => lutEffect.blendMode.setBlendFunction(e.value));
+	folder.addInput(params, "target size", { options: [32, 48, 64, 128].reduce(toRecord, {}) }).on("change", changeLUT);
+	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
+	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 

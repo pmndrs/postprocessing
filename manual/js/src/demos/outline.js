@@ -1,5 +1,6 @@
 import {
 	AnimationMixer,
+	Color,
 	CubeTextureLoader,
 	LoadingManager,
 	PerspectiveCamera,
@@ -25,7 +26,7 @@ import {
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { Pane } from "tweakpane";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, FPSMeter } from "../utils";
+import { calculateVerticalFoV, FPSMeter, toRecord } from "../utils";
 import * as Shapes from "../objects/Shapes";
 
 function load() {
@@ -157,7 +158,7 @@ window.addEventListener("load", () => load().then((assets) => {
 		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
 	});
 
-	const outlineEffect = new OutlineEffect(scene, camera, {
+	const effect = new OutlineEffect(scene, camera, {
 		blendFunction: BlendFunction.SCREEN,
 		patternScale: 40,
 		visibleEdgeColor: 0xffffff,
@@ -167,10 +168,10 @@ window.addEventListener("load", () => load().then((assets) => {
 		xRay: true
 	});
 
-	outlineEffect.selection.add(actors.children[0]);
+	effect.selection.add(actors.children[0]);
 
 	composer.addPass(new RenderPass(scene, camera));
-	composer.addPass(new EffectPass(camera, outlineEffect));
+	composer.addPass(new EffectPass(camera, effect));
 
 	// Object Picking
 
@@ -188,7 +189,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 		if(intersects.length > 0) {
 
-			outlineEffect.selection.toggle(intersects[0].object);
+			effect.selection.toggle(intersects[0].object);
 
 		}
 
@@ -197,55 +198,35 @@ window.addEventListener("load", () => load().then((assets) => {
 	// Settings
 
 	const fpsMeter = new FPSMeter();
+	const color = new Color();
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
 	const params = {
-		"resolution": outlineEffect.resolution.height,
-		"blur": outlineEffect.blurPass.enabled,
-		"kernel size": outlineEffect.blurPass.kernelSize,
-		"use pattern": false,
-		"pattern scale": outlineEffect.patternScale,
-		"pulse speed": outlineEffect.pulseSpeed,
-		"edge strength": outlineEffect.edgeStrength,
-		"visible edge": outlineEffect.visibleEdgeColor.getHex(),
-		"hidden edge": outlineEffect.hiddenEdgeColor.getHex(),
-		"x-ray": outlineEffect.xRay,
-		"opacity": outlineEffect.blendMode.getOpacity(),
-		"blend mode": outlineEffect.blendMode.getBlendFunction()
+		"patternTexture": false,
+		"visibleEdgeColor": color.copy(effect.visibleEdgeColor).convertLinearToSRGB().getHex(),
+		"hiddenEdgeColor": color.copy(effect.hiddenEdgeColor).convertLinearToSRGB().getHex()
 	};
 
-	function reducer(a, b) {
-
-		a[b] = b;
-		return a;
-
-	}
-
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(params, "resolution", { options: [360, 480, 720, 1080].reduce(reducer, {}) })
-		.on("change", (e) => outlineEffect.resolution.preferredHeight = e.value);
-	folder.addInput(params, "kernel size", { options: KernelSize })
-		.on("change", (e) => outlineEffect.blurPass.kernelSize = e.value);
-	folder.addInput(params, "blur").on("change", (e) => outlineEffect.blurPass.enabled = e.value);
-	folder.addInput(params, "use pattern")
-		.on("change", (e) => outlineEffect.patternTexture = (e.value ? assets.get("pattern") : null));
-	folder.addInput(params, "pattern scale", { min: 20, max: 100, step: 0.1 })
-		.on("change", (e) => outlineEffect.patternScale = e.value);
-	folder.addInput(params, "edge strength", { min: 0, max: 10, step: 0.01 })
-		.on("change", (e) => outlineEffect.edgeStrength = e.value);
-	folder.addInput(params, "pulse speed", { min: 0, max: 2, step: 0.01 })
-		.on("change", (e) => outlineEffect.pulseSpeed = e.value);
-	folder.addInput(params, "visible edge", { view: "color" })
-		.on("change", (e) => outlineEffect.visibleEdgeColor.setHex(e.value));
-	folder.addInput(params, "hidden edge", { view: "color" })
-		.on("change", (e) => outlineEffect.hiddenEdgeColor.setHex(e.value));
-	folder.addInput(params, "x-ray").on("change", (e) => outlineEffect.xRay = e.value);
-
-	folder.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
-		.on("change", (e) => outlineEffect.blendMode.setOpacity(e.value));
-	folder.addInput(params, "blend mode", { options: BlendFunction })
-		.on("change", (e) => outlineEffect.blendMode.setBlendFunction(e.value));
+	folder.addInput(effect.resolution, "height", {
+		options: [360, 480, 720, 1080].reduce(toRecord, {}),
+		label: "resolution"
+	});
+	folder.addInput(effect.blurPass, "kernelSize", { options: KernelSize });
+	folder.addInput(effect.blurPass, "enabled", { label: "blur" });
+	folder.addInput(params, "patternTexture")
+		.on("change", (e) => effect.patternTexture = (e.value ? assets.get("pattern") : null));
+	folder.addInput(effect, "patternScale", { min: 20, max: 100, step: 0.1 });
+	folder.addInput(effect, "edgeStrength", { min: 0, max: 10, step: 0.01 });
+	folder.addInput(effect, "pulseSpeed", { min: 0, max: 2, step: 0.01 });
+	folder.addInput(params, "visibleEdgeColor", { view: "color" })
+		.on("change", (e) => effect.visibleEdgeColor.setHex(e.value).convertSRGBToLinear());
+	folder.addInput(params, "hiddenEdgeColor", { view: "color" })
+		.on("change", (e) => effect.hiddenEdgeColor.setHex(e.value).convertSRGBToLinear());
+	folder.addInput(effect, "xRay");
+	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
+	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 

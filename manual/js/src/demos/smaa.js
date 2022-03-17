@@ -112,28 +112,28 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const composer = new EffectComposer(renderer);
 
-	const smaaEffect = new SMAAEffect(
+	const effect = new SMAAEffect(
 		assets.get("smaa-search"),
 		assets.get("smaa-area"),
 		SMAAPreset.MEDIUM,
 		EdgeDetectionMode.COLOR
 	);
 
-	const edgeDetectionMaterial = smaaEffect.edgeDetectionMaterial;
+	const edgeDetectionMaterial = effect.edgeDetectionMaterial;
 	edgeDetectionMaterial.edgeDetectionThreshold = 0.02;
 	edgeDetectionMaterial.predicationMode = PredicationMode.DEPTH;
 	edgeDetectionMaterial.predicationThreshold = 0.002;
 	edgeDetectionMaterial.predicationScale = 1;
 
-	const smaaPass = new EffectPass(camera, smaaEffect);
+	const effectPass = new EffectPass(camera, effect);
 
 	// BEGIN DEBUG
-	const smaaEdgesDebugPass = new EffectPass(camera, smaaEffect,
-		new TextureEffect({ texture: smaaEffect.edgesTexture }));
-	const smaaWeightsDebugPass = new EffectPass(camera, smaaEffect,
-		new TextureEffect({ texture: smaaEffect.weightsTexture }));
+	const smaaEdgesDebugPass = new EffectPass(camera, effect,
+		new TextureEffect({ texture: effect.edgesTexture }));
+	const smaaWeightsDebugPass = new EffectPass(camera, effect,
+		new TextureEffect({ texture: effect.weightsTexture }));
 
-	smaaPass.renderToScreen = true;
+	effectPass.renderToScreen = true;
 	smaaEdgesDebugPass.renderToScreen = true;
 	smaaWeightsDebugPass.renderToScreen = true;
 	smaaEdgesDebugPass.enabled = false;
@@ -143,71 +143,50 @@ window.addEventListener("load", () => load().then((assets) => {
 	// END DEBUG
 
 	composer.addPass(new RenderPass(scene, camera));
-	composer.addPass(smaaPass);
+	composer.addPass(effectPass);
 	composer.addPass(smaaEdgesDebugPass);
 	composer.addPass(smaaWeightsDebugPass);
 
 	// Settings
+
+	delete PredicationMode.CUSTOM; // disable for this demo
 
 	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
 	const SMAADebug = { OFF: 0, EDGES: 1, WEIGHTS: 2 };
-	delete PredicationMode.CUSTOM; // disable for this demo
-
 	const params = {
 		"preset": SMAAPreset.MEDIUM,
-		"debug": SMAADebug.OFF,
-		"opacity": smaaEffect.blendMode.getOpacity(),
-		"blend mode": smaaEffect.blendMode.getBlendFunction(),
-		edgeDetection: {
-			"mode": edgeDetectionMaterial.edgeDetectionMode,
-			"threshold": edgeDetectionMaterial.edgeDetectionThreshold
-		},
-		predication: {
-			"mode": edgeDetectionMaterial.predicationMode,
-			"threshold": edgeDetectionMaterial.predicationThreshold,
-			"strength": edgeDetectionMaterial.predicationStrength,
-			"scale": edgeDetectionMaterial.predicationScale
-		}
+		"debug": SMAADebug.OFF
 	};
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(params, "preset", { options: SMAAPreset }).on("change", (e) => {
-
-		smaaEffect.applyPreset(e.value);
-		edgeDetectionMaterial.edgeDetectionThreshold = params.edgeDetection.threshold;
-
-	});
-
-	let subfolder = folder.addFolder({ title: "Edge Detection", expanded: false });
-	subfolder.addInput(params.edgeDetection, "mode", { options: EdgeDetectionMode })
-		.on("change", (e) => edgeDetectionMaterial.edgeDetectionMode = e.value);
-	subfolder.addInput(params.edgeDetection, "threshold", { min: 0.01, max: 0.3, step: 0.0001 })
-		.on("change", (e) => edgeDetectionMaterial.edgeDetectionThreshold = e.value);
-	subfolder = subfolder.addFolder({ title: "Predicated Thresholding" });
-	subfolder.addInput(params.predication, "mode", { options: PredicationMode })
-		.on("change", (e) => edgeDetectionMaterial.predicationMode = e.value);
-	subfolder.addInput(params.predication, "threshold", { min: 0.0004, max: 0.01, step: 0.0001 })
-		.on("change", (e) => edgeDetectionMaterial.predicationThreshold = e.value);
-	subfolder.addInput(params.predication, "strength", { min: 0, max: 1, step: 0.0001 })
-		.on("change", (e) => edgeDetectionMaterial.predicationStrength = e.value);
-	subfolder.addInput(params.predication, "scale", { min: 1, max: 2, step: 0.01 })
-		.on("change", (e) => edgeDetectionMaterial.predicationScale = e.value);
-
 	folder.addInput(params, "debug", { options: SMAADebug }).on("change", (e) => {
 
-		smaaPass.enabled = (e.value === SMAADebug.OFF);
+		effectPass.enabled = (e.value === SMAADebug.OFF);
 		smaaEdgesDebugPass.enabled = (e.value === SMAADebug.EDGES);
 		smaaWeightsDebugPass.enabled = (e.value === SMAADebug.WEIGHTS);
 
 	});
 
-	folder.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
-		.on("change", (e) => smaaEffect.blendMode.setOpacity(e.value));
-	folder.addInput(params, "blend mode", { options: BlendFunction })
-		.on("change", (e) => smaaEffect.blendMode.setBlendFunction(e.value));
+	folder.addInput(params, "preset", { options: SMAAPreset }).on("change", (e) => {
+
+		effect.applyPreset(e.value);
+		edgeDetectionMaterial.edgeDetectionThreshold = params.edgeDetection.threshold;
+
+	});
+
+	let subfolder = folder.addFolder({ title: "Edge Detection", expanded: false });
+	subfolder.addInput(edgeDetectionMaterial, "edgeDetectionMode", { options: EdgeDetectionMode });
+	subfolder.addInput(edgeDetectionMaterial, "edgeDetectionThreshold", { min: 0.01, max: 0.3, step: 1e-4 });
+	subfolder.addInput(edgeDetectionMaterial, "predicationMode", { options: PredicationMode });
+	subfolder.addInput(edgeDetectionMaterial, "predicationThreshold", { min: 4e-4, max: 0.01, step: 1e-4 });
+	subfolder.addInput(edgeDetectionMaterial, "predicationStrength", { min: 0, max: 1, step: 1e-4 });
+	subfolder.addInput(edgeDetectionMaterial, "predicationScale", { min: 1, max: 2, step: 0.01 });
+
+	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
+	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 

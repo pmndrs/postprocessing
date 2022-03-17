@@ -1,5 +1,6 @@
 import {
 	CubeTextureLoader,
+	FogExp2,
 	LoadingManager,
 	PerspectiveCamera,
 	RGBAFormat,
@@ -21,9 +22,9 @@ import {
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
-import { ControlMode, SpatialControls } from "spatial-controls";
+import { SpatialControls } from "spatial-controls";
 import { calculateVerticalFoV, FPSMeter } from "../utils";
-import * as CornellBox from "../objects/CornellBox";
+import * as Domain from "../objects/Domain";
 
 function load() {
 
@@ -92,20 +93,20 @@ window.addEventListener("load", () => load().then((assets) => {
 	const camera = new PerspectiveCamera();
 	const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 	const settings = controls.settings;
-	settings.general.setMode(ControlMode.THIRD_PERSON);
 	settings.rotation.setSensitivity(2.2);
 	settings.rotation.setDamping(0.05);
-	settings.zoom.setDamping(0.1);
-	settings.translation.setEnabled(false);
-	controls.setPosition(0, 0, 5);
+	settings.translation.setDamping(0.1);
+	controls.setPosition(0, 0, 1);
+	controls.lookAt(0, 0, 0);
 
 	// Scene, Lights, Objects
 
 	const scene = new Scene();
+	scene.fog = new FogExp2(0x0a0809, 0.06);
 	scene.background = assets.get("sky");
-	scene.add(CornellBox.createLights());
-	scene.add(CornellBox.createEnvironment());
-	scene.add(CornellBox.createActors());
+	scene.add(Domain.createLights());
+	scene.add(Domain.createEnvironment(scene.background));
+	scene.add(Domain.createActors(scene.background));
 
 	// Post Processing
 
@@ -115,57 +116,38 @@ window.addEventListener("load", () => load().then((assets) => {
 	});
 
 	const chromaticAberrationEffect = new ChromaticAberrationEffect();
-	const glitchEffect = new GlitchEffect({
+	const effect = new GlitchEffect({
 		perturbationMap: assets.get("noise"),
-		chromaticAberrationOffset: chromaticAberrationEffect.getOffset() // optional
+		chromaticAberrationOffset: chromaticAberrationEffect.offset // optional
 	});
 
 	composer.addPass(new RenderPass(scene, camera));
-	composer.addPass(new EffectPass(camera, glitchEffect));
+	composer.addPass(new EffectPass(camera, effect));
 	composer.addPass(new EffectPass(camera, chromaticAberrationEffect));
 
 	// Settings
 
 	const fpsMeter = new FPSMeter();
+	const noiseTexture = new NoiseTexture(64, 64, RGBAFormat);
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
-	const noiseTexture = new NoiseTexture(64, 64, RGBAFormat);
 	const params = {
-		"glitch mode": glitchEffect.mode,
-		"custom pattern": true,
-		"min delay": glitchEffect.minDelay,
-		"max delay": glitchEffect.maxDelay,
-		"min duration": glitchEffect.minDuration,
-		"max duration": glitchEffect.maxDuration,
-		"min strength": glitchEffect.minStrength,
-		"max strength": glitchEffect.maxStrength,
-		"glitch ratio": 1.0 - glitchEffect.ratio,
-		"glitch columns": glitchEffect.columns
+		"custom pattern": true
 	};
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(params, "glitch mode", { options: GlitchMode })
-		.on("change", (e) => glitchEffect.mode = e.value);
+	folder.addInput(effect, "mode", { options: GlitchMode });
+	folder.addInput(effect, "minDelay", { min: 0, max: 2, step: 0.01 });
+	folder.addInput(effect, "maxDelay", { min: 2, max: 4, step: 0.01 });
+	folder.addInput(effect, "minDuration", { min: 0, max: 0.6, step: 0.01 });
+	folder.addInput(effect, "maxDuration", { min: 0.6, max: 1.8, step: 0.01 });
+	folder.addInput(effect, "minStrength", { min: 0, max: 1, step: 0.01 });
+	folder.addInput(effect, "maxStrength", { min: 0, max: 1, step: 0.01 });
+	folder.addInput(effect, "ratio", { min: 0, max: 1, step: 0.01 });
+	folder.addInput(effect, "columns", { min: 0, max: 0.5, step: 0.01 });
 	folder.addInput(params, "custom pattern")
-		.on("change", (e) => glitchEffect.perturbationMap = (e.value ? assets.get("noise") : noiseTexture));
-
-	folder.addInput(params, "min delay", { min: 0, max: 2, step: 0.01 })
-		.on("change", (e) => glitchEffect.minDelay = e.value);
-	folder.addInput(params, "max delay", { min: 2, max: 4, step: 0.01 })
-		.on("change", (e) => glitchEffect.maxDelay = e.value);
-	folder.addInput(params, "min duration", { min: 0, max: 0.6, step: 0.01 })
-		.on("change", (e) => glitchEffect.minDuration = e.value);
-	folder.addInput(params, "max duration", { min: 0.6, max: 1.8, step: 0.01 })
-		.on("change", (e) => glitchEffect.maxDuration = e.value);
-	folder.addInput(params, "min strength", { min: 0, max: 1, step: 0.01 })
-		.on("change", (e) => glitchEffect.minStrength = e.value);
-	folder.addInput(params, "max strength", { min: 0, max: 1, step: 0.01 })
-		.on("change", (e) => glitchEffect.maxStrength = e.value);
-	folder.addInput(params, "glitch ratio", { min: 0, max: 1, step: 0.01 })
-		.on("change", (e) => glitchEffect.ratio = 1.0 - e.value);
-	folder.addInput(params, "glitch columns", { min: 0, max: 0.5, step: 0.01 })
-		.on("change", (e) => glitchEffect.columns = e.value);
+		.on("change", (e) => effect.perturbationMap = (e.value ? assets.get("noise") : noiseTexture));
 
 	// Resize Handler
 

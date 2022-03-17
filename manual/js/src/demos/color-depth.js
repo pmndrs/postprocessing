@@ -1,5 +1,6 @@
 import {
 	CubeTextureLoader,
+	FogExp2,
 	LoadingManager,
 	PerspectiveCamera,
 	Scene,
@@ -17,9 +18,9 @@ import {
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
-import { ControlMode, SpatialControls } from "spatial-controls";
+import { SpatialControls } from "spatial-controls";
 import { calculateVerticalFoV, FPSMeter } from "../utils";
-import * as CornellBox from "../objects/CornellBox";
+import * as Domain from "../objects/Domain";
 
 function load() {
 
@@ -80,20 +81,20 @@ window.addEventListener("load", () => load().then((assets) => {
 	const camera = new PerspectiveCamera();
 	const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 	const settings = controls.settings;
-	settings.general.setMode(ControlMode.THIRD_PERSON);
 	settings.rotation.setSensitivity(2.2);
 	settings.rotation.setDamping(0.05);
-	settings.zoom.setDamping(0.1);
-	settings.translation.setEnabled(false);
-	controls.setPosition(0, 0, 5);
+	settings.translation.setDamping(0.1);
+	controls.setPosition(0, 0, 1);
+	controls.lookAt(0, 0, 0);
 
 	// Scene, Lights, Objects
 
 	const scene = new Scene();
+	scene.fog = new FogExp2(0x0a0809, 0.06);
 	scene.background = assets.get("sky");
-	scene.add(CornellBox.createLights());
-	scene.add(CornellBox.createEnvironment());
-	scene.add(CornellBox.createActors());
+	scene.add(Domain.createLights());
+	scene.add(Domain.createEnvironment(scene.background));
+	scene.add(Domain.createActors(scene.background));
 
 	// Post Processing
 
@@ -102,9 +103,9 @@ window.addEventListener("load", () => load().then((assets) => {
 		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
 	});
 
-	const colorDepthEffect = new ColorDepthEffect({ bits: 16 });
+	const effect = new ColorDepthEffect({ bits: 21 });
 	composer.addPass(new RenderPass(scene, camera));
-	composer.addPass(new EffectPass(camera, colorDepthEffect));
+	composer.addPass(new EffectPass(camera, effect));
 
 	// Settings
 
@@ -112,20 +113,10 @@ window.addEventListener("load", () => load().then((assets) => {
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
-	const params = {
-		"bits": colorDepthEffect.bitDepth,
-		"opacity": colorDepthEffect.blendMode.getOpacity(),
-		"blend mode": colorDepthEffect.blendMode.getBlendFunction()
-	};
-
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(params, "bits", { min: 1, max: 32, step: 1 })
-		.on("change", (e) => colorDepthEffect.bitDepth = e.value);
-
-	folder.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
-		.on("change", (e) => colorDepthEffect.blendMode.setOpacity(e.value));
-	folder.addInput(params, "blend mode", { options: BlendFunction })
-		.on("change", (e) => colorDepthEffect.blendMode.setBlendFunction(e.value));
+	folder.addInput(effect, "bitDepth", { min: 1, max: 32, step: 1 });
+	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
+	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 

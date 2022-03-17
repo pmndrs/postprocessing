@@ -102,9 +102,9 @@ window.addEventListener("load", () => load().then((assets) => {
 		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
 	});
 
-	const hueSaturationEffect = new HueSaturationEffect();
+	const effect = new HueSaturationEffect();
 	composer.addPass(new RenderPass(scene, camera));
-	composer.addPass(new EffectPass(camera, hueSaturationEffect));
+	composer.addPass(new EffectPass(camera, effect));
 
 	// Settings
 
@@ -112,23 +112,11 @@ window.addEventListener("load", () => load().then((assets) => {
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
-	const params = {
-		"hue": hueSaturationEffect.hue,
-		"saturation": hueSaturationEffect.saturation,
-		"opacity": hueSaturationEffect.blendMode.getOpacity(),
-		"blend mode": hueSaturationEffect.blendMode.getBlendFunction()
-	};
-
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(params, "hue", { min: 0, max: 2 * Math.PI, step: 1e-3 })
-		.on("change", (e) => hueSaturationEffect.hue = e.value);
-	folder.addInput(params, "saturation", { min: -1, max: 1, step: 1e-3 })
-		.on("change", (e) => hueSaturationEffect.saturation = e.value);
-
-	folder.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
-		.on("change", (e) => hueSaturationEffect.blendMode.setOpacity(e.value));
-	folder.addInput(params, "blend mode", { options: BlendFunction })
-		.on("change", (e) => hueSaturationEffect.blendMode.setBlendFunction(e.value));
+	folder.addInput(effect, "hue", { min: 0, max: 2 * Math.PI, step: 1e-3 });
+	folder.addInput(effect, "saturation", { min: -1, max: 1, step: 1e-3 });
+	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
+	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 

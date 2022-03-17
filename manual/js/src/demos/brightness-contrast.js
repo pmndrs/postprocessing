@@ -102,9 +102,9 @@ window.addEventListener("load", () => load().then((assets) => {
 		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
 	});
 
-	const brightnessContrastEffect = new BrightnessContrastEffect();
+	const effect = new BrightnessContrastEffect();
 	composer.addPass(new RenderPass(scene, camera));
-	composer.addPass(new EffectPass(camera, brightnessContrastEffect));
+	composer.addPass(new EffectPass(camera, effect));
 
 	// Settings
 
@@ -112,23 +112,11 @@ window.addEventListener("load", () => load().then((assets) => {
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
-	const params = {
-		"brightness": brightnessContrastEffect.brightness,
-		"contrast": brightnessContrastEffect.contrast,
-		"opacity": brightnessContrastEffect.blendMode.getOpacity(),
-		"blend mode": brightnessContrastEffect.blendMode.getBlendFunction()
-	};
-
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(params, "brightness", { min: -1, max: 1, step: 1e-4 })
-		.on("change", (e) => brightnessContrastEffect.brightness = e.value);
-	folder.addInput(params, "contrast", { min: -1, max: 1, step: 1e-4 })
-		.on("change", (e) => brightnessContrastEffect.contrast = e.value);
-
-	folder.addInput(params, "opacity", { min: 0, max: 1, step: 0.01 })
-		.on("change", (e) => brightnessContrastEffect.blendMode.setOpacity(e.value));
-	folder.addInput(params, "blend mode", { options: BlendFunction })
-		.on("change", (e) => brightnessContrastEffect.blendMode.setBlendFunction(e.value));
+	folder.addInput(effect, "brightness", { min: -1, max: 1, step: 1e-4 });
+	folder.addInput(effect, "contrast", { min: -1, max: 1, step: 1e-4 });
+	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
+	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 
