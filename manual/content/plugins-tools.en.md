@@ -11,17 +11,17 @@ weight: 50
 
 The following third-party plugins and tools augment `postprocessing` and/or connect it with other technologies.
 
-## hyper-postprocessing
-
-A [Hyper](https://github.com/vercel/hyper) plugin that makes it easy to attach fragment shaders to the terminal window.  
-
-_[Repository](https://github.com/slammayjammay/hyper-postprocessing)&ensp;&middot;&ensp;[@slammayjammay](https://github.com/slammayjammay)_
-
 ## react-postprocessing
 
 A postprocessing wrapper for [react-three-fiber](https://github.com/pmndrs/react-three-fiber).
 
 _[Repository](https://github.com/pmndrs/react-postprocessing)&ensp;&middot;&ensp;[@Poimandres](https://github.com/pmndrs)_
+
+## hyper-postprocessing
+
+A [Hyper](https://github.com/vercel/hyper) plugin that makes it easy to attach fragment shaders to the terminal window.  
+
+_[Repository](https://github.com/slammayjammay/hyper-postprocessing)&ensp;&middot;&ensp;[@slammayjammay](https://github.com/slammayjammay)_
 
 ## three-material-editor
 

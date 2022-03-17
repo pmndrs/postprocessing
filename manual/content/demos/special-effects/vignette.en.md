@@ -2,7 +2,7 @@
 layout: single
 collection: sections
 title: Vignette
-draft: true
+draft: false
 menu:
   demos:
     parent: special-effects

@@ -1,15 +1,15 @@
 ---
 layout: single
 collection: sections
-title: Dot Screen
-draft: true
+title: Grid
+draft: false
 menu:
   demos:
     parent: special-effects
     weight: 60
-script: dot-screen
+script: grid
 ---
 
-# Dot Screen
+# Grid
 
 ### External Resources

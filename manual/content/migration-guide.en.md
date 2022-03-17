@@ -4,7 +4,7 @@ collection: sections
 title: Migration Guide
 draft: false
 menu: main
-weight: 30
+weight: 50
 ---
 
 # Migration Guide
