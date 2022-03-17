@@ -22,7 +22,7 @@ export function createLights() {
 
 	const ambientLight = new AmbientLight(0x777777);
 
-	const mainLight = new DirectionalLight(0xFF7E66, 1.0);
+	const mainLight = new DirectionalLight(0xff7e66, 1.0);
 	mainLight.position.set(0, 0.05, -1).multiplyScalar(10);
 	mainLight.castShadow = true;
 	mainLight.shadow.bias = -0.01;
@@ -32,7 +32,7 @@ export function createLights() {
 	mainLight.shadow.mapSize.height = 512;
 	mainLight.shadow.radius = 1;
 
-	const backLight = new DirectionalLight(0xFF7E66, 0.1);
+	const backLight = new DirectionalLight(0xff7e66, 0.1);
 	backLight.position.copy(mainLight.position).negate();
 
 	const lights = new Group();
@@ -55,32 +55,32 @@ export function createActors() {
 		new Mesh(
 			new SphereGeometry(1, 32, 32),
 			new MeshStandardMaterial({
-				color: 0xFFFF00
+				color: 0xffff00
 			})
 		),
 		new Mesh(
 			new OctahedronGeometry(),
 			new MeshStandardMaterial({
-				color: 0xFF00FF
+				color: 0xff00ff
 			})
 		),
 		new Mesh(
 			new CircleGeometry(0.75, 32),
 			new MeshStandardMaterial({
 				side: DoubleSide,
-				color: 0xFF0000
+				color: 0xff0000
 			})
 		),
 		new Mesh(
 			new ConeGeometry(1, 1, 32),
 			new MeshStandardMaterial({
-				color: 0x00FF00
+				color: 0x00ff00
 			})
 		),
 		new Mesh(
 			new BoxGeometry(1, 1, 1),
 			new MeshStandardMaterial({
-				color: 0x00FFFF
+				color: 0x00ffff
 			})
 		)
 	);
