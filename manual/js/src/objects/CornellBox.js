@@ -18,9 +18,9 @@ import {
 
 export function createLights() {
 
-	const ambientLight = new AmbientLight(0x160D03);
+	const ambientLight = new AmbientLight(0x160d03);
 
-	const lightCeiling = new PointLight(0xFFC370, 1, 3);
+	const lightCeiling = new PointLight(0xffc370, 1, 3);
 	lightCeiling.position.set(0, 0.93, 0);
 	lightCeiling.castShadow = true;
 	lightCeiling.shadow.bias = -0.035;
@@ -28,11 +28,11 @@ export function createLights() {
 	lightCeiling.shadow.mapSize.height = 1024;
 	lightCeiling.shadow.radius = 4;
 
-	const lightRed = new DirectionalLight(0xFF0000, 0.05);
+	const lightRed = new DirectionalLight(0xff0000, 0.05);
 	lightRed.position.set(-1, 0, 0);
 	lightRed.target.position.set(0, 0, 0);
 
-	const lightGreen = new DirectionalLight(0x00FF00, 0.05);
+	const lightGreen = new DirectionalLight(0x00ff00, 0.05);
 	lightGreen.position.set(1, 0, 0);
 	lightGreen.target.position.set(0, 0, 0);
 
@@ -53,7 +53,7 @@ export function createEnvironment() {
 
 	const planeGeometry = new PlaneGeometry();
 	const planeMaterial = new MeshStandardMaterial({
-		color: 0xFFFFFF
+		color: 0xffffff
 	});
 
 	const plane00 = new Mesh(planeGeometry, planeMaterial);
@@ -88,22 +88,22 @@ export function createEnvironment() {
 	const plane05 = new Mesh(
 		planeGeometry,
 		new MeshStandardMaterial({
-			color: 0xFF0000
+			color: 0xff0000
 		})
 	);
 
 	const plane06 = new Mesh(
 		planeGeometry,
 		new MeshStandardMaterial({
-			color: 0x00FF00
+			color: 0x00ff00
 		})
 	);
 
 	const plane07 = new Mesh(
 		planeGeometry,
 		new MeshStandardMaterial({
-			color: 0xFFFFFF,
-			emissive: 0xFFFFFF
+			color: 0xffffff,
+			emissive: 0xffffff
 		})
 	);
 
@@ -140,7 +140,7 @@ export function createEnvironment() {
 export function createActors() {
 
 	const actorMaterial = new MeshStandardMaterial({
-		color: 0xFFFFFF
+		color: 0xffffff
 	});
 
 	const box01 = new Mesh(new BoxGeometry(1, 1, 1), actorMaterial);
