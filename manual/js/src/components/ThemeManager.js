@@ -7,7 +7,7 @@
 export class ThemeManager {
 
 	/**
-	 * Enabled or disable dark mode.
+	 * Enables or disables dark mode.
 	 *
 	 * @private
 	 * @param {Boolean} enabled - Whether dark mode should be enabled.
@@ -37,6 +37,10 @@ export class ThemeManager {
 		const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 		mediaQuery.addEventListener("change", (e) => this.setDarkModeEnabled(e.matches));
 		this.setDarkModeEnabled(mediaQuery.matches || localStorage.getItem("dark-mode") !== null);
+
+		// Prevent white flash during navigation.
+		document.body.style.visibility = "visible";
+		document.body.style.opacity = 1;
 
 	}
 
