@@ -8,7 +8,7 @@ weight: 10
 
 # Introduction
 
-[![CI](https://github.com/vanruesc/postprocessing/actions/workflows/ci.yml/badge.svg)](https://github.com/vanruesc/postprocessing/actions/workflows/ci.yml)
+[![CI](https://github.com/pmndrs/postprocessing/actions/workflows/ci.yml/badge.svg)](https://github.com/pmndrs/postprocessing/actions/workflows/ci.yml)
 
 Welcome to the `postprocessing` manual!
 
@@ -32,6 +32,6 @@ New applications should follow a [linear workflow](https://docs.unity3d.com/Manu
 
 ## Performance
 
-This library provides a specialized `EffectPass` that offers a structured and well defined mechanism for merging fullscreen effects into a single compound shader. This minimizes the amount of render operations and makes it possible to combine many effects without the performance penalties of traditional pass chaining. Additionally, every effect can choose its own blend function.
+This library provides a specialized `EffectPass` that offers a structured mechanism for merging fullscreen effects into a single compound shader by gathering and prefixing shader functions, varyings, uniforms, macros and individual blend functions. This minimizes the amount of render operations and makes it possible to combine many effects without the performance penalties of traditional pass chaining.
 
 All fullscreen render operations also use a [single triangle](https://michaldrobot.com/2014/04/01/gcn-execution-patterns-in-full-screen-passes/) that fills the screen. Compared to using a quad, this approach harmonizes with modern GPU rasterization patterns and eliminates unnecessary fragment calculations along the screen diagonal. This is especially beneficial for GPGPU passes and effects that use complex fragment shaders.
