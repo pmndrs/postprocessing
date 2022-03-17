@@ -225,21 +225,46 @@ export class DepthOfFieldEffect extends Effect {
 	}
 
 	/**
+	 * The circle of confusion texture.
+	 *
+	 * @type {Texture}
+	 */
+
+	get cocTexture() {
+
+		return this.renderTargetCoC.texture;
+
+	}
+
+	/**
 	 * The circle of confusion material.
 	 *
 	 * @type {CircleOfConfusionMaterial}
 	 */
 
-	get circleOfConfusionMaterial() {
+	get cocMaterial() {
 
 		return this.cocPass.fullscreenMaterial;
 
 	}
 
 	/**
+	 * The circle of confusion material.
+	 *
+	 * @deprecated Use cocMaterial instead.
+	 * @type {CircleOfConfusionMaterial}
+	 */
+
+	get circleOfConfusionMaterial() {
+
+		return this.cocMaterial;
+
+	}
+
+	/**
 	 * Returns the circle of confusion material.
 	 *
-	 * @deprecated Use circleOfConfusionMaterial instead.
+	 * @deprecated Use cocMaterial instead.
 	 * @return {CircleOfConfusionMaterial} The material.
 	 */
 
