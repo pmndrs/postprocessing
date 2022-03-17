@@ -117,7 +117,7 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 		// Collect unique blend modes.
 		const blendMode = effect.blendMode;
-		blendModes.set(blendMode.getBlendFunction(), blendMode);
+		blendModes.set(blendMode.blendFunction, blendMode);
 
 		if(mainImageExists) {
 
@@ -139,7 +139,7 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 			uniforms.set(blendOpacity, blendMode.opacity);
 
 			// Blend the result of this effect with the input color.
-			string += `color0 = blend${blendMode.getBlendFunction()}(color0, color1, ${blendOpacity});\n\n\t`;
+			string += `color0 = blend${blendMode.blendFunction}(color0, color1, ${blendOpacity});\n\n\t`;
 			shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, shaderParts.get(Section.FRAGMENT_MAIN_IMAGE) + string);
 			string = `uniform float ${blendOpacity};\n\n`;
 			shaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) + string);
@@ -344,7 +344,7 @@ export class EffectPass extends Pass {
 
 		for(const effect of this.effects) {
 
-			if(effect.blendMode.getBlendFunction() === BlendFunction.SKIP) {
+			if(effect.blendMode.blendFunction === BlendFunction.SKIP) {
 
 				// Check if this effect relies on depth and continue.
 				attributes |= (effect.getAttributes() & EffectAttribute.DEPTH);
@@ -383,7 +383,7 @@ export class EffectPass extends Pass {
 
 		for(const blendMode of blendModes.values()) {
 
-			const code = blendMode.getShaderCode().replace(blendRegExp, `blend${blendMode.getBlendFunction()}`);
+			const code = blendMode.getShaderCode().replace(blendRegExp, `blend${blendMode.blendFunction}`);
 			shaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) + code + "\n");
 
 		}
