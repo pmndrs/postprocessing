@@ -1,4 +1,4 @@
-import { SidebarManager, ThemeManager, ViewportManager } from "./components";
+import { NavigationManager, SidebarManager, ThemeManager, ViewportManager } from "./components";
 import { require } from "./shims/require";
 Object.assign(window, { require });
 
@@ -11,6 +11,7 @@ Object.assign(window, { require });
 window.addEventListener("DOMContentLoaded", (event) => {
 
 	const components = [
+		new NavigationManager(),
 		new SidebarManager(),
 		new ThemeManager(),
 		new ViewportManager()
