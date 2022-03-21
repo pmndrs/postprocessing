@@ -2,7 +2,7 @@
 layout: section
 collection: sections
 title: Light & Shadow
-draft: true
+draft: false
 menu:
   demos:
     title: Light & Shadow

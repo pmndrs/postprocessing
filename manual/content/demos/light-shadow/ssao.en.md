@@ -2,11 +2,11 @@
 layout: single
 collection: sections
 title: SSAO
-draft: true
+draft: false
 menu:
   demos:
     parent: light-shadow
-    weight: 10
+    weight: 100
 script: ssao
 ---
 
