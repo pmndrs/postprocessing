@@ -2,7 +2,7 @@
 layout: single
 collection: sections
 title: Sepia
-draft: true
+draft: false
 menu:
   demos:
     parent: color-grading
