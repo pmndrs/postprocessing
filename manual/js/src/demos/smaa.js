@@ -16,7 +16,6 @@ import {
 	PredicationMode,
 	RenderPass,
 	SMAAEffect,
-	SMAAImageLoader,
 	SMAAPreset,
 	TextureEffect
 } from "postprocessing";
@@ -31,7 +30,6 @@ function load() {
 	const assets = new Map();
 	const loadingManager = new LoadingManager();
 	const cubeTextureLoader = new CubeTextureLoader(loadingManager);
-	const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
 	const path = document.baseURI + "img/textures/skies/sunset/";
 	const format = ".png";
@@ -50,13 +48,6 @@ function load() {
 
 			t.encoding = sRGBEncoding;
 			assets.set("sky", t);
-
-		});
-
-		smaaImageLoader.load(([search, area]) => {
-
-			assets.set("smaa-search", search);
-			assets.set("smaa-area", area);
 
 		});
 
@@ -112,16 +103,14 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const composer = new EffectComposer(renderer);
 
-	const effect = new SMAAEffect(
-		assets.get("smaa-search"),
-		assets.get("smaa-area"),
-		SMAAPreset.MEDIUM,
-		EdgeDetectionMode.COLOR
-	);
+	const effect = new SMAAEffect({
+		preset: SMAAPreset.MEDIUM,
+		edgeDetectionMode: EdgeDetectionMode.COLOR,
+		predicationMode: PredicationMode.DEPTH
+	});
 
 	const edgeDetectionMaterial = effect.edgeDetectionMaterial;
 	edgeDetectionMaterial.edgeDetectionThreshold = 0.02;
-	edgeDetectionMaterial.predicationMode = PredicationMode.DEPTH;
 	edgeDetectionMaterial.predicationThreshold = 0.002;
 	edgeDetectionMaterial.predicationScale = 1;
 
@@ -172,8 +161,9 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	folder.addInput(params, "preset", { options: SMAAPreset }).on("change", (e) => {
 
+		const threshold = edgeDetectionMaterial.edgeDetectionThreshold;
 		effect.applyPreset(e.value);
-		edgeDetectionMaterial.edgeDetectionThreshold = params.edgeDetection.threshold;
+		edgeDetectionMaterial.edgeDetectionThreshold = threshold;
 
 	});
 
