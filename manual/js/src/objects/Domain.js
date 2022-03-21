@@ -51,9 +51,10 @@ export function createEnvironment(envMap) {
 	// Total triangles = instances * 12
 
 	const n = 12;
-	const clusterSizeXZ = 18;
+	const clusterSizeXZ = 24;
 	const instanceSizeXZ = clusterSizeXZ / n;
 	const instanceHeight = 10;
+	const clearance = 0.3;
 
 	const geometry = new BoxGeometry(1, 1, 1);
 	geometry.boundingSphere = new Sphere();
@@ -76,7 +77,7 @@ export function createEnvironment(envMap) {
 
 					for(let z = 0; z < n; ++z) {
 
-						s.set(instanceSizeXZ, Math.random() * instanceHeight, instanceSizeXZ);
+						s.set(instanceSizeXZ, Math.random() * (instanceHeight - clearance), instanceSizeXZ);
 						p.set(x * instanceSizeXZ, (y + 0.5) * instanceHeight, z * instanceSizeXZ);
 						mesh.setMatrixAt(k++, m.compose(p, q, s));
 
