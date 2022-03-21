@@ -440,6 +440,24 @@ export class SSAOEffect extends Effect {
 	}
 
 	/**
+	 * The luminance influence factor. Range: [0.0, 1.0].
+	 *
+	 * @type {Boolean}
+	 */
+
+	get luminanceInfluence() {
+
+		return this.uniforms.get("luminanceInfluence").value;
+
+	}
+
+	set luminanceInfluence(value) {
+
+		this.uniforms.get("luminanceInfluence").value = value;
+
+	}
+
+	/**
 	 * Returns the color of the ambient occlusion.
 	 *
 	 * @deprecated Use color instead.
