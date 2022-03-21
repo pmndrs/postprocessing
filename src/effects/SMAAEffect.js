@@ -8,7 +8,7 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { EdgeDetectionMaterial, EdgeDetectionMode, SMAAWeightsMaterial } from "../materials";
+import { EdgeDetectionMaterial, EdgeDetectionMode, PredicationMode, SMAAWeightsMaterial } from "../materials";
 import { ClearPass, ShaderPass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect, EffectAttribute } from "./Effect";
@@ -47,13 +47,17 @@ export class SMAAEffect extends Effect {
 	/**
 	 * Constructs a new SMAA effect.
 	 *
-	 * @param {Image} searchImage - The SMAA search image. Preload this image using the {@link SMAAImageLoader}.
-	 * @param {Image} areaImage - The SMAA area image. Preload this image using the {@link SMAAImageLoader}.
-	 * @param {SMAAPreset} [preset=SMAAPreset.HIGH] - An SMAA quality preset.
-	 * @param {EdgeDetectionMode} [edgeDetectionMode=EdgeDetectionMode.COLOR] - The edge detection mode.
+	 * @param {Object} [options] - The options.
+	 * @param {SMAAPreset} [options.preset=SMAAPreset.MEDIUM] - The quality preset.
+	 * @param {EdgeDetectionMode} [options.edgeDetectionMode=EdgeDetectionMode.COLOR] - The edge detection mode.
+	 * @param {PredicationMode} [options.predicationMode=PredicationMode.DISABLED] - The predication mode.
 	 */
 
-	constructor(searchImage, areaImage, preset = SMAAPreset.HIGH, edgeDetectionMode = EdgeDetectionMode.COLOR) {
+	constructor({
+		preset = SMAAPreset.MEDIUM,
+		edgeDetectionMode = EdgeDetectionMode.COLOR,
+		predicationMode = PredicationMode.DISABLED
+	} = {}) {
 
 		super("SMAAEffect", fragmentShader, {
 			vertexShader,
@@ -63,6 +67,14 @@ export class SMAAEffect extends Effect {
 				["weightMap", new Uniform(null)]
 			])
 		});
+
+		// TODO Added for backward-compatibility.
+		if(arguments.length > 2) {
+
+			preset = arguments[2];
+			edgeDetectionMode = (arguments.length === 4) ? arguments[3] : EdgeDetectionMode.COLOR;
+
+		}
 
 		/**
 		 * A render target for the edge detection.
@@ -109,7 +121,8 @@ export class SMAAEffect extends Effect {
 		 */
 
 		this.edgeDetectionPass = new ShaderPass(new EdgeDetectionMaterial());
-		this.edgeDetectionPass.edgeDetectionMode = edgeDetectionMode;
+		this.edgeDetectionMaterial.edgeDetectionMode = edgeDetectionMode;
+		this.edgeDetectionMaterial.predicationMode = predicationMode;
 
 		/**
 		 * An SMAA weights pass.
@@ -120,25 +133,38 @@ export class SMAAEffect extends Effect {
 
 		this.weightsPass = new ShaderPass(new SMAAWeightsMaterial());
 
-		const searchTexture = new Texture(searchImage);
-		searchTexture.name = "SMAA.Search";
-		searchTexture.magFilter = NearestFilter;
-		searchTexture.minFilter = NearestFilter;
-		searchTexture.generateMipmaps = false;
-		searchTexture.needsUpdate = true;
-		searchTexture.flipY = true;
+		// Load the lookup textures.
+		const searchImage = new Image();
+		const areaImage = new Image();
 
-		const areaTexture = new Texture(areaImage);
-		areaTexture.name = "SMAA.Area";
-		areaTexture.magFilter = LinearFilter;
-		areaTexture.minFilter = LinearFilter;
-		areaTexture.generateMipmaps = false;
-		areaTexture.needsUpdate = true;
-		areaTexture.flipY = false;
+		searchImage.addEventListener("load", () => {
 
-		const weightsMaterial = this.weightsPass.fullscreenMaterial;
-		weightsMaterial.searchTexture = searchTexture;
-		weightsMaterial.areaTexture = areaTexture;
+			const searchTexture = new Texture(searchImage);
+			searchTexture.name = "SMAA.Search";
+			searchTexture.magFilter = NearestFilter;
+			searchTexture.minFilter = NearestFilter;
+			searchTexture.generateMipmaps = false;
+			searchTexture.needsUpdate = true;
+			searchTexture.flipY = true;
+			this.weightsMaterial.searchTexture = searchTexture;
+
+		});
+
+		areaImage.addEventListener("load", () => {
+
+			const areaTexture = new Texture(areaImage);
+			areaTexture.name = "SMAA.Area";
+			areaTexture.magFilter = LinearFilter;
+			areaTexture.minFilter = LinearFilter;
+			areaTexture.generateMipmaps = false;
+			areaTexture.needsUpdate = true;
+			areaTexture.flipY = false;
+			this.weightsMaterial.areaTexture = areaTexture;
+
+		});
+
+		searchImage.src = searchImageDataURL;
+		areaImage.src = areaImageDataURL;
 
 		this.applyPreset(preset);
 
@@ -398,14 +424,8 @@ export class SMAAEffect extends Effect {
 	/**
 	 * The SMAA search image, encoded as a base64 data URL.
 	 *
-	 * Use this image data to create an Image instance for the {@link SMAAEffect}.
-	 *
 	 * @type {String}
-	 * @deprecated Use SMAAImageLoader instead.
-	 * @example
-	 * const searchImage = new Image();
-	 * searchImage.addEventListener("load", progress);
-	 * searchImage.src = SMAAEffect.searchImageDataURL;
+	 * @deprecated
 	 */
 
 	static get searchImageDataURL() {
@@ -417,14 +437,8 @@ export class SMAAEffect extends Effect {
 	/**
 	 * The SMAA area image, encoded as a base64 data URL.
 	 *
-	 * Use this image data to create an Image instance for the {@link SMAAEffect}.
-	 *
 	 * @type {String}
-	 * @deprecated Use SMAAImageLoader instead.
-	 * @example
-	 * const areaImage = new Image();
-	 * areaImage.addEventListener("load", progress);
-	 * areaImage.src = SMAAEffect.areaImageDataURL;
+	 * @deprecated
 	 */
 
 	static get areaImageDataURL() {
