@@ -6,6 +6,7 @@ import areaImageDataURL from "../images/smaa/areaImageDataURL";
 /**
  * An SMAA image loader.
  *
+ * @deprecated Preloading the SMAA lookup textures is no longer required.
  * @experimental Added for testing, API might change in patch or minor releases. Requires three >= r108.
  */
 
