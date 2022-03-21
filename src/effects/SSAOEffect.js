@@ -56,11 +56,14 @@ export class SSAOEffect extends Effect {
 	 * @param {Texture} [options.normalDepthBuffer=null] - A texture that contains downsampled scene normals and depth. See {@link DepthDownsamplingPass}.
 	 * @param {Number} [options.samples=9] - The amount of samples per pixel. Should not be a multiple of the ring count.
 	 * @param {Number} [options.rings=7] - The amount of spiral turns in the occlusion sampling pattern. Should be a prime number.
-	 * @param {Number} [options.distanceThreshold=0.97] - A global distance threshold at which the occlusion effect starts to fade out. Range [0.0, 1.0].
+	 * @param {Number} [options.worldDistanceThreshold] - The world distance threshold at which the occlusion effect starts to fade out.
+	 * @param {Number} [options.worldDistanceFalloff] - The world distance falloff. Influences the smoothness of the occlusion cutoff.
+	 * @param {Number} [options.worldProximityThreshold] - The world proximity threshold at which the occlusion starts to fade out.
+	 * @param {Number} [options.worldProximityFalloff] - The world proximity falloff. Influences the smoothness of the proximity cutoff.
+	 * @param {Number} [options.distanceThreshold=0.97] - The distance threshold at which the occlusion effect starts to fade out. Range [0.0, 1.0].
 	 * @param {Number} [options.distanceFalloff=0.03] - The distance falloff. Influences the smoothness of the overall occlusion cutoff. Range [0.0, 1.0].
-	 * @param {Number} [options.rangeThreshold=0.0005] - A local occlusion range threshold at which the occlusion starts to fade out. Range [0.0, 1.0].
-	 * @param {Number} [options.rangeFalloff=0.001] - The occlusion range falloff. Influences the smoothness of the proximity cutoff. Range [0.0, 1.0].
-	 * @param {Number} [options.minRadiusScale=0.33] - The minimum radius scale. Has no effect if distance scaling is disabled.
+	 * @param {Number} [options.rangeThreshold=0.0005] - The proximity threshold at which the occlusion starts to fade out. Range [0.0, 1.0].
+	 * @param {Number} [options.rangeFalloff=0.001] - The proximity falloff. Influences the smoothness of the proximity cutoff. Range [0.0, 1.0].
 	 * @param {Number} [options.luminanceInfluence=0.7] - Determines how much the luminance of the scene influences the ambient occlusion.
 	 * @param {Number} [options.radius=0.1825] - The occlusion sampling radius, expressed as a scale relative to the resolution. Range [1e-6, 1.0].
 	 * @param {Number} [options.intensity=1.0] - The intensity of the ambient occlusion.
@@ -79,6 +82,10 @@ export class SSAOEffect extends Effect {
 		normalDepthBuffer = null,
 		samples = 9,
 		rings = 7,
+		worldDistanceThreshold,
+		worldDistanceFalloff,
+		worldProximityThreshold,
+		worldProximityFalloff,
 		distanceThreshold = 0.97,
 		distanceFalloff = 0.03,
 		rangeThreshold = 0.0005,
@@ -158,7 +165,7 @@ export class SSAOEffect extends Effect {
 		const noiseTexture = new NoiseTexture(NOISE_TEXTURE_SIZE, NOISE_TEXTURE_SIZE, RGBAFormat);
 		noiseTexture.wrapS = noiseTexture.wrapT = RepeatWrapping;
 
-		const material = this.ssaoPass.fullscreenMaterial;
+		const material = this.ssaoMaterial;
 		material.noiseTexture = noiseTexture;
 		material.minRadiusScale = minRadiusScale;
 		material.intensity = intensity;
@@ -186,6 +193,31 @@ export class SSAOEffect extends Effect {
 		material.distanceFalloff = distanceFalloff;
 		material.proximityThreshold = rangeThreshold;
 		material.proximityFalloff = rangeFalloff;
+
+		if(worldDistanceThreshold !== undefined) {
+
+			material.worldDistanceThreshold = worldDistanceThreshold;
+
+		}
+
+		if(worldDistanceFalloff !== undefined) {
+
+			material.worldDistanceFalloff = worldDistanceFalloff;
+
+		}
+
+		if(worldProximityThreshold !== undefined) {
+
+			material.worldProximityThreshold = worldProximityThreshold;
+
+		}
+
+		if(worldProximityFalloff !== undefined) {
+
+			material.worldProximityFalloff = worldProximityFalloff;
+
+		}
+
 		material.distanceScaling = distanceScaling;
 		material.samples = samples;
 		material.radius = radius;
