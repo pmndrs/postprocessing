@@ -4,7 +4,7 @@ import { Effect } from "./Effect";
 import fragmentShader from "./glsl/color-average/shader.frag";
 
 /**
- * A color average effect.
+ * A fast greyscale effect.
  */
 
 export class ColorAverageEffect extends Effect {
