@@ -1,49 +1,42 @@
 import {
-	CubeTextureLoader,
 	LoadingManager,
 	PerspectiveCamera,
+	PlaneGeometry,
+	Mesh,
+	MeshBasicMaterial,
 	Scene,
 	sRGBEncoding,
-	VSMShadowMap,
+	TextureLoader,
 	WebGLRenderer
 } from "three";
 
 import {
 	BlendFunction,
-	HueSaturationEffect,
 	EffectComposer,
 	EffectPass,
+	HueSaturationEffect,
 	RenderPass
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
 import { ControlMode, SpatialControls } from "spatial-controls";
 import { calculateVerticalFoV, FPSMeter } from "../utils";
-import * as CornellBox from "../objects/CornellBox";
 
 function load() {
 
 	const assets = new Map();
 	const loadingManager = new LoadingManager();
-	const cubeTextureLoader = new CubeTextureLoader(loadingManager);
-
-	const path = document.baseURI + "img/textures/skies/sunset/";
-	const format = ".png";
-	const urls = [
-		path + "px" + format, path + "nx" + format,
-		path + "py" + format, path + "ny" + format,
-		path + "pz" + format, path + "nz" + format
-	];
+	const textureLoader = new TextureLoader(loadingManager);
 
 	return new Promise((resolve, reject) => {
 
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		cubeTextureLoader.load(urls, (t) => {
+		textureLoader.load(document.baseURI + "img/textures/photos/GEDC0053.jpg", (t) => {
 
 			t.encoding = sRGBEncoding;
-			assets.set("sky", t);
+			assets.set("photo", t);
 
 		});
 
@@ -66,11 +59,6 @@ window.addEventListener("load", () => load().then((assets) => {
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.outputEncoding = sRGBEncoding;
 	renderer.setClearColor(0x000000, 0);
-	renderer.physicallyCorrectLights = true;
-	renderer.shadowMap.type = VSMShadowMap;
-	renderer.shadowMap.autoUpdate = false;
-	renderer.shadowMap.needsUpdate = true;
-	renderer.shadowMap.enabled = true;
 
 	const container = document.querySelector(".viewport");
 	container.append(renderer.domElement);
@@ -81,26 +69,28 @@ window.addEventListener("load", () => load().then((assets) => {
 	const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 	const settings = controls.settings;
 	settings.general.setMode(ControlMode.THIRD_PERSON);
-	settings.rotation.setSensitivity(2.2);
-	settings.rotation.setDamping(0.05);
+	settings.zoom.setSensitivity(0.05);
 	settings.zoom.setDamping(0.1);
+	settings.rotation.setSensitivity(0);
 	settings.translation.setEnabled(false);
-	controls.setPosition(0, 0, 5);
+	controls.setPosition(0, 0, 1.4);
 
-	// Scene, Lights, Objects
+	// Scene & Objects
 
 	const scene = new Scene();
-	scene.background = assets.get("sky");
-	scene.add(CornellBox.createLights());
-	scene.add(CornellBox.createEnvironment());
-	scene.add(CornellBox.createActors());
+	const mesh = new Mesh(
+		new PlaneGeometry(),
+		new MeshBasicMaterial({
+			map: assets.get("photo")
+		})
+	);
+
+	mesh.scale.x = 2;
+	scene.add(mesh);
 
 	// Post Processing
 
-	const context = renderer.getContext();
-	const composer = new EffectComposer(renderer, {
-		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
-	});
+	const composer = new EffectComposer(renderer);
 
 	const effect = new HueSaturationEffect();
 	composer.addPass(new RenderPass(scene, camera));
