@@ -1,8 +1,8 @@
 ---
 layout: single
 collection: sections
-title: God-Rays
 draft: true
+title: God Rays
 menu:
   demos:
     parent: light-shadow
@@ -10,6 +10,6 @@ menu:
 script: god-rays
 ---
 
-# God-Rays
+# God Rays
 
 ### External Resources
