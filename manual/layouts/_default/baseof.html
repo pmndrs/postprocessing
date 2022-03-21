@@ -12,11 +12,15 @@
 
 		<base href="{{ .Site.BaseURL }}">
 		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+
 		{{ with resources.Get "css/index.css" }}
 			{{ $stylesheet := . | fingerprint }}
 			<link rel="stylesheet" href="{{ $stylesheet.RelPermalink }}" integrity="{{ $stylesheet.Data.Integrity }}">
 		{{ end }}
 		{{ block "styles" . }}{{ end }}
+		<style>body { visibility: hidden; opacity: 0; }</style>
+		<noscript><style>body { visibility: visible; opacity: 1; }</style></noscript>
+
 		{{ with resources.Get "js/libs/three.js" }}
 			{{ $script := . | fingerprint }}
 			<script src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>

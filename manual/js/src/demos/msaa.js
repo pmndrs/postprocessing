@@ -8,7 +8,7 @@ import {
 	WebGLRenderer
 } from "three";
 
-import { EffectComposer, RenderPass, SavePass } from "postprocessing";
+import { EffectComposer, RenderPass, CopyPass } from "postprocessing";
 import { Pane } from "tweakpane";
 import { ControlMode, SpatialControls } from "spatial-controls";
 import { calculateVerticalFoV, FPSMeter } from "../utils";
@@ -91,12 +91,13 @@ window.addEventListener("load", () => load().then((assets) => {
 	// Post Processing
 
 	const context = renderer.getContext();
+	const maxSamples = context.getParameter(context.MAX_SAMPLES);
 	const composer = new EffectComposer(renderer, {
-		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
+		multisampling: Math.min(4, maxSamples)
 	});
 
 	composer.addPass(new RenderPass(scene, camera));
-	composer.addPass(new SavePass());
+	composer.addPass(new CopyPass());
 
 	// Settings
 
@@ -109,9 +110,9 @@ window.addEventListener("load", () => load().then((assets) => {
 		label: "MSAA",
 		options: {
 			off: 0,
-			low: Math.min(2, context.getParameter(context.MAX_SAMPLES)),
-			medium: Math.min(4, context.getParameter(context.MAX_SAMPLES)),
-			high: Math.min(8, context.getParameter(context.MAX_SAMPLES))
+			low: Math.min(2, maxSamples),
+			medium: Math.min(4, maxSamples),
+			high: Math.min(8, maxSamples)
 		}
 	});
 

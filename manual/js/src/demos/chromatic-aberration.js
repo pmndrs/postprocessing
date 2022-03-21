@@ -1,5 +1,6 @@
 import {
 	CubeTextureLoader,
+	FogExp2,
 	LoadingManager,
 	PerspectiveCamera,
 	Scene,
@@ -16,9 +17,9 @@ import {
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
-import { ControlMode, SpatialControls } from "spatial-controls";
+import { SpatialControls } from "spatial-controls";
 import { calculateVerticalFoV, FPSMeter } from "../utils";
-import * as CornellBox from "../objects/CornellBox";
+import * as Domain from "../objects/Domain";
 
 function load() {
 
@@ -79,20 +80,20 @@ window.addEventListener("load", () => load().then((assets) => {
 	const camera = new PerspectiveCamera();
 	const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 	const settings = controls.settings;
-	settings.general.setMode(ControlMode.THIRD_PERSON);
 	settings.rotation.setSensitivity(2.2);
 	settings.rotation.setDamping(0.05);
-	settings.zoom.setDamping(0.1);
-	settings.translation.setEnabled(false);
-	controls.setPosition(0, 0, 5);
+	settings.translation.setDamping(0.1);
+	controls.setPosition(0, 0, 1);
+	controls.lookAt(0, 0, 0);
 
 	// Scene, Lights, Objects
 
 	const scene = new Scene();
+	scene.fog = new FogExp2(0x0a0809, 0.06);
 	scene.background = assets.get("sky");
-	scene.add(CornellBox.createLights());
-	scene.add(CornellBox.createEnvironment());
-	scene.add(CornellBox.createActors());
+	scene.add(Domain.createLights());
+	scene.add(Domain.createEnvironment(scene.background));
+	scene.add(Domain.createActors(scene.background));
 
 	// Post Processing
 
@@ -101,9 +102,10 @@ window.addEventListener("load", () => load().then((assets) => {
 		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
 	});
 
-	const chromaticAberrationEffect = new ChromaticAberrationEffect();
+	const effect = new ChromaticAberrationEffect();
+	effect.offset.setScalar(0.0025);
 	composer.addPass(new RenderPass(scene, camera));
-	composer.addPass(new EffectPass(camera, chromaticAberrationEffect));
+	composer.addPass(new EffectPass(camera, effect));
 
 	// Settings
 
@@ -111,12 +113,8 @@ window.addEventListener("load", () => load().then((assets) => {
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
-	const params = {
-		"offset": chromaticAberrationEffect.offset
-	};
-
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(params, "offset", {
+	folder.addInput(effect, "offset", {
 		x: { min: -1e-2, max: 1e-2, step: 1e-6 },
 		y: { min: -1e-2, max: 1e-2, step: 1e-6, inverted: true }
 	});

@@ -32,6 +32,7 @@ export class SepiaEffect extends Effect {
 	/**
 	 * The intensity.
 	 *
+	 * @deprecated Use blendMode.opacity instead.
 	 * @type {Number}
 	 */
 
@@ -50,7 +51,7 @@ export class SepiaEffect extends Effect {
 	/**
 	 * Returns the current sepia intensity.
 	 *
-	 * @deprecated Use intensity instead.
+	 * @deprecated Use blendMode.opacity instead.
 	 * @return {Number} The intensity.
 	 */
 
@@ -63,7 +64,7 @@ export class SepiaEffect extends Effect {
 	/**
 	 * Sets the sepia intensity.
 	 *
-	 * @deprecated Use intensity instead.
+	 * @deprecated Use blendMode.opacity instead.
 	 * @param {Number} value - The intensity.
 	 */
 

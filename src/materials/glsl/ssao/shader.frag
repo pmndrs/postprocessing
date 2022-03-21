@@ -186,10 +186,7 @@ void main() {
 
 	#else
 
-		vec4 normalDepth = vec4(
-			texture2D(normalBuffer, vUv).rgb,
-			readDepth(vUv)
-		);
+		vec4 normalDepth = vec4(texture2D(normalBuffer, vUv).rgb, readDepth(vUv));
 
 	#endif
 

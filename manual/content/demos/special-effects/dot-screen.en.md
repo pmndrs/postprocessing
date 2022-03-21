@@ -2,7 +2,7 @@
 layout: single
 collection: sections
 title: Dot Screen
-draft: true
+draft: false
 menu:
   demos:
     parent: special-effects
@@ -10,6 +10,6 @@ menu:
 script: dot-screen
 ---
 
-# Dot Screen
+# Dot Screen / Halftone
 
 ### External Resources

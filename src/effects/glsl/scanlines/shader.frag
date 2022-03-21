@@ -1,10 +1,22 @@
 uniform float count;
 
+#ifdef SCROLL
+
+	uniform float scrollSpeed;
+
+#endif
+
 void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
 
-	vec2 sl = vec2(sin(uv.y * count), cos(uv.y * count));
-	vec3 scanlines = vec3(sl.x, sl.y, sl.x);
+	float y = uv.y;
 
-	outputColor = vec4(scanlines, inputColor.a);
+	#ifdef SCROLL
+
+		y += time * scrollSpeed;
+
+	#endif
+
+	vec2 sl = vec2(sin(y * count), cos(y * count));
+	outputColor = vec4(sl.xyx, inputColor.a);
 
 }

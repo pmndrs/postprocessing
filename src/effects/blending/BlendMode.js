@@ -73,7 +73,7 @@ export class BlendMode extends EventDispatcher {
 		 * @private
 		 */
 
-		this.blendFunction = blendFunction;
+		this.f = blendFunction;
 
 		/**
 		 * A uniform that controls the opacity of this blend mode.
@@ -111,8 +111,28 @@ export class BlendMode extends EventDispatcher {
 	}
 
 	/**
+	 * The blend function.
+	 *
+	 * @type {BlendFunction}
+	 */
+
+	get blendFunction() {
+
+		return this.f;
+
+	}
+
+	set blendFunction(value) {
+
+		this.f = value;
+		this.dispatchEvent({ type: "change" });
+
+	}
+
+	/**
 	 * Returns the blend function.
 	 *
+	 * @deprecated Use blendFunction instead.
 	 * @return {BlendFunction} The blend function.
 	 */
 
@@ -125,13 +145,13 @@ export class BlendMode extends EventDispatcher {
 	/**
 	 * Sets the blend function.
 	 *
+	 * @deprecated Use blendFunction instead.
 	 * @param {BlendFunction} value - The blend function.
 	 */
 
 	setBlendFunction(value) {
 
 		this.blendFunction = value;
-		this.dispatchEvent({ type: "change" });
 
 	}
 

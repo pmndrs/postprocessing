@@ -1,4 +1,5 @@
 import { BasicDepthPacking, Matrix4, NoBlending, PerspectiveCamera, ShaderMaterial, Uniform, Vector2 } from "three";
+import { orthographicDepthToViewZ, viewZToOrthographicDepth } from "../utils";
 
 import fragmentShader from "./glsl/ssao/shader.frag";
 import vertexShader from "./glsl/ssao/shader.vert";
@@ -77,6 +78,32 @@ export class SSAOMaterial extends ShaderMaterial {
 		 */
 
 		this.r = 1.0;
+
+	}
+
+	/**
+	 * The current near plane setting.
+	 *
+	 * @type {Number}
+	 * @private
+	 */
+
+	get near() {
+
+		return this.uniforms.cameraNear.value;
+
+	}
+
+	/**
+	 * The current far plane setting.
+	 *
+	 * @type {Number}
+	 * @private
+	 */
+
+	get far() {
+
+		return this.uniforms.cameraFar.value;
 
 	}
 
@@ -387,7 +414,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * The depth bias.
+	 * The depth bias. Range: [0.0, 1.0].
 	 *
 	 * @type {Number}
 	 */
@@ -431,7 +458,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * The minimum radius scale for distance scaling.
+	 * The minimum radius scale for distance scaling. Range: [0.0, 1.0].
 	 *
 	 * @type {Number}
 	 */
@@ -490,7 +517,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * The occlusion sampling radius.
+	 * The occlusion sampling radius. Range: [0.0, 1.0].
 	 *
 	 * @type {Number}
 	 */
@@ -593,7 +620,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * The occlusion distance threshold.
+	 * The occlusion distance threshold. Range: [0.0, 1.0].
 	 *
 	 * @type {Number}
 	 */
@@ -614,7 +641,25 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * The occlusion distance falloff.
+	 * The occlusion distance threshold in world units.
+	 *
+	 * @type {Number}
+	 */
+
+	get worldDistanceThreshold() {
+
+		return -orthographicDepthToViewZ(this.distanceThreshold, this.near, this.far);
+
+	}
+
+	set worldDistanceThreshold(value) {
+
+		this.distanceThreshold = viewZToOrthographicDepth(-value, this.near, this.far);
+
+	}
+
+	/**
+	 * The occlusion distance falloff. Range: [0.0, 1.0].
 	 *
 	 * @type {Number}
 	 */
@@ -628,6 +673,24 @@ export class SSAOMaterial extends ShaderMaterial {
 	set distanceFalloff(value) {
 
 		this.uniforms.distanceCutoff.value.y = Math.min(Math.max(this.distanceThreshold + value, 0.0), 1.0);
+
+	}
+
+	/**
+	 * The occlusion distance falloff in world units.
+	 *
+	 * @type {Number}
+	 */
+
+	get worldDistanceFalloff() {
+
+		return -orthographicDepthToViewZ(this.distanceFalloff, this.near, this.far);
+
+	}
+
+	set worldDistanceFalloff(value) {
+
+		this.distanceFalloff = viewZToOrthographicDepth(-value, this.near, this.far);
 
 	}
 
@@ -649,7 +712,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * The occlusion proximity threshold.
+	 * The occlusion proximity threshold. Range: [0.0, 1.0].
 	 *
 	 * @type {Number}
 	 */
@@ -670,7 +733,25 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * The occlusion proximity falloff.
+	 * The occlusion proximity threshold in world units.
+	 *
+	 * @type {Number}
+	 */
+
+	get worldProximityThreshold() {
+
+		return -orthographicDepthToViewZ(this.proximityThreshold, this.near, this.far);
+
+	}
+
+	set worldProximityThreshold(value) {
+
+		this.proximityThreshold = viewZToOrthographicDepth(-value, this.near, this.far);
+
+	}
+
+	/**
+	 * The occlusion proximity falloff. Range: [0.0, 1.0].
 	 *
 	 * @type {Number}
 	 */
@@ -684,6 +765,24 @@ export class SSAOMaterial extends ShaderMaterial {
 	set proximityFalloff(value) {
 
 		this.uniforms.proximityCutoff.value.y = Math.min(Math.max(this.proximityThreshold + value, 0.0), 1.0);
+
+	}
+
+	/**
+	 * The occlusion proximity falloff in world units.
+	 *
+	 * @type {Number}
+	 */
+
+	get worldProximityFalloff() {
+
+		return -orthographicDepthToViewZ(this.proximityFalloff, this.near, this.far);
+
+	}
+
+	set worldProximityFalloff(value) {
+
+		this.proximityFalloff = viewZToOrthographicDepth(-value, this.near, this.far);
 
 	}
 

@@ -12,7 +12,7 @@
 #endif
 
 uniform float focusDistance;
-uniform float focalLength;
+uniform float focusRange;
 uniform float cameraNear;
 uniform float cameraFar;
 
@@ -48,11 +48,11 @@ void main() {
 	#endif
 
 	float signedDistance = linearDepth - focusDistance;
-	float magnitude = smoothstep(0.0, focalLength, abs(signedDistance));
+	float magnitude = smoothstep(0.0, focusRange, abs(signedDistance));
 
-	gl_FragColor.rg = vec2(
-		step(signedDistance, 0.0) * magnitude,
-		step(0.0, signedDistance) * magnitude
+	gl_FragColor.rg = magnitude * vec2(
+		step(signedDistance, 0.0),
+		step(0.0, signedDistance)
 	);
 
 }

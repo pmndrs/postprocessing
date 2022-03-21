@@ -7,7 +7,6 @@ A post processing library that provides the means to implement image filter effe
 
 *[Demo](https://pmndrs.github.io/postprocessing/public/demo)&ensp;&middot;&ensp;[Sandbox](https://codesandbox.io/s/postprocessing-25rts)&ensp;&middot;&ensp;[Documentation](https://pmndrs.github.io/postprocessing/public/docs)&ensp;&middot;&ensp;[Wiki](https://github.com/pmndrs/postprocessing/wiki)*
 
-
 ## Installation
 
 This library requires the peer dependency [three](https://github.com/mrdoob/three.js/).
@@ -15,7 +14,6 @@ This library requires the peer dependency [three](https://github.com/mrdoob/thre
 ```sh
 npm install three postprocessing
 ```
-
 
 ## Usage
 
@@ -49,11 +47,9 @@ requestAnimationFrame(function render() {
 });
 ```
 
-
 ## Output Encoding
 
 Simply set `WebGLRenderer.outputEncoding` to the desired target color space and `postprocessing` will follow suit. Built-in passes automatically encode colors when they render to screen and internal render operations are always performed in linear color space.
-
 
 ## Performance
 
@@ -62,7 +58,6 @@ This library provides an [EffectPass](https://pmndrs.github.io/postprocessing/pu
 All fullscreen render operations also use a [single triangle](https://michaldrobot.com/2014/04/01/gcn-execution-patterns-in-full-screen-passes/) that fills the screen. Compared to using a quad, this approach harmonizes with modern GPU rasterization patterns and eliminates unnecessary fragment calculations along the screen diagonal. This is especially beneficial for GPGPU passes and effects that use complex fragment shaders.
 
 [Performance Test](https://pmndrs.github.io/postprocessing/public/demo/#performance)
-
 
 ## Included Effects
 
@@ -96,16 +91,13 @@ _The total demo download size is about `60 MB`._
  - [Texture](https://pmndrs.github.io/postprocessing/public/demo/#texture)
  - [Tone Mapping](https://pmndrs.github.io/postprocessing/public/demo/#tone-mapping)
 
-
 ## Custom Effects
 
 If you want to learn how to create custom effects or passes, please check the [Wiki](https://github.com/pmndrs/postprocessing/wiki).
 
-
 ## Contributing
 
 Please refer to the [contribution guidelines](https://github.com/pmndrs/postprocessing/blob/main/.github/CONTRIBUTING.md) for details.
-
 
 ## License
 

@@ -26,7 +26,8 @@ export class ScanlineEffect extends Effect {
 		super("ScanlineEffect", fragmentShader, {
 			blendFunction,
 			uniforms: new Map([
-				["count", new Uniform(0.0)]
+				["count", new Uniform(0.0)],
+				["scrollSpeed", new Uniform(0.0)]
 			])
 		});
 
@@ -92,6 +93,39 @@ export class ScanlineEffect extends Effect {
 	setDensity(value) {
 
 		this.density = value;
+
+	}
+
+	/**
+	 * The scanline scroll speed. Default is 0 (disabled).
+	 *
+	 * @type {Number}
+	 */
+
+	get scrollSpeed() {
+
+		return this.uniforms.get("scrollSpeed").value;
+
+	}
+
+	set scrollSpeed(value) {
+
+		this.uniforms.get("scrollSpeed").value = value;
+
+		if(value === 0) {
+
+			if(this.defines.delete("SCROLL")) {
+
+				this.setChanged();
+
+			}
+
+		} else if(!this.defines.has("SCROLL")) {
+
+			this.defines.set("SCROLL", "1");
+			this.setChanged();
+
+		}
 
 	}
 

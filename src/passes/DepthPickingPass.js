@@ -77,10 +77,11 @@ export class DepthPickingPass extends DepthCopyPass {
 	 *
 	 * @example
 	 * const ndc = new Vector3();
-	 *
-	 * ndc.x = (pointerEvent.clientX / window.innerWidth) * 2.0 - 1.0;
-	 * ndc.y = -(pointerEvent.clientY / window.innerHeight) * 2.0 + 1.0;
-	 *
+	 * const clientRect = myViewport.getBoundingClientRect();
+	 * const clientX = pointerEvent.clientX - clientRect.left;
+	 * const clientY = pointerEvent.clientY - clientRect.top;
+	 * ndc.x = (clientX / myViewport.clientWidth) * 2.0 - 1.0;
+	 * ndc.y = -(clientY / myViewport.clientHeight) * 2.0 + 1.0;
 	 * const depth = await depthPickingPass.readDepth(ndc);
 	 * ndc.z = depth * 2.0 - 1.0;
 	 *

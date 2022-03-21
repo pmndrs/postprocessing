@@ -17,7 +17,7 @@ import {
 
 import { Pane } from "tweakpane";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, FPSMeter } from "../utils";
+import { calculateVerticalFoV, FPSMeter, toRecord } from "../utils";
 import * as CornellBox from "../objects/CornellBox";
 
 function load() {
@@ -111,26 +111,14 @@ window.addEventListener("load", () => load().then((assets) => {
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
-	const params = {
-		"resolution": kawaseBlurPass.resolution.height,
-		"kernel size": kawaseBlurPass.kernelSize,
-		"scale": kawaseBlurPass.scale
-	};
-
-	function reducer(a, b) {
-
-		a[b] = b;
-		return a;
-
-	}
-
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(params, "resolution", { options: [360, 480, 720, 1080].reduce(reducer, {}) })
-		.on("change", (e) => kawaseBlurPass.resolution.preferredHeight = e.value);
-	folder.addInput(params, "kernel size", { options: KernelSize })
-		.on("change", (e) => kawaseBlurPass.kernelSize = e.value);
-	folder.addInput(params, "scale", { min: 0, max: 1, step: 0.01 })
-		.on("change", (e) => kawaseBlurPass.scale = e.value);
+	folder.addInput(kawaseBlurPass.resolution, "height", {
+		options: [360, 480, 720, 1080].reduce(toRecord, {}),
+		label: "resolution"
+	});
+
+	folder.addInput(kawaseBlurPass, "kernelSize", { options: KernelSize });
+	folder.addInput(kawaseBlurPass, "scale", { min: 0, max: 1, step: 0.01 });
 
 	// Resize Handler
 

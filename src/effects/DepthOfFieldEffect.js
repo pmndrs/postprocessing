@@ -2,6 +2,7 @@ import { BasicDepthPacking, LinearFilter, sRGBEncoding, Uniform, UnsignedByteTyp
 import { BokehMaterial, CircleOfConfusionMaterial, MaskFunction, MaskMaterial } from "../materials";
 import { ColorChannel, KernelSize, Resolution } from "../core";
 import { KawaseBlurPass, ShaderPass } from "../passes";
+import { viewZToOrthographicDepth } from "../utils";
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect, EffectAttribute } from "./Effect";
 
@@ -23,8 +24,11 @@ export class DepthOfFieldEffect extends Effect {
 	 * @param {Camera} camera - The main camera.
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {Number} [options.worldFocusDistance] - The focus distance in world units.
+	 * @param {Number} [options.worldFocusRange] - The focus distance in world units.
 	 * @param {Number} [options.focusDistance=0.0] - The normalized focus distance. Range is [0.0, 1.0].
-	 * @param {Number} [options.focalLength=0.1] - The focal length. Range is [0.0, 1.0].
+	 * @param {Number} [options.focusRange=0.1] - The focus range. Range is [0.0, 1.0].
+	 * @param {Number} [options.focalLength=0.1] - Deprecated.
 	 * @param {Number} [options.bokehScale=1.0] - The scale of the bokeh blur.
 	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - The render width.
 	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - The render height.
@@ -32,8 +36,11 @@ export class DepthOfFieldEffect extends Effect {
 
 	constructor(camera, {
 		blendFunction = BlendFunction.NORMAL,
+		worldFocusDistance,
+		worldFocusRange,
 		focusDistance = 0.0,
 		focalLength = 0.1,
+		focusRange = focalLength,
 		bokehScale = 1.0,
 		width = Resolution.AUTO_SIZE,
 		height = Resolution.AUTO_SIZE
@@ -140,9 +147,21 @@ export class DepthOfFieldEffect extends Effect {
 		 */
 
 		this.cocPass = new ShaderPass(new CircleOfConfusionMaterial(camera));
-		const cocMaterial = this.cocPass.fullscreenMaterial;
-		cocMaterial.setFocusDistance(focusDistance);
-		cocMaterial.setFocalLength(focalLength);
+		const cocMaterial = this.cocMaterial;
+		cocMaterial.focusDistance = focusDistance;
+		cocMaterial.focusRange = focusRange;
+
+		if(worldFocusDistance !== undefined) {
+
+			cocMaterial.worldFocusDistance = worldFocusDistance;
+
+		}
+
+		if(worldFocusRange !== undefined) {
+
+			cocMaterial.worldFocusRange = worldFocusRange;
+
+		}
 
 		/**
 		 * This pass blurs the foreground CoC buffer to soften edges.
@@ -225,21 +244,46 @@ export class DepthOfFieldEffect extends Effect {
 	}
 
 	/**
+	 * The circle of confusion texture.
+	 *
+	 * @type {Texture}
+	 */
+
+	get cocTexture() {
+
+		return this.renderTargetCoC.texture;
+
+	}
+
+	/**
 	 * The circle of confusion material.
 	 *
 	 * @type {CircleOfConfusionMaterial}
 	 */
 
-	get circleOfConfusionMaterial() {
+	get cocMaterial() {
 
 		return this.cocPass.fullscreenMaterial;
 
 	}
 
 	/**
+	 * The circle of confusion material.
+	 *
+	 * @deprecated Use cocMaterial instead.
+	 * @type {CircleOfConfusionMaterial}
+	 */
+
+	get circleOfConfusionMaterial() {
+
+		return this.cocMaterial;
+
+	}
+
+	/**
 	 * Returns the circle of confusion material.
 	 *
-	 * @deprecated Use circleOfConfusionMaterial instead.
+	 * @deprecated Use cocMaterial instead.
 	 * @return {CircleOfConfusionMaterial} The material.
 	 */
 
@@ -381,10 +425,8 @@ export class DepthOfFieldEffect extends Effect {
 	calculateFocusDistance(target) {
 
 		const camera = this.camera;
-		const viewDistance = camera.far - camera.near;
 		const distance = camera.position.distanceTo(target);
-
-		return Math.min(Math.max((distance / viewDistance), 0.0), 1.0);
+		return viewZToOrthographicDepth(-distance, camera.near, camera.far);
 
 	}
 
