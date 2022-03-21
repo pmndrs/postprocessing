@@ -2,6 +2,7 @@ import { BasicDepthPacking, LinearFilter, sRGBEncoding, Uniform, UnsignedByteTyp
 import { BokehMaterial, CircleOfConfusionMaterial, MaskFunction, MaskMaterial } from "../materials";
 import { ColorChannel, KernelSize, Resolution } from "../core";
 import { KawaseBlurPass, ShaderPass } from "../passes";
+import { viewZToOrthographicDepth } from "../utils";
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect, EffectAttribute } from "./Effect";
 
@@ -408,10 +409,8 @@ export class DepthOfFieldEffect extends Effect {
 	calculateFocusDistance(target) {
 
 		const camera = this.camera;
-		const viewDistance = camera.far - camera.near;
 		const distance = camera.position.distanceTo(target);
-
-		return Math.min(Math.max((distance / viewDistance), 0.0), 1.0);
+		return viewZToOrthographicDepth(-distance, camera.near, camera.far);
 
 	}
 
