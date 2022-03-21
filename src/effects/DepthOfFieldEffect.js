@@ -24,7 +24,8 @@ export class DepthOfFieldEffect extends Effect {
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
 	 * @param {Number} [options.focusDistance=0.0] - The normalized focus distance. Range is [0.0, 1.0].
-	 * @param {Number} [options.focalLength=0.1] - The focal length. Range is [0.0, 1.0].
+	 * @param {Number} [options.focusRange=0.1] - The focus range. Range is [0.0, 1.0].
+	 * @param {Number} [options.focalLength=0.1] - Deprecated.
 	 * @param {Number} [options.bokehScale=1.0] - The scale of the bokeh blur.
 	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - The render width.
 	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - The render height.
@@ -34,6 +35,7 @@ export class DepthOfFieldEffect extends Effect {
 		blendFunction = BlendFunction.NORMAL,
 		focusDistance = 0.0,
 		focalLength = 0.1,
+		focusRange = focalLength,
 		bokehScale = 1.0,
 		width = Resolution.AUTO_SIZE,
 		height = Resolution.AUTO_SIZE
@@ -142,7 +144,7 @@ export class DepthOfFieldEffect extends Effect {
 		this.cocPass = new ShaderPass(new CircleOfConfusionMaterial(camera));
 		const cocMaterial = this.cocMaterial;
 		cocMaterial.focusDistance = focusDistance;
-		cocMaterial.focalLength = focalLength;
+		cocMaterial.focusRange = focusRange;
 
 		/**
 		 * This pass blurs the foreground CoC buffer to soften edges.
