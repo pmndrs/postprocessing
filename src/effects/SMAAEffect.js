@@ -136,8 +136,17 @@ export class SMAAEffect extends Effect {
 		// Load the lookup textures.
 		if(typeof Image !== "undefined") {
 
+			let nbImagesLoaded = 0;
+
 			const searchImage = new Image();
 			const areaImage = new Image();
+
+			const onSMAAImageLoaded = () => {
+
+				nbImagesLoaded++;
+				if (nbImagesLoaded === 2) this.dispatchEvent("load");
+
+			}
 
 			searchImage.addEventListener("load", () => {
 
@@ -149,6 +158,7 @@ export class SMAAEffect extends Effect {
 				searchTexture.needsUpdate = true;
 				searchTexture.flipY = true;
 				this.weightsMaterial.searchTexture = searchTexture;
+				onSMAAImageLoaded();
 
 			});
 
@@ -162,6 +172,7 @@ export class SMAAEffect extends Effect {
 				areaTexture.needsUpdate = true;
 				areaTexture.flipY = false;
 				this.weightsMaterial.areaTexture = areaTexture;
+				onSMAAImageLoaded()
 
 			});
 
