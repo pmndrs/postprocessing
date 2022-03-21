@@ -24,6 +24,8 @@ export class DepthOfFieldEffect extends Effect {
 	 * @param {Camera} camera - The main camera.
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {Number} [options.worldFocusDistance] - The focus distance in world units.
+	 * @param {Number} [options.worldFocusRange] - The focus distance in world units.
 	 * @param {Number} [options.focusDistance=0.0] - The normalized focus distance. Range is [0.0, 1.0].
 	 * @param {Number} [options.focusRange=0.1] - The focus range. Range is [0.0, 1.0].
 	 * @param {Number} [options.focalLength=0.1] - Deprecated.
@@ -34,6 +36,8 @@ export class DepthOfFieldEffect extends Effect {
 
 	constructor(camera, {
 		blendFunction = BlendFunction.NORMAL,
+		worldFocusDistance,
+		worldFocusRange,
 		focusDistance = 0.0,
 		focalLength = 0.1,
 		focusRange = focalLength,
@@ -146,6 +150,18 @@ export class DepthOfFieldEffect extends Effect {
 		const cocMaterial = this.cocMaterial;
 		cocMaterial.focusDistance = focusDistance;
 		cocMaterial.focusRange = focusRange;
+
+		if(worldFocusDistance !== undefined) {
+
+			cocMaterial.worldFocusDistance = worldFocusDistance;
+
+		}
+
+		if(worldFocusRange !== undefined) {
+
+			cocMaterial.worldFocusRange = worldFocusRange;
+
+		}
 
 		/**
 		 * This pass blurs the foreground CoC buffer to soften edges.
