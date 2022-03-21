@@ -5,7 +5,6 @@ import {
 	PerspectiveCamera,
 	Scene,
 	sRGBEncoding,
-	Vector3,
 	VSMShadowMap,
 	WebGLRenderer
 } from "three";
@@ -13,7 +12,6 @@ import {
 import {
 	BlendFunction,
 	DepthOfFieldEffect,
-	DepthEffect,
 	EffectComposer,
 	EffectPass,
 	KernelSize,
@@ -82,7 +80,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	// Camera & Controls
 
-	const camera = new PerspectiveCamera(1, 1, 0.3, 100);
+	const camera = new PerspectiveCamera();
 	const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 	const settings = controls.settings;
 	settings.rotation.setSensitivity(2.2);
@@ -109,8 +107,8 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const effect = new DepthOfFieldEffect(camera, {
 		kernelSize: KernelSize.SMALL,
-		focusDistance: 0.05,
-		focalLength: 0.15,
+		worldFocusDistance: 2,
+		worldFocusRange: 5,
 		bokehScale: 2.0,
 		height: 480
 	});
@@ -118,21 +116,15 @@ window.addEventListener("load", () => load().then((assets) => {
 	const effectPass = new EffectPass(camera, effect);
 
 	// BEGIN DEBUG
-	const depthDebugPass = new EffectPass(camera, new DepthEffect());
 	const cocDebugPass = new EffectPass(camera, new TextureEffect({ texture: effect.cocTexture }));
-
 	effectPass.renderToScreen = true;
-	depthDebugPass.renderToScreen = true;
 	cocDebugPass.renderToScreen = true;
-	depthDebugPass.enabled = false;
 	cocDebugPass.enabled = false;
-	depthDebugPass.fullscreenMaterial.encodeOutput = false;
 	cocDebugPass.fullscreenMaterial.encodeOutput = false;
 	// END DEBUG
 
 	composer.addPass(new RenderPass(scene, camera));
 	composer.addPass(effectPass);
-	composer.addPass(depthDebugPass);
 	composer.addPass(cocDebugPass);
 
 	// Settings
@@ -142,52 +134,19 @@ window.addEventListener("load", () => load().then((assets) => {
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
-	const DoFDebug = { OFF: 0, DEPTH: 1, COC: 2 };
-	const params = { debug: DoFDebug.OFF };
-
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(params, "debug", { options: DoFDebug }).on("change", (e) => {
-
-		effectPass.enabled = (e.value !== DoFDebug.DEPTH);
-		depthDebugPass.enabled = (e.value === DoFDebug.DEPTH);
-		cocDebugPass.enabled = (e.value === DoFDebug.COC);
-
-	});
-
+	folder.addInput(cocDebugPass, "enabled", { label: "debug" });
 	folder.addInput(effect.resolution, "height", {
 		options: [360, 480, 720, 1080].reduce(toRecord, {}),
 		label: "resolution"
 	});
 
 	folder.addInput(effect.blurPass, "kernelSize", { options: KernelSize });
-	folder.addInput(cocMaterial, "focusDistance", { min: 0, max: 1, step: 1e-3 });
-	folder.addInput(cocMaterial, "focalLength", { min: 0, max: 0.3, step: 1e-3 });
-	folder.addInput(effect, "bokehScale", { min: 0, max: 5, step: 1e-3 });
+	folder.addInput(cocMaterial, "worldFocusDistance", { min: 0, max: 50, step: 0.1 });
+	folder.addInput(cocMaterial, "worldFocusRange", { min: 0, max: 20, step: 0.1 });
+	folder.addInput(effect, "bokehScale", { min: 0, max: 5, step: 1e-2 });
 	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
 	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
-
-	// Debug Keys
-
-	document.addEventListener("keyup", (event) => {
-
-		const p = new Vector3();
-		const v = new Vector3();
-
-		switch(event.key) {
-
-			case "c":
-				console.log("Camera position", p.copy(controls.getPosition()));
-				console.log("World direction", controls.getViewDirection(v));
-				console.log("Target position", p.clone().add(v));
-				break;
-
-			case "i":
-				console.log(renderer.info);
-				break;
-
-		}
-
-	});
 
 	// Resize Handler
 
