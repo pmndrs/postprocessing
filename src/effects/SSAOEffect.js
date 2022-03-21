@@ -504,7 +504,7 @@ export class SSAOEffect extends Effect {
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
-		this.ssaoMaterial.depthTexture = depthTexture;
+		this.ssaoMaterial.depthBuffer = depthTexture;
 		this.ssaoMaterial.depthPacking = depthPacking;
 
 	}
