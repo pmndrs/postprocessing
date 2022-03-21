@@ -134,37 +134,41 @@ export class SMAAEffect extends Effect {
 		this.weightsPass = new ShaderPass(new SMAAWeightsMaterial());
 
 		// Load the lookup textures.
-		const searchImage = new Image();
-		const areaImage = new Image();
+		if(typeof Image !== "undefined") {
 
-		searchImage.addEventListener("load", () => {
+			const searchImage = new Image();
+			const areaImage = new Image();
 
-			const searchTexture = new Texture(searchImage);
-			searchTexture.name = "SMAA.Search";
-			searchTexture.magFilter = NearestFilter;
-			searchTexture.minFilter = NearestFilter;
-			searchTexture.generateMipmaps = false;
-			searchTexture.needsUpdate = true;
-			searchTexture.flipY = true;
-			this.weightsMaterial.searchTexture = searchTexture;
+			searchImage.addEventListener("load", () => {
 
-		});
+				const searchTexture = new Texture(searchImage);
+				searchTexture.name = "SMAA.Search";
+				searchTexture.magFilter = NearestFilter;
+				searchTexture.minFilter = NearestFilter;
+				searchTexture.generateMipmaps = false;
+				searchTexture.needsUpdate = true;
+				searchTexture.flipY = true;
+				this.weightsMaterial.searchTexture = searchTexture;
 
-		areaImage.addEventListener("load", () => {
+			});
 
-			const areaTexture = new Texture(areaImage);
-			areaTexture.name = "SMAA.Area";
-			areaTexture.magFilter = LinearFilter;
-			areaTexture.minFilter = LinearFilter;
-			areaTexture.generateMipmaps = false;
-			areaTexture.needsUpdate = true;
-			areaTexture.flipY = false;
-			this.weightsMaterial.areaTexture = areaTexture;
+			areaImage.addEventListener("load", () => {
 
-		});
+				const areaTexture = new Texture(areaImage);
+				areaTexture.name = "SMAA.Area";
+				areaTexture.magFilter = LinearFilter;
+				areaTexture.minFilter = LinearFilter;
+				areaTexture.generateMipmaps = false;
+				areaTexture.needsUpdate = true;
+				areaTexture.flipY = false;
+				this.weightsMaterial.areaTexture = areaTexture;
 
-		searchImage.src = searchImageDataURL;
-		areaImage.src = areaImageDataURL;
+			});
+
+			searchImage.src = searchImageDataURL;
+			areaImage.src = areaImageDataURL;
+
+		}
 
 		this.applyPreset(preset);
 
@@ -414,8 +418,14 @@ export class SMAAEffect extends Effect {
 
 	dispose() {
 
-		this.weightsMaterial.searchTexture.dispose();
-		this.weightsMaterial.areaTexture.dispose();
+		const { searchTexture, areaTexture } = this.weightsMaterial;
+
+		if(searchTexture !== null && areaTexture !== null) {
+
+			searchTexture.dispose();
+			areaTexture.dispose();
+
+		}
 
 		super.dispose();
 
