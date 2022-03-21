@@ -111,7 +111,7 @@ export class SSAOEffect extends Effect {
 			]),
 			uniforms: new Map([
 				["aoBuffer", new Uniform(null)],
-				["normalDepthBuffer", new Uniform(null)],
+				["normalDepthBuffer", new Uniform(normalDepthBuffer)],
 				["luminanceInfluence", new Uniform(luminanceInfluence)],
 				["color", new Uniform(null)],
 				["scale", new Uniform(0.0)] // Unused.
@@ -176,13 +176,7 @@ export class SSAOEffect extends Effect {
 		if(normalDepthBuffer !== null) {
 
 			material.normalDepthBuffer = normalDepthBuffer;
-
-			if(depthAwareUpsampling) {
-
-				this.depthAwareUpsampling = depthAwareUpsampling;
-				this.uniforms.get("normalDepthBuffer").value = normalDepthBuffer;
-
-			}
+			this.depthAwareUpsampling = depthAwareUpsampling;
 
 		} else {
 
@@ -338,7 +332,7 @@ export class SSAOEffect extends Effect {
 
 		if(this.depthAwareUpsampling !== value) {
 
-			if(value) {
+			if(value && this.uniforms.get("normalDepthBuffer").value !== null) {
 
 				this.defines.set("DEPTH_AWARE_UPSAMPLING", "1");
 
