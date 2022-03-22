@@ -170,7 +170,7 @@ export class SMAAEffect extends Effect {
 			areaTexture.flipY = false;
 			this.weightsMaterial.areaTexture = areaTexture;
 
-			this.dispatchEvent("load");
+			this.dispatchEvent({ type: "load" });
 
 		};
 
