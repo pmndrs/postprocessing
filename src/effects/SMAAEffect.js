@@ -2,6 +2,7 @@ import {
 	BasicDepthPacking,
 	Color,
 	LinearFilter,
+	LoadingManager,
 	NearestFilter,
 	Texture,
 	Uniform,
@@ -69,10 +70,24 @@ export class SMAAEffect extends Effect {
 		});
 
 		// TODO Added for backward-compatibility.
-		if(arguments.length > 2) {
+		let searchImage, areaImage;
 
-			preset = arguments[2];
-			edgeDetectionMode = (arguments.length === 4) ? arguments[3] : EdgeDetectionMode.COLOR;
+		if(arguments.length > 1) {
+
+			searchImage = arguments[0];
+			areaImage = arguments[1];
+
+			if(arguments.length > 2) {
+
+				preset = arguments[2];
+
+			}
+
+			if(arguments.length > 3) {
+
+				edgeDetectionMode = arguments[3];
+
+			}
 
 		}
 
@@ -134,48 +149,47 @@ export class SMAAEffect extends Effect {
 		this.weightsPass = new ShaderPass(new SMAAWeightsMaterial());
 
 		// Load the lookup textures.
-		if(typeof Image !== "undefined") {
+		const loadingManager = new LoadingManager();
+		loadingManager.onLoad = () => {
 
-			let nbImagesLoaded = 0;
+			const searchTexture = new Texture(searchImage);
+			searchTexture.name = "SMAA.Search";
+			searchTexture.magFilter = NearestFilter;
+			searchTexture.minFilter = NearestFilter;
+			searchTexture.generateMipmaps = false;
+			searchTexture.needsUpdate = true;
+			searchTexture.flipY = true;
+			this.weightsMaterial.searchTexture = searchTexture;
 
-			const searchImage = new Image();
-			const areaImage = new Image();
+			const areaTexture = new Texture(areaImage);
+			areaTexture.name = "SMAA.Area";
+			areaTexture.magFilter = LinearFilter;
+			areaTexture.minFilter = LinearFilter;
+			areaTexture.generateMipmaps = false;
+			areaTexture.needsUpdate = true;
+			areaTexture.flipY = false;
+			this.weightsMaterial.areaTexture = areaTexture;
 
-			const onSMAAImageLoaded = () => {
+			this.dispatchEvent("load");
 
-				nbImagesLoaded++;
-				if (nbImagesLoaded === 2) this.dispatchEvent("load");
+		};
 
-			}
+		loadingManager.itemStart("search");
+		loadingManager.itemStart("area");
 
-			searchImage.addEventListener("load", () => {
+		if(searchImage !== undefined && areaImage !== undefined) {
 
-				const searchTexture = new Texture(searchImage);
-				searchTexture.name = "SMAA.Search";
-				searchTexture.magFilter = NearestFilter;
-				searchTexture.minFilter = NearestFilter;
-				searchTexture.generateMipmaps = false;
-				searchTexture.needsUpdate = true;
-				searchTexture.flipY = true;
-				this.weightsMaterial.searchTexture = searchTexture;
-				onSMAAImageLoaded();
+			// Use the provided images.
+			loadingManager.itemEnd("search");
+			loadingManager.itemEnd("area");
 
-			});
+		} else if(typeof Image !== "undefined") {
 
-			areaImage.addEventListener("load", () => {
-
-				const areaTexture = new Texture(areaImage);
-				areaTexture.name = "SMAA.Area";
-				areaTexture.magFilter = LinearFilter;
-				areaTexture.minFilter = LinearFilter;
-				areaTexture.generateMipmaps = false;
-				areaTexture.needsUpdate = true;
-				areaTexture.flipY = false;
-				this.weightsMaterial.areaTexture = areaTexture;
-				onSMAAImageLoaded()
-
-			});
-
+			// Load the lookup textures.
+			searchImage = new Image();
+			areaImage = new Image();
+			searchImage.addEventListener("load", () => loadingManager.itemEnd("search"));
+			areaImage.addEventListener("load", () => loadingManager.itemEnd("area"));
 			searchImage.src = searchImageDataURL;
 			areaImage.src = areaImageDataURL;
 
