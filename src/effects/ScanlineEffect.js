@@ -19,9 +19,10 @@ export class ScanlineEffect extends Effect {
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.OVERLAY] - The blend function of this effect.
 	 * @param {Number} [options.density=1.25] - The scanline density.
+	 * @param {Number} [options.scrollSpeed=0.0] - The scanline scroll speed.
 	 */
 
-	constructor({ blendFunction = BlendFunction.OVERLAY, density = 1.25 } = {}) {
+	constructor({ blendFunction = BlendFunction.OVERLAY, density = 1.25, scrollSpeed = 0.0 } = {}) {
 
 		super("ScanlineEffect", fragmentShader, {
 			blendFunction,
@@ -48,6 +49,8 @@ export class ScanlineEffect extends Effect {
 		 */
 
 		this.d = density;
+
+		this.scrollSpeed = scrollSpeed;
 
 	}
 
