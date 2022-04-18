@@ -253,20 +253,16 @@ export class SelectiveBloomEffect extends BloomEffect {
 		const selection = this.selection;
 		let renderTarget = inputBuffer;
 
-		if(selection.size > 0) {
+		// Render depth of selected objects.
+		const mask = camera.layers.mask;
+		camera.layers.set(selection.layer);
+		this.depthPass.render(renderer);
+		camera.layers.mask = mask;
 
-			// Render depth of selected objects.
-			const mask = camera.layers.mask;
-			camera.layers.set(selection.layer);
-			this.depthPass.render(renderer);
-			camera.layers.mask = mask;
-
-			// Discard colors based on depth.
-			renderTarget = this.renderTargetMasked;
-			this.clearPass.render(renderer, renderTarget);
-			this.depthMaskPass.render(renderer, inputBuffer, renderTarget);
-
-		}
+		// Discard colors based on depth.
+		renderTarget = this.renderTargetMasked;
+		this.clearPass.render(renderer, renderTarget);
+		this.depthMaskPass.render(renderer, inputBuffer, renderTarget);
 
 		// Render the bloom texture as usual.
 		super.update(renderer, renderTarget, deltaTime);
