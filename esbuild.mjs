@@ -1,7 +1,7 @@
 import { createRequire } from "module";
 import { glsl } from "esbuild-plugin-glsl";
 import tsPaths from "esbuild-ts-paths";
-import glob from "glob-promise";
+import glob from "tiny-glob";
 import esbuild from "esbuild";
 
 const require = createRequire(import.meta.url);
