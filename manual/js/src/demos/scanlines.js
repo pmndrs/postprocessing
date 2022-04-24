@@ -96,7 +96,8 @@ window.addEventListener("load", () => load().then((assets) => {
 		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
 	});
 
-	const effect = new ScanlineEffect();
+	const effect = new ScanlineEffect({ scrollSpeed: 0.006 });
+	effect.blendMode.opacity.value = 0.25;
 	composer.addPass(new RenderPass(scene, camera));
 	composer.addPass(new EffectPass(camera, effect));
 
