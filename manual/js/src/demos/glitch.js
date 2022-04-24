@@ -7,7 +7,6 @@ import {
 	Scene,
 	sRGBEncoding,
 	TextureLoader,
-	VSMShadowMap,
 	WebGLRenderer
 } from "three";
 
@@ -75,14 +74,8 @@ window.addEventListener("load", () => load().then((assets) => {
 	});
 
 	renderer.debug.checkShaderErrors = (window.location.hostname === "localhost");
-	renderer.setPixelRatio(window.devicePixelRatio);
-	renderer.outputEncoding = sRGBEncoding;
-	renderer.setClearColor(0x000000, 0);
 	renderer.physicallyCorrectLights = true;
-	renderer.shadowMap.type = VSMShadowMap;
-	renderer.shadowMap.autoUpdate = false;
-	renderer.shadowMap.needsUpdate = true;
-	renderer.shadowMap.enabled = true;
+	renderer.outputEncoding = sRGBEncoding;
 
 	const container = document.querySelector(".viewport");
 	container.dataset.epilepsyWarning = "1";
