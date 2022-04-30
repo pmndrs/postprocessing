@@ -289,6 +289,22 @@ export class EffectPass extends Pass {
 	}
 
 	/**
+	 * Sets the effects.
+	 *
+	 * @protected
+	 * @param {Effect[]} effects - The effects.
+	 */
+
+	setEffects(effects) {
+
+		this.dispose();
+		this.effects = effects.sort((a, b) => (b.attributes - a.attributes));
+		this.updateMaterial();
+		this.verifyResources();
+
+	}
+
+	/**
 	 * Compares required resources with device capabilities.
 	 *
 	 * @private
