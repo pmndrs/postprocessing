@@ -79,7 +79,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const container = document.querySelector(".viewport");
 	container.dataset.epilepsyWarning = "1";
-	container.append(renderer.domElement);
+	container.prepend(renderer.domElement);
 
 	// Camera & Controls
 

@@ -66,7 +66,7 @@ window.addEventListener("load", () => load().then((assets) => {
 	renderer.outputEncoding = sRGBEncoding;
 
 	const container = document.querySelector(".viewport");
-	container.append(renderer.domElement);
+	container.prepend(renderer.domElement);
 
 	// Camera & Controls
 

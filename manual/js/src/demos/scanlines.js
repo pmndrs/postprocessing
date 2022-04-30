@@ -67,7 +67,7 @@ window.addEventListener("load", () => load().then((assets) => {
 	renderer.outputEncoding = sRGBEncoding;
 
 	const container = document.querySelector(".viewport");
-	container.append(renderer.domElement);
+	container.prepend(renderer.domElement);
 
 	// Camera & Controls
 
@@ -98,6 +98,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const effect = new ScanlineEffect({ scrollSpeed: 0.006 });
 	effect.blendMode.opacity.value = 0.25;
+
 	composer.addPass(new RenderPass(scene, camera));
 	composer.addPass(new EffectPass(camera, effect));
 

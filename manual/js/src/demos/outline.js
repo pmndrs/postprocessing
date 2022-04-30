@@ -104,7 +104,7 @@ window.addEventListener("load", () => load().then((assets) => {
 	renderer.shadowMap.enabled = true;
 
 	const container = document.querySelector(".viewport");
-	container.append(renderer.domElement);
+	container.prepend(renderer.domElement);
 
 	// Camera & Controls
 
