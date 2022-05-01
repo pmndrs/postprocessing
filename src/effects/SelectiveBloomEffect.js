@@ -97,6 +97,18 @@ export class SelectiveBloomEffect extends BloomEffect {
 		this.renderTargetMasked.texture.generateMipmaps = false;
 
 		/**
+		 * Backing data.
+		 *
+		 * @type {Record<String, Boolean>}
+		 * @private
+		 */
+
+		this.data = {
+			inverted: false,
+			ignoreBackground: false
+		};
+
+		/**
 		 * A selection of objects.
 		 *
 		 * The default layer of this selection is 11.
@@ -143,12 +155,13 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 	get inverted() {
 
-		return (this.depthMaskMaterial.depthMode === NotEqualDepth);
+		return this.data.inverted;
 
 	}
 
 	set inverted(value) {
 
+		this.data.inverted = value;
 		this.depthMaskMaterial.depthMode = value ? NotEqualDepth : EqualDepth;
 
 	}
@@ -187,12 +200,13 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 	get ignoreBackground() {
 
-		return (this.depthMaskMaterial.maxDepthStrategy === DepthTestStrategy.DISCARD_MAX_DEPTH);
+		return this.data.ignoreBackground;
 
 	}
 
 	set ignoreBackground(value) {
 
+		this.data.ignoreBackground = value;
 		this.depthMaskMaterial.maxDepthStrategy = value ?
 			DepthTestStrategy.DISCARD_MAX_DEPTH :
 			DepthTestStrategy.KEEP_MAX_DEPTH;
@@ -251,18 +265,23 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 		const camera = this.camera;
 		const selection = this.selection;
+		const inverted = this.inverted;
 		let renderTarget = inputBuffer;
 
-		// Render depth of selected objects.
-		const mask = camera.layers.mask;
-		camera.layers.set(selection.layer);
-		this.depthPass.render(renderer);
-		camera.layers.mask = mask;
+		if(this.ignoreBackground || !inverted || selection.size > 0) {
 
-		// Discard colors based on depth.
-		renderTarget = this.renderTargetMasked;
-		this.clearPass.render(renderer, renderTarget);
-		this.depthMaskPass.render(renderer, inputBuffer, renderTarget);
+			// Render depth of selected objects.
+			const mask = camera.layers.mask;
+			camera.layers.set(selection.layer);
+			this.depthPass.render(renderer);
+			camera.layers.mask = mask;
+
+			// Discard colors based on depth.
+			renderTarget = this.renderTargetMasked;
+			this.clearPass.render(renderer, renderTarget);
+			this.depthMaskPass.render(renderer, inputBuffer, renderTarget);
+
+		}
 
 		// Render the bloom texture as usual.
 		super.update(renderer, renderTarget, deltaTime);
