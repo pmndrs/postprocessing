@@ -200,6 +200,66 @@ export class ToneMappingEffect extends Effect {
 	}
 
 	/**
+	 * The white point. Default is `16.0`.
+	 *
+	 * Only applies to Reinhard2 (Modified & Adaptive).
+	 *
+	 * @type {Number}
+	 */
+
+	get whitePoint() {
+
+		return this.uniforms.get("whitePoint").value;
+
+	}
+
+	set whitePoint(value) {
+
+		this.uniforms.get("whitePoint").value = value;
+
+	}
+
+	/**
+	 * The middle grey factor. Default is `0.6`.
+	 *
+	 * Only applies to Reinhard2 (Modified & Adaptive).
+	 *
+	 * @type {Number}
+	 */
+
+	get middleGrey() {
+
+		return this.uniforms.get("middleGrey").value;
+
+	}
+
+	set middleGrey(value) {
+
+		this.uniforms.get("middleGrey").value = value;
+
+	}
+
+	/**
+	 * The average luminance.
+	 *
+	 * Only applies to Reinhard2 (Modified).
+	 *
+	 * @type {Number}
+	 */
+
+	get averageLuminance() {
+
+		return this.uniforms.get("averageLuminance").value;
+
+	}
+
+	set averageLuminance(value) {
+
+		this.uniforms.get("averageLuminance").value = value;
+
+	}
+
+	/**
 	 * The adaptive luminance material.
 	 *
 	 * @type {AdaptiveLuminanceMaterial}
