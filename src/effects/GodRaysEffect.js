@@ -250,6 +250,19 @@ export class GodRaysEffect extends Effect {
 	}
 
 	/**
+	 * The depth mask material.
+	 *
+	 * @type {DepthMaskMaterial}
+	 * @private
+	 */
+
+	get depthMaskMaterial() {
+
+		return this.depthMaskPass.fullscreenMaterial;
+
+	}
+
+	/**
 	 * The internal god rays material.
 	 *
 	 * @type {GodRaysMaterial}
