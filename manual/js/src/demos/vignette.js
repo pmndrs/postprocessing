@@ -118,8 +118,7 @@ window.addEventListener("load", () => load().then((assets) => {
 	folder.addInput(effect, "technique", { options: VignetteTechnique });
 	folder.addInput(effect, "offset", { min: 0, max: 1, step: 1e-3 });
 	folder.addInput(effect, "darkness", { min: 0, max: 1, step: 1e-3 });
-	folder.addInput(effectPass.fullscreenMaterial, "dithering")
-		.on("change", () => effectPass.fullscreenMaterial.needsUpdate = true);
+	folder.addInput(effectPass, "dithering");
 	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
 	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
 
