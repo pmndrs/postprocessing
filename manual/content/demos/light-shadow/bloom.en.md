@@ -2,7 +2,7 @@
 layout: single
 collection: sections
 title: Bloom
-draft: true
+draft: false
 menu:
   demos:
     parent: light-shadow

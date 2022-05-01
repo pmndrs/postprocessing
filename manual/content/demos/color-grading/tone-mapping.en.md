@@ -1,15 +1,15 @@
 ---
 layout: single
 collection: sections
+title: Tone Mapping
 draft: false
-title: God Rays
 menu:
   demos:
-    parent: light-shadow
-    weight: 20
-script: god-rays
+    parent: color-grading
+    weight: 60
+script: tone-mapping
 ---
 
-# God Rays
+# Tone Mapping
 
 ### External Resources
