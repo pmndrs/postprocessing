@@ -48,7 +48,7 @@ export class DepthMaskMaterial extends ShaderMaterial {
 		super({
 			name: "DepthMaskMaterial",
 			defines: {
-				DEPTH_EPSILON: "0.00001",
+				DEPTH_EPSILON: "0.0001",
 				DEPTH_PACKING_0: "0",
 				DEPTH_PACKING_1: "0",
 				DEPTH_TEST_STRATEGY: DepthTestStrategy.KEEP_MAX_DEPTH
