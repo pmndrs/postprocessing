@@ -3973,6 +3973,16 @@ declare module "postprocessing" {
     constructor(camera: Camera, ...effects: Effect[]);
     fullscreenMaterial: EffectMaterial;
     /**
+     * The effects.
+     *
+     * Use `updateMaterial` or `recompile` after changing the effects and consider calling `dispose` to free resources
+     * of unused effects.
+     *
+     * @type {Effect[]}
+     * @protected
+     */
+    protected effects: Effect[];
+    /**
      * A time offset.
      *
      * Elapsed time will start at this value.
@@ -4002,12 +4012,13 @@ declare module "postprocessing" {
     /**
      * Indicates whether dithering is enabled.
      *
-     * Color quantization reduces banding artifacts but degrades performance.
-     *
      * @type {Boolean}
-     * @deprecated Use fullscreenMaterial.dithering instead.
      */
     get dithering(): boolean;
+    /**
+     * Updates the compound shader material.
+     */
+    protected updateMaterial(): void;
     /**
      * Rebuilds the shader material.
      */
@@ -5901,6 +5912,12 @@ declare module "postprocessing" {
      */
     get texture(): Texture;
     /**
+     * The depth mask material.
+     *
+     * @type {DepthMaskMaterial}
+     */
+    get depthMaskMaterial(): DepthMaskMaterial;
+    /**
      * Returns the god rays texture.
      *
      * @deprecated Use texture instead.
@@ -7720,6 +7737,30 @@ declare module "postprocessing" {
      * @type {ToneMappingMode}
      */
     get mode(): ToneMappingMode;
+    /**
+     * The white point. Default is `16.0`.
+     *
+     * Only applies to Reinhard2 (Modified & Adaptive).
+     *
+     * @type {Number}
+     */
+    get whitePoint(): number;
+    /**
+     * The middle grey factor. Default is `0.6`.
+     *
+     * Only applies to Reinhard2 (Modified & Adaptive).
+     *
+     * @type {Number}
+     */
+    get middleGrey(): number;
+    /**
+     * The average luminance.
+     *
+     * Only applies to Reinhard2 (Modified).
+     *
+     * @type {Number}
+     */
+    get averageLuminance(): number;
     /**
      * Returns the current tone mapping mode.
      *
