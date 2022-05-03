@@ -271,10 +271,7 @@ export class EffectPass extends Pass {
 	/**
 	 * Indicates whether dithering is enabled.
 	 *
-	 * Color quantization reduces banding artifacts but degrades performance.
-	 *
 	 * @type {Boolean}
-	 * @deprecated Use fullscreenMaterial.dithering instead.
 	 */
 
 	get dithering() {
