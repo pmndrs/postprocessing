@@ -185,13 +185,16 @@ export class EffectPass extends Pass {
 		this.fullscreenMaterial = new EffectMaterial(null, null, null, camera);
 
 		/**
-		 * The effects, sorted by attribute priority, DESC.
+		 * The effects.
+		 *
+		 * Use `updateMaterial` or `recompile` after changing the effects and consider calling `dispose` to free resources
+		 * of unused effects.
 		 *
 		 * @type {Effect[]}
-		 * @private
+		 * @protected
 		 */
 
-		this.effects = effects.sort((a, b) => (b.attributes - a.attributes));
+		this.effects = effects;
 
 		/**
 		 * Indicates whether this pass should skip rendering.
@@ -268,7 +271,10 @@ export class EffectPass extends Pass {
 	/**
 	 * Indicates whether dithering is enabled.
 	 *
+	 * Color quantization reduces banding artifacts but degrades performance.
+	 *
 	 * @type {Boolean}
+	 * @deprecated Use fullscreenMaterial.dithering instead.
 	 */
 
 	get dithering() {
@@ -286,18 +292,14 @@ export class EffectPass extends Pass {
 	}
 
 	/**
-	 * Sets the effects.
+	 * Sorts the effects by attribute priority, DESC.
 	 *
-	 * @protected
-	 * @param {Effect[]} effects - The effects.
+	 * @private
 	 */
 
-	setEffects(effects) {
+	sortEffects() {
 
-		this.dispose();
-		this.effects = effects.sort((a, b) => (b.attributes - a.attributes));
-		this.updateMaterial();
-		this.verifyResources();
+		this.effects = this.effects.sort((a, b) => (b.attributes - a.attributes));
 
 	}
 
@@ -333,7 +335,7 @@ export class EffectPass extends Pass {
 	/**
 	 * Updates the compound shader material.
 	 *
-	 * @private
+	 * @protected
 	 */
 
 	updateMaterial() {
@@ -354,6 +356,8 @@ export class EffectPass extends Pass {
 
 		let id = 0, varyings = 0, attributes = 0;
 		let transformedUv = false, readDepth = false;
+
+		this.sortEffects();
 
 		for(const effect of this.effects) {
 
