@@ -5,7 +5,6 @@ import {
 	PerspectiveCamera,
 	Scene,
 	sRGBEncoding,
-	VSMShadowMap,
 	WebGLRenderer
 } from "three";
 
@@ -64,17 +63,11 @@ window.addEventListener("load", () => load().then((assets) => {
 	});
 
 	renderer.debug.checkShaderErrors = (window.location.hostname === "localhost");
-	renderer.setPixelRatio(window.devicePixelRatio);
-	renderer.outputEncoding = sRGBEncoding;
-	renderer.setClearColor(0x000000, 0);
 	renderer.physicallyCorrectLights = true;
-	renderer.shadowMap.type = VSMShadowMap;
-	renderer.shadowMap.autoUpdate = false;
-	renderer.shadowMap.needsUpdate = true;
-	renderer.shadowMap.enabled = true;
+	renderer.outputEncoding = sRGBEncoding;
 
 	const container = document.querySelector(".viewport");
-	container.append(renderer.domElement);
+	container.prepend(renderer.domElement);
 
 	// Camera & Controls
 
@@ -103,7 +96,9 @@ window.addEventListener("load", () => load().then((assets) => {
 		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
 	});
 
-	const effect = new ScanlineEffect();
+	const effect = new ScanlineEffect({ scrollSpeed: 0.006 });
+	effect.blendMode.opacity.value = 0.25;
+
 	composer.addPass(new RenderPass(scene, camera));
 	composer.addPass(new EffectPass(camera, effect));
 

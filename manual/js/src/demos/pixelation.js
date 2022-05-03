@@ -1,24 +1,25 @@
 import {
 	CubeTextureLoader,
+	FogExp2,
 	LoadingManager,
 	PerspectiveCamera,
 	Scene,
 	sRGBEncoding,
-	VSMShadowMap,
 	WebGLRenderer
 } from "three";
 
 import {
+	BlendFunction,
+	PixelationEffect,
 	EffectComposer,
-	KawaseBlurPass,
-	KernelSize,
+	EffectPass,
 	RenderPass
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
-import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, FPSMeter, toRecord } from "../utils";
-import * as CornellBox from "../objects/CornellBox";
+import { SpatialControls } from "spatial-controls";
+import { calculateVerticalFoV, FPSMeter } from "../utils";
+import * as Domain from "../objects/Domain";
 
 function load() {
 
@@ -64,10 +65,6 @@ window.addEventListener("load", () => load().then((assets) => {
 	renderer.debug.checkShaderErrors = (window.location.hostname === "localhost");
 	renderer.physicallyCorrectLights = true;
 	renderer.outputEncoding = sRGBEncoding;
-	renderer.shadowMap.type = VSMShadowMap;
-	renderer.shadowMap.autoUpdate = false;
-	renderer.shadowMap.needsUpdate = true;
-	renderer.shadowMap.enabled = true;
 
 	const container = document.querySelector(".viewport");
 	container.prepend(renderer.domElement);
@@ -77,20 +74,20 @@ window.addEventListener("load", () => load().then((assets) => {
 	const camera = new PerspectiveCamera();
 	const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 	const settings = controls.settings;
-	settings.general.setMode(ControlMode.THIRD_PERSON);
 	settings.rotation.setSensitivity(2.2);
 	settings.rotation.setDamping(0.05);
-	settings.zoom.setDamping(0.1);
-	settings.translation.setEnabled(false);
-	controls.setPosition(0, 0, 5);
+	settings.translation.setDamping(0.1);
+	controls.setPosition(0, 0, 1);
+	controls.lookAt(0, 0, 0);
 
 	// Scene, Lights, Objects
 
 	const scene = new Scene();
+	scene.fog = new FogExp2(0x0a0809, 0.06);
 	scene.background = assets.get("sky");
-	scene.add(CornellBox.createLights());
-	scene.add(CornellBox.createEnvironment());
-	scene.add(CornellBox.createActors());
+	scene.add(Domain.createLights());
+	scene.add(Domain.createEnvironment(scene.background));
+	scene.add(Domain.createActors(scene.background));
 
 	// Post Processing
 
@@ -99,9 +96,9 @@ window.addEventListener("load", () => load().then((assets) => {
 		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
 	});
 
-	const kawaseBlurPass = new KawaseBlurPass({ height: 480 });
+	const effect = new PixelationEffect(5);
 	composer.addPass(new RenderPass(scene, camera));
-	composer.addPass(kawaseBlurPass);
+	composer.addPass(new EffectPass(camera, effect));
 
 	// Settings
 
@@ -110,13 +107,9 @@ window.addEventListener("load", () => load().then((assets) => {
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(kawaseBlurPass.resolution, "height", {
-		options: [360, 480, 720, 1080].reduce(toRecord, {}),
-		label: "resolution"
-	});
-
-	folder.addInput(kawaseBlurPass, "kernelSize", { options: KernelSize });
-	folder.addInput(kawaseBlurPass, "scale", { min: 0, max: 1, step: 0.01 });
+	folder.addInput(effect, "granularity", { min: 0, max: 20, step: 1 });
+	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
+	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 

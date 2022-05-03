@@ -1,24 +1,26 @@
 import {
 	CubeTextureLoader,
+	FogExp2,
 	LoadingManager,
 	PerspectiveCamera,
 	Scene,
 	sRGBEncoding,
-	VSMShadowMap,
 	WebGLRenderer
 } from "three";
 
 import {
+	BlendFunction,
 	EffectComposer,
-	KawaseBlurPass,
-	KernelSize,
-	RenderPass
+	EffectPass,
+	RenderPass,
+	ToneMappingEffect,
+	ToneMappingMode
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
-import { ControlMode, SpatialControls } from "spatial-controls";
+import { SpatialControls } from "spatial-controls";
 import { calculateVerticalFoV, FPSMeter, toRecord } from "../utils";
-import * as CornellBox from "../objects/CornellBox";
+import * as Domain from "../objects/Domain";
 
 function load() {
 
@@ -64,10 +66,6 @@ window.addEventListener("load", () => load().then((assets) => {
 	renderer.debug.checkShaderErrors = (window.location.hostname === "localhost");
 	renderer.physicallyCorrectLights = true;
 	renderer.outputEncoding = sRGBEncoding;
-	renderer.shadowMap.type = VSMShadowMap;
-	renderer.shadowMap.autoUpdate = false;
-	renderer.shadowMap.needsUpdate = true;
-	renderer.shadowMap.enabled = true;
 
 	const container = document.querySelector(".viewport");
 	container.prepend(renderer.domElement);
@@ -77,20 +75,20 @@ window.addEventListener("load", () => load().then((assets) => {
 	const camera = new PerspectiveCamera();
 	const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 	const settings = controls.settings;
-	settings.general.setMode(ControlMode.THIRD_PERSON);
 	settings.rotation.setSensitivity(2.2);
 	settings.rotation.setDamping(0.05);
-	settings.zoom.setDamping(0.1);
-	settings.translation.setEnabled(false);
-	controls.setPosition(0, 0, 5);
+	settings.translation.setDamping(0.1);
+	controls.setPosition(0, 0, 1);
+	controls.lookAt(0, 0, 0);
 
 	// Scene, Lights, Objects
 
 	const scene = new Scene();
+	scene.fog = new FogExp2(0x0a0809, 0.06);
 	scene.background = assets.get("sky");
-	scene.add(CornellBox.createLights());
-	scene.add(CornellBox.createEnvironment());
-	scene.add(CornellBox.createActors());
+	scene.add(Domain.createLights());
+	scene.add(Domain.createEnvironment(scene.background));
+	scene.add(Domain.createActors(scene.background));
 
 	// Post Processing
 
@@ -99,24 +97,47 @@ window.addEventListener("load", () => load().then((assets) => {
 		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
 	});
 
-	const kawaseBlurPass = new KawaseBlurPass({ height: 480 });
+	const effect = new ToneMappingEffect({
+		mode: ToneMappingMode.REINHARD2_ADAPTIVE,
+		resolution: 256,
+		whitePoint: 16.0,
+		middleGrey: 0.6,
+		minLuminance: 0.01,
+		averageLuminance: 0.01,
+		adaptationRate: 1.0
+	});
+
+	const effectPass = new EffectPass(camera, effect);
 	composer.addPass(new RenderPass(scene, camera));
-	composer.addPass(kawaseBlurPass);
+	composer.addPass(effectPass);
 
 	// Settings
 
 	const fpsMeter = new FPSMeter();
+	const adaptiveLuminanceMaterial = effect.adaptiveLuminanceMaterial;
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(kawaseBlurPass.resolution, "height", {
-		options: [360, 480, 720, 1080].reduce(toRecord, {}),
+	folder.addInput(renderer, "toneMappingExposure", { min: 0, max: 2, step: 1e-3 });
+	folder.addInput(effect, "mode", { options: ToneMappingMode });
+
+	let subfolder = folder.addFolder({ title: "Reinhard2" });
+	subfolder.addInput(effect, "whitePoint", { min: 1, max: 20, step: 1e-2 });
+	subfolder.addInput(effect, "middleGrey", { min: 0, max: 1, step: 1e-4 });
+	subfolder.addInput(effect, "averageLuminance", { min: 1e-4, max: 1, step: 1e-3 });
+	subfolder = subfolder.addFolder({ title: "Adaptive" });
+	subfolder.addInput(effect, "resolution", {
+		options: [64, 128, 256, 512].reduce(toRecord, {}),
 		label: "resolution"
 	});
 
-	folder.addInput(kawaseBlurPass, "kernelSize", { options: KernelSize });
-	folder.addInput(kawaseBlurPass, "scale", { min: 0, max: 1, step: 0.01 });
+	subfolder.addInput(adaptiveLuminanceMaterial, "minLuminance", { min: 0, max: 3, step: 1e-3 });
+	subfolder.addInput(adaptiveLuminanceMaterial, "adaptationRate", { min: 0, max: 3, step: 1e-3 });
+
+	folder.addInput(effectPass, "dithering");
+	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
+	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 

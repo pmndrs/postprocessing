@@ -1,5 +1,4 @@
-uniform vec2 texelSize;
-uniform vec2 halfTexelSize;
+uniform vec4 texelSize;
 uniform float kernel;
 uniform float scale;
 
@@ -13,7 +12,7 @@ varying vec2 vUv3;
 void main() {
 
 	vec2 uv = position.xy * 0.5 + 0.5;
-	vec2 dUv = (texelSize * vec2(kernel) + halfTexelSize) * scale;
+	vec2 dUv = (texelSize.xy * vec2(kernel) + texelSize.zw) * scale;
 
 	vUv0 = vec2(uv.x - dUv.x, uv.y + dUv.y);
 	vUv1 = vec2(uv.x + dUv.x, uv.y + dUv.y);

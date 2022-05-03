@@ -75,7 +75,7 @@ const renderer = new WebGLRenderer({
 });
 ```
 
-The [PostProcessor]() manages and runs [RenderPipelines]() which contain passes. Common setups will only require one pipeline that contains a [ClearPass](), a [GeometryPass]() and one or more [EffectPass]() instances. The latter is used to render fullscreen [Effects](). Please refer to the [three.js manual](https://threejs.org/docs/#manual/en/introduction/Creating-a-scene) for more information on how to setup the renderer, scene and camera.
+[RenderPipelines]() are used to group passes. Common setups will only require one pipeline that contains a [ClearPass](), a [GeometryPass]() and one or more [EffectPass]() instances. The latter is used to render fullscreen [Effects](). Please refer to the [three.js manual](https://threejs.org/docs/#manual/en/introduction/Creating-a-scene) for more information on how to setup the renderer, scene and camera.
 
 ```js
 import {
@@ -83,22 +83,22 @@ import {
 	ClearPass,
 	EffectPass,
 	GeometryPass,
-	PostProcessor,
 	RenderPipeline
 } from "postprocessing";
 
-const pipeline = new RenderPipeline();
+const renderer = ...;
+const scene = ...;
+const camera = ...;
+
+const pipeline = new RenderPipeline(renderer);
 pipeline.addPass(new ClearPass());
 pipeline.addPass(new GeometryPass(scene, camera, { multisampling: 4 }));
 pipeline.addPass(new EffectPass(new BloomEffect()));
 
-const postProcessor = new PostProcessor(renderer);
-postProcessor.addPipeline(pipeline);
-
 requestAnimationFrame(function render() {
 
 	requestAnimationFrame(render);
-	postProcessor.render();
+	pipeline.render();
 
 });
 ```

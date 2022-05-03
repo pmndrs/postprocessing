@@ -8,6 +8,7 @@ export class NavigationManager {
 
 	initialize() {
 
+		const sidebar = document.querySelector(".sidebar");
 		const nav = document.querySelector(".navigation");
 		const main = document.getElementById("main");
 		nav.scrollTop = Number(sessionStorage.getItem("nav-scroll"));
@@ -23,7 +24,7 @@ export class NavigationManager {
 
 		}
 
-		for(const a of nav.querySelectorAll("a")) {
+		for(const a of sidebar.querySelectorAll("a")) {
 
 			if(a.target !== "_blank") {
 

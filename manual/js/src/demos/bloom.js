@@ -1,24 +1,32 @@
 import {
 	CubeTextureLoader,
+	FogExp2,
+	Group,
+	IcosahedronGeometry,
 	LoadingManager,
+	Mesh,
+	MeshBasicMaterial,
 	PerspectiveCamera,
+	Raycaster,
 	Scene,
 	sRGBEncoding,
-	VSMShadowMap,
+	Vector2,
 	WebGLRenderer
 } from "three";
 
 import {
+	BlendFunction,
 	EffectComposer,
-	KawaseBlurPass,
+	EffectPass,
 	KernelSize,
-	RenderPass
+	RenderPass,
+	SelectiveBloomEffect
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
-import { ControlMode, SpatialControls } from "spatial-controls";
+import { SpatialControls } from "spatial-controls";
 import { calculateVerticalFoV, FPSMeter, toRecord } from "../utils";
-import * as CornellBox from "../objects/CornellBox";
+import * as Domain from "../objects/Domain";
 
 function load() {
 
@@ -64,10 +72,6 @@ window.addEventListener("load", () => load().then((assets) => {
 	renderer.debug.checkShaderErrors = (window.location.hostname === "localhost");
 	renderer.physicallyCorrectLights = true;
 	renderer.outputEncoding = sRGBEncoding;
-	renderer.shadowMap.type = VSMShadowMap;
-	renderer.shadowMap.autoUpdate = false;
-	renderer.shadowMap.needsUpdate = true;
-	renderer.shadowMap.enabled = true;
 
 	const container = document.querySelector(".viewport");
 	container.prepend(renderer.domElement);
@@ -77,20 +81,46 @@ window.addEventListener("load", () => load().then((assets) => {
 	const camera = new PerspectiveCamera();
 	const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 	const settings = controls.settings;
-	settings.general.setMode(ControlMode.THIRD_PERSON);
 	settings.rotation.setSensitivity(2.2);
 	settings.rotation.setDamping(0.05);
-	settings.zoom.setDamping(0.1);
-	settings.translation.setEnabled(false);
-	controls.setPosition(0, 0, 5);
+	settings.translation.setDamping(0.1);
+	controls.setPosition(0, 0, 1);
+	controls.lookAt(0, 0, 0);
 
 	// Scene, Lights, Objects
 
 	const scene = new Scene();
+	scene.fog = new FogExp2(0x0a0809, 0.06);
 	scene.background = assets.get("sky");
-	scene.add(CornellBox.createLights());
-	scene.add(CornellBox.createEnvironment());
-	scene.add(CornellBox.createActors());
+	scene.add(Domain.createLights());
+	scene.add(Domain.createEnvironment(scene.background));
+	scene.add(Domain.createActors(scene.background));
+
+	const orbs = new Group();
+
+	const n = 12;
+	const step = 2.0 * Math.PI / n;
+	const radius = 4.0;
+	let angle = 0.0;
+
+	for(let i = 0; i < n; ++i) {
+
+		const orb = new Mesh(
+			new IcosahedronGeometry(1, 3),
+			new MeshBasicMaterial({
+				color: Math.random() * 0xffffff
+			})
+		);
+
+		// Arrange the objects in a circle.
+		orb.position.set(radius * Math.cos(angle), 0, radius * Math.sin(angle));
+		orb.scale.setScalar(0.15);
+		orbs.add(orb);
+		angle += step;
+
+	}
+
+	scene.add(orbs);
 
 	// Post Processing
 
@@ -99,9 +129,45 @@ window.addEventListener("load", () => load().then((assets) => {
 		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
 	});
 
-	const kawaseBlurPass = new KawaseBlurPass({ height: 480 });
+	const effect = new SelectiveBloomEffect(scene, camera, {
+		blendFunction: BlendFunction.SCREEN,
+		kernelSize: KernelSize.MEDIUM,
+		luminanceThreshold: 0.1,
+		luminanceSmoothing: 0.2,
+		height: 480
+	});
+
+	const effectPass = new EffectPass(camera, effect);
 	composer.addPass(new RenderPass(scene, camera));
-	composer.addPass(kawaseBlurPass);
+	composer.addPass(effectPass);
+
+	// Object Picking
+
+	const ndc = new Vector2();
+	const raycaster = new Raycaster();
+	renderer.domElement.addEventListener("pointerdown", (event) => {
+
+		const clientRect = container.getBoundingClientRect();
+		const clientX = event.clientX - clientRect.left;
+		const clientY = event.clientY - clientRect.top;
+		ndc.x = (clientX / container.clientWidth) * 2.0 - 1.0;
+		ndc.y = -(clientY / container.clientHeight) * 2.0 + 1.0;
+		raycaster.setFromCamera(ndc, camera);
+		const intersects = raycaster.intersectObjects(orbs.children, true);
+
+		if(intersects.length > 0) {
+
+			effect.selection.toggle(intersects[0].object);
+
+		}
+
+	});
+
+	for(let i = 0; i < n; i += 2) {
+
+		effect.selection.add(orbs.children[i]);
+
+	}
 
 	// Settings
 
@@ -110,13 +176,22 @@ window.addEventListener("load", () => load().then((assets) => {
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(kawaseBlurPass.resolution, "height", {
+	folder.addInput(effect.resolution, "height", {
 		options: [360, 480, 720, 1080].reduce(toRecord, {}),
 		label: "resolution"
 	});
-
-	folder.addInput(kawaseBlurPass, "kernelSize", { options: KernelSize });
-	folder.addInput(kawaseBlurPass, "scale", { min: 0, max: 1, step: 0.01 });
+	folder.addInput(effect.blurPass, "kernelSize", { options: KernelSize });
+	folder.addInput(effect.blurPass, "scale", { min: 0, max: 1, step: 0.01 });
+	folder.addInput(effect, "intensity", { min: 0, max: 4, step: 0.01 });
+	let subfolder = folder.addFolder({ title: "Luminance Filter" });
+	subfolder.addInput(effect.luminancePass, "enabled");
+	subfolder.addInput(effect.luminanceMaterial, "threshold", { min: 0, max: 1, step: 0.01 });
+	subfolder.addInput(effect.luminanceMaterial, "smoothing", { min: 0, max: 1, step: 0.01 });
+	subfolder = folder.addFolder({ title: "Selection" });
+	subfolder.addInput(effect, "inverted");
+	subfolder.addInput(effect, "ignoreBackground");
+	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
+	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 
