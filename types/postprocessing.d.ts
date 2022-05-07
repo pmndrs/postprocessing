@@ -5278,8 +5278,8 @@ declare module "postprocessing" {
         height,
       }?: {
         blendFunction?: BlendFunction;
-        worldFocusDistance: number;
-        worldFocusRange: number;
+        worldFocusDistance?: number;
+        worldFocusRange?: number;
         focusDistance?: number;
         focalLength?: number;
         focusRange?: number;
@@ -7163,7 +7163,7 @@ declare module "postprocessing" {
       preset,
       edgeDetectionMode,
       predicationMode,
-    }: {
+    }?: {
       preset?: SMAAPreset;
       edgeDetectionMode?: EdgeDetectionMode;
       predicationMode?: PredicationMode;
