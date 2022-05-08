@@ -191,7 +191,7 @@ export class EffectPass extends Pass {
 		 * of unused effects.
 		 *
 		 * @type {Effect[]}
-		 * @protected
+		 * @private
 		 */
 
 		this.effects = effects;
