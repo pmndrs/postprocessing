@@ -185,6 +185,15 @@ export class EffectPass extends Pass {
 		this.fullscreenMaterial = new EffectMaterial(null, null, null, camera);
 
 		/**
+		 * An event listener that forwards events to {@link handleEvent}.
+		 *
+		 * @type {EventListener}
+		 * @private
+		 */
+
+		this.listener = (event) => this.handleEvent(event);
+
+		/**
 		 * The effects.
 		 *
 		 * Use `updateMaterial` or `recompile` after changing the effects and consider calling `dispose` to free resources
@@ -247,15 +256,6 @@ export class EffectPass extends Pass {
 		 */
 
 		this.maxTime = Number.POSITIVE_INFINITY;
-
-		/**
-		 * An event listener that forwards events to {@link handleEvent}.
-		 *
-		 * @type {EventListener}
-		 * @private
-		 */
-
-		this.listener = (event) => this.handleEvent(event);
 
 	}
 
