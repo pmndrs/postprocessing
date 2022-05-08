@@ -194,7 +194,8 @@ export class EffectPass extends Pass {
 		 * @private
 		 */
 
-		this.effects = effects;
+		this.effects = [];
+		this.setEffects(effects);
 
 		/**
 		 * Indicates whether this pass should skip rendering.
@@ -247,6 +248,15 @@ export class EffectPass extends Pass {
 
 		this.maxTime = Number.POSITIVE_INFINITY;
 
+		/**
+		 * An event listener that forwards events to {@link handleEvent}.
+		 *
+		 * @type {EventListener}
+		 * @private
+		 */
+
+		this.listener = (event) => this.handleEvent(event);
+
 	}
 
 	/**
@@ -289,14 +299,27 @@ export class EffectPass extends Pass {
 	}
 
 	/**
-	 * Sorts the effects by attribute priority, DESC.
+	 * Sets the effects.
 	 *
-	 * @private
+	 * @param {Effect[]} effects - The effects.
+	 * @protected
 	 */
 
-	sortEffects() {
+	setEffects(effects) {
 
-		this.effects = this.effects.sort((a, b) => (b.attributes - a.attributes));
+		for(const effect of this.effects) {
+
+			effect.removeEventListener("change", this.listener);
+
+		}
+
+		this.effects = effects.sort((a, b) => (b.attributes - a.attributes));
+
+		for(const effect of this.effects) {
+
+			effect.addEventListener("change", this.listener);
+
+		}
 
 	}
 
@@ -353,8 +376,6 @@ export class EffectPass extends Pass {
 
 		let id = 0, varyings = 0, attributes = 0;
 		let transformedUv = false, readDepth = false;
-
-		this.sortEffects();
 
 		for(const effect of this.effects) {
 
@@ -561,7 +582,6 @@ export class EffectPass extends Pass {
 		for(const effect of this.effects) {
 
 			effect.initialize(renderer, alpha, frameBufferType);
-			effect.addEventListener("change", (event) => this.handleEvent(event));
 
 		}
 
@@ -587,6 +607,7 @@ export class EffectPass extends Pass {
 
 		for(const effect of this.effects) {
 
+			effect.removeEventListener("change", this.listener);
 			effect.dispose();
 
 		}
