@@ -324,29 +324,33 @@ export class EffectPass extends Pass {
 	}
 
 	/**
-	 * Compares required resources with device capabilities.
+	 * Checks if the required resources are within limits.
 	 *
 	 * @private
 	 */
 
 	verifyResources() {
 
-		const capabilities = this.renderer.capabilities;
-		let max = Math.min(capabilities.maxFragmentUniforms, capabilities.maxVertexUniforms);
+		if(this.renderer !== null) {
 
-		if(this.uniformCount > max) {
+			const capabilities = this.renderer.capabilities;
+			let max = Math.min(capabilities.maxFragmentUniforms, capabilities.maxVertexUniforms);
 
-			console.warn("The current rendering context doesn't support more than " +
-				max + " uniforms, but " + this.uniformCount + " were defined");
+			if(this.uniformCount > max) {
 
-		}
+				console.warn("The current rendering context doesn't support more than " +
+					max + " uniforms, but " + this.uniformCount + " were defined");
 
-		max = capabilities.maxVaryings;
+			}
 
-		if(this.varyingCount > max) {
+			max = capabilities.maxVaryings;
 
-			console.warn("The current rendering context doesn't support more than " +
-				max + " varyings, but " + this.varyingCount + " were defined");
+			if(this.varyingCount > max) {
+
+				console.warn("The current rendering context doesn't support more than " +
+					max + " varyings, but " + this.varyingCount + " were defined");
+
+			}
 
 		}
 
