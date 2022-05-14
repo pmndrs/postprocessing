@@ -1,6 +1,6 @@
 float blend(const in float x, const in float y) {
 
-	return (y == 0.0) ? y : max(1.0 - (1.0 - x) / y, 0.0);
+	return (y == 0.0) ? 0.0 : max(1.0 - (1.0 - x) / y, 0.0);
 
 }
 
@@ -13,6 +13,6 @@ vec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {
 		blend(x.a, y.a)
 	);
 
-	return z * opacity + x * (1.0 - opacity);
+	return mix(x, z, opacity);
 
 }
