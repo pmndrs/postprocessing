@@ -8,14 +8,15 @@ import colorBurnBlendFunction from "./glsl/color-burn/shader.frag";
 import colorDodgeBlendFunction from "./glsl/color-dodge/shader.frag";
 import darkenBlendFunction from "./glsl/darken/shader.frag";
 import differenceBlendFunction from "./glsl/difference/shader.frag";
+import divideBlendFunction from "./glsl/divide/shader.frag";
 import exclusionBlendFunction from "./glsl/exclusion/shader.frag";
 import lightenBlendFunction from "./glsl/lighten/shader.frag";
 import multiplyBlendFunction from "./glsl/multiply/shader.frag";
-import divideBlendFunction from "./glsl/divide/shader.frag";
 import negationBlendFunction from "./glsl/negation/shader.frag";
 import normalBlendFunction from "./glsl/normal/shader.frag";
 import overlayBlendFunction from "./glsl/overlay/shader.frag";
 import reflectBlendFunction from "./glsl/reflect/shader.frag";
+import setBlendFunction from "./glsl/set/shader.frag";
 import screenBlendFunction from "./glsl/screen/shader.frag";
 import softLightBlendFunction from "./glsl/soft-light/shader.frag";
 import subtractBlendFunction from "./glsl/subtract/shader.frag";
@@ -36,14 +37,15 @@ const blendFunctions = new Map([
 	[BlendFunction.COLOR_DODGE, colorDodgeBlendFunction],
 	[BlendFunction.DARKEN, darkenBlendFunction],
 	[BlendFunction.DIFFERENCE, differenceBlendFunction],
+	[BlendFunction.DIVIDE, divideBlendFunction],
 	[BlendFunction.EXCLUSION, exclusionBlendFunction],
 	[BlendFunction.LIGHTEN, lightenBlendFunction],
 	[BlendFunction.MULTIPLY, multiplyBlendFunction],
-	[BlendFunction.DIVIDE, divideBlendFunction],
 	[BlendFunction.NEGATION, negationBlendFunction],
 	[BlendFunction.NORMAL, normalBlendFunction],
 	[BlendFunction.OVERLAY, overlayBlendFunction],
 	[BlendFunction.REFLECT, reflectBlendFunction],
+	[BlendFunction.SET, setBlendFunction],
 	[BlendFunction.SCREEN, screenBlendFunction],
 	[BlendFunction.SOFT_LIGHT, softLightBlendFunction],
 	[BlendFunction.SUBTRACT, subtractBlendFunction]
