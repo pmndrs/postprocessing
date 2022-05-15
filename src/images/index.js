@@ -1,8 +1,11 @@
-export { LUTOperation } from "./lut/LUTOperation";
-export { TetrahedralUpscaler } from "./lut/TetrahedralUpscaler";
-export { SMAAAreaImageData } from "./smaa/SMAAAreaImageData";
-export { SMAAImageGenerator } from "./smaa/SMAAImageGenerator";
-export { SMAASearchImageData } from "./smaa/SMAASearchImageData";
-export { LookupTexture, LookupTexture as LookupTexture3D } from "./textures/LookupTexture";
-export { NoiseTexture } from "./textures/NoiseTexture";
-export { RawImageData } from "./RawImageData";
+export * from "./lut/LUTOperation";
+export * from "./lut/TetrahedralUpscaler";
+export * from "./smaa/SMAAAreaImageData";
+export * from "./smaa/SMAAImageGenerator";
+export * from "./smaa/SMAASearchImageData";
+export * from "./textures/LookupTexture";
+export * from "./textures/NoiseTexture";
+export * from "./RawImageData";
+
+// Added for backward compatibility.
+export { LookupTexture as LookupTexture3D } from "./textures/LookupTexture";

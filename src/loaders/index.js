@@ -1,3 +1,3 @@
-export { LUT3dlLoader } from "./LUT3dlLoader";
-export { LUTCubeLoader } from "./LUTCubeLoader";
-export { SMAAImageLoader } from "./SMAAImageLoader";
+export * from "./LUT3dlLoader";
+export * from "./LUTCubeLoader";
+export * from "./SMAAImageLoader";

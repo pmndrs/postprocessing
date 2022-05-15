@@ -1,10 +1,13 @@
-export { ColorChannel } from "./ColorChannel";
-export { Disposable } from "./Disposable";
-export { EffectComposer } from "./EffectComposer";
-export { Initializable } from "./Initializable";
-export { KernelSize } from "./KernelSize";
-export { OverrideMaterialManager } from "./OverrideMaterialManager";
-export { Resizable } from "./Resizable";
-export { Resolution, Resolution as Resizer } from "./Resolution";
-export { Selection } from "./Selection";
-export { Timer } from "./Timer";
+export * from "./ColorChannel";
+export * from "./Disposable";
+export * from "./EffectComposer";
+export * from "./Initializable";
+export * from "./KernelSize";
+export * from "./OverrideMaterialManager";
+export * from "./Resizable";
+export * from "./Resolution";
+export * from "./Selection";
+export * from "./Timer";
+
+// Added for backward compatibility.
+export { Resolution as Resizer } from "./Resolution";
