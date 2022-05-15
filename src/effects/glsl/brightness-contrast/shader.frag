@@ -15,6 +15,6 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
 
 	}
 
-	outputColor = vec4(min(color + vec3(0.5), 1.0), inputColor.a);
+	outputColor = vec4(color + vec3(0.5), inputColor.a);
 
 }
