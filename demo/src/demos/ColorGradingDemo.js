@@ -17,7 +17,7 @@ import {
 	BlendFunction,
 	BrightnessContrastEffect,
 	ColorAverageEffect,
-	LUTEffect,
+	LUT3DEffect,
 	EdgeDetectionMode,
 	EffectPass,
 	HueSaturationEffect,
@@ -292,8 +292,8 @@ export class ColorGradingDemo extends PostProcessingDemo {
 		assets.set(lutNeutral8.name, lutNeutral8);
 
 		const lut = LookupTexture3D.from(assets.get("png/filmic1"));
-		const lutEffect = capabilities.isWebGL2 ? new LUTEffect(lut) :
-			new LUTEffect(lut.convertToUint8().toDataTexture());
+		const lutEffect = capabilities.isWebGL2 ? new LUT3DEffect(lut) :
+			new LUT3DEffect(lut.convertToUint8().toDataTexture());
 
 		// lutEffect.setInputEncoding(LinearEncoding); // Debug
 

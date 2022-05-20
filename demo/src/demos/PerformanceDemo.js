@@ -33,7 +33,7 @@ import {
 	HueSaturationEffect,
 	KernelSize,
 	LookupTexture3D,
-	LUTEffect,
+	LUT3DEffect,
 	NoiseEffect,
 	SepiaEffect,
 	ScanlineEffect,
@@ -343,8 +343,8 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 		const lut = LookupTexture3D.createNeutral(8);
 		const lutEffect = capabilities.isWebGL2 ?
-			new LUTEffect(lut.convertToUint8()) :
-			new LUTEffect(lut.convertToUint8().toDataTexture());
+			new LUT3DEffect(lut.convertToUint8()) :
+			new LUT3DEffect(lut.convertToUint8().toDataTexture());
 
 		colorAverageEffect.blendMode.opacity.value = 0.01;
 		sepiaEffect.blendMode.opacity.value = 0.01;

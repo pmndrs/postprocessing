@@ -14,7 +14,7 @@ import {
 
 import {
 	BlendFunction,
-	LUTEffect,
+	LUT3DEffect,
 	EffectComposer,
 	EffectPass,
 	LookupTexture,
@@ -182,8 +182,8 @@ window.addEventListener("load", () => load().then((assets) => {
 	const composer = new EffectComposer(renderer);
 
 	const lut = LookupTexture.from(assets.get("png/filmic1"));
-	const effect = renderer.capabilities.isWebGL2 ? new LUTEffect(lut) :
-		new LUTEffect(lut.convertToUint8().toDataTexture());
+	const effect = renderer.capabilities.isWebGL2 ? new LUT3DEffect(lut) :
+		new LUT3DEffect(lut.convertToUint8().toDataTexture());
 
 	composer.addPass(new RenderPass(scene, camera));
 	composer.addPass(new EffectPass(camera, effect));
