@@ -1,6 +1,3 @@
-#include <common>
-#include <dithering_pars_fragment>
-
 #ifdef FRAMEBUFFER_PRECISION_HIGH
 
 	uniform mediump sampler2D inputBuffer;
@@ -34,6 +31,5 @@ void main() {
 	gl_FragColor = sum * 0.25;
 
 	#include <encodings_fragment>
-	#include <dithering_fragment>
 
 }
