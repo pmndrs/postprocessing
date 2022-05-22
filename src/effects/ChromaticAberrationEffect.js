@@ -15,11 +15,11 @@ export class ChromaticAberrationEffect extends Effect {
 	 * Constructs a new chromatic aberration effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
 	 * @param {Vector2} [options.offset] - The color offset.
 	 */
 
-	constructor({ blendFunction = BlendFunction.NORMAL, offset = new Vector2(0.001, 0.0005) } = {}) {
+	constructor({ blendFunction, offset = new Vector2(0.001, 0.0005) } = {}) {
 
 		super("ChromaticAberrationEffect", fragmentShader, {
 			vertexShader,

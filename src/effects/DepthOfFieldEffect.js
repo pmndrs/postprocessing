@@ -23,7 +23,7 @@ export class DepthOfFieldEffect extends Effect {
 	 *
 	 * @param {Camera} camera - The main camera.
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
 	 * @param {Number} [options.worldFocusDistance] - The focus distance in world units.
 	 * @param {Number} [options.worldFocusRange] - The focus distance in world units.
 	 * @param {Number} [options.focusDistance=0.0] - The normalized focus distance. Range is [0.0, 1.0].
@@ -35,7 +35,7 @@ export class DepthOfFieldEffect extends Effect {
 	 */
 
 	constructor(camera, {
-		blendFunction = BlendFunction.NORMAL,
+		blendFunction,
 		worldFocusDistance,
 		worldFocusRange,
 		focusDistance = 0.0,

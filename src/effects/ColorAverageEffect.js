@@ -12,10 +12,10 @@ export class ColorAverageEffect extends Effect {
 	/**
 	 * Constructs a new color average effect.
 	 *
-	 * @param {BlendFunction} [blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {BlendFunction} [blendFunction] - The blend function of this effect.
 	 */
 
-	constructor(blendFunction = BlendFunction.NORMAL) {
+	constructor(blendFunction) {
 
 		super("ColorAverageEffect", fragmentShader, { blendFunction });
 

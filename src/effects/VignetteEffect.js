@@ -14,7 +14,7 @@ export class VignetteEffect extends Effect {
 	 * Constructs a new Vignette effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
 	 * @param {VignetteTechnique} [options.technique=VignetteTechnique.DEFAULT] - The Vignette technique.
 	 * @param {Boolean} [options.eskil=false] - Deprecated. Use technique instead.
 	 * @param {Number} [options.offset=0.5] - The Vignette offset.
@@ -22,7 +22,7 @@ export class VignetteEffect extends Effect {
 	 */
 
 	constructor({
-		blendFunction = BlendFunction.NORMAL,
+		blendFunction,
 		technique = VignetteTechnique.DEFAULT,
 		eskil = false,
 		offset = 0.5,

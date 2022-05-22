@@ -21,7 +21,7 @@ export class RealisticBokehEffect extends Effect {
 	 * Constructs a new bokeh effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
 	 * @param {Number} [options.focus=1.0] - The focus distance in world units.
 	 * @param {Number} [options.focalLength=24.0] - The focal length of the main camera.
 	 * @param {Number} [options.fStop=0.9] - The ratio of the lens focal length to the diameter of the entrance pupil (aperture).
@@ -38,7 +38,7 @@ export class RealisticBokehEffect extends Effect {
 	 */
 
 	constructor({
-		blendFunction = BlendFunction.NORMAL,
+		blendFunction,
 		focus = 1.0,
 		focalLength = 24.0,
 		fStop = 0.9,

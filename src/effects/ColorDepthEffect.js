@@ -16,11 +16,11 @@ export class ColorDepthEffect extends Effect {
 	 * Constructs a new color depth effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
 	 * @param {Number} [options.bits=16] - The color bit depth.
 	 */
 
-	constructor({ blendFunction = BlendFunction.NORMAL, bits = 16 } = {}) {
+	constructor({ blendFunction, bits = 16 } = {}) {
 
 		super("ColorDepthEffect", fragmentShader, {
 			blendFunction,

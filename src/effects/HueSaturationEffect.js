@@ -16,12 +16,12 @@ export class HueSaturationEffect extends Effect {
 	 * Constructs a new hue/saturation effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
 	 * @param {Number} [options.hue=0.0] - The hue in radians.
 	 * @param {Number} [options.saturation=0.0] - The saturation factor, ranging from -1 to 1, where 0 means no change.
 	 */
 
-	constructor({ blendFunction = BlendFunction.NORMAL, hue = 0.0, saturation = 0.0 } = {}) {
+	constructor({ blendFunction, hue = 0.0, saturation = 0.0 } = {}) {
 
 		super("HueSaturationEffect", fragmentShader, {
 			blendFunction,

@@ -15,10 +15,10 @@ export class LUT1DEffect extends Effect {
 	 *
 	 * @param {Texture} lut - The lookup texture.
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
 	 */
 
-	constructor(lut, { blendFunction = BlendFunction.NORMAL } = {}) {
+	constructor(lut, { blendFunction } = {}) {
 
 		super("LUT1DEffect", fragmentShader, {
 			blendFunction,

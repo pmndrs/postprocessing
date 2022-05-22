@@ -14,11 +14,11 @@ export class SepiaEffect extends Effect {
 	 * Constructs a new sepia effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
 	 * @param {Number} [options.intensity=1.0] - The intensity of the effect.
 	 */
 
-	constructor({ blendFunction = BlendFunction.NORMAL, intensity = 1.0 } = {}) {
+	constructor({ blendFunction, intensity = 1.0 } = {}) {
 
 		super("SepiaEffect", fragmentShader, {
 			blendFunction,

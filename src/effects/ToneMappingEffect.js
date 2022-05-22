@@ -24,7 +24,7 @@ export class ToneMappingEffect extends Effect {
 	 *
 	 * TODO Change default mode to ACES_FILMIC and white point to 4.
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
 	 * @param {Boolean} [options.adaptive=true] - Deprecated. Use mode instead.
 	 * @param {ToneMappingMode} [options.mode=ToneMappingMode.REINHARD2_ADAPTIVE] - The tone mapping mode.
 	 * @param {Number} [options.resolution=256] - The resolution of the luminance texture. Must be a power of two.
@@ -37,7 +37,7 @@ export class ToneMappingEffect extends Effect {
 	 */
 
 	constructor({
-		blendFunction = BlendFunction.NORMAL,
+		blendFunction,
 		adaptive = true,
 		mode = adaptive ? ToneMappingMode.REINHARD2_ADAPTIVE : ToneMappingMode.REINHARD2,
 		resolution = 256,

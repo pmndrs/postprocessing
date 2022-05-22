@@ -37,7 +37,7 @@ export class GlitchEffect extends Effect {
 	 *
 	 * TODO Change ratio to 0.15.
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
 	 * @param {Vector2} [options.chromaticAberrationOffset] - A chromatic aberration offset. If provided, the glitch effect will influence this offset.
 	 * @param {Vector2} [options.delay] - The minimum and maximum delay between glitch activations in seconds.
 	 * @param {Vector2} [options.duration] - The minimum and maximum duration of a glitch in seconds.
@@ -49,7 +49,7 @@ export class GlitchEffect extends Effect {
 	 */
 
 	constructor({
-		blendFunction = BlendFunction.NORMAL,
+		blendFunction,
 		chromaticAberrationOffset = null,
 		delay = new Vector2(1.5, 3.5),
 		duration = new Vector2(0.6, 1.0),

@@ -32,12 +32,14 @@ export class SMAAEffect extends Effect {
 	 * Constructs a new SMAA effect.
 	 *
 	 * @param {Object} [options] - The options.
+	 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
 	 * @param {SMAAPreset} [options.preset=SMAAPreset.MEDIUM] - The quality preset.
 	 * @param {EdgeDetectionMode} [options.edgeDetectionMode=EdgeDetectionMode.COLOR] - The edge detection mode.
 	 * @param {PredicationMode} [options.predicationMode=PredicationMode.DISABLED] - The predication mode.
 	 */
 
 	constructor({
+		blendFunction,
 		preset = SMAAPreset.MEDIUM,
 		edgeDetectionMode = EdgeDetectionMode.COLOR,
 		predicationMode = PredicationMode.DISABLED
@@ -45,7 +47,7 @@ export class SMAAEffect extends Effect {
 
 		super("SMAAEffect", fragmentShader, {
 			vertexShader,
-			blendFunction: BlendFunction.NORMAL,
+			blendFunction,
 			attributes: EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH,
 			uniforms: new Map([
 				["weightMap", new Uniform(null)]
