@@ -15,15 +15,15 @@ export class KawaseBlurPass extends Pass {
 	 * @param {Object} [options] - The options.
 	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - The blur render width.
 	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - The blur render height.
-	 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
+	 * @param {KernelSize} [options.kernelSize=KernelSize.MEDIUM] - The blur kernel size.
 	 * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
 	 */
 
 	constructor({
+		kernelSize = KernelSize.MEDIUM,
 		resolutionScale = 0.5,
 		width = Resolution.AUTO_SIZE,
 		height = Resolution.AUTO_SIZE,
-		kernelSize = KernelSize.LARGE
 	} = {}) {
 
 		super("KawaseBlurPass");
