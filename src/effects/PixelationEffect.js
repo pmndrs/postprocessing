@@ -1,7 +1,7 @@
 import { Uniform, Vector2 } from "three";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/pixelation/shader.frag";
+import fragmentShader from "./glsl/pixelation.frag";
 
 /**
  * A pixelation effect.

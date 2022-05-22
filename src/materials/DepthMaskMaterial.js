@@ -13,10 +13,10 @@ import {
 	Uniform
 } from "three";
 
-import fragmentShader from "./glsl/depth-mask/shader.frag";
-import vertexShader from "./glsl/common/shader.vert";
 import { DepthTestStrategy } from "../enums";
 
+import fragmentShader from "./glsl/depth-mask.frag";
+import vertexShader from "./glsl/common.vert";
 
 /**
  * A depth mask shader material.

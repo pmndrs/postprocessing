@@ -17,8 +17,8 @@ import { Effect } from "./Effect";
 import searchImageDataURL from "../textures/smaa/searchImageDataURL";
 import areaImageDataURL from "../textures/smaa/areaImageDataURL";
 
-import fragmentShader from "./glsl/smaa/shader.frag";
-import vertexShader from "./glsl/smaa/shader.vert";
+import fragmentShader from "./glsl/smaa.frag";
+import vertexShader from "./glsl/smaa.vert";
 
 /**
  * Subpixel Morphological Antialiasing (SMAA).

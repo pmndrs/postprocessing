@@ -4,7 +4,7 @@ import { BlendFunction, KernelSize } from "../enums";
 import { KawaseBlurPass, LuminancePass } from "../passes";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/bloom/shader.frag";
+import fragmentShader from "./glsl/bloom.frag";
 
 /**
  * A bloom effect.

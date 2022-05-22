@@ -1,8 +1,8 @@
 import { BasicDepthPacking, NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
 import { DepthCopyMode } from "../enums";
 
-import fragmentShader from "./glsl/depth-copy/shader.frag";
-import vertexShader from "./glsl/depth-copy/shader.vert";
+import fragmentShader from "./glsl/depth-copy.frag";
+import vertexShader from "./glsl/depth-copy.vert";
 
 /**
  * A depth copy shader material.

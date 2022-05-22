@@ -1,7 +1,7 @@
 import { NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
 
-import fragmentShader from "./glsl/outline/shader.frag";
-import vertexShader from "./glsl/outline/shader.vert";
+import fragmentShader from "./glsl/outline.frag";
+import vertexShader from "./glsl/outline.vert";
 
 /**
  * An outline shader material.

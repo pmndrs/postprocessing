@@ -2,7 +2,7 @@ import { Uniform } from "three";
 import { BlendFunction } from "../enums";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/brightness-contrast/shader.frag";
+import fragmentShader from "./glsl/brightness-contrast.frag";
 
 /**
  * A brightness/contrast effect.

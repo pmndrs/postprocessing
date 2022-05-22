@@ -18,7 +18,7 @@ import { DepthMaskMaterial, GodRaysMaterial } from "../materials";
 import { KawaseBlurPass, ClearPass, RenderPass, ShaderPass } from "../passes";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/god-rays/shader.frag";
+import fragmentShader from "./glsl/god-rays.frag";
 
 const v = new Vector3();
 const m = new Matrix4();

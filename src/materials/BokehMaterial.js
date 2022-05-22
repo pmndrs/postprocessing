@@ -1,7 +1,7 @@
 import { NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
 
-import fragmentShader from "./glsl/bokeh/shader.frag";
-import vertexShader from "./glsl/common/shader.vert";
+import fragmentShader from "./glsl/convolution.bokeh.frag";
+import vertexShader from "./glsl/common.vert";
 
 /**
  * A bokeh disc blur material.

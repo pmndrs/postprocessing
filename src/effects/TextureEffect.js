@@ -3,8 +3,8 @@ import { BlendFunction, ColorChannel } from "../enums";
 import { getTextureDecoding } from "../utils";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/texture/shader.frag";
-import vertexShader from "./glsl/texture/shader.vert";
+import fragmentShader from "./glsl/texture.frag";
+import vertexShader from "./glsl/texture.vert";
 
 /**
  * A texture effect.

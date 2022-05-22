@@ -15,7 +15,7 @@ import { SSAOMaterial } from "../materials";
 import { ShaderPass } from "../passes";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/ssao/shader.frag";
+import fragmentShader from "./glsl/ssao.frag";
 
 const NOISE_TEXTURE_SIZE = 64;
 

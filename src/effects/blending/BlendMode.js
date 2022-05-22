@@ -1,25 +1,25 @@
 import { EventDispatcher, Uniform } from "three";
-
-import addBlendFunction from "./glsl/add/shader.frag";
-import alphaBlendFunction from "./glsl/alpha/shader.frag";
-import averageBlendFunction from "./glsl/average/shader.frag";
-import colorBurnBlendFunction from "./glsl/color-burn/shader.frag";
-import colorDodgeBlendFunction from "./glsl/color-dodge/shader.frag";
-import darkenBlendFunction from "./glsl/darken/shader.frag";
-import differenceBlendFunction from "./glsl/difference/shader.frag";
-import divideBlendFunction from "./glsl/divide/shader.frag";
-import exclusionBlendFunction from "./glsl/exclusion/shader.frag";
-import lightenBlendFunction from "./glsl/lighten/shader.frag";
-import multiplyBlendFunction from "./glsl/multiply/shader.frag";
-import negationBlendFunction from "./glsl/negation/shader.frag";
-import normalBlendFunction from "./glsl/normal/shader.frag";
-import overlayBlendFunction from "./glsl/overlay/shader.frag";
-import reflectBlendFunction from "./glsl/reflect/shader.frag";
-import setBlendFunction from "./glsl/set/shader.frag";
-import screenBlendFunction from "./glsl/screen/shader.frag";
-import softLightBlendFunction from "./glsl/soft-light/shader.frag";
-import subtractBlendFunction from "./glsl/subtract/shader.frag";
 import { BlendFunction } from "../../enums";
+
+import addBlendFunction from "./glsl/add.frag";
+import alphaBlendFunction from "./glsl/alpha.frag";
+import averageBlendFunction from "./glsl/average.frag";
+import colorBurnBlendFunction from "./glsl/color-burn.frag";
+import colorDodgeBlendFunction from "./glsl/color-dodge.frag";
+import darkenBlendFunction from "./glsl/darken.frag";
+import differenceBlendFunction from "./glsl/difference.frag";
+import divideBlendFunction from "./glsl/divide.frag";
+import exclusionBlendFunction from "./glsl/exclusion.frag";
+import lightenBlendFunction from "./glsl/lighten.frag";
+import multiplyBlendFunction from "./glsl/multiply.frag";
+import negationBlendFunction from "./glsl/negation.frag";
+import normalBlendFunction from "./glsl/normal.frag";
+import overlayBlendFunction from "./glsl/overlay.frag";
+import reflectBlendFunction from "./glsl/reflect.frag";
+import setBlendFunction from "./glsl/set.frag";
+import screenBlendFunction from "./glsl/screen.frag";
+import softLightBlendFunction from "./glsl/soft-light.frag";
+import subtractBlendFunction from "./glsl/subtract.frag";
 
 /**
  * A blend function shader code catalogue.

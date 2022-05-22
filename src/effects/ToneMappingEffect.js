@@ -3,7 +3,7 @@ import { AdaptiveLuminancePass, LuminancePass } from "../passes";
 import { BlendFunction, ToneMappingMode } from "../enums";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/tone-mapping/shader.frag";
+import fragmentShader from "./glsl/tone-mapping.frag";
 
 /**
  * A tone mapping effect.

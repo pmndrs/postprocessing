@@ -1,8 +1,8 @@
 import { NoBlending, ShaderMaterial, Uniform, UnsignedByteType } from "three";
 import { ColorChannel, MaskFunction } from "../enums";
 
-import fragmentShader from "./glsl/mask/shader.frag";
-import vertexShader from "./glsl/common/shader.vert";
+import fragmentShader from "./glsl/mask.frag";
+import vertexShader from "./glsl/common.vert";
 
 /**
  * A mask shader material.

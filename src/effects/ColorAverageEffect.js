@@ -1,7 +1,7 @@
 import { BlendFunction } from "../enums";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/color-average/shader.frag";
+import fragmentShader from "./glsl/color-average.frag";
 
 /**
  * A fast greyscale effect.

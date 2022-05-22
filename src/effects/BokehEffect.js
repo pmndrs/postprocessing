@@ -2,7 +2,7 @@ import { Uniform } from "three";
 import { BlendFunction, EffectAttribute } from "../enums";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/bokeh/shader.frag";
+import fragmentShader from "./glsl/bokeh.frag";
 
 /**
  * A depth of field (bokeh) effect.

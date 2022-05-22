@@ -2,7 +2,7 @@ import { Uniform } from "three";
 import { BlendFunction } from "../enums";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/color-depth/shader.frag";
+import fragmentShader from "./glsl/color-depth.frag";
 
 /**
  * A color depth effect.

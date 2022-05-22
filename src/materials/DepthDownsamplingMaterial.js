@@ -1,7 +1,7 @@
 import { BasicDepthPacking, NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
 
-import fragmentShader from "./glsl/depth-downsampling/shader.frag";
-import vertexShader from "./glsl/depth-downsampling/shader.vert";
+import fragmentShader from "./glsl/depth-downsampling.frag";
+import vertexShader from "./glsl/depth-downsampling.vert";
 
 /**
  * A depth downsampling shader material.

@@ -14,7 +14,7 @@ import { LookupTexture } from "../textures";
 import { BlendFunction } from "../enums";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/lut-3d/shader.frag";
+import fragmentShader from "./glsl/lut-3d.frag";
 
 /**
  * A LUT effect.

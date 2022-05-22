@@ -2,7 +2,7 @@ import { Uniform, Vector4 } from "three";
 import { BlendFunction, EffectAttribute } from "../enums";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/realistic-bokeh/shader.frag";
+import fragmentShader from "./glsl/realistic-bokeh.frag";
 
 /**
  * Depth of Field shader v2.4.

@@ -1,8 +1,8 @@
 import { BasicDepthPacking, NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
 import { EdgeDetectionMode } from "../enums";
 
-import fragmentShader from "./glsl/edge-detection/shader.frag";
-import vertexShader from "./glsl/edge-detection/shader.vert";
+import fragmentShader from "./glsl/edge-detection.frag";
+import vertexShader from "./glsl/edge-detection.vert";
 
 /**
  * An edge detection material. Mainly used for SMAA.

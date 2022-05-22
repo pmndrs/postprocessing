@@ -2,7 +2,7 @@ import { Uniform, Vector2 } from "three";
 import { BlendFunction } from "../enums";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/dot-screen/shader.frag";
+import fragmentShader from "./glsl/dot-screen.frag";
 
 /**
  * A dot screen effect.

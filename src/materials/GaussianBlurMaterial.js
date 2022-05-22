@@ -1,8 +1,8 @@
 import { NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
 import { GaussKernel } from "../core";
 
-import fragmentShader from "./glsl/convolution/gaussian.frag";
-import vertexShader from "./glsl/convolution/gaussian.vert";
+import fragmentShader from "./glsl/convolution.gaussian.frag";
+import vertexShader from "./glsl/convolution.gaussian.vert";
 
 /**
  * An optimized Gaussian convolution shader material.

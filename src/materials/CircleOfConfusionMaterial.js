@@ -1,8 +1,8 @@
 import { BasicDepthPacking, NoBlending, PerspectiveCamera, ShaderMaterial, Uniform } from "three";
 import { orthographicDepthToViewZ, viewZToOrthographicDepth } from "../utils";
 
-import fragmentShader from "./glsl/circle-of-confusion/shader.frag";
-import vertexShader from "./glsl/common/shader.vert";
+import fragmentShader from "./glsl/circle-of-confusion.frag";
+import vertexShader from "./glsl/common.vert";
 
 /**
  * A Circle of Confusion shader material.

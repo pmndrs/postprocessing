@@ -1,8 +1,8 @@
 import { Uniform, Vector2, Vector3 } from "three";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/shock-wave/shader.frag";
-import vertexShader from "./glsl/shock-wave/shader.vert";
+import fragmentShader from "./glsl/shock-wave.frag";
+import vertexShader from "./glsl/shock-wave.vert";
 
 const HALF_PI = Math.PI * 0.5;
 const v = new Vector3();

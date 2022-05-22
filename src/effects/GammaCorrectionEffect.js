@@ -2,7 +2,7 @@ import { Uniform } from "three";
 import { BlendFunction } from "../enums";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/gamma-correction/shader.frag";
+import fragmentShader from "./glsl/gamma-correction.frag";
 
 /**
  * A gamma correction effect.

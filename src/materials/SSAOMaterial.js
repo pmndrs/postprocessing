@@ -1,8 +1,8 @@
 import { BasicDepthPacking, Matrix4, NoBlending, PerspectiveCamera, ShaderMaterial, Uniform, Vector2 } from "three";
 import { orthographicDepthToViewZ, viewZToOrthographicDepth } from "../utils";
 
-import fragmentShader from "./glsl/ssao/shader.frag";
-import vertexShader from "./glsl/ssao/shader.vert";
+import fragmentShader from "./glsl/ssao.frag";
+import vertexShader from "./glsl/ssao.vert";
 
 /**
  * A Screen Space Ambient Occlusion (SSAO) shader material.

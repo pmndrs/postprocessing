@@ -3,7 +3,7 @@ import { BlendFunction, GlitchMode } from "../enums";
 import { NoiseTexture } from "../textures/NoiseTexture";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/glitch/shader.frag";
+import fragmentShader from "./glsl/glitch.frag";
 
 const textureTag = "Glitch.Generated";
 

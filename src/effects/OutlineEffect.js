@@ -6,8 +6,8 @@ import { KawaseBlurPass, ClearPass, DepthPass, RenderPass, ShaderPass } from "..
 import { getTextureDecoding } from "../utils/getTextureDecoding";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/outline/shader.frag";
-import vertexShader from "./glsl/outline/shader.vert";
+import fragmentShader from "./glsl/outline.frag";
+import vertexShader from "./glsl/outline.vert";
 
 /**
  * An outline effect.

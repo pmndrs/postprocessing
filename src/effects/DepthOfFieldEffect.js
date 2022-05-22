@@ -6,7 +6,7 @@ import { KawaseBlurPass, ShaderPass } from "../passes";
 import { viewZToOrthographicDepth } from "../utils";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/depth-of-field/shader.frag";
+import fragmentShader from "./glsl/depth-of-field.frag";
 
 /**
  * A depth of field effect.
