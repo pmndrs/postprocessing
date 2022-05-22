@@ -15,5 +15,16 @@
 		"skipLibCheck": true,
 		"strictNullChecks": false,
 		"noImplicitOverride": true
+	},
+	"typedocOptions": {
+		"entryPoints": ["./src/index.ts"],
+		"out": "public/docs",
+		"theme": "default",
+		"readme": "none",
+		"excludePrivate": true,
+		"excludeInternal": true,
+		"includeVersion": true,
+		"hideGenerator": true,
+		"treatWarningsAsErrors": true
 	}
 }
