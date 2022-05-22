@@ -1,4 +1,4 @@
-import { NoBlending, ShaderMaterial, Uniform, Vector2, Vector4 } from "three";
+import { NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
 
 import fragmentShader from "./glsl/bokeh/shader.frag";
 import vertexShader from "./glsl/common/shader.vert";
@@ -29,8 +29,6 @@ export class BokehMaterial extends ShaderMaterial {
 				PASS: fill ? "2" : "1"
 			},
 			uniforms: {
-				kernel64: new Uniform(null),
-				kernel16: new Uniform(null),
 				inputBuffer: new Uniform(null),
 				cocBuffer: new Uniform(null),
 				texelSize: new Uniform(new Vector2()),
@@ -159,15 +157,15 @@ export class BokehMaterial extends ShaderMaterial {
 	generateKernel() {
 
 		const GOLDEN_ANGLE = 2.39996323;
-		const points64 = new Float32Array(128);
-		const points16 = new Float32Array(32);
+		const points64 = new Float64Array(128);
+		const points16 = new Float64Array(32);
 
 		let i64 = 0, i16 = 0;
 
-		for(let i = 0; i < 80; ++i) {
+		for(let i = 0, sqrt80 = Math.sqrt(80); i < 80; ++i) {
 
 			const theta = i * GOLDEN_ANGLE;
-			const r = Math.sqrt(i) / Math.sqrt(80);
+			const r = Math.sqrt(i) / sqrt80;
 			const u = r * Math.cos(theta), v = r * Math.sin(theta);
 
 			if(i % 5 === 0) {
@@ -184,30 +182,12 @@ export class BokehMaterial extends ShaderMaterial {
 
 		}
 
-		// Pack points into vec4 instances to reduce the uniform count.
-		const kernel64 = [];
-		const kernel16 = [];
-
-		for(let i = 0; i < 128;) {
-
-			kernel64.push(new Vector4(
-				points64[i++], points64[i++],
-				points64[i++], points64[i++]
-			));
-
-		}
-
-		for(let i = 0; i < 32;) {
-
-			kernel16.push(new Vector4(
-				points16[i++], points16[i++],
-				points16[i++], points16[i++]
-			));
-
-		}
-
-		this.uniforms.kernel64.value = kernel64;
-		this.uniforms.kernel16.value = kernel16;
+		// The kernel data is injected as const arrays to avoid uniform count limitations.
+		let kernelData = `const float kernel64[${points64.length}] = float[${points64.length}](\n\t`;
+		kernelData += Array.from(points64).map(v => v.toFixed(16)).join(",\n\t");
+		kernelData += `\n);\n\nconst float kernel16[${points16.length}] = float[${points16.length}](\n\t`;
+		kernelData += Array.from(points16).map(v => v.toFixed(16)).join(",\n\t");
+		this.fragmentShader = kernelData + "\n);\n\n" + fragmentShader;
 
 	}
 
