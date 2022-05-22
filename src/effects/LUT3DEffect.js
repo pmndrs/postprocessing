@@ -416,6 +416,3 @@ export class LUT3DEffect extends Effect {
 	}
 
 }
-
-/** @deprecated Renamed to LUT3DEffect. */
-export class LUTEffect extends LUT3DEffect {}

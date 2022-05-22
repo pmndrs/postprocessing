@@ -30,3 +30,6 @@ export * from "./SSAOEffect";
 export * from "./TextureEffect";
 export * from "./ToneMappingEffect";
 export * from "./VignetteEffect";
+
+/** @deprecated Renamed to LUT3DEffect. */
+export { LUT3DEffect as LUTEffect } from "./LUT3DEffect";

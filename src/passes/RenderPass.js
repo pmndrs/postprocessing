@@ -28,6 +28,7 @@ export class RenderPass extends Pass {
 		 * A clear pass.
 		 *
 		 * @type {ClearPass}
+		 * @readonly
 		 */
 
 		this.clearPass = new ClearPass();
