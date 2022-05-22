@@ -14,7 +14,7 @@ import { LookupTexture } from "../images/textures/LookupTexture";
 import { BlendFunction } from "./blending/BlendFunction";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/lut/shader.frag";
+import fragmentShader from "./glsl/lut-3d/shader.frag";
 
 /**
  * A LUT effect.
@@ -34,7 +34,7 @@ import fragmentShader from "./glsl/lut/shader.frag";
  * TODO Replace DataTexture3D with Data3DTexture.
  */
 
-export class LUTEffect extends Effect {
+export class LUT3DEffect extends Effect {
 
 	/**
 	 * Constructs a new color grading effect.
@@ -43,11 +43,16 @@ export class LUTEffect extends Effect {
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
 	 * @param {Boolean} [options.tetrahedralInterpolation=false] - Enables or disables tetrahedral interpolation.
+	 * @param {Encoding} [options.inputEncoding=sRGBEncoding] - LUT input encoding.
 	 */
 
-	constructor(lut, { blendFunction = BlendFunction.NORMAL, tetrahedralInterpolation = false } = {}) {
+	constructor(lut, {
+		blendFunction = BlendFunction.NORMAL,
+		tetrahedralInterpolation = false,
+		inputEncoding = sRGBEncoding
+	} = {}) {
 
-		super("LUTEffect", fragmentShader, {
+		super("LUT3DEffect", fragmentShader, {
 			blendFunction,
 			uniforms: new Map([
 				["lut", new Uniform(null)],
@@ -59,7 +64,7 @@ export class LUTEffect extends Effect {
 		});
 
 		this.tetrahedralInterpolation = tetrahedralInterpolation;
-		this.inputEncoding = sRGBEncoding;
+		this.inputEncoding = inputEncoding;
 		this.lut = lut;
 
 	}
@@ -411,3 +416,6 @@ export class LUTEffect extends Effect {
 	}
 
 }
+
+/** @deprecated Renamed to LUT3DEffect. */
+export class LUTEffect extends LUT3DEffect {}
