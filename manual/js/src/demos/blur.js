@@ -10,6 +10,7 @@ import {
 
 import {
 	EffectComposer,
+	GaussianBlurPass,
 	KawaseBlurPass,
 	KernelSize,
 	RenderPass
@@ -17,7 +18,7 @@ import {
 
 import { Pane } from "tweakpane";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, FPSMeter, toRecord } from "../utils";
+import { calculateVerticalFoV, FPSMeter } from "../utils";
 import * as CornellBox from "../objects/CornellBox";
 
 function load() {
@@ -99,8 +100,15 @@ window.addEventListener("load", () => load().then((assets) => {
 		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
 	});
 
-	const kawaseBlurPass = new KawaseBlurPass({ height: 480 });
+	const gaussianBlurPass = new GaussianBlurPass({ resolutionScale: 0.75, kernelSize: 35 });
+	const kawaseBlurPass = new KawaseBlurPass({ resolutionScale: 0.75, kernelSize: KernelSize.MEDIUM });
+
+	gaussianBlurPass.renderToScreen = true;
+	kawaseBlurPass.renderToScreen = true;
+	kawaseBlurPass.enabled = false;
+
 	composer.addPass(new RenderPass(scene, camera));
+	composer.addPass(gaussianBlurPass);
 	composer.addPass(kawaseBlurPass);
 
 	// Settings
@@ -110,13 +118,44 @@ window.addEventListener("load", () => load().then((assets) => {
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(kawaseBlurPass.resolution, "height", {
-		options: [360, 480, 720, 1080].reduce(toRecord, {}),
-		label: "resolution"
+
+	const BlurTechnique = { GAUSSIAN: 0, KAWASE: 1 };
+	const params = { technique: BlurTechnique.GAUSSIAN };
+	folder.addInput(params, "technique", { options: BlurTechnique }).on("change", (event) => {
+
+		gaussianBlurPass.enabled = (event.value === BlurTechnique.GAUSSIAN);
+		kawaseBlurPass.enabled = (event.value === BlurTechnique.KAWASE);
+
 	});
 
-	folder.addInput(kawaseBlurPass, "kernelSize", { options: KernelSize });
-	folder.addInput(kawaseBlurPass, "scale", { min: 0, max: 1, step: 0.01 });
+	const tab = folder.addTab({
+		pages: [{ title: "Gaussian" }, { title: "Kawase" }]
+	});
+
+	/* tab.on("select", (event) => {
+
+		gaussianBlurPass.enabled = (event.index === 0);
+		kawaseBlurPass.enabled = (event.index === 1);
+
+	}); */
+
+	tab.pages[0].addInput(gaussianBlurPass.blurMaterial, "kernelSize", {
+		options: {
+			"7x7": 7,
+			"15x15": 15,
+			"25x25": 25,
+			"35x35": 35,
+			"63x63": 63,
+			"127x127": 127,
+			"255x255": 255
+		}
+	});
+	tab.pages[0].addInput(gaussianBlurPass.blurMaterial, "scale", { min: 0, max: 2, step: 0.01 });
+	tab.pages[0].addInput(gaussianBlurPass.resolution, "scale", { min: 0.5, max: 1, step: 0.05, label: "resolution" });
+
+	tab.pages[1].addInput(kawaseBlurPass.blurMaterial, "kernelSize", { options: KernelSize });
+	tab.pages[1].addInput(kawaseBlurPass.blurMaterial, "scale", { min: 0, max: 2, step: 0.01 });
+	tab.pages[1].addInput(kawaseBlurPass.resolution, "scale", { min: 0.5, max: 1, step: 0.05, label: "resolution" });
 
 	// Resize Handler
 
