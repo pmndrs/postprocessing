@@ -1,6 +1,5 @@
 import { BasicDepthPacking, UnsignedByteType } from "three";
-import { BlendFunction } from "../effects/blending";
-import { EffectAttribute } from "../effects/Effect";
+import { BlendFunction, EffectAttribute } from "../enums";
 import { EffectMaterial } from "../materials";
 import { Pass } from "./Pass";
 

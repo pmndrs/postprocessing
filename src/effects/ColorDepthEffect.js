@@ -1,5 +1,5 @@
 import { Uniform } from "three";
-import { BlendFunction } from "./blending/BlendFunction";
+import { BlendFunction } from "../enums";
 import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/color-depth/shader.frag";

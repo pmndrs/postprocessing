@@ -1,6 +1,7 @@
 import { LinearFilter, sRGBEncoding, UnsignedByteType, WebGLRenderTarget } from "three";
 import { CopyMaterial, KawaseBlurMaterial } from "../materials";
-import { KernelSize, Resolution } from "../core";
+import { Resolution } from "../core";
+import { KernelSize } from "../enums";
 import { Pass } from "./Pass";
 
 /**

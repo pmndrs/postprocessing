@@ -1,21 +1,8 @@
 import { Uniform } from "three";
-import { BlendFunction } from "./blending";
+import { BlendFunction, VignetteTechnique } from "../enums";
 import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/vignette/shader.frag";
-
-/**
- * An enumeration of Vignette techniques.
- *
- * @type {Object}
- * @property {Number} DEFAULT - Produces a dusty look.
- * @property {Number} ESKIL - Produces a burned look.
- */
-
-export const VignetteTechnique = {
-	DEFAULT: 0,
-	ESKIL: 1
-};
 
 /**
  * A Vignette effect.

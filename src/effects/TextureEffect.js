@@ -1,7 +1,6 @@
 import { Uniform, UnsignedByteType } from "three";
-import { ColorChannel } from "../core/ColorChannel";
-import { getTextureDecoding } from "../utils/getTextureDecoding";
-import { BlendFunction } from "./blending/BlendFunction";
+import { BlendFunction, ColorChannel } from "../enums";
+import { getTextureDecoding } from "../utils";
 import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/texture/shader.frag";

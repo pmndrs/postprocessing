@@ -9,11 +9,11 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { Selection } from "../core/Selection";
-import { DepthMaskMaterial, DepthTestStrategy } from "../materials";
+import { Selection } from "../core";
+import { EffectAttribute, DepthTestStrategy } from "../enums";
+import { DepthMaskMaterial } from "../materials";
 import { ClearPass, DepthPass, ShaderPass } from "../passes";
 import { BloomEffect } from "./BloomEffect";
-import { EffectAttribute } from "./Effect";
 
 /**
  * A selective bloom effect.

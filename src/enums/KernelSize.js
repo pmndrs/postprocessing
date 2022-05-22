@@ -1,5 +1,5 @@
 /**
- * A blur kernel size enumeration.
+ * An enumeration of blur kernel sizes.
  *
  * @type {Object}
  * @property {Number} VERY_SMALL - A very small kernel that matches a 7x7 Gaussian blur kernel.

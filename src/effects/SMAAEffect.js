@@ -9,33 +9,16 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { EdgeDetectionMaterial, EdgeDetectionMode, PredicationMode, SMAAWeightsMaterial } from "../materials";
+import { BlendFunction, EdgeDetectionMode, EffectAttribute, PredicationMode, SMAAPreset } from "../enums";
+import { EdgeDetectionMaterial, SMAAWeightsMaterial } from "../materials";
 import { ClearPass, ShaderPass } from "../passes";
-import { BlendFunction } from "./blending/BlendFunction";
-import { Effect, EffectAttribute } from "./Effect";
+import { Effect } from "./Effect";
 
 import searchImageDataURL from "../images/smaa/searchImageDataURL";
 import areaImageDataURL from "../images/smaa/areaImageDataURL";
 
 import fragmentShader from "./glsl/smaa/shader.frag";
 import vertexShader from "./glsl/smaa/shader.vert";
-
-/**
- * An enumeration of SMAA presets.
- *
- * @type {Object}
- * @property {Number} LOW - Results in around 60% of the maximum quality.
- * @property {Number} MEDIUM - Results in around 80% of the maximum quality.
- * @property {Number} HIGH - Results in around 95% of the maximum quality.
- * @property {Number} ULTRA - Results in around 99% of the maximum quality.
- */
-
-export const SMAAPreset = {
-	LOW: 0,
-	MEDIUM: 1,
-	HIGH: 2,
-	ULTRA: 3
-};
 
 /**
  * Subpixel Morphological Antialiasing (SMAA).

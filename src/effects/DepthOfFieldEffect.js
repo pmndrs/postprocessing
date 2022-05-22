@@ -1,10 +1,10 @@
 import { BasicDepthPacking, LinearFilter, sRGBEncoding, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
-import { BokehMaterial, CircleOfConfusionMaterial, MaskFunction, MaskMaterial } from "../materials";
-import { ColorChannel, KernelSize, Resolution } from "../core";
+import { BokehMaterial, CircleOfConfusionMaterial, MaskMaterial } from "../materials";
+import { BlendFunction, ColorChannel, EffectAttribute, KernelSize, MaskFunction } from "../enums";
+import { Resolution } from "../core";
 import { KawaseBlurPass, ShaderPass } from "../passes";
 import { viewZToOrthographicDepth } from "../utils";
-import { BlendFunction } from "./blending/BlendFunction";
-import { Effect, EffectAttribute } from "./Effect";
+import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/depth-of-field/shader.frag";
 

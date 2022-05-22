@@ -12,11 +12,11 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { KernelSize, Resolution } from "../core";
+import { Resolution } from "../core";
+import { BlendFunction, EffectAttribute, KernelSize } from "../enums";
 import { DepthMaskMaterial, GodRaysMaterial } from "../materials";
 import { KawaseBlurPass, ClearPass, RenderPass, ShaderPass } from "../passes";
-import { BlendFunction } from "./blending/BlendFunction";
-import { Effect, EffectAttribute } from "./Effect";
+import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/god-rays/shader.frag";
 

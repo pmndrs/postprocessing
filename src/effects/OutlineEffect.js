@@ -1,9 +1,9 @@
 import { Color, LinearFilter, RepeatWrapping, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
-import { KernelSize, Resolution, Selection } from "../core";
+import { Resolution, Selection } from "../core";
+import { BlendFunction, KernelSize } from "../enums";
 import { DepthComparisonMaterial, OutlineMaterial } from "../materials";
 import { KawaseBlurPass, ClearPass, DepthPass, RenderPass, ShaderPass } from "../passes";
 import { getTextureDecoding } from "../utils/getTextureDecoding";
-import { BlendFunction } from "./blending/BlendFunction";
 import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/outline/shader.frag";

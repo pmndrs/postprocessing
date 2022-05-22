@@ -10,8 +10,8 @@ import {
 	Vector3
 } from "three";
 
-import { LookupTexture } from "../images/textures/LookupTexture";
-import { BlendFunction } from "./blending/BlendFunction";
+import { LookupTexture } from "../textures";
+import { BlendFunction } from "../enums";
 import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/lut-3d/shader.frag";

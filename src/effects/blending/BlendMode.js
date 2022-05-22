@@ -1,5 +1,4 @@
 import { EventDispatcher, Uniform } from "three";
-import { BlendFunction } from "./BlendFunction";
 
 import addBlendFunction from "./glsl/add/shader.frag";
 import alphaBlendFunction from "./glsl/alpha/shader.frag";
@@ -20,6 +19,7 @@ import setBlendFunction from "./glsl/set/shader.frag";
 import screenBlendFunction from "./glsl/screen/shader.frag";
 import softLightBlendFunction from "./glsl/soft-light/shader.frag";
 import subtractBlendFunction from "./glsl/subtract/shader.frag";
+import { BlendFunction } from "../../enums";
 
 /**
  * A blend function shader code catalogue.

@@ -8,12 +8,12 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { BlendFunction } from "./blending/BlendFunction";
 import { Resolution } from "../core/Resolution";
-import { NoiseTexture } from "../images/textures/NoiseTexture";
+import { BlendFunction, EffectAttribute } from "../enums";
+import { NoiseTexture } from "../textures/NoiseTexture";
 import { SSAOMaterial } from "../materials";
 import { ShaderPass } from "../passes";
-import { Effect, EffectAttribute } from "./Effect";
+import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/ssao/shader.frag";
 

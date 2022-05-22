@@ -1,5 +1,5 @@
 import { NoBlending, ShaderMaterial, Uniform, Vector2, Vector4 } from "three";
-import { KernelSize } from "../core";
+import { KernelSize } from "../enums";
 
 import fragmentShader from "./glsl/convolution/kawase.frag";
 import vertexShader from "./glsl/convolution/kawase.vert";

@@ -1,7 +1,7 @@
 import { LinearFilter, sRGBEncoding, Uniform, WebGLRenderTarget } from "three";
-import { KernelSize, Resolution } from "../core";
+import { Resolution } from "../core";
+import { BlendFunction, KernelSize } from "../enums";
 import { KawaseBlurPass, LuminancePass } from "../passes";
-import { BlendFunction } from "./blending/BlendFunction";
 import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/bloom/shader.frag";
