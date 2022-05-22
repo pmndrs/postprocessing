@@ -17,9 +17,9 @@ const kernelPresets = [
  * An optimized convolution shader material.
  *
  * Based on the GDC2003 Presentation by Masaki Kawase, Bunkasha Games:
- *  Frame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L (Wreckless)
+ * "Frame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L (Wreckless)"
  * and an article by Filip Strugar, Intel:
- *  An investigation of fast real-time GPU-based image blur algorithms
+ * "An investigation of fast real-time GPU-based image blur algorithms"
  *
  * Further modified according to Apple's [Best Practices for Shaders](https://goo.gl/lmRoM5).
  *
