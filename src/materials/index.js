@@ -10,6 +10,7 @@ export * from "./DepthMaskMaterial";
 export * from "./EdgeDetectionMaterial";
 export * from "./EdgeDetectionMaterial";
 export * from "./EffectMaterial";
+export * from "./GaussianBlurMaterial";
 export * from "./GodRaysMaterial";
 export * from "./LuminanceMaterial";
 export * from "./MaskMaterial";
