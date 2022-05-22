@@ -7,6 +7,7 @@ export * from "./DepthDownsamplingPass";
 export * from "./DepthPickingPass";
 export * from "./DepthCopyPass";
 export * from "./EffectPass";
+export * from "./GaussianBlurPass";
 export * from "./KawaseBlurPass";
 export * from "./LambdaPass";
 export * from "./LuminancePass";
