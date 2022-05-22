@@ -1,7 +1,17 @@
-import { NoBlending, ShaderMaterial, Uniform, Vector4 } from "three";
+import { NoBlending, ShaderMaterial, Uniform, Vector2, Vector4 } from "three";
+import { KernelSize } from "../core";
 
 import fragmentShader from "./glsl/convolution/kawase.frag";
 import vertexShader from "./glsl/convolution/kawase.vert";
+
+const kernelPresets = [
+	new Float32Array([0.0, 0.0]),
+	new Float32Array([0.0, 1.0, 1.0]),
+	new Float32Array([0.0, 1.0, 1.0, 2.0]),
+	new Float32Array([0.0, 1.0, 2.0, 2.0, 3.0]),
+	new Float32Array([0.0, 1.0, 2.0, 3.0, 4.0, 4.0, 5.0]),
+	new Float32Array([0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 7.0, 8.0, 9.0, 10.0])
+];
 
 /**
  * An optimized convolution shader material.
@@ -33,8 +43,8 @@ export class KawaseBlurMaterial extends ShaderMaterial {
 			uniforms: {
 				inputBuffer: new Uniform(null),
 				texelSize: new Uniform(new Vector4()),
-				kernel: new Uniform(0.0),
-				scale: new Uniform(1.0)
+				scale: new Uniform(new Vector2(1.0, 1.0)),
+				kernel: new Uniform(0.0)
 			},
 			blending: NoBlending,
 			depthWrite: false,
@@ -47,6 +57,14 @@ export class KawaseBlurMaterial extends ShaderMaterial {
 		this.toneMapped = false;
 
 		this.setTexelSize(texelSize.x, texelSize.y);
+
+		/**
+		 * The kernel size.
+		 *
+		 * @type {KernelSize}
+		 */
+
+		this.kernelSize = KernelSize.MEDIUM;
 
 	}
 
@@ -76,6 +94,31 @@ export class KawaseBlurMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The kernel sequence for the current kernel size.
+	 *
+	 * @type {Float32Array}
+	 */
+
+	get kernelSequence() {
+
+		return kernelPresets[this.kernelSize];
+
+	}
+
+	/**
+	 * The resolution scale.
+	 *
+	 * @type {Number}
+	 * @internal
+	 */
+
+	set resolutionScale(value) {
+
+		this.uniforms.scale.value.x = value;
+
+	}
+
+	/**
 	 * The blur scale.
 	 *
 	 * @type {Number}
@@ -83,13 +126,13 @@ export class KawaseBlurMaterial extends ShaderMaterial {
 
 	get scale() {
 
-		return this.uniforms.scale.value;
+		return this.uniforms.scale.value.y;
 
 	}
 
 	set scale(value) {
 
-		this.uniforms.scale.value = value;
+		this.uniforms.scale.value.y = value;
 
 	}
 
