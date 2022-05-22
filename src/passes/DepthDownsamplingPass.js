@@ -168,7 +168,7 @@ export class DepthDownsamplingPass extends Pass {
 
 		if(!renderer.capabilities.isWebGL2) {
 
-			console.error("The DepthDownsamplingPass requires WebGL 2");
+			throw new Error("The DepthDownsamplingPass requires WebGL 2");
 
 		}
 
