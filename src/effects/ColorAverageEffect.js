@@ -1,4 +1,3 @@
-import { BlendFunction } from "../enums";
 import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/color-average.frag";

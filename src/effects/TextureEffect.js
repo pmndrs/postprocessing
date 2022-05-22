@@ -1,5 +1,5 @@
 import { Uniform, UnsignedByteType } from "three";
-import { BlendFunction, ColorChannel } from "../enums";
+import { ColorChannel } from "../enums";
 import { getTextureDecoding } from "../utils";
 import { Effect } from "./Effect";
 

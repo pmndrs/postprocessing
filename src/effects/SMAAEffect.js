@@ -9,7 +9,7 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { BlendFunction, EdgeDetectionMode, EffectAttribute, PredicationMode, SMAAPreset } from "../enums";
+import { EdgeDetectionMode, EffectAttribute, PredicationMode, SMAAPreset } from "../enums";
 import { EdgeDetectionMaterial, SMAAWeightsMaterial } from "../materials";
 import { ClearPass, ShaderPass } from "../passes";
 import { Effect } from "./Effect";

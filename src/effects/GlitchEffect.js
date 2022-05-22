@@ -1,5 +1,5 @@
 import { NearestFilter, RepeatWrapping, RGBAFormat, Uniform, Vector2 } from "three";
-import { BlendFunction, GlitchMode } from "../enums";
+import { GlitchMode } from "../enums";
 import { NoiseTexture } from "../textures/NoiseTexture";
 import { Effect } from "./Effect";
 

@@ -1,5 +1,4 @@
 import { Uniform, Vector3 } from "three";
-import { BlendFunction } from "../enums";
 import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/hue-saturation.frag";

@@ -1,5 +1,5 @@
 import { Uniform } from "three";
-import { BlendFunction, VignetteTechnique } from "../enums";
+import { VignetteTechnique } from "../enums";
 import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/vignette.frag";

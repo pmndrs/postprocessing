@@ -1,5 +1,4 @@
 import { FloatType, HalfFloatType, Uniform } from "three";
-import { BlendFunction } from "../enums";
 import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/lut-1d.frag";

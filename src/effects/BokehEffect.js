@@ -1,5 +1,5 @@
 import { Uniform } from "three";
-import { BlendFunction, EffectAttribute } from "../enums";
+import { EffectAttribute } from "../enums";
 import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/bokeh.frag";
