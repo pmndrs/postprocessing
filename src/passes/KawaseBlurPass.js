@@ -13,10 +13,10 @@ export class KawaseBlurPass extends Pass {
 	 * Constructs a new Kawase blur pass.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {Number} [options.resolutionScale=0.5] - Deprecated. Adjust the height or width instead for consistent results.
 	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - The blur render width.
 	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - The blur render height.
 	 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
+	 * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
 	 */
 
 	constructor({
