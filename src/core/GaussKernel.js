@@ -57,7 +57,7 @@ export class GaussKernel {
 	/**
 	 * Constructs a new Gauss kernel.
 	 *
-	 * @param {Number} kernelSize - The kernel size. Should be an odd number in the range [3, 1021].
+	 * @param {Number} kernelSize - The kernel size. Should be an odd number in the range [3, 1020].
 	 * @param {Number} [edgeBias=2] - Determines how many edge coefficients should be cut off for increased accuracy.
 	 */
 
@@ -132,9 +132,9 @@ export class GaussKernel {
 
 	generate(kernelSize, edgeBias) {
 
-		if(kernelSize < 3 || kernelSize > 1021) {
+		if(kernelSize < 3 || kernelSize > 1020) {
 
-			throw new Error("The kernel size must be in the range [3, 1021]");
+			throw new Error("The kernel size must be in the range [3, 1020]");
 
 		}
 
