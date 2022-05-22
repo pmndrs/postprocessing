@@ -14,8 +14,8 @@ import { EdgeDetectionMaterial, SMAAWeightsMaterial } from "../materials";
 import { ClearPass, ShaderPass } from "../passes";
 import { Effect } from "./Effect";
 
-import searchImageDataURL from "../images/smaa/searchImageDataURL";
-import areaImageDataURL from "../images/smaa/areaImageDataURL";
+import searchImageDataURL from "../textures/smaa/searchImageDataURL";
+import areaImageDataURL from "../textures/smaa/areaImageDataURL";
 
 import fragmentShader from "./glsl/smaa/shader.frag";
 import vertexShader from "./glsl/smaa/shader.vert";

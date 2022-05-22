@@ -1,4 +1,4 @@
-import { LUTOperation } from "./LUTOperation";
+import { LUTOperation } from "../../enums";
 import { TetrahedralUpscaler } from "./TetrahedralUpscaler";
 
 /**

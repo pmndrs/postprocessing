@@ -12,16 +12,9 @@ import {
 	Vector3
 } from "three";
 
+import { LUTOperation } from "../../enums";
 import { RawImageData } from "../RawImageData";
-import { LUTOperation } from "../lut/LUTOperation";
 import workerProgram from "../../../tmp/lut/worker.txt";
-
-/**
- * A color.
- *
- * @type {Color}
- * @private
- */
 
 const c = new Color();
 
