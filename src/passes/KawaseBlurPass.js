@@ -1,16 +1,7 @@
 import { LinearFilter, sRGBEncoding, UnsignedByteType, WebGLRenderTarget } from "three";
-import { KawaseBlurMaterial } from "../materials";
+import { CopyMaterial, KawaseBlurMaterial } from "../materials";
 import { KernelSize, Resolution } from "../core";
 import { Pass } from "./Pass";
-
-const kernelPresets = [
-	new Float32Array([0.0, 0.0]),
-	new Float32Array([0.0, 1.0, 1.0]),
-	new Float32Array([0.0, 1.0, 1.0, 2.0]),
-	new Float32Array([0.0, 1.0, 2.0, 2.0, 3.0]),
-	new Float32Array([0.0, 1.0, 2.0, 3.0, 4.0, 4.0, 5.0]),
-	new Float32Array([0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 7.0, 8.0, 9.0, 10.0])
-];
 
 /**
  * A Kawase blur pass.
@@ -84,32 +75,13 @@ export class KawaseBlurPass extends Pass {
 		this.blurMaterial = new KawaseBlurMaterial();
 
 		/**
-		 * A second blur material that uses dithering.
+		 * A copy material.
 		 *
-		 * @type {KawaseBlurMaterial}
-		 * @private
+		 * @type {CopyMaterial}
+		 * @readonly
 		 */
 
-		this.ditheredBlurMaterial = new KawaseBlurMaterial();
-		this.ditheredBlurMaterial.uniforms.scale = this.blurMaterial.uniforms.scale;
-		this.ditheredBlurMaterial.dithering = true;
-
-		/**
-		 * Indicates whether dithering is enabled.
-		 *
-		 * @type {Boolean}
-		 * @deprecated
-		 */
-
-		this.dithering = false;
-
-		/**
-		 * The kernel size.
-		 *
-		 * @type {KernelSize}
-		 */
-
-		this.kernelSize = kernelSize;
+		this.copyMaterial = new CopyMaterial();
 
 	}
 
@@ -123,6 +95,44 @@ export class KawaseBlurPass extends Pass {
 	getResolution() {
 
 		return this.resolution;
+
+	}
+
+	/**
+	 * Indicates whether dithering is enabled.
+	 *
+	 * @type {KernelSize}
+	 * @deprecated Use copyMaterial.dithering instead.
+	 */
+
+	get dithering() {
+
+		return this.copyMaterial.dithering;
+
+	}
+
+	set dithering(value) {
+
+		this.copyMaterial.dithering = value;
+
+	}
+
+	/**
+	 * The kernel size.
+	 *
+	 * @type {KernelSize}
+	 * @deprecated Use blurMaterial.kernelSize instead.
+	 */
+
+	get kernelSize() {
+
+		return this.blurMaterial.kernelSize;
+
+	}
+
+	set kernelSize(value) {
+
+		this.blurMaterial.kernelSize = value;
 
 	}
 
@@ -213,12 +223,6 @@ export class KawaseBlurPass extends Pass {
 	/**
 	 * Sets the blur scale.
 	 *
-	 * This value influences the overall blur strength and should not be greater than 1. For larger blurs please increase
-	 * the kernel size via {@link setKernelSize}!
-	 *
-	 * Note that the blur strength is closely tied to the resolution. For a smooth transition from no blur to full blur,
-	 * set the width or the height to a high enough value.
-	 *
 	 * @deprecated Use blurMaterial.scale instead.
 	 * @param {Number} value - The scale.
 	 */
@@ -232,7 +236,7 @@ export class KawaseBlurPass extends Pass {
 	/**
 	 * Returns the kernel size.
 	 *
-	 * @deprecated Use kernelSize instead.
+	 * @deprecated Use blurMaterial.kernelSize instead.
 	 * @return {KernelSize} The kernel size.
 	 */
 
@@ -247,7 +251,7 @@ export class KawaseBlurPass extends Pass {
 	 *
 	 * Larger kernels require more processing power but scale well with larger render resolutions.
 	 *
-	 * @deprecated Use kernelSize instead.
+	 * @deprecated Use blurMaterial.kernelSize instead.
 	 * @param {KernelSize} value - The kernel size.
 	 */
 
@@ -284,8 +288,7 @@ export class KawaseBlurPass extends Pass {
 	}
 
 	/**
-	 * Blurs the input buffer and writes the result to the output buffer. The input buffer remains intact, unless it's
-	 * also used as the output buffer.
+	 * Renders the blur.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
@@ -298,24 +301,20 @@ export class KawaseBlurPass extends Pass {
 
 		const scene = this.scene;
 		const camera = this.camera;
-
 		const renderTargetA = this.renderTargetA;
 		const renderTargetB = this.renderTargetB;
-		const kernels = kernelPresets[this.kernelSize];
+		const material = this.blurMaterial;
+		const kernelSequence = material.kernelSequence;
 
-		let material = this.blurMaterial;
 		let previousBuffer = inputBuffer;
-		let i, l;
-
 		this.fullscreenMaterial = material;
 
-		// Apply the multi-pass blur.
-		for(i = 0, l = kernels.length - 1; i < l; ++i) {
+		// Render the multi-pass blur.
+		for(let i = 0, l = kernelSequence.length; i < l; ++i) {
 
 			// Alternate between targets.
 			const buffer = ((i & 1) === 0) ? renderTargetA : renderTargetB;
-
-			material.kernel = kernels[i];
+			material.kernel = kernelSequence[i];
 			material.inputBuffer = previousBuffer.texture;
 			renderer.setRenderTarget(buffer);
 			renderer.render(scene, camera);
@@ -323,15 +322,9 @@ export class KawaseBlurPass extends Pass {
 
 		}
 
-		if(this.dithering) {
-
-			material = this.ditheredBlurMaterial;
-			this.fullscreenMaterial = material;
-
-		}
-
-		material.kernel = kernels[i];
-		material.inputBuffer = previousBuffer.texture;
+		// Copy the result to the output buffer.
+		this.fullscreenMaterial = this.copyMaterial;
+		this.copyMaterial.inputBuffer = previousBuffer.texture;
 		renderer.setRenderTarget(this.renderToScreen ? null : outputBuffer);
 		renderer.render(scene, camera);
 
@@ -353,7 +346,7 @@ export class KawaseBlurPass extends Pass {
 		this.renderTargetA.setSize(w, h);
 		this.renderTargetB.setSize(w, h);
 		this.blurMaterial.setSize(w, h);
-		this.ditheredBlurMaterial.setSize(w, h);
+		this.blurMaterial.resolutionScale = resolution.scale;
 
 	}
 
@@ -375,7 +368,6 @@ export class KawaseBlurPass extends Pass {
 			if(frameBufferType !== UnsignedByteType) {
 
 				this.blurMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
-				this.ditheredBlurMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
 			} else if(renderer.outputEncoding === sRGBEncoding) {
 
