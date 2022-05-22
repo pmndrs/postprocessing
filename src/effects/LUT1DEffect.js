@@ -4,6 +4,10 @@ import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/lut-1d/shader.frag";
 
+/**
+ * A 1D LUT effect.
+ */
+
 export class LUT1DEffect extends Effect {
 
 	/**

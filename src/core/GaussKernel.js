@@ -1,7 +1,7 @@
 /**
  * Uses Pascal's Triangle to generate coefficients in the expansion of any binomial expression.
  *
- * For details see https://mathworld.wolfram.com/PascalsTriangle.html
+ * For details see https://mathworld.wolfram.com/PascalsTriangle.html.
  *
  * @param {Number} n - The index of the coefficients row in Pascal's Triangle.
  * @return {Float64Array} The integer coefficients stored as doubles.
@@ -49,7 +49,7 @@ function getCoefficients(n) {
 /**
  * A Gauss kernel.
  *
- * Based on https://github.com/Jam3/glsl-fast-gaussian-blur
+ * Based on https://github.com/Jam3/glsl-fast-gaussian-blur.
  */
 
 export class GaussKernel {

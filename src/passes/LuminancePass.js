@@ -58,6 +58,7 @@ export class LuminancePass extends Pass {
 		 * The resolution.
 		 *
 		 * @type {Resolution}
+		 * @readonly
 		 */
 
 		const resolution = this.resolution = new Resolution(this, width, height);

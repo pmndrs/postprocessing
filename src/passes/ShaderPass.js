@@ -4,8 +4,8 @@ import { Pass } from "./Pass";
 /**
  * A shader pass.
  *
- * Renders any shader material as a fullscreen effect. This pass should not be used to create multiple chained effects.
- * For a more efficient solution, please refer to the {@link EffectPass}.
+ * Renders any shader material as a fullscreen effect. If you want to create multiple chained effects, please use
+ * {@link EffectPass} instead.
  */
 
 export class ShaderPass extends Pass {

@@ -17,7 +17,9 @@ export * from "./Pass";
 export * from "./RenderPass";
 export * from "./ShaderPass";
 
-// Added for backward compatibility.
+/** @deprecated Renamed to CopyPass. */
 export { CopyPass as SavePass } from "./CopyPass";
+/** @deprecated Renamed to DepthCopyPass. */
 export { DepthCopyPass as DepthSavePass } from "./DepthCopyPass";
+/** @deprecated Renamed to KawaseBlurPass. */
 export { KawaseBlurPass as BlurPass } from "./KawaseBlurPass";

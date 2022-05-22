@@ -61,6 +61,7 @@ export class RenderPass extends Pass {
 		 * A selection of objects to render.
 		 *
 		 * @type {Selection}
+		 * @readonly
 		 */
 
 		this.selection = null;

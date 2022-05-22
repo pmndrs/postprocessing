@@ -18,7 +18,9 @@ export * from "./OutlineMaterial";
 export * from "./SMAAWeightsMaterial";
 export * from "./SSAOMaterial";
 
-// Added for backward compatibility.
+/** @deprecated Renamed to KawaseBlurMaterial. */
 export { KawaseBlurMaterial as ConvolutionMaterial } from "./KawaseBlurMaterial";
+/** @deprecated Renamed to EdgeDetectionMaterial. */
 export { EdgeDetectionMaterial as ColorEdgesMaterial } from "./EdgeDetectionMaterial";
+/** @deprecated Renamed to OutlineMaterial. */
 export { OutlineMaterial as OutlineEdgesMaterial } from "./OutlineMaterial";

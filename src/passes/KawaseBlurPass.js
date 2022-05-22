@@ -5,6 +5,8 @@ import { Pass } from "./Pass";
 
 /**
  * A Kawase blur pass.
+ *
+ * Provides better performance compared to {@link GaussianBlurPass} at larger kernel sizes.
  */
 
 export class KawaseBlurPass extends Pass {
@@ -57,10 +59,8 @@ export class KawaseBlurPass extends Pass {
 		/**
 		 * The render resolution.
 		 *
-		 * It's recommended to set the render height or width to an absolute value for consistent results across different
-		 * devices and screen resolutions.
-		 *
 		 * @type {Resolution}
+		 * @readonly
 		 */
 
 		const resolution = this.resolution = new Resolution(this, width, height, resolutionScale);
@@ -70,6 +70,7 @@ export class KawaseBlurPass extends Pass {
 		 * The blur material.
 		 *
 		 * @type {KawaseBlurMaterial}
+		 * @readonly
 		 */
 
 		this.blurMaterial = new KawaseBlurMaterial();

@@ -7,8 +7,10 @@ import vertexShader from "./glsl/convolution/gaussian.vert";
 /**
  * An optimized Gaussian convolution shader material.
  *
- * Based on an article by Filip Strugar:
- * "An investigation of fast real-time GPU-based image blur algorithms"
+ * References:
+ *
+ * Filip Strugar, Intel, 2014: [An investigation of fast real-time GPU-based image blur algorithms](
+ * https://www.intel.com/content/www/us/en/developer/articles/technical/an-investigation-of-fast-real-time-gpu-based-image-blur-algorithms.html)
  *
  * @implements {Resizable}
  */
@@ -140,6 +142,7 @@ export class GaussianBlurMaterial extends ShaderMaterial {
 		const kernel = new GaussKernel(kernelSize);
 		const steps = kernel.linearSteps;
 
+		// The kernel data is injected as const arrays to avoid uniform count limitations.
 		let kernelData = `#define STEPS ${steps.toFixed(0)}\n\n`;
 		kernelData += `const float gWeights[${steps}] = float[${steps}](\n\t`;
 		kernelData += Array.from(kernel.linearWeights).map(v => v.toFixed(16)).join(",\n\t");

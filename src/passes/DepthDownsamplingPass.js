@@ -61,6 +61,7 @@ export class DepthDownsamplingPass extends Pass {
 		 * The resolution.
 		 *
 		 * @type {Resolution}
+		 * @readonly
 		 */
 
 		const resolution = this.resolution = new Resolution(this, width, height, resolutionScale);

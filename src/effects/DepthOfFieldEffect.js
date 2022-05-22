@@ -12,8 +12,8 @@ import fragmentShader from "./glsl/depth-of-field/shader.frag";
  * A depth of field effect.
  *
  * Based on a graphics study by Adrian Courrèges and an article by Steve Avery:
- *  https://www.adriancourreges.com/blog/2016/09/09/doom-2016-graphics-study/
- *  https://pixelmischiefblog.wordpress.com/2016/11/25/bokeh-depth-of-field/
+ * https://www.adriancourreges.com/blog/2016/09/09/doom-2016-graphics-study/
+ * https://pixelmischiefblog.wordpress.com/2016/11/25/bokeh-depth-of-field/
  */
 
 export class DepthOfFieldEffect extends Effect {

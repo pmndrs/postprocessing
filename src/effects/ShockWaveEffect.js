@@ -12,7 +12,7 @@ const ab = new Vector3();
  * A shock wave effect.
  *
  * Based on a Gist by Jean-Philippe Sarda:
- *  https://gist.github.com/jpsarda/33cea67a9f2ecb0a0eda
+ * https://gist.github.com/jpsarda/33cea67a9f2ecb0a0eda
  */
 
 export class ShockWaveEffect extends Effect {
