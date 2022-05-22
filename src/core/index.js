@@ -1,6 +1,7 @@
 export * from "./ColorChannel";
 export * from "./Disposable";
 export * from "./EffectComposer";
+export * from "./GaussKernel";
 export * from "./Initializable";
 export * from "./KernelSize";
 export * from "./OverrideMaterialManager";
