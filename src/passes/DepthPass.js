@@ -15,17 +15,21 @@ export class DepthPass extends Pass {
 	 * @param {Scene} scene - The scene to render.
 	 * @param {Camera} camera - The camera to use to render the scene.
 	 * @param {Object} [options] - The options.
-	 * @param {Number} [options.resolutionScale=1.0] - Deprecated. Adjust the height or width instead for consistent results.
-	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - The render width.
-	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - The render height.
 	 * @param {WebGLRenderTarget} [options.renderTarget] - A custom render target.
+	 * @param {Number} [options.resolutionScale=1.0] - The resolution scale.
+	 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
+	 * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
+	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprected. Use resolutionX instead.
+	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprected. Use resolutionY instead.
 	 */
 
 	constructor(scene, camera, {
+		renderTarget,
 		resolutionScale = 1.0,
 		width = Resolution.AUTO_SIZE,
 		height = Resolution.AUTO_SIZE,
-		renderTarget
+		resolutionX = width,
+		resolutionY = height
 	} = {}) {
 
 		super("DepthPass");
@@ -78,7 +82,7 @@ export class DepthPass extends Pass {
 		 * @type {Resolution}
 		 */
 
-		const resolution = this.resolution = new Resolution(this, width, height, resolutionScale);
+		const resolution = this.resolution = new Resolution(this, resolutionX, resolutionY, resolutionScale);
 		resolution.addEventListener("change", (e) => this.setSize(resolution.baseWidth, resolution.baseHeight));
 
 	}

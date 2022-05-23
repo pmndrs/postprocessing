@@ -42,9 +42,11 @@ export class GodRaysEffect extends Effect {
 	 * @param {Number} [options.weight=0.4] - A light ray weight factor.
 	 * @param {Number} [options.exposure=0.6] - A constant attenuation coefficient.
 	 * @param {Number} [options.clampMax=1.0] - An upper bound for the saturation of the overall effect.
-	 * @param {Number} [options.resolutionScale=0.5] - Deprecated. Use height or width instead.
-	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - The render width.
-	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - The render height.
+	 * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
+	 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
+	 * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
+	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprected. Use resolutionX instead.
+	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprected. Use resolutionY instead.
 	 * @param {KernelSize} [options.kernelSize=KernelSize.SMALL] - The blur kernel size. Has no effect if blur is disabled.
 	 * @param {Boolean} [options.blur=true] - Whether the god rays should be blurred to reduce artifacts.
 	 */
@@ -57,11 +59,13 @@ export class GodRaysEffect extends Effect {
 		weight = 0.4,
 		exposure = 0.6,
 		clampMax = 1.0,
+		blur = true,
+		kernelSize = KernelSize.SMALL,
 		resolutionScale = 0.5,
 		width = Resolution.AUTO_SIZE,
 		height = Resolution.AUTO_SIZE,
-		kernelSize = KernelSize.SMALL,
-		blur = true
+		resolutionX = width,
+		resolutionY = height
 	} = {}) {
 
 		super("GodRaysEffect", fragmentShader, {
@@ -177,7 +181,7 @@ export class GodRaysEffect extends Effect {
 		 * @type {KawaseBlurPass}
 		 */
 
-		this.blurPass = new KawaseBlurPass({ resolutionScale, width, height, kernelSize });
+		this.blurPass = new KawaseBlurPass({ resolutionScale, resolutionX, resolutionY, kernelSize });
 		this.blurPass.enabled = blur;
 		const resolution = this.blurPass.resolution;
 		resolution.addEventListener("change", (e) => this.setSize(resolution.baseWidth, resolution.baseHeight));

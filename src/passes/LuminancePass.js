@@ -13,17 +13,23 @@ export class LuminancePass extends Pass {
 	 * Constructs a new luminance pass.
 	 *
 	 * @param {Object} [options] - The options. See {@link LuminanceMaterial} for additional options.
-	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - The render width.
-	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - The render height.
 	 * @param {WebGLRenderTarget} [options.renderTarget] - A custom render target.
+	 * @param {Number} [options.resolutionScale=1.0] - The resolution scale.
+	 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
+	 * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
+	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprected. Use resolutionX instead.
+	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprected. Use resolutionY instead.
 	 */
 
 	constructor({
-		width = Resolution.AUTO_SIZE,
-		height = Resolution.AUTO_SIZE,
 		renderTarget,
 		luminanceRange,
-		colorOutput
+		colorOutput,
+		resolutionScale = 1.0,
+		width = Resolution.AUTO_SIZE,
+		height = Resolution.AUTO_SIZE,
+		resolutionX = width,
+		resolutionY = height
 	} = {}) {
 
 		super("LuminancePass");
@@ -61,7 +67,7 @@ export class LuminancePass extends Pass {
 		 * @readonly
 		 */
 
-		const resolution = this.resolution = new Resolution(this, width, height);
+		const resolution = this.resolution = new Resolution(this, resolutionX, resolutionY, resolutionScale);
 		resolution.addEventListener("change", (e) => this.setSize(resolution.baseWidth, resolution.baseHeight));
 
 	}

@@ -72,8 +72,10 @@ export class SSAOEffect extends Effect {
 	 * @param {Number} [options.fade=0.01] - Influences the smoothness of the shadows. A lower value results in higher contrast.
 	 * @param {Color} [options.color=null] - The color of the ambient occlusion.
 	 * @param {Number} [options.resolutionScale=1.0] - The resolution scale.
-	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - The render width.
-	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - The render height.
+	 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
+	 * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
+	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprected. Use resolutionX instead.
+	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprected. Use resolutionY instead.
 	 */
 
 	constructor(camera, normalBuffer, {
@@ -100,7 +102,9 @@ export class SSAOEffect extends Effect {
 		color = null,
 		resolutionScale = 1.0,
 		width = Resolution.AUTO_SIZE,
-		height = Resolution.AUTO_SIZE
+		height = Resolution.AUTO_SIZE,
+		resolutionX = width,
+		resolutionY = height
 	} = {}) {
 
 		super("SSAOEffect", fragmentShader, {
@@ -142,7 +146,7 @@ export class SSAOEffect extends Effect {
 		 * @type {Resolution}
 		 */
 
-		const resolution = this.resolution = new Resolution(this, width, height, resolutionScale);
+		const resolution = this.resolution = new Resolution(this, resolutionX, resolutionY, resolutionScale);
 		resolution.addEventListener("change", (e) => this.setSize(resolution.baseWidth, resolution.baseHeight));
 
 		/**

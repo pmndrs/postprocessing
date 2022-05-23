@@ -42,8 +42,11 @@ export class DepthOfFieldEffect extends Effect {
 		focalLength = 0.1,
 		focusRange = focalLength,
 		bokehScale = 1.0,
+		resolutionScale = 1.0,
 		width = Resolution.AUTO_SIZE,
-		height = Resolution.AUTO_SIZE
+		height = Resolution.AUTO_SIZE,
+		resolutionX = width,
+		resolutionY = height
 	} = {}) {
 
 		super("DepthOfFieldEffect", fragmentShader, {
@@ -170,7 +173,7 @@ export class DepthOfFieldEffect extends Effect {
 		 * @deprecated Use getBlurPass() instead.
 		 */
 
-		this.blurPass = new KawaseBlurPass({ kernelSize: KernelSize.MEDIUM, width, height });
+		this.blurPass = new KawaseBlurPass({ resolutionScale, resolutionX, resolutionY, kernelSize: KernelSize.MEDIUM });
 
 		const resolution = this.blurPass.getResolution();
 		resolution.addEventListener("change", (e) => this.setSize(
