@@ -1,4 +1,5 @@
 import { FloatType, HalfFloatType, Uniform } from "three";
+import { BlendFunction } from "../enums";
 import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/lut-1d.frag";
@@ -14,10 +15,10 @@ export class LUT1DEffect extends Effect {
 	 *
 	 * @param {Texture} lut - The lookup texture.
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SET] - The blend function of this effect.
 	 */
 
-	constructor(lut, { blendFunction } = {}) {
+	constructor(lut, { blendFunction = BlendFunction.SET } = {}) {
 
 		super("LUT1DEffect", fragmentShader, {
 			blendFunction,

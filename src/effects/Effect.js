@@ -21,7 +21,7 @@ export class Effect extends EventDispatcher {
 	 * @param {String} fragmentShader - The fragment shader. This shader is required.
 	 * @param {Object} [options] - Additional options.
 	 * @param {EffectAttribute} [options.attributes=EffectAttribute.NONE] - The effect attributes that determine the execution priority and resource requirements.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SET] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
 	 * @param {Map<String, String>} [options.defines] - Custom preprocessor macro definitions. Keys are names and values are code.
 	 * @param {Map<String, Uniform>} [options.uniforms] - Custom shader uniforms. Keys are names and values are uniforms.
 	 * @param {Set<WebGLExtension>} [options.extensions] - WebGL extensions.
@@ -30,7 +30,7 @@ export class Effect extends EventDispatcher {
 
 	constructor(name, fragmentShader, {
 		attributes = EffectAttribute.NONE,
-		blendFunction = BlendFunction.SET,
+		blendFunction = BlendFunction.NORMAL,
 		defines = new Map(),
 		uniforms = new Map(),
 		extensions = null,

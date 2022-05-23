@@ -9,7 +9,7 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { EdgeDetectionMode, EffectAttribute, PredicationMode, SMAAPreset } from "../enums";
+import { BlendFunction, EdgeDetectionMode, EffectAttribute, PredicationMode, SMAAPreset } from "../enums";
 import { EdgeDetectionMaterial, SMAAWeightsMaterial } from "../materials";
 import { ClearPass, ShaderPass } from "../passes";
 import { Effect } from "./Effect";
@@ -32,14 +32,14 @@ export class SMAAEffect extends Effect {
 	 * Constructs a new SMAA effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SET] - The blend function of this effect.
 	 * @param {SMAAPreset} [options.preset=SMAAPreset.MEDIUM] - The quality preset.
 	 * @param {EdgeDetectionMode} [options.edgeDetectionMode=EdgeDetectionMode.COLOR] - The edge detection mode.
 	 * @param {PredicationMode} [options.predicationMode=PredicationMode.DISABLED] - The predication mode.
 	 */
 
 	constructor({
-		blendFunction,
+		blendFunction = BlendFunction.SET,
 		preset = SMAAPreset.MEDIUM,
 		edgeDetectionMode = EdgeDetectionMode.COLOR,
 		predicationMode = PredicationMode.DISABLED
