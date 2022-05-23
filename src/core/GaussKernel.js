@@ -126,6 +126,7 @@ export class GaussKernel {
 	/**
 	 * Generates the kernel.
 	 *
+	 * @private
 	 * @param {Number} kernelSize - The kernel size.
 	 * @param {Number} edgeBias - The amount of edge coefficients to ignore.
 	 */
