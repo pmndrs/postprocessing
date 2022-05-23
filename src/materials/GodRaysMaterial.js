@@ -1,6 +1,6 @@
 import { NoBlending, ShaderMaterial, Uniform } from "three";
 
-import fragmentShader from "./glsl/god-rays.frag";
+import fragmentShader from "./glsl/convolution.god-rays.frag";
 import vertexShader from "./glsl/common.vert";
 
 /**
