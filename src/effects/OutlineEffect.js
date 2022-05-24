@@ -28,14 +28,14 @@ export class OutlineEffect extends Effect {
 	 * @param {Number} [options.pulseSpeed=0.0] - The pulse speed. A value of zero disables the pulse effect.
 	 * @param {Number} [options.visibleEdgeColor=0xffffff] - The color of visible edges.
 	 * @param {Number} [options.hiddenEdgeColor=0x22090a] - The color of hidden edges.
+	 * @param {KernelSize} [options.kernelSize=KernelSize.VERY_SMALL] - The blur kernel size.
+	 * @param {Boolean} [options.blur=false] - Whether the outline should be blurred.
+	 * @param {Boolean} [options.xRay=true] - Whether occluded parts of selected objects should be visible.
 	 * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
 	 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
 	 * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
 	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprected. Use resolutionX instead.
 	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprected. Use resolutionY instead.
-	 * @param {KernelSize} [options.kernelSize=KernelSize.VERY_SMALL] - The blur kernel size.
-	 * @param {Boolean} [options.blur=false] - Whether the outline should be blurred.
-	 * @param {Boolean} [options.xRay=true] - Whether occluded parts of selected objects should be visible.
 	 */
 
 	constructor(scene, camera, {
@@ -46,12 +46,14 @@ export class OutlineEffect extends Effect {
 		pulseSpeed = 0.0,
 		visibleEdgeColor = 0xffffff,
 		hiddenEdgeColor = 0x22090a,
+		kernelSize = KernelSize.VERY_SMALL,
+		blur = false,
+		xRay = true,
 		resolutionScale = 0.5,
 		width = Resolution.AUTO_SIZE,
 		height = Resolution.AUTO_SIZE,
-		kernelSize = KernelSize.VERY_SMALL,
-		blur = false,
-		xRay = true
+		resolutionX = width,
+		resolutionY = height
 	} = {}) {
 
 		super("OutlineEffect", fragmentShader, {
