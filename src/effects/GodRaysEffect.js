@@ -45,8 +45,8 @@ export class GodRaysEffect extends Effect {
 	 * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
 	 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
 	 * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
-	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprected. Use resolutionX instead.
-	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprected. Use resolutionY instead.
+	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprecated. Use resolutionX instead.
+	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use resolutionY instead.
 	 * @param {KernelSize} [options.kernelSize=KernelSize.SMALL] - The blur kernel size. Has no effect if blur is disabled.
 	 * @param {Boolean} [options.blur=true] - Whether the god rays should be blurred to reduce artifacts.
 	 */

@@ -17,8 +17,8 @@ export class LuminancePass extends Pass {
 	 * @param {Number} [options.resolutionScale=1.0] - The resolution scale.
 	 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
 	 * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
-	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprected. Use resolutionX instead.
-	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprected. Use resolutionY instead.
+	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprecated. Use resolutionX instead.
+	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use resolutionY instead.
 	 */
 
 	constructor({
