@@ -90,6 +90,7 @@ export class Effect extends EventDispatcher {
 		 * Call {@link Effect.setChanged} after changing macro definitions.
 		 *
 		 * @type {Map<String, String>}
+		 * @readonly
 		 */
 
 		this.defines = defines;
@@ -100,6 +101,7 @@ export class Effect extends EventDispatcher {
 		 * Call {@link Effect.setChanged} after adding or removing uniforms.
 		 *
 		 * @type {Map<String, Uniform>}
+		 * @readonly
 		 */
 
 		this.uniforms = uniforms;
@@ -110,6 +112,7 @@ export class Effect extends EventDispatcher {
 		 * Call {@link Effect.setChanged} after adding or removing extensions.
 		 *
 		 * @type {Set<WebGLExtension>}
+		 * @readonly
 		 */
 
 		this.extensions = extensions;
@@ -118,6 +121,7 @@ export class Effect extends EventDispatcher {
 		 * The blend mode of this effect.
 		 *
 		 * @type {BlendMode}
+		 * @readonly
 		 */
 
 		this.blendMode = new BlendMode(blendFunction);
