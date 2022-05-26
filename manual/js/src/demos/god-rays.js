@@ -23,7 +23,7 @@ import {
 
 import { Pane } from "tweakpane";
 import { SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, FPSMeter, toRecord } from "../utils";
+import { calculateVerticalFoV, FPSMeter } from "../utils";
 import * as Domain from "../objects/Domain";
 
 function load() {
@@ -122,7 +122,7 @@ window.addEventListener("load", () => load().then((assets) => {
 		weight: 0.3,
 		exposure: 0.54,
 		samples: 32,
-		height: 480
+		resolutionScale: 0.5
 	});
 
 	const effectPass = new EffectPass(camera, effect);
@@ -142,10 +142,7 @@ window.addEventListener("load", () => load().then((assets) => {
 	};
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(effect.resolution, "height", {
-		options: [360, 480, 720, 1080].reduce(toRecord, {}),
-		label: "resolution"
-	});
+	folder.addInput(effect.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
 	folder.addInput(effect, "blur");
 	folder.addInput(effect.blurPass, "kernelSize", { label: "blurriness", options: KernelSize });
 	folder.addInput(godRaysMaterial, "density", { min: 0, max: 1, step: 0.01 });

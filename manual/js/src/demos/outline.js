@@ -26,7 +26,7 @@ import {
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { Pane } from "tweakpane";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, FPSMeter, toRecord } from "../utils";
+import { calculateVerticalFoV, FPSMeter } from "../utils";
 import * as Shapes from "../objects/Shapes";
 
 function load() {
@@ -161,7 +161,7 @@ window.addEventListener("load", () => load().then((assets) => {
 		patternScale: 40,
 		visibleEdgeColor: 0xffffff,
 		hiddenEdgeColor: 0x22090a,
-		height: 480,
+		resolutionScale: 0.75,
 		blur: false,
 		xRay: true
 	});
@@ -207,10 +207,7 @@ window.addEventListener("load", () => load().then((assets) => {
 	};
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(effect.resolution, "height", {
-		options: [360, 480, 720, 1080].reduce(toRecord, {}),
-		label: "resolution"
-	});
+	folder.addInput(effect.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
 	folder.addInput(effect.blurPass, "kernelSize", { options: KernelSize });
 	folder.addInput(effect.blurPass, "enabled", { label: "blur" });
 	folder.addInput(params, "patternTexture")

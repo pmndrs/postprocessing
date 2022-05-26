@@ -151,11 +151,11 @@ window.addEventListener("load", () => load().then((assets) => {
 		}
 	});
 	tab.pages[0].addInput(gaussianBlurPass.blurMaterial, "scale", { min: 0, max: 2, step: 0.01 });
-	tab.pages[0].addInput(gaussianBlurPass.resolution, "scale", { min: 0.5, max: 1, step: 0.05, label: "resolution" });
+	tab.pages[0].addInput(gaussianBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
 
 	tab.pages[1].addInput(kawaseBlurPass.blurMaterial, "kernelSize", { options: KernelSize });
 	tab.pages[1].addInput(kawaseBlurPass.blurMaterial, "scale", { min: 0, max: 2, step: 0.01 });
-	tab.pages[1].addInput(kawaseBlurPass.resolution, "scale", { min: 0.5, max: 1, step: 0.05, label: "resolution" });
+	tab.pages[1].addInput(kawaseBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
 
 	// Resize Handler
 

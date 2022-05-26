@@ -176,7 +176,7 @@ window.addEventListener("load", () => load().then((assets) => {
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(effect.resolution, "scale", { min: 0.5, max: 1, step: 0.05, label: "resolution" });
+	folder.addInput(effect.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
 	folder.addInput(effect.blurPass.blurMaterial, "kernelSize", { options: KernelSize });
 	folder.addInput(effect.blurPass.blurMaterial, "scale", { min: 0, max: 2, step: 1e-3 });
 	folder.addInput(effect, "intensity", { min: 0, max: 20, step: 0.01 });
