@@ -22,8 +22,8 @@
  * @property {Number} NORMAL - Normal blending. The new color overwrites the old one.
  * @property {Number} OVERLAY - Color overlay.
  * @property {Number} REFLECT - Color reflection.
- * @property {Number} SET - Same as NORMAL but ignores opacity.
  * @property {Number} SCREEN - Screen blending. The two colors are effectively projected on a white screen simultaneously.
+ * @property {Number} SET - Same as NORMAL but ignores opacity.
  * @property {Number} SOFT_LIGHT - Soft light blending.
  * @property {Number} SUBTRACT - Color subtraction.
  */
@@ -45,8 +45,8 @@ export const BlendFunction = {
 	NORMAL: 13,
 	OVERLAY: 14,
 	REFLECT: 15,
-	SET: 16,
-	SCREEN: 17,
+	SCREEN: 16,
+	SET: 17,
 	SOFT_LIGHT: 18,
 	SUBTRACT: 19
 };
