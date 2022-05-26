@@ -113,10 +113,11 @@ export class GlitchDemo extends PostProcessingDemo {
 			const div = document.createElement("div");
 			div.classList.add("warning");
 			const p = document.createElement("p");
-			p.innerText = "This effect may trigger epileptic seizures or blackouts";
+			p.innerText = "The following contains flashing imagery that may cause discomfort and/or seizures for those " +
+				"with photosensitive epilepsy.";
 			const a = document.createElement("a");
-			a.innerText = "Click here to continue";
-			a.href = "Click here to continue";
+			a.innerText = "Continue";
+			a.href = "#";
 			a.addEventListener("click", (event) => {
 
 				event.preventDefault();
