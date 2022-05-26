@@ -150,7 +150,7 @@ window.addEventListener("load", () => load().then((assets) => {
 	subfolder.addInput(ssaoMaterial, "worldProximityThreshold", { min: 0, max: 3, step: 1e-2 });
 	subfolder.addInput(ssaoMaterial, "worldProximityFalloff", { min: 0, max: 3, step: 1e-2 });
 
-	folder.addInput(effect.resolution, "scale", { label: "resolution", min: 0.25, max: 1, step: 0.25 })
+	folder.addInput(effect.resolution, "scale", { label: "resolution", min: 0.25, max: 1, step: 0.05 })
 		.on("change", (e) => depthDownsamplingPass.resolution.scale = e.value);
 
 	if(renderer.capabilities.isWebGL2) {

@@ -1,2 +1,1 @@
-export { BlendFunction } from "./BlendFunction";
-export { BlendMode } from "./BlendMode";
+export * from "./BlendMode";

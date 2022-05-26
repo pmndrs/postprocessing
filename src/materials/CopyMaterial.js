@@ -1,7 +1,7 @@
 import { NoBlending, ShaderMaterial, Uniform } from "three";
 
-import fragmentShader from "./glsl/copy/shader.frag";
-import vertexShader from "./glsl/common/shader.vert";
+import fragmentShader from "./glsl/copy.frag";
+import vertexShader from "./glsl/common.vert";
 
 /**
  * A simple copy shader material.

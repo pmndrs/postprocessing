@@ -1,7 +1,7 @@
 import { Loader, LoadingManager } from "three";
 
-import searchImageDataURL from "../images/smaa/searchImageDataURL";
-import areaImageDataURL from "../images/smaa/areaImageDataURL";
+import searchImageDataURL from "../textures/smaa/searchImageDataURL";
+import areaImageDataURL from "../textures/smaa/areaImageDataURL";
 
 /**
  * An SMAA image loader.

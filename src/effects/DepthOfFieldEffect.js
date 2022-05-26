@@ -1,19 +1,19 @@
 import { BasicDepthPacking, LinearFilter, sRGBEncoding, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
-import { BokehMaterial, CircleOfConfusionMaterial, MaskFunction, MaskMaterial } from "../materials";
-import { ColorChannel, KernelSize, Resolution } from "../core";
+import { BokehMaterial, CircleOfConfusionMaterial, MaskMaterial } from "../materials";
+import { ColorChannel, EffectAttribute, KernelSize, MaskFunction } from "../enums";
+import { Resolution } from "../core";
 import { KawaseBlurPass, ShaderPass } from "../passes";
 import { viewZToOrthographicDepth } from "../utils";
-import { BlendFunction } from "./blending/BlendFunction";
-import { Effect, EffectAttribute } from "./Effect";
+import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/depth-of-field/shader.frag";
+import fragmentShader from "./glsl/depth-of-field.frag";
 
 /**
  * A depth of field effect.
  *
  * Based on a graphics study by Adrian Courrèges and an article by Steve Avery:
- *  https://www.adriancourreges.com/blog/2016/09/09/doom-2016-graphics-study/
- *  https://pixelmischiefblog.wordpress.com/2016/11/25/bokeh-depth-of-field/
+ * https://www.adriancourreges.com/blog/2016/09/09/doom-2016-graphics-study/
+ * https://pixelmischiefblog.wordpress.com/2016/11/25/bokeh-depth-of-field/
  */
 
 export class DepthOfFieldEffect extends Effect {
@@ -23,7 +23,7 @@ export class DepthOfFieldEffect extends Effect {
 	 *
 	 * @param {Camera} camera - The main camera.
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
 	 * @param {Number} [options.worldFocusDistance] - The focus distance in world units.
 	 * @param {Number} [options.worldFocusRange] - The focus distance in world units.
 	 * @param {Number} [options.focusDistance=0.0] - The normalized focus distance. Range is [0.0, 1.0].
@@ -35,15 +35,18 @@ export class DepthOfFieldEffect extends Effect {
 	 */
 
 	constructor(camera, {
-		blendFunction = BlendFunction.NORMAL,
+		blendFunction,
 		worldFocusDistance,
 		worldFocusRange,
 		focusDistance = 0.0,
 		focalLength = 0.1,
 		focusRange = focalLength,
 		bokehScale = 1.0,
+		resolutionScale = 1.0,
 		width = Resolution.AUTO_SIZE,
-		height = Resolution.AUTO_SIZE
+		height = Resolution.AUTO_SIZE,
+		resolutionX = width,
+		resolutionY = height
 	} = {}) {
 
 		super("DepthOfFieldEffect", fragmentShader, {
@@ -170,13 +173,10 @@ export class DepthOfFieldEffect extends Effect {
 		 * @deprecated Use getBlurPass() instead.
 		 */
 
-		this.blurPass = new KawaseBlurPass({ kernelSize: KernelSize.MEDIUM, width, height });
+		this.blurPass = new KawaseBlurPass({ resolutionScale, resolutionX, resolutionY, kernelSize: KernelSize.MEDIUM });
 
-		const resolution = this.blurPass.getResolution();
-		resolution.addEventListener("change", (e) => this.setSize(
-			resolution.getBaseWidth(),
-			resolution.getBaseHeight()
-		));
+		const resolution = this.blurPass.resolution;
+		resolution.addEventListener("change", (e) => this.setSize(resolution.baseWidth, resolution.baseHeight));
 
 		/**
 		 * A mask pass.
@@ -314,7 +314,7 @@ export class DepthOfFieldEffect extends Effect {
 
 	get resolution() {
 
-		return this.blurPass.getResolution();
+		return this.blurPass.resolution;
 
 	}
 
@@ -327,7 +327,7 @@ export class DepthOfFieldEffect extends Effect {
 
 	getResolution() {
 
-		return this.blurPass.getResolution();
+		return this.resolution;
 
 	}
 
@@ -345,20 +345,11 @@ export class DepthOfFieldEffect extends Effect {
 
 	set bokehScale(value) {
 
-		const passes = [
-			this.bokehNearBasePass,
-			this.bokehNearFillPass,
-			this.bokehFarBasePass,
-			this.bokehFarFillPass
-		];
-
-		for(const p of passes) {
-
-			p.fullscreenMaterial.setScale(value);
-
-		}
-
-		this.maskPass.fullscreenMaterial.setStrength(value);
+		this.bokehNearBasePass.fullscreenMaterial.scale = value;
+		this.bokehNearFillPass.fullscreenMaterial.scale = value;
+		this.bokehFarBasePass.fullscreenMaterial.scale = value;
+		this.bokehFarFillPass.fullscreenMaterial.scale = value;
+		this.maskPass.fullscreenMaterial.strength = value;
 		this.uniforms.get("scale").value = value;
 
 	}
@@ -497,38 +488,28 @@ export class DepthOfFieldEffect extends Effect {
 		resolution.setBaseSize(width, height);
 		const w = resolution.width, h = resolution.height;
 
-		let resizables = [
-			this.cocPass,
-			this.blurPass,
-			this.maskPass,
-			this.bokehNearBasePass,
-			this.bokehNearFillPass,
-			this.bokehFarBasePass,
-			this.bokehFarFillPass
-		];
+		this.cocPass.setSize(width, height);
+		this.blurPass.setSize(width, height);
+		this.maskPass.setSize(width, height);
 
 		// These buffers require full resolution to prevent bleeding artifacts.
-		resizables.push(this.renderTargetCoC, this.renderTargetMasked);
-		resizables.forEach((r) => r.setSize(width, height));
+		this.renderTargetCoC.setSize(width, height);
+		this.renderTargetMasked.setSize(width, height);
 
-		resizables = [
-			this.renderTarget,
-			this.renderTargetNear,
-			this.renderTargetFar,
-			this.renderTargetCoCBlurred
-		];
-
-		resizables.forEach((r) => r.setSize(w, h));
+		this.renderTarget.setSize(w, h);
+		this.renderTargetNear.setSize(w, h);
+		this.renderTargetFar.setSize(w, h);
+		this.renderTargetCoCBlurred.setSize(w, h);
 
 		// The bokeh blur passes operate on the low resolution buffers.
-		const passes = [
-			this.bokehNearBasePass,
-			this.bokehNearFillPass,
-			this.bokehFarBasePass,
-			this.bokehFarFillPass
-		];
-
-		passes.forEach((p) => p.fullscreenMaterial.setSize(w, h));
+		this.bokehNearBasePass.fullscreenMaterial.setSize(w, h);
+		this.bokehNearFillPass.fullscreenMaterial.setSize(w, h);
+		this.bokehFarBasePass.fullscreenMaterial.setSize(w, h);
+		this.bokehFarFillPass.fullscreenMaterial.setSize(w, h);
+		this.bokehNearBasePass.fullscreenMaterial.resolutionScale = resolution.scale;
+		this.bokehNearFillPass.fullscreenMaterial.resolutionScale = resolution.scale;
+		this.bokehFarBasePass.fullscreenMaterial.resolutionScale = resolution.scale;
+		this.bokehFarFillPass.fullscreenMaterial.resolutionScale = resolution.scale;
 
 	}
 
@@ -542,16 +523,12 @@ export class DepthOfFieldEffect extends Effect {
 
 	initialize(renderer, alpha, frameBufferType) {
 
-		const initializables = [
-			this.cocPass,
-			this.maskPass,
-			this.bokehNearBasePass,
-			this.bokehNearFillPass,
-			this.bokehFarBasePass,
-			this.bokehFarFillPass
-		];
-
-		initializables.forEach((i) => i.initialize(renderer, alpha, frameBufferType));
+		this.cocPass.initialize(renderer, alpha, frameBufferType);
+		this.maskPass.initialize(renderer, alpha, frameBufferType);
+		this.bokehNearBasePass.initialize(renderer, alpha, frameBufferType);
+		this.bokehNearFillPass.initialize(renderer, alpha, frameBufferType);
+		this.bokehFarBasePass.initialize(renderer, alpha, frameBufferType);
+		this.bokehFarFillPass.initialize(renderer, alpha, frameBufferType);
 
 		// The blur pass operates on the CoC buffer.
 		this.blurPass.initialize(renderer, alpha, UnsignedByteType);

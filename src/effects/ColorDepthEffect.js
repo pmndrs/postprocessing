@@ -1,13 +1,12 @@
 import { Uniform } from "three";
-import { BlendFunction } from "./blending/BlendFunction";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/color-depth/shader.frag";
+import fragmentShader from "./glsl/color-depth.frag";
 
 /**
  * A color depth effect.
  *
- * Simulates a hardware limitation to achieve a retro feel. The real color depth will not be altered by this effect.
+ * Simulates a hardware limitation to create a retro feel. The real color depth remains unchanged.
  */
 
 export class ColorDepthEffect extends Effect {
@@ -16,11 +15,11 @@ export class ColorDepthEffect extends Effect {
 	 * Constructs a new color depth effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
 	 * @param {Number} [options.bits=16] - The color bit depth.
 	 */
 
-	constructor({ blendFunction = BlendFunction.NORMAL, bits = 16 } = {}) {
+	constructor({ blendFunction, bits = 16 } = {}) {
 
 		super("ColorDepthEffect", fragmentShader, {
 			blendFunction,

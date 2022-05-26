@@ -1,20 +1,17 @@
 import { NoBlending, ShaderMaterial, Uniform } from "three";
 
-import fragmentShader from "./glsl/god-rays/shader.frag";
-import vertexShader from "./glsl/common/shader.vert";
+import fragmentShader from "./glsl/convolution.god-rays.frag";
+import vertexShader from "./glsl/common.vert";
 
 /**
  * A crepuscular rays shader material.
  *
  * References:
  *
- * Thibaut Despoulain, 2012:
- *  [(WebGL) Volumetric Light Approximation in Three.js](
- *  http://bkcore.com/blog/3d/webgl-three-js-volumetric-light-godrays.html)
- *
- * Nvidia, GPU Gems 3, 2008:
- *  [Chapter 13. Volumetric Light Scattering as a Post-Process](
- *  https://developer.nvidia.com/gpugems/GPUGems3/gpugems3_ch13.html)
+ * Thibaut Despoulain, 2012: [(WebGL) Volumetric Light Approximation in Three.js](
+ * http://bkcore.com/blog/3d/webgl-three-js-volumetric-light-godrays.html)
+ * Nvidia, GPU Gems 3, 2008: [Chapter 13. Volumetric Light Scattering as a Post-Process](
+ * https://developer.nvidia.com/gpugems/GPUGems3/gpugems3_ch13.html)
  *
  * @todo Remove dithering code from fragment shader.
  */

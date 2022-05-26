@@ -1,7 +1,7 @@
-import { BlendFunction } from "./blending/BlendFunction";
+import { BlendFunction } from "../enums";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/noise/shader.frag";
+import fragmentShader from "./glsl/noise.frag";
 
 /**
  * A noise effect.

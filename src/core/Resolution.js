@@ -13,8 +13,8 @@ export class Resolution extends EventDispatcher {
 	 *
 	 * TODO Remove resizable param.
 	 * @param {Resizable} resizeable - A resizable object.
-	 * @param {Number} [preferredWidth=Resolution.AUTO_SIZE] - The preferred width.
-	 * @param {Number} [preferredHeight=Resolution.AUTO_SIZE] - The preferred height.
+	 * @param {Number} [width=Resolution.AUTO_SIZE] - The preferred width.
+	 * @param {Number} [height=Resolution.AUTO_SIZE] - The preferred height.
 	 * @param {Number} [scale=1.0] - A resolution scale.
 	 */
 

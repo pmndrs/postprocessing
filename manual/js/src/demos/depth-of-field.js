@@ -20,7 +20,7 @@ import {
 
 import { Pane } from "tweakpane";
 import { SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, FPSMeter, toRecord } from "../utils";
+import { calculateVerticalFoV, FPSMeter } from "../utils";
 import * as Domain from "../objects/Domain";
 
 function load() {
@@ -102,8 +102,8 @@ window.addEventListener("load", () => load().then((assets) => {
 		kernelSize: KernelSize.SMALL,
 		worldFocusDistance: 2,
 		worldFocusRange: 5,
-		bokehScale: 2.0,
-		height: 480
+		bokehScale: 3.0,
+		resolutionScale: 0.75
 	});
 
 	const effectPass = new EffectPass(camera, effect);
@@ -129,15 +129,12 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addInput(cocDebugPass, "enabled", { label: "debug" });
-	folder.addInput(effect.resolution, "height", {
-		options: [360, 480, 720, 1080].reduce(toRecord, {}),
-		label: "resolution"
-	});
+	folder.addInput(effect.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
 
 	folder.addInput(effect.blurPass, "kernelSize", { options: KernelSize });
 	folder.addInput(cocMaterial, "worldFocusDistance", { min: 0, max: 50, step: 0.1 });
 	folder.addInput(cocMaterial, "worldFocusRange", { min: 0, max: 20, step: 0.1 });
-	folder.addInput(effect, "bokehScale", { min: 0, max: 5, step: 1e-2 });
+	folder.addInput(effect, "bokehScale", { min: 0, max: 7, step: 1e-2 });
 	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
 	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
 

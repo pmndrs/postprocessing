@@ -1,8 +1,8 @@
 import { Uniform, Vector4 } from "three";
-import { BlendFunction } from "./blending/BlendFunction";
-import { Effect, EffectAttribute } from "./Effect";
+import { EffectAttribute } from "../enums";
+import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/realistic-bokeh/shader.frag";
+import fragmentShader from "./glsl/realistic-bokeh.frag";
 
 /**
  * Depth of Field shader v2.4.
@@ -10,7 +10,7 @@ import fragmentShader from "./glsl/realistic-bokeh/shader.frag";
  * Yields more realistic results but is also more demanding.
  *
  * Original shader code by Martins Upitis:
- *  http://blenderartists.org/forum/showthread.php?237488-GLSL-depth-of-field-with-bokeh-v2-4-(update)
+ * http://blenderartists.org/forum/showthread.php?237488-GLSL-depth-of-field-with-bokeh-v2-4-(update)
  *
  * @deprecated Use DepthOfFieldEffect instead.
  */
@@ -21,7 +21,7 @@ export class RealisticBokehEffect extends Effect {
 	 * Constructs a new bokeh effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
 	 * @param {Number} [options.focus=1.0] - The focus distance in world units.
 	 * @param {Number} [options.focalLength=24.0] - The focal length of the main camera.
 	 * @param {Number} [options.fStop=0.9] - The ratio of the lens focal length to the diameter of the entrance pupil (aperture).
@@ -38,7 +38,7 @@ export class RealisticBokehEffect extends Effect {
 	 */
 
 	constructor({
-		blendFunction = BlendFunction.NORMAL,
+		blendFunction,
 		focus = 1.0,
 		focalLength = 24.0,
 		fStop = 0.9,

@@ -9,11 +9,11 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { Selection } from "../core/Selection";
-import { DepthMaskMaterial, DepthTestStrategy } from "../materials";
+import { Selection } from "../core";
+import { EffectAttribute, DepthTestStrategy } from "../enums";
+import { DepthMaskMaterial } from "../materials";
 import { ClearPass, DepthPass, ShaderPass } from "../passes";
 import { BloomEffect } from "./BloomEffect";
-import { EffectAttribute } from "./Effect";
 
 /**
  * A selective bloom effect.
@@ -97,18 +97,6 @@ export class SelectiveBloomEffect extends BloomEffect {
 		this.renderTargetMasked.texture.generateMipmaps = false;
 
 		/**
-		 * Backing data.
-		 *
-		 * @type {Record<String, Boolean>}
-		 * @private
-		 */
-
-		this.data = {
-			inverted: false,
-			ignoreBackground: false
-		};
-
-		/**
 		 * A selection of objects.
 		 *
 		 * The default layer of this selection is 11.
@@ -118,6 +106,24 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 		this.selection = new Selection();
 		this.selection.layer = 11;
+
+		/**
+		 * Backing data for {@link inverted}.
+		 *
+		 * @type {Boolean}
+		 * @private
+		 */
+
+		this._inverted = false;
+
+		/**
+		 * Backing data for {@link ignoreBackground}.
+		 *
+		 * @type {Boolean}
+		 * @private
+		 */
+
+		this._ignoreBackground = false;
 
 	}
 
@@ -155,13 +161,13 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 	get inverted() {
 
-		return this.data.inverted;
+		return this._inverted;
 
 	}
 
 	set inverted(value) {
 
-		this.data.inverted = value;
+		this._inverted = value;
 		this.depthMaskMaterial.depthMode = value ? NotEqualDepth : EqualDepth;
 
 	}
@@ -200,13 +206,13 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 	get ignoreBackground() {
 
-		return this.data.ignoreBackground;
+		return this._ignoreBackground;
 
 	}
 
 	set ignoreBackground(value) {
 
-		this.data.ignoreBackground = value;
+		this._ignoreBackground = value;
 		this.depthMaskMaterial.maxDepthStrategy = value ?
 			DepthTestStrategy.DISCARD_MAX_DEPTH :
 			DepthTestStrategy.KEEP_MAX_DEPTH;

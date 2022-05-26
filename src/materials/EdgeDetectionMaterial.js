@@ -1,42 +1,11 @@
 import { BasicDepthPacking, NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
+import { EdgeDetectionMode } from "../enums";
 
-import fragmentShader from "./glsl/edge-detection/shader.frag";
-import vertexShader from "./glsl/edge-detection/shader.vert";
-
-/**
- * An enumeration of edge detection modes.
- *
- * @type {Object}
- * @property {Number} DEPTH - Depth-based edge detection.
- * @property {Number} LUMA - Luminance-based edge detection.
- * @property {Number} COLOR - Chroma-based edge detection.
- */
-
-export const EdgeDetectionMode = {
-	DEPTH: 0,
-	LUMA: 1,
-	COLOR: 2
-};
+import fragmentShader from "./glsl/edge-detection.frag";
+import vertexShader from "./glsl/edge-detection.vert";
 
 /**
- * An enumeration of predication modes.
- *
- * @type {Object}
- * @property {Number} DISABLED - No predicated thresholding.
- * @property {Number} DEPTH - Depth-based predicated thresholding.
- * @property {Number} CUSTOM - Predicated thresholding using a custom buffer.
- */
-
-export const PredicationMode = {
-	DISABLED: 0,
-	DEPTH: 1,
-	CUSTOM: 2
-};
-
-/**
- * An edge detection material.
- *
- * Mainly used for Subpixel Morphological Anti-Aliasing.
+ * An edge detection material. Mainly used for SMAA.
  *
  * @implements {Resizable}
  */

@@ -1,9 +1,9 @@
 import { NearestFilter, RepeatWrapping, RGBAFormat, Uniform, Vector2 } from "three";
-import { NoiseTexture } from "../images/textures/NoiseTexture";
-import { BlendFunction } from "./blending/BlendFunction";
+import { GlitchMode } from "../enums";
+import { NoiseTexture } from "../textures/NoiseTexture";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/glitch/shader.frag";
+import fragmentShader from "./glsl/glitch.frag";
 
 const textureTag = "Glitch.Generated";
 
@@ -23,23 +23,6 @@ function randomFloat(low, high) {
 }
 
 /**
- * A glitch mode enumeration.
- *
- * @type {Object}
- * @property {Number} DISABLED - No glitches.
- * @property {Number} SPORADIC - Sporadic glitches.
- * @property {Number} CONSTANT_MILD - Constant mild glitches.
- * @property {Number} CONSTANT_WILD - Constant wild glitches.
- */
-
-export const GlitchMode = {
-	DISABLED: 0,
-	SPORADIC: 1,
-	CONSTANT_MILD: 2,
-	CONSTANT_WILD: 3
-};
-
-/**
  * A glitch effect.
  *
  * This effect can be used in conjunction with the {@link ChromaticAberrationEffect}.
@@ -54,7 +37,7 @@ export class GlitchEffect extends Effect {
 	 *
 	 * TODO Change ratio to 0.15.
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
 	 * @param {Vector2} [options.chromaticAberrationOffset] - A chromatic aberration offset. If provided, the glitch effect will influence this offset.
 	 * @param {Vector2} [options.delay] - The minimum and maximum delay between glitch activations in seconds.
 	 * @param {Vector2} [options.duration] - The minimum and maximum duration of a glitch in seconds.
@@ -66,7 +49,7 @@ export class GlitchEffect extends Effect {
 	 */
 
 	constructor({
-		blendFunction = BlendFunction.NORMAL,
+		blendFunction,
 		chromaticAberrationOffset = null,
 		delay = new Vector2(1.5, 3.5),
 		duration = new Vector2(0.6, 1.0),

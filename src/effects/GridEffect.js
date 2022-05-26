@@ -1,8 +1,8 @@
 import { Uniform, Vector2 } from "three";
-import { BlendFunction } from "./blending/BlendFunction";
+import { BlendFunction } from "../enums";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/grid/shader.frag";
+import fragmentShader from "./glsl/grid.frag";
 
 /**
  * A grid effect.

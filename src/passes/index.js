@@ -1,17 +1,25 @@
-export { AdaptiveLuminancePass } from "./AdaptiveLuminancePass";
-export { ClearMaskPass } from "./ClearMaskPass";
-export { ClearPass } from "./ClearPass";
-export { CopyPass, CopyPass as SavePass } from "./CopyPass";
-export { DepthPass } from "./DepthPass";
-export { DepthDownsamplingPass } from "./DepthDownsamplingPass";
-export { DepthPickingPass } from "./DepthPickingPass";
-export { DepthCopyPass, DepthCopyPass as DepthSavePass } from "./DepthCopyPass";
-export { EffectPass } from "./EffectPass";
-export { KawaseBlurPass, KawaseBlurPass as BlurPass } from "./KawaseBlurPass";
-export { LambdaPass } from "./LambdaPass";
-export { LuminancePass } from "./LuminancePass";
-export { MaskPass } from "./MaskPass";
-export { NormalPass } from "./NormalPass";
-export { Pass } from "./Pass";
-export { RenderPass } from "./RenderPass";
-export { ShaderPass } from "./ShaderPass";
+export * from "./AdaptiveLuminancePass";
+export * from "./ClearMaskPass";
+export * from "./ClearPass";
+export * from "./CopyPass";
+export * from "./DepthPass";
+export * from "./DepthDownsamplingPass";
+export * from "./DepthPickingPass";
+export * from "./DepthCopyPass";
+export * from "./EffectPass";
+export * from "./GaussianBlurPass";
+export * from "./KawaseBlurPass";
+export * from "./LambdaPass";
+export * from "./LuminancePass";
+export * from "./MaskPass";
+export * from "./NormalPass";
+export * from "./Pass";
+export * from "./RenderPass";
+export * from "./ShaderPass";
+
+/** @deprecated Renamed to CopyPass. */
+export { CopyPass as SavePass } from "./CopyPass";
+/** @deprecated Renamed to DepthCopyPass. */
+export { DepthCopyPass as DepthSavePass } from "./DepthCopyPass";
+/** @deprecated Renamed to KawaseBlurPass. */
+export { KawaseBlurPass as BlurPass } from "./KawaseBlurPass";

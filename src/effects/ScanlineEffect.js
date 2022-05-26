@@ -1,8 +1,8 @@
 import { Uniform, Vector2 } from "three";
-import { BlendFunction } from "./blending/BlendFunction";
+import { BlendFunction } from "../enums";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/scanlines/shader.frag";
+import fragmentShader from "./glsl/scanlines.frag";
 
 /**
  * A scanline effect.

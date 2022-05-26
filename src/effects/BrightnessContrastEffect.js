@@ -1,8 +1,7 @@
 import { Uniform } from "three";
-import { BlendFunction } from "./blending/BlendFunction";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/brightness-contrast/shader.frag";
+import fragmentShader from "./glsl/brightness-contrast.frag";
 
 /**
  * A brightness/contrast effect.
@@ -16,12 +15,12 @@ export class BrightnessContrastEffect extends Effect {
 	 * Constructs a new brightness/contrast effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
 	 * @param {Number} [options.brightness=0.0] - The brightness factor, ranging from -1 to 1, where 0 means no change.
 	 * @param {Number} [options.contrast=0.0] - The contrast factor, ranging from -1 to 1, where 0 means no change.
 	 */
 
-	constructor({ blendFunction = BlendFunction.NORMAL, brightness = 0.0, contrast = 0.0 } = {}) {
+	constructor({ blendFunction, brightness = 0.0, contrast = 0.0 } = {}) {
 
 		super("BrightnessContrastEffect", fragmentShader, {
 			blendFunction,

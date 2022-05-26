@@ -5,6 +5,7 @@ import {
 	PerspectiveCamera,
 	Scene,
 	sRGBEncoding,
+	Vector2,
 	WebGLRenderer
 } from "three";
 
@@ -95,8 +96,11 @@ window.addEventListener("load", () => load().then((assets) => {
 		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
 	});
 
-	const effect = new ChromaticAberrationEffect();
-	effect.offset.setScalar(0.0025);
+	const effect = new ChromaticAberrationEffect({
+		offset: new Vector2(0.0025, 0.0025),
+		radialModulation: true
+	});
+
 	composer.addPass(new RenderPass(scene, camera));
 	composer.addPass(new EffectPass(camera, effect));
 
@@ -107,9 +111,11 @@ window.addEventListener("load", () => load().then((assets) => {
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
 	const folder = pane.addFolder({ title: "Settings" });
+	folder.addInput(effect, "radialModulation");
+	folder.addInput(effect, "modulationOffset", { min: 0, max: 1.5, step: 1e-2 });
 	folder.addInput(effect, "offset", {
-		x: { min: -1e-2, max: 1e-2, step: 1e-6 },
-		y: { min: -1e-2, max: 1e-2, step: 1e-6, inverted: true }
+		x: { min: -1e-2, max: 1e-2, step: 1e-5 },
+		y: { min: -1e-2, max: 1e-2, step: 1e-5, inverted: true }
 	});
 
 	// Resize Handler

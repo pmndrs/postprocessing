@@ -1,11 +1,10 @@
 import { Uniform, UnsignedByteType } from "three";
-import { ColorChannel } from "../core/ColorChannel";
-import { getTextureDecoding } from "../utils/getTextureDecoding";
-import { BlendFunction } from "./blending/BlendFunction";
+import { ColorChannel } from "../enums";
+import { getTextureDecoding } from "../utils";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/texture/shader.frag";
-import vertexShader from "./glsl/texture/shader.vert";
+import fragmentShader from "./glsl/texture.frag";
+import vertexShader from "./glsl/texture.vert";
 
 /**
  * A texture effect.
@@ -17,12 +16,12 @@ export class TextureEffect extends Effect {
 	 * Constructs a new texture effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
 	 * @param {Texture} [options.texture] - A texture.
 	 * @param {Boolean} [options.aspectCorrection=false] - Deprecated. Adjust the texture's offset, repeat and center instead.
 	 */
 
-	constructor({ blendFunction = BlendFunction.NORMAL, texture = null, aspectCorrection = false } = {}) {
+	constructor({ blendFunction, texture = null, aspectCorrection = false } = {}) {
 
 		super("TextureEffect", fragmentShader, {
 			blendFunction,

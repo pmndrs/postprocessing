@@ -1,9 +1,9 @@
 import { Uniform, Vector2 } from "three";
-import { BlendFunction } from "./blending/BlendFunction";
-import { Effect, EffectAttribute } from "./Effect";
+import { EffectAttribute } from "../enums";
+import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/chromatic-aberration/shader.frag";
-import vertexShader from "./glsl/chromatic-aberration/shader.vert";
+import fragmentShader from "./glsl/chromatic-aberration.frag";
+import vertexShader from "./glsl/chromatic-aberration.vert";
 
 /**
  * A chromatic aberration effect.
@@ -15,20 +15,30 @@ export class ChromaticAberrationEffect extends Effect {
 	 * Constructs a new chromatic aberration effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
 	 * @param {Vector2} [options.offset] - The color offset.
+	 * @param {Boolean} [options.radialModulation=false] - Whether the effect should be modulated with a radial gradient.
+	 * @param {Number} [options.modulationOffset=0.15] - The modulation offset. Only applies if `radialModulation` is enabled.
 	 */
 
-	constructor({ blendFunction = BlendFunction.NORMAL, offset = new Vector2(0.001, 0.0005) } = {}) {
+	constructor({
+		blendFunction,
+		offset = new Vector2(1e-3, 5e-4),
+		radialModulation = false,
+		modulationOffset = 0.15
+	} = {}) {
 
 		super("ChromaticAberrationEffect", fragmentShader, {
 			vertexShader,
 			blendFunction,
 			attributes: EffectAttribute.CONVOLUTION,
 			uniforms: new Map([
-				["offset", new Uniform(offset)]
+				["offset", new Uniform(offset)],
+				["modulationOffset", new Uniform(modulationOffset)]
 			])
 		});
+
+		this.radialModulation = radialModulation;
 
 	}
 
@@ -47,6 +57,54 @@ export class ChromaticAberrationEffect extends Effect {
 	set offset(value) {
 
 		this.uniforms.get("offset").value = value;
+
+	}
+
+	/**
+	 * Indicates whether radial modulation is enabled.
+	 *
+	 * When enabled, the effect will be weaker in the middle and stronger towards the screen edges.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get radialModulation() {
+
+		return this.defines.has("RADIAL_MODULATION");
+
+	}
+
+	set radialModulation(value) {
+
+		if(value) {
+
+			this.defines.set("RADIAL_MODULATION", "1");
+
+		} else {
+
+			this.defines.delete("RADIAL_MODULATION");
+
+		}
+
+		this.setChanged();
+
+	}
+
+	/**
+	 * The modulation offset.
+	 *
+	 * @type {Number}
+	 */
+
+	get modulationOffset() {
+
+		return this.uniforms.get("modulationOffset").value;
+
+	}
+
+	set modulationOffset(value) {
+
+		this.uniforms.get("modulationOffset").value = value;
 
 	}
 

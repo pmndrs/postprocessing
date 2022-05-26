@@ -18,15 +18,19 @@ export class DepthDownsamplingPass extends Pass {
 	 * @param {Object} [options] - The options.
 	 * @param {Texture} [options.normalBuffer=null] - A texture that contains view space normals. See {@link NormalPass}.
 	 * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
-	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - The render width.
-	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - The render height.
+	 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
+	 * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
+	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprecated. Use resolutionX instead.
+	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use resolutionY instead.
 	 */
 
 	constructor({
 		normalBuffer = null,
 		resolutionScale = 0.5,
 		width = Resolution.AUTO_SIZE,
-		height = Resolution.AUTO_SIZE
+		height = Resolution.AUTO_SIZE,
+		resolutionX = width,
+		resolutionY = height
 	} = {}) {
 
 		super("DepthDownsamplingPass");
@@ -61,9 +65,10 @@ export class DepthDownsamplingPass extends Pass {
 		 * The resolution.
 		 *
 		 * @type {Resolution}
+		 * @readonly
 		 */
 
-		const resolution = this.resolution = new Resolution(this, width, height, resolutionScale);
+		const resolution = this.resolution = new Resolution(this, resolutionX, resolutionY, resolutionScale);
 		resolution.addEventListener("change", (e) => this.setSize(resolution.baseWidth, resolution.baseHeight));
 
 	}
@@ -167,7 +172,7 @@ export class DepthDownsamplingPass extends Pass {
 
 		if(!renderer.capabilities.isWebGL2) {
 
-			console.error("The DepthDownsamplingPass requires WebGL 2");
+			throw new Error("The DepthDownsamplingPass requires WebGL 2");
 
 		}
 

@@ -1,8 +1,8 @@
 import { Uniform, Vector2, Vector3 } from "three";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/shock-wave/shader.frag";
-import vertexShader from "./glsl/shock-wave/shader.vert";
+import fragmentShader from "./glsl/shock-wave.frag";
+import vertexShader from "./glsl/shock-wave.vert";
 
 const HALF_PI = Math.PI * 0.5;
 const v = new Vector3();
@@ -12,7 +12,7 @@ const ab = new Vector3();
  * A shock wave effect.
  *
  * Based on a Gist by Jean-Philippe Sarda:
- *  https://gist.github.com/jpsarda/33cea67a9f2ecb0a0eda
+ * https://gist.github.com/jpsarda/33cea67a9f2ecb0a0eda
  */
 
 export class ShockWaveEffect extends Effect {

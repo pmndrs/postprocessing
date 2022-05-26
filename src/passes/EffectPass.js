@@ -1,6 +1,5 @@
 import { BasicDepthPacking, UnsignedByteType } from "three";
-import { BlendFunction } from "../effects/blending";
-import { EffectAttribute } from "../effects/Effect";
+import { BlendFunction, EffectAttribute } from "../enums";
 import { EffectMaterial } from "../materials";
 import { Pass } from "./Pass";
 
@@ -185,16 +184,26 @@ export class EffectPass extends Pass {
 		this.fullscreenMaterial = new EffectMaterial(null, null, null, camera);
 
 		/**
+		 * An event listener that forwards events to {@link handleEvent}.
+		 *
+		 * @type {EventListener}
+		 * @private
+		 */
+
+		this.listener = (event) => this.handleEvent(event);
+
+		/**
 		 * The effects.
 		 *
 		 * Use `updateMaterial` or `recompile` after changing the effects and consider calling `dispose` to free resources
 		 * of unused effects.
 		 *
 		 * @type {Effect[]}
-		 * @protected
+		 * @private
 		 */
 
-		this.effects = effects;
+		this.effects = [];
+		this.setEffects(effects);
 
 		/**
 		 * Indicates whether this pass should skip rendering.
@@ -289,41 +298,58 @@ export class EffectPass extends Pass {
 	}
 
 	/**
-	 * Sorts the effects by attribute priority, DESC.
+	 * Sets the effects.
 	 *
-	 * @private
+	 * @param {Effect[]} effects - The effects.
+	 * @protected
 	 */
 
-	sortEffects() {
+	setEffects(effects) {
 
-		this.effects = this.effects.sort((a, b) => (b.attributes - a.attributes));
+		for(const effect of this.effects) {
+
+			effect.removeEventListener("change", this.listener);
+
+		}
+
+		this.effects = effects.sort((a, b) => (b.attributes - a.attributes));
+
+		for(const effect of this.effects) {
+
+			effect.addEventListener("change", this.listener);
+
+		}
 
 	}
 
 	/**
-	 * Compares required resources with device capabilities.
+	 * Checks if the required resources are within limits.
 	 *
 	 * @private
 	 */
 
 	verifyResources() {
 
-		const capabilities = this.renderer.capabilities;
-		let max = Math.min(capabilities.maxFragmentUniforms, capabilities.maxVertexUniforms);
+		if(this.renderer !== null) {
 
-		if(this.uniformCount > max) {
+			const capabilities = this.renderer.capabilities;
+			let max = Math.min(capabilities.maxFragmentUniforms, capabilities.maxVertexUniforms);
 
-			console.warn("The current rendering context doesn't support more than " +
-				max + " uniforms, but " + this.uniformCount + " were defined");
+			if(this.uniformCount > max) {
 
-		}
+				console.warn("The current rendering context doesn't support more than " +
+					max + " uniforms, but " + this.uniformCount + " were defined");
 
-		max = capabilities.maxVaryings;
+			}
 
-		if(this.varyingCount > max) {
+			max = capabilities.maxVaryings;
 
-			console.warn("The current rendering context doesn't support more than " +
-				max + " varyings, but " + this.varyingCount + " were defined");
+			if(this.varyingCount > max) {
+
+				console.warn("The current rendering context doesn't support more than " +
+					max + " varyings, but " + this.varyingCount + " were defined");
+
+			}
 
 		}
 
@@ -353,8 +379,6 @@ export class EffectPass extends Pass {
 
 		let id = 0, varyings = 0, attributes = 0;
 		let transformedUv = false, readDepth = false;
-
-		this.sortEffects();
 
 		for(const effect of this.effects) {
 
@@ -561,7 +585,6 @@ export class EffectPass extends Pass {
 		for(const effect of this.effects) {
 
 			effect.initialize(renderer, alpha, frameBufferType);
-			effect.addEventListener("change", (event) => this.handleEvent(event));
 
 		}
 
@@ -587,6 +610,7 @@ export class EffectPass extends Pass {
 
 		for(const effect of this.effects) {
 
+			effect.removeEventListener("change", this.listener);
 			effect.dispose();
 
 		}

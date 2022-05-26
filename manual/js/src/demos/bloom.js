@@ -25,7 +25,7 @@ import {
 
 import { Pane } from "tweakpane";
 import { SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, FPSMeter, toRecord } from "../utils";
+import { calculateVerticalFoV, FPSMeter } from "../utils";
 import * as Domain from "../objects/Domain";
 
 function load() {
@@ -134,7 +134,7 @@ window.addEventListener("load", () => load().then((assets) => {
 		kernelSize: KernelSize.MEDIUM,
 		luminanceThreshold: 0.1,
 		luminanceSmoothing: 0.2,
-		height: 480
+		resolutionScale: 0.5
 	});
 
 	const effectPass = new EffectPass(camera, effect);
@@ -176,20 +176,20 @@ window.addEventListener("load", () => load().then((assets) => {
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(effect.resolution, "height", {
-		options: [360, 480, 720, 1080].reduce(toRecord, {}),
-		label: "resolution"
-	});
-	folder.addInput(effect.blurPass, "kernelSize", { options: KernelSize });
-	folder.addInput(effect.blurPass, "scale", { min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect, "intensity", { min: 0, max: 4, step: 0.01 });
+	folder.addInput(effect.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
+	folder.addInput(effect.blurPass.blurMaterial, "kernelSize", { options: KernelSize });
+	folder.addInput(effect.blurPass.blurMaterial, "scale", { min: 0, max: 2, step: 1e-3 });
+	folder.addInput(effect, "intensity", { min: 0, max: 20, step: 0.01 });
+
 	let subfolder = folder.addFolder({ title: "Luminance Filter" });
 	subfolder.addInput(effect.luminancePass, "enabled");
 	subfolder.addInput(effect.luminanceMaterial, "threshold", { min: 0, max: 1, step: 0.01 });
 	subfolder.addInput(effect.luminanceMaterial, "smoothing", { min: 0, max: 1, step: 0.01 });
+
 	subfolder = folder.addFolder({ title: "Selection" });
 	subfolder.addInput(effect, "inverted");
 	subfolder.addInput(effect, "ignoreBackground");
+
 	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
 	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
 

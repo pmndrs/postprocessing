@@ -1,7 +1,7 @@
-import { BlendFunction } from "./blending/BlendFunction";
-import { Effect, EffectAttribute } from "./Effect";
+import { BlendFunction, EffectAttribute } from "../enums";
+import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/depth/shader.frag";
+import fragmentShader from "./glsl/depth.frag";
 
 /**
  * A depth visualization effect.
@@ -15,11 +15,11 @@ export class DepthEffect extends Effect {
 	 * Constructs a new depth effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SET] - The blend function of this effect.
 	 * @param {Boolean} [options.inverted=false] - Whether the depth should be inverted.
 	 */
 
-	constructor({ blendFunction = BlendFunction.NORMAL, inverted = false } = {}) {
+	constructor({ blendFunction = BlendFunction.SET, inverted = false } = {}) {
 
 		super("DepthEffect", fragmentShader, {
 			blendFunction,

@@ -1,10 +1,10 @@
 import { LinearFilter, sRGBEncoding, Uniform, WebGLRenderTarget } from "three";
-import { KernelSize, Resolution } from "../core";
+import { Resolution } from "../core";
+import { BlendFunction, KernelSize } from "../enums";
 import { KawaseBlurPass, LuminancePass } from "../passes";
-import { BlendFunction } from "./blending/BlendFunction";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/bloom/shader.frag";
+import fragmentShader from "./glsl/bloom.frag";
 
 /**
  * A bloom effect.
@@ -17,24 +17,28 @@ export class BloomEffect extends Effect {
 	 *
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
+	 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
 	 * @param {Number} [options.luminanceThreshold=0.9] - The luminance threshold. Raise this value to mask out darker elements in the scene. Range is [0, 1].
 	 * @param {Number} [options.luminanceSmoothing=0.025] - Controls the smoothness of the luminance threshold. Range is [0, 1].
-	 * @param {Number} [options.resolutionScale=0.5] - Deprecated. Use height or width instead.
 	 * @param {Number} [options.intensity=1.0] - The intensity.
-	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - The render width.
-	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - The render height.
-	 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
+	 * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
+	 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
+	 * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
+	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprecated. Use resolutionX instead.
+	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use resolutionY instead.
 	 */
 
 	constructor({
 		blendFunction = BlendFunction.SCREEN,
+		kernelSize = KernelSize.LARGE,
 		luminanceThreshold = 0.9,
 		luminanceSmoothing = 0.025,
-		resolutionScale = 0.5,
 		intensity = 1.0,
+		resolutionScale = 0.5,
 		width = Resolution.AUTO_SIZE,
 		height = Resolution.AUTO_SIZE,
-		kernelSize = KernelSize.LARGE
+		resolutionX = width,
+		resolutionY = height
 	} = {}) {
 
 		super("BloomEffect", fragmentShader, {
@@ -85,9 +89,8 @@ export class BloomEffect extends Effect {
 		 * @type {KawaseBlurPass}
 		 */
 
-		this.blurPass = new KawaseBlurPass({ resolutionScale, width, height, kernelSize });
-
-		const resolution = this.blurPass.getResolution();
+		this.blurPass = new KawaseBlurPass({ resolutionScale, resolutionX, resolutionY, kernelSize });
+		const resolution = this.blurPass.resolution;
 		resolution.addEventListener("change", (e) => this.setSize(resolution.baseWidth, resolution.baseHeight));
 
 	}

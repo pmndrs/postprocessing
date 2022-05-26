@@ -1,18 +1,26 @@
-export { AdaptiveLuminanceMaterial } from "./AdaptiveLuminanceMaterial";
-export { BokehMaterial } from "./BokehMaterial";
-export { CircleOfConfusionMaterial } from "./CircleOfConfusionMaterial";
-export { KawaseBlurMaterial, KawaseBlurMaterial as ConvolutionMaterial } from "./KawaseBlurMaterial";
-export { CopyMaterial } from "./CopyMaterial";
-export { DepthComparisonMaterial } from "./DepthComparisonMaterial";
-export { DepthCopyMaterial, DepthCopyMode } from "./DepthCopyMaterial";
-export { DepthDownsamplingMaterial } from "./DepthDownsamplingMaterial";
-export { DepthMaskMaterial, DepthTestStrategy } from "./DepthMaskMaterial";
-export { EdgeDetectionMaterial, EdgeDetectionMaterial as ColorEdgesMaterial } from "./EdgeDetectionMaterial";
-export { EdgeDetectionMode, PredicationMode } from "./EdgeDetectionMaterial";
-export { EffectMaterial, Section } from "./EffectMaterial";
-export { GodRaysMaterial } from "./GodRaysMaterial";
-export { LuminanceMaterial } from "./LuminanceMaterial";
-export { MaskFunction, MaskMaterial } from "./MaskMaterial";
-export { OutlineMaterial, OutlineMaterial as OutlineEdgesMaterial } from "./OutlineMaterial";
-export { SMAAWeightsMaterial } from "./SMAAWeightsMaterial";
-export { SSAOMaterial } from "./SSAOMaterial";
+export * from "./AdaptiveLuminanceMaterial";
+export * from "./BokehMaterial";
+export * from "./CircleOfConfusionMaterial";
+export * from "./KawaseBlurMaterial";
+export * from "./CopyMaterial";
+export * from "./DepthComparisonMaterial";
+export * from "./DepthCopyMaterial";
+export * from "./DepthDownsamplingMaterial";
+export * from "./DepthMaskMaterial";
+export * from "./EdgeDetectionMaterial";
+export * from "./EdgeDetectionMaterial";
+export * from "./EffectMaterial";
+export * from "./GaussianBlurMaterial";
+export * from "./GodRaysMaterial";
+export * from "./LuminanceMaterial";
+export * from "./MaskMaterial";
+export * from "./OutlineMaterial";
+export * from "./SMAAWeightsMaterial";
+export * from "./SSAOMaterial";
+
+/** @deprecated Renamed to KawaseBlurMaterial. */
+export { KawaseBlurMaterial as ConvolutionMaterial } from "./KawaseBlurMaterial";
+/** @deprecated Renamed to EdgeDetectionMaterial. */
+export { EdgeDetectionMaterial as ColorEdgesMaterial } from "./EdgeDetectionMaterial";
+/** @deprecated Renamed to OutlineMaterial. */
+export { OutlineMaterial as OutlineEdgesMaterial } from "./OutlineMaterial";

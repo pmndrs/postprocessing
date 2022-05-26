@@ -1,31 +1,31 @@
 declare module "postprocessing" {
-  import {
-    Vector2,
-    WebGLRenderer,
-    Camera,
-    PerspectiveCamera,
-    Texture,
-    Material,
-    WebGLRenderTarget,
-    Scene,
-    Uniform,
-    Object3D,
-    Vector3,
-    ShaderMaterial,
-    DataTexture,
-    Mesh,
-    Points,
-    Loader,
-    DepthPackingStrategies,
-    DepthModes,
-    EventDispatcher,
-    Color,
-    TextureEncoding,
-    DataTexture3D,
-    Wrapping,
-  } from "three";
+	import {
+		Vector2,
+		WebGLRenderer,
+		Camera,
+		PerspectiveCamera,
+		Texture,
+		Material,
+		WebGLRenderTarget,
+		Scene,
+		Uniform,
+		Object3D,
+		Vector3,
+		ShaderMaterial,
+		DataTexture,
+		Mesh,
+		Points,
+		Loader,
+		DepthPackingStrategies,
+		DepthModes,
+		EventDispatcher,
+		Color,
+		TextureEncoding,
+		DataTexture3D,
+		Wrapping
+	} from "three";
 
-  /**
+	/**
    * A color channel enumeration.
    *
    * @type {Object}
@@ -34,156 +34,178 @@ declare module "postprocessing" {
    * @property {Number} BLUE - Blue.
    * @property {Number} ALPHA - Alpha.
    */
-  export enum ColorChannel {
-    RED,
-    GREEN,
-    BLUE,
-    ALPHA,
-  }
+	export enum ColorChannel {
+		RED,
+		GREEN,
+		BLUE,
+		ALPHA,
+	}
 
-  /**
+	/**
    * The Disposable contract.
    *
    * Implemented by objects that can free internal resources.
    *
    * @interface
    */
-  export class Disposable {
-    /**
+	export class Disposable {
+
+		/**
      * Frees internal resources.
      */
-    dispose(): void;
-  }
+		dispose(): void;
 
-  /**
+	}
+
+	/**
    * The initializable contract.
    *
    * Implemented by objects that can be initialized.
    *
    * @interface
    */
-  export class Initializable {
-    /**
+	export class Initializable {
+
+		/**
      * Performs initialization tasks.
      *
      * @param {WebGLRenderer} renderer - A renderer.
      * @param {Boolean} alpha - Whether the renderer uses the alpha channel.
      * @param {Number} frameBufferType - The type of the main frame buffers.
      */
-    initialize(
-      renderer: WebGLRenderer,
-      alpha: boolean,
-      frameBufferType: number
-    ): void;
-  }
+		initialize(
+			renderer: WebGLRenderer,
+			alpha: boolean,
+			frameBufferType: number
+		): void;
 
-  /**
+	}
+
+	/**
+   * A Gauss kernel.
+   *
+   * Based on https://github.com/Jam3/glsl-fast-gaussian-blur.
+   */
+	export class GaussKernel {
+
+		/**
+     * Constructs a new Gauss kernel.
+     *
+     * @param kernelSize - The kernel size. Should be an odd number in the range [3, 1020].
+     * @param [edgeBias=2] - Determines how many edge coefficients should be cut off for increased accuracy.
+     */
+		constructor(kernelSize: number, edgeBias: number);
+
+	}
+	/**
    * An adaptive luminance shader material.
    */
-  export class AdaptiveLuminanceMaterial extends ShaderMaterial {
-    /**
+	export class AdaptiveLuminanceMaterial extends ShaderMaterial {
+
+		/**
      * Constructs a new adaptive luminance material.
      */
-    constructor();
-    /**
+		constructor();
+		/**
      * The primary luminance buffer that contains the downsampled average luminance.
      *
      * @type {Texture}
      */
-    set luminanceBuffer0(arg: Texture);
-    /**
+		set luminanceBuffer0(arg: Texture);
+		/**
      * Sets the primary luminance buffer that contains the downsampled average luminance.
      *
      * @deprecated Use luminanceBuffer0 instead.
      * @param {Texture} value - The buffer.
      */
-    setLuminanceBuffer0(value: Texture): void;
-    /**
+		setLuminanceBuffer0(value: Texture): void;
+		/**
      * The secondary luminance buffer.
      *
      * @type {Texture}
      */
-    set luminanceBuffer1(arg: Texture);
-    /**
+		set luminanceBuffer1(arg: Texture);
+		/**
      * Sets the secondary luminance buffer.
      *
      * @deprecated Use luminanceBuffer1 instead.
      * @param {Texture} value - The buffer.
      */
-    setLuminanceBuffer1(value: Texture): void;
-    /**
+		setLuminanceBuffer1(value: Texture): void;
+		/**
      * The 1x1 mipmap level.
      *
      * This level is used to identify the smallest mipmap of the primary luminance buffer.
      *
      * @type {Number}
      */
-    set mipLevel1x1(arg: number);
-    /**
+		set mipLevel1x1(arg: number);
+		/**
      * Sets the 1x1 mipmap level.
      *
      * @deprecated Use mipLevel1x1 instead.
      * @param {Number} value - The level.
      */
-    setMipLevel1x1(value: number): void;
-    /**
+		setMipLevel1x1(value: number): void;
+		/**
      * The delta time.
      *
      * @type {Number}
      */
-    set deltaTime(arg: number);
-    /**
+		set deltaTime(arg: number);
+		/**
      * Sets the delta time.
      *
      * @deprecated Use deltaTime instead.
      * @param {Number} value - The delta time.
      */
-    setDeltaTime(value: number): void;
-    set minLuminance(arg: number);
-    /**
+		setDeltaTime(value: number): void;
+		set minLuminance(arg: number);
+		/**
      * The lowest possible luminance value.
      *
      * @type {Number}
      */
-    get minLuminance(): number;
-    /**
+		get minLuminance(): number;
+		/**
      * Returns the lowest possible luminance value.
      *
      * @deprecated Use minLuminance instead.
      * @return {Number} The minimum luminance.
      */
-    getMinLuminance(): number;
-    /**
+		getMinLuminance(): number;
+		/**
      * Sets the minimum luminance.
      *
      * @deprecated Use minLuminance instead.
      * @param {Number} value - The minimum luminance.
      */
-    setMinLuminance(value: number): void;
-    set adaptationRate(arg: number);
-    /**
+		setMinLuminance(value: number): void;
+		set adaptationRate(arg: number);
+		/**
      * The luminance adaptation rate.
      *
      * @type {Number}
      */
-    get adaptationRate(): number;
-    /**
+		get adaptationRate(): number;
+		/**
      * Returns the luminance adaptation rate.
      *
      * @deprecated Use adaptationRate instead.
      * @return {Number} The adaptation rate.
      */
-    getAdaptationRate(): number;
-    /**
+		getAdaptationRate(): number;
+		/**
      * Sets the luminance adaptation rate.
      *
      * @deprecated Use adaptationRate instead.
      * @param {Number} value - The adaptation rate.
      */
-    setAdaptationRate(value: number): void;
-  }
+		setAdaptationRate(value: number): void;
 
-  /**
+	}
+
+	/**
    * A bokeh disc blur material.
    *
    * This material should be applied twice in a row, with `fill` mode enabled for the second pass. Enabling the
@@ -191,187 +213,192 @@ declare module "postprocessing" {
    *
    * @implements {Resizable}
    */
-  export class BokehMaterial extends ShaderMaterial implements Resizable {
-    /**
+	export class BokehMaterial extends ShaderMaterial implements Resizable {
+
+		/**
      * Constructs a new bokeh material.
      *
      * @param {Boolean} [fill=false] - Enables or disables the bokeh highlight fill mode.
      * @param {Boolean} [foreground=false] - Determines whether this material will be applied to foreground colors.
      */
-    constructor(fill?: boolean, foreground?: boolean);
-    /**
+		constructor(fill?: boolean, foreground?: boolean);
+		/**
      * The input buffer.
      *
      * @type {Texture}
      */
-    set inputBuffer(arg: Texture);
-    /**
+		set inputBuffer(arg: Texture);
+		/**
      * Sets the input buffer.
      *
      * @deprecated Use inputBuffer instead.
      * @param {Texture} value - The buffer.
      */
-    setInputBuffer(value: Texture): void;
-    /**
+		setInputBuffer(value: Texture): void;
+		/**
      * The circle of confusion buffer.
      *
      * @type {Texture}
      */
-    set cocBuffer(arg: Texture);
-    /**
+		set cocBuffer(arg: Texture);
+		/**
      * Sets the circle of confusion buffer.
      *
      * @deprecated Use cocBuffer instead.
      * @param {Texture} value - The buffer.
      */
-    setCoCBuffer(value: Texture): void;
-    set scale(arg: number);
-    /**
+		setCoCBuffer(value: Texture): void;
+		set scale(arg: number);
+		/**
      * The blur scale.
      *
      * @type {Number}
      */
-    get scale(): number;
-    /**
+		get scale(): number;
+		/**
      * Returns the blur scale.
      *
      * @deprecated Use scale instead.
      * @return {Number} The scale.
      */
-    getScale(value: number): number;
-    /**
+		getScale(value: number): number;
+		/**
      * Sets the blur scale.
      *
      * @deprecated Use scale instead.
      * @param {Number} value - The scale.
      */
-    setScale(value: number): void;
-    /**
+		setScale(value: number): void;
+		/**
      * Sets the texel size.
      *
      * @deprecated Use setSize() instead.
      * @param {Number} x - The texel width.
      * @param {Number} y - The texel height.
      */
-    setTexelSize(x: number, y: number): void;
-    /**
+		setTexelSize(x: number, y: number): void;
+		/**
      * Sets the size of this object.
      *
      * @param {Number} width - The width.
      * @param {Number} height - The height.
      */
-    setSize(width: number, height: number): void;
-  }
+		setSize(width: number, height: number): void;
 
-  /**
+	}
+
+	/**
    * A Circle of Confusion shader material.
    */
-  export class CircleOfConfusionMaterial extends ShaderMaterial {
-    /**
+	export class CircleOfConfusionMaterial extends ShaderMaterial {
+
+		/**
      * Constructs a new CoC material.
      *
      * @param {Camera} camera - A camera.
      */
-    constructor(camera: Camera);
-    /**
+		constructor(camera: Camera);
+		/**
      * The depth buffer.
      *
      * @type {Texture}
      */
-    set depthBuffer(arg: Texture);
-    /**
+		set depthBuffer(arg: Texture);
+		/**
      * The depth packing strategy.
      *
      * @type {DepthPackingStrategies}
      */
-    set depthPacking(arg: DepthPackingStrategies);
-    /**
+		set depthPacking(arg: DepthPackingStrategies);
+		/**
      * Sets the depth buffer.
      *
      * @deprecated Use depthBuffer and depthPacking instead.
      * @param {Texture} buffer - The depth texture.
      * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
      */
-    setDepthBuffer(
-      buffer: Texture,
-      depthPacking?: DepthPackingStrategies
-    ): void;
-    set focusDistance(arg: number);
-    /**
+		setDepthBuffer(
+			buffer: Texture,
+			depthPacking?: DepthPackingStrategies
+		): void;
+
+		set focusDistance(arg: number);
+		/**
      * The focus distance. Range: [0.0, 1.0].
      *
      * @type {Number}
      */
-    get focusDistance(): number;
-    /**
+		get focusDistance(): number;
+		/**
      * Returns the focus distance.
      *
      * @deprecated Use focusDistance instead.
      * @return {Number} The focus distance.
      */
-    getFocusDistance(value: number): number;
-    /**
+		getFocusDistance(value: number): number;
+		/**
      * Sets the focus distance.
      *
      * @deprecated Use focusDistance instead.
      * @param {Number} value - The focus distance.
      */
-    setFocusDistance(value: number): void;
-    set focalLength(arg: number);
-    /**
+		setFocusDistance(value: number): void;
+		set focalLength(arg: number);
+		/**
      * The focal length.
      *
      * @deprecated Renamed to focusRange.
      * @type {Number}
      */
-    get focalLength(): number;
-    /**
+		get focalLength(): number;
+		/**
      * Returns the focal length.
      *
      * @deprecated Use focusRange instead.
      * @return {Number} The focal length.
      */
-    getFocalLength(value: number): number;
-    /**
+		getFocalLength(value: number): number;
+		/**
      * Sets the focal length.
      *
      * @deprecated Use focusRange instead.
      * @param {Number} value - The focal length.
      */
-    setFocalLength(value: number): void;
-    /**
+		setFocalLength(value: number): void;
+		/**
      * Adopts the settings of the given camera.
      *
      * @param {Camera} camera - A camera.
      */
-    adoptCameraSettings(camera: Camera): void;
+		adoptCameraSettings(camera: Camera): void;
 
-    /**
+		/**
      * The focus distance in world units.
      *
      * @type {Number}
      */
-    get worldFocusDistance(): number;
-    set worldFocusDistance(value: number);
+		get worldFocusDistance(): number;
+		set worldFocusDistance(value: number);
 
-    /**
+		/**
      * The focus range. Range: [0.0, 1.0].
      *
      * @type {Number}
      */
-    get focusRange(): number;
-    set focusRange(value: number);
+		get focusRange(): number;
+		set focusRange(value: number);
 
-    /**
+		/**
      * The focus range in world units.
      *
      * @type {Number}
      */
-    get worldFocusRange(): number;
-    set worldFocusRange(value: number);
-  }
+		get worldFocusRange(): number;
+		set worldFocusRange(value: number);
 
-  /**
+	}
+
+	/**
    * A blur kernel size enumeration.
    *
    * @type {Object}
@@ -382,216 +409,224 @@ declare module "postprocessing" {
    * @property {Number} VERY_LARGE - A very large kernel that matches a 63x63 Gaussian blur kernel.
    * @property {Number} HUGE - A huge kernel that matches a 127x127 Gaussian blur kernel.
    */
-  export enum KernelSize {
-    VERY_SMALL,
-    SMALL,
-    MEDIUM,
-    LARGE,
-    VERY_LARGE,
-    HUGE,
-  }
+	export enum KernelSize {
+		VERY_SMALL,
+		SMALL,
+		MEDIUM,
+		LARGE,
+		VERY_LARGE,
+		HUGE,
+	}
 
-  /**
+	/**
    * A simple copy shader material.
    */
-  export class CopyMaterial extends ShaderMaterial {
-    /**
+	export class CopyMaterial extends ShaderMaterial {
+
+		/**
      * Constructs a new copy material.
      */
-    constructor();
-    /**
+		constructor();
+		/**
      * The input buffer.
      *
      * @type {Texture}
      */
-    set inputBuffer(arg: Texture);
-    /**
+		set inputBuffer(arg: Texture);
+		/**
      * Sets the input buffer.
      *
      * @deprecated Use inputBuffer instead.
      * @param {Number} value - The buffer.
      */
-    setInputBuffer(value: number): void;
-    /**
+		setInputBuffer(value: number): void;
+		/**
      * Returns the opacity.
      *
      * @deprecated Use opacity instead.
      * @return {Number} The opacity.
      */
-    getOpacity(): number;
-    /**
+		getOpacity(): number;
+		/**
      * Sets the opacity.
      *
      * @deprecated Use opacity instead.
      * @param {Number} value - The opacity.
      */
-    setOpacity(value: number): void;
-  }
+		setOpacity(value: number): void;
 
-  /**
+	}
+
+	/**
    * A depth comparison shader material.
    */
-  export class DepthComparisonMaterial extends ShaderMaterial {
-    /**
+	export class DepthComparisonMaterial extends ShaderMaterial {
+
+		/**
      * Constructs a new depth comparison material.
      *
      * @param {Texture} [depthTexture=null] - A depth texture.
      * @param {PerspectiveCamera} [camera] - A camera.
      */
-    constructor(depthTexture?: Texture, camera?: PerspectiveCamera);
-    /**
+		constructor(depthTexture?: Texture, camera?: PerspectiveCamera);
+		/**
      * The depth buffer.
      *
      * @type {Texture}
      */
-    set depthBuffer(arg: Texture);
-    /**
+		set depthBuffer(arg: Texture);
+		/**
      * The depth packing strategy.
      *
      * @type {DepthPackingStrategies}
      */
-    set depthPacking(arg: DepthPackingStrategies);
-    /**
+		set depthPacking(arg: DepthPackingStrategies);
+		/**
      * Sets the depth buffer.
      *
      * @deprecated Use depthBuffer and depthPacking instead.
      * @param {Texture} buffer - The depth texture.
      * @param {DepthPackingStrategies} [depthPacking=RGBADepthPacking] - The depth packing strategy.
      */
-    setDepthBuffer(
-      buffer: Texture,
-      depthPacking?: DepthPackingStrategies
-    ): void;
-    /**
+		setDepthBuffer(
+			buffer: Texture,
+			depthPacking?: DepthPackingStrategies
+		): void;
+
+		/**
      * Adopts the settings of the given camera.
      *
      * @param {Camera} camera - A camera.
      */
-    adoptCameraSettings(camera: Camera): void;
-  }
+		adoptCameraSettings(camera: Camera): void;
 
-  /**
+	}
+
+	/**
    * An enumeration of depth copy modes.
    *
    * @type {Object}
    * @property {Number} FULL - Copies the full depth texture every frame.
    * @property {Number} SINGLE - Copies a single texel from the depth texture on demand.
    */
-  export enum DepthCopyMode {
-    FULL,
-    SINGLE,
-  }
+	export enum DepthCopyMode {
+		FULL,
+		SINGLE,
+	}
 
-  /**
+	/**
    * A depth copy shader material.
    */
-  export class DepthCopyMaterial extends ShaderMaterial {
-    /**
+	export class DepthCopyMaterial extends ShaderMaterial {
+
+		/**
      * Constructs a new depth copy material.
      */
-    constructor();
-    /**
+		constructor();
+		/**
      * The input depth buffer.
      *
      * @type {Texture}
      */
-    set depthBuffer(arg: Texture);
-    /**
+		set depthBuffer(arg: Texture);
+		/**
      * The input depth packing strategy.
      *
      * @type {DepthPackingStrategies}
      */
-    set inputDepthPacking(arg: DepthPackingStrategies);
-    set outputDepthPacking(arg: DepthPackingStrategies);
-    /**
+		set inputDepthPacking(arg: DepthPackingStrategies);
+		set outputDepthPacking(arg: DepthPackingStrategies);
+		/**
      * The output depth packing strategy.
      *
      * @type {DepthPackingStrategies}
      */
-    get outputDepthPacking(): DepthPackingStrategies;
-    /**
+		get outputDepthPacking(): DepthPackingStrategies;
+		/**
      * Sets the input depth buffer.
      *
      * @deprecated Use depthBuffer and inputDepthPacking instead.
      * @param {Texture} buffer - The depth texture.
      * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
      */
-    setDepthBuffer(
-      buffer: Texture,
-      depthPacking?: DepthPackingStrategies
-    ): void;
-    /**
+		setDepthBuffer(
+			buffer: Texture,
+			depthPacking?: DepthPackingStrategies
+		): void;
+
+		/**
      * Returns the current input depth packing strategy.
      *
      * @deprecated
      * @return {DepthPackingStrategies} The input depth packing strategy.
      */
-    getInputDepthPacking(): DepthPackingStrategies;
-    /**
+		getInputDepthPacking(): DepthPackingStrategies;
+		/**
      * Sets the input depth packing strategy.
      *
      * @deprecated Use inputDepthPacking instead.
      * @param {DepthPackingStrategies} value - The new input depth packing strategy.
      */
-    setInputDepthPacking(value: DepthPackingStrategies): void;
-    /**
+		setInputDepthPacking(value: DepthPackingStrategies): void;
+		/**
      * Returns the current output depth packing strategy.
      *
      * @deprecated Use outputDepthPacking instead.
      * @return {DepthPackingStrategies} The output depth packing strategy.
      */
-    getOutputDepthPacking(): DepthPackingStrategies;
-    /**
+		getOutputDepthPacking(): DepthPackingStrategies;
+		/**
      * Sets the output depth packing strategy.
      *
      * @deprecated Use outputDepthPacking instead.
      * @param {DepthPackingStrategies} value - The new output depth packing strategy.
      */
-    setOutputDepthPacking(value: DepthPackingStrategies): void;
-    /**
+		setOutputDepthPacking(value: DepthPackingStrategies): void;
+		/**
      * The screen space position used for single-texel copy operations.
      *
      * @type {Vector2}
      */
-    get texelPosition(): Vector2;
-    /**
+		get texelPosition(): Vector2;
+		/**
      * Returns the screen space position used for single-texel copy operations.
      *
      * @deprecated Use texelPosition instead.
      * @return {Vector2} The position.
      */
-    getTexelPosition(): Vector2;
-    /**
+		getTexelPosition(): Vector2;
+		/**
      * Sets the screen space position used for single-texel copy operations.
      *
      * @deprecated
      * @param {Vector2} value - The position.
      */
-    setTexelPosition(value: Vector2): void;
-    set mode(arg: DepthCopyMode);
-    /**
+		setTexelPosition(value: Vector2): void;
+		set mode(arg: DepthCopyMode);
+		/**
      * The depth copy mode.
      *
      * @type {DepthCopyMode}
      */
-    get mode(): DepthCopyMode;
-    /**
+		get mode(): DepthCopyMode;
+		/**
      * Returns the depth copy mode.
      *
      * @deprecated Use mode instead.
      * @return {DepthCopyMode} The depth copy mode.
      */
-    getMode(): DepthCopyMode;
-    /**
+		getMode(): DepthCopyMode;
+		/**
      * Sets the depth copy mode.
      *
      * @deprecated Use mode instead.
      * @param {DepthCopyMode} value - The new mode.
      */
-    setMode(value: DepthCopyMode): void;
-  }
+		setMode(value: DepthCopyMode): void;
 
-  /**
+	}
+
+	/**
    * A depth downsampling shader material.
    *
    * Based on an article by Eleni Maria Stea:
@@ -599,68 +634,70 @@ declare module "postprocessing" {
    *
    * @implements {Resizable}
    */
-  export class DepthDownsamplingMaterial
-    extends ShaderMaterial
-    implements Resizable
-  {
-    /**
+	export class DepthDownsamplingMaterial
+		extends ShaderMaterial
+		implements Resizable {
+
+		/**
      * Constructs a new depth downsampling material.
      */
-    constructor();
-    /**
+		constructor();
+		/**
      * The depth buffer.
      *
      * @type {Texture}
      */
-    set depthBuffer(arg: Texture);
-    /**
+		set depthBuffer(arg: Texture);
+		/**
      * The depth packing strategy.
      *
      * @type {DepthPackingStrategies}
      */
-    set depthPacking(arg: DepthPackingStrategies);
-    /**
+		set depthPacking(arg: DepthPackingStrategies);
+		/**
      * Sets the depth buffer.
      *
      * @deprecated Use depthBuffer and depthPacking instead.
      * @param {Texture} buffer - The depth texture.
      * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
      */
-    setDepthBuffer(
-      buffer: Texture,
-      depthPacking?: DepthPackingStrategies
-    ): void;
-    /**
+		setDepthBuffer(
+			buffer: Texture,
+			depthPacking?: DepthPackingStrategies
+		): void;
+
+		/**
      * The normal buffer.
      *
      * @type {Texture}
      */
-    set normalBuffer(arg: Texture);
-    /**
+		set normalBuffer(arg: Texture);
+		/**
      * Sets the normal buffer.
      *
      * @deprecated Use normalBuffer instead.
      * @param {Texture} value - The normal buffer.
      */
-    setNormalBuffer(value: Texture): void;
-    /**
+		setNormalBuffer(value: Texture): void;
+		/**
      * Sets the texel size.
      *
      * @deprecated Use setSize() instead.
      * @param {Number} x - The texel width.
      * @param {Number} y - The texel height.
      */
-    setTexelSize(x: number, y: number): void;
-    /**
+		setTexelSize(x: number, y: number): void;
+		/**
      * Sets the size of this object.
      *
      * @param {Number} width - The width.
      * @param {Number} height - The height.
      */
-    setSize(width: number, height: number): void;
-  }
+		setSize(width: number, height: number): void;
 
-  /**
+	}
+
+	/**
    * An enumeration of depth test strategies.
    *
    * @type {Object}
@@ -668,143 +705,147 @@ declare module "postprocessing" {
    * @property {Number} KEEP_MAX_DEPTH - Always keep max depth.
    * @property {Number} DISCARD_MAX_DEPTH - Always discard max depth.
    */
-  export enum DepthTestStrategy {
-    DEFAULT,
-    KEEP_MAX_DEPTH,
-    DISCARD_MAX_DEPTH,
-  }
+	export enum DepthTestStrategy {
+		DEFAULT,
+		KEEP_MAX_DEPTH,
+		DISCARD_MAX_DEPTH,
+	}
 
-  /**
+	/**
    * A depth mask shader material.
    *
    * This material masks a color buffer by comparing two depth textures.
    */
-  export class DepthMaskMaterial extends ShaderMaterial {
-    /**
+	export class DepthMaskMaterial extends ShaderMaterial {
+
+		/**
      * Constructs a new depth mask material.
      */
-    constructor();
-    set depthMode(arg: DepthModes);
-    /**
+		constructor();
+		set depthMode(arg: DepthModes);
+		/**
      * The depth mode.
      *
      * @see https://threejs.org/docs/#api/en/constants/Materials
      * @type {DepthModes}
      */
-    get depthMode(): DepthModes;
-    /**
+		get depthMode(): DepthModes;
+		/**
      * The primary depth buffer.
      *
      * @type {Texture}
      */
-    set depthBuffer0(arg: Texture);
-    /**
+		set depthBuffer0(arg: Texture);
+		/**
      * The primary depth packing strategy.
      *
      * @type {DepthPackingStrategies}
      */
-    set depthPacking0(arg: DepthPackingStrategies);
-    /**
+		set depthPacking0(arg: DepthPackingStrategies);
+		/**
      * Sets the base depth buffer.
      *
      * @deprecated Use depthBuffer0 and depthPacking0 instead.
      * @param {Texture} buffer - The depth texture.
      * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
      */
-    setDepthBuffer0(
-      buffer: Texture,
-      depthPacking?: DepthPackingStrategies
-    ): void;
-    /**
+		setDepthBuffer0(
+			buffer: Texture,
+			depthPacking?: DepthPackingStrategies
+		): void;
+
+		/**
      * The secondary depth buffer.
      *
      * @type {Texture}
      */
-    set depthBuffer1(arg: Texture);
-    /**
+		set depthBuffer1(arg: Texture);
+		/**
      * The secondary depth packing strategy.
      *
      * @type {DepthPackingStrategies}
      */
-    set depthPacking1(arg: DepthPackingStrategies);
-    /**
+		set depthPacking1(arg: DepthPackingStrategies);
+		/**
      * Sets the depth buffer that will be compared with the base depth buffer.
      *
      * @deprecated Use depthBuffer1 and depthPacking1 instead.
      * @param {Texture} buffer - The depth texture.
      * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
      */
-    setDepthBuffer1(
-      buffer: Texture,
-      depthPacking?: DepthPackingStrategies
-    ): void;
-    set maxDepthStrategy(arg: DepthTestStrategy);
-    /**
+		setDepthBuffer1(
+			buffer: Texture,
+			depthPacking?: DepthPackingStrategies
+		): void;
+
+		set maxDepthStrategy(arg: DepthTestStrategy);
+		/**
      * The strategy for handling maximum depth.
      *
      * @type {DepthTestStrategy}
      */
-    get maxDepthStrategy(): DepthTestStrategy;
-    set keepFar(arg: boolean);
-    /**
+		get maxDepthStrategy(): DepthTestStrategy;
+		set keepFar(arg: boolean);
+		/**
      * Indicates whether maximum depth values should be preserved.
      *
      * @type {Boolean}
      * @deprecated Use maxDepthStrategy instead.
      */
-    get keepFar(): boolean;
-    /**
+		get keepFar(): boolean;
+		/**
      * Returns the strategy for dealing with maximum depth values.
      *
      * @deprecated Use maxDepthStrategy instead.
      * @return {DepthTestStrategy} The strategy.
      */
-    getMaxDepthStrategy(): DepthTestStrategy;
-    /**
+		getMaxDepthStrategy(): DepthTestStrategy;
+		/**
      * Sets the strategy for dealing with maximum depth values.
      *
      * @deprecated Use maxDepthStrategy instead.
      * @param {DepthTestStrategy} value - The strategy.
      */
-    setMaxDepthStrategy(value: DepthTestStrategy): void;
-    set epsilon(arg: number);
-    /**
+		setMaxDepthStrategy(value: DepthTestStrategy): void;
+		set epsilon(arg: number);
+		/**
      * A small error threshold that is used for `EqualDepth` and `NotEqualDepth` tests. Default is `1e-5`.
      *
      * @type {Number}
      */
-    get epsilon(): number;
-    /**
+		get epsilon(): number;
+		/**
      * Returns the current error threshold for depth comparisons. Default is `1e-5`.
      *
      * @deprecated Use epsilon instead.
      * @return {Number} The error threshold.
      */
-    getEpsilon(): number;
-    /**
+		getEpsilon(): number;
+		/**
      * Sets the depth comparison error threshold.
      *
      * @deprecated Use epsilon instead.
      * @param {Number} value - The new error threshold.
      */
-    setEpsilon(value: number): void;
-    /**
+		setEpsilon(value: number): void;
+		/**
      * Returns the current depth mode.
      *
      * @deprecated Use depthMode instead.
      * @return {DepthModes} The depth mode. Default is `LessDepth`.
      */
-    getDepthMode(): DepthModes;
-    /**
+		getDepthMode(): DepthModes;
+		/**
      * Sets the depth mode.
      *
      * @deprecated Use depthMode instead.
      * @param {DepthModes} mode - The depth mode.
      */
-    setDepthMode(mode: DepthModes): void;
-  }
+		setDepthMode(mode: DepthModes): void;
 
-  /**
+	}
+
+	/**
    * An enumeration of edge detection modes.
    *
    * @type {Object}
@@ -812,13 +853,13 @@ declare module "postprocessing" {
    * @property {Number} LUMA - Luminance-based edge detection.
    * @property {Number} COLOR - Chroma-based edge detection.
    */
-  export enum EdgeDetectionMode {
-    DEPTH,
-    LUMA,
-    COLOR,
-  }
+	export enum EdgeDetectionMode {
+		DEPTH,
+		LUMA,
+		COLOR,
+	}
 
-  /**
+	/**
    * An enumeration of predication modes.
    *
    * @type {Object}
@@ -826,76 +867,77 @@ declare module "postprocessing" {
    * @property {Number} DEPTH - Depth-based predicated thresholding.
    * @property {Number} CUSTOM - Predicated thresholding using a custom buffer.
    */
-  export enum PredicationMode {
-    DISABLED,
-    DEPTH,
-    CUSTOM,
-  }
-  /**
+	export enum PredicationMode {
+		DISABLED,
+		DEPTH,
+		CUSTOM,
+	}
+	/**
    * An edge detection material.
    *
    * Mainly used for Subpixel Morphological Anti-Aliasing.
    *
    * @implements {Resizable}
    */
-  export class EdgeDetectionMaterial
-    extends ShaderMaterial
-    implements Resizable
-  {
-    /**
+	export class EdgeDetectionMaterial
+		extends ShaderMaterial
+		implements Resizable {
+
+		/**
      * Constructs a new edge detection material.
      *
      * TODO Remove parameters.
      * @param {Vector2} [texelSize] - The screen texel size.
      * @param {EdgeDetectionMode} [mode=EdgeDetectionMode.COLOR] - The edge detection mode.
      */
-    constructor(texelSize?: Vector2, mode?: EdgeDetectionMode);
-    set edgeDetectionMode(arg: EdgeDetectionMode);
-    /**
+		constructor(texelSize?: Vector2, mode?: EdgeDetectionMode);
+		set edgeDetectionMode(arg: EdgeDetectionMode);
+		/**
      * The edge detection mode.
      *
      * @type {EdgeDetectionMode}
      */
-    get edgeDetectionMode(): EdgeDetectionMode;
-    /**
+		get edgeDetectionMode(): EdgeDetectionMode;
+		/**
      * The depth buffer.
      *
      * @type {Texture}
      */
-    set depthBuffer(arg: Texture);
-    /**
+		set depthBuffer(arg: Texture);
+		/**
      * The depth packing strategy.
      *
      * @type {DepthPackingStrategies}
      */
-    set depthPacking(arg: DepthPackingStrategies);
-    /**
+		set depthPacking(arg: DepthPackingStrategies);
+		/**
      * Sets the depth buffer.
      *
      * @deprecated Use depthBuffer and depthPacking instead.
      * @param {Texture} buffer - The depth texture.
      * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
      */
-    setDepthBuffer(
-      buffer: Texture,
-      depthPacking?: DepthPackingStrategies
-    ): void;
-    /**
+		setDepthBuffer(
+			buffer: Texture,
+			depthPacking?: DepthPackingStrategies
+		): void;
+
+		/**
      * Returns the edge detection mode.
      *
      * @deprecated Use edgeDetectionMode instead.
      * @return {EdgeDetectionMode} The mode.
      */
-    getEdgeDetectionMode(): EdgeDetectionMode;
-    /**
+		getEdgeDetectionMode(): EdgeDetectionMode;
+		/**
      * Sets the edge detection mode.
      *
      * @deprecated Use edgeDetectionMode instead.
      * @param {EdgeDetectionMode} value - The edge detection mode.
      */
-    setEdgeDetectionMode(value: EdgeDetectionMode): void;
-    set localContrastAdaptationFactor(arg: number);
-    /**
+		setEdgeDetectionMode(value: EdgeDetectionMode): void;
+		set localContrastAdaptationFactor(arg: number);
+		/**
      * The local contrast adaptation factor. Has no effect if the edge detection mode is set to DEPTH. Default is 2.0.
      *
      * If a neighbor edge has _factor_ times bigger contrast than the current edge, the edge will be discarded.
@@ -905,23 +947,23 @@ declare module "postprocessing" {
      *
      * @type {Number}
      */
-    get localContrastAdaptationFactor(): number;
-    /**
+		get localContrastAdaptationFactor(): number;
+		/**
      * Returns the local contrast adaptation factor.
      *
      * @deprecated Use localContrastAdaptationFactor instead.
      * @return {Number} The factor.
      */
-    getLocalContrastAdaptationFactor(): number;
-    /**
+		getLocalContrastAdaptationFactor(): number;
+		/**
      * Sets the local contrast adaptation factor. Has no effect if the edge detection mode is set to DEPTH.
      *
      * @deprecated Use localContrastAdaptationFactor instead.
      * @param {Number} value - The local contrast adaptation factor. Default is 2.0.
      */
-    setLocalContrastAdaptationFactor(value: number): void;
-    set edgeDetectionThreshold(arg: number);
-    /**
+		setLocalContrastAdaptationFactor(value: number): void;
+		set edgeDetectionThreshold(arg: number);
+		/**
      * The edge detection threshold. Range: [0.0, 0.5].
      *
      * A lower value results in more edges being detected at the expense of performance.
@@ -933,23 +975,23 @@ declare module "postprocessing" {
      *
      * @type {Number}
      */
-    get edgeDetectionThreshold(): number;
-    /**
+		get edgeDetectionThreshold(): number;
+		/**
      * Returns the edge detection threshold.
      *
      * @deprecated Use edgeDetectionThreshold instead.
      * @return {Number} The threshold.
      */
-    getEdgeDetectionThreshold(): number;
-    /**
+		getEdgeDetectionThreshold(): number;
+		/**
      * Sets the edge detection threshold.
      *
      * @deprecated Use edgeDetectionThreshold instead.
      * @param {Number} value - The edge detection threshold. Range: [0.0, 0.5].
      */
-    setEdgeDetectionThreshold(value: number): void;
-    set predicationMode(arg: PredicationMode);
-    /**
+		setEdgeDetectionThreshold(value: number): void;
+		set predicationMode(arg: PredicationMode);
+		/**
      * The predication mode.
      *
      * Predicated thresholding allows to better preserve texture details and to improve edge detection using an additional
@@ -957,119 +999,121 @@ declare module "postprocessing" {
      *
      * @type {PredicationMode}
      */
-    get predicationMode(): PredicationMode;
-    /**
+		get predicationMode(): PredicationMode;
+		/**
      * Returns the predication mode.
      *
      * @deprecated Use predicationMode instead.
      * @return {PredicationMode} The mode.
      */
-    getPredicationMode(): PredicationMode;
-    /**
+		getPredicationMode(): PredicationMode;
+		/**
      * Sets the predication mode.
      *
      * @deprecated Use predicationMode instead.
      * @param {PredicationMode} value - The predication mode.
      */
-    setPredicationMode(value: PredicationMode): void;
-    /**
+		setPredicationMode(value: PredicationMode): void;
+		/**
      * The predication buffer.
      *
      * @type {Texture}
      */
-    set predicationBuffer(arg: Texture);
-    /**
+		set predicationBuffer(arg: Texture);
+		/**
      * Sets a custom predication buffer.
      *
      * @deprecated Use predicationBuffer instead.
      * @param {Texture} value - The predication buffer.
      */
-    setPredicationBuffer(value: Texture): void;
-    set predicationThreshold(arg: number);
-    /**
+		setPredicationBuffer(value: Texture): void;
+		set predicationThreshold(arg: number);
+		/**
      * The predication threshold.
      *
      * @type {Number}
      */
-    get predicationThreshold(): number;
-    /**
+		get predicationThreshold(): number;
+		/**
      * Returns the predication threshold.
      *
      * @deprecated Use predicationThreshold instead.
      * @return {Number} The threshold.
      */
-    getPredicationThreshold(): number;
-    /**
+		getPredicationThreshold(): number;
+		/**
      * Sets the predication threshold.
      *
      * @deprecated Use predicationThreshold instead.
      * @param {Number} value - The threshold.
      */
-    setPredicationThreshold(value: number): void;
-    set predicationScale(arg: number);
-    /**
+		setPredicationThreshold(value: number): void;
+		set predicationScale(arg: number);
+		/**
      * The predication scale. Range: [1.0, 5.0].
      *
      * Determines how much the edge detection threshold should be scaled when using predication.
      *
      * @type {Number}
      */
-    get predicationScale(): number;
-    /**
+		get predicationScale(): number;
+		/**
      * Returns the predication scale.
      *
      * @deprecated Use predicationScale instead.
      * @return {Number} The scale.
      */
-    getPredicationScale(): number;
-    /**
+		getPredicationScale(): number;
+		/**
      * Sets the predication scale.
      *
      * @deprecated Use predicationScale instead.
      * @param {Number} value - The scale. Range: [1.0, 5.0].
      */
-    setPredicationScale(value: number): void;
-    set predicationStrength(arg: number);
-    /**
+		setPredicationScale(value: number): void;
+		set predicationStrength(arg: number);
+		/**
      * The predication strength. Range: [0.0, 1.0].
      *
      * Determines how much the edge detection threshold should be decreased locally when using predication.
      *
      * @type {Number}
      */
-    get predicationStrength(): number;
-    /**
+		get predicationStrength(): number;
+		/**
      * Returns the predication strength.
      *
      * @deprecated Use predicationStrength instead.
      * @return {Number} The strength.
      */
-    getPredicationStrength(): number;
-    /**
+		getPredicationStrength(): number;
+		/**
      * Sets the predication strength.
      *
      * @deprecated Use predicationStrength instead.
      * @param {Number} value - The strength. Range: [0.0, 1.0].
      */
-    setPredicationStrength(value: number): void;
-    /**
+		setPredicationStrength(value: number): void;
+		/**
      * Sets the size of this object.
      *
      * @param {Number} width - The width.
      * @param {Number} height - The height.
      */
-    setSize(width: number, height: number): void;
-  }
+		setSize(width: number, height: number): void;
 
-  export type ColorEdgesMaterial = EdgeDetectionMaterial;
+	}
 
-  /**
+	export type ColorEdgesMaterial = EdgeDetectionMaterial;
+
+	/**
    * An effect material for compound shaders. Supports dithering.
    *
    * @implements {Resizable}
    */
-  export class EffectMaterial extends ShaderMaterial implements Resizable {
-    /**
+	export class EffectMaterial extends ShaderMaterial implements Resizable {
+
+		/**
      * An enumeration of shader code section placeholders used by the {@link EffectPass}.
      *
      * @type {Object}
@@ -1079,14 +1123,15 @@ declare module "postprocessing" {
      * @property {String} VERTEX_HEAD - A placeholder for function and variable declarations inside the vertex shader.
      * @property {String} VERTEX_MAIN_SUPPORT - A placeholder for supporting calculations inside the vertex shader.
      */
-    static get Section(): {
-      FRAGMENT_HEAD: string;
-      FRAGMENT_MAIN_UV: string;
-      FRAGMENT_MAIN_IMAGE: string;
-      VERTEX_HEAD: string;
-      VERTEX_MAIN_SUPPORT: string;
-    };
-    /**
+		static get Section(): {
+			FRAGMENT_HEAD: string;
+			FRAGMENT_MAIN_UV: string;
+			FRAGMENT_MAIN_IMAGE: string;
+			VERTEX_HEAD: string;
+			VERTEX_MAIN_SUPPORT: string;
+		};
+
+		/**
      * Constructs a new effect material.
      *
      * @param {Map<String, String>} [shaderParts] - A collection of shader snippets. See {@link Section}.
@@ -1095,130 +1140,133 @@ declare module "postprocessing" {
      * @param {Camera} [camera] - A camera.
      * @param {Boolean} [dithering=false] - Whether dithering should be enabled.
      */
-    constructor(
-      shaderParts?: Map<string, string>,
-      defines?: Map<string, string>,
-      uniforms?: Map<string, Uniform>,
-      camera?: Camera,
-      dithering?: boolean
-    );
-    /**
+		constructor(
+			shaderParts?: Map<string, string>,
+			defines?: Map<string, string>,
+			uniforms?: Map<string, Uniform>,
+			camera?: Camera,
+			dithering?: boolean
+		);
+
+		/**
      * The input buffer.
      *
      * @type {Texture}
      */
-    set inputBuffer(arg: Texture);
-    /**
+		set inputBuffer(arg: Texture);
+		/**
      * Sets the input buffer.
      *
      * @deprecated Use inputBuffer instead.
      * @param {Texture} value - The input buffer.
      */
-    setInputBuffer(value: Texture): void;
-    set depthBuffer(arg: Texture);
-    /**
+		setInputBuffer(value: Texture): void;
+		set depthBuffer(arg: Texture);
+		/**
      * The depth buffer.
      *
      * @type {Texture}
      */
-    get depthBuffer(): Texture;
-    set depthPacking(arg: DepthPackingStrategies);
-    /**
+		get depthBuffer(): Texture;
+		set depthPacking(arg: DepthPackingStrategies);
+		/**
      * The depth packing strategy.
      *
      * @type {DepthPackingStrategies}
      */
-    get depthPacking(): DepthPackingStrategies;
-    /**
+		get depthPacking(): DepthPackingStrategies;
+		/**
      * Sets the depth buffer.
      *
      * @deprecated Use depthBuffer and depthPacking instead.
      * @param {Texture} buffer - The depth texture.
      * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
      */
-    setDepthBuffer(
-      buffer: Texture,
-      depthPacking?: DepthPackingStrategies
-    ): void;
-    /**
+		setDepthBuffer(
+			buffer: Texture,
+			depthPacking?: DepthPackingStrategies
+		): void;
+
+		/**
      * Sets the shader parts.
      *
      * @param {Map<String, String>} shaderParts - A collection of shader snippets. See {@link Section}.
      * @return {EffectMaterial} This material.
      */
-    setShaderParts(shaderParts: Map<string, string>): EffectMaterial;
-    /**
+		setShaderParts(shaderParts: Map<string, string>): EffectMaterial;
+		/**
      * Sets the shader macros.
      *
      * @param {Map<String, String>} defines - A collection of preprocessor macro definitions.
      * @return {EffectMaterial} This material.
      */
-    setDefines(defines: Map<string, string>): EffectMaterial;
-    /**
+		setDefines(defines: Map<string, string>): EffectMaterial;
+		/**
      * Sets the shader uniforms.
      *
      * @param {Map<String, Uniform>} uniforms - A collection of uniforms.
      * @return {EffectMaterial} This material.
      */
-    setUniforms(uniforms: Map<string, Uniform>): EffectMaterial;
-    /**
+		setUniforms(uniforms: Map<string, Uniform>): EffectMaterial;
+		/**
      * Sets the required shader extensions.
      *
      * @param {Set<WebGLExtension>} extensions - A collection of extensions.
      * @return {EffectMaterial} This material.
      */
-    setExtensions(extensions: Set<WebGLExtension>): EffectMaterial;
-    set encodeOutput(arg: boolean);
-    /**
+		setExtensions(extensions: Set<WebGLExtension>): EffectMaterial;
+		set encodeOutput(arg: boolean);
+		/**
      * Indicates whether output encoding is enabled.
      *
      * @type {Boolean}
      */
-    get encodeOutput(): boolean;
-    /**
+		get encodeOutput(): boolean;
+		/**
      * Indicates whether output encoding is enabled.
      *
      * @deprecated Use encodeOutput instead.
      * @return {Boolean} Whether output encoding is enabled.
      */
-    isOutputEncodingEnabled(): boolean;
-    /**
+		isOutputEncodingEnabled(): boolean;
+		/**
      * Enables or disables output encoding.
      *
      * @deprecated Use encodeOutput instead.
      * @param {Boolean} value - Whether output encoding should be enabled.
      */
-    setOutputEncodingEnabled(value: boolean): void;
-    set time(arg: number);
-    /**
+		setOutputEncodingEnabled(value: boolean): void;
+		set time(arg: number);
+		/**
      * The time in seconds.
      *
      * @type {Number}
      */
-    get time(): number;
-    /**
+		get time(): number;
+		/**
      * Sets the delta time.
      *
      * @deprecated Use time instead.
      * @param {Number} value - The delta time in seconds.
      */
-    setDeltaTime(value: number): void;
-    /**
+		setDeltaTime(value: number): void;
+		/**
      * Adopts the settings of the given camera.
      *
      * @param {Camera} camera - A camera.
      */
-    adoptCameraSettings(camera: Camera): void;
-    /**
+		adoptCameraSettings(camera: Camera): void;
+		/**
      * Sets the resolution.
      *
      * @param {Number} width - The width.
      * @param {Number} height - The height.
      */
-    setSize(width: number, height: number): void;
-  }
+		setSize(width: number, height: number): void;
 
-  /**
+	}
+
+	/**
    * An enumeration of shader code placeholders used by the {@link EffectPass}.
    * @property FRAGMENT_HEAD - A placeholder for function and variable declarations inside the fragment shader.
    * @property FRAGMENT_MAIN_UV - A placeholder for UV transformations inside the fragment shader.
@@ -1227,15 +1275,15 @@ declare module "postprocessing" {
    * @property VERTEX_MAIN_SUPPORT - A placeholder for supporting calculations inside the vertex shader.
    * @deprecated Use EffectMaterial.Section instead.
    */
-  export const Section: {
-    FRAGMENT_HEAD: string;
-    FRAGMENT_MAIN_UV: string;
-    FRAGMENT_MAIN_IMAGE: string;
-    VERTEX_HEAD: string;
-    VERTEX_MAIN_SUPPORT: string;
-  };
+	export const Section: {
+		FRAGMENT_HEAD: string;
+		FRAGMENT_MAIN_UV: string;
+		FRAGMENT_MAIN_IMAGE: string;
+		VERTEX_HEAD: string;
+		VERTEX_MAIN_SUPPORT: string;
+	};
 
-  /**
+	/**
    * A crepuscular rays shader material.
    *
    * References:
@@ -1250,176 +1298,178 @@ declare module "postprocessing" {
    *
    * @todo Remove dithering code from fragment shader.
    */
-  export class GodRaysMaterial extends ShaderMaterial {
-    /**
+	export class GodRaysMaterial extends ShaderMaterial {
+
+		/**
      * Constructs a new god rays material.
      *
      * TODO Remove lightPosition param.
      * @param {Vector2} lightPosition - Deprecated.
      */
-    constructor(lightPosition: Vector2);
-    /**
+		constructor(lightPosition: Vector2);
+		/**
      * The input buffer.
      *
      * @type {Texture}
      */
-    set inputBuffer(arg: Texture);
-    /**
+		set inputBuffer(arg: Texture);
+		/**
      * Sets the input buffer.
      *
      * @deprecated Use inputBuffer instead.
      * @param {Texture} value - The input buffer.
      */
-    setInputBuffer(value: Texture): void;
-    /**
+		setInputBuffer(value: Texture): void;
+		/**
      * The screen space position of the light source.
      *
      * @type {Vector2}
      */
-    get lightPosition(): Vector2;
-    /**
+		get lightPosition(): Vector2;
+		/**
      * Returns the screen space position of the light source.
      *
      * @deprecated Use lightPosition instead.
      * @return {Vector2} The position.
      */
-    getLightPosition(): Vector2;
-    /**
+		getLightPosition(): Vector2;
+		/**
      * Sets the screen space position of the light source.
      *
      * @deprecated Use lightPosition instead.
      * @param {Vector2} value - The position.
      */
-    setLightPosition(value: Vector2): void;
-    set density(arg: number);
-    /**
+		setLightPosition(value: Vector2): void;
+		set density(arg: number);
+		/**
      * The density.
      *
      * @type {Number}
      */
-    get density(): number;
-    /**
+		get density(): number;
+		/**
      * Returns the density.
      *
      * @deprecated Use density instead.
      * @return {Number} The density.
      */
-    getDensity(): number;
-    /**
+		getDensity(): number;
+		/**
      * Sets the density.
      *
      * @deprecated Use density instead.
      * @param {Number} value - The density.
      */
-    setDensity(value: number): void;
-    set decay(arg: number);
-    /**
+		setDensity(value: number): void;
+		set decay(arg: number);
+		/**
      * The decay.
      *
      * @type {Number}
      */
-    get decay(): number;
-    /**
+		get decay(): number;
+		/**
      * Returns the decay.
      *
      * @deprecated Use decay instead.
      * @return {Number} The decay.
      */
-    getDecay(): number;
-    /**
+		getDecay(): number;
+		/**
      * Sets the decay.
      *
      * @deprecated Use decay instead.
      * @param {Number} value - The decay.
      */
-    setDecay(value: number): void;
-    set weight(arg: number);
-    /**
+		setDecay(value: number): void;
+		set weight(arg: number);
+		/**
      * The weight.
      *
      * @type {Number}
      */
-    get weight(): number;
-    /**
+		get weight(): number;
+		/**
      * Returns the weight.
      *
      * @deprecated Use weight instead.
      * @return {Number} The weight.
      */
-    getWeight(): number;
-    /**
+		getWeight(): number;
+		/**
      * Sets the weight.
      *
      * @deprecated Use weight instead.
      * @param {Number} value - The weight.
      */
-    setWeight(value: number): void;
-    set exposure(arg: number);
-    /**
+		setWeight(value: number): void;
+		set exposure(arg: number);
+		/**
      * The exposure.
      *
      * @type {Number}
      */
-    get exposure(): number;
-    /**
+		get exposure(): number;
+		/**
      * Returns the exposure.
      *
      * @deprecated Use exposure instead.
      * @return {Number} The exposure.
      */
-    getExposure(): number;
-    /**
+		getExposure(): number;
+		/**
      * Sets the exposure.
      *
      * @deprecated Use exposure instead.
      * @param {Number} value - The exposure.
      */
-    setExposure(value: number): void;
-    set maxIntensity(arg: number);
-    /**
+		setExposure(value: number): void;
+		set maxIntensity(arg: number);
+		/**
      * The maximum light intensity.
      *
      * @type {Number}
      */
-    get maxIntensity(): number;
-    /**
+		get maxIntensity(): number;
+		/**
      * Returns the maximum light intensity.
      *
      * @deprecated Use maxIntensity instead.
      * @return {Number} The maximum light intensity.
      */
-    getMaxIntensity(): number;
-    /**
+		getMaxIntensity(): number;
+		/**
      * Sets the maximum light intensity.
      *
      * @deprecated Use maxIntensity instead.
      * @param {Number} value - The maximum light intensity.
      */
-    setMaxIntensity(value: number): void;
-    set samples(arg: number);
-    /**
+		setMaxIntensity(value: number): void;
+		set samples(arg: number);
+		/**
      * The amount of samples per pixel.
      *
      * @type {Number}
      */
-    get samples(): number;
-    /**
+		get samples(): number;
+		/**
      * Returns the amount of samples per pixel.
      *
      * @deprecated Use samples instead.
      * @return {Number} The sample count.
      */
-    getSamples(): number;
-    /**
+		getSamples(): number;
+		/**
      * Sets the amount of samples per pixel.
      *
      * @deprecated Use samples instead.
      * @param {Number} value - The sample count.
      */
-    setSamples(value: number): void;
-  }
+		setSamples(value: number): void;
 
-  /**
+	}
+
+	/**
    * An optimised convolution shader material.
    *
    * Based on the GDC2003 Presentation by Masaki Kawase, Bunkasha Games:
@@ -1432,89 +1482,91 @@ declare module "postprocessing" {
    * @todo Remove dithering code from fragment shader.
    * @implements {Resizable}
    */
-  export class KawaseBlurMaterial extends ShaderMaterial implements Resizable {
-    /**
+	export class KawaseBlurMaterial extends ShaderMaterial implements Resizable {
+
+		/**
      * Constructs a new convolution material.
      *
      * TODO Remove texelSize param.
      * @param {Vector2} [texelSize] - Deprecated.
      */
-    constructor(texelSize?: Vector2);
-    /**
+		constructor(texelSize?: Vector2);
+		/**
      * The input buffer.
      *
      * @type {Texture}
      */
-    set inputBuffer(arg: Texture);
-    /**
+		set inputBuffer(arg: Texture);
+		/**
      * Sets the input buffer.
      *
      * @deprecated Use inputBuffer instead.
      * @param {Texture} value - The input buffer.
      */
-    setInputBuffer(value: Texture): void;
-    set scale(arg: number);
-    /**
+		setInputBuffer(value: Texture): void;
+		set scale(arg: number);
+		/**
      * The blur scale.
      *
      * @type {Number}
      */
-    get scale(): number;
-    /**
+		get scale(): number;
+		/**
      * Returns the blur scale.
      *
      * @deprecated Use scale instead.
      * @return {Number} The scale.
      */
-    getScale(): number;
-    /**
+		getScale(): number;
+		/**
      * Sets the blur scale.
      *
      * @deprecated Use scale instead.
      * @param {Number} value - The scale.
      */
-    setScale(value: number): void;
-    /**
+		setScale(value: number): void;
+		/**
      * Returns the kernel.
      *
      * @return {Float32Array} The kernel.
      * @deprecated Implementation detail, removed with no replacement.
      */
-    getKernel(): Float32Array;
-    set kernel(arg: number);
-    /**
+		getKernel(): Float32Array;
+		set kernel(arg: number);
+		/**
      * The current kernel.
      *
      * @type {Number}
      */
-    get kernel(): number;
-    /**
+		get kernel(): number;
+		/**
      * Sets the current kernel.
      *
      * @deprecated Use kernel instead.
      * @param {Number} value - The kernel.
      */
-    setKernel(value: number): void;
-    /**
+		setKernel(value: number): void;
+		/**
      * Sets the texel size.
      *
      * @deprecated Use setSize() instead.
      * @param {Number} x - The texel width.
      * @param {Number} y - The texel height.
      */
-    setTexelSize(x: number, y: number): void;
-    /**
+		setTexelSize(x: number, y: number): void;
+		/**
      * Sets the size of this object.
      *
      * @param {Number} width - The width.
      * @param {Number} height - The height.
      */
-    setSize(width: number, height: number): void;
-  }
+		setSize(width: number, height: number): void;
 
-  export type ConvolutionMaterial = KawaseBlurMaterial;
+	}
 
-  /**
+	export type ConvolutionMaterial = KawaseBlurMaterial;
+
+	/**
    * A luminance shader material.
    *
    * This shader produces a greyscale luminance map that describes the absolute amount of light emitted by a scene. It can
@@ -1532,130 +1584,132 @@ declare module "postprocessing" {
    * Luminance range reference:
    *  https://cycling74.com/2007/05/23/your-first-shader/#.Vty9FfkrL4Z
    */
-  export class LuminanceMaterial extends ShaderMaterial {
-    /**
+	export class LuminanceMaterial extends ShaderMaterial {
+
+		/**
      * Constructs a new luminance material.
      *
      * @param {Boolean} [colorOutput=false] - Defines whether the shader should output colors scaled with their luminance value.
      * @param {Vector2} [luminanceRange] - If provided, the shader will mask out texels that aren't in the specified luminance range.
      */
-    constructor(colorOutput?: boolean, luminanceRange?: Vector2);
-    set colorOutput(arg: boolean);
-    /**
+		constructor(colorOutput?: boolean, luminanceRange?: Vector2);
+		set colorOutput(arg: boolean);
+		/**
      * Indicates whether color output is enabled.
      *
      * @type {Boolean}
      */
-    get colorOutput(): boolean;
-    set luminanceRange(arg: boolean);
-    /**
+		get colorOutput(): boolean;
+		set luminanceRange(arg: boolean);
+		/**
      * The luminance range. Set to null to disable.
      *
      * @type {Boolean}
      */
-    get luminanceRange(): boolean;
-    /**
+		get luminanceRange(): boolean;
+		/**
      * The input buffer.
      *
      * @type {Texture}
      */
-    set inputBuffer(arg: Texture);
-    /**
+		set inputBuffer(arg: Texture);
+		/**
      * Sets the input buffer.
      *
      * @deprecated Use inputBuffer instead.
      * @param {Texture} value - The input buffer.
      */
-    setInputBuffer(value: Texture): void;
-    set threshold(arg: number);
-    /**
+		setInputBuffer(value: Texture): void;
+		set threshold(arg: number);
+		/**
      * The luminance threshold.
      *
      * @type {Number}
      */
-    get threshold(): number;
-    /**
+		get threshold(): number;
+		/**
      * Returns the luminance threshold.
      *
      * @deprecated Use threshold instead.
      * @return {Number} The threshold.
      */
-    getThreshold(): number;
-    /**
+		getThreshold(): number;
+		/**
      * Sets the luminance threshold.
      *
      * @deprecated Use threshold instead.
      * @param {Number} value - The threshold.
      */
-    setThreshold(value: number): void;
-    set smoothing(arg: number);
-    /**
+		setThreshold(value: number): void;
+		set smoothing(arg: number);
+		/**
      * The luminance threshold smoothing.
      *
      * @type {Number}
      */
-    get smoothing(): number;
-    /**
+		get smoothing(): number;
+		/**
      * Returns the luminance threshold smoothing factor.
      *
      * @deprecated Use smoothing instead.
      * @return {Number} The smoothing factor.
      */
-    getSmoothingFactor(): number;
-    /**
+		getSmoothingFactor(): number;
+		/**
      * Sets the luminance threshold smoothing factor.
      *
      * @deprecated Use smoothing instead.
      * @param {Number} value - The smoothing factor.
      */
-    setSmoothingFactor(value: number): void;
-    set useThreshold(arg: boolean);
-    /**
+		setSmoothingFactor(value: number): void;
+		set useThreshold(arg: boolean);
+		/**
      * Indicates whether the luminance threshold is enabled.
      *
      * @type {Boolean}
      * @deprecated Adjust the threshold or smoothing factor instead.
      */
-    get useThreshold(): boolean;
-    /**
+		get useThreshold(): boolean;
+		/**
      * Indicates whether color output is enabled.
      *
      * @deprecated Use colorOutput instead.
      * @return {Boolean} Whether color output is enabled.
      */
-    isColorOutputEnabled(): boolean;
-    /**
+		isColorOutputEnabled(): boolean;
+		/**
      * Enables or disables color output.
      *
      * @deprecated Use colorOutput instead.
      * @param {Boolean} value - Whether color output should be enabled.
      */
-    setColorOutputEnabled(value: boolean): void;
-    set useRange(arg: boolean);
-    /**
+		setColorOutputEnabled(value: boolean): void;
+		set useRange(arg: boolean);
+		/**
      * Indicates whether luminance masking is enabled.
      *
      * @type {Boolean}
      * @deprecated
      */
-    get useRange(): boolean;
-    /**
+		get useRange(): boolean;
+		/**
      * Returns the current luminance range.
      *
      * @deprecated Use luminanceRange instead.
      * @return {Vector2} The luminance range.
      */
-    getLuminanceRange(): Vector2;
-    /**
+		getLuminanceRange(): Vector2;
+		/**
      * Sets a luminance range. Set to null to disable.
      *
      * @deprecated Use luminanceRange instead.
      * @param {Vector2} value - The luminance range.
      */
-    setLuminanceRange(value: Vector2): void;
-  }
+		setLuminanceRange(value: Vector2): void;
 
-  /**
+	}
+
+	/**
    * A mask function enumeration.
    *
    * @type {Object}
@@ -1663,114 +1717,115 @@ declare module "postprocessing" {
    * @property {Number} MULTIPLY - Multiplies the input buffer with the mask texture.
    * @property {Number} MULTIPLY_RGB_SET_ALPHA - Multiplies the input RGB values with the mask and sets alpha to the mask value.
    */
-  export enum MaskFunction {
-    DISCARD,
-    MULTIPLY,
-    MULTIPLY_RGB_SET_ALPHA,
-  }
+	export enum MaskFunction {
+		DISCARD,
+		MULTIPLY,
+		MULTIPLY_RGB_SET_ALPHA,
+	}
 
-  /**
+	/**
    * A mask shader material.
    *
    * This material applies a mask texture to a buffer.
    */
-  export class MaskMaterial extends ShaderMaterial {
-    /**
+	export class MaskMaterial extends ShaderMaterial {
+
+		/**
      * Constructs a new mask material.
      *
      * @param {Texture} [maskTexture] - The mask texture.
      */
-    constructor(maskTexture?: Texture);
-    /**
+		constructor(maskTexture?: Texture);
+		/**
      * The input buffer.
      *
      * @param {Texture} arg - The input buffer
      */
-    set inputBuffer(arg: Texture);
-    /**
+		set inputBuffer(arg: Texture);
+		/**
      * Sets the input buffer.
      *
      * @deprecated Use inputBuffer instead.
      * @param {Texture} value - The input buffer.
      */
-    setInputBuffer(value: Texture): void;
-    /**
+		setInputBuffer(value: Texture): void;
+		/**
      * The mask texture.
      *
      * @param {Texture} arg - The texture
      */
-    set maskTexture(arg: Texture);
-    /**
+		set maskTexture(arg: Texture);
+		/**
      * Sets the mask texture.
      *
      * @deprecated Use maskTexture instead.
      * @param {Texture} value - The texture.
      */
-    setMaskTexture(value: Texture): void;
-    /**
+		setMaskTexture(value: Texture): void;
+		/**
      * Sets the color channel to use for masking. Default is `ColorChannel.RED`.
      *
      * @param {ColorChannel} type - The channel.
      */
-    set colorChannel(arg: ColorChannel);
-    /**
+		set colorChannel(arg: ColorChannel);
+		/**
      * Sets the color channel to use for masking. Default is `ColorChannel.RED`.
      *
      * @deprecated Use colorChannel instead.
      * @param {ColorChannel} value - The channel.
      */
-    setColorChannel(value: ColorChannel): void;
-    /**
+		setColorChannel(value: ColorChannel): void;
+		/**
      * The masking technique. Default is `MaskFunction.DISCARD`.
      *
      * @param {MaskFunction} arg - The function
      */
-    set maskFunction(arg: MaskFunction);
-    /**
+		set maskFunction(arg: MaskFunction);
+		/**
      * Sets the masking technique. Default is `MaskFunction.DISCARD`.
      *
      * @deprecated Use maskFunction instead.
      * @param {MaskFunction} value - The function.
      */
-    setMaskFunction(value: MaskFunction): void;
-    set inverted(arg: boolean);
-    /**
+		setMaskFunction(value: MaskFunction): void;
+		set inverted(arg: boolean);
+		/**
      * Indicates whether the masking is inverted.
      *
      * @type {Boolean}
      */
-    get inverted(): boolean;
-    /**
+		get inverted(): boolean;
+		/**
      * Indicates whether the masking is inverted.
      *
      * @deprecated Use inverted instead.
      * @return {Boolean} Whether the masking is inverted.
      */
-    isInverted(): boolean;
-    /**
+		isInverted(): boolean;
+		/**
      * Determines whether the masking should be inverted.
      *
      * @deprecated Use inverted instead.
      * @param {Boolean} value - Whether the masking should be inverted.
      */
-    setInverted(value: boolean): void;
-    set strength(arg: number);
-    /**
+		setInverted(value: boolean): void;
+		set strength(arg: number);
+		/**
      * The current mask strength.
      *
      * Individual mask values will be clamped to [0.0, 1.0]. Has no effect when the mask function is set to `DISCARD`.
      *
      * @type {Number}
      */
-    get strength(): number;
-    /**
+		get strength(): number;
+		/**
      * Returns the current mask strength.
      *
      * @deprecated Use strength instead.
      * @return {Number} The mask strength.
      */
-    getStrength(): number;
-    /**
+		getStrength(): number;
+		/**
      * Sets the mask strength.
      *
      * Has no effect when the mask function is set to `DISCARD`.
@@ -1778,109 +1833,113 @@ declare module "postprocessing" {
      * @deprecated Use strength instead.
      * @param {Number} value - The mask strength.
      */
-    setStrength(value: number): void;
-  }
+		setStrength(value: number): void;
 
-  /**
+	}
+
+	/**
    * An outline shader material.
    *
    * @implements {Resizable}
    */
-  export class OutlineMaterial extends ShaderMaterial implements Resizable {
-    /**
+	export class OutlineMaterial extends ShaderMaterial implements Resizable {
+
+		/**
      * Constructs a new outline material.
      *
      * TODO Remove texelSize param.
      * @param {Vector2} [texelSize] - The screen texel size.
      */
-    constructor(texelSize?: Vector2);
-    /**
+		constructor(texelSize?: Vector2);
+		/**
      * The input buffer.
      *
      * @param {Texture} arg - The input buffer.
      */
-    set inputBuffer(arg: Texture);
-    /**
+		set inputBuffer(arg: Texture);
+		/**
      * Sets the input buffer.
      *
      * @deprecated Use inputBuffer instead.
      * @param {Texture} value - The input buffer.
      */
-    setInputBuffer(value: Texture): void;
-    /**
+		setInputBuffer(value: Texture): void;
+		/**
      * Sets the texel size.
      *
      * @deprecated Use setSize() instead.
      * @param {Number} x - The texel width.
      * @param {Number} y - The texel height.
      */
-    setTexelSize(x: number, y: number): void;
-    /**
+		setTexelSize(x: number, y: number): void;
+		/**
      * Sets the size of this object.
      *
      * @param {Number} width - The width.
      * @param {Number} height - The height.
      */
-    setSize(width: number, height: number): void;
-  }
+		setSize(width: number, height: number): void;
 
-  /**
+	}
+
+	/**
    * An outline shader material.
    */
-  export type OutlineEdgesMaterial = OutlineMaterial;
+	export type OutlineEdgesMaterial = OutlineMaterial;
 
-  /**
+	/**
    * Subpixel Morphological Antialiasing.
    *
    * This material computes weights for detected edges.
    *
    * @implements {Resizable}
    */
-  export class SMAAWeightsMaterial extends ShaderMaterial implements Resizable {
-    /**
+	export class SMAAWeightsMaterial extends ShaderMaterial implements Resizable {
+
+		/**
      * Constructs a new SMAA weights material.
      *
      * @param {Vector2} [texelSize] - The absolute screen texel size.
      * @param {Vector2} [resolution] - The resolution.
      */
-    constructor(texelSize?: Vector2, resolution?: Vector2);
-    /**
+		constructor(texelSize?: Vector2, resolution?: Vector2);
+		/**
      * The input buffer.
      *
      * @param {Texture} arg - The input buffer.
      */
-    set inputBuffer(arg: Texture);
-    /**
+		set inputBuffer(arg: Texture);
+		/**
      * Sets the input buffer.
      *
      * @deprecated Use inputBuffer instead.
      * @param {Texture} value - The input buffer.
      */
-    setInputBuffer(value: Texture): void;
-    set searchTexture(arg: Texture);
-    /**
+		setInputBuffer(value: Texture): void;
+		set searchTexture(arg: Texture);
+		/**
      * The search lookup texture.
      *
      * @type {Texture}
      */
-    get searchTexture(): Texture;
-    set areaTexture(arg: Texture);
-    /**
+		get searchTexture(): Texture;
+		set areaTexture(arg: Texture);
+		/**
      * The area lookup texture.
      *
      * @type {Texture}
      */
-    get areaTexture(): Texture;
-    /**
+		get areaTexture(): Texture;
+		/**
      * Sets the search and area lookup textures.
      *
      * @deprecated Use searchTexture and areaTexture instead.
      * @param {Texture} search - The search lookup texture.
      * @param {Texture} area - The area lookup texture.
      */
-    setLookupTextures(search: Texture, area: Texture): void;
-    set orthogonalSearchSteps(arg: number);
-    /**
+		setLookupTextures(search: Texture, area: Texture): void;
+		set orthogonalSearchSteps(arg: number);
+		/**
      * The maximum amount of steps performed in the horizontal/vertical pattern searches, at each side of the pixel.
      * Range: [0, 112].
      *
@@ -1889,16 +1948,16 @@ declare module "postprocessing" {
      *
      * @type {Number}
      */
-    get orthogonalSearchSteps(): number;
-    /**
+		get orthogonalSearchSteps(): number;
+		/**
      * Sets the maximum amount of steps performed in the horizontal/vertical pattern searches, at each side of the pixel.
      *
      * @deprecated Use orthogonalSearchSteps instead.
      * @param {Number} value - The search steps. Range: [0, 112].
      */
-    setOrthogonalSearchSteps(value: number): void;
-    set diagonalSearchSteps(arg: number);
-    /**
+		setOrthogonalSearchSteps(value: number): void;
+		set diagonalSearchSteps(arg: number);
+		/**
      * The maximum steps performed in the diagonal pattern searches, at each side of the pixel. This search
      * jumps one pixel at a time. Range: [0, 20].
      *
@@ -1907,440 +1966,445 @@ declare module "postprocessing" {
      *
      * @type {Number}
      */
-    get diagonalSearchSteps(): number;
-    /**
+		get diagonalSearchSteps(): number;
+		/**
      * Specifies the maximum steps performed in the diagonal pattern searches, at each side of the pixel.
      *
      * @deprecated Use diagonalSearchSteps instead.
      * @param {Number} value - The search steps. Range: [0, 20].
      */
-    setDiagonalSearchSteps(value: number): void;
-    set diagonalDetection(arg: boolean);
-    /**
+		setDiagonalSearchSteps(value: number): void;
+		set diagonalDetection(arg: boolean);
+		/**
      * Indicates whether diagonal pattern detection is enabled.
      *
      * @type {Boolean}
      */
-    get diagonalDetection(): boolean;
-    /**
+		get diagonalDetection(): boolean;
+		/**
      * Indicates whether diagonal pattern detection is enabled.
      *
      * @deprecated Use diagonalDetection instead.
      * @return {Boolean} Whether diagonal pattern detection is enabled.
      */
-    isDiagonalDetectionEnabled(): boolean;
-    /**
+		isDiagonalDetectionEnabled(): boolean;
+		/**
      * Enables or disables diagonal pattern detection.
      *
      * @deprecated Use diagonalDetection instead.
      * @param {Boolean} value - Whether diagonal pattern detection should be enabled.
      */
-    setDiagonalDetectionEnabled(value: boolean): void;
-    set cornerRounding(arg: number);
-    /**
+		setDiagonalDetectionEnabled(value: boolean): void;
+		set cornerRounding(arg: number);
+		/**
      * Specifies how much sharp corners will be rounded. Range: [0, 100].
      *
      * @type {Number}
      */
-    get cornerRounding(): number;
-    /**
+		get cornerRounding(): number;
+		/**
      * Specifies how much sharp corners will be rounded.
      *
      * @deprecated Use cornerRounding instead.
      * @param {Number} value - The corner rounding amount. Range: [0, 100].
      */
-    setCornerRounding(value: number): void;
-    set cornerDetection(arg: number);
-    /**
+		setCornerRounding(value: number): void;
+		set cornerDetection(arg: number);
+		/**
      * Indicates whether corner detection is enabled.
      *
      * @type {Number}
      */
-    get cornerDetection(): number;
-    /**
+		get cornerDetection(): number;
+		/**
      * Indicates whether corner rounding is enabled.
      *
      * @deprecated Use cornerDetection instead.
      * @return {Boolean} Whether corner rounding is enabled.
      */
-    isCornerRoundingEnabled(): boolean;
-    /**
+		isCornerRoundingEnabled(): boolean;
+		/**
      * Enables or disables corner rounding.
      *
      * @deprecated Use cornerDetection instead.
      * @param {Boolean} value - Whether corner rounding should be enabled.
      */
-    setCornerRoundingEnabled(value: boolean): void;
-    /**
+		setCornerRoundingEnabled(value: boolean): void;
+		/**
      * Sets the size of this object.
      *
      * @param {Number} width - The width.
      * @param {Number} height - The height.
      */
-    setSize(width: number, height: number): void;
-  }
+		setSize(width: number, height: number): void;
 
-  /**
+	}
+
+	/**
    * A Screen Space Ambient Occlusion (SSAO) shader material.
    *
    * @implements {Resizable}
    */
-  export class SSAOMaterial extends ShaderMaterial implements Resizable {
-    /**
+	export class SSAOMaterial extends ShaderMaterial implements Resizable {
+
+		/**
      * Constructs a new SSAO material.
      *
      * @param {Camera} camera - A camera.
      */
-    constructor(camera: Camera);
-    /**
+		constructor(camera: Camera);
+		/**
      * The combined normal-depth buffer.
      *
      * @param {Texture} arg - The buffer.
      */
-    set normalDepthBuffer(arg: Texture);
-    /**
+		set normalDepthBuffer(arg: Texture);
+		/**
      * Sets the combined normal-depth buffer.
      *
      * @deprecated Use normalDepthBuffer instead.
      * @param {Texture} value - The buffer.
      */
-    setNormalDepthBuffer(value: Texture): void;
-    /**
+		setNormalDepthBuffer(value: Texture): void;
+		/**
      * The normal buffer.
      *
      * @param {Texture} arg - The buffer.
      */
-    set normalBuffer(arg: Texture);
-    /**
+		set normalBuffer(arg: Texture);
+		/**
      * Sets the normal buffer.
      *
      * @deprecated Use normalBuffer instead.
      * @param {Texture} value - The buffer.
      */
-    setNormalBuffer(value: Texture): void;
-    /**
+		setNormalBuffer(value: Texture): void;
+		/**
      * The depth buffer.
      *
      * @param {Texture} arg - The buffer.
      */
-    set depthBuffer(arg: Texture);
-    /**
+		set depthBuffer(arg: Texture);
+		/**
      * The depth packing strategy.
      *
      * @param {DepthPackingStrategies} arg - The depth packing strategy.
      */
-    set depthPacking(arg: DepthPackingStrategies);
-    /**
+		set depthPacking(arg: DepthPackingStrategies);
+		/**
      * Sets the depth buffer.
      *
      * @deprecated Use depthBuffer and depthPacking instead.
      * @param {Texture} buffer - The depth texture.
      * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing strategy.
      */
-    setDepthBuffer(
-      buffer: Texture,
-      depthPacking?: DepthPackingStrategies
-    ): void;
-    /**
+		setDepthBuffer(
+			buffer: Texture,
+			depthPacking?: DepthPackingStrategies
+		): void;
+
+		/**
      * The noise texture.
      *
      * @param {Texture} arg - The texture.
      */
-    set noiseTexture(arg: Texture);
-    /**
+		set noiseTexture(arg: Texture);
+		/**
      * Sets the noise texture.
      *
      * @deprecated Use noiseTexture instead.
      * @param {Texture} value - The texture.
      */
-    setNoiseTexture(value: Texture): void;
-    set samples(arg: number);
-    /**
+		setNoiseTexture(value: Texture): void;
+		set samples(arg: number);
+		/**
      * The sample count.
      *
      * @type {Number}
      */
-    get samples(): number;
-    /**
+		get samples(): number;
+		/**
      * Returns the amount of occlusion samples per pixel.
      *
      * @deprecated Use samples instead.
      * @return {Number} The sample count.
      */
-    getSamples(): number;
-    /**
+		getSamples(): number;
+		/**
      * Sets the amount of occlusion samples per pixel.
      *
      * @deprecated Use samples instead.
      * @param {Number} value - The sample count.
      */
-    setSamples(value: number): void;
-    set rings(arg: number);
-    /**
+		setSamples(value: number): void;
+		set rings(arg: number);
+		/**
      * The sampling spiral ring count.
      *
      * @type {Number}
      */
-    get rings(): number;
-    /**
+		get rings(): number;
+		/**
      * Returns the amount of spiral turns in the occlusion sampling pattern.
      *
      * @deprecated Use rings instead.
      * @return {Number} The radius.
      */
-    getRings(): number;
-    /**
+		getRings(): number;
+		/**
      * Sets the amount of spiral turns in the occlusion sampling pattern.
      *
      * @deprecated Use rings instead.
      * @param {Number} value - The radius.
      */
-    setRings(value: number): void;
-    set intensity(arg: number);
-    /**
+		setRings(value: number): void;
+		set intensity(arg: number);
+		/**
      * The intensity.
      *
      * @type {Number}
      */
-    get intensity(): number;
-    /**
+		get intensity(): number;
+		/**
      * Returns the intensity.
      *
      * @deprecated Use intensity instead.
      * @return {Number} The intensity.
      */
-    getIntensity(): number;
-    /**
+		getIntensity(): number;
+		/**
      * Sets the intensity.
      *
      * @deprecated Use intensity instead.
      * @param {Number} value - The intensity.
      */
-    setIntensity(value: number): void;
-    set fade(arg: number);
-    /**
+		setIntensity(value: number): void;
+		set fade(arg: number);
+		/**
      * The depth fade factor.
      *
      * @type {Number}
      */
-    get fade(): number;
-    /**
+		get fade(): number;
+		/**
      * Returns the depth fade factor.
      *
      * @deprecated Use fade instead.
      * @return {Number} The fade factor.
      */
-    getFade(): number;
-    /**
+		getFade(): number;
+		/**
      * Sets the depth fade factor.
      *
      * @deprecated Use fade instead.
      * @param {Number} value - The fade factor.
      */
-    setFade(value: number): void;
-    set bias(arg: number);
-    /**
+		setFade(value: number): void;
+		set bias(arg: number);
+		/**
      * The depth bias. Range: [0.0, 1.0].
      *
      * @type {Number}
      */
-    get bias(): number;
-    /**
+		get bias(): number;
+		/**
      * Returns the depth bias.
      *
      * @deprecated Use bias instead.
      * @return {Number} The bias.
      */
-    getBias(): number;
-    /**
+		getBias(): number;
+		/**
      * Sets the depth bias.
      *
      * @deprecated Use bias instead.
      * @param {Number} value - The bias.
      */
-    setBias(value: number): void;
-    set minRadiusScale(arg: number);
-    /**
+		setBias(value: number): void;
+		set minRadiusScale(arg: number);
+		/**
      * The minimum radius scale for distance scaling. Range: [0.0, 1.0].
      *
      * @type {Number}
      */
-    get minRadiusScale(): number;
-    /**
+		get minRadiusScale(): number;
+		/**
      * Returns the minimum radius scale for distance scaling.
      *
      * @deprecated Use minRadiusScale instead.
      * @return {Number} The minimum radius scale.
      */
-    getMinRadiusScale(): number;
-    /**
+		getMinRadiusScale(): number;
+		/**
      * Sets the minimum radius scale for distance scaling.
      *
      * @deprecated Use minRadiusScale instead.
      * @param {Number} value - The minimum radius scale.
      */
-    setMinRadiusScale(value: number): void;
-    set radius(arg: number);
-    /**
+		setMinRadiusScale(value: number): void;
+		set radius(arg: number);
+		/**
      * The occlusion sampling radius. Range: [0.0, 1.0].
      *
      * @type {Number}
      */
-    get radius(): number;
-    /**
+		get radius(): number;
+		/**
      * Returns the occlusion sampling radius.
      *
      * @deprecated Use radius instead.
      * @return {Number} The radius.
      */
-    getRadius(): number;
-    /**
+		getRadius(): number;
+		/**
      * Sets the occlusion sampling radius.
      *
      * @deprecated Use radius instead.
      * @param {Number} value - The radius. Range [1e-6, 1.0].
      */
-    setRadius(value: number): void;
-    set distanceScaling(arg: boolean);
-    /**
+		setRadius(value: number): void;
+		set distanceScaling(arg: boolean);
+		/**
      * Indicates whether distance-based radius scaling is enabled.
      *
      * @type {Boolean}
      */
-    get distanceScaling(): boolean;
-    /**
+		get distanceScaling(): boolean;
+		/**
      * Indicates whether distance-based radius scaling is enabled.
      *
      * @deprecated Use distanceScaling instead.
      * @return {Boolean} Whether distance scaling is enabled.
      */
-    isDistanceScalingEnabled(): boolean;
-    /**
+		isDistanceScalingEnabled(): boolean;
+		/**
      * Enables or disables distance-based radius scaling.
      *
      * @deprecated Use distanceScaling instead.
      * @param {Boolean} value - Whether distance scaling should be enabled.
      */
-    setDistanceScalingEnabled(value: boolean): void;
-    set distanceThreshold(arg: number);
-    /**
+		setDistanceScalingEnabled(value: boolean): void;
+		set distanceThreshold(arg: number);
+		/**
      * The occlusion distance threshold. Range: [0.0, 1.0].
      *
      * @type {Number}
      */
-    get distanceThreshold(): number;
+		get distanceThreshold(): number;
 
-    /**
+		/**
      * The occlusion distance falloff.
      * The occlusion distance threshold in world units.
      *
      * @type {Number}
      */
 
-    get worldDistanceThreshold(): number;
-    set worldDistanceThreshold(value: number);
+		get worldDistanceThreshold(): number;
+		set worldDistanceThreshold(value: number);
 
-    set distanceFalloff(arg: number);
-    /**
+		set distanceFalloff(arg: number);
+		/**
      * The occlusion distance falloff. Range: [0.0, 1.0].
      *
      * @type {Number}
      */
-    get distanceFalloff(): number;
+		get distanceFalloff(): number;
 
-    /**
+		/**
      * The occlusion distance falloff in world units.
      *
      * @type {Number}
      */
 
-    get worldDistanceFalloff(): number;
-    set worldDistanceFalloff(value: number);
+		get worldDistanceFalloff(): number;
+		set worldDistanceFalloff(value: number);
 
-    /**
+		/**
      * Sets the occlusion distance cutoff.
      *
      * @deprecated Use distanceThreshold and distanceFalloff instead.
      * @param {Number} threshold - The distance threshold. Range [0.0, 1.0].
      * @param {Number} falloff - The falloff. Range [0.0, 1.0].
      */
-    setDistanceCutoff(threshold: number, falloff: number): void;
-    set proximityThreshold(arg: number);
-    /**
+		setDistanceCutoff(threshold: number, falloff: number): void;
+		set proximityThreshold(arg: number);
+		/**
      * The occlusion proximity threshold. Range: [0.0, 1.0].
      *
      * @type {Number}
      */
-    get proximityThreshold(): number;
-    /**
+		get proximityThreshold(): number;
+		/**
      * The occlusion proximity threshold in world units.
      *
      * @type {Number}
      */
-    get worldProximityThreshold(): number;
-    set worldProximityThreshold(value: number);
+		get worldProximityThreshold(): number;
+		set worldProximityThreshold(value: number);
 
-    set proximityFalloff(arg: number);
-    /**
+		set proximityFalloff(arg: number);
+		/**
      * The occlusion proximity falloff. Range: [0.0, 1.0].
      *
      * @type {Number}
      */
-    get proximityFalloff(): number;
+		get proximityFalloff(): number;
 
-    /**
+		/**
      * The occlusion proximity falloff in world units.
      *
      * @type {Number}
      */
 
-    get worldProximityFalloff(): number;
-    set worldProximityFalloff(value: number);
+		get worldProximityFalloff(): number;
+		set worldProximityFalloff(value: number);
 
-    /**
+		/**
      * Sets the occlusion proximity cutoff.
      *
      * @deprecated Use proximityThreshold and proximityFalloff instead.
      * @param {Number} threshold - The range threshold. Range [0.0, 1.0].
      * @param {Number} falloff - The falloff. Range [0.0, 1.0].
      */
-    setProximityCutoff(threshold: number, falloff: number): void;
-    /**
+		setProximityCutoff(threshold: number, falloff: number): void;
+		/**
      * Sets the texel size.
      *
      * @deprecated Use setSize() instead.
      * @param {Number} x - The texel width.
      * @param {Number} y - The texel height.
      */
-    setTexelSize(x: number, y: number): void;
-    /**
+		setTexelSize(x: number, y: number): void;
+		/**
      * Adopts the settings of the given camera.
      *
      * @param {Camera} camera - A camera.
      */
-    adoptCameraSettings(camera: Camera): void;
-    /**
+		adoptCameraSettings(camera: Camera): void;
+		/**
      * Sets the size of this object.
      *
      * @param {Number} width - The width.
      * @param {Number} height - The height.
      */
-    setSize(width: number, height: number): void;
-  }
+		setSize(width: number, height: number): void;
 
-  /**
+	}
+
+	/**
    * A resolution.
    */
-  export class Resolution extends EventDispatcher<import("three").Event> {
-    /**
+	export class Resolution extends EventDispatcher<import("three").Event> {
+
+		/**
      * An auto sizing constant.
      *
      * Can be used to automatically calculate the width or height based on the original aspect ratio.
      *
      * @type {Number}
      */
-    static get AUTO_SIZE(): number;
-    /**
+		static get AUTO_SIZE(): number;
+		/**
      * Constructs a new resolution.
      *
      * TODO Remove resizable param.
@@ -2349,59 +2413,60 @@ declare module "postprocessing" {
      * @param {Number} [preferredHeight=Resolution.AUTO_SIZE] - The preferred height.
      * @param {Number} [scale=1.0] - A resolution scale.
      */
-    constructor(
-      resizable: Resizable,
-      width?: number,
-      height?: number,
-      scale?: number
-    );
-    /**
+		constructor(
+			resizable: Resizable,
+			width?: number,
+			height?: number,
+			scale?: number
+		);
+
+		/**
      * A resizable object.
      *
      * @type {Resizable}
      * @deprecated Use an event listener for "change" events instead.
      */
-    resizable: Resizable;
-    /**
+		resizable: Resizable;
+		/**
      * The preferred resolution.
      *
      * @type {Vector2}
      * @deprecated Added for backward-compatibility.
      */
-    target: Vector2;
-    set width(arg: number);
-    /**
+		target: Vector2;
+		set width(arg: number);
+		/**
      * The effective width.
      *
      * If the preferred width and height are set to {@link Resizer.AUTO_SIZE}, the base width will be returned.
      *
      * @type {Number}
      */
-    get width(): number;
-    set preferredWidth(arg: number);
-    /**
+		get width(): number;
+		set preferredWidth(arg: number);
+		/**
      * The preferred width.
      *
      * @type {Number}
      */
-    get preferredWidth(): number;
-    set height(arg: number);
-    /**
+		get preferredWidth(): number;
+		set height(arg: number);
+		/**
      * The effective height.
      *
      * If the preferred width and height are set to {@link Resizer.AUTO_SIZE}, the base height will be returned.
      *
      * @type {Number}
      */
-    get height(): number;
-    set preferredHeight(arg: number);
-    /**
+		get height(): number;
+		set preferredHeight(arg: number);
+		/**
      * The preferred height.
      *
      * @type {Number}
      */
-    get preferredHeight(): number;
-    /**
+		get preferredHeight(): number;
+		/**
      * Returns the effective width.
      *
      * If the preferred width and height are set to {@link Resizer.AUTO_SIZE}, the base width will be returned.
@@ -2409,8 +2474,8 @@ declare module "postprocessing" {
      * @deprecated Use width instead.
      * @return {Number} The effective width.
      */
-    getWidth(): number;
-    /**
+		getWidth(): number;
+		/**
      * Returns the effective height.
      *
      * If the preferred width and height are set to {@link Resizer.AUTO_SIZE}, the base height will be returned.
@@ -2418,22 +2483,22 @@ declare module "postprocessing" {
      * @deprecated Use height instead.
      * @return {Number} The effective height.
      */
-    getHeight(): number;
-    set scale(arg: number);
-    /**
+		getHeight(): number;
+		set scale(arg: number);
+		/**
      * The resolution scale.
      *
      * @type {Number}
      */
-    get scale(): number;
-    /**
+		get scale(): number;
+		/**
      * Returns the current resolution scale.
      *
      * @deprecated Use scale instead.
      * @return {Number} The scale.
      */
-    getScale(): number;
-    /**
+		getScale(): number;
+		/**
      * Sets the resolution scale.
      *
      * Also sets the preferred resolution to {@link Resizer.AUTO_SIZE}.
@@ -2441,64 +2506,64 @@ declare module "postprocessing" {
      * @deprecated Use scale instead.
      * @param {Number} value - The scale.
      */
-    setScale(value: number): void;
-    set baseWidth(arg: number);
-    /**
+		setScale(value: number): void;
+		set baseWidth(arg: number);
+		/**
      * The base width.
      *
      * @type {Number}
      */
-    get baseWidth(): number;
-    /**
+		get baseWidth(): number;
+		/**
      * Returns the base width.
      *
      * @deprecated Use baseWidth instead.
      * @return {Number} The base width.
      */
-    getBaseWidth(): number;
-    /**
+		getBaseWidth(): number;
+		/**
      * Sets the base width.
      *
      * @deprecated Use baseWidth instead.
      * @param {Number} value - The width.
      */
-    setBaseWidth(value: number): void;
-    set baseHeight(arg: number);
-    /**
+		setBaseWidth(value: number): void;
+		set baseHeight(arg: number);
+		/**
      * The base height.
      *
      * @type {Number}
      */
-    get baseHeight(): number;
-    /**
+		get baseHeight(): number;
+		/**
      * Returns the base height.
      *
      * @deprecated Use baseHeight instead.
      * @return {Number} The base height.
      */
-    getBaseHeight(): number;
-    /**
+		getBaseHeight(): number;
+		/**
      * Sets the base height.
      *
      * @deprecated Use baseHeight instead.
      * @param {Number} value - The height.
      */
-    setBaseHeight(value: number): void;
-    /**
+		setBaseHeight(value: number): void;
+		/**
      * Sets the base size.
      *
      * @param {Number} width - The width.
      * @param {Number} height - The height.
      */
-    setBaseSize(width: number, height: number): void;
-    /**
+		setBaseSize(width: number, height: number): void;
+		/**
      * Returns the preferred width.
      *
      * @deprecated Use preferredWidth instead.
      * @return {Number} The preferred width.
      */
-    getPreferredWidth(): number;
-    /**
+		getPreferredWidth(): number;
+		/**
      * Sets the preferred width.
      *
      * Use {@link Resizer.AUTO_SIZE} to automatically calculate the width based on the height and aspect ratio.
@@ -2506,15 +2571,15 @@ declare module "postprocessing" {
      * @deprecated Use preferredWidth instead.
      * @param {Number} value - The width.
      */
-    setPreferredWidth(value: number): void;
-    /**
+		setPreferredWidth(value: number): void;
+		/**
      * Returns the preferred height.
      *
      * @deprecated Use preferredHeight instead.
      * @return {Number} The preferred height.
      */
-    getPreferredHeight(): number;
-    /**
+		getPreferredHeight(): number;
+		/**
      * Sets the preferred height.
      *
      * Use {@link Resizer.AUTO_SIZE} to automatically calculate the height based on the width and aspect ratio.
@@ -2522,25 +2587,26 @@ declare module "postprocessing" {
      * @deprecated Use preferredHeight instead.
      * @param {Number} value - The height.
      */
-    setPreferredHeight(value: number): void;
-    /**
+		setPreferredHeight(value: number): void;
+		/**
      * Sets the preferred size.
      *
      * @param {Number} width - The width.
      * @param {Number} height - The height.
      */
-    setPreferredSize(width: number, height: number): void;
-    /**
+		setPreferredSize(width: number, height: number): void;
+		/**
      * Copies the given resolution.
      *
      * @param {Resolution} resolution - The resolution.
      */
-    copy(resolution: Resolution): void;
-  }
+		copy(resolution: Resolution): void;
 
-  export type Resizer = Resolution;
+	}
 
-  /**
+	export type Resizer = Resolution;
+
+	/**
    * An abstract pass.
    *
    * Fullscreen passes use a shared fullscreen triangle:
@@ -2550,44 +2616,45 @@ declare module "postprocessing" {
    * @implements {Resizable}
    * @implements {Disposable}
    */
-  export class Pass implements Initializable, Resizable, Disposable {
-    /**
+	export class Pass implements Initializable, Resizable, Disposable {
+
+		/**
      * Constructs a new pass.
      *
      * @param {String} [name] - The name of this pass. Does not have to be unique.
      * @param {Scene} [scene] - The scene to render. The default scene contains a single mesh that fills the screen.
      * @param {Camera} [camera] - A camera. Fullscreen effect passes don't require a camera.
      */
-    constructor(name?: string, scene?: Scene, camera?: Camera);
-    /**
+		constructor(name?: string, scene?: Scene, camera?: Camera);
+		/**
      * The name of this pass.
      *
      * @type {String}
      */
-    name: string;
-    /**
+		name: string;
+		/**
      * The renderer.
      *
      * @deprecated
      * @type {WebGLRenderer}
      * @protected
      */
-    protected renderer: WebGLRenderer;
-    /**
+		protected renderer: WebGLRenderer;
+		/**
      * The scene to render.
      *
      * @type {Scene}
      * @protected
      */
-    protected scene: Scene;
-    /**
+		protected scene: Scene;
+		/**
      * The camera.
      *
      * @type {Camera}
      * @protected
      */
-    protected camera: Camera;
-    /**
+		protected camera: Camera;
+		/**
      * Only relevant for subclassing.
      *
      * Indicates whether the {@link EffectComposer} should swap the frame buffers after this pass has finished
@@ -2596,8 +2663,8 @@ declare module "postprocessing" {
      *
      * @type {Boolean}
      */
-    needsSwap: boolean;
-    /**
+		needsSwap: boolean;
+		/**
      * Only relevant for subclassing.
      *
      * Indicates whether the {@link EffectComposer} should prepare a depth texture for this pass.
@@ -2605,77 +2672,77 @@ declare module "postprocessing" {
      *
      * @type {Boolean}
      */
-    needsDepthTexture: boolean;
-    /**
+		needsDepthTexture: boolean;
+		/**
      * Indicates whether this pass is enabled.
      *
      * @type {Boolean}
      */
-    enabled: boolean;
-    /**
+		enabled: boolean;
+		/**
      * Sets the render to screen flag.
      *
      * If this flag is changed, the fullscreen material will be updated as well.
      *
      * @type {Boolean}
      */
-    set renderToScreen(arg: boolean);
-    /**
+		set renderToScreen(arg: boolean);
+		/**
      * Indicates whether this pass should render to screen.
      *
      * @type {Boolean}
      */
-    get renderToScreen(): boolean;
-    /**
+		get renderToScreen(): boolean;
+		/**
      * Sets the renderer
      *
      * @deprecated
      * @param {WebGLRenderer} renderer - The renderer.
      */
-    setRenderer(renderer: WebGLRenderer): void;
-    /**
+		setRenderer(renderer: WebGLRenderer): void;
+		/**
      * Indicates whether this pass is enabled.
      *
      * @deprecated Use enabled instead.
      * @return {Boolean} Whether this pass is enabled.
      */
-    isEnabled(): boolean;
-    /**
+		isEnabled(): boolean;
+		/**
      * Enables or disables this pass.
      *
      * @deprecated Use enabled instead.
      * @param {Boolean} value - Whether the pass should be enabled.
      */
-    setEnabled(value: boolean): void;
-    set fullscreenMaterial(arg: Material);
-    /**
+		setEnabled(value: boolean): void;
+		set fullscreenMaterial(arg: Material);
+		/**
      * The fullscreen material.
      *
      * @type {Material}
      */
-    get fullscreenMaterial(): Material;
-    /**
+		get fullscreenMaterial(): Material;
+		/**
      * Returns the current fullscreen material.
      *
      * @deprecated Use fullscreenMaterial instead.
      * @return {Material} The current fullscreen material, or null if there is none.
      */
-    getFullscreenMaterial(): Material;
-    /**
+		getFullscreenMaterial(): Material;
+		/**
      * Sets the fullscreen material.
      *
      * @deprecated Use fullscreenMaterial instead.
      * @protected
      * @param {Material} value - A fullscreen material.
      */
-    protected setFullscreenMaterial(value: Material): void;
-    /**
+		protected setFullscreenMaterial(value: Material): void;
+		/**
      * Returns the current depth texture.
      *
      * @return {Texture} The current depth texture, or null if there is none.
      */
-    getDepthTexture(): Texture;
-    /**
+		getDepthTexture(): Texture;
+		/**
      * Sets the depth texture.
      *
      * This method will be called automatically by the {@link EffectComposer}.
@@ -2684,11 +2751,12 @@ declare module "postprocessing" {
      * @param {Texture} depthTexture - A depth texture.
      * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing.
      */
-    setDepthTexture(
-      depthTexture: Texture,
-      depthPacking?: DepthPackingStrategies
-    ): void;
-    /**
+		setDepthTexture(
+			depthTexture: Texture,
+			depthPacking?: DepthPackingStrategies
+		): void;
+
+		/**
      * Renders this pass.
      *
      * This is an abstract method that must be overridden.
@@ -2701,14 +2769,15 @@ declare module "postprocessing" {
      * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
      * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
      */
-    render(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      outputBuffer: WebGLRenderTarget,
-      deltaTime?: number,
-      stencilTest?: boolean
-    ): void;
-    /**
+		render(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			outputBuffer: WebGLRenderTarget,
+			deltaTime?: number,
+			stencilTest?: boolean
+		): void;
+
+		/**
      * Sets the size.
      *
      * You may override this method if you want to be informed about the size of the backbuffer/canvas.
@@ -2717,8 +2786,8 @@ declare module "postprocessing" {
      * @param {Number} width - The width.
      * @param {Number} height - The height.
      */
-    setSize(width: number, height: number): void;
-    /**
+		setSize(width: number, height: number): void;
+		/**
      * Performs initialization tasks.
      *
      * This method is called when this pass is added to an {@link EffectComposer}.
@@ -2727,25 +2796,28 @@ declare module "postprocessing" {
      * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
      * @param {Number} frameBufferType - The type of the main frame buffers.
      */
-    initialize(
-      renderer: WebGLRenderer,
-      alpha: boolean,
-      frameBufferType: number
-    ): void;
-    /**
+		initialize(
+			renderer: WebGLRenderer,
+			alpha: boolean,
+			frameBufferType: number
+		): void;
+
+		/**
      * Performs a shallow search for disposable properties and deletes them.
      *
      * The {@link EffectComposer} calls this method when it is being destroyed. You can use it independently to free
      * memory when you're certain that you don't need this pass anymore.
      */
-    dispose(): void;
-  }
+		dispose(): void;
 
-  /**
+	}
+
+	/**
    * A pass that renders an adaptive luminance map.
    */
-  export class AdaptiveLuminancePass extends Pass {
-    /**
+	export class AdaptiveLuminancePass extends Pass {
+
+		/**
      * Constructs a new adaptive luminance pass.
      *
      * @param {Texture} luminanceBuffer - A buffer that contains the current scene luminance.
@@ -2753,31 +2825,32 @@ declare module "postprocessing" {
      * @param {Number} [options.minLuminance=0.01] - The minimum luminance.
      * @param {Number} [options.adaptationRate=1.0] - The luminance adaptation rate.
      */
-    constructor(
-      luminanceBuffer: Texture,
-      {
-        minLuminance,
-        adaptationRate,
-      }?: {
-        minLuminance?: number;
-        adaptationRate?: number;
-      }
-    );
-    fullscreenMaterial: AdaptiveLuminanceMaterial;
-    /**
+		constructor(
+			luminanceBuffer: Texture,
+			{
+				minLuminance,
+				adaptationRate
+			}?: {
+				minLuminance?: number;
+				adaptationRate?: number;
+			}
+		);
+
+		fullscreenMaterial: AdaptiveLuminanceMaterial;
+		/**
      * The adaptive luminance texture.
      *
      * @type {Texture}
      */
-    get texture(): Texture;
-    /**
+		get texture(): Texture;
+		/**
      * Returns the adaptive 1x1 luminance texture.
      *
      * @deprecated Use texture instead.
      * @return {Texture} The texture.
      */
-    getTexture(): Texture;
-    /**
+		getTexture(): Texture;
+		/**
      * Sets the 1x1 mipmap level.
      *
      * This level is used to identify the smallest mipmap of the main luminance texture which contains the downsampled
@@ -2786,20 +2859,20 @@ declare module "postprocessing" {
      * @type {Number}
      * @deprecated Use fullscreenMaterial.mipLevel1x1 instead.
      */
-    set mipLevel1x1(arg: number);
-    /**
+		set mipLevel1x1(arg: number);
+		/**
      * @type {Number}
      * @deprecated Use fullscreenMaterial.adaptationRate instead.
      */
-    set adaptationRate(arg: number);
-    /**
+		set adaptationRate(arg: number);
+		/**
      * The luminance adaptation rate.
      *
      * @type {Number}
      * @deprecated Use fullscreenMaterial.adaptationRate instead.
      */
-    get adaptationRate(): number;
-    /**
+		get adaptationRate(): number;
+		/**
      * Renders the scene normals.
      *
      * @param {WebGLRenderer} renderer - The renderer.
@@ -2808,118 +2881,126 @@ declare module "postprocessing" {
      * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
      * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
      */
-    render(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      outputBuffer: WebGLRenderTarget,
-      deltaTime?: number,
-      stencilTest?: boolean
-    ): void;
-  }
+		render(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			outputBuffer: WebGLRenderTarget,
+			deltaTime?: number,
+			stencilTest?: boolean
+		): void;
 
-  /**
+	}
+
+	/**
    * A Kawase blur pass.
    */
-  export class KawaseBlurPass extends Pass {
-    /**
+	export class KawaseBlurPass extends Pass {
+
+		/**
      * An auto sizing flag.
      *
      * @type {Number}
      * @deprecated Use {@link Resolution.AUTO_SIZE} instead.
      */
-    static get AUTO_SIZE(): number;
-    /**
+		static get AUTO_SIZE(): number;
+		/**
      * Constructs a new Kawase blur pass.
      *
      * @param {Object} [options] - The options.
-     * @param {Number} [options.resolutionScale=0.5] - Deprecated. Adjust the height or width instead for consistent results.
-     * @param {Number} [options.width=Resolution.AUTO_SIZE] - The blur render width.
-     * @param {Number} [options.height=Resolution.AUTO_SIZE] - The blur render height.
-     * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
+     * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
+     * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
+     * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
+     * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprecated. Use resolutionX instead.
+     * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use resolutionY instead.
+     * @param {KernelSize} [options.kernelSize=KernelSize.MEDIUM] - The blur kernel size.
      */
-    constructor({
-      resolutionScale,
-      width,
-      height,
-      kernelSize,
-    }?: {
-      resolutionScale?: number;
-      width?: number;
-      height?: number;
-      kernelSize?: KernelSize;
-    });
+		constructor({
+			resolutionScale,
+			resolutionX,
+			resolutionY,
+			width,
+			height,
+			kernelSize
+		}?: {
+			resolutionScale?: number;
+			resolutionX?: number;
+			resolutionY?: number;
+			width?: number;
+			height?: number;
+			kernelSize?: KernelSize;
+		});
 
-    resolution: Resolution;
-    /**
+		resolution: Resolution;
+		/**
      * The blur material.
      *
      * @type {KawaseBlurMaterial}
      */
-    blurMaterial: KawaseBlurMaterial;
-    /**
+		blurMaterial: KawaseBlurMaterial;
+		/**
      * Indicates whether dithering is enabled.
      *
      * @type {Boolean}
      * @deprecated
      */
-    dithering: boolean;
-    /**
+		dithering: boolean;
+		/**
      * The kernel size.
      *
      * @type {KernelSize}
      */
-    kernelSize: KernelSize;
-    /**
+		kernelSize: KernelSize;
+		/**
      * Returns the resolution settings.
      *
      * @deprecated Use resolution instead.
      * @return {Resolution} The resolution.
      */
-    getResolution(): Resolution;
-    /**
+		getResolution(): Resolution;
+		/**
      * Sets the render width.
      *
      * @type {Number}
      * @deprecated Use resolution.preferredWidth instead.
      */
-    set width(arg: number);
-    /**
+		set width(arg: number);
+		/**
      * The current width of the internal render targets.
      *
      * @type {Number}
      * @deprecated Use resolution.width instead.
      */
-    get width(): number;
-    /**
+		get width(): number;
+		/**
      * Sets the render height.
      *
      * @type {Number}
      * @deprecated Use resolution.preferredHeight instead.
      */
-    set height(arg: number);
-    /**
+		set height(arg: number);
+		/**
      * The current height of the internal render targets.
      *
      * @type {Number}
      * @deprecated Use resolution.height instead.
      */
-    get height(): number;
-    set scale(arg: number);
-    /**
+		get height(): number;
+		set scale(arg: number);
+		/**
      * The current blur scale.
      *
      * @type {Number}
      * @deprecated Use blurMaterial.scale instead.
      */
-    get scale(): number;
-    /**
+		get scale(): number;
+		/**
      * Returns the current blur scale.
      *
      * @deprecated Use blurMaterial.scale instead.
      * @return {Number} The scale.
      */
-    getScale(): number;
-    /**
+		getScale(): number;
+		/**
      * Sets the blur scale.
      *
      * This value influences the overall blur strength and should not be greater than 1. For larger blurs please increase
@@ -2931,15 +3012,15 @@ declare module "postprocessing" {
      * @deprecated Use blurMaterial.scale instead.
      * @param {Number} value - The scale.
      */
-    setScale(value: number): void;
-    /**
+		setScale(value: number): void;
+		/**
      * Returns the kernel size.
      *
      * @deprecated Use kernelSize instead.
      * @return {KernelSize} The kernel size.
      */
-    getKernelSize(): KernelSize;
-    /**
+		getKernelSize(): KernelSize;
+		/**
      * Sets the kernel size.
      *
      * Larger kernels require more processing power but scale well with larger render resolutions.
@@ -2947,22 +3028,22 @@ declare module "postprocessing" {
      * @deprecated Use kernelSize instead.
      * @param {KernelSize} value - The kernel size.
      */
-    setKernelSize(value: KernelSize): void;
-    /**
+		setKernelSize(value: KernelSize): void;
+		/**
      * Returns the current resolution scale.
      *
      * @return {Number} The resolution scale.
      * @deprecated Use resolution instead.
      */
-    getResolutionScale(): number;
-    /**
+		getResolutionScale(): number;
+		/**
      * Sets the resolution scale.
      *
      * @param {Number} scale - The new resolution scale.
      * @deprecated Use resolution instead.
      */
-    setResolutionScale(scale: number): void;
-    /**
+		setResolutionScale(scale: number): void;
+		/**
      * Blurs the input buffer and writes the result to the output buffer. The input buffer remains intact, unless it's
      * also used as the output buffer.
      *
@@ -2972,27 +3053,29 @@ declare module "postprocessing" {
      * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
      * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
      */
-    render(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      outputBuffer: WebGLRenderTarget,
-      deltaTime?: number,
-      stencilTest?: boolean
-    ): void;
-  }
+		render(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			outputBuffer: WebGLRenderTarget,
+			deltaTime?: number,
+			stencilTest?: boolean
+		): void;
 
-  export type BlurPass = KawaseBlurPass;
+	}
 
-  /**
+	export type BlurPass = KawaseBlurPass;
+
+	/**
    * A pass that disables the stencil test.
    */
-  export class ClearMaskPass extends Pass {
-    /**
+	export class ClearMaskPass extends Pass {
+
+		/**
      * Constructs a new clear mask pass.
      */
-    constructor();
+		constructor();
 
-    /**
+		/**
      * Disables the global stencil test.
      * @param renderer - The renderer.
      * @param inputBuffer - A frame buffer that contains the result of the previous pass.
@@ -3000,97 +3083,99 @@ declare module "postprocessing" {
      * @param [deltaTime] - The time between the last frame and the current one in seconds.
      * @param [stencilTest] - Indicates whether a stencil mask is active.
      */
-    render(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      outputBuffer: WebGLRenderTarget,
-      deltaTime?: number,
-      stencilTest?: boolean
-    ): void;
-  }
+		render(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			outputBuffer: WebGLRenderTarget,
+			deltaTime?: number,
+			stencilTest?: boolean
+		): void;
 
-  /**
+	}
+
+	/**
    * A pass that clears the input buffer or the screen.
    */
-  export class ClearPass extends Pass {
-    /**
+	export class ClearPass extends Pass {
+
+		/**
      * Constructs a new clear pass.
      *
      * @param {Boolean} [color=true] - Determines whether the color buffer should be cleared.
      * @param {Boolean} [depth=true] - Determines whether the depth buffer should be cleared.
      * @param {Boolean} [stencil=false] - Determines whether the stencil buffer should be cleared.
      */
-    constructor(color?: boolean, depth?: boolean, stencil?: boolean);
-    /**
+		constructor(color?: boolean, depth?: boolean, stencil?: boolean);
+		/**
      * Indicates whether the color buffer should be cleared.
      *
      * @type {Boolean}
      * @deprecated Use setClearFlags() instead.
      */
-    color: boolean;
-    /**
+		color: boolean;
+		/**
      * Indicates whether the depth buffer should be cleared.
      *
      * @type {Boolean}
      * @deprecated Use setClearFlags() instead.
      */
-    depth: boolean;
-    /**
+		depth: boolean;
+		/**
      * Indicates whether the stencil buffer should be cleared.
      *
      * @type {Boolean}
      * @deprecated Use setClearFlags() instead.
      */
-    stencil: boolean;
-    /**
+		stencil: boolean;
+		/**
      * An override clear color. Default is null.
      *
      * @type {Color}
      */
-    overrideClearColor: Color;
-    /**
+		overrideClearColor: Color;
+		/**
      * An override clear alpha. Default is -1.
      *
      * @type {Number}
      */
-    overrideClearAlpha: number;
-    /**
+		overrideClearAlpha: number;
+		/**
      * Sets the clear flags.
      *
      * @param {Boolean} color - Whether the color buffer should be cleared.
      * @param {Boolean} depth - Whether the depth buffer should be cleared.
      * @param {Boolean} stencil - Whether the stencil buffer should be cleared.
      */
-    setClearFlags(color: boolean, depth: boolean, stencil: boolean): void;
-    /**
+		setClearFlags(color: boolean, depth: boolean, stencil: boolean): void;
+		/**
      * Returns the override clear color. Default is null.
      *
      * @deprecated Use overrideClearColor instead.
      * @return {Color} The clear color.
      */
-    getOverrideClearColor(): Color;
-    /**
+		getOverrideClearColor(): Color;
+		/**
      * Sets the override clear color.
      *
      * @deprecated Use overrideClearColor instead.
      * @param {Color} value - The clear color.
      */
-    setOverrideClearColor(value: Color): void;
-    /**
+		setOverrideClearColor(value: Color): void;
+		/**
      * Returns the override clear alpha. Default is -1.
      *
      * @deprecated Use overrideClearAlpha instead.
      * @return {Number} The clear alpha.
      */
-    getOverrideClearAlpha(): number;
-    /**
+		getOverrideClearAlpha(): number;
+		/**
      * Sets the override clear alpha.
      *
      * @deprecated Use overrideClearAlpha instead.
      * @param {Number} value - The clear alpha.
      */
-    setOverrideClearAlpha(value: number): void;
-    /**
+		setOverrideClearAlpha(value: number): void;
+		/**
      * Clears the input buffer or the screen.
      * @param renderer - The renderer.
      * @param inputBuffer - A frame buffer that contains the result of the previous pass.
@@ -3098,62 +3183,64 @@ declare module "postprocessing" {
      * @param [deltaTime] - The time between the last frame and the current one in seconds.
      * @param [stencilTest] - Indicates whether a stencil mask is active.
      */
-    render(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      outputBuffer: WebGLRenderTarget,
-      deltaTime?: number,
-      stencilTest?: boolean
-    ): void;
-  }
+		render(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			outputBuffer: WebGLRenderTarget,
+			deltaTime?: number,
+			stencilTest?: boolean
+		): void;
 
-  /**
+	}
+
+	/**
    * A pass that copies the contents of an input buffer to another render target.
    */
-  export class CopyPass extends Pass {
-    /**
+	export class CopyPass extends Pass {
+
+		/**
      * Constructs a new save pass.
      *
      * @param {WebGLRenderTarget} [renderTarget] - A render target.
      * @param {Boolean} [autoResize=true] - Whether the render target size should be updated automatically.
      */
-    constructor(renderTarget?: WebGLRenderTarget, autoResize?: boolean);
-    fullscreenMaterial: CopyMaterial;
-    /**
+		constructor(renderTarget?: WebGLRenderTarget, autoResize?: boolean);
+		fullscreenMaterial: CopyMaterial;
+		/**
      * Enables or disables auto resizing of the render target.
      *
      * @type {Boolean}
      */
-    autoResize: boolean;
-    set resize(arg: boolean);
-    /**
+		autoResize: boolean;
+		set resize(arg: boolean);
+		/**
      * Enables or disables auto resizing of the render target.
      *
      * @deprecated Use autoResize instead.
      * @type {Boolean}
      */
-    get resize(): boolean;
-    /**
+		get resize(): boolean;
+		/**
      * The output texture.
      *
      * @type {Texture}
      */
-    get texture(): Texture;
-    /**
+		get texture(): Texture;
+		/**
      * Returns the output texture.
      *
      * @deprecated Use texture instead.
      * @return {Texture} The texture.
      */
-    getTexture(): Texture;
-    /**
+		getTexture(): Texture;
+		/**
      * Enables or disables auto resizing of the render target.
      *
      * @deprecated Use autoResize instead.
      * @param {Boolean} value - Whether the render target size should be updated automatically.
      */
-    setAutoResizeEnabled(value: boolean): void;
-    /**
+		setAutoResizeEnabled(value: boolean): void;
+		/**
      * Saves the input buffer.
      *
      * @param {WebGLRenderer} renderer - The renderer.
@@ -3162,56 +3249,58 @@ declare module "postprocessing" {
      * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
      * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
      */
-    render(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      outputBuffer: WebGLRenderTarget,
-      deltaTime?: number,
-      stencilTest?: boolean
-    ): void;
-  }
+		render(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			outputBuffer: WebGLRenderTarget,
+			deltaTime?: number,
+			stencilTest?: boolean
+		): void;
 
-  export type SavePass = CopyPass;
+	}
 
-  /**
+	export type SavePass = CopyPass;
+
+	/**
    * A pass that copies depth into a render target.
    */
-  export class DepthCopyPass extends Pass {
-    /**
+	export class DepthCopyPass extends Pass {
+
+		/**
      * Constructs a new depth save pass.
      *
      * @param {Object} [options] - The options.
      * @param {DepthPackingStrategies} [options.depthPacking=RGBADepthPacking] - The output depth packing.
      */
-    constructor({ depthPacking }?: { depthPacking?: DepthPackingStrategies });
-    fullscreenMaterial: DepthCopyMaterial;
-    /**
+		constructor({ depthPacking }?: { depthPacking?: DepthPackingStrategies });
+		fullscreenMaterial: DepthCopyMaterial;
+		/**
      * The output depth texture.
      *
      * @type {Texture}
      */
-    get texture(): Texture;
-    /**
+		get texture(): Texture;
+		/**
      * Returns the output depth texture.
      *
      * @deprecated Use texture instead.
      * @return {Texture} The texture.
      */
-    getTexture(): Texture;
-    /**
+		getTexture(): Texture;
+		/**
      * The output depth packing.
      *
      * @type {DepthPackingStrategies}
      */
-    get depthPacking(): DepthPackingStrategies;
-    /**
+		get depthPacking(): DepthPackingStrategies;
+		/**
      * Returns the output depth packing.
      *
      * @deprecated Use depthPacking instead.
      * @return {DepthPackingStrategies} The depth packing.
      */
-    getDepthPacking(): DepthPackingStrategies;
-    /**
+		getDepthPacking(): DepthPackingStrategies;
+		/**
      * Copies depth from a depth texture.
      *
      * @param {WebGLRenderer} renderer - The renderer.
@@ -3220,23 +3309,25 @@ declare module "postprocessing" {
      * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
      * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
      */
-    render(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      outputBuffer: WebGLRenderTarget,
-      deltaTime?: number,
-      stencilTest?: boolean
-    ): void;
-  }
+		render(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			outputBuffer: WebGLRenderTarget,
+			deltaTime?: number,
+			stencilTest?: boolean
+		): void;
 
-  /**
+	}
+
+	/**
    * A pass that downsamples the scene depth by picking the most representative depth in 2x2 texel neighborhoods. If a
    * normal buffer is provided, the corresponding normals will be stored as well.
    *
    * This pass requires WebGL 2.
    */
-  export class DepthDownsamplingPass extends Pass {
-    /**
+	export class DepthDownsamplingPass extends Pass {
+
+		/**
      * Constructs a new depth downsampling pass.
      *
      * @param {Object} [options] - The options.
@@ -3245,40 +3336,41 @@ declare module "postprocessing" {
      * @param {Number} [options.width=Resolution.AUTO_SIZE] - The render width.
      * @param {Number} [options.height=Resolution.AUTO_SIZE] - The render height.
      */
-    constructor({
-      normalBuffer,
-      resolutionScale,
-      width,
-      height,
-    }?: {
-      normalBuffer?: Texture;
-      resolutionScale?: number;
-      width?: number;
-      height?: number;
-    });
-    fullscreenMaterial: DepthDownsamplingMaterial;
-    resolution: Resolution;
-    /**
+		constructor({
+			normalBuffer,
+			resolutionScale,
+			width,
+			height
+		}?: {
+			normalBuffer?: Texture;
+			resolutionScale?: number;
+			width?: number;
+			height?: number;
+		});
+
+		fullscreenMaterial: DepthDownsamplingMaterial;
+		resolution: Resolution;
+		/**
      * The normal(RGB) + depth(A) texture.
      *
      * @type {Texture}
      */
-    get texture(): Texture;
-    /**
+		get texture(): Texture;
+		/**
      * Returns the normal(RGB) + depth(A) texture.
      *
      * @deprecated Use texture instead.
      * @return {Texture} The texture.
      */
-    getTexture(): Texture;
-    /**
+		getTexture(): Texture;
+		/**
      * Returns the resolution settings.
      *
      * @deprecated Use resolution instead.
      * @return {Resolution} The resolution.
      */
-    getResolution(): Resolution;
-    /**
+		getResolution(): Resolution;
+		/**
      * Downsamples depth and scene normals.
      *
      * @param {WebGLRenderer} renderer - The renderer.
@@ -3287,132 +3379,134 @@ declare module "postprocessing" {
      * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
      * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
      */
-    render(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      outputBuffer: WebGLRenderTarget,
-      deltaTime?: number,
-      stencilTest?: boolean
-    ): void;
-  }
+		render(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			outputBuffer: WebGLRenderTarget,
+			deltaTime?: number,
+			stencilTest?: boolean
+		): void;
 
-  /**
+	}
+
+	/**
    * A pass that renders a given scene into the input buffer or to screen.
    *
    * This pass uses a {@link ClearPass} to clear the target buffer.
    */
-  export class RenderPass extends Pass {
-    /**
+	export class RenderPass extends Pass {
+
+		/**
      * Constructs a new render pass.
      *
      * @param {Scene} scene - The scene to render.
      * @param {Camera} camera - The camera to use to render the scene.
      * @param {Material} [overrideMaterial=null] - An override material.
      */
-    constructor(scene?: Scene, camera?: Camera, overrideMaterial?: Material);
-    /**
+		constructor(scene?: Scene, camera?: Camera, overrideMaterial?: Material);
+		/**
      * A clear pass.
      *
      * @type {ClearPass}
      */
-    clearPass: ClearPass;
-    /**
+		clearPass: ClearPass;
+		/**
      * Indicates whether the scene background should be ignored.
      *
      * @type {Boolean}
      */
-    ignoreBackground: boolean;
-    /**
+		ignoreBackground: boolean;
+		/**
      * Indicates whether the shadow map auto update should be skipped.
      *
      * @type {Boolean}
      */
-    skipShadowMapUpdate: boolean;
-    /**
+		skipShadowMapUpdate: boolean;
+		/**
      * A selection of objects to render.
      *
      * @type {Selection}
      */
-    selection: Selection;
-    set overrideMaterial(arg: Material);
-    /**
+		selection: Selection;
+		set overrideMaterial(arg: Material);
+		/**
      * The current override material.
      *
      * @type {Material}
      */
-    get overrideMaterial(): Material;
-    /**
+		get overrideMaterial(): Material;
+		/**
      * Returns the current override material.
      *
      * @deprecated Use overrideMaterial instead.
      * @return {Material} The material.
      */
-    getOverrideMaterial(): Material;
-    /**
+		getOverrideMaterial(): Material;
+		/**
      * Sets the override material.
      *
      * @deprecated Use overrideMaterial instead.
      * @param {Material} value - The material.
      */
-    setOverrideMaterial(value: Material): void;
-    set clear(arg: boolean);
-    /**
+		setOverrideMaterial(value: Material): void;
+		set clear(arg: boolean);
+		/**
      * Indicates whether the target buffer should be cleared before rendering.
      *
      * @type {Boolean}
      * @deprecated Use clearPass.enabled instead.
      */
-    get clear(): boolean;
-    /**
+		get clear(): boolean;
+		/**
      * Returns the selection. Default is `null` (no restriction).
      *
      * @deprecated Use selection instead.
      * @return {Selection} The selection.
      */
-    getSelection(): Selection;
-    /**
+		getSelection(): Selection;
+		/**
      * Sets the selection. Set to `null` to disable.
      *
      * @deprecated Use selection instead.
      * @param {Selection} value - The selection.
      */
-    setSelection(value: Selection): void;
-    /**
+		setSelection(value: Selection): void;
+		/**
      * Indicates whether the scene background is disabled.
      *
      * @deprecated Use ignoreBackground instead.
      * @return {Boolean} Whether the scene background is disabled.
      */
-    isBackgroundDisabled(): boolean;
-    /**
+		isBackgroundDisabled(): boolean;
+		/**
      * Enables or disables the scene background.
      *
      * @deprecated Use ignoreBackground instead.
      * @param {Boolean} value - Whether the scene background should be disabled.
      */
-    setBackgroundDisabled(value: boolean): void;
-    /**
+		setBackgroundDisabled(value: boolean): void;
+		/**
      * Indicates whether the shadow map auto update is disabled.
      *
      * @deprecated Use skipShadowMapUpdate instead.
      * @return {Boolean} Whether the shadow map update is disabled.
      */
-    isShadowMapDisabled(): boolean;
-    /**
+		isShadowMapDisabled(): boolean;
+		/**
      * Enables or disables the shadow map auto update.
      *
      * @deprecated Use skipShadowMapUpdate instead.
      * @param {Boolean} value - Whether the shadow map auto update should be disabled.
      */
-    setShadowMapDisabled(value: boolean): void;
-    /**
+		setShadowMapDisabled(value: boolean): void;
+		/**
      * Returns the clear pass.
      *
      * @deprecated Use clearPass.enabled instead.
      * @return {ClearPass} The clear pass.
      */
-    getClearPass(): ClearPass;
-    /**
+		getClearPass(): ClearPass;
+		/**
      * Renders the scene.
      * @param renderer - The renderer.
      * @param inputBuffer - A frame buffer that contains the result of the previous pass.
@@ -3420,81 +3514,90 @@ declare module "postprocessing" {
      * @param [deltaTime] - The time between the last frame and the current one in seconds.
      * @param [stencilTest] - Indicates whether a stencil mask is active.
      */
-    render(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      outputBuffer: WebGLRenderTarget,
-      deltaTime?: number,
-      stencilTest?: boolean
-    ): void;
-  }
+		render(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			outputBuffer: WebGLRenderTarget,
+			deltaTime?: number,
+			stencilTest?: boolean
+		): void;
 
-  /**
+	}
+
+	/**
    * A pass that renders depth into an RGBA buffer.
    */
-  export class DepthPass extends Pass {
-    /**
+	export class DepthPass extends Pass {
+
+		/**
      * Constructs a new depth pass.
      *
      * @param {Scene} scene - The scene to render.
      * @param {Camera} camera - The camera to use to render the scene.
      * @param {Object} [options] - The options.
-     * @param {Number} [options.resolutionScale=1.0] - Deprecated. Adjust the height or width instead for consistent results.
-     * @param {Number} [options.width=Resolution.AUTO_SIZE] - The render width.
-     * @param {Number} [options.height=Resolution.AUTO_SIZE] - The render height.
+     * @param {Number} [options.resolutionScale=1.0] - The resolution scale.
+     * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
+     * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
+     * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprecated. Use resolutionX instead.
+     * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use resolutionY instead.
      * @param {WebGLRenderTarget} [options.renderTarget] - A custom render target.
      */
-    constructor(
-      scene: Scene,
-      camera: Camera,
-      {
-        resolutionScale,
-        width,
-        height,
-        renderTarget,
-      }?: {
-        resolutionScale?: number;
-        width?: number;
-        height?: number;
-        renderTarget?: WebGLRenderTarget;
-      }
-    );
-    resolution: Resolution;
-    /**
+		constructor(
+			scene: Scene,
+			camera: Camera,
+			{
+				resolutionScale,
+				resolutionX,
+				resolutionY,
+				width,
+				height,
+				renderTarget
+			}?: {
+				resolutionScale?: number;
+				resolutionX?: number;
+				resolutionY?: number;
+				width?: number;
+				height?: number;
+				renderTarget?: WebGLRenderTarget;
+			}
+		);
+
+		resolution: Resolution;
+		/**
      * The depth texture.
      *
      * @type {Texture}
      */
-    get texture(): Texture;
-    /**
+		get texture(): Texture;
+		/**
      * Returns the depth texture.
      *
      * @deprecated Use texture instead.
      * @return {Texture} The texture.
      */
-    getTexture(): Texture;
-    /**
+		getTexture(): Texture;
+		/**
      * Returns the resolution settings.
      *
      * @deprecated Use resolution instead.
      * @return {Resolution} The resolution.
      */
-    getResolution(): Resolution;
-    /**
+		getResolution(): Resolution;
+		/**
      * Returns the current resolution scale.
      *
      * @return {Number} The resolution scale.
      * @deprecated Use resolution instead.
      */
-    getResolutionScale(): number;
-    /**
+		getResolutionScale(): number;
+		/**
      * Sets the resolution scale.
      *
      * @param {Number} scale - The new resolution scale.
      * @deprecated Use resolution instead.
      */
-    setResolutionScale(scale: number): void;
-    /**
+		setResolutionScale(scale: number): void;
+		/**
      * Renders the scene depth.
      *
      * @param {WebGLRenderer} renderer - The renderer.
@@ -3503,34 +3606,37 @@ declare module "postprocessing" {
      * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
      * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
      */
-    render(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      outputBuffer: WebGLRenderTarget,
-      deltaTime?: number,
-      stencilTest?: boolean
-    ): void;
-  }
+		render(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			outputBuffer: WebGLRenderTarget,
+			deltaTime?: number,
+			stencilTest?: boolean
+		): void;
 
-  /**
+	}
+
+	/**
    * A depth picking pass.
    */
-  export class DepthPickingPass extends DepthCopyPass {
-    /**
+	export class DepthPickingPass extends DepthCopyPass {
+
+		/**
      * Constructs a new depth picking pass.
      *
      * @param {Object} [options] - The options.
      * @param {DepthPackingStrategies} [options.depthPacking=RGBADepthPacking] - The depth packing.
      * @param {Number} [options.mode=DepthCopyMode.SINGLE] - The depth copy mode.
      */
-    constructor({
-      depthPacking,
-      mode,
-    }?: {
-      depthPacking?: DepthPackingStrategies;
-      mode?: number;
-    });
-    /**
+		constructor({
+			depthPacking,
+			mode
+		}?: {
+			depthPacking?: DepthPackingStrategies;
+			mode?: number;
+		});
+
+		/**
      * Reads depth at a specific screen position.
      *
      * Only one depth value can be picked per frame. Calling this method multiple times per frame will overwrite the
@@ -3551,8 +3657,8 @@ declare module "postprocessing" {
      * @param {Vector2|Vector3} ndc - Normalized device coordinates. Only X and Y are relevant.
      * @return {Promise<Number>} A promise that returns the depth on the next frame.
      */
-    readDepth(ndc: Vector2 | Vector3): Promise<number>;
-    /**
+		readDepth(ndc: Vector2 | Vector3): Promise<number>;
+		/**
      * Copies depth and resolves depth picking promises.
      *
      * @param {WebGLRenderer} renderer - The renderer.
@@ -3561,16 +3667,17 @@ declare module "postprocessing" {
      * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
      * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
      */
-    render(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      outputBuffer: WebGLRenderTarget,
-      deltaTime?: number,
-      stencilTest?: boolean
-    ): void;
-  }
+		render(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			outputBuffer: WebGLRenderTarget,
+			deltaTime?: number,
+			stencilTest?: boolean
+		): void;
 
-  /**
+	}
+
+	/**
    * A blend function enumeration.
    *
    * Important: Do not use `BlendFunction.SKIP` to disable effects. See
@@ -3595,91 +3702,95 @@ declare module "postprocessing" {
    * @property {Number} OVERLAY - Color overlay.
    * @property {Number} REFLECT - Color reflection.
    * @property {Number} SCREEN - Screen blending. The two colors are effectively projected on a white screen simultaneously.
+   * @property {Number} SET - Same as NORMAL but ignores opacity.
    * @property {Number} SOFT_LIGHT - Soft light blending.
    * @property {Number} SUBTRACT - Color subtraction.
    */
-  export enum BlendFunction {
-    SKIP,
-    ADD,
-    ALPHA,
-    AVERAGE,
-    COLOR_BURN,
-    COLOR_DODGE,
-    DARKEN,
-    DIFFERENCE,
-    EXCLUSION,
-    LIGHTEN,
-    MULTIPLY,
-    DIVIDE,
-    NEGATION,
-    NORMAL,
-    OVERLAY,
-    REFLECT,
-    SCREEN,
-    SOFT_LIGHT,
-    SUBTRACT,
-  }
+	export enum BlendFunction {
+		SKIP,
+		ADD,
+		ALPHA,
+		AVERAGE,
+		COLOR_BURN,
+		COLOR_DODGE,
+		DARKEN,
+		DIFFERENCE,
+		EXCLUSION,
+		LIGHTEN,
+		MULTIPLY,
+		DIVIDE,
+		NEGATION,
+		NORMAL,
+		OVERLAY,
+		REFLECT,
+		SCREEN,
+		SET,
+		SOFT_LIGHT,
+		SUBTRACT,
+	}
 
-  /**
+	/**
    * A blend mode.
    */
-  export class BlendMode extends EventDispatcher<import("three").Event> {
-    /**
+	export class BlendMode extends EventDispatcher<import("three").Event> {
+
+		/**
      * Constructs a new blend mode.
      *
      * @param {BlendFunction} blendFunction - The blend function.
      * @param {Number} opacity - The opacity of the color that will be blended with the base color.
      */
-    constructor(blendFunction: BlendFunction, opacity?: number);
-    /**
+		constructor(blendFunction: BlendFunction, opacity?: number);
+		/**
      * A uniform that controls the opacity of this blend mode.
      *
      * TODO Add opacity accessors for uniform value.
      * @type {Uniform}
      */
-    opacity: Uniform;
-    /**
+		opacity: Uniform;
+		/**
      * Returns the opacity.
      *
      * @return {Number} The opacity.
      */
-    getOpacity(): number;
-    /**
+		getOpacity(): number;
+		/**
      * Sets the opacity.
      *
      * @param {Number} value - The opacity.
      */
-    setOpacity(value: number): void;
-    /**
+		setOpacity(value: number): void;
+		/**
      * Returns the blend function.
      *
      * @deprecated Use blendFunction instead.
      * @return {BlendFunction} The blend function.
      */
-    getBlendFunction(): BlendFunction;
-    /**
+		getBlendFunction(): BlendFunction;
+		/**
      * Sets the blend function.
      *
      * @deprecated Use blendFunction instead.
      * @param {BlendFunction} value - The blend function.
      */
-    setBlendFunction(value: BlendFunction): void;
-    /**
+		setBlendFunction(value: BlendFunction): void;
+		/**
      * Returns the blend function shader code.
      *
      * @return {String} The blend function shader code.
      */
-    getShaderCode(): string;
-    /**
+		getShaderCode(): string;
+		/**
      * The blend function.
      *
      * @type {BlendFunction}
      */
-    get blendFunction(): BlendFunction;
-    set blendFunction(value: BlendFunction);
-  }
+		get blendFunction(): BlendFunction;
+		set blendFunction(value: BlendFunction);
 
-  /**
+	}
+
+	/**
    * An abstract effect.
    *
    * Effects can be combined using the {@link EffectPass}.
@@ -3688,11 +3799,11 @@ declare module "postprocessing" {
    * @implements {Resizable}
    * @implements {Disposable}
    */
-  export class Effect
-    extends EventDispatcher<import("three").Event>
-    implements Initializable, Resizable, Disposable
-  {
-    /**
+	export class Effect
+		extends EventDispatcher<import("three").Event>
+		implements Initializable, Resizable, Disposable {
+
+		/**
      * Constructs a new effect.
      *
      * @param {String} name - The name of this effect. Doesn't have to be unique.
@@ -3705,105 +3816,106 @@ declare module "postprocessing" {
      * @param {Set<WebGLExtension>} [options.extensions] - WebGL extensions.
      * @param {String} [options.vertexShader=null] - The vertex shader. Most effects don't need one.
      */
-    constructor(
-      name: string,
-      fragmentShader: string,
-      {
-        attributes,
-        blendFunction,
-        defines,
-        uniforms,
-        extensions,
-        vertexShader,
-      }?: {
-        attributes?: EffectAttribute;
-        blendFunction?: BlendFunction;
-        defines?: Map<string, string>;
-        uniforms?: Map<string, Uniform>;
-        extensions?: Set<WebGLExtension>;
-        vertexShader?: string;
-      }
-    );
-    /**
+		constructor(
+			name: string,
+			fragmentShader: string,
+			{
+				attributes,
+				blendFunction,
+				defines,
+				uniforms,
+				extensions,
+				vertexShader
+			}?: {
+				attributes?: EffectAttribute;
+				blendFunction?: BlendFunction;
+				defines?: Map<string, string>;
+				uniforms?: Map<string, Uniform>;
+				extensions?: Set<WebGLExtension>;
+				vertexShader?: string;
+			}
+		);
+
+		/**
      * The name of this effect.
      *
      * @type {String}
      */
-    name: string;
-    /**
+		name: string;
+		/**
      * The renderer.
      *
      * @type {WebGLRenderer}
      * @protected
      * @deprecated
      */
-    protected renderer: WebGLRenderer;
-    /**
+		protected renderer: WebGLRenderer;
+		/**
      * Preprocessor macro definitions.
      *
      * Call {@link Effect.setChanged} after changing macro definitions.
      *
      * @type {Map<String, String>}
      */
-    defines: Map<string, string>;
-    /**
+		readonly defines: Map<string, string>;
+		/**
      * Shader uniforms.
      *
      * Call {@link Effect.setChanged} after adding or removing uniforms.
      *
      * @type {Map<String, Uniform>}
      */
-    uniforms: Map<string, Uniform>;
-    /**
+		readonly uniforms: Map<string, Uniform>;
+		/**
      * WebGL extensions that are required by this effect.
      *
      * Call {@link Effect.setChanged} after adding or removing extensions.
      *
      * @type {Set<WebGLExtension>}
      */
-    extensions: Set<WebGLExtension>;
-    /**
+		readonly extensions: Set<WebGLExtension>;
+		/**
      * The blend mode of this effect.
      *
      * @type {BlendMode}
      */
-    blendMode: BlendMode;
-    /**
+		readonly blendMode: BlendMode;
+		/**
      * Returns the name of this effect.
      *
      * @deprecated Use name instead.
      * @return {String} The name.
      */
-    getName(): string;
-    /**
+		getName(): string;
+		/**
      * Sets the renderer.
      *
      * @deprecated
      * @param {WebGLRenderer} renderer - The renderer.
      */
-    setRenderer(renderer: WebGLRenderer): void;
-    /**
+		setRenderer(renderer: WebGLRenderer): void;
+		/**
      * Returns the preprocessor macro definitions.
      *
      * @deprecated Use defines instead.
      * @return {Map<String, String>} The extensions.
      */
-    getDefines(): Map<string, string>;
-    /**
+		getDefines(): Map<string, string>;
+		/**
      * Returns the uniforms of this effect.
      *
      * @deprecated Use uniforms instead.
      * @return {Map<String, Uniform>} The extensions.
      */
-    getUniforms(): Map<string, Uniform>;
-    /**
+		getUniforms(): Map<string, Uniform>;
+		/**
      * Returns the WebGL extensions that are required by this effect.
      *
      * @deprecated Use extensions instead.
      * @return {Set<WebGLExtension>} The extensions.
      */
-    getExtensions(): Set<WebGLExtension>;
-    /**
+		getExtensions(): Set<WebGLExtension>;
+		/**
      * Returns the blend mode.
      *
      * The result of this effect will be blended with the result of the previous effect using this blend mode.
@@ -3811,14 +3923,14 @@ declare module "postprocessing" {
      * @deprecated Use blendMode instead.
      * @return {BlendMode} The blend mode.
      */
-    getBlendMode(): BlendMode;
-    /**
+		getBlendMode(): BlendMode;
+		/**
      * Returns the effect attributes.
      *
      * @return {EffectAttribute} The attributes.
      */
-    getAttributes(): EffectAttribute;
-    /**
+		getAttributes(): EffectAttribute;
+		/**
      * Sets the effect attributes.
      *
      * Effects that have the same attributes will be executed in the order in which they were registered. Some attributes
@@ -3827,42 +3939,42 @@ declare module "postprocessing" {
      * @protected
      * @param {EffectAttribute} attributes - The attributes.
      */
-    protected setAttributes(attributes: EffectAttribute): void;
-    /**
+		protected setAttributes(attributes: EffectAttribute): void;
+		/**
      * Returns the fragment shader.
      *
      * @return {String} The fragment shader.
      */
-    getFragmentShader(): string;
-    /**
+		getFragmentShader(): string;
+		/**
      * Sets the fragment shader.
      *
      * @protected
      * @param {String} fragmentShader - The fragment shader.
      */
-    protected setFragmentShader(fragmentShader: string): void;
-    /**
+		protected setFragmentShader(fragmentShader: string): void;
+		/**
      * Returns the vertex shader.
      *
      * @return {String} The vertex shader.
      */
-    getVertexShader(): string;
-    /**
+		getVertexShader(): string;
+		/**
      * Sets the vertex shader.
      *
      * @protected
      * @param {String} vertexShader - The vertex shader.
      */
-    protected setVertexShader(vertexShader: string): void;
-    /**
+		protected setVertexShader(vertexShader: string): void;
+		/**
      * Informs the associated {@link EffectPass} that this effect requires a shader recompilation.
      *
      * Should be called after changing macros or extensions and after adding/removing uniforms.
      *
      * @protected
      */
-    protected setChanged(): void;
-    /**
+		protected setChanged(): void;
+		/**
      * Sets the depth texture.
      *
      * You may override this method if your effect requires direct access to the depth texture that is bound to the
@@ -3871,11 +3983,12 @@ declare module "postprocessing" {
      * @param {Texture} depthTexture - A depth texture.
      * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing.
      */
-    setDepthTexture(
-      depthTexture: Texture,
-      depthPacking?: DepthPackingStrategies
-    ): void;
-    /**
+		setDepthTexture(
+			depthTexture: Texture,
+			depthPacking?: DepthPackingStrategies
+		): void;
+
+		/**
      * Updates this effect by performing supporting operations.
      *
      * This method is called by the {@link EffectPass} right before the main fullscreen render operation, even if the
@@ -3887,12 +4000,13 @@ declare module "postprocessing" {
      * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
      * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
      */
-    update(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      deltaTime?: number
-    ): void;
-    /**
+		update(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			deltaTime?: number
+		): void;
+
+		/**
      * Updates the size of this effect.
      *
      * You may override this method if you want to be informed about the size of the backbuffer/canvas.
@@ -3901,8 +4015,8 @@ declare module "postprocessing" {
      * @param {Number} width - The width.
      * @param {Number} height - The height.
      */
-    setSize(width: number, height: number): void;
-    /**
+		setSize(width: number, height: number): void;
+		/**
      * Performs initialization tasks.
      *
      * This method is called when the associated {@link EffectPass} is added to an {@link EffectComposer}.
@@ -3912,20 +4026,22 @@ declare module "postprocessing" {
      * @param {Number} frameBufferType - The type of the main frame buffers.
      * @example if(!alpha && frameBufferType === UnsignedByteType) { this.myRenderTarget.texture.format = RGBFormat; }
      */
-    initialize(
-      renderer: WebGLRenderer,
-      alpha: boolean,
-      frameBufferType: number
-    ): void;
-    /**
+		initialize(
+			renderer: WebGLRenderer,
+			alpha: boolean,
+			frameBufferType: number
+		): void;
+
+		/**
      * Performs a shallow search for properties that define a dispose method and deletes them.
      *
      * The {@link EffectComposer} calls this method when it is being destroyed.
      */
-    dispose(): void;
-  }
+		dispose(): void;
 
-  /**
+	}
+
+	/**
    * An enumeration of effect attributes.
    *
    * Attributes can be concatenated using the bitwise OR operator.
@@ -3936,13 +4052,13 @@ declare module "postprocessing" {
    * @property {Number} CONVOLUTION - Describes effects that fetch additional samples from the input buffer. There cannot be more than one effect with this attribute per {@link EffectPass}.
    * @example const attributes = EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH;
    */
-  export enum EffectAttribute {
-    CONVOLUTION,
-    DEPTH,
-    NONE,
-  }
+	export enum EffectAttribute {
+		CONVOLUTION,
+		DEPTH,
+		NONE,
+	}
 
-  /**
+	/**
    * An enumeration of WebGL extensions.
    *
    * @type {Object}
@@ -3951,28 +4067,29 @@ declare module "postprocessing" {
    * @property {String} DRAW_BUFFERS - Enables multiple render targets (MRT) support.
    * @property {String} SHADER_TEXTURE_LOD - Enables explicit control of texture LOD.
    */
-  export enum WebGLExtension {
-    DERIVATIVES = "derivatives",
-    FRAG_DEPTH = "fragDepth",
-    DRAW_BUFFERS = "drawBuffers",
-    SHADER_TEXTURE_LOD = "shaderTextureLOD",
-  }
+	export enum WebGLExtension {
+		DERIVATIVES = "derivatives",
+		FRAG_DEPTH = "fragDepth",
+		DRAW_BUFFERS = "drawBuffers",
+		SHADER_TEXTURE_LOD = "shaderTextureLOD",
+	}
 
-  /**
+	/**
    * An effect pass.
    *
    * Use this pass to combine {@link Effect} instances.
    */
-  export class EffectPass extends Pass {
-    /**
+	export class EffectPass extends Pass {
+
+		/**
      * Constructs a new effect pass.
      *
      * @param {Camera} camera - The main camera.
      * @param {...Effect} effects - The effects that will be rendered by this pass.
      */
-    constructor(camera: Camera, ...effects: Effect[]);
-    fullscreenMaterial: EffectMaterial;
-    /**
+		constructor(camera: Camera, ...effects: Effect[]);
+		fullscreenMaterial: EffectMaterial;
+		/**
      * The effects.
      *
      * Use `updateMaterial` or `recompile` after changing the effects and consider calling `dispose` to free resources
@@ -3981,8 +4098,8 @@ declare module "postprocessing" {
      * @type {Effect[]}
      * @protected
      */
-    protected effects: Effect[];
-    /**
+		private effects: Effect[];
+		/**
      * A time offset.
      *
      * Elapsed time will start at this value.
@@ -3990,8 +4107,8 @@ declare module "postprocessing" {
      * @type {Number}
      * @deprecated
      */
-    minTime: number;
-    /**
+		minTime: number;
+		/**
      * The maximum time.
      *
      * If the elapsed time exceeds this value, it will be reset.
@@ -3999,42 +4116,48 @@ declare module "postprocessing" {
      * @type {Number}
      * @deprecated
      */
-    maxTime: number;
-    set encodeOutput(arg: boolean);
-    /**
+		maxTime: number;
+		set encodeOutput(arg: boolean);
+		/**
      * Indicates whether this pass encodes its output when rendering to screen.
      *
      * @type {Boolean}
      * @deprecated Use fullscreenMaterial.encodeOutput instead.
      */
-    get encodeOutput(): boolean;
-    set dithering(arg: boolean);
-    /**
+		get encodeOutput(): boolean;
+		set dithering(arg: boolean);
+		/**
      * Indicates whether dithering is enabled.
      *
      * @type {Boolean}
      */
-    get dithering(): boolean;
-    /**
+		get dithering(): boolean;
+		/**
      * Updates the compound shader material.
      */
-    protected updateMaterial(): void;
-    /**
+		protected updateMaterial(): void;
+		/**
      * Rebuilds the shader material.
      */
-    recompile(): void;
-    /**
+		recompile(): void;
+		/**
+     * Sets the effects.
+     *
+     * @param effects - The effects.
+     */
+		protected setEffects(effects: Effect[]): void;
+		/**
      * Returns the current depth texture.
      * @returns The current depth texture, or null if there is none.
      */
-    getDepthTexture(): Texture;
-    /**
+		getDepthTexture(): Texture;
+		/**
      * Sets the depth texture.
      * @param depthTexture - A depth texture.
      * @param [depthPacking = 0] - The depth packing.
      */
-    setDepthTexture(depthTexture: Texture, depthPacking?: number): void;
-    /**
+		setDepthTexture(depthTexture: Texture, depthPacking?: number): void;
+		/**
      * Renders the effect.
      * @param renderer - The renderer.
      * @param inputBuffer - A frame buffer that contains the result of the previous pass.
@@ -4042,99 +4165,115 @@ declare module "postprocessing" {
      * @param [deltaTime] - The time between the last frame and the current one in seconds.
      * @param [stencilTest] - Indicates whether a stencil mask is active.
      */
-    render(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      outputBuffer: WebGLRenderTarget,
-      deltaTime?: number,
-      stencilTest?: boolean
-    ): void;
-    /**
+		render(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			outputBuffer: WebGLRenderTarget,
+			deltaTime?: number,
+			stencilTest?: boolean
+		): void;
+
+		/**
      * Updates the size of this pass.
      * @param width - The width.
      * @param height - The height.
      */
-    setSize(width: number, height: number): void;
-    /**
+		setSize(width: number, height: number): void;
+		/**
      * Performs initialization tasks.
      * @param renderer - The renderer.
      * @param alpha - Whether the renderer uses the alpha channel or not.
      * @param frameBufferType - The type of the main frame buffers.
      */
-    initialize(
-      renderer: WebGLRenderer,
-      alpha: boolean,
-      frameBufferType: number
-    ): void;
-    /**
+		initialize(
+			renderer: WebGLRenderer,
+			alpha: boolean,
+			frameBufferType: number
+		): void;
+
+		/**
      * Deletes disposable objects.
      * This pass will be inoperative after this method was called!
      */
-    dispose(): void;
-    /**
+		dispose(): void;
+		/**
      * Handles events.
      *
      * @param {Event} event - An event.
      */
-    handleEvent(event: Event): void;
-  }
+		handleEvent(event: Event): void;
 
-  /**
+	}
+
+	/**
    * A pass that executes a given function.
    */
-  export class LambdaPass extends Pass {
-    /**
+	export class LambdaPass extends Pass {
+
+		/**
      * Constructs a new lambda pass.
      *
      * @param {Function} f - A function.
      */
-    constructor(f: Function);
-  }
+		constructor(f: Function);
 
-  /**
+	}
+
+	/**
    * A pass that renders luminance.
    */
-  export class LuminancePass extends Pass {
-    /**
+	export class LuminancePass extends Pass {
+
+		/**
      * Constructs a new luminance pass.
      *
      * @param {Object} [options] - The options. See {@link LuminanceMaterial} for additional options.
-     * @param {Number} [options.width=Resolution.AUTO_SIZE] - The render width.
-     * @param {Number} [options.height=Resolution.AUTO_SIZE] - The render height.
+     * @param {Number} [options.resolutionScale=1.0] - The resolution scale.
+     * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
+     * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
+     * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprecated. Use resolutionX instead.
+     * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use resolutionY instead.
      * @param {WebGLRenderTarget} [options.renderTarget] - A custom render target.
      */
-    constructor({
-      width,
-      height,
-      renderTarget,
-    }?: {
-      width?: number;
-      height?: number;
-      renderTarget?: WebGLRenderTarget;
-    });
-    fullscreenMaterial: LuminanceMaterial;
-    resolution: Resolution;
-    /**
+		constructor({
+			resolutionScale,
+			resolutionX,
+			resolutionY,
+			width,
+			height,
+			renderTarget
+		}?: {
+			resolutionScale?: number;
+			resolutionX?: number;
+			resolutionY?: number;
+			width?: number;
+			height?: number;
+			renderTarget?: WebGLRenderTarget;
+		});
+
+		fullscreenMaterial: LuminanceMaterial;
+		resolution: Resolution;
+		/**
      * The luminance texture.
      *
      * @type {Texture}
      */
-    get texture(): Texture;
-    /**
+		get texture(): Texture;
+		/**
      * Returns the luminance texture.
      *
      * @deprecated Use texture instead.
      * @return {Texture} The texture.
      */
-    getTexture(): Texture;
-    /**
+		getTexture(): Texture;
+		/**
      * Returns the resolution settings.
      *
      * @deprecated Use resolution instead.
      * @return {Resolution} The resolution.
      */
-    getResolution(): Resolution;
-    /**
+		getResolution(): Resolution;
+		/**
      * Renders the luminance.
      *
      * @param {WebGLRenderer} renderer - The renderer.
@@ -4143,79 +4282,81 @@ declare module "postprocessing" {
      * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
      * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
      */
-    render(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      outputBuffer: WebGLRenderTarget,
-      deltaTime?: number,
-      stencilTest?: boolean
-    ): void;
-  }
+		render(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			outputBuffer: WebGLRenderTarget,
+			deltaTime?: number,
+			stencilTest?: boolean
+		): void;
 
-  /**
+	}
+
+	/**
    * A stencil mask pass.
    *
    * This pass requires that the input and output buffers have a stencil buffer. You can enable the stencil buffer via the
    * {@link EffectComposer} constructor.
    */
-  export class MaskPass extends Pass {
-    /**
+	export class MaskPass extends Pass {
+
+		/**
      * Constructs a new mask pass.
      *
      * @param {Scene} scene - The scene to render.
      * @param {Camera} camera - The camera to use.
      */
-    constructor(scene: Scene, camera: Camera);
-    /**
+		constructor(scene: Scene, camera: Camera);
+		/**
      * A clear pass.
      *
      * @type {ClearPass}
      */
-    clearPass: ClearPass;
-    /**
+		clearPass: ClearPass;
+		/**
      * Inverse flag.
      *
      * @type {Boolean}
      * @deprecated Use inverted instead.
      */
-    inverse: boolean;
-    set inverted(arg: boolean);
-    /**
+		inverse: boolean;
+		set inverted(arg: boolean);
+		/**
      * Indicates whether the mask should be inverted.
      *
      * @type {Boolean}
      */
-    get inverted(): boolean;
-    set clear(arg: boolean);
-    /**
+		get inverted(): boolean;
+		set clear(arg: boolean);
+		/**
      * Indicates whether this pass should clear the stencil buffer.
      *
      * @type {Boolean}
      * @deprecated Use clearPass.enabled instead.
      */
-    get clear(): boolean;
-    /**
+		get clear(): boolean;
+		/**
      * Returns the internal clear pass.
      *
      * @deprecated Use clearPass.enabled instead.
      * @return {ClearPass} The clear pass.
      */
-    getClearPass(): ClearPass;
-    /**
+		getClearPass(): ClearPass;
+		/**
      * Indicates whether the mask is inverted.
      *
      * @deprecated Use inverted instead.
      * @return {Boolean} Whether the mask is inverted.
      */
-    isInverted(): boolean;
-    /**
+		isInverted(): boolean;
+		/**
      * Enables or disable mask inversion.
      *
      * @deprecated Use inverted instead.
      * @param {Boolean} value - Whether the mask should be inverted.
      */
-    setInverted(value: boolean): void;
-    /**
+		setInverted(value: boolean): void;
+		/**
      * Renders the effect.
      * @param renderer - The renderer.
      * @param inputBuffer - A frame buffer that contains the result of the previous pass.
@@ -4223,81 +4364,90 @@ declare module "postprocessing" {
      * @param [deltaTime] - The time between the last frame and the current one in seconds.
      * @param [stencilTest] - Indicates whether a stencil mask is active.
      */
-    render(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      outputBuffer: WebGLRenderTarget,
-      deltaTime?: number,
-      stencilTest?: boolean
-    ): void;
-  }
+		render(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			outputBuffer: WebGLRenderTarget,
+			deltaTime?: number,
+			stencilTest?: boolean
+		): void;
 
-  /**
+	}
+
+	/**
    * A pass that renders the normals of a given scene.
    */
-  export class NormalPass extends Pass {
-    /**
+	export class NormalPass extends Pass {
+
+		/**
      * Constructs a new normal pass.
      *
      * @param {Scene} scene - The scene to render.
      * @param {Camera} camera - The camera to use to render the scene.
      * @param {Object} [options] - The options.
-     * @param {Number} [options.resolutionScale=1.0] - Deprecated. Adjust the height or width instead for consistent results.
-     * @param {Number} [options.width=Resolution.AUTO_SIZE] - The render width.
-     * @param {Number} [options.height=Resolution.AUTO_SIZE] - The render height.
+     * @param {Number} [options.resolutionScale=1.0] - The resolution scale.
+     * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
+     * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
+     * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprecated. Use resolutionX instead.
+     * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use resolutionY instead.
      * @param {WebGLRenderTarget} [options.renderTarget] - A custom render target.
      */
-    constructor(
-      scene: Scene,
-      camera: Camera,
-      {
-        resolutionScale,
-        width,
-        height,
-        renderTarget,
-      }?: {
-        resolutionScale?: number;
-        width?: number;
-        height?: number;
-        renderTarget?: WebGLRenderTarget;
-      }
-    );
-    resolution: Resolution;
-    /**
+		constructor(
+			scene: Scene,
+			camera: Camera,
+			{
+				resolutionScale,
+				resolutionX,
+				resolutionY,
+				width,
+				height,
+				renderTarget
+			}?: {
+				resolutionScale?: number;
+				resolutionX?: number;
+				resolutionY?: number;
+				width?: number;
+				height?: number;
+				renderTarget?: WebGLRenderTarget;
+			}
+		);
+
+		resolution: Resolution;
+		/**
      * The normal texture.
      *
      * @type {Texture}
      */
-    get texture(): Texture;
-    /**
+		get texture(): Texture;
+		/**
      * The normal texture.
      *
      * @deprecated Use texture instead.
      * @return {Texture} The texture.
      */
-    getTexture(): Texture;
-    /**
+		getTexture(): Texture;
+		/**
      * Returns the resolution settings.
      *
      * @deprecated Use resolution instead.
      * @return {Resolution} The resolution.
      */
-    getResolution(): Resolution;
-    /**
+		getResolution(): Resolution;
+		/**
      * Returns the current resolution scale.
      *
      * @return {Number} The resolution scale.
      * @deprecated Use resolution.preferredWidth or resolution.preferredHeight instead.
      */
-    getResolutionScale(): number;
-    /**
+		getResolutionScale(): number;
+		/**
      * Sets the resolution scale.
      *
      * @param {Number} scale - The new resolution scale.
      * @deprecated Use resolution.preferredWidth or resolution.preferredHeight instead.
      */
-    setResolutionScale(scale: number): void;
-    /**
+		setResolutionScale(scale: number): void;
+		/**
      * Renders the scene normals.
      *
      * @param {WebGLRenderer} renderer - The renderer.
@@ -4306,30 +4456,32 @@ declare module "postprocessing" {
      * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
      * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
      */
-    render(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      outputBuffer: WebGLRenderTarget,
-      deltaTime?: number,
-      stencilTest?: boolean
-    ): void;
-  }
+		render(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			outputBuffer: WebGLRenderTarget,
+			deltaTime?: number,
+			stencilTest?: boolean
+		): void;
 
-  /**
+	}
+
+	/**
    * A shader pass.
    *
    * Renders any shader material as a fullscreen effect. This pass should not be used to create multiple chained effects.
    * For a more efficient solution, please refer to the {@link EffectPass}.
    */
-  export class ShaderPass extends Pass {
-    /**
+	export class ShaderPass extends Pass {
+
+		/**
      * Constructs a new shader pass.
      *
      * @param {ShaderMaterial} material - A shader material.
      * @param {String} [input="inputBuffer"] - The name of the input buffer uniform.
      */
-    constructor(material: ShaderMaterial, input?: string);
-    /**
+		constructor(material: ShaderMaterial, input?: string);
+		/**
      * Sets the name of the input buffer uniform.
      *
      * Most fullscreen materials modify texels from an input texture. This pass automatically assigns the main input
@@ -4337,8 +4489,8 @@ declare module "postprocessing" {
      *
      * @param {String} input - The name of the input buffer uniform.
      */
-    setInput(input: string): void;
-    /**
+		setInput(input: string): void;
+		/**
      * Renders the effect.
      * @param renderer - The renderer.
      * @param inputBuffer - A frame buffer that contains the result of the previous pass.
@@ -4346,16 +4498,17 @@ declare module "postprocessing" {
      * @param [deltaTime] - The time between the last frame and the current one in seconds.
      * @param [stencilTest] - Indicates whether a stencil mask is active.
      */
-    render(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      outputBuffer: WebGLRenderTarget,
-      deltaTime?: number,
-      stencilTest?: boolean
-    ): void;
-  }
+		render(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			outputBuffer: WebGLRenderTarget,
+			deltaTime?: number,
+			stencilTest?: boolean
+		): void;
 
-  /**
+	}
+
+	/**
    * The EffectComposer may be used in place of a normal WebGLRenderer.
    *
    * The auto clear behaviour of the provided renderer will be disabled to prevent unnecessary clear operations.
@@ -4366,8 +4519,9 @@ declare module "postprocessing" {
    * @implements {Resizable}
    * @implements {Disposable}
    */
-  export class EffectComposer implements Resizable, Disposable {
-    /**
+	export class EffectComposer implements Resizable, Disposable {
+
+		/**
      * Constructs a new effect composer.
      *
      * @param {WebGLRenderer} renderer - The renderer that should be used.
@@ -4378,81 +4532,81 @@ declare module "postprocessing" {
      * @param {Number} [options.multisampling=0] - The number of samples used for multisample antialiasing. Requires WebGL 2.
      * @param {Number} [options.frameBufferType] - The type of the internal frame buffers. It's recommended to use HalfFloatType if possible.
      */
-    constructor(
-      renderer?: WebGLRenderer,
-      {
-        depthBuffer,
-        stencilBuffer,
-        multisampling,
-        frameBufferType,
-      }?: {
-        depthBuffer?: boolean;
-        stencilBuffer?: boolean;
-        alpha?: boolean;
-        multisampling?: number;
-        frameBufferType?: number;
-      }
-    );
+		constructor(
+			renderer?: WebGLRenderer,
+			{
+				depthBuffer,
+				stencilBuffer,
+				multisampling,
+				frameBufferType
+			}?: {
+				depthBuffer?: boolean;
+				stencilBuffer?: boolean;
+				alpha?: boolean;
+				multisampling?: number;
+				frameBufferType?: number;
+			}
+		);
 
-    /**
+		/**
      * The input buffer.
      *
      * Two identical buffers are used to avoid reading from and writing to the same render target.
      *
      * @type {WebGLRenderTarget}
      */
-    inputBuffer: WebGLRenderTarget;
-    /**
+		inputBuffer: WebGLRenderTarget;
+		/**
      * The output buffer.
      *
      * @type {WebGLRenderTarget}
      */
-    outputBuffer: WebGLRenderTarget;
-    /**
+		outputBuffer: WebGLRenderTarget;
+		/**
      * The passes.
      *
      * @type {Pass[]}
      */
-    passes: Pass[];
-    /**
+		passes: Pass[];
+		/**
      * Determines whether the last pass automatically renders to screen.
      *
      * @type {Boolean}
      */
-    autoRenderToScreen: boolean;
-    /**
+		autoRenderToScreen: boolean;
+		/**
      * Sets the amount of MSAA samples.
      *
      * Requires WebGL 2. Set to zero to disable multisampling.
      *
      * @type {Number}
      */
-    set multisampling(arg: number);
-    /**
+		set multisampling(arg: number);
+		/**
      * The current amount of samples used for multisample anti-aliasing.
      *
      * @type {Number}
      */
-    get multisampling(): number;
-    /**
+		get multisampling(): number;
+		/**
      * Returns the internal timer.
      *
      * @return {Timer} The timer.
      */
-    getTimer(): Timer;
-    /**
+		getTimer(): Timer;
+		/**
      * Returns the renderer.
      *
      * @return {WebGLRenderer} The renderer.
      */
-    getRenderer(): WebGLRenderer;
-    /**
+		getRenderer(): WebGLRenderer;
+		/**
      * Sets the renderer.
      *
      * @param {WebGLRenderer} renderer - The renderer.
      */
-    setRenderer(renderer: WebGLRenderer): void;
-    /**
+		setRenderer(renderer: WebGLRenderer): void;
+		/**
      * Replaces the current renderer with the given one.
      *
      * The auto clear mechanism of the provided renderer will be disabled. If the new render size differs from the
@@ -4466,11 +4620,12 @@ declare module "postprocessing" {
      * @param {Boolean} updateDOM - Indicates whether the old canvas should be replaced by the new one in the DOM.
      * @return {WebGLRenderer} The old renderer.
      */
-    replaceRenderer(
-      renderer: WebGLRenderer,
-      updateDOM?: boolean
-    ): WebGLRenderer;
-    /**
+		replaceRenderer(
+			renderer: WebGLRenderer,
+			updateDOM?: boolean
+		): WebGLRenderer;
+
+		/**
      * Creates a new render target.
      *
      * @deprecated Create buffers manually via WebGLRenderTarget instead.
@@ -4480,54 +4635,56 @@ declare module "postprocessing" {
      * @param {Number} multisampling - The number of samples to use for antialiasing.
      * @return {WebGLRenderTarget} A new render target that equals the renderer's canvas.
      */
-    createBuffer(
-      depthBuffer: boolean,
-      stencilBuffer: boolean,
-      type: number,
-      multisampling: number
-    ): WebGLRenderTarget;
-    /**
+		createBuffer(
+			depthBuffer: boolean,
+			stencilBuffer: boolean,
+			type: number,
+			multisampling: number
+		): WebGLRenderTarget;
+
+		/**
      * Adds a pass, optionally at a specific index.
      *
      * @param {Pass} pass - A new pass.
      * @param {Number} [index] - An index at which the pass should be inserted.
      */
-    addPass(pass: Pass, index?: number): void;
-    /**
+		addPass(pass: Pass, index?: number): void;
+		/**
      * Removes a pass.
      *
      * @param {Pass} pass - The pass.
      */
-    removePass(pass: Pass): void;
-    /**
+		removePass(pass: Pass): void;
+		/**
      * Removes all passes.
      */
-    removeAllPasses(): void;
-    /**
+		removeAllPasses(): void;
+		/**
      * Renders all enabled passes in the order in which they were added.
      *
      * @param {Number} [deltaTime] - The time since the last frame in seconds.
      */
-    render(deltaTime?: number): void;
-    /**
+		render(deltaTime?: number): void;
+		/**
      * Sets the size of the buffers, passes and the renderer.
      *
      * @param {Number} width - The width.
      * @param {Number} height - The height.
      * @param {Boolean} [updateStyle] - Determines whether the style of the canvas should be updated.
      */
-    setSize(width: number, height: number, updateStyle?: boolean): void;
-    /**
+		setSize(width: number, height: number, updateStyle?: boolean): void;
+		/**
      * Resets this composer by deleting all passes and creating new buffers.
      */
-    reset(): void;
-    /**
+		reset(): void;
+		/**
      * Disposes this composer and all passes.
      */
-    dispose(): void;
-  }
+		dispose(): void;
 
-  /**
+	}
+
+	/**
    * An override material manager.
    *
    * Includes a workaround that fixes override materials for skinned meshes and instancing. Doesn't fix uniforms such as
@@ -4536,83 +4693,88 @@ declare module "postprocessing" {
    *
    * @implements {Disposable}
    */
-  export class OverrideMaterialManager implements Disposable {
-    /**
+	export class OverrideMaterialManager implements Disposable {
+
+		/**
      * Enables or disables the override material workaround globally.
      *
      * This only affects post processing passes and effects.
      *
      * @type {Boolean}
      */
-    static set workaroundEnabled(arg: boolean);
-    /**
+		static set workaroundEnabled(arg: boolean);
+		/**
      * Indicates whether the override material workaround is enabled.
      *
      * @type {Boolean}
      */
-    static get workaroundEnabled(): boolean;
-    /**
+		static get workaroundEnabled(): boolean;
+		/**
      * Constructs a new override material manager.
      *
      * @param {Material} [material=null] - An override material.
      */
-    constructor(material?: Material);
-    /**
+		constructor(material?: Material);
+		/**
      * Sets the override material.
      *
      * @param {Material} material - The material.
      */
-    setMaterial(material: Material): void;
-    /**
+		setMaterial(material: Material): void;
+		/**
      * Performs cleanup tasks.
      */
-    dispose(): void;
-  }
+		dispose(): void;
 
-  /**
+	}
+
+	/**
    * The Resizable contract.
    *
    * Implemented by objects that can be resized.
    *
    * @interface
    */
-  export class Resizable {
-    /**
+	export class Resizable {
+
+		/**
      * Sets the size of this object.
      *
      * @param {number} width - The width.
      * @param {number} height - The height.
      */
-    setSize(width: number, height: number): void;
-  }
+		setSize(width: number, height: number): void;
 
-  /**
+	}
+
+	/**
    * An object selection.
    *
    * Object selections use render layers to facilitate quick and efficient visibility changes.
    */
-  export class Selection extends Set<Object3D> {
-    /**
+	export class Selection extends Set<Object3D> {
+
+		/**
      * Constructs a new selection.
      *
      * @param {Iterable<Object3D>} [iterable] - A collection of objects that should be added to this selection.
      * @param {Number} [layer=10] - A dedicated render layer for selected objects.
      */
-    constructor(iterable?: Iterable<Object3D>, layer?: number);
-    /**
+		constructor(iterable?: Iterable<Object3D>, layer?: number);
+		/**
      * Controls whether objects that are added to this selection should be removed from all other layers.
      *
      * @type {Boolean}
      */
-    exclusive: boolean;
-    set layer(arg: number);
-    /**
+		exclusive: boolean;
+		set layer(arg: number);
+		/**
      * The render layer for selected objects.
      *
      * @type {Number}
      */
-    get layer(): number;
-    /**
+		get layer(): number;
+		/**
      * Returns the current render layer for selected objects.
      *
      * The default layer is 10. If this collides with your own custom layers, please change it before rendering!
@@ -4620,8 +4782,8 @@ declare module "postprocessing" {
      * @deprecated Use layer instead.
      * @return {Number} The layer.
      */
-    getLayer(): number;
-    /**
+		getLayer(): number;
+		/**
      * Sets the render layer for selected objects.
      *
      * The current selection will be updated accordingly.
@@ -4629,43 +4791,43 @@ declare module "postprocessing" {
      * @deprecated Use layer instead.
      * @param {Number} value - The layer. Range is [0, 31].
      */
-    setLayer(value: number): void;
-    /**
+		setLayer(value: number): void;
+		/**
      * Indicates whether objects that are added to this selection will be removed from all other layers.
      *
      * @deprecated Use exclusive instead.
      * @return {Number} Whether this selection is exclusive. Default is false.
      */
-    isExclusive(): number;
-    /**
+		isExclusive(): number;
+		/**
      * Controls whether objects that are added to this selection should be removed from all other layers.
      *
      * @deprecated Use exclusive instead.
      * @param {Number} value - Whether this selection should be exclusive.
      */
-    setExclusive(value: number): void;
-    /**
+		setExclusive(value: number): void;
+		/**
      * Clears this selection.
      *
      * @return {Selection} This selection.
      */
-    clear(): Selection;
-    /**
+		clear(): Selection;
+		/**
      * Clears this selection and adds the given objects.
      *
      * @param {Iterable<Object3D>} objects - The objects that should be selected.
      * @return {Selection} This selection.
      */
-    set(objects: Iterable<Object3D>): Selection;
-    /**
+		set(objects: Iterable<Object3D>): Selection;
+		/**
      * An alias for {@link has}.
      *
      * @param {Object3D} object - An object.
      * @return {Number} Returns 0 if the given object is currently selected, or -1 otherwise.
      * @deprecated Added for backward-compatibility.
      */
-    indexOf(object: Object3D): number;
-    /**
+		indexOf(object: Object3D): number;
+		/**
      * Adds an object to this selection.
      *
      * If {@link exclusive} is set to `true`, the object will also be removed from all other layers.
@@ -4673,15 +4835,15 @@ declare module "postprocessing" {
      * @param {Object3D} object - The object that should be selected.
      * @return {Selection} This selection.
      */
-    add(object: Object3D): Selection;
-    /**
+		add(object: Object3D): Selection;
+		/**
      * Removes an existing object from the selection. If the object doesn't exist it's added instead.
      *
      * @param {Object3D} object - The object.
      * @return {Boolean} Returns true if the object is added, false otherwise.
      */
-    toggle(object: Object3D): boolean;
-    /**
+		toggle(object: Object3D): boolean;
+		/**
      * Sets the visibility of all selected objects.
      *
      * This method enables or disables render layer 0 of all selected objects.
@@ -4689,10 +4851,11 @@ declare module "postprocessing" {
      * @param {Boolean} visible - Whether the selected objects should be visible.
      * @return {Selection} This selection.
      */
-    setVisible(visible: boolean): Selection;
-  }
+		setVisible(visible: boolean): Selection;
 
-  /**
+	}
+
+	/**
    * A timer.
    *
    * Original implementation by Michael Herzog (Mugen87).
@@ -4700,22 +4863,23 @@ declare module "postprocessing" {
    * @experimental Temporary substitute for {@link https://github.com/mrdoob/three.js/pull/17912}
    * @implements {Disposable}
    */
-  export class Timer implements Disposable {
-    /**
+	export class Timer implements Disposable {
+
+		/**
      * Enables or disables the fixed time step.
      *
      * @param {Boolean} enabled - Whether the fixed delta time should be used.
      * @return {Timer} This timer.
      */
-    setFixedDeltaEnabled(enabled: boolean): Timer;
-    /**
+		setFixedDeltaEnabled(enabled: boolean): Timer;
+		/**
      * Indicates whether auto reset is enabled.
      *
      * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API}
      * @return {Boolean} Whether the timer will be reset on visibility change.
      */
-    isAutoResetEnabled(): boolean;
-    /**
+		isAutoResetEnabled(): boolean;
+		/**
      * Enables or disables auto reset based on page visibility.
      *
      * If enabled, the timer will be reset when the page becomes visible. This effectively pauses the timer when the page
@@ -4725,282 +4889,293 @@ declare module "postprocessing" {
      * @param {Boolean} enabled - Whether the timer should be reset on visibility change.
      * @return {Timer} This timer.
      */
-    setAutoResetEnabled(enabled: boolean): Timer;
-    /**
+		setAutoResetEnabled(enabled: boolean): Timer;
+		/**
      * Returns the delta time.
      *
      * @return {Number} The delta time in seconds.
      */
-    getDelta(): number;
-    /**
+		getDelta(): number;
+		/**
      * Returns the fixed delta time.
      *
      * @return {Number} The fixed delta time in seconds.
      */
-    getFixedDelta(): number;
-    /**
+		getFixedDelta(): number;
+		/**
      * Sets the fixed delta time.
      *
      * @param {Number} fixedDelta - The delta time in seconds.
      * @return {Timer} This timer.
      */
-    setFixedDelta(fixedDelta: number): Timer;
-    /**
+		setFixedDelta(fixedDelta: number): Timer;
+		/**
      * Returns the elapsed time.
      *
      * @return {Number} The elapsed time in seconds.
      */
-    getElapsed(): number;
-    /**
+		getElapsed(): number;
+		/**
      * Returns the timescale.
      *
      * @return {Number} The timescale.
      */
-    getTimescale(): number;
-    /**
+		getTimescale(): number;
+		/**
      * Sets the timescale.
      *
      * @param {Number} timescale - The timescale.
      * @return {Timer} This timer.
      */
-    setTimescale(timescale: number): Timer;
-    /**
+		setTimescale(timescale: number): Timer;
+		/**
      * Updates this timer.
      *
      * @param {Number} [timestamp] - The current time in milliseconds.
      * @return {Timer} This timer.
      */
-    update(timestamp?: number): Timer;
-    /**
+		update(timestamp?: number): Timer;
+		/**
      * Resets this timer.
      *
      * @return {Timer} This timer.
      */
-    reset(): Timer;
-    /**
+		reset(): Timer;
+		/**
      * Handles events.
      *
      * @param {Event} event - The event.
      */
-    handleEvent(event: Event): void;
-    /**
+		handleEvent(event: Event): void;
+		/**
      * Disposes this timer.
      */
-    dispose(): void;
-  }
+		dispose(): void;
 
-  export type BloomEffectOptions = {
-    blendFunction?: BlendFunction;
-    luminanceThreshold?: number;
-    luminanceSmoothing?: number;
-    resolutionScale?: number;
-    intensity?: number;
-    width?: number;
-    height?: number;
-    kernelSize?: KernelSize;
-  };
+	}
 
-  /**
+	export type BloomEffectOptions = {
+		blendFunction?: BlendFunction;
+		luminanceThreshold?: number;
+		luminanceSmoothing?: number;
+		intensity?: number;
+		resolutionScale?: number;
+		resolutionX?: number;
+		resolutionY?: number;
+		width?: number;
+		height?: number;
+		kernelSize?: KernelSize;
+	};
+
+	/**
    * A bloom effect.
    */
-  export class BloomEffect extends Effect {
-    /**
+	export class BloomEffect extends Effect {
+
+		/**
      * Constructs a new bloom effect.
      *
      * @param {Object} [options] - The options.
      * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
      * @param {Number} [options.luminanceThreshold=0.9] - The luminance threshold. Raise this value to mask out darker elements in the scene. Range is [0, 1].
      * @param {Number} [options.luminanceSmoothing=0.025] - Controls the smoothness of the luminance threshold. Range is [0, 1].
-     * @param {Number} [options.resolutionScale=0.5] - Deprecated. Use height or width instead.
      * @param {Number} [options.intensity=1.0] - The intensity.
-     * @param {Number} [options.width=Resolution.AUTO_SIZE] - The render width.
-     * @param {Number} [options.height=Resolution.AUTO_SIZE] - The render height.
      * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
+     * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
+     * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
+     * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
+     * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprecated. Use resolutionX instead.
+     * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use resolutionY instead.
      */
-    constructor({
-      blendFunction,
-      luminanceThreshold,
-      luminanceSmoothing,
-      resolutionScale,
-      intensity,
-      width,
-      height,
-      kernelSize,
-    }?: BloomEffectOptions);
-    /**
+		constructor({
+			blendFunction,
+			luminanceThreshold,
+			luminanceSmoothing,
+			intensity,
+			resolutionScale,
+			width,
+			height,
+			resolutionX,
+			resolutionY,
+			kernelSize
+		}?: BloomEffectOptions);
+
+		/**
      * A luminance shader pass.
      *
      * This pass can be disabled to skip luminance filtering.
      *
      * @type {LuminancePass}
      */
-    luminancePass: LuminancePass;
-    /**
+		luminancePass: LuminancePass;
+		/**
      * A blur pass.
      *
      * @type {KawaseBlurPass}
      */
-    blurPass: KawaseBlurPass;
-    /**
+		blurPass: KawaseBlurPass;
+		/**
      * A texture that contains the intermediate result of this effect.
      *
      * @type {Texture}
      */
-    get texture(): Texture;
-    /**
+		get texture(): Texture;
+		/**
      * Returns the generated bloom texture.
      *
      * @deprecated Use texture instead.
      * @return {Texture} The texture.
      */
-    getTexture(): Texture;
-    /**
+		getTexture(): Texture;
+		/**
      * The resolution of this effect.
      *
      * @type {Resolution}
      */
-    get resolution(): Resolution;
-    /**
+		get resolution(): Resolution;
+		/**
      * Returns the resolution settings.
      *
      * @deprecated Use resolution instead.
      * @return {Resolution} The resolution.
      */
-    getResolution(): Resolution;
-    /**
+		getResolution(): Resolution;
+		/**
      * Returns the blur pass.
      *
      * @deprecated Use blurPass instead.
      * @return {KawaseBlurPass} The blur pass.
      */
-    getBlurPass(): KawaseBlurPass;
-    /**
+		getBlurPass(): KawaseBlurPass;
+		/**
      * Returns the luminance pass.
      *
      * @deprecated Use luminancePass instead.
      * @return {LuminancePass} The luminance pass.
      */
-    getLuminancePass(): LuminancePass;
-    /**
+		getLuminancePass(): LuminancePass;
+		/**
      * The luminance material.
      *
      * @type {LuminanceMaterial}
      */
-    get luminanceMaterial(): LuminanceMaterial;
-    /**
+		get luminanceMaterial(): LuminanceMaterial;
+		/**
      * Returns the luminance material.
      *
      * @deprecated Use luminanceMaterial instead.
      * @return {LuminanceMaterial} The material.
      */
-    getLuminanceMaterial(): LuminanceMaterial;
-    set width(arg: number);
-    /**
+		getLuminanceMaterial(): LuminanceMaterial;
+		set width(arg: number);
+		/**
      * The current width of the internal render targets.
      *
      * @type {Number}
      * @deprecated Use resolution.width instead.
      */
-    get width(): number;
-    set height(arg: number);
-    /**
+		get width(): number;
+		set height(arg: number);
+		/**
      * The current height of the internal render targets.
      *
      * @type {Number}
      * @deprecated Use resolution.height instead.
      */
-    get height(): number;
-    set dithering(arg: boolean);
-    /**
+		get height(): number;
+		set dithering(arg: boolean);
+		/**
      * Indicates whether dithering is enabled.
      *
      * @type {Boolean}
      * @deprecated Use EffectPass.fullscreenMaterial.dithering instead.
      */
-    get dithering(): boolean;
-    set kernelSize(arg: KernelSize);
-    /**
+		get dithering(): boolean;
+		set kernelSize(arg: KernelSize);
+		/**
      * The blur kernel size.
      *
      * @type {KernelSize}
      * @deprecated Use blurPass.kernelSize instead.
      */
-    get kernelSize(): KernelSize;
-    set distinction(arg: number);
-    /**
+		get kernelSize(): KernelSize;
+		set distinction(arg: number);
+		/**
      * @type {Number}
      * @deprecated Use luminanceMaterial instead.
      */
-    get distinction(): number;
-    set intensity(arg: number);
-    /**
+		get distinction(): number;
+		set intensity(arg: number);
+		/**
      * The bloom intensity.
      *
      * @type {Number}
      */
-    get intensity(): number;
-    /**
+		get intensity(): number;
+		/**
      * The bloom intensity.
      *
      * @deprecated Use intensity instead.
      * @return {Number} The intensity.
      */
-    getIntensity(): number;
-    /**
+		getIntensity(): number;
+		/**
      * Sets the bloom intensity.
      *
      * @deprecated Use intensity instead.
      * @param {Number} value - The intensity.
      */
-    setIntensity(value: number): void;
-    /**
+		setIntensity(value: number): void;
+		/**
      * Returns the current resolution scale.
      *
      * @return {Number} The resolution scale.
      * @deprecated Use resolution instead.
      */
-    getResolutionScale(): number;
-    /**
+		getResolutionScale(): number;
+		/**
      * Sets the resolution scale.
      *
      * @param {Number} scale - The new resolution scale.
      * @deprecated Use resolution instead.
      */
-    setResolutionScale(scale: number): void;
-    /**
+		setResolutionScale(scale: number): void;
+		/**
      * Updates this effect.
      *
      * @param {WebGLRenderer} renderer - The renderer.
      * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
      * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
      */
-    update(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      deltaTime?: number
-    ): void;
-    /**
+		update(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			deltaTime?: number
+		): void;
+
+		/**
      * Updates the size of internal render targets.
      *
      * @param {Number} width - The width.
      * @param {Number} height - The height.
      */
-    setSize(width: number, height: number): void;
-    /**
+		setSize(width: number, height: number): void;
+		/**
      * Performs initialization tasks.
      *
      * @param {WebGLRenderer} renderer - The renderer.
      * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
      * @param {Number} frameBufferType - The type of the main frame buffers.
      */
-    initialize(
-      renderer: WebGLRenderer,
-      alpha: boolean,
-      frameBufferType: number
-    ): void;
-  }
+		initialize(
+			renderer: WebGLRenderer,
+			alpha: boolean,
+			frameBufferType: number
+		): void;
 
-  /**
+	}
+
+	/**
    * A depth of field (bokeh) effect.
    *
    * Original shader code by Martins Upitis:
@@ -5008,8 +5183,9 @@ declare module "postprocessing" {
    *
    * @deprecated Use DepthOfFieldEffect instead.
    */
-  export class BokehEffect extends Effect {
-    /**
+	export class BokehEffect extends Effect {
+
+		/**
      * Constructs a new bokeh effect.
      *
      * @param {Object} [options] - The options.
@@ -5019,28 +5195,30 @@ declare module "postprocessing" {
      * @param {Number} [options.aperture=0.015] - Camera aperture scale. Bigger values for stronger blur and shallower depth of field.
      * @param {Number} [options.maxBlur=1.0] - The maximum blur strength.
      */
-    constructor({
-      blendFunction,
-      focus,
-      dof,
-      aperture,
-      maxBlur,
-    }?: {
-      blendFunction?: BlendFunction;
-      focus?: number;
-      dof?: number;
-      aperture?: number;
-      maxBlur?: number;
-    });
-  }
+		constructor({
+			blendFunction,
+			focus,
+			dof,
+			aperture,
+			maxBlur
+		}?: {
+			blendFunction?: BlendFunction;
+			focus?: number;
+			dof?: number;
+			aperture?: number;
+			maxBlur?: number;
+		});
 
-  /**
+	}
+
+	/**
    * A brightness/contrast effect.
    *
    * Reference: https://github.com/evanw/glfx.js
    */
-  export class BrightnessContrastEffect extends Effect {
-    /**
+	export class BrightnessContrastEffect extends Effect {
+
+		/**
      * Constructs a new brightness/contrast effect.
      *
      * @param {Object} [options] - The options.
@@ -5048,207 +5226,243 @@ declare module "postprocessing" {
      * @param {Number} [options.brightness=0.0] - The brightness factor, ranging from -1 to 1, where 0 means no change.
      * @param {Number} [options.contrast=0.0] - The contrast factor, ranging from -1 to 1, where 0 means no change.
      */
-    constructor({
-      blendFunction,
-      brightness,
-      contrast,
-    }?: {
-      blendFunction?: BlendFunction;
-      brightness?: number;
-      contrast?: number;
-    });
-    set brightness(arg: number);
-    /**
+		constructor({
+			blendFunction,
+			brightness,
+			contrast
+		}?: {
+			blendFunction?: BlendFunction;
+			brightness?: number;
+			contrast?: number;
+		});
+
+		set brightness(arg: number);
+		/**
      * The brightness.
      *
      * @type {Number}
      */
-    get brightness(): number;
-    /**
+		get brightness(): number;
+		/**
      * Returns the brightness.
      *
      * @deprecated Use brightness instead.
      * @return {Number} The brightness.
      */
-    getBrightness(): number;
-    /**
+		getBrightness(): number;
+		/**
      * Sets the brightness.
      *
      * @deprecated Use brightness instead.
      * @param {Number} value - The brightness.
      */
-    setBrightness(value: number): void;
-    set contrast(arg: number);
-    /**
+		setBrightness(value: number): void;
+		set contrast(arg: number);
+		/**
      * The contrast.
      *
      * @type {Number}
      */
-    get contrast(): number;
-    /**
+		get contrast(): number;
+		/**
      * Returns the contrast.
      *
      * @deprecated Use contrast instead.
      * @return {Number} The contrast.
      */
-    getContrast(): number;
-    /**
+		getContrast(): number;
+		/**
      * Sets the contrast.
      *
      * @deprecated Use contrast instead.
      * @param {Number} value - The contrast.
      */
-    setContrast(value: number): void;
-  }
+		setContrast(value: number): void;
 
-  /**
+	}
+
+	/**
    * A chromatic aberration effect.
    */
-  export class ChromaticAberrationEffect extends Effect {
-    /**
+	export class ChromaticAberrationEffect extends Effect {
+
+		/**
      * Constructs a new chromatic aberration effect.
      *
      * @param {Object} [options] - The options.
      * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
      * @param {Vector2} [options.offset] - The color offset.
+     * @param {Boolean} [options.radialModulation=false] - Whether the effect should be modulated with a radial gradient.
+     * @param {Number} [options.modulationOffset=0.15] - The modulation offset. Only applies if `radialModulation` is enabled.
      */
-    constructor({
-      blendFunction,
-      offset,
-    }?: {
-      blendFunction?: BlendFunction;
-      offset?: Vector2;
-    });
-    set offset(arg: Vector2);
-    /**
+		constructor({
+			blendFunction,
+			offset,
+			radialModulation,
+			modulationOffset
+		}?: {
+			blendFunction?: BlendFunction;
+			offset?: Vector2;
+			radialModulation: boolean,
+			modulationOffset: number
+		});
+
+		set offset(arg: Vector2);
+		/**
      * The color offset.
      *
      * @type {Vector2}
      */
-    get offset(): Vector2;
-    /**
+		get offset(): Vector2;
+		/**
+     * Indicates whether radial modulation is enabled.
+     *
+     * When enabled, the effect will be weaker in the middle and stronger towards the screen edges.
+     *
+     * @type {Boolean}
+     */
+		get radialModulation(): boolean;
+		set radialModulation(arg: boolean);
+		/**
+     * The modulation offset.
+     *
+     * @type {Number}
+     */
+		get modulationOffset(): number;
+		set modulationOffset(arg: number);
+		/**
      * Returns the color offset vector.
      *
      * @deprecated Use offset instead.
      * @return {Vector2} The offset.
      */
-    getOffset(): Vector2;
-    /**
+		getOffset(): Vector2;
+		/**
      * Sets the color offset vector.
      *
      * @deprecated Use offset instead.
      * @param {Vector2} value - The offset.
      */
-    setOffset(value: Vector2): void;
-  }
+		setOffset(value: Vector2): void;
 
-  /**
+	}
+
+	/**
    * A fast greyscale effect.
    */
-  export class ColorAverageEffect extends Effect {
-    /**
+	export class ColorAverageEffect extends Effect {
+
+		/**
      * Constructs a new color average effect.
      *
      * @param {BlendFunction} [blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
      */
-    constructor(blendFunction?: BlendFunction);
-  }
+		constructor(blendFunction?: BlendFunction);
 
-  /**
+	}
+
+	/**
    * A color depth effect.
    *
    * Simulates a hardware limitation to achieve a retro feel. The real color depth will not be altered by this effect.
    */
-  export class ColorDepthEffect extends Effect {
-    /**
+	export class ColorDepthEffect extends Effect {
+
+		/**
      * Constructs a new color depth effect.
      *
      * @param {Object} [options] - The options.
      * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
      * @param {Number} [options.bits=16] - The color bit depth.
      */
-    constructor({
-      blendFunction,
-      bits,
-    }?: {
-      blendFunction?: BlendFunction;
-      bits?: number;
-    });
-    set bitDepth(arg: number);
-    /**
+		constructor({
+			blendFunction,
+			bits
+		}?: {
+			blendFunction?: BlendFunction;
+			bits?: number;
+		});
+
+		set bitDepth(arg: number);
+		/**
      * The virtual amount of color bits.
      *
      * Each color channel effectively uses a fourth of the total amount of bits. Alpha remains unaffected.
      *
      * @type {Number}
      */
-    get bitDepth(): number;
-    /**
+		get bitDepth(): number;
+		/**
      * Returns the current color bit depth.
      *
      * @return {Number} The bit depth.
      */
-    getBitDepth(): number;
-    /**
+		getBitDepth(): number;
+		/**
      * Sets the virtual amount of color bits.
      *
      * @param {Number} value - The bit depth.
      */
-    setBitDepth(value: number): void;
-  }
+		setBitDepth(value: number): void;
 
-  /**
+	}
+
+	/**
    * A depth visualization effect.
    *
    * Useful for debugging.
    */
-  export class DepthEffect extends Effect {
-    /**
+	export class DepthEffect extends Effect {
+
+		/**
      * Constructs a new depth effect.
      *
      * @param {Object} [options] - The options.
      * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
      * @param {Boolean} [options.inverted=false] - Whether the depth should be inverted.
      */
-    constructor({
-      blendFunction,
-      inverted,
-    }?: {
-      blendFunction?: BlendFunction;
-      inverted?: boolean;
-    });
-    set inverted(arg: boolean);
-    /**
+		constructor({
+			blendFunction,
+			inverted
+		}?: {
+			blendFunction?: BlendFunction;
+			inverted?: boolean;
+		});
+
+		set inverted(arg: boolean);
+		/**
      * Indicates whether depth should be inverted.
      *
      * @type {Boolean}
      */
-    get inverted(): boolean;
-    /**
+		get inverted(): boolean;
+		/**
      * Indicates whether the rendered depth is inverted.
      *
      * @deprecated Use inverted instead.
      * @return {Boolean} Whether the rendered depth is inverted.
      */
-    isInverted(): boolean;
-    /**
+		isInverted(): boolean;
+		/**
      * Enables or disables depth inversion.
      *
      * @deprecated Use inverted instead.
      * @param {Boolean} value - Whether depth should be inverted.
      */
-    setInverted(value: boolean): void;
-  }
+		setInverted(value: boolean): void;
 
-  /**
+	}
+
+	/**
    * A depth of field effect.
    *
    * Based on a graphics study by Adrian Courrèges and an article by Steve Avery:
    *  https://www.adriancourreges.com/blog/2016/09/09/doom-2016-graphics-study/
    *  https://pixelmischiefblog.wordpress.com/2016/11/25/bokeh-depth-of-field/
    */
-  export class DepthOfFieldEffect extends Effect {
-    /**
+	export class DepthOfFieldEffect extends Effect {
+
+		/**
      * Constructs a new depth of field effect.
      *
      * @param {Camera} camera - The main camera.
@@ -5261,160 +5475,169 @@ declare module "postprocessing" {
      * @param {Number} [options.focusRange=0.1] - The focus range. Range is [0.0, 1.0].
      * @param {Number} [options.focalLength=0.1] - Deprecated.
      * @param {Number} [options.bokehScale=1.0] - The scale of the bokeh blur.
-     * @param {Number} [options.width=Resolution.AUTO_SIZE] - The render width.
-     * @param {Number} [options.height=Resolution.AUTO_SIZE] - The render height.
+     * @param {Number} [options.resolutionScale=1.0] - The resolution scale.
+     * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
+     * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
+     * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprecated. Use resolutionX instead.
+     * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use resolutionY instead.
      */
-    constructor(
-      camera: Camera,
-      {
-        blendFunction,
-        worldFocusDistance,
-        worldFocusRange,
-        focusDistance,
-        focalLength,
-        focusRange,
-        bokehScale,
-        width,
-        height,
-      }?: {
-        blendFunction?: BlendFunction;
-        worldFocusDistance: number;
-        worldFocusRange: number;
-        focusDistance?: number;
-        focalLength?: number;
-        focusRange?: number;
-        bokehScale?: number;
-        width?: number;
-        height?: number;
-      }
-    );
-    /**
+		constructor(
+			camera: Camera,
+			{
+				blendFunction,
+				worldFocusDistance,
+				worldFocusRange,
+				focusDistance,
+				focalLength,
+				focusRange,
+				bokehScale,
+				resolutionScale,
+				resolutionX,
+				resolutionY,
+				width,
+				height
+			}?: {
+				blendFunction?: BlendFunction;
+				worldFocusDistance?: number;
+				worldFocusRange?: number;
+				focusDistance?: number;
+				focalLength?: number;
+				focusRange?: number;
+				bokehScale?: number;
+				width?: number;
+				height?: number;
+			}
+		);
+
+		/**
      * This pass blurs the foreground CoC buffer to soften edges.
      *
      * @type {KawaseBlurPass}
      * @deprecated Use getBlurPass() instead.
      */
-    blurPass: KawaseBlurPass;
-    /**
+		blurPass: KawaseBlurPass;
+		/**
      * A target position that should be kept in focus. Set to `null` to disable auto focus.
      *
      * @type {Vector3}
      */
-    target: Vector3;
-    set bokehScale(arg: number);
-    /**
+		target: Vector3;
+		set bokehScale(arg: number);
+		/**
      * The current bokeh scale.
      *
      * @type {Number}
      */
-    get bokehScale(): number;
-    /**
+		get bokehScale(): number;
+		/**
      * The circle of confusion material.
      *
      * @type {CircleOfConfusionMaterial}
      */
-    get circleOfConfusionMaterial(): CircleOfConfusionMaterial;
-    /**
+		get circleOfConfusionMaterial(): CircleOfConfusionMaterial;
+		/**
      * Returns the circle of confusion material.
      *
      * @deprecated Use circleOfConfusionMaterial instead.
      * @return {CircleOfConfusionMaterial} The material.
      */
-    getCircleOfConfusionMaterial(): CircleOfConfusionMaterial;
-    /**
+		getCircleOfConfusionMaterial(): CircleOfConfusionMaterial;
+		/**
      * Returns the pass that blurs the foreground CoC buffer to soften edges.
      *
      * @deprecated Use blurPass instead.
      * @return {KawaseBlurPass} The blur pass.
      */
-    getBlurPass(): KawaseBlurPass;
-    /**
+		getBlurPass(): KawaseBlurPass;
+		/**
      * The resolution of this effect.
      *
      * @type {Resolution}
      */
-    get resolution(): Resolution;
-    /**
+		get resolution(): Resolution;
+		/**
      * Returns the resolution settings.
      *
      * @deprecated Use resolution instead.
      * @return {Resolution} The resolution.
      */
-    getResolution(): Resolution;
-    /**
+		getResolution(): Resolution;
+		/**
      * Returns the current bokeh scale.
      *
      * @deprecated Use bokehScale instead.
      * @return {Number} The scale.
      */
-    getBokehScale(): number;
-    /**
+		getBokehScale(): number;
+		/**
      * Sets the bokeh scale.
      *
      * @deprecated Use bokehScale instead.
      * @param {Number} value - The scale.
      */
-    setBokehScale(value: number): void;
-    /**
+		setBokehScale(value: number): void;
+		/**
      * Returns the current auto focus target.
      *
      * @deprecated Use target instead.
      * @return {Vector3} The target.
      */
-    getTarget(): Vector3;
-    /**
+		getTarget(): Vector3;
+		/**
      * Sets the auto focus target.
      *
      * @deprecated Use target instead.
      * @param {Vector3} value - The target.
      */
-    setTarget(value: Vector3): void;
-    /**
+		setTarget(value: Vector3): void;
+		/**
      * Calculates the focus distance from the camera to the given position.
      *
      * @param {Vector3} target - The target.
      * @return {Number} The normalized focus distance.
      */
-    calculateFocusDistance(target: Vector3): number;
-    /**
+		calculateFocusDistance(target: Vector3): number;
+		/**
      * Updates this effect.
      *
      * @param {WebGLRenderer} renderer - The renderer.
      * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
      * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
      */
-    update(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      deltaTime?: number
-    ): void;
+		update(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			deltaTime?: number
+		): void;
 
-    /**
+		/**
      * Updates the size of internal render targets.
      *
      * @param {Number} width - The width.
      * @param {Number} height - The height.
      */
-    setSize(width: number, height: number): void;
-    /**
+		setSize(width: number, height: number): void;
+		/**
      * Performs initialization tasks.
      *
      * @param {WebGLRenderer} renderer - The renderer.
      * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
      * @param {Number} frameBufferType - The type of the main frame buffers.
      */
-    initialize(
-      renderer: WebGLRenderer,
-      alpha: boolean,
-      frameBufferType: number
-    ): void;
-  }
+		initialize(
+			renderer: WebGLRenderer,
+			alpha: boolean,
+			frameBufferType: number
+		): void;
 
-  /**
+	}
+
+	/**
    * A dot screen effect.
    */
-  export class DotScreenEffect extends Effect {
-    /**
+	export class DotScreenEffect extends Effect {
+
+		/**
      * Constructs a new dot screen effect.
      *
      * @param {Object} [options] - The options.
@@ -5422,76 +5645,81 @@ declare module "postprocessing" {
      * @param {Number} [options.angle=1.57] - The angle of the dot pattern.
      * @param {Number} [options.scale=1.0] - The scale of the dot pattern.
      */
-    constructor({
-      blendFunction,
-      angle,
-      scale,
-    }?: {
-      blendFunction?: BlendFunction;
-      angle?: number;
-      scale?: number;
-    });
-    set angle(arg: number);
-    /**
+		constructor({
+			blendFunction,
+			angle,
+			scale
+		}?: {
+			blendFunction?: BlendFunction;
+			angle?: number;
+			scale?: number;
+		});
+
+		set angle(arg: number);
+		/**
      * The angle.
      *
      * @type {Number}
      */
-    get angle(): number;
-    /**
+		get angle(): number;
+		/**
      * Returns the pattern angle.
      *
      * @deprecated Use angle instead.
      * @return {Number} The angle in radians.
      */
-    getAngle(): number;
-    /**
+		getAngle(): number;
+		/**
      * Sets the pattern angle.
      *
      * @deprecated Use angle instead.
      * @param {Number} value - The angle in radians.
      */
-    setAngle(value: number): void;
-    set scale(arg: number);
-    /**
+		setAngle(value: number): void;
+		set scale(arg: number);
+		/**
      * The scale.
      *
      * @type {Number}
      */
-    get scale(): number;
-  }
+		get scale(): number;
 
-  /**
+	}
+
+	/**
    * A gamma correction effect.
    *
    * @deprecated Set WebGLRenderer.outputEncoding to sRGBEncoding instead.
    */
-  export class GammaCorrectionEffect extends Effect {
-    /**
+	export class GammaCorrectionEffect extends Effect {
+
+		/**
      * Constructs a new gamma correction effect.
      *
      * @param {Object} [options] - The options.
      * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
      * @param {Number} [options.gamma=2.0] - The gamma factor.
      */
-    constructor({
-      blendFunction,
-      gamma,
-    }?: {
-      blendFunction?: BlendFunction;
-      gamma?: number;
-    });
-  }
+		constructor({
+			blendFunction,
+			gamma
+		}?: {
+			blendFunction?: BlendFunction;
+			gamma?: number;
+		});
 
-  /**
+	}
+
+	/**
    * A glitch effect.
    *
    * This effect can be used in conjunction with the {@link ChromaticAberrationEffect}.
    *
    * Reference: https://github.com/staffantan/unityglitch
    */
-  export class GlitchEffect extends Effect {
-    /**
+	export class GlitchEffect extends Effect {
+
+		/**
      * Constructs a new glitch effect.
      *
      * TODO Change ratio to 0.15.
@@ -5506,62 +5734,63 @@ declare module "postprocessing" {
      * @param {Number} [options.columns=0.05] - The scale of the blocky glitch columns.
      * @param {Number} [options.ratio=0.85] - The threshold for strong glitches.
      */
-    constructor({
-      blendFunction,
-      chromaticAberrationOffset,
-      delay,
-      duration,
-      strength,
-      columns,
-      ratio,
-      perturbationMap,
-      dtSize,
-    }?: {
-      blendFunction?: BlendFunction;
-      chromaticAberrationOffset?: Vector2;
-      delay?: Vector2;
-      duration?: Vector2;
-      strength?: Vector2;
-      perturbationMap?: Texture;
-      dtSize?: number;
-      columns?: number;
-      ratio?: number;
-    });
-    set perturbationMap(arg: Texture);
-    /**
+		constructor({
+			blendFunction,
+			chromaticAberrationOffset,
+			delay,
+			duration,
+			strength,
+			columns,
+			ratio,
+			perturbationMap,
+			dtSize
+		}?: {
+			blendFunction?: BlendFunction;
+			chromaticAberrationOffset?: Vector2;
+			delay?: Vector2;
+			duration?: Vector2;
+			strength?: Vector2;
+			perturbationMap?: Texture;
+			dtSize?: number;
+			columns?: number;
+			ratio?: number;
+		});
+
+		set perturbationMap(arg: Texture);
+		/**
      * The perturbation map.
      *
      * @type {Texture}
      */
-    get perturbationMap(): Texture;
-    /**
+		get perturbationMap(): Texture;
+		/**
      * The minimum and maximum delay between glitch activations in seconds.
      *
      * @type {Vector2}
      * @deprecated Use minDelay and maxDelay instead.
      */
-    delay: Vector2;
-    /**
+		delay: Vector2;
+		/**
      * The minimum and maximum duration of a glitch in seconds.
      *
      * @type {Vector2}
      * @deprecated Use minDuration and maxDuration instead.
      */
-    duration: Vector2;
-    /**
+		duration: Vector2;
+		/**
      * The strength of weak and strong glitches.
      *
      * @type {Vector2}
      * @deprecated Use minStrength and maxStrength instead.
      */
-    strength: Vector2;
-    /**
+		strength: Vector2;
+		/**
      * The effect mode.
      *
      * @type {GlitchMode}
      */
-    mode: GlitchMode;
-    /**
+		mode: GlitchMode;
+		/**
      * The ratio between weak (0.0) and strong (1.0) glitches. Range is [0.0, 1.0].
      *
      * This value is currently being treated as a threshold for strong glitches, i.e. it's inverted.
@@ -5569,223 +5798,223 @@ declare module "postprocessing" {
      * TODO Resolve inversion.
      * @type {Number}
      */
-    ratio: number;
-    /**
+		ratio: number;
+		/**
      * The chromatic aberration offset.
      *
      * @type {Vector2}
      */
-    chromaticAberrationOffset: Vector2;
-    /**
+		chromaticAberrationOffset: Vector2;
+		/**
      * Indicates whether the glitch effect is currently active.
      *
      * @type {Boolean}
      */
-    get active(): boolean;
-    /**
+		get active(): boolean;
+		/**
      * Indicates whether the glitch effect is currently active.
      *
      * @deprecated Use active instead.
      * @return {Boolean} Whether the glitch effect is active.
      */
-    isActive(): boolean;
-    set minDelay(arg: number);
-    /**
+		isActive(): boolean;
+		set minDelay(arg: number);
+		/**
      * The minimum delay between glitch activations.
      *
      * @type {Number}
      */
-    get minDelay(): number;
-    /**
+		get minDelay(): number;
+		/**
      * Returns the minimum delay between glitch activations.
      *
      * @deprecated Use minDelay instead.
      * @return {Number} The minimum delay in seconds.
      */
-    getMinDelay(): number;
-    /**
+		getMinDelay(): number;
+		/**
      * Sets the minimum delay between glitch activations.
      *
      * @deprecated Use minDelay instead.
      * @param {Number} value - The minimum delay in seconds.
      */
-    setMinDelay(value: number): void;
-    set maxDelay(arg: number);
-    /**
+		setMinDelay(value: number): void;
+		set maxDelay(arg: number);
+		/**
      * The maximum delay between glitch activations.
      *
      * @type {Number}
      */
-    get maxDelay(): number;
-    /**
+		get maxDelay(): number;
+		/**
      * Returns the maximum delay between glitch activations.
      *
      * @deprecated Use maxDelay instead.
      * @return {Number} The maximum delay in seconds.
      */
-    getMaxDelay(): number;
-    /**
+		getMaxDelay(): number;
+		/**
      * Sets the maximum delay between glitch activations.
      *
      * @deprecated Use maxDelay instead.
      * @param {Number} value - The maximum delay in seconds.
      */
-    setMaxDelay(value: number): void;
-    set minDuration(arg: number);
-    /**
+		setMaxDelay(value: number): void;
+		set minDuration(arg: number);
+		/**
      * The minimum duration of sporadic glitches.
      *
      * @type {Number}
      */
-    get minDuration(): number;
-    /**
+		get minDuration(): number;
+		/**
      * Returns the minimum duration of sporadic glitches.
      *
      * @deprecated Use minDuration instead.
      * @return {Number} The minimum duration in seconds.
      */
-    getMinDuration(): number;
-    /**
+		getMinDuration(): number;
+		/**
      * Sets the minimum duration of sporadic glitches.
      *
      * @deprecated Use minDuration instead.
      * @param {Number} value - The minimum duration in seconds.
      */
-    setMinDuration(value: number): void;
-    set maxDuration(arg: number);
-    /**
+		setMinDuration(value: number): void;
+		set maxDuration(arg: number);
+		/**
      * The maximum duration of sporadic glitches.
      *
      * @type {Number}
      */
-    get maxDuration(): number;
-    /**
+		get maxDuration(): number;
+		/**
      * Returns the maximum duration of sporadic glitches.
      *
      * @deprecated Use maxDuration instead.
      * @return {Number} The maximum duration in seconds.
      */
-    getMaxDuration(): number;
-    /**
+		getMaxDuration(): number;
+		/**
      * Sets the maximum duration of sporadic glitches.
      *
      * @deprecated Use maxDuration instead.
      * @param {Number} value - The maximum duration in seconds.
      */
-    setMaxDuration(value: number): void;
-    set minStrength(arg: number);
-    /**
+		setMaxDuration(value: number): void;
+		set minStrength(arg: number);
+		/**
      * The strength of weak glitches.
      *
      * @type {Number}
      */
-    get minStrength(): number;
-    /**
+		get minStrength(): number;
+		/**
      * Returns the strength of weak glitches.
      *
      * @deprecated Use minStrength instead.
      * @return {Number} The strength.
      */
-    getMinStrength(): number;
-    /**
+		getMinStrength(): number;
+		/**
      * Sets the strength of weak glitches.
      *
      * @deprecated Use minStrength instead.
      * @param {Number} value - The strength.
      */
-    setMinStrength(value: number): void;
-    set maxStrength(arg: number);
-    /**
+		setMinStrength(value: number): void;
+		set maxStrength(arg: number);
+		/**
      * The strength of strong glitches.
      *
      * @type {Number}
      */
-    get maxStrength(): number;
-    /**
+		get maxStrength(): number;
+		/**
      * Returns the strength of strong glitches.
      *
      * @deprecated Use maxStrength instead.
      * @return {Number} The strength.
      */
-    getMaxStrength(): number;
-    /**
+		getMaxStrength(): number;
+		/**
      * Sets the strength of strong glitches.
      *
      * @deprecated Use maxStrength instead.
      * @param {Number} value - The strength.
      */
-    setMaxStrength(value: number): void;
-    /**
+		setMaxStrength(value: number): void;
+		/**
      * Returns the current glitch mode.
      *
      * @deprecated Use mode instead.
      * @return {GlitchMode} The mode.
      */
-    getMode(): GlitchMode;
-    /**
+		getMode(): GlitchMode;
+		/**
      * Sets the current glitch mode.
      *
      * @deprecated Use mode instead.
      * @param {GlitchMode} value - The mode.
      */
-    setMode(value: GlitchMode): void;
-    /**
+		setMode(value: GlitchMode): void;
+		/**
      * Returns the glitch ratio.
      *
      * @deprecated Use ratio instead.
      * @return {Number} The ratio.
      */
-    getGlitchRatio(): number;
-    /**
+		getGlitchRatio(): number;
+		/**
      * Sets the ratio of weak (0.0) and strong (1.0) glitches.
      *
      * @deprecated Use ratio instead.
      * @param {Number} value - The ratio. Range is [0.0, 1.0].
      */
-    setGlitchRatio(value: number): void;
-    set columns(arg: number);
-    /**
+		setGlitchRatio(value: number): void;
+		set columns(arg: number);
+		/**
      * The glitch column size.
      *
      * @type {Number}
      */
-    get columns(): number;
-    /**
+		get columns(): number;
+		/**
      * Returns the glitch column size.
      *
      * @deprecated Use columns instead.
      * @return {Number} The glitch column size.
      */
-    getGlitchColumns(): number;
-    /**
+		getGlitchColumns(): number;
+		/**
      * Sets the glitch column size.
      *
      * @deprecated Use columns instead.
      * @param {Number} value - The glitch column size.
      */
-    setGlitchColumns(value: number): void;
-    /**
+		setGlitchColumns(value: number): void;
+		/**
      * Returns the chromatic aberration offset.
      *
      * @deprecated Use chromaticAberrationOffset instead.
      * @return {Vector2} The offset.
      */
-    getChromaticAberrationOffset(): Vector2;
-    /**
+		getChromaticAberrationOffset(): Vector2;
+		/**
      * Sets the chromatic aberration offset.
      *
      * @deprecated Use chromaticAberrationOffset instead.
      * @param {Vector2} value - The offset.
      */
-    setChromaticAberrationOffset(value: Vector2): void;
-    /**
+		setChromaticAberrationOffset(value: Vector2): void;
+		/**
      * Returns the current perturbation map.
      *
      * @deprecated Use perturbationMap instead.
      * @return {Texture} The current perturbation map.
      */
-    getPerturbationMap(): Texture;
-    /**
+		getPerturbationMap(): Texture;
+		/**
      * Replaces the current perturbation map with the given one.
      *
      * The current map will be disposed if it was generated by this effect.
@@ -5793,34 +6022,36 @@ declare module "postprocessing" {
      * @deprecated Use perturbationMap instead.
      * @param {Texture} value - The new perturbation map.
      */
-    setPerturbationMap(value: Texture): void;
-    /**
+		setPerturbationMap(value: Texture): void;
+		/**
      * Generates a perturbation map.
      *
      * @deprecated Use NoiseTexture instead.
      * @param {Number} [value=64] - The texture size.
      * @return {DataTexture} The perturbation map.
      */
-    generatePerturbationMap(value?: number): DataTexture;
-    /**
+		generatePerturbationMap(value?: number): DataTexture;
+		/**
      * Updates this effect.
      *
      * @param {WebGLRenderer} renderer - The renderer.
      * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
      * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
      */
-    update(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      deltaTime?: number
-    ): void;
-    /**
+		update(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			deltaTime?: number
+		): void;
+
+		/**
      * Deletes generated resources.
      */
-    dispose(): void;
-  }
+		dispose(): void;
 
-  /**
+	}
+
+	/**
    * A glitch mode enumeration.
    *
    * @type {Object}
@@ -5829,18 +6060,19 @@ declare module "postprocessing" {
    * @property {Number} CONSTANT_MILD - Constant mild glitches.
    * @property {Number} CONSTANT_WILD - Constant wild glitches.
    */
-  export enum GlitchMode {
-    DISABLED,
-    SPORADIC,
-    CONSTANT_MILD,
-    CONSTANT_WILD,
-  }
+	export enum GlitchMode {
+		DISABLED,
+		SPORADIC,
+		CONSTANT_MILD,
+		CONSTANT_WILD,
+	}
 
-  /**
+	/**
    * A god rays effect.
    */
-  export class GodRaysEffect extends Effect {
-    /**
+	export class GodRaysEffect extends Effect {
+
+		/**
      * Constructs a new god rays effect.
      *
      * @param {Camera} camera - The main camera.
@@ -5853,216 +6085,226 @@ declare module "postprocessing" {
      * @param {Number} [options.weight=0.4] - A light ray weight factor.
      * @param {Number} [options.exposure=0.6] - A constant attenuation coefficient.
      * @param {Number} [options.clampMax=1.0] - An upper bound for the saturation of the overall effect.
-     * @param {Number} [options.resolutionScale=0.5] - Deprecated. Use height or width instead.
-     * @param {Number} [options.width=Resolution.AUTO_SIZE] - The render width.
-     * @param {Number} [options.height=Resolution.AUTO_SIZE] - The render height.
+     * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
+     * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
+     * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
+     * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprecated. Use resolutionX instead.
+     * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use resolutionY instead.
      * @param {KernelSize} [options.kernelSize=KernelSize.SMALL] - The blur kernel size. Has no effect if blur is disabled.
      * @param {Boolean} [options.blur=true] - Whether the god rays should be blurred to reduce artifacts.
      */
-    constructor(
-      camera: Camera,
-      lightSource: Mesh | Points,
-      {
-        blendFunction,
-        samples,
-        density,
-        decay,
-        weight,
-        exposure,
-        clampMax,
-        resolutionScale,
-        width,
-        height,
-        kernelSize,
-        blur,
-      }?: {
-        blendFunction?: BlendFunction;
-        samples?: number;
-        density?: number;
-        decay?: number;
-        weight?: number;
-        exposure?: number;
-        clampMax?: number;
-        resolutionScale?: number;
-        width?: number;
-        height?: number;
-        kernelSize?: KernelSize;
-        blur?: boolean;
-      }
-    );
-    /**
+		constructor(
+			camera: Camera,
+			lightSource: Mesh | Points,
+			{
+				blendFunction,
+				samples,
+				density,
+				decay,
+				weight,
+				exposure,
+				clampMax,
+				resolutionScale,
+				resolutionX,
+				resolutionY,
+				width,
+				height,
+				kernelSize,
+				blur
+			}?: {
+				blendFunction?: BlendFunction;
+				samples?: number;
+				density?: number;
+				decay?: number;
+				weight?: number;
+				exposure?: number;
+				clampMax?: number;
+				resolutionScale?: number;
+				resolutionX?: number;
+				resolutionY?: number;
+				width?: number;
+				height?: number;
+				kernelSize?: KernelSize;
+				blur?: boolean;
+			}
+		);
+
+		/**
      * A blur pass that reduces aliasing artifacts and makes the light softer.
      *
      * This pass can be disabled to improve performance.
      *
      * @type {KawaseBlurPass}
      */
-    blurPass: KawaseBlurPass;
-    /**
+		blurPass: KawaseBlurPass;
+		/**
      * Returns the blur pass that reduces aliasing artifacts and makes the light softer.
      *
      * @deprecated Use blurPass instead.
      * @return {KawaseBlurPass} The blur pass.
      */
-    getBlurPass(): KawaseBlurPass;
-    /**
+		getBlurPass(): KawaseBlurPass;
+		/**
      * A texture that contains the intermediate result of this effect.
      *
      * @type {Texture}
      */
-    get texture(): Texture;
-    /**
+		get texture(): Texture;
+		/**
      * The depth mask material.
      *
      * @type {DepthMaskMaterial}
      */
-    get depthMaskMaterial(): DepthMaskMaterial;
-    /**
+		get depthMaskMaterial(): DepthMaskMaterial;
+		/**
      * Returns the god rays texture.
      *
      * @deprecated Use texture instead.
      * @return {Texture} The texture.
      */
-    getTexture(): Texture;
-    /**
+		getTexture(): Texture;
+		/**
      * The internal god rays material.
      *
      * @type {GodRaysMaterial}
      */
-    get godRaysMaterial(): GodRaysMaterial;
-    /**
+		get godRaysMaterial(): GodRaysMaterial;
+		/**
      * Returns the god rays material.
      *
      * @deprecated Use godRaysMaterial instead.
      * @return {GodRaysMaterial} The material.
      */
-    getGodRaysMaterial(): GodRaysMaterial;
-    /**
+		getGodRaysMaterial(): GodRaysMaterial;
+		/**
      * The resolution of this effect.
      *
      * @type {Resizer}
      */
-    get resolution(): Resizer;
-    /**
+		get resolution(): Resizer;
+		/**
      * Returns the resolution of this effect.
      *
      * @deprecated Use resolution instead.
      * @return {GodRaysMaterial} The material.
      */
-    getResolution(): GodRaysMaterial;
-    set width(arg: number);
-    /**
+		getResolution(): GodRaysMaterial;
+		set width(arg: number);
+		/**
      * The current width of the internal render targets.
      *
      * @type {Number}
      * @deprecated Use resolution.width instead.
      */
-    get width(): number;
-    set height(arg: number);
-    /**
+		get width(): number;
+		set height(arg: number);
+		/**
      * The current height of the internal render targets.
      *
      * @type {Number}
      * @deprecated Use resolution.height instead.
      */
-    get height(): number;
-    set dithering(arg: boolean);
-    /**
+		get height(): number;
+		set dithering(arg: boolean);
+		/**
      * Indicates whether dithering is enabled.
      *
      * @type {Boolean}
      * @deprecated
      */
-    get dithering(): boolean;
-    set blur(arg: boolean);
-    /**
+		get dithering(): boolean;
+		set blur(arg: boolean);
+		/**
      * Indicates whether the god rays should be blurred to reduce artifacts.
      *
      * @type {Boolean}
      * @deprecated Use blurPass.enabled instead.
      */
-    get blur(): boolean;
-    set kernelSize(arg: KernelSize);
-    /**
+		get blur(): boolean;
+		set kernelSize(arg: KernelSize);
+		/**
      * The blur kernel size.
      *
      * @type {KernelSize}
      * @deprecated Use blurPass.kernelSize instead.
      */
-    get kernelSize(): KernelSize;
-    /**
+		get kernelSize(): KernelSize;
+		/**
      * Returns the current resolution scale.
      *
      * @return {Number} The resolution scale.
      * @deprecated Use resolution instead.
      */
-    getResolutionScale(): number;
-    /**
+		getResolutionScale(): number;
+		/**
      * Sets the resolution scale.
      *
      * @param {Number} scale - The new resolution scale.
      * @deprecated Use resolution instead.
      */
-    setResolutionScale(scale: number): void;
-    /**
+		setResolutionScale(scale: number): void;
+		/**
      * A higher sample count improves quality at the cost of performance.
      *
      * @type {Number}
      * @deprecated Use godRaysMaterial.samples instead.
      */
-    set samples(arg: number);
-    /**
+		set samples(arg: number);
+		/**
      * The number of samples per pixel.
      *
      * @type {Number}
      * @deprecated Use godRaysMaterial.samples instead.
      */
-    get samples(): number;
-    /**
+		get samples(): number;
+		/**
      * Sets the depth texture.
      *
      * @param {Texture} depthTexture - A depth texture.
      * @param {Number} [depthPacking=BasicDepthPacking] - The depth packing.
      */
-    setDepthTexture(depthTexture: Texture, depthPacking?: number): void;
-    /**
+		setDepthTexture(depthTexture: Texture, depthPacking?: number): void;
+		/**
      * Updates this effect.
      *
      * @param {WebGLRenderer} renderer - The renderer.
      * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
      * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
      */
-    update(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      deltaTime?: number
-    ): void;
-    /**
+		update(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			deltaTime?: number
+		): void;
+
+		/**
      * Updates the size of internal render targets.
      *
      * @param {Number} width - The width.
      * @param {Number} height - The height.
      */
-    setSize(width: number, height: number): void;
-    /**
+		setSize(width: number, height: number): void;
+		/**
      * Performs initialization tasks.
      *
      * @param {WebGLRenderer} renderer - The renderer.
      * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
      * @param {Number} frameBufferType - The type of the main frame buffers.
      */
-    initialize(
-      renderer: WebGLRenderer,
-      alpha: boolean,
-      frameBufferType: number
-    ): void;
-  }
+		initialize(
+			renderer: WebGLRenderer,
+			alpha: boolean,
+			frameBufferType: number
+		): void;
 
-  /**
+	}
+
+	/**
    * A grid effect.
    */
-  export class GridEffect extends Effect {
-    /**
+	export class GridEffect extends Effect {
+
+		/**
      * Constructs a new grid effect.
      *
      * @param {Object} [options] - The options.
@@ -6070,73 +6312,76 @@ declare module "postprocessing" {
      * @param {Number} [options.scale=1.0] - The scale of the grid pattern.
      * @param {Number} [options.lineWidth=0.0] - The line width of the grid pattern.
      */
-    constructor({
-      blendFunction,
-      scale,
-      lineWidth,
-    }?: {
-      blendFunction?: BlendFunction;
-      scale?: number;
-      lineWidth?: number;
-    });
-    set scale(arg: number);
-    /**
+		constructor({
+			blendFunction,
+			scale,
+			lineWidth
+		}?: {
+			blendFunction?: BlendFunction;
+			scale?: number;
+			lineWidth?: number;
+		});
+
+		set scale(arg: number);
+		/**
      * The scale.
      *
      * @type {Number}
      */
-    get scale(): number;
-    set lineWidth(arg: number);
-    /**
+		get scale(): number;
+		set lineWidth(arg: number);
+		/**
      * The line width.
      *
      * @type {Number}
      */
-    get lineWidth(): number;
-    /**
+		get lineWidth(): number;
+		/**
      * Returns the current grid scale.
      *
      * @deprecated Use scale instead.
      * @return {Number} The grid scale.
      */
-    getScale(): number;
-    /**
+		getScale(): number;
+		/**
      * Sets the grid scale.
      *
      * @deprecated Use scale instead.
      * @param {Number} value - The new grid scale.
      */
-    setScale(value: number): void;
-    /**
+		setScale(value: number): void;
+		/**
      * Returns the current grid line width.
      *
      * @deprecated Use lineWidth instead.
      * @return {Number} The grid line width.
      */
-    getLineWidth(): number;
-    /**
+		getLineWidth(): number;
+		/**
      * Sets the grid line width.
      *
      * @deprecated Use lineWidth instead.
      * @param {Number} value - The new grid line width.
      */
-    setLineWidth(value: number): void;
-    /**
+		setLineWidth(value: number): void;
+		/**
      * Updates the size of this pass.
      *
      * @param {Number} width - The width.
      * @param {Number} height - The height.
      */
-    setSize(width: number, height: number): void;
-  }
+		setSize(width: number, height: number): void;
 
-  /**
+	}
+
+	/**
    * A hue/saturation effect.
    *
    * Reference: https://github.com/evanw/glfx.js
    */
-  export class HueSaturationEffect extends Effect {
-    /**
+	export class HueSaturationEffect extends Effect {
+
+		/**
      * Constructs a new hue/saturation effect.
      *
      * @param {Object} [options] - The options.
@@ -6144,60 +6389,85 @@ declare module "postprocessing" {
      * @param {Number} [options.hue=0.0] - The hue in radians.
      * @param {Number} [options.saturation=0.0] - The saturation factor, ranging from -1 to 1, where 0 means no change.
      */
-    constructor({
-      blendFunction,
-      hue,
-      saturation,
-    }?: {
-      blendFunction?: BlendFunction;
-      hue?: number;
-      saturation?: number;
-    });
-    set hue(arg: number);
-    /**
+		constructor({
+			blendFunction,
+			hue,
+			saturation
+		}?: {
+			blendFunction?: BlendFunction;
+			hue?: number;
+			saturation?: number;
+		});
+
+		set hue(arg: number);
+		/**
      * The hue.
      *
      * @type {Number}
      */
-    get hue(): number;
-    set saturation(arg: number);
-    /**
+		get hue(): number;
+		set saturation(arg: number);
+		/**
      * The saturation.
      *
      * @type {Number}
      */
-    get saturation(): number;
-    /**
+		get saturation(): number;
+		/**
      * Returns the saturation.
      *
      * @deprecated Use saturation instead.
      * @return {Number} The saturation.
      */
-    getSaturation(): number;
-    /**
+		getSaturation(): number;
+		/**
      * Sets the saturation.
      *
      * @deprecated Use saturation instead.
      * @param {Number} value - The saturation.
      */
-    setSaturation(value: number): void;
-    /**
+		setSaturation(value: number): void;
+		/**
      * Returns the hue.
      *
      * @deprecated Use hue instead.
      * @return {Number} The hue in radians.
      */
-    getHue(): number;
-    /**
+		getHue(): number;
+		/**
      * Sets the hue.
      *
      * @deprecated Use hue instead.
      * @param {Number} value - The hue in radians.
      */
-    setHue(value: number): void;
-  }
+		setHue(value: number): void;
 
-  /**
+	}
+
+	/**
+	 * A 1D LUT effect.
+	 */
+
+	export class LUT1DEffect extends Effect {
+
+		/**
+		 * Constructs a new color grading effect.
+		 *
+		 * @param {Texture} lut - The lookup texture.
+		 * @param {Object} [options] - The options.
+		 * @param {BlendFunction} [options.blendFunction=BlendFunction.SET] - The blend function of this effect.
+		 */
+		constructor(
+			lut: Texture,
+			{
+				blendFunction
+			}?: {
+				blendFunction?: BlendFunction;
+			}
+		);
+
+	}
+	/**
    * A LUT effect.
    *
    * The tetrahedral interpolation algorithm was inspired by an implementation from OpenColorIO which is licensed under
@@ -6214,140 +6484,147 @@ declare module "postprocessing" {
    *
    * TODO Replace DataTexture3D with Data3DTexture.
    */
-  export class LUTEffect extends Effect {
-    /**
+	export class LUT3DEffect extends Effect {
+
+		/**
      * Constructs a new color grading effect.
      *
      * @param {Texture} lut - The lookup texture.
      * @param {Object} [options] - The options.
-     * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+     * @param {BlendFunction} [options.blendFunction=BlendFunction.SET] - The blend function of this effect.
      * @param {Boolean} [options.tetrahedralInterpolation=false] - Enables or disables tetrahedral interpolation.
      */
-    constructor(
-      lut: Texture,
-      {
-        blendFunction,
-        tetrahedralInterpolation,
-      }?: {
-        blendFunction?: BlendFunction;
-        tetrahedralInterpolation?: boolean;
-      }
-    );
-    set tetrahedralInterpolation(arg: boolean);
-    /**
+		constructor(
+			lut: Texture,
+			{
+				blendFunction,
+				tetrahedralInterpolation
+			}?: {
+				blendFunction?: BlendFunction;
+				tetrahedralInterpolation?: boolean;
+			}
+		);
+
+		set tetrahedralInterpolation(arg: boolean);
+		/**
      * Indicates whether tetrahedral interpolation is enabled. Requires a 3D LUT, disabled by default.
      *
      * Tetrahedral interpolation produces highly accurate results but is slower than hardware interpolation.
      *
      * @type {Boolean}
      */
-    get tetrahedralInterpolation(): boolean;
-    set inputEncoding(arg: TextureEncoding);
-    /**
+		get tetrahedralInterpolation(): boolean;
+		set inputEncoding(arg: TextureEncoding);
+		/**
      * The input encoding. Default is `sRGBEncoding`.
      *
      * Set this to `LinearEncoding` if your LUT expects linear color input.
      *
      * @type {TextureEncoding}
      */
-    get inputEncoding(): TextureEncoding;
-    set lut(arg: Texture);
-    /**
+		get inputEncoding(): TextureEncoding;
+		set lut(arg: Texture);
+		/**
      * The LUT.
      *
      * @type {Texture}
      */
-    get lut(): Texture;
-    /**
+		get lut(): Texture;
+		/**
      * Returns the output encoding.
      *
      * @deprecated
      * @return {TextureEncoding} The encoding.
      */
-    getOutputEncoding(): TextureEncoding;
-    /**
+		getOutputEncoding(): TextureEncoding;
+		/**
      * Returns the input encoding.
      *
      * @deprecated Use inputEncoding instead.
      * @return {TextureEncoding} The encoding.
      */
-    getInputEncoding(): TextureEncoding;
-    /**
+		getInputEncoding(): TextureEncoding;
+		/**
      * Sets the input encoding.
      *
      * @deprecated Use inputEncoding instead.
      * @param {TextureEncoding} value - The encoding.
      */
-    setInputEncoding(value: TextureEncoding): void;
-    /**
+		setInputEncoding(value: TextureEncoding): void;
+		/**
      * Returns the current LUT.
      *
      * @deprecated Use lut instead.
      * @return {Texture} The LUT.
      */
-    getLUT(): Texture;
-    /**
+		getLUT(): Texture;
+		/**
      * Sets the LUT.
      *
      * @deprecated Use lut instead.
      * @param {Texture} value - The LUT.
      */
-    setLUT(value: Texture): void;
-    /**
+		setLUT(value: Texture): void;
+		/**
      * Enables or disables tetrahedral interpolation.
      *
      * @deprecated Use tetrahedralInterpolation instead.
      * @param {Boolean} value - Whether tetrahedral interpolation should be enabled.
      */
-    setTetrahedralInterpolationEnabled(value: boolean): void;
-  }
+		setTetrahedralInterpolationEnabled(value: boolean): void;
 
-  /**
+	}
+
+	/**
    * A noise effect.
    */
-  export class NoiseEffect extends Effect {
-    /**
+	export class NoiseEffect extends Effect {
+
+		/**
      * Constructs a new noise effect.
      *
      * @param {Object} [options] - The options.
      * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
      * @param {Boolean} [options.premultiply=false] - Whether the noise should be multiplied with the input colors prior to blending.
      */
-    constructor({
-      blendFunction,
-      premultiply,
-    }?: {
-      blendFunction?: BlendFunction;
-      premultiply?: boolean;
-    });
-    set premultiply(arg: boolean);
-    /**
+		constructor({
+			blendFunction,
+			premultiply
+		}?: {
+			blendFunction?: BlendFunction;
+			premultiply?: boolean;
+		});
+
+		set premultiply(arg: boolean);
+		/**
      * Indicates whether noise will be multiplied with the input colors prior to blending.
      *
      * @type {Boolean}
      */
-    get premultiply(): boolean;
-    /**
+		get premultiply(): boolean;
+		/**
      * Indicates whether noise will be multiplied with the input colors prior to blending.
      *
      * @deprecated Use premultiply instead.
      * @return {Boolean} Whether noise is premultiplied.
      */
-    isPremultiplied(): boolean;
-    /**
+		isPremultiplied(): boolean;
+		/**
      * Controls whether noise should be multiplied with the input colors prior to blending.
      *
      * @deprecated Use premultiply instead.
      * @param {Boolean} value - Whether noise should be premultiplied.
      */
-    setPremultiplied(value: boolean): void;
-  }
+		setPremultiplied(value: boolean): void;
 
-  /**
+	}
+
+	/**
    * An outline effect.
    */
-  export class OutlineEffect extends Effect {
-    /**
+	export class OutlineEffect extends Effect {
+
+		/**
      * Constructs a new outline effect.
      *
      * @param {Scene} scene - The main scene.
@@ -6360,340 +6637,351 @@ declare module "postprocessing" {
      * @param {Number} [options.pulseSpeed=0.0] - The pulse speed. A value of zero disables the pulse effect.
      * @param {Number} [options.visibleEdgeColor=0xffffff] - The color of visible edges.
      * @param {Number} [options.hiddenEdgeColor=0x22090a] - The color of hidden edges.
-     * @param {Number} [options.resolutionScale=0.5] - Deprecated. Use height or width instead.
-     * @param {Number} [options.width=Resolution.AUTO_SIZE] - The render width.
-     * @param {Number} [options.height=Resolution.AUTO_SIZE] - The render height.
+     * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
+     * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
+     * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
+     * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprecated. Use resolutionX instead.
+     * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use resolutionY instead.
      * @param {KernelSize} [options.kernelSize=KernelSize.VERY_SMALL] - The blur kernel size.
      * @param {Boolean} [options.blur=false] - Whether the outline should be blurred.
      * @param {Boolean} [options.xRay=true] - Whether occluded parts of selected objects should be visible.
      */
-    constructor(
-      scene: Scene,
-      camera: Camera,
-      {
-        blendFunction,
-        patternTexture,
-        patternScale,
-        edgeStrength,
-        pulseSpeed,
-        visibleEdgeColor,
-        hiddenEdgeColor,
-        resolutionScale,
-        width,
-        height,
-        kernelSize,
-        blur,
-        xRay,
-      }?: {
-        blendFunction?: BlendFunction;
-        patternTexture?: number;
-        patternScale?: number;
-        edgeStrength?: number;
-        pulseSpeed?: number;
-        visibleEdgeColor?: number;
-        hiddenEdgeColor?: number;
-        resolutionScale?: number;
-        width?: number;
-        height?: number;
-        kernelSize?: KernelSize;
-        blur?: boolean;
-        xRay?: boolean;
-      }
-    );
-    set patternTexture(arg: Texture);
-    /**
+		constructor(
+			scene: Scene,
+			camera: Camera,
+			{
+				blendFunction,
+				patternTexture,
+				patternScale,
+				edgeStrength,
+				pulseSpeed,
+				visibleEdgeColor,
+				hiddenEdgeColor,
+				resolutionScale,
+				resolutionX,
+				resolutionY,
+				width,
+				height,
+				kernelSize,
+				blur,
+				xRay
+			}?: {
+				blendFunction?: BlendFunction;
+				patternTexture?: number;
+				patternScale?: number;
+				edgeStrength?: number;
+				pulseSpeed?: number;
+				visibleEdgeColor?: number;
+				hiddenEdgeColor?: number;
+				resolutionScale?: number;
+				resolutionX?: number;
+				resolutionY?: number;
+				width?: number;
+				height?: number;
+				kernelSize?: KernelSize;
+				blur?: boolean;
+				xRay?: boolean;
+			}
+		);
+
+		set patternTexture(arg: Texture);
+		/**
      * The pattern texture. Set to `null` to disable.
      *
      * @type {Texture}
      */
-    get patternTexture(): Texture;
-    set xRay(arg: boolean);
-    /**
+		get patternTexture(): Texture;
+		set xRay(arg: boolean);
+		/**
      * Indicates whether X-ray mode is enabled.
      *
      * @type {Boolean}
      */
-    get xRay(): boolean;
-    /**
+		get xRay(): boolean;
+		/**
      * A blur pass.
      *
      * @type {KawaseBlurPass}
      */
-    blurPass: KawaseBlurPass;
-    /**
+		blurPass: KawaseBlurPass;
+		/**
      * A selection of objects that will be outlined.
      *
      * The default layer of this selection is 10.
      *
      * @type {Selection}
      */
-    selection: Selection;
-    /**
+		selection: Selection;
+		/**
      * The pulse speed. Set to 0 to disable.
      *
      * @type {Number}
      */
-    pulseSpeed: number;
-    /**
+		pulseSpeed: number;
+		/**
      * The resolution of this effect.
      *
      * @type {Resolution}
      */
-    get resolution(): Resolution;
-    /**
+		get resolution(): Resolution;
+		/**
      * Returns the resolution.
      *
      * @return {Resizer} The resolution.
      */
-    getResolution(): Resizer;
-    set patternScale(arg: number);
-    /**
+		getResolution(): Resizer;
+		set patternScale(arg: number);
+		/**
      * The pattern scale.
      *
      * @type {Number}
      */
-    get patternScale(): number;
-    set edgeStrength(arg: number);
-    /**
+		get patternScale(): number;
+		set edgeStrength(arg: number);
+		/**
      * The edge strength.
      *
      * @type {Number}
      */
-    get edgeStrength(): number;
-    set visibleEdgeColor(arg: Color);
-    /**
+		get edgeStrength(): number;
+		set visibleEdgeColor(arg: Color);
+		/**
      * The visible edge color.
      *
      * @type {Color}
      */
-    get visibleEdgeColor(): Color;
-    set hiddenEdgeColor(arg: Color);
-    /**
+		get visibleEdgeColor(): Color;
+		set hiddenEdgeColor(arg: Color);
+		/**
      * The hidden edge color.
      *
      * @type {Color}
      */
-    get hiddenEdgeColor(): Color;
-    /**
+		get hiddenEdgeColor(): Color;
+		/**
      * Returns the blur pass.
      *
      * @deprecated Use blurPass instead.
      * @return {KawaseBlurPass} The blur pass.
      */
-    getBlurPass(): KawaseBlurPass;
-    /**
+		getBlurPass(): KawaseBlurPass;
+		/**
      * Returns the selection.
      *
      * @deprecated Use selection instead.
      * @return {Selection} The selection.
      */
-    getSelection(): Selection;
-    /**
+		getSelection(): Selection;
+		/**
      * Returns the pulse speed.
      *
      * @deprecated Use pulseSpeed instead.
      * @return {Number} The speed.
      */
-    getPulseSpeed(): number;
-    /**
+		getPulseSpeed(): number;
+		/**
      * Sets the pulse speed. Set to zero to disable.
      *
      * @deprecated Use pulseSpeed instead.
      * @param {Number} value - The speed.
      */
-    setPulseSpeed(value: number): void;
-    set width(arg: number);
-    /**
+		setPulseSpeed(value: number): void;
+		set width(arg: number);
+		/**
      * The current width of the internal render targets.
      *
      * @type {Number}
      * @deprecated Use resolution.width instead.
      */
-    get width(): number;
-    set height(arg: number);
-    /**
+		get width(): number;
+		set height(arg: number);
+		/**
      * The current height of the internal render targets.
      *
      * @type {Number}
      * @deprecated Use resolution.height instead.
      */
-    get height(): number;
-    set selectionLayer(arg: number);
-    /**
+		get height(): number;
+		set selectionLayer(arg: number);
+		/**
      * The selection layer.
      *
      * @type {Number}
      * @deprecated Use selection.layer instead.
      */
-    get selectionLayer(): number;
-    set dithering(arg: boolean);
-    /**
+		get selectionLayer(): number;
+		set dithering(arg: boolean);
+		/**
      * Indicates whether dithering is enabled.
      *
      * @type {Boolean}
      * @deprecated
      */
-    get dithering(): boolean;
-    set kernelSize(arg: KernelSize);
-    /**
+		get dithering(): boolean;
+		set kernelSize(arg: KernelSize);
+		/**
      * The blur kernel size.
      *
      * @type {KernelSize}
      * @deprecated Use blurPass.kernelSize instead.
      */
-    get kernelSize(): KernelSize;
-    set blur(arg: boolean);
-    /**
+		get kernelSize(): KernelSize;
+		set blur(arg: boolean);
+		/**
      * Indicates whether the outlines should be blurred.
      *
      * @type {Boolean}
      * @deprecated Use blurPass.enabled instead.
      */
-    get blur(): boolean;
-    /**
+		get blur(): boolean;
+		/**
      * Indicates whether X-ray mode is enabled.
      *
      * @deprecated Use xRay instead.
      * @return {Boolean} Whether X-ray mode is enabled.
      */
-    isXRayEnabled(): boolean;
-    /**
+		isXRayEnabled(): boolean;
+		/**
      * Enables or disables X-ray outlines.
      *
      * @deprecated Use xRay instead.
      * @param {Boolean} value - Whether X-ray should be enabled.
      */
-    setXRayEnabled(value: boolean): void;
-    /**
+		setXRayEnabled(value: boolean): void;
+		/**
      * Sets the pattern texture.
      *
      * @deprecated Use patternTexture instead.
      * @param {Texture} value - The new texture.
      */
-    setPatternTexture(value: Texture): void;
-    /**
+		setPatternTexture(value: Texture): void;
+		/**
      * Returns the current resolution scale.
      *
      * @return {Number} The resolution scale.
      * @deprecated Use resolution instead.
      */
-    getResolutionScale(): number;
-    /**
+		getResolutionScale(): number;
+		/**
      * Sets the resolution scale.
      *
      * @param {Number} scale - The new resolution scale.
      * @deprecated Use resolution instead.
      */
-    setResolutionScale(scale: number): void;
-    /**
+		setResolutionScale(scale: number): void;
+		/**
      * Clears the current selection and selects a list of objects.
      *
      * @param {Object3D[]} objects - The objects that should be outlined. This array will be copied.
      * @return {OutlineEffect} This pass.
      * @deprecated Use selection.set() instead.
      */
-    setSelection(objects: Object3D[]): OutlineEffect;
-    /**
+		setSelection(objects: Object3D[]): OutlineEffect;
+		/**
      * Clears the list of selected objects.
      *
      * @return {OutlineEffect} This pass.
      * @deprecated Use selection.clear() instead.
      */
-    clearSelection(): OutlineEffect;
-    /**
+		clearSelection(): OutlineEffect;
+		/**
      * Selects an object.
      *
      * @param {Object3D} object - The object that should be outlined.
      * @return {OutlineEffect} This pass.
      * @deprecated Use selection.add() instead.
      */
-    selectObject(object: Object3D): OutlineEffect;
-    /**
+		selectObject(object: Object3D): OutlineEffect;
+		/**
      * Deselects an object.
      *
      * @param {Object3D} object - The object that should no longer be outlined.
      * @return {OutlineEffect} This pass.
      * @deprecated Use selection.delete() instead.
      */
-    deselectObject(object: Object3D): OutlineEffect;
-    /**
+		deselectObject(object: Object3D): OutlineEffect;
+		/**
      * Updates this effect.
      *
      * @param {WebGLRenderer} renderer - The renderer.
      * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
      * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
      */
-    update(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      deltaTime?: number
-    ): void;
-    /**
+		update(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			deltaTime?: number
+		): void;
+
+		/**
      * Updates the size of internal render targets.
      *
      * @param {Number} width - The width.
      * @param {Number} height - The height.
      */
-    setSize(width: number, height: number): void;
-    /**
+		setSize(width: number, height: number): void;
+		/**
      * Performs initialization tasks.
      *
      * @param {WebGLRenderer} renderer - The renderer.
      * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
      * @param {Number} frameBufferType - The type of the main frame buffers.
      */
-    initialize(
-      renderer: WebGLRenderer,
-      alpha: boolean,
-      frameBufferType: number
-    ): void;
-  }
+		initialize(
+			renderer: WebGLRenderer,
+			alpha: boolean,
+			frameBufferType: number
+		): void;
 
-  /**
+	}
+
+	/**
    * A pixelation effect.
    *
    * Warning: This effect cannot be merged with convolution effects.
    */
-  export class PixelationEffect extends Effect {
-    /**
+	export class PixelationEffect extends Effect {
+
+		/**
      * Constructs a new pixelation effect.
      *
      * @param {Number} [granularity=30.0] - The pixel granularity.
      */
-    constructor(granularity?: number);
-    set granularity(arg: number);
-    /**
+		constructor(granularity?: number);
+		set granularity(arg: number);
+		/**
      * The pixel granularity.
      *
      * A higher value yields coarser visuals.
      *
      * @type {Number}
      */
-    get granularity(): number;
-    /**
+		get granularity(): number;
+		/**
      * Returns the pixel granularity.
      *
      * @deprecated Use granularity instead.
      * @return {Number} The granularity.
      */
-    getGranularity(): number;
-    /**
+		getGranularity(): number;
+		/**
      * Sets the pixel granularity.
      *
      * @deprecated Use granularity instead.
      * @param {Number} value - The new granularity.
      */
-    setGranularity(value: number): void;
-    /**
+		setGranularity(value: number): void;
+		/**
      * Updates the granularity.
      *
      * @param {Number} width - The width.
      * @param {Number} height - The height.
      */
-    setSize(width: number, height: number): void;
-  }
+		setSize(width: number, height: number): void;
 
-  /**
+	}
+
+	/**
    * Depth of Field shader v2.4.
    *
    * Yields more realistic results but is also more demanding.
@@ -6703,8 +6991,9 @@ declare module "postprocessing" {
    *
    * @deprecated Use DepthOfFieldEffect instead.
    */
-  export class RealisticBokehEffect extends Effect {
-    /**
+	export class RealisticBokehEffect extends Effect {
+
+		/**
      * Constructs a new bokeh effect.
      *
      * @param {Object} [options] - The options.
@@ -6723,301 +7012,312 @@ declare module "postprocessing" {
      * @param {Boolean} [options.manualDoF=false] - Enables manual control over the depth of field.
      * @param {Boolean} [options.pentagon=false] - Enables pentagonal blur shapes. Requires a high number of rings and samples.
      */
-    constructor({
-      blendFunction,
-      focus,
-      focalLength,
-      fStop,
-      luminanceThreshold,
-      luminanceGain,
-      bias,
-      fringe,
-      maxBlur,
-      rings,
-      samples,
-      showFocus,
-      manualDoF,
-      pentagon,
-    }?: {
-      blendFunction?: BlendFunction;
-      focus?: number;
-      focalLength?: number;
-      fStop?: number;
-      luminanceThreshold?: number;
-      luminanceGain?: number;
-      bias?: number;
-      fringe?: number;
-      maxBlur?: number;
-      rings?: boolean;
-      samples?: boolean;
-      showFocus?: boolean;
-      manualDoF?: boolean;
-      pentagon?: boolean;
-    });
-    set rings(arg: number);
-    /**
+		constructor({
+			blendFunction,
+			focus,
+			focalLength,
+			fStop,
+			luminanceThreshold,
+			luminanceGain,
+			bias,
+			fringe,
+			maxBlur,
+			rings,
+			samples,
+			showFocus,
+			manualDoF,
+			pentagon
+		}?: {
+			blendFunction?: BlendFunction;
+			focus?: number;
+			focalLength?: number;
+			fStop?: number;
+			luminanceThreshold?: number;
+			luminanceGain?: number;
+			bias?: number;
+			fringe?: number;
+			maxBlur?: number;
+			rings?: boolean;
+			samples?: boolean;
+			showFocus?: boolean;
+			manualDoF?: boolean;
+			pentagon?: boolean;
+		});
+
+		set rings(arg: number);
+		/**
      * The amount of blur iterations.
      *
      * @type {Number}
      */
-    get rings(): number;
-    set samples(arg: number);
-    /**
+		get rings(): number;
+		set samples(arg: number);
+		/**
      * The amount of blur samples per ring.
      *
      * @type {Number}
      */
-    get samples(): number;
-    set showFocus(arg: boolean);
-    /**
+		get samples(): number;
+		set showFocus(arg: boolean);
+		/**
      * Indicates whether the focal point will be highlighted.
      *
      * @type {Boolean}
      */
-    get showFocus(): boolean;
-    set manualDoF(arg: boolean);
-    /**
+		get showFocus(): boolean;
+		set manualDoF(arg: boolean);
+		/**
      * Indicates whether the Depth of Field should be calculated manually.
      *
      * If enabled, the Depth of Field can be adjusted via the `dof` uniform.
      *
      * @type {Boolean}
      */
-    get manualDoF(): boolean;
-    set pentagon(arg: boolean);
-    /**
+		get manualDoF(): boolean;
+		set pentagon(arg: boolean);
+		/**
      * Indicates whether the blur shape should be pentagonal.
      *
      * @type {Boolean}
      */
-    get pentagon(): boolean;
-  }
+		get pentagon(): boolean;
 
-  /**
+	}
+
+	/**
    * A scanline effect.
    *
    * Based on an implementation by Georg 'Leviathan' Steinrohder (CC BY 3.0):
    * http://www.truevision3d.com/forums/showcase/staticnoise_colorblackwhite_scanline_shaders-t18698.0.html
    */
-  export class ScanlineEffect extends Effect {
-    /**
+	export class ScanlineEffect extends Effect {
+
+		/**
      * Constructs a new scanline effect.
      *
      * @param {Object} [options] - The options.
      * @param {BlendFunction} [options.blendFunction=BlendFunction.OVERLAY] - The blend function of this effect.
      * @param {Number} [options.density=1.25] - The scanline density.
      */
-    constructor({
-      blendFunction,
-      density,
-    }?: {
-      blendFunction?: BlendFunction;
-      density?: number;
-    });
-    set density(arg: number);
-    /**
+		constructor({
+			blendFunction,
+			density
+		}?: {
+			blendFunction?: BlendFunction;
+			density?: number;
+		});
+
+		set density(arg: number);
+		/**
      * The scanline density.
      *
      * @type {Number}
      */
-    get density(): number;
-    /**
+		get density(): number;
+		/**
      * Returns the current scanline density.
      *
      * @deprecated Use density instead.
      * @return {Number} The scanline density.
      */
-    getDensity(): number;
-    /**
+		getDensity(): number;
+		/**
      * Sets the scanline density.
      *
      * @deprecated Use density instead.
      * @param {Number} value - The new scanline density.
      */
-    setDensity(value: number): void;
-    /**
+		setDensity(value: number): void;
+		/**
      * Updates the size of this pass.
      *
      * @param {Number} width - The width.
      * @param {Number} height - The height.
      */
-    setSize(width, height): void;
-    /**
+		setSize(width, height): void;
+		/**
      * The scanline scroll speed. Default is 0 (disabled).
      *
      * @type {Number}
      */
-    get scrollSpeed(): number;
-    set scrollSpeed(value: number);
-  }
+		get scrollSpeed(): number;
+		set scrollSpeed(value: number);
 
-  /**
+	}
+
+	/**
    * A selective bloom effect.
    *
    * This effect applies bloom to selected objects only.
    */
-  export class SelectiveBloomEffect extends BloomEffect {
-    /**
+	export class SelectiveBloomEffect extends BloomEffect {
+
+		/**
      * Constructs a new selective bloom effect.
      *
      * @param {Scene} scene - The main scene.
      * @param {Camera} camera - The main camera.
      * @param {BloomEffectOptions} [options] - The options. See {@link BloomEffect} for details.
      */
-    constructor(scene: Scene, camera: Camera, options?: BloomEffectOptions);
-    /**
+		constructor(scene: Scene, camera: Camera, options?: BloomEffectOptions);
+		/**
      * A selection of objects.
      *
      * The default layer of this selection is 11.
      *
      * @type {Selection}
      */
-    selection: Selection;
-    /**
+		selection: Selection;
+		/**
      * Returns the selection.
      *
      * @deprecated Use selection instead.
      * @return {Selection} The selection.
      */
-    getSelection(): Selection;
-    set inverted(arg: boolean);
-    /**
+		getSelection(): Selection;
+		set inverted(arg: boolean);
+		/**
      * Indicates whether the selection should be considered inverted.
      *
      * @type {Boolean}
      */
-    get inverted(): boolean;
-    /**
+		get inverted(): boolean;
+		/**
      * Indicates whether the mask is inverted.
      *
      * @deprecated Use inverted instead.
      * @return {Boolean} Whether the mask is inverted.
      */
-    isInverted(): boolean;
-    /**
+		isInverted(): boolean;
+		/**
      * Enables or disable mask inversion.
      *
      * @deprecated Use inverted instead.
      * @param {Boolean} value - Whether the mask should be inverted.
      */
-    setInverted(value: boolean): void;
-    set ignoreBackground(arg: boolean);
-    /**
+		setInverted(value: boolean): void;
+		set ignoreBackground(arg: boolean);
+		/**
      * Indicates whether the background colors will be ignored.
      *
      * @type {Boolean}
      */
-    get ignoreBackground(): boolean;
-    /**
+		get ignoreBackground(): boolean;
+		/**
      * Indicates whether the background is disabled.
      *
      * @deprecated Use ignoreBackground instead.
      * @return {Boolean} Whether the background is disabled.
      */
-    isBackgroundDisabled(): boolean;
-    /**
+		isBackgroundDisabled(): boolean;
+		/**
      * Enables or disables the background.
      *
      * @deprecated Use ignoreBackground instead.
      * @param {Boolean} value - Whether the background should be disabled.
      */
-    setBackgroundDisabled(value: boolean): void;
-    /**
+		setBackgroundDisabled(value: boolean): void;
+		/**
      * Sets the depth texture.
      *
      * @param {Texture} depthTexture - A depth texture.
      * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing.
      */
-    setDepthTexture(
-      depthTexture: Texture,
-      depthPacking?: DepthPackingStrategies
-    ): void;
+		setDepthTexture(
+			depthTexture: Texture,
+			depthPacking?: DepthPackingStrategies
+		): void;
 
-    /**
+		/**
      * Updates this effect.
      *
      * @param {WebGLRenderer} renderer - The renderer.
      * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
      * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
      */
-    update(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      deltaTime: number
-    ): void;
+		update(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			deltaTime: number
+		): void;
 
-    /**
+		/**
      * Updates the size of internal render targets.
      *
      * @param {Number} width - The width.
      * @param {Number} height - The height.
      */
-    setSize(width: number, height: number): void;
+		setSize(width: number, height: number): void;
 
-    /**
+		/**
      * Performs initialization tasks.
      *
      * @param {WebGLRenderer} renderer - The renderer.
      * @param {Boolean} alpha - Whether the renderer uses the alpha channel.
      * @param {Number} frameBufferType - The type of the main frame buffers.
      */
-    initialize(
-      renderer: WebGLRenderer,
-      alpha: boolean,
-      frameBufferType: number
-    ): void;
-  }
+		initialize(
+			renderer: WebGLRenderer,
+			alpha: boolean,
+			frameBufferType: number
+		): void;
 
-  /**
+	}
+
+	/**
    * A sepia effect.
    */
-  export class SepiaEffect extends Effect {
-    /**
+	export class SepiaEffect extends Effect {
+
+		/**
      * Constructs a new sepia effect.
      *
      * @param {Object} [options] - The options.
      * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
      * @param {Number} [options.intensity=1.0] - The intensity of the effect.
      */
-    constructor({
-      blendFunction,
-      intensity,
-    }?: {
-      blendFunction?: BlendFunction;
-      intensity?: number;
-    });
-    set intensity(arg: number);
-    /**
+		constructor({
+			blendFunction,
+			intensity
+		}?: {
+			blendFunction?: BlendFunction;
+			intensity?: number;
+		});
+
+		set intensity(arg: number);
+		/**
      * The intensity.
      *
      * @deprecated Use blendMode.opacity instead.
      * @type {Number}
      */
-    get intensity(): number;
-    /**
+		get intensity(): number;
+		/**
      * Returns the current sepia intensity.
      *
      * @deprecated Use blendMode.opacity instead.
      * @return {Number} The intensity.
      */
-    getIntensity(): number;
-    /**
+		getIntensity(): number;
+		/**
      * Sets the sepia intensity.
      *
      * @deprecated Use blendMode.opacity instead.
      * @param {Number} value - The intensity.
      */
-    setIntensity(value: number): void;
-  }
+		setIntensity(value: number): void;
 
-  /**
+	}
+
+	/**
    * A shock wave effect.
    *
    * Based on a Gist by Jean-Philippe Sarda:
    *  https://gist.github.com/jpsarda/33cea67a9f2ecb0a0eda
    */
-  export class ShockWaveEffect extends Effect {
-    /**
+	export class ShockWaveEffect extends Effect {
+
+		/**
      * Constructs a new shock wave effect.
      *
      * @param {Camera} camera - The main camera.
@@ -7028,95 +7328,96 @@ declare module "postprocessing" {
      * @param {Number} [options.waveSize=0.2] - The wave size.
      * @param {Number} [options.amplitude=0.05] - The distortion amplitude.
      */
-    constructor(
-      camera: Camera,
-      position?: Vector3,
-      {
-        speed,
-        maxRadius,
-        waveSize,
-        amplitude,
-      }?: {
-        speed?: number;
-        maxRadius?: number;
-        waveSize?: number;
-        amplitude?: number;
-      }
-    );
-    /**
+		constructor(
+			camera: Camera,
+			position?: Vector3,
+			{
+				speed,
+				maxRadius,
+				waveSize,
+				amplitude
+			}?: {
+				speed?: number;
+				maxRadius?: number;
+				waveSize?: number;
+				amplitude?: number;
+			}
+		);
+
+		/**
      * The position of the shock wave.
      *
      * @type {Vector3}
      */
-    position: Vector3;
-    /**
+		position: Vector3;
+		/**
      * The speed of the shock wave animation.
      *
      * @type {Number}
      */
-    speed: number;
-    set amplitude(arg: number);
-    /**
+		speed: number;
+		set amplitude(arg: number);
+		/**
      * The amplitude.
      *
      * @type {Number}
      */
-    get amplitude(): number;
-    set waveSize(arg: number);
-    /**
+		get amplitude(): number;
+		set waveSize(arg: number);
+		/**
      * The wave size.
      *
      * @type {Number}
      */
-    get waveSize(): number;
-    set maxRadius(arg: number);
-    /**
+		get waveSize(): number;
+		set maxRadius(arg: number);
+		/**
      * The maximum radius.
      *
      * @type {Number}
      */
-    get maxRadius(): number;
-    set epicenter(arg: Vector3);
-    /**
+		get maxRadius(): number;
+		set epicenter(arg: Vector3);
+		/**
      * The position of the shock wave.
      *
      * @type {Vector3}
      * @deprecated Use position instead.
      */
-    get epicenter(): Vector3;
-    /**
+		get epicenter(): Vector3;
+		/**
      * Returns the position of the shock wave.
      *
      * @deprecated Use position instead.
      * @return {Vector3} The position.
      */
-    getPosition(): Vector3;
-    /**
+		getPosition(): Vector3;
+		/**
      * Sets the position of the shock wave.
      *
      * @deprecated Use position instead.
      * @param {Vector3} value - The position.
      */
-    setPosition(value: Vector3): void;
-    /**
+		setPosition(value: Vector3): void;
+		/**
      * Returns the speed of the shock wave.
      *
      * @deprecated Use speed instead.
      * @return {Number} The speed.
      */
-    getSpeed(): number;
-    /**
+		getSpeed(): number;
+		/**
      * Sets the speed of the shock wave.
      *
      * @deprecated Use speed instead.
      * @param {Number} value - The speed.
      */
-    setSpeed(value: number): void;
-    /**
+		setSpeed(value: number): void;
+		/**
      * Emits the shock wave.
      */
-    explode(): void;
-    /**
+		explode(): void;
+		/**
      * Updates this effect.
      *
      * @param {WebGLRenderer} renderer - The renderer.
@@ -7124,34 +7425,36 @@ declare module "postprocessing" {
      * @param {Number} [delta] - The time between the last frame and the current one in seconds.
      */
 
-    update(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      delta: number
-    ): void;
-  }
+		update(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			delta: number
+		): void;
 
-  /**
+	}
+
+	/**
    * Subpixel Morphological Antialiasing (SMAA).
    *
    * https://github.com/iryoku/smaa/releases/tag/v2.8
    */
-  export class SMAAEffect extends Effect {
-    /**
+	export class SMAAEffect extends Effect {
+
+		/**
      * The SMAA search image, encoded as a base64 data URL.
      *
      * @type {String}
      * @deprecated
      */
-    static get searchImageDataURL(): string;
-    /**
+		static get searchImageDataURL(): string;
+		/**
      * The SMAA area image, encoded as a base64 data URL.
      *
      * @type {String}
      * @deprecated
      */
-    static get areaImageDataURL(): string;
-    /**
+		static get areaImageDataURL(): string;
+		/**
      * Constructs a new SMAA effect.
      *
      * @param {Object} [options] - The options.
@@ -7159,75 +7462,76 @@ declare module "postprocessing" {
      * @param {EdgeDetectionMode} [options.edgeDetectionMode=EdgeDetectionMode.COLOR] - The edge detection mode.
      * @param {PredicationMode} [options.predicationMode=PredicationMode.DISABLED] - The predication mode.
      */
-    constructor({
-      preset,
-      edgeDetectionMode,
-      predicationMode,
-    }: {
-      preset?: SMAAPreset;
-      edgeDetectionMode?: EdgeDetectionMode;
-      predicationMode?: PredicationMode;
-    });
-    /**
+		constructor({
+			preset,
+			edgeDetectionMode,
+			predicationMode
+		}?: {
+			preset?: SMAAPreset;
+			edgeDetectionMode?: EdgeDetectionMode;
+			predicationMode?: PredicationMode;
+		});
+
+		/**
      * The edges texture.
      *
      * @type {Texture}
      */
-    get edgesTexture(): Texture;
-    /**
+		get edgesTexture(): Texture;
+		/**
      * Returns the edges texture.
      *
      * @deprecated Use edgesTexture instead.
      * @return {Texture} The texture.
      */
-    getEdgesTexture(): Texture;
-    /**
+		getEdgesTexture(): Texture;
+		/**
      * The edge weights texture.
      *
      * @type {Texture}
      */
-    get weightsTexture(): Texture;
-    /**
+		get weightsTexture(): Texture;
+		/**
      * Returns the edge weights texture.
      *
      * @deprecated Use weightsTexture instead.
      * @return {Texture} The texture.
      */
-    getWeightsTexture(): Texture;
-    /**
+		getWeightsTexture(): Texture;
+		/**
      * The edge detection material.
      *
      * @type {EdgeDetectionMaterial}
      */
-    get edgeDetectionMaterial(): EdgeDetectionMaterial;
-    /**
+		get edgeDetectionMaterial(): EdgeDetectionMaterial;
+		/**
      * The edge detection material.
      *
      * @type {EdgeDetectionMaterial}
      * @deprecated Use edgeDetectionMaterial instead.
      */
-    get colorEdgesMaterial(): EdgeDetectionMaterial;
-    /**
+		get colorEdgesMaterial(): EdgeDetectionMaterial;
+		/**
      * Returns the edge detection material.
      *
      * @deprecated Use edgeDetectionMaterial instead.
      * @return {EdgeDetectionMaterial} The material.
      */
-    getEdgeDetectionMaterial(): EdgeDetectionMaterial;
-    /**
+		getEdgeDetectionMaterial(): EdgeDetectionMaterial;
+		/**
      * The edge weights material.
      *
      * @type {SMAAWeightsMaterial}
      */
-    get weightsMaterial(): SMAAWeightsMaterial;
-    /**
+		get weightsMaterial(): SMAAWeightsMaterial;
+		/**
      * Returns the edge weights material.
      *
      * @deprecated Use weightsMaterial instead.
      * @return {SMAAWeightsMaterial} The material.
      */
-    getWeightsMaterial(): SMAAWeightsMaterial;
-    /**
+		getWeightsMaterial(): SMAAWeightsMaterial;
+		/**
      * Sets the edge detection sensitivity.
      *
      * See {@link EdgeDetectionMaterial#setEdgeDetectionThreshold} for more details.
@@ -7235,8 +7539,8 @@ declare module "postprocessing" {
      * @deprecated Use edgeDetectionMaterial instead.
      * @param {Number} threshold - The edge detection sensitivity. Range: [0.05, 0.5].
      */
-    setEdgeDetectionThreshold(threshold: number): void;
-    /**
+		setEdgeDetectionThreshold(threshold: number): void;
+		/**
      * Sets the maximum amount of horizontal/vertical search steps.
      *
      * See {@link SMAAWeightsMaterial#setOrthogonalSearchSteps} for more details.
@@ -7244,49 +7548,52 @@ declare module "postprocessing" {
      * @deprecated Use weightsMaterial instead.
      * @param {Number} steps - The search steps. Range: [0, 112].
      */
-    setOrthogonalSearchSteps(steps: number): void;
-    /**
+		setOrthogonalSearchSteps(steps: number): void;
+		/**
      * Applies the given quality preset.
      *
      * @param {SMAAPreset} preset - The preset.
      */
-    applyPreset(preset: SMAAPreset): void;
-    /**
+		applyPreset(preset: SMAAPreset): void;
+		/**
      * Sets the depth texture.
      *
      * @param {Texture} depthTexture - A depth texture.
      * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing.
      */
-    setDepthTexture(
-      depthTexture: Texture,
-      depthPacking?: DepthPackingStrategies
-    ): void;
-    /**
+		setDepthTexture(
+			depthTexture: Texture,
+			depthPacking?: DepthPackingStrategies
+		): void;
+
+		/**
      * Updates this effect.
      *
      * @param {WebGLRenderer} renderer - The renderer.
      * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
      * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
      */
-    update(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      deltaTime?: number
-    ): void;
-    /**
+		update(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			deltaTime?: number
+		): void;
+
+		/**
      * Updates the size of internal render targets.
      *
      * @param {Number} width - The width.
      * @param {Number} height - The height.
      */
-    setSize(width: number, height: number): void;
-    /**
+		setSize(width: number, height: number): void;
+		/**
      * Deletes internal render targets and textures.
      */
-    dispose(): void;
-  }
+		dispose(): void;
 
-  /**
+	}
+
+	/**
    * An enumeration of SMAA presets.
    *
    * @type {Object}
@@ -7295,14 +7602,14 @@ declare module "postprocessing" {
    * @property {Number} HIGH - Results in around 95% of the maximum quality.
    * @property {Number} ULTRA - Results in around 99% of the maximum quality.
    */
-  export enum SMAAPreset {
-    LOW,
-    MEDIUM,
-    HIGH,
-    ULTRA,
-  }
+	export enum SMAAPreset {
+		LOW,
+		MEDIUM,
+		HIGH,
+		ULTRA,
+	}
 
-  /**
+	/**
    * A Screen Space Ambient Occlusion (SSAO) effect.
    *
    * For high quality visuals use two SSAO effect instances in a row with different radii, one for rough AO and one for
@@ -7323,8 +7630,9 @@ declare module "postprocessing" {
    * The view position calculation is based on a shader by Norbert Nopper:
    * https://github.com/McNopper/OpenGL/blob/master/Example28/shader/ssao.frag.glsl
    */
-  export class SSAOEffect extends Effect {
-    /**
+	export class SSAOEffect extends Effect {
+
+		/**
      * Constructs a new SSAO effect.
      *
      * @todo Move normalBuffer to options.
@@ -7353,210 +7661,220 @@ declare module "postprocessing" {
      * @param {Number} [options.fade=0.01] - Influences the smoothness of the shadows. A lower value results in higher contrast.
      * @param {Color} [options.color=null] - The color of the ambient occlusion.
      * @param {Number} [options.resolutionScale=1.0] - The resolution scale.
-     * @param {Number} [options.width=Resolution.AUTO_SIZE] - The render width.
-     * @param {Number} [options.height=Resolution.AUTO_SIZE] - The render height.
+     * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
+     * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
+     * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprecated. Use resolutionX instead.
+     * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use resolutionY instead.
      */
-    constructor(
-      camera: Camera,
-      normalBuffer: Texture,
-      {
-        blendFunction,
-        distanceScaling,
-        depthAwareUpsampling,
-        normalDepthBuffer,
-        samples,
-        rings,
-        worldDistanceThreshold,
-        worldDistanceFalloff,
-        worldProximityThreshold,
-        worldProximityFalloff,
-        distanceThreshold,
-        distanceFalloff,
-        rangeThreshold,
-        rangeFalloff,
-        minRadiusScale,
-        luminanceInfluence,
-        radius,
-        intensity,
-        bias,
-        fade,
-        color,
-        resolutionScale,
-        width,
-        height,
-      }?: {
-        blendFunction?: BlendFunction;
-        distanceScaling?: boolean;
-        depthAwareUpsampling?: boolean;
-        normalDepthBuffer?: Texture;
-        samples?: number;
-        rings?: number;
-        worldDistanceThreshold: number;
-        worldDistanceFalloff: number;
-        worldProximityThreshold: number;
-        worldProximityFalloff: number;
-        distanceThreshold?: number;
-        distanceFalloff?: number;
-        rangeThreshold?: number;
-        rangeFalloff?: number;
-        minRadiusScale?: number;
-        luminanceInfluence?: number;
-        radius?: number;
-        intensity?: number;
-        bias?: number;
-        fade?: number;
-        color?: Color;
-        resolutionScale?: number;
-        width?: number;
-        height?: number;
-      }
-    );
-    resolution: Resolution;
-    set depthAwareUpsampling(arg: boolean);
-    /**
+		constructor(
+			camera: Camera,
+			normalBuffer: Texture,
+			{
+				blendFunction,
+				distanceScaling,
+				depthAwareUpsampling,
+				normalDepthBuffer,
+				samples,
+				rings,
+				worldDistanceThreshold,
+				worldDistanceFalloff,
+				worldProximityThreshold,
+				worldProximityFalloff,
+				distanceThreshold,
+				distanceFalloff,
+				rangeThreshold,
+				rangeFalloff,
+				minRadiusScale,
+				luminanceInfluence,
+				radius,
+				intensity,
+				bias,
+				fade,
+				color,
+				resolutionScale,
+				resolutionX,
+				resolutionY,
+				width,
+				height
+			}?: {
+				blendFunction?: BlendFunction;
+				distanceScaling?: boolean;
+				depthAwareUpsampling?: boolean;
+				normalDepthBuffer?: Texture;
+				samples?: number;
+				rings?: number;
+				worldDistanceThreshold: number;
+				worldDistanceFalloff: number;
+				worldProximityThreshold: number;
+				worldProximityFalloff: number;
+				distanceThreshold?: number;
+				distanceFalloff?: number;
+				rangeThreshold?: number;
+				rangeFalloff?: number;
+				minRadiusScale?: number;
+				luminanceInfluence?: number;
+				radius?: number;
+				intensity?: number;
+				bias?: number;
+				fade?: number;
+				color?: Color;
+				resolutionScale?: number;
+				resolutionX?: number;
+				resolutionY?: number;
+				width?: number;
+				height?: number;
+			}
+		);
+
+		resolution: Resolution;
+		set depthAwareUpsampling(arg: boolean);
+		/**
      * Indicates whether depth-aware upsampling is enabled.
      *
      * @type {Boolean}
      */
-    get depthAwareUpsampling(): boolean;
-    set color(arg: Color);
-    /**
+		get depthAwareUpsampling(): boolean;
+		set color(arg: Color);
+		/**
      * The color of the ambient occlusion. Set to `null` to disable.
      *
      * @type {Color}
      */
-    get color(): Color;
-    /**
+		get color(): Color;
+		/**
      * Returns the resolution settings.
      *
      * @deprecated Use resolution instead.
      * @return {Resolution} The resolution.
      */
-    getResolution(): Resolution;
-    /**
+		getResolution(): Resolution;
+		/**
      * The SSAO material.
      *
      * @type {SSAOMaterial}
      */
-    get ssaoMaterial(): SSAOMaterial;
-    /**
+		get ssaoMaterial(): SSAOMaterial;
+		/**
      * Returns the SSAO material.
      *
      * @deprecated Use ssaoMaterial instead.
      * @return {SSAOMaterial} The material.
      */
-    getSSAOMaterial(): SSAOMaterial;
-    set samples(arg: number);
-    /**
+		getSSAOMaterial(): SSAOMaterial;
+		set samples(arg: number);
+		/**
      * The amount of occlusion samples per pixel.
      *
      * @type {Number}
      * @deprecated Use ssaoMaterial.samples instead.
      */
-    get samples(): number;
-    set rings(arg: number);
-    /**
+		get samples(): number;
+		set rings(arg: number);
+		/**
      * The amount of spiral turns in the occlusion sampling pattern.
      *
      * @type {Number}
      * @deprecated Use ssaoMaterial.rings instead.
      */
-    get rings(): number;
-    set radius(arg: number);
-    /**
+		get rings(): number;
+		set radius(arg: number);
+		/**
      * The occlusion sampling radius.
      *
      * @type {Number}
      * @deprecated Use ssaoMaterial.radius instead.
      */
-    get radius(): number;
-    /**
+		get radius(): number;
+		/**
      * Indicates whether depth-aware upsampling is enabled.
      *
      * @deprecated Use depthAwareUpsampling instead.
      * @return {Boolean} Whether depth-aware upsampling is enabled.
      */
-    isDepthAwareUpsamplingEnabled(): boolean;
-    /**
+		isDepthAwareUpsamplingEnabled(): boolean;
+		/**
      * Enables or disables depth-aware upsampling.
      *
      * @deprecated Use depthAwareUpsampling instead.
      * @param {Boolean} value - Whether depth-aware upsampling should be enabled.
      */
-    setDepthAwareUpsamplingEnabled(value: boolean): void;
-    set distanceScaling(arg: boolean);
-    /**
+		setDepthAwareUpsamplingEnabled(value: boolean): void;
+		set distanceScaling(arg: boolean);
+		/**
      * Indicates whether distance-based radius scaling is enabled.
      *
      * @type {Boolean}
      * @deprecated Use ssaoMaterial.distanceScaling instead.
      */
-    get distanceScaling(): boolean;
-    /**
+		get distanceScaling(): boolean;
+		/**
      * Returns the color of the ambient occlusion.
      *
      * @deprecated Use color instead.
      * @return {Color} The color.
      */
-    getColor(): Color;
-    /**
+		getColor(): Color;
+		/**
      * Sets the color of the ambient occlusion. Set to `null` to disable colorization.
      *
      * @deprecated Use color instead.
      * @param {Color} value - The color.
      */
-    setColor(value: Color): void;
-    /**
+		setColor(value: Color): void;
+		/**
      * Sets the occlusion distance cutoff.
      *
      * @deprecated Use ssaoMaterial instead.
      * @param {Number} threshold - The distance threshold. Range [0.0, 1.0].
      * @param {Number} falloff - The falloff. Range [0.0, 1.0].
      */
-    setDistanceCutoff(threshold: number, falloff: number): void;
-    /**
+		setDistanceCutoff(threshold: number, falloff: number): void;
+		/**
      * Sets the occlusion proximity cutoff.
      *
      * @deprecated Use ssaoMaterial instead.
      * @param {Number} threshold - The proximity threshold. Range [0.0, 1.0].
      * @param {Number} falloff - The falloff. Range [0.0, 1.0].
      */
-    setProximityCutoff(threshold: number, falloff: number): void;
-    /**
+		setProximityCutoff(threshold: number, falloff: number): void;
+		/**
      * Updates this effect.
      *
      * @param {WebGLRenderer} renderer - The renderer.
      * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
      * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
      */
-    update(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      deltaTime?: number
-    ): void;
-    /**
+		update(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			deltaTime?: number
+		): void;
+
+		/**
      * Sets the size.
      *
      * @param {Number} width - The width.
      * @param {Number} height - The height.
      */
-    setSize(width: number, height: number): void;
+		setSize(width: number, height: number): void;
 
-    /**
+		/**
      * The luminance influence factor. Range: [0.0, 1.0].
      *
      * @type {Boolean}
      */
 
-    get luminanceInfluence(): boolean;
-    set luminanceInfluence(value: boolean);
-  }
+		get luminanceInfluence(): boolean;
+		set luminanceInfluence(value: boolean);
 
-  /**
+	}
+
+	/**
    * A texture effect.
    */
-  export class TextureEffect extends Effect {
-    /**
+	export class TextureEffect extends Effect {
+
+		/**
      * Constructs a new texture effect.
      *
      * @param {Object} [options] - The options.
@@ -7564,53 +7882,54 @@ declare module "postprocessing" {
      * @param {Texture} [options.texture] - A texture.
      * @param {Boolean} [options.aspectCorrection=false] - Deprecated. Adjust the texture's offset, repeat and center instead.
      */
-    constructor({
-      blendFunction,
-      texture,
-      aspectCorrection,
-    }?: {
-      blendFunction?: BlendFunction;
-      texture?: Texture;
-      aspectCorrection?: boolean;
-    });
-    set texture(arg: Texture);
-    /**
+		constructor({
+			blendFunction,
+			texture,
+			aspectCorrection
+		}?: {
+			blendFunction?: BlendFunction;
+			texture?: Texture;
+			aspectCorrection?: boolean;
+		});
+
+		set texture(arg: Texture);
+		/**
      * The texture.
      *
      * @type {Texture}
      */
-    get texture(): Texture;
-    set aspectCorrection(arg: number);
-    /**
+		get texture(): Texture;
+		set aspectCorrection(arg: number);
+		/**
      * Indicates whether aspect correction is enabled.
      *
      * @type {Number}
      * @deprecated Adjust the texture's offset, repeat, rotation and center instead.
      */
-    get aspectCorrection(): number;
-    /**
+		get aspectCorrection(): number;
+		/**
      * Returns the texture.
      *
      * @deprecated Use texture instead.
      * @return {Texture} The texture.
      */
-    getTexture(): Texture;
-    /**
+		getTexture(): Texture;
+		/**
      * Sets the texture.
      *
      * @deprecated Use texture instead.
      * @param {Texture} value - The texture.
      */
-    setTexture(value: Texture): void;
-    set uvTransform(arg: boolean);
-    /**
+		setTexture(value: Texture): void;
+		set uvTransform(arg: boolean);
+		/**
      * Indicates whether the texture UV coordinates will be transformed using the transformation matrix of the texture.
      *
      * @type {Boolean}
      * @deprecated Use texture.matrixAutoUpdate instead.
      */
-    get uvTransform(): boolean;
-    /**
+		get uvTransform(): boolean;
+		/**
      * Sets the swizzles that will be applied to the components of a texel before it is written to the output color.
      *
      * @param {ColorChannel} r - The swizzle for the `r` component.
@@ -7618,14 +7937,14 @@ declare module "postprocessing" {
      * @param {ColorChannel} [b=r] - The swizzle for the `b` component.
      * @param {ColorChannel} [a=r] - The swizzle for the `a` component.
      */
-    setTextureSwizzleRGBA(
-      r: ColorChannel,
-      g?: ColorChannel,
-      b?: ColorChannel,
-      a?: ColorChannel
-    ): void;
+		setTextureSwizzleRGBA(
+			r: ColorChannel,
+			g?: ColorChannel,
+			b?: ColorChannel,
+			a?: ColorChannel
+		): void;
 
-    /**
+		/**
      * Updates this effect.
      *
      * @param {WebGLRenderer} renderer - The renderer.
@@ -7633,13 +7952,13 @@ declare module "postprocessing" {
      * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
      */
 
-    update(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      deltaTime: number
-    ): void;
+		update(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			deltaTime: number
+		): void;
 
-    /**
+		/**
      * Performs initialization tasks.
      *
      * @param {WebGLRenderer} renderer - The renderer.
@@ -7647,14 +7966,15 @@ declare module "postprocessing" {
      * @param {Number} frameBufferType - The type of the main frame buffers.
      */
 
-    initialize(
-      renderer: WebGLRenderer,
-      alpha: boolean,
-      frameBufferType: number
-    ): void;
-  }
+		initialize(
+			renderer: WebGLRenderer,
+			alpha: boolean,
+			frameBufferType: number
+		): void;
 
-  /**
+	}
+
+	/**
    * A tone mapping mode enumeration.
    *
    * @type {Object}
@@ -7664,15 +7984,15 @@ declare module "postprocessing" {
    * @property {Number} OPTIMIZED_CINEON - Optimized filmic operator by Jim Hejl and Richard Burgess-Dawson.
    * @property {Number} ACES_FILMIC - ACES tone mapping with a scale of 1.0/0.6.
    */
-  export enum ToneMappingMode {
-    REINHARD,
-    REINHARD2,
-    REINHARD2_ADAPTIVE,
-    OPTIMIZED_CINEON,
-    ACES_FILMIC,
-  }
+	export enum ToneMappingMode {
+		REINHARD,
+		REINHARD2,
+		REINHARD2_ADAPTIVE,
+		OPTIMIZED_CINEON,
+		ACES_FILMIC,
+	}
 
-  /**
+	/**
    * A tone mapping effect.
    *
    * Note: `ToneMappingMode.REINHARD2_ADAPTIVE` requires support for `EXT_shader_texture_lod`.
@@ -7681,8 +8001,9 @@ declare module "postprocessing" {
    * GDC2007 - Wolfgang Engel, Post-Processing Pipeline
    * http://perso.univ-lyon1.fr/jean-claude.iehl/Public/educ/GAMA/2007/gdc07/Post-Processing_Pipeline.pdf
    */
-  export class ToneMappingEffect extends Effect {
-    /**
+	export class ToneMappingEffect extends Effect {
+
+		/**
      * Constructs a new tone mapping effect.
      *
      * The additional parameters only affect the Reinhard2 operator.
@@ -7700,172 +8021,176 @@ declare module "postprocessing" {
      * @param {Number} [options.averageLuminance=1.0] - The average luminance. Used for the non-adaptive Reinhard operator.
      * @param {Number} [options.adaptationRate=1.0] - The luminance adaptation rate.
      */
-    constructor({
-      blendFunction,
-      adaptive,
-      mode,
-      resolution,
-      maxLuminance,
-      whitePoint,
-      middleGrey,
-      minLuminance,
-      averageLuminance,
-      adaptationRate,
-    }?: {
-      blendFunction?: BlendFunction;
-      adaptive?: boolean;
-      mode?: ToneMappingMode;
-      resolution?: number;
-      maxLuminance?: number;
-      whitePoint?: number;
-      middleGrey?: number;
-      minLuminance?: number;
-      averageLuminance?: number;
-      adaptationRate?: number;
-    });
-    set resolution(arg: number);
-    /**
+		constructor({
+			blendFunction,
+			adaptive,
+			mode,
+			resolution,
+			maxLuminance,
+			whitePoint,
+			middleGrey,
+			minLuminance,
+			averageLuminance,
+			adaptationRate
+		}?: {
+			blendFunction?: BlendFunction;
+			adaptive?: boolean;
+			mode?: ToneMappingMode;
+			resolution?: number;
+			maxLuminance?: number;
+			whitePoint?: number;
+			middleGrey?: number;
+			minLuminance?: number;
+			averageLuminance?: number;
+			adaptationRate?: number;
+		});
+
+		set resolution(arg: number);
+		/**
      * The resolution of the luminance texture. Must be a power of two.
      *
      * @type {Number}
      */
-    get resolution(): number;
-    set mode(arg: ToneMappingMode);
-    /**
+		get resolution(): number;
+		set mode(arg: ToneMappingMode);
+		/**
      * The tone mapping mode.
      *
      * @type {ToneMappingMode}
      */
-    get mode(): ToneMappingMode;
-    /**
+		get mode(): ToneMappingMode;
+		/**
      * The white point. Default is `16.0`.
      *
      * Only applies to Reinhard2 (Modified & Adaptive).
      *
      * @type {Number}
      */
-    get whitePoint(): number;
-    /**
+		get whitePoint(): number;
+		/**
      * The middle grey factor. Default is `0.6`.
      *
      * Only applies to Reinhard2 (Modified & Adaptive).
      *
      * @type {Number}
      */
-    get middleGrey(): number;
-    /**
+		get middleGrey(): number;
+		/**
      * The average luminance.
      *
      * Only applies to Reinhard2 (Modified).
      *
      * @type {Number}
      */
-    get averageLuminance(): number;
-    /**
+		get averageLuminance(): number;
+		/**
      * Returns the current tone mapping mode.
      *
      * @deprecated Use mode instead.
      * @return {ToneMappingMode} The tone mapping mode.
      */
-    getMode(): ToneMappingMode;
-    /**
+		getMode(): ToneMappingMode;
+		/**
      * Sets the tone mapping mode.
      *
      * @deprecated Use mode instead.
      * @param {ToneMappingMode} value - The tone mapping mode.
      */
-    setMode(value: ToneMappingMode): void;
-    /**
+		setMode(value: ToneMappingMode): void;
+		/**
      * The adaptive luminance material.
      *
      * @type {AdaptiveLuminanceMaterial}
      */
-    get adaptiveLuminanceMaterial(): AdaptiveLuminanceMaterial;
-    /**
+		get adaptiveLuminanceMaterial(): AdaptiveLuminanceMaterial;
+		/**
      * Returns the adaptive luminance material.
      *
      * @deprecated Use adaptiveLuminanceMaterial instead.
      * @return {AdaptiveLuminanceMaterial} The material.
      */
-    getAdaptiveLuminanceMaterial(): AdaptiveLuminanceMaterial;
-    /**
+		getAdaptiveLuminanceMaterial(): AdaptiveLuminanceMaterial;
+		/**
      * Returns the resolution of the luminance texture.
      *
      * @deprecated Use resolution instead.
      * @return {Number} The resolution.
      */
-    getResolution(): number;
-    /**
+		getResolution(): number;
+		/**
      * Sets the resolution of the luminance texture. Must be a power of two.
      *
      * @deprecated Use resolution instead.
      * @param {Number} value - The resolution.
      */
-    setResolution(value: number): void;
-    set adaptive(arg: boolean);
-    /**
+		setResolution(value: number): void;
+		set adaptive(arg: boolean);
+		/**
      * Indicates whether this pass uses adaptive luminance.
      *
      * @type {Boolean}
      * @deprecated Use mode instead.
      */
-    get adaptive(): boolean;
-    set adaptationRate(arg: number);
-    /**
+		get adaptive(): boolean;
+		set adaptationRate(arg: number);
+		/**
      * The luminance adaptation rate.
      *
      * @type {Number}
      * @deprecated Use adaptiveLuminanceMaterial.adaptationRate instead.
      */
-    get adaptationRate(): number;
-    set distinction(arg: number);
-    /**
+		get adaptationRate(): number;
+		set distinction(arg: number);
+		/**
      * @type {Number}
      * @deprecated
      */
-    get distinction(): number;
-    /**
+		get distinction(): number;
+		/**
      * Updates this effect.
      *
      * @param {WebGLRenderer} renderer - The renderer.
      * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
      * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
      */
-    update(
-      renderer: WebGLRenderer,
-      inputBuffer: WebGLRenderTarget,
-      deltaTime?: number
-    ): void;
-    /**
+		update(
+			renderer: WebGLRenderer,
+			inputBuffer: WebGLRenderTarget,
+			deltaTime?: number
+		): void;
+
+		/**
      * Performs initialization tasks.
      *
      * @param {WebGLRenderer} renderer - The renderer.
      * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
      * @param {Number} frameBufferType - The type of the main frame buffers.
      */
-    initialize(
-      renderer: WebGLRenderer,
-      alpha: boolean,
-      frameBufferType: number
-    ): void;
-  }
+		initialize(
+			renderer: WebGLRenderer,
+			alpha: boolean,
+			frameBufferType: number
+		): void;
 
-  /**
+	}
+
+	/**
    * An enumeration of Vignette techniques.
    *
    * @type {Object}
    * @property {Number} DEFAULT - Produces a dusty look.
    * @property {Number} ESKIL - Produces a burned look.
    */
-  export enum VignetteTechnique {
-    DEFAULT,
-    ESKIL,
-  }
-  /**
+	export enum VignetteTechnique {
+		DEFAULT,
+		ESKIL,
+	}
+	/**
    * A Vignette effect.
    */
-  export class VignetteEffect extends Effect {
-    /**
+	export class VignetteEffect extends Effect {
+
+		/**
      * Constructs a new Vignette effect.
      *
      * @param {Object} [options] - The options.
@@ -7875,126 +8200,130 @@ declare module "postprocessing" {
      * @param {Number} [options.offset=0.5] - The Vignette offset.
      * @param {Number} [options.darkness=0.5] - The Vignette darkness.
      */
-    constructor({
-      blendFunction,
-      technique,
-      eskil,
-      offset,
-      darkness,
-    }?: {
-      blendFunction?: BlendFunction;
-      technique?: VignetteTechnique;
-      eskil?: boolean;
-      offset?: number;
-      darkness?: number;
-    });
-    set technique(arg: VignetteTechnique);
-    /**
+		constructor({
+			blendFunction,
+			technique,
+			eskil,
+			offset,
+			darkness
+		}?: {
+			blendFunction?: BlendFunction;
+			technique?: VignetteTechnique;
+			eskil?: boolean;
+			offset?: number;
+			darkness?: number;
+		});
+
+		set technique(arg: VignetteTechnique);
+		/**
      * The Vignette technique.
      *
      * @type {VignetteTechnique}
      */
-    get technique(): VignetteTechnique;
-    /**
+		get technique(): VignetteTechnique;
+		/**
      * Indicates whether Eskil's Vignette technique is enabled.
      *
      * @type {Boolean}
      * @deprecated Use technique instead.
      */
-    set eskil(arg: boolean);
-    /**
+		set eskil(arg: boolean);
+		/**
      * Indicates whether Eskil's Vignette technique is enabled.
      *
      * @type {Boolean}
      * @deprecated Use technique instead.
      */
-    get eskil(): boolean;
-    /**
+		get eskil(): boolean;
+		/**
      * Returns the Vignette technique.
      *
      * @deprecated Use technique instead.
      * @return {VignetteTechnique} The technique.
      */
-    getTechnique(): VignetteTechnique;
-    /**
+		getTechnique(): VignetteTechnique;
+		/**
      * Sets the Vignette technique.
      *
      * @deprecated Use technique instead.
      * @param {VignetteTechnique} value - The technique.
      */
-    setTechnique(value: VignetteTechnique): void;
-    set offset(arg: number);
-    /**
+		setTechnique(value: VignetteTechnique): void;
+		set offset(arg: number);
+		/**
      * The Vignette offset.
      *
      * @type {Number}
      */
-    get offset(): number;
-    /**
+		get offset(): number;
+		/**
      * Returns the Vignette offset.
      *
      * @deprecated Use offset instead.
      * @return {Number} The offset.
      */
-    getOffset(): number;
-    /**
+		getOffset(): number;
+		/**
      * Sets the Vignette offset.
      *
      * @deprecated Use offset instead.
      * @param {Number} value - The offset.
      */
-    setOffset(value: number): void;
-    set darkness(arg: number);
-    /**
+		setOffset(value: number): void;
+		set darkness(arg: number);
+		/**
      * The Vignette darkness.
      *
      * @type {Number}
      */
-    get darkness(): number;
-    /**
+		get darkness(): number;
+		/**
      * Returns the Vignette darkness.
      *
      * @deprecated Use darkness instead.
      * @return {Number} The darkness.
      */
-    getDarkness(): number;
-    /**
+		getDarkness(): number;
+		/**
      * Sets the Vignette darkness.
      *
      * @deprecated Use darkness instead.
      * @param {Number} value - The darkness.
      */
-    setDarkness(value: number): void;
-  }
+		setDarkness(value: number): void;
 
-  /**
+	}
+
+	/**
    * An enumeration of LUT worker operations.
    *
    * @type {Object}
    * @property {String} SCALE_UP - Tetrahedral upscale operation.
    */
-  export enum LUTOperation {
-    SCALE_UP = "lut.scaleup",
-  }
+	export enum LUTOperation {
+		SCALE_UP = "lut.scaleup",
+	}
 
-  /**
+	/**
    * A tetrahedral upscaler that can be used to augment 3D LUTs.
    *
    * Based on an implementation by Garrett Johnson:
    * https://github.com/gkjohnson/threejs-sandbox/blob/master/3d-lut/src/TetrahedralUpscaler.js
    */
-  export class TetrahedralUpscaler {
-    /**
+	export class TetrahedralUpscaler {
+
+		/**
      * Expands the given data to the target size.
      *
      * @param {ArrayBufferView} data - The input RGBA data. Assumed to be cubic.
      * @param {Number} size - The target size.
      * @return {ArrayBufferView} The new data.
      */
-    static expand(data: ArrayBufferView, size: number): ArrayBufferView;
-  }
+		static expand(data: ArrayBufferView, size: number): ArrayBufferView;
 
-  /**
+	}
+
+	/**
    * SMAA area image data.
    *
    * This texture allows to obtain the area for a certain pattern and distances to the left and right of identified lines.
@@ -8002,36 +8331,39 @@ declare module "postprocessing" {
    * Based on the official python scripts:
    *  https://github.com/iryoku/smaa/tree/master/Scripts
    */
-  export class SMAAAreaImageData {
-    /**
+	export class SMAAAreaImageData {
+
+		/**
      * Creates a new area image.
      *
      * @return {RawImageData} The generated image data.
      */
-    static generate(): RawImageData;
-  }
+		static generate(): RawImageData;
 
-  /**
+	}
+
+	/**
    * An SMAA image generator.
    *
    * This class uses a worker thread to generate the search and area images. The generated data URLs will be cached using
    * localStorage, if available. To disable caching use {@link SMAAImageGenerator.setCacheEnabled}.
    */
-  export class SMAAImageGenerator {
-    /**
+	export class SMAAImageGenerator {
+
+		/**
      * Indicates whether data image caching is disabled.
      *
      * @type {Boolean}
      * @deprecated Use setCacheEnabled() instead.
      */
-    disableCache: boolean;
-    /**
+		disableCache: boolean;
+		/**
      * Enables or disables caching via localStorage.
      *
      * @param {Boolean} value - Whether the cache should be enabled.
      */
-    setCacheEnabled(value: boolean): void;
-    /**
+		setCacheEnabled(value: boolean): void;
+		/**
      * Generates the SMAA data images.
      *
      * @example
@@ -8040,12 +8372,13 @@ declare module "postprocessing" {
      * });
      * @return {Promise<Image[]>} A promise that returns the search image and area image as a pair.
      */
-    generate(): Promise<
-      (new (width?: number, height?: number) => HTMLImageElement)[]
-    >;
-  }
+		generate(): Promise<
+		(new (width?: number, height?: number) => HTMLImageElement)[]
+		>;
 
-  /**
+	}
+
+	/**
    * SMAA search image data.
    *
    * This image stores information about how many pixels the line search algorithm must advance in the last step.
@@ -8053,24 +8386,27 @@ declare module "postprocessing" {
    * Based on the official python scripts:
    *  https://github.com/iryoku/smaa/tree/master/Scripts
    */
-  export class SMAASearchImageData {
-    /**
+	export class SMAASearchImageData {
+
+		/**
      * Creates a new search image.
      *
      * @return {RawImageData} The generated image data.
      */
-    static generate(): RawImageData;
-  }
+		static generate(): RawImageData;
 
-  /**
+	}
+
+	/**
    * A 3D lookup texture (LUT).
    *
    * This texture can be used as-is in a WebGL 2 context. It can also be converted into a 2D texture.
    *
    * TODO Extend Data3DTexture.
    */
-  export class LookupTexture extends DataTexture3D {
-    /**
+	export class LookupTexture extends DataTexture3D {
+
+		/**
      * Creates a new 3D LUT by copying a given LUT.
      *
      * Common image-based textures will be converted into 3D data textures.
@@ -8078,106 +8414,108 @@ declare module "postprocessing" {
      * @param {Texture} texture - The LUT. Assumed to be cubic.
      * @return {LookupTexture} A new 3D LUT.
      */
-    static from(texture: Texture): LookupTexture;
-    /**
+		static from(texture: Texture): LookupTexture;
+		/**
      * Creates a neutral 3D LUT.
      *
      * @param {Number} size - The sidelength.
      * @return {LookupTexture} A neutral 3D LUT.
      */
-    static createNeutral(size: number): LookupTexture;
-    /**
+		static createNeutral(size: number): LookupTexture;
+		/**
      * Constructs a cubic 3D lookup texture.
      *
      * @param {TypedArray} data - The pixel data. The default format is RGBA.
      * @param {Number} size - The sidelength.
      */
-    constructor(data: ArrayBufferView, size: number);
-    wrapR: Wrapping;
-    /**
+		constructor(data: ArrayBufferView, size: number);
+		wrapR: Wrapping;
+		/**
      * The lower bounds of the input domain.
      *
      * @type {Vector3}
      */
-    domainMin: Vector3;
-    /**
+		domainMin: Vector3;
+		/**
      * The upper bounds of the input domain.
      *
      * @type {Vector3}
      */
-    domainMax: Vector3;
-    /**
+		domainMax: Vector3;
+		/**
      * Indicates that this is an instance of LookupTexture3D.
      *
      * @type {Boolean}
      * @deprecated
      */
-    get isLookupTexture3D(): boolean;
-    /**
+		get isLookupTexture3D(): boolean;
+		/**
      * Scales this LUT up to a given target size using tetrahedral interpolation.
      *
      * @param {Number} size - The target sidelength.
      * @param {Boolean} [transferData=true] - Extra fast mode. Set to false to keep the original data intact.
      * @return {Promise<LookupTexture>} A promise that resolves with a new LUT upon completion.
      */
-    scaleUp(size: number, transferData?: boolean): Promise<LookupTexture>;
-    /**
+		scaleUp(size: number, transferData?: boolean): Promise<LookupTexture>;
+		/**
      * Applies the given LUT to this one.
      *
      * @param {LookupTexture} lut - A LUT. Must have the same dimensions, type and format as this LUT.
      * @return {LookupTexture} This texture.
      */
-    applyLUT(lut: LookupTexture): LookupTexture;
-    /**
+		applyLUT(lut: LookupTexture): LookupTexture;
+		/**
      * Converts the LUT data into unsigned byte data.
      *
      * This is a lossy operation which should only be performed after all other transformations have been applied.
      *
      * @return {LookupTexture} This texture.
      */
-    convertToUint8(): LookupTexture;
-    /**
+		convertToUint8(): LookupTexture;
+		/**
      * Converts the LUT data into float data.
      *
      * @return {LookupTexture} This texture.
      */
-    convertToFloat(): LookupTexture;
-    /**
+		convertToFloat(): LookupTexture;
+		/**
      * Converts this LUT into RGBA data.
      *
      * @deprecated LUTs are RGBA by default since three r137.
      * @return {LookupTexture} This texture.
      */
-    convertToRGBA(): LookupTexture;
-    /**
+		convertToRGBA(): LookupTexture;
+		/**
      * Converts the output of this LUT into sRGB color space.
      *
      * @return {LookupTexture} This texture.
      */
-    convertLinearToSRGB(): LookupTexture;
-    /**
+		convertLinearToSRGB(): LookupTexture;
+		/**
      * Converts the output of this LUT into linear color space.
      *
      * @return {LookupTexture} This texture.
      */
-    convertSRGBToLinear(): LookupTexture;
-    /**
+		convertSRGBToLinear(): LookupTexture;
+		/**
      * Converts this LUT into a 2D data texture.
      *
      * Please note that custom input domains are not carried over to 2D textures.
      *
      * @return {DataTexture} The texture.
      */
-    toDataTexture(): DataTexture;
-  }
+		toDataTexture(): DataTexture;
 
-  export type LookupTexture3D = LookupTexture;
+	}
 
-  /**
+	export type LookupTexture3D = LookupTexture;
+
+	/**
    * A simple noise texture.
    */
-  export class NoiseTexture extends DataTexture {
-    /**
+	export class NoiseTexture extends DataTexture {
+
+		/**
      * Constructs a new noise texture.
      *
      * The texture format can be either `LuminanceFormat` or `RGBAFormat`. Additionally, the formats `RedFormat` and
@@ -8188,81 +8526,87 @@ declare module "postprocessing" {
      * @param {Number} [format=LuminanceFormat] - The texture format.
      * @param {Number} [type=UnsignedByteType] - The texture type.
      */
-    constructor(width: number, height: number, format?: number, type?: number);
-  }
+		constructor(width: number, height: number, format?: number, type?: number);
 
-  /**
+	}
+
+	/**
    * A container for raw RGBA image data.
    *
    * @implements {ImageData}
    */
-  export class RawImageData implements ImageData {
-    /**
+	export class RawImageData implements ImageData {
+
+		/**
      * Creates a new image data container.
      *
      * @param {ImageData|Image} image - An image or plain image data.
      * @return {RawImageData} The image data.
      */
-    static from(
-      image:
-        | ImageData
-        | (new (width?: number, height?: number) => HTMLImageElement)
-    ): RawImageData;
-    /**
+		static from(
+			image:
+			| ImageData
+			| (new (width?: number, height?: number) => HTMLImageElement)
+		): RawImageData;
+
+		/**
      * Constructs a new image data container.
      *
      * @param {Number} [width=0] - The width of the image.
      * @param {Number} [height=0] - The height of the image.
      * @param {Uint8ClampedArray} [data=null] - The image data.
      */
-    constructor(width?: number, height?: number, data?: Uint8ClampedArray);
-    /**
+		constructor(width?: number, height?: number, data?: Uint8ClampedArray);
+		/**
      * The width of the image.
      *
      * @type {Number}
      */
-    width: number;
-    /**
+		width: number;
+		/**
      * The height of the image.
      *
      * @type {Number}
      */
-    height: number;
-    /**
+		height: number;
+		/**
      * The RGBA image data.
      *
      * @type {Uint8ClampedArray}
      */
-    data: Uint8ClampedArray;
-    /**
+		data: Uint8ClampedArray;
+		/**
      * Creates a canvas from this image data.
      *
      * @return {HTMLCanvasElement} The canvas, or null if it couldn't be created.
      */
-    toCanvas(): HTMLCanvasElement;
-  }
+		toCanvas(): HTMLCanvasElement;
 
-  /**
+	}
+
+	/**
    * An SMAA image loader.
    *
    * @deprecated Preloading the SMAA lookup textures is no longer required.
    * @experimental Added for testing, API might change in patch or minor releases. Requires three >= r108.
    */
-  export class SMAAImageLoader extends Loader {
-    /**
+	export class SMAAImageLoader extends Loader {
+
+		/**
      * Loads the SMAA data images.
      *
      * @param {Function} [onLoad] - A callback that receives the search image and area image as a pair.
      * @param {Function} [onError] - An error callback that receives the URL of the image that failed to load.
      * @return {Promise<Image[]>} A promise that returns the search image and area image as a pair.
      */
-    load(
-      onLoad?: Function,
-      onError?: Function
-    ): Promise<(new (width?: number, height?: number) => HTMLImageElement)[]>;
-  }
+		load(
+			onLoad?: Function,
+			onError?: Function
+		): Promise<(new (width?: number, height?: number) => HTMLImageElement)[]>;
 
-  /**
+	}
+
+	/**
    * A 3D LUT loader that supports the .cube file format.
    *
    * Based on an implementation by Garrett Johnson:
@@ -8271,8 +8615,9 @@ declare module "postprocessing" {
    * For more details see:
    * https://wwwimages2.adobe.com/content/dam/acom/en/products/speedgrade/cc/pdfs/cube-lut-specification-1.0.pdf
    */
-  export class LUTCubeLoader extends Loader {
-    /**
+	export class LUTCubeLoader extends Loader {
+
+		/**
      * Loads a LUT.
      *
      * @param {String} url - The URL of the CUBE-file.
@@ -8281,23 +8626,25 @@ declare module "postprocessing" {
      * @param {Function} [onError] - An error callback that receives the URL of the file that failed to load.
      * @return {Promise<LookupTexture>} A promise that returns the lookup texture.
      */
-    load(
-      url: string,
-      onLoad?: Function,
-      onProgress?: Function,
-      onError?: Function
-    ): Promise<LookupTexture>;
-    /**
+		load(
+			url: string,
+			onLoad?: Function,
+			onProgress?: Function,
+			onError?: Function
+		): Promise<LookupTexture>;
+
+		/**
      * Parses the given data.
      *
      * @param {String} input - The LUT data.
      * @return {LookupTexture} The lookup texture.
      * @throws {Error} Fails if the data is invalid.
      */
-    parse(input: string): LookupTexture;
-  }
+		parse(input: string): LookupTexture;
 
-  /**
+	}
+
+	/**
    * A 3D LUT loader that supports the .3dl file format.
    *
    * Based on an implementation by Garrett Johnson:
@@ -8306,8 +8653,9 @@ declare module "postprocessing" {
    * For more details see:
    * http://download.autodesk.com/us/systemdocs/help/2011/lustre/index.html?url=./files/WSc4e151a45a3b785a24c3d9a411df9298473-7ffd.htm,topicNumber=d0e9492
    */
-  export class LUT3dlLoader extends Loader {
-    /**
+	export class LUT3dlLoader extends Loader {
+
+		/**
      * Loads a LUT.
      *
      * @param {String} url - The URL of the 3dl-file.
@@ -8316,23 +8664,25 @@ declare module "postprocessing" {
      * @param {Function} [onError] - An error callback that receives the URL of the file that failed to load.
      * @return {Promise<LookupTexture>} A promise that returns the lookup texture.
      */
-    load(
-      url: string,
-      onLoad?: Function,
-      onProgress?: Function,
-      onError?: Function
-    ): Promise<LookupTexture>;
-    /**
+		load(
+			url: string,
+			onLoad?: Function,
+			onProgress?: Function,
+			onError?: Function
+		): Promise<LookupTexture>;
+
+		/**
      * Parses the given data.
      *
      * @param {String} input - The LUT data.
      * @return {LookupTexture} The lookup texture.
      * @throws {Error} Fails if the data is invalid.
      */
-    parse(input: string): LookupTexture;
-  }
+		parse(input: string): LookupTexture;
 
-  /**
+	}
+
+	/**
    * Determines the texture inline decoding.
    *
    * @param {Texture} texture - A texture.
@@ -8340,12 +8690,12 @@ declare module "postprocessing" {
    * @return {String} The decoding.
    * @ignore
    */
-  export function getTextureDecoding(
-    texture: Texture,
-    isWebGL2: boolean
-  ): string;
+	export function getTextureDecoding(
+		texture: Texture,
+		isWebGL2: boolean
+	): string;
 
-  /**
+	/**
    * Converts orthographic depth to view Z.
    *
    * @see https://github.com/mrdoob/three.js/blob/0de4e75ee65c3238957318b88ef91b6597e23c1e/src/renderers/shaders/ShaderChunk/packing.glsl.js#L42
@@ -8355,13 +8705,13 @@ declare module "postprocessing" {
    * @return {Number} The view Z.
    * @ignore
    */
-  export function orthographicDepthToViewZ(
-    depth: number,
-    near: number,
-    far: number
-  ): number;
+	export function orthographicDepthToViewZ(
+		depth: number,
+		near: number,
+		far: number
+	): number;
 
-  /**
+	/**
    * Converts view Z to orthographic depth.
    *
    * @see https://github.com/mrdoob/three.js/blob/0de4e75ee65c3238957318b88ef91b6597e23c1e/src/renderers/shaders/ShaderChunk/packing.glsl.js#L39
@@ -8371,9 +8721,9 @@ declare module "postprocessing" {
    * @return {Number} The depth.
    * @ignore
    */
-  export function viewZToOrthographicDepth(
-    viewZ: number,
-    near: number,
-    far: number
-  ): number;
+	export function viewZToOrthographicDepth(
+		viewZ: number,
+		near: number,
+		far: number
+	): number;
 }

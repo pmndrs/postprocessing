@@ -1,5 +1,5 @@
 import { FloatType, RGBADepthPacking } from "three";
-import { DepthCopyMode } from "../materials";
+import { DepthCopyMode } from "../enums";
 import { DepthCopyPass } from "./DepthCopyPass";
 
 const unpackFactors = new Float32Array([

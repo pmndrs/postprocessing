@@ -1,7 +1,7 @@
-import { NoBlending, ShaderMaterial, Uniform, Vector2, Vector4 } from "three";
+import { NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
 
-import fragmentShader from "./glsl/bokeh/shader.frag";
-import vertexShader from "./glsl/common/shader.vert";
+import fragmentShader from "./glsl/convolution.bokeh.frag";
+import vertexShader from "./glsl/common.vert";
 
 /**
  * A bokeh disc blur material.
@@ -29,12 +29,12 @@ export class BokehMaterial extends ShaderMaterial {
 				PASS: fill ? "2" : "1"
 			},
 			uniforms: {
-				kernel64: new Uniform(null),
-				kernel16: new Uniform(null),
 				inputBuffer: new Uniform(null),
 				cocBuffer: new Uniform(null),
 				texelSize: new Uniform(new Vector2()),
-				scale: new Uniform(1.0)
+				kernel64: new Uniform(null),
+				kernel16: new Uniform(null),
+				scale: new Uniform(new Vector2(1.0, 1.0))
 			},
 			blending: NoBlending,
 			depthWrite: false,
@@ -107,6 +107,19 @@ export class BokehMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The resolution scale.
+	 *
+	 * @type {Number}
+	 * @internal
+	 */
+
+	set resolutionScale(value) {
+
+		this.uniforms.scale.value.x = value;
+
+	}
+
+	/**
 	 * The blur scale.
 	 *
 	 * @type {Number}
@@ -114,13 +127,13 @@ export class BokehMaterial extends ShaderMaterial {
 
 	get scale() {
 
-		return this.uniforms.scale.value;
+		return this.uniforms.scale.value.y;
 
 	}
 
 	set scale(value) {
 
-		this.uniforms.scale.value = value;
+		this.uniforms.scale.value.y = value;
 
 	}
 
@@ -133,7 +146,7 @@ export class BokehMaterial extends ShaderMaterial {
 
 	getScale(value) {
 
-		return this.uniforms.scale.value = value;
+		return this.scale;
 
 	}
 
@@ -146,7 +159,7 @@ export class BokehMaterial extends ShaderMaterial {
 
 	setScale(value) {
 
-		this.uniforms.scale.value = value;
+		this.scale = value;
 
 	}
 
@@ -159,15 +172,15 @@ export class BokehMaterial extends ShaderMaterial {
 	generateKernel() {
 
 		const GOLDEN_ANGLE = 2.39996323;
-		const points64 = new Float32Array(128);
-		const points16 = new Float32Array(32);
+		const points64 = new Float64Array(128);
+		const points16 = new Float64Array(32);
 
 		let i64 = 0, i16 = 0;
 
-		for(let i = 0; i < 80; ++i) {
+		for(let i = 0, sqrt80 = Math.sqrt(80); i < 80; ++i) {
 
 			const theta = i * GOLDEN_ANGLE;
-			const r = Math.sqrt(i) / Math.sqrt(80);
+			const r = Math.sqrt(i) / sqrt80;
 			const u = r * Math.cos(theta), v = r * Math.sin(theta);
 
 			if(i % 5 === 0) {
@@ -184,30 +197,9 @@ export class BokehMaterial extends ShaderMaterial {
 
 		}
 
-		// Pack points into vec4 instances to reduce the uniform count.
-		const kernel64 = [];
-		const kernel16 = [];
-
-		for(let i = 0; i < 128;) {
-
-			kernel64.push(new Vector4(
-				points64[i++], points64[i++],
-				points64[i++], points64[i++]
-			));
-
-		}
-
-		for(let i = 0; i < 32;) {
-
-			kernel16.push(new Vector4(
-				points16[i++], points16[i++],
-				points16[i++], points16[i++]
-			));
-
-		}
-
-		this.uniforms.kernel64.value = kernel64;
-		this.uniforms.kernel16.value = kernel16;
+		// The points are packed into vec4 instances to minimize the uniform count.
+		this.uniforms.kernel64.value = points64;
+		this.uniforms.kernel16.value = points16;
 
 	}
 

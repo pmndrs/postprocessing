@@ -1,28 +1,9 @@
 import { LinearFilter, LinearMipmapLinearFilter, Uniform, WebGLRenderTarget } from "three";
 import { AdaptiveLuminancePass, LuminancePass } from "../passes";
-import { BlendFunction } from "./blending/BlendFunction";
+import { BlendFunction, ToneMappingMode } from "../enums";
 import { Effect } from "./Effect";
 
-import fragmentShader from "./glsl/tone-mapping/shader.frag";
-
-/**
- * A tone mapping mode enumeration.
- *
- * @type {Object}
- * @property {Number} REINHARD - Simple Reinhard tone mapping.
- * @property {Number} REINHARD2 - Modified Reinhard tone mapping.
- * @property {Number} REINHARD2_ADAPTIVE - Simulates the optic nerve responding to the amount of light it is receiving.
- * @property {Number} OPTIMIZED_CINEON - Optimized filmic operator by Jim Hejl and Richard Burgess-Dawson.
- * @property {Number} ACES_FILMIC - ACES tone mapping with a scale of 1.0/0.6.
- */
-
-export const ToneMappingMode = {
-	REINHARD: 0,
-	REINHARD2: 1,
-	REINHARD2_ADAPTIVE: 2,
-	OPTIMIZED_CINEON: 3,
-	ACES_FILMIC: 4
-};
+import fragmentShader from "./glsl/tone-mapping.frag";
 
 /**
  * A tone mapping effect.
@@ -43,7 +24,7 @@ export class ToneMappingEffect extends Effect {
 	 *
 	 * TODO Change default mode to ACES_FILMIC and white point to 4.
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SET] - The blend function of this effect.
 	 * @param {Boolean} [options.adaptive=true] - Deprecated. Use mode instead.
 	 * @param {ToneMappingMode} [options.mode=ToneMappingMode.REINHARD2_ADAPTIVE] - The tone mapping mode.
 	 * @param {Number} [options.resolution=256] - The resolution of the luminance texture. Must be a power of two.
@@ -56,7 +37,7 @@ export class ToneMappingEffect extends Effect {
 	 */
 
 	constructor({
-		blendFunction = BlendFunction.NORMAL,
+		blendFunction = BlendFunction.SET,
 		adaptive = true,
 		mode = adaptive ? ToneMappingMode.REINHARD2_ADAPTIVE : ToneMappingMode.REINHARD2,
 		resolution = 256,

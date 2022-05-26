@@ -1,7 +1,7 @@
 import { NoBlending, ShaderMaterial, Uniform } from "three";
 
-import fragmentShader from "./glsl/luminance/shader.frag";
-import vertexShader from "./glsl/common/shader.vert";
+import fragmentShader from "./glsl/luminance.frag";
+import vertexShader from "./glsl/common.vert";
 
 /**
  * A luminance shader material.

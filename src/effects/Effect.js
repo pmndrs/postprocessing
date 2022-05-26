@@ -1,40 +1,6 @@
 import { BasicDepthPacking, EventDispatcher, Scene } from "three";
-import { BlendFunction, BlendMode } from "./blending";
-
-/**
- * An enumeration of effect attributes.
- *
- * Attributes can be concatenated using the bitwise OR operator.
- *
- * @type {Object}
- * @property {Number} NONE - No attributes. Most effects don't need to specify any attributes.
- * @property {Number} DEPTH - Describes effects that require a depth texture.
- * @property {Number} CONVOLUTION - Describes effects that fetch additional samples from the input buffer. There cannot be more than one effect with this attribute per {@link EffectPass}.
- * @example const attributes = EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH;
- */
-
-export const EffectAttribute = {
-	NONE: 0,
-	DEPTH: 1,
-	CONVOLUTION: 2
-};
-
-/**
- * An enumeration of WebGL extensions.
- *
- * @type {Object}
- * @property {String} DERIVATIVES - Enables derivatives by adding the functions dFdx, dFdy and fwidth.
- * @property {String} FRAG_DEPTH - Enables gl_FragDepthEXT to set a depth value of a fragment from within the fragment shader.
- * @property {String} DRAW_BUFFERS - Enables multiple render targets (MRT) support.
- * @property {String} SHADER_TEXTURE_LOD - Enables explicit control of texture LOD.
- */
-
-export const WebGLExtension = {
-	DERIVATIVES: "derivatives",
-	FRAG_DEPTH: "fragDepth",
-	DRAW_BUFFERS: "drawBuffers",
-	SHADER_TEXTURE_LOD: "shaderTextureLOD"
-};
+import { BlendFunction, EffectAttribute } from "../enums";
+import { BlendMode } from "./blending";
 
 /**
  * An abstract effect.
@@ -55,7 +21,7 @@ export class Effect extends EventDispatcher {
 	 * @param {String} fragmentShader - The fragment shader. This shader is required.
 	 * @param {Object} [options] - Additional options.
 	 * @param {EffectAttribute} [options.attributes=EffectAttribute.NONE] - The effect attributes that determine the execution priority and resource requirements.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
 	 * @param {Map<String, String>} [options.defines] - Custom preprocessor macro definitions. Keys are names and values are code.
 	 * @param {Map<String, Uniform>} [options.uniforms] - Custom shader uniforms. Keys are names and values are uniforms.
 	 * @param {Set<WebGLExtension>} [options.extensions] - WebGL extensions.
@@ -64,7 +30,7 @@ export class Effect extends EventDispatcher {
 
 	constructor(name, fragmentShader, {
 		attributes = EffectAttribute.NONE,
-		blendFunction = BlendFunction.SCREEN,
+		blendFunction = BlendFunction.NORMAL,
 		defines = new Map(),
 		uniforms = new Map(),
 		extensions = null,
@@ -124,6 +90,7 @@ export class Effect extends EventDispatcher {
 		 * Call {@link Effect.setChanged} after changing macro definitions.
 		 *
 		 * @type {Map<String, String>}
+		 * @readonly
 		 */
 
 		this.defines = defines;
@@ -134,6 +101,7 @@ export class Effect extends EventDispatcher {
 		 * Call {@link Effect.setChanged} after adding or removing uniforms.
 		 *
 		 * @type {Map<String, Uniform>}
+		 * @readonly
 		 */
 
 		this.uniforms = uniforms;
@@ -144,6 +112,7 @@ export class Effect extends EventDispatcher {
 		 * Call {@link Effect.setChanged} after adding or removing extensions.
 		 *
 		 * @type {Set<WebGLExtension>}
+		 * @readonly
 		 */
 
 		this.extensions = extensions;
@@ -152,6 +121,7 @@ export class Effect extends EventDispatcher {
 		 * The blend mode of this effect.
 		 *
 		 * @type {BlendMode}
+		 * @readonly
 		 */
 
 		this.blendMode = new BlendMode(blendFunction);

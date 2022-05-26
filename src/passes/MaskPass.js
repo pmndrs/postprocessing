@@ -27,6 +27,7 @@ export class MaskPass extends Pass {
 		 * A clear pass.
 		 *
 		 * @type {ClearPass}
+		 * @readonly
 		 */
 
 		this.clearPass = new ClearPass(false, false, true);
