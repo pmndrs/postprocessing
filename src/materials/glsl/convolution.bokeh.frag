@@ -20,7 +20,7 @@
 
 uniform lowp sampler2D cocBuffer;
 uniform vec2 texelSize;
-uniform float scale;
+uniform vec2 scale;
 
 varying vec2 vUv;
 
@@ -29,11 +29,11 @@ void main() {
 	#ifdef FOREGROUND
 
 		vec2 CoCNearFar = texture2D(cocBuffer, vUv).rg;
-		float CoC = CoCNearFar.r * scale;
+		float CoC = CoCNearFar.r * scale.y;
 
 	#else
 
-		float CoC = texture2D(cocBuffer, vUv).g * scale;
+		float CoC = texture2D(cocBuffer, vUv).g * scale.y;
 
 	#endif
 
@@ -47,11 +47,11 @@ void main() {
 		#ifdef FOREGROUND
 
 			// Use far CoC to avoid weak blurring around foreground objects.
-			vec2 step = texelSize * max(CoC, CoCNearFar.g * scale);
+			vec2 step = texelSize * scale.x * max(CoC, CoCNearFar.g * scale.y);
 
 		#else
 
-			vec2 step = texelSize * CoC;
+			vec2 step = texelSize * scale.x * CoC;
 
 		#endif
 

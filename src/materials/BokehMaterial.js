@@ -34,7 +34,7 @@ export class BokehMaterial extends ShaderMaterial {
 				texelSize: new Uniform(new Vector2()),
 				kernel64: new Uniform(null),
 				kernel16: new Uniform(null),
-				scale: new Uniform(1.0)
+				scale: new Uniform(new Vector2(1.0, 1.0))
 			},
 			blending: NoBlending,
 			depthWrite: false,
@@ -107,6 +107,19 @@ export class BokehMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The resolution scale.
+	 *
+	 * @type {Number}
+	 * @internal
+	 */
+
+	set resolutionScale(value) {
+
+		this.uniforms.scale.value.x = value;
+
+	}
+
+	/**
 	 * The blur scale.
 	 *
 	 * @type {Number}
@@ -114,13 +127,13 @@ export class BokehMaterial extends ShaderMaterial {
 
 	get scale() {
 
-		return this.uniforms.scale.value;
+		return this.uniforms.scale.value.y;
 
 	}
 
 	set scale(value) {
 
-		this.uniforms.scale.value = value;
+		this.uniforms.scale.value.y = value;
 
 	}
 
@@ -133,7 +146,7 @@ export class BokehMaterial extends ShaderMaterial {
 
 	getScale(value) {
 
-		return this.uniforms.scale.value = value;
+		return this.scale;
 
 	}
 
@@ -146,7 +159,7 @@ export class BokehMaterial extends ShaderMaterial {
 
 	setScale(value) {
 
-		this.uniforms.scale.value = value;
+		this.scale = value;
 
 	}
 
