@@ -48,9 +48,8 @@ uniform lowp sampler2D noiseTexture;
 uniform mat4 inverseProjectionMatrix;
 uniform mat4 projectionMatrix;
 uniform vec2 texelSize;
+uniform vec2 cameraNearFar;
 
-uniform float cameraNear;
-uniform float cameraFar;
 uniform float minRadiusScale;
 uniform float intensity;
 uniform float fade;
@@ -66,11 +65,11 @@ float getViewZ(const in float depth) {
 
 	#ifdef PERSPECTIVE_CAMERA
 
-		return perspectiveDepthToViewZ(depth, cameraNear, cameraFar);
+		return perspectiveDepthToViewZ(depth, cameraNearFar.x, cameraNearFar.y);
 
 	#else
 
-		return orthographicDepthToViewZ(depth, cameraNear, cameraFar);
+		return orthographicDepthToViewZ(depth, cameraNearFar.x, cameraNearFar.y);
 
 	#endif
 
@@ -145,7 +144,7 @@ float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth
 
 		#ifdef PERSPECTIVE_CAMERA
 
-			float linearSampleDepth = viewZToOrthographicDepth(viewZ, cameraNear, cameraFar);
+			float linearSampleDepth = viewZToOrthographicDepth(viewZ, cameraNearFar.x, cameraNearFar.y);
 
 		#else
 
@@ -196,7 +195,7 @@ void main() {
 
 	#ifdef PERSPECTIVE_CAMERA
 
-		float linearDepth = viewZToOrthographicDepth(viewZ, cameraNear, cameraFar);
+		float linearDepth = viewZToOrthographicDepth(viewZ, cameraNearFar.x, cameraNearFar.y);
 
 	#else
 

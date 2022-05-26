@@ -39,8 +39,7 @@ export class SSAOMaterial extends ShaderMaterial {
 				inverseProjectionMatrix: new Uniform(new Matrix4()),
 				projectionMatrix: new Uniform(new Matrix4()),
 				texelSize: new Uniform(new Vector2()),
-				cameraNear: new Uniform(0.0),
-				cameraFar: new Uniform(0.0),
+				cameraNearFar: new Uniform(new Vector2()),
 				distanceCutoff: new Uniform(new Vector2()),
 				proximityCutoff: new Uniform(new Vector2()),
 				noiseScale: new Uniform(new Vector2()),
@@ -90,7 +89,7 @@ export class SSAOMaterial extends ShaderMaterial {
 
 	get near() {
 
-		return this.uniforms.cameraNear.value;
+		return this.uniforms.cameraNearFar.value.x;
 
 	}
 
@@ -103,7 +102,7 @@ export class SSAOMaterial extends ShaderMaterial {
 
 	get far() {
 
-		return this.uniforms.cameraFar.value;
+		return this.uniforms.cameraNearFar.value.y;
 
 	}
 
@@ -827,8 +826,7 @@ export class SSAOMaterial extends ShaderMaterial {
 
 		if(camera) {
 
-			this.uniforms.cameraNear.value = camera.near;
-			this.uniforms.cameraFar.value = camera.far;
+			this.uniforms.cameraNearFar.value.set(camera.near, camera.far);
 			this.uniforms.projectionMatrix.value.copy(camera.projectionMatrix);
 			this.uniforms.inverseProjectionMatrix.value.copy(camera.projectionMatrix).invert();
 
