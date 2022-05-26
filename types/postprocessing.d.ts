@@ -6445,6 +6445,29 @@ declare module "postprocessing" {
 	}
 
 	/**
+	 * A 1D LUT effect.
+	 */
+
+	export class LUT1DEffect extends Effect {
+
+		/**
+		 * Constructs a new color grading effect.
+		 *
+		 * @param {Texture} lut - The lookup texture.
+		 * @param {Object} [options] - The options.
+		 * @param {BlendFunction} [options.blendFunction=BlendFunction.SET] - The blend function of this effect.
+		 */
+		constructor(
+			lut: Texture,
+			{
+				blendFunction
+			}?: {
+				blendFunction?: BlendFunction;
+			}
+		);
+
+	}
+	/**
    * A LUT effect.
    *
    * The tetrahedral interpolation algorithm was inspired by an implementation from OpenColorIO which is licensed under
@@ -6461,14 +6484,14 @@ declare module "postprocessing" {
    *
    * TODO Replace DataTexture3D with Data3DTexture.
    */
-	export class LUTEffect extends Effect {
+	export class LUT3DEffect extends Effect {
 
 		/**
      * Constructs a new color grading effect.
      *
      * @param {Texture} lut - The lookup texture.
      * @param {Object} [options] - The options.
-     * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+     * @param {BlendFunction} [options.blendFunction=BlendFunction.SET] - The blend function of this effect.
      * @param {Boolean} [options.tetrahedralInterpolation=false] - Enables or disables tetrahedral interpolation.
      */
 		constructor(
