@@ -32,8 +32,7 @@ void main() {
 	float illuminationDecay = 1.0;
 	vec4 color = vec4(0.0);
 
-	/* Estimate the probability of occlusion at each pixel by summing samples
-	along a ray to the light position. */
+	// Estimate the probability of occlusion at each pixel by summing samples along a ray to the light position.
 	for(int i = 0; i < SAMPLES_INT; ++i) {
 
 		coord += delta;
