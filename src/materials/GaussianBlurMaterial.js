@@ -32,6 +32,7 @@ export class GaussianBlurMaterial extends ShaderMaterial {
 				inputBuffer: new Uniform(null),
 				texelSize: new Uniform(new Vector2()),
 				direction: new Uniform(new Vector2()),
+				kernel: new Uniform(null),
 				scale: new Uniform(new Vector2(1.0, 1.0))
 			},
 			blending: NoBlending,
@@ -142,13 +143,18 @@ export class GaussianBlurMaterial extends ShaderMaterial {
 		const kernel = new GaussKernel(kernelSize);
 		const steps = kernel.linearSteps;
 
-		// The kernel data is injected as const arrays to avoid uniform count limitations.
-		let kernelData = `#define STEPS ${steps.toFixed(0)}\n\n`;
-		kernelData += `const float gWeights[${steps}] = float[${steps}](\n\t`;
-		kernelData += Array.from(kernel.linearWeights).map(v => v.toFixed(16)).join(",\n\t");
-		kernelData += `\n);\n\nconst float gOffsets[${steps}] = float[${steps}](\n\t`;
-		kernelData += Array.from(kernel.linearOffsets).map(v => v.toFixed(16)).join(",\n\t");
-		this.fragmentShader = kernelData + "\n);\n\n" + fragmentShader;
+		// Store offsets and weights as vec2 instances to minimize the uniform count.
+		const kernelData = new Float64Array(steps * 2);
+
+		for(let i = 0, j = 0; i < steps; ++i) {
+
+			kernelData[j++] = kernel.linearOffsets[i];
+			kernelData[j++] = kernel.linearWeights[i];
+
+		}
+
+		this.uniforms.kernel.value = kernelData;
+		this.defines.STEPS = steps.toFixed(0);
 		this.needsUpdate = true;
 
 	}

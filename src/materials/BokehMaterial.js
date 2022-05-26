@@ -32,6 +32,8 @@ export class BokehMaterial extends ShaderMaterial {
 				inputBuffer: new Uniform(null),
 				cocBuffer: new Uniform(null),
 				texelSize: new Uniform(new Vector2()),
+				kernel64: new Uniform(null),
+				kernel16: new Uniform(null),
 				scale: new Uniform(1.0)
 			},
 			blending: NoBlending,
@@ -182,12 +184,9 @@ export class BokehMaterial extends ShaderMaterial {
 
 		}
 
-		// The kernel data is injected as const arrays to avoid uniform count limitations.
-		let kernelData = `const float kernel64[${points64.length}] = float[${points64.length}](\n\t`;
-		kernelData += Array.from(points64).map(v => v.toFixed(16)).join(",\n\t");
-		kernelData += `\n);\n\nconst float kernel16[${points16.length}] = float[${points16.length}](\n\t`;
-		kernelData += Array.from(points16).map(v => v.toFixed(16)).join(",\n\t");
-		this.fragmentShader = kernelData + "\n);\n\n" + fragmentShader;
+		// The points are packed into vec4 instances to minimize the uniform count.
+		this.uniforms.kernel64.value = points64;
+		this.uniforms.kernel16.value = points16;
 
 	}
 

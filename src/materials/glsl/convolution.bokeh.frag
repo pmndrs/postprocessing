@@ -8,13 +8,21 @@
 
 #endif
 
+#if PASS == 1
+
+	uniform vec4 kernel64[32];
+
+#else
+
+	uniform vec4 kernel16[8];
+
+#endif
+
 uniform lowp sampler2D cocBuffer;
 uniform vec2 texelSize;
 uniform float scale;
 
 varying vec2 vUv;
-
-// kernel64 and kernel16 will be injected as const arrays.
 
 void main() {
 
@@ -51,11 +59,15 @@ void main() {
 
 			vec4 acc = vec4(0.0);
 
-			// kernel64 contains 64 2D sampling points.
-			for(int i = 0; i < 128; i += 2) {
+			// Each vector contains two sampling points (64 in total).
+			for(int i = 0; i < 32; ++i) {
 
-				vec2 kernel = vec2(kernel64[i], kernel64[i + 1]);
-				vec2 uv = step * kernel + vUv;
+				vec4 kernel = kernel64[i];
+
+				vec2 uv = step * kernel.xy + vUv;
+				acc += texture2D(inputBuffer, uv);
+
+				uv = step * kernel.zw + vUv;
 				acc += texture2D(inputBuffer, uv);
 
 			}
@@ -66,12 +78,17 @@ void main() {
 
 			vec4 maxValue = texture2D(inputBuffer, vUv);
 
-			// kernel16 contains 16 2D sampling points.
-			for(int i = 0; i < 16; i += 2) {
+			// Each vector contains two sampling points (16 in total).
+			for(int i = 0; i < 8; ++i) {
 
-				vec2 kernel = vec2(kernel16[i], kernel16[i + 1]);
+				vec4 kernel = kernel16[i];
+
 				vec2 uv = step * kernel.xy + vUv;
 				maxValue = max(texture2D(inputBuffer, uv), maxValue);
+
+				uv = step * kernel.zw + vUv;
+				maxValue = max(texture2D(inputBuffer, uv), maxValue);
+
 
 			}
 
