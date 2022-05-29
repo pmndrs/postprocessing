@@ -1,5 +1,6 @@
-import { BasicDepthPacking, UnsignedByteType } from "three";
-import { BlendFunction, EffectAttribute } from "../enums";
+import { BasicDepthPacking, UnsignedByteType, sRGBEncoding } from "three";
+import { EffectShaderData } from "../core";
+import { BlendFunction, EffectAttribute, EffectShaderSection as Section } from "../enums";
 import { EffectMaterial } from "../materials";
 import { Pass } from "./Pass";
 
@@ -16,6 +17,7 @@ function prefixSubstrings(prefix, substrings, strings) {
 
 	for(const substring of substrings) {
 
+		// Prefix the substring and build a RegExp that searches for the unprefixed version.
 		const prefixed = "$1" + prefix + substring.charAt(0).toUpperCase() + substring.slice(1);
 		const regExp = new RegExp("([^\\.])(\\b" + substring + "\\b)", "g");
 
@@ -23,6 +25,7 @@ function prefixSubstrings(prefix, substrings, strings) {
 
 			if(entry[1] !== null) {
 
+				// Replace all occurances of the substring with the prefixed version.
 				strings.set(entry[0], entry[1].replace(regExp, prefixed));
 
 			}
@@ -38,125 +41,157 @@ function prefixSubstrings(prefix, substrings, strings) {
  *
  * @private
  * @param {String} prefix - A prefix.
- * @param {Effect} effect - An effect.
- * @param {Map<String, String>} shaderParts - The shader parts.
- * @param {Map<BlendFunction, BlendMode>} blendModes - The blend modes.
- * @param {Map<String, String>} defines - The macro definitions.
- * @param {Map<String, Uniform>} uniforms - The uniforms.
- * @param {EffectAttribute} attributes - The global, collective attributes.
- * @return {Object} The results.
- * @property {String[]} varyings - The varyings used by the given effect.
- * @property {Boolean} transformedUv - Indicates whether the effect transforms UV coordinates in the fragment shader.
- * @property {Boolean} readDepth - Indicates whether the effect actually uses depth in the fragment shader.
+ * @param {Effect} effect - The effect.
+ * @param {EffectShaderData} data - Cumulative shader data.
  */
 
-function integrateEffect(prefix, effect, shaderParts, blendModes, defines, uniforms, attributes) {
+function integrateEffect(prefix, effect, data) {
 
-	const shaders = new Map([
-		["fragment", effect.getFragmentShader()],
-		["vertex", effect.getVertexShader()]
-	]);
+	let fragmentShader = effect.getFragmentShader();
+	let vertexShader = effect.getVertexShader();
 
-	const mainImageExists = (shaders.get("fragment") !== undefined && /mainImage/.test(shaders.get("fragment")));
-	const mainUvExists = (shaders.get("fragment") !== undefined && /mainUv/.test(shaders.get("fragment")));
+	const mainImageExists = (fragmentShader !== undefined && /mainImage/.test(fragmentShader));
+	const mainUvExists = (fragmentShader !== undefined && /mainUv/.test(fragmentShader));
 
-	let varyings = [], names = [];
-	let transformedUv = false, readDepth = false;
+	data.attributes |= effect.getAttributes();
 
-	if(shaders.get("fragment") === undefined) {
+	if(fragmentShader === undefined) {
 
-		console.error("Missing fragment shader", effect);
+		throw new Error(`Missing fragment shader (${effect.name})`);
 
-	} else if(mainUvExists && (attributes & EffectAttribute.CONVOLUTION) !== 0) {
+	} else if(mainUvExists && (data.attributes & EffectAttribute.CONVOLUTION) !== 0) {
 
-		console.error("Effects that transform UV coordinates are incompatible with convolution effects", effect);
+		throw new Error(`Effects that transform UVs are incompatible with convolution effects (${effect.name})`);
 
 	} else if(!mainImageExists && !mainUvExists) {
 
-		console.error("The fragment shader contains neither a mainImage nor a mainUv function", effect);
+		throw new Error(`Could not find mainImage or mainUv function (${effect.name})`);
 
 	} else {
 
 		const functionRegExp = /(?:\w+\s+(\w+)\([\w\s,]*\)\s*{[^}]+})/g;
-		const Section = EffectMaterial.Section;
+
+		const shaderParts = data.shaderParts;
+		let fragmentHead = shaderParts.get(Section.FRAGMENT_HEAD) ?? "";
+		let fragmentMainUv = shaderParts.get(Section.FRAGMENT_MAIN_UV) ?? "";
+		let fragmentMainImage = shaderParts.get(Section.FRAGMENT_MAIN_IMAGE) ?? "";
+		let vertexHead = shaderParts.get(Section.VERTEX_HEAD) ?? "";
+		let vertexMainSupport = shaderParts.get(Section.VERTEX_MAIN_SUPPORT) ?? "";
+
+		let varyings = [], names = [];
 
 		if(mainUvExists) {
 
-			const code = `\t${prefix}MainUv(UV);\n`;
-			shaderParts.set(Section.FRAGMENT_MAIN_UV, shaderParts.get(Section.FRAGMENT_MAIN_UV) + code);
-			transformedUv = true;
+			fragmentMainUv += `\t${prefix}MainUv(UV);\n`;
+			data.uvTransformation = true;
 
 		}
 
-		if(shaders.get("vertex") !== null && /mainSupport/.test(shaders.get("vertex"))) {
+		if(vertexShader !== null && /mainSupport/.test(vertexShader)) {
 
 			// Build the mainSupport call (with optional uv parameter).
-			let string = `\t${prefix}MainSupport(`;
-			string += /mainSupport *\([\w\s]*?uv\s*?\)/.test(shaders.get("vertex")) ? "vUv);\n" : ");\n";
-			shaderParts.set(Section.VERTEX_MAIN_SUPPORT, shaderParts.get(Section.VERTEX_MAIN_SUPPORT) + string);
+			const needsUv = /mainSupport *\([\w\s]*?uv\s*?\)/.test(vertexShader);
+			vertexMainSupport += `\t${prefix}MainSupport(`;
+			vertexMainSupport += needsUv ? "vUv);\n" : ");\n";
 
 			// Collect names of varyings and functions.
-			varyings = varyings.concat([...shaders.get("vertex").matchAll(/(?:varying\s+\w+\s+(\w*))/g)].map(m => m[1]));
-			names = names.concat(varyings).concat([...shaders.get("vertex").matchAll(functionRegExp)].map(m => m[1]));
+			varyings = varyings.concat([...vertexShader.matchAll(/(?:varying\s+\w+\s+(\w*))/g)].map(m => m[1]));
+			names = names.concat(varyings).concat([...vertexShader.matchAll(functionRegExp)].map(m => m[1]));
 
 		}
 
 		// Assemble all names while ignoring parameters of function-like macros.
-		names = names.concat([...shaders.get("fragment").matchAll(functionRegExp)].map(m => m[1]));
+		names = names.concat([...fragmentShader.matchAll(functionRegExp)].map(m => m[1]));
 		names = names.concat([...effect.defines.keys()].map((s) => s.replace(/\([\w\s,]*\)/g, "")));
 		names = names.concat([...effect.uniforms.keys()]);
 
 		// Store prefixed uniforms and macros.
-		effect.uniforms.forEach((val, key) => uniforms.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), val));
-		effect.defines.forEach((val, key) => defines.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), val));
+		effect.uniforms.forEach((val, key) => data.uniforms.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), val));
+		effect.defines.forEach((val, key) => data.defines.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), val));
 
 		// Prefix varyings, functions, uniforms and macro values.
-		prefixSubstrings(prefix, names, defines);
+		const shaders = new Map([["fragment", fragmentShader], ["vertex", vertexShader]]);
+		prefixSubstrings(prefix, names, data.defines);
 		prefixSubstrings(prefix, names, shaders);
+		fragmentShader = shaders.get("fragment");
+		vertexShader = shaders.get("vertex");
 
 		// Collect unique blend modes.
 		const blendMode = effect.blendMode;
-		blendModes.set(blendMode.blendFunction, blendMode);
+		data.blendModes.set(blendMode.blendFunction, blendMode);
 
 		if(mainImageExists) {
 
-			const depthParamRegExp = /MainImage *\([\w\s,]*?depth[\w\s,]*?\)/;
-			let string = `${prefix}MainImage(color0, UV, `;
+			if(effect.inputColorSpace !== null && effect.inputColorSpace !== data.colorSpace) {
 
-			// The effect may sample depth in a different shader.
-			if((attributes & EffectAttribute.DEPTH) !== 0 && depthParamRegExp.test(shaders.get("fragment"))) {
-
-				string += "depth, ";
-				readDepth = true;
+				fragmentMainImage += (effect.inputColorSpace === sRGBEncoding) ?
+					"color0 = LinearTosRGB(color0);\n\t" :
+					"color0 = sRGBToLinear(color0);\n\t";
 
 			}
 
-			string += "color1);\n\t";
+			if(effect.outputColorSpace !== null) {
+
+				data.colorSpace = effect.outputColorSpace;
+
+			} else if(effect.inputColorSpace !== null) {
+
+				data.colorSpace = effect.inputColorSpace;
+
+			}
+
+			const depthParamRegExp = /MainImage *\([\w\s,]*?depth[\w\s,]*?\)/;
+			fragmentMainImage += `${prefix}MainImage(color0, UV, `;
+
+			// Check if the effect reads depth in the fragment shader.
+			if((data.attributes & EffectAttribute.DEPTH) !== 0 && depthParamRegExp.test(fragmentShader)) {
+
+				fragmentMainImage += "depth, ";
+				data.readDepth = true;
+
+			}
+
+			fragmentMainImage += "color1);\n\t";
 
 			// Include the blend opacity uniform of this effect.
 			const blendOpacity = prefix + "BlendOpacity";
-			uniforms.set(blendOpacity, blendMode.opacity);
+			data.uniforms.set(blendOpacity, blendMode.opacity);
 
 			// Blend the result of this effect with the input color.
-			string += `color0 = blend${blendMode.blendFunction}(color0, color1, ${blendOpacity});\n\n\t`;
-			shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, shaderParts.get(Section.FRAGMENT_MAIN_IMAGE) + string);
-			string = `uniform float ${blendOpacity};\n\n`;
-			shaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) + string);
+			fragmentMainImage += `color0 = blend${blendMode.blendFunction}(color0, color1, ${blendOpacity});\n\n\t`;
+			fragmentHead += `uniform float ${blendOpacity};\n\n`;
 
 		}
 
 		// Include the modified code in the final shader.
-		shaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) + shaders.get("fragment") + "\n");
+		fragmentHead += fragmentShader + "\n";
 
-		if(shaders.get("vertex") !== null) {
+		if(vertexShader !== null) {
 
-			shaderParts.set(Section.VERTEX_HEAD, shaderParts.get(Section.VERTEX_HEAD) + shaders.get("vertex") + "\n");
+			vertexHead += vertexShader + "\n";
+
+		}
+
+		shaderParts.set(Section.FRAGMENT_HEAD, fragmentHead);
+		shaderParts.set(Section.FRAGMENT_MAIN_UV, fragmentMainUv);
+		shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, fragmentMainImage);
+		shaderParts.set(Section.VERTEX_HEAD, vertexHead);
+		shaderParts.set(Section.VERTEX_MAIN_SUPPORT, vertexMainSupport);
+
+		data.varyings = data.varyings.concat(varyings);
+
+		if(effect.extensions !== null) {
+
+			// Collect required WebGL extensions.
+			for(const extension of effect.extensions) {
+
+				data.extensions.add(extension);
+
+			}
 
 		}
 
 	}
-
-	return { varyings, transformedUv, readDepth };
 
 }
 
@@ -363,77 +398,48 @@ export class EffectPass extends Pass {
 
 	updateMaterial() {
 
-		const Section = EffectMaterial.Section;
-		const shaderParts = new Map([
-			[Section.FRAGMENT_HEAD, ""],
-			[Section.FRAGMENT_MAIN_UV, ""],
-			[Section.FRAGMENT_MAIN_IMAGE, ""],
-			[Section.VERTEX_HEAD, ""],
-			[Section.VERTEX_MAIN_SUPPORT, ""]
-		]);
-
-		const blendModes = new Map();
-		const defines = new Map();
-		const uniforms = new Map();
-		const extensions = new Set();
-
-		let id = 0, varyings = 0, attributes = 0;
-		let transformedUv = false, readDepth = false;
+		const data = new EffectShaderData();
+		let id = 0;
 
 		for(const effect of this.effects) {
 
 			if(effect.blendMode.blendFunction === BlendFunction.SKIP) {
 
 				// Check if this effect relies on depth and continue.
-				attributes |= (effect.getAttributes() & EffectAttribute.DEPTH);
+				data.attributes |= (effect.getAttributes() & EffectAttribute.DEPTH);
 
-			} else if((attributes & effect.getAttributes() & EffectAttribute.CONVOLUTION) !== 0) {
+			} else if((data.attributes & effect.getAttributes() & EffectAttribute.CONVOLUTION) !== 0) {
 
-				console.error("Convolution effects cannot be merged", effect);
+				throw new Error(`Convolution effects cannot be merged (${effect.name})`);
 
 			} else {
 
-				attributes |= effect.getAttributes();
-
-				const prefix = ("e" + id++);
-				const result = integrateEffect(prefix, effect, shaderParts, blendModes, defines, uniforms, attributes);
-				varyings += result.varyings.length;
-				transformedUv = transformedUv || result.transformedUv;
-				readDepth = readDepth || result.readDepth;
-
-				if(effect.extensions !== null) {
-
-					// Collect the WebGL extensions that are required by this effect.
-					for(const extension of effect.extensions) {
-
-						extensions.add(extension);
-
-					}
-
-				}
+				integrateEffect("e" + id++, effect, data);
 
 			}
 
 		}
 
+		let fragmentHead = data.shaderParts.get(Section.FRAGMENT_HEAD);
+		let fragmentMainImage = data.shaderParts.get(Section.FRAGMENT_MAIN_IMAGE);
+		let fragmentMainUv = data.shaderParts.get(Section.FRAGMENT_MAIN_UV);
+
 		// Integrate the relevant blend functions.
 		const blendRegExp = /\bblend\b/g;
 
-		for(const blendMode of blendModes.values()) {
+		for(const blendMode of data.blendModes.values()) {
 
-			const code = blendMode.getShaderCode().replace(blendRegExp, `blend${blendMode.blendFunction}`);
-			shaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) + code + "\n");
+			fragmentHead += blendMode.getShaderCode().replace(blendRegExp, `blend${blendMode.blendFunction}`) + "\n";
 
 		}
 
 		// Check if any effect relies on depth.
-		if((attributes & EffectAttribute.DEPTH) !== 0) {
+		if((data.attributes & EffectAttribute.DEPTH) !== 0) {
 
-			// Only read depth if any effect actually uses this information.
-			if(readDepth) {
+			// Check if depth should be read.
+			if(data.readDepth) {
 
-				const code = "float depth = readDepth(UV);\n\n\t";
-				shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, code + shaderParts.get(Section.FRAGMENT_MAIN_IMAGE));
+				fragmentMainImage = "float depth = readDepth(UV);\n\n\t" + fragmentMainImage;
 
 			}
 
@@ -446,33 +452,37 @@ export class EffectPass extends Pass {
 
 		}
 
-		// Check if any effect transforms UVs in the fragment shader.
-		if(transformedUv) {
+		if(data.colorSpace === sRGBEncoding) {
 
-			const code = "vec2 transformedUv = vUv;\n";
-			shaderParts.set(Section.FRAGMENT_MAIN_UV, code + shaderParts.get(Section.FRAGMENT_MAIN_UV));
-			defines.set("UV", "transformedUv");
-
-		} else {
-
-			defines.set("UV", "vUv");
+			// Convert back to linear.
+			fragmentMainImage += "color0 = sRGBToLinear(color0);\n\t";
 
 		}
 
-		// Ensure that leading preprocessor directives start at a new line.
-		shaderParts.forEach((value, key, map) => map.set(key, value.trim().replace(/^#/, "\n#")));
+		// Check if any effect transforms UVs in the fragment shader.
+		if(data.uvTransformation) {
 
-		this.uniformCount = uniforms.size;
-		this.varyingCount = varyings;
+			fragmentMainUv = "vec2 transformedUv = vUv;\n" + fragmentMainUv;
+			data.defines.set("UV", "transformedUv");
 
+		} else {
+
+			data.defines.set("UV", "vUv");
+
+		}
+
+		data.shaderParts.set(Section.FRAGMENT_HEAD, fragmentHead);
+		data.shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, fragmentMainImage);
+		data.shaderParts.set(Section.FRAGMENT_MAIN_UV, fragmentMainUv);
+
+		// Ensure that leading preprocessor directives start on a new line.
+		data.shaderParts.forEach((value, key, map) => map.set(key, value.trim().replace(/^#/, "\n#")));
+
+		this.uniformCount = data.uniforms.size;
+		this.varyingCount = data.varyings.length;
 		this.skipRendering = (id === 0);
 		this.needsSwap = !this.skipRendering;
-
-		this.fullscreenMaterial
-			.setShaderParts(shaderParts)
-			.setExtensions(extensions)
-			.setUniforms(uniforms)
-			.setDefines(defines);
+		this.fullscreenMaterial.setShaderData(data);
 
 	}
 

@@ -1,22 +1,8 @@
 import { BasicDepthPacking, NoBlending, PerspectiveCamera, REVISION, ShaderMaterial, Uniform, Vector2 } from "three";
+import { EffectShaderSection as Section } from "../enums";
 
 import fragmentTemplate from "./glsl/effect.frag";
 import vertexTemplate from "./glsl/effect.vert";
-
-/**
- * An enumeration of shader code placeholders used by the {@link EffectPass}.
- *
- * @type {Object}
- * @deprecated Use EffectMaterial.Section instead.
- */
-
-export const Section = {
-	FRAGMENT_HEAD: "FRAGMENT_HEAD",
-	FRAGMENT_MAIN_UV: "FRAGMENT_MAIN_UV",
-	FRAGMENT_MAIN_IMAGE: "FRAGMENT_MAIN_IMAGE",
-	VERTEX_HEAD: "VERTEX_HEAD",
-	VERTEX_MAIN_SUPPORT: "VERTEX_MAIN_SUPPORT"
-};
 
 /**
  * An effect material for compound shaders. Supports dithering.
@@ -29,11 +15,11 @@ export class EffectMaterial extends ShaderMaterial {
 	/**
 	 * Constructs a new effect material.
 	 *
-	 * @param {Map<String, String>} [shaderParts] - A collection of shader snippets. See {@link Section}.
-	 * @param {Map<String, String>} [defines] - A collection of preprocessor macro definitions.
-	 * @param {Map<String, Uniform>} [uniforms] - A collection of uniforms.
+	 * @param {Map<String, String>} [shaderParts] - Deprecated. Use setShaderData instead.
+	 * @param {Map<String, String>} [defines] - Deprecated. Use setShaderData instead.
+	 * @param {Map<String, Uniform>} [uniforms] - Deprecated. Use setShaderData instead.
 	 * @param {Camera} [camera] - A camera.
-	 * @param {Boolean} [dithering=false] - Whether dithering should be enabled.
+	 * @param {Boolean} [dithering=false] - Deprecated.
 	 */
 
 	constructor(shaderParts, defines, uniforms, camera, dithering = false) {
@@ -164,9 +150,26 @@ export class EffectMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Sets the shader data.
+	 *
+	 * @param {EffectShaderData} data - The shader data.
+	 * @return {EffectMaterial} This material.
+	 */
+
+	setShaderData(data) {
+
+		this.setShaderParts(data.shaderParts);
+		this.setDefines(data.defines);
+		this.setUniforms(data.uniforms);
+		this.setExtensions(data.extensions);
+
+	}
+
+	/**
 	 * Sets the shader parts.
 	 *
-	 * @param {Map<String, String>} shaderParts - A collection of shader snippets. See {@link Section}.
+	 * @deprecated Use setShaderData instead.
+	 * @param {Map<String, String>} shaderParts - A collection of shader snippets. See {@link EffectShaderSection}.
 	 * @return {EffectMaterial} This material.
 	 */
 
@@ -189,6 +192,7 @@ export class EffectMaterial extends ShaderMaterial {
 	/**
 	 * Sets the shader macros.
 	 *
+	 * @deprecated Use setShaderData instead.
 	 * @param {Map<String, String>} defines - A collection of preprocessor macro definitions.
 	 * @return {EffectMaterial} This material.
 	 */
@@ -209,6 +213,7 @@ export class EffectMaterial extends ShaderMaterial {
 	/**
 	 * Sets the shader uniforms.
 	 *
+	 * @deprecated Use setShaderData instead.
 	 * @param {Map<String, Uniform>} uniforms - A collection of uniforms.
 	 * @return {EffectMaterial} This material.
 	 */
@@ -228,6 +233,7 @@ export class EffectMaterial extends ShaderMaterial {
 	/**
 	 * Sets the required shader extensions.
 	 *
+	 * @deprecated Use setShaderData instead.
 	 * @param {Set<WebGLExtension>} extensions - A collection of extensions.
 	 * @return {EffectMaterial} This material.
 	 */
@@ -381,14 +387,10 @@ export class EffectMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * An enumeration of shader code section placeholders used by the {@link EffectPass}.
+	 * An enumeration of shader code placeholders.
 	 *
+	 * @deprecated Use EffectShaderSection instead.
 	 * @type {Object}
-	 * @property {String} FRAGMENT_HEAD - A placeholder for function and variable declarations inside the fragment shader.
-	 * @property {String} FRAGMENT_MAIN_UV - A placeholder for UV transformations inside the fragment shader.
-	 * @property {String} FRAGMENT_MAIN_IMAGE - A placeholder for color calculations inside the fragment shader.
-	 * @property {String} VERTEX_HEAD - A placeholder for function and variable declarations inside the vertex shader.
-	 * @property {String} VERTEX_MAIN_SUPPORT - A placeholder for supporting calculations inside the vertex shader.
 	 */
 
 	static get Section() {

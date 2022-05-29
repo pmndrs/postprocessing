@@ -2,7 +2,6 @@ import {
 	DataTexture3D,
 	FloatType,
 	HalfFloatType,
-	LinearEncoding,
 	LinearFilter,
 	NearestFilter,
 	sRGBEncoding,
@@ -64,21 +63,8 @@ export class LUT3DEffect extends Effect {
 		});
 
 		this.tetrahedralInterpolation = tetrahedralInterpolation;
-		this.inputEncoding = inputEncoding;
+		this.inputColorSpace = inputEncoding;
 		this.lut = lut;
-
-	}
-
-	/**
-	 * Returns the output encoding.
-	 *
-	 * @deprecated
-	 * @return {TextureEncoding} The encoding.
-	 */
-
-	getOutputEncoding() {
-
-		return Number(this.defines.get("OUTPUT_ENCODING"));
 
 	}
 
@@ -87,88 +73,58 @@ export class LUT3DEffect extends Effect {
 	 *
 	 * Set this to `LinearEncoding` if your LUT expects linear color input.
 	 *
+	 * @deprecated Use inputColorSpace instead.
 	 * @type {TextureEncoding}
 	 */
 
 	get inputEncoding() {
 
-		return Number(this.defines.get("INPUT_ENCODING"));
+		return this.inputColorSpace;
 
 	}
 
 	set inputEncoding(value) {
 
-		const lut = this.lut;
-		const defines = this.defines;
-		defines.set("INPUT_ENCODING", value.toFixed(0));
-
-		switch(value) {
-
-			case sRGBEncoding:
-				defines.set("linearToInputTexel(texel)", "LinearTosRGB(texel)");
-				break;
-
-			case LinearEncoding:
-				defines.set("linearToInputTexel(texel)", "texel");
-				break;
-
-			default:
-				console.error("Unsupported input encoding:", value);
-				break;
-
-		}
-
-		if(lut !== null) {
-
-			// The encoding of the input colors carries over if the LUT is linear.
-			const outputEncoding = (lut.encoding === LinearEncoding) ? value : lut.encoding;
-			defines.set("OUTPUT_ENCODING", outputEncoding.toFixed(0));
-
-			switch(outputEncoding) {
-
-				case sRGBEncoding:
-					defines.set("texelToLinear(texel)", "sRGBToLinear(texel)");
-					break;
-
-				case LinearEncoding:
-					defines.set("texelToLinear(texel)", "texel");
-					break;
-
-				default:
-					console.error("Unsupported output encoding:", outputEncoding);
-					break;
-
-			}
-
-		}
-
-		this.setChanged();
+		this.inputColorSpace = value;
 
 	}
 
 	/**
 	 * Returns the input encoding.
 	 *
-	 * @deprecated Use inputEncoding instead.
+	 * @deprecated Use inputColorSpace instead.
 	 * @return {TextureEncoding} The encoding.
 	 */
 
 	getInputEncoding() {
 
-		return this.inputEncoding;
+		return this.inputColorSpace;
 
 	}
 
 	/**
 	 * Sets the input encoding.
 	 *
-	 * @deprecated Use inputEncoding instead.
+	 * @deprecated Use inputColorSpace instead.
 	 * @param {TextureEncoding} value - The encoding.
 	 */
 
 	setInputEncoding(value) {
 
-		this.inputEncoding = value;
+		this.inputColorSpace = value;
+
+	}
+
+	/**
+	 * Returns the output encoding.
+	 *
+	 * @deprecated Use outputColorSpace instead.
+	 * @return {TextureEncoding} The encoding.
+	 */
+
+	getOutputEncoding() {
+
+		return this.outputColorSpace;
 
 	}
 
@@ -199,7 +155,6 @@ export class LUT3DEffect extends Effect {
 
 				// Remember settings that are backed by defines.
 				const tetrahedralInterpolation = this.tetrahedralInterpolation;
-				const inputEncoding = this.inputEncoding;
 
 				defines.clear();
 				defines.set("LUT_SIZE", Math.min(image.width, image.height).toFixed(16));
@@ -240,9 +195,8 @@ export class LUT3DEffect extends Effect {
 
 				}
 
-				// Refresh settings that depend on and affect the LUT.
+				// Refresh settings that affect the LUT.
 				this.tetrahedralInterpolation = tetrahedralInterpolation;
-				this.inputEncoding = inputEncoding;
 
 			}
 

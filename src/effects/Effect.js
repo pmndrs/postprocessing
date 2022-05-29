@@ -1,4 +1,4 @@
-import { BasicDepthPacking, EventDispatcher, Scene } from "three";
+import { BasicDepthPacking, EventDispatcher, LinearEncoding, Scene } from "three";
 import { BlendFunction, EffectAttribute } from "../enums";
 import { BlendMode } from "./blending";
 
@@ -126,6 +126,78 @@ export class Effect extends EventDispatcher {
 
 		this.blendMode = new BlendMode(blendFunction);
 		this.blendMode.addEventListener("change", (event) => this.setChanged());
+
+		/**
+		 * Backing data for {@link inputColorSpace}.
+		 *
+		 * @type {TextureEncoding}
+		 * @private
+		 */
+
+		this._inputColorSpace = LinearEncoding;
+
+		/**
+		 * Backing data for {@link outputColorSpace}.
+		 *
+		 * @type {TextureEncoding}
+		 * @private
+		 */
+
+		this._outputColorSpace = null;
+
+	}
+
+	/**
+	 * The input color space.
+	 *
+	 * @type {TextureEncoding}
+	 * @experimental
+	 */
+
+	get inputColorSpace() {
+
+		return this._inputColorSpace;
+
+	}
+
+	/**
+	 * @type {TextureEncoding}
+	 * @protected
+	 * @experimental
+	 */
+
+	set inputColorSpace(value) {
+
+		this._inputColorSpace = value;
+		this.setChanged();
+
+	}
+
+	/**
+	 * The output color space.
+	 *
+	 * Should only be changed if this effect converts the input colors to a different color space.
+	 *
+	 * @type {TextureEncoding}
+	 * @experimental
+	 */
+
+	get outputColorSpace() {
+
+		return this._outputColorSpace;
+
+	}
+
+	/**
+	 * @type {TextureEncoding}
+	 * @protected
+	 * @experimental
+	 */
+
+	set outputColorSpace(value) {
+
+		this._outputColorSpace = value;
+		this.setChanged();
 
 	}
 
