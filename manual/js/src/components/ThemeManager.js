@@ -18,12 +18,12 @@ export class ThemeManager {
 		if(enabled) {
 
 			localStorage.setItem("dark-mode", "1");
-			document.body.classList.add("dark");
+			document.documentElement.classList.add("dark");
 
 		} else {
 
 			localStorage.removeItem("dark-mode");
-			document.body.classList.remove("dark");
+			document.documentElement.classList.remove("dark");
 
 		}
 
