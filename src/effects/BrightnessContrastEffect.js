@@ -1,4 +1,4 @@
-import { Uniform } from "three";
+import { sRGBEncoding, Uniform } from "three";
 import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/brightness-contrast.frag";
@@ -29,6 +29,8 @@ export class BrightnessContrastEffect extends Effect {
 				["contrast", new Uniform(contrast)]
 			])
 		});
+
+		this.inputColorSpace = sRGBEncoding;
 
 	}
 
