@@ -43,7 +43,7 @@ export class LUT3DEffect extends Effect {
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SET] - The blend function of this effect.
 	 * @param {Boolean} [options.tetrahedralInterpolation=false] - Enables or disables tetrahedral interpolation.
-	 * @param {Encoding} [options.inputEncoding=sRGBEncoding] - LUT input encoding.
+	 * @param {TextureEncoding} [options.inputEncoding=sRGBEncoding] - LUT input encoding.
 	 */
 
 	constructor(lut, {

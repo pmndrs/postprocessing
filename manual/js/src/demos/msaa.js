@@ -110,10 +110,10 @@ window.addEventListener("load", () => load().then((assets) => {
 	folder.addInput(composer, "multisampling", {
 		label: "MSAA",
 		options: {
-			off: 0,
-			low: Math.min(2, maxSamples),
-			medium: Math.min(4, maxSamples),
-			high: Math.min(8, maxSamples)
+			"OFF": 0,
+			"LOW": Math.min(2, maxSamples),
+			"MEDIUM": Math.min(4, maxSamples),
+			"HIGH": Math.min(8, maxSamples)
 		}
 	});
 

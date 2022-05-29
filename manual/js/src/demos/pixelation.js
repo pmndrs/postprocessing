@@ -10,7 +10,6 @@ import {
 } from "three";
 
 import {
-	BlendFunction,
 	PixelationEffect,
 	EffectComposer,
 	EffectPass,
@@ -111,8 +110,6 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addInput(effect, "granularity", { min: 0, max: 20, step: 1 });
-	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 
