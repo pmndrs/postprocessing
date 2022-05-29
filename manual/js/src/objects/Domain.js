@@ -34,7 +34,7 @@ export function createEnvironment(envMap) {
 
 	const environment = new Group();
 	const material = new MeshStandardMaterial({
-		color: 0x3f3f3f,
+		color: 0x888888,
 		roughness: 0.0,
 		metalness: 1.0,
 		envMap

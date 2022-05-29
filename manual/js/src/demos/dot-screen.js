@@ -1,4 +1,5 @@
 import {
+	ColorManagement,
 	CubeTextureLoader,
 	FogExp2,
 	LoadingManager,
@@ -52,6 +53,8 @@ function load() {
 }
 
 window.addEventListener("load", () => load().then((assets) => {
+
+	ColorManagement.legacyMode = false;
 
 	// Renderer
 

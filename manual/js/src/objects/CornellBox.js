@@ -18,9 +18,9 @@ import {
 
 export function createLights() {
 
-	const ambientLight = new AmbientLight(0x160d03);
+	const ambientLight = new AmbientLight(0x523f1c);
 
-	const lightCeiling = new PointLight(0xffc370, 1, 3);
+	const lightCeiling = new PointLight(0xfee2b0, 1, 3);
 	lightCeiling.position.set(0, 0.93, 0);
 	lightCeiling.castShadow = true;
 	lightCeiling.shadow.bias = -0.035;

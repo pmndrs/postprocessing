@@ -1,4 +1,5 @@
 import {
+	ColorManagement,
 	LoadingManager,
 	PerspectiveCamera,
 	PlaneGeometry,
@@ -45,6 +46,8 @@ function load() {
 }
 
 window.addEventListener("load", () => load().then((assets) => {
+
+	ColorManagement.legacyMode = false;
 
 	// Renderer
 

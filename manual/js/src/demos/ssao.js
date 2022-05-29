@@ -1,5 +1,6 @@
 import {
 	Color,
+	ColorManagement,
 	CubeTextureLoader,
 	FogExp2,
 	LoadingManager,
@@ -56,6 +57,8 @@ function load() {
 
 window.addEventListener("load", () => load().then((assets) => {
 
+	ColorManagement.legacyMode = false;
+
 	// Renderer
 
 	const renderer = new WebGLRenderer({
@@ -86,7 +89,7 @@ window.addEventListener("load", () => load().then((assets) => {
 	// Scene, Lights, Objects
 
 	const scene = new Scene();
-	scene.fog = new FogExp2(0x0a0809, 0.06);
+	scene.fog = new FogExp2(0x373134, 0.06);
 	scene.background = assets.get("sky");
 	scene.add(Domain.createLights());
 	scene.add(Domain.createEnvironment(scene.background));

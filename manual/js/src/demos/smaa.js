@@ -1,4 +1,5 @@
 import {
+	ColorManagement,
 	CubeTextureLoader,
 	LoadingManager,
 	PerspectiveCamera,
@@ -56,6 +57,8 @@ function load() {
 }
 
 window.addEventListener("load", () => load().then((assets) => {
+
+	ColorManagement.legacyMode = false;
 
 	// Renderer
 

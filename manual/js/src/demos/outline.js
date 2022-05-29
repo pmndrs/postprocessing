@@ -1,4 +1,5 @@
 import {
+	ColorManagement,
 	AnimationMixer,
 	Color,
 	CubeTextureLoader,
@@ -85,6 +86,8 @@ function load() {
 }
 
 window.addEventListener("load", () => load().then((assets) => {
+
+	ColorManagement.legacyMode = false;
 
 	// Renderer
 
