@@ -1,4 +1,4 @@
-import { Uniform, Vector2 } from "three";
+import { Uniform, Vector2, Vector4 } from "three";
 import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/pixelation.frag";
@@ -22,7 +22,7 @@ export class PixelationEffect extends Effect {
 		super("PixelationEffect", fragmentShader, {
 			uniforms: new Map([
 				["active", new Uniform(false)],
-				["d", new Uniform(new Vector2())]
+				["d", new Uniform(new Vector4())]
 			])
 		});
 
@@ -36,13 +36,13 @@ export class PixelationEffect extends Effect {
 		this.resolution = new Vector2();
 
 		/**
-		 * The pixel granularity.
+		 * Backing data for {@link granularity}.
 		 *
 		 * @type {Number}
 		 * @private
 		 */
 
-		this.d = 0;
+		this._granularity = 0;
 		this.granularity = granularity;
 
 	}
@@ -57,7 +57,7 @@ export class PixelationEffect extends Effect {
 
 	get granularity() {
 
-		return this.d;
+		return this._granularity;
 
 	}
 
@@ -71,7 +71,7 @@ export class PixelationEffect extends Effect {
 
 		}
 
-		this.d = d;
+		this._granularity = d;
 		this.uniforms.get("active").value = (d > 0);
 		this.setSize(this.resolution.width, this.resolution.height);
 
@@ -112,8 +112,13 @@ export class PixelationEffect extends Effect {
 
 	setSize(width, height) {
 
-		this.resolution.set(width, height);
-		this.uniforms.get("d").value.setScalar(this.d).divide(this.resolution);
+		const resolution = this.resolution;
+		resolution.set(width, height);
+
+		const d = this.granularity;
+		const x = d / resolution.x;
+		const y = d / resolution.y;
+		this.uniforms.get("d").value.set(x, y, 1.0 / x, 1.0 / y);
 
 	}
 
