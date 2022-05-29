@@ -13,21 +13,22 @@
 		<base href="{{ .Site.BaseURL }}">
 		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
+		{{/* Prevent white flash on navigation in dark mode. */}}
+		<script>document.documentElement.classList[localStorage.getItem("dark-mode")?"add":"remove"]("dark")</script>
+
 		{{ with resources.Get "css/index.css" }}
 			{{ $stylesheet := . | fingerprint }}
 			<link rel="stylesheet" href="{{ $stylesheet.RelPermalink }}" integrity="{{ $stylesheet.Data.Integrity }}">
 		{{ end }}
 		{{ block "styles" . }}{{ end }}
-		<style>body { visibility: hidden; opacity: 0; }</style>
-		<noscript><style>body { visibility: visible; opacity: 1; }</style></noscript>
 
-		{{ with resources.Get "js/libs/three.js" }}
-			{{ $script := . | fingerprint }}
-			<script src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
-		{{ end }}
 		{{ with resources.Get "js/index.js" }}
 			{{ $script := . | fingerprint }}
-			<script src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
+			<script defer src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
+		{{ end }}
+		{{ with resources.Get "js/libs/three.js" }}
+			{{ $script := . | fingerprint }}
+			<script defer src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
 		{{ end }}
 		{{ block "scripts" . }}{{ end }}
 

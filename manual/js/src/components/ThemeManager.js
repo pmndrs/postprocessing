@@ -38,10 +38,6 @@ export class ThemeManager {
 		mediaQuery.addEventListener("change", (e) => this.setDarkModeEnabled(e.matches));
 		this.setDarkModeEnabled(mediaQuery.matches || localStorage.getItem("dark-mode") !== null);
 
-		// Prevent white flash during navigation.
-		document.body.style.visibility = "visible";
-		document.body.style.opacity = 1;
-
 	}
 
 }
