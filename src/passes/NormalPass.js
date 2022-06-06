@@ -57,7 +57,7 @@ export class NormalPass extends Pass {
 		 * A render target for the scene normals.
 		 *
 		 * @type {WebGLRenderTarget}
-		 * @private
+		 * @readonly
 		 */
 
 		this.renderTarget = renderTarget;

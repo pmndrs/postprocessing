@@ -41,7 +41,7 @@ export class LuminancePass extends Pass {
 		 * The luminance render target.
 		 *
 		 * @type {WebGLRenderTarget}
-		 * @private
+		 * @readonly
 		 */
 
 		this.renderTarget = renderTarget;

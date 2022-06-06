@@ -47,7 +47,7 @@ export class DepthDownsamplingPass extends Pass {
 		 * Normals are stored as RGB and depth as alpha.
 		 *
 		 * @type {WebGLRenderTarget}
-		 * @private
+		 * @readonly
 		 */
 
 		this.renderTarget = new WebGLRenderTarget(1, 1, {

@@ -59,7 +59,7 @@ export class DepthPass extends Pass {
 		 * A render target that contains the scene depth.
 		 *
 		 * @type {WebGLRenderTarget}
-		 * @private
+		 * @readonly
 		 */
 
 		this.renderTarget = renderTarget;
