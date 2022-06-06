@@ -77,7 +77,6 @@ export class BloomEffect extends Effect {
 		 */
 
 		this.luminancePass = new LuminancePass({
-			renderTarget: this.renderTarget,
 			colorOutput: true
 		});
 
@@ -373,8 +372,8 @@ export class BloomEffect extends Effect {
 
 		if(luminancePass.enabled) {
 
-			this.luminancePass.render(renderer, inputBuffer, renderTarget);
-			this.blurPass.render(renderer, renderTarget, renderTarget);
+			luminancePass.render(renderer, inputBuffer);
+			this.blurPass.render(renderer, luminancePass.renderTarget, renderTarget);
 
 		} else {
 
@@ -396,7 +395,10 @@ export class BloomEffect extends Effect {
 		const resolution = this.resolution;
 		resolution.setBaseSize(width, height);
 		this.renderTarget.setSize(resolution.width, resolution.height);
-		this.luminancePass.resolution.copy(resolution);
+		this.blurPass.resolution.copy(resolution);
+
+		// Use the full resolution to reduce shimmering.
+		this.luminancePass.setSize(width, height);
 
 	}
 
