@@ -16,15 +16,11 @@ export class NavigationManager {
 		sessionStorage.removeItem("nav-scroll");
 		sessionStorage.removeItem("main-scroll");
 
-		let saveMainScroll = true;
+		let saveMainScroll = true, saveNavScroll = true;
+		function resetMainScroll() { saveMainScroll = false; }
+		function resetNavScroll() { saveNavScroll = false; }
 
-		function resetMainScroll() {
-
-			saveMainScroll = false;
-
-		}
-
-		for(const a of sidebar.querySelectorAll("a")) {
+		for(const a of document.querySelectorAll("a")) {
 
 			if(a.target !== "_blank") {
 
@@ -34,9 +30,15 @@ export class NavigationManager {
 
 		}
 
+		document.querySelector(".page-title a").addEventListener("click", resetNavScroll);
+
 		window.addEventListener("beforeunload", () => {
 
-			sessionStorage.setItem("nav-scroll", nav.scrollTop.toFixed(0));
+			if(saveNavScroll) {
+
+				sessionStorage.setItem("nav-scroll", nav.scrollTop.toFixed(0));
+
+			}
 
 			if(saveMainScroll) {
 
