@@ -10,7 +10,7 @@ import {
 } from "three";
 
 import { Selection } from "../core";
-import { EffectAttribute, DepthTestStrategy } from "../enums";
+import { DepthTestStrategy, EffectAttribute } from "../enums";
 import { DepthMaskMaterial } from "../materials";
 import { ClearPass, DepthPass, ShaderPass } from "../passes";
 import { BloomEffect } from "./BloomEffect";
@@ -102,6 +102,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 		 * The default layer of this selection is 11.
 		 *
 		 * @type {Selection}
+		 * @readonly
 		 */
 
 		this.selection = new Selection();
@@ -304,11 +305,8 @@ export class SelectiveBloomEffect extends BloomEffect {
 	setSize(width, height) {
 
 		super.setSize(width, height);
-
-		this.clearPass.setSize(width, height);
-		this.depthPass.setSize(width, height);
-		this.depthMaskPass.setSize(width, height);
 		this.renderTargetMasked.setSize(width, height);
+		this.depthPass.setSize(width, height);
 
 	}
 

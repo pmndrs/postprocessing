@@ -73,6 +73,7 @@ export class BloomEffect extends Effect {
 		 * This pass can be disabled to skip luminance filtering.
 		 *
 		 * @type {LuminancePass}
+		 * @readonly
 		 */
 
 		this.luminancePass = new LuminancePass({
@@ -87,10 +88,19 @@ export class BloomEffect extends Effect {
 		 * A blur pass.
 		 *
 		 * @type {KawaseBlurPass}
+		 * @readonly
 		 */
 
-		this.blurPass = new KawaseBlurPass({ resolutionScale, resolutionX, resolutionY, kernelSize });
-		const resolution = this.blurPass.resolution;
+		this.blurPass = new KawaseBlurPass({ kernelSize });
+
+		/**
+		 * The render resolution.
+		 *
+		 * @type {Resolution}
+		 * @readonly
+		 */
+
+		const resolution = this.resolution = new Resolution(this, resolutionX, resolutionY, resolutionScale);
 		resolution.addEventListener("change", (e) => this.setSize(resolution.baseWidth, resolution.baseHeight));
 
 	}
@@ -121,18 +131,6 @@ export class BloomEffect extends Effect {
 	}
 
 	/**
-	 * The resolution of this effect.
-	 *
-	 * @type {Resolution}
-	 */
-
-	get resolution() {
-
-		return this.blurPass.resolution;
-
-	}
-
-	/**
 	 * Returns the resolution settings.
 	 *
 	 * @deprecated Use resolution instead.
@@ -141,7 +139,7 @@ export class BloomEffect extends Effect {
 
 	getResolution() {
 
-		return this.blurPass.resolution;
+		return this.resolution;
 
 	}
 
@@ -371,8 +369,9 @@ export class BloomEffect extends Effect {
 	update(renderer, inputBuffer, deltaTime) {
 
 		const renderTarget = this.renderTarget;
+		const luminancePass = this.luminancePass;
 
-		if(this.luminancePass.enabled) {
+		if(luminancePass.enabled) {
 
 			this.luminancePass.render(renderer, inputBuffer, renderTarget);
 			this.blurPass.render(renderer, renderTarget, renderTarget);
@@ -412,6 +411,7 @@ export class BloomEffect extends Effect {
 	initialize(renderer, alpha, frameBufferType) {
 
 		this.blurPass.initialize(renderer, alpha, frameBufferType);
+		this.luminancePass.initialize(renderer, alpha, frameBufferType);
 
 		if(frameBufferType !== undefined) {
 

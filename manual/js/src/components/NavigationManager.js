@@ -8,7 +8,6 @@ export class NavigationManager {
 
 	initialize() {
 
-		const sidebar = document.querySelector(".sidebar");
 		const nav = document.querySelector(".navigation");
 		const main = document.getElementById("main");
 		nav.scrollTop = Number(sessionStorage.getItem("nav-scroll"));
