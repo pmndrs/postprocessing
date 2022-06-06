@@ -92,9 +92,8 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	// Post Processing
 
-	const composer = new EffectComposer(renderer);
-
 	const effect = new HueSaturationEffect();
+	const composer = new EffectComposer(renderer);
 	composer.addPass(new RenderPass(scene, camera));
 	composer.addPass(new EffectPass(camera, effect));
 

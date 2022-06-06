@@ -91,8 +91,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	// Post Processing
 
-	const context = renderer.getContext();
-	const maxSamples = context.getParameter(context.MAX_SAMPLES);
+	const maxSamples = renderer.capabilities.maxSamples;
 	const composer = new EffectComposer(renderer, {
 		multisampling: Math.min(4, maxSamples)
 	});

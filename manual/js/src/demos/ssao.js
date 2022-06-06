@@ -97,9 +97,8 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	// Post Processing
 
-	const context = renderer.getContext();
 	const composer = new EffectComposer(renderer, {
-		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
+		multisampling: Math.min(4, renderer.capabilities.maxSamples)
 	});
 
 	const normalPass = new NormalPass(scene, camera);

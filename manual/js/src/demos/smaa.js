@@ -102,7 +102,6 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	// Post Processing
 
-	const composer = new EffectComposer(renderer);
 
 	const effect = new SMAAEffect({
 		preset: SMAAPreset.MEDIUM,
@@ -132,6 +131,7 @@ window.addEventListener("load", () => load().then((assets) => {
 	smaaWeightsDebugPass.fullscreenMaterial.encodeOutput = false;
 	// END DEBUG
 
+	const composer = new EffectComposer(renderer);
 	composer.addPass(new RenderPass(scene, camera));
 	composer.addPass(effectPass);
 	composer.addPass(smaaEdgesDebugPass);
