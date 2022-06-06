@@ -9,7 +9,7 @@ import { Pass } from "./Pass";
  *
  * @private
  * @param {String} prefix - A prefix.
- * @param {String[]} substrings - The substrings.
+ * @param {Iterable<String>} substrings - The substrings.
  * @param {Map<String, String>} strings - A collection of named strings.
  */
 
@@ -69,7 +69,7 @@ function integrateEffect(prefix, effect, data) {
 
 	} else {
 
-		const functionRegExp = /(?:\w+\s+(\w+)\([\w\s,]*\)\s*{[^}]+})/g;
+		const functionRegExp = /\w+\s+(\w+)\([\w\s,]*\)\s*{/g;
 
 		const shaderParts = data.shaderParts;
 		let fragmentHead = shaderParts.get(Section.FRAGMENT_HEAD) ?? "";
@@ -78,7 +78,8 @@ function integrateEffect(prefix, effect, data) {
 		let vertexHead = shaderParts.get(Section.VERTEX_HEAD) ?? "";
 		let vertexMainSupport = shaderParts.get(Section.VERTEX_MAIN_SUPPORT) ?? "";
 
-		let varyings = [], names = [];
+		const varyings = new Set();
+		const names = new Set();
 
 		if(mainUvExists) {
 
@@ -95,15 +96,45 @@ function integrateEffect(prefix, effect, data) {
 			vertexMainSupport += needsUv ? "vUv);\n" : ");\n";
 
 			// Collect names of varyings and functions.
-			varyings = varyings.concat([...vertexShader.matchAll(/(?:varying\s+\w+\s+(\w*))/g)].map(m => m[1]));
-			names = names.concat(varyings).concat([...vertexShader.matchAll(functionRegExp)].map(m => m[1]));
+			for(const m of vertexShader.matchAll(/(?:varying\s+\w+\s+(\w*))/g)) {
+
+				data.varyings.add(m[1]);
+				varyings.add(m[1]);
+				names.add(m[1]);
+
+			}
+
+			for(const m of vertexShader.matchAll(functionRegExp)) {
+
+				names.add(m[1]);
+
+			}
 
 		}
 
-		// Assemble all names while ignoring parameters of function-like macros.
-		names = names.concat([...fragmentShader.matchAll(functionRegExp)].map(m => m[1]));
-		names = names.concat([...effect.defines.keys()].map((s) => s.replace(/\([\w\s,]*\)/g, "")));
-		names = names.concat([...effect.uniforms.keys()]);
+		for(const m of fragmentShader.matchAll(functionRegExp)) {
+
+			names.add(m[1]);
+
+		}
+
+		for(const d of effect.defines.keys()) {
+
+			// Ignore parameters of function-like macros.
+			names.add(d.replace(/\([\w\s,]*\)/g, ""));
+
+		}
+
+		for(const u of effect.uniforms.keys()) {
+
+			names.add(u);
+
+		}
+
+		// Remove potential false positives.
+		names.delete("while");
+		names.delete("for");
+		names.delete("if");
 
 		// Store prefixed uniforms and macros.
 		effect.uniforms.forEach((val, key) => data.uniforms.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), val));
@@ -177,8 +208,6 @@ function integrateEffect(prefix, effect, data) {
 		shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, fragmentMainImage);
 		shaderParts.set(Section.VERTEX_HEAD, vertexHead);
 		shaderParts.set(Section.VERTEX_MAIN_SUPPORT, vertexMainSupport);
-
-		data.varyings = data.varyings.concat(varyings);
 
 		if(effect.extensions !== null) {
 
@@ -479,7 +508,7 @@ export class EffectPass extends Pass {
 		data.shaderParts.forEach((value, key, map) => map.set(key, value.trim().replace(/^#/, "\n#")));
 
 		this.uniformCount = data.uniforms.size;
-		this.varyingCount = data.varyings.length;
+		this.varyingCount = data.varyings.size;
 		this.skipRendering = (id === 0);
 		this.needsSwap = !this.skipRendering;
 		this.fullscreenMaterial.setShaderData(data);
