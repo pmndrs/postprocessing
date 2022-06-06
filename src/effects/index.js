@@ -10,6 +10,7 @@ export * from "./DepthEffect";
 export * from "./DepthOfFieldEffect";
 export * from "./DotScreenEffect";
 export * from "./Effect";
+export * from "./FXAAEffect";
 export * from "./GammaCorrectionEffect";
 export * from "./GlitchEffect";
 export * from "./GodRaysEffect";
