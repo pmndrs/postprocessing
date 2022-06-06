@@ -77,10 +77,11 @@ export class EffectShaderData {
 		/**
 		 * A list of varyings.
 		 *
-		 * @type {String[]}
+		 * @type {Set<String>}
+		 * @readonly
 		 */
 
-		this.varyings = [];
+		this.varyings = new Set();
 
 		/**
 		 * Indicates whether the shader transforms UV coordinates in the fragment shader.
