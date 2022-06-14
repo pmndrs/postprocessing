@@ -66,8 +66,7 @@ export class NormalPass extends Pass {
 
 			this.renderTarget = new WebGLRenderTarget(1, 1, {
 				minFilter: NearestFilter,
-				magFilter: NearestFilter,
-				stencilBuffer: false
+				magFilter: NearestFilter
 			});
 
 			this.renderTarget.texture.name = "NormalPass.Target";

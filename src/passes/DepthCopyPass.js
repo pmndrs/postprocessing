@@ -44,7 +44,6 @@ export class DepthCopyPass extends Pass {
 			type: (depthPacking === RGBADepthPacking) ? UnsignedByteType : FloatType,
 			minFilter: NearestFilter,
 			magFilter: NearestFilter,
-			stencilBuffer: false,
 			depthBuffer: false
 		});
 

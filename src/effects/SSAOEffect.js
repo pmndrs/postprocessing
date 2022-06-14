@@ -1,13 +1,4 @@
-import {
-	BasicDepthPacking,
-	Color,
-	LinearFilter,
-	RepeatWrapping,
-	RGBAFormat,
-	Uniform,
-	WebGLRenderTarget
-} from "three";
-
+import { BasicDepthPacking, Color, RepeatWrapping, RGBAFormat, Uniform, WebGLRenderTarget } from "three";
 import { Resolution } from "../core/Resolution";
 import { BlendFunction, EffectAttribute } from "../enums";
 import { NoiseTexture } from "../textures/NoiseTexture";
@@ -129,15 +120,8 @@ export class SSAOEffect extends Effect {
 		 * @private
 		 */
 
-		this.renderTargetAO = new WebGLRenderTarget(1, 1, {
-			minFilter: LinearFilter,
-			magFilter: LinearFilter,
-			stencilBuffer: false,
-			depthBuffer: false
-		});
-
+		this.renderTargetAO = new WebGLRenderTarget(1, 1, { depthBuffer: false });
 		this.renderTargetAO.texture.name = "AO.Target";
-		this.renderTargetAO.texture.generateMipmaps = false;
 		this.uniforms.get("aoBuffer").value = this.renderTargetAO.texture;
 
 		/**

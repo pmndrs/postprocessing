@@ -1,4 +1,4 @@
-import { BasicDepthPacking, LinearFilter, sRGBEncoding, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
+import { BasicDepthPacking, sRGBEncoding, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
 import { BokehMaterial, CircleOfConfusionMaterial, MaskMaterial } from "../materials";
 import { ColorChannel, EffectAttribute, KernelSize, MaskFunction } from "../enums";
 import { Resolution } from "../core";
@@ -76,15 +76,8 @@ export class DepthOfFieldEffect extends Effect {
 		 * @private
 		 */
 
-		this.renderTarget = new WebGLRenderTarget(1, 1, {
-			minFilter: LinearFilter,
-			magFilter: LinearFilter,
-			stencilBuffer: false,
-			depthBuffer: false
-		});
-
+		this.renderTarget = new WebGLRenderTarget(1, 1, { depthBuffer: false });
 		this.renderTarget.texture.name = "DoF.Intermediate";
-		this.renderTarget.texture.generateMipmaps = false;
 
 		/**
 		 * A render target for masked background colors (premultiplied with CoC).

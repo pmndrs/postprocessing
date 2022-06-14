@@ -1,7 +1,6 @@
 import {
 	BasicDepthPacking,
 	Color,
-	LinearFilter,
 	NotEqualDepth,
 	EqualDepth,
 	RGBADepthPacking,
@@ -86,15 +85,8 @@ export class SelectiveBloomEffect extends BloomEffect {
 		 * @private
 		 */
 
-		this.renderTargetMasked = new WebGLRenderTarget(1, 1, {
-			minFilter: LinearFilter,
-			magFilter: LinearFilter,
-			stencilBuffer: false,
-			depthBuffer: false
-		});
-
+		this.renderTargetMasked = new WebGLRenderTarget(1, 1, { depthBuffer: false });
 		this.renderTargetMasked.texture.name = "Bloom.Masked";
-		this.renderTargetMasked.texture.generateMipmaps = false;
 
 		/**
 		 * A selection of objects.

@@ -53,7 +53,6 @@ export class DepthDownsamplingPass extends Pass {
 		this.renderTarget = new WebGLRenderTarget(1, 1, {
 			minFilter: NearestFilter,
 			magFilter: NearestFilter,
-			stencilBuffer: false,
 			depthBuffer: false,
 			type: FloatType
 		});

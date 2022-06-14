@@ -1,4 +1,4 @@
-import { LinearFilter, sRGBEncoding, UnsignedByteType, WebGLRenderTarget } from "three";
+import { sRGBEncoding, UnsignedByteType, WebGLRenderTarget } from "three";
 import { CopyMaterial, GaussianBlurMaterial } from "../materials";
 import { Resolution } from "../core";
 import { Pass } from "./Pass";
@@ -37,13 +37,7 @@ export class GaussianBlurPass extends Pass {
 		 * @private
 		 */
 
-		this.renderTargetA = new WebGLRenderTarget(1, 1, {
-			minFilter: LinearFilter,
-			magFilter: LinearFilter,
-			stencilBuffer: false,
-			depthBuffer: false
-		});
-
+		this.renderTargetA = new WebGLRenderTarget(1, 1, { depthBuffer: false });
 		this.renderTargetA.texture.name = "Blur.Target.A";
 
 		/**

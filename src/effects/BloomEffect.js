@@ -56,15 +56,8 @@ export class BloomEffect extends Effect {
 		 * @private
 		 */
 
-		this.renderTarget = new WebGLRenderTarget(1, 1, {
-			minFilter: LinearFilter,
-			magFilter: LinearFilter,
-			stencilBuffer: false,
-			depthBuffer: false
-		});
-
+		this.renderTarget = new WebGLRenderTarget(1, 1, { depthBuffer: false });
 		this.renderTarget.texture.name = "Bloom.Target";
-		this.renderTarget.texture.generateMipmaps = false;
 		this.uniforms.get("map").value = this.renderTarget.texture;
 
 		/**

@@ -35,7 +35,6 @@ export class AdaptiveLuminancePass extends Pass {
 		this.renderTargetPrevious = new WebGLRenderTarget(1, 1, {
 			minFilter: NearestFilter,
 			magFilter: NearestFilter,
-			stencilBuffer: false,
 			depthBuffer: false
 		});
 

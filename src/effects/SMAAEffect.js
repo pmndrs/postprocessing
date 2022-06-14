@@ -83,12 +83,7 @@ export class SMAAEffect extends Effect {
 		 * @private
 		 */
 
-		this.renderTargetEdges = new WebGLRenderTarget(1, 1, {
-			minFilter: LinearFilter,
-			stencilBuffer: false,
-			depthBuffer: false
-		});
-
+		this.renderTargetEdges = new WebGLRenderTarget(1, 1, { depthBuffer: false });
 		this.renderTargetEdges.texture.name = "SMAA.Edges";
 
 		/**

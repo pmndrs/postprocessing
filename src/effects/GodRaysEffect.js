@@ -2,7 +2,6 @@ import {
 	BasicDepthPacking,
 	Color,
 	DepthTexture,
-	LinearFilter,
 	Matrix4,
 	Scene,
 	sRGBEncoding,
@@ -121,13 +120,7 @@ export class GodRaysEffect extends Effect {
 		 * @private
 		 */
 
-		this.renderTargetA = new WebGLRenderTarget(1, 1, {
-			minFilter: LinearFilter,
-			magFilter: LinearFilter,
-			stencilBuffer: false,
-			depthBuffer: false
-		});
-
+		this.renderTargetA = new WebGLRenderTarget(1, 1, { depthBuffer: false });
 		this.renderTargetA.texture.name = "GodRays.Target.A";
 
 		/**
@@ -148,9 +141,8 @@ export class GodRaysEffect extends Effect {
 		 * @private
 		 */
 
-		this.renderTargetLight = this.renderTargetA.clone();
+		this.renderTargetLight = new WebGLRenderTarget(1, 1);
 		this.renderTargetLight.texture.name = "GodRays.Light";
-		this.renderTargetLight.depthBuffer = true;
 		this.renderTargetLight.depthTexture = new DepthTexture();
 
 		/**
