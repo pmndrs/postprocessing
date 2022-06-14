@@ -12,6 +12,7 @@ export * from "./KawaseBlurPass";
 export * from "./LambdaPass";
 export * from "./LuminancePass";
 export * from "./MaskPass";
+export * from "./MipmapBlurPass";
 export * from "./NormalPass";
 export * from "./Pass";
 export * from "./RenderPass";
