@@ -24,43 +24,26 @@ export class ShaderPass extends Pass {
 		this.fullscreenMaterial = material;
 
 		/**
-		 * The input buffer uniform.
+		 * The name of the input buffer uniform.
+		 *
+		 * Most fullscreen materials modify texels from an input texture. This pass automatically assigns the main input
+		 * buffer to the uniform identified by the input name.
 		 *
 		 * @type {String}
-		 * @private
 		 */
 
-		this.inputBufferUniform = null;
-		this.setInput(input);
+		this.input = input;
 
 	}
 
 	/**
 	 * Sets the name of the input buffer uniform.
 	 *
-	 * Most fullscreen materials modify texels from an input texture. This pass automatically assigns the main input
-	 * buffer to the uniform identified by the given name.
-	 *
 	 * @param {String} input - The name of the input buffer uniform.
+	 * @deprecated Use input instead.
 	 */
 
-	setInput(input) {
-
-		this.inputBufferUniform = null;
-
-		if(this.fullscreenMaterial !== null) {
-
-			const uniforms = this.fullscreenMaterial.uniforms;
-
-			if(uniforms !== undefined && uniforms[input] !== undefined) {
-
-				this.inputBufferUniform = uniforms[input];
-
-			}
-
-		}
-
-	}
+	setInput(input) {}
 
 	/**
 	 * Renders the effect.
@@ -74,9 +57,11 @@ export class ShaderPass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
-		if(this.inputBufferUniform !== null && inputBuffer !== null) {
+		const uniforms = this.fullscreenMaterial.uniforms;
 
-			this.inputBufferUniform.value = inputBuffer.texture;
+		if(inputBuffer !== null && uniforms !== undefined && uniforms[this.input] !== undefined) {
+
+			uniforms[this.input].value = inputBuffer.texture;
 
 		}
 
