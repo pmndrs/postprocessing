@@ -281,24 +281,6 @@ export class EffectPass extends Pass {
 		this.skipRendering = false;
 
 		/**
-		 * The amount of shader uniforms that this pass uses.
-		 *
-		 * @type {Number}
-		 * @private
-		 */
-
-		this.uniformCount = 0;
-
-		/**
-		 * The amount of shader varyings that this pass uses.
-		 *
-		 * @type {Number}
-		 * @private
-		 */
-
-		this.varyingCount = 0;
-
-		/**
 		 * A time offset.
 		 *
 		 * Elapsed time will start at this value.
@@ -381,39 +363,6 @@ export class EffectPass extends Pass {
 		for(const effect of this.effects) {
 
 			effect.addEventListener("change", this.listener);
-
-		}
-
-	}
-
-	/**
-	 * Checks if the required resources are within limits.
-	 *
-	 * @private
-	 */
-
-	verifyResources() {
-
-		if(this.renderer !== null) {
-
-			const capabilities = this.renderer.capabilities;
-			let max = Math.min(capabilities.maxFragmentUniforms, capabilities.maxVertexUniforms);
-
-			if(this.uniformCount > max) {
-
-				console.warn("The current rendering context doesn't support more than " +
-					max + " uniforms, but " + this.uniformCount + " were defined");
-
-			}
-
-			max = capabilities.maxVaryings;
-
-			if(this.varyingCount > max) {
-
-				console.warn("The current rendering context doesn't support more than " +
-					max + " varyings, but " + this.varyingCount + " were defined");
-
-			}
 
 		}
 
@@ -507,8 +456,6 @@ export class EffectPass extends Pass {
 		// Ensure that leading preprocessor directives start on a new line.
 		data.shaderParts.forEach((value, key, map) => map.set(key, value.trim().replace(/^#/, "\n#")));
 
-		this.uniformCount = data.uniforms.size;
-		this.varyingCount = data.varyings.size;
 		this.skipRendering = (id === 0);
 		this.needsSwap = !this.skipRendering;
 		this.fullscreenMaterial.setShaderData(data);
@@ -522,7 +469,6 @@ export class EffectPass extends Pass {
 	recompile() {
 
 		this.updateMaterial();
-		this.verifyResources();
 
 	}
 
@@ -629,7 +575,6 @@ export class EffectPass extends Pass {
 
 		// Initialize the fullscreen material.
 		this.updateMaterial();
-		this.verifyResources();
 
 		if(frameBufferType !== undefined && frameBufferType !== UnsignedByteType) {
 
