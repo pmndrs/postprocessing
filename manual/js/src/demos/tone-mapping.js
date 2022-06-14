@@ -100,6 +100,7 @@ window.addEventListener("load", () => load().then((assets) => {
 	});
 
 	const effect = new ToneMappingEffect({
+		blendFunction: BlendFunction.NORMAL,
 		mode: ToneMappingMode.REINHARD2_ADAPTIVE,
 		resolution: 256,
 		whitePoint: 16.0,

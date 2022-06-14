@@ -98,7 +98,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	// Post Processing
 
-	const effect = new FXAAEffect();
+	const effect = new FXAAEffect({ blendFunction: BlendFunction.NORMAL });
 	const composer = new EffectComposer(renderer);
 	composer.addPass(new RenderPass(scene, camera));
 	composer.addPass(new EffectPass(camera, effect));

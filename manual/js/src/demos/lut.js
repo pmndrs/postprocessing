@@ -186,6 +186,7 @@ window.addEventListener("load", () => load().then((assets) => {
 	const effect = renderer.capabilities.isWebGL2 ? new LUT3DEffect(lut) :
 		new LUT3DEffect(lut.convertToUint8().toDataTexture());
 
+	effect.blendMode.blendFunction = BlendFunction.NORMAL;
 	const composer = new EffectComposer(renderer);
 	composer.addPass(new RenderPass(scene, camera));
 	composer.addPass(new EffectPass(camera, effect));

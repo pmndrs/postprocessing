@@ -104,6 +104,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 
 	const effect = new SMAAEffect({
+		blendFunction: BlendFunction.NORMAL,
 		preset: SMAAPreset.MEDIUM,
 		edgeDetectionMode: EdgeDetectionMode.COLOR,
 		predicationMode: PredicationMode.DEPTH

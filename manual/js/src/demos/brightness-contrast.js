@@ -92,7 +92,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	// Post Processing
 
-	const effect = new BrightnessContrastEffect();
+	const effect = new BrightnessContrastEffect({ blendFunction: BlendFunction.NORMAL });
 	const composer = new EffectComposer(renderer);
 	composer.addPass(new RenderPass(scene, camera));
 	composer.addPass(new EffectPass(camera, effect));
