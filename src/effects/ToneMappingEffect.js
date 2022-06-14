@@ -1,4 +1,4 @@
-import { LinearFilter, LinearMipmapLinearFilter, Uniform, WebGLRenderTarget } from "three";
+import { LinearMipmapLinearFilter, Uniform, WebGLRenderTarget } from "three";
 import { AdaptiveLuminancePass, LuminancePass } from "../passes";
 import { BlendFunction, ToneMappingMode } from "../enums";
 import { Effect } from "./Effect";
