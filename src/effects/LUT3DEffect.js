@@ -30,7 +30,7 @@ import fragmentShader from "./glsl/lut-3d.frag";
  * https://github.com/AcademySoftwareFoundation/OpenColorIO/blob/master/src/OpenColorIO/ops/lut3d/
  * https://github.com/gkjohnson/threejs-sandbox/tree/master/3d-lut
  *
- * TODO Replace DataTexture3D with Data3DTexture.
+ * TODO Replace DataTexture3D with Data3DTexture and rename inputEncoding to inputColorSpace.
  */
 
 export class LUT3DEffect extends Effect {
