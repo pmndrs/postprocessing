@@ -14,6 +14,21 @@
 #endif
 
 uniform sampler2D inputBuffer;
+uniform vec2 cameraNearFar;
+
+float getViewZ(const in float depth) {
+
+	#ifdef PERSPECTIVE_CAMERA
+
+		return perspectiveDepthToViewZ(depth, cameraNearFar.x, cameraNearFar.y);
+
+	#else
+
+		return orthographicDepthToViewZ(depth, cameraNearFar.x, cameraNearFar.y);
+
+	#endif
+
+}
 
 varying vec2 vUv;
 
@@ -41,7 +56,15 @@ void main() {
 
 	#endif
 
-	depth = clamp(depth, 0.0, 1.0);
+	bool isMaxDepth = (depth.x == 1.0);
+
+	#ifdef PERSPECTIVE_CAMERA
+
+		// Linearize.
+		depth.x = viewZToOrthographicDepth(getViewZ(depth.x), cameraNearFar.x, cameraNearFar.y);
+		depth.y = viewZToOrthographicDepth(getViewZ(depth.y), cameraNearFar.x, cameraNearFar.y);
+
+	#endif
 
 	#if DEPTH_TEST_STRATEGY == 0
 
@@ -51,12 +74,12 @@ void main() {
 	#elif DEPTH_TEST_STRATEGY == 1
 
 		// Always keep max depth.
-		bool keep = (depth.x == 1.0) || depthTest(depth.x, depth.y);
+		bool keep = isMaxDepth || depthTest(depth.x, depth.y);
 
 	#else
 
 		// Always discard max depth.
-		bool keep = (depth.x != 1.0) && depthTest(depth.x, depth.y);
+		bool keep = !isMaxDepth && depthTest(depth.x, depth.y);
 
 	#endif
 

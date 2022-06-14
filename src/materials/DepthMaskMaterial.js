@@ -9,8 +9,10 @@ import {
 	NeverDepth,
 	NoBlending,
 	NotEqualDepth,
+	PerspectiveCamera,
 	ShaderMaterial,
-	Uniform
+	Uniform,
+	Vector2
 } from "three";
 
 import { DepthTestStrategy } from "../enums";
@@ -43,7 +45,8 @@ export class DepthMaskMaterial extends ShaderMaterial {
 			uniforms: {
 				inputBuffer: new Uniform(null),
 				depthBuffer0: new Uniform(null),
-				depthBuffer1: new Uniform(null)
+				depthBuffer1: new Uniform(null),
+				cameraNearFar: new Uniform(new Vector2(1, 1))
 			},
 			blending: NoBlending,
 			depthWrite: false,
@@ -332,6 +335,34 @@ export class DepthMaskMaterial extends ShaderMaterial {
 	setDepthMode(mode) {
 
 		this.depthMode = mode;
+
+	}
+
+	/**
+	 * Adopts the settings of the given camera.
+	 *
+	 * @param {Camera} camera - A camera.
+	 */
+
+	adoptCameraSettings(camera) {
+
+		if(camera) {
+
+			this.uniforms.cameraNearFar.value.set(camera.near, camera.far);
+
+			if(camera instanceof PerspectiveCamera) {
+
+				this.defines.PERSPECTIVE_CAMERA = "1";
+
+			} else {
+
+				delete this.defines.PERSPECTIVE_CAMERA;
+
+			}
+
+			this.needsUpdate = true;
+
+		}
 
 	}
 
