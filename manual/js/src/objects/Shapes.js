@@ -20,9 +20,9 @@ import {
 
 export function createLights() {
 
-	const ambientLight = new AmbientLight(0x777777);
+	const ambientLight = new AmbientLight(0xb5b5b5);
 
-	const mainLight = new DirectionalLight(0xff7e66, 1.0);
+	const mainLight = new DirectionalLight(0xfee2b0, 1.0);
 	mainLight.position.set(0, 0.05, -1).multiplyScalar(10);
 	mainLight.castShadow = true;
 	mainLight.shadow.bias = -0.01;
@@ -32,7 +32,7 @@ export function createLights() {
 	mainLight.shadow.mapSize.height = 512;
 	mainLight.shadow.radius = 1;
 
-	const backLight = new DirectionalLight(0xff7e66, 0.1);
+	const backLight = new DirectionalLight(0xfee2b0, 0.1);
 	backLight.position.copy(mainLight.position).negate();
 
 	const lights = new Group();

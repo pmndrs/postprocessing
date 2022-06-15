@@ -1,4 +1,4 @@
-import { LinearFilter, LinearMipmapLinearFilter, Uniform, WebGLRenderTarget } from "three";
+import { LinearMipmapLinearFilter, Uniform, WebGLRenderTarget } from "three";
 import { AdaptiveLuminancePass, LuminancePass } from "../passes";
 import { BlendFunction, ToneMappingMode } from "../enums";
 import { Effect } from "./Effect";
@@ -69,13 +69,11 @@ export class ToneMappingEffect extends Effect {
 
 		this.renderTargetLuminance = new WebGLRenderTarget(1, 1, {
 			minFilter: LinearMipmapLinearFilter,
-			magFilter: LinearFilter,
-			stencilBuffer: false,
 			depthBuffer: false
 		});
 
-		this.renderTargetLuminance.texture.name = "Luminance";
 		this.renderTargetLuminance.texture.generateMipmaps = true;
+		this.renderTargetLuminance.texture.name = "Luminance";
 
 		/**
 		 * A luminance pass.

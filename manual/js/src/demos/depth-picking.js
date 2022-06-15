@@ -1,4 +1,5 @@
 import {
+	ColorManagement,
 	CubeTextureLoader,
 	LoadingManager,
 	Mesh,
@@ -56,6 +57,8 @@ function load() {
 
 window.addEventListener("load", () => load().then((assets) => {
 
+	ColorManagement.legacyMode = false;
+
 	// Renderer
 
 	const renderer = new WebGLRenderer({
@@ -99,7 +102,7 @@ window.addEventListener("load", () => load().then((assets) => {
 	const cursor = new Mesh(
 		new SphereBufferGeometry(0.2, 32, 32),
 		new MeshBasicMaterial({
-			color: 0x666666,
+			color: 0xa9a9a9,
 			transparent: true,
 			depthWrite: false,
 			opacity: 0.5
@@ -110,9 +113,8 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	// Post Processing
 
-	const context = renderer.getContext();
 	const composer = new EffectComposer(renderer, {
-		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
+		multisampling: Math.min(4, renderer.capabilities.maxSamples)
 	});
 
 	const depthPickingPass = new DepthPickingPass();

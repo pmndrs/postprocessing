@@ -18,12 +18,12 @@ export class ThemeManager {
 		if(enabled) {
 
 			localStorage.setItem("dark-mode", "1");
-			document.body.classList.add("dark");
+			document.documentElement.classList.add("dark");
 
 		} else {
 
 			localStorage.removeItem("dark-mode");
-			document.body.classList.remove("dark");
+			document.documentElement.classList.remove("dark");
 
 		}
 
@@ -37,10 +37,6 @@ export class ThemeManager {
 		const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 		mediaQuery.addEventListener("change", (e) => this.setDarkModeEnabled(e.matches));
 		this.setDarkModeEnabled(mediaQuery.matches || localStorage.getItem("dark-mode") !== null);
-
-		// Prevent white flash during navigation.
-		document.body.style.visibility = "visible";
-		document.body.style.opacity = 1;
 
 	}
 

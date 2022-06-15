@@ -37,14 +37,13 @@ export class DepthCopyPass extends Pass {
 		 * The render target.
 		 *
 		 * @type {WebGLRenderTarget}
-		 * @private
+		 * @readonly
 		 */
 
 		this.renderTarget = new WebGLRenderTarget(1, 1, {
 			type: (depthPacking === RGBADepthPacking) ? UnsignedByteType : FloatType,
 			minFilter: NearestFilter,
 			magFilter: NearestFilter,
-			stencilBuffer: false,
 			depthBuffer: false
 		});
 

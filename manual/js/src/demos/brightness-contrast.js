@@ -1,4 +1,5 @@
 import {
+	ColorManagement,
 	LoadingManager,
 	PerspectiveCamera,
 	PlaneGeometry,
@@ -46,6 +47,8 @@ function load() {
 
 window.addEventListener("load", () => load().then((assets) => {
 
+	ColorManagement.legacyMode = false;
+
 	// Renderer
 
 	const renderer = new WebGLRenderer({
@@ -89,9 +92,8 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	// Post Processing
 
+	const effect = new BrightnessContrastEffect({ blendFunction: BlendFunction.NORMAL });
 	const composer = new EffectComposer(renderer);
-
-	const effect = new BrightnessContrastEffect();
 	composer.addPass(new RenderPass(scene, camera));
 	composer.addPass(new EffectPass(camera, effect));
 

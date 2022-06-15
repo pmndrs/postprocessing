@@ -1,4 +1,5 @@
 import {
+	ColorManagement,
 	CubeTextureLoader,
 	LoadingManager,
 	PerspectiveCamera,
@@ -57,6 +58,8 @@ function load() {
 
 window.addEventListener("load", () => load().then((assets) => {
 
+	ColorManagement.legacyMode = false;
+
 	// Renderer
 
 	const renderer = new WebGLRenderer({
@@ -99,9 +102,9 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	// Post Processing
 
-	const composer = new EffectComposer(renderer);
 
 	const effect = new SMAAEffect({
+		blendFunction: BlendFunction.NORMAL,
 		preset: SMAAPreset.MEDIUM,
 		edgeDetectionMode: EdgeDetectionMode.COLOR,
 		predicationMode: PredicationMode.DEPTH
@@ -129,6 +132,7 @@ window.addEventListener("load", () => load().then((assets) => {
 	smaaWeightsDebugPass.fullscreenMaterial.encodeOutput = false;
 	// END DEBUG
 
+	const composer = new EffectComposer(renderer);
 	composer.addPass(new RenderPass(scene, camera));
 	composer.addPass(effectPass);
 	composer.addPass(smaaEdgesDebugPass);

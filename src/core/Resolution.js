@@ -484,6 +484,7 @@ export class Resolution extends EventDispatcher {
 
 	copy(resolution) {
 
+		this.s = resolution.scale;
 		this.base.set(resolution.getBaseWidth(), resolution.getBaseHeight());
 		this.preferred.set(resolution.getPreferredWidth(), resolution.getPreferredHeight());
 		this.dispatchEvent({ type: "change" });

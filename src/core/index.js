@@ -1,5 +1,6 @@
 export * from "./Disposable";
 export * from "./EffectComposer";
+export * from "./EffectShaderData";
 export * from "./GaussKernel";
 export * from "./Initializable";
 export * from "./OverrideMaterialManager";

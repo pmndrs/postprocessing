@@ -1,7 +1,6 @@
 import {
 	BasicDepthPacking,
 	Color,
-	LinearFilter,
 	NotEqualDepth,
 	EqualDepth,
 	RGBADepthPacking,
@@ -10,7 +9,7 @@ import {
 } from "three";
 
 import { Selection } from "../core";
-import { EffectAttribute, DepthTestStrategy } from "../enums";
+import { DepthTestStrategy, EffectAttribute } from "../enums";
 import { DepthMaskMaterial } from "../materials";
 import { ClearPass, DepthPass, ShaderPass } from "../passes";
 import { BloomEffect } from "./BloomEffect";
@@ -75,6 +74,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 		this.depthMaskPass = new ShaderPass(new DepthMaskMaterial());
 
 		const depthMaskMaterial = this.depthMaskMaterial;
+		depthMaskMaterial.adoptCameraSettings(camera);
 		depthMaskMaterial.depthBuffer1 = this.depthPass.texture;
 		depthMaskMaterial.depthPacking1 = RGBADepthPacking;
 		depthMaskMaterial.depthMode = EqualDepth;
@@ -86,15 +86,8 @@ export class SelectiveBloomEffect extends BloomEffect {
 		 * @private
 		 */
 
-		this.renderTargetMasked = new WebGLRenderTarget(1, 1, {
-			minFilter: LinearFilter,
-			magFilter: LinearFilter,
-			stencilBuffer: false,
-			depthBuffer: false
-		});
-
+		this.renderTargetMasked = new WebGLRenderTarget(1, 1, { depthBuffer: false });
 		this.renderTargetMasked.texture.name = "Bloom.Masked";
-		this.renderTargetMasked.texture.generateMipmaps = false;
 
 		/**
 		 * A selection of objects.
@@ -102,6 +95,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 		 * The default layer of this selection is 11.
 		 *
 		 * @type {Selection}
+		 * @readonly
 		 */
 
 		this.selection = new Selection();
@@ -304,11 +298,8 @@ export class SelectiveBloomEffect extends BloomEffect {
 	setSize(width, height) {
 
 		super.setSize(width, height);
-
-		this.clearPass.setSize(width, height);
-		this.depthPass.setSize(width, height);
-		this.depthMaskPass.setSize(width, height);
 		this.renderTargetMasked.setSize(width, height);
+		this.depthPass.setSize(width, height);
 
 	}
 

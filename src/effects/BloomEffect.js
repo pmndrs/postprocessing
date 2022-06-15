@@ -1,13 +1,16 @@
-import { LinearFilter, sRGBEncoding, Uniform, WebGLRenderTarget } from "three";
+import { sRGBEncoding, Uniform, WebGLRenderTarget } from "three";
 import { Resolution } from "../core";
 import { BlendFunction, KernelSize } from "../enums";
-import { KawaseBlurPass, LuminancePass } from "../passes";
+import { KawaseBlurPass, LuminancePass, MipmapBlurPass } from "../passes";
 import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/bloom.frag";
 
 /**
  * A bloom effect.
+ *
+ * Based on an article by Fabrice Piquet
+ * https://www.froyok.fr/blog/2021-12-ue4-custom-bloom/
  */
 
 export class BloomEffect extends Effect {
@@ -17,23 +20,29 @@ export class BloomEffect extends Effect {
 	 *
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
-	 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
-	 * @param {Number} [options.luminanceThreshold=0.9] - The luminance threshold. Raise this value to mask out darker elements in the scene. Range is [0, 1].
-	 * @param {Number} [options.luminanceSmoothing=0.025] - Controls the smoothness of the luminance threshold. Range is [0, 1].
-	 * @param {Number} [options.intensity=1.0] - The intensity.
-	 * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
-	 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
-	 * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
-	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprecated. Use resolutionX instead.
-	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use resolutionY instead.
+	 * @param {Number} [options.luminanceThreshold=0.9] - The luminance threshold. Raise this value to mask out darker elements in the scene.
+	 * @param {Number} [options.luminanceSmoothing=0.025] - Controls the smoothness of the luminance threshold.
+	 * @param {Boolean} [options.mipmapBlur=false] - Enables or disables mipmap blur.
+	 * @param {Number} [options.intensity=1.0] - The bloom intensity.
+	 * @param {Number} [options.radius=0.85] - The blur radius. Only applies to mipmap blur.
+	 * @param {Number} [options.levels=8] - The amount of MIP levels. Only applies to mipmap blur.
+	 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - Deprecated. Use mipmapBlur instead.
+	 * @param {Number} [options.resolutionScale=0.5] - Deprecated. Use mipmapBlur instead.
+	 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - Deprecated. Use mipmapBlur instead.
+	 * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - Deprecated. Use mipmapBlur instead.
+	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprecated. Use mipmapBlur instead.
+	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use mipmapBlur instead.
 	 */
 
 	constructor({
 		blendFunction = BlendFunction.SCREEN,
-		kernelSize = KernelSize.LARGE,
 		luminanceThreshold = 0.9,
 		luminanceSmoothing = 0.025,
+		mipmapBlur = false,
 		intensity = 1.0,
+		radius = 0.85,
+		levels = 8,
+		kernelSize = KernelSize.LARGE,
 		resolutionScale = 0.5,
 		width = Resolution.AUTO_SIZE,
 		height = Resolution.AUTO_SIZE,
@@ -56,41 +65,54 @@ export class BloomEffect extends Effect {
 		 * @private
 		 */
 
-		this.renderTarget = new WebGLRenderTarget(1, 1, {
-			minFilter: LinearFilter,
-			magFilter: LinearFilter,
-			stencilBuffer: false,
-			depthBuffer: false
-		});
-
+		this.renderTarget = new WebGLRenderTarget(1, 1, { depthBuffer: false });
 		this.renderTarget.texture.name = "Bloom.Target";
-		this.renderTarget.texture.generateMipmaps = false;
-		this.uniforms.get("map").value = this.renderTarget.texture;
-
-		/**
-		 * A luminance shader pass.
-		 *
-		 * This pass can be disabled to skip luminance filtering.
-		 *
-		 * @type {LuminancePass}
-		 */
-
-		this.luminancePass = new LuminancePass({
-			renderTarget: this.renderTarget,
-			colorOutput: true
-		});
-
-		this.luminanceMaterial.threshold = luminanceThreshold;
-		this.luminanceMaterial.smoothing = luminanceSmoothing;
 
 		/**
 		 * A blur pass.
 		 *
 		 * @type {KawaseBlurPass}
+		 * @readonly
 		 */
 
-		this.blurPass = new KawaseBlurPass({ resolutionScale, resolutionX, resolutionY, kernelSize });
-		const resolution = this.blurPass.resolution;
+		this.blurPass = new KawaseBlurPass({ kernelSize });
+
+		/**
+		 * A luminance pass.
+		 *
+		 * Disable to skip luminance filtering.
+		 *
+		 * @type {LuminancePass}
+		 * @readonly
+		 */
+
+		this.luminancePass = new LuminancePass({ colorOutput: true });
+		this.luminanceMaterial.threshold = luminanceThreshold;
+		this.luminanceMaterial.smoothing = luminanceSmoothing;
+
+		/**
+		 * A mipmap blur pass.
+		 *
+		 * @type {MipmapBlurPass}
+		 * @private
+		 */
+
+		this.mipmapBlurPass = new MipmapBlurPass();
+		this.mipmapBlurPass.enabled = mipmapBlur;
+		this.mipmapBlurPass.radius = radius;
+		this.mipmapBlurPass.levels = levels;
+
+		this.uniforms.get("map").value = mipmapBlur ? this.mipmapBlurPass.texture : this.renderTarget.texture;
+
+		/**
+		 * The render resolution.
+		 *
+		 * @type {Resolution}
+		 * @readonly
+		 * @deprecated
+		 */
+
+		const resolution = this.resolution = new Resolution(this, resolutionX, resolutionY, resolutionScale);
 		resolution.addEventListener("change", (e) => this.setSize(resolution.baseWidth, resolution.baseHeight));
 
 	}
@@ -103,7 +125,7 @@ export class BloomEffect extends Effect {
 
 	get texture() {
 
-		return this.renderTarget.texture;
+		return this.mipmapBlurPass.enabled ? this.mipmapBlurPass.texture : this.renderTarget.texture;
 
 	}
 
@@ -116,19 +138,7 @@ export class BloomEffect extends Effect {
 
 	getTexture() {
 
-		return this.renderTarget.texture;
-
-	}
-
-	/**
-	 * The resolution of this effect.
-	 *
-	 * @type {Resolution}
-	 */
-
-	get resolution() {
-
-		return this.blurPass.resolution;
+		return this.texture;
 
 	}
 
@@ -141,14 +151,14 @@ export class BloomEffect extends Effect {
 
 	getResolution() {
 
-		return this.blurPass.resolution;
+		return this.resolution;
 
 	}
 
 	/**
 	 * Returns the blur pass.
 	 *
-	 * @deprecated Use blurPass instead.
+	 * @deprecated
 	 * @return {KawaseBlurPass} The blur pass.
 	 */
 
@@ -200,7 +210,7 @@ export class BloomEffect extends Effect {
 	 * The current width of the internal render targets.
 	 *
 	 * @type {Number}
-	 * @deprecated Use resolution.width instead.
+	 * @deprecated
 	 */
 
 	get width() {
@@ -219,7 +229,7 @@ export class BloomEffect extends Effect {
 	 * The current height of the internal render targets.
 	 *
 	 * @type {Number}
-	 * @deprecated Use resolution.height instead.
+	 * @deprecated
 	 */
 
 	get height() {
@@ -238,7 +248,7 @@ export class BloomEffect extends Effect {
 	 * Indicates whether dithering is enabled.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use EffectPass.fullscreenMaterial.dithering instead.
+	 * @deprecated Use EffectPass.dithering instead.
 	 */
 
 	get dithering() {
@@ -257,7 +267,7 @@ export class BloomEffect extends Effect {
 	 * The blur kernel size.
 	 *
 	 * @type {KernelSize}
-	 * @deprecated Use blurPass.kernelSize instead.
+	 * @deprecated
 	 */
 
 	get kernelSize() {
@@ -274,7 +284,7 @@ export class BloomEffect extends Effect {
 
 	/**
 	 * @type {Number}
-	 * @deprecated Use luminanceMaterial instead.
+	 * @deprecated
 	 */
 
 	get distinction() {
@@ -338,7 +348,7 @@ export class BloomEffect extends Effect {
 	 * Returns the current resolution scale.
 	 *
 	 * @return {Number} The resolution scale.
-	 * @deprecated Use resolution instead.
+	 * @deprecated
 	 */
 
 	getResolutionScale() {
@@ -351,7 +361,7 @@ export class BloomEffect extends Effect {
 	 * Sets the resolution scale.
 	 *
 	 * @param {Number} scale - The new resolution scale.
-	 * @deprecated Use resolution instead.
+	 * @deprecated
 	 */
 
 	setResolutionScale(scale) {
@@ -371,15 +381,33 @@ export class BloomEffect extends Effect {
 	update(renderer, inputBuffer, deltaTime) {
 
 		const renderTarget = this.renderTarget;
+		const luminancePass = this.luminancePass;
 
-		if(this.luminancePass.enabled) {
+		if(luminancePass.enabled) {
 
-			this.luminancePass.render(renderer, inputBuffer, renderTarget);
-			this.blurPass.render(renderer, renderTarget, renderTarget);
+			luminancePass.render(renderer, inputBuffer);
+
+			if(this.mipmapBlurPass.enabled) {
+
+				this.mipmapBlurPass.render(renderer, luminancePass.renderTarget);
+
+			} else {
+
+				this.blurPass.render(renderer, luminancePass.renderTarget, renderTarget);
+
+			}
 
 		} else {
 
-			this.blurPass.render(renderer, inputBuffer, renderTarget);
+			if(this.mipmapBlurPass.enabled) {
+
+				this.mipmapBlurPass.render(renderer, inputBuffer);
+
+			} else {
+
+				this.blurPass.render(renderer, inputBuffer, renderTarget);
+
+			}
 
 		}
 
@@ -396,8 +424,12 @@ export class BloomEffect extends Effect {
 
 		const resolution = this.resolution;
 		resolution.setBaseSize(width, height);
+
 		this.renderTarget.setSize(resolution.width, resolution.height);
-		this.luminancePass.resolution.copy(resolution);
+		this.blurPass.resolution.copy(resolution);
+
+		this.luminancePass.setSize(width, height);
+		this.mipmapBlurPass.setSize(width, height);
 
 	}
 
@@ -412,6 +444,8 @@ export class BloomEffect extends Effect {
 	initialize(renderer, alpha, frameBufferType) {
 
 		this.blurPass.initialize(renderer, alpha, frameBufferType);
+		this.luminancePass.initialize(renderer, alpha, frameBufferType);
+		this.mipmapBlurPass.initialize(renderer, alpha, frameBufferType);
 
 		if(frameBufferType !== undefined) {
 

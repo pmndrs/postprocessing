@@ -1,4 +1,5 @@
 import {
+	ColorManagement,
 	CubeTextureLoader,
 	FogExp2,
 	Group,
@@ -18,7 +19,6 @@ import {
 	BlendFunction,
 	EffectComposer,
 	EffectPass,
-	KernelSize,
 	RenderPass,
 	SelectiveBloomEffect
 } from "postprocessing";
@@ -60,6 +60,8 @@ function load() {
 
 window.addEventListener("load", () => load().then((assets) => {
 
+	ColorManagement.legacyMode = false;
+
 	// Renderer
 
 	const renderer = new WebGLRenderer({
@@ -90,7 +92,7 @@ window.addEventListener("load", () => load().then((assets) => {
 	// Scene, Lights, Objects
 
 	const scene = new Scene();
-	scene.fog = new FogExp2(0x0a0809, 0.06);
+	scene.fog = new FogExp2(0x373134, 0.06);
 	scene.background = assets.get("sky");
 	scene.add(Domain.createLights());
 	scene.add(Domain.createEnvironment(scene.background));
@@ -124,22 +126,20 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	// Post Processing
 
-	const context = renderer.getContext();
 	const composer = new EffectComposer(renderer, {
-		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
+		multisampling: Math.min(4, renderer.capabilities.maxSamples)
 	});
 
 	const effect = new SelectiveBloomEffect(scene, camera, {
-		blendFunction: BlendFunction.SCREEN,
-		kernelSize: KernelSize.MEDIUM,
 		luminanceThreshold: 0.1,
-		luminanceSmoothing: 0.2,
-		resolutionScale: 0.5
+		luminanceSmoothing: 0.3,
+		mipmapBlur: true,
+		intensity: 4.0
 	});
 
-	const effectPass = new EffectPass(camera, effect);
+	effect.inverted = true;
 	composer.addPass(new RenderPass(scene, camera));
-	composer.addPass(effectPass);
+	composer.addPass(new EffectPass(camera, effect));
 
 	// Object Picking
 
@@ -163,12 +163,6 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	});
 
-	for(let i = 0; i < n; i += 2) {
-
-		effect.selection.add(orbs.children[i]);
-
-	}
-
 	// Settings
 
 	const fpsMeter = new FPSMeter();
@@ -176,10 +170,9 @@ window.addEventListener("load", () => load().then((assets) => {
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(effect.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
-	folder.addInput(effect.blurPass.blurMaterial, "kernelSize", { options: KernelSize });
-	folder.addInput(effect.blurPass.blurMaterial, "scale", { min: 0, max: 2, step: 1e-3 });
-	folder.addInput(effect, "intensity", { min: 0, max: 20, step: 0.01 });
+	folder.addInput(effect, "intensity", { min: 0, max: 10, step: 0.01 });
+	folder.addInput(effect.mipmapBlurPass, "radius", { min: 0, max: 1, step: 1e-3 });
+	folder.addInput(effect.mipmapBlurPass, "levels", { min: 1, max: 9, step: 1 });
 
 	let subfolder = folder.addFolder({ title: "Luminance Filter" });
 	subfolder.addInput(effect.luminancePass, "enabled");

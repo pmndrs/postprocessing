@@ -1,4 +1,5 @@
 import {
+	ColorManagement,
 	CubeTextureLoader,
 	FogExp2,
 	LoadingManager,
@@ -54,6 +55,8 @@ function load() {
 
 window.addEventListener("load", () => load().then((assets) => {
 
+	ColorManagement.legacyMode = false;
+
 	// Renderer
 
 	const renderer = new WebGLRenderer({
@@ -84,7 +87,7 @@ window.addEventListener("load", () => load().then((assets) => {
 	// Scene, Lights, Objects
 
 	const scene = new Scene();
-	scene.fog = new FogExp2(0x0a0809, 0.06);
+	scene.fog = new FogExp2(0x373134, 0.06);
 	scene.background = assets.get("sky");
 	scene.add(Domain.createLights());
 	scene.add(Domain.createEnvironment(scene.background));
@@ -92,12 +95,12 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	// Post Processing
 
-	const context = renderer.getContext();
 	const composer = new EffectComposer(renderer, {
-		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
+		multisampling: Math.min(4, renderer.capabilities.maxSamples)
 	});
 
 	const effect = new ToneMappingEffect({
+		blendFunction: BlendFunction.NORMAL,
 		mode: ToneMappingMode.REINHARD2_ADAPTIVE,
 		resolution: 256,
 		whitePoint: 16.0,

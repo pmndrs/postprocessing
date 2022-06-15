@@ -45,7 +45,7 @@ export class LUT1DEffect extends Effect {
 
 		this.uniforms.get("lut").value = value;
 
-		if(value && (value.type === FloatType || value.type === HalfFloatType)) {
+		if(value !== null && (value.type === FloatType || value.type === HalfFloatType)) {
 
 			this.defines.set("LUT_PRECISION_HIGH", "1");
 

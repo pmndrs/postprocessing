@@ -195,14 +195,14 @@ uniform vec3 offset;
 
 void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
 
-	vec3 c = linearToInputTexel(inputColor).rgb;
+	vec3 c = inputColor.rgb;
 
 	#ifdef CUSTOM_INPUT_DOMAIN
 
 		if(c.r >= domainMin.r && c.g >= domainMin.g && c.b >= domainMin.b &&
 			c.r <= domainMax.r && c.g <= domainMax.g && c.b <= domainMax.b) {
 
-			c = texelToLinear(applyLUT(scale * c + offset)).rgb;
+			c = applyLUT(scale * c + offset).rgb;
 
 		} else {
 
@@ -218,7 +218,7 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
 
 		#endif
 
-		c = texelToLinear(applyLUT(scale * c + offset)).rgb;
+		c = applyLUT(scale * c + offset).rgb;
 
 	#endif
 

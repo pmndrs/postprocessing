@@ -1,4 +1,5 @@
 import {
+	ColorManagement,
 	AnimationMixer,
 	Color,
 	CubeTextureLoader,
@@ -86,6 +87,8 @@ function load() {
 
 window.addEventListener("load", () => load().then((assets) => {
 
+	ColorManagement.legacyMode = false;
+
 	// Renderer
 
 	const renderer = new WebGLRenderer({
@@ -151,9 +154,8 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	OverrideMaterialManager.workaroundEnabled = true;
 
-	const context = renderer.getContext();
 	const composer = new EffectComposer(renderer, {
-		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
+		multisampling: Math.min(4, renderer.capabilities.maxSamples)
 	});
 
 	const effect = new OutlineEffect(scene, camera, {

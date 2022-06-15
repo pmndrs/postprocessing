@@ -1,4 +1,4 @@
-import { LinearFilter, sRGBEncoding, UnsignedByteType, WebGLRenderTarget } from "three";
+import { sRGBEncoding, UnsignedByteType, WebGLRenderTarget } from "three";
 import { CopyMaterial, GaussianBlurMaterial } from "../materials";
 import { Resolution } from "../core";
 import { Pass } from "./Pass";
@@ -14,6 +14,7 @@ export class GaussianBlurPass extends Pass {
 	 *
 	 * @param {Object} [options] - The options.
 	 * @param {Number} [options.kernelSize=35] - The kernel size. Should be an odd number in the range [3, 1020].
+	 * @param {Number} [options.iterations=1] - The amount of times the blur should be applied.
 	 * @param {Number} [options.resolutionScale=1.0] - The resolution scale.
 	 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
 	 * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
@@ -21,6 +22,7 @@ export class GaussianBlurPass extends Pass {
 
 	constructor({
 		kernelSize = 35,
+		iterations = 1,
 		resolutionScale = 1.0,
 		resolutionX = Resolution.AUTO_SIZE,
 		resolutionY = Resolution.AUTO_SIZE
@@ -35,13 +37,7 @@ export class GaussianBlurPass extends Pass {
 		 * @private
 		 */
 
-		this.renderTargetA = new WebGLRenderTarget(1, 1, {
-			minFilter: LinearFilter,
-			magFilter: LinearFilter,
-			stencilBuffer: false,
-			depthBuffer: false
-		});
-
+		this.renderTargetA = new WebGLRenderTarget(1, 1, { depthBuffer: false });
 		this.renderTargetA.texture.name = "Blur.Target.A";
 
 		/**
@@ -83,6 +79,14 @@ export class GaussianBlurPass extends Pass {
 		const resolution = this.resolution = new Resolution(this, resolutionX, resolutionY, resolutionScale);
 		resolution.addEventListener("change", (e) => this.setSize(resolution.baseWidth, resolution.baseHeight));
 
+		/**
+		 * The amount of blur iterations.
+		 *
+		 * @type {Number}
+		 */
+
+		this.iterations = iterations;
+
 	}
 
 	/**
@@ -104,17 +108,26 @@ export class GaussianBlurPass extends Pass {
 		const blurMaterial = this.blurMaterial;
 		this.fullscreenMaterial = blurMaterial;
 
-		// Blur direction: Horizontal
-		blurMaterial.direction.set(1.0, 0.0);
-		blurMaterial.inputBuffer = inputBuffer.texture;
-		renderer.setRenderTarget(renderTargetA);
-		renderer.render(scene, camera);
+		let previousBuffer = inputBuffer;
 
-		// Blur direction: Vertical
-		blurMaterial.direction.set(0.0, 1.0);
-		blurMaterial.inputBuffer = renderTargetA.texture;
-		renderer.setRenderTarget(renderTargetB);
-		renderer.render(scene, camera);
+		for(let i = 0, l = Math.max(this.iterations, 1); i < l; ++i) {
+
+			// Blur direction: Horizontal
+			blurMaterial.direction.set(1.0, 0.0);
+			blurMaterial.inputBuffer = previousBuffer.texture;
+			renderer.setRenderTarget(renderTargetA);
+			renderer.render(scene, camera);
+
+			// Blur direction: Vertical
+			blurMaterial.direction.set(0.0, 1.0);
+			blurMaterial.inputBuffer = renderTargetA.texture;
+			renderer.setRenderTarget(renderTargetB);
+			renderer.render(scene, camera);
+
+			// Use renderTargetB as input for further blur iterations.
+			previousBuffer = renderTargetB;
+
+		}
 
 		// Copy the result to the output buffer.
 		this.fullscreenMaterial = this.copyMaterial;

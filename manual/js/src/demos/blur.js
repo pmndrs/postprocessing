@@ -1,4 +1,5 @@
 import {
+	ColorManagement,
 	CubeTextureLoader,
 	LoadingManager,
 	PerspectiveCamera,
@@ -53,6 +54,8 @@ function load() {
 
 window.addEventListener("load", () => load().then((assets) => {
 
+	ColorManagement.legacyMode = false;
+
 	// Renderer
 
 	const renderer = new WebGLRenderer({
@@ -95,9 +98,8 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	// Post Processing
 
-	const context = renderer.getContext();
 	const composer = new EffectComposer(renderer, {
-		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
+		multisampling: Math.min(4, renderer.capabilities.maxSamples)
 	});
 
 	const gaussianBlurPass = new GaussianBlurPass({ resolutionScale: 0.75, kernelSize: 35 });
@@ -118,26 +120,19 @@ window.addEventListener("load", () => load().then((assets) => {
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
 	const folder = pane.addFolder({ title: "Settings" });
-
-	const BlurTechnique = { GAUSSIAN: 0, KAWASE: 1 };
-	const params = { technique: BlurTechnique.GAUSSIAN };
-	folder.addInput(params, "technique", { options: BlurTechnique }).on("change", (event) => {
-
-		gaussianBlurPass.enabled = (event.value === BlurTechnique.GAUSSIAN);
-		kawaseBlurPass.enabled = (event.value === BlurTechnique.KAWASE);
-
-	});
-
 	const tab = folder.addTab({
-		pages: [{ title: "Gaussian" }, { title: "Kawase" }]
+		pages: [
+			{ title: "Gaussian" },
+			{ title: "Kawase" }
+		]
 	});
 
-	/* tab.on("select", (event) => {
+	tab.on("select", (event) => {
 
 		gaussianBlurPass.enabled = (event.index === 0);
 		kawaseBlurPass.enabled = (event.index === 1);
 
-	}); */
+	});
 
 	tab.pages[0].addInput(gaussianBlurPass.blurMaterial, "kernelSize", {
 		options: {
@@ -150,8 +145,10 @@ window.addEventListener("load", () => load().then((assets) => {
 			"255x255": 255
 		}
 	});
+
 	tab.pages[0].addInput(gaussianBlurPass.blurMaterial, "scale", { min: 0, max: 2, step: 0.01 });
 	tab.pages[0].addInput(gaussianBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
+	tab.pages[0].addInput(gaussianBlurPass, "iterations", { min: 1, max: 8, step: 1 });
 
 	tab.pages[1].addInput(kawaseBlurPass.blurMaterial, "kernelSize", { options: KernelSize });
 	tab.pages[1].addInput(kawaseBlurPass.blurMaterial, "scale", { min: 0, max: 2, step: 0.01 });

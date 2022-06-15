@@ -1,4 +1,4 @@
-import { LinearFilter, UnsignedByteType, WebGLRenderTarget } from "three";
+import { UnsignedByteType, WebGLRenderTarget } from "three";
 import { LuminanceMaterial } from "../materials";
 import { Resolution } from "../core/Resolution";
 import { Pass } from "./Pass";
@@ -41,22 +41,15 @@ export class LuminancePass extends Pass {
 		 * The luminance render target.
 		 *
 		 * @type {WebGLRenderTarget}
-		 * @private
+		 * @readonly
 		 */
 
 		this.renderTarget = renderTarget;
 
 		if(this.renderTarget === undefined) {
 
-			this.renderTarget = new WebGLRenderTarget(1, 1, {
-				minFilter: LinearFilter,
-				magFilter: LinearFilter,
-				stencilBuffer: false,
-				depthBuffer: false
-			});
-
+			this.renderTarget = new WebGLRenderTarget(1, 1, { depthBuffer: false });
 			this.renderTarget.texture.name = "LuminancePass.Target";
-			this.renderTarget.texture.generateMipmaps = false;
 
 		}
 

@@ -1,4 +1,5 @@
 import {
+	ColorManagement,
 	CubeTextureLoader,
 	FogExp2,
 	LoadingManager,
@@ -9,7 +10,6 @@ import {
 } from "three";
 
 import {
-	BlendFunction,
 	PixelationEffect,
 	EffectComposer,
 	EffectPass,
@@ -53,6 +53,8 @@ function load() {
 
 window.addEventListener("load", () => load().then((assets) => {
 
+	ColorManagement.legacyMode = false;
+
 	// Renderer
 
 	const renderer = new WebGLRenderer({
@@ -83,7 +85,7 @@ window.addEventListener("load", () => load().then((assets) => {
 	// Scene, Lights, Objects
 
 	const scene = new Scene();
-	scene.fog = new FogExp2(0x0a0809, 0.06);
+	scene.fog = new FogExp2(0x373134, 0.06);
 	scene.background = assets.get("sky");
 	scene.add(Domain.createLights());
 	scene.add(Domain.createEnvironment(scene.background));
@@ -91,9 +93,8 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	// Post Processing
 
-	const context = renderer.getContext();
 	const composer = new EffectComposer(renderer, {
-		multisampling: Math.min(4, context.getParameter(context.MAX_SAMPLES))
+		multisampling: Math.min(4, renderer.capabilities.maxSamples)
 	});
 
 	const effect = new PixelationEffect(5);
@@ -108,8 +109,6 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addInput(effect, "granularity", { min: 0, max: 20, step: 1 });
-	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 
