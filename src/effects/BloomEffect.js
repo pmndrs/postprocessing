@@ -25,6 +25,7 @@ export class BloomEffect extends Effect {
 	 * @param {Boolean} [options.mipmapBlur=false] - Enables or disables mipmap blur.
 	 * @param {Number} [options.intensity=1.0] - The bloom intensity.
 	 * @param {Number} [options.radius=0.85] - The blur radius. Only applies to mipmap blur.
+	 * @param {Number} [options.levels=8] - The amount of MIP levels. Only applies to mipmap blur.
 	 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - Deprecated. Use mipmapBlur instead.
 	 * @param {Number} [options.resolutionScale=0.5] - Deprecated. Use mipmapBlur instead.
 	 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - Deprecated. Use mipmapBlur instead.
@@ -40,6 +41,7 @@ export class BloomEffect extends Effect {
 		mipmapBlur = false,
 		intensity = 1.0,
 		radius = 0.85,
+		levels = 8,
 		kernelSize = KernelSize.LARGE,
 		resolutionScale = 0.5,
 		width = Resolution.AUTO_SIZE,
@@ -97,7 +99,8 @@ export class BloomEffect extends Effect {
 
 		this.mipmapBlurPass = new MipmapBlurPass();
 		this.mipmapBlurPass.enabled = mipmapBlur;
-		this.radius = radius;
+		this.mipmapBlurPass.radius = radius;
+		this.mipmapBlurPass.levels = levels;
 
 		this.uniforms.get("map").value = mipmapBlur ? this.mipmapBlurPass.texture : this.renderTarget.texture;
 
@@ -293,24 +296,6 @@ export class BloomEffect extends Effect {
 	set distinction(value) {
 
 		console.warn(this.name, "distinction was removed");
-
-	}
-
-	/**
-	 * The bloom radius.
-	 *
-	 * @type {Number}
-	 */
-
-	get radius() {
-
-		return this.mipmapBlurPass.upsamplingMaterial.radius;
-
-	}
-
-	set radius(value) {
-
-		this.mipmapBlurPass.upsamplingMaterial.radius = value;
 
 	}
 
