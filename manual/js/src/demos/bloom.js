@@ -171,7 +171,8 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addInput(effect, "intensity", { min: 0, max: 10, step: 0.01 });
-	folder.addInput(effect, "radius", { min: 0, max: 1, step: 1e-3 });
+	folder.addInput(effect.mipmapBlurPass, "radius", { min: 0, max: 1, step: 1e-3 });
+	folder.addInput(effect.mipmapBlurPass, "levels", { min: 1, max: 9, step: 1 });
 
 	let subfolder = folder.addFolder({ title: "Luminance Filter" });
 	subfolder.addInput(effect.luminancePass, "enabled");
