@@ -93,9 +93,9 @@ export class MipmapBlurPass extends Pass {
 	}
 
 	/**
-	 * The MIP levels.
+	 * The MIP levels. Default is 8.
 	 *
-	 * @private
+	 * @type {Number}
 	 */
 
 	get levels() {
@@ -106,27 +106,51 @@ export class MipmapBlurPass extends Pass {
 
 	set levels(value) {
 
-		const renderTarget = this.renderTarget;
+		if(this.levels !== value) {
 
-		this.dispose();
+			const renderTarget = this.renderTarget;
 
-		for(let i = 0; i < value; ++i) {
+			this.dispose();
 
-			const mipmap = renderTarget.clone();
-			mipmap.texture.name = "Downsampling.Mipmap" + i;
-			this.downsamplingMipmaps.push(mipmap);
+			for(let i = 0; i < value; ++i) {
+
+				const mipmap = renderTarget.clone();
+				mipmap.texture.name = "Downsampling.Mipmap" + i;
+				this.downsamplingMipmaps.push(mipmap);
+
+			}
+
+			this.upsamplingMipmaps.push(renderTarget);
+
+			for(let i = 1, l = value - 1; i < l; ++i) {
+
+				const mipmap = renderTarget.clone();
+				mipmap.texture.name = "Upsampling.Mipmap" + i;
+				this.upsamplingMipmaps.push(mipmap);
+
+			}
+
+			this.setSize(this.resolution.x, this.resolution.y);
 
 		}
 
-		this.upsamplingMipmaps.push(renderTarget);
+	}
 
-		for(let i = 1, l = value - 1; i < l; ++i) {
+	/**
+	 * The blur radius.
+	 *
+	 * @type {Number}
+	 */
 
-			const mipmap = renderTarget.clone();
-			mipmap.texture.name = "Upsampling.Mipmap" + i;
-			this.upsamplingMipmaps.push(mipmap);
+	get radius() {
 
-		}
+		return this.upsamplingMaterial.radius;
+
+	}
+
+	set radius(value) {
+
+		this.upsamplingMaterial.radius = value;
 
 	}
 
@@ -191,17 +215,6 @@ export class MipmapBlurPass extends Pass {
 
 		const resolution = this.resolution;
 		resolution.set(width, height);
-
-		const maxSize = Math.max(width, height);
-		const targetSize = 7.5; // 1920 / 2 ** 8
-		const levels = Math.max(Math.round(Math.log2(maxSize / targetSize)), 1);
-
-		if(levels !== this.levels) {
-
-			// Update the mipmap chain.
-			this.levels = levels;
-
-		}
 
 		let w = resolution.width, h = resolution.height;
 
