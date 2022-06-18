@@ -86,7 +86,7 @@ export class LUT3dlLoader extends Loader {
 	parse(input) {
 
 		const regExpGridInfo = /^[\d ]+$/m;
-		const regExpDataPoints = /^([\d.]+) +([\d.]+) +([\d.]+) *$/gm;
+		const regExpDataPoints = /^([\d.e+-]+) +([\d.e+-]+) +([\d.e+-]+) *$/gm;
 
 		// The first line describes the positions of values on the LUT grid.
 		let result = regExpGridInfo.exec(input);
@@ -151,7 +151,7 @@ export class LUT3dlLoader extends Loader {
 
 		}
 
-		return new LookupTexture(data, size, size, size);
+		return new LookupTexture(data, size);
 
 	}
 

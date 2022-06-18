@@ -89,7 +89,7 @@ export class LUTCubeLoader extends Loader {
 		const regExpSize = /LUT_3D_SIZE +(\d+)/;
 		const regExpDomainMin = /DOMAIN_MIN +([\d.]+) +([\d.]+) +([\d.]+)/;
 		const regExpDomainMax = /DOMAIN_MAX +([\d.]+) +([\d.]+) +([\d.]+)/;
-		const regExpDataPoints = /^([\d.]+) +([\d.]+) +([\d.]+) *$/gm;
+		const regExpDataPoints = /^([\d.e+-]+) +([\d.e+-]+) +([\d.e+-]+) *$/gm;
 
 		let result = regExpTitle.exec(input);
 		const title = (result !== null) ? result[1] : null;
@@ -144,7 +144,7 @@ export class LUTCubeLoader extends Loader {
 
 		}
 
-		const lut = new LookupTexture(data, size, size, size);
+		const lut = new LookupTexture(data, size);
 		lut.domainMin.copy(domainMin);
 		lut.domainMax.copy(domainMax);
 
