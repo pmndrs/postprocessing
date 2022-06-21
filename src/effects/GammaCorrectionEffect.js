@@ -16,11 +16,11 @@ export class GammaCorrectionEffect extends Effect {
 	 * Constructs a new gamma correction effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SET] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SRC] - The blend function of this effect.
 	 * @param {Number} [options.gamma=2.0] - The gamma factor.
 	 */
 
-	constructor({ blendFunction = BlendFunction.SET, gamma = 2.0 } = {}) {
+	constructor({ blendFunction = BlendFunction.SRC, gamma = 2.0 } = {}) {
 
 		super("GammaCorrectionEffect", fragmentShader, {
 			blendFunction,

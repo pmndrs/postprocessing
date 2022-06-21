@@ -15,14 +15,12 @@ export class ChromaticAberrationEffect extends Effect {
 	 * Constructs a new chromatic aberration effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
 	 * @param {Vector2} [options.offset] - The color offset.
 	 * @param {Boolean} [options.radialModulation=false] - Whether the effect should be modulated with a radial gradient.
 	 * @param {Number} [options.modulationOffset=0.15] - The modulation offset. Only applies if `radialModulation` is enabled.
 	 */
 
 	constructor({
-		blendFunction,
 		offset = new Vector2(1e-3, 5e-4),
 		radialModulation = false,
 		modulationOffset = 0.15
@@ -30,7 +28,6 @@ export class ChromaticAberrationEffect extends Effect {
 
 		super("ChromaticAberrationEffect", fragmentShader, {
 			vertexShader,
-			blendFunction,
 			attributes: EffectAttribute.CONVOLUTION,
 			uniforms: new Map([
 				["offset", new Uniform(offset)],

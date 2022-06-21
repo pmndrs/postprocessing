@@ -15,11 +15,11 @@ export class DepthEffect extends Effect {
 	 * Constructs a new depth effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SET] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SRC] - The blend function of this effect.
 	 * @param {Boolean} [options.inverted=false] - Whether the depth should be inverted.
 	 */
 
-	constructor({ blendFunction = BlendFunction.SET, inverted = false } = {}) {
+	constructor({ blendFunction = BlendFunction.SRC, inverted = false } = {}) {
 
 		super("DepthEffect", fragmentShader, {
 			blendFunction,

@@ -18,10 +18,10 @@ export class FXAAEffect extends Effect {
 	 * Constructs a new FXAA effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SET] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SRC] - The blend function of this effect.
 	 */
 
-	constructor({ blendFunction = BlendFunction.SET } = {}) {
+	constructor({ blendFunction = BlendFunction.SRC } = {}) {
 
 		super("FXAAEffect", fragmentShader, {
 			vertexShader,

@@ -40,13 +40,13 @@ export class LUT3DEffect extends Effect {
 	 *
 	 * @param {Texture} lut - The lookup texture.
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SET] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SRC] - The blend function of this effect.
 	 * @param {Boolean} [options.tetrahedralInterpolation=false] - Enables or disables tetrahedral interpolation.
 	 * @param {TextureEncoding} [options.inputEncoding=sRGBEncoding] - LUT input encoding.
 	 */
 
 	constructor(lut, {
-		blendFunction = BlendFunction.SET,
+		blendFunction = BlendFunction.SRC,
 		tetrahedralInterpolation = false,
 		inputEncoding = sRGBEncoding
 	} = {}) {

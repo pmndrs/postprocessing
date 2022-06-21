@@ -32,14 +32,14 @@ export class SMAAEffect extends Effect {
 	 * Constructs a new SMAA effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SET] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SRC] - The blend function of this effect.
 	 * @param {SMAAPreset} [options.preset=SMAAPreset.MEDIUM] - The quality preset.
 	 * @param {EdgeDetectionMode} [options.edgeDetectionMode=EdgeDetectionMode.COLOR] - The edge detection mode.
 	 * @param {PredicationMode} [options.predicationMode=PredicationMode.DISABLED] - The predication mode.
 	 */
 
 	constructor({
-		blendFunction = BlendFunction.SET,
+		blendFunction = BlendFunction.SRC,
 		preset = SMAAPreset.MEDIUM,
 		edgeDetectionMode = EdgeDetectionMode.COLOR,
 		predicationMode = PredicationMode.DISABLED
