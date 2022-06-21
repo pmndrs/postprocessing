@@ -30,8 +30,11 @@ export class DepthOfFieldEffect extends Effect {
 	 * @param {Number} [options.focusRange=0.1] - The focus range. Range is [0.0, 1.0].
 	 * @param {Number} [options.focalLength=0.1] - Deprecated.
 	 * @param {Number} [options.bokehScale=1.0] - The scale of the bokeh blur.
-	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - The render width.
-	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - The render height.
+	 * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
+	 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
+	 * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
+	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprecated. Use resolutionX instead.
+	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use resolutionY instead.
 	 */
 
 	constructor(camera, {
@@ -168,8 +171,6 @@ export class DepthOfFieldEffect extends Effect {
 
 		this.blurPass = new KawaseBlurPass({ resolutionScale, resolutionX, resolutionY, kernelSize: KernelSize.MEDIUM });
 
-		const resolution = this.blurPass.resolution;
-		resolution.addEventListener("change", (e) => this.setSize(resolution.baseWidth, resolution.baseHeight));
 
 		/**
 		 * A mask pass.
@@ -223,7 +224,6 @@ export class DepthOfFieldEffect extends Effect {
 		this.bokehFarFillPass = new ShaderPass(new BokehMaterial(true, false));
 		this.bokehFarFillPass.fullscreenMaterial.cocBuffer = this.renderTargetCoC.texture;
 
-
 		/**
 		 * A target position that should be kept in focus. Set to `null` to disable auto focus.
 		 *
@@ -231,6 +231,16 @@ export class DepthOfFieldEffect extends Effect {
 		 */
 
 		this.target = null;
+
+		/**
+		 * The render resolution.
+		 *
+		 * @type {Resolution}
+		 * @readonly
+		 */
+
+		const resolution = this.resolution = new Resolution(this, resolutionX, resolutionY, resolutionScale);
+		resolution.addEventListener("change", (e) => this.setSize(resolution.baseWidth, resolution.baseHeight));
 
 		this.bokehScale = bokehScale;
 
@@ -296,18 +306,6 @@ export class DepthOfFieldEffect extends Effect {
 	getBlurPass() {
 
 		return this.blurPass;
-
-	}
-
-	/**
-	 * The resolution of this effect.
-	 *
-	 * @type {Resolution}
-	 */
-
-	get resolution() {
-
-		return this.blurPass.resolution;
 
 	}
 
@@ -485,7 +483,7 @@ export class DepthOfFieldEffect extends Effect {
 		this.blurPass.setSize(width, height);
 		this.maskPass.setSize(width, height);
 
-		// These buffers require full resolution to prevent bleeding artifacts.
+		// These buffers require full resolution to prevent color bleeding.
 		this.renderTargetCoC.setSize(width, height);
 		this.renderTargetMasked.setSize(width, height);
 

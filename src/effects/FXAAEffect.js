@@ -5,8 +5,6 @@ import fragmentShader from "./glsl/fxaa.frag";
 import vertexShader from "./glsl/fxaa.vert";
 
 /**
- * An FXAA effect.
- *
  * NVIDIA FXAA 3.11 by Timothy Lottes:
  * https://developer.download.nvidia.com/assets/gamedev/files/sdk/11/FXAA_WhitePaper.pdf
  *
@@ -20,10 +18,10 @@ export class FXAAEffect extends Effect {
 	 * Constructs a new FXAA effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SET] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SRC] - The blend function of this effect.
 	 */
 
-	constructor({ blendFunction = BlendFunction.SET } = {}) {
+	constructor({ blendFunction = BlendFunction.SRC } = {}) {
 
 		super("FXAAEffect", fragmentShader, {
 			vertexShader,

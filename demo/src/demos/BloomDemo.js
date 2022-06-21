@@ -18,10 +18,8 @@ import * as ObjectCloud from "./objects/ObjectCloud";
 
 import {
 	BlendFunction,
-	BloomEffect,
 	EdgeDetectionMode,
 	EffectPass,
-	KernelSize,
 	SelectiveBloomEffect,
 	SMAAEffect,
 	SMAAPreset,
@@ -306,8 +304,6 @@ export class BloomDemo extends PostProcessingDemo {
 	}
 
 	registerOptions(menu) {
-
-		const renderer = this.composer.getRenderer();
 
 		const pass = this.pass;
 		const effect = this.effect;
