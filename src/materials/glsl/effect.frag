@@ -77,6 +77,47 @@ float getViewZ(const in float depth) {
 
 }
 
+/**
+ * Based on work by Sam Hocevar, Emil Persson and Ian Taylor.
+ * https://www.chilliant.com/rgb2hsv.html
+ */
+
+vec3 RGBToHCV(const in vec3 RGB) {
+
+	vec4 P = mix(vec4(RGB.bg, -1.0, 2.0 / 3.0), vec4(RGB.gb, 0.0, -1.0 / 3.0), step(RGB.b, RGB.g));
+	vec4 Q = mix(vec4(P.xyw, RGB.r), vec4(RGB.r, P.yzx), step(P.x, RGB.r));
+	float C = Q.x - min(Q.w, Q.y);
+	float H = abs((Q.w - Q.y) / (6.0 * C + EPSILON) + Q.z);
+	return vec3(H, C, Q.x);
+
+}
+
+vec3 RGBToHSL(const in vec3 RGB) {
+
+	vec3 HCV = RGBToHCV(RGB);
+	float L = HCV.z - HCV.y * 0.5;
+	float S = HCV.y / (1.0 - abs(L * 2.0 - 1.0) + EPSILON);
+	return vec3(HCV.x, S, L);
+
+}
+
+vec3 HueToRGB(const in float H) {
+
+	float R = abs(H * 6.0 - 3.0) - 1.0;
+	float G = 2.0 - abs(H * 6.0 - 2.0);
+	float B = 2.0 - abs(H * 6.0 - 4.0);
+	return clamp(vec3(R, G, B), 0.0, 1.0);
+
+}
+
+vec3 HSLToRGB(const in vec3 HSL) {
+
+	vec3 RGB = HueToRGB(HSL.x);
+	float C = (1.0 - abs(2.0 * HSL.z - 1.0)) * HSL.y;
+	return (RGB - 0.5) * C + HSL.z;
+
+}
+
 FRAGMENT_HEAD
 
 void main() {

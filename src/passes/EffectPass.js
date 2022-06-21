@@ -188,7 +188,7 @@ function integrateEffect(prefix, effect, data) {
 			const blendOpacity = prefix + "BlendOpacity";
 			data.uniforms.set(blendOpacity, blendMode.opacity);
 
-			// Blend the result of this effect with the input color.
+			// Blend the result of this effect with the input color (color0 = dst, color1 = src).
 			fragmentMainImage += `color0 = blend${blendMode.blendFunction}(color0, color1, ${blendOpacity});\n\n\t`;
 			fragmentHead += `uniform float ${blendOpacity};\n\n`;
 
@@ -381,7 +381,7 @@ export class EffectPass extends Pass {
 
 		for(const effect of this.effects) {
 
-			if(effect.blendMode.blendFunction === BlendFunction.SKIP) {
+			if(effect.blendMode.blendFunction === BlendFunction.DST) {
 
 				// Check if this effect relies on depth and continue.
 				data.attributes |= (effect.getAttributes() & EffectAttribute.DEPTH);
@@ -454,7 +454,7 @@ export class EffectPass extends Pass {
 		data.shaderParts.set(Section.FRAGMENT_MAIN_UV, fragmentMainUv);
 
 		// Ensure that leading preprocessor directives start on a new line.
-		data.shaderParts.forEach((value, key, map) => map.set(key, value.trim().replace(/^#/, "\n#")));
+		data.shaderParts.forEach((value, key, map) => map.set(key, value?.trim().replace(/^#/, "\n#")));
 
 		this.skipRendering = (id === 0);
 		this.needsSwap = !this.skipRendering;
