@@ -5,8 +5,6 @@ import fragmentShader from "./glsl/fxaa.frag";
 import vertexShader from "./glsl/fxaa.vert";
 
 /**
- * An FXAA effect.
- *
  * NVIDIA FXAA 3.11 by Timothy Lottes:
  * https://developer.download.nvidia.com/assets/gamedev/files/sdk/11/FXAA_WhitePaper.pdf
  *
