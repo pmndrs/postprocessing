@@ -101,7 +101,7 @@ export class KawaseBlurPass extends Pass {
 	/**
 	 * Indicates whether dithering is enabled.
 	 *
-	 * @type {KernelSize}
+	 * @type {Boolean}
 	 * @deprecated Use copyMaterial.dithering instead.
 	 */
 
