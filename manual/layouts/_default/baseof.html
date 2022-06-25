@@ -67,5 +67,11 @@
 			</div>
 		</div>
 
+		{{/* Immediately restore scroll positions. */}}
+		<script>
+			document.querySelector(".navigation").scrollTop = Number(sessionStorage.getItem("nav-scroll"));
+			document.querySelector("main").scrollTop = Number(sessionStorage.getItem("main-scroll"));
+		</script>
+
 	</body>
 </html>
