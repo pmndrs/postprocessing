@@ -19,7 +19,7 @@
 		}
 		&[target="_blank"] {
 			&::after {
-				background: no-repeat center/cover url("../img/svg/open_in_new_black_24dp.svg");
+				background: no-repeat center/cover url("/img/svg/open_in_new_black_24dp.svg");
 				background-attachment: scroll;
 				background-origin: content-box;
 				content: "";
@@ -77,7 +77,7 @@
 	.navigation {
 		li {
 			a[target="_blank"]::after {
-				background-image: url("../img/svg/open_in_new_white_24dp.svg");
+				background-image: url("/img/svg/open_in_new_white_24dp.svg");
 			}
 		}
 	}

@@ -1,34 +1,34 @@
 import {
-	Color,
 	ColorManagement,
 	CubeTextureLoader,
-	FogExp2,
 	LoadingManager,
 	PerspectiveCamera,
+	RepeatWrapping,
 	Scene,
 	sRGBEncoding,
+	TextureLoader,
+	VSMShadowMap,
 	WebGLRenderer
 } from "three";
 
 import {
 	BlendFunction,
-	DepthDownsamplingPass,
 	EffectComposer,
 	EffectPass,
-	NormalPass,
 	RenderPass,
-	SSAOEffect
+	TextureEffect
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
-import { SpatialControls } from "spatial-controls";
+import { ControlMode, SpatialControls } from "spatial-controls";
 import { calculateVerticalFoV, FPSMeter } from "../utils";
-import * as Domain from "../objects/Domain";
+import * as CornellBox from "../objects/CornellBox";
 
 function load() {
 
 	const assets = new Map();
 	const loadingManager = new LoadingManager();
+	const textureLoader = new TextureLoader(loadingManager);
 	const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
 	const path = document.baseURI + "img/textures/skies/sunset/";
@@ -43,6 +43,22 @@ function load() {
 
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
+
+		textureLoader.load(document.baseURI + "img/textures/lens-dirt/scratches.jpg", (t) => {
+
+			t.encoding = sRGBEncoding;
+			t.wrapS = t.wrapT = RepeatWrapping;
+			assets.set("scratches", t);
+
+		});
+
+		textureLoader.load(document.baseURI + "img/textures/lens-dirt/bokeh.png", (t) => {
+
+			t.encoding = sRGBEncoding;
+			t.wrapS = t.wrapT = RepeatWrapping;
+			assets.set("bokeh", t);
+
+		});
 
 		cubeTextureLoader.load(urls, (t) => {
 
@@ -71,6 +87,10 @@ window.addEventListener("load", () => load().then((assets) => {
 	renderer.debug.checkShaderErrors = (window.location.hostname === "localhost");
 	renderer.physicallyCorrectLights = true;
 	renderer.outputEncoding = sRGBEncoding;
+	renderer.shadowMap.type = VSMShadowMap;
+	renderer.shadowMap.autoUpdate = false;
+	renderer.shadowMap.needsUpdate = true;
+	renderer.shadowMap.enabled = true;
 
 	const container = document.querySelector(".viewport");
 	container.prepend(renderer.domElement);
@@ -80,20 +100,20 @@ window.addEventListener("load", () => load().then((assets) => {
 	const camera = new PerspectiveCamera();
 	const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 	const settings = controls.settings;
+	settings.general.setMode(ControlMode.THIRD_PERSON);
 	settings.rotation.setSensitivity(2.2);
 	settings.rotation.setDamping(0.05);
-	settings.translation.setDamping(0.1);
-	controls.setPosition(0, 0, 1);
-	controls.lookAt(0, 0, 0);
+	settings.zoom.setDamping(0.1);
+	settings.translation.setEnabled(false);
+	controls.setPosition(0, 0, 5);
 
 	// Scene, Lights, Objects
 
 	const scene = new Scene();
-	scene.fog = new FogExp2(0x373134, 0.06);
 	scene.background = assets.get("sky");
-	scene.add(Domain.createLights());
-	scene.add(Domain.createEnvironment(scene.background));
-	scene.add(Domain.createActors(scene.background));
+	scene.add(CornellBox.createLights());
+	scene.add(CornellBox.createEnvironment());
+	scene.add(CornellBox.createActors());
 
 	// Post Processing
 
@@ -101,88 +121,33 @@ window.addEventListener("load", () => load().then((assets) => {
 		multisampling: Math.min(4, renderer.capabilities.maxSamples)
 	});
 
-	const normalPass = new NormalPass(scene, camera);
-	const depthDownsamplingPass = new DepthDownsamplingPass({
-		normalBuffer: normalPass.texture,
-		resolutionScale: 0.5
+	const effect = new TextureEffect({
+		blendFunction: BlendFunction.COLOR_DODGE,
+		texture: assets.get("bokeh")
 	});
 
-	const normalDepthBuffer = renderer.capabilities.isWebGL2 ? depthDownsamplingPass.texture : null;
-
-	const effect = new SSAOEffect(camera, normalPass.texture, {
-		distanceScaling: true,
-		depthAwareUpsampling: false,
-		normalDepthBuffer,
-		worldDistanceThreshold: 20,
-		worldDistanceFalloff: 5,
-		worldProximityThreshold: 0.4,
-		worldProximityFalloff: 0.1,
-		radius: 0.1,
-		intensity: 1.33,
-		resolutionScale: 0.5
-	});
-
-	const effectPass = new EffectPass(camera, effect);
 	composer.addPass(new RenderPass(scene, camera));
-	composer.addPass(normalPass);
-
-	if(renderer.capabilities.isWebGL2) {
-
-		composer.addPass(depthDownsamplingPass);
-
-	}
-
-	composer.addPass(effectPass);
+	composer.addPass(new EffectPass(camera, effect));
 
 	// Settings
 
 	const fpsMeter = new FPSMeter();
-	const color = new Color();
-	const ssaoMaterial = effect.ssaoMaterial;
+	const texture = effect.texture;
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
 
-	const params = { "color": 0x000000 };
 	const folder = pane.addFolder({ title: "Settings" });
+	folder.addInput(texture, "rotation", { min: 0, max: 2 * Math.PI, step: 0.001 });
 
-	let subfolder = folder.addFolder({ title: "Distance Cutoff", expanded: false });
-	subfolder.addInput(ssaoMaterial, "worldDistanceThreshold", { min: 0, max: 100, step: 0.1 });
-	subfolder.addInput(ssaoMaterial, "worldDistanceFalloff", { min: 0, max: 10, step: 0.1 });
-	subfolder = folder.addFolder({ title: "Proximity Cutoff", expanded: false });
-	subfolder.addInput(ssaoMaterial, "worldProximityThreshold", { min: 0, max: 3, step: 1e-2 });
-	subfolder.addInput(ssaoMaterial, "worldProximityFalloff", { min: 0, max: 3, step: 1e-2 });
-
-	folder.addInput(effect.resolution, "scale", { label: "resolution", min: 0.25, max: 1, step: 0.05 })
-		.on("change", (e) => depthDownsamplingPass.resolution.scale = e.value);
-
-	if(renderer.capabilities.isWebGL2) {
-
-		folder.addInput(effect, "depthAwareUpsampling");
-
-	}
-
-	folder.addInput(ssaoMaterial, "samples", { min: 1, max: 32, step: 1 });
-	folder.addInput(ssaoMaterial, "rings", { min: 1, max: 16, step: 1 });
-	folder.addInput(ssaoMaterial, "radius", { min: 1e-6, max: 1.0, step: 1e-2 });
-	folder.addInput(ssaoMaterial, "distanceScaling");
-	folder.addInput(ssaoMaterial, "minRadiusScale", { min: 0, max: 1, step: 1e-2 });
-	folder.addInput(ssaoMaterial, "bias", { min: 0, max: 0.5, step: 1e-3 });
-	folder.addInput(ssaoMaterial, "fade", { min: 0, max: 1, step: 1e-3 });
-	folder.addInput(ssaoMaterial, "intensity", { min: 0, max: 4, step: 1e-2 });
-	folder.addInput(effect, "luminanceInfluence", { min: 0, max: 1, step: 1e-2 });
-	folder.addInput(params, "color", { view: "color" }).on("change", (e) => {
-
-		if(e.value === 0x000000) {
-
-			effect.color = null;
-
-		} else {
-
-			effect.color = color.setHex(e.value).convertSRGBToLinear();
-
-		}
-
-	});
+	let subFolder = folder.addFolder({ title: "offset" });
+	subFolder.addInput(texture.offset, "x", { min: 0, max: 1, step: 0.001 });
+	subFolder.addInput(texture.offset, "y", { min: 0, max: 1, step: 0.001 });
+	subFolder = folder.addFolder({ title: "repeat" });
+	subFolder.addInput(texture.repeat, "x", { min: 0, max: 2, step: 0.001 });
+	subFolder.addInput(texture.repeat, "y", { min: 0, max: 2, step: 0.001 });
+	subFolder = folder.addFolder({ title: "center" });
+	subFolder.addInput(texture.center, "x", { min: 0, max: 1, step: 0.001 });
+	subFolder.addInput(texture.center, "y", { min: 0, max: 1, step: 0.001 });
 
 	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
 	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });

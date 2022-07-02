@@ -43,8 +43,8 @@ await esbuild.build({
 }).catch(() => process.exit(1));
 
 await esbuild.build({
-	entryPoints: ["manual/js/libs/three.js"],
-	outdir: "manual/assets/js/libs",
+	entryPoints: ["manual/assets/js/libs/three.js"],
+	outdir: "manual/assets/js/dist/libs",
 	globalName: "THREE",
 	target: "es6",
 	logLevel: "info",
@@ -54,8 +54,9 @@ await esbuild.build({
 }).catch(() => process.exit(1));
 
 await esbuild.build({
-	entryPoints: ["manual/js/src/index.js"].concat(await glob("manual/js/src/demos/*.js")),
-	outdir: "manual/assets/js",
+	entryPoints: ["manual/assets/js/src/index.js"]
+		.concat(await glob("manual/assets/js/src/demos/*.js")),
+	outdir: "manual/assets/js/dist",
 	logLevel: "info",
 	format: "iife",
 	target: "es6",
