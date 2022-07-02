@@ -51,7 +51,7 @@
 	"scripts": {
 		"ava": "ava",
 		"build": "run-s build:*",
-		"build:css": "sass --no-source-map -I manual/css/src/values manual/assets/css/src:manual/assets/css/dist",
+		"build:css": "sass --no-source-map -I manual/assets/css/src/values manual/assets/css/src:manual/assets/css/dist",
 		"build:js": "node esbuild.mjs -m",
 		"build:manual": "hugo -s manual --minify",
 		"clean": "del-cli build tmp manual/resources public",
@@ -63,7 +63,7 @@
 		"lint": "run-s lint:*",
 		"lint:css": "stylelint --fix manual/assets/css/src",
 		"lint:js": "eslint --ext .js --fix src demo/src manual/assets/js/src",
-		"postbuild:css": "postcss manual/assets/css/index.css -o manual/assets/css/index.css -c manual",
+		"postbuild:css": "postcss manual/assets/css/dist/index.css -o manual/assets/css/dist/index.css -c manual",
 		"prepublishOnly": "run-s test doc",
 		"test": "run-s lint clean build ava",
 		"start": "hugo server -s manual -e development",
