@@ -9,7 +9,7 @@ weight: 50
 
 # Plugins and Tools
 
-The following third-party plugins and tools augment `postprocessing` and/or connect it with other technologies.
+The following third-party plugins and tools augment postprocessing and/or connect it with other technologies.
 
 ## react-postprocessing
 
