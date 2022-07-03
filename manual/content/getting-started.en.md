@@ -9,8 +9,6 @@ weight: 30
 
 # Getting Started
 
-[![Version](https://badgen.net/npm/v/postprocessing)](https://www.npmjs.com/package/postprocessing)
-
 ## Installation
 
 This library requires the peer dependency [three](https://github.com/mrdoob/three.js/). Check the [release notes](https://github.com/vanruesc/postprocessing/releases) for supported versions.
@@ -54,15 +52,15 @@ __package.json__
 __src/app.js__
 
 ```js
-import { PostProcessor } from "postprocessing";
-console.log(PostProcessor);
+import { RenderPipeline } from "postprocessing";
+console.log(RenderPipeline);
 ```
 
 Install [node.js](https://nodejs.org) and use the command `npm run build` to generate the code bundle. Include the bundle in an HTML file to run it in a browser.
 
 ## Usage
 
-Postprocessing extends the common rendering workflow with fullscreen image manipulation tools. The following WebGL attributes should be used for an optimal post processing workflow:
+Postprocessing extends the common rendering workflow with fullscreen image manipulation tools. The following WebGL attributes should be used for an optimal workflow:
 
 ```js
 import { WebGLRenderer } from "three";
@@ -92,7 +90,7 @@ const camera = ...;
 
 const pipeline = new RenderPipeline(renderer);
 pipeline.addPass(new ClearPass());
-pipeline.addPass(new GeometryPass(scene, camera, { multisampling: 4 }));
+pipeline.addPass(new GeometryPass(scene, camera, { samples: 4 }));
 pipeline.addPass(new EffectPass(new BloomEffect()));
 
 requestAnimationFrame(function render() {
