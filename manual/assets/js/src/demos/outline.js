@@ -3,6 +3,7 @@ import {
 	AnimationMixer,
 	Color,
 	CubeTextureLoader,
+	GLTFLoader,
 	LoadingManager,
 	PerspectiveCamera,
 	Raycaster,
@@ -24,7 +25,6 @@ import {
 	RenderPass
 } from "postprocessing";
 
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { Pane } from "tweakpane";
 import { ControlMode, SpatialControls } from "spatial-controls";
 import { calculateVerticalFoV, FPSMeter } from "../utils";
