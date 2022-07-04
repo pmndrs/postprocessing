@@ -38,7 +38,7 @@ export class Resolution extends EventDispatcher {
 		 * @private
 		 */
 
-		this.base = new Vector2(1, 1);
+		this.baseSize = new Vector2(1, 1);
 
 		/**
 		 * The preferred resolution.
@@ -47,7 +47,7 @@ export class Resolution extends EventDispatcher {
 		 * @private
 		 */
 
-		this.preferred = new Vector2(width, height);
+		this.preferredSize = new Vector2(width, height);
 
 		/**
 		 * The preferred resolution.
@@ -56,7 +56,7 @@ export class Resolution extends EventDispatcher {
 		 * @deprecated Added for backward-compatibility.
 		 */
 
-		this.target = this.preferred;
+		this.target = this.preferredSize;
 
 		/**
 		 * A resolution scale.
@@ -66,6 +66,57 @@ export class Resolution extends EventDispatcher {
 		 */
 
 		this.s = scale;
+
+		/**
+		 * The effective resolution.
+		 *
+		 * @type {Vector2}
+		 * @private
+		 */
+
+		this.effectiveSize = new Vector2();
+		this.addEventListener("change", () => this.updateEffectiveSize());
+		this.updateEffectiveSize();
+
+	}
+
+	/**
+	 * Calculates the effective size.
+	 *
+	 * @private
+	 */
+
+	updateEffectiveSize() {
+
+		const { base, preferred, scale, effective } = this;
+
+		if(preferred.width !== AUTO_SIZE) {
+
+			effective.width = preferred.width;
+
+		} else if(preferred.height !== AUTO_SIZE) {
+
+			effective.width = Math.round(preferred.height * (base.width / Math.max(base.height, 1)));
+
+		} else {
+
+			effective.width = Math.round(base.width * scale);
+
+		}
+
+		if(preferred.height !== AUTO_SIZE) {
+
+			effective.height = preferred.height;
+
+		} else if(preferred.width !== AUTO_SIZE) {
+
+			effective.height = Math.round(preferred.width / Math.max(base.width / Math.max(base.height, 1), 1));
+
+		} else {
+
+			effective.height = Math.round(base.height * scale);
+
+		}
 
 	}
 
@@ -79,25 +130,7 @@ export class Resolution extends EventDispatcher {
 
 	get width() {
 
-		const { base, preferred, scale } = this;
-
-		let result;
-
-		if(preferred.width !== AUTO_SIZE) {
-
-			result = preferred.width;
-
-		} else if(preferred.height !== AUTO_SIZE) {
-
-			result = Math.round(preferred.height * (base.width / Math.max(base.height, 1)));
-
-		} else {
-
-			result = Math.round(base.width * scale);
-
-		}
-
-		return result;
+		return this.effectiveSize.width;
 
 	}
 
@@ -117,25 +150,7 @@ export class Resolution extends EventDispatcher {
 
 	get height() {
 
-		const { base, preferred, scale } = this;
-
-		let result;
-
-		if(preferred.height !== AUTO_SIZE) {
-
-			result = preferred.height;
-
-		} else if(preferred.width !== AUTO_SIZE) {
-
-			result = Math.round(preferred.width / Math.max(base.width / Math.max(base.height, 1), 1));
-
-		} else {
-
-			result = Math.round(base.height * scale);
-
-		}
-
-		return result;
+		return this.effectiveSize.height;
 
 	}
 
@@ -192,9 +207,9 @@ export class Resolution extends EventDispatcher {
 		if(this.s !== value) {
 
 			this.s = value;
-			this.preferred.setScalar(AUTO_SIZE);
+			this.preferredSize.setScalar(AUTO_SIZE);
 			this.dispatchEvent({ type: "change" });
-			this.resizable.setSize(this.base.width, this.base.height);
+			this.resizable.setSize(this.baseSize.width, this.baseSize.height);
 
 		}
 
@@ -236,17 +251,17 @@ export class Resolution extends EventDispatcher {
 
 	get baseWidth() {
 
-		return this.base.width;
+		return this.baseSize.width;
 
 	}
 
 	set baseWidth(value) {
 
-		if(this.base.width !== value) {
+		if(this.baseSize.width !== value) {
 
-			this.base.width = value;
+			this.baseSize.width = value;
 			this.dispatchEvent({ type: "change" });
-			this.resizable.setSize(this.base.width, this.base.height);
+			this.resizable.setSize(this.baseSize.width, this.baseSize.height);
 
 		}
 
@@ -261,7 +276,7 @@ export class Resolution extends EventDispatcher {
 
 	getBaseWidth() {
 
-		return this.base.width;
+		return this.baseWidth;
 
 	}
 
@@ -274,13 +289,7 @@ export class Resolution extends EventDispatcher {
 
 	setBaseWidth(value) {
 
-		if(this.base.width !== value) {
-
-			this.base.width = value;
-			this.dispatchEvent({ type: "change" });
-			this.resizable.setSize(this.base.width, this.base.height);
-
-		}
+		this.baseWidth = value;
 
 	}
 
@@ -292,17 +301,17 @@ export class Resolution extends EventDispatcher {
 
 	get baseHeight() {
 
-		return this.base.height;
+		return this.baseSize.height;
 
 	}
 
 	set baseHeight(value) {
 
-		if(this.base.height !== value) {
+		if(this.baseSize.height !== value) {
 
-			this.base.height = value;
+			this.baseSize.height = value;
 			this.dispatchEvent({ type: "change" });
-			this.resizable.setSize(this.base.width, this.base.height);
+			this.resizable.setSize(this.baseSize.width, this.baseSize.height);
 
 		}
 
@@ -343,11 +352,11 @@ export class Resolution extends EventDispatcher {
 
 	setBaseSize(width, height) {
 
-		if(this.base.width !== width || this.base.height !== height) {
+		if(this.baseSize.width !== width || this.baseSize.height !== height) {
 
-			this.base.set(width, height);
+			this.baseSize.set(width, height);
 			this.dispatchEvent({ type: "change" });
-			this.resizable.setSize(this.base.width, this.base.height);
+			this.resizable.setSize(this.baseSize.width, this.baseSize.height);
 
 		}
 
@@ -361,17 +370,17 @@ export class Resolution extends EventDispatcher {
 
 	get preferredWidth() {
 
-		return this.preferred.width;
+		return this.preferredSize.width;
 
 	}
 
 	set preferredWidth(value) {
 
-		if(this.preferred.width !== value) {
+		if(this.preferredSize.width !== value) {
 
-			this.preferred.width = value;
+			this.preferredSize.width = value;
 			this.dispatchEvent({ type: "change" });
-			this.resizable.setSize(this.base.width, this.base.height);
+			this.resizable.setSize(this.baseSize.width, this.baseSize.height);
 
 		}
 
@@ -413,17 +422,17 @@ export class Resolution extends EventDispatcher {
 
 	get preferredHeight() {
 
-		return this.preferred.height;
+		return this.preferredSize.height;
 
 	}
 
 	set preferredHeight(value) {
 
-		if(this.preferred.height !== value) {
+		if(this.preferredSize.height !== value) {
 
-			this.preferred.height = value;
+			this.preferredSize.height = value;
 			this.dispatchEvent({ type: "change" });
-			this.resizable.setSize(this.base.width, this.base.height);
+			this.resizable.setSize(this.baseSize.width, this.baseSize.height);
 
 		}
 
@@ -466,11 +475,11 @@ export class Resolution extends EventDispatcher {
 
 	setPreferredSize(width, height) {
 
-		if(this.preferred.width !== width || this.preferred.height !== height) {
+		if(this.preferredSize.width !== width || this.preferredSize.height !== height) {
 
-			this.preferred.set(width, height);
+			this.preferredSize.set(width, height);
 			this.dispatchEvent({ type: "change" });
-			this.resizable.setSize(this.base.width, this.base.height);
+			this.resizable.setSize(this.baseSize.width, this.baseSize.height);
 
 		}
 
@@ -485,10 +494,10 @@ export class Resolution extends EventDispatcher {
 	copy(resolution) {
 
 		this.s = resolution.scale;
-		this.base.set(resolution.getBaseWidth(), resolution.getBaseHeight());
-		this.preferred.set(resolution.getPreferredWidth(), resolution.getPreferredHeight());
+		this.baseSize.set(resolution.getBaseWidth(), resolution.getBaseHeight());
+		this.preferredSize.set(resolution.getPreferredWidth(), resolution.getPreferredHeight());
 		this.dispatchEvent({ type: "change" });
-		this.resizable.setSize(this.base.width, this.base.height);
+		this.resizable.setSize(this.baseSize.width, this.baseSize.height);
 
 	}
 
