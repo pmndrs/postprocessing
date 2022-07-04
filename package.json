@@ -54,7 +54,7 @@
 		"build:css": "sass --no-source-map -I manual/assets/css/src/values manual/assets/css/src:manual/assets/css/dist",
 		"build:js": "node esbuild.mjs -m",
 		"build:manual": "hugo -s manual --minify",
-		"clean": "del-cli build tmp manual/resources public",
+		"clean": "del-cli build tmp manual/resources manual/assets/**/dist public",
 		"copy": "copyfiles -u 2 \"demo/static/**/*\" public/demo",
 		"deploy": "run-s test copy doc gzip",
 		"dev": "run-s clean copy && run-p start watch:*",
