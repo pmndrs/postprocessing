@@ -2,8 +2,6 @@ uniform vec4 texelSize; // XY = texel size, ZW = half texel size
 uniform float kernel;
 uniform vec2 scale; // X = resolution, Y = kernel
 
-/* Packing multiple texture coordinates into one varying vec4 and using a swizzle to extract them in the fragment shader
-still causes a dependent texture read. */
 varying vec2 vUv0;
 varying vec2 vUv1;
 varying vec2 vUv2;
