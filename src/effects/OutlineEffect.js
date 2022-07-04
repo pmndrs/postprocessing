@@ -31,6 +31,7 @@ export class OutlineEffect extends Effect {
 	 * @param {KernelSize} [options.kernelSize=KernelSize.VERY_SMALL] - The blur kernel size.
 	 * @param {Boolean} [options.blur=false] - Whether the outline should be blurred.
 	 * @param {Boolean} [options.xRay=true] - Whether occluded parts of selected objects should be visible.
+	 * @param {Number} [options.multisampling=0] - The number of samples used for multisample antialiasing. Requires WebGL 2.
 	 * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
 	 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
 	 * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
@@ -49,6 +50,7 @@ export class OutlineEffect extends Effect {
 		kernelSize = KernelSize.VERY_SMALL,
 		blur = false,
 		xRay = true,
+		multisampling = 0,
 		resolutionScale = 0.5,
 		width = Resolution.AUTO_SIZE,
 		height = Resolution.AUTO_SIZE,
@@ -116,6 +118,7 @@ export class OutlineEffect extends Effect {
 		 */
 
 		this.renderTargetMask = new WebGLRenderTarget(1, 1);
+		this.renderTargetMask.samples = multisampling;
 		this.renderTargetMask.texture.name = "Outline.Mask";
 		this.uniforms.get("maskTexture").value = this.renderTargetMask.texture;
 
@@ -235,6 +238,28 @@ export class OutlineEffect extends Effect {
 	getResolution() {
 
 		return this.blurPass.getResolution();
+
+	}
+
+	/**
+	 * The amount of MSAA samples.
+	 *
+	 * Requires WebGL 2. Set to zero to disable multisampling.
+	 *
+	 * @experimental Requires three >= r138.
+	 * @type {Number}
+	 */
+
+	get multisampling() {
+
+		return this.renderTargetMask.samples;
+
+	}
+
+	set multisampling(value) {
+
+		this.renderTargetMask.samples = value;
+		this.renderTargetMask.dispose();
 
 	}
 
