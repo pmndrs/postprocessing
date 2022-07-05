@@ -57,7 +57,7 @@
 		"clean": "del-cli build tmp manual/resources manual/assets/**/dist public",
 		"copy": "copyfiles -u 2 \"demo/static/**/*\" public/demo",
 		"deploy": "run-s test copy doc gzip",
-		"dev": "run-s clean copy && run-p start watch:*",
+		"dev": "run-s clean copy && run-p watch:* start",
 		"doc": "esdoc",
 		"gzip": "gzipper c public",
 		"lint": "run-s lint:*",
