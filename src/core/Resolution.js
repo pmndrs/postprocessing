@@ -88,7 +88,10 @@ export class Resolution extends EventDispatcher {
 
 	updateEffectiveSize() {
 
-		const { base, preferred, scale, effective } = this;
+		const base = this.baseSize;
+		const preferred = this.preferredSize;
+		const effective = this.effectiveSize;
+		const scale = this.scale;
 
 		if(preferred.width !== AUTO_SIZE) {
 
