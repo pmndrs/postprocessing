@@ -1495,6 +1495,7 @@ declare module "postprocessing" {
 				kernelSize?: number;
 			}
 		);
+
 	}
 
 	/**
