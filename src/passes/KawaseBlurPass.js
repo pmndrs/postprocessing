@@ -101,7 +101,7 @@ export class KawaseBlurPass extends Pass {
 	/**
 	 * Indicates whether dithering is enabled.
 	 *
-	 * @type {KernelSize}
+	 * @type {Boolean}
 	 * @deprecated Use copyMaterial.dithering instead.
 	 */
 
@@ -345,8 +345,9 @@ export class KawaseBlurPass extends Pass {
 
 		this.renderTargetA.setSize(w, h);
 		this.renderTargetB.setSize(w, h);
-		this.blurMaterial.setSize(w, h);
-		this.blurMaterial.resolutionScale = resolution.scale;
+
+		// Optimization: 1 / (TexelSize * ResolutionScale) = FullResolution
+		this.blurMaterial.setSize(width, height);
 
 	}
 
@@ -368,6 +369,7 @@ export class KawaseBlurPass extends Pass {
 			if(frameBufferType !== UnsignedByteType) {
 
 				this.blurMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+				this.copyMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
 			} else if(renderer.outputEncoding === sRGBEncoding) {
 

@@ -1,9 +1,7 @@
 uniform vec4 texelSize; // XY = texel size, ZW = half texel size
 uniform float kernel;
-uniform vec2 scale; // X = resolution, Y = kernel
+uniform float scale;
 
-/* Packing multiple texture coordinates into one varying vec4 and using a swizzle to extract them in the fragment shader
-still causes a dependent texture read. */
 varying vec2 vUv0;
 varying vec2 vUv1;
 varying vec2 vUv2;
@@ -12,7 +10,7 @@ varying vec2 vUv3;
 void main() {
 
 	vec2 uv = position.xy * 0.5 + 0.5;
-	vec2 dUv = (texelSize.xy * vec2(kernel) + texelSize.zw) * scale.x * scale.y;
+	vec2 dUv = (texelSize.xy * vec2(kernel) + texelSize.zw) * scale;
 
 	vUv0 = vec2(uv.x - dUv.x, uv.y + dUv.y);
 	vUv1 = vec2(uv.x + dUv.x, uv.y + dUv.y);

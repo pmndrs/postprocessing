@@ -33,7 +33,7 @@ export class GaussianBlurMaterial extends ShaderMaterial {
 				texelSize: new Uniform(new Vector2()),
 				direction: new Uniform(new Vector2()),
 				kernel: new Uniform(null),
-				scale: new Uniform(new Vector2(1.0, 1.0))
+				scale: new Uniform(1.0)
 			},
 			blending: NoBlending,
 			depthWrite: false,
@@ -101,19 +101,6 @@ export class GaussianBlurMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * The resolution scale.
-	 *
-	 * @type {Number}
-	 * @internal
-	 */
-
-	set resolutionScale(value) {
-
-		this.uniforms.scale.value.x = value;
-
-	}
-
-	/**
 	 * The blur kernel scale. Values greater than 1.0 may introduce artifacts.
 	 *
 	 * @type {Number}
@@ -121,13 +108,13 @@ export class GaussianBlurMaterial extends ShaderMaterial {
 
 	get scale() {
 
-		return this.uniforms.scale.value.y;
+		return this.uniforms.scale.value;
 
 	}
 
 	set scale(value) {
 
-		this.uniforms.scale.value.y = value;
+		this.uniforms.scale.value = value;
 
 	}
 

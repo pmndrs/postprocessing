@@ -124,8 +124,12 @@ export class GaussianBlurPass extends Pass {
 			renderer.setRenderTarget(renderTargetB);
 			renderer.render(scene, camera);
 
-			// Use renderTargetB as input for further blur iterations.
-			previousBuffer = renderTargetB;
+			if(i === 0 && l > 1) {
+
+				// Use renderTargetB as input for further blur iterations.
+				previousBuffer = renderTargetB;
+
+			}
 
 		}
 
@@ -148,11 +152,11 @@ export class GaussianBlurPass extends Pass {
 		const resolution = this.resolution;
 		resolution.setBaseSize(width, height);
 		const w = resolution.width, h = resolution.height;
-
 		this.renderTargetA.setSize(w, h);
 		this.renderTargetB.setSize(w, h);
-		this.blurMaterial.setSize(w, h);
-		this.blurMaterial.resolutionScale = resolution.scale;
+
+		// Optimization: 1 / (TexelSize * ResolutionScale) = FullResolution
+		this.blurMaterial.setSize(width, height);
 
 	}
 
@@ -173,7 +177,8 @@ export class GaussianBlurPass extends Pass {
 
 			if(frameBufferType !== UnsignedByteType) {
 
-				this.fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+				this.blurMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+				this.copyMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
 			} else if(renderer.outputEncoding === sRGBEncoding) {
 

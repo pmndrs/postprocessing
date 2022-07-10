@@ -492,15 +492,11 @@ export class DepthOfFieldEffect extends Effect {
 		this.renderTargetFar.setSize(w, h);
 		this.renderTargetCoCBlurred.setSize(w, h);
 
-		// The bokeh blur passes operate on the low resolution buffers.
-		this.bokehNearBasePass.fullscreenMaterial.setSize(w, h);
-		this.bokehNearFillPass.fullscreenMaterial.setSize(w, h);
-		this.bokehFarBasePass.fullscreenMaterial.setSize(w, h);
-		this.bokehFarFillPass.fullscreenMaterial.setSize(w, h);
-		this.bokehNearBasePass.fullscreenMaterial.resolutionScale = resolution.scale;
-		this.bokehNearFillPass.fullscreenMaterial.resolutionScale = resolution.scale;
-		this.bokehFarBasePass.fullscreenMaterial.resolutionScale = resolution.scale;
-		this.bokehFarFillPass.fullscreenMaterial.resolutionScale = resolution.scale;
+		// Optimization: 1 / (TexelSize * ResolutionScale) = FullResolution
+		this.bokehNearBasePass.fullscreenMaterial.setSize(width, height);
+		this.bokehNearFillPass.fullscreenMaterial.setSize(width, height);
+		this.bokehFarBasePass.fullscreenMaterial.setSize(width, height);
+		this.bokehFarFillPass.fullscreenMaterial.setSize(width, height);
 
 	}
 

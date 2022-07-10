@@ -1,6 +1,6 @@
 {
 	"name": "postprocessing",
-	"version": "6.28.1",
+	"version": "6.28.2",
 	"description": "A post processing library that provides the means to implement image filter effects for three.js.",
 	"homepage": "https://github.com/pmndrs/postprocessing",
 	"main": "build/postprocessing.js",
@@ -51,25 +51,24 @@
 	"scripts": {
 		"ava": "ava",
 		"build": "run-s build:*",
-		"build:css": "sass --no-source-map -I manual/css/src/values manual/css/src:manual/assets/css",
+		"build:css": "sass --no-source-map -I manual/assets/css/src/values manual/assets/css/src:manual/assets/css/dist",
 		"build:js": "node esbuild.mjs -m",
-		"build:manual": "hugo -s manual --minify",
-		"clean": "del-cli build tmp manual/resources public && mkdirp manual/assets/css",
+		"clean": "del-cli build tmp manual/resources manual/assets/**/dist public",
 		"copy": "copyfiles -u 2 \"demo/static/**/*\" public/demo",
 		"deploy": "run-s test copy doc gzip",
-		"dev": "run-s clean copy && run-p start watch:*",
 		"doc": "esdoc",
 		"gzip": "gzipper c public",
+		"hugo": "hugo -s manual --minify",
 		"lint": "run-s lint:*",
-		"lint:css": "stylelint --fix manual/css/src",
-		"lint:js": "eslint --ext .js --fix src demo/src manual/js/src",
-		"postbuild:css": "postcss manual/assets/css/index.css -o manual/assets/css/index.css -c manual",
+		"lint:css": "stylelint --fix manual/assets/css/src",
+		"lint:js": "eslint --ext .js --fix src demo/src manual/assets/js/src",
+		"postcss": "postcss manual/assets/css/dist/index.css -o manual/assets/css/dist/index.css -c manual",
 		"prepublishOnly": "run-s test doc",
-		"test": "run-s lint clean build ava",
+		"test": "run-s lint clean build ava postcss hugo",
 		"start": "hugo server -s manual -e development",
-		"watch": "run-p watch:*",
-		"watch:css": "sass --no-source-map -I manual/css/src/values manual/css/src:manual/assets/css --watch",
-		"watch:eslint": "esw -w --ext .js --color src demo/src manual/js/src",
+		"watch": "run-s clean copy build && run-p watch:* start",
+		"watch:css": "sass --no-source-map -I manual/assets/css/src/values manual/assets/css/src:manual/assets/css/dist -w",
+		"watch:eslint": "esw -w --ext .js --color src demo/src manual/assets/js/src",
 		"watch:js": "node esbuild.mjs -w"
 	},
 	"ava": {
@@ -82,7 +81,7 @@
 		"extends": "aether"
 	},
 	"peerDependencies": {
-		"three": ">= 0.107.0 < 0.142.0"
+		"three": ">= 0.107.0 < 0.143.0"
 	},
 	"devDependencies": {
 		"@tweakpane/core": "1.x.x",
@@ -107,7 +106,6 @@
 		"tiny-glob": "0.x.x",
 		"gzipper": "7.x.x",
 		"hugo-bin": "0.x.x",
-		"mkdirp": "1.x.x",
 		"npm-run-all": "4.x.x",
 		"postcss": "8.x.x",
 		"postcss-cli": "9.x.x",

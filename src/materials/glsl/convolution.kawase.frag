@@ -15,20 +15,11 @@ varying vec2 vUv3;
 
 void main() {
 
-	// Sample top left texel.
-	vec4 sum = texture2D(inputBuffer, vUv0);
-
-	// Sample top right texel.
-	sum += texture2D(inputBuffer, vUv1);
-
-	// Sample bottom right texel.
-	sum += texture2D(inputBuffer, vUv2);
-
-	// Sample bottom left texel.
-	sum += texture2D(inputBuffer, vUv3);
-
-	// Compute the average.
-	gl_FragColor = sum * 0.25;
+	vec4 sum = texture2D(inputBuffer, vUv0); // Top left
+	sum += texture2D(inputBuffer, vUv1); // Top right
+	sum += texture2D(inputBuffer, vUv2); // Bottom right
+	sum += texture2D(inputBuffer, vUv3); // Bottom left
+	gl_FragColor = sum * 0.25; // Compute the average
 
 	#include <encodings_fragment>
 

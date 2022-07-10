@@ -102,8 +102,8 @@ window.addEventListener("load", () => load().then((assets) => {
 		multisampling: Math.min(4, renderer.capabilities.maxSamples)
 	});
 
-	const gaussianBlurPass = new GaussianBlurPass({ resolutionScale: 0.75, kernelSize: 35 });
-	const kawaseBlurPass = new KawaseBlurPass({ resolutionScale: 0.75, kernelSize: KernelSize.MEDIUM });
+	const gaussianBlurPass = new GaussianBlurPass({ resolutionScale: 0.5, kernelSize: 35 });
+	const kawaseBlurPass = new KawaseBlurPass({ resolutionScale: 0.5, kernelSize: KernelSize.MEDIUM });
 
 	gaussianBlurPass.renderToScreen = true;
 	kawaseBlurPass.renderToScreen = true;

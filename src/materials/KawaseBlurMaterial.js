@@ -1,4 +1,4 @@
-import { NoBlending, ShaderMaterial, Uniform, Vector2, Vector4 } from "three";
+import { NoBlending, ShaderMaterial, Uniform, Vector4 } from "three";
 import { KernelSize } from "../enums";
 
 import fragmentShader from "./glsl/convolution.kawase.frag";
@@ -17,7 +17,6 @@ const kernelPresets = [
  * An optimized convolution shader material.
  *
  * References:
- *
  * Masaki Kawase, Bunkasha Games, GDC2003 Presentation: [Frame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L
  * (Wreckless)](http://genderi.org/frame-buffer-postprocessing-effects-in-double-s-t-e-a-l-wreckl.html)
  * Filip Strugar, Intel, 2014: [An investigation of fast real-time GPU-based image blur algorithms](
@@ -25,7 +24,6 @@ const kernelPresets = [
  *
  * Further modified according to Apple's [Best Practices for Shaders](https://goo.gl/lmRoM5).
  *
- * @todo Remove dithering code from fragment shader.
  * @implements {Resizable}
  */
 
@@ -45,7 +43,7 @@ export class KawaseBlurMaterial extends ShaderMaterial {
 			uniforms: {
 				inputBuffer: new Uniform(null),
 				texelSize: new Uniform(new Vector4()),
-				scale: new Uniform(new Vector2(1.0, 1.0)),
+				scale: new Uniform(1.0),
 				kernel: new Uniform(0.0)
 			},
 			blending: NoBlending,
@@ -108,19 +106,6 @@ export class KawaseBlurMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * The resolution scale.
-	 *
-	 * @type {Number}
-	 * @internal
-	 */
-
-	set resolutionScale(value) {
-
-		this.uniforms.scale.value.x = value;
-
-	}
-
-	/**
 	 * The blur scale.
 	 *
 	 * @type {Number}
@@ -128,13 +113,13 @@ export class KawaseBlurMaterial extends ShaderMaterial {
 
 	get scale() {
 
-		return this.uniforms.scale.value.y;
+		return this.uniforms.scale.value;
 
 	}
 
 	set scale(value) {
 
-		this.uniforms.scale.value.y = value;
+		this.uniforms.scale.value = value;
 
 	}
 

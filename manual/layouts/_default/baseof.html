@@ -16,17 +16,17 @@
 		{{/* Prevent white flash on navigation in dark mode. */}}
 		<script>document.documentElement.classList[localStorage.getItem("dark-mode")?"add":"remove"]("dark")</script>
 
-		{{ with resources.Get "css/index.css" }}
+		{{ with resources.Get "css/dist/index.css" }}
 			{{ $stylesheet := . | fingerprint }}
 			<link rel="stylesheet" href="{{ $stylesheet.RelPermalink }}" integrity="{{ $stylesheet.Data.Integrity }}">
 		{{ end }}
 		{{ block "styles" . }}{{ end }}
 
-		{{ with resources.Get "js/index.js" }}
+		{{ with resources.Get "js/dist/index.js" }}
 			{{ $script := . | fingerprint }}
 			<script defer src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
 		{{ end }}
-		{{ with resources.Get "js/libs/three.js" }}
+		{{ with resources.Get "js/dist/libs/three.js" }}
 			{{ $script := . | fingerprint }}
 			<script defer src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
 		{{ end }}
@@ -66,6 +66,12 @@
 				</main>
 			</div>
 		</div>
+
+		{{/* Immediately restore scroll positions. */}}
+		<script>
+			document.querySelector(".navigation").scrollTop = Number(sessionStorage.getItem("nav-scroll"));
+			document.querySelector("main").scrollTop = Number(sessionStorage.getItem("main-scroll"));
+		</script>
 
 	</body>
 </html>

@@ -1,5 +1,6 @@
-import { BasicDepthPacking, EventDispatcher, LinearEncoding, Scene } from "three";
+import { BasicDepthPacking, EventDispatcher, LinearEncoding, Material, Texture, WebGLRenderTarget } from "three";
 import { BlendFunction, EffectAttribute } from "../enums";
+import { Pass } from "../passes";
 import { BlendMode } from "./blending";
 
 /**
@@ -439,14 +440,14 @@ export class Effect extends EventDispatcher {
 		for(const key of Object.keys(this)) {
 
 			const property = this[key];
+			const isDisposable = (
+				property instanceof WebGLRenderTarget ||
+				property instanceof Material ||
+				property instanceof Texture ||
+				property instanceof Pass
+			);
 
-			if(property !== null && typeof property.dispose === "function") {
-
-				if(property instanceof Scene || property === this.renderer) {
-
-					continue;
-
-				}
+			if(isDisposable) {
 
 				/** @ignore */
 				this[key].dispose();

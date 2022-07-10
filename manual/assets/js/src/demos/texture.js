@@ -52,6 +52,14 @@ function load() {
 
 		});
 
+		textureLoader.load(document.baseURI + "img/textures/lens-dirt/bokeh.png", (t) => {
+
+			t.encoding = sRGBEncoding;
+			t.wrapS = t.wrapT = RepeatWrapping;
+			assets.set("bokeh", t);
+
+		});
+
 		cubeTextureLoader.load(urls, (t) => {
 
 			t.encoding = sRGBEncoding;
@@ -115,7 +123,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const effect = new TextureEffect({
 		blendFunction: BlendFunction.COLOR_DODGE,
-		texture: assets.get("scratches")
+		texture: assets.get("bokeh")
 	});
 
 	composer.addPass(new RenderPass(scene, camera));

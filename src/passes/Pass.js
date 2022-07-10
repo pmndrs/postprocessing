@@ -1,4 +1,14 @@
-import { BasicDepthPacking, BufferAttribute, BufferGeometry, Camera, Mesh, Scene } from "three";
+import {
+	BasicDepthPacking,
+	BufferAttribute,
+	BufferGeometry,
+	Camera,
+	Material,
+	Mesh,
+	Scene,
+	Texture,
+	WebGLRenderTarget
+} from "three";
 
 const dummyCamera = new Camera();
 let geometry = null;
@@ -173,7 +183,7 @@ export class Pass {
 
 		if(this.rtt === value) {
 
-			const material = this.getFullscreenMaterial();
+			const material = this.fullscreenMaterial;
 
 			if(material !== null) {
 
@@ -371,14 +381,14 @@ export class Pass {
 		for(const key of Object.keys(this)) {
 
 			const property = this[key];
+			const isDisposable = (
+				property instanceof WebGLRenderTarget ||
+				property instanceof Material ||
+				property instanceof Texture ||
+				property instanceof Pass
+			);
 
-			if(property !== null && typeof property.dispose === "function") {
-
-				if(property instanceof Scene || property === this.renderer) {
-
-					continue;
-
-				}
+			if(isDisposable) {
 
 				/** @ignore */
 				this[key].dispose();

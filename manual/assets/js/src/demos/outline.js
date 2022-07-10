@@ -3,6 +3,7 @@ import {
 	AnimationMixer,
 	Color,
 	CubeTextureLoader,
+	GLTFLoader,
 	LoadingManager,
 	PerspectiveCamera,
 	Raycaster,
@@ -24,7 +25,6 @@ import {
 	RenderPass
 } from "postprocessing";
 
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { Pane } from "tweakpane";
 import { ControlMode, SpatialControls } from "spatial-controls";
 import { calculateVerticalFoV, FPSMeter } from "../utils";
@@ -160,6 +160,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const effect = new OutlineEffect(scene, camera, {
 		blendFunction: BlendFunction.SCREEN,
+		multisampling: Math.min(4, renderer.capabilities.maxSamples),
 		patternScale: 40,
 		visibleEdgeColor: 0xffffff,
 		hiddenEdgeColor: 0x22090a,
