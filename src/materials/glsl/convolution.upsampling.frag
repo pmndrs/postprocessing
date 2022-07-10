@@ -12,27 +12,29 @@
 
 uniform float radius;
 
-uniform vec2 texelSize;
-uniform vec3 kernel[SAMPLES];
-
 varying vec2 vUv;
-
-vec4 textureClampToBorder(sampler2D map, const in vec2 uv) {
-
-	return (uv.s < 0.0 || uv.s > 1.0 || uv.t < 0.0 || uv.t > 1.0) ? vec4(0.0) : texture2D(map, uv);
-
-}
+varying vec2 vUv0;
+varying vec2 vUv1;
+varying vec2 vUv2;
+varying vec2 vUv3;
+varying vec2 vUv4;
+varying vec2 vUv5;
+varying vec2 vUv6;
+varying vec2 vUv7;
 
 void main() {
 
 	vec4 c = vec4(0.0);
 
-	for(int i = 0; i < SAMPLES; ++i) {
-
-		vec2 uv = vUv + kernel[i].xy * texelSize;
-		c += kernel[i].z * textureClampToBorder(inputBuffer, uv);
-
-	}
+	c += texture2D(inputBuffer, vUv0) * 0.0625;
+	c += texture2D(inputBuffer, vUv1) * 0.125;
+	c += texture2D(inputBuffer, vUv2) * 0.0625;
+	c += texture2D(inputBuffer, vUv3) * 0.125;
+	c += texture2D(inputBuffer, vUv) * 0.25;
+	c += texture2D(inputBuffer, vUv4) * 0.125;
+	c += texture2D(inputBuffer, vUv5) * 0.0625;
+	c += texture2D(inputBuffer, vUv6) * 0.125;
+	c += texture2D(inputBuffer, vUv7) * 0.0625;
 
 	vec4 baseColor = texture2D(supportBuffer, vUv);
 	gl_FragColor = mix(baseColor, c, radius);

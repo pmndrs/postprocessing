@@ -1,7 +1,7 @@
 import { NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
 
 import fragmentShader from "./glsl/convolution.downsampling.frag";
-import vertexShader from "./glsl/common.vert";
+import vertexShader from "./glsl/convolution.downsampling.vert";
 
 /**
  * A downsampling material.
@@ -22,21 +22,9 @@ export class DownsamplingMaterial extends ShaderMaterial {
 
 		super({
 			name: "DownsamplingMaterial",
-			defines: {
-				SAMPLES: "13"
-			},
 			uniforms: {
 				inputBuffer: new Uniform(null),
-				texelSize: new Uniform(new Vector2()),
-				kernel: new Uniform(new Float32Array([
-					// (1 / 4) * 0.5 = 0.125
-					-1.0, 1.0, 0.125, 1.0, 1.0, 0.125,
-					-1.0, -1.0, 0.125, 1.0, -1.0, 0.125,
-					// (1 / 9) * 0.5 = 0.0555555
-					-2.0, 2.0, 0.0555555, 0.0, 2.0, 0.0555555, 2.0, 2.0, 0.0555555,
-					-2.0, 0.0, 0.0555555, 0.0, 0.0, 0.0555555, 2.0, 0.0, 0.0555555,
-					-2.0, -2.0, 0.0555555, 0.0, -2.0, 0.0555555, 2.0, -2.0, 0.0555555
-				]))
+				texelSize: new Uniform(new Vector2())
 			},
 			blending: NoBlending,
 			depthWrite: false,
