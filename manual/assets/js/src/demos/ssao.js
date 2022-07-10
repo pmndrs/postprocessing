@@ -1,12 +1,9 @@
 import {
-	AmbientLight,
 	Color,
 	ColorManagement,
-	DirectionalLight,
 	CubeTextureLoader,
 	FogExp2,
 	LoadingManager,
-	OrthographicCamera,
 	PerspectiveCamera,
 	Scene,
 	sRGBEncoding,
@@ -15,7 +12,6 @@ import {
 
 import {
 	BlendFunction,
-	BoxBlurPass,
 	DepthDownsamplingPass,
 	EffectComposer,
 	EffectPass,
@@ -24,10 +20,8 @@ import {
 	SSAOEffect
 } from "postprocessing";
 
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-
 import { Pane } from "tweakpane";
-import { ControlMode, SpatialControls } from "spatial-controls";
+import { SpatialControls } from "spatial-controls";
 import { calculateVerticalFoV, FPSMeter } from "../utils";
 import * as Domain from "../objects/Domain";
 
@@ -35,7 +29,6 @@ function load() {
 
 	const assets = new Map();
 	const loadingManager = new LoadingManager();
-	const gltfLoader = new GLTFLoader(loadingManager);
 	const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
 	const path = document.baseURI + "img/textures/skies/sunset/";
@@ -50,12 +43,6 @@ function load() {
 
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
-
-		gltfLoader.load(`${document.baseURI}models/machine/machine.gltf`, (gltf) => {
-
-			assets.set("machine", gltf);
-
-		});
 
 		cubeTextureLoader.load(urls, (t) => {
 
@@ -84,58 +71,34 @@ window.addEventListener("load", () => load().then((assets) => {
 	renderer.debug.checkShaderErrors = (window.location.hostname === "localhost");
 	renderer.physicallyCorrectLights = true;
 	renderer.outputEncoding = sRGBEncoding;
-	renderer.setClearColor(0x000000);
-	renderer.setClearAlpha(0);
 
 	const container = document.querySelector(".viewport");
 	container.prepend(renderer.domElement);
 
 	// Camera & Controls
 
-	const camera = new OrthographicCamera();
+	const camera = new PerspectiveCamera();
 	const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 	const settings = controls.settings;
-	settings.general.setMode(ControlMode.THIRD_PERSON);
 	settings.rotation.setSensitivity(2.2);
 	settings.rotation.setDamping(0.05);
-	settings.zoom.setEnabled(false);
-	settings.translation.setEnabled(false);
-	controls.setPosition(2, 1, 10);
+	settings.translation.setDamping(0.1);
+	controls.setPosition(0, 0, 1);
+	controls.lookAt(0, 0, 0);
 
 	// Scene, Lights, Objects
 
 	const scene = new Scene();
+	scene.fog = new FogExp2(0x373134, 0.06);
 	scene.background = assets.get("sky");
-
-	const machine = assets.get("machine");
-	scene.add(machine.scene);
-
-	machine.scene.traverse((object) => {
-
-		if(object.isMesh && object.material) {
-
-			object.material.envMap = assets.get("sky");
-
-		}
-
-	});
-
-	const ambientLight = new AmbientLight(0xffffff);
-	const mainLight = new DirectionalLight(0xffffff, 1.0);
-	mainLight.position.set(0, 1, -1).multiplyScalar(10);
-	mainLight.castShadow = true;
-	mainLight.shadow.bias = -0.01;
-	mainLight.shadow.camera.near = 0.3;
-	mainLight.shadow.camera.far = 20;
-	mainLight.shadow.mapSize.width = 512;
-	mainLight.shadow.mapSize.height = 512;
-	mainLight.shadow.radius = 1;
-	scene.add(mainLight);
+	scene.add(Domain.createLights());
+	scene.add(Domain.createEnvironment(scene.background));
+	scene.add(Domain.createActors(scene.background));
 
 	// Post Processing
 
 	const composer = new EffectComposer(renderer, {
-		//multisampling: Math.min(4, renderer.capabilities.maxSamples)
+		multisampling: Math.min(4, renderer.capabilities.maxSamples)
 	});
 
 	const normalPass = new NormalPass(scene, camera);
@@ -147,7 +110,6 @@ window.addEventListener("load", () => load().then((assets) => {
 	const normalDepthBuffer = renderer.capabilities.isWebGL2 ? depthDownsamplingPass.texture : null;
 
 	const effect = new SSAOEffect(camera, normalPass.texture, {
-		blendFunction: BlendFunction.NORMAL,
 		distanceScaling: true,
 		depthAwareUpsampling: false,
 		normalDepthBuffer,
@@ -156,7 +118,7 @@ window.addEventListener("load", () => load().then((assets) => {
 		worldProximityThreshold: 0.4,
 		worldProximityFalloff: 0.1,
 		radius: 0.1,
-		intensity: 3.33,
+		intensity: 1.33,
 		resolutionScale: 0.5
 	});
 
@@ -171,15 +133,6 @@ window.addEventListener("load", () => load().then((assets) => {
 	}
 
 	composer.addPass(effectPass);
-
-	const blurPass = new BoxBlurPass({
-		iterations: 2,
-		bilateral: true,
-		resolutionScale: 0.5
-	});
-
-	blurPass.blurMaterial.adoptCameraSettings(camera);
-	composer.addPass(blurPass);
 
 	// Settings
 
@@ -239,13 +192,8 @@ window.addEventListener("load", () => load().then((assets) => {
 	function onResize() {
 
 		const width = container.clientWidth, height = container.clientHeight;
-		camera.left = width / -2;
-		camera.right = width / 2;
-		camera.top = height / 2;
-		camera.bottom = height / -2;
 		camera.aspect = width / height;
 		camera.fov = calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
-		camera.zoom = 100;
 		camera.updateProjectionMatrix();
 		composer.setSize(width, height);
 
