@@ -32,12 +32,11 @@ A proposed change should be focused and concise. Please adhere to the following 
 This project contains scripts that will help you during development. All scripts can be executed with `npm run [script]`.
 The following table provides an overview of the most important scripts:
 
-| Task  | Description                                                    |
-|-------|----------------------------------------------------------------|
-| build | Builds and minifies all bundles.                               |
-| watch | Lints source files, builds the manual and listens for changes. |
-| dev   | Runs the watch script and serves files locally.                |
-| test  | Lints source files, builds all bundles and runs unit tests.    |
+| Task  | Description                                                                     |
+|-------|---------------------------------------------------------------------------------|
+| build | Builds and minifies all bundles.                                                |
+| watch | Lints sources, builds the manual, listens for changes and serves files locally. |
+| test  | Lints source files, builds all bundles and runs unit tests.                     |
 
 
 ### Testing :heavy_check_mark:

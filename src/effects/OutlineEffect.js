@@ -752,7 +752,7 @@ export class OutlineEffect extends Effect {
 
 		} else if(this.time > 0) {
 
-			this.clearPass.render(renderer, this.renderTargetMask);
+			this.clearPass.render(renderer, this.renderTargetOutline);
 			this.time = 0;
 
 		}
