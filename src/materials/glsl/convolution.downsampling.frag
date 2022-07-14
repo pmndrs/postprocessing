@@ -29,16 +29,13 @@ varying vec2 vUv11;
 
 float clampToBorder(const in vec2 uv) {
 
-	// (uv.s < 0.0 || uv.s > 1.0 || uv.t < 0.0 || uv.t > 1.0) ? 0.0 : 1.0;
-	vec2 s = step(vec2(0.0), uv) * step(uv, vec2(1.0));
-	return s.x * s.y;
+	return float(uv.s >= 0.0 && uv.s <= 1.0 && uv.t >= 0.0 && uv.t <= 1.0);
 
 }
 
 void main() {
 
 	vec4 c = vec4(0.0);
-	float d = 1.0;
 
 	vec4 w = WEIGHT_INNER * vec4(
 		clampToBorder(vUv00),
@@ -47,7 +44,6 @@ void main() {
 		clampToBorder(vUv03)
 	);
 
-	d -= dot(w, vec4(1.0));
 	c += w.x * texture2D(inputBuffer, vUv00);
 	c += w.y * texture2D(inputBuffer, vUv01);
 	c += w.z * texture2D(inputBuffer, vUv02);
@@ -60,7 +56,6 @@ void main() {
 		clampToBorder(vUv07)
 	);
 
-	d -= dot(w, vec4(1.0));
 	c += w.x * texture2D(inputBuffer, vUv04);
 	c += w.y * texture2D(inputBuffer, vUv05);
 	c += w.z * texture2D(inputBuffer, vUv06);
@@ -73,13 +68,12 @@ void main() {
 		clampToBorder(vUv11)
 	);
 
-	d -= dot(w, vec4(1.0));
 	c += w.x * texture2D(inputBuffer, vUv08);
 	c += w.y * texture2D(inputBuffer, vUv09);
 	c += w.z * texture2D(inputBuffer, vUv10);
 	c += w.w * texture2D(inputBuffer, vUv11);
 
-	c += texture2D(inputBuffer, vUv) * d;
+	c += WEIGHT_OUTER * texture2D(inputBuffer, vUv);
 	gl_FragColor = c;
 
 	#include <encodings_fragment>

@@ -16,7 +16,7 @@ varying vec2 vUv11;
 
 void main() {
 
-	vec2 vUv = position.xy * 0.5 + 0.5;
+	vUv = position.xy * 0.5 + 0.5;
 
 	vUv00 = vUv + texelSize * vec2(-1.0, 1.0);
 	vUv01 = vUv + texelSize * vec2(1.0, 1.0);
