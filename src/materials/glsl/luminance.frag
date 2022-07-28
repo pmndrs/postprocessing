@@ -1,5 +1,11 @@
 #include <common>
 
+#if THREE_REVISION < 143
+
+	#define luminance(v) linearToRelativeLuminance(v)
+
+#endif
+
 #ifdef FRAMEBUFFER_PRECISION_HIGH
 
 	uniform mediump sampler2D inputBuffer;
@@ -26,7 +32,7 @@ varying vec2 vUv;
 void main() {
 
 	vec4 texel = texture2D(inputBuffer, vUv);
-	float l = linearToRelativeLuminance(texel.rgb);
+	float l = luminance(texel.rgb);
 
 	#ifdef RANGE
 

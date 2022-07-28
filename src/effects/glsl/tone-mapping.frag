@@ -1,5 +1,11 @@
 #include <tonemapping_pars_fragment>
 
+#if THREE_REVISION < 143
+
+	#define luminance(v) linearToRelativeLuminance(v)
+
+#endif
+
 uniform lowp sampler2D luminanceBuffer;
 uniform float whitePoint;
 uniform float middleGrey;
@@ -15,7 +21,7 @@ vec3 Reinhard2ToneMapping(vec3 color) {
 	color *= toneMappingExposure;
 
 	// Calculate the luminance of the current pixel.
-	float l = linearToRelativeLuminance(color);
+	float l = luminance(color);
 
 	#if TONE_MAPPING_MODE == 2
 

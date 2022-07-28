@@ -1,4 +1,4 @@
-import { BasicDepthPacking, NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
+import { BasicDepthPacking, NoBlending, REVISION, ShaderMaterial, Uniform, Vector2 } from "three";
 import { EdgeDetectionMode } from "../enums";
 
 import fragmentShader from "./glsl/edge-detection.frag";
@@ -25,6 +25,7 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 		super({
 			name: "EdgeDetectionMaterial",
 			defines: {
+				THREE_REVISION: REVISION.replace(/\D+/g, ""),
 				LOCAL_CONTRAST_ADAPTATION_FACTOR: "2.0",
 				EDGE_THRESHOLD: "0.1",
 				DEPTH_THRESHOLD: "0.01",

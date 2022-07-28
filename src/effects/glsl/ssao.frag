@@ -1,6 +1,12 @@
 uniform lowp sampler2D aoBuffer;
 uniform float luminanceInfluence;
 
+#if THREE_REVISION < 143
+
+	#define luminance(v) linearToRelativeLuminance(v)
+
+#endif
+
 #ifdef DEPTH_AWARE_UPSAMPLING
 
 	#ifdef GL_FRAGMENT_PRECISION_HIGH
@@ -77,7 +83,7 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth,
 	#endif
 
 	// Fade AO based on luminance.
-	float l = linearToRelativeLuminance(inputColor.rgb);
+	float l = luminance(inputColor.rgb);
 	ao = mix(ao, 1.0, l * luminanceInfluence);
 
 	#ifdef COLORIZE

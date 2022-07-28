@@ -11,6 +11,12 @@
  * THE USE OF OR INABILITY TO USE THIS SOFTWARE, EVEN IF NVIDIA HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
  */
 
+#if THREE_REVISION < 143
+
+	#define luminance(v) linearToRelativeLuminance(v)
+
+#endif
+
 #define QUALITY(q) ((q) < 5 ? 1.0 : ((q) > 5 ? ((q) < 10 ? 2.0 : ((q) < 11 ? 4.0 : 8.0)) : 1.5))
 #define ONE_OVER_TWELVE 0.08333333333333333
 
@@ -27,13 +33,13 @@ varying vec2 vUvDownRight;
 vec4 fxaa(const in vec4 inputColor, const in vec2 uv) {
 
 	// Luma at the current fragment.
-	float lumaCenter = linearToRelativeLuminance(inputColor.rgb);
+	float lumaCenter = luminance(inputColor.rgb);
 
 	// Luma at the four direct neighbours of the current fragment.
-	float lumaDown = linearToRelativeLuminance(texture2D(inputBuffer, vUvDown).rgb);
-	float lumaUp = linearToRelativeLuminance(texture2D(inputBuffer, vUvUp).rgb);
-	float lumaLeft = linearToRelativeLuminance(texture2D(inputBuffer, vUvLeft).rgb);
-	float lumaRight = linearToRelativeLuminance(texture2D(inputBuffer, vUvRight).rgb);
+	float lumaDown = luminance(texture2D(inputBuffer, vUvDown).rgb);
+	float lumaUp = luminance(texture2D(inputBuffer, vUvUp).rgb);
+	float lumaLeft = luminance(texture2D(inputBuffer, vUvLeft).rgb);
+	float lumaRight = luminance(texture2D(inputBuffer, vUvRight).rgb);
 
 	// Find the maximum and minimum luma around the current fragment.
 	float lumaMin = min(lumaCenter, min(min(lumaDown, lumaUp), min(lumaLeft, lumaRight)));
@@ -50,10 +56,10 @@ vec4 fxaa(const in vec4 inputColor, const in vec2 uv) {
 	}
 
 	// Query the 4 remaining corners lumas.
-	float lumaDownLeft = linearToRelativeLuminance(texture2D(inputBuffer, vUvDownLeft).rgb);
-	float lumaUpRight = linearToRelativeLuminance(texture2D(inputBuffer, vUvUpRight).rgb);
-	float lumaUpLeft = linearToRelativeLuminance(texture2D(inputBuffer, vUvUpLeft).rgb);
-	float lumaDownRight = linearToRelativeLuminance(texture2D(inputBuffer, vUvDownRight).rgb);
+	float lumaDownLeft = luminance(texture2D(inputBuffer, vUvDownLeft).rgb);
+	float lumaUpRight = luminance(texture2D(inputBuffer, vUvUpRight).rgb);
+	float lumaUpLeft = luminance(texture2D(inputBuffer, vUvUpLeft).rgb);
+	float lumaDownRight = luminance(texture2D(inputBuffer, vUvDownRight).rgb);
 
 	// Combine the four edges lumas (using intermediary variables for future computations with the same values).
 	float lumaDownUp = lumaDown + lumaUp;
@@ -134,8 +140,8 @@ vec4 fxaa(const in vec4 inputColor, const in vec2 uv) {
 	vec2 uv2 = currentUv + offset * QUALITY(0);
 
 	// Read lumas at both extremities of the exploration segment, and compute the delta w.r.t. the local average luma.
-	float lumaEnd1 = linearToRelativeLuminance(texture2D(inputBuffer, uv1).rgb);
-	float lumaEnd2 = linearToRelativeLuminance(texture2D(inputBuffer, uv2).rgb);
+	float lumaEnd1 = luminance(texture2D(inputBuffer, uv1).rgb);
+	float lumaEnd2 = luminance(texture2D(inputBuffer, uv2).rgb);
 	lumaEnd1 -= lumaLocalAverage;
 	lumaEnd2 -= lumaLocalAverage;
 
@@ -165,7 +171,7 @@ vec4 fxaa(const in vec4 inputColor, const in vec2 uv) {
 			// If needed, read luma in 1st direction, compute delta.
 			if(!reached1) {
 
-				lumaEnd1 = linearToRelativeLuminance(texture2D(inputBuffer, uv1).rgb);
+				lumaEnd1 = luminance(texture2D(inputBuffer, uv1).rgb);
 				lumaEnd1 = lumaEnd1 - lumaLocalAverage;
 
 			}
@@ -173,7 +179,7 @@ vec4 fxaa(const in vec4 inputColor, const in vec2 uv) {
 			// If needed, read luma in opposite direction, compute delta.
 			if(!reached2) {
 
-				lumaEnd2 = linearToRelativeLuminance(texture2D(inputBuffer, uv2).rgb);
+				lumaEnd2 = luminance(texture2D(inputBuffer, uv2).rgb);
 				lumaEnd2 = lumaEnd2 - lumaLocalAverage;
 
 			}
