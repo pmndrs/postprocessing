@@ -5,6 +5,8 @@ import fragmentShader from "./glsl/sepia.frag";
 
 /**
  * A sepia effect.
+ *
+ * Based on https://github.com/evanw/glfx.js
  */
 
 export class SepiaEffect extends Effect {
