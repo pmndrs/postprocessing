@@ -149,6 +149,7 @@ export class LuminancePass extends Pass {
 
 		if(frameBufferType !== undefined && frameBufferType !== UnsignedByteType) {
 
+			this.renderTarget.texture.type = frameBufferType;
 			this.fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
 		}
