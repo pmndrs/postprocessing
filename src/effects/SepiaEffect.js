@@ -1,4 +1,4 @@
-import { Uniform } from "three";
+import { Uniform, Vector3 } from "three";
 import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/sepia.frag";
@@ -24,7 +24,9 @@ export class SepiaEffect extends Effect {
 		super("SepiaEffect", fragmentShader, {
 			blendFunction,
 			uniforms: new Map([
-				["intensity", new Uniform(intensity)]
+				["weightsR", new Uniform(new Vector3(0.393, 0.769, 0.189))],
+				["weightsG", new Uniform(new Vector3(0.349, 0.686, 0.168))],
+				["weightsB", new Uniform(new Vector3(0.272, 0.534, 0.131))]
 			])
 		});
 
@@ -39,13 +41,13 @@ export class SepiaEffect extends Effect {
 
 	get intensity() {
 
-		return this.uniforms.get("intensity").value;
+		return this.blendMode.opacity.value;
 
 	}
 
 	set intensity(value) {
 
-		this.uniforms.get("intensity").value = value;
+		this.blendMode.opacity.value = value;
 
 	}
 
@@ -72,6 +74,42 @@ export class SepiaEffect extends Effect {
 	setIntensity(value) {
 
 		this.intensity = value;
+
+	}
+
+	/**
+	 * The weights for the red channel. Default is `(0.393, 0.769, 0.189)`.
+	 *
+	 * @type {Vector3}
+	 */
+
+	get weightsR() {
+
+		return this.uniforms.get("weightsR").value;
+
+	}
+
+	/**
+	 * The weights for the green channel. Default is `(0.349, 0.686, 0.168)`.
+	 *
+	 * @type {Vector3}
+	 */
+
+	get weightsG() {
+
+		return this.uniforms.get("weightsG").value;
+
+	}
+
+	/**
+	 * The weights for the blue channel. Default is `(0.272, 0.534, 0.131)`.
+	 *
+	 * @type {Vector3}
+	 */
+
+	get weightsB() {
+
+		return this.uniforms.get("weightsB").value;
 
 	}
 
