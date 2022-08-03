@@ -1,4 +1,4 @@
-import { NoBlending, ShaderMaterial, Uniform } from "three";
+import { NoBlending, REVISION, ShaderMaterial, Uniform } from "three";
 
 import fragmentShader from "./glsl/luminance.frag";
 import vertexShader from "./glsl/common.vert";
@@ -35,6 +35,9 @@ export class LuminanceMaterial extends ShaderMaterial {
 
 		super({
 			name: "LuminanceMaterial",
+			defines: {
+				THREE_REVISION: REVISION.replace(/\D+/g, "")
+			},
 			uniforms: {
 				inputBuffer: new Uniform(null),
 				threshold: new Uniform(0.0),

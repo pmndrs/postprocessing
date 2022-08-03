@@ -41,7 +41,7 @@ The following table provides an overview of the most important scripts:
 
 ### Testing :heavy_check_mark:
 
-Use the script `npm run dev` to run an HTTP server, build the demo bundle and watch files for changes. Open your web browser and navigate to http://localhost:1313. Extend one of the existing demos or create a new one depending on the kind of feature you wish to implement. Make sure that your changes don't break the existing demos.
+Use the script `npm run watch` to run an HTTP server, build the demo bundle and watch files for changes. Open your web browser and navigate to http://localhost:1313. Extend one of the existing demos or create a new one depending on the kind of feature you wish to implement. Make sure that your changes don't break the existing demos.
 
 __Hint__: Open the development tools in your browser and make sure that the cache is disabled while it's open.
 

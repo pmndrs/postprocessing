@@ -35,6 +35,12 @@ uniform float time;
 
 varying vec2 vUv;
 
+#if THREE_REVISION < 143
+
+	#define luminance(v) linearToRelativeLuminance(v)
+
+#endif
+
 #if THREE_REVISION >= 137
 
 	vec4 sRGBToLinear(const in vec4 value) {

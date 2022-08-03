@@ -1,6 +1,6 @@
 {
 	"name": "postprocessing",
-	"version": "6.28.4",
+	"version": "6.28.5",
 	"description": "A post processing library that provides the means to implement image filter effects for three.js.",
 	"homepage": "https://github.com/pmndrs/postprocessing",
 	"main": "build/postprocessing.js",
@@ -55,7 +55,7 @@
 		"build:js": "node esbuild.mjs -m",
 		"clean": "del-cli build tmp manual/resources manual/assets/**/dist public",
 		"copy": "copyfiles -u 2 \"demo/static/**/*\" public/demo",
-		"deploy": "run-s test copy doc gzip",
+		"deploy": "run-s copy gzip",
 		"doc": "esdoc",
 		"gzip": "gzipper c public",
 		"hugo": "hugo -s manual --minify",
@@ -81,7 +81,7 @@
 		"extends": "aether"
 	},
 	"peerDependencies": {
-		"three": ">= 0.107.0 < 0.143.0"
+		"three": ">= 0.107.0 < 0.144.0"
 	},
 	"devDependencies": {
 		"@tweakpane/core": "1.x.x",

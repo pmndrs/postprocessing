@@ -2,6 +2,12 @@ varying vec2 vUv;
 varying vec2 vUv0;
 varying vec2 vUv1;
 
+#if THREE_REVISION < 143
+
+	#define luminance(v) linearToRelativeLuminance(v)
+
+#endif
+
 #if EDGE_DETECTION_MODE != 0
 
 	varying vec2 vUv2;
@@ -125,9 +131,9 @@ void main() {
 
 		// Luma-based edge detection.
 
-		float l = linearToRelativeLuminance(texture2D(inputBuffer, vUv).rgb);
-		float lLeft = linearToRelativeLuminance(texture2D(inputBuffer, vUv0).rgb);
-		float lTop  = linearToRelativeLuminance(texture2D(inputBuffer, vUv1).rgb);
+		float l = luminance(texture2D(inputBuffer, vUv).rgb);
+		float lLeft = luminance(texture2D(inputBuffer, vUv0).rgb);
+		float lTop  = luminance(texture2D(inputBuffer, vUv1).rgb);
 
 		vec4 delta;
 		delta.xy = abs(l - vec2(lLeft, lTop));
@@ -141,16 +147,16 @@ void main() {
 		}
 
 		// Calculate right and bottom deltas.
-		float lRight = linearToRelativeLuminance(texture2D(inputBuffer, vUv2).rgb);
-		float lBottom  = linearToRelativeLuminance(texture2D(inputBuffer, vUv3).rgb);
+		float lRight = luminance(texture2D(inputBuffer, vUv2).rgb);
+		float lBottom  = luminance(texture2D(inputBuffer, vUv3).rgb);
 		delta.zw = abs(l - vec2(lRight, lBottom));
 
 		// Calculate the maximum delta in the direct neighborhood.
 		vec2 maxDelta = max(delta.xy, delta.zw);
 
 		// Calculate left-left and top-top deltas.
-		float lLeftLeft = linearToRelativeLuminance(texture2D(inputBuffer, vUv4).rgb);
-		float lTopTop = linearToRelativeLuminance(texture2D(inputBuffer, vUv5).rgb);
+		float lLeftLeft = luminance(texture2D(inputBuffer, vUv4).rgb);
+		float lTopTop = luminance(texture2D(inputBuffer, vUv5).rgb);
 		delta.zw = abs(vec2(lLeft, lTop) - vec2(lLeftLeft, lTopTop));
 
 		// Calculate the final maximum delta.
