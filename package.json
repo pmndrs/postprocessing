@@ -55,7 +55,7 @@
 		"build:js": "node esbuild.mjs -m",
 		"clean": "del-cli build tmp manual/resources manual/assets/**/dist public",
 		"copy": "copyfiles -u 2 \"demo/static/**/*\" public/demo",
-		"deploy": "run-s test copy doc gzip",
+		"deploy": "run-s copy gzip",
 		"doc": "esdoc",
 		"gzip": "gzipper c public",
 		"hugo": "hugo -s manual --minify",

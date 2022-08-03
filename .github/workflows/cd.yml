@@ -19,14 +19,6 @@ jobs:
         run: npm install -g pnpm
       - name: Install dependencies
         run: pnpm install --frozen-lockfile=false
-      - name: Build and deploy
-        run: pnpm run deploy
-      - uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: gh-pages
-          folder: public
-          target-folder: public
-          single-commit: true
       - name: Publish
         id: publish
         uses: JS-DevTools/npm-publish@v1
@@ -35,3 +27,11 @@ jobs:
       - if: steps.publish.outputs.type != 'none'
         run: |
           echo "Version changed: ${{ steps.publish.outputs.old-version }} → ${{ steps.publish.outputs.version }}"
+      - name: Deploy
+        run: pnpm run deploy
+      - uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: public
+          target-folder: public
+          single-commit: true
