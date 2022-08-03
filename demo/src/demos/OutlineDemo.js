@@ -260,6 +260,7 @@ export class OutlineDemo extends PostProcessingDemo {
 		settings.rotation.setDamping(0.05);
 		settings.translation.setEnabled(false);
 		settings.zoom.setSensitivity(1.0);
+		settings.zoom.setDamping(0.05);
 		controls.setPosition(-4, 1.25, -5);
 		this.controls = controls;
 
