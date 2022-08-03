@@ -336,7 +336,6 @@ export class ColorGradingDemo extends PostProcessingDemo {
 				"blend mode": colorAverageEffect.blendMode.blendFunction
 			},
 			sepia: {
-				"intensity": sepiaEffect.uniforms.get("intensity").value,
 				"opacity": sepiaEffect.blendMode.opacity.value,
 				"blend mode": sepiaEffect.blendMode.blendFunction
 			},
@@ -476,12 +475,6 @@ export class ColorGradingDemo extends PostProcessingDemo {
 			});
 
 		f = menu.addFolder("Sepia");
-
-		f.add(params.sepia, "intensity", 0.0, 1.0, 0.001).onChange((value) => {
-
-			sepiaEffect.uniforms.get("intensity").value = value;
-
-		});
 
 		f.add(params.sepia, "opacity", 0.0, 1.0, 0.01).onChange((value) => {
 
