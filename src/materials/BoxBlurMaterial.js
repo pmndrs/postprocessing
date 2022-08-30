@@ -78,7 +78,7 @@ export class BoxBlurMaterial extends ShaderMaterial {
 
 		if(value % 2 === 0) {
 
-			throw new Error(`The kernel size must be an odd number`);
+			throw new Error("The kernel size must be an odd number");
 
 		}
 
