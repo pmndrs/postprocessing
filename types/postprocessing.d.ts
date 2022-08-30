@@ -1470,6 +1470,52 @@ declare module "postprocessing" {
 	}
 
 	/**
+	 * A box blur material.
+	 *
+	 * @implements {Resizable}
+	 */
+
+	export class BoxBlurMaterial extends ShaderMaterial {}
+
+	/**
+	 * A box blur pass.
+	 */
+
+	export class BoxBlurPass extends Pass {
+
+		/**
+		 * Constructs a new box blur pass.
+		 *
+		 * @param {Object} [options] - The options.
+		 * @param {Number} [options.kernelSize=5] - The kernel size.
+		 * @param {Number} [options.iterations=1] - The amount of times the blur should be applied.
+		 * @param {Number} [options.bilateral=false] - Enables or disables bilateral blurring.
+		 * @param {Number} [options.resolutionScale=1.0] - The resolution scale.
+		 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
+		 * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
+		 */
+
+		constructor(
+			{
+				kernelSize,
+				iterations,
+				bilateral,
+				resolutionScale,
+				resolutionX,
+				resolutionY
+			}?: {
+				kernelSize?: number;
+				iterations?: number;
+				bilateral?: boolean;
+				resolutionScale?: number;
+				resolutionX?: number;
+				resolutionY?: number;
+			}
+		);
+
+	}
+
+	/**
 	 * An optimized Gaussian convolution shader material.
 	 *
 	 * References:
@@ -1493,6 +1539,41 @@ declare module "postprocessing" {
 				kernelSize
 			}?: {
 				kernelSize?: number;
+			}
+		);
+
+	}
+
+	/**
+	 * A Gaussian blur pass.
+	 */
+
+	export class GaussianBlurPass extends Pass {
+
+		/**
+		 * Constructs a new Gaussian blur pass.
+		 *
+		 * @param {Object} [options] - The options.
+		 * @param {Number} [options.kernelSize=35] - The kernel size. Should be an odd number in the range [3, 1020].
+		 * @param {Number} [options.iterations=1] - The amount of times the blur should be applied.
+		 * @param {Number} [options.resolutionScale=1.0] - The resolution scale.
+		 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
+		 * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
+		 */
+
+		constructor(
+			{
+				kernelSize,
+				iterations,
+				resolutionScale,
+				resolutionX,
+				resolutionY
+			}?: {
+				kernelSize?: number;
+				iterations?: number;
+				resolutionScale?: number;
+				resolutionX?: number;
+				resolutionY?: number;
 			}
 		);
 
@@ -2865,7 +2946,6 @@ declare module "postprocessing" {
 			}
 		);
 
-		fullscreenMaterial: AdaptiveLuminanceMaterial;
 		/**
 		 * The adaptive luminance texture.
 		 *
@@ -3234,7 +3314,6 @@ declare module "postprocessing" {
 		 * @param {Boolean} [autoResize=true] - Whether the render target size should be updated automatically.
 		 */
 		constructor(renderTarget?: WebGLRenderTarget, autoResize?: boolean);
-		fullscreenMaterial: CopyMaterial;
 		/**
 		 * Enables or disables auto resizing of the render target.
 		 *
@@ -3302,7 +3381,6 @@ declare module "postprocessing" {
 		 * @param {DepthPackingStrategies} [options.depthPacking=RGBADepthPacking] - The output depth packing.
 		 */
 		constructor({ depthPacking }?: { depthPacking?: DepthPackingStrategies });
-		fullscreenMaterial: DepthCopyMaterial;
 		/**
 		 * The output depth texture.
 		 *
@@ -3377,7 +3455,6 @@ declare module "postprocessing" {
 			height?: number;
 		});
 
-		fullscreenMaterial: DepthDownsamplingMaterial;
 		resolution: Resolution;
 		/**
 		 * The normal(RGB) + depth(A) texture.
@@ -4177,7 +4254,6 @@ declare module "postprocessing" {
 		 * @param {...Effect} effects - The effects that will be rendered by this pass.
 		 */
 		constructor(camera: Camera, ...effects: Effect[]);
-		fullscreenMaterial: EffectMaterial;
 		/**
 		 * The effects.
 		 *
@@ -4340,7 +4416,6 @@ declare module "postprocessing" {
 			renderTarget?: WebGLRenderTarget;
 		});
 
-		fullscreenMaterial: LuminanceMaterial;
 		resolution: Resolution;
 		/**
 		 * The luminance texture.
@@ -4900,14 +4975,14 @@ declare module "postprocessing" {
 		 *
 		 * @return {Selection} This selection.
 		 */
-		clear(): Selection;
+		clear(): this;
 		/**
 		 * Clears this selection and adds the given objects.
 		 *
 		 * @param {Iterable<Object3D>} objects - The objects that should be selected.
 		 * @return {Selection} This selection.
 		 */
-		set(objects: Iterable<Object3D>): Selection;
+		set(objects: Iterable<Object3D>): this;
 		/**
 		 * An alias for {@link has}.
 		 *
@@ -4924,7 +4999,7 @@ declare module "postprocessing" {
 		 * @param {Object3D} object - The object that should be selected.
 		 * @return {Selection} This selection.
 		 */
-		add(object: Object3D): Selection;
+		add(object: Object3D): this;
 		/**
 		 * Removes an existing object from the selection. If the object doesn't exist it's added instead.
 		 *
@@ -4940,7 +5015,7 @@ declare module "postprocessing" {
 		 * @param {Boolean} visible - Whether the selected objects should be visible.
 		 * @return {Selection} This selection.
 		 */
-		setVisible(visible: boolean): Selection;
+		setVisible(visible: boolean): this;
 
 	}
 
@@ -5593,6 +5668,9 @@ declare module "postprocessing" {
 				focalLength?: number;
 				focusRange?: number;
 				bokehScale?: number;
+				resolutionScale?: number;
+				resolutionX?: number;
+				resolutionY?: number;
 				width?: number;
 				height?: number;
 			}
@@ -7236,7 +7314,7 @@ declare module "postprocessing" {
 		 * @param {Number} width - The width.
 		 * @param {Number} height - The height.
 		 */
-		setSize(width, height): void;
+		setSize(width: number, height: number): void;
 		/**
 		 * The scanline scroll speed. Default is 0 (disabled).
 		 *
@@ -8586,7 +8664,6 @@ declare module "postprocessing" {
 		 * @param {Number} size - The sidelength.
 		 */
 		constructor(data: ArrayBufferView, size: number);
-		wrapR: Wrapping;
 		/**
 		 * The lower bounds of the input domain.
 		 *
@@ -8714,6 +8791,7 @@ declare module "postprocessing" {
 		 * @param {Uint8ClampedArray} [data=null] - The image data.
 		 */
 		constructor(width?: number, height?: number, data?: Uint8ClampedArray);
+        colorSpace: PredefinedColorSpace;
 		/**
 		 * The width of the image.
 		 *
