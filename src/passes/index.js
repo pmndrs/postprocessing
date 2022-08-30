@@ -1,4 +1,5 @@
 export * from "./AdaptiveLuminancePass";
+export * from "./BoxBlurPass";
 export * from "./ClearMaskPass";
 export * from "./ClearPass";
 export * from "./CopyPass";

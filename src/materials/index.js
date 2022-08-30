@@ -1,5 +1,6 @@
 export * from "./AdaptiveLuminanceMaterial";
 export * from "./BokehMaterial";
+export * from "./BoxBlurMaterial";
 export * from "./CircleOfConfusionMaterial";
 export * from "./KawaseBlurMaterial";
 export * from "./CopyMaterial";
