@@ -1,18 +1,24 @@
 uniform vec2 texelSize;
 
-#if KERNEL_SIZE == 9
+#if KERNEL_SIZE == 3
 
+	// Optimized 3x3
 	varying vec2 vUv00, vUv01, vUv02;
 	varying vec2 vUv03, vUv04, vUv05;
 	varying vec2 vUv06, vUv07, vUv08;
 
-#else
+#elif KERNEL_SIZE == 5 && MAX_VARYING_VECTORS >= 13
 
+	// Optimized 5x5
 	varying vec2 vUv00, vUv01, vUv02, vUv03, vUv04;
 	varying vec2 vUv05, vUv06, vUv07, vUv08, vUv09;
 	varying vec2 vUv10, vUv11, vUv12, vUv13, vUv14;
 	varying vec2 vUv15, vUv16, vUv17, vUv18, vUv19;
 	varying vec2 vUv20, vUv21, vUv22, vUv23, vUv24;
+
+#else
+
+	varying vec2 vUv;
 
 #endif
 
@@ -20,8 +26,9 @@ void main() {
 
 	vec2 uv = position.xy * 0.5 + 0.5;
 
-	#if KERNEL_SIZE == 9
+	#if KERNEL_SIZE == 3
 
+		// Optimized 3x3
 		vUv00 = uv + texelSize * vec2(-1.0, -1.0);
 		vUv01 = uv + texelSize * vec2(0.0, -1.0);
 		vUv02 = uv + texelSize * vec2(1.0, -1.0);
@@ -34,8 +41,9 @@ void main() {
 		vUv07 = uv + texelSize * vec2(0.0, 1.0);
 		vUv08 = uv + texelSize * vec2(1.0, 1.0);
 
-	#else
+	#elif KERNEL_SIZE == 5
 
+		// Optimized 5x5
 		vUv00 = uv + texelSize * vec2(-2.0, -2.0);
 		vUv01 = uv + texelSize * vec2(-1.0, -2.0);
 		vUv02 = uv + texelSize * vec2(0.0, -2.0);
@@ -65,6 +73,11 @@ void main() {
 		vUv22 = uv + texelSize * vec2(0.0, 2.0);
 		vUv23 = uv + texelSize * vec2(1.0, 2.0);
 		vUv24 = uv + texelSize * vec2(2.0, 2.0);
+
+	#else
+
+		// General case
+		vUv = uv;
 
 	#endif
 

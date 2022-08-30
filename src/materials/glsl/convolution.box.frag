@@ -66,27 +66,36 @@
 
 #define getTexel(v) texture2D(inputBuffer, v)
 
-#if KERNEL_SIZE == 9
+#if KERNEL_SIZE == 3
 
+	// Optimized 3x3
 	varying vec2 vUv00, vUv01, vUv02;
 	varying vec2 vUv03, vUv04, vUv05;
 	varying vec2 vUv06, vUv07, vUv08;
 
-#else
+#elif KERNEL_SIZE == 5 && MAX_VARYING_VECTORS >= 13
 
+	// Optimized 5x5
 	varying vec2 vUv00, vUv01, vUv02, vUv03, vUv04;
 	varying vec2 vUv05, vUv06, vUv07, vUv08, vUv09;
 	varying vec2 vUv10, vUv11, vUv12, vUv13, vUv14;
 	varying vec2 vUv15, vUv16, vUv17, vUv18, vUv19;
 	varying vec2 vUv20, vUv21, vUv22, vUv23, vUv24;
 
+#else
+
+	// General case
+	uniform vec2 texelSize;
+	varying vec2 vUv;
+
 #endif
 
 void main() {
 
-	#if KERNEL_SIZE == 9
+	#if KERNEL_SIZE == 3
 
-		vec4 c[] = vec4[9](
+		// Optimized 3x3
+		vec4 c[] = vec4[KERNEL_SIZE_SQ](
 			getTexel(vUv00), getTexel(vUv01), getTexel(vUv02),
 			getTexel(vUv03), getTexel(vUv04), getTexel(vUv05),
 			getTexel(vUv06), getTexel(vUv07), getTexel(vUv08)
@@ -94,19 +103,18 @@ void main() {
 
 		#ifdef BILATERAL
 
-			float z[] = float[9](
+			float z[] = float[KERNEL_SIZE_SQ](
 				linearDepth(vUv00), linearDepth(vUv01), linearDepth(vUv02),
 				linearDepth(vUv03), linearDepth(vUv04), linearDepth(vUv05),
 				linearDepth(vUv06), linearDepth(vUv07), linearDepth(vUv08)
 			);
 
-			float centerDepth = z[4];
-
 		#endif
 
-	#else
+	#elif KERNEL_SIZE == 5 && MAX_VARYING_VECTORS >= 13
 
-		vec4 c[] = vec4[25](
+		// Optimized 5x5
+		vec4 c[] = vec4[KERNEL_SIZE_SQ](
 			getTexel(vUv00), getTexel(vUv01), getTexel(vUv02), getTexel(vUv03), getTexel(vUv04),
 			getTexel(vUv05), getTexel(vUv06), getTexel(vUv07), getTexel(vUv08), getTexel(vUv09),
 			getTexel(vUv10), getTexel(vUv11), getTexel(vUv12), getTexel(vUv13), getTexel(vUv14),
@@ -116,7 +124,7 @@ void main() {
 
 		#ifdef BILATERAL
 
-			float z[] = float[25](
+			float z[] = float[KERNEL_SIZE_SQ](
 				linearDepth(vUv00), linearDepth(vUv01), linearDepth(vUv02), linearDepth(vUv03), linearDepth(vUv04),
 				linearDepth(vUv05), linearDepth(vUv06), linearDepth(vUv07), linearDepth(vUv08), linearDepth(vUv09),
 				linearDepth(vUv10), linearDepth(vUv11), linearDepth(vUv12), linearDepth(vUv13), linearDepth(vUv14),
@@ -124,38 +132,81 @@ void main() {
 				linearDepth(vUv20), linearDepth(vUv21), linearDepth(vUv22), linearDepth(vUv23), linearDepth(vUv24)
 			);
 
-			float centerDepth = z[12];
-
 		#endif
 
 	#endif
 
+	vec4 result = vec4(0.0);
+
 	#ifdef BILATERAL
 
-		vec4 result = vec4(0.0);
 		float w = 0.0;
 
-		for(int i = 0; i < KERNEL_SIZE; ++i) {
+		#if KERNEL_SIZE == 3 || (KERNEL_SIZE == 5 && MAX_VARYING_VECTORS >= 13)
 
-			float d = step(abs(z[i] - centerDepth), DISTANCE_THRESHOLD);
-			result += c[i] * d;
-			w += d;
+			// Optimized 3x3 or 5x5
+			float centerDepth = z[KERNEL_SIZE_SQ_HALF];
 
-		}
+			for(int i = 0; i < KERNEL_SIZE_SQ; ++i) {
+
+				float d = step(abs(z[i] - centerDepth), DISTANCE_THRESHOLD);
+				result += c[i] * d;
+				w += d;
+
+			}
+
+		#else
+
+			// General case
+			float centerDepth = linearDepth(vUv);
+
+			for(int x = -KERNEL_SIZE_HALF; x <= KERNEL_SIZE_HALF; ++x) {
+
+				for(int y = -KERNEL_SIZE_HALF; y <= KERNEL_SIZE_HALF; ++y) {
+
+					vec2 coords = vUv + vec2(x, y) * texelSize;
+					vec4 c = getTexel(coords);
+					float z = linearDepth(coords);
+
+					float d = step(abs(z - centerDepth), DISTANCE_THRESHOLD);
+					result += c * d;
+					w += d;
+
+				}
+
+			}
+
+		#endif
 
 		gl_FragColor = result / max(w, 1.0);
 
 	#else
 
-		vec4 result = vec4(0.0);
+		#if KERNEL_SIZE == 3 || (KERNEL_SIZE == 5 && MAX_VARYING_VECTORS >= 13)
 
-		for(int i = 0; i < KERNEL_SIZE; ++i) {
+			// Optimized 3x3 or 5x5
+			for(int i = 0; i < KERNEL_SIZE_SQ; ++i) {
 
-			result += c[i];
+				result += c[i];
 
-		}
+			}
 
-		gl_FragColor = result * INV_KERNEL_SIZE;
+		#else
+
+			// General case
+			for(int x = -KERNEL_SIZE_HALF; x <= KERNEL_SIZE_HALF; ++x) {
+
+				for(int y = -KERNEL_SIZE_HALF; y <= KERNEL_SIZE_HALF; ++y) {
+
+					result += getTexel(uv + vec2(x, y) * texelSize);
+
+				}
+
+			}
+
+		#endif
+
+		gl_FragColor = result * INV_KERNEL_SIZE_SQ;
 
 	#endif
 

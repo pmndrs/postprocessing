@@ -59,7 +59,7 @@ export class BoxBlurPass extends Pass {
 		 * @readonly
 		 */
 
-		this.blurMaterial = new BoxBlurMaterial({ bilateral });
+		this.blurMaterial = new BoxBlurMaterial({ bilateral, kernelSize: 5 });
 
 		/**
 		 * A copy material.
@@ -172,6 +172,8 @@ export class BoxBlurPass extends Pass {
 	 */
 
 	initialize(renderer, alpha, frameBufferType) {
+
+		this.blurMaterial.maxVaryingVectors = renderer.capabilities.maxVaryings;
 
 		if(frameBufferType !== undefined) {
 
