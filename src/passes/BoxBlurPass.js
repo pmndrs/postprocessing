@@ -13,6 +13,7 @@ export class BoxBlurPass extends Pass {
 	 * Constructs a new box blur pass.
 	 *
 	 * @param {Object} [options] - The options.
+	 * @param {Number} [options.kernelSize=5] - The kernel size.
 	 * @param {Number} [options.iterations=1] - The amount of times the blur should be applied.
 	 * @param {Number} [options.bilateral=false] - Enables or disables bilateral blurring.
 	 * @param {Number} [options.resolutionScale=1.0] - The resolution scale.
@@ -21,6 +22,7 @@ export class BoxBlurPass extends Pass {
 	 */
 
 	constructor({
+		kernelSize = 5,
 		iterations = 1,
 		bilateral = false,
 		resolutionScale = 1.0,
@@ -49,7 +51,7 @@ export class BoxBlurPass extends Pass {
 		 * @private
 		 */
 
-		this.renderTargetB = this.renderTargetA.clone();
+		this.renderTargetB = new WebGLRenderTarget(1, 1, { depthBuffer: false });
 		this.renderTargetB.texture.name = "Blur.Target.B";
 
 		/**
@@ -59,7 +61,7 @@ export class BoxBlurPass extends Pass {
 		 * @readonly
 		 */
 
-		this.blurMaterial = new BoxBlurMaterial({ bilateral, kernelSize: 5 });
+		this.blurMaterial = new BoxBlurMaterial({ bilateral, kernelSize });
 
 		/**
 		 * A copy material.
