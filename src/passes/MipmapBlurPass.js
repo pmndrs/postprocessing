@@ -5,7 +5,7 @@ import { Pass } from "./Pass";
 /**
  * A blur pass that produces a wide blur by downsampling and upsampling the input over multiple MIP levels.
  *
- * Based on an article by Fabrice Piquet
+ * Based on an article by Fabrice Piquet:
  * https://www.froyok.fr/blog/2021-12-ue4-custom-bloom/
  */
 
@@ -287,9 +287,6 @@ export class MipmapBlurPass extends Pass {
 			mipmap.dispose();
 
 		}
-
-		this.downsamplingMipmaps = [];
-		this.upsamplingMipmaps = [];
 
 	}
 

@@ -9,7 +9,7 @@ import fragmentShader from "./glsl/bloom.frag";
 /**
  * A bloom effect.
  *
- * Based on an article by Fabrice Piquet
+ * Based on an article by Fabrice Piquet:
  * https://www.froyok.fr/blog/2021-12-ue4-custom-bloom/
  */
 

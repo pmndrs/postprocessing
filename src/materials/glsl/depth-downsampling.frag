@@ -42,7 +42,7 @@ float readDepth(const in vec2 uv) {
 int findBestDepth(const in float samples[4]) {
 
 	// Calculate the centroid.
-	float c = (samples[0] + samples[1] + samples[2] + samples[3]) / 4.0;
+	float c = (samples[0] + samples[1] + samples[2] + samples[3]) * 0.25;
 
 	float distances[4];
 	distances[0] = abs(c - samples[0]); distances[1] = abs(c - samples[1]);

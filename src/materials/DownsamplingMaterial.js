@@ -6,7 +6,7 @@ import vertexShader from "./glsl/convolution.downsampling.vert";
 /**
  * A downsampling material.
  *
- * Based on an article by Fabrice Piquet
+ * Based on an article by Fabrice Piquet:
  * https://www.froyok.fr/blog/2021-12-ue4-custom-bloom/
  *
  * @implements {Resizable}

@@ -5120,6 +5120,7 @@ declare module "postprocessing" {
 
 	export type BloomEffectOptions = {
 		blendFunction?: BlendFunction;
+		mipmapBlur?: boolean;
 		luminanceThreshold?: number;
 		luminanceSmoothing?: number;
 		intensity?: number;
@@ -5141,6 +5142,7 @@ declare module "postprocessing" {
 		 *
 		 * @param {Object} [options] - The options.
 		 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
+		 * @param {Boolean} [options.mipmapBlur=false] - Enables or disables mipmap blur.
 		 * @param {Number} [options.luminanceThreshold=0.9] - The luminance threshold. Raise this value to mask out darker elements in the scene. Range is [0, 1].
 		 * @param {Number} [options.luminanceSmoothing=0.025] - Controls the smoothness of the luminance threshold. Range is [0, 1].
 		 * @param {Number} [options.intensity=1.0] - The intensity.
@@ -5153,6 +5155,7 @@ declare module "postprocessing" {
 		 */
 		constructor({
 			blendFunction,
+			mipmapBlur,
 			luminanceThreshold,
 			luminanceSmoothing,
 			intensity,
