@@ -64,13 +64,13 @@ devDependencies:
   postcss: 8.4.16
   postcss-cli: 9.1.0_postcss@8.4.16
   postcss-preset-env: 7.8.0_postcss@8.4.16
-  sass: 1.54.6
-  spatial-controls: 5.0.8_three@0.143.0
+  sass: 1.54.7
+  spatial-controls: 5.0.8_three@0.144.0
   stylelint: 14.11.0
   stylelint-config-standard-scss: 4.0.0_74u2qasxp5mudia6vln5kcfuni
   stylelint-order: 5.0.0_stylelint@14.11.0
-  three: 0.143.0
-  three-demo: 5.1.3_5hqatirc7a4zfdj7vngnf4crye
+  three: 0.144.0
+  three-demo: 5.1.3_vfa3bi2bqth53tzm66fttawo6i
   tiny-glob: 0.2.9
   tslib: 2.4.0
   tweakpane: 3.1.0
@@ -716,7 +716,7 @@ packages:
       postcss: ^8.1.0
     dependencies:
       browserslist: 4.21.3
-      caniuse-lite: 1.0.30001385
+      caniuse-lite: 1.0.30001387
       fraction.js: 4.2.0
       normalize-range: 0.1.2
       picocolors: 1.0.0
@@ -968,8 +968,8 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001385
-      electron-to-chromium: 1.4.236
+      caniuse-lite: 1.0.30001387
+      electron-to-chromium: 1.4.237
       node-releases: 2.0.6
       update-browserslist-db: 1.0.5_browserslist@4.21.3
     dev: true
@@ -1066,13 +1066,13 @@ packages:
     resolution: {integrity: sha512-bsTwuIg/BZZK/vreVTYYbSWoe2F+71P7K5QGEX+pT250DZbfU1MQ5prOKpPR+LL6uWKK3KMwMCAS74QB3Um1uw==}
     dependencies:
       browserslist: 4.21.3
-      caniuse-lite: 1.0.30001385
+      caniuse-lite: 1.0.30001387
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
     dev: true
 
-  /caniuse-lite/1.0.30001385:
-    resolution: {integrity: sha512-MpiCqJGhBkHgpyimE9GWmZTnyHyEEM35u115bD3QBrXpjvL/JgcP8cUhKJshfmg4OtEHFenifcK5sZayEw5tvQ==}
+  /caniuse-lite/1.0.30001387:
+    resolution: {integrity: sha512-fKDH0F1KOJvR+mWSOvhj8lVRr/Q/mc5u5nabU2vi1/sgvlSqEsE8dOq0Hy/BqVbDkCYQPRRHB1WRjW6PGB/7PA==}
     dev: true
 
   /caseless/0.12.0:
@@ -1918,8 +1918,8 @@ packages:
     dev: true
     optional: true
 
-  /electron-to-chromium/1.4.236:
-    resolution: {integrity: sha512-41wPRcb9OIpB0RMLnIIDbfbJ5IXwuQ2qAr0jCTSpv5s7M61MazcBGS5kovW5E28SGxum/KR3fm2imswjdlTWmw==}
+  /electron-to-chromium/1.4.237:
+    resolution: {integrity: sha512-vxVyGJcsgArNOVUJcXm+7iY3PJAfmSapEszQD1HbyPLl0qoCmNQ1o/EX3RI7Et5/88In9oLxX3SGF8J3orkUgA==}
     dev: true
 
   /emittery/0.11.0:
@@ -5630,8 +5630,8 @@ packages:
     dev: true
     optional: true
 
-  /sass/1.54.6:
-    resolution: {integrity: sha512-DUqJjR2WxXBcZjRSZX5gCVyU+9fuC2qDfFzoKX9rV4rCOcec5mPtEafTcfsyL3YJuLONjWylBne+uXVh5rrmFw==}
+  /sass/1.54.7:
+    resolution: {integrity: sha512-3q7MQz7sCpVG6TLhUfZwGOcd2/sm2ghYN2JEdRjNiW04ILdvahdo9GuAs+bxsxZ3hDCKv+wUT5w0iFWGU0CxlA==}
     engines: {node: '>=12.0.0'}
     hasBin: true
     dependencies:
@@ -5796,13 +5796,13 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /spatial-controls/5.0.8_three@0.143.0:
+  /spatial-controls/5.0.8_three@0.144.0:
     resolution: {integrity: sha512-VajbX1AHbebTGBbHxSVwKLwB+0NZi2ESVVvEtrlhwsj0Dylbk2EGExSrFkBKa2Xm6LLiyZfdYtmmK0zT9wX1Yg==}
     engines: {node: '>= 0.14.0'}
     peerDependencies:
       three: 0.x.x
     dependencies:
-      three: 0.143.0
+      three: 0.144.0
     dev: true
 
   /spdx-correct/3.1.1:
@@ -6241,7 +6241,7 @@ packages:
     resolution: {integrity: sha512-89Gi5raiWA3QZ4b2ePcEwswC3me9JIg+ToSgtE0JWeCynLnLxNr/f9G+xfo9K+Oj4AFdom8YNJjibIARTJmapQ==}
     dev: true
 
-  /three-demo/5.1.3_5hqatirc7a4zfdj7vngnf4crye:
+  /three-demo/5.1.3_vfa3bi2bqth53tzm66fttawo6i:
     resolution: {integrity: sha512-bItONudb5cDlE2PMcAAEZbImsluwuGUKdm+ymC726Ew0vnYz5m+/bn0C37AdDBLpqmwixrgtmhEBXQzyrmTimg==}
     engines: {node: '>= 0.14.0'}
     peerDependencies:
@@ -6249,11 +6249,11 @@ packages:
       three: 0.x.x
     dependencies:
       dat.gui: 0.7.9
-      three: 0.143.0
+      three: 0.144.0
     dev: true
 
-  /three/0.143.0:
-    resolution: {integrity: sha512-oKcAGYHhJ46TGEuHjodo2n6TY2R6lbvrkp+feKZxqsUL/WkH7GKKaeu6RHeyb2Xjfk2dPLRKLsOP0KM2VgT8Zg==}
+  /three/0.144.0:
+    resolution: {integrity: sha512-R8AXPuqfjfRJKkYoTQcTK7A6i3AdO9++2n8ubya/GTU+fEHhYKu1ZooRSCPkx69jbnzT7dD/xEo6eROQTt2lJw==}
     dev: true
 
   /through/2.3.8:
