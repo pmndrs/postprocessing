@@ -5,6 +5,7 @@ import {
 	REVISION,
 	sRGBEncoding,
 	UnsignedByteType,
+	UnsignedIntType,
 	UnsignedInt248Type,
 	Vector2,
 	WebGLMultisampleRenderTarget,
@@ -290,8 +291,16 @@ export class EffectComposer {
 		this.inputBuffer.depthTexture = depthTexture;
 		this.inputBuffer.dispose();
 
-		depthTexture.format = DepthStencilFormat;
-		depthTexture.type = UnsignedInt248Type;
+		if(this.inputBuffer.stencilBuffer) {
+
+			depthTexture.format = DepthStencilFormat;
+			depthTexture.type = UnsignedInt248Type;
+
+		} else {
+
+			depthTexture.type = UnsignedIntType;
+
+		}
 
 		return depthTexture;
 
