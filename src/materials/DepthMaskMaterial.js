@@ -207,7 +207,7 @@ export class DepthMaskMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * A small error threshold that is used for `EqualDepth` and `NotEqualDepth` tests. Default is `1e-5`.
+	 * A small error threshold that is used for `EqualDepth` and `NotEqualDepth` tests. Default is `1e-4`.
 	 *
 	 * @type {Number}
 	 */
@@ -226,7 +226,7 @@ export class DepthMaskMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Returns the current error threshold for depth comparisons. Default is `1e-5`.
+	 * Returns the current error threshold for depth comparisons.
 	 *
 	 * @deprecated Use epsilon instead.
 	 * @return {Number} The error threshold.
