@@ -6,7 +6,7 @@ import {
 	MeshBasicMaterial,
 	PerspectiveCamera,
 	Scene,
-	SphereBufferGeometry,
+	SphereGeometry,
 	sRGBEncoding,
 	Vector3,
 	VSMShadowMap,
@@ -100,7 +100,7 @@ window.addEventListener("load", () => load().then((assets) => {
 	scene.add(CornellBox.createActors());
 
 	const cursor = new Mesh(
-		new SphereBufferGeometry(0.2, 32, 32),
+		new SphereGeometry(0.2, 32, 32),
 		new MeshBasicMaterial({
 			color: 0xa9a9a9,
 			transparent: true,
