@@ -90,6 +90,9 @@ export class SSAOEffect extends Effect {
 		super("SSAOEffect", fragmentShader, {
 			blendFunction,
 			attributes: EffectAttribute.DEPTH,
+			defines: new Map([
+				["THRESHOLD", "0.997"]
+			]),
 			uniforms: new Map([
 				["aoBuffer", new Uniform(null)],
 				["normalDepthBuffer", new Uniform(normalDepthBuffer)],
@@ -313,7 +316,7 @@ export class SSAOEffect extends Effect {
 
 		if(this.depthAwareUpsampling !== value) {
 
-			if(value && this.uniforms.get("normalDepthBuffer").value !== null) {
+			if(value) {
 
 				this.defines.set("DEPTH_AWARE_UPSAMPLING", "1");
 
@@ -566,8 +569,6 @@ export class SSAOEffect extends Effect {
 	 */
 
 	initialize(renderer, alpha, frameBufferType) {
-
-		this.blurPass.initialize(renderer, alpha, frameBufferType);
 
 		try {
 
