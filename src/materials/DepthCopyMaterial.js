@@ -54,6 +54,12 @@ export class DepthCopyMaterial extends ShaderMaterial {
 	 * @type {Texture}
 	 */
 
+	get depthBuffer() {
+
+		return this.uniforms.depthBuffer.value;
+
+	}
+
 	set depthBuffer(value) {
 
 		this.uniforms.depthBuffer.value = value;

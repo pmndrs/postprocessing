@@ -1,12 +1,32 @@
 #include <packing>
 
-#if INPUT_DEPTH_PACKING == 3201
+varying vec2 vUv;
 
-	uniform lowp sampler2D depthBuffer;
+#ifdef NORMAL_DEPTH
+
+	#ifdef GL_FRAGMENT_PRECISION_HIGH
+
+		uniform highp sampler2D normalDepthBuffer;
+
+	#else
+
+		uniform mediump sampler2D normalDepthBuffer;
+
+	#endif
+
+	float readDepth(const in vec2 uv) {
+
+		return texture2D(normalDepthBuffer, uv).a;
+
+	}
 
 #else
 
-	#ifdef GL_FRAGMENT_PRECISION_HIGH
+	#if INPUT_DEPTH_PACKING == 3201
+
+		uniform lowp sampler2D depthBuffer;
+
+	#elif defined(GL_FRAGMENT_PRECISION_HIGH)
 
 		uniform highp sampler2D depthBuffer;
 
@@ -16,9 +36,21 @@
 
 	#endif
 
-#endif
+	float readDepth(const in vec2 uv) {
 
-varying vec2 vUv;
+		#if INPUT_DEPTH_PACKING == 3201
+
+			return unpackRGBAToDepth(texture2D(depthBuffer, uv));
+
+		#else
+
+			return texture2D(depthBuffer, uv).r;
+
+		#endif
+
+	}
+
+#endif
 
 void main() {
 
@@ -28,15 +60,15 @@ void main() {
 
 	#else
 
-		#if INPUT_DEPTH_PACKING == 3201
+		float depth = readDepth(vUv);
 
-			float depth = unpackRGBAToDepth(texture2D(depthBuffer, vUv));
-			gl_FragColor = vec4(vec3(depth), 1.0);
+		#if OUTPUT_DEPTH_PACKING == 3201
+
+			gl_FragColor = (depth == 1.0) ? vec4(1.0) : packDepthToRGBA(depth);
 
 		#else
 
-			float depth = texture2D(depthBuffer, vUv).r;
-			gl_FragColor = (depth == 1.0) ? vec4(1.0) : packDepthToRGBA(depth);
+			gl_FragColor = vec4(vec3(depth), 1.0);
 
 		#endif
 
