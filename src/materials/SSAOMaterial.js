@@ -24,7 +24,7 @@ export class SSAOMaterial extends ShaderMaterial {
 			name: "SSAOMaterial",
 			defines: {
 				SAMPLES_INT: "0",
-				SAMPLES_FLOAT: "0.0",
+				INV_SAMPLES_FLOAT: "0.0",
 				SPIRAL_TURNS: "0.0",
 				RADIUS: "1.0",
 				RADIUS_SQ: "1.0",
@@ -248,7 +248,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	set samples(value) {
 
 		this.defines.SAMPLES_INT = value.toFixed(0);
-		this.defines.SAMPLES_FLOAT = value.toFixed(1);
+		this.defines.INV_SAMPLES_FLOAT = (1.0 / value).toFixed(9);
 		this.needsUpdate = true;
 
 	}
@@ -564,38 +564,16 @@ export class SSAOMaterial extends ShaderMaterial {
 	 * Indicates whether distance-based radius scaling is enabled.
 	 *
 	 * @type {Boolean}
+	 * @deprecated
 	 */
 
-	get distanceScaling() {
-
-		return (this.defines.DISTANCE_SCALING !== undefined);
-
-	}
-
-	set distanceScaling(value) {
-
-		if(this.isDistanceScalingEnabled() !== value) {
-
-			if(value) {
-
-				this.defines.DISTANCE_SCALING = "1";
-
-			} else {
-
-				delete this.defines.DISTANCE_SCALING;
-
-			}
-
-			this.needsUpdate = true;
-
-		}
-
-	}
+	get distanceScaling() { return true; }
+	set distanceScaling(value) {}
 
 	/**
 	 * Indicates whether distance-based radius scaling is enabled.
 	 *
-	 * @deprecated Use distanceScaling instead.
+	 * @deprecated
 	 * @return {Boolean} Whether distance scaling is enabled.
 	 */
 
@@ -608,7 +586,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	/**
 	 * Enables or disables distance-based radius scaling.
 	 *
-	 * @deprecated Use distanceScaling instead.
+	 * @deprecated
 	 * @param {Boolean} value - Whether distance scaling should be enabled.
 	 */
 
