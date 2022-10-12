@@ -7,7 +7,7 @@ import { Pass } from "./Pass";
  * A pass that downsamples the scene depth by picking the most representative depth in 2x2 texel neighborhoods. If a
  * normal buffer is provided, the corresponding normals will be stored as well.
  *
- * This pass requires WebGL 2.
+ * This pass requires FloatType texture support.
  */
 
 export class DepthDownsamplingPass extends Pass {
@@ -150,12 +150,12 @@ export class DepthDownsamplingPass extends Pass {
 
 	setSize(width, height) {
 
-		// Use the full resolution to calculate the depth/normal buffer texel size.
-		this.fullscreenMaterial.setSize(width, height);
-
 		const resolution = this.resolution;
 		resolution.setBaseSize(width, height);
 		this.renderTarget.setSize(resolution.width, resolution.height);
+
+		// Use the full resolution to calculate the depth/normal buffer texel size.
+		this.fullscreenMaterial.setSize(width, height);
 
 	}
 
@@ -169,9 +169,12 @@ export class DepthDownsamplingPass extends Pass {
 
 	initialize(renderer, alpha, frameBufferType) {
 
-		if(!renderer.capabilities.isWebGL2) {
+		const gl = renderer.getContext();
+		const renderable = gl.getExtension("EXT_color_buffer_float") || gl.getExtension("EXT_color_buffer_half_float");
 
-			throw new Error("The DepthDownsamplingPass requires WebGL 2");
+		if(!renderable) {
+
+			throw new Error("Rendering to float texture is not supported.");
 
 		}
 
