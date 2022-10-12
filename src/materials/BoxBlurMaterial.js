@@ -31,8 +31,10 @@ export class BoxBlurMaterial extends ShaderMaterial {
 			uniforms: {
 				inputBuffer: new Uniform(null),
 				depthBuffer: new Uniform(null),
+				normalDepthBuffer: new Uniform(null),
 				texelSize: new Uniform(new Vector2()),
-				cameraNearFar: new Uniform(new Vector2())
+				cameraNearFar: new Uniform(new Vector2()),
+				scale: new Uniform(1.0)
 			},
 			blending: NoBlending,
 			depthWrite: false,
@@ -74,6 +76,12 @@ export class BoxBlurMaterial extends ShaderMaterial {
 	 * @type {Number}
 	 */
 
+	get kernelSize() {
+
+		return Number(this.defines.KERNEL_SIZE);
+
+	}
+
 	set kernelSize(value) {
 
 		if(value % 2 === 0) {
@@ -83,10 +91,29 @@ export class BoxBlurMaterial extends ShaderMaterial {
 		}
 
 		this.defines.KERNEL_SIZE = value.toFixed(0);
-		this.defines.KERNEL_SIZE_HALF = (value / 2).toFixed(0);
+		this.defines.KERNEL_SIZE_HALF = Math.floor(value / 2).toFixed(0);
 		this.defines.KERNEL_SIZE_SQ = (value ** 2).toFixed(0);
-		this.defines.KERNEL_SIZE_SQ_HALF = (value ** 2 / 2).toFixed(0);
+		this.defines.KERNEL_SIZE_SQ_HALF = Math.floor(value ** 2 / 2).toFixed(0);
 		this.defines.INV_KERNEL_SIZE_SQ = (1 / value ** 2).toFixed(6);
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * The blur scale.
+	 *
+	 * @type {Number}
+	 */
+
+	get scale() {
+
+		return this.uniforms.scale.value;
+
+	}
+
+	set scale(value) {
+
+		this.uniforms.scale.value = value;
 
 	}
 
@@ -137,6 +164,30 @@ export class BoxBlurMaterial extends ShaderMaterial {
 	set depthBuffer(value) {
 
 		this.uniforms.depthBuffer.value = value;
+
+	}
+
+	/**
+	 * A combined normal-depth buffer. Overrides {@link depthBuffer} if set.
+	 *
+	 * @type {Texture}
+	 */
+
+	set normalDepthBuffer(value) {
+
+		this.uniforms.normalDepthBuffer.value = value;
+
+		if(value !== null) {
+
+			this.defines.NORMAL_DEPTH = "1";
+
+		} else {
+
+			delete this.defines.NORMAL_DEPTH;
+
+		}
+
+		this.needsUpdate = true;
 
 	}
 
@@ -197,6 +248,7 @@ export class BoxBlurMaterial extends ShaderMaterial {
 
 		const threshold = viewZToOrthographicDepth(-value, this.near, this.far);
 		this.defines.DISTANCE_THRESHOLD = threshold.toFixed(12);
+		this.needsUpdate = true;
 
 	}
 

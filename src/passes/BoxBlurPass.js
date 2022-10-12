@@ -13,7 +13,7 @@ export class BoxBlurPass extends Pass {
 	 * Constructs a new box blur pass.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {Number} [options.kernelSize=5] - The kernel size.
+	 * @param {Number} [options.kernelSize=5] - Must be an odd number. The sizes 3 and 5 use optimized code paths.
 	 * @param {Number} [options.iterations=1] - The amount of times the blur should be applied.
 	 * @param {Number} [options.bilateral=false] - Enables or disables bilateral blurring.
 	 * @param {Number} [options.resolutionScale=1.0] - The resolution scale.
