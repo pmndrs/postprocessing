@@ -60,6 +60,7 @@ uniform mat4 projectionMatrix;
 uniform vec2 texelSize;
 uniform vec2 cameraNearFar;
 
+uniform float intensity;
 uniform float minRadiusScale;
 uniform float fade;
 uniform float bias;
@@ -203,6 +204,7 @@ void main() {
 		// Fade AO based on depth.
 		float d = smoothstep(distanceCutoff.x, distanceCutoff.y, linearDepth);
 		ao = mix(ao, 0.0, d);
+		ao = clamp(pow(ao, abs(intensity)), 0.0, 1.0);
 
 	}
 

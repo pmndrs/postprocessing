@@ -107,7 +107,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * The combined normal-depth buffer.
+	 * A combined normal-depth buffer.
 	 *
 	 * @type {Texture}
 	 */
@@ -328,6 +328,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	 * The intensity.
 	 *
 	 * @type {Number}
+	 * @deprecated Use SSAOEffect.intensity instead.
 	 */
 
 	get intensity() {
@@ -345,7 +346,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	/**
 	 * Returns the intensity.
 	 *
-	 * @deprecated Use intensity instead.
+	 * @deprecated Use SSAOEffect.intensity instead.
 	 * @return {Number} The intensity.
 	 */
 
@@ -358,7 +359,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	/**
 	 * Sets the intensity.
 	 *
-	 * @deprecated Use intensity instead.
+	 * @deprecated Use SSAOEffect.intensity instead.
 	 * @param {Number} value - The intensity.
 	 */
 
