@@ -8,7 +8,7 @@ uniform float intensity;
 
 #endif
 
-#ifdef DEPTH_AWARE_UPSAMPLING
+#if defined(DEPTH_AWARE_UPSAMPLING) && defined(NORMAL_DEPTH)
 
 	#ifdef GL_FRAGMENT_PRECISION_HIGH
 
@@ -32,7 +32,7 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth,
 
 	float aoLinear = texture2D(aoBuffer, uv).r;
 
-	#if defined(DEPTH_AWARE_UPSAMPLING) && __VERSION__ == 300
+	#if defined(DEPTH_AWARE_UPSAMPLING) && defined(NORMAL_DEPTH) && __VERSION__ == 300
 
 		// Gather normals and depth in a 2x2 neighborhood.
 		vec4 normalDepth[4];
