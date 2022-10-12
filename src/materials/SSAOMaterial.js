@@ -58,7 +58,7 @@ export class SSAOMaterial extends ShaderMaterial {
 		/** @ignore */
 		this.toneMapped = false;
 
-		this.adoptCameraSettings(camera);
+		this.copyCameraSettings(camera);
 
 		/**
 		 * The resolution.
@@ -796,12 +796,25 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Adopts the settings of the given camera.
+	 * Copies the settings of the given camera.
 	 *
+	 * @deprecated Use copyCameraSettings instead.
 	 * @param {Camera} camera - A camera.
 	 */
 
 	adoptCameraSettings(camera) {
+
+		this.copyCameraSettings(camera);
+
+	}
+
+	/**
+	 * Copies the settings of the given camera.
+	 *
+	 * @param {Camera} camera - A camera.
+	 */
+
+	copyCameraSettings(camera) {
 
 		if(camera) {
 

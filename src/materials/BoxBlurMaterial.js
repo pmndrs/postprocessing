@@ -201,7 +201,7 @@ export class BoxBlurMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Adopts the settings of the given camera.
+	 * Copies the settings of the given camera.
 	 *
 	 * @param {Camera} camera - A camera.
 	 */

@@ -187,7 +187,7 @@ export class GodRaysEffect extends Effect {
 		this.depthMaskPass = new ShaderPass(new DepthMaskMaterial());
 		const depthMaskMaterial = this.depthMaskPass.fullscreenMaterial;
 		depthMaskMaterial.depthBuffer1 = this.renderTargetLight.depthTexture;
-		depthMaskMaterial.adoptCameraSettings(camera);
+		depthMaskMaterial.copyCameraSettings(camera);
 
 		/**
 		 * A god rays blur pass.
