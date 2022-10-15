@@ -1,15 +1,15 @@
 ---
 layout: single
 collection: sections
-title: Scanlines
+title: Tilt Shift
 draft: false
 menu:
   demos:
     parent: special-effects
-    weight: 100
-script: scanlines
+    weight: 90
+script: tilt-shift
 ---
 
-# Scanlines
+# Tilt Shift
 
 ### External Resources

@@ -6,7 +6,7 @@ draft: false
 menu:
   demos:
     parent: special-effects
-    weight: 200
+    weight: 110
 script: vignette
 ---
 

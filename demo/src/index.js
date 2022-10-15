@@ -24,7 +24,6 @@ import { PixelationDemo } from "./demos/PixelationDemo";
 import { ShockWaveDemo } from "./demos/ShockWaveDemo";
 import { SSAODemo } from "./demos/SSAODemo";
 import { TextureDemo } from "./demos/TextureDemo";
-import { TiltShiftDemo } from "./demos/TiltShiftDemo";
 import { ToneMappingDemo } from "./demos/ToneMappingDemo";
 import { PerformanceDemo } from "./demos/PerformanceDemo";
 
@@ -167,7 +166,6 @@ window.addEventListener("load", (event) => {
 		new OutlineDemo(composer),
 		new PatternDemo(composer),
 		new PixelationDemo(composer),
-		new TiltShiftDemo(composer),
 		new ShockWaveDemo(composer),
 		new SSAODemo(composer),
 		new TextureDemo(composer),
