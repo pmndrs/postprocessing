@@ -26,7 +26,7 @@
 			{{ $script := . | fingerprint }}
 			<script defer src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
 		{{ end }}
-		{{ with resources.Get "js/dist/libs/three.js" }}
+		{{ with resources.Get "js/dist/libs/vendor.js" }}
 			{{ $script := . | fingerprint }}
 			<script defer src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
 		{{ end }}

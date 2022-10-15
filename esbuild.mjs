@@ -6,15 +6,18 @@ import esbuild from "esbuild";
 
 const require = createRequire(import.meta.url);
 const pkg = require("./package");
-const date = (new Date()).toDateString();
-const external = Object.keys(pkg.peerDependencies || {});
+
 const minify = process.argv.includes("-m");
 const watch = process.argv.includes("-w");
 const plugins = [glsl({ minify }), tsPaths()];
+const external = Object.keys(pkg.peerDependencies || {})
+	.concat(["spatial-controls", "tweakpane"]);
+
+const date = new Date();
 const banner = `/**
- * ${pkg.name} v${pkg.version} build ${date}
+ * ${pkg.name} v${pkg.version} build ${date.toDateString()}
  * ${pkg.homepage}
- * Copyright 2015-${date.slice(-4)} ${pkg.author.name}
+ * Copyright 2015-${date.getFullYear()} ${pkg.author.name}
  * @license ${pkg.license}
  */`;
 
@@ -43,9 +46,9 @@ await esbuild.build({
 }).catch(() => process.exit(1));
 
 await esbuild.build({
-	entryPoints: ["manual/assets/js/libs/three.js"],
+	entryPoints: ["manual/assets/js/libs/vendor.js"],
 	outdir: "manual/assets/js/dist/libs",
-	globalName: "THREE",
+	globalName: "VENDOR",
 	target: "es6",
 	logLevel: "info",
 	format: "iife",
