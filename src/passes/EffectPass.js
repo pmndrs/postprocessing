@@ -96,11 +96,16 @@ function integrateEffect(prefix, effect, data) {
 			vertexMainSupport += needsUv ? "vUv);\n" : ");\n";
 
 			// Collect names of varyings and functions.
-			for(const m of vertexShader.matchAll(/(?:varying\s+\w+\s+(\w*))/g)) {
+			for(const m of vertexShader.matchAll(/(?:varying\s+\w+\s+([\S\s]*?);)/g)) {
 
-				data.varyings.add(m[1]);
-				varyings.add(m[1]);
-				names.add(m[1]);
+				// Handle unusual formatting and commas.
+				for(const n of m[1].split(/\s*,\s*/)) {
+
+					data.varyings.add(n);
+					varyings.add(n);
+					names.add(n);
+
+				}
 
 			}
 
