@@ -34,7 +34,7 @@ export class TiltShiftEffect extends Effect {
 		offset = 0.0,
 		rotation = 0.0,
 		focusArea = 0.4,
-		feather = 0.3
+		feather = 0.3,
 		bias = 0.06,
 		kernelSize = KernelSize.MEDIUM,
 		resolutionScale = 0.5,

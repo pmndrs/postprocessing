@@ -27,7 +27,7 @@ export class TiltShiftBlurPass extends KawaseBlurPass {
 		offset = 0.0,
 		rotation = 0.0,
 		focusArea = 0.4,
-		feather = 0.3
+		feather = 0.3,
 		kernelSize = KernelSize.MEDIUM,
 		resolutionScale = 0.5,
 		resolutionX = Resolution.AUTO_SIZE,
