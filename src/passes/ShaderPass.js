@@ -43,7 +43,11 @@ export class ShaderPass extends Pass {
 	 * @deprecated Use input instead.
 	 */
 
-	setInput(input) {}
+	setInput(input) {
+
+		this.input = input;
+
+	}
 
 	/**
 	 * Renders the effect.
