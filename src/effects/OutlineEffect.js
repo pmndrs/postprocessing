@@ -226,6 +226,23 @@ export class OutlineEffect extends Effect {
 
 	}
 
+	set mainScene(value) {
+
+		this.scene = value;
+		this.depthPass.mainScene = value;
+		this.maskPass.mainScene = value;
+
+	}
+
+	set mainCamera(value) {
+
+		this.camera = value;
+		this.depthPass.mainCamera = value;
+		this.maskPass.mainCamera = value;
+		this.maskPass.overrideMaterial.copyCameraSettings(value);
+
+	}
+
 	/**
 	 * The resolution of this effect.
 	 *

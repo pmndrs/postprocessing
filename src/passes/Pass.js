@@ -198,6 +198,22 @@ export class Pass {
 	}
 
 	/**
+	 * Sets the main scene.
+	 *
+	 * @type {Scene}
+	 */
+
+	set mainScene(value) {}
+
+	/**
+	 * Sets the main camera.
+	 *
+	 * @type {Camera}
+	 */
+
+	set mainCamera(value) {}
+
+	/**
 	 * Sets the renderer
 	 *
 	 * @deprecated

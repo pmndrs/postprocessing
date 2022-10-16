@@ -317,6 +317,28 @@ export class EffectPass extends Pass {
 
 	}
 
+	set mainScene(value) {
+
+		for(const effect of this.effects) {
+
+			effect.mainScene = value;
+
+		}
+
+	}
+
+	set mainCamera(value) {
+
+		this.fullscreenMaterial.copyCameraSettings(value);
+
+		for(const effect of this.effects) {
+
+			effect.mainCamera = value;
+
+		}
+
+	}
+
 	/**
 	 * Indicates whether this pass encodes its output when rendering to screen.
 	 *

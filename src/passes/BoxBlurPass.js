@@ -92,6 +92,12 @@ export class BoxBlurPass extends Pass {
 
 	}
 
+	set mainCamera(value) {
+
+		this.blurMaterial.copyCameraSettings(value);
+
+	}
+
 	/**
 	 * Sets the depth texture.
 	 *

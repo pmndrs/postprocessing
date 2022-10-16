@@ -104,6 +104,12 @@ export class ShockWaveEffect extends Effect {
 
 	}
 
+	set mainCamera(value) {
+
+		this.camera = value;
+
+	}
+
 	/**
 	 * The amplitude.
 	 *

@@ -121,6 +121,20 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 	}
 
+	set mainScene(value) {
+
+		this.depthPass.mainScene = value;
+
+	}
+
+	set mainCamera(value) {
+
+		this.camera = value;
+		this.depthPass.mainCamera = value;
+		this.depthMaskMaterial.copyCameraSettings(value);
+
+	}
+
 	/**
 	 * Returns the selection.
 	 *

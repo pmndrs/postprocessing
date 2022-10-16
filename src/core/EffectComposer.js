@@ -388,6 +388,38 @@ export class EffectComposer {
 	}
 
 	/**
+	 * Can be used to change the main scene for all registered passes and effects.
+	 *
+	 * @param {Scene} scene - The scene.
+	 */
+
+	setMainScene(scene) {
+
+		for(const pass of this.passes) {
+
+			pass.mainScene = scene;
+
+		}
+
+	}
+
+	/**
+	 * Can be used to change the main camera for all registered passes and effects.
+	 *
+	 * @param {Camera} camera - The camera.
+	 */
+
+	setMainCamera(camera) {
+
+		for(const pass of this.passes) {
+
+			pass.mainCamera = camera;
+
+		}
+
+	}
+
+	/**
 	 * Adds a pass, optionally at a specific index.
 	 *
 	 * @param {Pass} pass - A new pass.

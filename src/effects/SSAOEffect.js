@@ -205,6 +205,13 @@ export class SSAOEffect extends Effect {
 
 	}
 
+	set mainCamera(value) {
+
+		this.camera = value;
+		this.ssaoMaterial.copyCameraSettings(value);
+
+	}
+
 	/**
 	 * Returns the resolution settings.
 	 *

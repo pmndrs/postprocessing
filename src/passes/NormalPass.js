@@ -85,6 +85,18 @@ export class NormalPass extends Pass {
 
 	}
 
+	set mainScene(value) {
+
+		this.renderPass.mainScene = value;
+
+	}
+
+	set mainCamera(value) {
+
+		this.renderPass.mainCamera = value;
+
+	}
+
 	/**
 	 * The normal texture.
 	 *
