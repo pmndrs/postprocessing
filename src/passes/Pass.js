@@ -160,7 +160,9 @@ export class Pass {
 	}
 
 	/**
-	 * Indicates whether this pass should render to screen.
+	 * Sets the render to screen flag.
+	 *
+	 * If this flag is changed, the fullscreen material will be updated as well.
 	 *
 	 * @type {Boolean}
 	 */
@@ -170,14 +172,6 @@ export class Pass {
 		return !this.rtt;
 
 	}
-
-	/**
-	 * Sets the render to screen flag.
-	 *
-	 * If this flag is changed, the fullscreen material will be updated as well.
-	 *
-	 * @type {Boolean}
-	 */
 
 	set renderToScreen(value) {
 
