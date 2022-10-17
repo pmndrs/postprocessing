@@ -21,8 +21,7 @@ declare module "postprocessing" {
 		EventDispatcher,
 		Color,
 		TextureEncoding,
-		DataTexture3D,
-		Wrapping
+		DataTexture3D
 	} from "three";
 
 	/**
@@ -1849,7 +1848,7 @@ declare module "postprocessing" {
 		/**
 		 * The input buffer.
 		 *
-		 * @param {Texture} arg - The input buffer
+		 * @type {Texture}
 		 */
 		set inputBuffer(arg: Texture);
 		/**
@@ -1862,7 +1861,7 @@ declare module "postprocessing" {
 		/**
 		 * The mask texture.
 		 *
-		 * @param {Texture} arg - The texture
+		 * @type {Texture}
 		 */
 		set maskTexture(arg: Texture);
 		/**
@@ -1875,7 +1874,7 @@ declare module "postprocessing" {
 		/**
 		 * Sets the color channel to use for masking. Default is `ColorChannel.RED`.
 		 *
-		 * @param {ColorChannel} type - The channel.
+		 * @type {ColorChannel}
 		 */
 		set colorChannel(arg: ColorChannel);
 		/**
@@ -1888,7 +1887,7 @@ declare module "postprocessing" {
 		/**
 		 * The masking technique. Default is `MaskFunction.DISCARD`.
 		 *
-		 * @param {MaskFunction} arg - The function
+		 * @type {MaskFunction}
 		 */
 		set maskFunction(arg: MaskFunction);
 		/**
@@ -2518,9 +2517,9 @@ declare module "postprocessing" {
 		 * Constructs a new resolution.
 		 *
 		 * TODO Remove resizable param.
-		 * @param {Resizable} resizeable - A resizable object.
-		 * @param {Number} [preferredWidth=Resolution.AUTO_SIZE] - The preferred width.
-		 * @param {Number} [preferredHeight=Resolution.AUTO_SIZE] - The preferred height.
+		 * @param {Resizable} resizable - A resizable object.
+		 * @param {Number} [width=Resolution.AUTO_SIZE] - The preferred width.
+		 * @param {Number} [height=Resolution.AUTO_SIZE] - The preferred height.
 		 * @param {Number} [scale=1.0] - A resolution scale.
 		 */
 		constructor(
