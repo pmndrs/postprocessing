@@ -32,7 +32,7 @@ export class SSAOEffect extends Effect {
 	 * @param {Texture} normalBuffer - A texture that contains the scene normals.
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
-	 * @param {Boolean} [options.depthScaling=true] - Deprecated.
+	 * @param {Boolean} [options.distanceScaling=true] - Deprecated.
 	 * @param {Boolean} [options.depthAwareUpsampling=true] - Enables or disables depth-aware upsampling. Has no effect if WebGL 2 is not supported.
 	 * @param {Texture} [options.normalDepthBuffer=null] - Deprecated.
 	 * @param {Number} [options.samples=9] - The amount of samples per pixel. Should not be a multiple of the ring count.
