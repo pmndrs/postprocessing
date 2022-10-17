@@ -13,11 +13,21 @@
 
 	#endif
 
+	float readDepth(const in vec2 uv) {
+
+		return texture2D(normalDepthBuffer, uv).a;
+
+	}
+
 #else
 
 	uniform lowp sampler2D normalBuffer;
 
-	#ifdef GL_FRAGMENT_PRECISION_HIGH
+	#if DEPTH_PACKING == 3201
+
+		uniform lowp sampler2D depthBuffer;
+
+	#elif defined(GL_FRAGMENT_PRECISION_HIGH)
 
 		uniform highp sampler2D depthBuffer;
 
@@ -50,8 +60,8 @@ uniform mat4 projectionMatrix;
 uniform vec2 texelSize;
 uniform vec2 cameraNearFar;
 
-uniform float minRadiusScale;
 uniform float intensity;
+uniform float minRadiusScale;
 uniform float fade;
 uniform float bias;
 
@@ -93,24 +103,14 @@ vec3 getViewPosition(const in vec2 screenPosition, const in float depth, const i
 
 float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth, const in vec2 uv) {
 
-	#ifdef DISTANCE_SCALING
-
-		float radiusScale = 1.0 - smoothstep(0.0, distanceCutoff.y, depth);
-		radiusScale = radiusScale * (1.0 - minRadiusScale) + minRadiusScale;
-
-		float radius = RADIUS * radiusScale;
-
-	#else
-
-		float radius = RADIUS;
-
-	#endif
+	// Distance scaling
+	float radiusScale = 1.0 - smoothstep(0.0, distanceCutoff.y, depth);
+	radiusScale = radiusScale * (1.0 - minRadiusScale) + minRadiusScale;
+	float radius = RADIUS * radiusScale;
 
 	// Use a random starting angle.
 	float noise = texture2D(noiseTexture, vUv2).r;
 	float baseAngle = noise * PI2;
-
-	float invSamples = 1.0 / SAMPLES_FLOAT;
 	float rings = SPIRAL_TURNS * PI2;
 
 	float occlusion = 0.0;
@@ -118,28 +118,19 @@ float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth
 
 	for(int i = 0; i < SAMPLES_INT; ++i) {
 
-		float alpha = (float(i) + 0.5) * invSamples;
+		float alpha = (float(i) + 0.5) * INV_SAMPLES_FLOAT;
 		float angle = alpha * rings + baseAngle;
+		vec2 rotation = vec2(cos(angle), sin(angle));
+		vec2 coords = alpha * radius * rotation * texelSize + uv;
 
-		vec2 coord = alpha * radius * vec2(cos(angle), sin(angle)) * texelSize + uv;
-
-		if(coord.s < 0.0 || coord.s > 1.0 || coord.t < 0.0 || coord.t > 1.0) {
+		if(coords.s < 0.0 || coords.s > 1.0 || coords.t < 0.0 || coords.t > 1.0) {
 
 			// Skip samples outside the screen.
 			continue;
 
 		}
 
-		#ifdef NORMAL_DEPTH
-
-			float sampleDepth = texture2D(normalDepthBuffer, coord).a;
-
-		#else
-
-			float sampleDepth = readDepth(coord);
-
-		#endif
-
+		float sampleDepth = readDepth(coords);
 		float viewZ = getViewZ(sampleDepth);
 
 		#ifdef PERSPECTIVE_CAMERA
@@ -158,7 +149,7 @@ float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth
 
 			float falloff = 1.0 - smoothstep(proximityCutoff.x, proximityCutoff.y, proximity);
 
-			vec3 Q = getViewPosition(coord, sampleDepth, viewZ);
+			vec3 Q = getViewPosition(coords, sampleDepth, viewZ);
 			vec3 v = Q - p;
 
 			float vv = dot(v, v);
@@ -185,11 +176,11 @@ void main() {
 
 	#else
 
-		vec4 normalDepth = vec4(texture2D(normalBuffer, vUv).rgb, readDepth(vUv));
+		vec4 normalDepth = vec4(texture2D(normalBuffer, vUv).xyz, readDepth(vUv));
 
 	#endif
 
-	float ao = 1.0;
+	float ao = 0.0;
 	float depth = normalDepth.a;
 	float viewZ = getViewZ(depth);
 
@@ -208,14 +199,17 @@ void main() {
 
 		vec3 viewPosition = getViewPosition(vUv, depth, viewZ);
 		vec3 viewNormal = unpackRGBToNormal(normalDepth.rgb);
-		ao -= getAmbientOcclusion(viewPosition, viewNormal, linearDepth, vUv);
+		ao += getAmbientOcclusion(viewPosition, viewNormal, linearDepth, vUv);
 
 		// Fade AO based on depth.
 		float d = smoothstep(distanceCutoff.x, distanceCutoff.y, linearDepth);
-		ao = mix(ao, 1.0, d);
+		ao = mix(ao, 0.0, d);
 
-		// Adjust the overall intensity.
-		ao = clamp(pow(ao, abs(intensity)), 0.0, 1.0);
+		#ifdef LEGACY_INTENSITY
+
+			ao = clamp(1.0 - pow(1.0 - ao, abs(intensity)), 0.0, 1.0);
+
+		#endif
 
 	}
 

@@ -1,4 +1,5 @@
 uniform vec2 texelSize;
+uniform float scale;
 
 #if KERNEL_SIZE == 3
 
@@ -18,6 +19,7 @@ uniform vec2 texelSize;
 
 #else
 
+	// General case
 	varying vec2 vUv;
 
 #endif
@@ -28,51 +30,55 @@ void main() {
 
 	#if KERNEL_SIZE == 3
 
+		vec2 s = texelSize * scale;
+
 		// Optimized 3x3
-		vUv00 = uv + texelSize * vec2(-1.0, -1.0);
-		vUv01 = uv + texelSize * vec2(0.0, -1.0);
-		vUv02 = uv + texelSize * vec2(1.0, -1.0);
+		vUv00 = uv + s * vec2(-1.0, -1.0);
+		vUv01 = uv + s * vec2(0.0, -1.0);
+		vUv02 = uv + s * vec2(1.0, -1.0);
 
-		vUv03 = uv + texelSize * vec2(-1.0, 0.0);
+		vUv03 = uv + s * vec2(-1.0, 0.0);
 		vUv04 = uv;
-		vUv05 = uv + texelSize * vec2(1.0, 0.0);
+		vUv05 = uv + s * vec2(1.0, 0.0);
 
-		vUv06 = uv + texelSize * vec2(-1.0, 1.0);
-		vUv07 = uv + texelSize * vec2(0.0, 1.0);
-		vUv08 = uv + texelSize * vec2(1.0, 1.0);
+		vUv06 = uv + s * vec2(-1.0, 1.0);
+		vUv07 = uv + s * vec2(0.0, 1.0);
+		vUv08 = uv + s * vec2(1.0, 1.0);
 
 	#elif KERNEL_SIZE == 5
 
+		vec2 s = texelSize * scale;
+
 		// Optimized 5x5
-		vUv00 = uv + texelSize * vec2(-2.0, -2.0);
-		vUv01 = uv + texelSize * vec2(-1.0, -2.0);
-		vUv02 = uv + texelSize * vec2(0.0, -2.0);
-		vUv03 = uv + texelSize * vec2(1.0, -2.0);
-		vUv04 = uv + texelSize * vec2(2.0, -2.0);
+		vUv00 = uv + s * vec2(-2.0, -2.0);
+		vUv01 = uv + s * vec2(-1.0, -2.0);
+		vUv02 = uv + s * vec2(0.0, -2.0);
+		vUv03 = uv + s * vec2(1.0, -2.0);
+		vUv04 = uv + s * vec2(2.0, -2.0);
 
-		vUv05 = uv + texelSize * vec2(-2.0, -1.0);
-		vUv06 = uv + texelSize * vec2(-1.0, -1.0);
-		vUv07 = uv + texelSize * vec2(0.0, -1.0);
-		vUv08 = uv + texelSize * vec2(1.0, -1.0);
-		vUv09 = uv + texelSize * vec2(2.0, -1.0);
+		vUv05 = uv + s * vec2(-2.0, -1.0);
+		vUv06 = uv + s * vec2(-1.0, -1.0);
+		vUv07 = uv + s * vec2(0.0, -1.0);
+		vUv08 = uv + s * vec2(1.0, -1.0);
+		vUv09 = uv + s * vec2(2.0, -1.0);
 
-		vUv10 = uv + texelSize * vec2(-2.0, 0.0);
-		vUv11 = uv + texelSize * vec2(-1.0, 0.0);
+		vUv10 = uv + s * vec2(-2.0, 0.0);
+		vUv11 = uv + s * vec2(-1.0, 0.0);
 		vUv12 = uv;
-		vUv13 = uv + texelSize * vec2(1.0, 0.0);
-		vUv14 = uv + texelSize * vec2(2.0, 0.0);
+		vUv13 = uv + s * vec2(1.0, 0.0);
+		vUv14 = uv + s * vec2(2.0, 0.0);
 
-		vUv15 = uv + texelSize * vec2(-2.0, 1.0);
-		vUv16 = uv + texelSize * vec2(-1.0, 1.0);
-		vUv17 = uv + texelSize * vec2(0.0, 1.0);
-		vUv18 = uv + texelSize * vec2(1.0, 1.0);
-		vUv19 = uv + texelSize * vec2(2.0, 1.0);
+		vUv15 = uv + s * vec2(-2.0, 1.0);
+		vUv16 = uv + s * vec2(-1.0, 1.0);
+		vUv17 = uv + s * vec2(0.0, 1.0);
+		vUv18 = uv + s * vec2(1.0, 1.0);
+		vUv19 = uv + s * vec2(2.0, 1.0);
 
-		vUv20 = uv + texelSize * vec2(-2.0, 2.0);
-		vUv21 = uv + texelSize * vec2(-1.0, 2.0);
-		vUv22 = uv + texelSize * vec2(0.0, 2.0);
-		vUv23 = uv + texelSize * vec2(1.0, 2.0);
-		vUv24 = uv + texelSize * vec2(2.0, 2.0);
+		vUv20 = uv + s * vec2(-2.0, 2.0);
+		vUv21 = uv + s * vec2(-1.0, 2.0);
+		vUv22 = uv + s * vec2(0.0, 2.0);
+		vUv23 = uv + s * vec2(1.0, 2.0);
+		vUv24 = uv + s * vec2(2.0, 2.0);
 
 	#else
 

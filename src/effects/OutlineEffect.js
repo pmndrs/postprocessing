@@ -197,6 +197,15 @@ export class OutlineEffect extends Effect {
 		this.time = 0;
 
 		/**
+		 * Indicates whether the outline effect is active.
+		 *
+		 * @type {Boolean}
+		 * @private
+		 */
+
+		this.active = false;
+
+		/**
 		 * A selection of objects that will be outlined.
 		 *
 		 * The default layer of this selection is 10.
@@ -214,6 +223,23 @@ export class OutlineEffect extends Effect {
 		 */
 
 		this.pulseSpeed = pulseSpeed;
+
+	}
+
+	set mainScene(value) {
+
+		this.scene = value;
+		this.depthPass.mainScene = value;
+		this.maskPass.mainScene = value;
+
+	}
+
+	set mainCamera(value) {
+
+		this.camera = value;
+		this.depthPass.mainCamera = value;
+		this.maskPass.mainCamera = value;
+		this.maskPass.overrideMaterial.copyCameraSettings(value);
 
 	}
 
@@ -726,6 +752,7 @@ export class OutlineEffect extends Effect {
 
 			}
 
+			this.active = true;
 			this.time += deltaTime;
 
 			// Render a custom depth texture and ignore selected objects.
@@ -750,10 +777,10 @@ export class OutlineEffect extends Effect {
 
 			}
 
-		} else if(this.time > 0) {
+		} else if(this.active) {
 
 			this.clearPass.render(renderer, this.renderTargetOutline);
-			this.time = 0;
+			this.active = false;
 
 		}
 

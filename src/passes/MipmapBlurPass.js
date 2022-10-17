@@ -111,6 +111,8 @@ export class MipmapBlurPass extends Pass {
 			const renderTarget = this.renderTarget;
 
 			this.dispose();
+			this.downsamplingMipmaps = [];
+			this.upsamplingMipmaps = [];
 
 			for(let i = 0; i < value; ++i) {
 

@@ -96,11 +96,16 @@ function integrateEffect(prefix, effect, data) {
 			vertexMainSupport += needsUv ? "vUv);\n" : ");\n";
 
 			// Collect names of varyings and functions.
-			for(const m of vertexShader.matchAll(/(?:varying\s+\w+\s+(\w*))/g)) {
+			for(const m of vertexShader.matchAll(/(?:varying\s+\w+\s+([\S\s]*?);)/g)) {
 
-				data.varyings.add(m[1]);
-				varyings.add(m[1]);
-				names.add(m[1]);
+				// Handle unusual formatting and commas.
+				for(const n of m[1].split(/\s*,\s*/)) {
+
+					data.varyings.add(n);
+					varyings.add(n);
+					names.add(n);
+
+				}
 
 			}
 
@@ -301,6 +306,36 @@ export class EffectPass extends Pass {
 		 */
 
 		this.maxTime = Number.POSITIVE_INFINITY;
+
+		/**
+		 * The animation time scale.
+		 *
+		 * @type {Number}
+		 */
+
+		this.timeScale = 1.0;
+
+	}
+
+	set mainScene(value) {
+
+		for(const effect of this.effects) {
+
+			effect.mainScene = value;
+
+		}
+
+	}
+
+	set mainCamera(value) {
+
+		this.fullscreenMaterial.copyCameraSettings(value);
+
+		for(const effect of this.effects) {
+
+			effect.mainCamera = value;
+
+		}
 
 	}
 
@@ -526,7 +561,7 @@ export class EffectPass extends Pass {
 
 			const material = this.fullscreenMaterial;
 			material.inputBuffer = inputBuffer.texture;
-			material.time += deltaTime;
+			material.time += deltaTime * this.timeScale;
 
 			renderer.setRenderTarget(this.renderToScreen ? null : outputBuffer);
 			renderer.render(this.scene, this.camera);

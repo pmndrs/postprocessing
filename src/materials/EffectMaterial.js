@@ -68,7 +68,7 @@ export class EffectMaterial extends ShaderMaterial {
 
 		}
 
-		this.adoptCameraSettings(camera);
+		this.copyCameraSettings(camera);
 
 	}
 
@@ -342,12 +342,25 @@ export class EffectMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Adopts the settings of the given camera.
+	 * Copies the settings of the given camera.
 	 *
+	 * @deprecated Use copyCameraSettings instead.
 	 * @param {Camera} camera - A camera.
 	 */
 
 	adoptCameraSettings(camera) {
+
+		this.copyCameraSettings(camera);
+
+	}
+
+	/**
+	 * Copies the settings of the given camera.
+	 *
+	 * @param {Camera} camera - A camera.
+	 */
+
+	copyCameraSettings(camera) {
 
 		if(camera) {
 

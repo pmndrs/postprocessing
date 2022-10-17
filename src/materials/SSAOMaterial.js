@@ -24,7 +24,7 @@ export class SSAOMaterial extends ShaderMaterial {
 			name: "SSAOMaterial",
 			defines: {
 				SAMPLES_INT: "0",
-				SAMPLES_FLOAT: "0.0",
+				INV_SAMPLES_FLOAT: "0.0",
 				SPIRAL_TURNS: "0.0",
 				RADIUS: "1.0",
 				RADIUS_SQ: "1.0",
@@ -58,7 +58,7 @@ export class SSAOMaterial extends ShaderMaterial {
 		/** @ignore */
 		this.toneMapped = false;
 
-		this.adoptCameraSettings(camera);
+		this.copyCameraSettings(camera);
 
 		/**
 		 * The resolution.
@@ -107,7 +107,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * The combined normal-depth buffer.
+	 * A combined normal-depth buffer.
 	 *
 	 * @type {Texture}
 	 */
@@ -248,7 +248,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	set samples(value) {
 
 		this.defines.SAMPLES_INT = value.toFixed(0);
-		this.defines.SAMPLES_FLOAT = value.toFixed(1);
+		this.defines.INV_SAMPLES_FLOAT = (1.0 / value).toFixed(9);
 		this.needsUpdate = true;
 
 	}
@@ -328,6 +328,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	 * The intensity.
 	 *
 	 * @type {Number}
+	 * @deprecated Use SSAOEffect.intensity instead.
 	 */
 
 	get intensity() {
@@ -340,12 +341,19 @@ export class SSAOMaterial extends ShaderMaterial {
 
 		this.uniforms.intensity.value = value;
 
+		if(this.defines.LEGACY_INTENSITY === undefined) {
+
+			this.defines.LEGACY_INTENSITY = "1";
+			this.needsUpdate = true;
+
+		}
+
 	}
 
 	/**
 	 * Returns the intensity.
 	 *
-	 * @deprecated Use intensity instead.
+	 * @deprecated Use SSAOEffect.intensity instead.
 	 * @return {Number} The intensity.
 	 */
 
@@ -358,7 +366,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	/**
 	 * Sets the intensity.
 	 *
-	 * @deprecated Use intensity instead.
+	 * @deprecated Use SSAOEffect.intensity instead.
 	 * @param {Number} value - The intensity.
 	 */
 
@@ -564,38 +572,16 @@ export class SSAOMaterial extends ShaderMaterial {
 	 * Indicates whether distance-based radius scaling is enabled.
 	 *
 	 * @type {Boolean}
+	 * @deprecated
 	 */
 
-	get distanceScaling() {
-
-		return (this.defines.DISTANCE_SCALING !== undefined);
-
-	}
-
-	set distanceScaling(value) {
-
-		if(this.isDistanceScalingEnabled() !== value) {
-
-			if(value) {
-
-				this.defines.DISTANCE_SCALING = "1";
-
-			} else {
-
-				delete this.defines.DISTANCE_SCALING;
-
-			}
-
-			this.needsUpdate = true;
-
-		}
-
-	}
+	get distanceScaling() { return true; }
+	set distanceScaling(value) {}
 
 	/**
 	 * Indicates whether distance-based radius scaling is enabled.
 	 *
-	 * @deprecated Use distanceScaling instead.
+	 * @deprecated
 	 * @return {Boolean} Whether distance scaling is enabled.
 	 */
 
@@ -608,7 +594,7 @@ export class SSAOMaterial extends ShaderMaterial {
 	/**
 	 * Enables or disables distance-based radius scaling.
 	 *
-	 * @deprecated Use distanceScaling instead.
+	 * @deprecated
 	 * @param {Boolean} value - Whether distance scaling should be enabled.
 	 */
 
@@ -817,12 +803,25 @@ export class SSAOMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Adopts the settings of the given camera.
+	 * Copies the settings of the given camera.
 	 *
+	 * @deprecated Use copyCameraSettings instead.
 	 * @param {Camera} camera - A camera.
 	 */
 
 	adoptCameraSettings(camera) {
+
+		this.copyCameraSettings(camera);
+
+	}
+
+	/**
+	 * Copies the settings of the given camera.
+	 *
+	 * @param {Camera} camera - A camera.
+	 */
+
+	copyCameraSettings(camera) {
 
 		if(camera) {
 

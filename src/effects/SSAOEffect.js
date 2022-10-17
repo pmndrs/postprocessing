@@ -3,7 +3,7 @@ import { Resolution } from "../core/Resolution";
 import { BlendFunction, EffectAttribute } from "../enums";
 import { NoiseTexture } from "../textures/NoiseTexture";
 import { SSAOMaterial } from "../materials";
-import { ShaderPass } from "../passes";
+import { DepthDownsamplingPass, ShaderPass } from "../passes";
 import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/ssao.frag";
@@ -11,20 +11,10 @@ import fragmentShader from "./glsl/ssao.frag";
 const NOISE_TEXTURE_SIZE = 64;
 
 /**
- * A Screen Space Ambient Occlusion (SSAO) effect.
+ * A Screen Space Ambient Occlusion effect.
  *
- * For high quality visuals use two SSAO effect instances in a row with different radii, one for rough AO and one for
- * fine details.
- *
- * This effect supports depth-aware upsampling and should be rendered at a lower resolution. The resolution should match
- * that of the downsampled normals and depth. If you intend to render SSAO at full resolution, do not provide a
- * downsampled `normalDepthBuffer`.
- *
- * It's recommended to specify a relative render resolution using the `resolutionScale` constructor parameter to avoid
- * undesired sampling patterns.
- *
- * Based on "Scalable Ambient Obscurance" by Morgan McGuire et al. and "Depth-aware upsampling experiments" by Eleni
- * Maria Stea:
+ * Based on "Scalable Ambient Obscurance" by Morgan McGuire et al.
+ * and "Depth-aware upsampling experiments" by Eleni Maria Stea:
  * https://research.nvidia.com/publication/scalable-ambient-obscurance
  * https://eleni.mutantstargoat.com/hikiko/on-depth-aware-upsampling
  *
@@ -39,23 +29,23 @@ export class SSAOEffect extends Effect {
 	 *
 	 * @todo Move normalBuffer to options.
 	 * @param {Camera} camera - The main camera.
-	 * @param {Texture} normalBuffer - A texture that contains the scene normals. May be null if a normalDepthBuffer is provided. See {@link NormalPass}.
+	 * @param {Texture} normalBuffer - A texture that contains the scene normals.
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
-	 * @param {Boolean} [options.distanceScaling=true] - Enables or disables distance-based radius scaling.
+	 * @param {Boolean} [options.distanceScaling=true] - Deprecated.
 	 * @param {Boolean} [options.depthAwareUpsampling=true] - Enables or disables depth-aware upsampling. Has no effect if WebGL 2 is not supported.
-	 * @param {Texture} [options.normalDepthBuffer=null] - A texture that contains downsampled scene normals and depth. See {@link DepthDownsamplingPass}.
+	 * @param {Texture} [options.normalDepthBuffer=null] - Deprecated.
 	 * @param {Number} [options.samples=9] - The amount of samples per pixel. Should not be a multiple of the ring count.
 	 * @param {Number} [options.rings=7] - The amount of spiral turns in the occlusion sampling pattern. Should be a prime number.
 	 * @param {Number} [options.worldDistanceThreshold] - The world distance threshold at which the occlusion effect starts to fade out.
 	 * @param {Number} [options.worldDistanceFalloff] - The world distance falloff. Influences the smoothness of the occlusion cutoff.
 	 * @param {Number} [options.worldProximityThreshold] - The world proximity threshold at which the occlusion starts to fade out.
 	 * @param {Number} [options.worldProximityFalloff] - The world proximity falloff. Influences the smoothness of the proximity cutoff.
-	 * @param {Number} [options.distanceThreshold=0.97] - The distance threshold at which the occlusion effect starts to fade out. Range [0.0, 1.0].
-	 * @param {Number} [options.distanceFalloff=0.03] - The distance falloff. Influences the smoothness of the overall occlusion cutoff. Range [0.0, 1.0].
-	 * @param {Number} [options.rangeThreshold=0.0005] - The proximity threshold at which the occlusion starts to fade out. Range [0.0, 1.0].
-	 * @param {Number} [options.rangeFalloff=0.001] - The proximity falloff. Influences the smoothness of the proximity cutoff. Range [0.0, 1.0].
-	 * @param {Number} [options.minRadiusScale=0.1] - The minimum radius scale. Has no effect if distance scaling is disabled.
+	 * @param {Number} [options.distanceThreshold=0.97] - Deprecated.
+	 * @param {Number} [options.distanceFalloff=0.03] - Deprecated.
+	 * @param {Number} [options.rangeThreshold=0.0005] - Deprecated.
+	 * @param {Number} [options.rangeFalloff=0.001] - Deprecated.
+	 * @param {Number} [options.minRadiusScale=0.1] - The minimum radius scale.
 	 * @param {Number} [options.luminanceInfluence=0.7] - Determines how much the luminance of the scene influences the ambient occlusion.
 	 * @param {Number} [options.radius=0.1825] - The occlusion sampling radius, expressed as a scale relative to the resolution. Range [1e-6, 1.0].
 	 * @param {Number} [options.intensity=1.0] - The intensity of the ambient occlusion.
@@ -71,11 +61,10 @@ export class SSAOEffect extends Effect {
 
 	constructor(camera, normalBuffer, {
 		blendFunction = BlendFunction.MULTIPLY,
-		distanceScaling = true,
-		depthAwareUpsampling = true,
-		normalDepthBuffer = null,
 		samples = 9,
 		rings = 7,
+		normalDepthBuffer = null,
+		depthAwareUpsampling = true,
 		worldDistanceThreshold,
 		worldDistanceFalloff,
 		worldProximityThreshold,
@@ -109,20 +98,21 @@ export class SSAOEffect extends Effect {
 				["normalDepthBuffer", new Uniform(normalDepthBuffer)],
 				["luminanceInfluence", new Uniform(luminanceInfluence)],
 				["color", new Uniform(null)],
+				["intensity", new Uniform(intensity)],
 				["scale", new Uniform(0.0)] // Unused.
 			])
 		});
 
 		/**
-		 * A render target for the ambient occlusion shadows.
+		 * A render target.
 		 *
 		 * @type {WebGLRenderTarget}
 		 * @private
 		 */
 
-		this.renderTargetAO = new WebGLRenderTarget(1, 1, { depthBuffer: false });
-		this.renderTargetAO.texture.name = "AO.Target";
-		this.uniforms.get("aoBuffer").value = this.renderTargetAO.texture;
+		this.renderTarget = new WebGLRenderTarget(1, 1, { depthBuffer: false });
+		this.renderTarget.texture.name = "AO.Target";
+		this.uniforms.get("aoBuffer").value = this.renderTarget.texture;
 
 		/**
 		 * The resolution.
@@ -143,6 +133,16 @@ export class SSAOEffect extends Effect {
 		this.camera = camera;
 
 		/**
+		 * A depth downsampling pass.
+		 *
+		 * @type {DepthDownsamplingPass}
+		 * @private
+		 */
+
+		this.depthDownsamplingPass = new DepthDownsamplingPass({ normalBuffer, resolutionScale });
+		this.depthDownsamplingPass.enabled = (normalDepthBuffer === null);
+
+		/**
 		 * An SSAO pass.
 		 *
 		 * @type {ShaderPass}
@@ -154,58 +154,61 @@ export class SSAOEffect extends Effect {
 		const noiseTexture = new NoiseTexture(NOISE_TEXTURE_SIZE, NOISE_TEXTURE_SIZE, RGBAFormat);
 		noiseTexture.wrapS = noiseTexture.wrapT = RepeatWrapping;
 
-		const material = this.ssaoMaterial;
-		material.noiseTexture = noiseTexture;
-		material.minRadiusScale = minRadiusScale;
-		material.intensity = intensity;
-		material.fade = fade;
-		material.bias = bias;
+		const ssaoMaterial = this.ssaoMaterial;
+		ssaoMaterial.normalBuffer = normalBuffer;
+		ssaoMaterial.noiseTexture = noiseTexture;
+		ssaoMaterial.minRadiusScale = minRadiusScale;
+		ssaoMaterial.samples = samples;
+		ssaoMaterial.radius = radius;
+		ssaoMaterial.rings = rings;
+		ssaoMaterial.fade = fade;
+		ssaoMaterial.bias = bias;
 
-		if(normalDepthBuffer !== null) {
-
-			material.normalDepthBuffer = normalDepthBuffer;
-			this.depthAwareUpsampling = depthAwareUpsampling;
-
-		} else {
-
-			material.normalBuffer = normalBuffer;
-
-		}
-
-		material.distanceThreshold = distanceThreshold;
-		material.distanceFalloff = distanceFalloff;
-		material.proximityThreshold = rangeThreshold;
-		material.proximityFalloff = rangeFalloff;
+		ssaoMaterial.distanceThreshold = distanceThreshold;
+		ssaoMaterial.distanceFalloff = distanceFalloff;
+		ssaoMaterial.proximityThreshold = rangeThreshold;
+		ssaoMaterial.proximityFalloff = rangeFalloff;
 
 		if(worldDistanceThreshold !== undefined) {
 
-			material.worldDistanceThreshold = worldDistanceThreshold;
+			ssaoMaterial.worldDistanceThreshold = worldDistanceThreshold;
 
 		}
 
 		if(worldDistanceFalloff !== undefined) {
 
-			material.worldDistanceFalloff = worldDistanceFalloff;
+			ssaoMaterial.worldDistanceFalloff = worldDistanceFalloff;
 
 		}
 
 		if(worldProximityThreshold !== undefined) {
 
-			material.worldProximityThreshold = worldProximityThreshold;
+			ssaoMaterial.worldProximityThreshold = worldProximityThreshold;
 
 		}
 
 		if(worldProximityFalloff !== undefined) {
 
-			material.worldProximityFalloff = worldProximityFalloff;
+			ssaoMaterial.worldProximityFalloff = worldProximityFalloff;
 
 		}
 
-		material.distanceScaling = distanceScaling;
-		material.samples = samples;
-		material.radius = radius;
-		material.rings = rings;
+		if(normalDepthBuffer !== null) {
+
+			this.ssaoMaterial.normalDepthBuffer = normalDepthBuffer;
+			this.defines.set("NORMAL_DEPTH", "1");
+
+		}
+
+		this.depthAwareUpsampling = depthAwareUpsampling;
 		this.color = color;
+
+	}
+
+	set mainCamera(value) {
+
+		this.camera = value;
+		this.ssaoMaterial.copyCameraSettings(value);
 
 	}
 
@@ -320,7 +323,7 @@ export class SSAOEffect extends Effect {
 
 		if(this.depthAwareUpsampling !== value) {
 
-			if(value && this.uniforms.get("normalDepthBuffer").value !== null) {
+			if(value) {
 
 				this.defines.set("DEPTH_AWARE_UPSAMPLING", "1");
 
@@ -366,20 +369,11 @@ export class SSAOEffect extends Effect {
 	 * Indicates whether distance-based radius scaling is enabled.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use ssaoMaterial.distanceScaling instead.
+	 * @deprecated
 	 */
 
-	get distanceScaling() {
-
-		return this.ssaoMaterial.distanceScaling;
-
-	}
-
-	set distanceScaling(value) {
-
-		this.ssaoMaterial.distanceScaling = value;
-
-	}
+	get distanceScaling() { return true; }
+	set distanceScaling(value) {}
 
 	/**
 	 * The color of the ambient occlusion. Set to `null` to disable.
@@ -437,6 +431,24 @@ export class SSAOEffect extends Effect {
 	set luminanceInfluence(value) {
 
 		this.uniforms.get("luminanceInfluence").value = value;
+
+	}
+
+	/**
+	 * The intensity.
+	 *
+	 * @type {Number}
+	 */
+
+	get intensity() {
+
+		return this.uniforms.get("intensity").value;
+
+	}
+
+	set intensity(value) {
+
+		this.uniforms.get("intensity").value = value;
 
 	}
 
@@ -505,6 +517,7 @@ export class SSAOEffect extends Effect {
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
+		this.depthDownsamplingPass.setDepthTexture(depthTexture, depthPacking);
 		this.ssaoMaterial.depthBuffer = depthTexture;
 		this.ssaoMaterial.depthPacking = depthPacking;
 
@@ -520,7 +533,15 @@ export class SSAOEffect extends Effect {
 
 	update(renderer, inputBuffer, deltaTime) {
 
-		this.ssaoPass.render(renderer, null, this.renderTargetAO);
+		const renderTarget = this.renderTarget;
+
+		if(this.depthDownsamplingPass.enabled) {
+
+			this.depthDownsamplingPass.render(renderer);
+
+		}
+
+		this.ssaoPass.render(renderer, null, renderTarget);
 
 	}
 
@@ -537,10 +558,45 @@ export class SSAOEffect extends Effect {
 		resolution.setBaseSize(width, height);
 		const w = resolution.width, h = resolution.height;
 
-		const material = this.ssaoMaterial;
-		material.adoptCameraSettings(this.camera);
-		material.setSize(w, h);
-		this.renderTargetAO.setSize(w, h);
+		this.ssaoMaterial.copyCameraSettings(this.camera);
+		this.ssaoMaterial.setSize(w, h);
+		this.renderTarget.setSize(w, h);
+
+		this.depthDownsamplingPass.resolution.scale = resolution.scale;
+		this.depthDownsamplingPass.setSize(width, height);
+
+	}
+
+	/**
+	 * Performs initialization tasks.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 * @param {Number} frameBufferType - The type of the main frame buffers.
+	 */
+
+	initialize(renderer, alpha, frameBufferType) {
+
+		try {
+
+			let normalDepthBuffer = this.uniforms.get("normalDepthBuffer").value;
+
+			if(normalDepthBuffer === null) {
+
+				this.depthDownsamplingPass.initialize(renderer, alpha, frameBufferType);
+				normalDepthBuffer = this.depthDownsamplingPass.texture;
+				this.uniforms.get("normalDepthBuffer").value = normalDepthBuffer;
+				this.ssaoMaterial.normalDepthBuffer = normalDepthBuffer;
+				this.defines.set("NORMAL_DEPTH", "1");
+
+			}
+
+		} catch(e) {
+
+			// Not supported.
+			this.depthDownsamplingPass.enabled = false;
+
+		}
 
 	}
 

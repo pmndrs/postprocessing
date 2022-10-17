@@ -1,53 +1,44 @@
 import {
 	ColorManagement,
-	CubeTextureLoader,
 	LoadingManager,
+	PerspectiveCamera,
+	PlaneGeometry,
 	Mesh,
 	MeshBasicMaterial,
-	PerspectiveCamera,
 	Scene,
-	SphereGeometry,
 	sRGBEncoding,
-	Vector3,
-	VSMShadowMap,
+	TextureLoader,
 	WebGLRenderer
 } from "three";
 
 import {
-	CopyPass,
-	DepthPickingPass,
+	BlendFunction,
 	EffectComposer,
-	RenderPass
+	EffectPass,
+	KernelSize,
+	RenderPass,
+	TiltShiftEffect
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
 import { ControlMode, SpatialControls } from "spatial-controls";
 import { calculateVerticalFoV, FPSMeter } from "../utils";
-import * as CornellBox from "../objects/CornellBox";
 
 function load() {
 
 	const assets = new Map();
 	const loadingManager = new LoadingManager();
-	const cubeTextureLoader = new CubeTextureLoader(loadingManager);
-
-	const path = document.baseURI + "img/textures/skies/sunset/";
-	const format = ".png";
-	const urls = [
-		path + "px" + format, path + "nx" + format,
-		path + "py" + format, path + "ny" + format,
-		path + "pz" + format, path + "nz" + format
-	];
+	const textureLoader = new TextureLoader(loadingManager);
 
 	return new Promise((resolve, reject) => {
 
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		cubeTextureLoader.load(urls, (t) => {
+		textureLoader.load(document.baseURI + "img/textures/photos/GEDC0053.jpg", (t) => {
 
 			t.encoding = sRGBEncoding;
-			assets.set("sky", t);
+			assets.set("photo", t);
 
 		});
 
@@ -69,12 +60,8 @@ window.addEventListener("load", () => load().then((assets) => {
 	});
 
 	renderer.debug.checkShaderErrors = (window.location.hostname === "localhost");
-	renderer.physicallyCorrectLights = true;
 	renderer.outputEncoding = sRGBEncoding;
-	renderer.shadowMap.type = VSMShadowMap;
-	renderer.shadowMap.autoUpdate = false;
-	renderer.shadowMap.needsUpdate = true;
-	renderer.shadowMap.enabled = true;
+	renderer.setClearAlpha(0);
 
 	const container = document.querySelector(".viewport");
 	container.prepend(renderer.domElement);
@@ -85,68 +72,59 @@ window.addEventListener("load", () => load().then((assets) => {
 	const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 	const settings = controls.settings;
 	settings.general.setMode(ControlMode.THIRD_PERSON);
-	settings.rotation.setSensitivity(2.2);
-	settings.rotation.setDamping(0.05);
+	settings.zoom.setSensitivity(0.05);
 	settings.zoom.setDamping(0.1);
+	settings.rotation.setSensitivity(0);
 	settings.translation.setEnabled(false);
-	controls.setPosition(0, 0, 5);
+	controls.setPosition(0, 0, 1.4);
 
-	// Scene, Lights, Objects
+	// Scene & Objects
 
 	const scene = new Scene();
-	scene.background = assets.get("sky");
-	scene.add(CornellBox.createLights());
-	scene.add(CornellBox.createEnvironment());
-	scene.add(CornellBox.createActors());
-
-	const cursor = new Mesh(
-		new SphereGeometry(0.2, 32, 32),
+	const mesh = new Mesh(
+		new PlaneGeometry(),
 		new MeshBasicMaterial({
-			color: 0xa9a9a9,
-			transparent: true,
-			depthWrite: false,
-			opacity: 0.5
+			map: assets.get("photo")
 		})
 	);
 
-	scene.add(cursor);
+	mesh.scale.x = 2;
+	scene.add(mesh);
 
 	// Post Processing
 
-	const composer = new EffectComposer(renderer, {
-		multisampling: Math.min(4, renderer.capabilities.maxSamples)
+	const effect = new TiltShiftEffect({
+		kernelSize: KernelSize.LARGE,
+		offset: 0.25,
+		rotation: 3.01,
+		focusArea: 0.3,
+		feather: 0.25,
+		bias: 0.05
 	});
 
-	const depthPickingPass = new DepthPickingPass();
+	const composer = new EffectComposer(renderer);
 	composer.addPass(new RenderPass(scene, camera));
-	composer.addPass(depthPickingPass);
-	composer.addPass(new CopyPass());
-
-	const ndc = new Vector3();
-
-	async function pickDepth(event) {
-
-		const clientRect = container.getBoundingClientRect();
-		const clientX = event.clientX - clientRect.left;
-		const clientY = event.clientY - clientRect.top;
-		ndc.x = (clientX / container.clientWidth) * 2.0 - 1.0;
-		ndc.y = -(clientY / container.clientHeight) * 2.0 + 1.0;
-
-		ndc.z = await depthPickingPass.readDepth(ndc);
-		ndc.z = ndc.z * 2.0 - 1.0;
-
-		// Convert from NDC to world position.
-		cursor.position.copy(ndc.unproject(camera));
-
-	}
-
-	container.addEventListener("pointermove", (e) => void pickDepth(e), { passive: true });
+	composer.addPass(new EffectPass(camera, effect));
 
 	// Settings
 
 	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") });
 	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+
+	const folder = pane.addFolder({ title: "Settings" });
+	let subfolder = folder.addFolder({ title: "Blur" });
+	subfolder.addInput(effect.blurPass.blurMaterial, "kernelSize", { options: KernelSize });
+	subfolder.addInput(effect.blurPass.blurMaterial, "scale", { min: 0, max: 2, step: 0.01 });
+	subfolder.addInput(effect.resolution, "scale", { label: "resolution", min: 0.25, max: 1, step: 0.05 });
+	subfolder = folder.addFolder({ title: "Gradient Mask" });
+	subfolder.addInput(effect, "offset", { min: -1, max: 1, step: 1e-2 });
+	subfolder.addInput(effect, "rotation", { min: 0, max: 2 * Math.PI, step: 1e-2 });
+	subfolder.addInput(effect, "focusArea", { min: 0, max: 1, step: 1e-2 });
+	subfolder.addInput(effect, "feather", { min: 0, max: 1, step: 1e-3 });
+	subfolder.addInput(effect, "bias", { min: 0, max: 1, step: 1e-3 });
+	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 1e-2 });
+	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 

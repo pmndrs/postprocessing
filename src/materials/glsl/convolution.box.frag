@@ -12,31 +12,57 @@
 
 	#include <packing>
 
-	#ifdef GL_FRAGMENT_PRECISION_HIGH
-
-		uniform highp sampler2D depthBuffer;
-
-	#else
-
-		uniform mediump sampler2D depthBuffer;
-
-	#endif
-
 	uniform vec2 cameraNearFar;
 
-	float readDepth(const in vec2 uv) {
+	#ifdef NORMAL_DEPTH
 
-		#if DEPTH_PACKING == 3201
+		#ifdef GL_FRAGMENT_PRECISION_HIGH
 
-			return unpackRGBAToDepth(texture2D(depthBuffer, uv));
+			uniform highp sampler2D normalDepthBuffer;
 
 		#else
 
-			return texture2D(depthBuffer, uv).r;
+			uniform mediump sampler2D normalDepthBuffer;
 
 		#endif
 
-	}
+		float readDepth(const in vec2 uv) {
+
+			return texture2D(normalDepthBuffer, uv).a;
+
+		}
+
+	#else
+
+		#if DEPTH_PACKING == 3201
+
+			uniform lowp sampler2D depthBuffer;
+
+		#elif defined(GL_FRAGMENT_PRECISION_HIGH)
+
+			uniform highp sampler2D depthBuffer;
+
+		#else
+
+			uniform mediump sampler2D depthBuffer;
+
+		#endif
+
+		float readDepth(const in vec2 uv) {
+
+			#if DEPTH_PACKING == 3201
+
+				return unpackRGBAToDepth(texture2D(depthBuffer, uv));
+
+			#else
+
+				return texture2D(depthBuffer, uv).r;
+
+			#endif
+
+		}
+
+	#endif
 
 	float getViewZ(const in float depth) {
 
@@ -86,6 +112,7 @@
 
 	// General case
 	uniform vec2 texelSize;
+	uniform float scale;
 	varying vec2 vUv;
 
 #endif
@@ -159,14 +186,15 @@ void main() {
 
 			// General case
 			float centerDepth = linearDepth(vUv);
+			vec2 s = texelSize * scale;
 
 			for(int x = -KERNEL_SIZE_HALF; x <= KERNEL_SIZE_HALF; ++x) {
 
 				for(int y = -KERNEL_SIZE_HALF; y <= KERNEL_SIZE_HALF; ++y) {
 
-					vec2 coords = vUv + vec2(x, y) * texelSize;
+					vec2 coords = vUv + vec2(x, y) * s;
 					vec4 c = getTexel(coords);
-					float z = linearDepth(coords);
+					float z = (x == 0 && y == 0) ? centerDepth : linearDepth(coords);
 
 					float d = step(abs(z - centerDepth), DISTANCE_THRESHOLD);
 					result += c * d;
@@ -194,11 +222,13 @@ void main() {
 		#else
 
 			// General case
+			vec2 s = texelSize * scale;
+
 			for(int x = -KERNEL_SIZE_HALF; x <= KERNEL_SIZE_HALF; ++x) {
 
 				for(int y = -KERNEL_SIZE_HALF; y <= KERNEL_SIZE_HALF; ++y) {
 
-					result += getTexel(uv + vec2(x, y) * texelSize);
+					result += getTexel(uv + vec2(x, y) * s);
 
 				}
 

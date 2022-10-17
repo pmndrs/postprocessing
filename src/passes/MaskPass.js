@@ -43,6 +43,18 @@ export class MaskPass extends Pass {
 
 	}
 
+	set mainScene(value) {
+
+		this.scene = value;
+
+	}
+
+	set mainCamera(value) {
+
+		this.camera = value;
+
+	}
+
 	/**
 	 * Indicates whether the mask should be inverted.
 	 *

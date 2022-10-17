@@ -1,5 +1,6 @@
 uniform lowp sampler2D aoBuffer;
 uniform float luminanceInfluence;
+uniform float intensity;
 
 #if THREE_REVISION < 143
 
@@ -7,7 +8,7 @@ uniform float luminanceInfluence;
 
 #endif
 
-#ifdef DEPTH_AWARE_UPSAMPLING
+#if defined(DEPTH_AWARE_UPSAMPLING) && defined(NORMAL_DEPTH)
 
 	#ifdef GL_FRAGMENT_PRECISION_HIGH
 
@@ -31,7 +32,7 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth,
 
 	float aoLinear = texture2D(aoBuffer, uv).r;
 
-	#if defined(DEPTH_AWARE_UPSAMPLING) && __VERSION__ == 300
+	#if defined(DEPTH_AWARE_UPSAMPLING) && defined(NORMAL_DEPTH) && __VERSION__ == 300
 
 		// Gather normals and depth in a 2x2 neighborhood.
 		vec4 normalDepth[4];
@@ -84,15 +85,16 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth,
 
 	// Fade AO based on luminance.
 	float l = luminance(inputColor.rgb);
-	ao = mix(ao, 1.0, l * luminanceInfluence);
+	ao = mix(ao, 0.0, l * luminanceInfluence);
+	ao = clamp(ao * intensity, 0.0, 1.0);
 
 	#ifdef COLORIZE
 
-		outputColor = vec4(1.0 - (1.0 - ao) * (1.0 - color), inputColor.a);
+		outputColor = vec4(1.0 - ao * (1.0 - color), inputColor.a);
 
 	#else
 
-		outputColor = vec4(vec3(ao), inputColor.a);
+		outputColor = vec4(vec3(1.0 - ao), inputColor.a);
 
 	#endif
 

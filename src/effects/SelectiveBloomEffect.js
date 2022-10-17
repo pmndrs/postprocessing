@@ -74,7 +74,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 		this.depthMaskPass = new ShaderPass(new DepthMaskMaterial());
 
 		const depthMaskMaterial = this.depthMaskMaterial;
-		depthMaskMaterial.adoptCameraSettings(camera);
+		depthMaskMaterial.copyCameraSettings(camera);
 		depthMaskMaterial.depthBuffer1 = this.depthPass.texture;
 		depthMaskMaterial.depthPacking1 = RGBADepthPacking;
 		depthMaskMaterial.depthMode = EqualDepth;
@@ -118,6 +118,20 @@ export class SelectiveBloomEffect extends BloomEffect {
 		 */
 
 		this._ignoreBackground = false;
+
+	}
+
+	set mainScene(value) {
+
+		this.depthPass.mainScene = value;
+
+	}
+
+	set mainCamera(value) {
+
+		this.camera = value;
+		this.depthPass.mainCamera = value;
+		this.depthMaskMaterial.copyCameraSettings(value);
 
 	}
 

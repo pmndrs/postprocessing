@@ -18,6 +18,7 @@ export * from "./NormalPass";
 export * from "./Pass";
 export * from "./RenderPass";
 export * from "./ShaderPass";
+export * from "./TiltShiftBlurPass";
 
 /** @deprecated Renamed to CopyPass. */
 export { CopyPass as SavePass } from "./CopyPass";

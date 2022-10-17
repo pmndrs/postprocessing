@@ -44,9 +44,10 @@ int findBestDepth(const in float samples[4]) {
 	// Calculate the centroid.
 	float c = (samples[0] + samples[1] + samples[2] + samples[3]) * 0.25;
 
-	float distances[4];
-	distances[0] = abs(c - samples[0]); distances[1] = abs(c - samples[1]);
-	distances[2] = abs(c - samples[2]); distances[3] = abs(c - samples[3]);
+	float distances[] = float[4](
+		abs(c - samples[0]), abs(c - samples[1]),
+		abs(c - samples[2]), abs(c - samples[3])
+	);
 
 	float maxDistance = max(
 		max(distances[0], distances[1]),
@@ -115,26 +116,30 @@ int findBestDepth(const in float samples[4]) {
 void main() {
 
 	// Gather depth samples in a 2x2 neighborhood.
-	float d[4];
-	d[0] = readDepth(vUv0); d[1] = readDepth(vUv1);
-	d[2] = readDepth(vUv2); d[3] = readDepth(vUv3);
+	float d[] = float[4](
+		readDepth(vUv0), readDepth(vUv1),
+		readDepth(vUv2), readDepth(vUv3)
+	);
 
 	int index = findBestDepth(d);
 
 	#ifdef DOWNSAMPLE_NORMALS
 
-		vec2 uvs[4];
-		uvs[0] = vUv0; uvs[1] = vUv1;
-		uvs[2] = vUv2; uvs[3] = vUv3;
-
-		vec3 n = texture2D(normalBuffer, uvs[index]).rgb;
+		// Gather all corresponding normals to avoid dependent texel fetches.
+		vec3 n[] = vec3[4](
+			texture2D(normalBuffer, vUv0).rgb, texture2D(normalBuffer, vUv1).rgb,
+			texture2D(normalBuffer, vUv2).rgb, texture2D(normalBuffer, vUv3).rgb
+		);
 
 	#else
 
-		vec3 n = vec3(0.0);
+		vec3 n[] = vec3[4](
+			vec3(0.0), vec3(0.0),
+			vec3(0.0), vec3(0.0)
+		);
 
 	#endif
 
-	gl_FragColor = vec4(n, d[index]);
+	gl_FragColor = vec4(n[index], d[index]);
 
 }

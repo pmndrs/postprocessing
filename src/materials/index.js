@@ -19,6 +19,7 @@ export * from "./MaskMaterial";
 export * from "./OutlineMaterial";
 export * from "./SMAAWeightsMaterial";
 export * from "./SSAOMaterial";
+export * from "./TiltShiftBlurMaterial";
 export * from "./UpsamplingMaterial";
 
 /** @deprecated Renamed to KawaseBlurMaterial. */

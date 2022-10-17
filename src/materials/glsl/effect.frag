@@ -15,7 +15,11 @@
 
 #endif
 
-#ifdef GL_FRAGMENT_PRECISION_HIGH
+#if DEPTH_PACKING == 3201
+
+	uniform lowp sampler2D depthBuffer;
+
+#elif defined(GL_FRAGMENT_PRECISION_HIGH)
 
 	uniform highp sampler2D depthBuffer;
 

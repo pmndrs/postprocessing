@@ -185,9 +185,9 @@ export class GodRaysEffect extends Effect {
 		 */
 
 		this.depthMaskPass = new ShaderPass(new DepthMaskMaterial());
-		const depthMaskMaterial = this.depthMaskPass.fullscreenMaterial;
+		const depthMaskMaterial = this.depthMaskMaterial;
 		depthMaskMaterial.depthBuffer1 = this.renderTargetLight.depthTexture;
-		depthMaskMaterial.adoptCameraSettings(camera);
+		depthMaskMaterial.copyCameraSettings(camera);
 
 		/**
 		 * A god rays blur pass.
@@ -197,7 +197,7 @@ export class GodRaysEffect extends Effect {
 		 */
 
 		this.godRaysPass = new ShaderPass(new GodRaysMaterial(this.screenPosition));
-		const godRaysMaterial = this.godRaysPass.fullscreenMaterial;
+		const godRaysMaterial = this.godRaysMaterial;
 		godRaysMaterial.density = density;
 		godRaysMaterial.decay = decay;
 		godRaysMaterial.weight = weight;
@@ -214,6 +214,14 @@ export class GodRaysEffect extends Effect {
 
 		const resolution = this.resolution = new Resolution(this, resolutionX, resolutionY, resolutionScale);
 		resolution.addEventListener("change", (e) => this.setSize(resolution.baseWidth, resolution.baseHeight));
+
+	}
+
+	set mainCamera(value) {
+
+		this.camera = value;
+		this.renderPassLight.mainCamera = value;
+		this.depthMaskMaterial.copyCameraSettings(value);
 
 	}
 

@@ -46,12 +46,12 @@ export class NormalPass extends Pass {
 		this.renderPass = new RenderPass(scene, camera, new MeshNormalMaterial());
 
 		const renderPass = this.renderPass;
-		renderPass.setBackgroundDisabled(true);
-		renderPass.setShadowMapDisabled(true);
+		renderPass.ignoreBackground = true;
+		renderPass.skipShadowMapUpdate = true;
 
 		const clearPass = renderPass.getClearPass();
-		clearPass.setOverrideClearColor(new Color(0x7777ff));
-		clearPass.setOverrideClearAlpha(1.0);
+		clearPass.overrideClearColor = new Color(0x7777ff);
+		clearPass.overrideClearAlpha = 1.0;
 
 		/**
 		 * A render target for the scene normals.
@@ -82,6 +82,18 @@ export class NormalPass extends Pass {
 
 		const resolution = this.resolution = new Resolution(this, resolutionX, resolutionY, resolutionScale);
 		resolution.addEventListener("change", (e) => this.setSize(resolution.baseWidth, resolution.baseHeight));
+
+	}
+
+	set mainScene(value) {
+
+		this.renderPass.mainScene = value;
+
+	}
+
+	set mainCamera(value) {
+
+		this.renderPass.mainCamera = value;
 
 	}
 

@@ -21,8 +21,7 @@ declare module "postprocessing" {
 		EventDispatcher,
 		Color,
 		TextureEncoding,
-		DataTexture3D,
-		Wrapping
+		DataTexture3D
 	} from "three";
 
 	/**
@@ -1849,7 +1848,7 @@ declare module "postprocessing" {
 		/**
 		 * The input buffer.
 		 *
-		 * @param {Texture} arg - The input buffer
+		 * @type {Texture}
 		 */
 		set inputBuffer(arg: Texture);
 		/**
@@ -1862,7 +1861,7 @@ declare module "postprocessing" {
 		/**
 		 * The mask texture.
 		 *
-		 * @param {Texture} arg - The texture
+		 * @type {Texture}
 		 */
 		set maskTexture(arg: Texture);
 		/**
@@ -1875,7 +1874,7 @@ declare module "postprocessing" {
 		/**
 		 * Sets the color channel to use for masking. Default is `ColorChannel.RED`.
 		 *
-		 * @param {ColorChannel} type - The channel.
+		 * @type {ColorChannel}
 		 */
 		set colorChannel(arg: ColorChannel);
 		/**
@@ -1888,7 +1887,7 @@ declare module "postprocessing" {
 		/**
 		 * The masking technique. Default is `MaskFunction.DISCARD`.
 		 *
-		 * @param {MaskFunction} arg - The function
+		 * @type {MaskFunction}
 		 */
 		set maskFunction(arg: MaskFunction);
 		/**
@@ -2268,13 +2267,14 @@ declare module "postprocessing" {
 		 * @param {Number} value - The radius.
 		 */
 		setRings(value: number): void;
-		set intensity(arg: number);
 		/**
 		 * The intensity.
 		 *
 		 * @type {Number}
+		 * @deprecated Use SSAOEffect.intensity instead.
 		 */
 		get intensity(): number;
+		set intensity(arg: number);
 		/**
 		 * Returns the intensity.
 		 *
@@ -2518,9 +2518,9 @@ declare module "postprocessing" {
 		 * Constructs a new resolution.
 		 *
 		 * TODO Remove resizable param.
-		 * @param {Resizable} resizeable - A resizable object.
-		 * @param {Number} [preferredWidth=Resolution.AUTO_SIZE] - The preferred width.
-		 * @param {Number} [preferredHeight=Resolution.AUTO_SIZE] - The preferred height.
+		 * @param {Resizable} resizable - A resizable object.
+		 * @param {Number} [width=Resolution.AUTO_SIZE] - The preferred width.
+		 * @param {Number} [height=Resolution.AUTO_SIZE] - The preferred height.
 		 * @param {Number} [scale=1.0] - A resolution scale.
 		 */
 		constructor(
@@ -2803,6 +2803,18 @@ declare module "postprocessing" {
 		 * @type {Boolean}
 		 */
 		get renderToScreen(): boolean;
+		/**
+		 * Sets the main scene.
+		 *
+		 * @type {Scene}
+		 */
+		set mainScene(arg: Scene);
+		/**
+		 * Sets the main camera.
+		 *
+		 * @type {Camera}
+		 */
+		set mainCamera(arg: Camera);
 		/**
 		 * Sets the renderer
 		 *
@@ -4047,6 +4059,18 @@ declare module "postprocessing" {
 		 */
 		protected set outputColorSpace(arg: TextureEncoding);
 		/**
+		 * Sets the main scene.
+		 *
+		 * @type {Scene}
+		 */
+		set mainScene(arg: Scene);
+		/**
+		 * Sets the main camera.
+		 *
+		 * @type {Camera}
+		 */
+		set mainCamera(arg: Camera);
+		/**
 		 * Returns the name of this effect.
 		 *
 		 * @deprecated Use name instead.
@@ -4788,7 +4812,6 @@ declare module "postprocessing" {
 			renderer: WebGLRenderer,
 			updateDOM?: boolean
 		): WebGLRenderer;
-
 		/**
 		 * Creates a new render target.
 		 *
@@ -4805,7 +4828,18 @@ declare module "postprocessing" {
 			type: number,
 			multisampling: number
 		): WebGLRenderTarget;
-
+		/**
+		 * Can be used to change the main scene for all registered passes and effects.
+		 *
+		 * @param {Scene} scene - The scene.
+		 */
+		setMainScene(scene: Scene): void;
+		/**
+		 * Can be used to change the main camera for all registered passes and effects.
+		 *
+		 * @param {Camera} camera - The camera.
+		 */
+		setMainCamera(camera: Camera): void;
 		/**
 		 * Adds a pass, optionally at a specific index.
 		 *
@@ -5881,6 +5915,102 @@ declare module "postprocessing" {
 	}
 
 	/**
+	 * A tilt shift effect.
+	 */
+	export class TiltShiftEffect extends Effect {
+
+		/**
+		 * Constructs a new tilt shift Effect
+		 *
+		 * @param {Object} [options] - The options.
+		 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
+		 * @param {Number} [options.offset=0.0] - The relative offset of the focus area.
+		 * @param {Number} [options.rotation=0.0] - The rotation of the focus area in radians.
+		 * @param {Number} [options.focusArea=0.4] - The relative size of the focus area.
+		 * @param {Number} [options.feather=0.3] - The softness of the focus area edges.
+		 * @param {Number} [options.bias=0.06] - A blend bias.
+		 * @param {KernelSize} [options.kernelSize=KernelSize.MEDIUM] - The blur kernel size.
+		 * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
+		 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
+		 * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
+		 */
+		constructor({
+			blendFunction,
+			offset,
+			rotation,
+			focusArea,
+			feather,
+			bias,
+			kernelSize,
+			resolutionScale,
+			resolutionX,
+			resolutionY
+		}?: {
+			blendFunction?: BlendFunction,
+			offset?: number,
+			rotation?: number,
+			focusArea?: number,
+			feather?: number,
+			bias?: number,
+			kernelSize?: KernelSize,
+			resolutionScale?: number,
+			resolutionX?: number,
+			resolutionY?: number
+		});
+
+		/**
+		 * A blur pass.
+		 *
+		 * @type {KawaseBlurPass}
+		 * @readonly
+		 */
+		blurPass: KawaseBlurPass;
+		/**
+		 * The resolution.
+		 *
+		 * @type {Resolution}
+		 * @readonly
+		 */
+		get resolution(): Resolution;
+		/**
+		 * The rotation of the focus area in radians.
+		 *
+		 * @type {Number}
+		 */
+		get rotation(): number;
+		set rotation(arg: number);
+		/**
+		 * The relative offset of the focus area.
+		 *
+		 * @type {Number}
+		 */
+		get offset(): number;
+		set offset(arg: number);
+		/**
+		 * The relative size of the focus area.
+		 *
+		 * @type {Number}
+		 */
+
+		get focusArea(): number;
+		set focusArea(arg: number);
+		/**
+		 * The softness of the focus area edges.
+		 *
+		 * @type {Number}
+		 */
+		get feather(): number;
+		set feather(arg: number);
+		/**
+		 * A blend bias.
+		 *
+		 * @type {Number}
+		 */
+		get bias(): number;
+		set bias(arg: number);
+	}
+
+	/**
 	 * A glitch effect.
 	 *
 	 * This effect can be used in conjunction with the {@link ChromaticAberrationEffect}.
@@ -6349,9 +6479,9 @@ declare module "postprocessing" {
 		/**
 		 * The resolution of this effect.
 		 *
-		 * @type {Resizer}
+		 * @type {Resolution}
 		 */
-		get resolution(): Resizer;
+		get resolution(): Resolution;
 		/**
 		 * Returns the resolution of this effect.
 		 *
@@ -7875,23 +8005,23 @@ declare module "postprocessing" {
 		 *
 		 * @todo Move normalBuffer to options.
 		 * @param {Camera} camera - The main camera.
-		 * @param {Texture} normalBuffer - A texture that contains the scene normals. May be null if a normalDepthBuffer is provided. See {@link NormalPass}.
+		 * @param {Texture} normalBuffer - A texture that contains the scene normals.
 		 * @param {Object} [options] - The options.
 		 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
-		 * @param {Boolean} [options.distanceScaling=true] - Enables or disables distance-based radius scaling.
+		 * @param {Boolean} [options.distanceScaling=true] - Deprecated.
 		 * @param {Boolean} [options.depthAwareUpsampling=true] - Enables or disables depth-aware upsampling. Has no effect if WebGL 2 is not supported.
-		 * @param {Texture} [options.normalDepthBuffer=null] - A texture that contains downsampled scene normals and depth. See {@link DepthDownsamplingPass}.
+		 * @param {Texture} [options.normalDepthBuffer=null] - Deprecated.
 		 * @param {Number} [options.samples=9] - The amount of samples per pixel. Should not be a multiple of the ring count.
 		 * @param {Number} [options.rings=7] - The amount of spiral turns in the occlusion sampling pattern. Should be a prime number.
 		 * @param {Number} [options.worldDistanceThreshold] - The world distance threshold at which the occlusion effect starts to fade out.
 		 * @param {Number} [options.worldDistanceFalloff] - The world distance falloff. Influences the smoothness of the occlusion cutoff.
 		 * @param {Number} [options.worldProximityThreshold] - The world proximity threshold at which the occlusion starts to fade out.
 		 * @param {Number} [options.worldProximityFalloff] - The world proximity falloff. Influences the smoothness of the proximity cutoff.
-		 * @param {Number} [options.distanceThreshold=0.97] - The distance threshold at which the occlusion effect starts to fade out. Range [0.0, 1.0].
-		 * @param {Number} [options.distanceFalloff=0.03] - The distance falloff. Influences the smoothness of the overall occlusion cutoff. Range [0.0, 1.0].
-		 * @param {Number} [options.rangeThreshold=0.0005] - The proximity threshold at which the occlusion starts to fade out. Range [0.0, 1.0].
-		 * @param {Number} [options.rangeFalloff=0.001] - The proximity falloff. Influences the smoothness of the proximity cutoff. Range [0.0, 1.0].
-		 * @param {Number} [options.minRadiusScale=0.1] - The minimum radius scale. Has no effect if distance scaling is disabled.
+		 * @param {Number} [options.distanceThreshold=0.97] - Deprecated.
+		 * @param {Number} [options.distanceFalloff=0.03] - Deprecated.
+		 * @param {Number} [options.rangeThreshold=0.0005] - Deprecated.
+		 * @param {Number} [options.rangeFalloff=0.001] - Deprecated.
+		 * @param {Number} [options.minRadiusScale=0.1] - The minimum radius scale.
 		 * @param {Number} [options.luminanceInfluence=0.7] - Determines how much the luminance of the scene influences the ambient occlusion.
 		 * @param {Number} [options.radius=0.1825] - The occlusion sampling radius, expressed as a scale relative to the resolution. Range [1e-6, 1.0].
 		 * @param {Number} [options.intensity=1.0] - The intensity of the ambient occlusion.
@@ -8023,6 +8153,13 @@ declare module "postprocessing" {
 		 * @deprecated Use ssaoMaterial.radius instead.
 		 */
 		get radius(): number;
+		/**
+		 * The intensity.
+		 *
+		 * @type {Number}
+		 */
+		get intensity(): number;
+		set intensity(arg: number);
 		/**
 		 * Indicates whether depth-aware upsampling is enabled.
 		 *

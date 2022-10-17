@@ -66,13 +66,13 @@ export class KawaseBlurPass extends Pass {
 		resolution.addEventListener("change", (e) => this.setSize(resolution.baseWidth, resolution.baseHeight));
 
 		/**
-		 * The blur material.
-		 *
+		 * @see {@link blurMaterial}
 		 * @type {KawaseBlurMaterial}
-		 * @readonly
+		 * @private
 		 */
 
-		this.blurMaterial = new KawaseBlurMaterial();
+		this._blurMaterial = new KawaseBlurMaterial();
+		this._blurMaterial.kernelSize = kernelSize;
 
 		/**
 		 * A copy material.
@@ -95,6 +95,31 @@ export class KawaseBlurPass extends Pass {
 	getResolution() {
 
 		return this.resolution;
+
+	}
+
+	/**
+	 * The blur material.
+	 *
+	 * @type {KawaseBlurMaterial}
+	 */
+
+	get blurMaterial() {
+
+		return this._blurMaterial;
+
+	}
+
+	/**
+	 * The blur material.
+	 *
+	 * @type {KawaseBlurMaterial}
+	 * @protected
+	 */
+
+	set blurMaterial(value) {
+
+		this._blurMaterial = value;
 
 	}
 

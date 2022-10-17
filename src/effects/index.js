@@ -29,6 +29,7 @@ export * from "./SepiaEffect";
 export * from "./SMAAEffect";
 export * from "./SSAOEffect";
 export * from "./TextureEffect";
+export * from "./TiltShiftEffect";
 export * from "./ToneMappingEffect";
 export * from "./VignetteEffect";
 

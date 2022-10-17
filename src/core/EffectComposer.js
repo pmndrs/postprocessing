@@ -388,6 +388,38 @@ export class EffectComposer {
 	}
 
 	/**
+	 * Can be used to change the main scene for all registered passes and effects.
+	 *
+	 * @param {Scene} scene - The scene.
+	 */
+
+	setMainScene(scene) {
+
+		for(const pass of this.passes) {
+
+			pass.mainScene = scene;
+
+		}
+
+	}
+
+	/**
+	 * Can be used to change the main camera for all registered passes and effects.
+	 *
+	 * @param {Camera} camera - The camera.
+	 */
+
+	setMainCamera(camera) {
+
+		for(const pass of this.passes) {
+
+			pass.mainCamera = camera;
+
+		}
+
+	}
+
+	/**
 	 * Adds a pass, optionally at a specific index.
 	 *
 	 * @param {Pass} pass - A new pass.
@@ -618,16 +650,21 @@ export class EffectComposer {
 	setSize(width, height, updateStyle) {
 
 		const renderer = this.renderer;
+		const currentSize = renderer.getSize(new Vector2());
 
 		if(width === undefined || height === undefined) {
 
-			const size = renderer.getSize(new Vector2());
-			width = size.width; height = size.height;
+			width = currentSize.width;
+			height = currentSize.height;
 
 		}
 
-		// Update the logical render size.
-		renderer.setSize(width, height, updateStyle);
+		if(currentSize.width !== width || currentSize.height !== height) {
+
+			// Update the logical render size.
+			renderer.setSize(width, height, updateStyle);
+
+		}
 
 		// The drawing buffer size takes the device pixel ratio into account.
 		const drawingBufferSize = renderer.getDrawingBufferSize(new Vector2());

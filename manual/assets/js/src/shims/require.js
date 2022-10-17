@@ -4,20 +4,17 @@
 
 export function require(name) {
 
-	let module;
-
 	switch(name) {
 
 		case "three":
 		case "three/examples/jsm/loaders/GLTFLoader.js":
-			module = window.THREE;
-			break;
+		case "tweakpane":
+		case "spatial-controls":
+			return window.VENDOR;
 
 		default:
 			throw new Error(`Cannot require ${name}`);
 
 	}
-
-	return module;
 
 }

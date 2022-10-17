@@ -69,6 +69,18 @@ export class RenderPass extends Pass {
 
 	}
 
+	set mainScene(value) {
+
+		this.scene = value;
+
+	}
+
+	set mainCamera(value) {
+
+		this.camera = value;
+
+	}
+
 	get renderToScreen() {
 
 		return super.renderToScreen;

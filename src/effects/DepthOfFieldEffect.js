@@ -246,6 +246,13 @@ export class DepthOfFieldEffect extends Effect {
 
 	}
 
+	set mainCamera(value) {
+
+		this.camera = value;
+		this.cocMaterial.copyCameraSettings(value);
+
+	}
+
 	/**
 	 * The circle of confusion texture.
 	 *

@@ -55,6 +55,8 @@ export class FPSMeter {
 
 	update(timestamp) {
 
+		++this.frames;
+
 		this.acc += timestamp - this.timestamp;
 		this.timestamp = timestamp;
 
@@ -63,10 +65,6 @@ export class FPSMeter {
 			this.fps = this.frames.toFixed(0);
 			this.acc = 0.0;
 			this.frames = 0;
-
-		} else {
-
-			++this.frames;
 
 		}
 
