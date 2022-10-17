@@ -2267,13 +2267,14 @@ declare module "postprocessing" {
 		 * @param {Number} value - The radius.
 		 */
 		setRings(value: number): void;
-		set intensity(arg: number);
 		/**
 		 * The intensity.
 		 *
 		 * @type {Number}
+		 * @deprecated Use SSAOEffect.intensity instead.
 		 */
 		get intensity(): number;
+		set intensity(arg: number);
 		/**
 		 * Returns the intensity.
 		 *
@@ -8004,23 +8005,23 @@ declare module "postprocessing" {
 		 *
 		 * @todo Move normalBuffer to options.
 		 * @param {Camera} camera - The main camera.
-		 * @param {Texture} normalBuffer - A texture that contains the scene normals. May be null if a normalDepthBuffer is provided. See {@link NormalPass}.
+		 * @param {Texture} normalBuffer - A texture that contains the scene normals.
 		 * @param {Object} [options] - The options.
 		 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
-		 * @param {Boolean} [options.distanceScaling=true] - Enables or disables distance-based radius scaling.
+		 * @param {Boolean} [options.distanceScaling=true] - Deprecated.
 		 * @param {Boolean} [options.depthAwareUpsampling=true] - Enables or disables depth-aware upsampling. Has no effect if WebGL 2 is not supported.
-		 * @param {Texture} [options.normalDepthBuffer=null] - A texture that contains downsampled scene normals and depth. See {@link DepthDownsamplingPass}.
+		 * @param {Texture} [options.normalDepthBuffer=null] - Deprecated.
 		 * @param {Number} [options.samples=9] - The amount of samples per pixel. Should not be a multiple of the ring count.
 		 * @param {Number} [options.rings=7] - The amount of spiral turns in the occlusion sampling pattern. Should be a prime number.
 		 * @param {Number} [options.worldDistanceThreshold] - The world distance threshold at which the occlusion effect starts to fade out.
 		 * @param {Number} [options.worldDistanceFalloff] - The world distance falloff. Influences the smoothness of the occlusion cutoff.
 		 * @param {Number} [options.worldProximityThreshold] - The world proximity threshold at which the occlusion starts to fade out.
 		 * @param {Number} [options.worldProximityFalloff] - The world proximity falloff. Influences the smoothness of the proximity cutoff.
-		 * @param {Number} [options.distanceThreshold=0.97] - The distance threshold at which the occlusion effect starts to fade out. Range [0.0, 1.0].
-		 * @param {Number} [options.distanceFalloff=0.03] - The distance falloff. Influences the smoothness of the overall occlusion cutoff. Range [0.0, 1.0].
-		 * @param {Number} [options.rangeThreshold=0.0005] - The proximity threshold at which the occlusion starts to fade out. Range [0.0, 1.0].
-		 * @param {Number} [options.rangeFalloff=0.001] - The proximity falloff. Influences the smoothness of the proximity cutoff. Range [0.0, 1.0].
-		 * @param {Number} [options.minRadiusScale=0.1] - The minimum radius scale. Has no effect if distance scaling is disabled.
+		 * @param {Number} [options.distanceThreshold=0.97] - Deprecated.
+		 * @param {Number} [options.distanceFalloff=0.03] - Deprecated.
+		 * @param {Number} [options.rangeThreshold=0.0005] - Deprecated.
+		 * @param {Number} [options.rangeFalloff=0.001] - Deprecated.
+		 * @param {Number} [options.minRadiusScale=0.1] - The minimum radius scale.
 		 * @param {Number} [options.luminanceInfluence=0.7] - Determines how much the luminance of the scene influences the ambient occlusion.
 		 * @param {Number} [options.radius=0.1825] - The occlusion sampling radius, expressed as a scale relative to the resolution. Range [1e-6, 1.0].
 		 * @param {Number} [options.intensity=1.0] - The intensity of the ambient occlusion.
@@ -8152,6 +8153,13 @@ declare module "postprocessing" {
 		 * @deprecated Use ssaoMaterial.radius instead.
 		 */
 		get radius(): number;
+		/**
+		 * The intensity.
+		 *
+		 * @type {Number}
+		 */
+		get intensity(): number;
+		set intensity(arg: number);
 		/**
 		 * Indicates whether depth-aware upsampling is enabled.
 		 *
