@@ -204,7 +204,12 @@ void main() {
 		// Fade AO based on depth.
 		float d = smoothstep(distanceCutoff.x, distanceCutoff.y, linearDepth);
 		ao = mix(ao, 0.0, d);
-		ao = clamp(pow(ao, abs(intensity)), 0.0, 1.0);
+
+		#ifdef LEGACY_INTENSITY
+
+			ao = clamp(1.0 - pow(1.0 - ao, abs(intensity)), 0.0, 1.0);
+
+		#endif
 
 	}
 

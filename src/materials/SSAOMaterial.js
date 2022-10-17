@@ -341,6 +341,13 @@ export class SSAOMaterial extends ShaderMaterial {
 
 		this.uniforms.intensity.value = value;
 
+		if(this.defines.LEGACY_INTENSITY === undefined) {
+
+			this.defines.LEGACY_INTENSITY = "1";
+			this.needsUpdate = true;
+
+		}
+
 	}
 
 	/**
