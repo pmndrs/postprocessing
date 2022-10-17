@@ -2804,6 +2804,18 @@ declare module "postprocessing" {
 		 */
 		get renderToScreen(): boolean;
 		/**
+		 * Sets the main scene.
+		 *
+		 * @type {Scene}
+		 */
+		set mainScene(arg: Scene);
+		/**
+		 * Sets the main camera.
+		 *
+		 * @type {Camera}
+		 */
+		set mainCamera(arg: Camera);
+		/**
 		 * Sets the renderer
 		 *
 		 * @deprecated
@@ -4047,6 +4059,18 @@ declare module "postprocessing" {
 		 */
 		protected set outputColorSpace(arg: TextureEncoding);
 		/**
+		 * Sets the main scene.
+		 *
+		 * @type {Scene}
+		 */
+		set mainScene(arg: Scene);
+		/**
+		 * Sets the main camera.
+		 *
+		 * @type {Camera}
+		 */
+		set mainCamera(arg: Camera);
+		/**
 		 * Returns the name of this effect.
 		 *
 		 * @deprecated Use name instead.
@@ -4788,7 +4812,6 @@ declare module "postprocessing" {
 			renderer: WebGLRenderer,
 			updateDOM?: boolean
 		): WebGLRenderer;
-
 		/**
 		 * Creates a new render target.
 		 *
@@ -4805,7 +4828,18 @@ declare module "postprocessing" {
 			type: number,
 			multisampling: number
 		): WebGLRenderTarget;
-
+		/**
+		 * Can be used to change the main scene for all registered passes and effects.
+		 *
+		 * @param {Scene} scene - The scene.
+		 */
+		setMainScene(scene: Scene): void;
+		/**
+		 * Can be used to change the main camera for all registered passes and effects.
+		 *
+		 * @param {Camera} camera - The camera.
+		 */
+		setMainCamera(camera: Camera): void;
 		/**
 		 * Adds a pass, optionally at a specific index.
 		 *
@@ -5881,6 +5915,102 @@ declare module "postprocessing" {
 	}
 
 	/**
+	 * A tilt shift effect.
+	 */
+	export class TiltShiftEffect extends Effect {
+
+		/**
+		 * Constructs a new tilt shift Effect
+		 *
+		 * @param {Object} [options] - The options.
+		 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
+		 * @param {Number} [options.offset=0.0] - The relative offset of the focus area.
+		 * @param {Number} [options.rotation=0.0] - The rotation of the focus area in radians.
+		 * @param {Number} [options.focusArea=0.4] - The relative size of the focus area.
+		 * @param {Number} [options.feather=0.3] - The softness of the focus area edges.
+		 * @param {Number} [options.bias=0.06] - A blend bias.
+		 * @param {KernelSize} [options.kernelSize=KernelSize.MEDIUM] - The blur kernel size.
+		 * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
+		 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
+		 * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
+		 */
+		constructor({
+			blendFunction,
+			offset,
+			rotation,
+			focusArea,
+			feather,
+			bias,
+			kernelSize,
+			resolutionScale,
+			resolutionX,
+			resolutionY
+		}?: {
+			blendFunction?: BlendFunction,
+			offset?: number,
+			rotation?: number,
+			focusArea?: number,
+			feather?: number,
+			bias?: number,
+			kernelSize?: KernelSize,
+			resolutionScale?: number,
+			resolutionX?: number,
+			resolutionY?: number
+		});
+
+		/**
+		 * A blur pass.
+		 *
+		 * @type {KawaseBlurPass}
+		 * @readonly
+		 */
+		blurPass: KawaseBlurPass;
+		/**
+		 * The resolution.
+		 *
+		 * @type {Resolution}
+		 * @readonly
+		 */
+		get resolution(): Resolution;
+		/**
+		 * The rotation of the focus area in radians.
+		 *
+		 * @type {Number}
+		 */
+		get rotation(): number;
+		set rotation(arg: number);
+		/**
+		 * The relative offset of the focus area.
+		 *
+		 * @type {Number}
+		 */
+		get offset(): number;
+		set offset(arg: number);
+		/**
+		 * The relative size of the focus area.
+		 *
+		 * @type {Number}
+		 */
+
+		get focusArea(): number;
+		set focusArea(arg: number);
+		/**
+		 * The softness of the focus area edges.
+		 *
+		 * @type {Number}
+		 */
+		get feather(): number;
+		set feather(arg: number);
+		/**
+		 * A blend bias.
+		 *
+		 * @type {Number}
+		 */
+		get bias(): number;
+		set bias(arg: number);
+	}
+
+	/**
 	 * A glitch effect.
 	 *
 	 * This effect can be used in conjunction with the {@link ChromaticAberrationEffect}.
@@ -6349,9 +6479,9 @@ declare module "postprocessing" {
 		/**
 		 * The resolution of this effect.
 		 *
-		 * @type {Resizer}
+		 * @type {Resolution}
 		 */
-		get resolution(): Resizer;
+		get resolution(): Resolution;
 		/**
 		 * Returns the resolution of this effect.
 		 *
