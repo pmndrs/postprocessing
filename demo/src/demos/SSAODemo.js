@@ -399,7 +399,7 @@ export class SSAODemo extends PostProcessingDemo {
 
 		menu.add(params, "intensity", 1.0, 4.0, 0.01).onChange((value) => {
 
-			uniforms.intensity.value = value;
+			ssaoEffect.ssaoMaterial.intensity = value;
 
 		});
 
