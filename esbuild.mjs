@@ -10,8 +10,7 @@ const pkg = require("./package");
 const minify = process.argv.includes("-m");
 const watch = process.argv.includes("-w");
 const plugins = [glsl({ minify }), tsPaths()];
-const external = Object.keys(pkg.peerDependencies || {})
-	.concat(["spatial-controls", "tweakpane"]);
+const external = ["three", "spatial-controls", "tweakpane"];
 
 const date = new Date();
 const banner = `/**
