@@ -166,11 +166,10 @@ export class DepthOfFieldEffect extends Effect {
 		 * This pass blurs the foreground CoC buffer to soften edges.
 		 *
 		 * @type {KawaseBlurPass}
-		 * @deprecated Use getBlurPass() instead.
+		 * @readonly
 		 */
 
 		this.blurPass = new KawaseBlurPass({ resolutionScale, resolutionX, resolutionY, kernelSize: KernelSize.MEDIUM });
-
 
 		/**
 		 * A mask pass.

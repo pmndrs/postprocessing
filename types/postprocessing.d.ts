@@ -5717,7 +5717,7 @@ declare module "postprocessing" {
 		 * This pass blurs the foreground CoC buffer to soften edges.
 		 *
 		 * @type {KawaseBlurPass}
-		 * @deprecated Use getBlurPass() instead.
+		 * @readonly
 		 */
 		blurPass: KawaseBlurPass;
 		/**
