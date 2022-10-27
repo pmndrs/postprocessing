@@ -5962,9 +5962,8 @@ declare module "postprocessing" {
 		 * A blur pass.
 		 *
 		 * @type {KawaseBlurPass}
-		 * @readonly
 		 */
-		blurPass: KawaseBlurPass;
+		readonly blurPass: KawaseBlurPass;
 		/**
 		 * The resolution.
 		 *
