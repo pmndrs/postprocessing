@@ -51,7 +51,7 @@ __package.json__
 
 __src/app.js__
 
-```js
+```ts
 import { RenderPipeline } from "postprocessing";
 console.log(RenderPipeline);
 ```
@@ -62,7 +62,7 @@ Install [node.js](https://nodejs.org) and use the command `npm run build` to gen
 
 Postprocessing extends the common rendering workflow with fullscreen image manipulation tools. The following WebGL attributes should be used for an optimal workflow:
 
-```js
+```ts
 import { WebGLRenderer } from "three";
 
 const renderer = new WebGLRenderer({
@@ -71,11 +71,12 @@ const renderer = new WebGLRenderer({
 	stencil: false,
 	depth: false
 });
+
 ```
 
 [RenderPipelines]() are used to group passes. Common setups will only require one pipeline that contains a [ClearPass](), a [GeometryPass]() and one or more [EffectPass]() instances. The latter is used to render fullscreen [Effects](). Please refer to the [three.js manual](https://threejs.org/docs/#manual/en/introduction/Creating-a-scene) for more information on how to setup the renderer, scene and camera.
 
-```js
+```ts
 import {
 	BloomEffect,
 	ClearPass,
@@ -84,19 +85,33 @@ import {
 	RenderPipeline
 } from "postprocessing";
 
-const renderer = ...;
-const scene = ...;
-const camera = ...;
+const container = document.querySelector(".viewport");
+container.prepend(renderer.domElement);
+
+const scene = new Scene();
+const camera = new PerspectiveCamera();
 
 const pipeline = new RenderPipeline(renderer);
 pipeline.addPass(new ClearPass());
 pipeline.addPass(new GeometryPass(scene, camera, { samples: 4 }));
 pipeline.addPass(new EffectPass(new BloomEffect()));
 
-requestAnimationFrame(function render() {
+function onResize(): void {
+
+	const width = container.clientWidth, height = container.clientHeight;
+	camera.aspect = width / height;
+	camera.updateProjectionMatrix();
+	pipeline.setSize(width, height);
+
+}
+
+window.addEventListener("resize", onResize);
+onResize();
+
+requestAnimationFrame(function render(timestamp: number): void {
 
 	requestAnimationFrame(render);
-	pipeline.render();
+	pipeline.render(timestamp);
 
 });
 ```
@@ -107,11 +122,12 @@ New applications should follow a [linear workflow](https://docs.unity3d.com/Manu
 
 Postprocessing uses `UnsignedByteType` sRGB frame buffers to store intermediate results due to good hardware support and resource efficiency. This is a compromise because linear results normally require at least 12 bits per color channel to prevent [color degradation and banding](https://blog.demofox.org/2018/03/10/dont-convert-srgb-u8-to-linear-u8/). With low precision sRGB buffers, colors will be clamped to [0.0, 1.0] and information loss will shift to the darker spectrum which leads to noticable banding in dark scenes. Linear, high precision `HalfFloatType` buffers don't have these issues and are the preferred option for HDR-like workflows on desktop devices. You can enable high precision frame buffers like so:
 
-```js
+```ts
 import { HalfFloatType } from "three";
 
-const pipeline = new RenderPipeline(renderer);
-pipeline.bufferManager.frameBufferType = HalfFloatType;
+const geoPass = new GeometryPass(scene, camera, {
+	frameBufferType: HalfFloatType
+});
 ```
 
 See [three's color management manual](https://threejs.org/docs/#manual/en/introduction/Color-management) for more information on the topic.

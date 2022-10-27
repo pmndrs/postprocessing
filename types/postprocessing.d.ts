@@ -5717,9 +5717,8 @@ declare module "postprocessing" {
 		 * This pass blurs the foreground CoC buffer to soften edges.
 		 *
 		 * @type {KawaseBlurPass}
-		 * @deprecated Use getBlurPass() instead.
 		 */
-		blurPass: KawaseBlurPass;
+		readonly blurPass: KawaseBlurPass;
 		/**
 		 * A target position that should be kept in focus. Set to `null` to disable auto focus.
 		 *
@@ -5962,9 +5961,8 @@ declare module "postprocessing" {
 		 * A blur pass.
 		 *
 		 * @type {KawaseBlurPass}
-		 * @readonly
 		 */
-		blurPass: KawaseBlurPass;
+		readonly blurPass: KawaseBlurPass;
 		/**
 		 * The resolution.
 		 *

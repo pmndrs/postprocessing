@@ -152,7 +152,7 @@ window.addEventListener("load", () => load().then((assets) => {
 	folder.addInput(ssaoMaterial, "minRadiusScale", { min: 0, max: 1, step: 1e-2 });
 	folder.addInput(ssaoMaterial, "bias", { min: 0, max: 0.5, step: 1e-3 });
 	folder.addInput(ssaoMaterial, "fade", { min: 0, max: 1, step: 1e-3 });
-	folder.addInput(effect.ssaoMaterial, "intensity", { min: 0, max: 4, step: 1e-2 });
+	folder.addInput(effect, "intensity", { min: 0, max: 4, step: 1e-2 });
 	folder.addInput(effect, "luminanceInfluence", { min: 0, max: 1, step: 1e-2 });
 	folder.addInput(params, "color", { view: "color" })
 		.on("change", (e) => effect.color = (e.value === 0) ? null : color.setHex(e.value).convertSRGBToLinear());
