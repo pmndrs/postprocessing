@@ -130,8 +130,8 @@ attribute vec3 position;
 
 Available macros:
 
-- If the camera of the associated `EffectPass` is a `PerspectiveCamera`, the macro `PERSPECTIVE_CAMERA` will be defined.
-- If the composer uses `HalfFloatType` frame buffers, the macro `FRAMEBUFFER_PRECISION_HIGH` will be defined.
+- If the main camera is a `PerspectiveCamera`, the macro `PERSPECTIVE_CAMERA` will be defined.
+- If the geometry pass uses a float type color buffer, the macro `FRAMEBUFFER_PRECISION_HIGH` will be defined.
 
 _Effects may define custom uniforms, varyings, functions and preprocessor macros as usual, but should not define global variables or constants._
 
