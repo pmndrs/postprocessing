@@ -8,9 +8,13 @@
 	"exports": {
 		".": {
 			"import": "./build/postprocessing.esm.js",
-			"require": "./build/postprocessing.js"
+			"require": "./build/postprocessing.js",
+			"types": "./types/postprocessing.d.ts"
 		},
-		"./module": "./build/postprocessing.mjs"
+		"./module": {
+			"import": "./build/postprocessing.mjs",
+			"types": "./types/postprocessing.d.ts"
+		}
 	},
 	"types": "types/postprocessing.d.ts",
 	"sideEffects": false,
