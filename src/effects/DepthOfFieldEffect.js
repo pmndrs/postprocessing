@@ -451,7 +451,7 @@ export class DepthOfFieldEffect extends Effect {
 		if(this.target !== null) {
 
 			const distance = this.calculateFocusDistance(this.target);
-			this.circleOfConfusionMaterial.focusDistance = distance;
+			this.cocMaterial.focusDistance = distance;
 
 		}
 
