@@ -98,8 +98,7 @@ window.addEventListener("load", () => load().then((assets) => {
 		offset: 0.25,
 		rotation: 3.01,
 		focusArea: 0.3,
-		feather: 0.25,
-		bias: 0.05
+		feather: 0.25
 	});
 
 	const composer = new EffectComposer(renderer);
@@ -122,7 +121,6 @@ window.addEventListener("load", () => load().then((assets) => {
 	subfolder.addInput(effect, "rotation", { min: 0, max: 2 * Math.PI, step: 1e-2 });
 	subfolder.addInput(effect, "focusArea", { min: 0, max: 1, step: 1e-2 });
 	subfolder.addInput(effect, "feather", { min: 0, max: 1, step: 1e-3 });
-	subfolder.addInput(effect, "bias", { min: 0, max: 1, step: 1e-3 });
 	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 1e-2 });
 	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
 

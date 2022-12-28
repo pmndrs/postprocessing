@@ -8,13 +8,12 @@
 
 #endif
 
-uniform vec4 maskParams;
+uniform vec2 maskParams;
 varying vec2 vUv2;
 
 float linearGradientMask(const in float x) {
 
-	return smoothstep(maskParams.x, maskParams.y, x) -
-		smoothstep(maskParams.w, maskParams.z, x);
+	return step(maskParams.x, x) - step(maskParams.y, x);
 
 }
 

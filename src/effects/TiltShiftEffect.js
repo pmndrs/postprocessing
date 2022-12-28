@@ -1,4 +1,4 @@
-import { sRGBEncoding, Uniform, Vector2, Vector4, WebGLRenderTarget } from "three";
+import { sRGBEncoding, Uniform, Vector2, WebGLRenderTarget } from "three";
 import { Resolution } from "../core";
 import { KernelSize } from "../enums";
 import { TiltShiftBlurPass } from "../passes";
@@ -22,7 +22,7 @@ export class TiltShiftEffect extends Effect {
 	 * @param {Number} [options.rotation=0.0] - The rotation of the focus area in radians.
 	 * @param {Number} [options.focusArea=0.4] - The relative size of the focus area.
 	 * @param {Number} [options.feather=0.3] - The softness of the focus area edges.
-	 * @param {Number} [options.bias=0.06] - A blend bias.
+	 * @param {Number} [options.bias=0.06] - Deprecated.
 	 * @param {KernelSize} [options.kernelSize=KernelSize.MEDIUM] - The blur kernel size.
 	 * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
 	 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
@@ -35,7 +35,6 @@ export class TiltShiftEffect extends Effect {
 		rotation = 0.0,
 		focusArea = 0.4,
 		feather = 0.3,
-		bias = 0.06,
 		kernelSize = KernelSize.MEDIUM,
 		resolutionScale = 0.5,
 		resolutionX = Resolution.AUTO_SIZE,
@@ -47,7 +46,7 @@ export class TiltShiftEffect extends Effect {
 			blendFunction,
 			uniforms: new Map([
 				["rotation", new Uniform(new Vector2())],
-				["maskParams", new Uniform(new Vector4())],
+				["maskParams", new Uniform(new Vector2())],
 				["map", new Uniform(null)]
 			])
 		});
@@ -75,14 +74,6 @@ export class TiltShiftEffect extends Effect {
 		 */
 
 		this._feather = feather;
-
-		/**
-		 * @see {@link bias}
-		 * @type {Number}
-		 * @private
-		 */
-
-		this._bias = bias;
 
 		/**
 		 * A render target.
@@ -129,7 +120,7 @@ export class TiltShiftEffect extends Effect {
 	}
 
 	/**
-	 * The relative offset of the focus area.
+	 * Updates the mask params.
 	 *
 	 * @private
 	 */
@@ -137,13 +128,8 @@ export class TiltShiftEffect extends Effect {
 	updateParams() {
 
 		const params = this.uniforms.get("maskParams").value;
-		const a = Math.max(this.focusArea - this.bias, 0.0);
-		const b = Math.max(a - Math.max(this.feather - this.bias, 0.0), 0.0);
-
-		params.set(
-			this.offset - a, this.offset - b,
-			this.offset + a, this.offset + b
-		);
+		const x = Math.max(this.focusArea - this.feather, 0.0);
+		params.set(this.offset - x, this.offset + x);
 
 	}
 
@@ -230,20 +216,11 @@ export class TiltShiftEffect extends Effect {
 	 * A blend bias.
 	 *
 	 * @type {Number}
+	 * @deprecated
 	 */
 
-	get bias() {
-
-		return this._bias;
-
-	}
-
-	set bias(value) {
-
-		this._bias = value;
-		this.updateParams();
-
-	}
+	get bias() { return 0; }
+	set bias(value) {}
 
 	/**
 	 * Updates this effect.
