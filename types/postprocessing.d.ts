@@ -5927,7 +5927,7 @@ declare module "postprocessing" {
 		 * @param {Number} [options.rotation=0.0] - The rotation of the focus area in radians.
 		 * @param {Number} [options.focusArea=0.4] - The relative size of the focus area.
 		 * @param {Number} [options.feather=0.3] - The softness of the focus area edges.
-		 * @param {Number} [options.bias=0.06] - A blend bias.
+		 * @param {Number} [options.bias=0.06] - Deprecated.
 		 * @param {KernelSize} [options.kernelSize=KernelSize.MEDIUM] - The blur kernel size.
 		 * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
 		 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
@@ -6003,6 +6003,7 @@ declare module "postprocessing" {
 		 * A blend bias.
 		 *
 		 * @type {Number}
+		 * @deprecated
 		 */
 		get bias(): number;
 		set bias(arg: number);
