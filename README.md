@@ -49,9 +49,9 @@ requestAnimationFrame(function render() {
 
 ## Output Encoding
 
-New applications should follow a [linear workflow](https://docs.unity3d.com/Manual/LinearRendering-LinearOrGammaWorkflow.html) for color management and postprocessing supports this automatically. Simply set `WebGLRenderer.outputEncoding` to `sRGBEncoding` and postprocessing will follow suit. Built-in passes automatically encode colors when they render to screen and internal render operations are always performed in the most appropriate color space.
+New applications should follow a [linear workflow](https://docs.unity3d.com/Manual/LinearRendering-LinearOrGammaWorkflow.html) for color management and postprocessing supports this automatically. Simply set `WebGLRenderer.outputEncoding` to `sRGBEncoding` and postprocessing will follow suit.
 
-Postprocessing uses `UnsignedByteType` sRGB frame buffers to store intermediate results due to good hardware support and resource efficiency. This is a compromise because linear results normally require at least 12 bits per color channel to prevent [color degradation and banding](https://blog.demofox.org/2018/03/10/dont-convert-srgb-u8-to-linear-u8/). With low precision sRGB buffers, colors will be clamped to `[0.0, 1.0]` and information loss will shift to the darker spectrum which leads to noticable banding in dark scenes. Linear, high precision `HalfFloatType` buffers don't have these issues and are the preferred option for HDR-like workflows on desktop devices. You can enable high precision frame buffers like so:
+Postprocessing uses `UnsignedByteType` sRGB frame buffers to store intermediate results. This is a trade-off between hardware support, efficiency and quality since linear results normally require at least 12 bits per color channel to prevent [color degradation and banding](https://blog.demofox.org/2018/03/10/dont-convert-srgb-u8-to-linear-u8/). With low precision sRGB buffers, colors will be clamped to `[0.0, 1.0]` and information loss will shift to the darker spectrum which leads to noticable banding in dark scenes. Linear, high precision `HalfFloatType` buffers don't have these issues and are the preferred option for HDR-like workflows on desktop devices. You can enable high precision frame buffers as follows:
 
 ```ts
 import { HalfFloatType } from "three";
