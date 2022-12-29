@@ -1,6 +1,6 @@
 {
 	"name": "postprocessing",
-	"version": "6.29.1",
+	"version": "6.29.2",
 	"description": "A post processing library that provides the means to implement image filter effects for three.js.",
 	"homepage": "https://github.com/pmndrs/postprocessing",
 	"main": "build/postprocessing.js",
@@ -8,9 +8,13 @@
 	"exports": {
 		".": {
 			"import": "./build/postprocessing.esm.js",
-			"require": "./build/postprocessing.js"
+			"require": "./build/postprocessing.js",
+			"types": "./types/postprocessing.d.ts"
 		},
-		"./module": "./build/postprocessing.mjs"
+		"./module": {
+			"import": "./build/postprocessing.mjs",
+			"types": "./types/postprocessing.d.ts"
+		}
 	},
 	"types": "types/postprocessing.d.ts",
 	"sideEffects": false,
@@ -82,7 +86,7 @@
 		"extends": "aether"
 	},
 	"peerDependencies": {
-		"three": ">= 0.125.0 < 0.147.0"
+		"three": ">= 0.125.0 < 0.149.0"
 	},
 	"devDependencies": {
 		"@tweakpane/core": "1.x.x",
@@ -90,11 +94,11 @@
 		"@typescript-eslint/eslint-plugin": "5.x.x",
 		"@typescript-eslint/parser": "5.x.x",
 		"autoprefixer": "10.x.x",
-		"ava": "4.x.x",
+		"ava": "5.x.x",
 		"copyfiles": "2.x.x",
 		"cssnano": "5.x.x",
 		"dat.gui": "0.x.x",
-		"del-cli": "4.x.x",
+		"del-cli": "5.x.x",
 		"esbuild": "0.x.x",
 		"esbuild-plugin-glsl": "1.x.x",
 		"esbuild-ts-paths": "1.x.x",
@@ -108,12 +112,12 @@
 		"hugo-bin": "0.x.x",
 		"npm-run-all": "4.x.x",
 		"postcss": "8.x.x",
-		"postcss-cli": "9.x.x",
+		"postcss-cli": "10.x.x",
 		"postcss-preset-env": "7.x.x",
 		"sass": "1.x.x",
 		"spatial-controls": "5.x.x",
 		"stylelint": "14.x.x",
-		"stylelint-config-standard-scss": "4.x.x",
+		"stylelint-config-standard-scss": "6.x.x",
 		"stylelint-order": "5.x.x",
 		"three": "0.x.x",
 		"three-demo": "5.x.x",
