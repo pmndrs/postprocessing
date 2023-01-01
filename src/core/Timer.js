@@ -42,35 +42,35 @@ export class Timer {
 		 *
 		 * @type {Number}
 		 * @private
+		 * @see {@link delta}
 		 */
 
-		this.delta = 0;
-
-		/**
-		 * The fixed time step in milliseconds.
-		 *
-		 * Default is 16.667 (60 fps).
-		 *
-		 * @type {Number}
-		 * @private
-		 */
-
-		this.fixedDelta = 1000.0 / 60.0;
+		this._delta = 0;
 
 		/**
 		 * The total elapsed time in milliseconds.
 		 *
 		 * @type {Number}
 		 * @private
+		 * @see {@link elapsed}
 		 */
 
-		this.elapsed = 0;
+		this._elapsed = 0;
+
+		/**
+		 * The fixed time step in milliseconds. Default is 16.667 (60 fps).
+		 *
+		 * @type {Number}
+		 * @private
+		 * @see {@link fixedDelta}
+		 */
+
+		this._fixedDelta = 1000.0 / 60.0;
 
 		/**
 		 * The timescale.
 		 *
 		 * @type {Number}
-		 * @private
 		 */
 
 		this.timescale = 1.0;
@@ -79,46 +79,17 @@ export class Timer {
 		 * Determines whether this timer should use a fixed time step.
 		 *
 		 * @type {Boolean}
-		 * @private
 		 */
 
-		this.fixedDeltaEnabled = false;
+		this.useFixedDelta = false;
 
 		/**
-		 * Indicates whether auto reset is enabled.
-		 *
 		 * @type {Boolean}
 		 * @private
+		 * @see {@link autoReset}
 		 */
 
-		this.autoReset = false;
-
-	}
-
-	/**
-	 * Enables or disables the fixed time step.
-	 *
-	 * @param {Boolean} enabled - Whether the fixed delta time should be used.
-	 * @return {Timer} This timer.
-	 */
-
-	setFixedDeltaEnabled(enabled) {
-
-		this.fixedDeltaEnabled = enabled;
-		return this;
-
-	}
-
-	/**
-	 * Indicates whether auto reset is enabled.
-	 *
-	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API}
-	 * @return {Boolean} Whether the timer will be reset on visibility change.
-	 */
-
-	isAutoResetEnabled(enabled) {
-
-		return this.autoReset;
+		this._autoReset = false;
 
 	}
 
@@ -128,16 +99,21 @@ export class Timer {
 	 * If enabled, the timer will be reset when the page becomes visible. This effectively pauses the timer when the page
 	 * is hidden. Has no effect if the API is not supported.
 	 *
-	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API}
-	 * @param {Boolean} enabled - Whether the timer should be reset on visibility change.
-	 * @return {Timer} This timer.
+	 * @type {Boolean}
+	 * @see https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API
 	 */
 
-	setAutoResetEnabled(enabled) {
+	get autoReset() {
+
+		return this._autoReset;
+
+	}
+
+	set autoReset(value) {
 
 		if(typeof document !== "undefined" && document.hidden !== undefined) {
 
-			if(enabled) {
+			if(value) {
 
 				document.addEventListener("visibilitychange", this);
 
@@ -147,141 +123,74 @@ export class Timer {
 
 			}
 
-			this.autoReset = enabled;
+			this._autoReset = value;
 
 		}
 
-		return this;
+	}
+
+	get delta() {
+
+		return this._delta * MILLISECONDS_TO_SECONDS;
 
 	}
 
-	/**
-	 * Returns the delta time.
-	 *
-	 * @return {Number} The delta time in seconds.
-	 */
+	get fixedDelta() {
 
-	getDelta() {
-
-		return this.delta * MILLISECONDS_TO_SECONDS;
+		return this._fixedDelta * MILLISECONDS_TO_SECONDS;
 
 	}
 
-	/**
-	 * Returns the fixed delta time.
-	 *
-	 * @return {Number} The fixed delta time in seconds.
-	 */
+	set fixedDelta(value) {
 
-	getFixedDelta() {
-
-		return this.fixedDelta * MILLISECONDS_TO_SECONDS;
+		this._fixedDelta = value * SECONDS_TO_MILLISECONDS;
 
 	}
 
-	/**
-	 * Sets the fixed delta time.
-	 *
-	 * @param {Number} fixedDelta - The delta time in seconds.
-	 * @return {Timer} This timer.
-	 */
+	get elapsed() {
 
-	setFixedDelta(fixedDelta) {
-
-		this.fixedDelta = fixedDelta * SECONDS_TO_MILLISECONDS;
-		return this;
-
-	}
-
-	/**
-	 * Returns the elapsed time.
-	 *
-	 * @return {Number} The elapsed time in seconds.
-	 */
-
-	getElapsed() {
-
-		return this.elapsed * MILLISECONDS_TO_SECONDS;
-
-	}
-
-	/**
-	 * Returns the timescale.
-	 *
-	 * @return {Number} The timescale.
-	 */
-
-	getTimescale() {
-
-		return this.timescale;
-
-	}
-
-	/**
-	 * Sets the timescale.
-	 *
-	 * @param {Number} timescale - The timescale.
-	 * @return {Timer} This timer.
-	 */
-
-	setTimescale(timescale) {
-
-		this.timescale = timescale;
-		return this;
+		return this._elapsed * MILLISECONDS_TO_SECONDS;
 
 	}
 
 	/**
 	 * Updates this timer.
 	 *
-	 * @param {Number} [timestamp] - The current time in milliseconds.
-	 * @return {Timer} This timer.
+	 * @param {Boolean} [timestamp] - The current time in milliseconds.
 	 */
 
 	update(timestamp) {
 
-		if(this.fixedDeltaEnabled) {
+		if(this.useFixedDelta) {
 
-			this.delta = this.fixedDelta;
+			this._delta = this.fixedDelta;
 
 		} else {
 
 			this.previousTime = this.currentTime;
 			this.currentTime = (timestamp !== undefined) ? timestamp : performance.now();
-			this.delta = this.currentTime - this.previousTime;
+			this._delta = this.currentTime - this.previousTime;
 
 		}
 
-		this.delta *= this.timescale;
-		this.elapsed += this.delta;
-
-		return this;
+		this._delta *= this.timescale;
+		this._elapsed += this._delta;
 
 	}
 
 	/**
 	 * Resets this timer.
-	 *
-	 * @return {Timer} This timer.
 	 */
 
 	reset() {
 
-		this.delta = 0;
-		this.elapsed = 0;
+		this._delta = 0;
+		this._elapsed = 0;
 		this.currentTime = performance.now();
-
-		return this;
 
 	}
 
-	/**
-	 * Handles events.
-	 *
-	 * @param {Event} event - The event.
-	 */
-
-	handleEvent(event) {
+	handleEvent(e) {
 
 		if(!document.hidden) {
 
@@ -292,13 +201,9 @@ export class Timer {
 
 	}
 
-	/**
-	 * Disposes this timer.
-	 */
-
 	dispose() {
 
-		this.setAutoResetEnabled(false);
+		this.autoReset = false;
 
 	}
 
