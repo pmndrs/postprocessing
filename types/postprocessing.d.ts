@@ -5060,91 +5060,53 @@ declare module "postprocessing" {
 	 *
 	 * @experimental Temporary substitute for {@link https://github.com/mrdoob/three.js/pull/17912}
 	 * @implements {Disposable}
+	 * @implements {EventListenerObject}
 	 */
-	export class Timer implements Disposable {
+	export class Timer implements Disposable, EventListenerObject {
 
 		/**
-		 * Enables or disables the fixed time step.
-		 *
-		 * @param {Boolean} enabled - Whether the fixed delta time should be used.
-		 * @return {Timer} This timer.
+		 * The current delta time in seconds.
 		 */
-		setFixedDeltaEnabled(enabled: boolean): Timer;
+		get delta(): number;
 		/**
-		 * Indicates whether auto reset is enabled.
-		 *
-		 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API}
-		 * @return {Boolean} Whether the timer will be reset on visibility change.
+		 * The fixed delta time in seconds.
 		 */
-		isAutoResetEnabled(): boolean;
+		get fixedDelta(): number;
+		set fixedDelta(value: number);
+		/**
+		 * The elapsed time in seconds.
+		 */
+		get elapsed(): number;
+		/**
+		 * Determines whether this timer should use a fixed time step.
+		 */
+		useFixedDelta: boolean;
+		/**
+		 * The timescale.
+		 */
+		timescale: number;
 		/**
 		 * Enables or disables auto reset based on page visibility.
 		 *
 		 * If enabled, the timer will be reset when the page becomes visible. This effectively pauses the timer when the page
 		 * is hidden. Has no effect if the API is not supported.
 		 *
-		 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API}
-		 * @param {Boolean} enabled - Whether the timer should be reset on visibility change.
-		 * @return {Timer} This timer.
+		 * @see https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API
 		 */
-		setAutoResetEnabled(enabled: boolean): Timer;
-		/**
-		 * Returns the delta time.
-		 *
-		 * @return {Number} The delta time in seconds.
-		 */
-		getDelta(): number;
-		/**
-		 * Returns the fixed delta time.
-		 *
-		 * @return {Number} The fixed delta time in seconds.
-		 */
-		getFixedDelta(): number;
-		/**
-		 * Sets the fixed delta time.
-		 *
-		 * @param {Number} fixedDelta - The delta time in seconds.
-		 * @return {Timer} This timer.
-		 */
-		setFixedDelta(fixedDelta: number): Timer;
-		/**
-		 * Returns the elapsed time.
-		 *
-		 * @return {Number} The elapsed time in seconds.
-		 */
-		getElapsed(): number;
-		/**
-		 * Returns the timescale.
-		 *
-		 * @return {Number} The timescale.
-		 */
-		getTimescale(): number;
-		/**
-		 * Sets the timescale.
-		 *
-		 * @param {Number} timescale - The timescale.
-		 * @return {Timer} This timer.
-		 */
-		setTimescale(timescale: number): Timer;
+		get autoReset(): boolean;
+		set autoReset(value: boolean);
 		/**
 		 * Updates this timer.
 		 *
 		 * @param {Number} [timestamp] - The current time in milliseconds.
-		 * @return {Timer} This timer.
 		 */
-		update(timestamp?: number): Timer;
+		update(timestamp?: number): void;
 		/**
 		 * Resets this timer.
 		 *
 		 * @return {Timer} This timer.
 		 */
 		reset(): Timer;
-		/**
-		 * Handles events.
-		 *
-		 * @param {Event} event - The event.
-		 */
-		handleEvent(event: Event): void;
 		/**
 		 * Disposes this timer.
 		 */

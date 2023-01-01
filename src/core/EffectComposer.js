@@ -592,7 +592,8 @@ export class EffectComposer {
 
 		if(deltaTime === undefined) {
 
-			deltaTime = this.timer.update().getDelta();
+			this.timer.update();
+			deltaTime = this.timer.delta;
 
 		}
 
@@ -685,10 +686,10 @@ export class EffectComposer {
 
 	reset() {
 
-		const autoReset = this.timer.isAutoResetEnabled();
+		const autoReset = this.timer.autoReset;
 		this.dispose();
 		this.autoRenderToScreen = true;
-		this.timer.setAutoResetEnabled(autoReset);
+		this.timer.autoReset = autoReset;
 
 	}
 
