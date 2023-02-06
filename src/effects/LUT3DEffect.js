@@ -1,5 +1,5 @@
 import {
-	DataTexture3D,
+	Data3DTexture,
 	FloatType,
 	HalfFloatType,
 	LinearFilter,
@@ -29,8 +29,6 @@ import fragmentShader from "./glsl/lut-3d.frag";
  * https://www.nvidia.com/content/GTC/posters/2010/V01-Real-Time-Color-Space-Conversion-for-High-Resolution-Video.pdf
  * https://github.com/AcademySoftwareFoundation/OpenColorIO/blob/master/src/OpenColorIO/ops/lut3d/
  * https://github.com/gkjohnson/threejs-sandbox/tree/master/3d-lut
- *
- * TODO Replace DataTexture3D with Data3DTexture and rename inputEncoding to inputColorSpace.
  */
 
 export class LUT3DEffect extends Effect {
@@ -42,13 +40,13 @@ export class LUT3DEffect extends Effect {
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SRC] - The blend function of this effect.
 	 * @param {Boolean} [options.tetrahedralInterpolation=false] - Enables or disables tetrahedral interpolation.
-	 * @param {TextureEncoding} [options.inputEncoding=sRGBEncoding] - LUT input encoding.
+	 * @param {TextureEncoding} [options.inputColorSpace=sRGBEncoding] - LUT input encoding.
 	 */
 
 	constructor(lut, {
 		blendFunction = BlendFunction.SRC,
 		tetrahedralInterpolation = false,
-		inputEncoding = sRGBEncoding
+		inputColorSpace = sRGBEncoding
 	} = {}) {
 
 		super("LUT3DEffect", fragmentShader, {
@@ -63,7 +61,7 @@ export class LUT3DEffect extends Effect {
 		});
 
 		this.tetrahedralInterpolation = tetrahedralInterpolation;
-		this.inputColorSpace = inputEncoding;
+		this.inputColorSpace = inputColorSpace;
 		this.lut = lut;
 
 	}
@@ -77,13 +75,13 @@ export class LUT3DEffect extends Effect {
 	 * @type {TextureEncoding}
 	 */
 
-	get inputEncoding() {
+	get inputColorSpace() {
 
 		return this.inputColorSpace;
 
 	}
 
-	set inputEncoding(value) {
+	set inputColorSpace(value) {
 
 		this.inputColorSpace = value;
 
@@ -96,7 +94,7 @@ export class LUT3DEffect extends Effect {
 	 * @return {TextureEncoding} The encoding.
 	 */
 
-	getInputEncoding() {
+	getinputColorSpace() {
 
 		return this.inputColorSpace;
 
@@ -109,7 +107,7 @@ export class LUT3DEffect extends Effect {
 	 * @param {TextureEncoding} value - The encoding.
 	 */
 
-	setInputEncoding(value) {
+	setinputColorSpace(value) {
 
 		this.inputColorSpace = value;
 
@@ -174,7 +172,7 @@ export class LUT3DEffect extends Effect {
 
 					defines.set("LUT_STRIP_HORIZONTAL", "1");
 
-				} else if(value instanceof DataTexture3D) {
+				} else if(value instanceof Data3DTexture) {
 
 					defines.set("LUT_3D", "1");
 
@@ -246,7 +244,7 @@ export class LUT3DEffect extends Effect {
 			const scale = this.uniforms.get("scale").value;
 			const offset = this.uniforms.get("offset").value;
 
-			if(this.tetrahedralInterpolation && lut instanceof DataTexture3D) {
+			if(this.tetrahedralInterpolation && lut instanceof Data3DTexture) {
 
 				if(this.defines.has("CUSTOM_INPUT_DOMAIN")) {
 
@@ -299,7 +297,7 @@ export class LUT3DEffect extends Effect {
 
 			if(this.tetrahedralInterpolation) {
 
-				if(lut instanceof DataTexture3D) {
+				if(lut instanceof Data3DTexture) {
 
 					// Interpolate samples manually.
 					lut.minFilter = NearestFilter;

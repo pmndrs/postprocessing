@@ -2,7 +2,7 @@ import {
 	Color,
 	ClampToEdgeWrapping,
 	DataTexture,
-	DataTexture3D,
+	Data3DTexture,
 	FloatType,
 	LinearFilter,
 	LinearEncoding,
@@ -22,11 +22,9 @@ const c = new Color();
  * A 3D lookup texture (LUT).
  *
  * This texture can be used as-is in a WebGL 2 context. It can also be converted into a 2D texture.
- *
- * TODO Extend Data3DTexture.
  */
 
-export class LookupTexture extends DataTexture3D {
+export class LookupTexture extends Data3DTexture {
 
 	/**
 	 * Constructs a cubic 3D lookup texture.
