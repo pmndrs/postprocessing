@@ -29,6 +29,8 @@ import fragmentShader from "./glsl/lut-3d.frag";
  * https://www.nvidia.com/content/GTC/posters/2010/V01-Real-Time-Color-Space-Conversion-for-High-Resolution-Video.pdf
  * https://github.com/AcademySoftwareFoundation/OpenColorIO/blob/master/src/OpenColorIO/ops/lut3d/
  * https://github.com/gkjohnson/threejs-sandbox/tree/master/3d-lut
+ *
+ * TODO Remove inputEncoding.
  */
 
 export class LUT3DEffect extends Effect {
@@ -40,13 +42,13 @@ export class LUT3DEffect extends Effect {
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SRC] - The blend function of this effect.
 	 * @param {Boolean} [options.tetrahedralInterpolation=false] - Enables or disables tetrahedral interpolation.
-	 * @param {TextureEncoding} [options.inputColorSpace=sRGBEncoding] - LUT input encoding.
+	 * @param {TextureEncoding} [options.inputEncoding=sRGBEncoding] - LUT input encoding.
 	 */
 
 	constructor(lut, {
 		blendFunction = BlendFunction.SRC,
 		tetrahedralInterpolation = false,
-		inputColorSpace = sRGBEncoding
+		inputEncoding = sRGBEncoding
 	} = {}) {
 
 		super("LUT3DEffect", fragmentShader, {
@@ -61,7 +63,7 @@ export class LUT3DEffect extends Effect {
 		});
 
 		this.tetrahedralInterpolation = tetrahedralInterpolation;
-		this.inputColorSpace = inputColorSpace;
+		this.inputColorSpace = inputEncoding;
 		this.lut = lut;
 
 	}
@@ -75,13 +77,13 @@ export class LUT3DEffect extends Effect {
 	 * @type {TextureEncoding}
 	 */
 
-	get inputColorSpace() {
+	get inputEncoding() {
 
 		return this.inputColorSpace;
 
 	}
 
-	set inputColorSpace(value) {
+	set inputEncoding(value) {
 
 		this.inputColorSpace = value;
 
@@ -94,7 +96,7 @@ export class LUT3DEffect extends Effect {
 	 * @return {TextureEncoding} The encoding.
 	 */
 
-	getinputColorSpace() {
+	getInputEncoding() {
 
 		return this.inputColorSpace;
 
@@ -107,7 +109,7 @@ export class LUT3DEffect extends Effect {
 	 * @param {TextureEncoding} value - The encoding.
 	 */
 
-	setinputColorSpace(value) {
+	setInputEncoding(value) {
 
 		this.inputColorSpace = value;
 
