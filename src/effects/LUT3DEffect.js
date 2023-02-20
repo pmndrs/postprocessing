@@ -1,5 +1,5 @@
 import {
-	DataTexture3D,
+	Data3DTexture,
 	FloatType,
 	HalfFloatType,
 	LinearFilter,
@@ -30,7 +30,7 @@ import fragmentShader from "./glsl/lut-3d.frag";
  * https://github.com/AcademySoftwareFoundation/OpenColorIO/blob/master/src/OpenColorIO/ops/lut3d/
  * https://github.com/gkjohnson/threejs-sandbox/tree/master/3d-lut
  *
- * TODO Replace DataTexture3D with Data3DTexture and rename inputEncoding to inputColorSpace.
+ * TODO Remove inputEncoding.
  */
 
 export class LUT3DEffect extends Effect {
@@ -174,7 +174,7 @@ export class LUT3DEffect extends Effect {
 
 					defines.set("LUT_STRIP_HORIZONTAL", "1");
 
-				} else if(value instanceof DataTexture3D) {
+				} else if(value instanceof Data3DTexture) {
 
 					defines.set("LUT_3D", "1");
 
@@ -246,7 +246,7 @@ export class LUT3DEffect extends Effect {
 			const scale = this.uniforms.get("scale").value;
 			const offset = this.uniforms.get("offset").value;
 
-			if(this.tetrahedralInterpolation && lut instanceof DataTexture3D) {
+			if(this.tetrahedralInterpolation && lut instanceof Data3DTexture) {
 
 				if(this.defines.has("CUSTOM_INPUT_DOMAIN")) {
 
@@ -299,7 +299,7 @@ export class LUT3DEffect extends Effect {
 
 			if(this.tetrahedralInterpolation) {
 
-				if(lut instanceof DataTexture3D) {
+				if(lut instanceof Data3DTexture) {
 
 					// Interpolate samples manually.
 					lut.minFilter = NearestFilter;

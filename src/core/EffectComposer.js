@@ -2,13 +2,11 @@ import {
 	DepthStencilFormat,
 	DepthTexture,
 	LinearFilter,
-	REVISION,
 	sRGBEncoding,
 	UnsignedByteType,
 	UnsignedIntType,
 	UnsignedInt248Type,
 	Vector2,
-	WebGLMultisampleRenderTarget,
 	WebGLRenderTarget
 } from "three";
 
@@ -357,20 +355,12 @@ export class EffectComposer {
 			type
 		};
 
-		let renderTarget;
+		const renderTarget = new WebGLRenderTarget(size.width, size.height, options);
 
 		if(multisampling > 0) {
 
-			renderTarget = (Number(REVISION.replace(/\D+/g, "")) < 138) ?
-				new WebGLMultisampleRenderTarget(size.width, size.height, options) :
-				new WebGLRenderTarget(size.width, size.height, options);
-
 			renderTarget.ignoreDepthForMultisampleCopy = false;
 			renderTarget.samples = multisampling;
-
-		} else {
-
-			renderTarget = new WebGLRenderTarget(size.width, size.height, options);
 
 		}
 
