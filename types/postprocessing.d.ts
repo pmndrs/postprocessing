@@ -21,7 +21,7 @@ declare module "postprocessing" {
 		EventDispatcher,
 		Color,
 		TextureEncoding,
-		DataTexture3D
+		Data3DTexture
 	} from "three";
 
 	/**
@@ -6742,8 +6742,6 @@ declare module "postprocessing" {
 	 * https://www.nvidia.com/content/GTC/posters/2010/V01-Real-Time-Color-Space-Conversion-for-High-Resolution-Video.pdf
 	 * https://github.com/AcademySoftwareFoundation/OpenColorIO/blob/master/src/OpenColorIO/ops/lut3d/
 	 * https://github.com/gkjohnson/threejs-sandbox/tree/master/3d-lut
-	 *
-	 * TODO Replace DataTexture3D with Data3DTexture.
 	 */
 	export class LUT3DEffect extends Effect {
 
@@ -8737,10 +8735,8 @@ declare module "postprocessing" {
 	 * A 3D lookup texture (LUT).
 	 *
 	 * This texture can be used as-is in a WebGL 2 context. It can also be converted into a 2D texture.
-	 *
-	 * TODO Extend Data3DTexture.
 	 */
-	export class LookupTexture extends DataTexture3D {
+	export class LookupTexture extends Data3DTexture {
 
 		/**
 		 * Creates a new 3D LUT by copying a given LUT.
