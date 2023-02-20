@@ -5063,6 +5063,7 @@ declare module "postprocessing" {
 	 * @implements {EventListenerObject}
 	 */
 	export class Timer implements Disposable, EventListenerObject {
+		handleEvent(object: Event): void;
 
 		/**
 		 * The current delta time in seconds.
