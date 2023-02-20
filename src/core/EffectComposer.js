@@ -2,7 +2,6 @@ import {
 	DepthStencilFormat,
 	DepthTexture,
 	LinearFilter,
-	REVISION,
 	sRGBEncoding,
 	UnsignedByteType,
 	UnsignedIntType,
