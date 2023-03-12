@@ -3661,8 +3661,8 @@ declare module "postprocessing" {
 		 * @param {WebGLRenderTarget} [options.renderTarget] - A custom render target.
 		 */
 		constructor(
-			scene: Scene,
-			camera: Camera,
+			scene?: Scene,
+			camera?: Camera,
 			{
 				resolutionScale,
 				resolutionX,
@@ -4277,7 +4277,7 @@ declare module "postprocessing" {
 		 * @param {Camera} camera - The main camera.
 		 * @param {...Effect} effects - The effects that will be rendered by this pass.
 		 */
-		constructor(camera: Camera, ...effects: Effect[]);
+		constructor(camera?: Camera, ...effects: Effect[]);
 		/**
 		 * The effects.
 		 *
@@ -4494,7 +4494,7 @@ declare module "postprocessing" {
 		 * @param {Scene} scene - The scene to render.
 		 * @param {Camera} camera - The camera to use.
 		 */
-		constructor(scene: Scene, camera: Camera);
+		constructor(scene?: Scene, camera?: Camera);
 		/**
 		 * A clear pass.
 		 *
@@ -4581,8 +4581,8 @@ declare module "postprocessing" {
 		 * @param {WebGLRenderTarget} [options.renderTarget] - A custom render target.
 		 */
 		constructor(
-			scene: Scene,
-			camera: Camera,
+			scene?: Scene,
+			camera?: Camera,
 			{
 				resolutionScale,
 				resolutionX,
@@ -5646,7 +5646,7 @@ declare module "postprocessing" {
 		 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use resolutionY instead.
 		 */
 		constructor(
-			camera: Camera,
+			camera?: Camera,
 			{
 				blendFunction,
 				worldFocusDistance,
@@ -6356,7 +6356,7 @@ declare module "postprocessing" {
 		 * @param {Boolean} [options.blur=true] - Whether the god rays should be blurred to reduce artifacts.
 		 */
 		constructor(
-			camera: Camera,
+			camera?: Camera,
 			lightSource: Mesh | Points,
 			{
 				blendFunction,
@@ -6908,8 +6908,8 @@ declare module "postprocessing" {
 		 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use resolutionY instead.
 		 */
 		constructor(
-			scene: Scene,
-			camera: Camera,
+			scene?: Scene,
+			camera?: Camera,
 			{
 				blendFunction,
 				patternTexture,
@@ -7432,7 +7432,7 @@ declare module "postprocessing" {
 		 * @param {Camera} camera - The main camera.
 		 * @param {BloomEffectOptions} [options] - The options. See {@link BloomEffect} for details.
 		 */
-		constructor(scene: Scene, camera: Camera, options?: BloomEffectOptions);
+		constructor(scene?: Scene, camera?: Camera, options?: BloomEffectOptions);
 		/**
 		 * A selection of objects.
 		 *
@@ -7602,7 +7602,7 @@ declare module "postprocessing" {
 		 * @param {Number} [options.amplitude=0.05] - The distortion amplitude.
 		 */
 		constructor(
-			camera: Camera,
+			camera?: Camera,
 			position?: Vector3,
 			{
 				speed,
@@ -7995,7 +7995,7 @@ declare module "postprocessing" {
 		 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use resolutionY instead.
 		 */
 		constructor(
-			camera: Camera,
+			camera?: Camera,
 			normalBuffer: Texture,
 			{
 				blendFunction,
