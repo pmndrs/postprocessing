@@ -90,7 +90,7 @@ export class SSAOMaterial extends ShaderMaterial {
 
 	get near() {
 
-		return this.uniforms.cameraNearFar.value.x;
+		return this.uniforms.cameraNear.value;
 
 	}
 
@@ -103,7 +103,7 @@ export class SSAOMaterial extends ShaderMaterial {
 
 	get far() {
 
-		return this.uniforms.cameraNearFar.value.y;
+		return this.uniforms.cameraFar.value;
 
 	}
 
@@ -829,7 +829,7 @@ export class SSAOMaterial extends ShaderMaterial {
 			this.uniforms.cameraNear.value = camera.near;
 			this.uniforms.cameraFar.value = camera.far;
 			this.uniforms.projectionMatrix.value = camera.projectionMatrix;
-			this.uniforms.inverseProjectionMatrix.value. = camera.projectionMatrix.invert();
+			this.uniforms.inverseProjectionMatrix.value = camera.projectionMatrixInverse;
 
 			if(camera instanceof PerspectiveCamera) {
 
