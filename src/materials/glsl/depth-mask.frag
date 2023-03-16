@@ -14,17 +14,18 @@
 #endif
 
 uniform sampler2D inputBuffer;
-uniform vec2 cameraNearFar;
+uniform float cameraNear;
+uniform float cameraFar;
 
 float getViewZ(const in float depth) {
 
 	#ifdef PERSPECTIVE_CAMERA
 
-		return perspectiveDepthToViewZ(depth, cameraNearFar.x, cameraNearFar.y);
+		return perspectiveDepthToViewZ(depth, cameraNear, cameraFar);
 
 	#else
 
-		return orthographicDepthToViewZ(depth, cameraNearFar.x, cameraNearFar.y);
+		return orthographicDepthToViewZ(depth, cameraNear, cameraFar);
 
 	#endif
 
@@ -61,8 +62,8 @@ void main() {
 	#ifdef PERSPECTIVE_CAMERA
 
 		// Linearize.
-		depth.x = viewZToOrthographicDepth(getViewZ(depth.x), cameraNearFar.x, cameraNearFar.y);
-		depth.y = viewZToOrthographicDepth(getViewZ(depth.y), cameraNearFar.x, cameraNearFar.y);
+		depth.x = viewZToOrthographicDepth(getViewZ(depth.x), cameraNear, cameraFar);
+		depth.y = viewZToOrthographicDepth(getViewZ(depth.y), cameraNear, cameraFar);
 
 	#endif
 

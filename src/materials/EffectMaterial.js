@@ -367,7 +367,7 @@ export class EffectMaterial extends ShaderMaterial {
 			this.uniforms.cameraNear.value = camera.near;
 			this.uniforms.cameraFar.value = camera.far;
 
-			if(camera instanceof PerspectiveCamera) {
+			if(camera instanceof PerspectiveCamera || camera.type === "PerspectiveCamera") {
 
 				this.defines.PERSPECTIVE_CAMERA = "1";
 

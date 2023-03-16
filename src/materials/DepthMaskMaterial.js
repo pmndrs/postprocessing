@@ -46,7 +46,8 @@ export class DepthMaskMaterial extends ShaderMaterial {
 				inputBuffer: new Uniform(null),
 				depthBuffer0: new Uniform(null),
 				depthBuffer1: new Uniform(null),
-				cameraNearFar: new Uniform(new Vector2(1, 1))
+				cameraNear: new Uniform(0.3),
+				cameraFar: new Uniform(1000),
 			},
 			blending: NoBlending,
 			depthWrite: false,
@@ -361,9 +362,10 @@ export class DepthMaskMaterial extends ShaderMaterial {
 
 		if(camera) {
 
-			this.uniforms.cameraNearFar.value.set(camera.near, camera.far);
+			this.uniforms.cameraNear.value = camera.near;
+			this.uniforms.cameraFar.value = camera.far;
 
-			if(camera instanceof PerspectiveCamera) {
+			if(camera instanceof PerspectiveCamera || camera.type === 'PerspectiveCamera') {
 
 				this.defines.PERSPECTIVE_CAMERA = "1";
 
