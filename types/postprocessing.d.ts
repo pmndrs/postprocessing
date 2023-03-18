@@ -2893,8 +2893,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -3004,8 +3004,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -3176,8 +3176,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -3206,8 +3206,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -3306,8 +3306,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -3371,8 +3371,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -3430,8 +3430,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -3499,8 +3499,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -3634,8 +3634,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -3726,8 +3726,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -3787,8 +3787,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -4356,8 +4356,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -4472,8 +4472,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -4554,8 +4554,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -4646,8 +4646,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -4688,8 +4688,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
