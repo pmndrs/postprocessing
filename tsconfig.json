@@ -2,6 +2,7 @@
 	"include": ["./src", "./demo/src", "./manual/js"],
 	"compilerOptions": {
 		"baseUrl": ".",
+		"outDir": "./build",
 		"paths": {
 			"postprocessing": ["./src/index.js"]
 		},
@@ -9,11 +10,12 @@
 		"module": "ESNext",
 		"target": "ESNext",
 		"strict": true,
+		"allowJs": true,
 		"sourceMap": false,
 		"skipLibCheck": true,
 		"importHelpers": true,
 		"downlevelIteration": true,
 		"noImplicitOverride": true,
-		"allowSyntheticDefaultImports": true,
+		"allowSyntheticDefaultImports": true
 	}
 }
