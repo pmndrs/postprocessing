@@ -6435,6 +6435,13 @@ declare module "postprocessing" {
 		 */
 		getBlurPass(): KawaseBlurPass;
 		/**
+		 * Sets the light source.
+		 *
+		 * @type {Mesh|Points}
+		 */
+		get lightSource(): Mesh | Points | null;
+		set lightSource(value: Mesh | Points | null);
+		/**
 		 * A texture that contains the intermediate result of this effect.
 		 *
 		 * @type {Texture}
@@ -8083,20 +8090,27 @@ declare module "postprocessing" {
 		);
 
 		resolution: Resolution;
-		set depthAwareUpsampling(arg: boolean);
+		/**
+		 * Sets the normal buffer.
+		 *
+		 * @type {Texture}
+		 */
+		get normalBuffer(): Texture | null;
+		set normalBuffer(value: Texture | null);
 		/**
 		 * Indicates whether depth-aware upsampling is enabled.
 		 *
 		 * @type {Boolean}
 		 */
 		get depthAwareUpsampling(): boolean;
-		set color(arg: Color);
+		set depthAwareUpsampling(arg: boolean);
 		/**
 		 * The color of the ambient occlusion. Set to `null` to disable.
 		 *
 		 * @type {Color}
 		 */
 		get color(): Color;
+		set color(arg: Color);
 		/**
 		 * Returns the resolution settings.
 		 *
@@ -8117,7 +8131,6 @@ declare module "postprocessing" {
 		 * @return {SSAOMaterial} The material.
 		 */
 		getSSAOMaterial(): SSAOMaterial;
-		set samples(arg: number);
 		/**
 		 * The amount of occlusion samples per pixel.
 		 *
@@ -8125,7 +8138,7 @@ declare module "postprocessing" {
 		 * @deprecated Use ssaoMaterial.samples instead.
 		 */
 		get samples(): number;
-		set rings(arg: number);
+		set samples(arg: number);
 		/**
 		 * The amount of spiral turns in the occlusion sampling pattern.
 		 *
@@ -8133,7 +8146,7 @@ declare module "postprocessing" {
 		 * @deprecated Use ssaoMaterial.rings instead.
 		 */
 		get rings(): number;
-		set radius(arg: number);
+		set rings(arg: number);
 		/**
 		 * The occlusion sampling radius.
 		 *
@@ -8141,6 +8154,7 @@ declare module "postprocessing" {
 		 * @deprecated Use ssaoMaterial.radius instead.
 		 */
 		get radius(): number;
+		set radius(arg: number);
 		/**
 		 * The intensity.
 		 *
@@ -8162,7 +8176,6 @@ declare module "postprocessing" {
 		 * @param {Boolean} value - Whether depth-aware upsampling should be enabled.
 		 */
 		setDepthAwareUpsamplingEnabled(value: boolean): void;
-		set distanceScaling(arg: boolean);
 		/**
 		 * Indicates whether distance-based radius scaling is enabled.
 		 *
@@ -8170,6 +8183,7 @@ declare module "postprocessing" {
 		 * @deprecated Use ssaoMaterial.distanceScaling instead.
 		 */
 		get distanceScaling(): boolean;
+		set distanceScaling(arg: boolean);
 		/**
 		 * Returns the color of the ambient occlusion.
 		 *
