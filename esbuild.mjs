@@ -1,6 +1,5 @@
 import { createRequire } from "module";
 import { glsl } from "esbuild-plugin-glsl";
-import tsPaths from "esbuild-ts-paths";
 import glob from "tiny-glob";
 import esbuild from "esbuild";
 
@@ -8,8 +7,7 @@ const require = createRequire(import.meta.url);
 const pkg = require("./package");
 
 const minify = process.argv.includes("-m");
-const watch = process.argv.includes("-w");
-const plugins = [glsl({ minify }), tsPaths()];
+const plugins = [glsl({ minify })];
 const external = ["three", "spatial-controls", "tweakpane"];
 
 const date = new Date();
@@ -20,7 +18,7 @@ const banner = `/**
  * @license ${pkg.license}
  */`;
 
-await esbuild.build({
+const workers = {
 	entryPoints: await glob("src/**/worker.js"),
 	outExtension: { ".js": ".txt" },
 	outdir: "tmp",
@@ -28,11 +26,10 @@ await esbuild.build({
 	logLevel: "info",
 	format: "iife",
 	bundle: true,
-	minify,
-	watch
-}).catch(() => process.exit(1));
+	minify
+};
 
-await esbuild.build({
+const demo = {
 	entryPoints: ["demo/src/index.js"],
 	outdir: "public/demo",
 	target: "es6",
@@ -40,9 +37,21 @@ await esbuild.build({
 	format: "iife",
 	bundle: true,
 	plugins,
-	minify,
-	watch
-}).catch(() => process.exit(1));
+	minify
+};
+
+const manual = {
+	entryPoints: ["manual/assets/js/src/index.js"]
+		.concat(await glob("manual/assets/js/src/demos/*.js")),
+	outdir: "manual/assets/js/dist",
+	logLevel: "info",
+	format: "iife",
+	target: "es6",
+	bundle: true,
+	external,
+	plugins,
+	minify
+};
 
 await esbuild.build({
 	entryPoints: ["manual/assets/js/libs/vendor.js"],
@@ -53,21 +62,24 @@ await esbuild.build({
 	format: "iife",
 	bundle: true,
 	minify
-}).catch(() => process.exit(1));
+});
 
-await esbuild.build({
-	entryPoints: ["manual/assets/js/src/index.js"]
-		.concat(await glob("manual/assets/js/src/demos/*.js")),
-	outdir: "manual/assets/js/dist",
-	logLevel: "info",
-	format: "iife",
-	target: "es6",
-	bundle: true,
-	external,
-	plugins,
-	minify,
-	watch
-}).catch(() => process.exit(1));
+if(process.argv.includes("-w")) {
+
+	const ctxWorkers = await esbuild.context(workers);
+	const ctxDemo = await esbuild.context(demo);
+	const ctxManual = await esbuild.context(manual);
+	await ctxWorkers.watch();
+	await ctxDemo.watch();
+	await ctxManual.watch();
+
+} else {
+
+	await esbuild.build(workers);
+	await esbuild.build(demo);
+	await esbuild.build(manual);
+
+}
 
 await esbuild.build({
 	entryPoints: ["src/index.js"],
@@ -79,7 +91,7 @@ await esbuild.build({
 	bundle: true,
 	external,
 	plugins
-}).catch(() => process.exit(1));
+});
 
 await esbuild.build({
 	entryPoints: ["src/index.js"],
@@ -91,11 +103,11 @@ await esbuild.build({
 	bundle: true,
 	external,
 	plugins
-}).catch(() => process.exit(1));
+});
 
 // @todo Remove in next major release.
 const globalName = pkg.name.replace(/-/g, "").toUpperCase();
-const requireShim = `if(typeof window==="object"&&!window.require)window.require=()=>window.THREE;`;
+const requireShim = "if(typeof window===\"object\"&&!window.require)window.require=()=>window.THREE;";
 const footer = `if(typeof module==="object"&&module.exports)module.exports=${globalName};`;
 
 await esbuild.build({
@@ -110,7 +122,7 @@ await esbuild.build({
 	globalName,
 	external,
 	plugins
-}).catch(() => process.exit(1));
+});
 
 await esbuild.build({
 	entryPoints: ["src/index.js"],
@@ -125,4 +137,4 @@ await esbuild.build({
 	external,
 	plugins,
 	minify
-}).catch(() => process.exit(1));
+});
