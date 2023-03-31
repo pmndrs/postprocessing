@@ -47,7 +47,7 @@ declare module "postprocessing" {
 	 *
 	 * @interface
 	 */
-	export class Disposable {
+	export interface Disposable {
 
 		/**
 		 * Frees internal resources.
@@ -63,7 +63,7 @@ declare module "postprocessing" {
 	 *
 	 * @interface
 	 */
-	export class Initializable {
+	export interface Initializable {
 
 		/**
 		 * Performs initialization tasks.
@@ -2893,8 +2893,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -3004,8 +3004,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -3176,8 +3176,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -3206,8 +3206,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -3306,8 +3306,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -3371,8 +3371,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -3430,8 +3430,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -3499,8 +3499,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -3634,8 +3634,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -3661,8 +3661,8 @@ declare module "postprocessing" {
 		 * @param {WebGLRenderTarget} [options.renderTarget] - A custom render target.
 		 */
 		constructor(
-			scene: Scene,
-			camera: Camera,
+			scene?: Scene,
+			camera?: Camera,
 			{
 				resolutionScale,
 				resolutionX,
@@ -3726,8 +3726,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -3787,8 +3787,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -4277,7 +4277,7 @@ declare module "postprocessing" {
 		 * @param {Camera} camera - The main camera.
 		 * @param {...Effect} effects - The effects that will be rendered by this pass.
 		 */
-		constructor(camera: Camera, ...effects: Effect[]);
+		constructor(camera?: Camera, ...effects: Effect[]);
 		/**
 		 * The effects.
 		 *
@@ -4356,8 +4356,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -4472,8 +4472,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -4494,7 +4494,7 @@ declare module "postprocessing" {
 		 * @param {Scene} scene - The scene to render.
 		 * @param {Camera} camera - The camera to use.
 		 */
-		constructor(scene: Scene, camera: Camera);
+		constructor(scene?: Scene, camera?: Camera);
 		/**
 		 * A clear pass.
 		 *
@@ -4554,8 +4554,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -4581,8 +4581,8 @@ declare module "postprocessing" {
 		 * @param {WebGLRenderTarget} [options.renderTarget] - A custom render target.
 		 */
 		constructor(
-			scene: Scene,
-			camera: Camera,
+			scene?: Scene,
+			camera?: Camera,
 			{
 				resolutionScale,
 				resolutionX,
@@ -4646,8 +4646,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -4688,8 +4688,8 @@ declare module "postprocessing" {
 		 */
 		render(
 			renderer: WebGLRenderer,
-			inputBuffer: WebGLRenderTarget,
-			outputBuffer: WebGLRenderTarget,
+			inputBuffer: WebGLRenderTarget | null,
+			outputBuffer: WebGLRenderTarget | null,
 			deltaTime?: number,
 			stencilTest?: boolean
 		): void;
@@ -4933,7 +4933,7 @@ declare module "postprocessing" {
 	 *
 	 * @interface
 	 */
-	export class Resizable {
+	export interface Resizable {
 
 		/**
 		 * Sets the size of this object.
@@ -4942,6 +4942,34 @@ declare module "postprocessing" {
 		 * @param {number} height - The height.
 		 */
 		setSize(width: number, height: number): void;
+
+	}
+
+	/**
+	 * A timer that provides read access to time data.
+	 *
+	 * @interface
+	 */
+	export interface ImmutableTimer {
+
+		/**
+		* The current delta time in seconds.
+		*
+		* @type {Number}
+		*/
+		get delta(): number;
+		/**
+		* The fixed delta time in seconds.
+		*
+		* @type {Number}
+		*/
+		get fixedDelta(): number;
+		/**
+		* The elapsed time in seconds.
+		*
+		* @type {Number}
+		*/
+		get elapsed(): number;
 
 	}
 
@@ -5062,7 +5090,7 @@ declare module "postprocessing" {
 	 * @implements {Disposable}
 	 * @implements {EventListenerObject}
 	 */
-	export class Timer implements Disposable, EventListenerObject {
+	export class Timer implements ImmutableTimer, Disposable, EventListenerObject {
 		handleEvent(object: Event): void;
 
 		/**
@@ -5646,7 +5674,7 @@ declare module "postprocessing" {
 		 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use resolutionY instead.
 		 */
 		constructor(
-			camera: Camera,
+			camera?: Camera,
 			{
 				blendFunction,
 				worldFocusDistance,
@@ -6337,8 +6365,8 @@ declare module "postprocessing" {
 		/**
 		 * Constructs a new god rays effect.
 		 *
-		 * @param {Camera} camera - The main camera.
-		 * @param {Mesh|Points} lightSource - The light source. Must not write depth and has to be flagged as transparent.
+		 * @param {Camera} [camera] - The main camera.
+		 * @param {Mesh|Points} [lightSource] - The light source. Must not write depth and has to be flagged as transparent.
 		 * @param {Object} [options] - The options.
 		 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
 		 * @param {Number} [options.samples=60.0] - The number of samples per pixel.
@@ -6356,8 +6384,8 @@ declare module "postprocessing" {
 		 * @param {Boolean} [options.blur=true] - Whether the god rays should be blurred to reduce artifacts.
 		 */
 		constructor(
-			camera: Camera,
-			lightSource: Mesh | Points,
+			camera?: Camera,
+			lightSource?: Mesh | Points,
 			{
 				blendFunction,
 				samples,
@@ -6406,6 +6434,13 @@ declare module "postprocessing" {
 		 * @return {KawaseBlurPass} The blur pass.
 		 */
 		getBlurPass(): KawaseBlurPass;
+		/**
+		 * Sets the light source.
+		 *
+		 * @type {Mesh|Points}
+		 */
+		get lightSource(): Mesh | Points | null;
+		set lightSource(value: Mesh | Points | null);
 		/**
 		 * A texture that contains the intermediate result of this effect.
 		 *
@@ -6908,8 +6943,8 @@ declare module "postprocessing" {
 		 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use resolutionY instead.
 		 */
 		constructor(
-			scene: Scene,
-			camera: Camera,
+			scene?: Scene,
+			camera?: Camera,
 			{
 				blendFunction,
 				patternTexture,
@@ -7432,7 +7467,7 @@ declare module "postprocessing" {
 		 * @param {Camera} camera - The main camera.
 		 * @param {BloomEffectOptions} [options] - The options. See {@link BloomEffect} for details.
 		 */
-		constructor(scene: Scene, camera: Camera, options?: BloomEffectOptions);
+		constructor(scene?: Scene, camera?: Camera, options?: BloomEffectOptions);
 		/**
 		 * A selection of objects.
 		 *
@@ -7602,7 +7637,7 @@ declare module "postprocessing" {
 		 * @param {Number} [options.amplitude=0.05] - The distortion amplitude.
 		 */
 		constructor(
-			camera: Camera,
+			camera?: Camera,
 			position?: Vector3,
 			{
 				speed,
@@ -7964,8 +7999,8 @@ declare module "postprocessing" {
 		 * Constructs a new SSAO effect.
 		 *
 		 * @todo Move normalBuffer to options.
-		 * @param {Camera} camera - The main camera.
-		 * @param {Texture} normalBuffer - A texture that contains the scene normals.
+		 * @param {Camera} [camera] - The main camera.
+		 * @param {Texture} [normalBuffer] - A texture that contains the scene normals.
 		 * @param {Object} [options] - The options.
 		 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
 		 * @param {Boolean} [options.distanceScaling=true] - Deprecated.
@@ -7995,8 +8030,8 @@ declare module "postprocessing" {
 		 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use resolutionY instead.
 		 */
 		constructor(
-			camera: Camera,
-			normalBuffer: Texture,
+			camera?: Camera,
+			normalBuffer?: Texture,
 			{
 				blendFunction,
 				distanceScaling,
@@ -8055,20 +8090,27 @@ declare module "postprocessing" {
 		);
 
 		resolution: Resolution;
-		set depthAwareUpsampling(arg: boolean);
+		/**
+		 * Sets the normal buffer.
+		 *
+		 * @type {Texture}
+		 */
+		get normalBuffer(): Texture | null;
+		set normalBuffer(value: Texture | null);
 		/**
 		 * Indicates whether depth-aware upsampling is enabled.
 		 *
 		 * @type {Boolean}
 		 */
 		get depthAwareUpsampling(): boolean;
-		set color(arg: Color);
+		set depthAwareUpsampling(arg: boolean);
 		/**
 		 * The color of the ambient occlusion. Set to `null` to disable.
 		 *
 		 * @type {Color}
 		 */
 		get color(): Color;
+		set color(arg: Color);
 		/**
 		 * Returns the resolution settings.
 		 *
@@ -8089,7 +8131,6 @@ declare module "postprocessing" {
 		 * @return {SSAOMaterial} The material.
 		 */
 		getSSAOMaterial(): SSAOMaterial;
-		set samples(arg: number);
 		/**
 		 * The amount of occlusion samples per pixel.
 		 *
@@ -8097,7 +8138,7 @@ declare module "postprocessing" {
 		 * @deprecated Use ssaoMaterial.samples instead.
 		 */
 		get samples(): number;
-		set rings(arg: number);
+		set samples(arg: number);
 		/**
 		 * The amount of spiral turns in the occlusion sampling pattern.
 		 *
@@ -8105,7 +8146,7 @@ declare module "postprocessing" {
 		 * @deprecated Use ssaoMaterial.rings instead.
 		 */
 		get rings(): number;
-		set radius(arg: number);
+		set rings(arg: number);
 		/**
 		 * The occlusion sampling radius.
 		 *
@@ -8113,6 +8154,7 @@ declare module "postprocessing" {
 		 * @deprecated Use ssaoMaterial.radius instead.
 		 */
 		get radius(): number;
+		set radius(arg: number);
 		/**
 		 * The intensity.
 		 *
@@ -8134,7 +8176,6 @@ declare module "postprocessing" {
 		 * @param {Boolean} value - Whether depth-aware upsampling should be enabled.
 		 */
 		setDepthAwareUpsamplingEnabled(value: boolean): void;
-		set distanceScaling(arg: boolean);
 		/**
 		 * Indicates whether distance-based radius scaling is enabled.
 		 *
@@ -8142,6 +8183,7 @@ declare module "postprocessing" {
 		 * @deprecated Use ssaoMaterial.distanceScaling instead.
 		 */
 		get distanceScaling(): boolean;
+		set distanceScaling(arg: boolean);
 		/**
 		 * Returns the color of the ambient occlusion.
 		 *
@@ -8184,7 +8226,6 @@ declare module "postprocessing" {
 			inputBuffer: WebGLRenderTarget,
 			deltaTime?: number
 		): void;
-
 		/**
 		 * Sets the size.
 		 *
@@ -8192,13 +8233,11 @@ declare module "postprocessing" {
 		 * @param {Number} height - The height.
 		 */
 		setSize(width: number, height: number): void;
-
 		/**
 		 * The luminance influence factor. Range: [0.0, 1.0].
 		 *
 		 * @type {Boolean}
 		 */
-
 		get luminanceInfluence(): boolean;
 		set luminanceInfluence(value: boolean);
 

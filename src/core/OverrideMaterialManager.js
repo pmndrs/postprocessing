@@ -1,4 +1,4 @@
-import { BackSide, DoubleSide, FrontSide } from "three";
+import { BackSide, DoubleSide, FrontSide, ShaderMaterial } from "three";
 
 /**
  * A flag that indicates whether the override material workaround is enabled.
@@ -188,6 +188,54 @@ export class OverrideMaterialManager {
 	}
 
 	/**
+	 * Clones the given material.
+	 *
+	 * @private
+	 * @param {Material} material - The material.
+	 * @return {Material} The cloned material.
+	 */
+
+	cloneMaterial(material) {
+
+		if(!(material instanceof ShaderMaterial)) {
+
+			// No uniforms.
+			return material.clone();
+
+		}
+
+		const uniforms = material.uniforms;
+		const textureUniforms = new Map();
+
+		for(const key in uniforms) {
+
+			const value = uniforms[key].value;
+
+			if(value.isRenderTargetTexture) {
+
+				// Three logs warnings about cloning render target textures since r151.
+				uniforms[key].value = null;
+				textureUniforms.set(key, value);
+
+			}
+
+		}
+
+		const clone = material.clone();
+
+		for(const entry of textureUniforms) {
+
+			// Restore and copy references to textures.
+			uniforms[entry[0]].value = entry[1];
+			clone.uniforms[entry[0]].value = entry[1];
+
+		}
+
+		return clone;
+
+	}
+
+	/**
 	 * Sets the override material.
 	 *
 	 * @param {Material} material - The material.
@@ -202,9 +250,9 @@ export class OverrideMaterialManager {
 
 			// Create materials for simple, instanced and skinned meshes.
 			const materials = this.materials = [
-				material.clone(),
-				material.clone(),
-				material.clone()
+				this.cloneMaterial(material),
+				this.cloneMaterial(material),
+				this.cloneMaterial(material)
 			];
 
 			// FrontSide
@@ -220,7 +268,7 @@ export class OverrideMaterialManager {
 			// BackSide
 			this.materialsBackSide = materials.map((m) => {
 
-				const c = m.clone();
+				const c = this.cloneMaterial(m);
 				c.uniforms = Object.assign({}, material.uniforms);
 				c.side = BackSide;
 				return c;
@@ -230,7 +278,7 @@ export class OverrideMaterialManager {
 			// DoubleSide
 			this.materialsDoubleSide = materials.map((m) => {
 
-				const c = m.clone();
+				const c = this.cloneMaterial(m);
 				c.uniforms = Object.assign({}, material.uniforms);
 				c.side = DoubleSide;
 				return c;
@@ -240,7 +288,7 @@ export class OverrideMaterialManager {
 			// FrontSide & flatShading
 			this.materialsFlatShaded = materials.map((m) => {
 
-				const c = m.clone();
+				const c = this.cloneMaterial(m);
 				c.uniforms = Object.assign({}, material.uniforms);
 				c.flatShading = true;
 				return c;
@@ -250,7 +298,7 @@ export class OverrideMaterialManager {
 			// BackSide & flatShading
 			this.materialsFlatShadedBackSide = materials.map((m) => {
 
-				const c = m.clone();
+				const c = this.cloneMaterial(m);
 				c.uniforms = Object.assign({}, material.uniforms);
 				c.flatShading = true;
 				c.side = BackSide;
@@ -261,7 +309,7 @@ export class OverrideMaterialManager {
 			// DoubleSide & flatShading
 			this.materialsFlatShadedDoubleSide = materials.map((m) => {
 
-				const c = m.clone();
+				const c = this.cloneMaterial(m);
 				c.uniforms = Object.assign({}, material.uniforms);
 				c.flatShading = true;
 				c.side = DoubleSide;

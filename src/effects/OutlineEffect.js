@@ -74,7 +74,7 @@ export class OutlineEffect extends Effect {
 		// Handle alpha blending.
 		this.blendMode.addEventListener("change", (event) => {
 
-			if(this.blendMode.getBlendFunction() === BlendFunction.ALPHA) {
+			if(this.blendMode.blendFunction === BlendFunction.ALPHA) {
 
 				this.defines.set("ALPHA", "1");
 
@@ -88,7 +88,7 @@ export class OutlineEffect extends Effect {
 
 		});
 
-		this.blendMode.setBlendFunction(blendFunction);
+		this.blendMode.blendFunction = blendFunction;
 		this.patternTexture = patternTexture;
 		this.xRay = xRay;
 

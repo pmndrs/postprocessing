@@ -1,24 +1,24 @@
 {
 	"name": "postprocessing",
-	"version": "6.30.1",
+	"version": "6.30.2",
 	"description": "A post processing library that provides the means to implement image filter effects for three.js.",
 	"homepage": "https://github.com/pmndrs/postprocessing",
-	"main": "build/postprocessing.js",
-	"module": "build/postprocessing.esm.js",
-	"exports": {
-		".": {
-			"import": "./build/postprocessing.esm.js",
-			"require": "./build/postprocessing.js",
-			"types": "./types/postprocessing.d.ts"
-		},
-		"./module": {
-			"import": "./build/postprocessing.mjs",
-			"types": "./types/postprocessing.d.ts"
-		}
-	},
-	"types": "types/postprocessing.d.ts",
 	"sideEffects": false,
 	"license": "Zlib",
+	"main": "build/postprocessing.js",
+	"module": "build/postprocessing.esm.js",
+	"types": "types/postprocessing.d.ts",
+	"exports": {
+		".": {
+			"types": "./types/postprocessing.d.ts",
+			"import": "./build/postprocessing.esm.js",
+			"require": "./build/postprocessing.js"
+		},
+		"./module": {
+			"types": "./types/postprocessing.d.ts",
+			"import": "./build/postprocessing.mjs"
+		}
+	},
 	"keywords": [
 		"rendering",
 		"image",
@@ -86,7 +86,7 @@
 		"extends": "aether"
 	},
 	"peerDependencies": {
-		"three": ">= 0.138.0 < 0.151.0"
+		"three": ">= 0.138.0 < 0.152.0"
 	},
 	"devDependencies": {
 		"@tweakpane/core": "1.x.x",
@@ -99,9 +99,8 @@
 		"cssnano": "5.x.x",
 		"dat.gui": "0.x.x",
 		"del-cli": "5.x.x",
-		"esbuild": "0.16.x",
+		"esbuild": "0.17.x",
 		"esbuild-plugin-glsl": "1.x.x",
-		"esbuild-ts-paths": "1.x.x",
 		"esdoc": "1.x.x",
 		"esdoc-importpath-plugin": "1.x.x",
 		"esdoc-standard-plugin": "1.x.x",

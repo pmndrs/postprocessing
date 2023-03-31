@@ -28,8 +28,8 @@ export class SSAOEffect extends Effect {
 	 * Constructs a new SSAO effect.
 	 *
 	 * @todo Move normalBuffer to options.
-	 * @param {Camera} camera - The main camera.
-	 * @param {Texture} normalBuffer - A texture that contains the scene normals.
+	 * @param {Camera} [camera] - The main camera.
+	 * @param {Texture} [normalBuffer] - A texture that contains the scene normals.
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
 	 * @param {Boolean} [options.distanceScaling=true] - Deprecated.
@@ -209,6 +209,25 @@ export class SSAOEffect extends Effect {
 
 		this.camera = value;
 		this.ssaoMaterial.copyCameraSettings(value);
+
+	}
+
+	/**
+	 * Sets the normal buffer.
+	 *
+	 * @type {Texture}
+	 */
+
+	get normalBuffer() {
+
+		return this.ssaoMaterial.normalBuffer;
+
+	}
+
+	set normalBuffer(value) {
+
+		this.ssaoMaterial.normalBuffer = value;
+		this.depthDownsamplingPass.fullscreenMaterial.normalBuffer = value;
 
 	}
 

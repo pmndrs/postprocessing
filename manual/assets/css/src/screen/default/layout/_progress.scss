@@ -2,15 +2,12 @@
 
 .progress {
 	align-items: center;
-	bottom: 0;
 	display: flex;
 	flex-direction: column;
+	inset: 0 0 0 0;
 	justify-content: center;
-	left: 0;
 	pointer-events: none;
 	position: absolute;
-	right: 0;
-	top: 0;
 	user-select: none;
 	z-index: layers.$foreground;
 }
