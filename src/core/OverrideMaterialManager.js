@@ -213,7 +213,7 @@ export class OverrideMaterialManager {
 
 			if(value.isRenderTargetTexture) {
 
-				// Three complains about cloning render target textures since r151.
+				// Three logs warnings about cloning render target textures since r151.
 				uniforms[key].value = null;
 				textureUniforms.set(key, value);
 
