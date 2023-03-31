@@ -47,7 +47,7 @@ declare module "postprocessing" {
 	 *
 	 * @interface
 	 */
-	export class Disposable {
+	export interface Disposable {
 
 		/**
 		 * Frees internal resources.
@@ -63,7 +63,7 @@ declare module "postprocessing" {
 	 *
 	 * @interface
 	 */
-	export class Initializable {
+	export interface Initializable {
 
 		/**
 		 * Performs initialization tasks.
@@ -4933,7 +4933,7 @@ declare module "postprocessing" {
 	 *
 	 * @interface
 	 */
-	export class Resizable {
+	export interface Resizable {
 
 		/**
 		 * Sets the size of this object.
@@ -4942,6 +4942,34 @@ declare module "postprocessing" {
 		 * @param {number} height - The height.
 		 */
 		setSize(width: number, height: number): void;
+
+	}
+
+	/**
+	 * A timer that provides read access to time data.
+	 *
+	 * @interface
+	 */
+	export interface ImmutableTimer {
+
+		/**
+		* The current delta time in seconds.
+		*
+		* @type {Number}
+		*/
+		get delta(): number;
+		/**
+		* The fixed delta time in seconds.
+		*
+		* @type {Number}
+		*/
+		get fixedDelta(): number;
+		/**
+		* The elapsed time in seconds.
+		*
+		* @type {Number}
+		*/
+		get elapsed(): number;
 
 	}
 
@@ -5062,7 +5090,7 @@ declare module "postprocessing" {
 	 * @implements {Disposable}
 	 * @implements {EventListenerObject}
 	 */
-	export class Timer implements Disposable, EventListenerObject {
+	export class Timer implements ImmutableTimer, Disposable, EventListenerObject {
 		handleEvent(object: Event): void;
 
 		/**
@@ -6337,8 +6365,8 @@ declare module "postprocessing" {
 		/**
 		 * Constructs a new god rays effect.
 		 *
-		 * @param {Camera} camera - The main camera.
-		 * @param {Mesh|Points} lightSource - The light source. Must not write depth and has to be flagged as transparent.
+		 * @param {Camera} [camera] - The main camera.
+		 * @param {Mesh|Points} [lightSource] - The light source. Must not write depth and has to be flagged as transparent.
 		 * @param {Object} [options] - The options.
 		 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
 		 * @param {Number} [options.samples=60.0] - The number of samples per pixel.
@@ -6357,7 +6385,7 @@ declare module "postprocessing" {
 		 */
 		constructor(
 			camera?: Camera,
-			lightSource: Mesh | Points,
+			lightSource?: Mesh | Points,
 			{
 				blendFunction,
 				samples,
@@ -7964,8 +7992,8 @@ declare module "postprocessing" {
 		 * Constructs a new SSAO effect.
 		 *
 		 * @todo Move normalBuffer to options.
-		 * @param {Camera} camera - The main camera.
-		 * @param {Texture} normalBuffer - A texture that contains the scene normals.
+		 * @param {Camera} [camera] - The main camera.
+		 * @param {Texture} [normalBuffer] - A texture that contains the scene normals.
 		 * @param {Object} [options] - The options.
 		 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
 		 * @param {Boolean} [options.distanceScaling=true] - Deprecated.
@@ -7996,7 +8024,7 @@ declare module "postprocessing" {
 		 */
 		constructor(
 			camera?: Camera,
-			normalBuffer: Texture,
+			normalBuffer?: Texture,
 			{
 				blendFunction,
 				distanceScaling,
@@ -8184,7 +8212,6 @@ declare module "postprocessing" {
 			inputBuffer: WebGLRenderTarget,
 			deltaTime?: number
 		): void;
-
 		/**
 		 * Sets the size.
 		 *
@@ -8192,13 +8219,11 @@ declare module "postprocessing" {
 		 * @param {Number} height - The height.
 		 */
 		setSize(width: number, height: number): void;
-
 		/**
 		 * The luminance influence factor. Range: [0.0, 1.0].
 		 *
 		 * @type {Boolean}
 		 */
-
 		get luminanceInfluence(): boolean;
 		set luminanceInfluence(value: boolean);
 
