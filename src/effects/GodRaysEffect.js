@@ -31,8 +31,8 @@ export class GodRaysEffect extends Effect {
 	/**
 	 * Constructs a new god rays effect.
 	 *
-	 * @param {Camera} camera - The main camera.
-	 * @param {Mesh|Points} lightSource - The light source. Must not write depth and has to be flagged as transparent.
+	 * @param {Camera} [camera] - The main camera.
+	 * @param {Mesh|Points} [lightSource] - The light source. Must not write depth and has to be flagged as transparent.
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
 	 * @param {Number} [options.samples=60.0] - The number of samples per pixel.
@@ -91,9 +91,8 @@ export class GodRaysEffect extends Effect {
 		 * @private
 		 */
 
+		this._lightSource = lightSource;
 		this.lightSource = lightSource;
-		this.lightSource.material.depthWrite = false;
-		this.lightSource.material.transparent = true;
 
 		/**
 		 * A scene for the light source.
@@ -222,6 +221,31 @@ export class GodRaysEffect extends Effect {
 		this.camera = value;
 		this.renderPassLight.mainCamera = value;
 		this.depthMaskMaterial.copyCameraSettings(value);
+
+	}
+
+	/**
+	 * Sets the light source.
+	 *
+	 * @type {Mesh|Points}
+	 */
+
+	get lightSource() {
+
+		return this._lightSource;
+
+	}
+
+	set lightSource(value) {
+
+		this._lightSource = value;
+
+		if(value !== null) {
+
+			value.material.depthWrite = false;
+			value.material.transparent = true;
+
+		}
 
 	}
 
