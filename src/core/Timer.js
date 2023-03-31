@@ -7,6 +7,7 @@ const SECONDS_TO_MILLISECONDS = 1e3;
  * Original implementation by Michael Herzog (Mugen87).
  *
  * @experimental Temporary substitute for {@link https://github.com/mrdoob/three.js/pull/17912}
+ * @implements {ImmutableTimer}
  * @implements {EventListenerObject}
  * @implements {Disposable}
  */
@@ -18,6 +19,15 @@ export class Timer {
 	 */
 
 	constructor() {
+
+		/**
+		 * The start time in milliseconds.
+		 *
+		 * @type {Number}
+		 * @private
+		 */
+
+		this.startTime = performance.now();
 
 		/**
 		 * The previous time in milliseconds.
@@ -168,7 +178,7 @@ export class Timer {
 		} else {
 
 			this.previousTime = this.currentTime;
-			this.currentTime = (timestamp !== undefined) ? timestamp : performance.now();
+			this.currentTime = ((timestamp !== undefined) ? timestamp : performance.now()) - this.startTime;
 			this._delta = this.currentTime - this.previousTime;
 
 		}
@@ -186,7 +196,7 @@ export class Timer {
 
 		this._delta = 0;
 		this._elapsed = 0;
-		this.currentTime = performance.now();
+		this.currentTime = performance.now() - this.startTime;
 
 	}
 
@@ -195,7 +205,7 @@ export class Timer {
 		if(!document.hidden) {
 
 			// Reset the current time.
-			this.currentTime = performance.now();
+			this.currentTime = performance.now() - this.startTime;
 
 		}
 
