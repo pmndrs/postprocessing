@@ -180,7 +180,7 @@ export class DepthOfFieldEffect extends Effect {
 
 		this.maskPass = new ShaderPass(new MaskMaterial(this.renderTargetCoC.texture));
 		const maskMaterial = this.maskPass.fullscreenMaterial;
-		maskMaterial.maskFunction = MaskFunction;
+		maskMaterial.maskFunction = MaskFunction.MULTIPLY;
 		maskMaterial.colorChannel = ColorChannel.GREEN;
 
 		/**
