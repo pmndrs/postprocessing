@@ -1,6 +1,7 @@
 import {
 	AmbientLight,
 	AnimationMixer,
+	BoxGeometry,
 	CircleGeometry,
 	Color,
 	CubeTextureLoader,
@@ -425,8 +426,6 @@ export class OutlineDemo extends PostProcessingDemo {
 			"use pattern": false,
 			"pattern scale": 60.0,
 			"pulse speed": effect.pulseSpeed,
-			"edge strength": uniforms.get("edgeStrength").value,
-			"visible edge": color.copyLinearToSRGB(
 			"edge strength": effect.edgeStrength,
 			"visible edge": color.copyLinearToSRGB(effect.visibleEdgeColor).getHex(),
 			"hidden edge": color.copyLinearToSRGB(effect.hiddenEdgeColor).getHex(),
