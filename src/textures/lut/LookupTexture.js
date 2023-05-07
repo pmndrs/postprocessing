@@ -5,16 +5,17 @@ import {
 	Data3DTexture,
 	FloatType,
 	LinearFilter,
-	LinearEncoding,
 	RGBAFormat,
-	sRGBEncoding,
 	UnsignedByteType,
 	Vector3
 } from "three";
 
+import { LinearSRGBColorSpace, SRGBColorSpace } from "../../enums/ColorSpace";
 import { LUTOperation } from "../../enums";
+import { setTextureColorSpace } from "../../utils";
 import { RawImageData } from "../RawImageData";
 import workerProgram from "../../../tmp/lut/worker.txt";
+import { copyTextureColorSpace } from "../../utils/BackCompat.js";
 
 const c = new Color();
 
@@ -39,7 +40,6 @@ export class LookupTexture extends Data3DTexture {
 
 		this.type = FloatType;
 		this.format = RGBAFormat;
-		this.encoding = LinearEncoding;
 		this.minFilter = LinearFilter;
 		this.magFilter = LinearFilter;
 		this.wrapS = ClampToEdgeWrapping;
@@ -47,6 +47,8 @@ export class LookupTexture extends Data3DTexture {
 		this.wrapR = ClampToEdgeWrapping;
 		this.unpackAlignment = 1;
 		this.needsUpdate = true;
+
+		setTextureColorSpace(this, LinearSRGBColorSpace);
 
 		/**
 		 * The lower bounds of the input domain.
@@ -109,7 +111,7 @@ export class LookupTexture extends Data3DTexture {
 				worker.addEventListener("message", (event) => {
 
 					const lut = new LookupTexture(event.data, size);
-					lut.encoding = this.encoding;
+					copyTextureColorSpace(this, lut);
 					lut.type = this.type;
 					lut.name = this.name;
 
@@ -283,7 +285,7 @@ export class LookupTexture extends Data3DTexture {
 
 			}
 
-			this.encoding = sRGBEncoding;
+			setTextureColorSpace(this, SRGBColorSpace);
 			this.needsUpdate = true;
 
 		} else {
@@ -314,7 +316,7 @@ export class LookupTexture extends Data3DTexture {
 
 			}
 
-			this.encoding = LinearEncoding;
+			setTextureColorSpace(this, LinearSRGBColorSpace);
 			this.needsUpdate = true;
 
 		} else {
@@ -344,13 +346,14 @@ export class LookupTexture extends Data3DTexture {
 		texture.name = this.name;
 		texture.type = this.type;
 		texture.format = this.format;
-		texture.encoding = this.encoding;
 		texture.minFilter = LinearFilter;
 		texture.magFilter = LinearFilter;
 		texture.wrapS = this.wrapS;
 		texture.wrapT = this.wrapT;
 		texture.generateMipmaps = false;
 		texture.needsUpdate = true;
+
+		copyTextureColorSpace(this, texture);
 
 		return texture;
 
@@ -422,9 +425,10 @@ export class LookupTexture extends Data3DTexture {
 		}
 
 		const lut = new LookupTexture(data, size);
-		lut.encoding = texture.encoding;
 		lut.type = texture.type;
 		lut.name = texture.name;
+
+		copyTextureColorSpace(texture, lut);
 
 		return lut;
 

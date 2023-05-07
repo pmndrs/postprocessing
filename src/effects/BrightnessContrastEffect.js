@@ -1,4 +1,5 @@
-import { sRGBEncoding, Uniform } from "three";
+import { Uniform } from "three";
+import { SRGBColorSpace } from "../enums/ColorSpace";
 import { BlendFunction } from "../enums";
 import { Effect } from "./Effect";
 
@@ -31,7 +32,7 @@ export class BrightnessContrastEffect extends Effect {
 			])
 		});
 
-		this.inputColorSpace = sRGBEncoding;
+		this.inputColorSpace = SRGBColorSpace;
 
 	}
 
@@ -60,7 +61,7 @@ export class BrightnessContrastEffect extends Effect {
 	 * @return {Number} The brightness.
 	 */
 
-	getBrightness(value) {
+	getBrightness() {
 
 		return this.brightness;
 
@@ -104,7 +105,7 @@ export class BrightnessContrastEffect extends Effect {
 	 * @return {Number} The contrast.
 	 */
 
-	getContrast(value) {
+	getContrast() {
 
 		return this.contrast;
 

@@ -1,9 +1,10 @@
-import { BasicDepthPacking, sRGBEncoding, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
+import { BasicDepthPacking, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
 import { BokehMaterial, CircleOfConfusionMaterial, MaskMaterial } from "../materials";
 import { ColorChannel, EffectAttribute, KernelSize, MaskFunction } from "../enums";
 import { Resolution } from "../core";
+import { SRGBColorSpace } from "../enums/ColorSpace";
 import { KawaseBlurPass, ShaderPass } from "../passes";
-import { viewZToOrthographicDepth } from "../utils";
+import { getOutputColorSpace, setTextureColorSpace, viewZToOrthographicDepth } from "../utils";
 import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/depth-of-field.frag";
@@ -537,12 +538,12 @@ export class DepthOfFieldEffect extends Effect {
 			this.renderTargetFar.texture.type = frameBufferType;
 			this.renderTargetMasked.texture.type = frameBufferType;
 
-			if(renderer.outputEncoding === sRGBEncoding) {
+			if(getOutputColorSpace(renderer) === SRGBColorSpace) {
 
-				this.renderTarget.texture.encoding = sRGBEncoding;
-				this.renderTargetNear.texture.encoding = sRGBEncoding;
-				this.renderTargetFar.texture.encoding = sRGBEncoding;
-				this.renderTargetMasked.texture.encoding = sRGBEncoding;
+				setTextureColorSpace(this.renderTarget.texture, SRGBColorSpace);
+				setTextureColorSpace(this.renderTargetNear.texture, SRGBColorSpace);
+				setTextureColorSpace(this.renderTargetFar.texture, SRGBColorSpace);
+				setTextureColorSpace(this.renderTargetMasked.texture, SRGBColorSpace);
 
 			}
 

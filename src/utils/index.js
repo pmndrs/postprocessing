@@ -1,3 +1,3 @@
-export * from "./getTextureDecoding";
+export * from "./BackCompat";
 export * from "./orthographicDepthToViewZ";
 export * from "./viewZToOrthographicDepth";

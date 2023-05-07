@@ -1,5 +1,6 @@
-import { BasicDepthPacking, UnsignedByteType, sRGBEncoding } from "three";
+import { BasicDepthPacking, UnsignedByteType } from "three";
 import { EffectShaderData } from "../core";
+import { NoColorSpace, SRGBColorSpace } from "../enums/ColorSpace";
 import { BlendFunction, EffectAttribute, EffectShaderSection as Section } from "../enums";
 import { EffectMaterial } from "../materials";
 import { Pass } from "./Pass";
@@ -160,13 +161,13 @@ function integrateEffect(prefix, effect, data) {
 
 			if(effect.inputColorSpace !== null && effect.inputColorSpace !== data.colorSpace) {
 
-				fragmentMainImage += (effect.inputColorSpace === sRGBEncoding) ?
+				fragmentMainImage += (effect.inputColorSpace === SRGBColorSpace) ?
 					"color0 = LinearTosRGB(color0);\n\t" :
 					"color0 = sRGBToLinear(color0);\n\t";
 
 			}
 
-			if(effect.outputColorSpace !== null) {
+			if(effect.outputColorSpace !== NoColorSpace) {
 
 				data.colorSpace = effect.outputColorSpace;
 
@@ -465,7 +466,7 @@ export class EffectPass extends Pass {
 
 		}
 
-		if(data.colorSpace === sRGBEncoding) {
+		if(data.colorSpace === SRGBColorSpace) {
 
 			// Convert back to linear.
 			fragmentMainImage += "color0 = sRGBToLinear(color0);\n\t";

@@ -11,6 +11,7 @@ import {
 
 import { BlendFunction } from "../enums";
 import { LookupTexture } from "../textures";
+import { encodingToColorSpace } from "../utils";
 import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/lut-3d.frag";
@@ -29,8 +30,6 @@ import fragmentShader from "./glsl/lut-3d.frag";
  * https://www.nvidia.com/content/GTC/posters/2010/V01-Real-Time-Color-Space-Conversion-for-High-Resolution-Video.pdf
  * https://github.com/AcademySoftwareFoundation/OpenColorIO/blob/master/src/OpenColorIO/ops/lut3d/
  * https://github.com/gkjohnson/threejs-sandbox/tree/master/3d-lut
- *
- * TODO Remove inputEncoding.
  */
 
 export class LUT3DEffect extends Effect {
@@ -42,13 +41,15 @@ export class LUT3DEffect extends Effect {
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SRC] - The blend function of this effect.
 	 * @param {Boolean} [options.tetrahedralInterpolation=false] - Enables or disables tetrahedral interpolation.
-	 * @param {TextureEncoding} [options.inputEncoding=sRGBEncoding] - LUT input encoding.
+	 * @param {TextureEncoding} [options.inputEncoding=sRGBEncoding] - Deprecated.
+	 * @param {ColorSpace} [options.inputColorSpace=SRGBColorSpace] - The input color space.
 	 */
 
 	constructor(lut, {
 		blendFunction = BlendFunction.SRC,
 		tetrahedralInterpolation = false,
-		inputEncoding = sRGBEncoding
+		inputEncoding = sRGBEncoding,
+		inputColorSpace
 	} = {}) {
 
 		super("LUT3DEffect", fragmentShader, {
@@ -63,7 +64,7 @@ export class LUT3DEffect extends Effect {
 		});
 
 		this.tetrahedralInterpolation = tetrahedralInterpolation;
-		this.inputColorSpace = inputEncoding;
+		this.inputColorSpace = inputColorSpace || encodingToColorSpace.get(inputEncoding);
 		this.lut = lut;
 
 	}

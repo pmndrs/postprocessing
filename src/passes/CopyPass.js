@@ -1,5 +1,7 @@
-import { LinearFilter, sRGBEncoding, UnsignedByteType, WebGLRenderTarget } from "three";
+import { LinearFilter, UnsignedByteType, WebGLRenderTarget } from "three";
+import { SRGBColorSpace } from "../enums/ColorSpace";
 import { CopyMaterial } from "../materials";
+import { getOutputColorSpace, setTextureColorSpace } from "../utils";
 import { Pass } from "./Pass";
 
 /**
@@ -164,9 +166,9 @@ export class CopyPass extends Pass {
 
 				this.fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
-			} else if(renderer.outputEncoding === sRGBEncoding) {
+			} else if(getOutputColorSpace(renderer) === SRGBColorSpace) {
 
-				this.renderTarget.texture.encoding = sRGBEncoding;
+				setTextureColorSpace(this.renderTarget.texture, SRGBColorSpace);
 
 			}
 

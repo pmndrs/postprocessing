@@ -3,7 +3,6 @@ import { Resolution, Selection } from "../core";
 import { BlendFunction, KernelSize } from "../enums";
 import { DepthComparisonMaterial, OutlineMaterial } from "../materials";
 import { KawaseBlurPass, ClearPass, DepthPass, RenderPass, ShaderPass } from "../passes";
-import { getTextureDecoding } from "../utils/getTextureDecoding";
 import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/outline.frag";
@@ -612,13 +611,6 @@ export class OutlineEffect extends Effect {
 
 		}
 
-		if(this.renderer !== null) {
-
-			const decoding = getTextureDecoding(value, this.renderer.capabilities.isWebGL2);
-			this.defines.set("texelToLinear(texel)", decoding);
-
-		}
-
 		this.uniforms.get("patternTexture").value = value;
 		this.setChanged();
 
@@ -817,10 +809,6 @@ export class OutlineEffect extends Effect {
 	 */
 
 	initialize(renderer, alpha, frameBufferType) {
-
-		const texture = this.patternTexture;
-		const decoding = getTextureDecoding(texture, renderer.capabilities.isWebGL2);
-		this.defines.set("texelToLinear(texel)", decoding);
 
 		// No need for high precision: the blur pass operates on a mask texture.
 		this.blurPass.initialize(renderer, alpha, UnsignedByteType);

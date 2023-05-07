@@ -1,6 +1,5 @@
 import { Uniform, UnsignedByteType } from "three";
 import { ColorChannel } from "../enums";
-import { getTextureDecoding } from "../utils";
 import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/texture.frag";
@@ -63,13 +62,6 @@ export class TextureEffect extends Effect {
 			uniforms.get("map").value = value;
 			uniforms.get("uvTransform").value = value.matrix;
 			defines.delete("TEXTURE_PRECISION_HIGH");
-
-			if(this.renderer !== null) {
-
-				const decoding = getTextureDecoding(value, this.renderer.capabilities.isWebGL2);
-				defines.set("texelToLinear(texel)", decoding);
-
-			}
 
 			if(value !== null) {
 
@@ -228,22 +220,6 @@ export class TextureEffect extends Effect {
 			this.texture.updateMatrix();
 
 		}
-
-	}
-
-	/**
-	 * Performs initialization tasks.
-	 *
-	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
-	 * @param {Number} frameBufferType - The type of the main frame buffers.
-	 */
-
-	initialize(renderer, alpha, frameBufferType) {
-
-		const decoding = getTextureDecoding(this.texture, renderer.capabilities.isWebGL2);
-		this.defines.set("texelToLinear(texel)", decoding);
-		this.renderer = renderer;
 
 	}
 

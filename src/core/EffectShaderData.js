@@ -1,4 +1,4 @@
-import { LinearEncoding } from "three";
+import { LinearSRGBColorSpace } from "../enums/ColorSpace";
 import { EffectAttribute, EffectShaderSection as Section } from "../enums";
 
 /**
@@ -102,10 +102,10 @@ export class EffectShaderData {
 		/**
 		 * Keeps track of the current color space.
 		 *
-		 * @type {TextureEncoding}
+		 * @type {ColorSpace}
 		 */
 
-		this.colorSpace = LinearEncoding;
+		this.colorSpace = LinearSRGBColorSpace;
 
 	}
 
