@@ -7,7 +7,7 @@ import {
 	MeshBasicMaterial,
 	PerspectiveCamera,
 	PointLight,
-	SphereBufferGeometry
+	SphereGeometry
 } from "three";
 
 import { SpatialControls } from "spatial-controls";
@@ -156,9 +156,9 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 		// Lights
 
-		const ambientLight = new AmbientLight(0x101010);
+		const ambientLight = new AmbientLight(0x474747);
 
-		const mainLight = new PointLight(0xffe3b1);
+		const mainLight = new PointLight(0xffddaa);
 		mainLight.position.set(-0.5, 3, -0.25);
 		mainLight.castShadow = true;
 		mainLight.shadow.bias = 0.0000125;
@@ -188,7 +188,7 @@ export class GodRaysDemo extends PostProcessingDemo {
 			fog: false
 		});
 
-		const sunGeometry = new SphereBufferGeometry(0.75, 32, 32);
+		const sunGeometry = new SphereGeometry(0.75, 32, 32);
 		const sun = new Mesh(sunGeometry, sunMaterial);
 		sun.frustumCulled = false;
 		sun.matrixAutoUpdate = false;
@@ -240,8 +240,6 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const color = new Color();
-
 		const sun = this.sun;
 		const light = this.light;
 
@@ -259,7 +257,7 @@ export class GodRaysDemo extends PostProcessingDemo {
 			"exposure": uniforms.exposure.value,
 			"clampMax": uniforms.clampMax.value,
 			"samples": effect.samples,
-			"color": color.copyLinearToSRGB(sun.material.color).getHex(),
+			"color": sun.material.color.getHex(),
 			"opacity": blendMode.opacity.value,
 			"blend mode": blendMode.blendFunction
 		};
@@ -315,8 +313,8 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 		menu.addColor(params, "color").onChange((value) => {
 
-			sun.material.color.setHex(value).convertSRGBToLinear();
-			light.color.setHex(value).convertSRGBToLinear();
+			sun.material.color.setHex(value);
+			light.color.setHex(value);
 
 		});
 

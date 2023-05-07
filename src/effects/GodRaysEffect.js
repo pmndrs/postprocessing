@@ -4,7 +4,6 @@ import {
 	DepthTexture,
 	Matrix4,
 	Scene,
-	sRGBEncoding,
 	Uniform,
 	Vector2,
 	Vector3,
@@ -12,9 +11,11 @@ import {
 } from "three";
 
 import { Resolution } from "../core";
+import { SRGBColorSpace } from "../enums/ColorSpace";
 import { BlendFunction, EffectAttribute, KernelSize } from "../enums";
 import { DepthMaskMaterial, GodRaysMaterial } from "../materials";
 import { KawaseBlurPass, ClearPass, RenderPass, ShaderPass } from "../passes";
+import { getOutputColorSpace, setTextureColorSpace } from "../utils";
 import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/god-rays.frag";
@@ -623,11 +624,11 @@ export class GodRaysEffect extends Effect {
 			this.renderTargetB.texture.type = frameBufferType;
 			this.renderTargetLight.texture.type = frameBufferType;
 
-			if(renderer.outputEncoding === sRGBEncoding) {
+			if(getOutputColorSpace(renderer) === SRGBColorSpace) {
 
-				this.renderTargetA.texture.encoding = sRGBEncoding;
-				this.renderTargetB.texture.encoding = sRGBEncoding;
-				this.renderTargetLight.texture.encoding = sRGBEncoding;
+				setTextureColorSpace(this.renderTargetA.texture, SRGBColorSpace);
+				setTextureColorSpace(this.renderTargetB.texture, SRGBColorSpace);
+				setTextureColorSpace(this.renderTargetLight.texture, SRGBColorSpace);
 
 			}
 

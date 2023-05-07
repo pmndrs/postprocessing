@@ -28,17 +28,15 @@ export class MaskMaterial extends ShaderMaterial {
 				strength: new Uniform(1.0)
 			},
 			blending: NoBlending,
+			toneMapped: false,
 			depthWrite: false,
 			depthTest: false,
 			fragmentShader,
 			vertexShader
 		});
 
-		/** @ignore */
-		this.toneMapped = false;
-
-		this.setColorChannel(ColorChannel.RED);
-		this.setMaskFunction(MaskFunction.DISCARD);
+		this.colorChannel = ColorChannel.RED;
+		this.maskFunction = MaskFunction.DISCARD;
 
 	}
 

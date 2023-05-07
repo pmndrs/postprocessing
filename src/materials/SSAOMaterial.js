@@ -49,14 +49,12 @@ export class SSAOMaterial extends ShaderMaterial {
 				bias: new Uniform(0.0)
 			},
 			blending: NoBlending,
+			toneMapped: false,
 			depthWrite: false,
 			depthTest: false,
 			fragmentShader,
 			vertexShader
 		});
-
-		/** @ignore */
-		this.toneMapped = false;
 
 		this.copyCameraSettings(camera);
 

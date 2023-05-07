@@ -1,7 +1,7 @@
 import {
 	HalfFloatType,
 	PCFSoftShadowMap,
-	sRGBEncoding,
+	SRGBColorSpace,
 	Vector3,
 	WebGLRenderer
 } from "three";
@@ -41,10 +41,9 @@ window.addEventListener("load", (event) => {
 		depth: false
 	});
 
-	renderer.outputEncoding = sRGBEncoding;
+	renderer.outputColorSpace = SRGBColorSpace;
 	renderer.debug.checkShaderErrors = debug;
 	renderer.setSize(viewport.clientWidth, viewport.clientHeight);
-	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.setClearColor(0x000000, 0.0);
 	renderer.shadowMap.type = PCFSoftShadowMap;
 	renderer.shadowMap.autoUpdate = false;

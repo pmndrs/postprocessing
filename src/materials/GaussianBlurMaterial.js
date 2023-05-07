@@ -36,18 +36,15 @@ export class GaussianBlurMaterial extends ShaderMaterial {
 				scale: new Uniform(1.0)
 			},
 			blending: NoBlending,
+			toneMapped: false,
 			depthWrite: false,
 			depthTest: false,
 			fragmentShader,
 			vertexShader
 		});
 
-		/** @ignore */
-		this.toneMapped = false;
-
 		/**
-		 * Backing data for {@link kernelSize}.
-		 *
+		 * @see {@link kernelSize}
 		 * @type {Number}
 		 * @private
 		 */

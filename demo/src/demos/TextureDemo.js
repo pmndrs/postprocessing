@@ -2,7 +2,7 @@ import {
 	Color,
 	PerspectiveCamera,
 	RepeatWrapping,
-	sRGBEncoding,
+	SRGBColorSpace,
 	TextureLoader
 } from "three";
 
@@ -72,7 +72,7 @@ export class TextureDemo extends PostProcessingDemo {
 
 				textureLoader.load("textures/scratches.jpg", (t) => {
 
-					t.encoding = sRGBEncoding;
+					t.colorSpace = SRGBColorSpace;
 					t.wrapS = t.wrapT = RepeatWrapping;
 					assets.set("scratches-color", t);
 

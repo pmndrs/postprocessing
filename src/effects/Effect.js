@@ -1,4 +1,5 @@
-import { BasicDepthPacking, EventDispatcher, LinearEncoding, Material, Texture, WebGLRenderTarget } from "three";
+import { BasicDepthPacking, EventDispatcher, Material, Texture, WebGLRenderTarget } from "three";
+import { LinearSRGBColorSpace, NoColorSpace } from "../enums/ColorSpace";
 import { BlendFunction, EffectAttribute } from "../enums";
 import { Pass } from "../passes";
 import { BlendMode } from "./blending";
@@ -131,27 +132,27 @@ export class Effect extends EventDispatcher {
 		/**
 		 * Backing data for {@link inputColorSpace}.
 		 *
-		 * @type {TextureEncoding}
+		 * @type {ColorSpace}
 		 * @private
 		 */
 
-		this._inputColorSpace = LinearEncoding;
+		this._inputColorSpace = LinearSRGBColorSpace;
 
 		/**
 		 * Backing data for {@link outputColorSpace}.
 		 *
-		 * @type {TextureEncoding}
+		 * @type {ColorSpace}
 		 * @private
 		 */
 
-		this._outputColorSpace = null;
+		this._outputColorSpace = NoColorSpace;
 
 	}
 
 	/**
 	 * The input color space.
 	 *
-	 * @type {TextureEncoding}
+	 * @type {ColorSpace}
 	 * @experimental
 	 */
 
@@ -162,7 +163,7 @@ export class Effect extends EventDispatcher {
 	}
 
 	/**
-	 * @type {TextureEncoding}
+	 * @type {ColorSpace}
 	 * @protected
 	 * @experimental
 	 */
@@ -179,7 +180,7 @@ export class Effect extends EventDispatcher {
 	 *
 	 * Should only be changed if this effect converts the input colors to a different color space.
 	 *
-	 * @type {TextureEncoding}
+	 * @type {ColorSpace}
 	 * @experimental
 	 */
 
@@ -190,7 +191,7 @@ export class Effect extends EventDispatcher {
 	}
 
 	/**
-	 * @type {TextureEncoding}
+	 * @type {ColorSpace}
 	 * @protected
 	 * @experimental
 	 */
@@ -465,7 +466,6 @@ export class Effect extends EventDispatcher {
 
 			if(isDisposable) {
 
-				/** @ignore */
 				this[key].dispose();
 
 			}

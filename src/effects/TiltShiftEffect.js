@@ -1,7 +1,9 @@
-import { sRGBEncoding, Uniform, Vector2, WebGLRenderTarget } from "three";
+import { Uniform, Vector2, WebGLRenderTarget } from "three";
 import { Resolution } from "../core";
+import { SRGBColorSpace } from "../enums/ColorSpace";
 import { KernelSize } from "../enums";
 import { TiltShiftBlurPass } from "../passes";
+import { getOutputColorSpace, setTextureColorSpace } from "../utils";
 import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/tilt-shift.frag";
@@ -269,9 +271,9 @@ export class TiltShiftEffect extends Effect {
 
 			this.renderTarget.texture.type = frameBufferType;
 
-			if(renderer.outputEncoding === sRGBEncoding) {
+			if(getOutputColorSpace(renderer) === SRGBColorSpace) {
 
-				this.renderTarget.texture.encoding = sRGBEncoding;
+				setTextureColorSpace(this.renderTarget.texture, SRGBColorSpace);
 
 			}
 

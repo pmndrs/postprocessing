@@ -28,14 +28,12 @@ export class DepthCopyMaterial extends ShaderMaterial {
 				texelPosition: new Uniform(new Vector2())
 			},
 			blending: NoBlending,
+			toneMapped: false,
 			depthWrite: false,
 			depthTest: false,
 			fragmentShader,
 			vertexShader
 		});
-
-		/** @ignore */
-		this.toneMapped = false;
 
 		/**
 		 * The current depth copy mode.

@@ -1,11 +1,11 @@
 import {
-	BoxBufferGeometry,
-	ConeBufferGeometry,
+	BoxGeometry,
+	ConeGeometry,
 	Group,
 	Mesh,
 	MeshPhongMaterial,
-	OctahedronBufferGeometry,
-	SphereBufferGeometry
+	OctahedronGeometry,
+	SphereGeometry
 } from "three";
 
 /**
@@ -22,10 +22,10 @@ export function create(amount = 30, range = 10.0) {
 	const PI2 = 2 * Math.PI;
 
 	const geometries = [
-		new BoxBufferGeometry(1, 1, 1),
-		new ConeBufferGeometry(1, 1, 16),
-		new OctahedronBufferGeometry(),
-		new SphereBufferGeometry(1, 16, 16)
+		new BoxGeometry(1, 1, 1),
+		new ConeGeometry(1, 1, 16),
+		new OctahedronGeometry(),
+		new SphereGeometry(1, 16, 16)
 	];
 
 	for(let i = 0, j = 0, l = geometries.length; i < amount; ++i, j = ++j % l) {

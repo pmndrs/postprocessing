@@ -1,6 +1,6 @@
 import { UnsignedByteType, WebGLRenderTarget } from "three";
-import { LuminanceMaterial } from "../materials";
 import { Resolution } from "../core/Resolution";
+import { LuminanceMaterial } from "../materials";
 import { Pass } from "./Pass";
 
 /**

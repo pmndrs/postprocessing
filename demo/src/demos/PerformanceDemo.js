@@ -1,17 +1,17 @@
 import {
 	AmbientLight,
 	CubeTextureLoader,
-	CylinderBufferGeometry,
+	CylinderGeometry,
 	Mesh,
 	MeshBasicMaterial,
 	MeshPhongMaterial,
 	PerspectiveCamera,
 	PointLight,
 	RepeatWrapping,
-	SphereBufferGeometry,
-	sRGBEncoding,
+	SRGBColorSpace,
+	SphereGeometry,
 	TextureLoader,
-	TorusBufferGeometry,
+	TorusGeometry,
 	Vector3
 } from "three";
 
@@ -168,14 +168,14 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 				cubeTextureLoader.load(urls, (t) => {
 
-					t.encoding = sRGBEncoding;
+					t.colorSpace = SRGBColorSpace;
 					assets.set("sky", t);
 
 				});
 
 				textureLoader.load("textures/scratches.jpg", (t) => {
 
-					t.encoding = sRGBEncoding;
+					t.colorSpace = SRGBColorSpace;
 					t.wrapS = t.wrapT = RepeatWrapping;
 					assets.set("scratches-color", t);
 
@@ -226,8 +226,8 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 		// Lights
 
-		const ambientLight = new AmbientLight(0x323232);
-		const pointLight = new PointLight(0xb6d4ff, 80, 10);
+		const ambientLight = new AmbientLight(0x7a7a7a);
+		const pointLight = new PointLight(0xdcebff, 80, 10);
 
 		this.light = pointLight;
 		scene.add(ambientLight, pointLight);
@@ -240,12 +240,12 @@ export class PerformanceDemo extends PostProcessingDemo {
 			flatShading: true
 		});
 
-		const cylinderGeometry = new CylinderBufferGeometry(1, 1, 20, 6);
+		const cylinderGeometry = new CylinderGeometry(1, 1, 20, 6);
 		const cylinderMesh = new Mesh(cylinderGeometry, material);
 		cylinderMesh.rotation.set(0, 0, Math.PI / 2);
 		scene.add(cylinderMesh);
 
-		const torusGeometry = new TorusBufferGeometry(1, 0.4, 16, 100);
+		const torusGeometry = new TorusGeometry(1, 0.4, 16, 100);
 		const torusMeshes = [
 			new Mesh(torusGeometry, material),
 			new Mesh(torusGeometry, material),
@@ -268,7 +268,7 @@ export class PerformanceDemo extends PostProcessingDemo {
 			fog: false
 		});
 
-		const sunGeometry = new SphereBufferGeometry(0.65, 32, 32);
+		const sunGeometry = new SphereGeometry(0.65, 32, 32);
 		const sun = new Mesh(sunGeometry, sunMaterial);
 		sun.frustumCulled = false;
 		this.sun = sun;
@@ -383,7 +383,7 @@ export class PerformanceDemo extends PostProcessingDemo {
 		// Add all passes to the composer.
 		for(const pass of passes) {
 
-			pass.setEnabled(false);
+			pass.enabled = false;
 			composer.addPass(pass);
 
 		}
@@ -401,15 +401,13 @@ export class PerformanceDemo extends PostProcessingDemo {
 		this.acc0 += deltaTime;
 		this.acc1 += deltaTime;
 
+		++this.frames;
+
 		if(this.acc0 >= 1.0) {
 
 			this.fps = this.frames.toFixed();
 			this.acc0 = 0.0;
 			this.frames = 0;
-
-		} else {
-
-			++this.frames;
 
 		}
 
@@ -440,7 +438,7 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 		menu.add(params, "merge effects").onChange((value) => {
 
-			this.effectPass.setEnabled(value);
+			this.effectPass.enabled = value;
 
 			for(const pass of this.passes) {
 

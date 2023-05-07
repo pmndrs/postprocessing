@@ -36,7 +36,7 @@ export class ToneMappingDemo extends PostProcessingDemo {
 		/**
 		 * An effect.
 		 *
-		 * @type {Effect}
+		 * @type {ToneMappingEffect}
 		 * @private
 		 */
 
@@ -161,25 +161,24 @@ export class ToneMappingDemo extends PostProcessingDemo {
 		const effect = this.effect;
 		const blendMode = effect.blendMode;
 		const adaptiveLuminancePass = effect.adaptiveLuminancePass;
-		const adaptiveLuminanceMaterial = adaptiveLuminancePass
-			.getFullscreenMaterial();
+		const adaptiveLuminanceMaterial = adaptiveLuminancePass.fullscreenMaterial;
 
 		const params = {
-			"mode": effect.getMode(),
+			"mode": effect.mode,
 			"exposure": renderer.toneMappingExposure,
 			"resolution": effect.resolution,
-			"white point": effect.uniforms.get("whitePoint").value,
-			"middle grey": effect.uniforms.get("middleGrey").value,
-			"average lum": effect.uniforms.get("averageLuminance").value,
-			"min lum": adaptiveLuminanceMaterial.uniforms.minLuminance.value,
-			"adaptation rate": adaptiveLuminancePass.adaptationRate,
+			"white point": effect.whitePoint,
+			"middle grey": effect.middleGrey,
+			"average lum": effect.averageLuminance,
+			"min lum": adaptiveLuminanceMaterial.minLuminance,
+			"adaptation rate": adaptiveLuminanceMaterial.adaptationRate,
 			"opacity": blendMode.opacity.value,
 			"blend mode": blendMode.blendFunction
 		};
 
 		menu.add(params, "mode", ToneMappingMode).onChange((value) => {
 
-			effect.setMode(Number(value));
+			effect.mode = Number(value);
 
 		});
 
@@ -193,19 +192,19 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 		f.add(params, "white point", 2.0, 32.0, 0.01).onChange((value) => {
 
-			effect.uniforms.get("whitePoint").value = value;
+			effect.whitePoint = value;
 
 		});
 
 		f.add(params, "middle grey", 0.0, 1.0, 0.0001).onChange((value) => {
 
-			effect.uniforms.get("middleGrey").value = value;
+			effect.middleGrey = value;
 
 		});
 
 		f.add(params, "average lum", 0.0001, 1.0, 0.0001).onChange((value) => {
 
-			effect.uniforms.get("averageLuminance").value = value;
+			effect.averageLuminance = value;
 
 		});
 
@@ -221,7 +220,7 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 		f.add(params, "adaptation rate", 0.001, 3.0, 0.001).onChange((value) => {
 
-			adaptiveLuminancePass.adaptationRate = value;
+			adaptiveLuminanceMaterial.adaptationRate = value;
 
 		});
 

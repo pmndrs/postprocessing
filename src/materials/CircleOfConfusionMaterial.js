@@ -31,14 +31,12 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 				cameraFar: new Uniform(1000)
 			},
 			blending: NoBlending,
+			toneMapped: false,
 			depthWrite: false,
 			depthTest: false,
 			fragmentShader,
 			vertexShader
 		});
-
-		/** @ignore */
-		this.toneMapped = false;
 
 		// TODO Added for backward-compatibility.
 		this.uniforms.focalLength = this.uniforms.focusRange;

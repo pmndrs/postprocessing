@@ -3,7 +3,7 @@ import {
 	Mesh,
 	MeshBasicMaterial,
 	PerspectiveCamera,
-	SphereBufferGeometry,
+	SphereGeometry,
 	Vector3
 } from "three";
 
@@ -224,7 +224,7 @@ export class ShockWaveDemo extends PostProcessingDemo {
 		scene.add(assets.get(Sponza.tag));
 
 		const mesh = new Mesh(
-			new SphereBufferGeometry(0.2, 32, 32),
+			new SphereGeometry(0.2, 32, 32),
 			new MeshBasicMaterial({
 				color: 0x666666,
 				transparent: true,

@@ -47,14 +47,12 @@ export class KawaseBlurMaterial extends ShaderMaterial {
 				kernel: new Uniform(0.0)
 			},
 			blending: NoBlending,
+			toneMapped: false,
 			depthWrite: false,
 			depthTest: false,
 			fragmentShader,
 			vertexShader
 		});
-
-		/** @ignore */
-		this.toneMapped = false;
 
 		this.setTexelSize(texelSize.x, texelSize.y);
 

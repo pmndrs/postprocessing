@@ -27,18 +27,16 @@ export class OutlineMaterial extends ShaderMaterial {
 				texelSize: new Uniform(new Vector2())
 			},
 			blending: NoBlending,
+			toneMapped: false,
 			depthWrite: false,
 			depthTest: false,
 			fragmentShader,
 			vertexShader
 		});
 
-		/** @ignore */
-		this.toneMapped = false;
-
 		this.uniforms.texelSize.value.set(texelSize.x, texelSize.y);
 
-		// TODO Added for backward compatibility.
+		// TODO Added for backward-compatibility.
 		this.uniforms.maskTexture = this.uniforms.inputBuffer;
 
 	}

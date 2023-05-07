@@ -1,5 +1,7 @@
-import { sRGBEncoding, UnsignedByteType, Vector2, WebGLRenderTarget } from "three";
+import { UnsignedByteType, Vector2, WebGLRenderTarget } from "three";
+import { SRGBColorSpace } from "../enums/ColorSpace";
 import { DownsamplingMaterial, UpsamplingMaterial } from "../materials";
+import { getOutputColorSpace, setTextureColorSpace } from "../utils";
 import { Pass } from "./Pass";
 
 /**
@@ -262,11 +264,11 @@ export class MipmapBlurPass extends Pass {
 				this.downsamplingMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 				this.upsamplingMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
-			} else if(renderer.outputEncoding === sRGBEncoding) {
+			} else if(getOutputColorSpace(renderer) === SRGBColorSpace) {
 
 				for(const mipmap of mipmaps) {
 
-					mipmap.texture.encoding = sRGBEncoding;
+					setTextureColorSpace(mipmap.texture, SRGBColorSpace);
 
 				}
 

@@ -1,7 +1,9 @@
-import { sRGBEncoding, Uniform, WebGLRenderTarget } from "three";
+import { Uniform, WebGLRenderTarget } from "three";
 import { Resolution } from "../core";
+import { SRGBColorSpace } from "../enums/ColorSpace";
 import { BlendFunction, KernelSize } from "../enums";
 import { KawaseBlurPass, LuminancePass, MipmapBlurPass } from "../passes";
+import { getOutputColorSpace, setTextureColorSpace } from "../utils";
 import { Effect } from "./Effect";
 
 import fragmentShader from "./glsl/bloom.frag";
@@ -451,9 +453,9 @@ export class BloomEffect extends Effect {
 
 			this.renderTarget.texture.type = frameBufferType;
 
-			if(renderer.outputEncoding === sRGBEncoding) {
+			if(getOutputColorSpace(renderer) === SRGBColorSpace) {
 
-				this.renderTarget.texture.encoding = sRGBEncoding;
+				setTextureColorSpace(this.renderTarget.texture, SRGBColorSpace);
 
 			}
 

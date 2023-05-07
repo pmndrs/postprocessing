@@ -1,5 +1,6 @@
-import { BasicDepthPacking, UnsignedByteType, sRGBEncoding } from "three";
+import { BasicDepthPacking, UnsignedByteType } from "three";
 import { EffectShaderData } from "../core";
+import { NoColorSpace, SRGBColorSpace } from "../enums/ColorSpace";
 import { BlendFunction, EffectAttribute, EffectShaderSection as Section } from "../enums";
 import { EffectMaterial } from "../materials";
 import { Pass } from "./Pass";
@@ -72,11 +73,11 @@ function integrateEffect(prefix, effect, data) {
 		const functionRegExp = /\w+\s+(\w+)\([\w\s,]*\)\s*{/g;
 
 		const shaderParts = data.shaderParts;
-		let fragmentHead = shaderParts.get(Section.FRAGMENT_HEAD) ?? "";
-		let fragmentMainUv = shaderParts.get(Section.FRAGMENT_MAIN_UV) ?? "";
-		let fragmentMainImage = shaderParts.get(Section.FRAGMENT_MAIN_IMAGE) ?? "";
-		let vertexHead = shaderParts.get(Section.VERTEX_HEAD) ?? "";
-		let vertexMainSupport = shaderParts.get(Section.VERTEX_MAIN_SUPPORT) ?? "";
+		let fragmentHead = shaderParts.get(Section.FRAGMENT_HEAD) || "";
+		let fragmentMainUv = shaderParts.get(Section.FRAGMENT_MAIN_UV) || "";
+		let fragmentMainImage = shaderParts.get(Section.FRAGMENT_MAIN_IMAGE) || "";
+		let vertexHead = shaderParts.get(Section.VERTEX_HEAD) || "";
+		let vertexMainSupport = shaderParts.get(Section.VERTEX_MAIN_SUPPORT) || "";
 
 		const varyings = new Set();
 		const names = new Set();
@@ -160,13 +161,13 @@ function integrateEffect(prefix, effect, data) {
 
 			if(effect.inputColorSpace !== null && effect.inputColorSpace !== data.colorSpace) {
 
-				fragmentMainImage += (effect.inputColorSpace === sRGBEncoding) ?
+				fragmentMainImage += (effect.inputColorSpace === SRGBColorSpace) ?
 					"color0 = LinearTosRGB(color0);\n\t" :
 					"color0 = sRGBToLinear(color0);\n\t";
 
 			}
 
-			if(effect.outputColorSpace !== null) {
+			if(effect.outputColorSpace !== NoColorSpace) {
 
 				data.colorSpace = effect.outputColorSpace;
 
@@ -465,7 +466,7 @@ export class EffectPass extends Pass {
 
 		}
 
-		if(data.colorSpace === sRGBEncoding) {
+		if(data.colorSpace === SRGBColorSpace) {
 
 			// Convert back to linear.
 			fragmentMainImage += "color0 = sRGBToLinear(color0);\n\t";
@@ -489,7 +490,15 @@ export class EffectPass extends Pass {
 		data.shaderParts.set(Section.FRAGMENT_MAIN_UV, fragmentMainUv);
 
 		// Ensure that leading preprocessor directives start on a new line.
-		data.shaderParts.forEach((value, key, map) => map.set(key, value?.trim().replace(/^#/, "\n#")));
+		for(const [key, value] of data.shaderParts) {
+
+			if(value !== null) {
+
+				data.shaderParts.set(key, value.trim().replace(/^#/, "\n#"));
+
+			}
+
+		}
 
 		this.skipRendering = (id === 0);
 		this.needsSwap = !this.skipRendering;

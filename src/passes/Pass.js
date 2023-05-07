@@ -400,7 +400,6 @@ export class Pass {
 
 			if(isDisposable) {
 
-				/** @ignore */
 				this[key].dispose();
 
 			}

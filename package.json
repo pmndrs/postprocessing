@@ -1,6 +1,6 @@
 {
 	"name": "postprocessing",
-	"version": "6.30.2",
+	"version": "6.31.0",
 	"description": "A post processing library that provides the means to implement image filter effects for three.js.",
 	"homepage": "https://github.com/pmndrs/postprocessing",
 	"sideEffects": false,
@@ -86,7 +86,7 @@
 		"extends": "aether"
 	},
 	"peerDependencies": {
-		"three": ">= 0.138.0 < 0.152.0"
+		"three": ">= 0.138.0 < 0.153.0"
 	},
 	"devDependencies": {
 		"@tweakpane/core": "1.x.x",
@@ -123,6 +123,6 @@
 		"tiny-glob": "0.x.x",
 		"tslib": "2.x.x",
 		"tweakpane": "3.x.x",
-		"typescript": "4.x.x"
+		"typescript": "5.x.x"
 	}
 }
