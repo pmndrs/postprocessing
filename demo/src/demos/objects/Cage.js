@@ -1,4 +1,4 @@
-import { BoxBufferGeometry, Group, Mesh, MeshBasicMaterial } from "three";
+import { BoxGeometry, Group, Mesh, MeshBasicMaterial } from "three";
 
 /**
  * Creates a cubic cage.
@@ -15,7 +15,7 @@ export function create(color = 0x000000, size = 8.0, thickness = 0.25) {
 	const halfSize = size * 0.5;
 
 	const mesh = new Mesh(
-		new BoxBufferGeometry(thickness, size + thickness, thickness),
+		new BoxGeometry(thickness, size + thickness, thickness),
 		new MeshBasicMaterial({ color })
 	);
 

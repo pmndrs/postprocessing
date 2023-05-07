@@ -3,7 +3,7 @@ import {
 	CubeTextureLoader,
 	DirectionalLight,
 	PerspectiveCamera,
-	sRGBEncoding
+	SRGBColorSpace
 } from "three";
 
 import { ControlMode, SpatialControls } from "spatial-controls";
@@ -104,7 +104,7 @@ export class BlurDemo extends PostProcessingDemo {
 
 				cubeTextureLoader.load(urls, (t) => {
 
-					t.encoding = sRGBEncoding;
+					t.colorSpace = SRGBColorSpace;
 					assets.set("sky", t);
 
 				});
@@ -160,8 +160,8 @@ export class BlurDemo extends PostProcessingDemo {
 
 		// Lights
 
-		const ambientLight = new AmbientLight(0x323232);
-		const mainLight = new DirectionalLight(0xff7e66, 1.0);
+		const ambientLight = new AmbientLight(0x7a7a7a);
+		const mainLight = new DirectionalLight(0xffbbaa, 1.0);
 		mainLight.position.set(1.44, 0.2, 2.0);
 
 		scene.add(ambientLight);

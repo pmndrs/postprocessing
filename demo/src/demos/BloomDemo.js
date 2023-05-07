@@ -4,7 +4,7 @@ import {
 	DirectionalLight,
 	PerspectiveCamera,
 	Raycaster,
-	sRGBEncoding,
+	SRGBColorSpace,
 	Vector2
 } from "three";
 
@@ -176,7 +176,7 @@ export class BloomDemo extends PostProcessingDemo {
 
 				cubeTextureLoader.load(urls, (t) => {
 
-					t.encoding = sRGBEncoding;
+					t.colorSpace = SRGBColorSpace;
 					assets.set("sky", t);
 
 				});
@@ -232,7 +232,7 @@ export class BloomDemo extends PostProcessingDemo {
 
 		// Lights
 
-		const ambientLight = new AmbientLight(0x323232);
+		const ambientLight = new AmbientLight(0x7a7a7a);
 		const mainLight = new DirectionalLight(0xffffff, 1.0);
 		mainLight.position.set(-1, 1, 1);
 
@@ -265,7 +265,7 @@ export class BloomDemo extends PostProcessingDemo {
 		const effect = new SelectiveBloomEffect(scene, camera, {
 			blendFunction: BlendFunction.ADD,
 			mipmapBlur: true,
-			luminanceThreshold: 0.7,
+			luminanceThreshold: 0.4,
 			luminanceSmoothing: 0.3,
 			intensity: 3.0
 		});

@@ -1,11 +1,10 @@
 import {
-	ColorManagement,
 	CubeTextureLoader,
 	FogExp2,
 	LoadingManager,
 	PerspectiveCamera,
 	Scene,
-	sRGBEncoding,
+	SRGBColorSpace,
 	Vector2,
 	WebGLRenderer
 } from "three";
@@ -43,7 +42,7 @@ function load() {
 
 		cubeTextureLoader.load(urls, (t) => {
 
-			t.encoding = sRGBEncoding;
+			t.colorSpace = SRGBColorSpace;
 			assets.set("sky", t);
 
 		});
@@ -53,8 +52,6 @@ function load() {
 }
 
 window.addEventListener("load", () => load().then((assets) => {
-
-	ColorManagement.legacyMode = false;
 
 	// Renderer
 
@@ -66,9 +63,6 @@ window.addEventListener("load", () => load().then((assets) => {
 	});
 
 	renderer.debug.checkShaderErrors = (window.location.hostname === "localhost");
-	renderer.physicallyCorrectLights = true;
-	renderer.outputEncoding = sRGBEncoding;
-
 	const container = document.querySelector(".viewport");
 	container.prepend(renderer.domElement);
 

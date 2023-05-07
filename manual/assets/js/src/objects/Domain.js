@@ -34,7 +34,7 @@ export function createEnvironment(envMap) {
 
 	const environment = new Group();
 	const material = new MeshStandardMaterial({
-		color: 0x888888,
+		color: 0xc1c1c1,
 		roughness: 0.0,
 		metalness: 1.0,
 		envMap
@@ -89,6 +89,8 @@ export function createEnvironment(envMap) {
 
 			mesh.position.set(clusterSizeXZ * i, 0, clusterSizeXZ * j);
 			mesh.instanceMatrix.needsUpdate = true;
+			mesh.boundingBox = geometry.boundingBox;
+			mesh.boundingSphere = geometry.boundingSphere;
 			mesh.frustumCulled = true;
 			environment.add(mesh);
 

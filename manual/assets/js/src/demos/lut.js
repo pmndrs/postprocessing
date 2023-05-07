@@ -1,5 +1,4 @@
 import {
-	ColorManagement,
 	ClampToEdgeWrapping,
 	LinearFilter,
 	LoadingManager,
@@ -8,7 +7,7 @@ import {
 	Mesh,
 	MeshBasicMaterial,
 	Scene,
-	sRGBEncoding,
+	SRGBColorSpace,
 	TextureLoader,
 	WebGLRenderer
 } from "three";
@@ -76,7 +75,7 @@ function load() {
 
 		textureLoader.load(document.baseURI + "img/textures/photos/GEDC0053.jpg", (t) => {
 
-			t.encoding = sRGBEncoding;
+			t.colorSpace = SRGBColorSpace;
 			assets.set("photo", t);
 
 		});
@@ -130,8 +129,6 @@ function load() {
 
 window.addEventListener("load", () => load().then((assets) => {
 
-	ColorManagement.legacyMode = false;
-
 	// Renderer
 
 	const renderer = new WebGLRenderer({
@@ -142,7 +139,6 @@ window.addEventListener("load", () => load().then((assets) => {
 	});
 
 	renderer.debug.checkShaderErrors = (window.location.hostname === "localhost");
-	renderer.outputEncoding = sRGBEncoding;
 	renderer.setClearAlpha(0);
 
 	const container = document.querySelector(".viewport");

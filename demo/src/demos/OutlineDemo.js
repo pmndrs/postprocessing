@@ -1,22 +1,21 @@
 import {
 	AmbientLight,
 	AnimationMixer,
-	BoxBufferGeometry,
-	CircleBufferGeometry,
+	CircleGeometry,
 	Color,
 	CubeTextureLoader,
-	ConeBufferGeometry,
+	ConeGeometry,
 	DirectionalLight,
 	DoubleSide,
 	Mesh,
 	MeshPhongMaterial,
-	OctahedronBufferGeometry,
+	OctahedronGeometry,
 	PerspectiveCamera,
 	Raycaster,
-	SphereBufferGeometry,
-	sRGBEncoding,
+	SphereGeometry,
 	TextureLoader,
-	Vector2
+	Vector2,
+	SRGBColorSpace
 } from "three";
 
 import { ControlMode, SpatialControls } from "spatial-controls";
@@ -85,7 +84,7 @@ export class OutlineDemo extends PostProcessingDemo {
 		/**
 		 * An effect.
 		 *
-		 * @type {Effect}
+		 * @type {OutlineEffect}
 		 * @private
 		 */
 
@@ -200,14 +199,14 @@ export class OutlineDemo extends PostProcessingDemo {
 
 				cubeTextureLoader.load(urls, (t) => {
 
-					t.encoding = sRGBEncoding;
+					t.colorSpace = SRGBColorSpace;
 					assets.set("sky", t);
 
 				});
 
 				textureLoader.load("textures/pattern.png", (t) => {
 
-					t.encoding = sRGBEncoding;
+					t.colorSpace = SRGBColorSpace;
 					assets.set("pattern-color", t);
 
 				});
@@ -270,9 +269,9 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		// Lights
 
-		const ambientLight = new AmbientLight(0x212121);
-		const mainLight = new DirectionalLight(0xff7e66, 1.0);
-		const backLight = new DirectionalLight(0xff7e66, 0.1);
+		const ambientLight = new AmbientLight(0x656565);
+		const mainLight = new DirectionalLight(0xffbbaa, 1.0);
+		const backLight = new DirectionalLight(0xffbbaa, 0.1);
 
 		mainLight.position.set(14.4, 2, 20);
 		backLight.position.copy(mainLight.position).negate();
@@ -285,7 +284,7 @@ export class OutlineDemo extends PostProcessingDemo {
 		const meshes = [];
 
 		let mesh = new Mesh(
-			new SphereBufferGeometry(1, 32, 32),
+			new SphereGeometry(1, 32, 32),
 			new MeshPhongMaterial({
 				color: 0xffff00
 			})
@@ -296,7 +295,7 @@ export class OutlineDemo extends PostProcessingDemo {
 		selection.push(mesh);
 
 		mesh = new Mesh(
-			new OctahedronBufferGeometry(),
+			new OctahedronGeometry(),
 			new MeshPhongMaterial({
 				color: 0xff00ff
 			})
@@ -307,7 +306,7 @@ export class OutlineDemo extends PostProcessingDemo {
 		selection.push(mesh);
 
 		mesh = new Mesh(
-			new CircleBufferGeometry(0.75, 32),
+			new CircleGeometry(0.75, 32),
 			new MeshPhongMaterial({
 				side: DoubleSide,
 				color: 0xff0000
@@ -320,7 +319,7 @@ export class OutlineDemo extends PostProcessingDemo {
 		selection.push(mesh);
 
 		mesh = new Mesh(
-			new ConeBufferGeometry(1, 1, 32),
+			new ConeGeometry(1, 1, 32),
 			new MeshPhongMaterial({
 				color: 0x00ff00
 			})
@@ -331,7 +330,7 @@ export class OutlineDemo extends PostProcessingDemo {
 		selection.push(mesh);
 
 		mesh = new Mesh(
-			new BoxBufferGeometry(1, 1, 1),
+			new BoxGeometry(1, 1, 1),
 			new MeshPhongMaterial({
 				color: 0x00ffff
 			})
@@ -428,26 +427,25 @@ export class OutlineDemo extends PostProcessingDemo {
 			"pulse speed": effect.pulseSpeed,
 			"edge strength": uniforms.get("edgeStrength").value,
 			"visible edge": color.copyLinearToSRGB(
-				uniforms.get("visibleEdgeColor").value).getHex(),
-			"hidden edge": color.copyLinearToSRGB(
-				uniforms.get("hiddenEdgeColor").value).getHex(),
+			"edge strength": effect.edgeStrength,
+			"visible edge": color.copyLinearToSRGB(effect.visibleEdgeColor).getHex(),
+			"hidden edge": color.copyLinearToSRGB(effect.hiddenEdgeColor).getHex(),
 			"x-ray": true,
 			"opacity": blendMode.opacity.value,
 			"blend mode": blendMode.blendFunction
 		};
 
-		menu.add(params, "resolution", [240, 360, 480, 720, 1080])
-			.onChange((value) => {
+		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange((value) => {
 
-				effect.resolution.height = Number(value);
+			effect.resolution.height = Number(value);
 
-			});
+		});
 
 		menu.add(params, "blurriness",
 			KernelSize.VERY_SMALL, KernelSize.HUGE + 1, 1).onChange((value) => {
 
-			effect.blur = (value > 0);
-			effect.blurPass.kernelSize = value - 1;
+			effect.blurPass.enabled = (value > 0);
+			effect.blurPass.blurMaterial.kernelSize = value - 1;
 
 		});
 
@@ -455,12 +453,12 @@ export class OutlineDemo extends PostProcessingDemo {
 
 			if(value) {
 
-				effect.setPatternTexture(assets.get("pattern-color"));
+				effect.patternTexture = assets.get("pattern-color");
 				uniforms.get("patternScale").value = params["pattern scale"];
 
 			} else {
 
-				effect.setPatternTexture(null);
+				effect.patternTexture = null;
 
 			}
 
@@ -486,15 +484,13 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		menu.addColor(params, "visible edge").onChange((value) => {
 
-			uniforms.get("visibleEdgeColor").value.setHex(value)
-				.convertSRGBToLinear();
+			effect.visibleEdgeColor.setHex(value).convertSRGBToLinear();
 
 		});
 
 		menu.addColor(params, "hidden edge").onChange((value) => {
 
-			uniforms.get("hiddenEdgeColor").value.setHex(value)
-				.convertSRGBToLinear();
+			effect.hiddenEdgeColor.setHex(value).convertSRGBToLinear();
 
 		});
 

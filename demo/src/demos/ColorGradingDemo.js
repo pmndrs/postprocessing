@@ -295,7 +295,7 @@ export class ColorGradingDemo extends PostProcessingDemo {
 		const lutEffect = capabilities.isWebGL2 ? new LUT3DEffect(lut) :
 			new LUT3DEffect(lut.convertToUint8().toDataTexture());
 
-		// lutEffect.setInputEncoding(LinearEncoding); // Debug
+		// lutEffect.inputColorSpace = LinearSRGBColorSpace; // Debug
 
 		this.brightnessContrastEffect = brightnessContrastEffect;
 		this.colorAverageEffect = colorAverageEffect;
