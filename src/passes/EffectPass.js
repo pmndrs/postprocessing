@@ -73,11 +73,11 @@ function integrateEffect(prefix, effect, data) {
 		const functionRegExp = /\w+\s+(\w+)\([\w\s,]*\)\s*{/g;
 
 		const shaderParts = data.shaderParts;
-		let fragmentHead = shaderParts.get(Section.FRAGMENT_HEAD) ?? "";
-		let fragmentMainUv = shaderParts.get(Section.FRAGMENT_MAIN_UV) ?? "";
-		let fragmentMainImage = shaderParts.get(Section.FRAGMENT_MAIN_IMAGE) ?? "";
-		let vertexHead = shaderParts.get(Section.VERTEX_HEAD) ?? "";
-		let vertexMainSupport = shaderParts.get(Section.VERTEX_MAIN_SUPPORT) ?? "";
+		let fragmentHead = shaderParts.get(Section.FRAGMENT_HEAD) || "";
+		let fragmentMainUv = shaderParts.get(Section.FRAGMENT_MAIN_UV) || "";
+		let fragmentMainImage = shaderParts.get(Section.FRAGMENT_MAIN_IMAGE) || "";
+		let vertexHead = shaderParts.get(Section.VERTEX_HEAD) || "";
+		let vertexMainSupport = shaderParts.get(Section.VERTEX_MAIN_SUPPORT) || "";
 
 		const varyings = new Set();
 		const names = new Set();
@@ -490,7 +490,15 @@ export class EffectPass extends Pass {
 		data.shaderParts.set(Section.FRAGMENT_MAIN_UV, fragmentMainUv);
 
 		// Ensure that leading preprocessor directives start on a new line.
-		data.shaderParts.forEach((value, key, map) => map.set(key, value?.trim().replace(/^#/, "\n#")));
+		for(const [key, value] of data.shaderParts) {
+
+			if(value !== null) {
+
+				data.shaderParts.set(key, value.trim().replace(/^#/, "\n#"));
+
+			}
+
+		}
 
 		this.skipRendering = (id === 0);
 		this.needsSwap = !this.skipRendering;
