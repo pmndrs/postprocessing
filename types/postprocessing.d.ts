@@ -20,6 +20,7 @@ declare module "postprocessing" {
 		DepthModes,
 		EventDispatcher,
 		Color,
+		ColorSpace,
 		TextureEncoding,
 		Data3DTexture
 	} from "three";
@@ -4033,31 +4034,31 @@ declare module "postprocessing" {
 		/**
 		 * The input color space.
 		 *
-		 * @type {TextureEncoding}
+		 * @type {ColorSpace}
 		 * @experimental
 		 */
-		get inputColorSpace(): TextureEncoding;
+		get inputColorSpace(): ColorSpace;
 		/**
-		 * @type {TextureEncoding}
+		 * @type {ColorSpace}
 		 * @protected
 		 * @experimental
 		 */
-		protected set inputColorSpace(arg: TextureEncoding);
+		protected set inputColorSpace(arg: ColorSpace);
 		/**
 		 * The output color space.
 		 *
 		 * Should only be changed if this effect converts the input colors to a different color space.
 		 *
-		 * @type {TextureEncoding}
+		 * @type {ColorSpace}
 		 * @experimental
 		 */
-		get outputColorSpace(): TextureEncoding;
+		get outputColorSpace(): ColorSpace;
 		/**
-		 * @type {TextureEncoding}
+		 * @type {ColorSpace}
 		 * @protected
 		 * @experimental
 		 */
-		protected set outputColorSpace(arg: TextureEncoding);
+		protected set outputColorSpace(arg: ColorSpace);
 		/**
 		 * Sets the main scene.
 		 *
@@ -6788,19 +6789,24 @@ declare module "postprocessing" {
 		 * @param {Object} [options] - The options.
 		 * @param {BlendFunction} [options.blendFunction=BlendFunction.SET] - The blend function of this effect.
 		 * @param {Boolean} [options.tetrahedralInterpolation=false] - Enables or disables tetrahedral interpolation.
+		 * @param {TextureEncoding} [options.inputEncoding=sRGBEncoding] - Deprecated.
+		 * @param {ColorSpace} [options.inputColorSpace=SRGBColorSpace] - The input color space.
 		 */
 		constructor(
 			lut: Texture,
 			{
 				blendFunction,
-				tetrahedralInterpolation
+				tetrahedralInterpolation,
+				inputEncoding,
+				inputColorSpace
 			}?: {
 				blendFunction?: BlendFunction;
 				tetrahedralInterpolation?: boolean;
+				inputEncoding?: TextureEncoding;
+				inputColorSpace?: ColorSpace;
 			}
 		);
 
-		set tetrahedralInterpolation(arg: boolean);
 		/**
 		 * Indicates whether tetrahedral interpolation is enabled. Requires a 3D LUT, disabled by default.
 		 *
@@ -6809,22 +6815,24 @@ declare module "postprocessing" {
 		 * @type {Boolean}
 		 */
 		get tetrahedralInterpolation(): boolean;
-		set inputEncoding(arg: TextureEncoding);
+		set tetrahedralInterpolation(arg: boolean);
 		/**
 		 * The input encoding. Default is `sRGBEncoding`.
 		 *
 		 * Set this to `LinearEncoding` if your LUT expects linear color input.
 		 *
+		 * @deprecated Use inputColorSpace instead.
 		 * @type {TextureEncoding}
 		 */
 		get inputEncoding(): TextureEncoding;
-		set lut(arg: Texture);
+		set inputEncoding(arg: TextureEncoding);
 		/**
 		 * The LUT.
 		 *
 		 * @type {Texture}
 		 */
 		get lut(): Texture;
+		set lut(arg: Texture);
 		/**
 		 * Returns the output encoding.
 		 *
