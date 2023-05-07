@@ -22,14 +22,12 @@ export class CopyMaterial extends ShaderMaterial {
 				opacity: new Uniform(1.0)
 			},
 			blending: NoBlending,
+			toneMapped: false,
 			depthWrite: false,
 			depthTest: false,
 			fragmentShader,
 			vertexShader
 		});
-
-		/** @ignore */
-		this.toneMapped = false;
 
 	}
 

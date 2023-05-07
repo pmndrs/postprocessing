@@ -37,14 +37,12 @@ export class BoxBlurMaterial extends ShaderMaterial {
 				scale: new Uniform(1.0)
 			},
 			blending: NoBlending,
+			toneMapped: false,
 			depthWrite: false,
 			depthTest: false,
 			fragmentShader,
 			vertexShader
 		});
-
-		/** @ignore */
-		this.toneMapped = false;
 
 		this.bilateral = bilateral;
 		this.kernelSize = kernelSize;

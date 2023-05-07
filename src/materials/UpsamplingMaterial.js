@@ -29,14 +29,12 @@ export class UpsamplingMaterial extends ShaderMaterial {
 				radius: new Uniform(0.85)
 			},
 			blending: NoBlending,
+			toneMapped: false,
 			depthWrite: false,
 			depthTest: false,
 			fragmentShader,
 			vertexShader
 		});
-
-		/** @ignore */
-		this.toneMapped = false;
 
 	}
 

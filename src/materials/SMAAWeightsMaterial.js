@@ -48,14 +48,12 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 				texelSize: new Uniform(texelSize)
 			},
 			blending: NoBlending,
+			toneMapped: false,
 			depthWrite: false,
 			depthTest: false,
 			fragmentShader,
 			vertexShader
 		});
-
-		/** @ignore */
-		this.toneMapped = false;
 
 	}
 

@@ -1,4 +1,4 @@
-import { NoBlending, REVISION, ShaderMaterial, Uniform } from "three";
+import { NoBlending, ShaderMaterial, Uniform } from "three";
 
 import fragmentShader from "./glsl/adaptive-luminance.frag";
 import vertexShader from "./glsl/common.vert";
@@ -18,7 +18,6 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 		super({
 			name: "AdaptiveLuminanceMaterial",
 			defines: {
-				THREE_REVISION: REVISION.replace(/\D+/g, ""),
 				MIP_LEVEL_1X1: "0.0"
 			},
 			uniforms: {
@@ -32,14 +31,12 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 				shaderTextureLOD: true
 			},
 			blending: NoBlending,
+			toneMapped: false,
 			depthWrite: false,
 			depthTest: false,
 			fragmentShader,
 			vertexShader
 		});
-
-		/** @ignore */
-		this.toneMapped = false;
 
 	}
 

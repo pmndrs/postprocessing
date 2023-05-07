@@ -49,14 +49,12 @@ export class DepthMaskMaterial extends ShaderMaterial {
 				cameraNearFar: new Uniform(new Vector2(1, 1))
 			},
 			blending: NoBlending,
+			toneMapped: false,
 			depthWrite: false,
 			depthTest: false,
 			fragmentShader,
 			vertexShader
 		});
-
-		/** @ignore */
-		this.toneMapped = false;
 
 		this.depthMode = LessDepth;
 

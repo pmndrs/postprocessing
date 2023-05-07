@@ -27,14 +27,12 @@ export class DownsamplingMaterial extends ShaderMaterial {
 				texelSize: new Uniform(new Vector2())
 			},
 			blending: NoBlending,
+			toneMapped: false,
 			depthWrite: false,
 			depthTest: false,
 			fragmentShader,
 			vertexShader
 		});
-
-		/** @ignore */
-		this.toneMapped = false;
 
 	}
 

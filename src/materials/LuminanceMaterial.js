@@ -45,14 +45,12 @@ export class LuminanceMaterial extends ShaderMaterial {
 				range: new Uniform(null)
 			},
 			blending: NoBlending,
+			toneMapped: false,
 			depthWrite: false,
 			depthTest: false,
 			fragmentShader,
 			vertexShader
 		});
-
-		/** @ignore */
-		this.toneMapped = false;
 
 		this.colorOutput = colorOutput;
 		this.luminanceRange = luminanceRange;

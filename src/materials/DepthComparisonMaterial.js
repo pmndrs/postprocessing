@@ -29,14 +29,12 @@ export class DepthComparisonMaterial extends ShaderMaterial {
 				cameraFar: new Uniform(1000)
 			},
 			blending: NoBlending,
+			toneMapped: false,
 			depthWrite: false,
 			depthTest: false,
 			fragmentShader,
 			vertexShader
 		});
-
-		/** @ignore */
-		this.toneMapped = false;
 
 		this.depthBuffer = depthTexture;
 		this.depthPacking = RGBADepthPacking;
