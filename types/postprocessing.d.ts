@@ -6972,7 +6972,7 @@ declare module "postprocessing" {
 				xRay
 			}?: {
 				blendFunction?: BlendFunction;
-				patternTexture?: number;
+				patternTexture?: Texture;
 				patternScale?: number;
 				edgeStrength?: number;
 				pulseSpeed?: number;
