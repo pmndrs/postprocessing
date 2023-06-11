@@ -9,9 +9,13 @@ jobs:
     steps:
       - name: Git checkout
         uses: actions/checkout@v3
+      - name: Install PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
       - name: Install Node
         uses: actions/setup-node@v3
-      - name: Install PNPM
-        run: npm install -g pnpm
+        with:
+          cache: "pnpm"
       - name: Install and test
-        run: pnpm install-test --frozen-lockfile=false
+        run: pnpm install-test --frozen-lockfile
