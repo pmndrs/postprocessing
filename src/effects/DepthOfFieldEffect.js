@@ -531,6 +531,12 @@ export class DepthOfFieldEffect extends Effect {
 		maskMaterial.maskFunction = alpha ? MaskFunction.MULTIPLY :
 			MaskFunction.MULTIPLY_RGB_SET_ALPHA;
 
+		if(renderer.capabilities.logarithmicDepthBuffer) {
+
+			this.cocPass.fullscreenMaterial.defines.LOG_DEPTH = "1";
+
+		}
+
 		if(frameBufferType !== undefined) {
 
 			this.renderTarget.texture.type = frameBufferType;
