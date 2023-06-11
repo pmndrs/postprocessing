@@ -6934,7 +6934,7 @@ declare module "postprocessing" {
 		 * @param {Camera} camera - The main camera.
 		 * @param {Object} [options] - The options.
 		 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function. Use `BlendFunction.ALPHA` for dark outlines.
-		 * @param {Number} [options.patternTexture=null] - A pattern texture.
+		 * @param {Texture} [options.patternTexture=null] - A pattern texture.
 		 * @param {Number} [options.patternScale=1.0] - The pattern scale.
 		 * @param {Number} [options.edgeStrength=1.0] - The edge strength.
 		 * @param {Number} [options.pulseSpeed=0.0] - The pulse speed. A value of zero disables the pulse effect.
@@ -6972,7 +6972,7 @@ declare module "postprocessing" {
 				xRay
 			}?: {
 				blendFunction?: BlendFunction;
-				patternTexture?: number;
+				patternTexture?: Texture;
 				patternScale?: number;
 				edgeStrength?: number;
 				pulseSpeed?: number;
