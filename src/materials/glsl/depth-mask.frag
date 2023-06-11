@@ -44,6 +44,15 @@ void main() {
 
 		depth.x = texture2D(depthBuffer0, vUv).r;
 
+		#ifdef LOG_DEPTH
+
+			float d = pow(2.0, depth.x * log2(cameraNearFar.y + 1.0)) - 1.0;
+			float a = cameraNearFar.y / (cameraNearFar.y - cameraNearFar.x);
+			float b = cameraNearFar.y * cameraNearFar.x / (cameraNearFar.x - cameraNearFar.y);
+			depth.x = a + b / d;
+
+		#endif
+
 	#endif
 
 	#if DEPTH_PACKING_1 == 3201
@@ -53,6 +62,15 @@ void main() {
 	#else
 
 		depth.y = texture2D(depthBuffer1, vUv).r;
+
+		#ifdef LOG_DEPTH
+
+			float d = pow(2.0, depth.y * log2(cameraNearFar.y + 1.0)) - 1.0;
+			float a = cameraNearFar.y / (cameraNearFar.y - cameraNearFar.x);
+			float b = cameraNearFar.y * cameraNearFar.x / (cameraNearFar.x - cameraNearFar.y);
+			depth.y = a + b / d;
+
+		#endif
 
 	#endif
 
