@@ -19,10 +19,10 @@ const banner = `/**
  */`;
 
 const workers = {
-	entryPoints: await glob("src/**/worker.js"),
+	entryPoints: await glob("./src/**/worker.js"),
 	outExtension: { ".js": ".txt" },
-	outdir: "tmp",
-	target: "es6",
+	outdir: "./tmp",
+	target: "es2019",
 	logLevel: "info",
 	format: "iife",
 	bundle: true,
@@ -30,8 +30,8 @@ const workers = {
 };
 
 const demo = {
-	entryPoints: ["demo/src/index.js"],
-	outdir: "public/demo",
+	entryPoints: ["./demo/src/index.js"],
+	outdir: "./public/demo",
 	target: "es6",
 	logLevel: "info",
 	format: "iife",
@@ -41,9 +41,9 @@ const demo = {
 };
 
 const manual = {
-	entryPoints: ["manual/assets/js/src/index.js"]
-		.concat(await glob("manual/assets/js/src/demos/*.js")),
-	outdir: "manual/assets/js/dist",
+	entryPoints: ["./manual/assets/js/src/index.js"]
+		.concat(await glob("./manual/assets/js/src/demos/*.js")),
+	outdir: "./manual/assets/js/dist",
 	logLevel: "info",
 	format: "iife",
 	target: "es6",
@@ -54,8 +54,8 @@ const manual = {
 };
 
 await esbuild.build({
-	entryPoints: ["manual/assets/js/libs/vendor.js"],
-	outdir: "manual/assets/js/dist/libs",
+	entryPoints: ["./manual/assets/js/libs/vendor.js"],
+	outdir: "./manual/assets/js/dist/libs",
 	globalName: "VENDOR",
 	target: "es6",
 	logLevel: "info",
@@ -82,20 +82,8 @@ if(process.argv.includes("-w")) {
 }
 
 await esbuild.build({
-	entryPoints: ["src/index.js"],
-	outfile: `build/${pkg.name}.esm.js`,
-	banner: { js: banner },
-	logLevel: "info",
-	format: "esm",
-	target: "es2019",
-	bundle: true,
-	external,
-	plugins
-});
-
-await esbuild.build({
-	entryPoints: ["src/index.js"],
-	outfile: `build/${pkg.name}.mjs`,
+	entryPoints: ["./src/index.js"],
+	outfile: "./build/index.js",
 	banner: { js: banner },
 	logLevel: "info",
 	format: "esm",
@@ -106,18 +94,31 @@ await esbuild.build({
 });
 
 // @todo Remove in next major release.
+
+await esbuild.build({
+	entryPoints: ["./src/index.js"],
+	outfile: "./build/index.cjs",
+	banner: { js: banner },
+	logLevel: "info",
+	format: "cjs",
+	target: "es2019",
+	bundle: true,
+	external,
+	plugins
+});
+
 const globalName = pkg.name.replace(/-/g, "").toUpperCase();
 const requireShim = "if(typeof window===\"object\"&&!window.require)window.require=()=>window.THREE;";
 const footer = `if(typeof module==="object"&&module.exports)module.exports=${globalName};`;
 
 await esbuild.build({
-	entryPoints: ["src/index.js"],
-	outfile: `build/${pkg.name}.js`,
+	entryPoints: ["./src/index.js"],
+	outfile: `./build/${pkg.name}.js`,
 	banner: { js: `${banner}\n${requireShim}` },
 	footer: { js: footer },
 	logLevel: "info",
 	format: "iife",
-	target: "es6",
+	target: "es2019",
 	bundle: true,
 	globalName,
 	external,
@@ -125,13 +126,13 @@ await esbuild.build({
 });
 
 await esbuild.build({
-	entryPoints: ["src/index.js"],
-	outfile: `build/${pkg.name}.min.js`,
+	entryPoints: ["./src/index.js"],
+	outfile: `./build/${pkg.name}.min.js`,
 	banner: { js: `${banner}\n${requireShim}` },
 	footer: { js: footer },
 	logLevel: "info",
 	format: "iife",
-	target: "es6",
+	target: "es2019",
 	bundle: true,
 	globalName,
 	external,
