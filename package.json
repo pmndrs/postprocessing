@@ -8,12 +8,17 @@
 	"sideEffects": false,
 	"main": "./build/index.cjs",
 	"module": "./build/index.js",
-	"types": "./types/index.d.ts",
+	"types": "./build/types/index.d.cts",
 	"exports": {
 		".": {
-			"types": "./types/index.d.ts",
-			"import": "./build/index.js",
-			"require": "./build/index.cjs"
+			"import": {
+				"types": "./build/types/index.d.ts",
+				"default": "./build/index.js"
+			},
+			"require": {
+				"types": "./build/types/index.d.cts",
+				"default": "./build/index.cjs"
+			}
 		}
 	},
 	"keywords": [
@@ -43,19 +48,28 @@
 		"url": "https://github.com/pmndrs/postprocessing/issues"
 	},
 	"files": [
-		"./build",
-		"./types"
+		"./build"
 	],
 	"engines": {
 		"node": ">= 0.13.2"
+	},
+	"ava": {
+		"failFast": true,
+		"files": [
+			"./test/**/*"
+		]
+	},
+	"eslintConfig": {
+		"extends": "aether"
 	},
 	"scripts": {
 		"ava": "ava",
 		"build:css": "sass --no-source-map -I manual/assets/css/src/values manual/assets/css/src:manual/assets/css/dist",
 		"build:js": "node esbuild",
 		"build:js:min": "node esbuild -m",
-		"clean": "del-cli build tmp manual/resources manual/assets/**/dist public",
-		"copy": "copyfiles -u 2 \"demo/static/**/*\" public/demo",
+		"build:dts": "cpy \"types/*\" build/types && cpy \"types/*\" build/types --rename=index.d.cts",
+		"clean": "del-cli build tmp manual/resources \"manual/assets/**/dist\" public",
+		"copy": "cpy \"demo/static/**/*\" public/demo",
 		"deploy": "run-s copy postcss hugo gzip",
 		"doc": "esdoc",
 		"gzip": "gzipper c public",
@@ -66,21 +80,12 @@
 		"postcss": "postcss manual/assets/css/dist/index.css -o manual/assets/css/dist/index.css -c manual",
 		"prepublishOnly": "run-s test doc",
 		"prewatch": "run-s clean copy build:css build:js",
-		"test": "run-s clean lint build:css build:js:min ava",
+		"test": "run-s clean lint build:css build:js:min build:dts ava",
 		"start": "hugo server -s manual -e development",
 		"watch": "run-p watch:* start",
 		"watch:css": "sass --no-source-map -I manual/assets/css/src/values manual/assets/css/src:manual/assets/css/dist -w",
 		"watch:eslint": "esw -w --ext .js --color src demo/src manual/assets/js/src",
 		"watch:js": "node esbuild -w"
-	},
-	"ava": {
-		"failFast": true,
-		"files": [
-			"./test/**/*"
-		]
-	},
-	"eslintConfig": {
-		"extends": "aether"
 	},
 	"peerDependencies": {
 		"three": ">= 0.138.0 < 0.154.0"
@@ -92,11 +97,11 @@
 		"@typescript-eslint/parser": "5.x.x",
 		"autoprefixer": "10.x.x",
 		"ava": "5.x.x",
-		"copyfiles": "2.x.x",
-		"cssnano": "5.x.x",
+		"cpy-cli": "4.x.x",
+		"cssnano": "6.x.x",
 		"dat.gui": "0.x.x",
 		"del-cli": "5.x.x",
-		"esbuild": "0.17.x",
+		"esbuild": "0.18.x",
 		"esbuild-plugin-glsl": "1.x.x",
 		"esdoc": "1.x.x",
 		"esdoc-importpath-plugin": "1.x.x",
@@ -113,7 +118,7 @@
 		"sass": "1.x.x",
 		"spatial-controls": "5.x.x",
 		"stylelint": "15.x.x",
-		"stylelint-config-standard-scss": "7.x.x",
+		"stylelint-config-standard-scss": "9.x.x",
 		"stylelint-order": "6.x.x",
 		"three": "0.x.x",
 		"three-demo": "5.x.x",
