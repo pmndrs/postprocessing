@@ -218,12 +218,12 @@ export class BloomDemo extends PostProcessingDemo {
 		const { position, quaternion } = camera;
 		const controls = new SpatialControls(position, quaternion, domElement);
 		const settings = controls.settings;
-		settings.general.setMode(ControlMode.THIRD_PERSON);
-		settings.rotation.setSensitivity(2.2);
-		settings.rotation.setDamping(0.05);
-		settings.translation.setEnabled(false);
-		settings.zoom.setSensitivity(1.0);
-		controls.setPosition(-10, 6, 15);
+		settings.general.mode = ControlMode.THIRD_PERSON;
+		settings.rotation.sensitivity = 2.2;
+		settings.rotation.damping = 0.05;
+		settings.translation.enabled = false;
+		settings.zoom.sensitivity = 1.0;
+		controls.position.set(-10, 6, 15);
 		this.controls = controls;
 
 		// Sky
