@@ -61,6 +61,12 @@ const composer = new EffectComposer(renderer, {
 });
 ```
 
+## Tone Mapping
+
+Tone mapping is the process of converting HDR colors to LDR output colors. When using postprocessing, the `toneMapping` setting on the renderer should be set to `NoToneMapping` (default) and high precision frame buffers should be enabled. Otherwise, colors will be mapped to `[0.0, 1.0]` at the start of the pipeline. To enable tone mapping, use a `ToneMappingEffect` at the end of the pipeline.
+
+Note that tone mapping is not applied to the clear color when using only the renderer because clearing doesn't involve shaders. Postprocessing applies to the full input image which means that tone mapping will also be applied uniformly. Consequently, the results of tone mapping a clear color background with and without postprocessing will be different, with the postprocessing approach being correct.
+
 ## Performance
 
 This library provides an [EffectPass](https://pmndrs.github.io/postprocessing/public/docs/class/src/passes/EffectPass.js~EffectPass.html) which automatically organizes and merges any given combination of effects. This minimizes the amount of render operations and makes it possible to combine many effects without the performance penalties of traditional pass chaining. Additionally, every effect can choose its own [blend function](https://pmndrs.github.io/postprocessing/public/docs/variable/index.html#static-variable-BlendFunction).
