@@ -8365,6 +8365,7 @@ declare module "postprocessing" {
 	 * @property {Number} REINHARD2_ADAPTIVE - Simulates the optic nerve responding to the amount of light it is receiving.
 	 * @property {Number} OPTIMIZED_CINEON - Optimized filmic operator by Jim Hejl and Richard Burgess-Dawson.
 	 * @property {Number} ACES_FILMIC - ACES tone mapping with a scale of 1.0/0.6.
+	 * @property {Number} UNCHARTED2 - Uncharted 2 tone mapping. http://filmicworlds.com/blog/filmic-tonemapping-operators
 	 */
 	export enum ToneMappingMode {
 		REINHARD,
@@ -8372,6 +8373,7 @@ declare module "postprocessing" {
 		REINHARD2_ADAPTIVE,
 		OPTIMIZED_CINEON,
 		ACES_FILMIC,
+		UNCHARTED2,
 	}
 
 	/**
@@ -8390,14 +8392,13 @@ declare module "postprocessing" {
 		 *
 		 * The additional parameters only affect the Reinhard2 operator.
 		 *
-		 * TODO Change default mode to ACES_FILMIC and white point to 4.
 		 * @param {Object} [options] - The options.
 		 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
-		 * @param {Boolean} [options.adaptive=true] - Deprecated. Use mode instead.
-		 * @param {ToneMappingMode} [options.mode=ToneMappingMode.REINHARD2_ADAPTIVE] - The tone mapping mode.
+		 * @param {Boolean} [options.adaptive=false] - Deprecated. Use mode instead.
+		 * @param {ToneMappingMode} [options.mode=ToneMappingMode.ACES_FILMIC] - The tone mapping mode.
 		 * @param {Number} [options.resolution=256] - The resolution of the luminance texture. Must be a power of two.
-		 * @param {Number} [options.maxLuminance=16.0] - Deprecated. Same as whitePoint.
-		 * @param {Number} [options.whitePoint=16.0] - The white point.
+		 * @param {Number} [options.maxLuminance=4.0] - Deprecated. Same as whitePoint.
+		 * @param {Number} [options.whitePoint=4.0] - The white point.
 		 * @param {Number} [options.middleGrey=0.6] - The middle grey factor.
 		 * @param {Number} [options.minLuminance=0.01] - The minimum luminance. Prevents very high exposure in dark scenes.
 		 * @param {Number} [options.averageLuminance=1.0] - The average luminance. Used for the non-adaptive Reinhard operator.
