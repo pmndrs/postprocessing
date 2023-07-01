@@ -1,4 +1,5 @@
 import { BasicDepthPacking, NoBlending, PerspectiveCamera, REVISION, ShaderMaterial, Uniform, Vector2 } from "three";
+import { updateFragmentShader } from "../utils";
 import { EffectShaderSection as Section } from "../enums";
 
 import fragmentTemplate from "./glsl/effect.frag";
@@ -181,6 +182,8 @@ export class EffectMaterial extends ShaderMaterial {
 		this.vertexShader = vertexTemplate
 			.replace(Section.VERTEX_HEAD, shaderParts.get(Section.VERTEX_HEAD) || "")
 			.replace(Section.VERTEX_MAIN_SUPPORT, shaderParts.get(Section.VERTEX_MAIN_SUPPORT) || "");
+
+		this.fragmentShader = updateFragmentShader(this.fragmentShader);
 
 		this.needsUpdate = true;
 		return this;

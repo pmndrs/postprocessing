@@ -1,4 +1,5 @@
 import { NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
+import { updateFragmentShader } from "../utils";
 import { GaussKernel } from "../core";
 
 import fragmentShader from "./glsl/convolution.gaussian.frag";
@@ -42,6 +43,8 @@ export class GaussianBlurMaterial extends ShaderMaterial {
 			fragmentShader,
 			vertexShader
 		});
+
+		this.fragmentShader = updateFragmentShader(this.fragmentShader);
 
 		/**
 		 * @see {@link kernelSize}
