@@ -22,14 +22,13 @@ export class ToneMappingEffect extends Effect {
 	 *
 	 * The additional parameters only affect the Reinhard2 operator.
 	 *
-	 * TODO Change default mode to ACES_FILMIC and white point to 4.
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SRC] - The blend function of this effect.
-	 * @param {Boolean} [options.adaptive=true] - Deprecated. Use mode instead.
-	 * @param {ToneMappingMode} [options.mode=ToneMappingMode.REINHARD2_ADAPTIVE] - The tone mapping mode.
+	 * @param {Boolean} [options.adaptive=false] - Deprecated. Use mode instead.
+	 * @param {ToneMappingMode} [options.mode=ToneMappingMode.ACES_FILMIC] - The tone mapping mode.
 	 * @param {Number} [options.resolution=256] - The resolution of the luminance texture. Must be a power of two.
-	 * @param {Number} [options.maxLuminance=16.0] - Deprecated. Same as whitePoint.
-	 * @param {Number} [options.whitePoint=16.0] - The white point.
+	 * @param {Number} [options.maxLuminance=4.0] - Deprecated. Same as whitePoint.
+	 * @param {Number} [options.whitePoint=4.0] - The white point.
 	 * @param {Number} [options.middleGrey=0.6] - The middle grey factor.
 	 * @param {Number} [options.minLuminance=0.01] - The minimum luminance. Prevents very high exposure in dark scenes.
 	 * @param {Number} [options.averageLuminance=1.0] - The average luminance. Used for the non-adaptive Reinhard operator.
@@ -38,10 +37,10 @@ export class ToneMappingEffect extends Effect {
 
 	constructor({
 		blendFunction = BlendFunction.SRC,
-		adaptive = true,
-		mode = adaptive ? ToneMappingMode.REINHARD2_ADAPTIVE : ToneMappingMode.REINHARD2,
+		adaptive = false,
+		mode = adaptive ? ToneMappingMode.REINHARD2_ADAPTIVE : ToneMappingMode.ACES_FILMIC,
 		resolution = 256,
-		maxLuminance = 16.0,
+		maxLuminance = 4.0,
 		whitePoint = maxLuminance,
 		middleGrey = 0.6,
 		minLuminance = 0.01,
@@ -179,7 +178,7 @@ export class ToneMappingEffect extends Effect {
 	}
 
 	/**
-	 * The white point. Default is `16.0`.
+	 * The white point. Default is `4.0`.
 	 *
 	 * Only applies to Reinhard2 (Modified & Adaptive).
 	 *
