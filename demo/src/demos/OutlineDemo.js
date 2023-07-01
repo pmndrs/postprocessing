@@ -383,6 +383,7 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		const outlineEffect = new OutlineEffect(scene, camera, {
 			blendFunction: BlendFunction.SCREEN,
+			multisampling: Math.min(4, renderer.capabilities.maxSamples),
 			edgeStrength: 2.5,
 			pulseSpeed: 0.0,
 			visibleEdgeColor: 0xffffff,
@@ -439,6 +440,8 @@ export class OutlineDemo extends PostProcessingDemo {
 			effect.resolution.height = Number(value);
 
 		});
+
+		menu.add(effect, "multisampling", [0, 2, 4]);
 
 		menu.add(params, "blurriness",
 			KernelSize.VERY_SMALL, KernelSize.HUGE + 1, 1).onChange((value) => {
