@@ -771,6 +771,11 @@ export class OutlineEffect extends Effect {
 
 		} else if(this.active) {
 
+			// Must call render as a workaround for a multisampling bug.
+			camera.layers.set(selection.layer);
+			this.maskPass.render(renderer, this.renderTargetMask);
+			camera.layers.mask = mask;
+
 			this.clearPass.render(renderer, this.renderTargetOutline);
 			this.active = false;
 
