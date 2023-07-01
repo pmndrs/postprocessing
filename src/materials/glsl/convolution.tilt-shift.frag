@@ -30,6 +30,6 @@ void main() {
 	sum += texture2D(inputBuffer, vec2(vUv.x - dUv.x, vUv.y - dUv.y)); // Bottom left
 	gl_FragColor = sum * 0.25; // Compute the average
 
-	#include <encodings_fragment>
+	#include <colorspace_fragment>
 
 }

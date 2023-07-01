@@ -255,13 +255,13 @@ export class OutlineDemo extends PostProcessingDemo {
 		const { position, quaternion } = camera;
 		const controls = new SpatialControls(position, quaternion, domElement);
 		const settings = controls.settings;
-		settings.general.setMode(ControlMode.THIRD_PERSON);
-		settings.rotation.setSensitivity(2.2);
-		settings.rotation.setDamping(0.05);
-		settings.translation.setEnabled(false);
-		settings.zoom.setSensitivity(1.0);
-		settings.zoom.setDamping(0.05);
-		controls.setPosition(-4, 1.25, -5);
+		settings.general.mode = ControlMode.THIRD_PERSON;
+		settings.rotation.sensitivity = 2.2;
+		settings.rotation.damping = 0.05;
+		settings.translation.enabled = false;
+		settings.zoom.sensitivity = 1.0;
+		settings.zoom.damping = 0.05;
+		controls.position.set(-4, 1.25, -5);
 		this.controls = controls;
 
 		// Sky
@@ -383,6 +383,7 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		const outlineEffect = new OutlineEffect(scene, camera, {
 			blendFunction: BlendFunction.SCREEN,
+			multisampling: Math.min(4, renderer.capabilities.maxSamples),
 			edgeStrength: 2.5,
 			pulseSpeed: 0.0,
 			visibleEdgeColor: 0xffffff,
@@ -439,6 +440,8 @@ export class OutlineDemo extends PostProcessingDemo {
 			effect.resolution.height = Number(value);
 
 		});
+
+		menu.add(effect, "multisampling", [0, 2, 4]);
 
 		menu.add(params, "blurriness",
 			KernelSize.VERY_SMALL, KernelSize.HUGE + 1, 1).onChange((value) => {

@@ -1,4 +1,5 @@
 import { Uniform, Vector2, Vector4 } from "three";
+import { updateFragmentShader } from "../utils";
 import { KernelSize } from "../enums";
 import { KawaseBlurMaterial } from "./KawaseBlurMaterial";
 
@@ -34,6 +35,8 @@ export class TiltShiftBlurMaterial extends KawaseBlurMaterial {
 		this.fragmentShader = fragmentShader;
 		this.vertexShader = vertexShader;
 		this.kernelSize = kernelSize;
+
+		this.fragmentShader = updateFragmentShader(this.fragmentShader);
 
 		this.uniforms.aspect = new Uniform(1.0);
 		this.uniforms.rotation = new Uniform(new Vector2());

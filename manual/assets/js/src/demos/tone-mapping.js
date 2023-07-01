@@ -1,6 +1,7 @@
 import {
 	CubeTextureLoader,
 	FogExp2,
+	HalfFloatType,
 	LoadingManager,
 	PerspectiveCamera,
 	Scene,
@@ -72,10 +73,10 @@ window.addEventListener("load", () => load().then((assets) => {
 	const camera = new PerspectiveCamera();
 	const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 	const settings = controls.settings;
-	settings.rotation.setSensitivity(2.2);
-	settings.rotation.setDamping(0.05);
-	settings.translation.setDamping(0.1);
-	controls.setPosition(0, 0, 1);
+	settings.rotation.sensitivity = 2.2;
+	settings.rotation.damping = 0.05;
+	settings.translation.damping = 0.1;
+	controls.position.set(0, 0, 1);
 	controls.lookAt(0, 0, 0);
 
 	// Scene, Lights, Objects
@@ -90,14 +91,15 @@ window.addEventListener("load", () => load().then((assets) => {
 	// Post Processing
 
 	const composer = new EffectComposer(renderer, {
-		multisampling: Math.min(4, renderer.capabilities.maxSamples)
+		multisampling: Math.min(4, renderer.capabilities.maxSamples),
+		frameBufferType: HalfFloatType
 	});
 
 	const effect = new ToneMappingEffect({
 		blendFunction: BlendFunction.NORMAL,
 		mode: ToneMappingMode.REINHARD2_ADAPTIVE,
 		resolution: 256,
-		whitePoint: 16.0,
+		whitePoint: 4.0,
 		middleGrey: 0.6,
 		minLuminance: 0.01,
 		averageLuminance: 0.01,
@@ -119,11 +121,17 @@ window.addEventListener("load", () => load().then((assets) => {
 	folder.addInput(renderer, "toneMappingExposure", { min: 0, max: 2, step: 1e-3 });
 	folder.addInput(effect, "mode", { options: ToneMappingMode });
 
-	let subfolder = folder.addFolder({ title: "Reinhard2" });
-	subfolder.addInput(effect, "whitePoint", { min: 1, max: 20, step: 1e-2 });
-	subfolder.addInput(effect, "middleGrey", { min: 0, max: 1, step: 1e-4 });
-	subfolder.addInput(effect, "averageLuminance", { min: 1e-4, max: 1, step: 1e-3 });
-	subfolder = subfolder.addFolder({ title: "Adaptive" });
+	const tab = folder.addTab({
+		pages: [
+			{ title: "Reinhard2" },
+			{ title: "Uncharted2" }
+		]
+	});
+
+	tab.pages[0].addInput(effect, "whitePoint", { min: 1, max: 20, step: 1e-2 });
+	tab.pages[0].addInput(effect, "middleGrey", { min: 0, max: 1, step: 1e-4 });
+	tab.pages[0].addInput(effect, "averageLuminance", { min: 1e-4, max: 1, step: 1e-3 });
+	const subfolder = tab.pages[0].addFolder({ title: "Adaptive" });
 	subfolder.addInput(effect, "resolution", {
 		options: [64, 128, 256, 512].reduce(toRecord, {}),
 		label: "resolution"
@@ -131,6 +139,8 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	subfolder.addInput(adaptiveLuminanceMaterial, "minLuminance", { min: 0, max: 3, step: 1e-3 });
 	subfolder.addInput(adaptiveLuminanceMaterial, "adaptationRate", { min: 0, max: 3, step: 1e-3 });
+
+	tab.pages[1].addInput(effect, "whitePoint", { min: 1, max: 20, step: 1e-2 });
 
 	folder.addInput(effectPass, "dithering");
 	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });

@@ -76,10 +76,10 @@ window.addEventListener("load", () => load().then((assets) => {
 	const camera = new PerspectiveCamera();
 	const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 	const settings = controls.settings;
-	settings.rotation.setSensitivity(2.2);
-	settings.rotation.setDamping(0.05);
-	settings.translation.setDamping(0.1);
-	controls.setPosition(-1, -0.3, -30);
+	settings.rotation.sensitivity = 2.2;
+	settings.rotation.damping = 0.05;
+	settings.translation.damping = 0.1;
+	controls.position.set(-1, -0.3, -30);
 	controls.lookAt(0, 0, -35);
 
 	// Scene, Lights, Objects

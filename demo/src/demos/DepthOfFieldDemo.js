@@ -151,11 +151,11 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 		const { position, quaternion } = camera;
 		const controls = new SpatialControls(position, quaternion, domElement);
 		const settings = controls.settings;
-		settings.rotation.setSensitivity(2.2);
-		settings.rotation.setDamping(0.05);
-		settings.translation.setSensitivity(3.0);
-		settings.translation.setDamping(0.1);
-		controls.setPosition(-2.3684, 0.5964, -1.3052);
+		settings.rotation.sensitivity = 2.2;
+		settings.rotation.damping = 0.05;
+		settings.translation.sensitivity = 3.0;
+		settings.translation.damping = 0.1;
+		controls.position.set(-2.3684, 0.5964, -1.3052);
 		controls.lookAt(-1.4265, 0.6513, -1.6365);
 		this.controls = controls;
 

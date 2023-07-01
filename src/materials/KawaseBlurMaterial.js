@@ -1,4 +1,5 @@
 import { NoBlending, ShaderMaterial, Uniform, Vector4 } from "three";
+import { updateFragmentShader } from "../utils";
 import { KernelSize } from "../enums";
 
 import fragmentShader from "./glsl/convolution.kawase.frag";
@@ -53,6 +54,8 @@ export class KawaseBlurMaterial extends ShaderMaterial {
 			fragmentShader,
 			vertexShader
 		});
+
+		this.fragmentShader = updateFragmentShader(this.fragmentShader);
 
 		this.setTexelSize(texelSize.x, texelSize.y);
 

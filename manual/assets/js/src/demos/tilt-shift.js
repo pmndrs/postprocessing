@@ -67,12 +67,12 @@ window.addEventListener("load", () => load().then((assets) => {
 	const camera = new PerspectiveCamera();
 	const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 	const settings = controls.settings;
-	settings.general.setMode(ControlMode.THIRD_PERSON);
-	settings.zoom.setSensitivity(0.05);
-	settings.zoom.setDamping(0.1);
-	settings.rotation.setSensitivity(0);
-	settings.translation.setEnabled(false);
-	controls.setPosition(0, 0, 1.4);
+	settings.general.mode = ControlMode.THIRD_PERSON;
+	settings.zoom.sensitivity = 0.05;
+	settings.zoom.damping = 0.1;
+	settings.rotation.enabled = false;
+	settings.translation.enabled = false;
+	controls.position.set(0, 0, 1.4);
 
 	// Scene & Objects
 

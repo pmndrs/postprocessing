@@ -94,3 +94,37 @@ export function copyTextureColorSpace(src, dest) {
 	}
 
 }
+
+/**
+ * Updates the given fragment shader for the current version of three.
+ *
+ * @param {String} fragmentShader - A fragment shader.
+ * @return {String} The modified fragment shader.
+ * @ignore
+ */
+
+export function updateFragmentShader(fragmentShader) {
+
+	if(revision < 154) {
+
+		return fragmentShader.replace("colorspace_fragment", "encodings_fragment");
+
+	}
+
+	return fragmentShader;
+
+}
+
+/**
+ * Updates the given vertex shader for the current version of three.
+ *
+ * @param {String} vertexShader - A vertex shader.
+ * @return {String} The modified vertex shader.
+ * @ignore
+ */
+
+export function updateVertexShader(vertexShader) {
+
+	return vertexShader;
+
+}

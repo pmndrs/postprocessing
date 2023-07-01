@@ -1,4 +1,5 @@
 import { NoBlending, ShaderMaterial, Uniform } from "three";
+import { updateFragmentShader } from "../utils";
 
 import fragmentShader from "./glsl/copy.frag";
 import vertexShader from "./glsl/common.vert";
@@ -28,6 +29,8 @@ export class CopyMaterial extends ShaderMaterial {
 			fragmentShader,
 			vertexShader
 		});
+
+		this.fragmentShader = updateFragmentShader(this.fragmentShader);
 
 	}
 

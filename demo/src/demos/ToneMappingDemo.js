@@ -109,11 +109,11 @@ export class ToneMappingDemo extends PostProcessingDemo {
 		const { position, quaternion } = camera;
 		const controls = new SpatialControls(position, quaternion, domElement);
 		const settings = controls.settings;
-		settings.rotation.setSensitivity(2.2);
-		settings.rotation.setDamping(0.05);
-		settings.translation.setSensitivity(3.0);
-		settings.translation.setDamping(0.1);
-		controls.setPosition(-5.15, 8.1, -0.95);
+		settings.rotation.sensitivity = 2.2;
+		settings.rotation.damping = 0.05;
+		settings.translation.sensitivity = 3.0;
+		settings.translation.damping = 0.1;
+		controls.position.set(-5.15, 8.1, -0.95);
 		controls.lookAt(-4.4, 8.6, -0.5);
 		this.controls = controls;
 

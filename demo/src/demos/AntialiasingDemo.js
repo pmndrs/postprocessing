@@ -157,11 +157,11 @@ export class AntialiasingDemo extends PostProcessingDemo {
 		const { position, quaternion } = camera;
 		const controls = new SpatialControls(position, quaternion, domElement);
 		const settings = controls.settings;
-		settings.rotation.setSensitivity(2.2);
-		settings.rotation.setDamping(0.05);
-		settings.translation.setSensitivity(3.0);
-		settings.translation.setDamping(0.1);
-		controls.setPosition(4, 8, 0.75);
+		settings.rotation.sensitivity = 2.2;
+		settings.rotation.damping = 0.05;
+		settings.translation.sensitivity = 3.0;
+		settings.translation.damping = 0.1;
+		controls.position.set(4, 8, 0.75);
 		controls.lookAt(-0.5, 6.5, -0.25);
 		this.controls = controls;
 
