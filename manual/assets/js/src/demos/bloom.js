@@ -125,8 +125,8 @@ window.addEventListener("load", () => load().then((assets) => {
 	});
 
 	const effect = new SelectiveBloomEffect(scene, camera, {
-		luminanceThreshold: 0.1,
-		luminanceSmoothing: 0.3,
+		luminanceThreshold: 0.3,
+		luminanceSmoothing: 0.2,
 		mipmapBlur: true,
 		intensity: 4.0
 	});
