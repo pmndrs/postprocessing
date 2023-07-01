@@ -1,5 +1,4 @@
 import { NoBlending, ShaderMaterial, Uniform } from "three";
-import { updateFragmentShader } from "../utils";
 
 import fragmentShader from "./glsl/convolution.god-rays.frag";
 import vertexShader from "./glsl/common.vert";
@@ -50,8 +49,6 @@ export class GodRaysMaterial extends ShaderMaterial {
 			fragmentShader,
 			vertexShader
 		});
-
-		this.fragmentShader = updateFragmentShader(this.fragmentShader);
 
 	}
 

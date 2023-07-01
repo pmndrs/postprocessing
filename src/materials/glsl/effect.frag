@@ -143,7 +143,7 @@ void main() {
 
 	#ifdef ENCODE_OUTPUT
 
-		#include <encodings_fragment>
+		#include <colorspace_fragment>
 
 	#endif
 

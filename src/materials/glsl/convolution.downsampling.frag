@@ -76,6 +76,6 @@ void main() {
 	c += WEIGHT_OUTER * texture2D(inputBuffer, vUv);
 	gl_FragColor = c;
 
-	#include <encodings_fragment>
+	#include <colorspace_fragment>
 
 }

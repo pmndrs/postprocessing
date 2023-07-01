@@ -103,11 +103,11 @@ export function copyTextureColorSpace(src, dest) {
  * @ignore
  */
 
-export function updateFragmentShader(fragmentShader, vertexShader) {
+export function updateFragmentShader(fragmentShader) {
 
-	if(revision >= 154) {
+	if(revision < 154) {
 
-		return fragmentShader.replace("encodings_fragment", "colorspace_fragment");
+		return fragmentShader.replace("colorspace_fragment", "encodings_fragment");
 
 	}
 
