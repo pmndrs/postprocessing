@@ -16,6 +16,7 @@ export * from "./GlitchEffect";
 export * from "./GodRaysEffect";
 export * from "./GridEffect";
 export * from "./HueSaturationEffect";
+export * from "./LensDistortionEffect";
 export * from "./LUT1DEffect";
 export * from "./LUT3DEffect";
 export * from "./NoiseEffect";
