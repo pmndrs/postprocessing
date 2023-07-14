@@ -6,14 +6,12 @@ import fragmentShader from "./glsl/lens-distortion.frag";
 /**
  * Lens distortion effect.
  * Original shader ported from https://github.com/ycw/three-lens-distortion
- * @author danielr electroteque@gmail.com
  */
 export class LensDistortionEffect extends Effect {
 
 	/**
 	 * Constructs a new lens distortion effect.
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
 	 * @param {Vector2} [options.distortion={x: 0, y: 0 }] - The distortion value as vec2.
 	 * @param {Vector2} [options.principalPoint={x: 0, y: 0}] - The center point as vec2.
 	 * @param {Vector2} [options.focalLength={x: 1, y: 1}] - The focal length as vec2.
