@@ -9107,4 +9107,73 @@ declare module "postprocessing" {
 		near: number,
 		far: number
 	): number;
+
+	/**
+	 * A lens distortion effect.
+	 *
+	 * Original shader ported from https://github.com/ycw/three-lens-distortion
+	 */
+
+	export class LensDistortionEffect extends Effect {
+
+		/**
+		* Constructs a new lens distortion effect.
+		*
+		* @param {Object} [options] - The options.
+		* @param {Vector2} [options.distortion] - The distortion value.
+		* @param {Vector2} [options.principalPoint] - The center point.
+		* @param {Vector2} [options.focalLength] - The focal length.
+		* @param {Number} [options.skew=0] - The skew value.
+		*/
+
+		constructor({
+			distortion,
+			principalPoint,
+			focalLength,
+			skew
+		}?: {
+			distortion: Vector2;
+			principalPoint: Vector2;
+			focalLength: Vector2;
+			skew?: number;
+		});
+
+		/**
+		 * The radial distortion coefficients. Default is (0, 0).
+		 *
+		 * @type {Vector2}
+		 */
+
+		get distortion(): Vector2;
+		set distortion(value: Vector2);
+
+		/**
+		 * The principal point. Default is (0, 0).
+		 *
+		 * @type {Vector2}
+		 */
+
+		get principalPoint(): Vector2;
+		set principalPoint(value: Vector2);
+
+		/**
+		 * The focal length. Default is (1, 1).
+		 *
+		 * @type {Vector2}
+		 */
+
+		get focalLength(): Vector2;
+		set focalLength(value: Vector2);
+
+		/**
+		 * The skew factor in radians.
+		 *
+		 * @type {Number}
+		 */
+
+		get skew(): number;
+		set skew(value: number);
+
+	}
+
 }
