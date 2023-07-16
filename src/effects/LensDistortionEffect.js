@@ -20,6 +20,7 @@ export class LensDistortionEffect extends Effect {
 	 * @param {Vector2} [options.focalLength] - The focal length.
 	 * @param {Number} [options.skew=0] - The skew value.
 	 */
+
 	constructor({
 		distortion = new Vector2(0, 0),
 		principalPoint = new Vector2(0, 0),
