@@ -1,5 +1,6 @@
 export * from "./BlendFunction.js";
 export * from "./ColorChannel.js";
+export * from "./ColorSpace.js";
 export * from "./DepthCopyMode.js";
 export * from "./DepthTestStrategy.js";
 export * from "./EdgeDetectionMode.js";
