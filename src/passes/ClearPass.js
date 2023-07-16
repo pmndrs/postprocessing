@@ -1,5 +1,5 @@
 import { Color } from "three";
-import { Pass } from "./Pass";
+import { Pass } from "./Pass.js";
 
 const color = new Color();
 

@@ -1,6 +1,6 @@
 import { Uniform, Vector4 } from "three";
-import { EffectAttribute } from "../enums";
-import { Effect } from "./Effect";
+import { EffectAttribute } from "../enums/index.js";
+import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/realistic-bokeh.frag";
 

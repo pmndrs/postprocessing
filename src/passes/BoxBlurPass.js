@@ -1,9 +1,8 @@
 import { BasicDepthPacking, UnsignedByteType, WebGLRenderTarget } from "three";
-import { Resolution } from "../core";
-import { SRGBColorSpace } from "../enums/ColorSpace";
-import { CopyMaterial, BoxBlurMaterial } from "../materials";
-import { getOutputColorSpace, setTextureColorSpace } from "../utils";
-import { Pass } from "./Pass";
+import { Resolution } from "../core/index.js";
+import { CopyMaterial, BoxBlurMaterial, SRGBColorSpace } from "../materials/index.js";
+import { getOutputColorSpace, setTextureColorSpace } from "../utils/index.js";
+import { Pass } from "./Pass.js";
 
 /**
  * A box blur pass.

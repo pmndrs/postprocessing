@@ -1,5 +1,5 @@
-import { SMAAAreaImageData } from "./SMAAAreaImageData";
-import { SMAASearchImageData } from "./SMAASearchImageData";
+import { SMAAAreaImageData } from "./SMAAAreaImageData.js";
+import { SMAASearchImageData } from "./SMAASearchImageData.js";
 
 /**
  * Generates the SMAA area and search lookup tables.

@@ -1,4 +1,4 @@
-import { Effect } from "./Effect";
+import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/color-average.frag";
 

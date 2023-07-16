@@ -1,5 +1,5 @@
 import { LinearEncoding, REVISION, sRGBEncoding } from "three";
-import { LinearSRGBColorSpace, SRGBColorSpace } from "../enums/ColorSpace";
+import { LinearSRGBColorSpace, SRGBColorSpace } from "../enums/index.js";
 
 const revision = Number(REVISION.replace(/\D+/g, ""));
 const useColorSpace = revision >= 152;

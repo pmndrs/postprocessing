@@ -1,10 +1,9 @@
 import { Uniform, WebGLRenderTarget } from "three";
-import { Resolution } from "../core";
-import { SRGBColorSpace } from "../enums/ColorSpace";
-import { BlendFunction, KernelSize } from "../enums";
-import { KawaseBlurPass, LuminancePass, MipmapBlurPass } from "../passes";
-import { getOutputColorSpace, setTextureColorSpace } from "../utils";
-import { Effect } from "./Effect";
+import { Resolution } from "../core/index.js";
+import { BlendFunction, KernelSize, SRGBColorSpace } from "../enums/index.js";
+import { KawaseBlurPass, LuminancePass, MipmapBlurPass } from "../passes/index.js";
+import { getOutputColorSpace, setTextureColorSpace } from "../utils/index.js";
+import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/bloom.frag";
 

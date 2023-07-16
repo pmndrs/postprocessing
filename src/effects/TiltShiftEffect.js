@@ -1,10 +1,9 @@
 import { Uniform, Vector2, WebGLRenderTarget } from "three";
-import { Resolution } from "../core";
-import { SRGBColorSpace } from "../enums/ColorSpace";
-import { KernelSize } from "../enums";
-import { TiltShiftBlurPass } from "../passes";
-import { getOutputColorSpace, setTextureColorSpace } from "../utils";
-import { Effect } from "./Effect";
+import { Resolution } from "../core/index.js";
+import { KernelSize, SRGBColorSpace } from "../enums/index.js";
+import { TiltShiftBlurPass } from "../passes/index.js";
+import { getOutputColorSpace, setTextureColorSpace } from "../utils/index.js";
+import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/tilt-shift.frag";
 import vertexShader from "./glsl/tilt-shift.vert";

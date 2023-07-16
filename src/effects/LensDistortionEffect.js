@@ -1,5 +1,5 @@
 import { Uniform, Vector2 } from "three";
-import { Effect } from "postprocessing";
+import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/lens-distortion.frag";
 

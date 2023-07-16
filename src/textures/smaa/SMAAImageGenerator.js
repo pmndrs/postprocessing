@@ -1,5 +1,5 @@
 import { LoadingManager } from "three";
-import { RawImageData } from "../RawImageData";
+import { RawImageData } from "../RawImageData.js";
 import workerProgram from "../../../tmp/smaa/worker.txt";
 
 /**

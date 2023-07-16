@@ -1,6 +1,6 @@
 import { Uniform } from "three";
-import { BlendFunction } from "../enums";
-import { Effect } from "./Effect";
+import { BlendFunction } from "../enums/index.js";
+import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/gamma-correction.frag";
 

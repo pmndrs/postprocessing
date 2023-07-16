@@ -1,3 +1,3 @@
-export * from "./BackCompat";
-export * from "./orthographicDepthToViewZ";
-export * from "./viewZToOrthographicDepth";
+export * from "./BackCompat.js";
+export * from "./orthographicDepthToViewZ.js";
+export * from "./viewZToOrthographicDepth.js";

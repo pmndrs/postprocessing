@@ -1,7 +1,7 @@
 import { Color, MeshNormalMaterial, NearestFilter, WebGLRenderTarget } from "three";
-import { Resolution } from "../core/Resolution";
-import { RenderPass } from "./RenderPass";
-import { Pass } from "./Pass";
+import { Resolution } from "../core/index.js";
+import { RenderPass } from "./RenderPass.js";
+import { Pass } from "./Pass.js";
 
 /**
  * A pass that renders the normals of a given scene.

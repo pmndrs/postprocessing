@@ -1,6 +1,6 @@
 import { FloatType, RGBADepthPacking } from "three";
-import { DepthCopyMode } from "../enums";
-import { DepthCopyPass } from "./DepthCopyPass";
+import { DepthCopyMode } from "../enums/index.js";
+import { DepthCopyPass } from "./DepthCopyPass.js";
 
 const unpackFactors = new Float32Array([
 	(255 / 256) / (256 ** 3),

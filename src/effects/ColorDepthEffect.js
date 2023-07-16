@@ -1,5 +1,5 @@
 import { Uniform } from "three";
-import { Effect } from "./Effect";
+import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/color-depth.frag";
 

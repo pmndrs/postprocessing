@@ -9,10 +9,10 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { ClearMaskPass, CopyPass, MaskPass } from "../passes";
-import { SRGBColorSpace } from "../enums/ColorSpace";
-import { getOutputColorSpace, setTextureColorSpace } from "../utils/BackCompat";
-import { Timer } from "./Timer";
+import { ClearMaskPass, CopyPass, MaskPass } from "../passes/index.js";
+import { SRGBColorSpace } from "../enums/ColorSpace.js";
+import { getOutputColorSpace, setTextureColorSpace } from "../utils/BackCompat.js";
+import { Timer } from "./Timer.js";
 
 /**
  * The EffectComposer may be used in place of a normal WebGLRenderer.

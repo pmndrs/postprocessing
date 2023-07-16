@@ -1,7 +1,7 @@
 import { BasicDepthPacking, FloatType, NearestFilter, WebGLRenderTarget } from "three";
-import { Resolution } from "../core/Resolution";
-import { DepthDownsamplingMaterial } from "../materials";
-import { Pass } from "./Pass";
+import { Resolution } from "../core/index.js";
+import { DepthDownsamplingMaterial } from "../materials/index.js";
+import { Pass } from "./Pass.js";
 
 /**
  * A pass that downsamples the scene depth by picking the most representative depth in 2x2 texel neighborhoods. If a

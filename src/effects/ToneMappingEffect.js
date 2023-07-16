@@ -1,7 +1,7 @@
 import { LinearMipmapLinearFilter, Uniform, WebGLRenderTarget } from "three";
-import { AdaptiveLuminancePass, LuminancePass } from "../passes";
-import { BlendFunction, ToneMappingMode } from "../enums";
-import { Effect } from "./Effect";
+import { AdaptiveLuminancePass, LuminancePass } from "../passes/index.js";
+import { BlendFunction, ToneMappingMode } from "../enums/index.js";
+import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/tone-mapping.frag";
 

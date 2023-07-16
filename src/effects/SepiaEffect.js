@@ -1,5 +1,5 @@
 import { Uniform, Vector3 } from "three";
-import { Effect } from "./Effect";
+import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/sepia.frag";
 

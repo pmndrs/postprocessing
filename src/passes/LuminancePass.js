@@ -1,7 +1,7 @@
 import { UnsignedByteType, WebGLRenderTarget } from "three";
-import { Resolution } from "../core/Resolution";
-import { LuminanceMaterial } from "../materials";
-import { Pass } from "./Pass";
+import { Resolution } from "../core/index.js";
+import { LuminanceMaterial } from "../materials/index.js";
+import { Pass } from "./Pass.js";
 
 /**
  * A pass that renders luminance.

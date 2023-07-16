@@ -1,4 +1,4 @@
-import { RawImageData } from "../RawImageData";
+import { RawImageData } from "../RawImageData.js";
 
 /**
  * An 2D area, described by lower and upper bounds.

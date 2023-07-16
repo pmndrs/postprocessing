@@ -1,10 +1,9 @@
 import { UnsignedByteType, WebGLRenderTarget } from "three";
-import { Resolution } from "../core";
-import { SRGBColorSpace } from "../enums/ColorSpace";
-import { KernelSize } from "../enums";
-import { CopyMaterial, KawaseBlurMaterial } from "../materials";
-import { getOutputColorSpace, setTextureColorSpace } from "../utils";
-import { Pass } from "./Pass";
+import { Resolution } from "../core/index.js";
+import { KernelSize, SRGBColorSpace } from "../enums/index.js";
+import { CopyMaterial, KawaseBlurMaterial } from "../materials/index.js";
+import { getOutputColorSpace, setTextureColorSpace } from "../utils/index.js";
+import { Pass } from "./Pass.js";
 
 /**
  * A Kawase blur pass.

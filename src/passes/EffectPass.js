@@ -1,9 +1,16 @@
 import { BasicDepthPacking, UnsignedByteType } from "three";
-import { EffectShaderData } from "../core";
-import { NoColorSpace, SRGBColorSpace } from "../enums/ColorSpace";
-import { BlendFunction, EffectAttribute, EffectShaderSection as Section } from "../enums";
-import { EffectMaterial } from "../materials";
-import { Pass } from "./Pass";
+import { EffectShaderData } from "../core/index.js";
+
+import {
+	BlendFunction,
+	EffectAttribute,
+	EffectShaderSection as Section,
+	NoColorSpace,
+	SRGBColorSpace
+} from "../enums/index.js";
+
+import { EffectMaterial } from "../materials/index.js";
+import { Pass } from "./Pass.js";
 
 /**
  * Prefixes substrings within the given strings.

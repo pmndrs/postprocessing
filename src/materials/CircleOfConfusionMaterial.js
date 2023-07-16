@@ -1,5 +1,5 @@
 import { BasicDepthPacking, NoBlending, PerspectiveCamera, ShaderMaterial, Uniform } from "three";
-import { orthographicDepthToViewZ, viewZToOrthographicDepth } from "../utils";
+import { orthographicDepthToViewZ, viewZToOrthographicDepth } from "../utils/index.js";
 
 import fragmentShader from "./glsl/circle-of-confusion.frag";
 import vertexShader from "./glsl/common.vert";
