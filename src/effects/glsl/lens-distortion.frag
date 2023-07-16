@@ -3,7 +3,7 @@ uniform vec2 principalPoint;
 uniform vec2 focalLength; 
 uniform float skew;
 
-float border(const in vec2 uv) {
+float mask(const in vec2 uv) {
 
 	return float(uv.s >= 0.0 && uv.s <= 1.0 && uv.t >= 0.0 && uv.t <= 1.0);
 
@@ -26,6 +26,6 @@ void mainUv(inout vec2 uv) {
 
 void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
 
-	outputColor = border(uv) * inputColor;
+	outputColor = mask(uv) * inputColor;
 
 }

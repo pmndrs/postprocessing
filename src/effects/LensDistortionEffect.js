@@ -4,17 +4,20 @@ import { Effect } from "./Effect.js";
 import fragmentShader from "./glsl/lens-distortion.frag";
 
 /**
- * Lens distortion effect.
+ * A lens distortion effect.
+ *
  * Original shader ported from https://github.com/ycw/three-lens-distortion
  */
+
 export class LensDistortionEffect extends Effect {
 
 	/**
 	 * Constructs a new lens distortion effect.
+	 *
 	 * @param {Object} [options] - The options.
-	 * @param {Vector2} [options.distortion={x: 0, y: 0 }] - The distortion value as vec2.
-	 * @param {Vector2} [options.principalPoint={x: 0, y: 0}] - The center point as vec2.
-	 * @param {Vector2} [options.focalLength={x: 1, y: 1}] - The focal length as vec2.
+	 * @param {Vector2} [options.distortion] - The distortion value.
+	 * @param {Vector2} [options.principalPoint] - The center point.
+	 * @param {Vector2} [options.focalLength] - The focal length.
 	 * @param {Number} [options.skew=0] - The skew value.
 	 */
 	constructor({
@@ -26,7 +29,7 @@ export class LensDistortionEffect extends Effect {
 
 		super("LensDistortionEffect", fragmentShader, {
 			uniforms: new Map([
-				["distortion", new Uniform(distortion)], // radial distortion coeff 0 // radial distortion coeff of term r^2
+				["distortion", new Uniform(distortion)],
 				["principalPoint", new Uniform(principalPoint)],
 				["focalLength", new Uniform(focalLength)],
 				["skew", new Uniform(skew)]
@@ -36,19 +39,17 @@ export class LensDistortionEffect extends Effect {
 	}
 
 	/**
-	 * Get distortion uniform value
+	 * The radial distortion coefficients. Default is (0, 0).
+	 *
 	 * @type {Vector2}
 	 */
+
 	get distortion() {
 
 		return this.uniforms.get("distortion").value;
 
 	}
 
-	/**
-	 * Set distortion uniform value
-	 * @param {Vector2} the distortion value
-	 */
 	set distortion(value) {
 
 		this.uniforms.get("distortion").value = value;
@@ -56,19 +57,17 @@ export class LensDistortionEffect extends Effect {
 	}
 
 	/**
-	 * Get principal point uniform value
+	 * The principal point. Default is (0, 0).
+	 *
 	 * @type {Vector2}
 	 */
+
 	get principalPoint() {
 
 		return this.uniforms.get("principalPoint").value;
 
 	}
 
-	/**
-	 * Set principal point uniform value
-	 * @param {Vector2} the principle center point value
-	 */
 	set principalPoint(value) {
 
 		this.uniforms.get("principalPoint").value = value;
@@ -76,19 +75,17 @@ export class LensDistortionEffect extends Effect {
 	}
 
 	/**
-	 * Get focal length uniform value
+	 * The focal length. Default is (1, 1).
+	 *
 	 * @type {Vector2}
 	 */
+
 	get focalLength() {
 
 		return this.uniforms.get("focalLength").value;
 
 	}
 
-	/**
-	 * Set focal length uniform value
-	 * @param {Vector2} the focal length value
-	 */
 	set focalLength(value) {
 
 		this.uniforms.get("focalLength").value = value;
@@ -96,19 +93,17 @@ export class LensDistortionEffect extends Effect {
 	}
 
 	/**
-	 * Get skew uniform value
-	 * @type {Vector2}
+	 * The skew factor in radians.
+	 *
+	 * @type {Number}
 	 */
+
 	get skew() {
 
 		return this.uniforms.get("skew").value;
 
 	}
 
-	/**
-	 * Set skew uniform value
-	 * @param {Number} the skew value
-	 */
 	set skew(value) {
 
 		this.uniforms.get("skew").value = value;
