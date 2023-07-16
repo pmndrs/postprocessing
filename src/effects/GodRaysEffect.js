@@ -19,8 +19,8 @@ import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/god-rays.frag";
 
-const v = new Vector3();
-const m = new Matrix4();
+const v = /* @__PURE__ */ new Vector3();
+const m = /* @__PURE__ */ new Matrix4();
 
 /**
  * A god rays effect.

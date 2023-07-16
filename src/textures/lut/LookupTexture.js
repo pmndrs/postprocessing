@@ -15,7 +15,7 @@ import { copyTextureColorSpace, setTextureColorSpace } from "../../utils/index.j
 import { RawImageData } from "../RawImageData.js";
 import workerProgram from "../../../tmp/lut/worker.txt";
 
-const c = new Color();
+const c = /* @__PURE__ */ new Color();
 
 /**
  * A 3D lookup texture (LUT).

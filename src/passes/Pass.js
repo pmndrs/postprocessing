@@ -10,7 +10,7 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-const dummyCamera = new Camera();
+const dummyCamera = /* @__PURE__ */ new Camera();
 let geometry = null;
 
 /**

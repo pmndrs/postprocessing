@@ -1,7 +1,7 @@
 import { Color } from "three";
 import { Pass } from "./Pass.js";
 
-const color = new Color();
+const color = /* @__PURE__ */ new Color();
 
 /**
  * A pass that clears the input buffer or the screen.
