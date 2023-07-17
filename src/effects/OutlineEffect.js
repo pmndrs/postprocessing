@@ -202,7 +202,7 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.active = false;
+		this.active = true;
 
 		/**
 		 * A selection of objects that will be outlined.
@@ -733,7 +733,7 @@ export class OutlineEffect extends Effect {
 		const background = scene.background;
 		const mask = camera.layers.mask;
 
-		if(selection.size > 0) {
+		if(this.active) {
 
 			scene.background = null;
 			pulse.value = 1;
@@ -744,7 +744,6 @@ export class OutlineEffect extends Effect {
 
 			}
 
-			this.active = true;
 			this.time += deltaTime;
 
 			// Render a custom depth texture and ignore selected objects.
@@ -769,17 +768,9 @@ export class OutlineEffect extends Effect {
 
 			}
 
-		} else if(this.active) {
-
-			// Must call render as a workaround for a multisampling bug.
-			camera.layers.set(selection.layer);
-			this.maskPass.render(renderer, this.renderTargetMask);
-			camera.layers.mask = mask;
-
-			this.clearPass.render(renderer, this.renderTargetOutline);
-			this.active = false;
-
 		}
+
+		this.active = selection.size > 0;
 
 	}
 
