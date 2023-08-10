@@ -5146,16 +5146,18 @@ declare module "postprocessing" {
 
 	export type BloomEffectOptions = {
 		blendFunction?: BlendFunction;
-		mipmapBlur?: boolean;
 		luminanceThreshold?: number;
 		luminanceSmoothing?: number;
+		mipmapBlur?: boolean;
 		intensity?: number;
+		radius?: number;
+		levels?: number;
+		kernelSize?: KernelSize;
 		resolutionScale?: number;
-		resolutionX?: number;
-		resolutionY?: number;
 		width?: number;
 		height?: number;
-		kernelSize?: KernelSize;
+		resolutionX?: number;
+		resolutionY?: number;
 	};
 
 	/**
@@ -5168,29 +5170,33 @@ declare module "postprocessing" {
 		 *
 		 * @param {Object} [options] - The options.
 		 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
+		 * @param {Number} [options.luminanceThreshold=0.9] - The luminance threshold. Raise this value to mask out darker elements in the scene.
+		 * @param {Number} [options.luminanceSmoothing=0.025] - Controls the smoothness of the luminance threshold.
 		 * @param {Boolean} [options.mipmapBlur=false] - Enables or disables mipmap blur.
-		 * @param {Number} [options.luminanceThreshold=0.9] - The luminance threshold. Raise this value to mask out darker elements in the scene. Range is [0, 1].
-		 * @param {Number} [options.luminanceSmoothing=0.025] - Controls the smoothness of the luminance threshold. Range is [0, 1].
-		 * @param {Number} [options.intensity=1.0] - The intensity.
-		 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
-		 * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
-		 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
-		 * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
-		 * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprecated. Use resolutionX instead.
-		 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use resolutionY instead.
+		 * @param {Number} [options.intensity=1.0] - The bloom intensity.
+		 * @param {Number} [options.radius=0.85] - The blur radius. Only applies to mipmap blur.
+		 * @param {Number} [options.levels=8] - The amount of MIP levels. Only applies to mipmap blur.
+		 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - Deprecated. Use mipmapBlur instead.
+		 * @param {Number} [options.resolutionScale=0.5] - Deprecated. Use mipmapBlur instead.
+		 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - Deprecated. Use mipmapBlur instead.
+		 * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - Deprecated. Use mipmapBlur instead.
+		 * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprecated. Use mipmapBlur instead.
+		 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use mipmapBlur instead.
 		 */
 		constructor({
 			blendFunction,
-			mipmapBlur,
 			luminanceThreshold,
 			luminanceSmoothing,
+			mipmapBlur,
 			intensity,
+			radius,
+			levels,
+			kernelSize,
 			resolutionScale,
 			width,
 			height,
 			resolutionX,
-			resolutionY,
-			kernelSize
+			resolutionY
 		}?: BloomEffectOptions);
 
 		/**
