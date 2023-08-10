@@ -266,7 +266,7 @@ export class BloomDemo extends PostProcessingDemo {
 			blendFunction: BlendFunction.ADD,
 			mipmapBlur: true,
 			luminanceThreshold: 0.4,
-			luminanceSmoothing: 0.1,
+			luminanceSmoothing: 0.2,
 			intensity: 3.0
 		});
 
