@@ -14,8 +14,8 @@
 uniform float cameraNear;
 uniform float cameraFar;
 
-varying float vViewZ;
-varying vec4 vProjTexCoord;
+centroid varying float vViewZ;
+centroid varying vec4 vProjTexCoord;
 
 void main() {
 
