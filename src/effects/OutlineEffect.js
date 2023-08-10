@@ -196,13 +196,13 @@ export class OutlineEffect extends Effect {
 		this.time = 0;
 
 		/**
-		 * Indicates whether the outline effect is active.
+		 * Indicates whether the outlines should be updated.
 		 *
 		 * @type {Boolean}
 		 * @private
 		 */
 
-		this.active = true;
+		this.forceUpdate = true;
 
 		/**
 		 * A selection of objects that will be outlined.
@@ -733,7 +733,7 @@ export class OutlineEffect extends Effect {
 		const background = scene.background;
 		const mask = camera.layers.mask;
 
-		if(this.active) {
+		if(this.forceUpdate || selection.size > 0) {
 
 			scene.background = null;
 			pulse.value = 1;
@@ -770,7 +770,7 @@ export class OutlineEffect extends Effect {
 
 		}
 
-		this.active = selection.size > 0;
+		this.forceUpdate = selection.size > 0;
 
 	}
 
