@@ -119,23 +119,23 @@ window.addEventListener("load", () => load().then((assets) => {
 	const fpsMeter = new FPSMeter();
 	const noiseTexture = new NoiseTexture(64, 64, RGBAFormat);
 	const pane = new Pane({ container: container.querySelector(".tp") });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.addBinding(fpsMeter, "fps", { readonly: true, label: "FPS" });
 
 	const params = {
 		"custom pattern": true
 	};
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(effect, "mode", { options: GlitchMode });
-	folder.addInput(effect, "minDelay", { min: 0, max: 2, step: 0.01 });
-	folder.addInput(effect, "maxDelay", { min: 2, max: 4, step: 0.01 });
-	folder.addInput(effect, "minDuration", { min: 0, max: 0.6, step: 0.01 });
-	folder.addInput(effect, "maxDuration", { min: 0.6, max: 1.8, step: 0.01 });
-	folder.addInput(effect, "minStrength", { min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect, "maxStrength", { min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect, "ratio", { min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect, "columns", { min: 0, max: 0.5, step: 0.01 });
-	folder.addInput(params, "custom pattern")
+	folder.addBinding(effect, "mode", { options: GlitchMode });
+	folder.addBinding(effect, "minDelay", { min: 0, max: 2, step: 0.01 });
+	folder.addBinding(effect, "maxDelay", { min: 2, max: 4, step: 0.01 });
+	folder.addBinding(effect, "minDuration", { min: 0, max: 0.6, step: 0.01 });
+	folder.addBinding(effect, "maxDuration", { min: 0.6, max: 1.8, step: 0.01 });
+	folder.addBinding(effect, "minStrength", { min: 0, max: 1, step: 0.01 });
+	folder.addBinding(effect, "maxStrength", { min: 0, max: 1, step: 0.01 });
+	folder.addBinding(effect, "ratio", { min: 0, max: 1, step: 0.01 });
+	folder.addBinding(effect, "columns", { min: 0, max: 0.5, step: 0.01 });
+	folder.addBinding(params, "custom pattern")
 		.on("change", (e) => effect.perturbationMap = (e.value ? assets.get("noise") : noiseTexture));
 
 	// Resize Handler

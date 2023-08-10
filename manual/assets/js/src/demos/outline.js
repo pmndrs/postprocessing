@@ -147,20 +147,19 @@ window.addEventListener("load", () => load().then((assets) => {
 	// Post Processing
 
 	OverrideMaterialManager.workaroundEnabled = true;
+	const multisampling = Math.min(4, renderer.capabilities.maxSamples);
 
-	const composer = new EffectComposer(renderer, {
-		multisampling: Math.min(4, renderer.capabilities.maxSamples)
-	});
+	const composer = new EffectComposer(renderer, { multisampling });
 
 	const effect = new OutlineEffect(scene, camera, {
 		blendFunction: BlendFunction.SCREEN,
-		multisampling: Math.min(4, renderer.capabilities.maxSamples),
 		patternScale: 40,
 		visibleEdgeColor: 0xffffff,
 		hiddenEdgeColor: 0x22090a,
 		resolutionScale: 0.75,
 		blur: false,
-		xRay: true
+		xRay: true,
+		multisampling
 	});
 
 	effect.selection.add(actors.children[0]);
@@ -195,30 +194,33 @@ window.addEventListener("load", () => load().then((assets) => {
 	const fpsMeter = new FPSMeter();
 	const color = new Color();
 	const pane = new Pane({ container: container.querySelector(".tp") });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.addBinding(fpsMeter, "fps", { readonly: true, label: "FPS" });
 
 	const params = {
 		"patternTexture": false,
+		"multisampling": true,
 		"visibleEdgeColor": color.copy(effect.visibleEdgeColor).convertLinearToSRGB().getHex(),
 		"hiddenEdgeColor": color.copy(effect.hiddenEdgeColor).convertLinearToSRGB().getHex()
 	};
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(effect.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
-	folder.addInput(effect.blurPass, "kernelSize", { options: KernelSize });
-	folder.addInput(effect.blurPass, "enabled", { label: "blur" });
-	folder.addInput(params, "patternTexture")
+	folder.addBinding(effect.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
+	folder.addBinding(params, "multisampling")
+		.on("change", (e) => effect.multisampling = e.value ? multisampling : 0);
+	folder.addBinding(effect.blurPass, "kernelSize", { options: KernelSize });
+	folder.addBinding(effect.blurPass, "enabled", { label: "blur" });
+	folder.addBinding(params, "patternTexture")
 		.on("change", (e) => effect.patternTexture = (e.value ? assets.get("pattern") : null));
-	folder.addInput(effect, "patternScale", { min: 20, max: 100, step: 0.1 });
-	folder.addInput(effect, "edgeStrength", { min: 0, max: 10, step: 0.01 });
-	folder.addInput(effect, "pulseSpeed", { min: 0, max: 2, step: 0.01 });
-	folder.addInput(params, "visibleEdgeColor", { view: "color" })
+	folder.addBinding(effect, "patternScale", { min: 20, max: 100, step: 0.1 });
+	folder.addBinding(effect, "edgeStrength", { min: 0, max: 10, step: 0.01 });
+	folder.addBinding(effect, "pulseSpeed", { min: 0, max: 2, step: 0.01 });
+	folder.addBinding(params, "visibleEdgeColor", { view: "color" })
 		.on("change", (e) => effect.visibleEdgeColor.setHex(e.value).convertSRGBToLinear());
-	folder.addInput(params, "hiddenEdgeColor", { view: "color" })
+	folder.addBinding(params, "hiddenEdgeColor", { view: "color" })
 		.on("change", (e) => effect.hiddenEdgeColor.setHex(e.value).convertSRGBToLinear());
-	folder.addInput(effect, "xRay");
-	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
+	folder.addBinding(effect, "xRay");
+	folder.addBinding(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
+	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 

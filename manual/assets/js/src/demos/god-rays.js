@@ -131,26 +131,26 @@ window.addEventListener("load", () => load().then((assets) => {
 	const color = new Color();
 	const godRaysMaterial = effect.godRaysMaterial;
 	const pane = new Pane({ container: container.querySelector(".tp") });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.addBinding(fpsMeter, "fps", { readonly: true, label: "FPS" });
 
 	const params = {
 		"color": color.copy(sun.material.color).convertLinearToSRGB().getHex()
 	};
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(effect.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
-	folder.addInput(effect, "blur");
-	folder.addInput(effect.blurPass, "kernelSize", { label: "blurriness", options: KernelSize });
-	folder.addInput(godRaysMaterial, "density", { min: 0, max: 1, step: 0.01 });
-	folder.addInput(godRaysMaterial, "decay", { min: 0, max: 1, step: 0.01 });
-	folder.addInput(godRaysMaterial, "weight", { min: 0, max: 1, step: 0.01 });
-	folder.addInput(godRaysMaterial, "exposure", { min: 0, max: 1, step: 0.01 });
-	folder.addInput(godRaysMaterial, "maxIntensity", { min: 0, max: 1, step: 0.01 });
-	folder.addInput(godRaysMaterial, "samples", { min: 16, max: 128, step: 1 });
-	folder.addInput(params, "color", { view: "color" })
+	folder.addBinding(effect.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
+	folder.addBinding(effect, "blur");
+	folder.addBinding(effect.blurPass, "kernelSize", { label: "blurriness", options: KernelSize });
+	folder.addBinding(godRaysMaterial, "density", { min: 0, max: 1, step: 0.01 });
+	folder.addBinding(godRaysMaterial, "decay", { min: 0, max: 1, step: 0.01 });
+	folder.addBinding(godRaysMaterial, "weight", { min: 0, max: 1, step: 0.01 });
+	folder.addBinding(godRaysMaterial, "exposure", { min: 0, max: 1, step: 0.01 });
+	folder.addBinding(godRaysMaterial, "maxIntensity", { min: 0, max: 1, step: 0.01 });
+	folder.addBinding(godRaysMaterial, "samples", { min: 16, max: 128, step: 1 });
+	folder.addBinding(params, "color", { view: "color" })
 		.on("change", (e) => sun.material.color.setHex(e.value).convertSRGBToLinear());
-	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
+	folder.addBinding(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
+	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 

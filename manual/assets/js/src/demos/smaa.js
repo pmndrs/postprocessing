@@ -139,7 +139,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.addBinding(fpsMeter, "fps", { readonly: true, abel: "FPS" });
 
 	const SMAADebug = { OFF: 0, EDGES: 1, WEIGHTS: 2 };
 	const params = {
@@ -148,7 +148,7 @@ window.addEventListener("load", () => load().then((assets) => {
 	};
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(params, "debug", { options: SMAADebug }).on("change", (e) => {
+	folder.addBinding(params, "debug", { options: SMAADebug }).on("change", (e) => {
 
 		effectPass.enabled = (e.value === SMAADebug.OFF);
 		smaaEdgesDebugPass.enabled = (e.value === SMAADebug.EDGES);
@@ -156,7 +156,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	});
 
-	folder.addInput(params, "preset", { options: SMAAPreset }).on("change", (e) => {
+	folder.addBinding(params, "preset", { options: SMAAPreset }).on("change", (e) => {
 
 		const threshold = edgeDetectionMaterial.edgeDetectionThreshold;
 		effect.applyPreset(e.value);
@@ -165,15 +165,15 @@ window.addEventListener("load", () => load().then((assets) => {
 	});
 
 	let subfolder = folder.addFolder({ title: "Edge Detection", expanded: false });
-	subfolder.addInput(edgeDetectionMaterial, "edgeDetectionMode", { options: EdgeDetectionMode });
-	subfolder.addInput(edgeDetectionMaterial, "edgeDetectionThreshold", { min: 0.01, max: 0.3, step: 1e-4 });
-	subfolder.addInput(edgeDetectionMaterial, "predicationMode", { options: PredicationMode });
-	subfolder.addInput(edgeDetectionMaterial, "predicationThreshold", { min: 4e-4, max: 0.01, step: 1e-4 });
-	subfolder.addInput(edgeDetectionMaterial, "predicationStrength", { min: 0, max: 1, step: 1e-4 });
-	subfolder.addInput(edgeDetectionMaterial, "predicationScale", { min: 1, max: 2, step: 0.01 });
+	subfolder.addBinding(edgeDetectionMaterial, "edgeDetectionMode", { options: EdgeDetectionMode });
+	subfolder.addBinding(edgeDetectionMaterial, "edgeDetectionThreshold", { min: 0.01, max: 0.3, step: 1e-4 });
+	subfolder.addBinding(edgeDetectionMaterial, "predicationMode", { options: PredicationMode });
+	subfolder.addBinding(edgeDetectionMaterial, "predicationThreshold", { min: 4e-4, max: 0.01, step: 1e-4 });
+	subfolder.addBinding(edgeDetectionMaterial, "predicationStrength", { min: 0, max: 1, step: 1e-4 });
+	subfolder.addBinding(edgeDetectionMaterial, "predicationScale", { min: 1, max: 2, step: 0.01 });
 
-	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
+	folder.addBinding(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
+	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 

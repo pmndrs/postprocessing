@@ -141,7 +141,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.addBinding(fpsMeter, "fps", { readonly: true, label: "FPS" });
 
 	// Resize Handler
 

@@ -104,12 +104,12 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.addBinding(fpsMeter, "fps", { readonly: true, label: "FPS" });
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(effect, "radialModulation");
-	folder.addInput(effect, "modulationOffset", { min: 0, max: 1.5, step: 1e-2 });
-	folder.addInput(effect, "offset", {
+	folder.addBinding(effect, "radialModulation");
+	folder.addBinding(effect, "modulationOffset", { min: 0, max: 1.5, step: 1e-2 });
+	folder.addBinding(effect, "offset", {
 		x: { min: -1e-2, max: 1e-2, step: 1e-5 },
 		y: { min: -1e-2, max: 1e-2, step: 1e-5, inverted: true }
 	});

@@ -115,11 +115,11 @@ window.addEventListener("load", () => load().then((assets) => {
 	const fpsMeter = new FPSMeter();
 	const adaptiveLuminanceMaterial = effect.adaptiveLuminanceMaterial;
 	const pane = new Pane({ container: container.querySelector(".tp") });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.addBinding(fpsMeter, "fps", { readonly: true, label: "FPS" });
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(renderer, "toneMappingExposure", { min: 0, max: 2, step: 1e-3 });
-	folder.addInput(effect, "mode", { options: ToneMappingMode });
+	folder.addBinding(renderer, "toneMappingExposure", { min: 0, max: 2, step: 1e-3 });
+	folder.addBinding(effect, "mode", { options: ToneMappingMode });
 
 	const tab = folder.addTab({
 		pages: [
@@ -128,23 +128,23 @@ window.addEventListener("load", () => load().then((assets) => {
 		]
 	});
 
-	tab.pages[0].addInput(effect, "whitePoint", { min: 1, max: 20, step: 1e-2 });
-	tab.pages[0].addInput(effect, "middleGrey", { min: 0, max: 1, step: 1e-4 });
-	tab.pages[0].addInput(effect, "averageLuminance", { min: 1e-4, max: 1, step: 1e-3 });
+	tab.pages[0].addBinding(effect, "whitePoint", { min: 1, max: 20, step: 1e-2 });
+	tab.pages[0].addBinding(effect, "middleGrey", { min: 0, max: 1, step: 1e-4 });
+	tab.pages[0].addBinding(effect, "averageLuminance", { min: 1e-4, max: 1, step: 1e-3 });
 	const subfolder = tab.pages[0].addFolder({ title: "Adaptive" });
-	subfolder.addInput(effect, "resolution", {
+	subfolder.addBinding(effect, "resolution", {
 		options: [64, 128, 256, 512].reduce(toRecord, {}),
 		label: "resolution"
 	});
 
-	subfolder.addInput(adaptiveLuminanceMaterial, "minLuminance", { min: 0, max: 3, step: 1e-3 });
-	subfolder.addInput(adaptiveLuminanceMaterial, "adaptationRate", { min: 0, max: 3, step: 1e-3 });
+	subfolder.addBinding(adaptiveLuminanceMaterial, "minLuminance", { min: 0, max: 3, step: 1e-3 });
+	subfolder.addBinding(adaptiveLuminanceMaterial, "adaptationRate", { min: 0, max: 3, step: 1e-3 });
 
-	tab.pages[1].addInput(effect, "whitePoint", { min: 1, max: 20, step: 1e-2 });
+	tab.pages[1].addBinding(effect, "whitePoint", { min: 1, max: 20, step: 1e-2 });
 
-	folder.addInput(effectPass, "dithering");
-	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
+	folder.addBinding(effectPass, "dithering");
+	folder.addBinding(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
+	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 

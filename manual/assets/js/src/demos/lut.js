@@ -191,7 +191,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.addBinding(fpsMeter, "fps", { readonly: true, label: "FPS" });
 
 	const params = {
 		"lut": effect.lut.name,
@@ -276,20 +276,20 @@ window.addEventListener("load", () => load().then((assets) => {
 	}
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(params, "lut", { options: [...luts.keys()].reduce(toRecord, {}) }).on("change", changeLUT);
+	folder.addBinding(params, "lut", { options: [...luts.keys()].reduce(toRecord, {}) }).on("change", changeLUT);
 
 	if(renderer.capabilities.isWebGL2) {
 
-		folder.addInput(params, "3D texture").on("change", changeLUT);
-		folder.addInput(effect, "tetrahedralInterpolation");
+		folder.addBinding(params, "3D texture").on("change", changeLUT);
+		folder.addBinding(effect, "tetrahedralInterpolation");
 
 	}
 
-	folder.addMonitor(params, "base size", { format: (v) => v.toFixed(0) });
-	folder.addInput(params, "scale up").on("change", changeLUT);
-	folder.addInput(params, "target size", { options: [32, 48, 64, 128].reduce(toRecord, {}) }).on("change", changeLUT);
-	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
+	folder.addBinding(params, "base size", { readonly: true, format: (v) => v.toFixed(0) });
+	folder.addBinding(params, "scale up").on("change", changeLUT);
+	folder.addBinding(params, "target size", { options: [32, 48, 64, 128].reduce(toRecord, {}) }).on("change", changeLUT);
+	folder.addBinding(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
+	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 

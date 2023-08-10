@@ -161,24 +161,24 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.addBinding(fpsMeter, "fps", { readonly: true, label: "FPS" });
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(effect, "intensity", { min: 0, max: 10, step: 0.01 });
-	folder.addInput(effect.mipmapBlurPass, "radius", { min: 0, max: 1, step: 1e-3 });
-	folder.addInput(effect.mipmapBlurPass, "levels", { min: 1, max: 9, step: 1 });
+	folder.addBinding(effect, "intensity", { min: 0, max: 10, step: 0.01 });
+	folder.addBinding(effect.mipmapBlurPass, "radius", { min: 0, max: 1, step: 1e-3 });
+	folder.addBinding(effect.mipmapBlurPass, "levels", { min: 1, max: 9, step: 1 });
 
 	let subfolder = folder.addFolder({ title: "Luminance Filter" });
-	subfolder.addInput(effect.luminancePass, "enabled");
-	subfolder.addInput(effect.luminanceMaterial, "threshold", { min: 0, max: 1, step: 0.01 });
-	subfolder.addInput(effect.luminanceMaterial, "smoothing", { min: 0, max: 1, step: 0.01 });
+	subfolder.addBinding(effect.luminancePass, "enabled");
+	subfolder.addBinding(effect.luminanceMaterial, "threshold", { min: 0, max: 1, step: 0.01 });
+	subfolder.addBinding(effect.luminanceMaterial, "smoothing", { min: 0, max: 1, step: 0.01 });
 
 	subfolder = folder.addFolder({ title: "Selection" });
-	subfolder.addInput(effect, "inverted");
-	subfolder.addInput(effect, "ignoreBackground");
+	subfolder.addBinding(effect, "inverted");
+	subfolder.addBinding(effect, "ignoreBackground");
 
-	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
+	folder.addBinding(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
+	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 

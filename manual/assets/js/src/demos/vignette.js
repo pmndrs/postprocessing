@@ -108,15 +108,15 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.addBinding(fpsMeter, "fps", { readonly: true, label: "FPS" });
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(effect, "technique", { options: VignetteTechnique });
-	folder.addInput(effect, "offset", { min: 0, max: 1, step: 1e-3 });
-	folder.addInput(effect, "darkness", { min: 0, max: 1, step: 1e-3 });
-	folder.addInput(effectPass, "dithering");
-	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
+	folder.addBinding(effect, "technique", { options: VignetteTechnique });
+	folder.addBinding(effect, "offset", { min: 0, max: 1, step: 1e-3 });
+	folder.addBinding(effect, "darkness", { min: 0, max: 1, step: 1e-3 });
+	folder.addBinding(effectPass, "dithering");
+	folder.addBinding(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
+	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 

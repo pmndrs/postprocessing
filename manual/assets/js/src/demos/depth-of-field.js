@@ -121,18 +121,18 @@ window.addEventListener("load", () => load().then((assets) => {
 	const fpsMeter = new FPSMeter();
 	const cocMaterial = effect.cocMaterial;
 	const pane = new Pane({ container: container.querySelector(".tp") });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.addBinding(fpsMeter, "fps", { readonly: true, label: "FPS" });
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(cocDebugPass, "enabled", { label: "debug" });
-	folder.addInput(effect.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
+	folder.addBinding(cocDebugPass, "enabled", { label: "debug" });
+	folder.addBinding(effect.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
 
-	folder.addInput(effect.blurPass, "kernelSize", { options: KernelSize });
-	folder.addInput(cocMaterial, "worldFocusDistance", { min: 0, max: 50, step: 0.1 });
-	folder.addInput(cocMaterial, "worldFocusRange", { min: 0, max: 20, step: 0.1 });
-	folder.addInput(effect, "bokehScale", { min: 0, max: 7, step: 1e-2 });
-	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
+	folder.addBinding(effect.blurPass, "kernelSize", { options: KernelSize });
+	folder.addBinding(cocMaterial, "worldFocusDistance", { min: 0, max: 50, step: 0.1 });
+	folder.addBinding(cocMaterial, "worldFocusRange", { min: 0, max: 20, step: 0.1 });
+	folder.addBinding(effect, "bokehScale", { min: 0, max: 7, step: 1e-2 });
+	folder.addBinding(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
+	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 
