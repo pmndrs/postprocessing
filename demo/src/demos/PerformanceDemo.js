@@ -1,5 +1,4 @@
 import {
-	AmbientLight,
 	CubeTextureLoader,
 	CylinderGeometry,
 	Mesh,
@@ -41,6 +40,8 @@ import {
 	SMAAImageLoader,
 	SMAAPreset,
 	TextureEffect,
+	ToneMappingEffect,
+	ToneMappingMode,
 	VignetteEffect
 } from "../../../src";
 
@@ -226,11 +227,9 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 		// Lights
 
-		const ambientLight = new AmbientLight(0x7a7a7a);
-		const pointLight = new PointLight(0xdcebff, 80, 10);
-
+		const pointLight = new PointLight(0xeff6ff, 300);
 		this.light = pointLight;
-		scene.add(ambientLight, pointLight);
+		scene.add(pointLight);
 
 		// Objects
 
@@ -286,21 +285,22 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 		const bloomEffect = new BloomEffect({
 			blendFunction: BlendFunction.ADD,
-			kernelSize: KernelSize.MEDIUM,
-			luminanceThreshold: 0.825,
-			luminanceSmoothing: 0.075,
-			height: 480
+			luminanceThreshold: 0.2,
+			luminanceSmoothing: 0.01,
+			resolutionScale: 0.5,
+			intensity: 10,
+			mipmapBlur: true
 		});
 
 		const godRaysEffect = new GodRaysEffect(camera, sun, {
 			kernelSize: KernelSize.SMALL,
-			height: 480,
+			resolutionScale: 0.5,
 			density: 0.96,
 			decay: 0.92,
-			weight: 0.3,
+			weight: 0.07,
 			exposure: 0.55,
 			samples: 60,
-			clampMax: 1.0
+			clampMax: 1
 		});
 
 		const dotScreenEffect = new DotScreenEffect({
@@ -315,6 +315,7 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 		const scanlineEffect = new ScanlineEffect({
 			blendFunction: BlendFunction.OVERLAY,
+			scrollSpeed: 0.05,
 			density: 0.75
 		});
 
@@ -338,6 +339,13 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 		const hueSaturationEffect = new HueSaturationEffect({ saturation: 0.125 });
 
+		renderer.toneMappingExposure = 1.8;
+		const toneMappingEffect = new ToneMappingEffect({
+			mode: ToneMappingMode.REINHARD2,
+			averageLuminance: 0.001,
+			whitePoint: 16
+		});
+
 		const noiseEffect = new NoiseEffect({ premultiply: true });
 		const vignetteEffect = new VignetteEffect();
 
@@ -358,6 +366,7 @@ export class PerformanceDemo extends PostProcessingDemo {
 			smaaEffect,
 			bloomEffect,
 			godRaysEffect,
+			toneMappingEffect,
 			colorDepthEffect,
 			colorAverageEffect,
 			dotScreenEffect,
@@ -368,8 +377,8 @@ export class PerformanceDemo extends PostProcessingDemo {
 			sepiaEffect,
 			vignetteEffect,
 			textureEffect,
-			noiseEffect,
-			lutEffect
+			lutEffect,
+			noiseEffect
 		];
 
 		// Merge all effects into one pass.

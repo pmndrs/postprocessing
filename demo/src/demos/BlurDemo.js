@@ -160,8 +160,8 @@ export class BlurDemo extends PostProcessingDemo {
 
 		// Lights
 
-		const ambientLight = new AmbientLight(0x7a7a7a);
-		const mainLight = new DirectionalLight(0xffbbaa, 1.0);
+		const ambientLight = new AmbientLight(0xb8b8b8);
+		const mainLight = new DirectionalLight(0xffbbaa, 3);
 		mainLight.position.set(1.44, 0.2, 2.0);
 
 		scene.add(ambientLight);

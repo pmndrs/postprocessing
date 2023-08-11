@@ -17,8 +17,8 @@ export const tag = "sponza";
 
 export function createLights(shadowCameraHelper = false) {
 
-	const ambientLight = new AmbientLight(0x494949);
-	const directionalLight = new DirectionalLight(0xffffff, 1);
+	const ambientLight = new AmbientLight(0x929292);
+	const directionalLight = new DirectionalLight(0xffffff, 3);
 
 	directionalLight.position.set(4, 18, 3);
 	directionalLight.target.position.set(0, 7, 0);
