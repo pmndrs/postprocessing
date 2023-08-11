@@ -99,10 +99,10 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.addBinding(fpsMeter, "fps", { readonly: true, label: "FPS" });
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(effect, "granularity", { min: 0, max: 20, step: 1 });
+	folder.addBinding(effect, "granularity", { min: 0, max: 20, step: 1 });
 
 	// Resize Handler
 

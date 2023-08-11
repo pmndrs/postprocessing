@@ -1,8 +1,8 @@
 import { UnsignedByteType, Vector2, WebGLRenderTarget } from "three";
-import { SRGBColorSpace } from "../enums/ColorSpace";
-import { DownsamplingMaterial, UpsamplingMaterial } from "../materials";
-import { getOutputColorSpace, setTextureColorSpace } from "../utils";
-import { Pass } from "./Pass";
+import { SRGBColorSpace } from "../enums/index.js";
+import { DownsamplingMaterial, UpsamplingMaterial } from "../materials/index.js";
+import { getOutputColorSpace, setTextureColorSpace } from "../utils/index.js";
+import { Pass } from "./Pass.js";
 
 /**
  * A blur pass that produces a wide blur by downsampling and upsampling the input over multiple MIP levels.

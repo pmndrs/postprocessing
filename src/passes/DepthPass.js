@@ -1,7 +1,7 @@
 import { Color, MeshDepthMaterial, NearestFilter, RGBADepthPacking, WebGLRenderTarget } from "three";
-import { Resolution } from "../core/Resolution";
-import { Pass } from "./Pass";
-import { RenderPass } from "./RenderPass";
+import { Resolution } from "../core/index.js";
+import { Pass } from "./Pass.js";
+import { RenderPass } from "./RenderPass.js";
 
 /**
  * A pass that renders depth into an RGBA buffer.

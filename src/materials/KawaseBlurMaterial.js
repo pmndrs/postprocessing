@@ -1,6 +1,6 @@
 import { NoBlending, ShaderMaterial, Uniform, Vector4 } from "three";
-import { updateFragmentShader } from "../utils";
-import { KernelSize } from "../enums";
+import { KernelSize } from "../enums/index.js";
+import { updateFragmentShader } from "../utils/index.js";
 
 import fragmentShader from "./glsl/convolution.kawase.frag";
 import vertexShader from "./glsl/convolution.kawase.vert";

@@ -270,14 +270,13 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		// Lights
 
-		const ambientLight = new AmbientLight(0x656565);
-		const mainLight = new DirectionalLight(0xffbbaa, 1.0);
-		const backLight = new DirectionalLight(0xffbbaa, 0.1);
+		const ambientLight = new AmbientLight(0x929292);
+		const mainLight = new DirectionalLight(0xffefb5, 3);
 
 		mainLight.position.set(14.4, 2, 20);
-		backLight.position.copy(mainLight.position).negate();
-
-		scene.add(ambientLight, mainLight, backLight);
+		scene.add(ambientLight);
+		scene.add(mainLight);
+		scene.add(mainLight.target);
 
 		// Objects
 

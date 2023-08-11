@@ -2,6 +2,7 @@
  * Added for backward-compatibility.
  *
  * @todo Remove when minimum peer dependency version of three is >= 152.
+ * @ignore
  */
 
 export const NoColorSpace = "";

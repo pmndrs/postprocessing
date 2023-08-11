@@ -1,5 +1,5 @@
 import { FileLoader, Loader, LoadingManager, Vector3 } from "three";
-import { LookupTexture } from "../textures";
+import { LookupTexture } from "../textures/index.js";
 
 /**
  * A 3D LUT loader that supports the .cube file format.

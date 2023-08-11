@@ -1,6 +1,6 @@
 import { Uniform, Vector2 } from "three";
-import { EffectAttribute } from "../enums";
-import { Effect } from "./Effect";
+import { EffectAttribute } from "../enums/index.js";
+import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/chromatic-aberration.frag";
 import vertexShader from "./glsl/chromatic-aberration.vert";

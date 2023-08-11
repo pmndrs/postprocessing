@@ -7,13 +7,12 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { Selection } from "../core";
-import { SRGBColorSpace } from "../enums/ColorSpace";
-import { DepthTestStrategy, EffectAttribute } from "../enums";
-import { DepthMaskMaterial } from "../materials";
-import { ClearPass, DepthPass, ShaderPass } from "../passes";
-import { getOutputColorSpace, setTextureColorSpace } from "../utils";
-import { BloomEffect } from "./BloomEffect";
+import { Selection } from "../core/index.js";
+import { DepthTestStrategy, EffectAttribute, SRGBColorSpace } from "../enums/index.js";
+import { DepthMaskMaterial } from "../materials/index.js";
+import { ClearPass, DepthPass, ShaderPass } from "../passes/index.js";
+import { getOutputColorSpace, setTextureColorSpace } from "../utils/index.js";
+import { BloomEffect } from "./BloomEffect.js";
 
 /**
  * A selective bloom effect.

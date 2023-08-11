@@ -1,7 +1,7 @@
 import { NearestFilter, RepeatWrapping, RGBAFormat, Uniform, Vector2 } from "three";
-import { GlitchMode } from "../enums";
-import { NoiseTexture } from "../textures/NoiseTexture";
-import { Effect } from "./Effect";
+import { GlitchMode } from "../enums/index.js";
+import { NoiseTexture } from "../textures/index.js";
+import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/glitch.frag";
 

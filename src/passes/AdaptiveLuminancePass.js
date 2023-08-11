@@ -1,7 +1,7 @@
 import { NearestFilter, WebGLRenderTarget } from "three";
-import { AdaptiveLuminanceMaterial } from "../materials";
-import { CopyPass } from "./CopyPass";
-import { Pass } from "./Pass";
+import { AdaptiveLuminanceMaterial } from "../materials/index.js";
+import { CopyPass } from "./CopyPass.js";
+import { Pass } from "./Pass.js";
 
 /**
  * A pass that renders an adaptive luminance map.

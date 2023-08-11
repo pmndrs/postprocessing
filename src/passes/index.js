@@ -1,28 +1,28 @@
-export * from "./AdaptiveLuminancePass";
-export * from "./BoxBlurPass";
-export * from "./ClearMaskPass";
-export * from "./ClearPass";
-export * from "./CopyPass";
-export * from "./DepthPass";
-export * from "./DepthDownsamplingPass";
-export * from "./DepthPickingPass";
-export * from "./DepthCopyPass";
-export * from "./EffectPass";
-export * from "./GaussianBlurPass";
-export * from "./KawaseBlurPass";
-export * from "./LambdaPass";
-export * from "./LuminancePass";
-export * from "./MaskPass";
-export * from "./MipmapBlurPass";
-export * from "./NormalPass";
-export * from "./Pass";
-export * from "./RenderPass";
-export * from "./ShaderPass";
-export * from "./TiltShiftBlurPass";
+export * from "./AdaptiveLuminancePass.js";
+export * from "./BoxBlurPass.js";
+export * from "./ClearMaskPass.js";
+export * from "./ClearPass.js";
+export * from "./CopyPass.js";
+export * from "./DepthPass.js";
+export * from "./DepthDownsamplingPass.js";
+export * from "./DepthPickingPass.js";
+export * from "./DepthCopyPass.js";
+export * from "./EffectPass.js";
+export * from "./GaussianBlurPass.js";
+export * from "./KawaseBlurPass.js";
+export * from "./LambdaPass.js";
+export * from "./LuminancePass.js";
+export * from "./MaskPass.js";
+export * from "./MipmapBlurPass.js";
+export * from "./NormalPass.js";
+export * from "./Pass.js";
+export * from "./RenderPass.js";
+export * from "./ShaderPass.js";
+export * from "./TiltShiftBlurPass.js";
 
 /** @deprecated Renamed to CopyPass. */
-export { CopyPass as SavePass } from "./CopyPass";
+export { CopyPass as SavePass } from "./CopyPass.js";
 /** @deprecated Renamed to DepthCopyPass. */
-export { DepthCopyPass as DepthSavePass } from "./DepthCopyPass";
+export { DepthCopyPass as DepthSavePass } from "./DepthCopyPass.js";
 /** @deprecated Renamed to KawaseBlurPass. */
-export { KawaseBlurPass as BlurPass } from "./KawaseBlurPass";
+export { KawaseBlurPass as BlurPass } from "./KawaseBlurPass.js";

@@ -1,8 +1,8 @@
 import { LinearFilter, UnsignedByteType, WebGLRenderTarget } from "three";
-import { SRGBColorSpace } from "../enums/ColorSpace";
-import { CopyMaterial } from "../materials";
-import { getOutputColorSpace, setTextureColorSpace } from "../utils";
-import { Pass } from "./Pass";
+import { SRGBColorSpace } from "../enums/index.js";
+import { CopyMaterial } from "../materials/index.js";
+import { getOutputColorSpace, setTextureColorSpace } from "../utils/index.js";
+import { Pass } from "./Pass.js";
 
 /**
  * A pass that copies the contents of an input buffer to another render target.

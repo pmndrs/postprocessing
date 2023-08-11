@@ -121,23 +121,23 @@ window.addEventListener("load", () => load().then((assets) => {
 	const fpsMeter = new FPSMeter();
 	const texture = effect.texture;
 	const pane = new Pane({ container: container.querySelector(".tp") });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.addBinding(fpsMeter, "fps", { readonly: true, label: "FPS" });
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(texture, "rotation", { min: 0, max: 2 * Math.PI, step: 0.001 });
+	folder.addBinding(texture, "rotation", { min: 0, max: 2 * Math.PI, step: 0.001 });
 
 	let subFolder = folder.addFolder({ title: "offset" });
-	subFolder.addInput(texture.offset, "x", { min: 0, max: 1, step: 0.001 });
-	subFolder.addInput(texture.offset, "y", { min: 0, max: 1, step: 0.001 });
+	subFolder.addBinding(texture.offset, "x", { min: 0, max: 1, step: 0.001 });
+	subFolder.addBinding(texture.offset, "y", { min: 0, max: 1, step: 0.001 });
 	subFolder = folder.addFolder({ title: "repeat" });
-	subFolder.addInput(texture.repeat, "x", { min: 0, max: 2, step: 0.001 });
-	subFolder.addInput(texture.repeat, "y", { min: 0, max: 2, step: 0.001 });
+	subFolder.addBinding(texture.repeat, "x", { min: 0, max: 2, step: 0.001 });
+	subFolder.addBinding(texture.repeat, "y", { min: 0, max: 2, step: 0.001 });
 	subFolder = folder.addFolder({ title: "center" });
-	subFolder.addInput(texture.center, "x", { min: 0, max: 1, step: 0.001 });
-	subFolder.addInput(texture.center, "y", { min: 0, max: 1, step: 0.001 });
+	subFolder.addBinding(texture.center, "x", { min: 0, max: 1, step: 0.001 });
+	subFolder.addBinding(texture.center, "y", { min: 0, max: 1, step: 0.001 });
 
-	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
+	folder.addBinding(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
+	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 

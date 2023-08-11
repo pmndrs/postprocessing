@@ -1,6 +1,6 @@
 import { Uniform } from "three";
-import { VignetteTechnique } from "../enums";
-import { Effect } from "./Effect";
+import { VignetteTechnique } from "../enums/index.js";
+import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/vignette.frag";
 

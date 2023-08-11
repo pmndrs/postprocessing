@@ -1,11 +1,10 @@
 import { BasicDepthPacking, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
-import { BokehMaterial, CircleOfConfusionMaterial, MaskMaterial } from "../materials";
-import { ColorChannel, EffectAttribute, KernelSize, MaskFunction } from "../enums";
-import { Resolution } from "../core";
-import { SRGBColorSpace } from "../enums/ColorSpace";
-import { KawaseBlurPass, ShaderPass } from "../passes";
-import { getOutputColorSpace, setTextureColorSpace, viewZToOrthographicDepth } from "../utils";
-import { Effect } from "./Effect";
+import { Resolution } from "../core/index.js";
+import { ColorChannel, EffectAttribute, KernelSize, MaskFunction, SRGBColorSpace } from "../enums/index.js";
+import { BokehMaterial, CircleOfConfusionMaterial, MaskMaterial } from "../materials/index.js";
+import { KawaseBlurPass, ShaderPass } from "../passes/index.js";
+import { getOutputColorSpace, setTextureColorSpace, viewZToOrthographicDepth } from "../utils/index.js";
+import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/depth-of-field.frag";
 
@@ -181,7 +180,7 @@ export class DepthOfFieldEffect extends Effect {
 
 		this.maskPass = new ShaderPass(new MaskMaterial(this.renderTargetCoC.texture));
 		const maskMaterial = this.maskPass.fullscreenMaterial;
-		maskMaterial.maskFunction = MaskFunction.MULTIPLY;
+		maskMaterial.maskFunction = MaskFunction.MULTIPLY_RGB_SET_ALPHA;
 		maskMaterial.colorChannel = ColorChannel.GREEN;
 
 		/**
@@ -526,10 +525,6 @@ export class DepthOfFieldEffect extends Effect {
 
 		// The blur pass operates on the CoC buffer.
 		this.blurPass.initialize(renderer, alpha, UnsignedByteType);
-
-		const maskMaterial = this.maskPass.fullscreenMaterial;
-		maskMaterial.maskFunction = alpha ? MaskFunction.MULTIPLY :
-			MaskFunction.MULTIPLY_RGB_SET_ALPHA;
 
 		if(renderer.capabilities.logarithmicDepthBuffer) {
 

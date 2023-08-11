@@ -1,7 +1,7 @@
 import { Uniform, Vector2, Vector4 } from "three";
-import { updateFragmentShader } from "../utils";
-import { KernelSize } from "../enums";
-import { KawaseBlurMaterial } from "./KawaseBlurMaterial";
+import { KernelSize } from "../enums/index.js";
+import { updateFragmentShader } from "../utils/index.js";
+import { KawaseBlurMaterial } from "./KawaseBlurMaterial.js";
 
 import fragmentShader from "./glsl/convolution.tilt-shift.frag";
 import vertexShader from "./glsl/convolution.tilt-shift.vert";

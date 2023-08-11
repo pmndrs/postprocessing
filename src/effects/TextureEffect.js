@@ -1,6 +1,6 @@
 import { Uniform, UnsignedByteType } from "three";
-import { ColorChannel } from "../enums";
-import { Effect } from "./Effect";
+import { ColorChannel } from "../enums/index.js";
+import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/texture.frag";
 import vertexShader from "./glsl/texture.vert";

@@ -5146,16 +5146,18 @@ declare module "postprocessing" {
 
 	export type BloomEffectOptions = {
 		blendFunction?: BlendFunction;
-		mipmapBlur?: boolean;
 		luminanceThreshold?: number;
 		luminanceSmoothing?: number;
+		mipmapBlur?: boolean;
 		intensity?: number;
+		radius?: number;
+		levels?: number;
+		kernelSize?: KernelSize;
 		resolutionScale?: number;
-		resolutionX?: number;
-		resolutionY?: number;
 		width?: number;
 		height?: number;
-		kernelSize?: KernelSize;
+		resolutionX?: number;
+		resolutionY?: number;
 	};
 
 	/**
@@ -5168,29 +5170,33 @@ declare module "postprocessing" {
 		 *
 		 * @param {Object} [options] - The options.
 		 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
+		 * @param {Number} [options.luminanceThreshold=0.9] - The luminance threshold. Raise this value to mask out darker elements in the scene.
+		 * @param {Number} [options.luminanceSmoothing=0.025] - Controls the smoothness of the luminance threshold.
 		 * @param {Boolean} [options.mipmapBlur=false] - Enables or disables mipmap blur.
-		 * @param {Number} [options.luminanceThreshold=0.9] - The luminance threshold. Raise this value to mask out darker elements in the scene. Range is [0, 1].
-		 * @param {Number} [options.luminanceSmoothing=0.025] - Controls the smoothness of the luminance threshold. Range is [0, 1].
-		 * @param {Number} [options.intensity=1.0] - The intensity.
-		 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
-		 * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
-		 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
-		 * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
-		 * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprecated. Use resolutionX instead.
-		 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use resolutionY instead.
+		 * @param {Number} [options.intensity=1.0] - The bloom intensity.
+		 * @param {Number} [options.radius=0.85] - The blur radius. Only applies to mipmap blur.
+		 * @param {Number} [options.levels=8] - The amount of MIP levels. Only applies to mipmap blur.
+		 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - Deprecated. Use mipmapBlur instead.
+		 * @param {Number} [options.resolutionScale=0.5] - Deprecated. Use mipmapBlur instead.
+		 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - Deprecated. Use mipmapBlur instead.
+		 * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - Deprecated. Use mipmapBlur instead.
+		 * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprecated. Use mipmapBlur instead.
+		 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use mipmapBlur instead.
 		 */
 		constructor({
 			blendFunction,
-			mipmapBlur,
 			luminanceThreshold,
 			luminanceSmoothing,
+			mipmapBlur,
 			intensity,
+			radius,
+			levels,
+			kernelSize,
 			resolutionScale,
 			width,
 			height,
 			resolutionX,
-			resolutionY,
-			kernelSize
+			resolutionY
 		}?: BloomEffectOptions);
 
 		/**
@@ -9107,4 +9113,73 @@ declare module "postprocessing" {
 		near: number,
 		far: number
 	): number;
+
+	/**
+	 * A lens distortion effect.
+	 *
+	 * Original shader ported from https://github.com/ycw/three-lens-distortion
+	 */
+
+	export class LensDistortionEffect extends Effect {
+
+		/**
+		* Constructs a new lens distortion effect.
+		*
+		* @param {Object} [options] - The options.
+		* @param {Vector2} [options.distortion] - The distortion value.
+		* @param {Vector2} [options.principalPoint] - The center point.
+		* @param {Vector2} [options.focalLength] - The focal length.
+		* @param {Number} [options.skew=0] - The skew value.
+		*/
+
+		constructor({
+			distortion,
+			principalPoint,
+			focalLength,
+			skew
+		}?: {
+			distortion: Vector2;
+			principalPoint: Vector2;
+			focalLength: Vector2;
+			skew?: number;
+		});
+
+		/**
+		 * The radial distortion coefficients. Default is (0, 0).
+		 *
+		 * @type {Vector2}
+		 */
+
+		get distortion(): Vector2;
+		set distortion(value: Vector2);
+
+		/**
+		 * The principal point. Default is (0, 0).
+		 *
+		 * @type {Vector2}
+		 */
+
+		get principalPoint(): Vector2;
+		set principalPoint(value: Vector2);
+
+		/**
+		 * The focal length. Default is (1, 1).
+		 *
+		 * @type {Vector2}
+		 */
+
+		get focalLength(): Vector2;
+		set focalLength(value: Vector2);
+
+		/**
+		 * The skew factor in radians.
+		 *
+		 * @type {Number}
+		 */
+
+		get skew(): number;
+		set skew(value: number);
+
+	}
+
 }

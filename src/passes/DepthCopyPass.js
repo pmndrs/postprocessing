@@ -7,8 +7,8 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { DepthCopyMaterial } from "../materials";
-import { Pass } from "./Pass";
+import { DepthCopyMaterial } from "../materials/index.js";
+import { Pass } from "./Pass.js";
 
 /**
  * A pass that copies depth into a render target.

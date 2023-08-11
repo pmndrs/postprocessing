@@ -232,8 +232,8 @@ export class BloomDemo extends PostProcessingDemo {
 
 		// Lights
 
-		const ambientLight = new AmbientLight(0x7a7a7a);
-		const mainLight = new DirectionalLight(0xffffff, 1.0);
+		const ambientLight = new AmbientLight(0xb8b8b8);
+		const mainLight = new DirectionalLight(0xffffff, 3);
 		mainLight.position.set(-1, 1, 1);
 
 		scene.add(ambientLight, mainLight);
@@ -266,7 +266,7 @@ export class BloomDemo extends PostProcessingDemo {
 			blendFunction: BlendFunction.ADD,
 			mipmapBlur: true,
 			luminanceThreshold: 0.4,
-			luminanceSmoothing: 0.3,
+			luminanceSmoothing: 0.2,
 			intensity: 3.0
 		});
 

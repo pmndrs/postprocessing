@@ -102,16 +102,16 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.addBinding(fpsMeter, "fps", { readonly: true, label: "FPS" });
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(effect, "samples", { min: 0, max: 24, step: 1 });
-	folder.addInput(effect, "minEdgeThreshold", { min: 0.01, max: 0.3, step: 1e-4 });
-	folder.addInput(effect, "maxEdgeThreshold", { min: 0.01, max: 0.3, step: 1e-4 });
-	folder.addInput(effect, "subpixelQuality", { min: 0, max: 1.0, step: 1e-4 });
+	folder.addBinding(effect, "samples", { min: 0, max: 24, step: 1 });
+	folder.addBinding(effect, "minEdgeThreshold", { min: 0.01, max: 0.3, step: 1e-4 });
+	folder.addBinding(effect, "maxEdgeThreshold", { min: 0.01, max: 0.3, step: 1e-4 });
+	folder.addBinding(effect, "subpixelQuality", { min: 0, max: 1.0, step: 1e-4 });
 
-	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
+	folder.addBinding(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
+	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 

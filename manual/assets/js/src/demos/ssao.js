@@ -121,39 +121,39 @@ window.addEventListener("load", () => load().then((assets) => {
 	const color = new Color();
 	const ssaoMaterial = effect.ssaoMaterial;
 	const pane = new Pane({ container: container.querySelector(".tp") });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.addBinding(fpsMeter, "fps", { readonly: true, label: "FPS" });
 
 	const params = { "color": 0x000000 };
 	const folder = pane.addFolder({ title: "Settings" });
 
 	let subfolder = folder.addFolder({ title: "Distance Cutoff", expanded: false });
-	subfolder.addInput(ssaoMaterial, "worldDistanceThreshold", { min: 0, max: 100, step: 0.1 });
-	subfolder.addInput(ssaoMaterial, "worldDistanceFalloff", { min: 0, max: 10, step: 0.1 });
+	subfolder.addBinding(ssaoMaterial, "worldDistanceThreshold", { min: 0, max: 100, step: 0.1 });
+	subfolder.addBinding(ssaoMaterial, "worldDistanceFalloff", { min: 0, max: 10, step: 0.1 });
 	subfolder = folder.addFolder({ title: "Proximity Cutoff", expanded: false });
-	subfolder.addInput(ssaoMaterial, "worldProximityThreshold", { min: 0, max: 3, step: 1e-2 });
-	subfolder.addInput(ssaoMaterial, "worldProximityFalloff", { min: 0, max: 3, step: 1e-2 });
+	subfolder.addBinding(ssaoMaterial, "worldProximityThreshold", { min: 0, max: 3, step: 1e-2 });
+	subfolder.addBinding(ssaoMaterial, "worldProximityFalloff", { min: 0, max: 3, step: 1e-2 });
 
 	if(renderer.capabilities.isWebGL2) {
 
-		folder.addInput(effect, "depthAwareUpsampling");
+		folder.addBinding(effect, "depthAwareUpsampling");
 
 	}
 
-	folder.addInput(effect.resolution, "scale", { label: "resolution", min: 0.25, max: 1, step: 0.05 });
+	folder.addBinding(effect.resolution, "scale", { label: "resolution", min: 0.25, max: 1, step: 0.05 });
 
-	folder.addInput(ssaoMaterial, "samples", { min: 1, max: 32, step: 1 });
-	folder.addInput(ssaoMaterial, "rings", { min: 1, max: 16, step: 1 });
-	folder.addInput(ssaoMaterial, "radius", { min: 1e-6, max: 1.0, step: 1e-2 });
-	folder.addInput(ssaoMaterial, "minRadiusScale", { min: 0, max: 1, step: 1e-2 });
-	folder.addInput(ssaoMaterial, "bias", { min: 0, max: 0.5, step: 1e-3 });
-	folder.addInput(ssaoMaterial, "fade", { min: 0, max: 1, step: 1e-3 });
-	folder.addInput(effect, "intensity", { min: 0, max: 4, step: 1e-2 });
-	folder.addInput(effect, "luminanceInfluence", { min: 0, max: 1, step: 1e-2 });
-	folder.addInput(params, "color", { view: "color" })
+	folder.addBinding(ssaoMaterial, "samples", { min: 1, max: 32, step: 1 });
+	folder.addBinding(ssaoMaterial, "rings", { min: 1, max: 16, step: 1 });
+	folder.addBinding(ssaoMaterial, "radius", { min: 1e-6, max: 1.0, step: 1e-2 });
+	folder.addBinding(ssaoMaterial, "minRadiusScale", { min: 0, max: 1, step: 1e-2 });
+	folder.addBinding(ssaoMaterial, "bias", { min: 0, max: 0.5, step: 1e-3 });
+	folder.addBinding(ssaoMaterial, "fade", { min: 0, max: 1, step: 1e-3 });
+	folder.addBinding(effect, "intensity", { min: 0, max: 4, step: 1e-2 });
+	folder.addBinding(effect, "luminanceInfluence", { min: 0, max: 1, step: 1e-2 });
+	folder.addBinding(params, "color", { view: "color" })
 		.on("change", (e) => effect.color = (e.value === 0) ? null : color.setHex(e.value).convertSRGBToLinear());
 
-	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
+	folder.addBinding(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
+	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 

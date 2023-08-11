@@ -10,18 +10,17 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { Resolution } from "../core";
-import { SRGBColorSpace } from "../enums/ColorSpace";
-import { BlendFunction, EffectAttribute, KernelSize } from "../enums";
-import { DepthMaskMaterial, GodRaysMaterial } from "../materials";
-import { KawaseBlurPass, ClearPass, RenderPass, ShaderPass } from "../passes";
-import { getOutputColorSpace, setTextureColorSpace } from "../utils";
-import { Effect } from "./Effect";
+import { Resolution } from "../core/index.js";
+import { BlendFunction, EffectAttribute, KernelSize, SRGBColorSpace } from "../enums/index.js";
+import { DepthMaskMaterial, GodRaysMaterial } from "../materials/index.js";
+import { KawaseBlurPass, ClearPass, RenderPass, ShaderPass } from "../passes/index.js";
+import { getOutputColorSpace, setTextureColorSpace } from "../utils/index.js";
+import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/god-rays.frag";
 
-const v = new Vector3();
-const m = new Matrix4();
+const v = /* @__PURE__ */ new Vector3();
+const m = /* @__PURE__ */ new Matrix4();
 
 /**
  * A god rays effect.

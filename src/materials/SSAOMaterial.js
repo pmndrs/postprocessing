@@ -1,5 +1,5 @@
 import { BasicDepthPacking, Matrix4, NoBlending, PerspectiveCamera, ShaderMaterial, Uniform, Vector2 } from "three";
-import { orthographicDepthToViewZ, viewZToOrthographicDepth } from "../utils";
+import { orthographicDepthToViewZ, viewZToOrthographicDepth } from "../utils/index.js";
 
 import fragmentShader from "./glsl/ssao.frag";
 import vertexShader from "./glsl/ssao.vert";

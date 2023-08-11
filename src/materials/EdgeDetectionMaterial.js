@@ -1,5 +1,5 @@
 import { BasicDepthPacking, NoBlending, REVISION, ShaderMaterial, Uniform, Vector2 } from "three";
-import { EdgeDetectionMode } from "../enums";
+import { EdgeDetectionMode } from "../enums/index.js";
 
 import fragmentShader from "./glsl/edge-detection.frag";
 import vertexShader from "./glsl/edge-detection.vert";

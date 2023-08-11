@@ -1,5 +1,5 @@
 import { NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
-import { updateFragmentShader } from "../utils";
+import { updateFragmentShader } from "../utils/index.js";
 
 import fragmentShader from "./glsl/convolution.downsampling.frag";
 import vertexShader from "./glsl/convolution.downsampling.vert";

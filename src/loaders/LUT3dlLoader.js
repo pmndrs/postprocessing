@@ -1,5 +1,5 @@
 import { FileLoader, Loader, LoadingManager } from "three";
-import { LookupTexture } from "../textures";
+import { LookupTexture } from "../textures/index.js";
 
 /**
  * A 3D LUT loader that supports the .3dl file format.

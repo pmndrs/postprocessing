@@ -1,6 +1,6 @@
 import { BasicDepthPacking, NoBlending, PerspectiveCamera, REVISION, ShaderMaterial, Uniform, Vector2 } from "three";
-import { updateFragmentShader } from "../utils";
-import { EffectShaderSection as Section } from "../enums";
+import { updateFragmentShader } from "../utils/index.js";
+import { EffectShaderSection as Section } from "../enums/index.js";
 
 import fragmentTemplate from "./glsl/effect.frag";
 import vertexTemplate from "./glsl/effect.vert";

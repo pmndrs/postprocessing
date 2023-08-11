@@ -1,5 +1,5 @@
 import { UnsignedByteType } from "three";
-import { Pass } from "./Pass";
+import { Pass } from "./Pass.js";
 
 /**
  * A shader pass.

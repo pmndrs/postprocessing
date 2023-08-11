@@ -156,9 +156,9 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 		// Lights
 
-		const ambientLight = new AmbientLight(0x474747);
+		const ambientLight = new AmbientLight(0x909090);
 
-		const mainLight = new PointLight(0xffddaa);
+		const mainLight = new PointLight(0xffefd5, 30);
 		mainLight.position.set(-0.5, 3, -0.25);
 		mainLight.castShadow = true;
 		mainLight.shadow.bias = 0.0000125;

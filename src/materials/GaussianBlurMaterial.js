@@ -1,6 +1,6 @@
 import { NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
-import { updateFragmentShader } from "../utils";
-import { GaussKernel } from "../core";
+import { GaussKernel } from "../core/index.js";
+import { updateFragmentShader } from "../utils/index.js";
 
 import fragmentShader from "./glsl/convolution.gaussian.frag";
 import vertexShader from "./glsl/convolution.gaussian.vert";

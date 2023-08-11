@@ -1,1 +1,1 @@
-export * from "./BlendMode";
+export * from "./BlendMode.js";

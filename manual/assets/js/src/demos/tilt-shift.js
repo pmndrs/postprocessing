@@ -105,20 +105,20 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.addBinding(fpsMeter, "fps", { readonly: true, label: "FPS" });
 
 	const folder = pane.addFolder({ title: "Settings" });
 	let subfolder = folder.addFolder({ title: "Blur" });
-	subfolder.addInput(effect.blurPass.blurMaterial, "kernelSize", { options: KernelSize });
-	subfolder.addInput(effect.blurPass.blurMaterial, "scale", { min: 0, max: 2, step: 0.01 });
-	subfolder.addInput(effect.resolution, "scale", { label: "resolution", min: 0.25, max: 1, step: 0.05 });
+	subfolder.addBinding(effect.blurPass.blurMaterial, "kernelSize", { options: KernelSize });
+	subfolder.addBinding(effect.blurPass.blurMaterial, "scale", { min: 0, max: 2, step: 0.01 });
+	subfolder.addBinding(effect.resolution, "scale", { label: "resolution", min: 0.25, max: 1, step: 0.05 });
 	subfolder = folder.addFolder({ title: "Gradient Mask" });
-	subfolder.addInput(effect, "offset", { min: -1, max: 1, step: 1e-2 });
-	subfolder.addInput(effect, "rotation", { min: 0, max: 2 * Math.PI, step: 1e-2 });
-	subfolder.addInput(effect, "focusArea", { min: 0, max: 1, step: 1e-2 });
-	subfolder.addInput(effect, "feather", { min: 0, max: 1, step: 1e-3 });
-	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 1e-2 });
-	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
+	subfolder.addBinding(effect, "offset", { min: -1, max: 1, step: 1e-2 });
+	subfolder.addBinding(effect, "rotation", { min: 0, max: 2 * Math.PI, step: 1e-2 });
+	subfolder.addBinding(effect, "focusArea", { min: 0, max: 1, step: 1e-2 });
+	subfolder.addBinding(effect, "feather", { min: 0, max: 1, step: 1e-3 });
+	folder.addBinding(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 1e-2 });
+	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 

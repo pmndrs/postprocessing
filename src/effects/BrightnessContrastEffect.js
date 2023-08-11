@@ -1,7 +1,6 @@
 import { Uniform } from "three";
-import { SRGBColorSpace } from "../enums/ColorSpace";
-import { BlendFunction } from "../enums";
-import { Effect } from "./Effect";
+import { BlendFunction, SRGBColorSpace } from "../enums/index.js";
+import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/brightness-contrast.frag";
 

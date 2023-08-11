@@ -112,7 +112,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.addBinding(fpsMeter, "fps", { readonly: true, label: "FPS" });
 
 	const folder = pane.addFolder({ title: "Settings" });
 	const tab = folder.addTab({
@@ -129,7 +129,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	});
 
-	tab.pages[0].addInput(gaussianBlurPass.blurMaterial, "kernelSize", {
+	tab.pages[0].addBinding(gaussianBlurPass.blurMaterial, "kernelSize", {
 		options: {
 			"7x7": 7,
 			"15x15": 15,
@@ -141,13 +141,13 @@ window.addEventListener("load", () => load().then((assets) => {
 		}
 	});
 
-	tab.pages[0].addInput(gaussianBlurPass.blurMaterial, "scale", { min: 0, max: 2, step: 0.01 });
-	tab.pages[0].addInput(gaussianBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
-	tab.pages[0].addInput(gaussianBlurPass, "iterations", { min: 1, max: 8, step: 1 });
+	tab.pages[0].addBinding(gaussianBlurPass.blurMaterial, "scale", { min: 0, max: 2, step: 0.01 });
+	tab.pages[0].addBinding(gaussianBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
+	tab.pages[0].addBinding(gaussianBlurPass, "iterations", { min: 1, max: 8, step: 1 });
 
-	tab.pages[1].addInput(kawaseBlurPass.blurMaterial, "kernelSize", { options: KernelSize });
-	tab.pages[1].addInput(kawaseBlurPass.blurMaterial, "scale", { min: 0, max: 2, step: 0.01 });
-	tab.pages[1].addInput(kawaseBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
+	tab.pages[1].addBinding(kawaseBlurPass.blurMaterial, "kernelSize", { options: KernelSize });
+	tab.pages[1].addBinding(kawaseBlurPass.blurMaterial, "scale", { min: 0, max: 2, step: 0.01 });
+	tab.pages[1].addBinding(kawaseBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
 
 	// Resize Handler
 

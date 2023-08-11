@@ -10,14 +10,12 @@ import {
 	Vector3
 } from "three";
 
-import { LinearSRGBColorSpace, SRGBColorSpace } from "../../enums/ColorSpace";
-import { LUTOperation } from "../../enums";
-import { setTextureColorSpace } from "../../utils";
-import { RawImageData } from "../RawImageData";
+import { LinearSRGBColorSpace, LUTOperation, SRGBColorSpace } from "../../enums/index.js";
+import { copyTextureColorSpace, setTextureColorSpace } from "../../utils/index.js";
+import { RawImageData } from "../RawImageData.js";
 import workerProgram from "../../../tmp/lut/worker.txt";
-import { copyTextureColorSpace } from "../../utils/BackCompat.js";
 
-const c = new Color();
+const c = /* @__PURE__ */ new Color();
 
 /**
  * A 3D lookup texture (LUT).

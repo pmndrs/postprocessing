@@ -1,9 +1,9 @@
 import { Color, RepeatWrapping, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
-import { Resolution, Selection } from "../core";
-import { BlendFunction, KernelSize } from "../enums";
-import { DepthComparisonMaterial, OutlineMaterial } from "../materials";
-import { KawaseBlurPass, ClearPass, DepthPass, RenderPass, ShaderPass } from "../passes";
-import { Effect } from "./Effect";
+import { Resolution, Selection } from "../core/index.js";
+import { BlendFunction, KernelSize } from "../enums/index.js";
+import { DepthComparisonMaterial, OutlineMaterial } from "../materials/index.js";
+import { KawaseBlurPass, ClearPass, DepthPass, RenderPass, ShaderPass } from "../passes/index.js";
+import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/outline.frag";
 import vertexShader from "./glsl/outline.vert";
@@ -196,13 +196,13 @@ export class OutlineEffect extends Effect {
 		this.time = 0;
 
 		/**
-		 * Indicates whether the outline effect is active.
+		 * Indicates whether the outlines should be updated.
 		 *
 		 * @type {Boolean}
 		 * @private
 		 */
 
-		this.active = false;
+		this.forceUpdate = true;
 
 		/**
 		 * A selection of objects that will be outlined.
@@ -733,7 +733,7 @@ export class OutlineEffect extends Effect {
 		const background = scene.background;
 		const mask = camera.layers.mask;
 
-		if(selection.size > 0) {
+		if(this.forceUpdate || selection.size > 0) {
 
 			scene.background = null;
 			pulse.value = 1;
@@ -744,7 +744,6 @@ export class OutlineEffect extends Effect {
 
 			}
 
-			this.active = true;
 			this.time += deltaTime;
 
 			// Render a custom depth texture and ignore selected objects.
@@ -769,17 +768,9 @@ export class OutlineEffect extends Effect {
 
 			}
 
-		} else if(this.active) {
-
-			// Must call render as a workaround for a multisampling bug.
-			camera.layers.set(selection.layer);
-			this.maskPass.render(renderer, this.renderTargetMask);
-			camera.layers.mask = mask;
-
-			this.clearPass.render(renderer, this.renderTargetOutline);
-			this.active = false;
-
 		}
+
+		this.forceUpdate = selection.size > 0;
 
 	}
 

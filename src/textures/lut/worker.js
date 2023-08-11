@@ -1,5 +1,5 @@
-import { LUTOperation } from "../../enums";
-import { TetrahedralUpscaler } from "./TetrahedralUpscaler";
+import { LUTOperation } from "../../enums/index.js";
+import { TetrahedralUpscaler } from "./TetrahedralUpscaler.js";
 
 /**
  * Performs long-running LUT transformations.

@@ -1,7 +1,7 @@
-import { Resolution } from "../core";
-import { KernelSize } from "../enums";
-import { TiltShiftBlurMaterial } from "../materials";
-import { KawaseBlurPass } from "./KawaseBlurPass";
+import { Resolution } from "../core/index.js";
+import { KernelSize } from "../enums/index.js";
+import { TiltShiftBlurMaterial } from "../materials/index.js";
+import { KawaseBlurPass } from "./KawaseBlurPass.js";
 
 /**
  * A tilt shift blur pass.

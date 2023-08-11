@@ -1,5 +1,5 @@
 import { NoBlending, ShaderMaterial, Uniform } from "three";
-import { updateFragmentShader } from "../utils";
+import { updateFragmentShader } from "../utils/index.js";
 
 import fragmentShader from "./glsl/copy.frag";
 import vertexShader from "./glsl/common.vert";
