@@ -6,7 +6,7 @@ draft: false
 menu:
   demos:
     parent: utility
-    weight: 10
+    weight: 20
 script: blur
 ---
 

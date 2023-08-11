@@ -1,48 +1,61 @@
-import { createRequire } from "module";
+import pkg from "./package.json" assert { type: "json" };
+import esbuild from "esbuild";
 import { glsl } from "esbuild-plugin-glsl";
 import glob from "tiny-glob";
-import esbuild from "esbuild";
-
-const require = createRequire(import.meta.url);
-const pkg = require("./package");
 
 const minify = process.argv.includes("-m");
-const plugins = [glsl({ minify })];
 const external = ["three", "spatial-controls", "tweakpane"];
-
+const plugins = [glsl({ minify })];
 const date = new Date();
 const banner = `/**
  * ${pkg.name} v${pkg.version} build ${date.toDateString()}
  * ${pkg.homepage}
- * Copyright 2015-${date.getFullYear()} ${pkg.author.name}
+ * Copyright 2015 ${pkg.author.name}
  * @license ${pkg.license}
  */`;
 
-const workers = {
-	entryPoints: await glob("./src/**/worker.js"),
-	outExtension: { ".js": ".txt" },
-	outdir: "./tmp",
-	target: "es2019",
-	logLevel: "info",
-	format: "iife",
-	bundle: true,
-	minify
-};
+// #region Library
 
-const demo = {
-	entryPoints: ["./demo/src/index.js"],
-	outdir: "./public/demo",
+const workers = {
+	entryPoints: await glob("./src/**/worker.ts"),
+	outExtension: { ".js": ".txt" },
+	outdir: "./temp",
 	target: "es6",
 	logLevel: "info",
 	format: "iife",
 	bundle: true,
-	plugins,
+	minify
+};
+
+const lib = {
+	entryPoints: ["./src/index.ts"],
+	outfile: "./dist/index.js",
+	banner: { js: banner },
+	logLevel: "info",
+	format: "esm",
+	bundle: true,
+	external,
+	plugins
+};
+
+// #endregion
+
+// #region Manual
+
+const vendor = {
+	entryPoints: ["./manual/assets/js/libs/vendor.ts"],
+	outdir: "./manual/assets/js/dist/libs",
+	globalName: "VENDOR",
+	target: "es6",
+	logLevel: "info",
+	format: "iife",
+	bundle: true,
 	minify
 };
 
 const manual = {
-	entryPoints: ["./manual/assets/js/src/index.js"]
-		.concat(await glob("./manual/assets/js/src/demos/*.js")),
+	entryPoints: ["./manual/assets/js/src/index.ts"]
+		.concat(await glob("./manual/assets/js/src/demos/*.ts")),
 	outdir: "./manual/assets/js/dist",
 	logLevel: "info",
 	format: "iife",
@@ -53,89 +66,22 @@ const manual = {
 	minify
 };
 
-await esbuild.build({
-	entryPoints: ["./manual/assets/js/libs/vendor.js"],
-	outdir: "./manual/assets/js/dist/libs",
-	globalName: "VENDOR",
-	target: "es6",
-	logLevel: "info",
-	format: "iife",
-	bundle: true,
-	minify
-});
+// #endregion
+
+await esbuild.build(vendor);
 
 if(process.argv.includes("-w")) {
 
 	const ctxWorkers = await esbuild.context(workers);
-	const ctxDemo = await esbuild.context(demo);
-	const ctxManual = await esbuild.context(manual);
 	await ctxWorkers.watch();
-	await ctxDemo.watch();
-	await ctxManual.watch();
+	// const ctxManual = await esbuild.context(manual);
+	// await ctxManual.watch();
 
 } else {
 
 	await esbuild.build(workers);
-	await esbuild.build(demo);
-	await esbuild.build(manual);
+	await esbuild.build(lib);
+	// await esbuild.build(manual);
 
 }
 
-await esbuild.build({
-	entryPoints: ["./src/index.js"],
-	outfile: "./build/index.js",
-	banner: { js: banner },
-	logLevel: "info",
-	format: "esm",
-	target: "es2019",
-	bundle: true,
-	external,
-	plugins
-});
-
-// @todo Remove in next major release.
-
-await esbuild.build({
-	entryPoints: ["./src/index.js"],
-	outfile: "./build/index.cjs",
-	banner: { js: banner },
-	logLevel: "info",
-	format: "cjs",
-	target: "es2019",
-	bundle: true,
-	external,
-	plugins
-});
-
-const globalName = pkg.name.replace(/-/g, "").toUpperCase();
-const requireShim = "if(typeof window===\"object\"&&!window.require)window.require=()=>window.THREE;";
-const footer = `if(typeof module==="object"&&module.exports)module.exports=${globalName};`;
-
-await esbuild.build({
-	entryPoints: ["./src/index.js"],
-	outfile: `./build/${pkg.name}.js`,
-	banner: { js: `${banner}\n${requireShim}` },
-	footer: { js: footer },
-	logLevel: "info",
-	format: "iife",
-	target: "es2019",
-	bundle: true,
-	globalName,
-	external,
-	plugins
-});
-
-await esbuild.build({
-	entryPoints: ["./src/index.js"],
-	outfile: `./build/${pkg.name}.min.js`,
-	banner: { js: `${banner}\n${requireShim}` },
-	footer: { js: footer },
-	logLevel: "info",
-	format: "iife",
-	target: "es2019",
-	bundle: true,
-	globalName,
-	external,
-	plugins,
-	minify
-});

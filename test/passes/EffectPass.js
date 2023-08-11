@@ -1,17 +1,11 @@
 import test from "ava";
-import { EffectPass, TextureEffect } from "postprocessing";
+import { EffectPass } from "postprocessing";
 
 test("can be created and destroyed", t => {
 
-	const object = new EffectPass(null);
+	const object = new EffectPass();
 	object.dispose();
 
 	t.pass();
-
-});
-
-test("can create a compound shader material", t => {
-
-	t.truthy(new EffectPass(null, new TextureEffect()));
 
 });

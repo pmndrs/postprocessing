@@ -1,110 +1,101 @@
 {
 	"name": "postprocessing",
-	"version": "6.34.1",
+	"version": "7.0.0-alpha",
 	"description": "A post processing library for three.js.",
 	"homepage": "https://github.com/pmndrs/postprocessing",
 	"license": "Zlib",
 	"type": "module",
 	"sideEffects": false,
-	"main": "./build/index.cjs",
-	"module": "./build/index.js",
-	"types": "./build/types/index.d.cts",
+	"main": "./dist/index.js",
+	"types": "./types/index.d.ts",
 	"exports": {
 		".": {
-			"import": {
-				"types": "./build/types/index.d.ts",
-				"default": "./build/index.js"
-			},
-			"require": {
-				"types": "./build/types/index.d.cts",
-				"default": "./build/index.cjs"
-			}
+			"types": "./dist/types/index.d.ts",
+			"default": "./dist/index.js"
 		}
 	},
 	"keywords": [
-		"rendering",
-		"image",
-		"filter",
 		"effect",
-		"composer",
+		"gbuffer",
+		"filter",
 		"pass",
+		"pipeline",
 		"post",
 		"processing",
-		"gpgpu",
-		"rtt",
+		"rendering",
 		"rendertexture",
-		"rendertarget",
-		"three"
+		"rtt",
+		"three",
+		"webgl",
+		"webgpu"
 	],
 	"author": {
 		"name": "Raoul van Rüschen",
 		"email": "vanruesc@outlook.de"
 	},
 	"repository": {
-		"url": "git+https://github.com/pmndrs/postprocessing.git"
+		"type": "git",
+		"url": "https://github.com/pmndrs/postprocessing.git"
 	},
 	"bugs": {
 		"url": "https://github.com/pmndrs/postprocessing/issues"
 	},
 	"files": [
-		"./build"
+		"./dist"
 	],
 	"engines": {
-		"node": ">= 0.13.2"
+		"node": ">= 0.18.0"
 	},
 	"ava": {
 		"failFast": true,
 		"files": [
-			"./test/**/*"
+			"test/**/*.js"
 		]
 	},
 	"eslintConfig": {
-		"extends": "aether"
+		"extends": "aether/typescript"
 	},
 	"scripts": {
 		"ava": "ava",
 		"build:css": "sass --no-source-map -I manual/assets/css/src/values manual/assets/css/src:manual/assets/css/dist",
 		"build:js": "node esbuild",
 		"build:js:min": "node esbuild -m",
-		"build:dts": "cpy \"types/*\" build/types && cpy \"types/*\" build/types --rename=index.d.cts",
-		"clean": "del-cli build tmp manual/resources \"manual/assets/**/dist\" public",
-		"copy": "cpy \"demo/static/**/*\" public/demo",
-		"deploy": "run-s copy postcss hugo gzip",
-		"doc": "esdoc",
+		"build:dts": "tsc -p tsconfig.d.json",
+		"clean": "del-cli dist temp public manual/resources manual/assets/css/dist manual/assets/js/dist",
+		"deploy": "run-s postcss hugo gzip",
+		"doc": "typedoc --plugin typedoc-plugin-mdn-links",
 		"gzip": "gzipper c public",
 		"hugo": "hugo -s manual --minify",
 		"lint": "run-s lint:*",
 		"lint:css": "stylelint --fix manual/assets/css/src",
-		"lint:js": "eslint --ext .js --fix src demo/src manual/assets/js/src",
+		"lint:js": "eslint --ext .ts --fix src manual/assets/js/src",
+		"lint:tsc": "tsc --noemit",
 		"postcss": "postcss manual/assets/css/dist/index.css -o manual/assets/css/dist/index.css -c manual",
 		"prepublishOnly": "run-s test doc",
-		"prewatch": "run-s clean copy build:css build:js",
-		"test": "run-s clean lint build:css build:js:min build:dts ava",
+		"prewatch": "run-s clean build:css build:js",
+		"test": "run-s lint clean build:css build:js:min build:dts ava",
 		"start": "hugo server -s manual -e development",
 		"watch": "run-p watch:* start",
 		"watch:css": "sass --no-source-map -I manual/assets/css/src/values manual/assets/css/src:manual/assets/css/dist -w",
-		"watch:eslint": "esw -w --ext .js --color src demo/src manual/assets/js/src",
+		"watch:tsc": "tsc --noemit --watch --preserveWatchOutput",
+		"watch:eslint": "esw -w --ext .ts --color src manual/assets/js/src",
 		"watch:js": "node esbuild -w"
 	},
 	"peerDependencies": {
-		"three": ">= 0.138.0 < 0.161.0"
+		"three": ">= 0.156.0 < 0.157.0"
 	},
 	"devDependencies": {
-		"@tweakpane/core": "2.x.x",
+		"@tweakpane/core": "1.x.x",
+		"@types/node": "20.x.x",
 		"@types/three": "0.x.x",
-		"@typescript-eslint/eslint-plugin": "6.x.x",
-		"@typescript-eslint/parser": "6.x.x",
+		"@typescript-eslint/eslint-plugin": "5.x.x",
+		"@typescript-eslint/parser": "5.x.x",
 		"autoprefixer": "10.x.x",
-		"ava": "6.x.x",
-		"cpy-cli": "5.x.x",
+		"ava": "5.x.x",
 		"cssnano": "6.x.x",
-		"dat.gui": "0.x.x",
 		"del-cli": "5.x.x",
-		"esbuild": "0.19.x",
+		"esbuild": "0.x.x",
 		"esbuild-plugin-glsl": "1.x.x",
-		"esdoc": "1.x.x",
-		"esdoc-importpath-plugin": "1.x.x",
-		"esdoc-standard-plugin": "1.x.x",
 		"eslint": "8.x.x",
 		"eslint-config-aether": "1.x.x",
 		"eslint-watch": "8.x.x",
@@ -112,18 +103,19 @@
 		"hugo-bin": "0.x.x",
 		"npm-run-all": "4.x.x",
 		"postcss": "8.x.x",
-		"postcss-cli": "11.x.x",
-		"postcss-preset-env": "9.x.x",
+		"postcss-cli": "10.x.x",
+		"postcss-preset-env": "8.x.x",
 		"sass": "1.x.x",
 		"spatial-controls": "6.x.x",
 		"stylelint": "15.x.x",
 		"stylelint-config-standard-scss": "11.x.x",
 		"stylelint-order": "6.x.x",
 		"three": "0.x.x",
-		"three-demo": "5.x.x",
 		"tiny-glob": "0.x.x",
 		"tslib": "2.x.x",
-		"tweakpane": "4.x.x",
+		"tweakpane": "3.x.x",
+		"typedoc": "0.x.x",
+		"typedoc-plugin-mdn-links": "3.x.x",
 		"typescript": "5.x.x"
 	}
 }

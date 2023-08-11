@@ -3,14 +3,13 @@ import { BlendFunction, BlendMode } from "postprocessing";
 
 test("can be created", t => {
 
-	const object = new BlendMode(BlendFunction.NORMAL);
-	t.pass();
+	t.truthy(new BlendMode());
 
 });
 
 test("can return shader code", t => {
 
-	const object = new BlendMode(BlendFunction.NORMAL);
-	t.pass();
+	const blendMode = new BlendMode(BlendFunction.NORMAL);
+	t.truthy(blendMode.shaderCode);
 
 });

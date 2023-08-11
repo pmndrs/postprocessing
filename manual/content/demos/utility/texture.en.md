@@ -6,7 +6,7 @@ draft: false
 menu:
   demos:
     parent: utility
-    weight: 40
+    weight: 50
 script: texture
 ---
 

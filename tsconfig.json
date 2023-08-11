@@ -1,21 +1,21 @@
 {
-	"include": ["./src", "./demo/src", "./manual/js"],
+	"include": ["./*.js", "./src", "./manual/assets/js/src", "./test"],
 	"compilerOptions": {
 		"baseUrl": ".",
-		"outDir": "./build",
-		"paths": {
-			"postprocessing": ["./src/index.js"]
-		},
+		"outDir": "./dist",
 		"moduleResolution": "node",
 		"module": "ESNext",
 		"target": "ESNext",
 		"strict": true,
-		"allowJs": true,
 		"sourceMap": false,
 		"skipLibCheck": true,
 		"importHelpers": true,
-		"downlevelIteration": true,
+		"resolveJsonModule": true,
 		"noImplicitOverride": true,
-		"allowSyntheticDefaultImports": true
+		"allowSyntheticDefaultImports": true,
+		"paths": {
+			"postprocessing": ["./src/index.js"],
+			"temp": ["./temp"]
+		}
 	}
 }

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+	"entryPoints": ["./src/index.ts"],
+	"exclude": ["**/node_modules/**"],
+	"out": "./public/docs",
+	"theme": "default",
+	"excludePrivate": true,
+	"excludeInternal": true,
+	"includeVersion": true,
+	"treatWarningsAsErrors": true,
+	"externalSymbolLinkMappings": {
+		"@types/three": {
+			"*": "https://threejs.org/docs/"
+		},
+		"three": {
+			"*": "https://threejs.org/docs/"
+		}
+	}
+}
