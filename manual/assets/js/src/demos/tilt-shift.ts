@@ -21,9 +21,9 @@ import {
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
+import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { ControlMode, SpatialControls } from "spatial-controls";
 import { calculateVerticalFoV } from "../utils/CameraUtils.js";
-import { FPSMeter } from "../utils/FPSMeter.js";
 
 function load(): Promise<Map<string, unknown>> {
 
@@ -105,22 +105,22 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Settings
 
-	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.registerPlugin(EssentialsPlugin);
+	const fpsMeter = pane.addBlade({ view: "fpsgraph", label: "FPS", rows: 2 }) as EssentialsPlugin.FpsGraphBladeApi;
 
 	const folder = pane.addFolder({ title: "Settings" });
 	let subfolder = folder.addFolder({ title: "Blur" });
-	subfolder.addInput(effect.blurPass.blurMaterial, "kernelSize", { options: KernelSize });
-	subfolder.addInput(effect.blurPass.blurMaterial, "scale", { min: 0, max: 2, step: 0.01 });
-	subfolder.addInput(effect.resolution, "scale", { label: "resolution", min: 0.25, max: 1, step: 0.05 });
+	subfolder.addBinding(effect.blurPass.blurMaterial, "kernelSize", { options: KernelSize });
+	subfolder.addBinding(effect.blurPass.blurMaterial, "scale", { min: 0, max: 2, step: 0.01 });
+	subfolder.addBinding(effect.resolution, "scale", { label: "resolution", min: 0.25, max: 1, step: 0.05 });
 	subfolder = folder.addFolder({ title: "Gradient Mask" });
-	subfolder.addInput(effect, "offset", { min: -1, max: 1, step: 1e-2 });
-	subfolder.addInput(effect, "rotation", { min: 0, max: 2 * Math.PI, step: 1e-2 });
-	subfolder.addInput(effect, "focusArea", { min: 0, max: 1, step: 1e-2 });
-	subfolder.addInput(effect, "feather", { min: 0, max: 1, step: 1e-3 });
-	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 1e-2 });
-	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
+	subfolder.addBinding(effect, "offset", { min: -1, max: 1, step: 1e-2 });
+	subfolder.addBinding(effect, "rotation", { min: 0, max: 2 * Math.PI, step: 1e-2 });
+	subfolder.addBinding(effect, "focusArea", { min: 0, max: 1, step: 1e-2 });
+	subfolder.addBinding(effect, "feather", { min: 0, max: 1, step: 1e-3 });
+	folder.addBinding(effect.blendMode, "opacity", { min: 0, max: 1, step: 1e-2 });
+	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 
@@ -141,9 +141,10 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	requestAnimationFrame(function render(timestamp: number): void {
 
-		fpsMeter.update(timestamp);
+		fpsMeter.begin();
 		controls.update(timestamp);
 		pipeline.render(timestamp);
+		fpsMeter.end();
 		requestAnimationFrame(render);
 
 	});

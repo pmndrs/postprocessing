@@ -22,9 +22,9 @@ import {
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
+import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { ControlMode, SpatialControls } from "spatial-controls";
 import { calculateVerticalFoV } from "../utils/CameraUtils.js";
-import { FPSMeter } from "../utils/FPSMeter.js";
 import * as CornellBox from "../objects/CornellBox.js";
 
 function load(): Promise<Map<string, unknown>> {
@@ -118,9 +118,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Settings
 
-	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.registerPlugin(EssentialsPlugin);
+	const fpsMeter = pane.addBlade({ view: "fpsgraph", label: "FPS", rows: 2 }) as EssentialsPlugin.FpsGraphBladeApi;
 
 	// Resize Handler
 
@@ -141,9 +141,10 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	requestAnimationFrame(function render(timestamp: number): void {
 
-		fpsMeter.update(timestamp);
+		fpsMeter.begin();
 		controls.update(timestamp);
 		pipeline.render(timestamp);
+		fpsMeter.end();
 		requestAnimationFrame(render);
 
 	});

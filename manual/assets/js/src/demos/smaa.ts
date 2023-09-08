@@ -22,9 +22,9 @@ import {
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
+import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { ControlMode, SpatialControls } from "spatial-controls";
 import { calculateVerticalFoV } from "../utils/CameraUtils.js";
-import { FPSMeter } from "../utils/FPSMeter.js";
 import * as CornellBox from "../objects/CornellBox.js";
 
 function load(): Promise<Map<string, unknown>> {
@@ -136,26 +136,31 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Settings
 
-	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.registerPlugin(EssentialsPlugin);
+	const fpsMeter = pane.addBlade({ view: "fpsgraph", label: "FPS", rows: 2 }) as EssentialsPlugin.FpsGraphBladeApi;
 
-	const SMAADebug = { OFF: 0, EDGES: 1, WEIGHTS: 2 };
+	const smaaDebug = {
+		OFF: 0,
+		EDGES: 1,
+		WEIGHTS: 2
+	};
+
 	const params = {
 		"preset": SMAAPreset.MEDIUM,
-		"debug": SMAADebug.OFF
+		"debug": smaaDebug.OFF
 	};
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(params, "debug", { options: SMAADebug }).on("change", (e) => {
+	folder.addBinding(params, "debug", { options: smaaDebug }).on("change", (e) => {
 
-		effectPass.enabled = (e.value === SMAADebug.OFF);
-		smaaEdgesDebugPass.enabled = (e.value === SMAADebug.EDGES);
-		smaaWeightsDebugPass.enabled = (e.value === SMAADebug.WEIGHTS);
+		effectPass.enabled = (e.value === smaaDebug.OFF);
+		smaaEdgesDebugPass.enabled = (e.value === smaaDebug.EDGES);
+		smaaWeightsDebugPass.enabled = (e.value === smaaDebug.WEIGHTS);
 
 	});
 
-	folder.addInput(params, "preset", { options: SMAAPreset }).on("change", (e) => {
+	folder.addBinding(params, "preset", { options: SMAAPreset }).on("change", (e) => {
 
 		const threshold = edgeDetectionMaterial.edgeDetectionThreshold;
 		effect.applyPreset(e.value);
@@ -164,15 +169,15 @@ window.addEventListener("load", () => void load().then((assets) => {
 	});
 
 	const subfolder = folder.addFolder({ title: "Edge Detection", expanded: false });
-	subfolder.addInput(edgeDetectionMaterial, "edgeDetectionMode", { options: EdgeDetectionMode });
-	subfolder.addInput(edgeDetectionMaterial, "edgeDetectionThreshold", { min: 0.01, max: 0.3, step: 1e-4 });
-	subfolder.addInput(edgeDetectionMaterial, "predicationMode", { options: PredicationMode });
-	subfolder.addInput(edgeDetectionMaterial, "predicationThreshold", { min: 4e-4, max: 0.01, step: 1e-4 });
-	subfolder.addInput(edgeDetectionMaterial, "predicationStrength", { min: 0, max: 1, step: 1e-4 });
-	subfolder.addInput(edgeDetectionMaterial, "predicationScale", { min: 1, max: 2, step: 0.01 });
+	subfolder.addBinding(edgeDetectionMaterial, "edgeDetectionMode", { options: EdgeDetectionMode });
+	subfolder.addBinding(edgeDetectionMaterial, "edgeDetectionThreshold", { min: 0.01, max: 0.3, step: 1e-4 });
+	subfolder.addBinding(edgeDetectionMaterial, "predicationMode", { options: PredicationMode });
+	subfolder.addBinding(edgeDetectionMaterial, "predicationThreshold", { min: 4e-4, max: 0.01, step: 1e-4 });
+	subfolder.addBinding(edgeDetectionMaterial, "predicationStrength", { min: 0, max: 1, step: 1e-4 });
+	subfolder.addBinding(edgeDetectionMaterial, "predicationScale", { min: 1, max: 2, step: 0.01 });
 
-	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
+	folder.addBinding(effect.blendMode, "opacity", { min: 0, max: 1, step: 0.01 });
+	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 
@@ -193,9 +198,10 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	requestAnimationFrame(function render(timestamp: number): void {
 
-		fpsMeter.update(timestamp);
+		fpsMeter.begin();
 		controls.update(timestamp);
 		pipeline.render(timestamp);
+		fpsMeter.end();
 		requestAnimationFrame(render);
 
 	});

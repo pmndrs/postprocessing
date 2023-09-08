@@ -22,9 +22,9 @@ import {
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
+import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { SpatialControls } from "spatial-controls";
 import { calculateVerticalFoV } from "../utils/CameraUtils.js";
-import { FPSMeter } from "../utils/FPSMeter.js";
 import * as Domain from "../objects/Domain.js";
 
 function load(): Promise<Map<string, unknown>> {
@@ -113,26 +113,26 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Settings
 
-	const fpsMeter = new FPSMeter();
 	const noiseTexture = new NoiseTexture(64, 64, RGBAFormat);
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.registerPlugin(EssentialsPlugin);
+	const fpsMeter = pane.addBlade({ view: "fpsgraph", label: "FPS", rows: 2 }) as EssentialsPlugin.FpsGraphBladeApi;
 
 	const params = {
 		"custom pattern": true
 	};
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(effect, "mode", { options: GlitchMode });
-	folder.addInput(effect, "minDelay", { min: 0, max: 2, step: 0.01 });
-	folder.addInput(effect, "maxDelay", { min: 2, max: 4, step: 0.01 });
-	folder.addInput(effect, "minDuration", { min: 0, max: 0.6, step: 0.01 });
-	folder.addInput(effect, "maxDuration", { min: 0.6, max: 1.8, step: 0.01 });
-	folder.addInput(effect, "minStrength", { min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect, "maxStrength", { min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect, "ratio", { min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect, "columns", { min: 0, max: 0.5, step: 0.01 });
-	folder.addInput(params, "custom pattern")
+	folder.addBinding(effect, "mode", { options: GlitchMode });
+	folder.addBinding(effect, "minDelay", { min: 0, max: 2, step: 0.01 });
+	folder.addBinding(effect, "maxDelay", { min: 2, max: 4, step: 0.01 });
+	folder.addBinding(effect, "minDuration", { min: 0, max: 0.6, step: 0.01 });
+	folder.addBinding(effect, "maxDuration", { min: 0.6, max: 1.8, step: 0.01 });
+	folder.addBinding(effect, "minStrength", { min: 0, max: 1, step: 0.01 });
+	folder.addBinding(effect, "maxStrength", { min: 0, max: 1, step: 0.01 });
+	folder.addBinding(effect, "ratio", { min: 0, max: 1, step: 0.01 });
+	folder.addBinding(effect, "columns", { min: 0, max: 0.5, step: 0.01 });
+	folder.addBinding(params, "custom pattern")
 		.on("change", (e) => effect.perturbationMap = (e.value ? assets.get("noise") : noiseTexture));
 
 	// Resize Handler
@@ -154,9 +154,10 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	requestAnimationFrame(function render(timestamp: number): void {
 
-		fpsMeter.update(timestamp);
+		fpsMeter.begin();
 		controls.update(timestamp);
 		pipeline.render(timestamp);
+		fpsMeter.end();
 		requestAnimationFrame(render);
 
 	});

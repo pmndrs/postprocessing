@@ -24,9 +24,9 @@ import {
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
+import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { SpatialControls } from "spatial-controls";
 import { calculateVerticalFoV } from "../utils/CameraUtils.js";
-import { FPSMeter } from "../utils/FPSMeter.js";
 import * as Domain from "../objects/Domain.js";
 
 function load(): Promise<Map<string, unknown>> {
@@ -156,26 +156,26 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Settings
 
-	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.registerPlugin(EssentialsPlugin);
+	const fpsMeter = pane.addBlade({ view: "fpsgraph", label: "FPS", rows: 2 }) as EssentialsPlugin.FpsGraphBladeApi;
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(effect, "intensity", { min: 0, max: 10, step: 0.01 });
-	folder.addInput(effect.mipmapBlurPass, "radius", { min: 0, max: 1, step: 1e-3 });
-	folder.addInput(effect.mipmapBlurPass, "levels", { min: 1, max: 9, step: 1 });
+	folder.addBinding(effect, "intensity", { min: 0, max: 10, step: 0.01 });
+	folder.addBinding(effect.mipmapBlurPass, "radius", { min: 0, max: 1, step: 1e-3 });
+	folder.addBinding(effect.mipmapBlurPass, "levels", { min: 1, max: 9, step: 1 });
 
 	let subfolder = folder.addFolder({ title: "Luminance Filter" });
-	subfolder.addInput(effect.luminancePass, "enabled");
-	subfolder.addInput(effect.luminanceMaterial, "threshold", { min: 0, max: 1, step: 0.01 });
-	subfolder.addInput(effect.luminanceMaterial, "smoothing", { min: 0, max: 1, step: 0.01 });
+	subfolder.addBinding(effect.luminancePass, "enabled");
+	subfolder.addBinding(effect.luminanceMaterial, "threshold", { min: 0, max: 1, step: 0.01 });
+	subfolder.addBinding(effect.luminanceMaterial, "smoothing", { min: 0, max: 1, step: 0.01 });
 
 	subfolder = folder.addFolder({ title: "Selection" });
-	subfolder.addInput(effect, "inverted");
-	subfolder.addInput(effect, "ignoreBackground");
+	subfolder.addBinding(effect, "inverted");
+	subfolder.addBinding(effect, "ignoreBackground");
 
-	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
+	folder.addBinding(effect.blendMode, "opacity", { min: 0, max: 1, step: 0.01 });
+	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 
@@ -196,9 +196,10 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	requestAnimationFrame(function render(timestamp: number): void {
 
-		fpsMeter.update(timestamp);
+		fpsMeter.begin();
 		controls.update(timestamp);
 		pipeline.render(timestamp);
+		fpsMeter.end();
 		requestAnimationFrame(render);
 
 	});

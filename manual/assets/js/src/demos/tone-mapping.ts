@@ -19,9 +19,9 @@ import {
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
+import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { SpatialControls } from "spatial-controls";
 import { calculateVerticalFoV } from "../utils/CameraUtils.js";
-import { FPSMeter } from "../utils/FPSMeter.js";
 import { toRecord } from "../utils/ArrayUtils.js";
 import * as Domain from "../objects/Domain.js";
 
@@ -110,31 +110,31 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Settings
 
-	const fpsMeter = new FPSMeter();
-	const adaptiveLuminanceMaterial = effect.adaptiveLuminanceMaterial;
+	const lumMaterial = effect.adaptiveLuminanceMaterial;
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.registerPlugin(EssentialsPlugin);
+	const fpsMeter = pane.addBlade({ view: "fpsgraph", label: "FPS", rows: 2 }) as EssentialsPlugin.FpsGraphBladeApi;
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(renderer, "toneMappingExposure", { min: 0, max: 2, step: 1e-3 });
-	folder.addInput(effect, "mode", { options: ToneMappingMode });
+	folder.addBinding(renderer, "toneMappingExposure", { min: 0, max: 2, step: 1e-3 });
+	folder.addBinding(effect, "mode", { options: ToneMappingMode });
 
 	let subfolder = folder.addFolder({ title: "Reinhard2" });
-	subfolder.addInput(effect, "whitePoint", { min: 1, max: 20, step: 1e-2 });
-	subfolder.addInput(effect, "middleGrey", { min: 0, max: 1, step: 1e-4 });
-	subfolder.addInput(effect, "averageLuminance", { min: 1e-4, max: 1, step: 1e-3 });
+	subfolder.addBinding(effect, "whitePoint", { min: 1, max: 20, step: 1e-2 });
+	subfolder.addBinding(effect, "middleGrey", { min: 0, max: 1, step: 1e-4 });
+	subfolder.addBinding(effect, "averageLuminance", { min: 1e-4, max: 1, step: 1e-3 });
 	subfolder = subfolder.addFolder({ title: "Adaptive" });
-	subfolder.addInput(effect, "resolution", {
+	subfolder.addBinding(effect, "resolution", {
 		options: toRecord([64, 128, 256, 512]),
 		label: "resolution"
 	});
 
-	subfolder.addInput(adaptiveLuminanceMaterial, "minLuminance", { min: 0, max: 3, step: 1e-3 });
-	subfolder.addInput(adaptiveLuminanceMaterial, "adaptationRate", { min: 0, max: 3, step: 1e-3 });
+	subfolder.addBinding(lumMaterial, "minLuminance", { min: 0, max: 3, step: 1e-3 });
+	subfolder.addBinding(lumMaterial, "adaptationRate", { min: 0, max: 3, step: 1e-3 });
 
-	folder.addInput(effectPass, "dithering");
-	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
+	folder.addBinding(effectPass, "dithering");
+	folder.addBinding(effect.blendMode, "opacity", { min: 0, max: 1, step: 0.01 });
+	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 
@@ -155,9 +155,10 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	requestAnimationFrame(function render(timestamp: number): void {
 
-		fpsMeter.update(timestamp);
+		fpsMeter.begin();
 		controls.update(timestamp);
 		pipeline.render(timestamp);
+		fpsMeter.end();
 		requestAnimationFrame(render);
 
 	});

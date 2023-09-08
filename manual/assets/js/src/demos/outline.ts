@@ -26,9 +26,9 @@ import {
 
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { Pane } from "tweakpane";
+import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { ControlMode, SpatialControls } from "spatial-controls";
 import { calculateVerticalFoV } from "../utils/CameraUtils.js";
-import { FPSMeter } from "../utils/FPSMeter.js";
 import * as Shapes from "../objects/Shapes.js";
 
 function load(): Promise<Map<string, unknown>> {
@@ -189,10 +189,10 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Settings
 
-	const fpsMeter = new FPSMeter();
 	const color = new Color();
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.registerPlugin(EssentialsPlugin);
+	const fpsMeter = pane.addBlade({ view: "fpsgraph", label: "FPS", rows: 2 }) as EssentialsPlugin.FpsGraphBladeApi;
 
 	const params = {
 		"patternTexture": false,
@@ -201,21 +201,21 @@ window.addEventListener("load", () => void load().then((assets) => {
 	};
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(effect.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
-	folder.addInput(effect.blurPass, "kernelSize", { options: KernelSize });
-	folder.addInput(effect.blurPass, "enabled", { label: "blur" });
-	folder.addInput(params, "patternTexture")
+	folder.addBinding(effect.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
+	folder.addBinding(effect.blurPass, "kernelSize", { options: KernelSize });
+	folder.addBinding(effect.blurPass, "enabled", { label: "blur" });
+	folder.addBinding(params, "patternTexture")
 		.on("change", (e) => effect.patternTexture = (e.value ? assets.get("pattern") : null));
-	folder.addInput(effect, "patternScale", { min: 20, max: 100, step: 0.1 });
-	folder.addInput(effect, "edgeStrength", { min: 0, max: 10, step: 0.01 });
-	folder.addInput(effect, "pulseSpeed", { min: 0, max: 2, step: 0.01 });
-	folder.addInput(params, "visibleEdgeColor", { view: "color" })
+	folder.addBinding(effect, "patternScale", { min: 20, max: 100, step: 0.1 });
+	folder.addBinding(effect, "edgeStrength", { min: 0, max: 10, step: 0.01 });
+	folder.addBinding(effect, "pulseSpeed", { min: 0, max: 2, step: 0.01 });
+	folder.addBinding(params, "visibleEdgeColor", { view: "color" })
 		.on("change", (e) => effect.visibleEdgeColor.setHex(e.value).convertSRGBToLinear());
-	folder.addInput(params, "hiddenEdgeColor", { view: "color" })
+	folder.addBinding(params, "hiddenEdgeColor", { view: "color" })
 		.on("change", (e) => effect.hiddenEdgeColor.setHex(e.value).convertSRGBToLinear());
-	folder.addInput(effect, "xRay");
-	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
+	folder.addBinding(effect, "xRay");
+	folder.addBinding(effect.blendMode, "opacity", { min: 0, max: 1, step: 0.01 });
+	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 
@@ -236,10 +236,11 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	requestAnimationFrame(function render(timestamp: number): void {
 
-		fpsMeter.update(timestamp);
+		fpsMeter.begin();
 		controls.update(timestamp);
 		animationMixer.update(pipeline.timer.delta * 1e-3);
 		pipeline.render(timestamp);
+		fpsMeter.end();
 		requestAnimationFrame(render);
 
 	});

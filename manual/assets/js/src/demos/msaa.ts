@@ -16,9 +16,9 @@ import {
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
+import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { ControlMode, SpatialControls } from "spatial-controls";
 import { calculateVerticalFoV } from "../utils/CameraUtils.js";
-import { FPSMeter } from "../utils/FPSMeter.js";
 import * as CornellBox from "../objects/CornellBox.js";
 
 function load(): Promise<Map<string, unknown>> {
@@ -94,25 +94,24 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Post Processing
 
 	const pipeline = new RenderPipeline(renderer);
-	pipeline.addPass(new GeometryPass(scene, camera, { samples: 4 }));
+	const geoPass = new GeometryPass(scene, camera, { samples: 4 });
 	pipeline.addPass(geoPass);
 	pipeline.addPass(new CopyPass());
 
 	// Settings
 
-	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
-	const maxSamples = renderer.capabilities.maxSamples;
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.registerPlugin(EssentialsPlugin);
+	const fpsMeter = pane.addBlade({ view: "fpsgraph", label: "FPS", rows: 2 }) as EssentialsPlugin.FpsGraphBladeApi;
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(geoPass, "samples", {
+	folder.addBinding(geoPass, "samples", {
 		label: "MSAA",
 		options: {
 			"OFF": 0,
-			"LOW": Math.min(2, maxSamples),
-			"MEDIUM": Math.min(4, maxSamples),
-			"HIGH": Math.min(8, maxSamples)
+			"LOW": 2,
+			"MEDIUM": 4,
+			"HIGH": 8
 		}
 	});
 
@@ -135,9 +134,10 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	requestAnimationFrame(function render(timestamp: number): void {
 
-		fpsMeter.update(timestamp);
+		fpsMeter.begin();
 		controls.update(timestamp);
 		pipeline.render(timestamp);
+		fpsMeter.end();
 		requestAnimationFrame(render);
 
 	});

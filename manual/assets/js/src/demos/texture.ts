@@ -20,9 +20,9 @@ import {
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
+import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { ControlMode, SpatialControls } from "spatial-controls";
 import { calculateVerticalFoV } from "../utils/CameraUtils.js";
-import { FPSMeter } from "../utils/FPSMeter.js";
 import * as CornellBox from "../objects/CornellBox.js";
 
 function load(): Promise<Map<string, unknown>> {
@@ -117,26 +117,26 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Settings
 
-	const fpsMeter = new FPSMeter();
 	const texture = effect.texture;
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.registerPlugin(EssentialsPlugin);
+	const fpsMeter = pane.addBlade({ view: "fpsgraph", label: "FPS", rows: 2 }) as EssentialsPlugin.FpsGraphBladeApi;
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(texture, "rotation", { min: 0, max: 2 * Math.PI, step: 0.001 });
+	folder.addBinding(texture, "rotation", { min: 0, max: 2 * Math.PI, step: 0.001 });
 
 	let subFolder = folder.addFolder({ title: "offset" });
-	subFolder.addInput(texture.offset, "x", { min: 0, max: 1, step: 0.001 });
-	subFolder.addInput(texture.offset, "y", { min: 0, max: 1, step: 0.001 });
+	subFolder.addBinding(texture.offset, "x", { min: 0, max: 1, step: 0.001 });
+	subFolder.addBinding(texture.offset, "y", { min: 0, max: 1, step: 0.001 });
 	subFolder = folder.addFolder({ title: "repeat" });
-	subFolder.addInput(texture.repeat, "x", { min: 0, max: 2, step: 0.001 });
-	subFolder.addInput(texture.repeat, "y", { min: 0, max: 2, step: 0.001 });
+	subFolder.addBinding(texture.repeat, "x", { min: 0, max: 2, step: 0.001 });
+	subFolder.addBinding(texture.repeat, "y", { min: 0, max: 2, step: 0.001 });
 	subFolder = folder.addFolder({ title: "center" });
-	subFolder.addInput(texture.center, "x", { min: 0, max: 1, step: 0.001 });
-	subFolder.addInput(texture.center, "y", { min: 0, max: 1, step: 0.001 });
+	subFolder.addBinding(texture.center, "x", { min: 0, max: 1, step: 0.001 });
+	subFolder.addBinding(texture.center, "y", { min: 0, max: 1, step: 0.001 });
 
-	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
+	folder.addBinding(effect.blendMode, "opacity", { min: 0, max: 1, step: 0.01 });
+	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 
@@ -157,9 +157,10 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	requestAnimationFrame(function render(timestamp: number): void {
 
-		fpsMeter.update(timestamp);
+		fpsMeter.begin();
 		controls.update(timestamp);
 		pipeline.render(timestamp);
+		fpsMeter.end();
 		requestAnimationFrame(render);
 
 	});

@@ -18,9 +18,9 @@ import {
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
+import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { ControlMode, SpatialControls } from "spatial-controls";
 import { calculateVerticalFoV } from "../utils/CameraUtils.js";
-import { FPSMeter } from "../utils/FPSMeter.js";
 import * as CornellBox from "../objects/CornellBox.js";
 
 function load(): Promise<Map<string, unknown>> {
@@ -109,9 +109,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Settings
 
-	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.registerPlugin(EssentialsPlugin);
+	const fpsMeter = pane.addBlade({ view: "fpsgraph", label: "FPS", rows: 2 }) as EssentialsPlugin.FpsGraphBladeApi;
 
 	const folder = pane.addFolder({ title: "Settings" });
 	const tab = folder.addTab({
@@ -128,7 +128,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	});
 
-	tab.pages[0].addInput(gaussianBlurPass.blurMaterial, "kernelSize", {
+	tab.pages[0].addBinding(gaussianBlurPass.blurMaterial, "kernelSize", {
 		options: {
 			"7x7": 7,
 			"15x15": 15,
@@ -140,13 +140,13 @@ window.addEventListener("load", () => void load().then((assets) => {
 		}
 	});
 
-	tab.pages[0].addInput(gaussianBlurPass.blurMaterial, "scale", { min: 0, max: 2, step: 0.01 });
-	tab.pages[0].addInput(gaussianBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
-	tab.pages[0].addInput(gaussianBlurPass, "iterations", { min: 1, max: 8, step: 1 });
+	tab.pages[0].addBinding(gaussianBlurPass.blurMaterial, "scale", { min: 0, max: 2, step: 0.01 });
+	tab.pages[0].addBinding(gaussianBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
+	tab.pages[0].addBinding(gaussianBlurPass, "iterations", { min: 1, max: 8, step: 1 });
 
-	tab.pages[1].addInput(kawaseBlurPass.blurMaterial, "kernelSize", { options: KernelSize });
-	tab.pages[1].addInput(kawaseBlurPass.blurMaterial, "scale", { min: 0, max: 2, step: 0.01 });
-	tab.pages[1].addInput(kawaseBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
+	tab.pages[1].addBinding(kawaseBlurPass.blurMaterial, "kernelSize", { options: KernelSize });
+	tab.pages[1].addBinding(kawaseBlurPass.blurMaterial, "scale", { min: 0, max: 2, step: 0.01 });
+	tab.pages[1].addBinding(kawaseBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
 
 	// Resize Handler
 
@@ -167,9 +167,10 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	requestAnimationFrame(function render(timestamp: number): void {
 
-		fpsMeter.update(timestamp);
+		fpsMeter.begin();
 		controls.update(timestamp);
 		pipeline.render(timestamp);
+		fpsMeter.end();
 		requestAnimationFrame(render);
 
 	});

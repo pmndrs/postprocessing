@@ -26,9 +26,9 @@ import {
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
+import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { ControlMode, SpatialControls } from "spatial-controls";
 import { calculateVerticalFoV } from "../utils/CameraUtils.js";
-import { FPSMeter } from "../utils/FPSMeter.js";
 import { toRecord } from "../utils/ArrayUtils.js";
 
 const luts = new Map<string, string | null>([
@@ -193,9 +193,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Settings
 
-	const fpsMeter = new FPSMeter();
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
-	pane.addMonitor(fpsMeter, "fps", { label: "FPS" });
+	pane.registerPlugin(EssentialsPlugin);
+	const fpsMeter = pane.addBlade({ view: "fpsgraph", label: "FPS", rows: 2 }) as EssentialsPlugin.FpsGraphBladeApi;
 
 	const params = {
 		"lut": effect.lut.name,
@@ -284,20 +284,20 @@ window.addEventListener("load", () => void load().then((assets) => {
 	}
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addInput(params, "lut", { options: toRecord([...luts.keys()]) }).on("change", changeLUT);
+	folder.addBinding(params, "lut", { options: toRecord([...luts.keys()]) }).on("change", changeLUT);
 
 	if(renderer.capabilities.isWebGL2) {
 
-		folder.addInput(params, "3D texture").on("change", changeLUT);
-		folder.addInput(effect, "tetrahedralInterpolation");
+		folder.addBinding(params, "3D texture").on("change", changeLUT);
+		folder.addBinding(effect, "tetrahedralInterpolation");
 
 	}
 
-	folder.addMonitor(params, "base size", { format: (v) => v.toFixed(0) });
-	folder.addInput(params, "scale up").on("change", changeLUT);
-	folder.addInput(params, "target size", { options: toRecord([32, 48, 64, 128]) }).on("change", changeLUT);
-	folder.addInput(effect.blendMode.opacity, "value", { label: "opacity", min: 0, max: 1, step: 0.01 });
-	folder.addInput(effect.blendMode, "blendFunction", { options: BlendFunction });
+	folder.addBinding(params, "base size", { readonly: true, format: (v) => v.toFixed(0) });
+	folder.addBinding(params, "scale up").on("change", changeLUT);
+	folder.addBinding(params, "target size", { options: toRecord([32, 48, 64, 128]) }).on("change", changeLUT);
+	folder.addBinding(effect.blendMode, "opacity", { min: 0, max: 1, step: 0.01 });
+	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
 
 	// Resize Handler
 
@@ -318,9 +318,10 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	requestAnimationFrame(function render(timestamp: number): void {
 
-		fpsMeter.update(timestamp);
+		fpsMeter.begin();
 		controls.update(timestamp);
 		pipeline.render(timestamp);
+		fpsMeter.end();
 		requestAnimationFrame(render);
 
 	});
