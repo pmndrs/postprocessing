@@ -298,7 +298,7 @@ export class DepthOfFieldEffect extends Effect {
 
 	getCircleOfConfusionMaterial() {
 
-		return this.circleOfConfusionMaterial;
+		return this.cocMaterial;
 
 	}
 
@@ -427,8 +427,8 @@ export class DepthOfFieldEffect extends Effect {
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
-		this.circleOfConfusionMaterial.depthBuffer = depthTexture;
-		this.circleOfConfusionMaterial.depthPacking = depthPacking;
+		this.cocMaterial.depthBuffer = depthTexture;
+		this.cocMaterial.depthPacking = depthPacking;
 
 	}
 
