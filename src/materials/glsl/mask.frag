@@ -72,7 +72,13 @@ void main() {
 
 	#endif
 
-	#if MASK_FUNCTION == 2
+	#if MASK_FUNCTION == 3
+
+		// MULTIPLY_RGB
+		vec4 texel = texture2D(inputBuffer, vUv);
+		gl_FragColor = vec4(mask * texel.rgb, texel.a);
+
+	#elif MASK_FUNCTION == 2
 
 		// MULTIPLY_RGB_SET_ALPHA
 		gl_FragColor = vec4(mask * texture2D(inputBuffer, vUv).rgb, mask);
