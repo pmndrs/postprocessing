@@ -267,24 +267,6 @@ export class DepthOfFieldEffect extends Effect {
 	}
 
 	/**
-	 * The mask function. Default is `MULTIPLY_RGB_SET_ALPHA`.
-	 *
-	 * @type {MaskFunction}
-	 */
-
-	get maskFunction() {
-
-		return this.maskPass.fullscreenMaterial.maskFunction;
-
-	}
-
-	set maskFunction(value) {
-
-		this.maskPass.fullscreenMaterial.maskFunction = value;
-
-	}
-
-	/**
 	 * The circle of confusion material.
 	 *
 	 * @type {CircleOfConfusionMaterial}
