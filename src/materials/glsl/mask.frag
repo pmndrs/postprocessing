@@ -85,7 +85,7 @@ void main() {
 
 	#else
 
-		// DISCARD / MULTIPLY
+		// MULTIPLY
 		gl_FragColor = mask * texture2D(inputBuffer, vUv);
 
 	#endif
