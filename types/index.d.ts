@@ -1826,11 +1826,13 @@ declare module "postprocessing" {
 	 * @property {Number} DISCARD - Discards elements when the respective mask value is zero.
 	 * @property {Number} MULTIPLY - Multiplies the input buffer with the mask texture.
 	 * @property {Number} MULTIPLY_RGB_SET_ALPHA - Multiplies the input RGB values with the mask and sets alpha to the mask value.
+	 * @property {Number} MULTIPLY_RGB - Multiplies the input RGB values with the mask and keeps the original alpha.
 	 */
 	export enum MaskFunction {
 		DISCARD,
 		MULTIPLY,
 		MULTIPLY_RGB_SET_ALPHA,
+		MULTIPLY_RGB
 	}
 
 	/**
@@ -5731,15 +5733,35 @@ declare module "postprocessing" {
 		 */
 		get bokehScale(): number;
 		/**
+		 * The circle of confusion texture.
+		 *
+		 * @type {Texture}
+		 */
+		get cocTexture(): Texture;
+		/**
+		 * The mask function. Default is `MULTIPLY_RGB`.
+		 *
+		 * @type {MaskFunction}
+		 */
+		get maskFunction(): MaskFunction;
+		set maskFunction(arg: MaskFunction);
+		/**
 		 * The circle of confusion material.
 		 *
+		 * @type {CircleOfConfusionMaterial}
+		 */
+		get cocMaterial(): CircleOfConfusionMaterial;
+		/**
+		 * The circle of confusion material.
+		 *
+		 * @deprecated Use cocMaterial instead.
 		 * @type {CircleOfConfusionMaterial}
 		 */
 		get circleOfConfusionMaterial(): CircleOfConfusionMaterial;
 		/**
 		 * Returns the circle of confusion material.
 		 *
-		 * @deprecated Use circleOfConfusionMaterial instead.
+		 * @deprecated Use cocMaterial instead.
 		 * @return {CircleOfConfusionMaterial} The material.
 		 */
 		getCircleOfConfusionMaterial(): CircleOfConfusionMaterial;
@@ -8987,6 +9009,7 @@ declare module "postprocessing" {
 		 * @return {Promise<Image[]>} A promise that returns the search image and area image as a pair.
 		 */
 		load(
+			url?: string | null,
 			onLoad?: Function,
 			onError?: Function
 		): Promise<(new (width?: number, height?: number) => HTMLImageElement)[]>;
