@@ -19,12 +19,18 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth,
 	vec4 colorNear = texture2D(nearColorBuffer, uv);
 	vec4 colorFar = texture2D(farColorBuffer, uv);
 
-	vec2 cocNearFar = vec2(
-		texture2D(nearCoCBuffer, uv).r,
-		texture2D(farCoCBuffer, uv).g
-	);
+	#if MASK_FUNCTION == 1
 
-	cocNearFar = min(cocNearFar * scale, 1.0);
+		// Use the CoC from the far color buffer's alpha channel.
+		vec2 cocNearFar = vec2(texture2D(nearCoCBuffer, uv).r, colorFar.a);
+		cocNearFar.x = min(cocNearFar.x * scale, 1.0);
+
+	#else
+
+		vec2 cocNearFar = vec2(texture2D(nearCoCBuffer, uv).r, texture2D(farCoCBuffer, uv).g);
+		cocNearFar = min(cocNearFar * scale, 1.0);
+
+	#endif
 
 	// The far color buffer has been premultiplied with the CoC buffer.
 	vec4 result = inputColor * (1.0 - cocNearFar.y) + colorFar;

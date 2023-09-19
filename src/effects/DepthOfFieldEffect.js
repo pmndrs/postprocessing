@@ -182,8 +182,8 @@ export class DepthOfFieldEffect extends Effect {
 
 		this.maskPass = new ShaderPass(new MaskMaterial(this.renderTargetCoC.texture));
 		const maskMaterial = this.maskPass.fullscreenMaterial;
-		maskMaterial.maskFunction = MaskFunction.MULTIPLY_RGB;
 		maskMaterial.colorChannel = ColorChannel.GREEN;
+		this.maskFunction = MaskFunction.MULTIPLY_RGB;
 
 		/**
 		 * A bokeh blur pass for the foreground colors.
@@ -263,6 +263,30 @@ export class DepthOfFieldEffect extends Effect {
 	get cocTexture() {
 
 		return this.renderTargetCoC.texture;
+
+	}
+
+	/**
+	 * The mask function. Default is `MULTIPLY_RGB`.
+	 *
+	 * @type {MaskFunction}
+	 */
+
+	get maskFunction() {
+
+		return this.maskPass.fullscreenMaterial.maskFunction;
+
+	}
+
+	set maskFunction(value) {
+
+		if(this.maskFunction !== value) {
+
+			this.defines.set("MASK_FUNCTION", value.toFixed(0));
+			this.maskPass.fullscreenMaterial.maskFunction = value;
+			this.setChanged();
+
+		}
 
 	}
 
