@@ -1,8 +1,11 @@
 /**
  * A require shim for external bundles.
+ *
+ * @param name - The module name.
+ * @return The module.
  */
 
-export function require(name: string) {
+export function require(name: string): unknown {
 
 	switch(name) {
 
