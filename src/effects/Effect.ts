@@ -84,16 +84,16 @@ export abstract class Effect extends Pass {
 		const defines = new ObservableMap<string, string>();
 		const uniforms = new ObservableMap<string, Uniform>();
 		const extensions = new ObservableSet<WebGLExtension>();
-		defines.addEventListener("change", (e) => this.dispatchEvent(e));
-		uniforms.addEventListener("change", (e) => this.dispatchEvent(e));
-		extensions.addEventListener("change", (e) => this.dispatchEvent(e));
+		defines.addEventListener(Pass.EVENT_CHANGE, (e) => this.dispatchEvent(e));
+		uniforms.addEventListener(Pass.EVENT_CHANGE, (e) => this.dispatchEvent(e));
+		extensions.addEventListener(Pass.EVENT_CHANGE, (e) => this.dispatchEvent(e));
 
 		this.defines = defines;
 		this.uniforms = uniforms;
 		this.extensions = extensions;
 
 		this.blendMode = new BlendMode(BlendFunction.NORMAL);
-		this.blendMode.addEventListener("change", () => this.setChanged());
+		this.blendMode.addEventListener(Pass.EVENT_CHANGE, () => this.setChanged());
 
 		this._attributes = EffectAttribute.NONE;
 		this._fragmentShader = null;

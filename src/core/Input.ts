@@ -1,7 +1,17 @@
-import { Texture, Uniform, UnsignedByteType } from "three";
+import { BaseEvent, Texture, Uniform, UnsignedByteType } from "three";
 import { GBuffer } from "../enums/GBuffer.js";
 import { BufferedEventDispatcher } from "../utils/BufferedEventDispatcher.js";
 import { ObservableMap } from "../utils/ObservableMap.js";
+
+/**
+ * Input events.
+ */
+
+export interface InputEventMap {
+
+	change: BaseEvent;
+
+}
 
 /**
  * Input resources.
@@ -12,7 +22,7 @@ import { ObservableMap } from "../utils/ObservableMap.js";
  * @group Core
  */
 
-export class Input extends BufferedEventDispatcher {
+export class Input extends BufferedEventDispatcher<InputEventMap> {
 
 	/**
 	 * Triggers when an input resource is added, replaced or removed.
@@ -20,13 +30,13 @@ export class Input extends BufferedEventDispatcher {
 	 * @event
 	 */
 
-	static readonly EVENT_CHANGE: string = "change";
+	static readonly EVENT_CHANGE = "change";
 
 	/**
 	 * Identifies the default input buffer in the {@link textures} collection.
 	 */
 
-	static readonly BUFFER_DEFAULT: string = "buffer.default";
+	static readonly BUFFER_DEFAULT = "buffer.default";
 
 	/**
 	 * Input uniforms.
@@ -54,8 +64,8 @@ export class Input extends BufferedEventDispatcher {
 
 		const uniforms = new ObservableMap<string, Uniform>();
 		const textures = new ObservableMap<string | GBuffer, Texture | null>();
-		uniforms.addEventListener("change", (e) => this.dispatchEvent(e));
-		textures.addEventListener("change", (e) => this.dispatchEvent(e));
+		uniforms.addEventListener(ObservableMap.EVENT_CHANGE, (e) => this.dispatchEvent(e));
+		textures.addEventListener(ObservableMap.EVENT_CHANGE, (e) => this.dispatchEvent(e));
 
 		this.uniforms = uniforms;
 		this.textures = textures;

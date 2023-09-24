@@ -131,12 +131,12 @@ export abstract class Pass<T extends Material | null = null> extends EventDispat
 
 		this.disposables = new Set<Disposable>();
 		this.resolution = new Resolution();
-		this.resolution.addEventListener("change", () => this.onResolutionChange(this.resolution));
+		this.resolution.addEventListener(Resolution.EVENT_CHANGE, () => this.onResolutionChange(this.resolution));
 
 		this.input = new Input();
 		this.output = new Output();
-		this.input.addEventListener("change", () => this.onInputChange());
-		this.output.addEventListener("change", () => this.onOutputChange());
+		this.input.addEventListener(Input.EVENT_CHANGE, () => this.onInputChange());
+		this.output.addEventListener(Output.EVENT_CHANGE, () => this.onOutputChange());
 
 		this.enabled = true;
 

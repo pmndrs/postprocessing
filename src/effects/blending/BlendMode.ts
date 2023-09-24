@@ -1,4 +1,4 @@
-import { EventDispatcher, Uniform } from "three";
+import { BaseEvent, EventDispatcher, Uniform } from "three";
 import { BlendFunction } from "../../enums/BlendFunction.js";
 
 import add from "./shaders/add.frag";
@@ -71,12 +71,22 @@ const blendFunctions = new Map<BlendFunction, string>([
 ]);
 
 /**
+ * BlendMode events.
+ */
+
+export interface BlendModeEventMap {
+
+	change: BaseEvent;
+
+}
+
+/**
  * A blend mode.
  *
  * @group Effects
  */
 
-export class BlendMode extends EventDispatcher {
+export class BlendMode extends EventDispatcher<BlendModeEventMap> {
 
 	/**
 	 * @see {@link blendFunction}

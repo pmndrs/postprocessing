@@ -1,4 +1,4 @@
-import { Event, EventDispatcher } from "three";
+import { BaseEvent, EventDispatcher } from "three";
 
 /**
  * A buffered event dispatcher.
@@ -8,7 +8,7 @@ import { Event, EventDispatcher } from "three";
  * @group Utils
  */
 
-export class BufferedEventDispatcher extends EventDispatcher {
+export class BufferedEventDispatcher<TEventMap extends object> extends EventDispatcher<TEventMap> {
 
 	/**
 	 * A timeout ID.
@@ -27,7 +27,7 @@ export class BufferedEventDispatcher extends EventDispatcher {
 
 	}
 
-	override dispatchEvent(event: Event): void {
+	override dispatchEvent<T extends Extract<keyof TEventMap, string>>(event: BaseEvent<T> & TEventMap[T]): void {
 
 		if(this.timeoutId !== 0) {
 

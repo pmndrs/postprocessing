@@ -1,4 +1,14 @@
-import { EventDispatcher } from "three";
+import { BaseEvent, EventDispatcher } from "three";
+
+/**
+ * ObservableMap events.
+ */
+
+export interface ObservableMapEventMap {
+
+	change: BaseEvent;
+
+}
 
 /**
  * A map that emits events of type {@link EVENT_CHANGE} when its data changes.
@@ -6,7 +16,7 @@ import { EventDispatcher } from "three";
  * @group Utils
  */
 
-export class ObservableMap<K, V> extends EventDispatcher implements Map<K, V> {
+export class ObservableMap<K, V> extends EventDispatcher<ObservableMapEventMap> implements Map<K, V> {
 
 	/**
 	 * Triggers when an entry is added, replaced or removed.
@@ -14,7 +24,7 @@ export class ObservableMap<K, V> extends EventDispatcher implements Map<K, V> {
 	 * @event
 	 */
 
-	static readonly EVENT_CHANGE: string = "change";
+	static readonly EVENT_CHANGE = "change";
 
 	/**
 	 * The internal data collection.

@@ -1,6 +1,16 @@
-import { EventDispatcher, Vector2 } from "three";
+import { BaseEvent, EventDispatcher, Vector2 } from "three";
 
 const AUTO_SIZE = -1;
+
+/**
+ * Resolution events.
+ */
+
+export interface ResolutionEventMap {
+
+	change: BaseEvent;
+
+}
 
 /**
  * A resolution.
@@ -8,7 +18,15 @@ const AUTO_SIZE = -1;
  * @group Utils
  */
 
-export class Resolution extends EventDispatcher {
+export class Resolution extends EventDispatcher<ResolutionEventMap> {
+
+	/**
+	 * Triggers when the resolution is changed.
+	 *
+	 * @event
+	 */
+
+	static readonly EVENT_CHANGE = "change";
 
 	/**
 	 * An auto sizing constant.
@@ -66,7 +84,7 @@ export class Resolution extends EventDispatcher {
 		this._scale = scale;
 		this.locked = false;
 
-		this.addEventListener("change", () => this.updateEffectiveSize());
+		this.addEventListener(Resolution.EVENT_CHANGE, () => this.updateEffectiveSize());
 		this.updateEffectiveSize();
 
 	}
@@ -297,7 +315,7 @@ export class Resolution extends EventDispatcher {
 		if(!this.locked) {
 
 			this.locked = true;
-			this.dispatchEvent({ type: "change" });
+			this.dispatchEvent({ type: Resolution.EVENT_CHANGE });
 			this.locked = false;
 
 		} else {

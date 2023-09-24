@@ -1,7 +1,17 @@
-import { Uniform, WebGLRenderTarget } from "three";
+import { BaseEvent, Uniform, WebGLRenderTarget } from "three";
 import { GBuffer } from "../enums/GBuffer.js";
 import { BufferedEventDispatcher } from "../utils/BufferedEventDispatcher.js";
 import { ObservableMap } from "../utils/ObservableMap.js";
+
+/**
+ * Output events.
+ */
+
+export interface OutputEventMap {
+
+	change: BaseEvent;
+
+}
 
 /**
  * Output resources.
@@ -12,7 +22,7 @@ import { ObservableMap } from "../utils/ObservableMap.js";
  * @group Core
  */
 
-export class Output extends BufferedEventDispatcher {
+export class Output extends BufferedEventDispatcher<OutputEventMap> {
 
 	/**
 	 * Triggers when an output resource is added, replaced or removed.
@@ -20,13 +30,13 @@ export class Output extends BufferedEventDispatcher {
 	 * @event
 	 */
 
-	static readonly EVENT_CHANGE: string = "change";
+	static readonly EVENT_CHANGE = "change";
 
 	/**
 	 * Identifies the default output buffer in the {@link renderTargets} collection.
 	 */
 
-	static readonly BUFFER_DEFAULT: string = "buffer.default";
+	static readonly BUFFER_DEFAULT = "buffer.default";
 
 	/**
 	 * Output uniforms.
@@ -50,8 +60,8 @@ export class Output extends BufferedEventDispatcher {
 
 		const uniforms = new ObservableMap<string, Uniform>();
 		const renderTargets = new ObservableMap<string | GBuffer, WebGLRenderTarget | null>();
-		uniforms.addEventListener("change", (e) => this.dispatchEvent(e));
-		renderTargets.addEventListener("change", (e) => this.dispatchEvent(e));
+		uniforms.addEventListener(ObservableMap.EVENT_CHANGE, (e) => this.dispatchEvent(e));
+		renderTargets.addEventListener(ObservableMap.EVENT_CHANGE, (e) => this.dispatchEvent(e));
 
 		this.uniforms = uniforms;
 		this.renderTargets = renderTargets;
