@@ -12,7 +12,7 @@ import {
 /**
  * Generates noise.
  *
- * @param size - The linear texture size, i.e. total number of pixels.
+ * @param size - The total number of pixels.
  * @param format - The texture format.
  * @param type - The texture type.
  * @return The noise data.
