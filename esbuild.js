@@ -74,14 +74,14 @@ if(process.argv.includes("-w")) {
 
 	const ctxWorkers = await esbuild.context(workers);
 	await ctxWorkers.watch();
-	// const ctxManual = await esbuild.context(manual);
-	// await ctxManual.watch();
+	const ctxManual = await esbuild.context(manual);
+	await ctxManual.watch();
 
 } else {
 
 	await esbuild.build(workers);
 	await esbuild.build(lib);
-	// await esbuild.build(manual);
+	await esbuild.build(manual);
 
 }
 
