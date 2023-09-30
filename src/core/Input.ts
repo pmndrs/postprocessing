@@ -1,18 +1,9 @@
-import { BaseEvent, Texture, Uniform, UnsignedByteType } from "three";
+import { Texture, Uniform, UnsignedByteType } from "three";
 import { GBuffer } from "../enums/GBuffer.js";
 import { BufferedEventDispatcher } from "../utils/BufferedEventDispatcher.js";
 import { ObservableMap } from "../utils/ObservableMap.js";
 import { ObservableSet } from "../utils/ObservableSet.js";
-
-/**
- * Input events.
- */
-
-export interface InputEventMap {
-
-	change: BaseEvent;
-
-}
+import { BaseEventMap } from "./BaseEventMap.js";
 
 /**
  * Input resources.
@@ -23,7 +14,7 @@ export interface InputEventMap {
  * @group Core
  */
 
-export class Input extends BufferedEventDispatcher<InputEventMap> {
+export class Input extends BufferedEventDispatcher<BaseEventMap> {
 
 	/**
 	 * Triggers when an input resource is added, replaced or removed.

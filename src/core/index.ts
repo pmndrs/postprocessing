@@ -1,3 +1,4 @@
+export * from "./BaseEventMap.js";
 export * from "./BufferManager.js";
 export * from "./Disposable.js";
 export * from "./Input.js";

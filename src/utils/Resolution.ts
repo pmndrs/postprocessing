@@ -1,16 +1,7 @@
-import { BaseEvent, EventDispatcher, Vector2 } from "three";
+import { EventDispatcher, Vector2 } from "three";
+import { BaseEventMap } from "../core/BaseEventMap.js";
 
 const AUTO_SIZE = -1;
-
-/**
- * Resolution events.
- */
-
-export interface ResolutionEventMap {
-
-	change: BaseEvent;
-
-}
 
 /**
  * A resolution.
@@ -18,7 +9,7 @@ export interface ResolutionEventMap {
  * @group Utils
  */
 
-export class Resolution extends EventDispatcher<ResolutionEventMap> {
+export class Resolution extends EventDispatcher<BaseEventMap> {
 
 	/**
 	 * Triggers when the resolution is changed.

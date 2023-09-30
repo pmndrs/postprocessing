@@ -1,16 +1,7 @@
-import { BaseEvent, Uniform, WebGLMultipleRenderTargets, WebGLRenderTarget } from "three";
+import { Uniform, WebGLMultipleRenderTargets, WebGLRenderTarget } from "three";
 import { BufferedEventDispatcher } from "../utils/BufferedEventDispatcher.js";
 import { ObservableMap } from "../utils/ObservableMap.js";
-
-/**
- * Output events.
- */
-
-export interface OutputEventMap {
-
-	change: BaseEvent;
-
-}
+import { BaseEventMap } from "./BaseEventMap.js";
 
 /**
  * Output resources.
@@ -21,7 +12,7 @@ export interface OutputEventMap {
  * @group Core
  */
 
-export class Output extends BufferedEventDispatcher<OutputEventMap> {
+export class Output extends BufferedEventDispatcher<BaseEventMap> {
 
 	/**
 	 * Triggers when an output resource is added, replaced or removed.

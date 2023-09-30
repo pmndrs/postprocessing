@@ -1,4 +1,5 @@
 import { EventDispatcher } from "three";
+import { BaseEventMap } from "../core/BaseEventMap.js";
 
 /**
  * A set that emits events of type {@link EVENT_CHANGE} when its data changes.
@@ -6,7 +7,7 @@ import { EventDispatcher } from "three";
  * @group Utils
  */
 
-export class ObservableSet<T> extends EventDispatcher implements Set<T> {
+export class ObservableSet<T> extends EventDispatcher<BaseEventMap> implements Set<T> {
 
 	/**
 	 * Triggers when an entry is added, replaced or removed.
@@ -14,7 +15,7 @@ export class ObservableSet<T> extends EventDispatcher implements Set<T> {
 	 * @event
 	 */
 
-	static readonly EVENT_CHANGE: string = "change";
+	static readonly EVENT_CHANGE = "change";
 
 	/**
 	 * The internal data collection.

@@ -3,7 +3,8 @@ import {
 	EventListener,
 	Scene,
 	OrthographicCamera,
-	PerspectiveCamera
+	PerspectiveCamera,
+	BaseEvent
 } from "three";
 
 import { Pass } from "../core/Pass.js";
@@ -258,7 +259,7 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 	 * An event listener that forwards events to {@link handleEvent}.
 	 */
 
-	private listener: EventListener<Event, unknown, unknown>;
+	private listener: EventListener<BaseEvent, string, Effect>;
 
 	/**
 	 * The effects.
@@ -343,7 +344,7 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 
 		for(const effect of this._effects) {
 
-			effect.removeEventListener("change", this.listener);
+			effect.removeEventListener(Pass.EVENT_CHANGE, this.listener);
 
 		}
 
@@ -352,7 +353,7 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 
 		for(const effect of this._effects) {
 
-			effect.addEventListener("change", this.listener);
+			effect.addEventListener(Pass.EVENT_CHANGE, this.listener);
 
 		}
 

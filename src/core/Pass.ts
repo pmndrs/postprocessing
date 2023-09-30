@@ -14,6 +14,7 @@ import {
 import { ImmutableTimer } from "../utils/ImmutableTimer.js";
 import { Log } from "../utils/Log.js";
 import { Resolution } from "../utils/Resolution.js";
+import { BaseEventMap } from "./BaseEventMap.js";
 import { Disposable } from "./Disposable.js";
 import { Input } from "./Input.js";
 import { Output } from "./Output.js";
@@ -25,7 +26,16 @@ import { Renderable } from "./Renderable.js";
  * @group Core
  */
 
-export abstract class Pass<T extends Material | null = null> extends EventDispatcher implements Disposable, Renderable {
+export abstract class Pass<TMaterial extends Material | null = null>
+	extends EventDispatcher<BaseEventMap> implements Disposable, Renderable {
+
+	/**
+	 * Triggers when this pass has changed and requires a full update.
+	 *
+	 * @event
+	 */
+
+	static readonly EVENT_CHANGE = "change";
 
 	/**
 	 * A shared fullscreen triangle.
@@ -285,7 +295,7 @@ export abstract class Pass<T extends Material | null = null> extends EventDispat
 
 	protected setChanged(): void {
 
-		this.dispatchEvent({ type: "change" });
+		this.dispatchEvent({ type: Pass.EVENT_CHANGE });
 
 	}
 

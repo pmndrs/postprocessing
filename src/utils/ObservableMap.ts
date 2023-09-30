@@ -1,14 +1,5 @@
-import { BaseEvent, EventDispatcher } from "three";
-
-/**
- * ObservableMap events.
- */
-
-export interface ObservableMapEventMap {
-
-	change: BaseEvent;
-
-}
+import { EventDispatcher } from "three";
+import { BaseEventMap } from "../core/BaseEventMap.js";
 
 /**
  * A map that emits events of type {@link EVENT_CHANGE} when its data changes.
@@ -16,7 +7,7 @@ export interface ObservableMapEventMap {
  * @group Utils
  */
 
-export class ObservableMap<K, V> extends EventDispatcher<ObservableMapEventMap> implements Map<K, V> {
+export class ObservableMap<K, V> extends EventDispatcher<BaseEventMap> implements Map<K, V> {
 
 	/**
 	 * Triggers when an entry is added, replaced or removed.
