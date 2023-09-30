@@ -290,7 +290,15 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 
 	}
 
-	override set scene(value: Scene) {
+	override get scene(): Scene | null {
+
+		return super.scene;
+
+	}
+
+	override set scene(value: Scene | null) {
+
+		super.scene = value;
 
 		for(const effect of this.effects) {
 
@@ -300,13 +308,25 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 
 	}
 
-	override set camera(value: OrthographicCamera | PerspectiveCamera) {
+	override get camera(): OrthographicCamera | PerspectiveCamera | null {
 
-		this.fullscreenMaterial.copyCameraSettings(value);
+		return super.camera;
+
+	}
+
+	override set camera(value: OrthographicCamera | PerspectiveCamera | null) {
+
+		super.camera = value;
 
 		for(const effect of this.effects) {
 
 			effect.camera = value;
+
+		}
+
+		if(value !== null) {
+
+			this.fullscreenMaterial.copyCameraSettings(value);
 
 		}
 

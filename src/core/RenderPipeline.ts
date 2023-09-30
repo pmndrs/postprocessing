@@ -1,4 +1,5 @@
 import { Material, Vector2, WebGLRenderer } from "three";
+import { ImmutableTimer } from "../utils/ImmutableTimer.js";
 import { Log } from "../utils/Log.js";
 import { Resolution } from "../utils/Resolution.js";
 import { Timer } from "../utils/Timer.js";
@@ -7,7 +8,6 @@ import { Disposable } from "./Disposable.js";
 import { Renderable } from "./Renderable.js";
 import { Resizable } from "./Resizable.js";
 import { Pass } from "./Pass.js";
-import { ImmutableTimer } from "../index.js";
 
 const v = new Vector2();
 
@@ -32,16 +32,16 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 	private _renderer: WebGLRenderer | null;
 
 	/**
-	 * A list of passes.
-	 */
-
-	private passes: Pass<Material | null>[];
-
-	/**
 	 * A timer.
 	 */
 
 	private _timer: Timer;
+
+	/**
+	 * A list of passes.
+	 */
+
+	private passes: Pass<Material | null>[];
 
 	/**
 	 * The current resolution.

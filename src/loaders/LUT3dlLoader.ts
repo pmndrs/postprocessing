@@ -22,7 +22,7 @@ export class LUT3dlLoader extends Loader {
 	 * @return A promise that returns the lookup texture.
 	 */
 
-	async load(url: string, onLoad = (_: LookupTexture) => {}, onProgress = () => {},
+	override async load(url: string, onLoad = (_: LookupTexture) => {}, onProgress = (_: ProgressEvent) => {},
 		onError = (_: string) => {}): Promise<LookupTexture> {
 
 		const externalManager = this.manager;
@@ -38,7 +38,7 @@ export class LUT3dlLoader extends Loader {
 
 				externalManager.itemError(url);
 
-				if(onError !== null) {
+				if(onError !== null && onError !== undefined) {
 
 					onError(`Failed to load ${url}`);
 

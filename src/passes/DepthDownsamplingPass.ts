@@ -29,12 +29,15 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 		this.fullscreenMaterial = new DepthDownsamplingMaterial();
 		this.input.buffers.set(GBuffer.DEPTH, null);
 		this.input.buffers.set(GBuffer.NORMAL, null);
-		this.output.buffers.set(DepthDownsamplingPass.OUTPUT_BUFFER_NORMAL_DEPTH, new WebGLRenderTarget(1, 1, {
+
+		const renderTarget = new WebGLRenderTarget(1, 1, {
 			minFilter: NearestFilter,
 			magFilter: NearestFilter,
 			depthBuffer: false,
 			type: FloatType
-		}));
+		});
+
+		this.output.buffers.set(DepthDownsamplingPass.OUTPUT_BUFFER_NORMAL_DEPTH, renderTarget);
 
 	}
 

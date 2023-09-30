@@ -84,6 +84,7 @@ export abstract class Effect extends Pass {
 		const defines = new ObservableMap<string, string>();
 		const uniforms = new ObservableMap<string, Uniform>();
 		const extensions = new ObservableSet<WebGLExtension>();
+
 		defines.addEventListener(Pass.EVENT_CHANGE, (e) => this.dispatchEvent(e));
 		uniforms.addEventListener(Pass.EVENT_CHANGE, (e) => this.dispatchEvent(e));
 		extensions.addEventListener(Pass.EVENT_CHANGE, (e) => this.dispatchEvent(e));

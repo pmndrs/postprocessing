@@ -28,12 +28,15 @@ export class DepthCopyPass extends Pass<DepthCopyMaterial> {
 
 		this.fullscreenMaterial = new DepthCopyMaterial();
 		this.input.buffers.set(GBuffer.DEPTH, null);
-		this.output.buffers.set(DepthCopyPass.OUTPUT_BUFFER_DEPTH, new WebGLRenderTarget(1, 1, {
+
+		const renderTarget = new WebGLRenderTarget(1, 1, {
 			minFilter: NearestFilter,
 			magFilter: NearestFilter,
 			depthBuffer: false,
 			type: FloatType
-		}));
+		});
+
+		this.output.buffers.set(DepthCopyPass.OUTPUT_BUFFER_DEPTH, renderTarget);
 
 	}
 

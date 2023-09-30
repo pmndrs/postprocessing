@@ -21,7 +21,8 @@ export class LuminancePass extends Pass<LuminanceMaterial> {
 		super("LuminancePass");
 
 		this.fullscreenMaterial = new LuminanceMaterial();
-		this.output.buffers.set(GBuffer.LUMINANCE, new WebGLRenderTarget(1, 1, { depthBuffer: false }));
+		const renderTarget = new WebGLRenderTarget(1, 1, { depthBuffer: false });
+		this.output.buffers.set(GBuffer.LUMINANCE, renderTarget);
 
 	}
 

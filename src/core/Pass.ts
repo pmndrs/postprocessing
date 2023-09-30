@@ -71,6 +71,8 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	private screen: Mesh | null;
 
+	// #region Backing Data
+
 	/**
 	 * @see {@link name}
 	 */
@@ -88,6 +90,20 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 */
 
 	private _timer: ImmutableTimer | null;
+
+	/**
+	 * @see {@link scene}
+	 */
+
+	private _scene: Scene | null;
+
+	/**
+	 * @see {@link camera}
+	 */
+
+	private _camera: OrthographicCamera | PerspectiveCamera | null;
+
+	// #endregion
 
 	/**
 	 * A collection of objects that will be disposed when this pass is disposed.
@@ -138,6 +154,8 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this._name = name;
 		this._renderer = null;
 		this._timer = null;
+		this._scene = null;
+		this._camera = null;
 
 		this.disposables = new Set<Disposable>();
 		this.resolution = new Resolution();
@@ -220,27 +238,45 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 * The main scene.
 	 */
 
-	get scene(): Scene | null { return null; }
-	set scene(value: Scene | null) {}
+	get scene(): Scene | null {
+
+		return this._scene;
+
+	}
+
+	set scene(value: Scene | null) {
+
+		this._scene = value;
+
+	}
 
 	/**
 	 * The main camera.
 	 */
 
-	get camera(): OrthographicCamera | PerspectiveCamera | null { return null; }
-	set camera(value: OrthographicCamera | PerspectiveCamera | null) {}
+	get camera(): OrthographicCamera | PerspectiveCamera | null {
+
+		return this._camera;
+
+	}
+
+	set camera(value: OrthographicCamera | PerspectiveCamera | null) {
+
+		this._camera = value;
+
+	}
 
 	/**
 	 * The current fullscreen material.
 	 */
 
-	get fullscreenMaterial(): T {
+	get fullscreenMaterial(): TMaterial {
 
-		return this.screen?.material as T;
+		return this.screen?.material as TMaterial;
 
 	}
 
-	protected set fullscreenMaterial(value: T) {
+	protected set fullscreenMaterial(value: TMaterial) {
 
 		if(this.screen !== null) {
 
@@ -259,9 +295,9 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	}
 
 	/**
-	 * Override this method to check if the current device supports specific features.
+	 * Override this method to check if the current device supports the necessary features.
 	 *
-	 * If the requirements are not met, this method should throw an error.
+	 * This method should throw an error if the requirements are not met.
 	 *
 	 * @param renderer - The current renderer.
 	 * @throws If the device doesn't meet the requirements.
