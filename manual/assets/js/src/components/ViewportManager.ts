@@ -1,6 +1,24 @@
 import { Component } from "./Component.js";
 
 /**
+ * Extracts an error message from a given error event.
+ *
+ * @param event - An event.
+ */
+
+function getErrorMessage(event: ErrorEvent | PromiseRejectionEvent): string {
+
+	if(event instanceof ErrorEvent) {
+
+		return event.message;
+
+	}
+
+	return (typeof event.reason === "string") ? event.reason : (event.reason as ErrorEvent).message;
+
+}
+
+/**
  * A viewport manager.
  */
 
@@ -127,11 +145,11 @@ export class ViewportManager implements Component, EventListenerObject {
 
 			if(document.fullscreenElement !== null) {
 
-				document.exitFullscreen();
+				document.exitFullscreen().catch((e) => console.error(e));
 
 			} else {
 
-				this.viewport?.requestFullscreen();
+				this.viewport?.requestFullscreen().catch((e) => console.error(e));
 
 			}
 
@@ -164,7 +182,7 @@ export class ViewportManager implements Component, EventListenerObject {
 				break;
 
 			case "unhandledrejection":
-				this.showErrorMessage((event as PromiseRejectionEvent).reason.message);
+				this.showErrorMessage(getErrorMessage(event as PromiseRejectionEvent));
 				break;
 
 		}
@@ -212,7 +230,7 @@ export class ViewportManager implements Component, EventListenerObject {
 					// Show an epilepsy warning if applicable.
 					const alreadyShown = (sessionStorage.getItem("epilepsy-warning") !== null);
 
-					if(viewport.dataset.epilepsyWarning && !alreadyShown) {
+					if(viewport.dataset.epilepsyWarning !== undefined && !alreadyShown) {
 
 						this.showEpilepsyWarning();
 
