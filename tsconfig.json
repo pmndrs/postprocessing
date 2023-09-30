@@ -1,5 +1,11 @@
 {
-	"include": ["./*.js", "./src", "./manual/assets/js/src", "./test"],
+	"include": [
+		"./*.js",
+		"./src",
+		"./manual/assets/js/src",
+		"./manual/assets/js/libs",
+		"./test"
+	],
 	"compilerOptions": {
 		"baseUrl": ".",
 		"outDir": "./dist",
