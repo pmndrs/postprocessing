@@ -2,6 +2,7 @@ import { BaseEvent, Texture, Uniform, UnsignedByteType } from "three";
 import { GBuffer } from "../enums/GBuffer.js";
 import { BufferedEventDispatcher } from "../utils/BufferedEventDispatcher.js";
 import { ObservableMap } from "../utils/ObservableMap.js";
+import { ObservableSet } from "../utils/ObservableSet.js";
 
 /**
  * Input events.
@@ -27,6 +28,9 @@ export class Input extends BufferedEventDispatcher<InputEventMap> {
 	/**
 	 * Triggers when an input resource is added, replaced or removed.
 	 *
+	 * This event is also fired when gBuffer components are changed. The actual gBuffer textures can be accessed through
+	 * the {@link textures} map by using {@link GBuffer} values as keys.
+	 *
 	 * @event
 	 */
 
@@ -39,6 +43,12 @@ export class Input extends BufferedEventDispatcher<InputEventMap> {
 	static readonly BUFFER_DEFAULT = "buffer.default";
 
 	/**
+	 * Required gBuffer components.
+	 */
+
+	readonly gBuffer: Set<GBuffer>;
+
+	/**
 	 * Input uniforms.
 	 */
 
@@ -47,12 +57,12 @@ export class Input extends BufferedEventDispatcher<InputEventMap> {
 	/**
 	 * Input textures.
 	 *
-	 * Entries with {@link GBuffer} keys will be populated automatically.
+	 * Entries specified in {@link gBuffer} will be added automatically.
 	 *
 	 * @see EVENT_CHANGE
 	 */
 
-	readonly textures: Map<string | GBuffer, Texture | null>;
+	readonly textures: Map<string | GBuffer, Texture | null | undefined>;
 
 	/**
 	 * Constructs new input resources.
@@ -64,11 +74,15 @@ export class Input extends BufferedEventDispatcher<InputEventMap> {
 
 		const uniforms = new ObservableMap<string, Uniform>();
 		const textures = new ObservableMap<string | GBuffer, Texture | null>();
+		const gBuffer = new ObservableSet<GBuffer>();
+
 		uniforms.addEventListener(ObservableMap.EVENT_CHANGE, (e) => this.dispatchEvent(e));
 		textures.addEventListener(ObservableMap.EVENT_CHANGE, (e) => this.dispatchEvent(e));
+		gBuffer.addEventListener(ObservableSet.EVENT_CHANGE, (e) => this.dispatchEvent(e));
 
 		this.uniforms = uniforms;
 		this.textures = textures;
+		this.gBuffer = gBuffer;
 
 	}
 
@@ -76,7 +90,7 @@ export class Input extends BufferedEventDispatcher<InputEventMap> {
 	 * Alias for {@link textures}.
 	 */
 
-	get buffers(): Map<string, Texture | null> {
+	get buffers(): Map<string | GBuffer, Texture | null | undefined> {
 
 		return this.textures;
 
@@ -88,7 +102,7 @@ export class Input extends BufferedEventDispatcher<InputEventMap> {
 
 	get defaultBuffer(): Texture | null {
 
-		return this.textures.get(Input.BUFFER_DEFAULT) as Texture;
+		return this.textures.get(Input.BUFFER_DEFAULT) || null;
 
 	}
 

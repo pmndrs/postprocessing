@@ -1,5 +1,4 @@
-import { BaseEvent, Uniform, WebGLRenderTarget } from "three";
-import { GBuffer } from "../enums/GBuffer.js";
+import { BaseEvent, Uniform, WebGLMultipleRenderTargets, WebGLRenderTarget } from "three";
 import { BufferedEventDispatcher } from "../utils/BufferedEventDispatcher.js";
 import { ObservableMap } from "../utils/ObservableMap.js";
 
@@ -48,7 +47,7 @@ export class Output extends BufferedEventDispatcher<OutputEventMap> {
 	 * Output render targets.
 	 */
 
-	readonly renderTargets: Map<string | GBuffer, WebGLRenderTarget | null>;
+	readonly renderTargets: Map<string, WebGLRenderTarget | WebGLMultipleRenderTargets | null | undefined>;
 
 	/**
 	 * Constructs new output resources.
@@ -59,7 +58,8 @@ export class Output extends BufferedEventDispatcher<OutputEventMap> {
 		super();
 
 		const uniforms = new ObservableMap<string, Uniform>();
-		const renderTargets = new ObservableMap<string | GBuffer, WebGLRenderTarget | null>();
+		const renderTargets = new ObservableMap<string, WebGLRenderTarget | WebGLMultipleRenderTargets | null>();
+
 		uniforms.addEventListener(ObservableMap.EVENT_CHANGE, (e) => this.dispatchEvent(e));
 		renderTargets.addEventListener(ObservableMap.EVENT_CHANGE, (e) => this.dispatchEvent(e));
 
@@ -72,7 +72,7 @@ export class Output extends BufferedEventDispatcher<OutputEventMap> {
 	 * Alias for {@link renderTargets}.
 	 */
 
-	get buffers(): Map<string | GBuffer, WebGLRenderTarget | null> {
+	get buffers(): Map<string, WebGLRenderTarget | WebGLMultipleRenderTargets | null | undefined> {
 
 		return this.renderTargets;
 
@@ -82,13 +82,13 @@ export class Output extends BufferedEventDispatcher<OutputEventMap> {
 	 * The default output buffer.
 	 */
 
-	get defaultBuffer(): WebGLRenderTarget | null {
+	get defaultBuffer(): WebGLRenderTarget | WebGLMultipleRenderTargets | null {
 
-		return this.renderTargets.get(Output.BUFFER_DEFAULT) as WebGLRenderTarget;
+		return this.renderTargets.get(Output.BUFFER_DEFAULT) || null;
 
 	}
 
-	set defaultBuffer(value: WebGLRenderTarget | null) {
+	set defaultBuffer(value: WebGLRenderTarget | WebGLMultipleRenderTargets | null) {
 
 		this.renderTargets.set(Output.BUFFER_DEFAULT, value);
 
