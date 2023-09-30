@@ -7,7 +7,6 @@ import {
 	MeshStandardMaterial,
 	Quaternion,
 	Sphere,
-	Texture,
 	Vector3
 } from "three";
 
@@ -27,18 +26,16 @@ export function createLights(): Group {
 /**
  * Creates the environment.
  *
- * @param envMap - An environment map.
- * @return The environment.
+ * @return {Group} The environment.
  */
 
-export function createEnvironment(envMap: Texture | null): Group {
+export function createEnvironment() {
 
 	const environment = new Group();
 	const material = new MeshStandardMaterial({
 		color: 0xc1c1c1,
 		roughness: 0.0,
-		metalness: 1.0,
-		envMap
+		metalness: 1.0
 	});
 
 	const m = new Matrix4();
@@ -106,11 +103,10 @@ export function createEnvironment(envMap: Texture | null): Group {
 /**
  * Creates the scene actors.
  *
- * @param envMap - An environment map.
- * @return The actors.
+ * @return {Group} The actors.
  */
 
-export function createActors(envMap: Texture | null): Group {
+export function createActors(): Group {
 
 	const actors = new Group();
 	return actors;

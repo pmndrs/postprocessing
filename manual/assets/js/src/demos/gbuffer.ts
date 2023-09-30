@@ -1,5 +1,4 @@
 import {
-	CubeTexture,
 	CubeTextureLoader,
 	LoadingManager,
 	Mesh,
@@ -8,15 +7,14 @@ import {
 	Scene,
 	SphereGeometry,
 	SRGBColorSpace,
-	Vector3,
+	Texture,
 	VSMShadowMap,
 	WebGLRenderer
 } from "three";
 
 import {
 	CopyPass,
-	DepthPickingPass,
-	//GBufferDebugPass,
+	// GBufferDebugPass,
 	GeometryPass,
 	RenderPipeline
 } from "postprocessing";
@@ -24,7 +22,7 @@ import {
 import { Pane } from "tweakpane";
 import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV } from "../utils/CameraUtils.js";
+import { calculateVerticalFoV, getSkyboxUrls } from "../utils/index.js";
 import * as CornellBox from "../objects/CornellBox.js";
 
 function load(): Promise<Map<string, unknown>> {
@@ -33,20 +31,12 @@ function load(): Promise<Map<string, unknown>> {
 	const loadingManager = new LoadingManager();
 	const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
-	const path = document.baseURI + "img/textures/skies/sunset/";
-	const format = ".png";
-	const urls = [
-		path + "px" + format, path + "nx" + format,
-		path + "py" + format, path + "ny" + format,
-		path + "pz" + format, path + "nz" + format
-	];
-
 	return new Promise<Map<string, unknown>>((resolve, reject) => {
 
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		cubeTextureLoader.load(urls, (t) => {
+		cubeTextureLoader.load(getSkyboxUrls("sunset"), (t) => {
 
 			t.colorSpace = SRGBColorSpace;
 			assets.set("sky", t);
@@ -92,7 +82,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Scene, Lights, Objects
 
 	const scene = new Scene();
-	scene.background = assets.get("sky") as CubeTexture;
+	scene.background = assets.get("sky") as Texture;
 	scene.add(CornellBox.createLights());
 	scene.add(CornellBox.createEnvironment());
 	scene.add(CornellBox.createActors());
@@ -111,10 +101,11 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
-	const gBufferDebug = new GBufferDebugPass();
+	// const gBufferDebug = new GBufferDebugPass();
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.addPass(new GeometryPass(scene, camera, { samples: 4 }));
-	pipeline.addPass(gBufferDebug);
+	pipeline.addPass(new CopyPass());
+	// pipeline.addPass(gBufferDebug);
 
 	// Settings
 

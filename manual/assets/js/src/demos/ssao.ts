@@ -14,14 +14,14 @@ import {
 	BlendFunction,
 	EffectPass,
 	GeometryPass,
-	RenderPipeline,
-	SSAOEffect
+	RenderPipeline
+	// SSAOEffect
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
 import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV } from "../utils/CameraUtils.js";
+import { calculateVerticalFoV, getSkyboxUrls } from "../utils/index.js";
 import * as CornellBox from "../objects/CornellBox.js";
 
 function load(): Promise<Map<string, unknown>> {
@@ -30,20 +30,12 @@ function load(): Promise<Map<string, unknown>> {
 	const loadingManager = new LoadingManager();
 	const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
-	const path = document.baseURI + "img/textures/skies/sunset/";
-	const format = ".png";
-	const urls = [
-		path + "px" + format, path + "nx" + format,
-		path + "py" + format, path + "ny" + format,
-		path + "pz" + format, path + "nz" + format
-	];
-
 	return new Promise<Map<string, unknown>>((resolve, reject) => {
 
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		cubeTextureLoader.load(urls, (t) => {
+		cubeTextureLoader.load(getSkyboxUrls("sunset"), (t) => {
 
 			t.colorSpace = SRGBColorSpace;
 			assets.set("sky", t);
@@ -96,6 +88,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
+	/*
 	const effect = new SSAOEffect({
 		worldDistanceThreshold: 20,
 		worldDistanceFalloff: 5,
@@ -111,15 +104,17 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.addPass(new GeometryPass(scene, camera, { samples: 4 }));
 	pipeline.addPass(new EffectPass(effect));
+	*/
 
 	// Settings
 
-	const color = new Color();
-	const ssaoMaterial = effect.ssaoMaterial;
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
 	pane.registerPlugin(EssentialsPlugin);
 	const fpsMeter = pane.addBlade({ view: "fpsgraph", label: "FPS", rows: 2 }) as EssentialsPlugin.FpsGraphBladeApi;
 
+	/*
+	const color = new Color();
+	const ssaoMaterial = effect.ssaoMaterial;
 	const params = { "color": 0x000000 };
 	const folder = pane.addFolder({ title: "Settings" });
 
@@ -151,6 +146,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	folder.addBinding(effect.blendMode, "opacity", { min: 0, max: 1, step: 0.01 });
 	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
+	*/
 
 	// Resize Handler
 
@@ -160,7 +156,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 		camera.aspect = width / height;
 		camera.fov = calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
 		camera.updateProjectionMatrix();
-		pipeline.setSize(width, height);
+		// pipeline.setSize(width, height);
 
 	}
 
@@ -173,7 +169,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		fpsMeter.begin();
 		controls.update(timestamp);
-		pipeline.render(timestamp);
+		// pipeline.render(timestamp);
 		fpsMeter.end();
 		requestAnimationFrame(render);
 

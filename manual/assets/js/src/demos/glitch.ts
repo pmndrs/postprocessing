@@ -1,5 +1,4 @@
 import {
-	CubeTexture,
 	CubeTextureLoader,
 	FogExp2,
 	LoadingManager,
@@ -7,15 +6,16 @@ import {
 	RGBAFormat,
 	SRGBColorSpace,
 	Scene,
+	Texture,
 	TextureLoader,
 	WebGLRenderer
 } from "three";
 
 import {
-	ChromaticAberrationEffect,
+	// ChromaticAberrationEffect,
 	EffectPass,
 	GeometryPass,
-	GlitchEffect,
+	// GlitchEffect,
 	GlitchMode,
 	NoiseTexture,
 	RenderPipeline
@@ -24,8 +24,8 @@ import {
 import { Pane } from "tweakpane";
 import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV } from "../utils/CameraUtils.js";
-import * as Domain from "../objects/Domain.js";
+import { calculateVerticalFoV, getSkyboxUrls } from "../utils/index.js";
+import * as Checkerboard from "../objects/Checkerboard.js";
 
 function load(): Promise<Map<string, unknown>> {
 
@@ -34,29 +34,21 @@ function load(): Promise<Map<string, unknown>> {
 	const textureLoader = new TextureLoader(loadingManager);
 	const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
-	const path = document.baseURI + "img/textures/skies/sunset/";
-	const format = ".png";
-	const urls = [
-		path + "px" + format, path + "nx" + format,
-		path + "py" + format, path + "ny" + format,
-		path + "pz" + format, path + "nz" + format
-	];
-
 	return new Promise<Map<string, unknown>>((resolve, reject) => {
 
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		textureLoader.load(document.baseURI + "img/textures/perturb.jpg", (t) => {
-
-			assets.set("noise", t);
-
-		});
-
-		cubeTextureLoader.load(urls, (t) => {
+		cubeTextureLoader.load(getSkyboxUrls("space-00"), (t) => {
 
 			t.colorSpace = SRGBColorSpace;
 			assets.set("sky", t);
+
+		});
+
+		textureLoader.load(`${document.baseURI}img/textures/perturb.jpg`, (t) => {
+
+			assets.set("noise", t);
 
 		});
 
@@ -94,14 +86,15 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Scene, Lights, Objects
 
 	const scene = new Scene();
-	scene.fog = new FogExp2(0x373134, 0.06);
-	scene.background = assets.get("sky") as CubeTexture;
-	scene.add(Domain.createLights());
-	scene.add(Domain.createEnvironment(scene.background));
-	scene.add(Domain.createActors(scene.background));
+	const skyMap = assets.get("sky") as Texture;
+	scene.background = skyMap;
+	scene.environment = skyMap;
+	scene.fog = new FogExp2(0x000000, 0.025);
+	scene.add(Checkerboard.createEnvironment());
 
 	// Post Processing
 
+	/*
 	const chromaticAberrationEffect = new ChromaticAberrationEffect();
 	const effect = new GlitchEffect({ perturbationMap: assets.get("noise") });
 	effect.input.uniforms.set(GlitchEffect.INPUT_UNIFORM_OFFSET, chromaticAberrationEffect.offset); // optional
@@ -110,14 +103,16 @@ window.addEventListener("load", () => void load().then((assets) => {
 	pipeline.addPass(new GeometryPass(scene, camera, { samples: 4 }));
 	pipeline.addPass(new EffectPass(effect));
 	pipeline.addPass(new EffectPass(chromaticAberrationEffect));
+	*/
 
 	// Settings
 
-	const noiseTexture = new NoiseTexture(64, 64, RGBAFormat);
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
 	pane.registerPlugin(EssentialsPlugin);
 	const fpsMeter = pane.addBlade({ view: "fpsgraph", label: "FPS", rows: 2 }) as EssentialsPlugin.FpsGraphBladeApi;
 
+	/*
+	const noiseTexture = new NoiseTexture(64, 64, RGBAFormat);
 	const params = {
 		"custom pattern": true
 	};
@@ -134,6 +129,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	folder.addBinding(effect, "columns", { min: 0, max: 0.5, step: 0.01 });
 	folder.addBinding(params, "custom pattern")
 		.on("change", (e) => effect.perturbationMap = (e.value ? assets.get("noise") : noiseTexture));
+	*/
 
 	// Resize Handler
 
@@ -143,7 +139,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 		camera.aspect = width / height;
 		camera.fov = calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
 		camera.updateProjectionMatrix();
-		pipeline.setSize(width, height);
+		// pipeline.setSize(width, height);
 
 	}
 
@@ -156,7 +152,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		fpsMeter.begin();
 		controls.update(timestamp);
-		pipeline.render(timestamp);
+		// pipeline.render(timestamp);
 		fpsMeter.end();
 		requestAnimationFrame(render);
 

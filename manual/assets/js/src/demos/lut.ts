@@ -18,7 +18,7 @@ import {
 	EffectPass,
 	GeometryPass,
 	LookupTexture,
-	LUT3DEffect,
+	// LUT3DEffect,
 	LUT3dlLoader,
 	LUTCubeLoader,
 	RawImageData,
@@ -28,8 +28,7 @@ import {
 import { Pane } from "tweakpane";
 import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV } from "../utils/CameraUtils.js";
-import { toRecord } from "../utils/ArrayUtils.js";
+import { calculateVerticalFoV, toRecord } from "../utils/index.js";
 
 const luts = new Map<string, string | null>([
 	["neutral-2", null],
@@ -76,7 +75,7 @@ function load(): Promise<Map<string, unknown>> {
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		textureLoader.load(document.baseURI + "img/textures/photos/GEDC0053.jpg", (t) => {
+		textureLoader.load(`${document.baseURI}img/textures/photos/GEDC0053.jpg`, (t) => {
 
 			t.colorSpace = SRGBColorSpace;
 			assets.set("photo", t);
@@ -181,6 +180,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
+	/*
 	const lut = LookupTexture.from(assets.get("png/filmic1") as Texture);
 	const effect = renderer.capabilities.isWebGL2 ? new LUT3DEffect(lut) :
 		new LUT3DEffect(lut.convertToUint8().toDataTexture());
@@ -190,6 +190,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.addPass(new GeometryPass(scene, camera));
 	pipeline.addPass(new EffectPass(effect));
+	*/
 
 	// Settings
 
@@ -197,6 +198,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	pane.registerPlugin(EssentialsPlugin);
 	const fpsMeter = pane.addBlade({ view: "fpsgraph", label: "FPS", rows: 2 }) as EssentialsPlugin.FpsGraphBladeApi;
 
+	/*
 	const params = {
 		"lut": effect.lut.name,
 		"3D texture": true,
@@ -298,6 +300,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	folder.addBinding(params, "target size", { options: toRecord([32, 48, 64, 128]) }).on("change", changeLUT);
 	folder.addBinding(effect.blendMode, "opacity", { min: 0, max: 1, step: 0.01 });
 	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
+	*/
 
 	// Resize Handler
 
@@ -307,7 +310,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 		camera.aspect = width / height;
 		camera.fov = calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
 		camera.updateProjectionMatrix();
-		pipeline.setSize(width, height);
+		// pipeline.setSize(width, height);
 
 	}
 
@@ -320,7 +323,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		fpsMeter.begin();
 		controls.update(timestamp);
-		pipeline.render(timestamp);
+		// pipeline.render(timestamp);
 		fpsMeter.end();
 		requestAnimationFrame(render);
 

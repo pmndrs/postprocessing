@@ -1,10 +1,10 @@
 import {
-	CubeTexture,
 	CubeTextureLoader,
 	LoadingManager,
 	PerspectiveCamera,
 	SRGBColorSpace,
 	Scene,
+	Texture,
 	VSMShadowMap,
 	WebGLRenderer
 } from "three";
@@ -12,7 +12,7 @@ import {
 import {
 	BlendFunction,
 	EffectPass,
-	FXAAEffect,
+	// FXAAEffect,
 	GeometryPass,
 	RenderPipeline
 } from "postprocessing";
@@ -20,7 +20,7 @@ import {
 import { Pane } from "tweakpane";
 import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV } from "../utils/CameraUtils.js";
+import { calculateVerticalFoV, getSkyboxUrls } from "../utils/index.js";
 import * as CornellBox from "../objects/CornellBox.js";
 
 function load(): Promise<Map<string, unknown>> {
@@ -29,20 +29,12 @@ function load(): Promise<Map<string, unknown>> {
 	const loadingManager = new LoadingManager();
 	const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
-	const path = document.baseURI + "img/textures/skies/sunset/";
-	const format = ".png";
-	const urls = [
-		path + "px" + format, path + "nx" + format,
-		path + "py" + format, path + "ny" + format,
-		path + "pz" + format, path + "nz" + format
-	];
-
 	return new Promise<Map<string, unknown>>((resolve, reject) => {
 
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		cubeTextureLoader.load(urls, (t) => {
+		cubeTextureLoader.load(getSkyboxUrls("sunset"), (t) => {
 
 			t.colorSpace = SRGBColorSpace;
 			assets.set("sky", t);
@@ -88,17 +80,19 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Scene, Lights, Objects
 
 	const scene = new Scene();
-	scene.background = assets.get("sky") as CubeTexture;
+	scene.background = assets.get("sky") as Texture;
 	scene.add(CornellBox.createLights());
 	scene.add(CornellBox.createEnvironment());
 	scene.add(CornellBox.createActors());
 
 	// Post Processing
 
+	/*
 	const effect = new FXAAEffect({ blendFunction: BlendFunction.NORMAL });
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.addPass(new GeometryPass(scene, camera, { samples: 4 }));
 	pipeline.addPass(new EffectPass(effect));
+	*/
 
 	// Settings
 
@@ -106,6 +100,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	pane.registerPlugin(EssentialsPlugin);
 	const fpsMeter = pane.addBlade({ view: "fpsgraph", label: "FPS", rows: 2 }) as EssentialsPlugin.FpsGraphBladeApi;
 
+	/*
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addBinding(effect, "samples", { min: 0, max: 24, step: 1 });
 	folder.addBinding(effect, "minEdgeThreshold", { min: 0.01, max: 0.3, step: 1e-4 });
@@ -114,6 +109,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	folder.addBinding(effect.blendMode, "opacity", { min: 0, max: 1, step: 0.01 });
 	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
+	*/
 
 	// Resize Handler
 
@@ -123,7 +119,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 		camera.aspect = width / height;
 		camera.fov = calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
 		camera.updateProjectionMatrix();
-		pipeline.setSize(width, height);
+		// pipeline.setSize(width, height);
 
 	}
 
@@ -136,7 +132,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		fpsMeter.begin();
 		controls.update(timestamp);
-		pipeline.render(timestamp);
+		// pipeline.render(timestamp);
 		fpsMeter.end();
 		requestAnimationFrame(render);
 

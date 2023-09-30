@@ -13,7 +13,7 @@ import {
 
 import {
 	BlendFunction,
-	BrightnessContrastEffect,
+	// BrightnessContrastEffect,
 	EffectPass,
 	GeometryPass,
 	RenderPipeline
@@ -22,7 +22,7 @@ import {
 import { Pane } from "tweakpane";
 import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV } from "../utils/CameraUtils.js";
+import { calculateVerticalFoV } from "../utils/index.js";
 
 function load(): Promise<Map<string, unknown>> {
 
@@ -35,7 +35,7 @@ function load(): Promise<Map<string, unknown>> {
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		textureLoader.load(document.baseURI + "img/textures/photos/GEDC0053.jpg", (t) => {
+		textureLoader.load(`${document.baseURI}img/textures/photos/GEDC0053.jpg`, (t) => {
 
 			t.colorSpace = SRGBColorSpace;
 			assets.set("photo", t);
@@ -90,10 +90,10 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
-	const effect = new BrightnessContrastEffect({ blendFunction: BlendFunction.NORMAL });
+	// const effect = new BrightnessContrastEffect({ blendFunction: BlendFunction.NORMAL });
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.addPass(new GeometryPass(scene, camera, { samples: 4 }));
-	pipeline.addPass(new EffectPass(effect));
+	// pipeline.addPass(new EffectPass(effect));
 
 	// Settings
 
@@ -101,11 +101,13 @@ window.addEventListener("load", () => void load().then((assets) => {
 	pane.registerPlugin(EssentialsPlugin);
 	const fpsMeter = pane.addBlade({ view: "fpsgraph", label: "FPS", rows: 2 }) as EssentialsPlugin.FpsGraphBladeApi;
 
+	/*
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addBinding(effect, "brightness", { min: -1, max: 1, step: 1e-4 });
 	folder.addBinding(effect, "contrast", { min: -1, max: 1, step: 1e-4 });
 	folder.addBinding(effect.blendMode, "opacity", { min: 0, max: 1, step: 0.01 });
 	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
+	*/
 
 	// Resize Handler
 

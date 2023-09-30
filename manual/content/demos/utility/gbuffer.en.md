@@ -1,7 +1,7 @@
 ---
 layout: single
 collection: sections
-title: The Geometry Buffer
+title: Geometry Buffer
 draft: false
 menu:
   demos:
@@ -10,6 +10,6 @@ menu:
 script: gbuffer
 ---
 
-# The Geometry Buffer
+# Geometry Buffer
 
 ### External Resources

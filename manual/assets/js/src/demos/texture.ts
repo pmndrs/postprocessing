@@ -1,11 +1,12 @@
 import {
-	CubeTexture,
 	CubeTextureLoader,
+	FogExp2,
 	LoadingManager,
 	PerspectiveCamera,
 	RepeatWrapping,
 	SRGBColorSpace,
 	Scene,
+	Texture,
 	TextureLoader,
 	VSMShadowMap,
 	WebGLRenderer
@@ -15,15 +16,15 @@ import {
 	BlendFunction,
 	EffectPass,
 	GeometryPass,
-	RenderPipeline,
-	TextureEffect
+	RenderPipeline
+	// TextureEffect
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
 import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV } from "../utils/CameraUtils.js";
-import * as CornellBox from "../objects/CornellBox.js";
+import { calculateVerticalFoV, getSkyboxUrls } from "../utils/index.js";
+import * as Checkerboard from "../objects/Checkerboard.js";
 
 function load(): Promise<Map<string, unknown>> {
 
@@ -32,31 +33,23 @@ function load(): Promise<Map<string, unknown>> {
 	const textureLoader = new TextureLoader(loadingManager);
 	const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
-	const path = document.baseURI + "img/textures/skies/sunset/";
-	const format = ".png";
-	const urls = [
-		path + "px" + format, path + "nx" + format,
-		path + "py" + format, path + "ny" + format,
-		path + "pz" + format, path + "nz" + format
-	];
-
 	return new Promise<Map<string, unknown>>((resolve, reject) => {
 
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		textureLoader.load(document.baseURI + "img/textures/lens-dirt/scratches.jpg", (t) => {
+		cubeTextureLoader.load(getSkyboxUrls("space-00"), (t) => {
+
+			t.colorSpace = SRGBColorSpace;
+			assets.set("sky", t);
+
+		});
+
+		textureLoader.load(`${document.baseURI}img/textures/lens-dirt/scratches.jpg`, (t) => {
 
 			t.colorSpace = SRGBColorSpace;
 			t.wrapS = t.wrapT = RepeatWrapping;
 			assets.set("scratches", t);
-
-		});
-
-		cubeTextureLoader.load(urls, (t) => {
-
-			t.colorSpace = SRGBColorSpace;
-			assets.set("sky", t);
 
 		});
 
@@ -99,13 +92,15 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Scene, Lights, Objects
 
 	const scene = new Scene();
-	scene.background = assets.get("sky") as CubeTexture;
-	scene.add(CornellBox.createLights());
-	scene.add(CornellBox.createEnvironment());
-	scene.add(CornellBox.createActors());
+	const skyMap = assets.get("sky") as Texture;
+	scene.background = skyMap;
+	scene.environment = skyMap;
+	scene.fog = new FogExp2(0x000000, 0.025);
+	scene.add(Checkerboard.createEnvironment());
 
 	// Post Processing
 
+	/*
 	const effect = new TextureEffect({
 		blendFunction: BlendFunction.COLOR_DODGE,
 		texture: assets.get("scratches")
@@ -114,14 +109,16 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.addPass(new GeometryPass(scene, camera, { samples: 4 }));
 	pipeline.addPass(new EffectPass(effect));
+	*/
 
 	// Settings
 
-	const texture = effect.texture;
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
 	pane.registerPlugin(EssentialsPlugin);
 	const fpsMeter = pane.addBlade({ view: "fpsgraph", label: "FPS", rows: 2 }) as EssentialsPlugin.FpsGraphBladeApi;
 
+	/*
+	const texture = effect.texture;
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addBinding(texture, "rotation", { min: 0, max: 2 * Math.PI, step: 0.001 });
 
@@ -137,6 +134,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	folder.addBinding(effect.blendMode, "opacity", { min: 0, max: 1, step: 0.01 });
 	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
+	*/
 
 	// Resize Handler
 
@@ -146,7 +144,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 		camera.aspect = width / height;
 		camera.fov = calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
 		camera.updateProjectionMatrix();
-		pipeline.setSize(width, height);
+		// pipeline.setSize(width, height);
 
 	}
 
@@ -159,7 +157,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		fpsMeter.begin();
 		controls.update(timestamp);
-		pipeline.render(timestamp);
+		// pipeline.render(timestamp);
 		fpsMeter.end();
 		requestAnimationFrame(render);
 
