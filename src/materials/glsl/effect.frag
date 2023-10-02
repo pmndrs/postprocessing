@@ -139,6 +139,7 @@ void main() {
 
 	FRAGMENT_MAIN_IMAGE
 
+	color0.a = clamp(color0.a, 0.0, 1.0);
 	gl_FragColor = color0;
 
 	#ifdef ENCODE_OUTPUT
