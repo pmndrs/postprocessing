@@ -9,7 +9,7 @@ import { Renderable } from "./Renderable.js";
 import { Resizable } from "./Resizable.js";
 import { Pass } from "./Pass.js";
 
-const v = new Vector2();
+const v = /* @__PURE__ */ new Vector2();
 
 /**
  * A render pipeline that can be used to group and run passes.

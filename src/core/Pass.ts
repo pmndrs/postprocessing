@@ -44,7 +44,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 * @see https://michaldrobot.com/2014/04/01/gcn-execution-patterns-in-full-screen-passes/
 	 */
 
-	private static readonly fullscreenGeometry = (() => {
+	private static readonly fullscreenGeometry = /* @__PURE__ */ (() => {
 
 		const vertices = new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]);
 		const geometry = new BufferGeometry();
