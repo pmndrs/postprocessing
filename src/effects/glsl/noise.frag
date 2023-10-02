@@ -1,6 +1,6 @@
 void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
 
-	vec3 noise = vec3(rand(uv * time));
+	vec3 noise = vec3(rand(uv * (1.0 + time)));
 
 	#ifdef PREMULTIPLY
 
