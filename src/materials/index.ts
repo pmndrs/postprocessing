@@ -2,6 +2,7 @@ export * from "./AdaptiveLuminanceMaterial.js";
 export * from "./BokehMaterial.js";
 export * from "./BoxBlurMaterial.js";
 export * from "./CircleOfConfusionMaterial.js";
+export * from "./FullscreenMaterial.js";
 export * from "./KawaseBlurMaterial.js";
 export * from "./CopyMaterial.js";
 export * from "./DepthCopyMaterial.js";
