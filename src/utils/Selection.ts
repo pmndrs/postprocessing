@@ -1,4 +1,5 @@
 import { Object3D } from "three";
+import { Log } from "./Log.js";
 
 /**
  * An object selection.
@@ -9,6 +10,12 @@ import { Object3D } from "three";
  */
 
 export class Selection extends Set<Object3D> {
+
+	/**
+	 * The next layer ID.
+	 */
+
+	private static nextId = 2;
 
 	/**
 	 * @see {@link layer}
@@ -32,14 +39,30 @@ export class Selection extends Set<Object3D> {
 	 * Constructs a new selection.
 	 *
 	 * @param iterable - A collection of objects that should be added to this selection.
-	 * @param layer - A dedicated render layer for selected objects. Default is 10.
+	 * @param layer - A dedicated render layer for selected objects. Range is `[2, 31]`. Starts at 2 if omitted.
 	 */
 
-	constructor(iterable?: Iterable<Object3D>, layer = 10) {
+	constructor(iterable?: Iterable<Object3D>, layer?: number) {
 
 		super();
 
-		this._layer = layer;
+		if(layer === undefined) {
+
+			if(Selection.nextId > 31) {
+
+				Log.warn("Layer ID exceeded 31, resetting to 2");
+				Selection.nextId = 2;
+
+			}
+
+			this._layer = Selection.nextId++;
+
+		} else {
+
+			this._layer = layer;
+
+		}
+
 		this.enabled = true;
 		this.exclusive = false;
 
