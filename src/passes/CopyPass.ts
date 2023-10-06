@@ -4,7 +4,7 @@ import { CopyMaterial } from "../materials/CopyMaterial.js";
 import { Resolution } from "../utils/Resolution.js";
 
 /**
- * Copies the contents of the default input buffer to another buffer.
+ * Copies the contents of the default input buffer to another buffer or to screen.
  *
  * @group Passes
  */
@@ -14,7 +14,7 @@ export class CopyPass extends Pass<CopyMaterial> {
 	/**
 	 * Constructs a new copy pass.
 	 *
-	 * @param outputBuffer - An output buffer. If not provided, the output will be rendered to screen instead.
+	 * @param outputBuffer - An output buffer. If not provided, the output will be rendered to screen.
 	 */
 
 	constructor(outputBuffer: WebGLRenderTarget | null = null) {
