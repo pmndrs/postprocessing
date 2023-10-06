@@ -27,7 +27,7 @@ export abstract class Effect extends Pass {
 	 * Preprocessor macro definitions.
 	 */
 
-	readonly defines: Map<string, string>;
+	readonly defines: Map<string, string | number | boolean>;
 
 	/**
 	 * Shader uniforms.
@@ -81,7 +81,7 @@ export abstract class Effect extends Pass {
 
 		super(name);
 
-		const defines = new ObservableMap<string, string>();
+		const defines = new ObservableMap<string, string | number | boolean>();
 		const uniforms = new ObservableMap<string, Uniform>();
 		const extensions = new ObservableSet<WebGLExtension>();
 
