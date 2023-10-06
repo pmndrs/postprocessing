@@ -24,7 +24,7 @@ export class EffectShaderData {
 	 * Preprocessor macros.
 	 */
 
-	readonly defines: Map<string, string>;
+	readonly defines: Map<string, string | number | boolean>;
 
 	/**
 	 * The uniforms.
@@ -88,7 +88,7 @@ export class EffectShaderData {
 			[EffectShaderSection.VERTEX_MAIN_SUPPORT, null]
 		]);
 
-		this.defines = new Map<string, string>();
+		this.defines = new Map<string, string | number | boolean>();
 		this.uniforms = new Map<string, Uniform>();
 		this.blendModes = new Map<BlendFunction, BlendMode>();
 		this.extensions = new Set<WebGLExtension>();
