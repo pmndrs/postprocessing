@@ -1,4 +1,5 @@
-varying vec2 vUv;
+in vec3 position;
+out vec2 vUv;
 
 void main() {
 
