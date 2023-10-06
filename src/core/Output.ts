@@ -29,6 +29,12 @@ export class Output extends BufferedEventDispatcher<BaseEventMap> {
 	static readonly BUFFER_DEFAULT = "buffer.default";
 
 	/**
+	 * Output macro definitions.
+	 */
+
+	readonly defines: Map<string, string | number | boolean>;
+
+	/**
 	 * Output uniforms.
 	 */
 
@@ -49,11 +55,14 @@ export class Output extends BufferedEventDispatcher<BaseEventMap> {
 		super();
 
 		const uniforms = new ObservableMap<string, Uniform>();
+		const defines = new ObservableMap<string, string | number | boolean>();
 		const renderTargets = new ObservableMap<string, WebGLRenderTarget | WebGLMultipleRenderTargets | null>();
 
+		defines.addEventListener(ObservableMap.EVENT_CHANGE, (e) => this.dispatchEvent(e));
 		uniforms.addEventListener(ObservableMap.EVENT_CHANGE, (e) => this.dispatchEvent(e));
 		renderTargets.addEventListener(ObservableMap.EVENT_CHANGE, (e) => this.dispatchEvent(e));
 
+		this.defines = defines;
 		this.uniforms = uniforms;
 		this.renderTargets = renderTargets;
 
