@@ -1,28 +1,20 @@
-import {
-	NoBlending,
-	OrthographicCamera,
-	PerspectiveCamera,
-	ShaderMaterial,
-	Texture,
-	Uniform,
-	Vector3,
-	Vector4
-} from "three";
-
+import { OrthographicCamera, PerspectiveCamera, Texture, Uniform, Vector3, Vector4 } from "three";
 import { Resizable } from "../core/Resizable.js";
 import { EffectShaderSection, EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
-import { WebGLExtension } from "../enums/index.js";
+import { GBuffer } from "../enums/GBuffer.js";
+import { WebGLExtension } from "../enums/WebGLExtension.js";
+import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentTemplate from "./shaders/effect.frag";
 import vertexTemplate from "./shaders/effect.vert";
 
 /**
- * An effect material for compound shaders. Supports dithering.
+ * An effect material for compound shaders.
  *
  * @group Materials
  */
 
-export class EffectMaterial extends ShaderMaterial implements Resizable {
+export class EffectMaterial extends FullscreenMaterial implements Resizable {
 
 	/**
 	 * Constructs a new effect material.
@@ -32,30 +24,29 @@ export class EffectMaterial extends ShaderMaterial implements Resizable {
 
 		super({
 			name: "EffectMaterial",
-			defines: {
-				ENCODE_OUTPUT: "1"
-			},
 			uniforms: {
 				gBuffer: new Uniform(null),
 				resolution: new Uniform(new Vector4()),
 				cameraParams: new Uniform(new Vector3(0.3, 1000.0, 1.0)),
 				time: new Uniform(0.0)
-			},
-			blending: NoBlending,
-			toneMapped: false,
-			depthWrite: false,
-			depthTest: false
+			}
 		});
 
 	}
 
 	/**
-	 * The input buffer.
+	 * The current gBuffer.
 	 */
 
-	set inputBuffer(value: Texture | null) {
+	get gBuffer(): Record<GBuffer, Texture> {
 
-		this.uniforms.inputBuffer.value = value;
+		return this.uniforms.gBuffer.value as Record<GBuffer, Texture>;
+
+	}
+
+	set gBuffer(value: Record<GBuffer, Texture>) {
+
+		this.uniforms.gBuffer.value = value;
 
 	}
 
