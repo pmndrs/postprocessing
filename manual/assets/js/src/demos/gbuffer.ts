@@ -87,24 +87,14 @@ window.addEventListener("load", () => void load().then((assets) => {
 	scene.add(CornellBox.createEnvironment());
 	scene.add(CornellBox.createActors());
 
-	const cursor = new Mesh(
-		new SphereGeometry(0.2, 32, 32),
-		new MeshBasicMaterial({
-			color: 0xa9a9a9,
-			transparent: true,
-			depthWrite: false,
-			opacity: 0.5
-		})
-	);
-
-	scene.add(cursor);
-
 	// Post Processing
 
+	const geoPass = new GeometryPass(scene, camera, { samples: 4 });
+	const copyPass = new CopyPass();
 	// const gBufferDebug = new GBufferDebugPass();
 	const pipeline = new RenderPipeline(renderer);
-	pipeline.addPass(new GeometryPass(scene, camera, { samples: 4 }));
-	pipeline.addPass(new CopyPass());
+	pipeline.addPass(geoPass);
+	pipeline.addPass(copyPass);
 	// pipeline.addPass(gBufferDebug);
 
 	// Settings
