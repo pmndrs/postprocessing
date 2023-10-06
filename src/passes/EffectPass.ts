@@ -4,7 +4,8 @@ import {
 	Scene,
 	OrthographicCamera,
 	PerspectiveCamera,
-	BaseEvent
+	BaseEvent,
+	SRGBColorSpace
 } from "three";
 
 import { Pass } from "../core/Pass.js";
@@ -22,10 +23,11 @@ import { Resolution } from "../utils/Resolution.js";
  *
  * @param prefix - A prefix.
  * @param substrings - The substrings.
- * @param strings - A collection of named strings.
+ * @param shadersOrMacros - A collection of shaders or macros.
  */
 
-function prefixSubstrings(prefix: string, substrings: Iterable<string>, strings: Map<string, string | null>): void {
+function prefixSubstrings(prefix: string, substrings: Iterable<string>,
+	shadersOrMacros: Map<string, string | number | boolean | null>): void {
 
 	for(const substring of substrings) {
 
@@ -33,12 +35,12 @@ function prefixSubstrings(prefix: string, substrings: Iterable<string>, strings:
 		const prefixed = "$1" + prefix + substring.charAt(0).toUpperCase() + substring.slice(1);
 		const regExp = new RegExp("([^\\.])(\\b" + substring + "\\b)", "g");
 
-		for(const entry of strings.entries()) {
+		for(const entry of shadersOrMacros.entries()) {
 
-			if(entry[1] !== null) {
+			if(typeof entry[1] === "string") {
 
 				// Replace all occurances of the substring with the prefixed version.
-				strings.set(entry[0], entry[1].replace(regExp, prefixed));
+				shadersOrMacros.set(entry[0], entry[1].replace(regExp, prefixed));
 
 			}
 
@@ -159,7 +161,7 @@ function integrateEffect(prefix: string, effect: Effect, data: EffectShaderData)
 		effect.uniforms.forEach((v, k) => data.uniforms.set(prefix + k.charAt(0).toUpperCase() + k.slice(1), v));
 		effect.defines.forEach((v, k) => data.defines.set(prefix + k.charAt(0).toUpperCase() + k.slice(1), v));
 
-		// Prefix varyings, functions, uniforms and macro values.
+		// Prefix varyings, functions and uniforms in shaders and macros.
 		const shaders = new Map([["fragment", fragmentShader], ["vertex", vertexShader]]);
 		prefixSubstrings(prefix, names, data.defines);
 		prefixSubstrings(prefix, names, shaders);
@@ -174,7 +176,7 @@ function integrateEffect(prefix: string, effect: Effect, data: EffectShaderData)
 
 			if(effect.inputColorSpace !== null && effect.inputColorSpace !== data.colorSpace) {
 
-				fragmentMainImage += (effect.inputColorSpace === "srgb") ?
+				fragmentMainImage += (effect.inputColorSpace === SRGBColorSpace) ?
 					"color0 = LinearTosRGB(color0);\n\t" :
 					"color0 = sRGBToLinear(color0);\n\t";
 
@@ -523,7 +525,7 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 
 	protected override onInputChange(): void {
 
-		this.fullscreenMaterial.inputBuffer = this.input.defaultBuffer;
+		//this.fullscreenMaterial.inputBuffer = this.input.defaultBuffer;
 
 		if(this.input.frameBufferPrecisionHigh) {
 
@@ -561,7 +563,7 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 		}
 
 		const material = this.fullscreenMaterial;
-		material.inputBuffer = this.input.defaultBuffer;
+		//material.inputBuffer = this.input.defaultBuffer;
 		material.time += this.timer.delta * this.timeScale;
 
 		this.renderer.setRenderTarget(this.output.defaultBuffer);
