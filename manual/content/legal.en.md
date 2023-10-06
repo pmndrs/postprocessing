@@ -12,8 +12,9 @@ weight: 1
 ## Information in Accordance with § 5 TMG
 
 Raoul van Rüschen\
-Kampweg 1\
-26683 Saterland
+Emsteker Str. 82f\
+49661 Cloppenburg
+Germany
 
 ## Contact
 
