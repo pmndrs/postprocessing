@@ -1,18 +1,20 @@
 import {
+	DepthFormat,
 	DepthStencilFormat,
 	DepthTexture,
-	FloatType,
+	HalfFloatType,
 	LinearFilter,
 	NearestFilter,
 	OrthographicCamera,
 	PerspectiveCamera,
+	RGFormat,
 	SRGBColorSpace,
 	Scene,
 	TextureDataType,
 	UnsignedByteType,
 	UnsignedInt248Type,
+	UnsignedIntType,
 	WebGLMultipleRenderTargets,
-	WebGLRenderTarget,
 	WebGLRenderer
 } from "three";
 
@@ -34,6 +36,12 @@ export declare type MSAASamples = 0 | 2 | 4 | 8;
  */
 
 interface GeometryPassOptions {
+
+	/**
+	 * Determines whether a stencil buffer should be created.
+	 */
+
+	stencil?: boolean;
 
 	/**
 	 * The type of the color buffer.
@@ -80,6 +88,12 @@ export class GeometryPass extends Pass implements Selective {
 	skipShadowMapUpdate: boolean;
 
 	/**
+	 * Indicates whether a stencil buffer should be created.
+	 */
+
+	private readonly stencil: boolean;
+
+	/**
 	 * The texture data type of the primary color buffer.
 	 */
 
@@ -100,6 +114,7 @@ export class GeometryPass extends Pass implements Selective {
 	 */
 
 	constructor(scene: Scene, camera: OrthographicCamera | PerspectiveCamera, {
+		stencil = false,
 		frameBufferType = UnsignedByteType,
 		samples = 0
 	}: GeometryPassOptions = {}) {
@@ -109,6 +124,7 @@ export class GeometryPass extends Pass implements Selective {
 		this.scene = scene;
 		this.camera = camera;
 
+		this.stencil = stencil;
 		this.frameBufferType = frameBufferType;
 		this._samples = samples;
 
@@ -117,9 +133,10 @@ export class GeometryPass extends Pass implements Selective {
 		this.ignoreBackground = false;
 		this.skipShadowMapUpdate = false;
 
-		const gBufferComponents = new ObservableSet<GBuffer>();
+		const gBufferComponents = new ObservableSet<GBuffer>([GBuffer.COLOR]);
 		gBufferComponents.addEventListener(ObservableSet.EVENT_CHANGE, () => this.updateGBuffer());
 		this.gBufferComponents = gBufferComponents;
+		this.updateGBuffer();
 
 	}
 
@@ -133,12 +150,12 @@ export class GeometryPass extends Pass implements Selective {
 
 		super.renderer = value;
 
-		const renderTarget = this.output.defaultBuffer as WebGLRenderTarget;
+		const renderTarget = this.output.defaultBuffer as WebGLMultipleRenderTargets;
 		const type = this.frameBufferType;
 
 		if(renderTarget !== null && type === UnsignedByteType && value?.outputColorSpace === SRGBColorSpace) {
 
-			renderTarget.texture.colorSpace = SRGBColorSpace;
+			renderTarget.texture[0].colorSpace = SRGBColorSpace;
 
 		}
 
@@ -179,34 +196,77 @@ export class GeometryPass extends Pass implements Selective {
 	private updateGBuffer(): void {
 
 		const gBufferComponents = this.gBufferComponents;
-		const useDepthTexture = gBufferComponents.has(GBuffer.DEPTH) || gBufferComponents.has(GBuffer.NORMAL_DEPTH);
+		const useDepthTexture = gBufferComponents.has(GBuffer.DEPTH);
 
-		const renderTarget = new WebGLMultipleRenderTargets(1, 1, 2, {
+		const exclusions = new Set<GBuffer>([GBuffer.DEPTH, GBuffer.METALNESS]);
+		const textureCount = Array.from(gBufferComponents).filter((x) => !exclusions.has(x)).length;
+
+		const renderTarget = new WebGLMultipleRenderTargets(1, 1, textureCount, {
+			stencilBuffer: this.stencil && !useDepthTexture,
 			depthBuffer: !useDepthTexture,
-			stencilBuffer: true,
 			samples: this.samples
 		});
 
 		const textures = renderTarget.texture;
-		textures[0].name = GBuffer.COLOR;
-		textures[0].minFilter = LinearFilter;
-		textures[0].magFilter = LinearFilter;
-		textures[0].type = this.frameBufferType;
-		textures[1].name = GBuffer.NORMAL;
-		textures[1].minFilter = NearestFilter;
-		textures[1].magFilter = NearestFilter;
-		textures[1].type = FloatType;
+		const defines = this.output.defines as Map<GBuffer, number>;
+		defines.clear();
+
+		let index = 0;
+
+		if(gBufferComponents.has(GBuffer.COLOR)) {
+
+			textures[index].name = GBuffer.COLOR;
+			textures[index].minFilter = LinearFilter;
+			textures[index].magFilter = LinearFilter;
+			textures[index].type = this.frameBufferType;
+
+			if(this.frameBufferType === UnsignedByteType && this.renderer?.outputColorSpace === SRGBColorSpace) {
+
+				textures[index].colorSpace = SRGBColorSpace;
+
+			}
+
+			defines.set(GBuffer.COLOR, index++);
+
+		}
+
+		if(gBufferComponents.has(GBuffer.NORMAL)) {
+
+			textures[index].name = GBuffer.NORMAL;
+			textures[index].minFilter = NearestFilter;
+			textures[index].magFilter = NearestFilter;
+			textures[index].type = HalfFloatType;
+			defines.set(GBuffer.NORMAL, index++);
+
+		}
+
+		if(gBufferComponents.has(GBuffer.ROUGHNESS)) {
+
+			textures[index].name = GBuffer.ROUGHNESS;
+			textures[index].minFilter = LinearFilter;
+			textures[index].magFilter = LinearFilter;
+			textures[index].type = UnsignedByteType;
+			textures[index].format = RGFormat;
+			defines.set(GBuffer.ROUGHNESS, index++);
+
+		}
+
+		if(gBufferComponents.has(GBuffer.METALNESS)) {
+
+			defines.set(GBuffer.METALNESS, defines.get(GBuffer.ROUGHNESS) as number);
+
+		}
 
 		if(useDepthTexture) {
 
 			const depthTexture = new DepthTexture(1, 1);
-			depthTexture.format = DepthStencilFormat;
-			depthTexture.type = UnsignedInt248Type;
+			depthTexture.format = this.stencil ? DepthStencilFormat : DepthFormat;
+			depthTexture.type = this.stencil ? UnsignedInt248Type : UnsignedIntType;
 			renderTarget.depthTexture = depthTexture;
 
 		}
 
-
+		this.output.defaultBuffer?.dispose();
 		this.output.defaultBuffer = renderTarget;
 
 	}
