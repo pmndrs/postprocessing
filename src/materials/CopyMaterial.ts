@@ -1,15 +1,16 @@
-import { NoBlending, ShaderMaterial, Texture, Uniform } from "three";
+import { Texture, Uniform } from "three";
+import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentShader from "./shaders/copy.frag";
 import vertexShader from "./shaders/common.vert";
 
 /**
- * A simple copy shader material.
+ * A copy shader material.
  *
  * @group Materials
  */
 
-export class CopyMaterial extends ShaderMaterial {
+export class CopyMaterial extends FullscreenMaterial {
 
 	/**
 	 * Constructs a new copy material.
@@ -19,16 +20,11 @@ export class CopyMaterial extends ShaderMaterial {
 
 		super({
 			name: "CopyMaterial",
-			uniforms: {
-				inputBuffer: new Uniform(null),
-				opacity: new Uniform(1.0)
-			},
-			blending: NoBlending,
-			toneMapped: false,
-			depthWrite: false,
-			depthTest: false,
 			fragmentShader,
-			vertexShader
+			vertexShader,
+			uniforms: {
+				inputBuffer: new Uniform(null)
+			}
 		});
 
 	}
@@ -36,6 +32,12 @@ export class CopyMaterial extends ShaderMaterial {
 	/**
 	 * The input buffer.
 	 */
+
+	get inputBuffer(): Texture | null {
+
+		return this.uniforms.inputBuffer.value as Texture;
+
+	}
 
 	set inputBuffer(value: Texture | null) {
 

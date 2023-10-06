@@ -1,4 +1,8 @@
+#include <pp_precision_fragment>
+#include <pp_output_pars_fragment>
+
 #include <common>
+#include <colorspace_pars_fragment>
 #include <dithering_pars_fragment>
 
 #ifdef FRAMEBUFFER_PRECISION_HIGH
@@ -11,14 +15,11 @@
 
 #endif
 
-uniform float opacity;
-
-varying vec2 vUv;
+in vec2 vUv;
 
 void main() {
 
-	vec4 texel = texture2D(inputBuffer, vUv);
-	gl_FragColor = opacity * texel;
+	outputColor = texture(inputBuffer, vUv);
 
 	#include <colorspace_fragment>
 	#include <dithering_fragment>
