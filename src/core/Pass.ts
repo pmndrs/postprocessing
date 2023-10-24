@@ -7,7 +7,9 @@ import {
 	Mesh,
 	OrthographicCamera,
 	PerspectiveCamera,
+	RawShaderMaterial,
 	Scene,
+	ShaderMaterial,
 	WebGLRenderer
 } from "three";
 
@@ -163,6 +165,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		this.input = new Input();
 		this.output = new Output();
+		this.input.addEventListener(Input.EVENT_CHANGE, () => this.updateFullscreenMaterial());
 		this.input.addEventListener(Input.EVENT_CHANGE, () => this.onInputChange());
 		this.output.addEventListener(Output.EVENT_CHANGE, () => this.onOutputChange());
 
@@ -291,6 +294,43 @@ export abstract class Pass<TMaterial extends Material | null = null>
 			this.fullscreenScene.add(this.screen);
 
 		}
+
+	}
+
+	/**
+	 * Updates the shader input data of the fullscreen material, if it exists.
+	 */
+
+	private updateFullscreenMaterial(): void {
+
+		const fullscreenMaterial = this.fullscreenMaterial;
+
+		if(!(fullscreenMaterial instanceof ShaderMaterial ||
+			fullscreenMaterial instanceof RawShaderMaterial)) {
+
+			return;
+
+		}
+
+		if(this.input.frameBufferPrecisionHigh) {
+
+			fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+
+		}
+
+		for(const entry of this.input.defines) {
+
+			fullscreenMaterial.defines[entry[0]] = entry[1];
+
+		}
+
+		for(const entry of this.input.uniforms) {
+
+			fullscreenMaterial.uniforms[entry[0]] = entry[1];
+
+		}
+
+		fullscreenMaterial.needsUpdate = true;
 
 	}
 
