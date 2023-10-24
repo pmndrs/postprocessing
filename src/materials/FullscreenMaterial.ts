@@ -4,21 +4,20 @@ import {
 	NoBlending,
 	RawShaderMaterial,
 	SRGBColorSpace,
-	Shader,
 	ShaderMaterialParameters,
 	WebGLRenderer
 } from "three";
 
-interface ShaderWithDefines extends Shader {
+import { ShaderWithDefines } from "../core/ShaderWithDefines.js";
 
-	defines: Record<string, string>;
-
-}
+/**
+ * Supported precision constants.
+ */
 
 export type OutputPrecision = "highp" | "mediump" | "lowp";
 
 /**
- * An fullscreen shader base material.
+ * A fullscreen shader material.
  *
  * @group Materials
  */
@@ -51,6 +50,8 @@ export abstract class FullscreenMaterial extends RawShaderMaterial {
 			}
 
 			if(renderer.getRenderTarget() === null) {
+
+				shader.defines.RENDER_TO_SCREEN = true;
 
 				switch(renderer.outputColorSpace) {
 
