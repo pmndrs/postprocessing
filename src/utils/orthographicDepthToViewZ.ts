@@ -1,6 +1,7 @@
 /**
  * Converts orthographic depth into a view Z value.
  *
+ * @ignore
  * @see https://github.com/mrdoob/three.js/blob/0de4e75ee65c3238957318b88ef91b6597e23c1e/src/renderers/shaders/ShaderChunk/packing.glsl.js#L42
  * @param depth - The linear clip Z.
  * @param near - The camera near plane.
