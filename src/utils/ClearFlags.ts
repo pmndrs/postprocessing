@@ -4,6 +4,8 @@
  * @group Utils
  */
 
+import { GBuffer } from "../enums/GBuffer.js";
+
 export class ClearFlags {
 
 	/**
@@ -25,6 +27,12 @@ export class ClearFlags {
 	stencil: boolean;
 
 	/**
+	 * A collection of GBuffer components that should be cleared.
+	 */
+
+	readonly gBuffer: Set<GBuffer>;
+
+	/**
 	 * Constructs new clear flags.
 	 */
 
@@ -33,6 +41,7 @@ export class ClearFlags {
 		this.color = true;
 		this.depth = true;
 		this.stencil = true;
+		this.gBuffer = new Set<GBuffer>();
 
 	}
 
