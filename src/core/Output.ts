@@ -1,7 +1,7 @@
-import { Uniform, WebGLMultipleRenderTargets, WebGLRenderTarget } from "three";
-import { BufferedEventDispatcher } from "../utils/BufferedEventDispatcher.js";
+import { EventDispatcher, Uniform, WebGLMultipleRenderTargets, WebGLRenderTarget } from "three";
 import { ObservableMap } from "../utils/ObservableMap.js";
 import { BaseEventMap } from "./BaseEventMap.js";
+import { ShaderData } from "./ShaderData.js";
 
 /**
  * Output resources.
@@ -26,18 +26,9 @@ export class Output extends BufferedEventDispatcher<BaseEventMap> {
 	 * Identifies the default output buffer in the {@link renderTargets} collection.
 	 */
 
-	static readonly BUFFER_DEFAULT = "buffer.default";
-
-	/**
-	 * Output macro definitions.
-	 */
+	static readonly BUFFER_DEFAULT = "BUFFER_DEFAULT";
 
 	readonly defines: Map<string, string | number | boolean>;
-
-	/**
-	 * Output uniforms.
-	 */
-
 	readonly uniforms: Map<string, Uniform>;
 
 	/**
@@ -54,8 +45,8 @@ export class Output extends BufferedEventDispatcher<BaseEventMap> {
 
 		super();
 
-		const uniforms = new ObservableMap<string, Uniform>();
 		const defines = new ObservableMap<string, string | number | boolean>();
+		const uniforms = new ObservableMap<string, Uniform>();
 		const renderTargets = new ObservableMap<string, WebGLRenderTarget | WebGLMultipleRenderTargets | null>();
 
 		defines.addEventListener(ObservableMap.EVENT_CHANGE, (e) => this.dispatchEvent(e));

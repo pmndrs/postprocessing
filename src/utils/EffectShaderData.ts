@@ -1,4 +1,5 @@
 import { ColorSpace, Uniform } from "three";
+import { ShaderData } from "../core/ShaderData.js";
 import { BlendFunction } from "../enums/BlendFunction.js";
 import { EffectAttribute } from "../enums/EffectAttribute.js";
 import { EffectShaderSection } from "../enums/EffectShaderSection.js";
@@ -12,25 +13,16 @@ import { BlendMode } from "../effects/blending/BlendMode.js";
  * @group Utils
  */
 
-export class EffectShaderData {
+export class EffectShaderData implements ShaderData {
+
+	readonly defines: Map<string, string | number | boolean>;
+	readonly uniforms: Map<string, Uniform>;
 
 	/**
 	 * The shader parts.
 	 */
 
 	readonly shaderParts: Map<EffectShaderSection, string | null>;
-
-	/**
-	 * Preprocessor macros.
-	 */
-
-	readonly defines: Map<string, string | number | boolean>;
-
-	/**
-	 * The uniforms.
-	 */
-
-	readonly uniforms: Map<string, Uniform>;
 
 	/**
 	 * The blend modes of the individual effects.

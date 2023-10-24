@@ -1,9 +1,9 @@
-import { Texture, Uniform, UnsignedByteType } from "three";
+import { EventDispatcher, Texture, Uniform, UnsignedByteType } from "three";
 import { GBuffer } from "../enums/GBuffer.js";
-import { BufferedEventDispatcher } from "../utils/BufferedEventDispatcher.js";
 import { ObservableMap } from "../utils/ObservableMap.js";
 import { ObservableSet } from "../utils/ObservableSet.js";
 import { BaseEventMap } from "./BaseEventMap.js";
+import { ShaderData } from "./ShaderData.js";
 
 /**
  * Input resources.
@@ -33,17 +33,16 @@ export class Input extends BufferedEventDispatcher<BaseEventMap> {
 
 	static readonly BUFFER_DEFAULT = "buffer.default";
 
+	readonly defines: Map<string, string | number | boolean>;
+	readonly uniforms: Map<string, Uniform>;
+
 	/**
 	 * Required gBuffer components.
+	 *
+	 * {@link GBuffer.COLOR} is included by default.
 	 */
 
 	readonly gBuffer: Set<GBuffer>;
-
-	/**
-	 * Input uniforms.
-	 */
-
-	readonly uniforms: Map<string, Uniform>;
 
 	/**
 	 * Input textures.
@@ -63,14 +62,16 @@ export class Input extends BufferedEventDispatcher<BaseEventMap> {
 
 		super();
 
+		const defines = new ObservableMap<string, string | number | boolean>();
 		const uniforms = new ObservableMap<string, Uniform>();
 		const textures = new ObservableMap<string | GBuffer, Texture | null>();
-		const gBuffer = new ObservableSet<GBuffer>();
+		const gBuffer = new ObservableSet<GBuffer>([GBuffer.COLOR]);
 
 		uniforms.addEventListener(ObservableMap.EVENT_CHANGE, (e) => this.dispatchEvent(e));
 		textures.addEventListener(ObservableMap.EVENT_CHANGE, (e) => this.dispatchEvent(e));
 		gBuffer.addEventListener(ObservableSet.EVENT_CHANGE, (e) => this.dispatchEvent(e));
 
+		this.defines = defines;
 		this.uniforms = uniforms;
 		this.textures = textures;
 		this.gBuffer = gBuffer;
