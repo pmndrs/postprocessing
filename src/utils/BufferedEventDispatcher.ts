@@ -17,7 +17,7 @@ export class BufferedEventDispatcher<TEventMap extends object> extends EventDisp
 	private timeoutId: NodeJS.Timeout | number;
 
 	/**
-	 * Constructs new input resources.
+	 * Constructs a new buffered event dispatcher.
 	 */
 
 	constructor() {
