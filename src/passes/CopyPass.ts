@@ -14,7 +14,7 @@ export class CopyPass extends Pass<CopyMaterial> {
 	/**
 	 * Constructs a new copy pass.
 	 *
-	 * @param outputBuffer - An output buffer. If not provided, the output will be rendered to screen.
+	 * @param outputBuffer - An output buffer. If not provided, the input will be rendered to screen.
 	 */
 
 	constructor(outputBuffer: WebGLRenderTarget | null = null) {
@@ -35,12 +35,6 @@ export class CopyPass extends Pass<CopyMaterial> {
 	protected override onInputChange(): void {
 
 		this.fullscreenMaterial.inputBuffer = this.input.defaultBuffer;
-
-		if(this.input.frameBufferPrecisionHigh) {
-
-			this.fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
-
-		}
 
 	}
 
