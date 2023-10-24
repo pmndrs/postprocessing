@@ -13,12 +13,6 @@ import { Resolution } from "../utils/Resolution.js";
 export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 
 	/**
-	 * Identifies the normal(RGB) + depth(Alpha) output buffer.
-	 */
-
-	static readonly OUTPUT_BUFFER_NORMAL_DEPTH: string = "buffer.normaldepth";
-
-	/**
 	 * Constructs a new depth downsampling pass.
 	 */
 
@@ -27,8 +21,8 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 		super("DepthDownsamplingPass");
 
 		this.fullscreenMaterial = new DepthDownsamplingMaterial();
-		this.input.buffers.set(GBuffer.DEPTH, null);
-		this.input.buffers.set(GBuffer.NORMAL, null);
+		this.input.gBuffer.add(GBuffer.DEPTH);
+		this.input.gBuffer.add(GBuffer.NORMAL);
 
 		const renderTarget = new WebGLRenderTarget(1, 1, {
 			minFilter: NearestFilter,
@@ -37,13 +31,17 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 			type: FloatType
 		});
 
-		this.output.buffers.set(DepthDownsamplingPass.OUTPUT_BUFFER_NORMAL_DEPTH, renderTarget);
+		this.output.defaultBuffer = renderTarget;
 
 	}
 
-	private get renderTarget(): WebGLRenderTarget {
+	/**
+	 * Alias for {@link output.defaultBuffer}.
+	 */
 
-		return this.output.buffers.get(DepthDownsamplingPass.OUTPUT_BUFFER_NORMAL_DEPTH) as WebGLRenderTarget;
+	get renderTarget(): WebGLRenderTarget {
+
+		return this.output.defaultBuffer as WebGLRenderTarget;
 
 	}
 
@@ -59,7 +57,7 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 		this.renderTarget.setSize(resolution.width, resolution.height);
 
 		// Use the full resolution to calculate the depth/normal buffer texel size.
-		this.fullscreenMaterial.setSize(resolution.width, resolution.height);
+		this.fullscreenMaterial.setSize(resolution.baseWidth, resolution.baseHeight);
 
 	}
 
@@ -70,7 +68,7 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 
 		if(!renderable) {
 
-			throw new Error("Rendering to float texture is not supported");
+			throw new Error("Rendering to a float texture is not supported");
 
 		}
 
