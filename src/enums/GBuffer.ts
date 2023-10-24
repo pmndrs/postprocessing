@@ -1,7 +1,7 @@
 /**
  * An enumeration of G-Buffer components.
  *
- * The string values of the enum constants are used as shader macros.
+ * The string values of the enum constants double as shader macro names.
  *
  * @group Enums
  */
@@ -27,15 +27,15 @@ export enum GBuffer {
 	NORMAL = "GBUFFER_NORMAL",
 
 	/**
-	 * Roughness is stored in the GREEN channel of an 8 bit RG buffer.
-	 */
-
-	METALNESS = "GBUFFER_METALNESS",
-
-	/**
 	 * Roughness is stored in the RED channel of an 8 bit RG buffer.
 	 */
 
-	ROUGHNESS = "GBUFFER_ROUGHNESS"
+	ROUGHNESS = "GBUFFER_ROUGHNESS",
+
+	/**
+	 * Metalness is stored in the GREEN channel of an 8 bit RG buffer.
+	 */
+
+	METALNESS = "GBUFFER_METALNESS"
 
 }
