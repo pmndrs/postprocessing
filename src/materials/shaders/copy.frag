@@ -1,5 +1,6 @@
 #include <pp_precision_fragment>
-#include <pp_output_pars_fragment>
+#include <pp_gbuffer_output_pars_fragment>
+#include <pp_colorspace_pars_fragment>
 
 #include <common>
 #include <colorspace_pars_fragment>
@@ -19,9 +20,13 @@ in vec2 vUv;
 
 void main() {
 
-	outputColor = texture(inputBuffer, vUv);
+	#ifdef GBUFFER_COLOR
 
-	#include <colorspace_fragment>
-	#include <dithering_fragment>
+		outputColor = texture(inputBuffer, vUv);
+
+		#include <colorspace_fragment>
+		#include <dithering_fragment>
+
+	#endif
 
 }
