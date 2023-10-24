@@ -1,8 +1,8 @@
-import { SRGBColorSpace, WebGLMultipleRenderTargets } from "three";
+import { Material, SRGBColorSpace, WebGLMultipleRenderTargets } from "three";
 import { GBuffer } from "../enums/GBuffer.js";
 import { GeometryPass } from "../passes/GeometryPass.js";
-import { Disposable } from "./Disposable.js";
 import { RenderPipeline } from "./RenderPipeline.js";
+import { Pass } from "./Pass.js";
 
 /**
  * A buffer manager.
@@ -10,7 +10,7 @@ import { RenderPipeline } from "./RenderPipeline.js";
  * @group Core
  */
 
-export class BufferManager implements Disposable {
+export class BufferManager {
 
 	/**
 	 * A collection of active render pipelines.
@@ -49,6 +49,7 @@ export class BufferManager implements Disposable {
 	removePipeline(pipeline: RenderPipeline): void {
 
 		this.pipelines.delete(pipeline);
+		// Dispose related buffers.
 
 	}
 
@@ -62,7 +63,6 @@ export class BufferManager implements Disposable {
 	private gatherGBufferComponents(geoPass: GeometryPass, pipeline: RenderPipeline): void {
 
 		geoPass.gBufferComponents.clear();
-		geoPass.gBufferComponents.add(GBuffer.COLOR);
 
 		for(const pass of pipeline.passes) {
 
@@ -77,88 +77,106 @@ export class BufferManager implements Disposable {
 	}
 
 	/**
-	 * Updates the input and output buffers of all passes in a given pipeline.
+	 * Assigns GBuffer components to a given pass.
 	 *
-	 * @param pipeline - The pipeline to update.
+	 * @param pass - A pass.
+	 * @param gBuffer - The GBuffer.
+	 * @param gBufferIndices - GBuffer component indices.
 	 */
 
-	private updatePipeline(pipeline: RenderPipeline): void {
+	private assignGBufferTextures(pass: Pass<Material | null>, geoPass?: GeometryPass): void {
 
-		const mainGeoPass = pipeline.passes.find((x) => x instanceof GeometryPass) as GeometryPass;
-		const gBufferIndices = mainGeoPass.output.defines as Map<GBuffer, number>;
+		if(geoPass === undefined) {
 
-		let gBuffer = null;
-
-		if(mainGeoPass !== undefined) {
-
-			this.gatherGBufferComponents(mainGeoPass, pipeline);
-			gBuffer = mainGeoPass.output.defaultBuffer as WebGLMultipleRenderTargets;
+			return;
 
 		}
+
+		for(const component of pass.input.gBuffer) {
+
+			if(geoPass.gBufferIndices.has(component) && geoPass.gBuffer !== null) {
+
+				const index = geoPass.gBufferIndices.get(component) as number;
+				pass.input.buffers.set(component, geoPass.gBuffer.texture[index]);
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Updates the input buffers of all passes in a given pipeline.
+	 *
+	 * @param pipeline - The pipeline to update.
+	 * @param geoPass - The main geometry pass.
+	 */
+
+	private updateInput(pipeline: RenderPipeline, geoPass?: GeometryPass): void {
 
 		for(let i = 0, l = pipeline.passes.length; i < l; ++i) {
 
 			const previousPass = (i > 0) ? pipeline.passes[i - 1] : null;
 			const pass = pipeline.passes[i];
 
-			if(pass === mainGeoPass) {
+			if(pass === geoPass) {
 
 				continue;
 
 			}
 
-			if(pass instanceof GeometryPass) {
+			this.assignGBufferTextures(pass, geoPass);
 
-				for(const component of mainGeoPass.gBufferComponents) {
+			if(previousPass === null) {
 
-					pass.gBufferComponents.add(component);
-
-				}
-
-				pass.output.defaultBuffer = mainGeoPass.output.defaultBuffer;
 				continue;
 
 			}
 
-			if(gBuffer !== null) {
+			for(const entry of previousPass.output.defines) {
 
-				for(const component of pass.input.gBuffer) {
-
-					if(gBufferIndices.has(component)) {
-
-						pass.input.buffers.set(component, gBuffer.texture[gBufferIndices.get(component) as number]);
-
-					}
-
-				}
+				pass.input.defines.set(entry[0], entry[1]);
 
 			}
 
-			if(previousPass !== null) {
+			for(const entry of previousPass.output.uniforms) {
 
-				const buffer = previousPass.output.defaultBuffer;
+				pass.input.uniforms.set(entry[0], entry[1]);
 
-				if(buffer === null) {
+			}
 
-					pass.input.defaultBuffer = null;
+			const buffer = previousPass.output.defaultBuffer;
 
-				} else if(buffer instanceof WebGLMultipleRenderTargets) {
+			if(buffer === null) {
 
-					if(gBufferIndices.has(GBuffer.COLOR)) {
+				pass.input.defaultBuffer = null;
 
-						pass.input.defaultBuffer = buffer.texture[gBufferIndices.get(GBuffer.COLOR) as number];
+			} else if(buffer instanceof WebGLMultipleRenderTargets) {
 
-					}
+				if(geoPass !== undefined && geoPass.gBufferIndices.has(GBuffer.COLOR)) {
 
-				} else {
-
-					pass.input.defaultBuffer = buffer.texture;
+					const index = geoPass.gBufferIndices.get(GBuffer.COLOR) as number;
+					pass.input.defaultBuffer = buffer.texture[index];
 
 				}
+
+			} else {
+
+				pass.input.defaultBuffer = buffer.texture;
 
 			}
 
 		}
+
+	}
+
+	/**
+	 * Updates the output buffers of all passes in a given pipeline.
+	 *
+	 * @param pipeline - The pipeline to update.
+	 */
+
+	private updateOutput(pipeline: RenderPipeline): void {
 
 		for(const pass of pipeline.passes) {
 
@@ -184,6 +202,27 @@ export class BufferManager implements Disposable {
 	}
 
 	/**
+	 * Updates the input and output buffers of all passes in a given pipeline.
+	 *
+	 * @param pipeline - The pipeline to update.
+	 */
+
+	private updatePipeline(pipeline: RenderPipeline): void {
+
+		const geoPass = BufferManager.findMainGeometryPass(pipeline);
+
+		if(geoPass !== undefined) {
+
+			this.gatherGBufferComponents(geoPass, pipeline);
+
+		}
+
+		this.updateInput(pipeline, geoPass);
+		this.updateOutput(pipeline);
+
+	}
+
+	/**
 	 * Updates the input and output buffers of all pipelines.
 	 */
 
@@ -197,7 +236,16 @@ export class BufferManager implements Disposable {
 
 	}
 
-	dispose(): void {
+	/**
+	 * Returns the main geometry pass of the given pipeline.
+	 *
+	 * @param pipeline - A pipeline.
+	 * @return The geometry pass, or undefined if there is none.
+	 */
+
+	private static findMainGeometryPass(pipeline: RenderPipeline): GeometryPass | undefined {
+
+		return pipeline.passes.find((x) => x instanceof GeometryPass) as GeometryPass;
 
 	}
 
