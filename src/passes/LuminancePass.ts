@@ -1,6 +1,5 @@
 import { WebGLRenderTarget } from "three";
 import { Pass } from "../core/Pass.js";
-import { GBuffer } from "../enums/GBuffer.js";
 import { LuminanceMaterial } from "../materials/LuminanceMaterial.js";
 import { Resolution } from "../utils/Resolution.js";
 
@@ -22,13 +21,17 @@ export class LuminancePass extends Pass<LuminanceMaterial> {
 
 		this.fullscreenMaterial = new LuminanceMaterial();
 		const renderTarget = new WebGLRenderTarget(1, 1, { depthBuffer: false });
-		this.output.buffers.set(GBuffer.LUMINANCE, renderTarget);
+		this.output.defaultBuffer = renderTarget;
 
 	}
 
-	protected get renderTarget(): WebGLRenderTarget {
+	/**
+	 * Alias for {@link output.defaultBuffer}.
+	 */
 
-		return this.output.buffers.get(GBuffer.LUMINANCE) as WebGLRenderTarget;
+	get renderTarget(): WebGLRenderTarget {
+
+		return this.output.defaultBuffer as WebGLRenderTarget;
 
 	}
 
