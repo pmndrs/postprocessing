@@ -12,7 +12,7 @@ import { ShaderData } from "./ShaderData.js";
  * @group Core
  */
 
-export class Output extends BufferedEventDispatcher<BaseEventMap> {
+export class Output extends EventDispatcher<BaseEventMap> implements ShaderData {
 
 	/**
 	 * Triggers when an output resource is added, replaced or removed.
