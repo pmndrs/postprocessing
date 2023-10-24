@@ -80,7 +80,7 @@ export class EffectMaterial extends FullscreenMaterial implements Resizable {
 	 * @return This material.
 	 */
 
-	setDefines(defines: Map<string, string>): this {
+	setDefines(defines: Map<string, string | number | boolean>): this {
 
 		for(const entry of defines.entries()) {
 
