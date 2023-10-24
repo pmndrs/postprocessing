@@ -43,13 +43,32 @@ export class DepthPickingPass extends DepthCopyPass {
 	}
 
 	/**
+	 * Reads depth at a specific texture position.
+	 *
+	 * @param x - The X-coordinate.
+	 * @param x - The Y-coordinate.
+	 * @return The depth value.
+	 */
+
+	private readDepthAt(x: number, y: number): number {
+
+		const renderTarget = this.renderTarget;
+		const packed = (renderTarget.texture.type !== FloatType);
+		const pixelBuffer = packed ? uint8PixelBuffer : floatPixelBuffer;
+		this.renderer?.readRenderTargetPixels(renderTarget, x, y, 1, 1, pixelBuffer);
+
+		return packed ? unpackRGBAToFloat(uint8PixelBuffer) : floatPixelBuffer[0];
+
+	}
+
+	/**
 	 * Reads depth at a specific screen position.
 	 *
-	 * Only one depth value can be picked per frame. Calling this method multiple times per frame will overwrite the
-	 * picking coordinates. Unresolved promises will be abandoned.
+	 * If the mode is set to {@link DepthCopyMode.SINGLE}, only one depth value can be picked per frame. Calling this
+	 * method multiple times per frame will then overwrite the picking coordinates. Unresolved promises will be abandoned.
 	 *
 	 * @param ndc - Normalized device coordinates. Only X and Y are relevant.
-	 * @return A promise that returns the depth on the next frame.
+	 * @return A promise that returns the depth.
 	 * @example
 	 * const ndc = new Vector3();
 	 * const clientRect = myViewport.getBoundingClientRect();
@@ -68,7 +87,20 @@ export class DepthPickingPass extends DepthCopyPass {
 
 		return new Promise((resolve) => {
 
-			this.callback = resolve;
+			if(this.fullscreenMaterial.mode === DepthCopyMode.SINGLE) {
+
+				// The specific depth value needs to be copied before it can be read.
+				this.callback = resolve;
+
+			} else {
+
+				// The depth values from the current or last frame are already available.
+				const texelPosition = this.fullscreenMaterial.texelPosition;
+				const x = Math.round(texelPosition.x * this.renderTarget.width);
+				const y = Math.round(texelPosition.y * this.renderTarget.height);
+				resolve(this.readDepthAt(x, y));
+
+			}
 
 		});
 
@@ -76,39 +108,17 @@ export class DepthPickingPass extends DepthCopyPass {
 
 	override render(): void {
 
-		const material = this.fullscreenMaterial;
-		const mode = material.mode;
+		if(this.fullscreenMaterial.mode === DepthCopyMode.FULL) {
 
-		if(mode === DepthCopyMode.FULL) {
-
-			// Always copy the full depth texture.
+			// Always update the full depth buffer.
 			super.render();
 
-		}
+		} else if(this.callback !== null) {
 
-		if(this.callback !== null) {
+			// Copy a specific depth value on demand.
+			super.render();
 
-			const renderTarget = this.renderTarget;
-			const packed = (renderTarget.texture.type !== FloatType);
-
-			let x = 0, y = 0;
-
-			if(mode === DepthCopyMode.SINGLE) {
-
-				// Copy a specific depth value.
-				super.render();
-
-			} else {
-
-				const texelPosition = material.texelPosition;
-				x = Math.round(texelPosition.x * renderTarget.width);
-				y = Math.round(texelPosition.y * renderTarget.height);
-
-			}
-
-			const pixelBuffer = packed ? uint8PixelBuffer : floatPixelBuffer;
-			this.renderer?.readRenderTargetPixels(renderTarget, x, y, 1, 1, pixelBuffer);
-			this.callback(packed ? unpackRGBAToFloat(uint8PixelBuffer) : floatPixelBuffer[0]);
+			this.callback(this.readDepthAt(0, 0));
 			this.callback = null;
 
 		}
