@@ -33,6 +33,7 @@ void main() {
 
 	vec4 texel = texture2D(inputBuffer, vUv);
 	float l = luminance(texel.rgb);
+	texel = max(texel, vec4(0.0));
 
 	#ifdef RANGE
 
