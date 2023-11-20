@@ -7803,8 +7803,8 @@ declare module "postprocessing" {
 		 *
 		 * @type {Number}
 		 */
-		get minEdgeThreshold(): boolean;
-		set minEdgeThreshold(arg: boolean);
+		get minEdgeThreshold(): number;
+		set minEdgeThreshold(arg: number);
 
 		/**
 		 * The maximum edge detection threshold. Range is [0.0, 1.0].
