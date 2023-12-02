@@ -166,7 +166,7 @@ export class GeometryPass extends Pass implements Selective {
 	override set renderer(value: WebGLRenderer | null) {
 
 		super.renderer = value;
-		this.updateOutputColorSpace();
+		this.updateOutputBufferColorSpace();
 
 	}
 
@@ -296,7 +296,7 @@ export class GeometryPass extends Pass implements Selective {
 	 * Updates the color space of the output color texture.
 	 */
 
-	private updateOutputColorSpace(): void {
+	private updateOutputBufferColorSpace(): void {
 
 		if(!this.gBufferComponents.has(GBuffer.COLOR)) {
 
@@ -395,7 +395,7 @@ export class GeometryPass extends Pass implements Selective {
 		}
 
 		this.output.defaultBuffer = renderTarget;
-		this.updateOutputColorSpace();
+		this.updateOutputBufferColorSpace();
 
 	}
 
