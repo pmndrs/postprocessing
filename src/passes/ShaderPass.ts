@@ -38,24 +38,18 @@ export class ShaderPass extends Pass<ShaderMaterial> {
 
 	protected override onInputChange(): void {
 
-		if(this.input.frameBufferPrecisionHigh) {
+		const uniforms = this.fullscreenMaterial.uniforms;
+		const inputBuffer = this.input.defaultBuffer;
 
-			this.fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+		if(uniforms !== undefined && uniforms[this.uniformName] !== undefined) {
+
+			uniforms[this.uniformName].value = inputBuffer;
 
 		}
 
 	}
 
 	render(): void {
-
-		const uniforms = this.fullscreenMaterial.uniforms;
-		const inputBuffer = this.input.defaultBuffer;
-
-		if(inputBuffer !== null && uniforms !== undefined && uniforms[this.uniformName] !== undefined) {
-
-			uniforms[this.uniformName].value = inputBuffer;
-
-		}
 
 		this.renderer?.setRenderTarget(this.output.defaultBuffer);
 		this.renderFullscreen();
