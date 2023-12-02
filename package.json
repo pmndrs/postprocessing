@@ -41,8 +41,7 @@
 		"email": "vanruesc@outlook.de"
 	},
 	"repository": {
-		"type": "git",
-		"url": "https://github.com/pmndrs/postprocessing.git"
+		"url": "git+https://github.com/pmndrs/postprocessing.git"
 	},
 	"bugs": {
 		"url": "https://github.com/pmndrs/postprocessing/issues"
@@ -88,7 +87,7 @@
 		"watch:js": "node esbuild -w"
 	},
 	"peerDependencies": {
-		"three": ">= 0.138.0 < 0.159.0"
+		"three": ">= 0.138.0 < 0.160.0"
 	},
 	"devDependencies": {
 		"@tweakpane/core": "2.x.x",
