@@ -5,12 +5,12 @@ import { RenderPipeline } from "./RenderPipeline.js";
 import { Pass } from "./Pass.js";
 
 /**
- * A buffer manager.
+ * An I/O manager.
  *
  * @group Core
  */
 
-export class BufferManager {
+export class IOManager {
 
 	/**
 	 * A collection of active render pipelines.
@@ -19,7 +19,7 @@ export class BufferManager {
 	private readonly pipelines: Set<RenderPipeline>;
 
 	/**
-	 * Constructs a new buffer manager.
+	 * Constructs a new I/O manager.
 	 */
 
 	constructor() {
@@ -54,13 +54,61 @@ export class BufferManager {
 	}
 
 	/**
+	 * Updates the input and output buffers of all passes in a given pipeline.
+	 *
+	 * @param pipeline - The pipeline to update.
+	 */
+
+	private updatePipeline(pipeline: RenderPipeline): void {
+
+		const geoPass = IOManager.findMainGeometryPass(pipeline);
+
+		if(geoPass !== undefined) {
+
+			IOManager.gatherGBufferComponents(geoPass, pipeline);
+
+		}
+
+		IOManager.updateInput(pipeline, geoPass);
+		IOManager.updateOutput(pipeline);
+
+	}
+
+	/**
+	 * Updates the input and output buffers of all pipelines.
+	 */
+
+	update(): void {
+
+		for(const pipeline of this.pipelines) {
+
+			this.updatePipeline(pipeline);
+
+		}
+
+	}
+
+	/**
+	 * Returns the main geometry pass of the given pipeline.
+	 *
+	 * @param pipeline - A pipeline.
+	 * @return The geometry pass, or undefined if there is none.
+	 */
+
+	private static findMainGeometryPass(pipeline: RenderPipeline): GeometryPass | undefined {
+
+		return pipeline.passes.find((x) => x instanceof GeometryPass) as GeometryPass;
+
+	}
+
+	/**
 	 * Collects all required GBuffer components for a given pipeline.
 	 *
 	 * @param geoPass - The primary geometry pass.
 	 * @param pipeline - The pipeline.
 	 */
 
-	private gatherGBufferComponents(geoPass: GeometryPass, pipeline: RenderPipeline): void {
+	private static gatherGBufferComponents(geoPass: GeometryPass, pipeline: RenderPipeline): void {
 
 		geoPass.gBufferComponents.clear();
 
@@ -84,7 +132,7 @@ export class BufferManager {
 	 * @param gBufferIndices - GBuffer component indices.
 	 */
 
-	private assignGBufferTextures(pass: Pass<Material | null>, geoPass?: GeometryPass): void {
+	private static assignGBufferTextures(pass: Pass<Material | null>, geoPass?: GeometryPass): void {
 
 		if(geoPass === undefined) {
 
@@ -112,7 +160,7 @@ export class BufferManager {
 	 * @param geoPass - The main geometry pass.
 	 */
 
-	private updateInput(pipeline: RenderPipeline, geoPass?: GeometryPass): void {
+	private static updateInput(pipeline: RenderPipeline, geoPass?: GeometryPass): void {
 
 		for(let i = 0, l = pipeline.passes.length; i < l; ++i) {
 
@@ -125,7 +173,7 @@ export class BufferManager {
 
 			}
 
-			this.assignGBufferTextures(pass, geoPass);
+			IOManager.assignGBufferTextures(pass, geoPass);
 
 			if(previousPass === null) {
 
@@ -176,7 +224,7 @@ export class BufferManager {
 	 * @param pipeline - The pipeline to update.
 	 */
 
-	private updateOutput(pipeline: RenderPipeline): void {
+	private static updateOutput(pipeline: RenderPipeline): void {
 
 		for(const pass of pipeline.passes) {
 
@@ -198,54 +246,6 @@ export class BufferManager {
 			}
 
 		}
-
-	}
-
-	/**
-	 * Updates the input and output buffers of all passes in a given pipeline.
-	 *
-	 * @param pipeline - The pipeline to update.
-	 */
-
-	private updatePipeline(pipeline: RenderPipeline): void {
-
-		const geoPass = BufferManager.findMainGeometryPass(pipeline);
-
-		if(geoPass !== undefined) {
-
-			this.gatherGBufferComponents(geoPass, pipeline);
-
-		}
-
-		this.updateInput(pipeline, geoPass);
-		this.updateOutput(pipeline);
-
-	}
-
-	/**
-	 * Updates the input and output buffers of all pipelines.
-	 */
-
-	update(): void {
-
-		for(const pipeline of this.pipelines) {
-
-			this.updatePipeline(pipeline);
-
-		}
-
-	}
-
-	/**
-	 * Returns the main geometry pass of the given pipeline.
-	 *
-	 * @param pipeline - A pipeline.
-	 * @return The geometry pass, or undefined if there is none.
-	 */
-
-	private static findMainGeometryPass(pipeline: RenderPipeline): GeometryPass | undefined {
-
-		return pipeline.passes.find((x) => x instanceof GeometryPass) as GeometryPass;
 
 	}
 

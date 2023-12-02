@@ -4,7 +4,7 @@ import { ImmutableTimer } from "../utils/ImmutableTimer.js";
 import { Log } from "../utils/Log.js";
 import { Resolution } from "../utils/Resolution.js";
 import { Timer } from "../utils/Timer.js";
-import { BufferManager } from "./BufferManager.js";
+import { IOManager } from "./IOManager.js";
 import { Disposable } from "./Disposable.js";
 import { Renderable } from "./Renderable.js";
 import { Resizable } from "./Resizable.js";
@@ -21,10 +21,10 @@ const v = /* @__PURE__ */ new Vector2();
 export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 	/**
-	 * A shared buffer manager.
+	 * A shared I/O manager.
 	 */
 
-	private static readonly bufferManager = /* @__PURE__ */ new BufferManager();
+	private static readonly ioManager = /* @__PURE__ */ new IOManager();
 
 	/**
 	 * The current renderer.
@@ -73,7 +73,7 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 	constructor(renderer: WebGLRenderer | null = null) {
 
 		ShaderChunkExtensions.register();
-		RenderPipeline.bufferManager.addPipeline(this);
+		RenderPipeline.ioManager.addPipeline(this);
 
 		this._renderer = renderer;
 		this._timer = new Timer();
@@ -111,7 +111,7 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 			// Update the render resolution and refresh the buffers.
 			this.onResolutionChange();
-			RenderPipeline.bufferManager.update();
+			RenderPipeline.ioManager.update();
 
 		}
 
@@ -188,7 +188,7 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 		this.registerPass(pass);
 		passes.push(pass);
-		RenderPipeline.bufferManager.update();
+		RenderPipeline.ioManager.update();
 
 	}
 
@@ -208,7 +208,7 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 		if(removed) {
 
 			this.unregisterPass(pass);
-			RenderPipeline.bufferManager.update();
+			RenderPipeline.ioManager.update();
 
 		}
 
@@ -227,7 +227,7 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 		}
 
 		this._passes = [];
-		RenderPipeline.bufferManager.update();
+		RenderPipeline.ioManager.update();
 
 	}
 
@@ -315,7 +315,7 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 	dispose(): void {
 
-		RenderPipeline.bufferManager.removePipeline(this);
+		RenderPipeline.ioManager.removePipeline(this);
 
 		for(const pass of this.passes) {
 
