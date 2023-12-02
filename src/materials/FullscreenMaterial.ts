@@ -41,6 +41,7 @@ export abstract class FullscreenMaterial extends RawShaderMaterial {
 			}
 		}, parameters));
 
+		// Updates the output color space when rendering to screen.
 		this.onBeforeCompile = (shader: ShaderWithDefines, renderer: WebGLRenderer) => {
 
 			if(shader.defines === undefined || shader.defines === null) {
@@ -68,6 +69,8 @@ export abstract class FullscreenMaterial extends RawShaderMaterial {
 
 				}
 
+				this.outputPrecision = "lowp";
+
 			} else {
 
 				shader.defines.OUTPUT_COLORSPACE = "0";
@@ -80,6 +83,8 @@ export abstract class FullscreenMaterial extends RawShaderMaterial {
 
 	/**
 	 * The precision of the output color.
+	 *
+	 * This settings will be set automatically by the I/O manager.
 	 */
 
 	get outputPrecision(): OutputPrecision {
