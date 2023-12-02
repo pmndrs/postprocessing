@@ -305,9 +305,10 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		const fullscreenMaterial = this.fullscreenMaterial;
 
-		if(!(fullscreenMaterial instanceof ShaderMaterial ||
-			fullscreenMaterial instanceof RawShaderMaterial)) {
+		if(!(fullscreenMaterial instanceof RawShaderMaterial ||
+			fullscreenMaterial instanceof ShaderMaterial)) {
 
+			// No defines or uniforms available.
 			return;
 
 		}
