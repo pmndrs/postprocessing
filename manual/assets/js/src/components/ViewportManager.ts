@@ -36,17 +36,10 @@ export class ViewportManager implements Component, EventListenerObject {
 
 	private fullscreenButton: HTMLElement | null;
 
-	/**
-	 * Indicates whether scrolling should currently be prevented.
-	 */
-
-	private preventScrolling: boolean;
-
 	constructor() {
 
 		this.viewport = null;
 		this.fullscreenButton = null;
-		this.preventScrolling = false;
 
 	}
 
@@ -127,7 +120,7 @@ export class ViewportManager implements Component, EventListenerObject {
 
 	private handleScroll(event: Event): void {
 
-		if(this.preventScrolling) {
+		if(this.viewport !== null && this.viewport.matches(":hover")) {
 
 			event.preventDefault();
 
@@ -160,14 +153,6 @@ export class ViewportManager implements Component, EventListenerObject {
 	handleEvent(event: Event): void {
 
 		switch(event.type) {
-
-			case "mouseenter":
-				this.preventScrolling = true;
-				break;
-
-			case "mouseleave":
-				this.preventScrolling = false;
-				break;
 
 			case "wheel":
 				this.handleScroll(event);
@@ -207,8 +192,6 @@ export class ViewportManager implements Component, EventListenerObject {
 
 		const main = document.getElementById("main");
 		main?.addEventListener("wheel", this);
-		viewport.addEventListener("mouseenter", this);
-		viewport.addEventListener("mouseleave", this);
 
 		// Fullscreen
 
