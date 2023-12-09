@@ -3,6 +3,8 @@ import { GBuffer } from "../enums/GBuffer.js";
 import { GeometryPass } from "../passes/GeometryPass.js";
 import { RenderPipeline } from "./RenderPipeline.js";
 import { Pass } from "./Pass.js";
+import { ClearPass } from "../passes/ClearPass.js";
+import { ShaderData } from "./ShaderData.js";
 
 /**
  * An I/O manager.
@@ -181,17 +183,8 @@ export class IOManager {
 
 			}
 
-			for(const entry of previousPass.output.defines) {
-
-				pass.input.defines.set(entry[0], entry[1]);
-
-			}
-
-			for(const entry of previousPass.output.uniforms) {
-
-				pass.input.uniforms.set(entry[0], entry[1]);
-
-			}
+			IOManager.copyDefines(previousPass.output, pass.input);
+			IOManager.copyUniforms(previousPass.output, pass.input);
 
 			const buffer = previousPass.output.defaultBuffer;
 
@@ -226,9 +219,21 @@ export class IOManager {
 
 	private static updateOutput(pipeline: RenderPipeline): void {
 
-		for(const pass of pipeline.passes) {
+		for(let i = 0, j = 1, l = pipeline.passes.length; i < l; ++i, ++j) {
 
+			const pass = pipeline.passes[i];
 			const { input, output } = pass;
+
+			if(j < l && pass instanceof ClearPass) {
+
+				const nextPass = pipeline.passes[j];
+				IOManager.copyDefines(nextPass.output, pass.output);
+				IOManager.copyUniforms(nextPass.output, pass.output);
+				pass.output.defaultBuffer = nextPass.output.defaultBuffer;
+
+				continue;
+
+			}
 
 			if(input.defaultBuffer === null || output.defaultBuffer === null ||
 				output.defaultBuffer instanceof WebGLMultipleRenderTargets) {
@@ -244,6 +249,40 @@ export class IOManager {
 				output.defaultBuffer.texture.colorSpace = SRGBColorSpace;
 
 			}
+
+		}
+
+	}
+
+	/**
+	 * Copies the macro definitions of the given shader data.
+	 *
+	 * @param src - The source data.
+	 * @param dest - The destination data.
+	 */
+
+	private static copyDefines(src: ShaderData, dest: ShaderData): void {
+
+		for(const entry of src.defines) {
+
+			dest.defines.set(entry[0], entry[1]);
+
+		}
+
+	}
+
+	/**
+	 * Copies the uniforms of the given shader data.
+	 *
+	 * @param src - The source data.
+	 * @param dest - The destination data.
+	 */
+
+	private static copyUniforms(src: ShaderData, dest: ShaderData): void {
+
+		for(const entry of src.uniforms) {
+
+			dest.uniforms.set(entry[0], entry[1]);
 
 		}
 
