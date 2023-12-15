@@ -1,21 +1,17 @@
 import {
 	CubeTextureLoader,
 	LoadingManager,
-	Mesh,
-	MeshBasicMaterial,
 	PerspectiveCamera,
 	Scene,
-	SphereGeometry,
 	SRGBColorSpace,
-	Texture,
 	VSMShadowMap,
 	WebGLRenderer
 } from "three";
 
 import {
-	CopyPass,
+	BufferDebugPass,
+	ClearPass,
 	GBuffer,
-	// GBufferDebugPass,
 	GeometryPass,
 	RenderPipeline
 } from "postprocessing";
@@ -70,12 +66,13 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Camera & Controls
 
-	const camera = new PerspectiveCamera();
+	const camera = new PerspectiveCamera(50, 1, 1, 1000);
 	const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 	const settings = controls.settings;
 	settings.general.mode = ControlMode.THIRD_PERSON;
 	settings.rotation.sensitivity = 2.2;
 	settings.rotation.damping = 0.05;
+	settings.zoom.sensitivity = 0.15;
 	settings.zoom.damping = 0.1;
 	settings.translation.enabled = false;
 	controls.position.set(0, 0, 5);
@@ -84,20 +81,30 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const scene = new Scene();
 	//scene.background = assets.get("sky") as Texture;
+
 	scene.add(CornellBox.createLights());
 	scene.add(CornellBox.createEnvironment());
 	scene.add(CornellBox.createActors());
 
 	// Post Processing
 
+	const clearPass = new ClearPass();
 	const geoPass = new GeometryPass(scene, camera, { samples: 4 });
-	const copyPass = new CopyPass();
-	copyPass.input.gBuffer.add(GBuffer.NORMAL);
-	// const gBufferDebug = new GBufferDebugPass();
+
+	const bufferDebugPass = new BufferDebugPass(
+		new Set([
+			GBuffer.COLOR,
+			GBuffer.DEPTH,
+			GBuffer.NORMAL,
+			GBuffer.ROUGHNESS,
+			GBuffer.METALNESS
+		])
+	);
+
 	const pipeline = new RenderPipeline(renderer);
+	pipeline.addPass(clearPass);
 	pipeline.addPass(geoPass);
-	pipeline.addPass(copyPass);
-	// pipeline.addPass(gBufferDebug);
+	pipeline.addPass(bufferDebugPass);
 
 	// Settings
 
