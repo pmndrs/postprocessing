@@ -4,7 +4,6 @@ import { GeometryPass } from "../passes/GeometryPass.js";
 import { RenderPipeline } from "./RenderPipeline.js";
 import { Pass } from "./Pass.js";
 import { ClearPass } from "../passes/ClearPass.js";
-import { ShaderData } from "./ShaderData.js";
 
 /**
  * An I/O manager.
@@ -136,7 +135,7 @@ export class IOManager {
 
 	private static assignGBufferTextures(pass: Pass<Material | null>, geoPass?: GeometryPass): void {
 
-		if(geoPass === undefined) {
+		if(geoPass === undefined || geoPass.gBuffer === null) {
 
 			return;
 
@@ -144,7 +143,11 @@ export class IOManager {
 
 		for(const component of pass.input.gBuffer) {
 
-			if(geoPass.gBufferIndices.has(component) && geoPass.gBuffer !== null) {
+			if(component === GBuffer.DEPTH) {
+
+				pass.input.buffers.set(component, geoPass.gBuffer.depthTexture);
+
+			} else if(geoPass.gBufferIndices.has(component)) {
 
 				const index = geoPass.gBufferIndices.get(component) as number;
 				pass.input.buffers.set(component, geoPass.gBuffer.texture[index]);
@@ -183,8 +186,8 @@ export class IOManager {
 
 			}
 
-			IOManager.copyDefines(previousPass.output, pass.input);
-			IOManager.copyUniforms(previousPass.output, pass.input);
+			previousPass.output.defines.forEach((value, key) => pass.input.defines.set(key, value));
+			previousPass.output.uniforms.forEach((value, key) => pass.input.uniforms.set(key, value));
 
 			const buffer = previousPass.output.defaultBuffer;
 
@@ -227,9 +230,9 @@ export class IOManager {
 			if(j < l && pass instanceof ClearPass) {
 
 				const nextPass = pipeline.passes[j];
-				IOManager.copyDefines(nextPass.output, pass.output);
-				IOManager.copyUniforms(nextPass.output, pass.output);
-				pass.output.defaultBuffer = nextPass.output.defaultBuffer;
+				nextPass.output.defines.forEach((value, key) => output.defines.set(key, value));
+				nextPass.output.uniforms.forEach((value, key) => output.uniforms.set(key, value));
+				output.defaultBuffer = nextPass.output.defaultBuffer;
 
 				continue;
 
@@ -249,40 +252,6 @@ export class IOManager {
 				output.defaultBuffer.texture.colorSpace = SRGBColorSpace;
 
 			}
-
-		}
-
-	}
-
-	/**
-	 * Copies the macro definitions of the given shader data.
-	 *
-	 * @param src - The source data.
-	 * @param dest - The destination data.
-	 */
-
-	private static copyDefines(src: ShaderData, dest: ShaderData): void {
-
-		for(const entry of src.defines) {
-
-			dest.defines.set(entry[0], entry[1]);
-
-		}
-
-	}
-
-	/**
-	 * Copies the uniforms of the given shader data.
-	 *
-	 * @param src - The source data.
-	 * @param dest - The destination data.
-	 */
-
-	private static copyUniforms(src: ShaderData, dest: ShaderData): void {
-
-		for(const entry of src.uniforms) {
-
-			dest.uniforms.set(entry[0], entry[1]);
 
 		}
 
