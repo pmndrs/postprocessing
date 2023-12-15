@@ -20,9 +20,13 @@
 
 	#endif
 
-	#if defined(GBUFFER_ROUGHNESS) || defined(GBUFFER_METALNESS)
-dd
-		// Both components use the same location.
+	// Roughness and metalness use the same location.
+	#if defined(GBUFFER_ROUGHNESS)
+
+		layout(location = GBUFFER_ROUGHNESS) out lowp vec2 outputRoughMetal;
+
+	#elif defined(GBUFFER_METALNESS)
+
 		layout(location = GBUFFER_METALNESS) out lowp vec2 outputRoughMetal;
 
 	#endif
