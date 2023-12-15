@@ -1,3 +1,4 @@
+export * from "./BufferDebugPass.js";
 export * from "./ClearPass.js";
 export * from "./CopyPass.js";
 export * from "./DepthDownsamplingPass.js";
