@@ -27,12 +27,6 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 	private static readonly ioManager = /* @__PURE__ */ new IOManager();
 
 	/**
-	 * The current renderer.
-	 */
-
-	private _renderer: WebGLRenderer | null;
-
-	/**
 	 * A timer.
 	 */
 
@@ -43,6 +37,12 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 	 */
 
 	private _passes: Pass<Material | null>[];
+
+	/**
+	 * The current renderer.
+	 */
+
+	private _renderer: WebGLRenderer | null;
 
 	/**
 	 * The current resolution.
@@ -75,9 +75,10 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 		ShaderChunkExtensions.register();
 		RenderPipeline.ioManager.addPipeline(this);
 
-		this._renderer = renderer;
 		this._timer = new Timer();
 		this._passes = [];
+		this._renderer = null;
+		this.renderer = renderer;
 
 		this.resolution = new Resolution();
 		this.resolution.addEventListener("change", () => this.onResolutionChange());
@@ -109,9 +110,16 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 		if(value !== null) {
 
-			// Update the render resolution and refresh the buffers.
-			this.onResolutionChange();
-			RenderPipeline.ioManager.update();
+			// Clearing will be done with ClearPass instances.
+			value.autoClear = false;
+
+			if(this.passes.length > 0) {
+
+				// Update the render resolution and refresh the buffers.
+				this.onResolutionChange();
+				RenderPipeline.ioManager.update();
+
+			}
 
 		}
 
