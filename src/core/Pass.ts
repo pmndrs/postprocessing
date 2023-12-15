@@ -290,7 +290,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 			this.screen = new Mesh(Pass.fullscreenGeometry, value as Material);
 			this.screen.frustumCulled = false;
 			this.fullscreenScene = new Scene();
-			this.fullscreenCamera = new Camera();
+			this.fullscreenCamera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
 			this.fullscreenScene.add(this.screen);
 
 		}
