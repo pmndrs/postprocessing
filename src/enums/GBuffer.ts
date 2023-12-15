@@ -27,13 +27,13 @@ export enum GBuffer {
 	NORMAL = "GBUFFER_NORMAL",
 
 	/**
-	 * Roughness is stored in the RED channel of an 8 bit RG buffer.
+	 * Roughness is stored in the RED channel of an 8 bit RG buffer that also contains metalness.
 	 */
 
 	ROUGHNESS = "GBUFFER_ROUGHNESS",
 
 	/**
-	 * Metalness is stored in the GREEN channel of an 8 bit RG buffer.
+	 * Metalness is stored in the GREEN channel of an 8 bit RG buffer that also contains roughness.
 	 */
 
 	METALNESS = "GBUFFER_METALNESS"
