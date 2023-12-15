@@ -15,8 +15,6 @@ import {
 	Scene,
 	TextureDataType,
 	UnsignedByteType,
-	UnsignedInt248Type,
-	UnsignedIntType,
 	WebGLMultipleRenderTargets,
 	WebGLRenderer
 } from "three";
@@ -339,7 +337,7 @@ export class GeometryPass extends Pass implements Selective {
 
 		const renderTarget = new WebGLMultipleRenderTargets(1, 1, textureCount, {
 			stencilBuffer: this.stencil && !useDepthTexture,
-			depthBuffer: !useDepthTexture,
+			depthBuffer: useDepthTexture, // TODO Ask in three if this is intentional
 			samples: this.samples
 		});
 
@@ -389,7 +387,6 @@ export class GeometryPass extends Pass implements Selective {
 
 			const depthTexture = new DepthTexture(1, 1);
 			depthTexture.format = this.stencil ? DepthStencilFormat : DepthFormat;
-			depthTexture.type = this.stencil ? UnsignedInt248Type : UnsignedIntType;
 			renderTarget.depthTexture = depthTexture;
 
 		}
