@@ -52,7 +52,7 @@ export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
 	 * @see EVENT_CHANGE
 	 */
 
-	readonly textures: Map<string | GBuffer, Texture | null | undefined>;
+	readonly textures: Map<string | GBuffer, Texture | null>;
 
 	/**
 	 * Constructs new input resources.
@@ -82,7 +82,7 @@ export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
 	 * Alias for {@link textures}.
 	 */
 
-	get buffers(): Map<string | GBuffer, Texture | null | undefined> {
+	get buffers(): Map<string | GBuffer, Texture | null> {
 
 		return this.textures;
 

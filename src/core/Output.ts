@@ -35,7 +35,7 @@ export class Output extends EventDispatcher<BaseEventMap> implements ShaderData 
 	 * Output render targets.
 	 */
 
-	readonly renderTargets: Map<string, WebGLRenderTarget | WebGLMultipleRenderTargets | null | undefined>;
+	readonly renderTargets: Map<string, WebGLRenderTarget | WebGLMultipleRenderTargets | null>;
 
 	/**
 	 * Constructs new output resources.
@@ -63,7 +63,7 @@ export class Output extends EventDispatcher<BaseEventMap> implements ShaderData 
 	 * Alias for {@link renderTargets}.
 	 */
 
-	get buffers(): Map<string, WebGLRenderTarget | WebGLMultipleRenderTargets | null | undefined> {
+	get buffers(): Map<string, WebGLRenderTarget | WebGLMultipleRenderTargets | null> {
 
 		return this.renderTargets;
 
