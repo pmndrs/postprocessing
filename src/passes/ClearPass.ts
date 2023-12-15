@@ -4,8 +4,6 @@ import { GBuffer } from "../enums/GBuffer.js";
 import { ClearFlags } from "../utils/ClearFlags.js";
 
 const color = /* @__PURE__ */ new Color();
-const iv = /* @__PURE__ */ new Int32Array(4);
-const uiv = /* @__PURE__ */ new Uint32Array(4);
 const fv = /* @__PURE__ */ new Float32Array(4);
 
 /**
@@ -56,13 +54,17 @@ export class ClearPass extends Pass {
 
 	/**
 	 * Constructs a new clear pass.
+	 *
+	 * @param color - The color clear flag.
+	 * @param depth - The depth clear flag.
+	 * @param stencil - The stencil clear flag.
 	 */
 
-	constructor() {
+	constructor(color = true, depth = true, stencil = true) {
 
 		super("ClearPass");
 
-		this.flags = new ClearFlags();
+		this.flags = new ClearFlags(color, depth, stencil);
 		this.clearColor = null;
 		this.clearAlpha = -1;
 		this.clearNormal = new Vector3(0.5, 0.5, 1);
@@ -81,69 +83,67 @@ export class ClearPass extends Pass {
 
 	}
 
-	protected override onOutputChange(): void {
-
-	}
-
 	/**
-	 * Clears the MRT output buffer.
+	 * Clears GBuffer components.
 	 *
 	 * @see https://www.khronos.org/opengl/wiki/Framebuffer#Buffer_clearing
+	 * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/clearBuffer
 	 */
 
-	private clearMRT(): void {
+	private clearGBuffer(): void {
 
 		const renderer = this.renderer!;
 		const gl = renderer.getContext() as WebGL2RenderingContext;
 		const flags = this.flags;
 
-		const clearColor = this.clearColor ?? renderer.getClearColor(color);
-		const clearAlpha = this.clearAlpha ?? renderer.getClearAlpha();
+		if(flags.gBufferComponents.has(GBuffer.NORMAL) && this.gBufferIndices.has(GBuffer.NORMAL)) {
 
-		//for(const component of flags.gBufferComponents) { // flags not needed
+			const clearNormal = this.clearNormal;
+			const index = this.gBufferIndices.get(GBuffer.NORMAL) as number;
 
-		if(flags.depth || flags.stencil) {
-
-			renderer.clear(false, flags.depth, flags.stencil);
-
-		}
-
-		if(flags.color && this.gBufferIndices.has(GBuffer.COLOR)) {
-
-			const index = this.gBufferIndices.get(GBuffer.COLOR) as number;
-
-			fv[0] = clearColor.r;
-			fv[1] = clearColor.g;
-			fv[2] = clearColor.b;
-			fv[3] = clearAlpha;
+			fv[0] = clearNormal.x;
+			fv[1] = clearNormal.y;
+			fv[2] = clearNormal.z;
+			fv[3] = 1.0;
 
 			gl.clearBufferfv(gl.COLOR, index, fv);
 
 		}
 
-		if(this.gBufferIndices.has(GBuffer.NORMAL)) {
+		if((flags.gBufferComponents.has(GBuffer.ROUGHNESS) || flags.gBufferComponents.has(GBuffer.METALNESS)) &&
+			(this.gBufferIndices.has(GBuffer.ROUGHNESS) || this.gBufferIndices.has(GBuffer.METALNESS))) {
 
-			const index = this.gBufferIndices.get(GBuffer.NORMAL) as number;
-			gl.clearBufferfv(gl.COLOR, index, clearNormal.toArray(fv));
+			const clearRoughness = this.clearRoughness;
+			const clearMetalness = this.clearMetalness;
+			const index = this.gBufferIndices.get(GBuffer.ROUGHNESS) as number;
+
+			fv[0] = clearRoughness;
+			fv[1] = clearMetalness;
+			fv[2] = 0.0;
+			fv[3] = 1.0;
+
+			gl.clearBufferfv(gl.COLOR, index, fv);
 
 		}
 
 	}
 
-	/**
-	 * Clears the output buffer using default clear methods.
-	 */
+	render(): void {
 
-	private clear(): void {
+		const renderer = this.renderer;
 
-		const renderer = this.renderer!;
-		const flags = this.flags;
+		if(renderer === null) {
+
+			return;
+
+		}
 
 		const overrideClearColor = this.clearColor;
 		const overrideClearAlpha = this.clearAlpha;
-		const hasOverrideClearColor = (overrideClearColor !== null);
-		const hasOverrideClearAlpha = (overrideClearAlpha >= 0);
+		const hasOverrideClearColor = overrideClearColor !== null;
+		const hasOverrideClearAlpha = overrideClearAlpha >= 0;
 		const clearAlpha = renderer.getClearAlpha();
+		const flags = this.flags;
 
 		if(hasOverrideClearColor) {
 
@@ -158,7 +158,14 @@ export class ClearPass extends Pass {
 
 		}
 
+		renderer.setRenderTarget(this.output.defaultBuffer);
 		renderer.clear(flags.color, flags.depth, flags.stencil);
+
+		if(this.output.defaultBuffer instanceof WebGLMultipleRenderTargets) {
+
+			this.clearGBuffer();
+
+		}
 
 		if(hasOverrideClearColor) {
 
@@ -167,28 +174,6 @@ export class ClearPass extends Pass {
 		} else if(hasOverrideClearAlpha) {
 
 			renderer.setClearAlpha(clearAlpha);
-
-		}
-
-	}
-
-	render(): void {
-
-		if(this.renderer === null) {
-
-			return;
-
-		}
-
-		this.renderer.setRenderTarget(this.output.defaultBuffer);
-
-		if(this.output.defaultBuffer instanceof WebGLMultipleRenderTargets) {
-
-			this.clearMRT();
-
-		} else {
-
-			this.clear();
 
 		}
 
