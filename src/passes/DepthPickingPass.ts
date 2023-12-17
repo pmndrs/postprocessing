@@ -1,4 +1,4 @@
-import { FloatType, Vector2, Vector3 } from "three";
+import { UnsignedByteType, Vector2, Vector3, WebGLRenderTarget } from "three";
 import { DepthCopyMode } from "../enums/DepthCopyMode.js";
 import { unpackRGBAToFloat } from "../utils/packing.js";
 import { DepthCopyPass } from "./DepthCopyPass.js";
@@ -52,8 +52,8 @@ export class DepthPickingPass extends DepthCopyPass {
 
 	private readDepthAt(x: number, y: number): number {
 
-		const renderTarget = this.renderTarget;
-		const packed = (renderTarget.texture.type !== FloatType);
+		const renderTarget = this.output.defaultBuffer as WebGLRenderTarget;
+		const packed = (renderTarget.texture.type === UnsignedByteType);
 		const pixelBuffer = packed ? uint8PixelBuffer : floatPixelBuffer;
 		this.renderer?.readRenderTargetPixels(renderTarget, x, y, 1, 1, pixelBuffer);
 
@@ -95,9 +95,10 @@ export class DepthPickingPass extends DepthCopyPass {
 			} else {
 
 				// The depth values from the current or last frame are already available.
+				const renderTarget = this.output.defaultBuffer as WebGLRenderTarget;
 				const texelPosition = this.fullscreenMaterial.texelPosition;
-				const x = Math.round(texelPosition.x * this.renderTarget.width);
-				const y = Math.round(texelPosition.y * this.renderTarget.height);
+				const x = Math.round(texelPosition.x * renderTarget.width);
+				const y = Math.round(texelPosition.y * renderTarget.height);
 				resolve(this.readDepthAt(x, y));
 
 			}

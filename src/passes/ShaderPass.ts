@@ -36,6 +36,36 @@ export class ShaderPass extends Pass<ShaderMaterial> {
 
 	}
 
+	/**
+	 * Indicates whether the input buffer uses high precision.
+	 */
+
+	private get frameBufferPrecisionHigh(): boolean {
+
+		return (this.fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH !== undefined);
+
+	}
+
+	private set frameBufferPrecisionHigh(value: boolean) {
+
+		if(this.frameBufferPrecisionHigh !== value) {
+
+			if(value) {
+
+				this.fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+
+			} else {
+
+				delete this.fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH;
+
+			}
+
+			this.fullscreenMaterial.needsUpdate = true;
+
+		}
+
+	}
+
 	protected override onInputChange(): void {
 
 		const uniforms = this.fullscreenMaterial.uniforms;
@@ -46,6 +76,8 @@ export class ShaderPass extends Pass<ShaderMaterial> {
 			uniforms[this.uniformName].value = inputBuffer;
 
 		}
+
+		this.frameBufferPrecisionHigh = this.input.frameBufferPrecisionHigh;
 
 	}
 

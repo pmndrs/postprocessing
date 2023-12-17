@@ -35,16 +35,6 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 
 	}
 
-	/**
-	 * Alias for {@link output.defaultBuffer}.
-	 */
-
-	get renderTarget(): WebGLRenderTarget {
-
-		return this.output.defaultBuffer as WebGLRenderTarget;
-
-	}
-
 	protected override onInputChange(): void {
 
 		this.fullscreenMaterial.depthBuffer = this.input.buffers.get(GBuffer.DEPTH) as Texture;
@@ -54,7 +44,7 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 
 	protected override onResolutionChange(resolution: Resolution): void {
 
-		this.renderTarget.setSize(resolution.width, resolution.height);
+		this.output.defaultBuffer?.setSize(resolution.width, resolution.height);
 
 		// Use the full resolution to calculate the depth/normal buffer texel size.
 		this.fullscreenMaterial.setSize(resolution.baseWidth, resolution.baseHeight);
@@ -76,7 +66,7 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 
 	render(): void {
 
-		this.renderer?.setRenderTarget(this.renderTarget);
+		this.renderer?.setRenderTarget(this.output.defaultBuffer);
 		this.renderFullscreen();
 
 	}

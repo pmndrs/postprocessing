@@ -25,37 +25,21 @@ export class LuminancePass extends Pass<LuminanceMaterial> {
 
 	}
 
-	/**
-	 * Alias for {@link output.defaultBuffer}.
-	 */
-
-	get renderTarget(): WebGLRenderTarget {
-
-		return this.output.defaultBuffer as WebGLRenderTarget;
-
-	}
-
 	protected override onInputChange(): void {
 
 		this.fullscreenMaterial.inputBuffer = this.input.defaultBuffer;
-
-		if(this.input.frameBufferPrecisionHigh) {
-
-			this.fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
-
-		}
 
 	}
 
 	protected override onResolutionChange(resolution: Resolution): void {
 
-		this.renderTarget.setSize(resolution.width, resolution.height);
+		this.output.defaultBuffer?.setSize(resolution.width, resolution.height);
 
 	}
 
 	render(): void {
 
-		this.renderer?.setRenderTarget(this.renderTarget);
+		this.renderer?.setRenderTarget(this.output.defaultBuffer);
 		this.renderFullscreen();
 
 	}

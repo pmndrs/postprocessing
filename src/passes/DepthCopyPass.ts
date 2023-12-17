@@ -13,12 +13,6 @@ import { Resolution } from "../utils/Resolution.js";
 export class DepthCopyPass extends Pass<DepthCopyMaterial> {
 
 	/**
-	 * Identifies the depth output buffer.
-	 */
-
-	static readonly OUTPUT_BUFFER_DEPTH: string = "buffer.depth";
-
-	/**
 	 * Constructs a new depth copy pass.
 	 */
 
@@ -27,7 +21,7 @@ export class DepthCopyPass extends Pass<DepthCopyMaterial> {
 		super("DepthCopyPass");
 
 		this.fullscreenMaterial = new DepthCopyMaterial();
-		this.input.buffers.set(GBuffer.DEPTH, null);
+		this.input.gBuffer.add(GBuffer.DEPTH);
 
 		const renderTarget = new WebGLRenderTarget(1, 1, {
 			minFilter: NearestFilter,
@@ -36,13 +30,7 @@ export class DepthCopyPass extends Pass<DepthCopyMaterial> {
 			type: FloatType
 		});
 
-		this.output.buffers.set(DepthCopyPass.OUTPUT_BUFFER_DEPTH, renderTarget);
-
-	}
-
-	protected get renderTarget(): WebGLRenderTarget {
-
-		return this.output.buffers.get(DepthCopyPass.OUTPUT_BUFFER_DEPTH) as WebGLRenderTarget;
+		this.output.defaultBuffer = renderTarget;
 
 	}
 
@@ -54,13 +42,13 @@ export class DepthCopyPass extends Pass<DepthCopyMaterial> {
 
 	protected override onResolutionChange(resolution: Resolution): void {
 
-		this.renderTarget.setSize(resolution.width, resolution.height);
+		this.output.defaultBuffer?.setSize(resolution.width, resolution.height);
 
 	}
 
 	render(): void {
 
-		this.renderer?.setRenderTarget(this.renderTarget);
+		this.renderer?.setRenderTarget(this.output.defaultBuffer);
 		this.renderFullscreen();
 
 	}
