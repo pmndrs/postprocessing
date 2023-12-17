@@ -1,5 +1,5 @@
-import { NoBlending, ShaderMaterial, Texture, Uniform, Vector2 } from "three";
-import { Resizable } from "../core/Resizable.js";
+import { Texture, Uniform } from "three";
+import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentShader from "./shaders/convolution.bokeh.frag";
 import vertexShader from "./shaders/common.vert";
@@ -13,7 +13,7 @@ import vertexShader from "./shaders/common.vert";
  * @group Materials
  */
 
-export class BokehMaterial extends ShaderMaterial implements Resizable {
+export class BokehMaterial extends FullscreenMaterial {
 
 	/**
 	 * Constructs a new bokeh material.
@@ -26,22 +26,17 @@ export class BokehMaterial extends ShaderMaterial implements Resizable {
 
 		super({
 			name: "BokehMaterial",
+			fragmentShader,
+			vertexShader,
 			defines: {
 				PASS: fill ? "2" : "1"
 			},
 			uniforms: {
-				inputBuffer: new Uniform(null),
 				cocBuffer: new Uniform(null),
-				texelSize: new Uniform(new Vector2()),
 				kernel64: new Uniform(null),
 				kernel16: new Uniform(null),
 				scale: new Uniform(1.0)
-			},
-			blending: NoBlending,
-			depthWrite: false,
-			depthTest: false,
-			fragmentShader,
-			vertexShader
+			}
 		});
 
 		if(foreground) {
@@ -51,16 +46,6 @@ export class BokehMaterial extends ShaderMaterial implements Resizable {
 		}
 
 		this.generateKernel();
-
-	}
-
-	/**
-	 * The input buffer.
-	 */
-
-	set inputBuffer(value: Texture) {
-
-		this.uniforms.inputBuffer.value = value;
 
 	}
 
@@ -125,13 +110,6 @@ export class BokehMaterial extends ShaderMaterial implements Resizable {
 		// The points are packed into vec4 instances to minimize the uniform count.
 		this.uniforms.kernel64.value = points64;
 		this.uniforms.kernel16.value = points16;
-
-	}
-
-	setSize(width: number, height: number): void {
-
-		const texelSize = this.uniforms.texelSize.value as Vector2;
-		texelSize.set(1.0 / width, 1.0 / height);
 
 	}
 

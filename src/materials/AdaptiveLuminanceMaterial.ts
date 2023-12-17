@@ -1,4 +1,5 @@
-import { NoBlending, ShaderMaterial, Texture, Uniform } from "three";
+import { Texture, Uniform } from "three";
+import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentShader from "./shaders/adaptive-luminance.frag";
 import vertexShader from "./shaders/common.vert";
@@ -9,7 +10,7 @@ import vertexShader from "./shaders/common.vert";
  * @group Materials
  */
 
-export class AdaptiveLuminanceMaterial extends ShaderMaterial {
+export class AdaptiveLuminanceMaterial extends FullscreenMaterial {
 
 	/**
 	 * Constructs a new adaptive luminance material.
@@ -19,6 +20,8 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 
 		super({
 			name: "AdaptiveLuminanceMaterial",
+			fragmentShader,
+			vertexShader,
 			defines: {
 				MIP_LEVEL_1X1: "0.0"
 			},
@@ -31,13 +34,7 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 			},
 			extensions: {
 				shaderTextureLOD: true
-			},
-			blending: NoBlending,
-			toneMapped: false,
-			depthWrite: false,
-			depthTest: false,
-			fragmentShader,
-			vertexShader
+			}
 		});
 
 	}

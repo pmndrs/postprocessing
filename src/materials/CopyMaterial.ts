@@ -1,4 +1,3 @@
-import { Texture, Uniform } from "three";
 import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentShader from "./shaders/copy.frag";
@@ -21,27 +20,8 @@ export class CopyMaterial extends FullscreenMaterial {
 		super({
 			name: "CopyMaterial",
 			fragmentShader,
-			vertexShader,
-			uniforms: {
-				inputBuffer: new Uniform(null)
-			}
+			vertexShader
 		});
-
-	}
-
-	/**
-	 * The input buffer.
-	 */
-
-	get inputBuffer(): Texture | null {
-
-		return this.uniforms.inputBuffer.value as Texture;
-
-	}
-
-	set inputBuffer(value: Texture | null) {
-
-		this.uniforms.inputBuffer.value = value;
 
 	}
 

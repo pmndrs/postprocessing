@@ -1,6 +1,7 @@
-import { NoBlending, ShaderMaterial, Texture, Uniform, UnsignedByteType } from "three";
+import { Texture, Uniform, UnsignedByteType } from "three";
 import { ColorChannel } from "../enums/ColorChannel.js";
 import { MaskFunction } from "../enums/MaskFunction.js";
+import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentShader from "./shaders/mask.frag";
 import vertexShader from "./shaders/common.vert";
@@ -11,7 +12,7 @@ import vertexShader from "./shaders/common.vert";
  * @group Materials
  */
 
-export class MaskMaterial extends ShaderMaterial {
+export class MaskMaterial extends FullscreenMaterial {
 
 	/**
 	 * Constructs a new mask material.
@@ -23,31 +24,16 @@ export class MaskMaterial extends ShaderMaterial {
 
 		super({
 			name: "MaskMaterial",
+			fragmentShader,
+			vertexShader,
 			uniforms: {
 				maskTexture: new Uniform(maskTexture),
-				inputBuffer: new Uniform(null),
 				strength: new Uniform(1.0)
-			},
-			blending: NoBlending,
-			toneMapped: false,
-			depthWrite: false,
-			depthTest: false,
-			fragmentShader,
-			vertexShader
+			}
 		});
 
 		this.colorChannel = ColorChannel.RED;
 		this.maskFunction = MaskFunction.DISCARD;
-
-	}
-
-	/**
-	 * The input buffer.
-	 */
-
-	set inputBuffer(value: Texture | null) {
-
-		this.uniforms.inputBuffer.value = value;
 
 	}
 

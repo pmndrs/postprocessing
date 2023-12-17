@@ -1,5 +1,5 @@
-import { NoBlending, ShaderMaterial, Texture, Uniform, Vector2 } from "three";
-import { Resizable } from "../core/Resizable.js";
+import { Texture, Uniform } from "three";
+import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentShader from "./shaders/depth-downsampling.frag";
 import vertexShader from "./shaders/depth-downsampling.vert";
@@ -12,7 +12,7 @@ import vertexShader from "./shaders/depth-downsampling.vert";
  * @group Materials
  */
 
-export class DepthDownsamplingMaterial extends ShaderMaterial implements Resizable {
+export class DepthDownsamplingMaterial extends FullscreenMaterial {
 
 	/**
 	 * Constructs a new depth downsampling material.
@@ -22,17 +22,12 @@ export class DepthDownsamplingMaterial extends ShaderMaterial implements Resizab
 
 		super({
 			name: "DepthDownsamplingMaterial",
+			fragmentShader,
+			vertexShader,
 			uniforms: {
 				depthBuffer: new Uniform(null),
-				normalBuffer: new Uniform(null),
-				texelSize: new Uniform(new Vector2())
-			},
-			blending: NoBlending,
-			toneMapped: false,
-			depthWrite: false,
-			depthTest: false,
-			fragmentShader,
-			vertexShader
+				normalBuffer: new Uniform(null)
+			}
 		});
 
 	}
@@ -66,13 +61,6 @@ export class DepthDownsamplingMaterial extends ShaderMaterial implements Resizab
 		}
 
 		this.needsUpdate = true;
-
-	}
-
-	setSize(width: number, height: number): void {
-
-		const texelSize = this.uniforms.texelSize.value as Vector2;
-		texelSize.set(1.0 / width, 1.0 / height);
 
 	}
 

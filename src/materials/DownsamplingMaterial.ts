@@ -1,5 +1,4 @@
-import { NoBlending, ShaderMaterial, Texture, Uniform, Vector2 } from "three";
-import { Resizable } from "../core/Resizable.js";
+import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentShader from "./shaders/convolution.downsampling.frag";
 import vertexShader from "./shaders/convolution.downsampling.vert";
@@ -12,7 +11,7 @@ import vertexShader from "./shaders/convolution.downsampling.vert";
  * @group Materials
  */
 
-export class DownsamplingMaterial extends ShaderMaterial implements Resizable {
+export class DownsamplingMaterial extends FullscreenMaterial {
 
 	/**
 	 * Constructs a new downsampling material.
@@ -22,34 +21,9 @@ export class DownsamplingMaterial extends ShaderMaterial implements Resizable {
 
 		super({
 			name: "DownsamplingMaterial",
-			uniforms: {
-				inputBuffer: new Uniform(null),
-				texelSize: new Uniform(new Vector2())
-			},
-			blending: NoBlending,
-			toneMapped: false,
-			depthWrite: false,
-			depthTest: false,
 			fragmentShader,
 			vertexShader
 		});
-
-	}
-
-	/**
-	 * The input buffer.
-	 */
-
-	set inputBuffer(value: Texture | null) {
-
-		this.uniforms.inputBuffer.value = value;
-
-	}
-
-	setSize(width: number, height: number): void {
-
-		const texelSize = this.uniforms.texelSize.value as Vector2;
-		texelSize.set(1.0 / width, 1.0 / height);
 
 	}
 

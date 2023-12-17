@@ -1,5 +1,4 @@
-import { OrthographicCamera, PerspectiveCamera, Texture, Uniform, Vector3, Vector4 } from "three";
-import { Resizable } from "../core/Resizable.js";
+import { Texture, Uniform } from "three";
 import { EffectShaderSection, EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { WebGLExtension } from "../enums/WebGLExtension.js";
@@ -9,12 +8,12 @@ import fragmentTemplate from "./shaders/effect.frag";
 import vertexTemplate from "./shaders/effect.vert";
 
 /**
- * An effect material for compound shaders.
+ * An effect material.
  *
  * @group Materials
  */
 
-export class EffectMaterial extends FullscreenMaterial implements Resizable {
+export class EffectMaterial extends FullscreenMaterial {
 
 	/**
 	 * Constructs a new effect material.
@@ -26,8 +25,6 @@ export class EffectMaterial extends FullscreenMaterial implements Resizable {
 			name: "EffectMaterial",
 			uniforms: {
 				gBuffer: new Uniform(null),
-				resolution: new Uniform(new Vector4()),
-				cameraParams: new Uniform(new Vector3(0.3, 1000.0, 1.0)),
 				time: new Uniform(0.0)
 			}
 		});
@@ -174,41 +171,6 @@ export class EffectMaterial extends FullscreenMaterial implements Resizable {
 	set time(value: number) {
 
 		this.uniforms.time.value = value;
-
-	}
-
-	/**
-	 * Copies the settings of the given camera.
-	 *
-	 * @param camera - A camera.
-	 */
-
-	copyCameraSettings(camera: OrthographicCamera | PerspectiveCamera): void {
-
-		const cameraParams = this.uniforms.cameraParams.value as Vector3;
-		cameraParams.x = camera.near;
-		cameraParams.y = camera.far;
-
-		if(camera instanceof PerspectiveCamera) {
-
-			this.defines.PERSPECTIVE_CAMERA = "1";
-
-		} else {
-
-			delete this.defines.PERSPECTIVE_CAMERA;
-
-		}
-
-		this.needsUpdate = true;
-
-	}
-
-	setSize(width: number, height: number): void {
-
-		const resolution = this.uniforms.resolution.value as Vector4;
-		const cameraParams = this.uniforms.cameraParams.value as Vector3;
-		resolution.set(width, height, 1.0 / width, 1.0 / height);
-		cameraParams.z = width / height;
 
 	}
 

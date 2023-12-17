@@ -1,7 +1,7 @@
-import { NoBlending, OrthographicCamera, PerspectiveCamera, ShaderMaterial, Texture, Uniform, Vector2 } from "three";
-import { Resizable } from "../core/Resizable.js";
+import { Texture, Uniform } from "three";
 import { orthographicDepthToViewZ } from "../utils/orthographicDepthToViewZ.js";
 import { viewZToOrthographicDepth } from "../utils/viewZToOrthographicDepth.js";
+import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentShader from "./shaders/convolution.box.frag";
 import vertexShader from "./shaders/convolution.box.vert";
@@ -15,13 +15,13 @@ import vertexShader from "./shaders/convolution.box.vert";
 export interface BoxBlurMaterialOptions {
 
 	/**
-	 * The blur kernel size. Default is false.
+	 * The blur kernel size. Default is `false`.
 	 */
 
 	bilateral?: boolean;
 
 	/**
-	 * The blur kernel size. Default is 5.
+	 * The blur kernel size. Default is `5`.
 	 */
 
 	kernelSize?: number;
@@ -30,9 +30,11 @@ export interface BoxBlurMaterialOptions {
 
 /**
  * A fast box blur material that supports depth-based bilateral filtering.
+ *
+ * @group Materials
  */
 
-export class BoxBlurMaterial extends ShaderMaterial implements Resizable {
+export class BoxBlurMaterial extends FullscreenMaterial {
 
 	/**
 	 * Constructs a new box blur material.
@@ -44,23 +46,16 @@ export class BoxBlurMaterial extends ShaderMaterial implements Resizable {
 
 		super({
 			name: "BoxBlurMaterial",
+			fragmentShader,
+			vertexShader,
 			defines: {
 				DISTANCE_THRESHOLD: "0.1"
 			},
 			uniforms: {
-				inputBuffer: new Uniform(null),
 				depthBuffer: new Uniform(null),
 				normalDepthBuffer: new Uniform(null),
-				texelSize: new Uniform(new Vector2()),
-				cameraParams: new Uniform(new Vector2()),
 				scale: new Uniform(1.0)
-			},
-			blending: NoBlending,
-			toneMapped: false,
-			depthWrite: false,
-			depthTest: false,
-			fragmentShader,
-			vertexShader
+			}
 		});
 
 		this.bilateral = bilateral;
@@ -72,7 +67,7 @@ export class BoxBlurMaterial extends ShaderMaterial implements Resizable {
 	/**
 	 * The maximum amount of varying vectors.
 	 *
-	 * Should be synced with `renderer.capabilities.maxVaryings`. Default is 8 (minimum).
+	 * Should be synced with `renderer.capabilities.maxVaryings`. Default is `8` (minimum).
 	 */
 
 	set maxVaryingVectors(value: number) {
@@ -85,8 +80,8 @@ export class BoxBlurMaterial extends ShaderMaterial implements Resizable {
 	 * The kernel size.
 	 *
 	 * - Must be an odd number
-	 * - Kernel size 3 and 5 use optimized code paths
-	 * - Default is 5
+	 * - Kernel size `3` and `5` use optimized code paths
+	 * - Default is `5`
 	 */
 
 	get kernelSize(): number {
@@ -125,38 +120,6 @@ export class BoxBlurMaterial extends ShaderMaterial implements Resizable {
 	set scale(value: number) {
 
 		this.uniforms.scale.value = value;
-
-	}
-
-	/**
-	 * The current near plane setting.
-	 */
-
-	private get near(): number {
-
-		const cameraParams = this.uniforms.cameraParams.value as Vector2;
-		return cameraParams.x;
-
-	}
-
-	/**
-	 * The current far plane setting.
-	 */
-
-	private get far(): number {
-
-		const cameraParams = this.uniforms.cameraParams.value as Vector2;
-		return cameraParams.y;
-
-	}
-
-	/**
-	 * The input buffer.
-	 */
-
-	set inputBuffer(value: Texture) {
-
-		this.uniforms.inputBuffer.value = value;
 
 	}
 
@@ -233,39 +196,6 @@ export class BoxBlurMaterial extends ShaderMaterial implements Resizable {
 		const threshold = viewZToOrthographicDepth(-value, this.near, this.far);
 		this.defines.DISTANCE_THRESHOLD = threshold.toFixed(12);
 		this.needsUpdate = true;
-
-	}
-
-	/**
-	 * Copies the settings of the given camera.
-	 *
-	 * @param camera - A camera.
-	 */
-
-	copyCameraSettings(camera: OrthographicCamera | PerspectiveCamera) {
-
-		const cameraParams = this.uniforms.cameraParams.value as Vector2;
-		cameraParams.x = camera.near;
-		cameraParams.y = camera.far;
-
-		if(camera instanceof PerspectiveCamera) {
-
-			this.defines.PERSPECTIVE_CAMERA = "1";
-
-		} else {
-
-			delete this.defines.PERSPECTIVE_CAMERA;
-
-		}
-
-		this.needsUpdate = true;
-
-	}
-
-	setSize(width: number, height: number): void {
-
-		const texelSize = this.uniforms.texelSize.value as Vector2;
-		texelSize.set(1.0 / width, 1.0 / height);
 
 	}
 

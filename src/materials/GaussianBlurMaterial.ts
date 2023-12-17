@@ -1,6 +1,6 @@
-import { NoBlending, ShaderMaterial, Texture, Uniform, Vector2 } from "three";
-import { Resizable } from "../core/Resizable.js";
+import { Uniform, Vector2 } from "three";
 import { GaussKernel } from "../utils/GaussKernel.js";
+import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentShader from "./shaders/convolution.gaussian.frag";
 import vertexShader from "./shaders/convolution.gaussian.vert";
@@ -26,9 +26,10 @@ export interface GaussianBlurMaterialOptions {
  *
  * Based on "An investigation of fast real-time GPU-based image blur algorithms" by Filip Strugar, Intel, 2014.
  * @see https://www.intel.com/content/www/us/en/developer/articles/technical/an-investigation-of-fast-real-time-gpu-based-image-blur-algorithms.html)
+ * @group Materials
  */
 
-export class GaussianBlurMaterial extends ShaderMaterial implements Resizable {
+export class GaussianBlurMaterial extends FullscreenMaterial {
 
 	/**
 	 * @see kernelSize
@@ -46,35 +47,17 @@ export class GaussianBlurMaterial extends ShaderMaterial implements Resizable {
 
 		super({
 			name: "GaussianBlurMaterial",
+			fragmentShader,
+			vertexShader,
 			uniforms: {
-				inputBuffer: new Uniform(null),
-				texelSize: new Uniform(new Vector2()),
 				direction: new Uniform(new Vector2()),
 				kernel: new Uniform(null),
 				scale: new Uniform(1.0)
-			},
-			blending: NoBlending,
-			toneMapped: false,
-			depthWrite: false,
-			depthTest: false,
-			fragmentShader,
-			vertexShader
+			}
 		});
 
 		this._kernelSize = 0;
 		this.kernelSize = kernelSize;
-
-	}
-
-	/**
-	 * The input buffer.
-	 *
-	 * @type {}
-	 */
-
-	set inputBuffer(value: Texture) {
-
-		this.uniforms.inputBuffer.value = value;
 
 	}
 
@@ -145,13 +128,6 @@ export class GaussianBlurMaterial extends ShaderMaterial implements Resizable {
 		this.uniforms.kernel.value = kernelData;
 		this.defines.STEPS = steps.toFixed(0);
 		this.needsUpdate = true;
-
-	}
-
-	setSize(width: number, height: number): void {
-
-		const texelSize = this.uniforms.texelSize.value as Vector2;
-		texelSize.set(1.0 / width, 1.0 / height);
 
 	}
 

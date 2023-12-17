@@ -1,4 +1,5 @@
-import { NoBlending, ShaderMaterial, Texture, Uniform } from "three";
+import { Uniform } from "three";
+import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentShader from "./shaders/luminance.frag";
 import vertexShader from "./shaders/common.vert";
@@ -16,7 +17,7 @@ import vertexShader from "./shaders/common.vert";
  * @group Materials
  */
 
-export class LuminanceMaterial extends ShaderMaterial {
+export class LuminanceMaterial extends FullscreenMaterial {
 
 	/**
 	 * Constructs a new luminance material.
@@ -26,28 +27,13 @@ export class LuminanceMaterial extends ShaderMaterial {
 
 		super({
 			name: "LuminanceMaterial",
+			fragmentShader,
+			vertexShader,
 			uniforms: {
-				inputBuffer: new Uniform(null),
 				threshold: new Uniform(0.0),
 				smoothing: new Uniform(0.0)
-			},
-			blending: NoBlending,
-			toneMapped: false,
-			depthWrite: false,
-			depthTest: false,
-			fragmentShader,
-			vertexShader
+			}
 		});
-
-	}
-
-	/**
-	 * The input buffer.
-	 */
-
-	set inputBuffer(value: Texture | null) {
-
-		this.uniforms.inputBuffer.value = value;
 
 	}
 

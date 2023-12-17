@@ -1,6 +1,7 @@
-import { NoBlending, OrthographicCamera, PerspectiveCamera, ShaderMaterial, Texture, Uniform, Vector2 } from "three";
+import { Texture, Uniform } from "three";
 import { orthographicDepthToViewZ } from "../utils/orthographicDepthToViewZ.js";
 import { viewZToOrthographicDepth } from "../utils/viewZToOrthographicDepth.js";
+import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentShader from "./shaders/circle-of-confusion.frag";
 import vertexShader from "./shaders/common.vert";
@@ -11,7 +12,7 @@ import vertexShader from "./shaders/common.vert";
  * @group Materials
  */
 
-export class CircleOfConfusionMaterial extends ShaderMaterial {
+export class CircleOfConfusionMaterial extends FullscreenMaterial {
 
 	/**
 	 * Constructs a new circle of confusion material.
@@ -21,39 +22,14 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 
 		super({
 			name: "CircleOfConfusionMaterial",
+			fragmentShader,
+			vertexShader,
 			uniforms: {
 				depthBuffer: new Uniform(null),
 				focusDistance: new Uniform(0.0),
-				focusRange: new Uniform(0.0),
-				cameraParams: new Uniform(new Vector2(0.3, 1000))
-			},
-			blending: NoBlending,
-			toneMapped: false,
-			depthWrite: false,
-			depthTest: false,
-			fragmentShader,
-			vertexShader
+				focusRange: new Uniform(0.0)
+			}
 		});
-
-	}
-
-	/**
-	 * The current near plane setting.
-	 */
-
-	private get near(): number {
-
-		return this.uniforms.cameraNear.value as number;
-
-	}
-
-	/**
-	 * The current far plane setting.
-	 */
-
-	private get far(): number {
-
-		return this.uniforms.cameraFar.value as number;
 
 	}
 
@@ -128,32 +104,6 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 	set worldFocusRange(value: number) {
 
 		this.focusRange = viewZToOrthographicDepth(-value, this.near, this.far);
-
-	}
-
-	/**
-	 * Copies the settings of the given camera.
-	 *
-	 * @param camera - A camera.
-	 */
-
-	copyCameraSettings(camera: OrthographicCamera | PerspectiveCamera) {
-
-		const cameraParams = this.uniforms.cameraParams.value as Vector2;
-		cameraParams.x = camera.near;
-		cameraParams.y = camera.far;
-
-		if(camera instanceof PerspectiveCamera) {
-
-			this.defines.PERSPECTIVE_CAMERA = "1";
-
-		} else {
-
-			delete this.defines.PERSPECTIVE_CAMERA;
-
-		}
-
-		this.needsUpdate = true;
 
 	}
 

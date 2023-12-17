@@ -1,7 +1,7 @@
-import { NoBlending, ShaderMaterial, Texture, Uniform, Vector2 } from "three";
-import { Resizable } from "../core/Resizable.js";
+import { Texture, Uniform, UnsignedByteType } from "three";
 import { EdgeDetectionMode } from "../enums/EdgeDetectionMode.js";
 import { PredicationMode } from "../enums/PredicationMode.js";
+import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentShader from "./shaders/edge-detection.frag";
 import vertexShader from "./shaders/edge-detection.vert";
@@ -12,7 +12,7 @@ import vertexShader from "./shaders/edge-detection.vert";
  * @group Materials
  */
 
-export class EdgeDetectionMaterial extends ShaderMaterial implements Resizable {
+export class EdgeDetectionMaterial extends FullscreenMaterial {
 
 	/**
 	 * Constructs a new edge detection material.
@@ -22,6 +22,8 @@ export class EdgeDetectionMaterial extends ShaderMaterial implements Resizable {
 
 		super({
 			name: "EdgeDetectionMaterial",
+			fragmentShader,
+			vertexShader,
 			defines: {
 				LOCAL_CONTRAST_ADAPTATION_FACTOR: "2.0",
 				EDGE_THRESHOLD: "0.1",
@@ -33,17 +35,9 @@ export class EdgeDetectionMaterial extends ShaderMaterial implements Resizable {
 				DEPTH_PACKING: "0"
 			},
 			uniforms: {
-				inputBuffer: new Uniform(null),
 				depthBuffer: new Uniform(null),
-				predicationBuffer: new Uniform(null),
-				texelSize: new Uniform(new Vector2())
-			},
-			blending: NoBlending,
-			toneMapped: false,
-			depthWrite: false,
-			depthTest: false,
-			fragmentShader,
-			vertexShader
+				predicationBuffer: new Uniform(null)
+			}
 		});
 
 		this.edgeDetectionMode = EdgeDetectionMode.COLOR;
@@ -78,7 +72,7 @@ export class EdgeDetectionMaterial extends ShaderMaterial implements Resizable {
 	}
 
 	/**
-	 * The local contrast adaptation factor. Has no effect if the edge detection mode is set to DEPTH. Default is 2.0.
+	 * The local contrast adaptation factor. Has no effect if the edge detection mode is set to DEPTH. Default is `2.0`.
 	 *
 	 * If a neighbor edge has _factor_ times bigger contrast than the current edge, the edge will be discarded.
 	 *
@@ -145,11 +139,44 @@ export class EdgeDetectionMaterial extends ShaderMaterial implements Resizable {
 	}
 
 	/**
-	 * The predication buffer.
+	 * Indicates whether the predication buffer uses high precision.
 	 */
 
-	set predicationBuffer(value: Texture) {
+	private get predicationBufferPrecisionHigh(): boolean {
 
+		return (this.defines.PREDICATIONBUFFER_PRECISION_HIGH !== undefined);
+
+	}
+
+	private set predicationBufferPrecisionHigh(value: boolean) {
+
+		if(this.predicationBufferPrecisionHigh !== value) {
+
+			if(value) {
+
+				this.defines.PREDICATIONBUFFER_PRECISION_HIGH = "1";
+
+			} else {
+
+				delete this.defines.PREDICATIONBUFFER_PRECISION_HIGH;
+
+			}
+
+			this.needsUpdate = true;
+
+		}
+
+	}
+
+	/**
+	 * The predication buffer.
+	 *
+	 * If this buffer uses high precision, the macro `PREDICATIONBUFFER_PRECISION_HIGH` will be defined.
+	 */
+
+	set predicationBuffer(value: Texture | null) {
+
+		this.predicationBufferPrecisionHigh = value !== null && value.type !== UnsignedByteType;
 		this.uniforms.predicationBuffer.value = value;
 
 	}
@@ -208,13 +235,6 @@ export class EdgeDetectionMaterial extends ShaderMaterial implements Resizable {
 
 		this.defines.PREDICATION_STRENGTH = value.toFixed(6);
 		this.needsUpdate = true;
-
-	}
-
-	setSize(width: number, height: number): void {
-
-		const texelSize = this.uniforms.texelSize.value as Vector2;
-		texelSize.set(1.0 / width, 1.0 / height);
 
 	}
 

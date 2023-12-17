@@ -1,5 +1,5 @@
-import { NoBlending, ShaderMaterial, Texture, Uniform, Vector4 } from "three";
-import { Resizable } from "../core/Resizable.js";
+import { Texture, Uniform, Vector4 } from "three";
+import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentShader from "./shaders/smaa-weights.frag";
 import vertexShader from "./shaders/smaa-weights.vert";
@@ -12,7 +12,7 @@ import vertexShader from "./shaders/smaa-weights.vert";
  * @group Materials
  */
 
-export class SMAAWeightsMaterial extends ShaderMaterial implements Resizable {
+export class SMAAWeightsMaterial extends FullscreenMaterial {
 
 	/**
 	 * Constructs a new SMAA weights material.
@@ -22,6 +22,8 @@ export class SMAAWeightsMaterial extends ShaderMaterial implements Resizable {
 
 		super({
 			name: "SMAAWeightsMaterial",
+			fragmentShader,
+			vertexShader,
 			defines: {
 				// Configurable settings:
 				MAX_SEARCH_STEPS_INT: "16",
@@ -39,33 +41,10 @@ export class SMAAWeightsMaterial extends ShaderMaterial implements Resizable {
 				SEARCHTEX_PACKED_SIZE: "vec2(64.0, 16.0)"
 			},
 			uniforms: {
-				inputBuffer: new Uniform(null),
 				searchTexture: new Uniform(null),
-				areaTexture: new Uniform(null),
-				resolution: new Uniform(new Vector4())
-			},
-			blending: NoBlending,
-			toneMapped: false,
-			depthWrite: false,
-			depthTest: false,
-			fragmentShader,
-			vertexShader
+				areaTexture: new Uniform(null)
+			}
 		});
-
-		/** @ignore */
-		this.toneMapped = false;
-
-	}
-
-	/**
-	 * The input buffer.
-	 *
-	 * @type {Texture}
-	 */
-
-	set inputBuffer(value: Texture) {
-
-		this.uniforms.inputBuffer.value = value;
 
 	}
 
@@ -215,13 +194,6 @@ export class SMAAWeightsMaterial extends ShaderMaterial implements Resizable {
 		}
 
 		this.needsUpdate = true;
-
-	}
-
-	setSize(width: number, height: number): void {
-
-		const resolution = this.uniforms.resolution.value as Vector4;
-		resolution.set(width, height, 1.0 / width, 1.0 / height);
 
 	}
 

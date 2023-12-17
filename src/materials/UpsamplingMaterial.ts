@@ -1,5 +1,5 @@
-import { NoBlending, ShaderMaterial, Texture, Uniform, Vector2 } from "three";
-import { Resizable } from "../core/Resizable.js";
+import { Texture, Uniform, Vector2 } from "three";
+import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentShader from "./shaders/convolution.upsampling.frag";
 import vertexShader from "./shaders/convolution.upsampling.vert";
@@ -12,7 +12,7 @@ import vertexShader from "./shaders/convolution.upsampling.vert";
  * @group Materials
  */
 
-export class UpsamplingMaterial extends ShaderMaterial implements Resizable {
+export class UpsamplingMaterial extends FullscreenMaterial {
 
 	/**
 	 * Constructs a new upsampling material.
@@ -22,29 +22,14 @@ export class UpsamplingMaterial extends ShaderMaterial implements Resizable {
 
 		super({
 			name: "UpsamplingMaterial",
+			fragmentShader,
+			vertexShader,
 			uniforms: {
-				inputBuffer: new Uniform(null),
 				supportBuffer: new Uniform(null),
 				texelSize: new Uniform(new Vector2()),
 				radius: new Uniform(0.85)
-			},
-			blending: NoBlending,
-			toneMapped: false,
-			depthWrite: false,
-			depthTest: false,
-			fragmentShader,
-			vertexShader
+			}
 		});
-
-	}
-
-	/**
-	 * The input buffer.
-	 */
-
-	set inputBuffer(value: Texture | null) {
-
-		this.uniforms.inputBuffer.value = value;
 
 	}
 
@@ -71,13 +56,6 @@ export class UpsamplingMaterial extends ShaderMaterial implements Resizable {
 	set radius(value: number) {
 
 		this.uniforms.radius.value = value;
-
-	}
-
-	setSize(width: number, height: number): void {
-
-		const texelSize = this.uniforms.texelSize.value as Vector2;
-		texelSize.set(1.0 / width, 1.0 / height);
 
 	}
 

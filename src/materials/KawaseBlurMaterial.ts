@@ -1,6 +1,6 @@
-import { NoBlending, ShaderMaterial, Texture, Uniform, Vector4 } from "three";
-import { Resizable } from "../core/Resizable.js";
+import { Uniform } from "three";
 import { KernelSize } from "../enums/KernelSize.js";
+import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentShader from "./shaders/convolution.kawase.frag";
 import vertexShader from "./shaders/convolution.kawase.vert";
@@ -25,7 +25,7 @@ const kernelPresets = [
  * @group Materials
  */
 
-export class KawaseBlurMaterial extends ShaderMaterial implements Resizable {
+export class KawaseBlurMaterial extends FullscreenMaterial {
 
 	/**
 	 * The kernel size.
@@ -41,31 +41,15 @@ export class KawaseBlurMaterial extends ShaderMaterial implements Resizable {
 
 		super({
 			name: "KawaseBlurMaterial",
+			fragmentShader,
+			vertexShader,
 			uniforms: {
-				inputBuffer: new Uniform(null),
-				texelSize: new Uniform(new Vector4()),
 				scale: new Uniform(1.0),
 				kernel: new Uniform(0.0)
-			},
-			blending: NoBlending,
-			toneMapped: false,
-			depthWrite: false,
-			depthTest: false,
-			fragmentShader,
-			vertexShader
+			}
 		});
 
 		this.kernelSize = KernelSize.MEDIUM;
-
-	}
-
-	/**
-	 * The input buffer.
-	 */
-
-	set inputBuffer(value: Texture | null) {
-
-		this.uniforms.inputBuffer.value = value;
 
 	}
 
@@ -108,14 +92,6 @@ export class KawaseBlurMaterial extends ShaderMaterial implements Resizable {
 	set kernel(value: number) {
 
 		this.uniforms.kernel.value = value;
-
-	}
-
-	setSize(width: number, height: number): void {
-
-		const x = 1.0 / width, y = 1.0 / height;
-		const texelSize = this.uniforms.texelSize.value as Vector4;
-		texelSize.set(x, y, x * 0.5, y * 0.5);
 
 	}
 

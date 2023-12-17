@@ -1,5 +1,6 @@
-import { NoBlending, ShaderMaterial, Texture, Uniform, Vector2 } from "three";
+import { Texture, Uniform, Vector2 } from "three";
 import { DepthCopyMode } from "../enums/DepthCopyMode.js";
+import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentShader from "./shaders/depth-copy.frag";
 import vertexShader from "./shaders/depth-copy.vert";
@@ -10,10 +11,10 @@ import vertexShader from "./shaders/depth-copy.vert";
  * @group Materials
  */
 
-export class DepthCopyMaterial extends ShaderMaterial {
+export class DepthCopyMaterial extends FullscreenMaterial {
 
 	/**
-	 * @see mode
+	 * @see {@link mode}
 	 */
 
 	private _mode: DepthCopyMode;
@@ -26,19 +27,15 @@ export class DepthCopyMaterial extends ShaderMaterial {
 
 		super({
 			name: "DepthCopyMaterial",
+			fragmentShader,
+			vertexShader,
 			defines: {
 				DEPTH_COPY_MODE: "0"
 			},
 			uniforms: {
 				depthBuffer: new Uniform(null),
 				texelPosition: new Uniform(new Vector2())
-			},
-			blending: NoBlending,
-			toneMapped: false,
-			depthWrite: false,
-			depthTest: false,
-			fragmentShader,
-			vertexShader
+			}
 		});
 
 		this._mode = DepthCopyMode.FULL;

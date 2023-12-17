@@ -47,24 +47,26 @@ export interface TiltShiftBlurMaterialOptions {
 
 /**
  * A tilt shift material.
+ *
+ * @group Materials
  */
 
 export class TiltShiftBlurMaterial extends KawaseBlurMaterial {
 
 	/**
-	 * @see offset
+	 * @see {@link offset}
 	 */
 
 	private _offset: number;
 
 	/**
-	 * @see focusArea
+	 * @see {@link focusArea}
 	 */
 
 	private _focusArea: number;
 
 	/**
-	 * @see feather
+	 * @see {@link feather}
 	 */
 
 	private _feather: number;
