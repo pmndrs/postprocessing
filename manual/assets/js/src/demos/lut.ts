@@ -28,7 +28,7 @@ import {
 import { Pane } from "tweakpane";
 import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, toRecord } from "../utils/index.js";
+import { calculateVerticalFoV, createFPSGraph, toRecord } from "../utils/index.js";
 
 const luts = new Map<string, string | null>([
 	["neutral-2", null],
@@ -196,7 +196,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
 	pane.registerPlugin(EssentialsPlugin);
-	const fpsMeter = pane.addBlade({ view: "fpsgraph", label: "FPS", rows: 2 }) as EssentialsPlugin.FpsGraphBladeApi;
+	const fpsGraph = createFPSGraph(pane);
 
 	/*
 	const params = {
@@ -321,10 +321,10 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	requestAnimationFrame(function render(timestamp: number): void {
 
-		fpsMeter.begin();
+		fpsGraph.begin();
 		controls.update(timestamp);
 		// pipeline.render(timestamp);
-		fpsMeter.end();
+		fpsGraph.end();
 		requestAnimationFrame(render);
 
 	});

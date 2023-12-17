@@ -20,7 +20,7 @@ import {
 import { Pane } from "tweakpane";
 import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, getSkyboxUrls } from "../utils/index.js";
+import { calculateVerticalFoV, createFPSGraph, getSkyboxUrls } from "../utils/index.js";
 import * as CornellBox from "../objects/CornellBox.js";
 
 function load(): Promise<Map<string, unknown>> {
@@ -98,7 +98,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
 	pane.registerPlugin(EssentialsPlugin);
-	const fpsMeter = pane.addBlade({ view: "fpsgraph", label: "FPS", rows: 2 }) as EssentialsPlugin.FpsGraphBladeApi;
+	const fpsGraph = createFPSGraph(pane);
 
 	/*
 	const folder = pane.addFolder({ title: "Settings" });
@@ -130,10 +130,10 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	requestAnimationFrame(function render(timestamp: number): void {
 
-		fpsMeter.begin();
+		fpsGraph.begin();
 		controls.update(timestamp);
 		// pipeline.render(timestamp);
-		fpsMeter.end();
+		fpsGraph.end();
 		requestAnimationFrame(render);
 
 	});

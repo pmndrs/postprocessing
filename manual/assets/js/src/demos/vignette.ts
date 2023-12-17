@@ -21,8 +21,8 @@ import {
 import { Pane } from "tweakpane";
 import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, getSkyboxUrls } from "../utils/index.js";
-import * as Checkerboard from "../objects/Checkerboard.js";
+import { calculateVerticalFoV, createFPSGraph, getSkyboxUrls } from "../utils/index.js";
+import * as DefaultEnvironment from "../objects/DefaultEnvironment.js";
 
 function load(): Promise<Map<string, unknown>> {
 
@@ -79,7 +79,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	scene.background = skyMap;
 	scene.environment = skyMap;
 	scene.fog = new FogExp2(0x000000, 0.025);
-	scene.add(Checkerboard.createEnvironment());
+	scene.add(DefaultEnvironment.createEnvironment());
 
 	// Post Processing
 
@@ -101,7 +101,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
 	pane.registerPlugin(EssentialsPlugin);
-	const fpsMeter = pane.addBlade({ view: "fpsgraph", label: "FPS", rows: 2 }) as EssentialsPlugin.FpsGraphBladeApi;
+	const fpsGraph = createFPSGraph(pane);
 
 	/*
 	const folder = pane.addFolder({ title: "Settings" });
@@ -132,10 +132,10 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	requestAnimationFrame(function render(timestamp: number): void {
 
-		fpsMeter.begin();
+		fpsGraph.begin();
 		controls.update(timestamp);
 		// pipeline.render(timestamp);
-		fpsMeter.end();
+		fpsGraph.end();
 		requestAnimationFrame(render);
 
 	});

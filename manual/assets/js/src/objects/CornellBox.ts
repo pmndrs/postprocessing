@@ -1,5 +1,6 @@
 import {
 	BoxGeometry,
+	CylinderGeometry,
 	Group,
 	LightProbe,
 	Mesh,
@@ -146,38 +147,50 @@ export function createEnvironment(): Group {
 
 export function createActors(): Group {
 
-	const actorMaterial0 = new MeshStandardMaterial({
-		color: 0xffffff,
-		roughness: 1,
-		metalness: 0
-	});
+	const actor01 = new Mesh(
+		new CylinderGeometry(0.5, 0.5, 1),
+		new MeshStandardMaterial({
+			color: 0xffffaa,
+			roughness: 0.5,
+			metalness: 0
+		})
+	);
 
-	const actorMaterial1 = new MeshStandardMaterial({
-		color: 0xaaffff,
-		roughness: 0,
-		metalness: 0.1
-	});
+	const actor02 = new Mesh(
+		new BoxGeometry(1, 1, 1),
+		new MeshStandardMaterial({
+			color: 0xffaaff,
+			roughness: 1,
+			metalness: 0
+		})
+	);
 
-	const box01 = new Mesh(new BoxGeometry(1, 1, 1), actorMaterial0);
-	const box02 = new Mesh(new BoxGeometry(1, 1, 1), actorMaterial0);
-	const sphere01 = new Mesh(new SphereGeometry(1, 32, 32), actorMaterial1);
+	const actor03 = new Mesh(
+		new SphereGeometry(1, 32, 32), new MeshStandardMaterial({
+			color: 0xaaffff,
+			roughness: 0,
+			metalness: 0.1
+		})
+	);
 
-	box01.position.set(-0.35, -0.4, -0.3);
-	box01.rotation.y = Math.PI * 0.1;
-	box01.scale.set(0.6, 1.2, 0.6);
-	box01.castShadow = true;
+	const zFightingBias = 1e-4;
 
-	box02.position.set(0.35, -0.7, 0.3);
-	box02.rotation.y = Math.PI * -0.1;
-	box02.scale.set(0.6, 0.6, 0.6);
-	box02.castShadow = true;
+	actor01.position.set(-0.35, -0.4 + zFightingBias, -0.3);
+	actor01.rotation.y = Math.PI * 0.1;
+	actor01.scale.set(0.6, 1.2, 0.6);
+	actor01.castShadow = true;
 
-	sphere01.position.set(-0.5, -0.7, 0.6);
-	sphere01.scale.set(0.3, 0.3, 0.3);
-	sphere01.castShadow = true;
+	actor02.position.set(0.35, -0.7 + zFightingBias, 0.3);
+	actor02.rotation.y = Math.PI * -0.1;
+	actor02.scale.set(0.6, 0.6, 0.6);
+	actor02.castShadow = true;
+
+	actor03.position.set(-0.5, -0.7 + zFightingBias, 0.6);
+	actor03.scale.set(0.3, 0.3, 0.3);
+	actor03.castShadow = true;
 
 	const actors = new Group();
-	actors.add(box01, box02, sphere01);
+	actors.add(actor01, actor02, actor03);
 
 	return actors;
 
