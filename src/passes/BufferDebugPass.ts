@@ -1,9 +1,9 @@
 import { Mesh, MeshBasicMaterial, OrthographicCamera, PlaneGeometry, Scene, Texture } from "three";
 import { GBuffer } from "../enums/GBuffer.js";
-import { CopyPass } from "./CopyPass.js";
-import { Resolution } from "../utils/Resolution.js";
 import { Input } from "../core/Input.js";
+import { Resolution } from "../utils/Resolution.js";
 import { Log } from "../utils/Log.js";
+import { CopyPass } from "./CopyPass.js";
 
 /**
  * A debug pass that visualizes all input buffers.
@@ -14,10 +14,10 @@ import { Log } from "../utils/Log.js";
 export class BufferDebugPass extends CopyPass {
 
 	/**
-	 * The size of each texture view relative to the screen width. Default is `0.1`.
+	 * The size of each texture view relative to the screen size. Default is `0.1`.
 	 */
 
-	size: number;
+	viewSize: number;
 
 	/**
 	 * Limits the amount of texture views per row. Default is `4`.
@@ -55,7 +55,7 @@ export class BufferDebugPass extends CopyPass {
 
 		this.name = "GBufferDebugPass";
 
-		this.size = 0.1;
+		this.viewSize = 0.1;
 		this.columns = 4;
 		this.views = [];
 		this.debugScene = new Scene();
@@ -80,7 +80,7 @@ export class BufferDebugPass extends CopyPass {
 	private updateViews(): void {
 
 		const { width, height } = this.resolution;
-		const size = Math.min(Math.max(this.size, 0.0), 1.0);
+		const size = Math.min(Math.max(this.viewSize, 0.0), 1.0);
 		const columns = Math.max(this.columns, 0);
 		const views = this.views;
 		const rows = Math.ceil(views.length / columns);
