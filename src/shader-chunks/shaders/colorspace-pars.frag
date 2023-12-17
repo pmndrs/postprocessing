@@ -1,4 +1,4 @@
-#if OUTPUT_COLORSPACE == 1
+#if OUTPUT_COLOR_SPACE == 1
 
 	#define linearToOutputTexel(texel) sRGBTransferOETF(texel)
 
