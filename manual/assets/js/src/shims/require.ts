@@ -11,6 +11,8 @@ export function require(name: string): unknown {
 
 		case "three":
 		case "three/examples/jsm/loaders/GLTFLoader.js":
+		case "three/examples/jsm/loaders/LUT3dlLoader.js":
+		case "three/examples/jsm/loaders/LUTCubeLoader.js":
 		case "tweakpane":
 		case "spatial-controls":
 			return window.VENDOR;

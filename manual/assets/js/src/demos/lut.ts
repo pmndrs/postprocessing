@@ -2,15 +2,15 @@ import {
 	ClampToEdgeWrapping,
 	LinearFilter,
 	LoadingManager,
-	PerspectiveCamera,
-	PlaneGeometry,
 	Mesh,
 	MeshBasicMaterial,
+	PerspectiveCamera,
+	PlaneGeometry,
 	Scene,
+	SRGBColorSpace,
 	TextureLoader,
-	WebGLRenderer,
 	Texture,
-	SRGBColorSpace
+	WebGLRenderer
 } from "three";
 
 import {
@@ -19,12 +19,12 @@ import {
 	GeometryPass,
 	LookupTexture,
 	// LUT3DEffect,
-	LUT3dlLoader,
-	LUTCubeLoader,
 	RawImageData,
 	RenderPipeline
 } from "postprocessing";
 
+import { LUT3dlLoader } from "three/examples/jsm/loaders/LUT3dlLoader.js";
+import { LUTCubeLoader } from "three/examples/jsm/loaders/LUTCubeLoader.js";
 import { Pane } from "tweakpane";
 import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { ControlMode, SpatialControls } from "spatial-controls";
@@ -90,21 +90,23 @@ function load(): Promise<Map<string, unknown>> {
 
 			} else if(/.3dl$/im.test(entry[1])) {
 
-				lut3dlLoader.load(`${document.baseURI}img/textures/lut/${entry[1]}`, (t) => {
+				lut3dlLoader.load(`${document.baseURI}img/textures/lut/${entry[1]}`, (data) => {
 
+					const t = LookupTexture.from(data.texture3D);
 					t.name = entry[0];
 					assets.set(entry[0], t);
 
-				}).catch((e) => console.error(e));
+				});
 
 			} else if(/.cube$/im.test(entry[1])) {
 
-				lutCubeLoader.load(`${document.baseURI}img/textures/lut/${entry[1]}`, (t) => {
+				lutCubeLoader.load(`${document.baseURI}img/textures/lut/${entry[1]}`, (data) => {
 
+					const t = LookupTexture.from(data.texture3D);
 					t.name = entry[0];
 					assets.set(entry[0], t);
 
-				}).catch((e) => console.error(e));
+				});
 
 			} else {
 
