@@ -317,6 +317,10 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 			fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
+		} else {
+
+			delete fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH;
+
 		}
 
 		for(const entry of this.input.defines) {
