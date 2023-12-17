@@ -1,26 +1,27 @@
-uniform vec2 texelSize;
+#include <pp_resolution_pars_fragment>
+
 uniform float scale;
 
 #if KERNEL_SIZE == 3
 
 	// Optimized 3x3
-	varying vec2 vUv00, vUv01, vUv02;
-	varying vec2 vUv03, vUv04, vUv05;
-	varying vec2 vUv06, vUv07, vUv08;
+	out vec2 vUv00, vUv01, vUv02;
+	out vec2 vUv03, vUv04, vUv05;
+	out vec2 vUv06, vUv07, vUv08;
 
 #elif KERNEL_SIZE == 5 && MAX_VARYING_VECTORS >= 13
 
 	// Optimized 5x5
-	varying vec2 vUv00, vUv01, vUv02, vUv03, vUv04;
-	varying vec2 vUv05, vUv06, vUv07, vUv08, vUv09;
-	varying vec2 vUv10, vUv11, vUv12, vUv13, vUv14;
-	varying vec2 vUv15, vUv16, vUv17, vUv18, vUv19;
-	varying vec2 vUv20, vUv21, vUv22, vUv23, vUv24;
+	out vec2 vUv00, vUv01, vUv02, vUv03, vUv04;
+	out vec2 vUv05, vUv06, vUv07, vUv08, vUv09;
+	out vec2 vUv10, vUv11, vUv12, vUv13, vUv14;
+	out vec2 vUv15, vUv16, vUv17, vUv18, vUv19;
+	out vec2 vUv20, vUv21, vUv22, vUv23, vUv24;
 
 #else
 
 	// General case
-	varying vec2 vUv;
+	out vec2 vUv;
 
 #endif
 
@@ -30,7 +31,7 @@ void main() {
 
 	#if KERNEL_SIZE == 3
 
-		vec2 s = texelSize * scale;
+		vec2 s = resolution.zw * scale;
 
 		// Optimized 3x3
 		vUv00 = uv + s * vec2(-1.0, -1.0);
@@ -47,7 +48,7 @@ void main() {
 
 	#elif KERNEL_SIZE == 5
 
-		vec2 s = texelSize * scale;
+		vec2 s = resolution.zw * scale;
 
 		// Optimized 5x5
 		vUv00 = uv + s * vec2(-2.0, -2.0);

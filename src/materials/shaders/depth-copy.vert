@@ -1,4 +1,4 @@
-varying vec2 vUv;
+out vec2 vUv;
 
 #if DEPTH_COPY_MODE == 1
 

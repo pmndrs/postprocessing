@@ -1,45 +1,14 @@
+#include <pp_precision_fragment>
+#include <pp_camera_pars_fragment>
+#include <pp_default_output_pars_fragment>
+#include <pp_depth_buffer_pars_fragment>
+#include <pp_depth_utils_pars_fragment>
 #include <common>
-
-#ifdef GL_FRAGMENT_PRECISION_HIGH
-
-	uniform highp sampler2D depthBuffer;
-
-#else
-
-	uniform mediump sampler2D depthBuffer;
-
-#endif
 
 uniform float focusDistance;
 uniform float focusRange;
-uniform vec2 cameraParams;
 
-varying vec2 vUv;
-
-float readDepth(const in vec2 uv) {
-
-	#if DEPTH_PACKING == 3201
-
-		float depth = unpackRGBAToDepth(texture2D(depthBuffer, uv));
-
-	#else
-
-		float depth = texture2D(depthBuffer, uv).r;
-
-	#endif
-
-	#ifdef LOG_DEPTH
-
-		float d = pow(2.0, depth * log2(cameraFar + 1.0)) - 1.0;
-		float a = cameraFar / (cameraFar - cameraNear);
-		float b = cameraFar * cameraNear / (cameraNear - cameraFar);
-		depth = a + b / d;
-
-	#endif
-
-	return depth;
-
-}
+in vec2 vUv;
 
 void main() {
 
@@ -48,18 +17,14 @@ void main() {
 	#ifdef PERSPECTIVE_CAMERA
 
 		float viewZ = perspectiveDepthToViewZ(depth, cameraParams.x, cameraParams.y);
-		float linearDepth = viewZToOrthographicDepth(viewZ, cameraParams.x, cameraParams.y);
-
-	#else
-
-		float linearDepth = depth;
+		depth = viewZToOrthographicDepth(viewZ, cameraParams.x, cameraParams.y);
 
 	#endif
 
-	float signedDistance = linearDepth - focusDistance;
+	float signedDistance = depth - focusDistance;
 	float magnitude = smoothstep(0.0, focusRange, abs(signedDistance));
 
-	gl_FragColor.rg = magnitude * vec2(
+	outputColor.rg = magnitude * vec2(
 		step(signedDistance, 0.0),
 		step(0.0, signedDistance)
 	);

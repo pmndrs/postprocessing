@@ -1,39 +1,16 @@
+#include <pp_precision_fragment>
+#include <pp_default_output_pars_fragment>
+#include <pp_depth_buffer_pars_fragment>
+#include <pp_depth_utils_pars_fragment>
 #include <packing>
-
-#ifdef GL_FRAGMENT_PRECISION_HIGH
-
-	uniform highp sampler2D depthBuffer;
-
-#else
-
-	uniform mediump sampler2D depthBuffer;
-
-#endif
 
 #ifdef DOWNSAMPLE_NORMALS
 
-	uniform lowp sampler2D normalBuffer;
+	uniform mediump sampler2D normalBuffer;
 
 #endif
 
-varying vec2 vUv0;
-varying vec2 vUv1;
-varying vec2 vUv2;
-varying vec2 vUv3;
-
-float readDepth(const in vec2 uv) {
-
-	#if DEPTH_PACKING == 3201
-
-		return unpackRGBAToDepth(texture2D(depthBuffer, uv));
-
-	#else
-
-		return texture2D(depthBuffer, uv).r;
-
-	#endif
-
-}
+in vec2 vUv0, vUv1, vUv2, vUv3;
 
 /**
  * Returns the index of the most representative depth in the 2x2 neighborhood.
@@ -129,10 +106,10 @@ void main() {
 
 		// Gather all corresponding normals to avoid dependent texel fetches.
 		vec3 n[4];
-		n[0] = texture2D(normalBuffer, vUv0).rgb;
-		n[1] = texture2D(normalBuffer, vUv1).rgb;
-		n[2] = texture2D(normalBuffer, vUv2).rgb;
-		n[3] = texture2D(normalBuffer, vUv3).rgb;
+		n[0] = texture(normalBuffer, vUv0).rgb;
+		n[1] = texture(normalBuffer, vUv1).rgb;
+		n[2] = texture(normalBuffer, vUv2).rgb;
+		n[3] = texture(normalBuffer, vUv3).rgb;
 
 	#else
 
@@ -144,6 +121,6 @@ void main() {
 
 	#endif
 
-	gl_FragColor = vec4(n[index], d[index]);
+	outputColor = vec4(n[index], d[index]);
 
 }

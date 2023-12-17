@@ -1,12 +1,6 @@
-#ifdef FRAMEBUFFER_PRECISION_HIGH
-
-	uniform mediump sampler2D inputBuffer;
-
-#else
-
-	uniform lowp sampler2D inputBuffer;
-
-#endif
+#include <pp_precision_fragment>
+#include <pp_default_output_pars_fragment>
+#include <pp_input_buffer_pars_fragment>
 
 #ifdef MASK_PRECISION_HIGH
 
@@ -24,25 +18,25 @@
 
 #endif
 
-varying vec2 vUv;
+in vec2 vUv;
 
 void main() {
 
 	#if COLOR_CHANNEL == 0
 
-		float mask = texture2D(maskTexture, vUv).r;
+		float mask = texture(maskTexture, vUv).r;
 
 	#elif COLOR_CHANNEL == 1
 
-		float mask = texture2D(maskTexture, vUv).g;
+		float mask = texture(maskTexture, vUv).g;
 
 	#elif COLOR_CHANNEL == 2
 
-		float mask = texture2D(maskTexture, vUv).b;
+		float mask = texture(maskTexture, vUv).b;
 
 	#else
 
-		float mask = texture2D(maskTexture, vUv).a;
+		float mask = texture(maskTexture, vUv).a;
 
 	#endif
 
@@ -75,18 +69,18 @@ void main() {
 	#if MASK_FUNCTION == 3
 
 		// MULTIPLY_RGB
-		vec4 texel = texture2D(inputBuffer, vUv);
-		gl_FragColor = vec4(mask * texel.rgb, texel.a);
+		vec4 texel = texture(inputBuffer, vUv);
+		outputColor = vec4(mask * texel.rgb, texel.a);
 
 	#elif MASK_FUNCTION == 2
 
 		// MULTIPLY_RGB_SET_ALPHA
-		gl_FragColor = vec4(mask * texture2D(inputBuffer, vUv).rgb, mask);
+		outputColor = vec4(mask * texture(inputBuffer, vUv).rgb, mask);
 
 	#else
 
 		// MULTIPLY
-		gl_FragColor = mask * texture2D(inputBuffer, vUv);
+		outputColor = mask * texture(inputBuffer, vUv);
 
 	#endif
 

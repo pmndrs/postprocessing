@@ -1,31 +1,16 @@
-#ifdef FRAMEBUFFER_PRECISION_HIGH
-
-	uniform mediump sampler2D inputBuffer;
-
-#else
-
-	uniform lowp sampler2D inputBuffer;
-
-#endif
+#include <pp_precision_fragment>
+#include <pp_default_output_pars_fragment>
+#include <pp_input_buffer_pars_fragment>
 
 // (1 / 4) * 0.5 = 0.125
 #define WEIGHT_INNER 0.125
 // (1 / 9) * 0.5 = 0.0555555
 #define WEIGHT_OUTER 0.0555555
 
-varying vec2 vUv;
-varying vec2 vUv00;
-varying vec2 vUv01;
-varying vec2 vUv02;
-varying vec2 vUv03;
-varying vec2 vUv04;
-varying vec2 vUv05;
-varying vec2 vUv06;
-varying vec2 vUv07;
-varying vec2 vUv08;
-varying vec2 vUv09;
-varying vec2 vUv10;
-varying vec2 vUv11;
+in vec2 vUv;
+in vec2 vUv00, vUv01, vUv02, vUv03;
+in vec2 vUv04, vUv05, vUv06, vUv07;
+in vec2 vUv08, vUv09, vUv10, vUv11;
 
 float clampToBorder(const in vec2 uv) {
 
@@ -44,10 +29,10 @@ void main() {
 		clampToBorder(vUv03)
 	);
 
-	c += w.x * texture2D(inputBuffer, vUv00);
-	c += w.y * texture2D(inputBuffer, vUv01);
-	c += w.z * texture2D(inputBuffer, vUv02);
-	c += w.w * texture2D(inputBuffer, vUv03);
+	c += w.x * texture(inputBuffer, vUv00);
+	c += w.y * texture(inputBuffer, vUv01);
+	c += w.z * texture(inputBuffer, vUv02);
+	c += w.w * texture(inputBuffer, vUv03);
 
 	w = WEIGHT_OUTER * vec4(
 		clampToBorder(vUv04),
@@ -56,10 +41,10 @@ void main() {
 		clampToBorder(vUv07)
 	);
 
-	c += w.x * texture2D(inputBuffer, vUv04);
-	c += w.y * texture2D(inputBuffer, vUv05);
-	c += w.z * texture2D(inputBuffer, vUv06);
-	c += w.w * texture2D(inputBuffer, vUv07);
+	c += w.x * texture(inputBuffer, vUv04);
+	c += w.y * texture(inputBuffer, vUv05);
+	c += w.z * texture(inputBuffer, vUv06);
+	c += w.w * texture(inputBuffer, vUv07);
 
 	w = WEIGHT_OUTER * vec4(
 		clampToBorder(vUv08),
@@ -68,12 +53,12 @@ void main() {
 		clampToBorder(vUv11)
 	);
 
-	c += w.x * texture2D(inputBuffer, vUv08);
-	c += w.y * texture2D(inputBuffer, vUv09);
-	c += w.z * texture2D(inputBuffer, vUv10);
-	c += w.w * texture2D(inputBuffer, vUv11);
+	c += w.x * texture(inputBuffer, vUv08);
+	c += w.y * texture(inputBuffer, vUv09);
+	c += w.z * texture(inputBuffer, vUv10);
+	c += w.w * texture(inputBuffer, vUv11);
 
-	c += WEIGHT_OUTER * texture2D(inputBuffer, vUv);
-	gl_FragColor = c;
+	c += WEIGHT_OUTER * texture(inputBuffer, vUv);
+	outputColor = c;
 
 }

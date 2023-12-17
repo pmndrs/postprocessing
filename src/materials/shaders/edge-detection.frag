@@ -1,39 +1,53 @@
-varying vec2 vUv;
-varying vec2 vUv0;
-varying vec2 vUv1;
+#include <pp_precision_fragment>
+#include <pp_default_output_pars_fragment>
+
+in vec2 vUv;
+in vec2 vUv0;
+in vec2 vUv1;
 
 #if EDGE_DETECTION_MODE != 0
 
-	varying vec2 vUv2;
-	varying vec2 vUv3;
-	varying vec2 vUv4;
-	varying vec2 vUv5;
+	in vec2 vUv2, vUv3, vUv4, vUv5;
 
 #endif
 
 #if EDGE_DETECTION_MODE == 1
 
+	// Include the luminance function.
 	#include <common>
 
 #endif
 
 #if EDGE_DETECTION_MODE == 0 || PREDICATION_MODE == 1
 
-	#ifdef GL_FRAGMENT_PRECISION_HIGH
+	#include <pp_depth_buffer_pars_fragment>
+	#include <pp_depth_utils_pars_fragment>
+	#include <packing>
 
-		uniform highp sampler2D depthBuffer;
+	float getOrthographicDepth(sampler2D depthBuffer, const in vec2 uv, const in float near, const in float far) {
 
-	#else
+		float depth = readDepth(depthBuffer, uv);
 
-		uniform mediump sampler2D depthBuffer;
+		#ifdef PERSPECTIVE_CAMERA
 
-	#endif
+			float viewZ = perspectiveDepthToViewZ(depth, near, far);
+			return viewZToOrthographicDepth(viewZ, near, far);
+
+		#else
+
+			return depth;
+
+		#endif
+
+	}
+
+	uniform vec2 cameraParams;
 
 	vec3 gatherNeighbors() {
 
-		float p = texture2D(depthBuffer, vUv).r;
-		float pLeft = texture2D(depthBuffer, vUv0).r;
-		float pTop = texture2D(depthBuffer, vUv1).r;
+		float p = getOrthographicDepth(depthBuffer, vUv, cameraParams.x, cameraParams.y);
+		float pLeft = getOrthographicDepth(depthBuffer, vUv0, cameraParams.x, cameraParams.y);
+		float pTop = getOrthographicDepth(depthBuffer, vUv1, cameraParams.x, cameraParams.y);
 
 		return vec3(p, pLeft, pTop);
 
@@ -41,13 +55,21 @@ varying vec2 vUv1;
 
 #elif PREDICATION_MODE == 2
 
-	uniform sampler2D predicationBuffer;
+	#ifdef PREDICATIONBUFFER_PRECISION_HIGH
+
+		uniform mediump sampler2D predicationBuffer;
+
+	#else
+
+		uniform lowp sampler2D predicationBuffer;
+
+	#endif
 
 	vec3 gatherNeighbors() {
 
-		float p = texture2D(predicationBuffer, vUv).r;
-		float pLeft = texture2D(predicationBuffer, vUv0).r;
-		float pTop = texture2D(predicationBuffer, vUv1).r;
+		float p = texture(predicationBuffer, vUv).r;
+		float pLeft = texture(predicationBuffer, vUv0).r;
+		float pTop = texture(predicationBuffer, vUv1).r;
 
 		return vec3(p, pLeft, pTop);
 
@@ -71,7 +93,7 @@ varying vec2 vUv1;
 
 #if EDGE_DETECTION_MODE != 0
 
-	uniform sampler2D inputBuffer;
+	#include <pp_input_buffer_pars_fragment>
 
 #endif
 
@@ -105,15 +127,15 @@ void main() {
 
 		}
 
-		gl_FragColor = vec4(edges, 0.0, 1.0);
+		outputColor = vec4(edges, 0.0, 1.0);
 
 	#elif EDGE_DETECTION_MODE == 1
 
 		// Luma-based edge detection.
 
-		float l = luminance(texture2D(inputBuffer, vUv).rgb);
-		float lLeft = luminance(texture2D(inputBuffer, vUv0).rgb);
-		float lTop  = luminance(texture2D(inputBuffer, vUv1).rgb);
+		float l = luminance(texture(inputBuffer, vUv).rgb);
+		float lLeft = luminance(texture(inputBuffer, vUv0).rgb);
+		float lTop  = luminance(texture(inputBuffer, vUv1).rgb);
 
 		vec4 delta;
 		delta.xy = abs(l - vec2(lLeft, lTop));
@@ -127,16 +149,16 @@ void main() {
 		}
 
 		// Calculate right and bottom deltas.
-		float lRight = luminance(texture2D(inputBuffer, vUv2).rgb);
-		float lBottom  = luminance(texture2D(inputBuffer, vUv3).rgb);
+		float lRight = luminance(texture(inputBuffer, vUv2).rgb);
+		float lBottom  = luminance(texture(inputBuffer, vUv3).rgb);
 		delta.zw = abs(l - vec2(lRight, lBottom));
 
 		// Calculate the maximum delta in the direct neighborhood.
 		vec2 maxDelta = max(delta.xy, delta.zw);
 
 		// Calculate left-left and top-top deltas.
-		float lLeftLeft = luminance(texture2D(inputBuffer, vUv4).rgb);
-		float lTopTop = luminance(texture2D(inputBuffer, vUv5).rgb);
+		float lLeftLeft = luminance(texture(inputBuffer, vUv4).rgb);
+		float lTopTop = luminance(texture(inputBuffer, vUv5).rgb);
 		delta.zw = abs(vec2(lLeft, lTop) - vec2(lLeftLeft, lTopTop));
 
 		// Calculate the final maximum delta.
@@ -146,20 +168,20 @@ void main() {
 		// Local contrast adaptation.
 		edges.xy *= step(finalDelta, LOCAL_CONTRAST_ADAPTATION_FACTOR * delta.xy);
 
-		gl_FragColor = vec4(edges, 0.0, 1.0);
+		outputColor = vec4(edges, 0.0, 1.0);
 
 	#elif EDGE_DETECTION_MODE == 2
 
 		// Chroma-based edge detection.
 
 		vec4 delta;
-		vec3 c = texture2D(inputBuffer, vUv).rgb;
+		vec3 c = texture(inputBuffer, vUv).rgb;
 
-		vec3 cLeft = texture2D(inputBuffer, vUv0).rgb;
+		vec3 cLeft = texture(inputBuffer, vUv0).rgb;
 		vec3 t = abs(c - cLeft);
 		delta.x = max(max(t.r, t.g), t.b);
 
-		vec3 cTop = texture2D(inputBuffer, vUv1).rgb;
+		vec3 cTop = texture(inputBuffer, vUv1).rgb;
 		t = abs(c - cTop);
 		delta.y = max(max(t.r, t.g), t.b);
 
@@ -172,11 +194,11 @@ void main() {
 		}
 
 		// Calculate right and bottom deltas.
-		vec3 cRight = texture2D(inputBuffer, vUv2).rgb;
+		vec3 cRight = texture(inputBuffer, vUv2).rgb;
 		t = abs(c - cRight);
 		delta.z = max(max(t.r, t.g), t.b);
 
-		vec3 cBottom = texture2D(inputBuffer, vUv3).rgb;
+		vec3 cBottom = texture(inputBuffer, vUv3).rgb;
 		t = abs(c - cBottom);
 		delta.w = max(max(t.r, t.g), t.b);
 
@@ -184,11 +206,11 @@ void main() {
 		vec2 maxDelta = max(delta.xy, delta.zw);
 
 		// Calculate left-left and top-top deltas.
-		vec3 cLeftLeft = texture2D(inputBuffer, vUv4).rgb;
+		vec3 cLeftLeft = texture(inputBuffer, vUv4).rgb;
 		t = abs(c - cLeftLeft);
 		delta.z = max(max(t.r, t.g), t.b);
 
-		vec3 cTopTop = texture2D(inputBuffer, vUv5).rgb;
+		vec3 cTopTop = texture(inputBuffer, vUv5).rgb;
 		t = abs(c - cTopTop);
 		delta.w = max(max(t.r, t.g), t.b);
 
@@ -199,7 +221,7 @@ void main() {
 		// Local contrast adaptation.
 		edges *= step(finalDelta, LOCAL_CONTRAST_ADAPTATION_FACTOR * delta.xy);
 
-		gl_FragColor = vec4(edges, 0.0, 1.0);
+		outputColor = vec4(edges, 0.0, 1.0);
 
 	#endif
 

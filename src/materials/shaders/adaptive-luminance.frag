@@ -1,4 +1,5 @@
-#include <pp_output_pars_fragment>
+#include <pp_precision_fragment>
+#include <pp_default_output_pars_fragment>
 #include <packing>
 
 #define packFloatToRGBA(v) packDepthToRGBA(v)
@@ -16,7 +17,7 @@ in vec2 vUv;
 void main() {
 
 	// This 1x1 buffer contains the previous luminance.
-	float l0 = unpackRGBAToFloat(texture2D(luminanceBuffer0, vUv));
+	float l0 = unpackRGBAToFloat(texture(luminanceBuffer0, vUv));
 
 	// Get the current average scene luminance.
 	float l1 = textureLod(luminanceBuffer1, vUv, MIP_LEVEL_1X1).r;

@@ -1,4 +1,7 @@
-varying vec2 vUv;
+#include <pp_precision_fragment>
+#include <pp_default_output_pars_fragment>
+
+in vec2 vUv;
 
 #ifdef NORMAL_DEPTH
 
@@ -12,26 +15,17 @@ varying vec2 vUv;
 
 	#endif
 
-	#define getDepth(uv) texture2D(normalDepthBuffer, uv).a
+	#define getDepth(uv) texture(normalDepthBuffer, uv).a
 
 #else
 
-	#ifdef GL_FRAGMENT_PRECISION_HIGH
-
-		uniform highp sampler2D depthBuffer;
-
-	#else
-
-		uniform mediump sampler2D depthBuffer;
-
-	#endif
-
-	#define getDepth(uv) texture2D(depthBuffer, uv).r
+	#include <pp_depth_buffer_pars_fragment>
+	#define getDepth(uv) texture(depthBuffer, uv).r
 
 #endif
 
 void main() {
 
-	gl_FragColor = vec4(getDepth(vUv));
+	outputColor = vec4(getDepth(vUv));
 
 }

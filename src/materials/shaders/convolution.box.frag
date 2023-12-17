@@ -1,16 +1,10 @@
-#ifdef FRAMEBUFFER_PRECISION_HIGH
-
-	uniform mediump sampler2D inputBuffer;
-
-#else
-
-	uniform lowp sampler2D inputBuffer;
-
-#endif
+#include <pp_precision_fragment>
+#include <pp_default_output_pars_fragment>
+#include <pp_input_buffer_pars_fragment>
 
 #ifdef BILATERAL
 
-	uniform vec2 cameraParams;
+	#include <pp_camera_pars_fragment>
 
 	#ifdef NORMAL_DEPTH
 
@@ -24,74 +18,55 @@
 
 		#endif
 
-		#define getDepth(uv) texture2D(normalDepthBuffer, uv).a
+		#define getDepth(uv) texture(normalDepthBuffer, uv).a
 
 	#else
 
-		#ifdef GL_FRAGMENT_PRECISION_HIGH
-
-			uniform highp sampler2D depthBuffer;
-
-		#else
-
-			uniform mediump sampler2D depthBuffer;
-
-		#endif
-
-		#define getDepth(uv) texture2D(depthBuffer, uv).r
+		#include <pp_depth_buffer_pars_fragment>
+		#define getDepth(uv) texture(depthBuffer, uv).r
 
 	#endif
 
-	float getViewZ(const in float depth) {
-
-		#ifdef PERSPECTIVE_CAMERA
-
-			return perspectiveDepthToViewZ(depth, cameraParams.x, cameraParams.y);
-
-		#else
-
-			return orthographicDepthToViewZ(depth, cameraParams.x, cameraParams.y);
-
-		#endif
-
-	}
+	#include <packing>
 
 	#ifdef PERSPECTIVE_CAMERA
 
+		#define getViewZ(depth) perspectiveDepthToViewZ(depth, cameraParams.x, cameraParams.y)
 		#define linearDepth(uv) viewZToOrthographicDepth(getViewZ(getDepth(uv)), cameraParams.x, cameraParams.y)
 
 	#else
 
+		#define getViewZ(depth) orthographicDepthToViewZ(depth, cameraParams.x, cameraParams.y)
 		#define linearDepth(uv) getDepth(uv)
 
 	#endif
 
 #endif
 
-#define getTexel(uv) texture2D(inputBuffer, uv)
+#define getTexel(uv) texture(inputBuffer, uv)
 
 #if KERNEL_SIZE == 3
 
 	// Optimized 3x3
-	varying vec2 vUv00, vUv01, vUv02;
-	varying vec2 vUv03, vUv04, vUv05;
-	varying vec2 vUv06, vUv07, vUv08;
+	in vec2 vUv00, vUv01, vUv02;
+	in vec2 vUv03, vUv04, vUv05;
+	in vec2 vUv06, vUv07, vUv08;
 
 #elif KERNEL_SIZE == 5 && MAX_VARYING_VECTORS >= 13
 
 	// Optimized 5x5
-	varying vec2 vUv00, vUv01, vUv02, vUv03, vUv04;
-	varying vec2 vUv05, vUv06, vUv07, vUv08, vUv09;
-	varying vec2 vUv10, vUv11, vUv12, vUv13, vUv14;
-	varying vec2 vUv15, vUv16, vUv17, vUv18, vUv19;
-	varying vec2 vUv20, vUv21, vUv22, vUv23, vUv24;
+	in vec2 vUv00, vUv01, vUv02, vUv03, vUv04;
+	in vec2 vUv05, vUv06, vUv07, vUv08, vUv09;
+	in vec2 vUv10, vUv11, vUv12, vUv13, vUv14;
+	in vec2 vUv15, vUv16, vUv17, vUv18, vUv19;
+	in vec2 vUv20, vUv21, vUv22, vUv23, vUv24;
 
 #else
 
 	// General case
-	uniform vec2 texelSize;
+	#include <pp_resolution_pars_fragment>
 	uniform float scale;
-	varying vec2 vUv;
+	in vec2 vUv;
 
 #endif
 
@@ -164,7 +139,7 @@ void main() {
 
 			// General case
 			float centerDepth = linearDepth(vUv);
-			vec2 s = texelSize * scale;
+			vec2 s = resolution.zw * scale;
 
 			for(int x = -KERNEL_SIZE_HALF; x <= KERNEL_SIZE_HALF; ++x) {
 
@@ -184,7 +159,7 @@ void main() {
 
 		#endif
 
-		gl_FragColor = result / max(w, 1.0);
+		outputColor = result / max(w, 1.0);
 
 	#else
 
@@ -200,7 +175,7 @@ void main() {
 		#else
 
 			// General case
-			vec2 s = texelSize * scale;
+			vec2 s = resolution.zw * scale;
 
 			for(int x = -KERNEL_SIZE_HALF; x <= KERNEL_SIZE_HALF; ++x) {
 
@@ -214,7 +189,7 @@ void main() {
 
 		#endif
 
-		gl_FragColor = result * INV_KERNEL_SIZE_SQ;
+		outputColor = result * INV_KERNEL_SIZE_SQ;
 
 	#endif
 

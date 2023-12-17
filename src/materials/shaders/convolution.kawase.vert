@@ -1,16 +1,14 @@
-uniform vec4 texelSize; // XY = texel size, ZW = half texel size
+#include <pp_resolution_pars_fragment>
+
 uniform float kernel;
 uniform float scale;
 
-varying vec2 vUv0;
-varying vec2 vUv1;
-varying vec2 vUv2;
-varying vec2 vUv3;
+out vec2 vUv0, vUv1, vUv2, vUv3;
 
 void main() {
 
 	vec2 uv = position.xy * 0.5 + 0.5;
-	vec2 dUv = (texelSize.xy * vec2(kernel) + texelSize.zw) * scale;
+	vec2 dUv = (texelSize.zw * vec2(kernel) + texelSize.zw * vec2(0.5)) * scale;
 
 	vUv0 = vec2(uv.x - dUv.x, uv.y + dUv.y);
 	vUv1 = vec2(uv.x + dUv.x, uv.y + dUv.y);

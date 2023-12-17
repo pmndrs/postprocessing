@@ -1,29 +1,17 @@
-#define sampleLevelZeroOffset(t, coord, offset) texture2D(t, coord + offset * resolution.zw)
+#include <pp_precision_fragment>
+#include <pp_default_output_pars_fragment>
+#include <pp_input_buffer_pars_fragment>
 
-#if __VERSION__ < 300
-
-	#define round(v) floor(v + 0.5)
-
-#endif
-
-#ifdef FRAMEBUFFER_PRECISION_HIGH
-
-	uniform mediump sampler2D inputBuffer;
-
-#else
-
-	uniform lowp sampler2D inputBuffer;
-
-#endif
+#define sampleLevelZeroOffset(t, coord, offset) texture(t, coord + offset * resolution.zw)
 
 uniform lowp sampler2D areaTexture;
 uniform lowp sampler2D searchTexture;
 
 uniform vec4 resolution; // XY = resolution, ZW = texelSize
 
-varying vec2 vUv;
-varying vec4 vOffset[3];
-varying vec2 vPixCoord;
+in vec2 vUv;
+in vec4 vOffset[3];
+in vec2 vPixCoord;
 
 /**
  * Moves values to a target vector based on a given conditional vector.
@@ -46,8 +34,7 @@ void movec(const in bvec4 c, inout vec4 variable, const in vec4 value) {
 /**
  * Allows to decode two binary values from a bilinear-filtered access.
  *
- * Bilinear access for fetching 'e' have a 0.25 offset, and we are interested
- * in the R and G edges:
+ * Bilinear access for fetching 'e' have a 0.25 offset, and we are interested in the R and G edges:
  *
  * +---G---+-------+
  * |   x o R   x   |
@@ -76,7 +63,7 @@ vec4 decodeDiagBilinearAccess(in vec4 e) {
 }
 
 /**
- * Diagonal pattern searches.
+ * Diagonal pattern search.
  */
 
 vec2 searchDiag1(const in vec2 texCoord, const in vec2 dir, out vec2 e) {
@@ -93,7 +80,7 @@ vec2 searchDiag1(const in vec2 texCoord, const in vec2 dir, out vec2 e) {
 		}
 
 		coord.xyz = t * vec3(dir, 1.0) + coord.xyz;
-		e = texture2D(inputBuffer, coord.xy).rg;
+		e = texture(inputBuffer, coord.xy).rg;
 		coord.w = dot(e, vec2(0.5));
 
 	}
@@ -120,11 +107,11 @@ vec2 searchDiag2(const in vec2 texCoord, const in vec2 dir, out vec2 e) {
 
 		// @SearchDiag2Optimization
 		// Fetch both edges at once using bilinear filtering.
-		e = texture2D(inputBuffer, coord.xy).rg;
+		e = texture(inputBuffer, coord.xy).rg;
 		e = decodeDiagBilinearAccess(e);
 
 		// Non-optimized version:
-		// e.g = texture2D(inputBuffer, coord.xy).g;
+		// e.g = texture(inputBuffer, coord.xy).g;
 		// e.r = SMAASampleLevelZeroOffset(inputBuffer, coord.xy, vec2(1, 0)).r;
 
 		coord.w = dot(e, vec2(0.5));
@@ -136,8 +123,7 @@ vec2 searchDiag2(const in vec2 texCoord, const in vec2 dir, out vec2 e) {
 }
 
 /**
- * Calculates the area corresponding to a certain diagonal distance and crossing
- * edges 'e'.
+ * Calculates the area corresponding to a certain diagonal distance and crossing edges 'e'.
  */
 
 vec2 areaDiag(const in vec2 dist, const in vec2 e, const in float offset) {
@@ -153,7 +139,7 @@ vec2 areaDiag(const in vec2 dist, const in vec2 e, const in float offset) {
 	// Move to the proper place, according to the subpixel offset.
 	texCoord.y += AREATEX_SUBTEX_SIZE * offset;
 
-	return texture2D(areaTexture, texCoord).rg;
+	return texture(areaTexture, texCoord).rg;
 
 }
 
@@ -249,8 +235,8 @@ vec2 calculateDiagWeights(const in vec2 texCoord, const in vec2 e, const in vec4
 /**
  * Determines how much length should be added in the last step of the searches.
  *
- * Takes the bilinearly interpolated edge (see @PSEUDO_GATHER4), and adds 0, 1
- * or 2 depending on which edges and crossing edges are active.
+ * Takes the bilinearly interpolated edge (see @PSEUDO_GATHER4), and adds 0, 1 or 2 depending on which edges and
+ * crossing edges are active.
  */
 
 float searchLength(const in vec2 e, const in float offset) {
@@ -268,7 +254,7 @@ float searchLength(const in vec2 e, const in float offset) {
 	scale *= 1.0 / SEARCHTEX_PACKED_SIZE;
 	bias *= 1.0 / SEARCHTEX_PACKED_SIZE;
 
-	return texture2D(searchTexture, scale * e + bias).r;
+	return texture(searchTexture, scale * e + bias).r;
 
 }
 
@@ -279,10 +265,9 @@ float searchLength(const in vec2 e, const in float offset) {
 float searchXLeft(in vec2 texCoord, const in float end) {
 
 	/* @PSEUDO_GATHER4
-	This texCoord has been offset by (-0.25, -0.125) in the vertex shader to
-	sample between edges, thus fetching four edges in a row.
-	Sampling with different offsets in each direction allows to disambiguate
-	which edges are active from the four fetched ones. */
+	This texCoord has been offset by (-0.25, -0.125) in the vertex shader to sample between edges, thus fetching four
+	edges in a row. Sampling with different offsets in each direction allows to disambiguate which edges are active from
+	the four fetched ones. */
 
 	vec2 e = vec2(0.0, 1.0);
 
@@ -294,7 +279,7 @@ float searchXLeft(in vec2 texCoord, const in float end) {
 
 		}
 
-		e = texture2D(inputBuffer, texCoord).rg;
+		e = texture(inputBuffer, texCoord).rg;
 		texCoord = vec2(-2.0, 0.0) * resolution.zw + texCoord;
 
 	}
@@ -327,7 +312,7 @@ float searchXRight(vec2 texCoord, const in float end) {
 
 		}
 
-		e = texture2D(inputBuffer, texCoord).rg;
+		e = texture(inputBuffer, texCoord).rg;
 		texCoord = vec2(2.0, 0.0) * resolution.zw + texCoord;
 
 	}
@@ -354,7 +339,7 @@ float searchYUp(vec2 texCoord, const in float end) {
 
 		}
 
-		e = texture2D(inputBuffer, texCoord).rg;
+		e = texture(inputBuffer, texCoord).rg;
 		texCoord = -vec2(0.0, 2.0) * resolution.zw + texCoord;
 
 	}
@@ -377,7 +362,7 @@ float searchYDown(vec2 texCoord, const in float end) {
 
 		}
 
-		e = texture2D(inputBuffer, texCoord).rg;
+		e = texture(inputBuffer, texCoord).rg;
 		texCoord = vec2(0.0, 2.0) * resolution.zw + texCoord;
 
 	}
@@ -403,7 +388,7 @@ vec2 area(const in vec2 dist, const in float e1, const in float e2, const in flo
 	// Move to the proper place, according to the subpixel offset.
 	texCoord.y = AREATEX_SUBTEX_SIZE * offset + texCoord.y;
 
-	return texture2D(areaTexture, texCoord).rg;
+	return texture(areaTexture, texCoord).rg;
 
 }
 
@@ -458,7 +443,7 @@ void main() {
 
 	vec4 weights = vec4(0.0);
 	vec4 subsampleIndices = vec4(0.0);
-	vec2 e = texture2D(inputBuffer, vUv).rg;
+	vec2 e = texture(inputBuffer, vUv).rg;
 
 	if(e.g > 0.0) {
 
@@ -466,8 +451,7 @@ void main() {
 
 		#if !defined(DISABLE_DIAG_DETECTION)
 
-			/* Diagonals have both north and west edges, so searching for them in one of
-			the boundaries is enough. */
+			// Diagonals have both north and west edges, so searching for them in one of the boundaries is enough.
 			weights.rg = calculateDiagWeights(vUv, e, subsampleIndices);
 
 			// Skip horizontal/vertical processing if there is a diagonal.
@@ -485,7 +469,7 @@ void main() {
 
 		/* Now fetch the left crossing edges, two at a time using bilinear filtering. Sampling at -0.25
 		(see @CROSSING_OFFSET) enables to discern what value each edge has. */
-		float e1 = texture2D(inputBuffer, coords.xy).r;
+		float e1 = texture(inputBuffer, coords.xy).r;
 
 		// Find the distance to the right.
 		coords.z = searchXRight(vOffset[0].zw, vOffset[2].y);
@@ -533,7 +517,7 @@ void main() {
 		d.x = coords.y;
 
 		// Fetch the top crossing edges.
-		float e1 = texture2D(inputBuffer, coords.xy).g;
+		float e1 = texture(inputBuffer, coords.xy).g;
 
 		// Find the distance to the bottom.
 		coords.z = searchYDown(vOffset[1].zw, vOffset[2].w);
@@ -557,6 +541,6 @@ void main() {
 
 	}
 
-	gl_FragColor = weights;
+	outputColor = weights;
 
 }

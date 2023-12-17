@@ -1,24 +1,15 @@
-#ifdef FRAMEBUFFER_PRECISION_HIGH
+#include <pp_precision_fragment>
+#include <pp_default_output_pars_fragment>
+#include <pp_input_buffer_pars_fragment>
 
-	uniform mediump sampler2D inputBuffer;
-
-#else
-
-	uniform lowp sampler2D inputBuffer;
-
-#endif
-
-varying vec2 vUv0;
-varying vec2 vUv1;
-varying vec2 vUv2;
-varying vec2 vUv3;
+in vec2 vUv0, vUv1, vUv2, vUv3;
 
 void main() {
 
-	vec4 sum = texture2D(inputBuffer, vUv0); // Top left
-	sum += texture2D(inputBuffer, vUv1); // Top right
-	sum += texture2D(inputBuffer, vUv2); // Bottom right
-	sum += texture2D(inputBuffer, vUv3); // Bottom left
-	gl_FragColor = sum * 0.25; // Compute the average
+	vec4 sum = texture(inputBuffer, vUv0); // Top left
+	sum += texture(inputBuffer, vUv1); // Top right
+	sum += texture(inputBuffer, vUv2); // Bottom right
+	sum += texture(inputBuffer, vUv3); // Bottom left
+	outputColor = sum * 0.25; // Compute the average
 
 }

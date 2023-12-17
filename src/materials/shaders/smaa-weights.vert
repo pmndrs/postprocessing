@@ -1,8 +1,8 @@
 uniform vec4 resolution; // XY = resolution, ZW = texelSize
 
-varying vec2 vUv;
-varying vec4 vOffset[3];
-varying vec2 vPixCoord;
+out vec2 vUv;
+out vec4 vOffset[3];
+out vec2 vPixCoord;
 
 void main() {
 

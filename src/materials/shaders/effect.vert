@@ -1,8 +1,8 @@
-uniform vec4 resolution; // XY = resolution, ZW = texelSize
-uniform vec3 cameraParams; // near, far, aspect
-uniform float time;
+#include <pp_camera_pars_fragment>
+#include <pp_resolution_pars_fragment>
 
-varying vec2 vUv;
+uniform float time;
+out vec2 vUv;
 
 VERTEX_HEAD
 

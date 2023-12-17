@@ -1,14 +1,7 @@
+#include <pp_precision_fragment>
+#include <pp_default_output_pars_fragment>
+#include <pp_input_buffer_pars_fragment>
 #include <common>
-
-#ifdef FRAMEBUFFER_PRECISION_HIGH
-
-	uniform mediump sampler2D inputBuffer;
-
-#else
-
-	uniform lowp sampler2D inputBuffer;
-
-#endif
 
 #ifdef THRESHOLD
 
@@ -17,11 +10,11 @@
 
 #endif
 
-varying vec2 vUv;
+in vec2 vUv;
 
 void main() {
 
-	vec4 texel = texture2D(inputBuffer, vUv);
+	vec4 texel = texture(inputBuffer, vUv);
 	float l = luminance(texel.rgb);
 
 	#ifdef THRESHOLD
@@ -32,11 +25,11 @@ void main() {
 
 	#ifdef COLOR
 
-		gl_FragColor = vec4(texel.rgb * l, l);
+		outputColor = vec4(texel.rgb * l, l);
 
 	#else
 
-		gl_FragColor = vec4(l);
+		outputColor = vec4(l);
 
 	#endif
 

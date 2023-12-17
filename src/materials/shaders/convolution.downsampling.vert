@@ -1,36 +1,27 @@
-uniform vec2 texelSize;
+#include <pp_resolution_pars_fragment>
 
-varying vec2 vUv;
-varying vec2 vUv00;
-varying vec2 vUv01;
-varying vec2 vUv02;
-varying vec2 vUv03;
-varying vec2 vUv04;
-varying vec2 vUv05;
-varying vec2 vUv06;
-varying vec2 vUv07;
-varying vec2 vUv08;
-varying vec2 vUv09;
-varying vec2 vUv10;
-varying vec2 vUv11;
+out vec2 vUv;
+out vec2 vUv00, vUv01, vUv02, vUv03;
+out vec2 vUv04, vUv05, vUv06, vUv07;
+out vec2 vUv08, vUv09, vUv10, vUv11;
 
 void main() {
 
 	vUv = position.xy * 0.5 + 0.5;
 
-	vUv00 = vUv + texelSize * vec2(-1.0, 1.0);
-	vUv01 = vUv + texelSize * vec2(1.0, 1.0);
-	vUv02 = vUv + texelSize * vec2(-1.0, -1.0);
-	vUv03 = vUv + texelSize * vec2(1.0, -1.0);
+	vUv00 = vUv + resolution.zw * vec2(-1.0, 1.0);
+	vUv01 = vUv + resolution.zw * vec2(1.0, 1.0);
+	vUv02 = vUv + resolution.zw * vec2(-1.0, -1.0);
+	vUv03 = vUv + resolution.zw * vec2(1.0, -1.0);
 
-	vUv04 = vUv + texelSize * vec2(-2.0, 2.0);
-	vUv05 = vUv + texelSize * vec2(0.0, 2.0);
-	vUv06 = vUv + texelSize * vec2(2.0, 2.0);
-	vUv07 = vUv + texelSize * vec2(-2.0, 0.0);
-	vUv08 = vUv + texelSize * vec2(2.0, 0.0);
-	vUv09 = vUv + texelSize * vec2(-2.0, -2.0);
-	vUv10 = vUv + texelSize * vec2(0.0, -2.0);
-	vUv11 = vUv + texelSize * vec2(2.0, -2.0);
+	vUv04 = vUv + resolution.zw * vec2(-2.0, 2.0);
+	vUv05 = vUv + resolution.zw * vec2(0.0, 2.0);
+	vUv06 = vUv + resolution.zw * vec2(2.0, 2.0);
+	vUv07 = vUv + resolution.zw * vec2(-2.0, 0.0);
+	vUv08 = vUv + resolution.zw * vec2(2.0, 0.0);
+	vUv09 = vUv + resolution.zw * vec2(-2.0, -2.0);
+	vUv10 = vUv + resolution.zw * vec2(0.0, -2.0);
+	vUv11 = vUv + resolution.zw * vec2(2.0, -2.0);
 
 	gl_Position = vec4(position.xy, 1.0, 1.0);
 
