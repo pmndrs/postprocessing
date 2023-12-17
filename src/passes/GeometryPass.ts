@@ -26,6 +26,7 @@ import { ObservableSet } from "../utils/ObservableSet.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { Resolution } from "../utils/Resolution.js";
 import { ShaderWithDefines } from "../core/ShaderWithDefines.js";
+import { CopyPass } from "./CopyPass.js";
 
 /**
  * Supported MSAA sample counts.
@@ -74,6 +75,12 @@ export class GeometryPass extends Pass implements Selective {
 	 */
 
 	private readonly registeredMaterials: WeakSet<Material>;
+
+	/**
+	 * A copy pass that is used to blit the default input buffer to the output color buffer.
+	 */
+
+	private readonly copyPass: CopyPass;
 
 	/**
 	 * Controls which gBuffer components should be rendered by this pass.
@@ -145,6 +152,7 @@ export class GeometryPass extends Pass implements Selective {
 		this.selection = new Selection();
 		this.selection.enabled = false;
 		this.registeredMaterials = new WeakSet<Material>();
+		this.copyPass = new CopyPass();
 
 		const gBufferComponents = new ObservableSet<GBuffer>();
 		gBufferComponents.addEventListener(ObservableSet.EVENT_CHANGE, () => this.updateGBuffer());
@@ -171,6 +179,12 @@ export class GeometryPass extends Pass implements Selective {
 	protected override onResolutionChange(resolution: Resolution): void {
 
 		this.output.defaultBuffer?.setSize(resolution.width, resolution.height);
+
+	}
+
+	protected override onInputChange(): void {
+
+		this.copyPass.input.defaultBuffer = this.input.defaultBuffer;
 
 	}
 
@@ -391,6 +405,7 @@ export class GeometryPass extends Pass implements Selective {
 
 		}
 
+		this.copyPass.output.defaultBuffer = renderTarget;
 		this.output.defaultBuffer = renderTarget;
 		this.updateOutputBufferColorSpace();
 
@@ -429,7 +444,7 @@ export class GeometryPass extends Pass implements Selective {
 
 		if(this.input.defaultBuffer !== null) {
 
-			//this.copyInputToColorBuffer();
+			this.copyPass.render();
 
 		}
 
