@@ -148,9 +148,9 @@ export function createEnvironment(): Group {
 export function createActors(): Group {
 
 	const actor01 = new Mesh(
-		new CylinderGeometry(0.5, 0.5, 1),
+		new CylinderGeometry(0.6, 0.6, 1),
 		new MeshStandardMaterial({
-			color: 0xffffaa,
+			color: 0xffffff,
 			roughness: 0.5,
 			metalness: 0
 		})
