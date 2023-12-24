@@ -1,5 +1,5 @@
 import { LinearEncoding, REVISION, sRGBEncoding } from "three";
-import { LinearSRGBColorSpace, SRGBColorSpace } from "../enums/index.js";
+import { LinearSRGBColorSpace, SRGBColorSpace, ToneMappingMode } from "../enums/index.js";
 
 const revision = Number(REVISION.replace(/\D+/g, ""));
 const useColorSpace = revision >= 152;
@@ -126,5 +126,26 @@ export function updateFragmentShader(fragmentShader) {
 export function updateVertexShader(vertexShader) {
 
 	return vertexShader;
+
+}
+
+/**
+ * Validates the given tone mapping mode against the current version of three.
+ *
+ * @param {ToneMappingMode} mode - A tone mapping mode.
+ * @return {ToneMappingMode} The validated tone mapping mode.
+ * @ignore
+ */
+
+export function validateToneMappingMode(mode) {
+
+	if(revision < 160 && mode === ToneMappingMode.AGX) {
+
+		console.warn("AgX requires three r160 or higher, falling back to ACES filmic");
+		mode = ToneMappingMode.ACES_FILMIC;
+
+	}
+
+	return mode;
 
 }

@@ -1,6 +1,7 @@
 import { LinearMipmapLinearFilter, Uniform, WebGLRenderTarget } from "three";
 import { AdaptiveLuminancePass, LuminancePass } from "../passes/index.js";
 import { BlendFunction, ToneMappingMode } from "../enums/index.js";
+import { validateToneMappingMode } from "../utils/index.js";
 import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/tone-mapping.frag";
@@ -25,7 +26,7 @@ export class ToneMappingEffect extends Effect {
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SRC] - The blend function of this effect.
 	 * @param {Boolean} [options.adaptive=false] - Deprecated. Use mode instead.
-	 * @param {ToneMappingMode} [options.mode=ToneMappingMode.ACES_FILMIC] - The tone mapping mode.
+	 * @param {ToneMappingMode} [options.mode=ToneMappingMode.AGX] - The tone mapping mode.
 	 * @param {Number} [options.resolution=256] - The resolution of the luminance texture. Must be a power of two.
 	 * @param {Number} [options.maxLuminance=4.0] - Deprecated. Same as whitePoint.
 	 * @param {Number} [options.whitePoint=4.0] - The white point.
@@ -38,7 +39,7 @@ export class ToneMappingEffect extends Effect {
 	constructor({
 		blendFunction = BlendFunction.SRC,
 		adaptive = false,
-		mode = adaptive ? ToneMappingMode.REINHARD2_ADAPTIVE : ToneMappingMode.ACES_FILMIC,
+		mode = adaptive ? ToneMappingMode.REINHARD2_ADAPTIVE : ToneMappingMode.AGX,
 		resolution = 256,
 		maxLuminance = 4.0,
 		whitePoint = maxLuminance,
@@ -123,6 +124,8 @@ export class ToneMappingEffect extends Effect {
 			this.defines.clear();
 			this.defines.set("TONE_MAPPING_MODE", value.toFixed(0));
 
+			value = validateToneMappingMode(value);
+
 			// Use one of the built-in tone mapping operators.
 			switch(value) {
 
@@ -136,6 +139,10 @@ export class ToneMappingEffect extends Effect {
 
 				case ToneMappingMode.ACES_FILMIC:
 					this.defines.set("toneMapping(texel)", "ACESFilmicToneMapping(texel)");
+					break;
+
+				case ToneMappingMode.AGX:
+					this.defines.set("toneMapping(texel)", "AgXToneMapping(texel)");
 					break;
 
 				default:
