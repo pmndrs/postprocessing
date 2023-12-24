@@ -1,6 +1,6 @@
 {
 	"name": "postprocessing",
-	"version": "7.0.0-alpha",
+	"version": "7.0.0-alpha-1",
 	"description": "A post processing library for three.js.",
 	"homepage": "https://github.com/pmndrs/postprocessing",
 	"license": "Zlib",
@@ -81,7 +81,7 @@
 		"watch:js": "node esbuild -w"
 	},
 	"peerDependencies": {
-		"three": ">= 0.159.0 < 0.160.0"
+		"three": ">= 0.160.0 < 0.161.0"
 	},
 	"devDependencies": {
 		"@tweakpane/core": "2.x.x",
