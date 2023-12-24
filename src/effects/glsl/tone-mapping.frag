@@ -10,6 +10,8 @@ uniform float whitePoint;
 
 #if TONE_MAPPING_MODE == 1 || TONE_MAPPING_MODE == 2
 
+	// Reinhard 2
+
 	uniform float middleGrey;
 
 	#if TONE_MAPPING_MODE == 2
@@ -48,9 +50,10 @@ uniform float whitePoint;
 
 	}
 
-#elif TONE_MAPPING_MODE == 5
+#elif TONE_MAPPING_MODE == 3
 
-	// http://filmicworlds.com/blog/filmic-tonemapping-operators
+	// Uncharted 2: http://filmicworlds.com/blog/filmic-tonemapping-operators
+
 	#define A 0.15
 	#define B 0.50
 	#define C 0.10
@@ -79,7 +82,7 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
 
 		outputColor = vec4(Reinhard2ToneMapping(inputColor.rgb), inputColor.a);
 
-	#elif TONE_MAPPING_MODE == 5
+	#elif TONE_MAPPING_MODE == 3
 
 		outputColor = vec4(Uncharted2ToneMapping(inputColor.rgb), inputColor.a);
 
