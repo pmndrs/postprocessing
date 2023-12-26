@@ -85,6 +85,7 @@ export class NoiseTexture extends DataTexture {
 	constructor(width: number, height: number, format = RGBAFormat, type = UnsignedByteType) {
 
 		super(getNoise(width * height, format, type), width, height, format, type);
+
 		this.needsUpdate = true;
 
 	}
