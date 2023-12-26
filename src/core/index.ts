@@ -9,4 +9,3 @@ export * from "./Resizable.js";
 export * from "./RenderPipeline.js";
 export * from "./Selective.js";
 export * from "./ShaderData.js";
-export * from "./ShaderWithDefines.js";

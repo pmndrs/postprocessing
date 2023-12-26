@@ -12,11 +12,11 @@ import {
 	UnsignedByteType,
 	Vector3,
 	Vector4,
+	WebGLProgramParametersWithUniforms,
 	WebGLRenderer
 } from "three";
 
 import { Resizable } from "../core/Resizable.js";
-import { ShaderWithDefines } from "../core/ShaderWithDefines.js";
 
 /**
  * Supported precision constants.
@@ -74,7 +74,7 @@ export abstract class FullscreenMaterial extends RawShaderMaterial implements Re
 		this.outputPrecision = "lowp";
 
 		// Updates the output color space when rendering to screen.
-		this.onBeforeCompile = (shader: ShaderWithDefines, renderer: WebGLRenderer) => {
+		this.onBeforeCompile = (shader: WebGLProgramParametersWithUniforms, renderer: WebGLRenderer) => {
 
 			if(shader.defines === undefined || shader.defines === null) {
 

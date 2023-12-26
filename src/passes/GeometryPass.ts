@@ -16,6 +16,7 @@ import {
 	TextureDataType,
 	UnsignedByteType,
 	WebGLMultipleRenderTargets,
+	WebGLProgramParametersWithUniforms,
 	WebGLRenderer
 } from "three";
 
@@ -25,7 +26,6 @@ import { Selection } from "../utils/Selection.js";
 import { ObservableSet } from "../utils/ObservableSet.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { Resolution } from "../utils/Resolution.js";
-import { ShaderWithDefines } from "../core/ShaderWithDefines.js";
 import { CopyPass } from "./CopyPass.js";
 
 /**
@@ -249,7 +249,7 @@ export class GeometryPass extends Pass implements Selective {
 		// Binding to this doesn't do anything for arrow functions, but it satisfies eslint.
 		const onBeforeCompile = material.onBeforeCompile.bind(this);
 
-		material.onBeforeCompile = (shader: ShaderWithDefines, renderer: WebGLRenderer) => {
+		material.onBeforeCompile = (shader: WebGLProgramParametersWithUniforms, renderer: WebGLRenderer) => {
 
 			onBeforeCompile(shader, renderer);
 
