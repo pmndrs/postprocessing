@@ -4,6 +4,7 @@ export * from "./math.js";
 export * from "./packing.js";
 
 export * from "./ClearFlags.js";
+export * from "./ClearValues.js";
 export * from "./EffectShaderData.js";
 export * from "./GaussKernel.js";
 export * from "./ImmutableTimer.js";
