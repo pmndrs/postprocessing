@@ -21,7 +21,7 @@ import {
 import { Pane } from "tweakpane";
 import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, createFPSGraph, toRecord } from "../utils/index.js";
+import { calculateVerticalFoV, createFPSGraph, getSkyboxUrls, toRecord } from "../utils/index.js";
 import * as DefaultEnvironment from "../objects/DefaultEnvironment.js";
 
 function load(): Promise<Map<string, unknown>> {
