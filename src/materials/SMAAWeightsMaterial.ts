@@ -1,4 +1,4 @@
-import { Texture, Uniform, Vector4 } from "three";
+import { Texture, Uniform } from "three";
 import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentShader from "./shaders/smaa-weights.frag";
