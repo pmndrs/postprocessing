@@ -21,6 +21,7 @@ import { Disposable } from "./Disposable.js";
 import { Input } from "./Input.js";
 import { Output } from "./Output.js";
 import { Renderable } from "./Renderable.js";
+import { FullscreenMaterial } from "../materials/FullscreenMaterial.js";
 
 /**
  * An abstract pass.
@@ -310,6 +311,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 			// No defines or uniforms available.
 			return;
+
+		}
+
+		if(fullscreenMaterial instanceof FullscreenMaterial) {
+
+			fullscreenMaterial.inputBuffer = this.input.defaultBuffer;
 
 		}
 
