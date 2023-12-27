@@ -1,6 +1,5 @@
 import { ColorSpace, Uniform } from "three";
 import { ShaderData } from "../core/ShaderData.js";
-import { BlendFunction } from "../enums/BlendFunction.js";
 import { EffectAttribute } from "../enums/EffectAttribute.js";
 import { EffectShaderSection } from "../enums/EffectShaderSection.js";
 import { WebGLExtension } from "../enums/WebGLExtension.js";
@@ -28,7 +27,7 @@ export class EffectShaderData implements ShaderData {
 	 * The blend modes of the individual effects.
 	 */
 
-	readonly blendModes: Map<BlendFunction, BlendMode>;
+	readonly blendModes: Map<number, BlendMode>;
 
 	/**
 	 * Required extensions.
@@ -82,7 +81,7 @@ export class EffectShaderData implements ShaderData {
 
 		this.defines = new Map<string, string | number | boolean>();
 		this.uniforms = new Map<string, Uniform>();
-		this.blendModes = new Map<BlendFunction, BlendMode>();
+		this.blendModes = new Map<number, BlendMode>();
 		this.extensions = new Set<WebGLExtension>();
 		this.varyings = new Set<string>();
 		this.attributes = EffectAttribute.NONE;

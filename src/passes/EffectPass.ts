@@ -5,12 +5,12 @@ import {
 	OrthographicCamera,
 	PerspectiveCamera,
 	BaseEvent,
-	SRGBColorSpace
+	SRGBColorSpace,
+	WebGLRenderer
 } from "three";
 
 import { Pass } from "../core/Pass.js";
 import { Effect } from "../effects/Effect.js";
-import { BlendFunction } from "../enums/BlendFunction.js";
 import { EffectAttribute } from "../enums/EffectAttribute.js";
 import { EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
 import { EffectMaterial } from "../materials/EffectMaterial.js";
@@ -170,7 +170,7 @@ function integrateEffect(prefix: string, effect: Effect, data: EffectShaderData)
 
 		// Collect unique blend modes.
 		const blendMode = effect.blendMode;
-		data.blendModes.set(blendMode.blendFunction, blendMode);
+		data.blendModes.set(blendMode.blendFunction.id, blendMode);
 
 		if(mainImageExists) {
 
@@ -212,7 +212,7 @@ function integrateEffect(prefix: string, effect: Effect, data: EffectShaderData)
 			data.uniforms.set(blendOpacity, blendMode.opacityUniform);
 
 			// Blend the result of this effect with the input color (color0 = dst, color1 = src).
-			fragmentMainImage += `color0 = blend${blendMode.blendFunction}(color0, color1, ${blendOpacity});\n\n\t`;
+			fragmentMainImage += `color0 = ${blendMode.blendFunction.name}(color0, color1, ${blendOpacity});\n\n\t`;
 			fragmentHead += `uniform float ${blendOpacity};\n\n`;
 
 		}
@@ -402,7 +402,7 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 
 		for(const effect of this.effects) {
 
-			if(effect.blendMode.blendFunction === BlendFunction.DST) {
+			if(effect.blendMode.blendFunction.shader === null) {
 
 				continue;
 
@@ -435,7 +435,8 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 
 		for(const blendMode of data.blendModes.values()) {
 
-			fragmentHead += blendMode.shaderCode.replace(blendRegExp, `blend${blendMode.blendFunction}`) + "\n";
+			const blendFunctionShader = blendMode.blendFunction.shader!;
+			fragmentHead += blendFunctionShader.replace(blendRegExp, blendMode.blendFunction.name) + "\n";
 
 		}
 
@@ -486,7 +487,8 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 			(value, key, map) => map.set(key, value !== null ? value.trim().replace(/^#/, "\n#") : null)
 		);
 
-		this.fullscreenMaterial.setShaderParts(data.shaderParts)
+		this.fullscreenMaterial
+			.setShaderParts(data.shaderParts)
 			.setDefines(data.defines)
 			.setUniforms(data.uniforms)
 			.setExtensions(data.extensions);
@@ -525,13 +527,9 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 
 	protected override onInputChange(): void {
 
-		//this.fullscreenMaterial.inputBuffer = this.input.defaultBuffer;
+	}
 
-		if(this.input.frameBufferPrecisionHigh) {
-
-			this.fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
-
-		}
+	override checkRequirements(renderer: WebGLRenderer): void {
 
 	}
 
@@ -563,7 +561,6 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 		}
 
 		const material = this.fullscreenMaterial;
-		//material.inputBuffer = this.input.defaultBuffer;
 		material.time += this.timer.delta * this.timeScale;
 
 		this.renderer.setRenderTarget(this.output.defaultBuffer);

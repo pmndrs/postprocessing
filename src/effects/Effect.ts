@@ -1,10 +1,10 @@
 import { ColorSpace, Uniform } from "three";
 import { Pass } from "../core/Pass.js";
-import { BlendFunction } from "../enums/BlendFunction.js";
 import { EffectAttribute } from "../enums/EffectAttribute.js";
 import { WebGLExtension } from "../enums/WebGLExtension.js";
 import { ObservableMap } from "../utils/ObservableMap.js";
 import { ObservableSet } from "../utils/ObservableSet.js";
+import { SrcBlendFunction } from "./blending/blend-functions/SrcBlendFunction.js";
 import { BlendMode } from "./blending/BlendMode.js";
 
 /**
@@ -93,7 +93,7 @@ export abstract class Effect extends Pass {
 		this.uniforms = uniforms;
 		this.extensions = extensions;
 
-		this.blendMode = new BlendMode(BlendFunction.NORMAL);
+		this.blendMode = new BlendMode(new SrcBlendFunction());
 		this.blendMode.addEventListener(Pass.EVENT_CHANGE, () => this.setChanged());
 
 		this._attributes = EffectAttribute.NONE;

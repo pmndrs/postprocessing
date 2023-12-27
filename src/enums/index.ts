@@ -1,4 +1,3 @@
-export * from "./BlendFunction.js";
 export * from "./ColorChannel.js";
 export * from "./DepthCopyMode.js";
 export * from "./DepthTestStrategy.js";
@@ -12,6 +11,6 @@ export * from "./LogLevel.js";
 export * from "./MaskFunction.js";
 export * from "./PredicationMode.js";
 export * from "./SMAAPreset.js";
-export * from "./ToneMappingMode.js";
+export * from "./ToneMapping.js";
 export * from "./VignetteTechnique.js";
 export * from "./WebGLExtension.js";
