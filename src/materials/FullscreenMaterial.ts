@@ -29,7 +29,7 @@ export type OutputPrecision = "highp" | "mediump" | "lowp";
 /**
  * A fullscreen shader material.
  *
- * This material defines the following commonly used uniforms by default:
+ * This material defines the following commonly used uniforms:
  * - `mat4` projectionMatrix
  * - `mat4` projectionMatrixInverse
  * - `vec3` cameraParams
@@ -38,9 +38,9 @@ export type OutputPrecision = "highp" | "mediump" | "lowp";
  *
  * Requires WebGL 2.
  *
- * @see {@link inputBuffer} for setting the input buffer.
- * @see {@link copyCameraSettings} for copying the camera settings.
- * @see {@link setSize} for updating the resolution.
+ * @see {@link inputBuffer} for setting an input buffer.
+ * @see {@link copyCameraSettings} for copying camera settings.
+ * @see {@link setSize} for setting the resolution.
  * @group Materials
  */
 
