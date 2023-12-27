@@ -1,7 +1,4 @@
-export * from "./orthographicDepthToViewZ.js";
-export * from "./viewZToOrthographicDepth.js";
-export * from "./math.js";
-export * from "./packing.js";
+export * from "./functions/index.js";
 
 export * from "./ClearFlags.js";
 export * from "./ClearValues.js";
