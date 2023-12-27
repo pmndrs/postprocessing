@@ -1,9 +1,9 @@
 import { Material, SRGBColorSpace, WebGLMultipleRenderTargets } from "three";
 import { GBuffer } from "../enums/GBuffer.js";
+import { ClearPass } from "../passes/ClearPass.js";
 import { GeometryPass } from "../passes/GeometryPass.js";
 import { RenderPipeline } from "./RenderPipeline.js";
 import { Pass } from "./Pass.js";
-import { ClearPass } from "../passes/ClearPass.js";
 
 /**
  * An I/O manager.
@@ -167,16 +167,10 @@ export class IOManager {
 
 	private static updateInput(pipeline: RenderPipeline, geoPass?: GeometryPass): void {
 
-		for(let i = 0, l = pipeline.passes.length; i < l; ++i) {
+		for(let i = 0, j = -1, l = pipeline.passes.length; i < l; ++i, ++j) {
 
-			const previousPass = (i > 0) ? pipeline.passes[i - 1] : null;
+			const previousPass = (j >= 0) ? pipeline.passes[j] : null;
 			const pass = pipeline.passes[i];
-
-			if(pass === geoPass) {
-
-				continue;
-
-			}
 
 			IOManager.assignGBufferTextures(pass, geoPass);
 
@@ -229,6 +223,7 @@ export class IOManager {
 
 			if(j < l && pass instanceof ClearPass) {
 
+				// Assign the output resources of the next pass to this clear pass.
 				const nextPass = pipeline.passes[j];
 				nextPass.output.defines.forEach((value, key) => output.defines.set(key, value));
 				nextPass.output.uniforms.forEach((value, key) => output.uniforms.set(key, value));
@@ -238,6 +233,7 @@ export class IOManager {
 
 			}
 
+			// Sync the texture type of the output default buffer with the input default buffer.
 			if(input.defaultBuffer === null || output.defaultBuffer === null ||
 				output.defaultBuffer instanceof WebGLMultipleRenderTargets) {
 
