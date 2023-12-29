@@ -1,6 +1,6 @@
 import { UnsignedByteType, Vector2, Vector3, WebGLRenderTarget } from "three";
 import { DepthCopyMode } from "../enums/DepthCopyMode.js";
-import { unpackRGBAToFloat } from "../utils/packing.js";
+import { unpackRGBAToFloat } from "../utils/functions/packing.js";
 import { DepthCopyPass } from "./DepthCopyPass.js";
 
 const floatPixelBuffer = new Float32Array(4);

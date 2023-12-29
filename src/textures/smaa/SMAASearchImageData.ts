@@ -1,4 +1,4 @@
-import { lerp } from "../../utils/math.js";
+import { lerp } from "../../utils/functions/math.js";
 import { RawImageData } from "../RawImageData.js";
 
 /**

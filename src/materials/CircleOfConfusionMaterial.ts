@@ -1,5 +1,5 @@
 import { Texture, Uniform } from "three";
-import { orthographicDepthToViewZ, viewZToOrthographicDepth } from "../utils/camera.js";
+import { orthographicDepthToViewZ, viewZToOrthographicDepth } from "../utils/functions/camera.js";
 import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentShader from "./shaders/circle-of-confusion.frag";
