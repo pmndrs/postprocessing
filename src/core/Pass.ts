@@ -106,6 +106,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	private _camera: OrthographicCamera | PerspectiveCamera | null;
 
+	/**
+	 * @see {@link subpasses}
+	 */
+
+	private _subpasses: Pass<Material | null>[];
+
 	// #endregion
 
 	/**
@@ -170,6 +176,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this.input.addEventListener(Input.EVENT_CHANGE, () => this.onInputChange());
 		this.output.addEventListener(Output.EVENT_CHANGE, () => this.onOutputChange());
 
+		this._subpasses = [];
 		this.enabled = true;
 
 	}
@@ -191,6 +198,24 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	}
 
 	/**
+	 * A list of subpasses.
+	 *
+	 * Subpasses are subject to automatic resource optimizations.
+	 */
+
+	get subpasses(): ReadonlyArray<Pass<Material | null>> {
+
+		return this._subpasses;
+
+	}
+
+	protected set subpasses(value: Pass<Material | null>[]) {
+
+		this._subpasses = value;
+
+	}
+
+	/**
 	 * A timer.
 	 */
 
@@ -203,6 +228,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	set timer(value: ImmutableTimer | null) {
 
 		this._timer = value;
+
+		for(const pass of this.subpasses) {
+
+			pass.timer = value;
+
+		}
 
 	}
 
@@ -236,6 +267,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		}
 
+		for(const pass of this.subpasses) {
+
+			pass.renderer = value;
+
+		}
+
 	}
 
 	/**
@@ -252,6 +289,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		this._scene = value;
 
+		for(const pass of this.subpasses) {
+
+			pass.scene = value;
+
+		}
+
 	}
 
 	/**
@@ -267,6 +310,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	set camera(value: OrthographicCamera | PerspectiveCamera | null) {
 
 		this._camera = value;
+
+		for(const pass of this.subpasses) {
+
+			pass.camera = value;
+
+		}
 
 	}
 
@@ -408,6 +457,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		for(const disposable of this.disposables) {
 
 			disposable.dispose();
+
+		}
+
+		for(const pass of this.subpasses) {
+
+			pass.dispose();
 
 		}
 
