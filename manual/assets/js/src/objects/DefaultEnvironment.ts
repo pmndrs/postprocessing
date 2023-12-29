@@ -11,7 +11,7 @@ import {
 	SRGBColorSpace
 } from "three";
 
-import { alphaFog } from "../utils";
+import { alphaFog } from "../utils/alphaFog.js";
 
 /**
  * Creates the environment.
