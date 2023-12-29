@@ -1,4 +1,4 @@
-#ifdef FRAMEBUFFER_PRECISION_HIGH
+#ifdef FRAME_BUFFER_PRECISION_HIGH
 
 	uniform mediump sampler2D inputBuffer;
 

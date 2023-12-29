@@ -140,7 +140,7 @@ export abstract class FullscreenMaterial extends RawShaderMaterial implements Re
 
 	private get frameBufferPrecisionHigh(): boolean {
 
-		return (this.defines.FRAMEBUFFER_PRECISION_HIGH !== undefined);
+		return (this.defines.FRAME_BUFFER_PRECISION_HIGH !== undefined);
 
 	}
 
@@ -150,11 +150,11 @@ export abstract class FullscreenMaterial extends RawShaderMaterial implements Re
 
 			if(value) {
 
-				this.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+				this.defines.FRAME_BUFFER_PRECISION_HIGH = "1";
 
 			} else {
 
-				delete this.defines.FRAMEBUFFER_PRECISION_HIGH;
+				delete this.defines.FRAME_BUFFER_PRECISION_HIGH;
 
 			}
 
