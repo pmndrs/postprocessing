@@ -1,4 +1,3 @@
-/** @ignore */
 export { version } from "../package.json";
 
 export * from "./core/index.js";
