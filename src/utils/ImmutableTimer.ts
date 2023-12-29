@@ -7,21 +7,21 @@
 export interface ImmutableTimer {
 
 	/**
-	 * The current delta time in seconds.
+	 * Returns the current delta time in seconds.
 	 */
 
-	get delta(): number;
+	getDelta(): number;
 
 	/**
-	 * The fixed delta time in seconds.
+	 * Returns the fixed delta time in seconds.
 	 */
 
-	get fixedDelta(): number;
+	getFixedDelta(): number;
 
 	/**
-	 * The elapsed time in seconds.
+	 * Returns the elapsed time in seconds.
 	 */
 
-	get elapsed(): number;
+	getElapsed(): number;
 
 }

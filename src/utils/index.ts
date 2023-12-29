@@ -10,4 +10,3 @@ export * from "./ObservableMap.js";
 export * from "./ObservableSet.js";
 export * from "./Resolution.js";
 export * from "./Selection.js";
-export * from "./Timer.js";

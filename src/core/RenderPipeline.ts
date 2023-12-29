@@ -1,9 +1,9 @@
 import { Material, Vector2, WebGLRenderer } from "three";
+import { Timer } from "three/addons/misc/Timer.js";
 import { ShaderChunkExtensions } from "../shader-chunks/ShaderChunkExtensions.js";
 import { ImmutableTimer } from "../utils/ImmutableTimer.js";
 import { Log } from "../utils/Log.js";
 import { Resolution } from "../utils/Resolution.js";
-import { Timer } from "../utils/Timer.js";
 import { IOManager } from "./IOManager.js";
 import { Disposable } from "./Disposable.js";
 import { Renderable } from "./Renderable.js";
@@ -256,7 +256,8 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 		}
 
-		this._timer.update(timestamp);
+		// TODO r161
+		this._timer.update(/* timestamp */);
 
 		for(const pass of this.passes) {
 
