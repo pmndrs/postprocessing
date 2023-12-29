@@ -1,9 +1,5 @@
-import { ColorSpace, Uniform } from "three";
+import { ColorSpace, NoColorSpace } from "three";
 import { Pass } from "../core/Pass.js";
-import { EffectAttribute } from "../enums/EffectAttribute.js";
-import { WebGLExtension } from "../enums/WebGLExtension.js";
-import { ObservableMap } from "../utils/ObservableMap.js";
-import { ObservableSet } from "../utils/ObservableSet.js";
 import { SrcBlendFunction } from "./blending/blend-functions/SrcBlendFunction.js";
 import { BlendMode } from "./blending/BlendMode.js";
 
@@ -22,30 +18,6 @@ export abstract class Effect extends Pass {
 	 */
 
 	readonly blendMode: BlendMode;
-
-	/**
-	 * Preprocessor macro definitions.
-	 */
-
-	readonly defines: Map<string, string | number | boolean>;
-
-	/**
-	 * Shader uniforms.
-	 */
-
-	readonly uniforms: Map<string, Uniform>;
-
-	/**
-	 * A set of required extensions. Only applies to WebGL 1.
-	 */
-
-	readonly extensions: Set<WebGLExtension>;
-
-	/**
-	 * @see {@link attributes}
-	 */
-
-	private _attributes: EffectAttribute;
 
 	/**
 	 * @see {@link fragmentShader}
@@ -81,26 +53,13 @@ export abstract class Effect extends Pass {
 
 		super(name);
 
-		const defines = new ObservableMap<string, string | number | boolean>();
-		const uniforms = new ObservableMap<string, Uniform>();
-		const extensions = new ObservableSet<WebGLExtension>();
-
-		defines.addEventListener(Pass.EVENT_CHANGE, (e) => this.dispatchEvent(e));
-		uniforms.addEventListener(Pass.EVENT_CHANGE, (e) => this.dispatchEvent(e));
-		extensions.addEventListener(Pass.EVENT_CHANGE, (e) => this.dispatchEvent(e));
-
-		this.defines = defines;
-		this.uniforms = uniforms;
-		this.extensions = extensions;
-
 		this.blendMode = new BlendMode(new SrcBlendFunction());
 		this.blendMode.addEventListener(Pass.EVENT_CHANGE, () => this.setChanged());
 
-		this._attributes = EffectAttribute.NONE;
 		this._fragmentShader = null;
 		this._vertexShader = null;
-		this._inputColorSpace = "";
-		this._outputColorSpace = "";
+		this._inputColorSpace = NoColorSpace;
+		this._outputColorSpace = NoColorSpace;
 
 	}
 
@@ -173,22 +132,6 @@ export abstract class Effect extends Pass {
 
 		this._outputColorSpace = value;
 		this.setChanged();
-
-	}
-
-	/**
-	 * Special attributes that serve as hints for the {@link EffectPass}.
-	 */
-
-	get attributes(): EffectAttribute {
-
-		return this._attributes;
-
-	}
-
-	set attributes(value: EffectAttribute) {
-
-		this._attributes = value;
 
 	}
 
