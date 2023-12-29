@@ -396,8 +396,9 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	}
 
 	/**
-	 * Override this method to check if the current device supports the necessary features.
+	 * Checks if the current renderer supports all features that are required by this pass.
 	 *
+	 * Override this method to check if the current device supports the necessary features.
 	 * This method should throw an error if the requirements are not met.
 	 *
 	 * @param renderer - The current renderer.
@@ -407,21 +408,27 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	checkRequirements(renderer: WebGLRenderer): void {}
 
 	/**
+	 * Performs tasks when the input resources have changed.
+	 *
 	 * Override this method to handle input changes.
 	 */
 
 	protected onInputChange(): void {}
 
 	/**
+	 * Performs tasks when the output resources have changed.
+	 *
 	 * Override this method to handle output changes.
 	 */
 
 	protected onOutputChange(): void {}
 
 	/**
+	 * Performs tasks when the resolution has changed.
+	 *
 	 * Override this method to handle resolution changes.
 	 *
-	 * @param resolution - The resolution.
+	 * @param resolution - The updated resolution of this pass.
 	 */
 
 	protected onResolutionChange(resolution: Resolution): void {}
