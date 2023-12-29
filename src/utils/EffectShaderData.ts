@@ -1,8 +1,8 @@
-import { ColorSpace, Uniform } from "three";
+import { ColorSpace, LinearSRGBColorSpace, Uniform } from "three";
 import { ShaderData } from "../core/ShaderData.js";
-import { EffectAttribute } from "../enums/EffectAttribute.js";
+import { GData } from "../enums/GData.js";
+import { Effect } from "../effects/Effect.js";
 import { EffectShaderSection } from "../enums/EffectShaderSection.js";
-import { WebGLExtension } from "../enums/WebGLExtension.js";
 import { BlendMode } from "../effects/blending/BlendMode.js";
 
 /**
@@ -30,34 +30,28 @@ export class EffectShaderData implements ShaderData {
 	readonly blendModes: Map<number, BlendMode>;
 
 	/**
-	 * Required extensions.
-	 */
-
-	readonly extensions: Set<WebGLExtension>;
-
-	/**
 	 * A set of varyings.
 	 */
 
 	readonly varyings: Set<string>;
 
 	/**
-	 * Collective effect attributes.
+	 * A collection of required GBuffer data.
 	 */
 
-	attributes: EffectAttribute;
+	readonly gData: Set<GData>;
+
+	/**
+	 * A list of effects that use convolution operations.
+	 */
+
+	readonly convolutionEffects: Set<Effect>;
 
 	/**
 	 * Indicates whether the shader transforms UV coordinates in the fragment shader.
 	 */
 
 	uvTransformation: boolean;
-
-	/**
-	 * Indicates whether the shader reads depth in the fragment shader.
-	 */
-
-	readDepth: boolean;
 
 	/**
 	 * Keeps track of the current color space.
@@ -72,8 +66,10 @@ export class EffectShaderData implements ShaderData {
 	constructor() {
 
 		this.shaderParts = new Map<EffectShaderSection, string | null>([
+			[EffectShaderSection.FRAGMENT_HEAD_GBUFFER, null],
 			[EffectShaderSection.FRAGMENT_HEAD, null],
 			[EffectShaderSection.FRAGMENT_MAIN_UV, null],
+			[EffectShaderSection.FRAGMENT_MAIN_GDATA, null],
 			[EffectShaderSection.FRAGMENT_MAIN_IMAGE, null],
 			[EffectShaderSection.VERTEX_HEAD, null],
 			[EffectShaderSection.VERTEX_MAIN_SUPPORT, null]
@@ -82,12 +78,186 @@ export class EffectShaderData implements ShaderData {
 		this.defines = new Map<string, string | number | boolean>();
 		this.uniforms = new Map<string, Uniform>();
 		this.blendModes = new Map<number, BlendMode>();
-		this.extensions = new Set<WebGLExtension>();
 		this.varyings = new Set<string>();
-		this.attributes = EffectAttribute.NONE;
+		this.gData = new Set<GData>([GData.COLOR]);
+		this.convolutionEffects = new Set<Effect>();
 		this.uvTransformation = false;
-		this.readDepth = false;
-		this.colorSpace = "srgb-linear";
+		this.colorSpace = LinearSRGBColorSpace;
+
+	}
+
+	/**
+	* Creates a struct that defines the required GBuffer components.
+	*
+	* @return The shader code.
+	*/
+
+	createGBufferStruct(): string {
+
+		const gData = this.gData;
+		let s = "struct GBuffer {\n";
+
+		if(gData.has(GData.COLOR)) {
+
+			// Precision depends on the configured frame buffer type.
+			s += "\tFRAME_BUFFER_PRECISION sampler2D color;\n";
+
+		}
+
+		if(gData.has(GData.DEPTH)) {
+
+			// Precision depends on the hardware.
+			s += "\tDEPTH_BUFFER_PRECISION sampler2D depth;\n";
+
+		}
+
+		if(gData.has(GData.NORMAL)) {
+
+			s += "\tmediump sampler2D normal;\n";
+
+		}
+
+		if(gData.has(GData.ROUGHNESS) || gData.has(GData.METALNESS)) {
+
+			s += "\tlowp sampler2D roughnessMetalness;\n";
+
+		}
+
+		s += "}\n";
+
+		return s;
+
+	}
+
+	/**
+	* Creates a struct that defines the required GBuffer data.
+	*
+	* @return The shader code.
+	*/
+
+	createGDataStruct(): string {
+
+		const gData = this.gData;
+		let s = "struct GData {\n";
+
+		if(gData.has(GData.COLOR)) {
+
+			s += "\tvec4 color;\n";
+
+		}
+
+		if(gData.has(GData.DEPTH)) {
+
+			s += "\tfloat depth;\n";
+
+		}
+
+		if(gData.has(GData.NORMAL)) {
+
+			s += "\tvec3 normal;\n";
+
+		}
+
+		if(gData.has(GData.ROUGHNESS)) {
+
+			s += "\tfloat roughness;\n";
+
+		}
+
+		if(gData.has(GData.METALNESS)) {
+
+			s += "\tfloat metalness;\n";
+
+		}
+
+		if(gData.has(GData.LUMINANCE)) {
+
+			s += "\tfloat luminance;\n";
+
+		}
+
+		s += "}\n";
+
+		return s;
+
+	}
+
+	/**
+	* Creates the GData setup code.
+	*
+	* @return The shader code.
+	*/
+
+	createGDataSetup(): string {
+
+		const gData = this.gData;
+		let s = "GData gData;";
+
+		if(gData.has(GData.COLOR)) {
+
+			s += "gData.color = texture(gBuffer.color, UV);\n";
+
+		}
+
+		if(gData.has(GData.DEPTH)) {
+
+			s += "gData.depth = texture(gBuffer.depth, UV).r;\n";
+
+		}
+
+		if(gData.has(GData.NORMAL)) {
+
+			s += "gData.normal = texture(gBuffer.normal, UV).xyz;\n";
+
+		}
+
+		if(gData.has(GData.ROUGHNESS) || gData.has(GData.METALNESS)) {
+
+			s += "vec2 roughnessMetalness = texture(gBuffer.roughnessMetalness, UV).rg;\n";
+
+		}
+
+		if(gData.has(GData.ROUGHNESS)) {
+
+			s += "gData.roughness = roughnessMetalness.r;\n";
+
+		}
+
+		if(gData.has(GData.METALNESS)) {
+
+			s += "gData.metalness = roughnessMetalness.g;\n";
+
+		}
+
+		if(gData.has(GData.LUMINANCE)) {
+
+			s += "gData.luminance = luminance(gData.color.rgb);\n";
+
+		}
+
+		return s;
+
+	}
+
+	/**
+	* Creates the relevant blend function declarations.
+	*
+	* @return The shader code.
+	*/
+
+	createBlendFunctions(): string {
+
+		const blendRegExp = /\bblend\b/g;
+		let s = "";
+
+		for(const blendMode of this.blendModes.values()) {
+
+			const blendFunctionShader = blendMode.blendFunction.shader!;
+			s += blendFunctionShader.replace(blendRegExp, blendMode.blendFunction.name) + "\n";
+
+		}
+
+		return s;
 
 	}
 
