@@ -13,7 +13,12 @@ void main() {
 
 	outputColor = texture(inputBuffer, vUv);
 
-	#include <colorspace_fragment>
+	#ifdef COLOR_SPACE_CONVERSION
+
+		#include <colorspace_fragment>
+
+	#endif
+
 	#include <dithering_fragment>
 
 }

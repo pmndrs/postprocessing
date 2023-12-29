@@ -25,4 +25,34 @@ export class CopyMaterial extends FullscreenMaterial {
 
 	}
 
+	/**
+	 * Indicates whether output color space conversion is enabled.
+	 */
+
+	get colorSpaceConversion(): boolean {
+
+		return (this.defines.COLOR_SPACE_CONVERSION !== undefined);
+
+	}
+
+	set colorSpaceConversion(value: boolean) {
+
+		if(this.colorSpaceConversion !== value) {
+
+			if(value) {
+
+				this.defines.COLOR_SPACE_CONVERSION = "1";
+
+			} else {
+
+				delete this.defines.COLOR_SPACE_CONVERSION;
+
+			}
+
+			this.needsUpdate = true;
+
+		}
+
+	}
+
 }
