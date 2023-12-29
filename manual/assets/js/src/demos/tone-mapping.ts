@@ -15,7 +15,7 @@ import {
 	GeometryPass,
 	RenderPipeline,
 	// ToneMappingEffect,
-	ToneMappingMode
+	ToneMapping
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
@@ -85,18 +85,13 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	/*
 	const effect = new ToneMappingEffect({
-		blendFunction: BlendFunction.NORMAL,
-		mode: ToneMappingMode.REINHARD2_ADAPTIVE,
-		resolution: 256,
-		whitePoint: 16.0,
-		middleGrey: 0.6,
-		minLuminance: 0.01,
-		averageLuminance: 0.01,
-		adaptationRate: 1.0
+		blendFunction: blendFunctions["mix"],
+		mode: ToneMapping.AGX
 	});
 
 	const pipeline = new RenderPipeline(renderer);
 	const effectPass = new EffectPass(effect);
+	pipeline.addPass(new ClearPass());
 	pipeline.addPass(new GeometryPass(scene, camera, { samples: 4 }));
 	pipeline.addPass(effectPass);
 	*/
@@ -111,7 +106,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const lumMaterial = effect.adaptiveLuminanceMaterial;
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addBinding(renderer, "toneMappingExposure", { min: 0, max: 2, step: 1e-3 });
-	folder.addBinding(effect, "mode", { options: ToneMappingMode });
+	folder.addBinding(effect, "mode", { options: ToneMapping });
 
 	let subfolder = folder.addFolder({ title: "Reinhard2" });
 	subfolder.addBinding(effect, "whitePoint", { min: 1, max: 20, step: 1e-2 });
