@@ -371,11 +371,11 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		if(this.input.frameBufferPrecisionHigh) {
 
-			fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
+			fullscreenMaterial.defines.FRAME_BUFFER_PRECISION_HIGH = "1";
 
 		} else {
 
-			delete fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH;
+			delete fullscreenMaterial.defines.FRAME_BUFFER_PRECISION_HIGH;
 
 		}
 
