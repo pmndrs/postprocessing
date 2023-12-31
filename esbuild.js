@@ -4,7 +4,7 @@ import { glsl } from "esbuild-plugin-glsl";
 import glob from "tiny-glob";
 
 const minify = process.argv.includes("-m");
-const external = ["three", "spatial-controls", "tweakpane"];
+const external = ["three", "spatial-controls", "tweakpane", "@tweakpane/plugin-essentials"];
 const plugins = [glsl({ minify })];
 const date = new Date();
 const banner = `/**
