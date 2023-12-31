@@ -16,7 +16,7 @@ export class ExclusionBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader);
+		super("exclusion", shader);
 
 	}
 

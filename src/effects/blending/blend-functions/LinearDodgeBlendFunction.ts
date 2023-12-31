@@ -16,7 +16,7 @@ export class LinearDodgeBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader);
+		super("linear-dodge", shader);
 
 	}
 

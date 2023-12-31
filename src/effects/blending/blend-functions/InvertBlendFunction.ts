@@ -16,7 +16,7 @@ export class InvertBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader);
+		super("invert", shader);
 
 	}
 

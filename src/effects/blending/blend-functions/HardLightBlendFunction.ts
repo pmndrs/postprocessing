@@ -16,7 +16,7 @@ export class HardLightBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader);
+		super("hard-light", shader);
 
 	}
 

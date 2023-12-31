@@ -16,7 +16,7 @@ export class DarkenBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader, true);
+		super("darken", shader, true);
 
 	}
 

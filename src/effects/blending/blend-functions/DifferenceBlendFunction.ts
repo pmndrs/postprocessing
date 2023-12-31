@@ -16,7 +16,7 @@ export class DifferenceBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader, true);
+		super("difference", shader, true);
 
 	}
 

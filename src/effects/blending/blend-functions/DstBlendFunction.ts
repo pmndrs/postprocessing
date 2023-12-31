@@ -14,7 +14,7 @@ export class DstBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(null, true);
+		super("dst", null, true);
 
 	}
 

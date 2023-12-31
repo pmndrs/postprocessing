@@ -16,7 +16,7 @@ export class VividLightBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader);
+		super("vivid-light", shader);
 
 	}
 

@@ -46,10 +46,10 @@ export abstract class BlendFunction {
 	 * @param supportsHDR - Indicates whether this blend function supports HDR colors.
 	 */
 
-	constructor(shader: string | null, supportsHDR = false) {
+	constructor(name: string, shader: string | null, supportsHDR = false) {
 
 		this.id = BlendFunction.nextId++;
-		this.name = `blend${this.id}`;
+		this.name = name;
 		this.shader = shader;
 		this.supportsHDR = supportsHDR;
 

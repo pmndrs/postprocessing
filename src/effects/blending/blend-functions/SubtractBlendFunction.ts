@@ -16,7 +16,7 @@ export class SubtractBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader);
+		super("subtract", shader);
 
 	}
 

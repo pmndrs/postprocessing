@@ -16,7 +16,7 @@ export class ColorBurnBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader);
+		super("color-burn", shader);
 
 	}
 

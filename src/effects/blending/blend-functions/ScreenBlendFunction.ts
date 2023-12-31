@@ -16,7 +16,7 @@ export class ScreenBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader);
+		super("screen", shader);
 
 	}
 

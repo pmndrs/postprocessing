@@ -16,7 +16,7 @@ export class LinearBurnBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader);
+		super("linear-burn", shader);
 
 	}
 

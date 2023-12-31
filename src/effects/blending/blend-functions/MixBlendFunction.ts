@@ -16,7 +16,7 @@ export class MixBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader, true);
+		super("mix", shader, true);
 
 	}
 

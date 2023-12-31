@@ -16,7 +16,7 @@ export class LuminosityBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader);
+		super("luminosity", shader);
 
 	}
 

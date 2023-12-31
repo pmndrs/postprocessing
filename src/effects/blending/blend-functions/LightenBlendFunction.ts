@@ -16,7 +16,7 @@ export class LightenBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader, true);
+		super("lighten", shader, true);
 
 	}
 

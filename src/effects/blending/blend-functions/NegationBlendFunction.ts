@@ -16,7 +16,7 @@ export class NegationBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader);
+		super("negation", shader);
 
 	}
 

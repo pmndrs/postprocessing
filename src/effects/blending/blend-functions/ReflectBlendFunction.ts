@@ -16,7 +16,7 @@ export class ReflectBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader);
+		super("reflect", shader);
 
 	}
 

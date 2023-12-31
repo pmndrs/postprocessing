@@ -16,7 +16,7 @@ export class HueBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader);
+		super("hue", shader);
 
 	}
 

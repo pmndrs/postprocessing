@@ -16,7 +16,7 @@ export class SrcBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader, true);
+		super("src", shader, true);
 
 	}
 

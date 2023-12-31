@@ -16,7 +16,7 @@ export class SoftLightBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader);
+		super("soft-light", shader);
 
 	}
 

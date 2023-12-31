@@ -16,7 +16,7 @@ export class PinLightBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader);
+		super("pin-light", shader);
 
 	}
 

@@ -16,7 +16,7 @@ export class AlphaBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader, true);
+		super("alpha", shader, true);
 
 	}
 

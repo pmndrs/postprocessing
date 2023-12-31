@@ -16,7 +16,7 @@ export class LinearLightBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader);
+		super("linear-light", shader);
 
 	}
 

@@ -16,7 +16,7 @@ export class AddBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader, true);
+		super("add", shader, true);
 
 	}
 

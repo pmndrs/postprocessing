@@ -16,7 +16,7 @@ export class MultiplyBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader, true);
+		super("multiply", shader, true);
 
 	}
 

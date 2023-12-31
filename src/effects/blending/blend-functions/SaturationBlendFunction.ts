@@ -16,7 +16,7 @@ export class SaturationBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader);
+		super("saturation", shader);
 
 	}
 

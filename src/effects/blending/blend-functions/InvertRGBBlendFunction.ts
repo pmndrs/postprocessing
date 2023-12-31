@@ -16,7 +16,7 @@ export class InvertRGBBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader);
+		super("invert-rgb", shader);
 
 	}
 

@@ -16,7 +16,7 @@ export class ColorDodgeBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader);
+		super("color-dodge", shader);
 
 	}
 

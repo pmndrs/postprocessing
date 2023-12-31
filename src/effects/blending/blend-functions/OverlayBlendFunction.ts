@@ -16,7 +16,7 @@ export class OverlayBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader);
+		super("overlay", shader);
 
 	}
 

@@ -16,7 +16,7 @@ export class AverageBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader, true);
+		super("average", shader, true);
 
 	}
 

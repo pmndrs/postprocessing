@@ -16,7 +16,7 @@ export class DivideBlendFunction extends BlendFunction {
 
 	constructor() {
 
-		super(shader, true);
+		super("divide", shader, true);
 
 	}
 
