@@ -172,7 +172,14 @@ export class IOManager {
 			const previousPass = (j >= 0) ? pipeline.passes[j] : null;
 			const pass = pipeline.passes[i];
 
-			IOManager.assignGBufferTextures(pass, geoPass);
+			if(pass !== geoPass && geoPass !== undefined) {
+
+				IOManager.assignGBufferTextures(pass, geoPass);
+
+				pass.scene = geoPass.scene;
+				pass.camera = geoPass.camera;
+
+			}
 
 			if(previousPass === null) {
 
