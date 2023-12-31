@@ -26,6 +26,12 @@ export class BufferDebugPass extends CopyPass {
 	columns: number;
 
 	/**
+	 * @see {@link bufferFocus}
+	 */
+
+	private _bufferFocus: string | null;
+
+	/**
 	 * A list of meshes that are used to render the input textures.
 	 */
 
@@ -58,6 +64,7 @@ export class BufferDebugPass extends CopyPass {
 		this.viewSize = 0.1;
 		this.columns = 4;
 		this.views = [];
+		this._bufferFocus = null;
 		this.debugScene = new Scene();
 		this.debugCamera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
@@ -68,6 +75,32 @@ export class BufferDebugPass extends CopyPass {
 				this.input.gBuffer.add(component);
 
 			}
+
+		}
+
+	}
+
+	/**
+	 * A buffer that should be rendered in fullscreen mode.
+	 */
+
+	get bufferFocus(): string | null {
+
+		return this._bufferFocus;
+
+	}
+
+	set bufferFocus(value: string | null) {
+
+		this._bufferFocus = value;
+
+		if(value !== null && this.input.buffers.has(value)) {
+
+			this.fullscreenMaterial.inputBuffer = this.input.buffers.get(value) as Texture;
+
+		} else {
+
+			this.fullscreenMaterial.inputBuffer = this.input.defaultBuffer;
 
 		}
 

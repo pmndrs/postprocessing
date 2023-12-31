@@ -108,10 +108,13 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Settings
 
+	const gBufferOptions = Object.assign({ NONE: "NONE" }, Utils.enumToRecord(GBuffer));
+	bufferDebugPass.bufferFocus = gBufferOptions.NONE;
+
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
 	const fpsGraph = Utils.createFPSGraph(pane);
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addBinding(bufferDebugPass, "primaryBuffer", { options: Utils.enumToRecord(GBuffer) });
+	folder.addBinding(bufferDebugPass, "bufferFocus", { options: gBufferOptions });
 
 	// Resize Handler
 
