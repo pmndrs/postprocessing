@@ -28,7 +28,7 @@ import { LUTCubeLoader } from "three/addons/loaders/LUTCubeLoader.js";
 import { Pane } from "tweakpane";
 import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, createFPSGraph, toRecord } from "../utils/index.js";
+import { calculateVerticalFoV, createFPSGraph, arrayToRecord } from "../utils/index.js";
 
 const luts = new Map<string, string | null>([
 	["neutral-2", null],

@@ -4,6 +4,7 @@ import {
 	PerspectiveCamera,
 	Scene,
 	SRGBColorSpace,
+	Texture,
 	VSMShadowMap,
 	WebGLRenderer
 } from "three";
@@ -13,29 +14,26 @@ import {
 	ClearPass,
 	GBuffer,
 	GeometryPass,
-	Log,
-	LogLevel,
 	RenderPipeline
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
-import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, createFPSGraph, getSkyboxUrls } from "../utils/index.js";
 import * as CornellBox from "../objects/CornellBox.js";
+import * as Utils from "../utils/index.js";
 
-function load(): Promise<Map<string, unknown>> {
+function load(): Promise<Map<string, Texture>> {
 
-	const assets = new Map<string, unknown>();
+	const assets = new Map<string, Texture>();
 	const loadingManager = new LoadingManager();
 	const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
-	return new Promise<Map<string, unknown>>((resolve, reject) => {
+	return new Promise<Map<string, Texture>>((resolve, reject) => {
 
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		cubeTextureLoader.load(getSkyboxUrls("sunset"), (t) => {
+		cubeTextureLoader.load(Utils.getSkyboxUrls("sunset"), (t) => {
 
 			t.colorSpace = SRGBColorSpace;
 			assets.set("sky", t);
@@ -48,8 +46,6 @@ function load(): Promise<Map<string, unknown>> {
 
 window.addEventListener("load", () => void load().then((assets) => {
 
-	Log.level = LogLevel.WARN;
-
 	// Renderer
 
 	const renderer = new WebGLRenderer({
@@ -59,7 +55,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 		depth: false
 	});
 
-	renderer.debug.checkShaderErrors = (window.location.hostname === "localhost");
+	renderer.debug.checkShaderErrors = Utils.isLocalhost;
 	renderer.shadowMap.type = VSMShadowMap;
 	renderer.shadowMap.autoUpdate = false;
 	renderer.shadowMap.needsUpdate = true;
@@ -113,8 +109,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Settings
 
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
-	pane.registerPlugin(EssentialsPlugin);
-	const fpsGraph = createFPSGraph(pane);
+	const fpsGraph = Utils.createFPSGraph(pane);
+	const folder = pane.addFolder({ title: "Settings" });
+	folder.addBinding(bufferDebugPass, "primaryBuffer", { options: Utils.enumToRecord(GBuffer) });
 
 	// Resize Handler
 
@@ -122,7 +119,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		const width = container.clientWidth, height = container.clientHeight;
 		camera.aspect = width / height;
-		camera.fov = calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
+		camera.fov = Utils.calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
 		camera.updateProjectionMatrix();
 		pipeline.setSize(width, height);
 
@@ -139,6 +136,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 		controls.update(timestamp);
 		pipeline.render(timestamp);
 		fpsGraph.end();
+
 		requestAnimationFrame(render);
 
 	});

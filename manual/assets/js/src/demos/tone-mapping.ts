@@ -1,6 +1,7 @@
 import {
 	CubeTextureLoader,
 	FogExp2,
+	HalfFloatType,
 	LoadingManager,
 	PerspectiveCamera,
 	SRGBColorSpace,
@@ -10,32 +11,32 @@ import {
 } from "three";
 
 import {
-	BlendFunction,
+	ClearPass,
 	EffectPass,
 	GeometryPass,
+	MixBlendFunction,
 	RenderPipeline,
-	// ToneMappingEffect,
-	ToneMapping
+	ToneMapping,
+	ToneMappingEffect
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
-import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, createFPSGraph, getSkyboxUrls, toRecord } from "../utils/index.js";
 import * as DefaultEnvironment from "../objects/DefaultEnvironment.js";
+import * as Utils from "../utils/index.js";
 
-function load(): Promise<Map<string, unknown>> {
+function load(): Promise<Map<string, Texture>> {
 
-	const assets = new Map<string, unknown>();
+	const assets = new Map<string, Texture>();
 	const loadingManager = new LoadingManager();
 	const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
-	return new Promise<Map<string, unknown>>((resolve, reject) => {
+	return new Promise<Map<string, Texture>>((resolve, reject) => {
 
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		cubeTextureLoader.load(getSkyboxUrls("space-00"), (t) => {
+		cubeTextureLoader.load(Utils.getSkyboxUrls("space", ".jpg"), (t) => {
 
 			t.colorSpace = SRGBColorSpace;
 			assets.set("sky", t);
@@ -57,7 +58,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 		depth: false
 	});
 
-	renderer.debug.checkShaderErrors = (window.location.hostname === "localhost");
+	renderer.debug.checkShaderErrors = Utils.isLocalhost;
 	const container = document.querySelector(".viewport") as HTMLElement;
 	container.prepend(renderer.domElement);
 
@@ -69,8 +70,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 	settings.rotation.sensitivity = 2.2;
 	settings.rotation.damping = 0.05;
 	settings.translation.damping = 0.1;
-	controls.position.set(0, 0, 1);
-	controls.lookAt(0, 0, 0);
+	controls.position.set(0, 1.5, 10);
+	controls.lookAt(0, 1.35, 0);
 
 	// Scene, Lights, Objects
 
@@ -78,53 +79,28 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const skyMap = assets.get("sky") as Texture;
 	scene.background = skyMap;
 	scene.environment = skyMap;
-	scene.fog = new FogExp2(0x000000, 0.025);
+	scene.fog = new FogExp2(0x000000, 0.03);
 	scene.add(DefaultEnvironment.createEnvironment());
 
 	// Post Processing
 
-	/*
-	const effect = new ToneMappingEffect({
-		blendFunction: blendFunctions["mix"],
-		mode: ToneMapping.AGX
-	});
+	const effect = new ToneMappingEffect();
+	effect.blendMode.blendFunction = new MixBlendFunction();
 
 	const pipeline = new RenderPipeline(renderer);
 	const effectPass = new EffectPass(effect);
 	pipeline.addPass(new ClearPass());
-	pipeline.addPass(new GeometryPass(scene, camera, { samples: 4 }));
+	pipeline.addPass(new GeometryPass(scene, camera, { samples: 4, frameBufferType: HalfFloatType }));
 	pipeline.addPass(effectPass);
-	*/
 
 	// Settings
 
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
-	pane.registerPlugin(EssentialsPlugin);
-	const fpsGraph = createFPSGraph(pane);
-
-	/*
-	const lumMaterial = effect.adaptiveLuminanceMaterial;
+	const fpsGraph = Utils.createFPSGraph(pane);
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addBinding(renderer, "toneMappingExposure", { min: 0, max: 2, step: 1e-3 });
-	folder.addBinding(effect, "mode", { options: ToneMapping });
-
-	let subfolder = folder.addFolder({ title: "Reinhard2" });
-	subfolder.addBinding(effect, "whitePoint", { min: 1, max: 20, step: 1e-2 });
-	subfolder.addBinding(effect, "middleGrey", { min: 0, max: 1, step: 1e-4 });
-	subfolder.addBinding(effect, "averageLuminance", { min: 1e-4, max: 1, step: 1e-3 });
-	subfolder = subfolder.addFolder({ title: "Adaptive" });
-	subfolder.addBinding(effect, "resolution", {
-		options: toRecord([64, 128, 256, 512]),
-		label: "resolution"
-	});
-
-	subfolder.addBinding(lumMaterial, "minLuminance", { min: 0, max: 3, step: 1e-3 });
-	subfolder.addBinding(lumMaterial, "adaptationRate", { min: 0, max: 3, step: 1e-3 });
-
-	folder.addBinding(effectPass, "dithering");
-	folder.addBinding(effect.blendMode, "opacity", { min: 0, max: 1, step: 0.01 });
-	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
-	*/
+	folder.addBinding(renderer, "toneMappingExposure", { min: 0, max: 4, step: 1e-3 });
+	folder.addBinding(effect, "toneMapping", { options: Utils.enumToRecord(ToneMapping) });
+	Utils.addBlendModeBindings(folder, effect.blendMode);
 
 	// Resize Handler
 
@@ -132,9 +108,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		const width = container.clientWidth, height = container.clientHeight;
 		camera.aspect = width / height;
-		camera.fov = calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
+		camera.fov = Utils.calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
 		camera.updateProjectionMatrix();
-		// pipeline.setSize(width, height);
+		pipeline.setSize(width, height);
 
 	}
 
@@ -147,8 +123,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		fpsGraph.begin();
 		controls.update(timestamp);
-		// pipeline.render(timestamp);
+		pipeline.render(timestamp);
 		fpsGraph.end();
+
 		requestAnimationFrame(render);
 
 	});

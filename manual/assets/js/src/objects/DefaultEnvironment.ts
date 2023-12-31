@@ -1,6 +1,5 @@
 import {
-	Color,
-	DataTexture,
+	AmbientLight,
 	Group,
 	LinearFilter,
 	LinearMipMapLinearFilter,
@@ -8,10 +7,28 @@ import {
 	MeshStandardMaterial,
 	PlaneGeometry,
 	RepeatWrapping,
-	SRGBColorSpace
+	SRGBColorSpace,
+	Texture
 } from "three";
 
 import { alphaFog } from "../utils/alphaFog.js";
+import { checkerboardImageDataURL } from "./checkerboardImageDataURL.js";
+
+/**
+ * Creates lights.
+ *
+ * @return The lights.
+ */
+
+export function createLights(): Group {
+
+	const lights = new Group();
+	const ambientLight = new AmbientLight(0xffffff);
+	lights.add(ambientLight);
+
+	return lights;
+
+}
 
 /**
  * Creates the environment.
@@ -22,39 +39,25 @@ import { alphaFog } from "../utils/alphaFog.js";
 export function createEnvironment(): Group {
 
 	const planeSize = 5000;
-
-	const colors = [
-		new Color(0xffffff), new Color(0x000000),
-		new Color(0x000000), new Color(0xffffff)
-	];
-
-	const data = new Uint8Array(colors.length * 4);
-
-	for(let i = 0, j = 0, l = colors.length; i < l; ++i) {
-
-		const color = colors[i];
-		data[j++] = color.r * 255;
-		data[j++] = color.g * 255;
-		data[j++] = color.b * 255;
-		data[j++] = 255;
-
-	}
-
-	const map = new DataTexture(data, 2, 2);
+	const image = new Image();
+	const map = new Texture(image);
 	map.generateMipmaps = true;
 	map.minFilter = LinearMipMapLinearFilter;
 	map.magFilter = LinearFilter;
 	map.wrapS = RepeatWrapping;
 	map.wrapT = RepeatWrapping;
 	map.colorSpace = SRGBColorSpace;
-	map.repeat.setScalar(planeSize);
+	map.repeat.setScalar(planeSize / 2);
 	map.anisotropy = 4;
+
+	image.addEventListener("load", () => map.needsUpdate = true);
+	image.src = checkerboardImageDataURL;
 
 	const group = new Group();
 	const material = new MeshStandardMaterial({
 		transparent: true,
-		roughness: 0.01,
-		metalness: 0,
+		roughness: 0.1,
+		metalness: 1,
 		map
 	});
 
