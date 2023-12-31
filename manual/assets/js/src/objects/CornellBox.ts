@@ -107,14 +107,6 @@ export function createEnvironment(): Group {
 		})
 	);
 
-	const plane07 = new Mesh(
-		planeGeometry,
-		new MeshStandardMaterial({
-			color: 0xffffff,
-			emissive: 0xffffff
-		})
-	);
-
 	plane05.position.x = -1;
 	plane05.rotation.y = Math.PI * 0.5;
 	plane05.scale.set(2, 2, 1);
@@ -125,14 +117,10 @@ export function createEnvironment(): Group {
 	plane06.scale.set(2, 2, 1);
 	plane06.receiveShadow = true;
 
-	plane07.position.y = 1 - 1e-3;
-	plane07.rotation.x = Math.PI * 0.5;
-	plane07.scale.set(0.4, 0.4, 1);
-
 	const environment = new Group();
 	environment.add(
 		plane00, plane01, plane02, plane03,
-		plane04, plane05, plane06, plane07
+		plane04, plane05, plane06
 	);
 
 	return environment;
