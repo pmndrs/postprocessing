@@ -13,6 +13,7 @@ import {
 	WebGLRenderer
 } from "three";
 
+import { FullscreenMaterial } from "../materials/FullscreenMaterial.js";
 import { ImmutableTimer } from "../utils/ImmutableTimer.js";
 import { Log } from "../utils/Log.js";
 import { Resolution } from "../utils/Resolution.js";
@@ -21,7 +22,6 @@ import { Disposable } from "./Disposable.js";
 import { Input } from "./Input.js";
 import { Output } from "./Output.js";
 import { Renderable } from "./Renderable.js";
-import { FullscreenMaterial } from "../materials/FullscreenMaterial.js";
 
 /**
  * An abstract pass.
@@ -77,7 +77,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	// #region Backing Data
 
 	/**
-	 * @see {@link name}
+	 * @see {@link Pass.prototype.name}
 	 */
 
 	private _name: string;
@@ -371,7 +371,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		if(this.input.frameBufferPrecisionHigh) {
 
-			fullscreenMaterial.defines.FRAME_BUFFER_PRECISION_HIGH = "1";
+			fullscreenMaterial.defines.FRAME_BUFFER_PRECISION_HIGH = true;
 
 		} else {
 
@@ -392,6 +392,43 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		}
 
 		fullscreenMaterial.needsUpdate = true;
+
+	}
+
+	/**
+	 * Checks if his pass uses convolution shaders.
+	 *
+	 * Only works on passes that use `FullscreenMaterial`.
+	 *
+	 * @param recursive - Controls whether subpasses should be checked recursively.
+	 * @return True if the pass uses convolution shaders.
+	 */
+
+	isConvolutionPass(recursive: boolean): boolean {
+
+		const material = this.fullscreenMaterial;
+
+		if(material instanceof FullscreenMaterial && /texture\s*\(\s*inputBuffer/.test(material.fragmentShader)) {
+
+			return true;
+
+		}
+
+		if(recursive) {
+
+			for(const subpass of this.subpasses) {
+
+				if(subpass.isConvolutionPass(recursive)) {
+
+					return true;
+
+				}
+
+			}
+
+		}
+
+		return false;
 
 	}
 

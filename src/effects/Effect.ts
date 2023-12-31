@@ -75,7 +75,7 @@ export abstract class Effect extends Pass {
 
 	set fragmentShader(value: string | null) {
 
-		this.fragmentShader = value;
+		this._fragmentShader = value;
 		this.setChanged();
 
 	}
@@ -134,5 +134,40 @@ export abstract class Effect extends Pass {
 		this.setChanged();
 
 	}
+
+	/**
+	 * Indicates whether this effect defines a `mainImage` function in its fragment shader.
+	 */
+
+	get hasMainImageFunction(): boolean {
+
+		const regExp = /vec4\s+mainImage\s*\(.*vec4\s+\w+,.*vec2\s+\w+,.*GData\s+\w+\)/;
+		return this.fragmentShader !== null && regExp.test(this.fragmentShader);
+
+	}
+
+	/**
+	 * Indicates whether this effect defines a `mainUv` function in its fragment shader.
+	 */
+
+	get hasMainUvFunction(): boolean {
+
+		const regExp = /void\s+mainUv\s*\(.*inout\s+vec2\s+\w+\)/;
+		return this.fragmentShader !== null && regExp.test(this.fragmentShader);
+
+	}
+
+	/**
+	 * Indicates whether this effect defines a `mainSupport` function in its vertex shader.
+	 */
+
+	get hasMainSupportFunction(): boolean {
+
+		const regExp = /void\s+mainSupport\s*\(.*\)/;
+		return this.vertexShader !== null && regExp.test(this.vertexShader);
+
+	}
+
+	render(): void {}
 
 }

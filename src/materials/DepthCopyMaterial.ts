@@ -14,12 +14,6 @@ import vertexShader from "./shaders/depth-copy.vert";
 export class DepthCopyMaterial extends FullscreenMaterial {
 
 	/**
-	 * @see {@link mode}
-	 */
-
-	private _mode: DepthCopyMode;
-
-	/**
 	 * Constructs a new depth copy material.
 	 */
 
@@ -30,15 +24,13 @@ export class DepthCopyMaterial extends FullscreenMaterial {
 			fragmentShader,
 			vertexShader,
 			defines: {
-				DEPTH_COPY_MODE: "0"
+				DEPTH_COPY_MODE: DepthCopyMode.FULL
 			},
 			uniforms: {
 				depthBuffer: new Uniform(null),
 				texelPosition: new Uniform(new Vector2())
 			}
 		});
-
-		this._mode = DepthCopyMode.FULL;
 
 	}
 
@@ -74,14 +66,13 @@ export class DepthCopyMaterial extends FullscreenMaterial {
 
 	get mode(): DepthCopyMode {
 
-		return this._mode;
+		return this.defines.DEPTH_COPY_MODE as DepthCopyMode;
 
 	}
 
 	set mode(value: DepthCopyMode) {
 
-		this._mode = value;
-		this.defines.DEPTH_COPY_MODE = value.toFixed(0);
+		this.defines.DEPTH_COPY_MODE = value;
 		this.needsUpdate = true;
 
 	}

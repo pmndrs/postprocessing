@@ -20,7 +20,10 @@ export class CopyMaterial extends FullscreenMaterial {
 		super({
 			name: "CopyMaterial",
 			fragmentShader,
-			vertexShader
+			vertexShader,
+			defines: {
+				COLOR_SPACE_CONVERSION: true
+			}
 		});
 
 	}
@@ -41,7 +44,7 @@ export class CopyMaterial extends FullscreenMaterial {
 
 			if(value) {
 
-				this.defines.COLOR_SPACE_CONVERSION = "1";
+				this.defines.COLOR_SPACE_CONVERSION = true;
 
 			} else {
 

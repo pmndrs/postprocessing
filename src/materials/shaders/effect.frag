@@ -1,17 +1,19 @@
 #include <pp_precision_fragment>
+
+#include <common>
+#include <colorspace_pars_fragment>
+#include <dithering_pars_fragment>
+#include <packing>
+
 #include <pp_camera_pars_fragment>
 #include <pp_colorspace_pars_fragment>
 #include <pp_colorspace_conversion_pars_fragment>
 #include <pp_depth_precision_pars_fragment>
 #include <pp_depth_utils_pars_fragment>
 #include <pp_frame_buffer_precision_pars_fragment>
+#include <pp_input_buffer_pars_fragment>
 #include <pp_gbuffer_output_pars_fragment>
 #include <pp_resolution_pars_fragment>
-
-#include <colorspace_pars_fragment>
-#include <common>
-#include <dithering_pars_fragment>
-#include <packing>
 
 #define packFloatToRGBA(v) packDepthToRGBA(v)
 #define unpackRGBAToFloat(v) unpackRGBAToDepth(v)
@@ -23,7 +25,7 @@ uniform GBuffer gBuffer;
 uniform float time;
 in vec2 vUv;
 
-$FRAGMENT_HEAD
+$FRAGMENT_HEAD_EFFECTS
 
 void main() {
 

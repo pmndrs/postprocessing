@@ -26,15 +26,13 @@ export class SMAAWeightsMaterial extends FullscreenMaterial {
 			vertexShader,
 			defines: {
 				// Configurable settings:
-				MAX_SEARCH_STEPS_INT: "16",
-				MAX_SEARCH_STEPS_FLOAT: "16.0",
-				MAX_SEARCH_STEPS_DIAG_INT: "8",
-				MAX_SEARCH_STEPS_DIAG_FLOAT: "8.0",
-				CORNER_ROUNDING: "25",
-				CORNER_ROUNDING_NORM: "0.25",
+				MAX_SEARCH_STEPS: 16,
+				MAX_SEARCH_STEPS_DIAG: 8,
+				CORNER_ROUNDING: 25,
+				CORNER_ROUNDING_NORM: 0.25,
 				// Non-configurable settings:
-				AREATEX_MAX_DISTANCE: "16.0",
-				AREATEX_MAX_DISTANCE_DIAG: "20.0",
+				AREATEX_MAX_DISTANCE: 16,
+				AREATEX_MAX_DISTANCE_DIAG: 20,
 				AREATEX_PIXEL_SIZE: "(1.0 / vec2(160.0, 560.0))",
 				AREATEX_SUBTEX_SIZE: "(1.0 / 7.0)",
 				SEARCHTEX_SIZE: "vec2(66.0, 33.0)",
@@ -90,15 +88,14 @@ export class SMAAWeightsMaterial extends FullscreenMaterial {
 
 	get orthogonalSearchSteps(): number {
 
-		return Number(this.defines.MAX_SEARCH_STEPS_INT);
+		return this.defines.MAX_SEARCH_STEPS as number;
 
 	}
 
 	set orthogonalSearchSteps(value: number) {
 
 		const s = Math.min(Math.max(value, 0), 112);
-		this.defines.MAX_SEARCH_STEPS_INT = s.toFixed(0);
-		this.defines.MAX_SEARCH_STEPS_FLOAT = s.toFixed(1);
+		this.defines.MAX_SEARCH_STEPS = s;
 		this.needsUpdate = true;
 
 	}
@@ -113,15 +110,14 @@ export class SMAAWeightsMaterial extends FullscreenMaterial {
 
 	get diagonalSearchSteps(): number {
 
-		return Number(this.defines.MAX_SEARCH_STEPS_DIAG_INT);
+		return this.defines.MAX_SEARCH_STEPS_DIAG as number;
 
 	}
 
 	set diagonalSearchSteps(value: number) {
 
 		const s = Math.min(Math.max(value, 0), 20);
-		this.defines.MAX_SEARCH_STEPS_DIAG_INT = s.toFixed(0);
-		this.defines.MAX_SEARCH_STEPS_DIAG_FLOAT = s.toFixed(1);
+		this.defines.MAX_SEARCH_STEPS_DIAG = s;
 		this.needsUpdate = true;
 
 	}
@@ -144,7 +140,7 @@ export class SMAAWeightsMaterial extends FullscreenMaterial {
 
 		} else {
 
-			this.defines.DISABLE_DIAG_DETECTION = "1";
+			this.defines.DISABLE_DIAG_DETECTION = true;
 
 		}
 
@@ -158,15 +154,15 @@ export class SMAAWeightsMaterial extends FullscreenMaterial {
 
 	get cornerRounding(): number {
 
-		return Number(this.defines.CORNER_ROUNDING);
+		return this.defines.CORNER_ROUNDING as number;
 
 	}
 
 	set cornerRounding(value: number) {
 
 		const r = Math.min(Math.max(value, 0), 100);
-		this.defines.CORNER_ROUNDING = r.toFixed(4);
-		this.defines.CORNER_ROUNDING_NORM = (r / 100.0).toFixed(4);
+		this.defines.CORNER_ROUNDING = r;
+		this.defines.CORNER_ROUNDING_NORM = r / 100.0;
 		this.needsUpdate = true;
 
 	}
@@ -189,7 +185,7 @@ export class SMAAWeightsMaterial extends FullscreenMaterial {
 
 		} else {
 
-			this.defines.DISABLE_CORNER_DETECTION = "1";
+			this.defines.DISABLE_CORNER_DETECTION = true;
 
 		}
 

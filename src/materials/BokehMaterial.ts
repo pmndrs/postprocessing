@@ -29,7 +29,7 @@ export class BokehMaterial extends FullscreenMaterial {
 			fragmentShader,
 			vertexShader,
 			defines: {
-				PASS: fill ? "2" : "1"
+				PASS: fill ? 2 : 1
 			},
 			uniforms: {
 				cocBuffer: new Uniform(null),
@@ -41,7 +41,7 @@ export class BokehMaterial extends FullscreenMaterial {
 
 		if(foreground) {
 
-			this.defines.FOREGROUND = "1";
+			this.defines.FOREGROUND = true;
 
 		}
 

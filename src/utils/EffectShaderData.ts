@@ -1,23 +1,11 @@
-import { ColorSpace, LinearSRGBColorSpace, SRGBColorSpace, Uniform } from "three";
+import { ColorSpace, LinearSRGBColorSpace, NoColorSpace, SRGBColorSpace, Uniform } from "three";
 import { ShaderData } from "../core/ShaderData.js";
 import { Effect } from "../effects/Effect.js";
 import { BlendMode } from "../effects/blending/BlendMode.js";
 import { EffectShaderSection } from "../enums/EffectShaderSection.js";
 import { EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
 import { GData } from "../enums/GData.js";
-import { isConvolutionPass } from "../utils/functions/pass.js";
 import { prefixSubstrings } from "../utils/functions/string.js";
-
-/**
- * A collection of fragment shader information.
- */
-
-interface FragmentShaderInfo {
-
-	mainImageExists: boolean;
-	mainUvExists: boolean;
-
-}
 
 /**
  * A collection of shader data.
@@ -35,7 +23,7 @@ export class EffectShaderData implements ShaderData {
 	 * The shader parts.
 	 */
 
-	readonly shaderParts: Map<EffectShaderSection, string | null>;
+	readonly shaderParts: Map<EffectShaderSection, string>;
 
 	/**
 	 * The blend modes of the individual effects.
@@ -79,14 +67,14 @@ export class EffectShaderData implements ShaderData {
 
 	constructor() {
 
-		this.shaderParts = new Map<EffectShaderSection, string | null>([
-			[EffectShaderSection.FRAGMENT_HEAD_GBUFFER, null],
-			[EffectShaderSection.FRAGMENT_HEAD, null],
-			[EffectShaderSection.FRAGMENT_MAIN_UV, null],
-			[EffectShaderSection.FRAGMENT_MAIN_GDATA, null],
-			[EffectShaderSection.FRAGMENT_MAIN_IMAGE, null],
-			[EffectShaderSection.VERTEX_HEAD, null],
-			[EffectShaderSection.VERTEX_MAIN_SUPPORT, null]
+		this.shaderParts = new Map<EffectShaderSection, string>([
+			[EffectShaderSection.FRAGMENT_HEAD_GBUFFER, ""],
+			[EffectShaderSection.FRAGMENT_HEAD_EFFECTS, ""],
+			[EffectShaderSection.FRAGMENT_MAIN_UV, ""],
+			[EffectShaderSection.FRAGMENT_MAIN_GDATA, ""],
+			[EffectShaderSection.FRAGMENT_MAIN_IMAGE, ""],
+			[EffectShaderSection.VERTEX_HEAD, ""],
+			[EffectShaderSection.VERTEX_MAIN_SUPPORT, ""]
 		]);
 
 		this.defines = new Map<string, string | number | boolean>();
@@ -101,14 +89,13 @@ export class EffectShaderData implements ShaderData {
 	}
 
 	/**
-	* Validates the given effect.
-	*
-	* @param effect - The effect.
-	* @throws {@link Error} if the effect is invalid or cannot be merged.
-	* @return Fragment shader information.
-	*/
+	 * Validates the given effect.
+	 *
+	 * @param effect - The effect.
+	 * @throws {@link Error} if the effect is invalid or cannot be merged.
+	 */
 
-	private validateEffect(effect: Effect): FragmentShaderInfo {
+	private validateEffect(effect: Effect): void {
 
 		const fragmentShader = effect.fragmentShader;
 
@@ -118,10 +105,7 @@ export class EffectShaderData implements ShaderData {
 
 		}
 
-		const mainImageExists = (fragmentShader !== undefined && /mainImage/.test(fragmentShader));
-		const mainUvExists = (fragmentShader !== undefined && /mainUv/.test(fragmentShader));
-
-		if(isConvolutionPass(effect, true)) {
+		if(effect.isConvolutionPass(false)) {
 
 			this.convolutionEffects.add(effect);
 
@@ -132,21 +116,15 @@ export class EffectShaderData implements ShaderData {
 			const effectNames = Array.from(this.convolutionEffects).map(x => x.name).join(", ");
 			throw new Error(`Convolution effects cannot be merged (${effectNames})`);
 
-		} else if(mainUvExists && this.convolutionEffects.size > 0) {
+		} else if(effect.hasMainUvFunction && this.convolutionEffects.size > 0) {
 
 			throw new Error(`Effects that transform UVs are incompatible with convolution effects (${effect.name})`);
 
-		} else if(!mainImageExists && !mainUvExists) {
+		} else if(!effect.hasMainImageFunction && !effect.hasMainUvFunction) {
 
 			throw new Error(`Could not find a valid mainImage or mainUv function (${effect.name})`);
 
-		} else if(mainImageExists && !/GData\s+\w+/.test(fragmentShader)) {
-
-			throw new Error(`Invalid mainImage signature (${effect.name})`);
-
 		}
-
-		return { mainImageExists, mainUvExists };
 
 	}
 
@@ -160,21 +138,22 @@ export class EffectShaderData implements ShaderData {
 
 	integrateEffect(prefix: string, effect: Effect): void {
 
-		const { mainImageExists, mainUvExists } = this.validateEffect(effect);
+		this.validateEffect(effect);
+
 		let fragmentShader = effect.fragmentShader!;
 		let vertexShader = effect.vertexShader;
 
 		const shaderParts = this.shaderParts;
-		let fragmentHead = shaderParts.get(Section.FRAGMENT_HEAD) ?? "";
-		let fragmentMainUv = shaderParts.get(Section.FRAGMENT_MAIN_UV) ?? "";
-		let fragmentMainImage = shaderParts.get(Section.FRAGMENT_MAIN_IMAGE) ?? "";
-		let vertexHead = shaderParts.get(Section.VERTEX_HEAD) ?? "";
-		let vertexMainSupport = shaderParts.get(Section.VERTEX_MAIN_SUPPORT) ?? "";
+		let fragmentHead = shaderParts.get(Section.FRAGMENT_HEAD_EFFECTS) as string;
+		let fragmentMainUv = shaderParts.get(Section.FRAGMENT_MAIN_UV) as string;
+		let fragmentMainImage = shaderParts.get(Section.FRAGMENT_MAIN_IMAGE) as string;
+		let vertexHead = shaderParts.get(Section.VERTEX_HEAD) as string;
+		let vertexMainSupport = shaderParts.get(Section.VERTEX_MAIN_SUPPORT) as string;
 
 		const varyings = new Set<string>();
 		const names = new Set<string>();
 
-		if(mainUvExists) {
+		if(effect.hasMainUvFunction) {
 
 			fragmentMainUv += `\t${prefix}MainUv(UV);\n`;
 			this.uvTransformation = true;
@@ -183,7 +162,7 @@ export class EffectShaderData implements ShaderData {
 
 		const functionRegExp = /\w+\s+(\w+)\([\w\s,]*\)\s*{/g;
 
-		if(vertexShader !== null && /mainSupport/.test(vertexShader)) {
+		if(vertexShader !== null && effect.hasMainSupportFunction) {
 
 			// Build the mainSupport call (with optional uv parameter).
 			const needsUv = /mainSupport\s*\([\w\s]*?uv\s*?\)/.test(vertexShader);
@@ -196,8 +175,8 @@ export class EffectShaderData implements ShaderData {
 				// Handle unusual formatting and commas.
 				for(const n of m[1].split(/\s*,\s*/)) {
 
-					this.varyings.add(n);
-					varyings.add(n);
+					this.varyings.add(n); // Varyings of all effects combined.
+					varyings.add(n); // Varyings of this effect.
 					names.add(n);
 
 				}
@@ -251,7 +230,7 @@ export class EffectShaderData implements ShaderData {
 		const blendMode = effect.blendMode;
 		this.blendModes.set(blendMode.blendFunction.id, blendMode);
 
-		if(mainImageExists) {
+		if(effect.hasMainImageFunction) {
 
 			// Already checked param existence during effect validation.
 			const gDataParamName = fragmentShader.match(/GData\s+(\w+)/)![0];
@@ -269,7 +248,7 @@ export class EffectShaderData implements ShaderData {
 
 			}
 
-			if(effect.inputColorSpace !== null && effect.inputColorSpace !== this.colorSpace) {
+			if(effect.inputColorSpace !== NoColorSpace && effect.inputColorSpace !== this.colorSpace) {
 
 				fragmentMainImage += (effect.inputColorSpace === SRGBColorSpace) ?
 					"color0 = LinearTosRGB(color0);\n\t" :
@@ -295,7 +274,7 @@ export class EffectShaderData implements ShaderData {
 			this.uniforms.set(blendOpacity, blendMode.opacityUniform);
 
 			// Blend the result of this effect with the input color (color0 = dst, color1 = src).
-			fragmentMainImage += `color0 = ${blendMode.blendFunction.name}(color0, color1, ${blendOpacity});\n\n\t`;
+			fragmentMainImage += `color0 = blend${blendMode.blendFunction.id}(color0, color1, ${blendOpacity});\n\n\t`;
 			fragmentHead += `uniform float ${blendOpacity};\n\n`;
 
 		}
@@ -309,7 +288,7 @@ export class EffectShaderData implements ShaderData {
 
 		}
 
-		shaderParts.set(Section.FRAGMENT_HEAD, fragmentHead);
+		shaderParts.set(Section.FRAGMENT_HEAD_EFFECTS, fragmentHead);
 		shaderParts.set(Section.FRAGMENT_MAIN_UV, fragmentMainUv);
 		shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, fragmentMainImage);
 		shaderParts.set(Section.VERTEX_HEAD, vertexHead);
@@ -354,7 +333,7 @@ export class EffectShaderData implements ShaderData {
 
 		}
 
-		s += "}\n";
+		s += "};\n";
 
 		return s;
 
@@ -407,7 +386,7 @@ export class EffectShaderData implements ShaderData {
 
 		}
 
-		s += "}\n";
+		s += "};\n";
 
 		return s;
 
@@ -422,47 +401,47 @@ export class EffectShaderData implements ShaderData {
 	createGDataSetup(): string {
 
 		const gData = this.gData;
-		let s = "GData gData;";
+		let s = "GData gData;\n";
 
 		if(gData.has(GData.COLOR)) {
 
-			s += "gData.color = texture(gBuffer.color, UV);\n";
+			s += "\tgData.color = texture(gBuffer.color, UV);\n";
 
 		}
 
 		if(gData.has(GData.DEPTH)) {
 
-			s += "gData.depth = texture(gBuffer.depth, UV).r;\n";
+			s += "\tgData.depth = texture(gBuffer.depth, UV).r;\n";
 
 		}
 
 		if(gData.has(GData.NORMAL)) {
 
-			s += "gData.normal = texture(gBuffer.normal, UV).xyz;\n";
+			s += "\tgData.normal = texture(gBuffer.normal, UV).xyz;\n";
 
 		}
 
 		if(gData.has(GData.ROUGHNESS) || gData.has(GData.METALNESS)) {
 
-			s += "vec2 roughnessMetalness = texture(gBuffer.roughnessMetalness, UV).rg;\n";
+			s += "\tvec2 roughnessMetalness = texture(gBuffer.roughnessMetalness, UV).rg;\n";
 
 		}
 
 		if(gData.has(GData.ROUGHNESS)) {
 
-			s += "gData.roughness = roughnessMetalness.r;\n";
+			s += "\tgData.roughness = roughnessMetalness.r;\n";
 
 		}
 
 		if(gData.has(GData.METALNESS)) {
 
-			s += "gData.metalness = roughnessMetalness.g;\n";
+			s += "\tgData.metalness = roughnessMetalness.g;\n";
 
 		}
 
 		if(gData.has(GData.LUMINANCE)) {
 
-			s += "gData.luminance = luminance(gData.color.rgb);\n";
+			s += "\tgData.luminance = luminance(gData.color.rgb);\n";
 
 		}
 
@@ -484,7 +463,8 @@ export class EffectShaderData implements ShaderData {
 		for(const blendMode of this.blendModes.values()) {
 
 			const blendFunctionShader = blendMode.blendFunction.shader!;
-			s += blendFunctionShader.replace(blendRegExp, blendMode.blendFunction.name) + "\n";
+			const blendFunctionName = `blend${blendMode.blendFunction.id}`;
+			s += blendFunctionShader.replace(blendRegExp, blendFunctionName) + "\n";
 
 		}
 

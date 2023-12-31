@@ -89,11 +89,11 @@ export abstract class FullscreenMaterial extends RawShaderMaterial implements Re
 				switch(renderer.outputColorSpace) {
 
 					case SRGBColorSpace:
-						shader.defines.OUTPUT_COLOR_SPACE = "1";
+						shader.defines.OUTPUT_COLOR_SPACE = 1;
 						break;
 
 					case LinearSRGBColorSpace:
-						shader.defines.OUTPUT_COLOR_SPACE = "0";
+						shader.defines.OUTPUT_COLOR_SPACE = 0;
 						break;
 
 					default:
@@ -107,7 +107,7 @@ export abstract class FullscreenMaterial extends RawShaderMaterial implements Re
 
 			} else {
 
-				shader.defines.OUTPUT_COLOR_SPACE = "0";
+				shader.defines.OUTPUT_COLOR_SPACE = 0;
 
 			}
 
@@ -150,7 +150,7 @@ export abstract class FullscreenMaterial extends RawShaderMaterial implements Re
 
 			if(value) {
 
-				this.defines.FRAME_BUFFER_PRECISION_HIGH = "1";
+				this.defines.FRAME_BUFFER_PRECISION_HIGH = true;
 
 			} else {
 
@@ -167,7 +167,7 @@ export abstract class FullscreenMaterial extends RawShaderMaterial implements Re
 	/**
 	 * The input buffer.
 	 *
-	 * If this buffer uses high precision, the macro `FRAMEBUFFER_PRECISION_HIGH` will be defined.
+	 * If this buffer uses high precision, the macro `FRAME_BUFFER_PRECISION_HIGH` will be defined.
 	 */
 
 	get inputBuffer(): Texture | null {
@@ -222,8 +222,7 @@ export abstract class FullscreenMaterial extends RawShaderMaterial implements Re
 
 		if(camera instanceof PerspectiveCamera) {
 
-			this.defines.PERSPECTIVE_CAMERA = "1";
-			cameraParams.z = camera.aspect;
+			this.defines.PERSPECTIVE_CAMERA = true;
 
 		} else {
 
@@ -246,6 +245,9 @@ export abstract class FullscreenMaterial extends RawShaderMaterial implements Re
 
 		const resolution = this.uniforms.resolution.value as Vector4;
 		resolution.set(width, height, 1.0 / width, 1.0 / height);
+
+		const cameraParams = this.uniforms.cameraParams.value as Vector3;
+		cameraParams.z = width / height;
 
 	}
 

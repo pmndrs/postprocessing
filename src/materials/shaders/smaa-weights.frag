@@ -71,9 +71,9 @@ vec2 searchDiag1(const in vec2 texCoord, const in vec2 dir, out vec2 e) {
 	vec4 coord = vec4(texCoord, -1.0, 1.0);
 	vec3 t = vec3(resolution.zw, 1.0);
 
-	for(int i = 0; i < MAX_SEARCH_STEPS_INT; ++i) {
+	for(int i = 0; i < MAX_SEARCH_STEPS; ++i) {
 
-		if(!(coord.z < float(MAX_SEARCH_STEPS_DIAG_INT - 1) && coord.w > 0.9)) {
+		if(!(coord.z < float(MAX_SEARCH_STEPS_DIAG - 1) && coord.w > 0.9)) {
 
 			break;
 
@@ -95,9 +95,9 @@ vec2 searchDiag2(const in vec2 texCoord, const in vec2 dir, out vec2 e) {
 	coord.x += 0.25 * resolution.z; // See @SearchDiag2Optimization
 	vec3 t = vec3(resolution.zw, 1.0);
 
-	for(int i = 0; i < MAX_SEARCH_STEPS_INT; ++i) {
+	for(int i = 0; i < MAX_SEARCH_STEPS; ++i) {
 
-		if(!(coord.z < float(MAX_SEARCH_STEPS_DIAG_INT - 1) && coord.w > 0.9)) {
+		if(!(coord.z < float(MAX_SEARCH_STEPS_DIAG - 1) && coord.w > 0.9)) {
 
 			break;
 
@@ -271,7 +271,7 @@ float searchXLeft(in vec2 texCoord, const in float end) {
 
 	vec2 e = vec2(0.0, 1.0);
 
-	for(int i = 0; i < MAX_SEARCH_STEPS_INT; ++i) {
+	for(int i = 0; i < MAX_SEARCH_STEPS; ++i) {
 
 		if(!(texCoord.x > end && e.g > 0.8281 && e.r == 0.0)) {
 
@@ -304,7 +304,7 @@ float searchXRight(vec2 texCoord, const in float end) {
 
 	vec2 e = vec2(0.0, 1.0);
 
-	for(int i = 0; i < MAX_SEARCH_STEPS_INT; ++i) {
+	for(int i = 0; i < MAX_SEARCH_STEPS; ++i) {
 
 		if(!(texCoord.x < end && e.g > 0.8281 && e.r == 0.0)) {
 
@@ -331,7 +331,7 @@ float searchYUp(vec2 texCoord, const in float end) {
 
 	vec2 e = vec2(1.0, 0.0);
 
-	for(int i = 0; i < MAX_SEARCH_STEPS_INT; ++i) {
+	for(int i = 0; i < MAX_SEARCH_STEPS; ++i) {
 
 		if(!(texCoord.y > end && e.r > 0.8281 && e.g == 0.0)) {
 
@@ -354,7 +354,7 @@ float searchYDown(vec2 texCoord, const in float end) {
 
 	vec2 e = vec2(1.0, 0.0);
 
-	for(int i = 0; i < MAX_SEARCH_STEPS_INT; i++) {
+	for(int i = 0; i < MAX_SEARCH_STEPS; i++) {
 
 		if(!(texCoord.y < end && e.r > 0.8281 && e.g == 0.0)) {
 

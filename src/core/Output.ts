@@ -8,7 +8,6 @@ import { ShaderData } from "./ShaderData.js";
  *
  * Listen for events of type {@link EVENT_CHANGE} to react to resource updates.
  *
- * @see BufferManager
  * @group Core
  */
 

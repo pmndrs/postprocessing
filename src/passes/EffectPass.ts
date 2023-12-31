@@ -13,6 +13,7 @@ import {
 import { Pass } from "../core/Pass.js";
 import { Effect } from "../effects/Effect.js";
 import { EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
+import { GBuffer } from "../enums/GBuffer.js";
 import { EffectMaterial } from "../materials/EffectMaterial.js";
 import { EffectShaderData } from "../utils/EffectShaderData.js";
 import { Log } from "../utils/Log.js";
@@ -27,6 +28,18 @@ import { Resolution } from "../utils/Resolution.js";
  */
 
 export class EffectPass extends Pass<EffectMaterial> implements EventListenerObject {
+
+	/**
+	 * A collection that maps GBuffer components to GBuffer struct field names.
+	 */
+
+	private static gBufferStructFields = /* @__PURE__ */ new Map([
+		[GBuffer.COLOR, "color"],
+		[GBuffer.DEPTH, "depth"],
+		[GBuffer.NORMAL, "normal"],
+		[GBuffer.ROUGHNESS, "roughnessMetalness"],
+		[GBuffer.METALNESS, "roughnessMetalness"]
+	]);
 
 	/**
 	 * An event listener that forwards events to {@link handleEvent}.
@@ -131,8 +144,21 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 	set dithering(value: boolean) {
 
 		const material = this.fullscreenMaterial;
-		material.dithering = value;
-		material.needsUpdate = true;
+
+		if(material.dithering !== value) {
+
+			if(value && this.fullscreenMaterial.outputPrecision !== "lowp") {
+
+				Log.info("Dithering only works on low precision colors");
+
+			} else {
+
+				material.dithering = value;
+				material.needsUpdate = true;
+
+			}
+
+		}
 
 	}
 
@@ -167,8 +193,8 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 		data.shaderParts.set(Section.FRAGMENT_HEAD_GDATA, data.createGDataStruct());
 		data.shaderParts.set(Section.FRAGMENT_MAIN_GDATA, data.createGDataSetup());
 
-		const fragmentHead = data.shaderParts.get(Section.FRAGMENT_HEAD) as string;
-		data.shaderParts.set(Section.FRAGMENT_HEAD, fragmentHead + data.createBlendFunctions());
+		const fragmentHead = data.shaderParts.get(Section.FRAGMENT_HEAD_EFFECTS) as string;
+		data.shaderParts.set(Section.FRAGMENT_HEAD_EFFECTS, fragmentHead + data.createBlendFunctions());
 
 		if(data.colorSpace === SRGBColorSpace) {
 
@@ -192,7 +218,7 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 		}
 
 		// Ensure that leading preprocessor directives start on a new line.
-		data.shaderParts.forEach((v, k, map) => map.set(k, v !== null ? v.trim().replace(/^#/, "\n#") : null));
+		data.shaderParts.forEach((v, k, map) => map.set(k, v.trim().replace(/^#/, "\n#")));
 
 		this.fullscreenMaterial
 			.setShaderParts(data.shaderParts)
@@ -214,6 +240,8 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 		} catch(e) {
 
 			Log.error(e);
+			Log.info("Disabling pass:", this);
+			this.enabled = false;
 
 		}
 
@@ -237,12 +265,14 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 
 		for(const component of this.input.gBuffer) {
 
-			entries.push([component, this.input.buffers.get(component) || null]);
+			entries.push([
+				EffectPass.gBufferStructFields.get(component) as string,
+				this.input.buffers.get(component) || null
+			]);
 
 		}
 
 		this.fullscreenMaterial.gBuffer = Object.fromEntries(entries);
-		console.log(this.fullscreenMaterial.gBuffer);
 
 	}
 

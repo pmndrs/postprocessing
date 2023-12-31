@@ -10,7 +10,6 @@ import { ShaderData } from "./ShaderData.js";
  *
  * Listen for events of type {@link EVENT_CHANGE} to react to resource updates.
  *
- * @see BufferManager
  * @group Core
  */
 
@@ -49,7 +48,7 @@ export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
 	 *
 	 * Entries specified in {@link gBuffer} will be added automatically.
 	 *
-	 * @see EVENT_CHANGE
+	 * @see {@link EVENT_CHANGE}
 	 */
 
 	readonly textures: Map<string | GBuffer, Texture | null>;

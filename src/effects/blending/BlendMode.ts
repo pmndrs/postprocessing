@@ -3,6 +3,8 @@ import { BlendFunction } from "./BlendFunction.js";
 
 /**
  * BlendMode events.
+ *
+ * @group Blending
  */
 
 export interface BlendModeEventMap {
@@ -18,6 +20,14 @@ export interface BlendModeEventMap {
  */
 
 export class BlendMode extends EventDispatcher<BlendModeEventMap> {
+
+	/**
+	 * Triggers when the blend function is changed.
+	 *
+	 * @event
+	 */
+
+	static readonly EVENT_CHANGE = "change";
 
 	/**
 	 * @see {@link blendFunction}
@@ -80,7 +90,7 @@ export class BlendMode extends EventDispatcher<BlendModeEventMap> {
 	set blendFunction(value) {
 
 		this._blendFunction = value;
-		this.dispatchEvent({ type: "change" });
+		this.dispatchEvent({ type: BlendMode.EVENT_CHANGE });
 
 	}
 

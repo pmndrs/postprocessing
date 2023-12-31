@@ -52,7 +52,7 @@ export class DepthDownsamplingMaterial extends FullscreenMaterial {
 
 		if(value !== null) {
 
-			this.defines.DOWNSAMPLE_NORMALS = "1";
+			this.defines.DOWNSAMPLE_NORMALS = true;
 
 		} else {
 

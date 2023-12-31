@@ -350,8 +350,8 @@ export class GeometryPass extends Pass implements Selective {
 		const textureCount = Array.from(gBufferComponents).filter((x) => !exclusions.has(x)).length;
 
 		const renderTarget = new WebGLMultipleRenderTargets(1, 1, textureCount, {
-			stencilBuffer: this.stencil && !useDepthTexture,
-			depthBuffer: useDepthTexture, // TODO Ask in three if this is intentional
+			stencilBuffer: this.stencil,
+			depthBuffer: useDepthTexture,
 			samples: this.samples
 		});
 
@@ -407,6 +407,7 @@ export class GeometryPass extends Pass implements Selective {
 
 		this.copyPass.output.defaultBuffer = renderTarget;
 		this.output.defaultBuffer = renderTarget;
+		this.onResolutionChange(this.resolution);
 		this.updateOutputBufferColorSpace();
 
 	}

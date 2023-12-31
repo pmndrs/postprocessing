@@ -51,7 +51,7 @@ export class LuminanceMaterial extends FullscreenMaterial {
 
 		if(this.smoothing > 0 || value > 0) {
 
-			this.defines.THRESHOLD = "1";
+			this.defines.THRESHOLD = true;
 
 		} else {
 
@@ -77,7 +77,7 @@ export class LuminanceMaterial extends FullscreenMaterial {
 
 		if(this.threshold > 0 || value > 0) {
 
-			this.defines.THRESHOLD = "1";
+			this.defines.THRESHOLD = true;
 
 		} else {
 
@@ -103,7 +103,7 @@ export class LuminanceMaterial extends FullscreenMaterial {
 
 		if(value) {
 
-			this.defines.COLOR = "1";
+			this.defines.COLOR = true;
 
 		} else {
 

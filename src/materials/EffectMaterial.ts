@@ -1,5 +1,6 @@
 import { Texture, Uniform } from "three";
-import { EffectShaderSection, EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
+import { EffectShaderSection } from "../enums/EffectShaderSection.js";
+import { EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
 import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentTemplate from "./shaders/effect.frag";
@@ -21,6 +22,9 @@ export class EffectMaterial extends FullscreenMaterial {
 
 		super({
 			name: "EffectMaterial",
+			defines: {
+				COLOR_SPACE_CONVERSION: true
+			},
 			uniforms: {
 				gBuffer: new Uniform(null),
 				time: new Uniform(0.0)
@@ -61,7 +65,7 @@ export class EffectMaterial extends FullscreenMaterial {
 
 			if(value) {
 
-				this.defines.COLOR_SPACE_CONVERSION = "1";
+				this.defines.COLOR_SPACE_CONVERSION = true;
 
 			} else {
 
@@ -101,15 +105,16 @@ export class EffectMaterial extends FullscreenMaterial {
 	setShaderParts(shaderParts: Map<EffectShaderSection, string | null>): this {
 
 		this.fragmentShader = fragmentTemplate
-			.replace(Section.FRAGMENT_MAIN_IMAGE, shaderParts.get(Section.FRAGMENT_MAIN_IMAGE) ?? "")
-			.replace(Section.FRAGMENT_MAIN_GDATA, shaderParts.get(Section.FRAGMENT_MAIN_GDATA) ?? "")
-			.replace(Section.FRAGMENT_MAIN_UV, shaderParts.get(Section.FRAGMENT_MAIN_UV) ?? "")
-			.replace(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) ?? "")
-			.replace(Section.FRAGMENT_HEAD_GBUFFER, shaderParts.get(Section.FRAGMENT_HEAD_GBUFFER) ?? "");
+			.replace(Section.FRAGMENT_MAIN_IMAGE, shaderParts.get(Section.FRAGMENT_MAIN_IMAGE)!)
+			.replace(Section.FRAGMENT_MAIN_GDATA, shaderParts.get(Section.FRAGMENT_MAIN_GDATA)!)
+			.replace(Section.FRAGMENT_MAIN_UV, shaderParts.get(Section.FRAGMENT_MAIN_UV)!)
+			.replace(Section.FRAGMENT_HEAD_EFFECTS, shaderParts.get(Section.FRAGMENT_HEAD_EFFECTS)!)
+			.replace(Section.FRAGMENT_HEAD_GBUFFER, shaderParts.get(Section.FRAGMENT_HEAD_GBUFFER)!)
+			.replace(Section.FRAGMENT_HEAD_GDATA, shaderParts.get(Section.FRAGMENT_HEAD_GDATA)!);
 
 		this.vertexShader = vertexTemplate
-			.replace(Section.VERTEX_MAIN_SUPPORT, shaderParts.get(Section.VERTEX_MAIN_SUPPORT) ?? "")
-			.replace(Section.VERTEX_HEAD, shaderParts.get(Section.VERTEX_HEAD) ?? "");
+			.replace(Section.VERTEX_MAIN_SUPPORT, shaderParts.get(Section.VERTEX_MAIN_SUPPORT)!)
+			.replace(Section.VERTEX_HEAD, shaderParts.get(Section.VERTEX_HEAD)!);
 
 		this.needsUpdate = true;
 		return this;
@@ -151,6 +156,7 @@ export class EffectMaterial extends FullscreenMaterial {
 
 		}
 
+		this.needsUpdate = true;
 		return this;
 
 	}

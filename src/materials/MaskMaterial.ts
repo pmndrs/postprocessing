@@ -26,14 +26,15 @@ export class MaskMaterial extends FullscreenMaterial {
 			name: "MaskMaterial",
 			fragmentShader,
 			vertexShader,
+			defines: {
+				COLOR_CHANNEL: ColorChannel.RED,
+				MASK_FUNCTION: MaskFunction.DISCARD
+			},
 			uniforms: {
 				maskTexture: new Uniform(maskTexture),
 				strength: new Uniform(1.0)
 			}
 		});
-
-		this.colorChannel = ColorChannel.RED;
-		this.maskFunction = MaskFunction.DISCARD;
 
 	}
 
@@ -48,7 +49,7 @@ export class MaskMaterial extends FullscreenMaterial {
 
 		if(value?.type !== UnsignedByteType) {
 
-			this.defines.MASK_PRECISION_HIGH = "1";
+			this.defines.MASK_PRECISION_HIGH = true;
 
 		}
 
@@ -57,12 +58,18 @@ export class MaskMaterial extends FullscreenMaterial {
 	}
 
 	/**
-	 * Sets the color channel to use for masking. Default is `ColorChannel.RED`.
+	 * The color channel to use for masking. Default is `ColorChannel.RED`.
 	 */
+
+	get colorChannel(): ColorChannel {
+
+		return this.defines.COLOR_CHANNEL as ColorChannel;
+
+	}
 
 	set colorChannel(value: ColorChannel) {
 
-		this.defines.COLOR_CHANNEL = value.toFixed(0);
+		this.defines.COLOR_CHANNEL = value;
 		this.needsUpdate = true;
 
 	}
@@ -71,9 +78,15 @@ export class MaskMaterial extends FullscreenMaterial {
 	 * The masking technique. Default is `MaskFunction.DISCARD`.
 	 */
 
+	get maskFunction(): MaskFunction {
+
+		return this.defines.MASK_FUNCTION as MaskFunction;
+
+	}
+
 	set maskFunction(value: MaskFunction) {
 
-		this.defines.MASK_FUNCTION = value.toFixed(0);
+		this.defines.MASK_FUNCTION = value;
 		this.needsUpdate = true;
 
 	}
@@ -96,7 +109,7 @@ export class MaskMaterial extends FullscreenMaterial {
 
 		} else if(value) {
 
-			this.defines.INVERTED = "1";
+			this.defines.INVERTED = true;
 
 		}
 

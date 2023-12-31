@@ -25,22 +25,20 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 			fragmentShader,
 			vertexShader,
 			defines: {
-				LOCAL_CONTRAST_ADAPTATION_FACTOR: "2.0",
-				EDGE_THRESHOLD: "0.1",
-				DEPTH_THRESHOLD: "0.01",
-				PREDICATION_MODE: "0",
-				PREDICATION_THRESHOLD: "0.01",
-				PREDICATION_SCALE: "2.0",
-				PREDICATION_STRENGTH: "1.0",
-				DEPTH_PACKING: "0"
+				LOCAL_CONTRAST_ADAPTATION_FACTOR: 2,
+				EDGE_DETECTION_MODE: EdgeDetectionMode.COLOR,
+				EDGE_THRESHOLD: 0.1,
+				DEPTH_THRESHOLD: 0.01,
+				PREDICATION_MODE: PredicationMode.DISABLED,
+				PREDICATION_THRESHOLD: 0.01,
+				PREDICATION_SCALE: 2,
+				PREDICATION_STRENGTH: 1
 			},
 			uniforms: {
 				depthBuffer: new Uniform(null),
 				predicationBuffer: new Uniform(null)
 			}
 		});
-
-		this.edgeDetectionMode = EdgeDetectionMode.COLOR;
 
 	}
 
@@ -60,13 +58,13 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 
 	get edgeDetectionMode(): EdgeDetectionMode {
 
-		return Number(this.defines.EDGE_DETECTION_MODE);
+		return this.defines.EDGE_DETECTION_MODE as EdgeDetectionMode;
 
 	}
 
 	set edgeDetectionMode(value: EdgeDetectionMode) {
 
-		this.defines.EDGE_DETECTION_MODE = value.toFixed(0);
+		this.defines.EDGE_DETECTION_MODE = value;
 		this.needsUpdate = true;
 
 	}
@@ -82,13 +80,13 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 
 	get localContrastAdaptationFactor(): number {
 
-		return Number(this.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR);
+		return this.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR as number;
 
 	}
 
 	set localContrastAdaptationFactor(value: number) {
 
-		this.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR = value.toFixed(6);
+		this.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR = value;
 		this.needsUpdate = true;
 
 	}
@@ -106,14 +104,14 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 
 	get edgeDetectionThreshold(): number {
 
-		return Number(this.defines.EDGE_THRESHOLD);
+		return this.defines.EDGE_THRESHOLD as number;
 
 	}
 
 	set edgeDetectionThreshold(value: number) {
 
-		this.defines.EDGE_THRESHOLD = value.toFixed(6);
-		this.defines.DEPTH_THRESHOLD = (value * 0.1).toFixed(6);
+		this.defines.EDGE_THRESHOLD = value;
+		this.defines.DEPTH_THRESHOLD = value * 0.1;
 		this.needsUpdate = true;
 
 	}
@@ -127,13 +125,13 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 
 	get predicationMode(): PredicationMode {
 
-		return Number(this.defines.PREDICATION_MODE);
+		return this.defines.PREDICATION_MODE as PredicationMode;
 
 	}
 
 	set predicationMode(value: PredicationMode) {
 
-		this.defines.PREDICATION_MODE = value.toFixed(0);
+		this.defines.PREDICATION_MODE = value;
 		this.needsUpdate = true;
 
 	}
@@ -154,7 +152,7 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 
 			if(value) {
 
-				this.defines.PREDICATIONBUFFER_PRECISION_HIGH = "1";
+				this.defines.PREDICATIONBUFFER_PRECISION_HIGH = true;
 
 			} else {
 
@@ -189,13 +187,13 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 
 	get predicationThreshold(): number {
 
-		return Number(this.defines.PREDICATION_THRESHOLD);
+		return this.defines.PREDICATION_THRESHOLD as number;
 
 	}
 
 	set predicationThreshold(value: number) {
 
-		this.defines.PREDICATION_THRESHOLD = value.toFixed(6);
+		this.defines.PREDICATION_THRESHOLD = value;
 		this.needsUpdate = true;
 
 	}
@@ -208,13 +206,13 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 
 	get predicationScale(): number {
 
-		return Number(this.defines.PREDICATION_SCALE);
+		return this.defines.PREDICATION_SCALE as number;
 
 	}
 
 	set predicationScale(value: number) {
 
-		this.defines.PREDICATION_SCALE = value.toFixed(6);
+		this.defines.PREDICATION_SCALE = value;
 		this.needsUpdate = true;
 
 	}
@@ -227,13 +225,13 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 
 	get predicationStrength(): number {
 
-		return Number(this.defines.PREDICATION_STRENGTH);
+		return this.defines.PREDICATION_STRENGTH as number;
 
 	}
 
 	set predicationStrength(value: number) {
 
-		this.defines.PREDICATION_STRENGTH = value.toFixed(6);
+		this.defines.PREDICATION_STRENGTH = value;
 		this.needsUpdate = true;
 
 	}

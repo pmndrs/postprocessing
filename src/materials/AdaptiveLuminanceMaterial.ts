@@ -23,7 +23,7 @@ export class AdaptiveLuminanceMaterial extends FullscreenMaterial {
 			fragmentShader,
 			vertexShader,
 			defines: {
-				MIP_LEVEL_1X1: "0.0"
+				MIP_LEVEL_1X1: 0.0
 			},
 			uniforms: {
 				luminanceBuffer0: new Uniform(null),
@@ -67,7 +67,7 @@ export class AdaptiveLuminanceMaterial extends FullscreenMaterial {
 
 	set mipLevel1x1(value: number) {
 
-		this.defines.MIP_LEVEL_1X1 = value.toFixed(1);
+		this.defines.MIP_LEVEL_1X1 = value;
 		this.needsUpdate = true;
 
 	}

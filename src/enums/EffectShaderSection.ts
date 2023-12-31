@@ -10,7 +10,7 @@ export enum EffectShaderSection {
 	 * A placeholder for function and variable declarations in the fragment shader.
 	 */
 
-	FRAGMENT_HEAD = "$FRAGMENT_HEAD",
+	FRAGMENT_HEAD_EFFECTS = "$FRAGMENT_HEAD_EFFECTS",
 
 	/**
 	 * A placeholder for GBuffer declarations in the fragment shader.

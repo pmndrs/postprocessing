@@ -48,7 +48,7 @@ export class BoxBlurMaterial extends FullscreenMaterial {
 			fragmentShader,
 			vertexShader,
 			defines: {
-				DISTANCE_THRESHOLD: "0.1"
+				DISTANCE_THRESHOLD: 0.1
 			},
 			uniforms: {
 				depthBuffer: new Uniform(null),
@@ -71,7 +71,7 @@ export class BoxBlurMaterial extends FullscreenMaterial {
 
 	set maxVaryingVectors(value: number) {
 
-		this.defines.MAX_VARYING_VECTORS = value.toFixed(0);
+		this.defines.MAX_VARYING_VECTORS = value;
 
 	}
 
@@ -85,7 +85,7 @@ export class BoxBlurMaterial extends FullscreenMaterial {
 
 	get kernelSize(): number {
 
-		return Number(this.defines.KERNEL_SIZE);
+		return this.defines.KERNEL_SIZE as number;
 
 	}
 
@@ -97,11 +97,11 @@ export class BoxBlurMaterial extends FullscreenMaterial {
 
 		}
 
-		this.defines.KERNEL_SIZE = value.toFixed(0);
-		this.defines.KERNEL_SIZE_HALF = Math.floor(value / 2).toFixed(0);
-		this.defines.KERNEL_SIZE_SQ = (value ** 2).toFixed(0);
-		this.defines.KERNEL_SIZE_SQ_HALF = Math.floor(value ** 2 / 2).toFixed(0);
-		this.defines.INV_KERNEL_SIZE_SQ = (1 / value ** 2).toFixed(6);
+		this.defines.KERNEL_SIZE = value;
+		this.defines.KERNEL_SIZE_HALF = Math.floor(value / 2);
+		this.defines.KERNEL_SIZE_SQ = (value ** 2);
+		this.defines.KERNEL_SIZE_SQ_HALF = Math.floor(value ** 2 / 2);
+		this.defines.INV_KERNEL_SIZE_SQ = (1 / value ** 2);
 		this.needsUpdate = true;
 
 	}
@@ -142,7 +142,7 @@ export class BoxBlurMaterial extends FullscreenMaterial {
 
 		if(value !== null) {
 
-			this.defines.NORMAL_DEPTH = "1";
+			this.defines.NORMAL_DEPTH = true;
 
 		} else {
 
@@ -168,7 +168,7 @@ export class BoxBlurMaterial extends FullscreenMaterial {
 
 		if(value !== null) {
 
-			this.defines.BILATERAL = "1";
+			this.defines.BILATERAL = true;
 
 		} else {
 
@@ -186,14 +186,14 @@ export class BoxBlurMaterial extends FullscreenMaterial {
 
 	get worldDistanceThreshold(): number {
 
-		return -orthographicDepthToViewZ(Number(this.defines.DISTANCE_THRESHOLD), this.near, this.far);
+		return -orthographicDepthToViewZ(this.defines.DISTANCE_THRESHOLD as number, this.near, this.far);
 
 	}
 
 	set worldDistanceThreshold(value: number) {
 
 		const threshold = viewZToOrthographicDepth(-value, this.near, this.far);
-		this.defines.DISTANCE_THRESHOLD = threshold.toFixed(12);
+		this.defines.DISTANCE_THRESHOLD = threshold;
 		this.needsUpdate = true;
 
 	}

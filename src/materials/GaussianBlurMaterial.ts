@@ -49,6 +49,9 @@ export class GaussianBlurMaterial extends FullscreenMaterial {
 			name: "GaussianBlurMaterial",
 			fragmentShader,
 			vertexShader,
+			defines: {
+				STEPS: 0
+			},
 			uniforms: {
 				direction: new Uniform(new Vector2()),
 				kernel: new Uniform(null),
@@ -126,7 +129,7 @@ export class GaussianBlurMaterial extends FullscreenMaterial {
 		}
 
 		this.uniforms.kernel.value = kernelData;
-		this.defines.STEPS = steps.toFixed(0);
+		this.defines.STEPS = steps;
 		this.needsUpdate = true;
 
 	}

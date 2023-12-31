@@ -3,6 +3,7 @@ import { ShaderChunk } from "three";
 // Shader chunks for postprocessing shaders.
 import cameraParsFragment from "./shaders/camera-pars.frag";
 import colorspaceParsFragment from "./shaders/colorspace-pars.frag";
+import colorspaceConversionParsFragment from "./shaders/colorspace-conversion-pars.frag";
 import defaultOutputParsFragment from "./shaders/default-output-pars.frag";
 import depthBufferParsFragment from "./shaders/depth-buffer-pars.frag";
 import depthPrecisionParsFragment from "./shaders/depth-precision-pars.frag";
@@ -43,6 +44,7 @@ export class ShaderChunkExtensions {
 			"pp_extensions": { value: null }, // Serves as a registration indicator.
 			"pp_camera_pars_fragment": { value: cameraParsFragment },
 			"pp_colorspace_pars_fragment": { value: colorspaceParsFragment },
+			"pp_colorspace_conversion_pars_fragment": { value: colorspaceConversionParsFragment },
 			"pp_default_output_pars_fragment": { value: defaultOutputParsFragment },
 			"pp_depth_buffer_pars_fragment": { value: depthBufferParsFragment },
 			"pp_depth_precision_pars_fragment": { value: depthPrecisionParsFragment },

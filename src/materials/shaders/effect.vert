@@ -2,6 +2,8 @@
 #include <pp_resolution_pars_fragment>
 
 uniform float time;
+
+in vec3 position;
 out vec2 vUv;
 
 $VERTEX_HEAD

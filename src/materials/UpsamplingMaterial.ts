@@ -35,6 +35,8 @@ export class UpsamplingMaterial extends FullscreenMaterial {
 
 	/**
 	 * A support buffer.
+	 *
+	 * Assumed to use the same texture type as the main input buffer.
 	 */
 
 	set supportBuffer(value: Texture | null) {
