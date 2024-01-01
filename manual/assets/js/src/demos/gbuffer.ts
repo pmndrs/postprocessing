@@ -1,5 +1,6 @@
 import {
 	CubeTextureLoader,
+	HalfFloatType,
 	LoadingManager,
 	PerspectiveCamera,
 	Scene,
@@ -12,9 +13,11 @@ import {
 import {
 	BufferDebugPass,
 	ClearPass,
+	EffectPass,
 	GBuffer,
 	GeometryPass,
-	RenderPipeline
+	RenderPipeline,
+	ToneMappingEffect
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
@@ -81,15 +84,18 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const scene = new Scene();
 	//scene.background = assets.get("sky") as Texture;
-
 	scene.add(CornellBox.createLights());
 	scene.add(CornellBox.createEnvironment());
 	scene.add(CornellBox.createActors());
 
 	// Post Processing
 
-	const clearPass = new ClearPass();
-	const geoPass = new GeometryPass(scene, camera, { samples: 4 });
+	const pipeline = new RenderPipeline(renderer);
+	pipeline.addPass(new ClearPass());
+	pipeline.addPass(new GeometryPass(scene, camera, {
+		frameBufferType: HalfFloatType,
+		samples: 4
+	}));
 
 	const bufferDebugPass = new BufferDebugPass(
 		new Set([
@@ -101,9 +107,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 		])
 	);
 
-	const pipeline = new RenderPipeline(renderer);
-	pipeline.addPass(clearPass);
-	pipeline.addPass(geoPass);
+	pipeline.addPass(new EffectPass(new ToneMappingEffect()));
 	pipeline.addPass(bufferDebugPass);
 
 	// Settings
