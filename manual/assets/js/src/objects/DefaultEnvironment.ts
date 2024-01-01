@@ -1,8 +1,6 @@
 import {
 	AmbientLight,
 	Group,
-	LinearFilter,
-	LinearMipMapLinearFilter,
 	Mesh,
 	MeshStandardMaterial,
 	PlaneGeometry,
@@ -41,9 +39,6 @@ export function createEnvironment(): Group {
 	const planeSize = 5000;
 	const image = new Image();
 	const map = new Texture(image);
-	map.generateMipmaps = true;
-	map.minFilter = LinearMipMapLinearFilter;
-	map.magFilter = LinearFilter;
 	map.wrapS = RepeatWrapping;
 	map.wrapT = RepeatWrapping;
 	map.colorSpace = SRGBColorSpace;
