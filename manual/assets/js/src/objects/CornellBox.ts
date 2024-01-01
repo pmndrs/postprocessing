@@ -34,12 +34,12 @@ export function createLights(): Group {
 
 	const lightProbe = new LightProbe();
 	lightProbe.sh.coefficients = shCoefficients.map(x => new Vector3(x[0], x[1], x[2]));
-	lightProbe.intensity = 1.8;
+	lightProbe.intensity = 1.3;
 
-	const lightCeiling = new PointLight(0xfee2b0, 1, 3);
+	const lightCeiling = new PointLight(0xfee2b0, 1, 10);
 	lightCeiling.position.set(0, 0.93, 0);
 	lightCeiling.castShadow = true;
-	lightCeiling.shadow.bias = -0.035;
+	lightCeiling.shadow.bias = -0.015;
 	lightCeiling.shadow.mapSize.width = 1024;
 	lightCeiling.shadow.mapSize.height = 1024;
 	lightCeiling.shadow.radius = 4;

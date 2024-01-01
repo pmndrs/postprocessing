@@ -1,7 +1,7 @@
 import { Effect } from "./Effect.js";
 
-import fragmentShader from "./glsl/fxaa.frag";
-import vertexShader from "./glsl/fxaa.vert";
+import fragmentShader from "./shaders/fxaa.frag";
+import vertexShader from "./shaders/fxaa.vert";
 
 /**
  * NVIDIA FXAA 3.11 by Timothy Lottes:

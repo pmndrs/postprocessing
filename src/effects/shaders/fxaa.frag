@@ -82,7 +82,7 @@ vec4 fxaa(sampler2D inputBuffer, const in vec4 inputColor, const in vec2 uv) {
 	bool isHorizontal = (edgeHorizontal >= edgeVertical);
 
 	// Choose the step size (one pixel) accordingly.
-	float stepLength = isHorizontal ? texelSize.y : texelSize.x;
+	float stepLength = isHorizontal ? resolution.zw.y : resolution.zw.x;
 
 	// Select the two neighboring texels' lumas in the opposite direction to the local edge.
 	float luma1 = isHorizontal ? lumaDown : lumaLeft;
@@ -127,7 +127,7 @@ vec4 fxaa(sampler2D inputBuffer, const in vec4 inputColor, const in vec2 uv) {
 	}
 
 	// Compute offset (for each iteration step) in the right direction.
-	vec2 offset = isHorizontal ? vec2(texelSize.x, 0.0) : vec2(0.0, texelSize.y);
+	vec2 offset = isHorizontal ? vec2(resolution.zw.x, 0.0) : vec2(0.0, resolution.zw.y);
 
 	// Compute UVs to explore on each side of the edge, orthogonally. The QUALITY allows us to step faster.
 	vec2 uv1 = currentUv - offset * QUALITY(0);
