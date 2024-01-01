@@ -1,7 +1,6 @@
 import { WebGLRenderTarget } from "three";
 import { Pass } from "../core/Pass.js";
 import { CopyMaterial } from "../materials/CopyMaterial.js";
-import { Resolution } from "../utils/Resolution.js";
 
 /**
  * Copies the contents of the default input buffer to another buffer or to screen.
@@ -14,15 +13,15 @@ export class CopyPass extends Pass<CopyMaterial> {
 	/**
 	 * Constructs a new copy pass.
 	 *
-	 * @param outputBuffer - An output buffer. If not provided, the input will be rendered to screen.
+	 * @param outputBuffer - An output buffer. If not provided, a new framebuffer will be created.
 	 */
 
-	constructor(outputBuffer: WebGLRenderTarget | null = null) {
+	constructor(outputBuffer?: WebGLRenderTarget) {
 
 		super("CopyPass");
 
+		this.output.defaultBuffer = outputBuffer || this.createFramebuffer();
 		this.fullscreenMaterial = new CopyMaterial();
-		this.output.defaultBuffer = outputBuffer;
 
 	}
 

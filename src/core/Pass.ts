@@ -10,6 +10,7 @@ import {
 	RawShaderMaterial,
 	Scene,
 	ShaderMaterial,
+	WebGLRenderTarget,
 	WebGLRenderer
 } from "three";
 
@@ -480,6 +481,19 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 */
 
 	protected onResolutionChange(resolution: Resolution): void {}
+
+	/**
+	 * Creates a framebuffer.
+	 *
+	 * @return The framebuffer.
+	 */
+
+	protected createFramebuffer(): WebGLRenderTarget {
+
+		const { width, height } = this.resolution;
+		return new WebGLRenderTarget(width, height, { depthBuffer: false });
+
+	}
 
 	/**
 	 * Dispatches a `change` event.

@@ -63,6 +63,7 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 
 		super("EffectPass");
 
+		this.output.defaultBuffer = this.createFramebuffer();
 		this.fullscreenMaterial = new EffectMaterial();
 		this.listener = (e: Event) => this.handleEvent(e);
 		this.effects = effects;

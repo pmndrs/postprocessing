@@ -1,9 +1,10 @@
-import { Material, SRGBColorSpace, WebGLMultipleRenderTargets } from "three";
+import { Material, SRGBColorSpace, WebGLMultipleRenderTargets, WebGLRenderTarget } from "three";
 import { GBuffer } from "../enums/GBuffer.js";
 import { ClearPass } from "../passes/ClearPass.js";
 import { GeometryPass } from "../passes/GeometryPass.js";
 import { RenderPipeline } from "./RenderPipeline.js";
 import { Pass } from "./Pass.js";
+import { Output } from "./Output.js";
 
 /**
  * An I/O manager.
@@ -20,12 +21,150 @@ export class IOManager {
 	private readonly pipelines: Set<RenderPipeline>;
 
 	/**
+	 * A collection of active render pipelines.
+	 */
+
+	private readonly outputDefaultBuffers: Map<Output, WebGLRenderTarget | WebGLMultipleRenderTargets | null>;
+
+	/**
 	 * Constructs a new I/O manager.
 	 */
 
 	constructor() {
 
 		this.pipelines = new Set<RenderPipeline>();
+		this.outputDefaultBuffers = new Map<Output, WebGLRenderTarget | WebGLMultipleRenderTargets | null>();
+
+	}
+
+	/**
+	 * Updates the input and output buffers of all passes in a given pipeline.
+	 *
+	 * @param pipeline - The pipeline to update.
+	 */
+
+	private updatePipeline(pipeline: RenderPipeline): void {
+
+		const geoPass = IOManager.findMainGeometryPass(pipeline);
+
+		if(geoPass !== undefined) {
+
+			IOManager.gatherGBufferComponents(geoPass, pipeline);
+
+		}
+
+		this.updateInput(pipeline, geoPass);
+		this.updateOutput(pipeline);
+		IOManager.syncDefaultBufferType(pipeline);
+
+	}
+
+	/**
+	 * Updates the input buffers of all passes in a given pipeline.
+	 *
+	 * @param pipeline - The pipeline to update.
+	 * @param geoPass - The main geometry pass.
+	 */
+
+	private updateInput(pipeline: RenderPipeline, geoPass?: GeometryPass): void {
+
+		let previousOutputBuffer;
+
+		for(let i = 0, j = -1, l = pipeline.passes.length; i < l; ++i, ++j) {
+
+			const previousPass = (j >= 0) ? pipeline.passes[j] : null;
+			const pass = pipeline.passes[i];
+
+			if(pass !== geoPass && geoPass !== undefined) {
+
+				IOManager.assignGBufferTextures(pass, geoPass);
+
+				pass.scene = geoPass.scene;
+				pass.camera = geoPass.camera;
+
+			}
+
+			if(previousPass === null || previousPass instanceof ClearPass) {
+
+				continue;
+
+			}
+
+			previousPass.output.defines.forEach((value, key) => pass.input.defines.set(key, value));
+			previousPass.output.uniforms.forEach((value, key) => pass.input.uniforms.set(key, value));
+
+			// Keep track of the last output buffer (some passes don't render anything).
+			previousOutputBuffer = previousPass.output.buffers.get(Output.BUFFER_DEFAULT) || previousOutputBuffer;
+
+			if(previousOutputBuffer === null) {
+
+				pass.input.defaultBuffer = null;
+
+			} else if(previousOutputBuffer instanceof WebGLMultipleRenderTargets) {
+
+				if(geoPass !== undefined && geoPass.gBufferIndices.has(GBuffer.COLOR)) {
+
+					const index = geoPass.gBufferIndices.get(GBuffer.COLOR) as number;
+					pass.input.defaultBuffer = previousOutputBuffer.texture[index];
+
+				}
+
+			} else if(previousOutputBuffer !== undefined) {
+
+				pass.input.defaultBuffer = previousOutputBuffer.texture;
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Updates the output buffers of all passes in a given pipeline.
+	 *
+	 * @param pipeline - The pipeline to update.
+	 */
+
+	private updateOutput(pipeline: RenderPipeline): void {
+
+		const outputDefaultBuffers = this.outputDefaultBuffers;
+
+		for(let i = 0, j = 1, l = pipeline.passes.length; i < l; ++i, ++j) {
+
+			const pass = pipeline.passes[i];
+
+			if(j < l && pass instanceof ClearPass) {
+
+				// Assign the output resources of the next pass to this clear pass.
+				const nextPass = pipeline.passes[j];
+				nextPass.output.defines.forEach((value, key) => pass.output.defines.set(key, value));
+				nextPass.output.uniforms.forEach((value, key) => pass.output.uniforms.set(key, value));
+				pass.output.defaultBuffer = nextPass.output.defaultBuffer;
+
+				continue;
+
+			}
+
+			// Assign output buffers.
+			if(j === l) {
+
+				// This is the last pass.
+				if(pipeline.autoRenderToScreen) {
+
+					// Remember the original buffer and set to null.
+					outputDefaultBuffers.set(pass.output, pass.output.defaultBuffer);
+					pass.output.defaultBuffer = null;
+
+				}
+
+			} else if(pass.output.defaultBuffer === null && outputDefaultBuffers.has(pass.output)) {
+
+				// Restore the original buffer.
+				pass.output.defaultBuffer = outputDefaultBuffers.get(pass.output)!;
+
+			}
+
+		}
 
 	}
 
@@ -55,27 +194,6 @@ export class IOManager {
 	}
 
 	/**
-	 * Updates the input and output buffers of all passes in a given pipeline.
-	 *
-	 * @param pipeline - The pipeline to update.
-	 */
-
-	private updatePipeline(pipeline: RenderPipeline): void {
-
-		const geoPass = IOManager.findMainGeometryPass(pipeline);
-
-		if(geoPass !== undefined) {
-
-			IOManager.gatherGBufferComponents(geoPass, pipeline);
-
-		}
-
-		IOManager.updateInput(pipeline, geoPass);
-		IOManager.updateOutput(pipeline);
-
-	}
-
-	/**
 	 * Updates the input and output buffers of all pipelines.
 	 */
 
@@ -84,6 +202,36 @@ export class IOManager {
 		for(const pipeline of this.pipelines) {
 
 			this.updatePipeline(pipeline);
+
+		}
+
+	}
+
+	/**
+	 * Synchronizes the texture type of input/output default buffers.
+	 *
+	 * @param pipeline - The pipeline to update.
+	 */
+
+	private static syncDefaultBufferType(pipeline: RenderPipeline): void {
+
+		for(const pass of pipeline.passes) {
+
+			if(pass.input.defaultBuffer === null || pass.output.defaultBuffer === null ||
+				pass.output.defaultBuffer instanceof WebGLMultipleRenderTargets) {
+
+				continue;
+
+			}
+
+			pass.output.defaultBuffer.texture.type = pass.input.defaultBuffer.type;
+
+			if(!pass.input.frameBufferPrecisionHigh && pipeline.renderer?.outputColorSpace === SRGBColorSpace) {
+
+				// If the output buffer uses low precision, enable sRGB encoding to reduce information loss.
+				pass.output.defaultBuffer.texture.colorSpace = SRGBColorSpace;
+
+			}
 
 		}
 
@@ -151,108 +299,6 @@ export class IOManager {
 
 				const index = geoPass.gBufferIndices.get(component) as number;
 				pass.input.buffers.set(component, geoPass.gBuffer.texture[index]);
-
-			}
-
-		}
-
-	}
-
-	/**
-	 * Updates the input buffers of all passes in a given pipeline.
-	 *
-	 * @param pipeline - The pipeline to update.
-	 * @param geoPass - The main geometry pass.
-	 */
-
-	private static updateInput(pipeline: RenderPipeline, geoPass?: GeometryPass): void {
-
-		for(let i = 0, j = -1, l = pipeline.passes.length; i < l; ++i, ++j) {
-
-			const previousPass = (j >= 0) ? pipeline.passes[j] : null;
-			const pass = pipeline.passes[i];
-
-			if(pass !== geoPass && geoPass !== undefined) {
-
-				IOManager.assignGBufferTextures(pass, geoPass);
-
-				pass.scene = geoPass.scene;
-				pass.camera = geoPass.camera;
-
-			}
-
-			if(previousPass === null) {
-
-				continue;
-
-			}
-
-			previousPass.output.defines.forEach((value, key) => pass.input.defines.set(key, value));
-			previousPass.output.uniforms.forEach((value, key) => pass.input.uniforms.set(key, value));
-
-			const buffer = previousPass.output.defaultBuffer;
-
-			if(buffer === null) {
-
-				pass.input.defaultBuffer = null;
-
-			} else if(buffer instanceof WebGLMultipleRenderTargets) {
-
-				if(geoPass !== undefined && geoPass.gBufferIndices.has(GBuffer.COLOR)) {
-
-					const index = geoPass.gBufferIndices.get(GBuffer.COLOR) as number;
-					pass.input.defaultBuffer = buffer.texture[index];
-
-				}
-
-			} else {
-
-				pass.input.defaultBuffer = buffer.texture;
-
-			}
-
-		}
-
-	}
-
-	/**
-	 * Updates the output buffers of all passes in a given pipeline.
-	 *
-	 * @param pipeline - The pipeline to update.
-	 */
-
-	private static updateOutput(pipeline: RenderPipeline): void {
-
-		for(let i = 0, j = 1, l = pipeline.passes.length; i < l; ++i, ++j) {
-
-			const pass = pipeline.passes[i];
-			const { input, output } = pass;
-
-			if(j < l && pass instanceof ClearPass) {
-
-				// Assign the output resources of the next pass to this clear pass.
-				const nextPass = pipeline.passes[j];
-				nextPass.output.defines.forEach((value, key) => output.defines.set(key, value));
-				nextPass.output.uniforms.forEach((value, key) => output.uniforms.set(key, value));
-				output.defaultBuffer = nextPass.output.defaultBuffer;
-
-				continue;
-
-			}
-
-			// Sync the texture type of the output default buffer with the input default buffer.
-			if(input.defaultBuffer === null || output.defaultBuffer === null ||
-				output.defaultBuffer instanceof WebGLMultipleRenderTargets) {
-
-				continue;
-
-			}
-
-			output.defaultBuffer.texture.type = input.defaultBuffer.type;
-
-			if(!input.frameBufferPrecisionHigh && pipeline.renderer?.outputColorSpace === SRGBColorSpace) {
-
-				output.defaultBuffer.texture.colorSpace = SRGBColorSpace;
 
 			}
 

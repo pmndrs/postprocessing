@@ -1,4 +1,3 @@
-import { WebGLRenderTarget } from "three";
 import { Pass } from "../core/Pass.js";
 import { LuminanceMaterial } from "../materials/LuminanceMaterial.js";
 
@@ -18,9 +17,8 @@ export class LuminancePass extends Pass<LuminanceMaterial> {
 
 		super("LuminancePass");
 
+		this.output.defaultBuffer = this.createFramebuffer();
 		this.fullscreenMaterial = new LuminanceMaterial();
-		const renderTarget = new WebGLRenderTarget(1, 1, { depthBuffer: false });
-		this.output.defaultBuffer = renderTarget;
 
 	}
 
