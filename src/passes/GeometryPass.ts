@@ -40,19 +40,25 @@ export declare type MSAASamples = 0 | 2 | 4 | 8;
 interface GeometryPassOptions {
 
 	/**
-	 * Determines whether a stencil buffer should be created.
+	 * Determines whether a stencil buffer should be created. Default is `false`.
 	 */
 
-	stencil?: boolean;
+	stencilBuffer?: boolean;
 
 	/**
-	 * The type of the color buffer.
+	 * Determines whether a depth buffer should be created. Default is `true`.
+	 */
+
+	depthBuffer?: boolean;
+
+	/**
+	 * The type of the color buffer. Default is `UnsignedByteType`.
 	 */
 
 	frameBufferType?: TextureDataType;
 
 	/**
-	 * The amount of samples used for MSAA. Default is 0.
+	 * The amount of samples used for MSAA. Default is `0`.
 	 *
 	 * Will be limited to the maximum value supported by the device.
 	 */
@@ -107,7 +113,13 @@ export class GeometryPass extends Pass implements Selective {
 	 * Indicates whether a stencil buffer should be created.
 	 */
 
-	private readonly stencil: boolean;
+	private readonly stencilBuffer: boolean;
+
+	/**
+	 * Indicates whether a depth buffer should be created.
+	 */
+
+	private readonly depthBuffer: boolean;
 
 	/**
 	 * The texture data type of the primary color buffer.
@@ -132,7 +144,8 @@ export class GeometryPass extends Pass implements Selective {
 	 */
 
 	constructor(scene: Scene, camera: OrthographicCamera | PerspectiveCamera, {
-		stencil = false,
+		stencilBuffer = false,
+		depthBuffer = true,
 		frameBufferType = UnsignedByteType,
 		samples = 0
 	}: GeometryPassOptions = {}) {
@@ -144,7 +157,8 @@ export class GeometryPass extends Pass implements Selective {
 
 		this.ignoreBackground = false;
 		this.skipShadowMapUpdate = false;
-		this.stencil = stencil;
+		this.stencilBuffer = stencilBuffer;
+		this.depthBuffer = depthBuffer;
 		this.frameBufferType = frameBufferType;
 		this._samples = samples;
 
@@ -338,13 +352,12 @@ export class GeometryPass extends Pass implements Selective {
 
 		}
 
-		const useDepthTexture = gBufferComponents.has(GBuffer.DEPTH);
 		const exclusions = new Set<GBuffer>([GBuffer.DEPTH, GBuffer.METALNESS]);
 		const textureCount = Array.from(gBufferComponents).filter((x) => !exclusions.has(x)).length;
 
 		const renderTarget = new WebGLMultipleRenderTargets(1, 1, textureCount, {
-			stencilBuffer: this.stencil,
-			depthBuffer: useDepthTexture,
+			stencilBuffer: this.stencilBuffer,
+			depthBuffer: this.depthBuffer,
 			samples: this.samples
 		});
 
@@ -390,10 +403,10 @@ export class GeometryPass extends Pass implements Selective {
 
 		}
 
-		if(useDepthTexture) {
+		if(gBufferComponents.has(GBuffer.DEPTH)) {
 
 			const depthTexture = new DepthTexture(1, 1);
-			depthTexture.format = this.stencil ? DepthStencilFormat : DepthFormat;
+			depthTexture.format = this.stencilBuffer ? DepthStencilFormat : DepthFormat;
 			renderTarget.depthTexture = depthTexture;
 
 		}
