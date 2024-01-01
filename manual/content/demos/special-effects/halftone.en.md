@@ -1,15 +1,15 @@
 ---
 layout: single
 collection: sections
-title: Tone Mapping
+title: Halftone
 draft: true
 menu:
   demos:
-    parent: utility
-    weight: 90
-script: tone-mapping
+    parent: special-effects
+    weight: 40
+script: halftone
 ---
 
-# Tone Mapping
+# Halftone
 
 ### External Resources

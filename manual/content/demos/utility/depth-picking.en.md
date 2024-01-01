@@ -2,7 +2,7 @@
 layout: single
 collection: sections
 title: Depth Picking
-draft: false
+draft: true
 menu:
   demos:
     parent: utility

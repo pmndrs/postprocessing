@@ -2,7 +2,7 @@
 layout: single
 collection: sections
 title: Color Depth
-draft: false
+draft: true
 menu:
   demos:
     parent: special-effects

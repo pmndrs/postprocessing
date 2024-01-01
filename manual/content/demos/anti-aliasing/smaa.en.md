@@ -2,7 +2,7 @@
 layout: single
 collection: sections
 title: SMAA
-draft: false
+draft: true
 menu:
   demos:
     parent: anti-aliasing

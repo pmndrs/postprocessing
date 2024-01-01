@@ -2,7 +2,7 @@
 layout: single
 collection: sections
 title: Depth of Field
-draft: false
+draft: true
 menu:
   demos:
     parent: special-effects

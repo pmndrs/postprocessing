@@ -1,5 +1,6 @@
 import {
 	CubeTextureLoader,
+	HalfFloatType,
 	LoadingManager,
 	PerspectiveCamera,
 	SRGBColorSpace,
@@ -10,35 +11,28 @@ import {
 } from "three";
 
 import {
-	BlendFunction,
-	EdgeDetectionMode,
-	EffectPass,
+	ClearPass,
 	GeometryPass,
-	PredicationMode,
-	RenderPipeline,
-	// SMAAEffect,
-	SMAAPreset
-	// TextureEffect
+	RenderPipeline
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
-import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, createFPSGraph, getSkyboxUrls } from "../utils/index.js";
 import * as CornellBox from "../objects/CornellBox.js";
+import * as Utils from "../utils/index.js";
 
-function load(): Promise<Map<string, unknown>> {
+function load(): Promise<Map<string, Texture>> {
 
-	const assets = new Map<string, unknown>();
+	const assets = new Map<string, Texture>();
 	const loadingManager = new LoadingManager();
 	const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
-	return new Promise<Map<string, unknown>>((resolve, reject) => {
+	return new Promise<Map<string, Texture>>((resolve, reject) => {
 
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		cubeTextureLoader.load(getSkyboxUrls("sunset"), (t) => {
+		cubeTextureLoader.load(Utils.getSkyboxUrls("sunset"), (t) => {
 
 			t.colorSpace = SRGBColorSpace;
 			assets.set("sky", t);
@@ -60,7 +54,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 		depth: false
 	});
 
-	renderer.debug.checkShaderErrors = (window.location.hostname === "localhost");
 	renderer.shadowMap.type = VSMShadowMap;
 	renderer.shadowMap.autoUpdate = false;
 	renderer.shadowMap.needsUpdate = true;
@@ -91,6 +84,13 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
+	const pipeline = new RenderPipeline(renderer);
+	pipeline.autoRenderToScreen = false;
+	pipeline.addPass(new ClearPass());
+	pipeline.addPass(new GeometryPass(scene, camera, {
+		frameBufferType: HalfFloatType
+	}));
+
 	/*
 	const effect = new SMAAEffect({
 		blendFunction: BlendFunction.NORMAL,
@@ -104,12 +104,13 @@ window.addEventListener("load", () => void load().then((assets) => {
 	edgeDetectionMaterial.predicationThreshold = 0.002;
 	edgeDetectionMaterial.predicationScale = 1;
 
-	const effectPass = new EffectPass(effect);
+	const effectPass = new EffectPass(effect, new ToneMappingEffect());
 
 	// #region DEBUG
 	const smaaEdgesDebugPass = new EffectPass(effect, new TextureEffect({ texture: effect.edgesTexture }));
 	const smaaWeightsDebugPass = new EffectPass(effect, new TextureEffect({ texture: effect.weightsTexture }));
 
+	effect.blendMode.blendFunction = new MixBlendFunction();
 	effectPass.output.defaultBuffer = null;
 	smaaEdgesDebugPass.output.defaultBuffer = null;
 	smaaWeightsDebugPass.output.defaultBuffer = null;
@@ -119,10 +120,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 	smaaWeightsDebugPass.fullscreenMaterial.encodeOutput = false;
 	// #endregion DEBUG
 
-	const pipeline = new RenderPipeline(renderer);
-	pipeline.autoRenderToScreen = false;
-	pipeline.addPass(new GeometryPass(scene, camera, { samples: 4 }));
-	pipeline.addPass(new EffectPass(effect));
 	pipeline.addPass(effectPass);
 	pipeline.addPass(smaaEdgesDebugPass);
 	pipeline.addPass(smaaWeightsDebugPass);
@@ -131,8 +128,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Settings
 
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
-	pane.registerPlugin(EssentialsPlugin);
-	const fpsGraph = createFPSGraph(pane);
+	const fpsGraph = Utils.createFPSGraph(pane);
 
 	/*
 	const smaaDebug = {
@@ -155,7 +151,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	});
 
-	folder.addBinding(params, "preset", { options: SMAAPreset }).on("change", (e) => {
+	folder.addBinding(params, "preset", { options: Utils.enumToRecord(SMAAPreset) }).on("change", (e) => {
 
 		const threshold = edgeDetectionMaterial.edgeDetectionThreshold;
 		effect.applyPreset(e.value);
@@ -164,15 +160,14 @@ window.addEventListener("load", () => void load().then((assets) => {
 	});
 
 	const subfolder = folder.addFolder({ title: "Edge Detection", expanded: false });
-	subfolder.addBinding(edgeDetectionMaterial, "edgeDetectionMode", { options: EdgeDetectionMode });
+	subfolder.addBinding(edgeDetectionMaterial, "edgeDetectionMode", { options: Utils.enumToRecord(EdgeDetectionMode) });
 	subfolder.addBinding(edgeDetectionMaterial, "edgeDetectionThreshold", { min: 0.01, max: 0.3, step: 1e-4 });
-	subfolder.addBinding(edgeDetectionMaterial, "predicationMode", { options: PredicationMode });
+	subfolder.addBinding(edgeDetectionMaterial, "predicationMode", { options: Utils.enumToRecord(PredicationMode) });
 	subfolder.addBinding(edgeDetectionMaterial, "predicationThreshold", { min: 4e-4, max: 0.01, step: 1e-4 });
 	subfolder.addBinding(edgeDetectionMaterial, "predicationStrength", { min: 0, max: 1, step: 1e-4 });
 	subfolder.addBinding(edgeDetectionMaterial, "predicationScale", { min: 1, max: 2, step: 0.01 });
 
-	folder.addBinding(effect.blendMode, "opacity", { min: 0, max: 1, step: 0.01 });
-	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
+	Utils.addBlendModeBindings(folder, effect.blendMode);
 	*/
 
 	// Resize Handler
@@ -181,9 +176,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		const width = container.clientWidth, height = container.clientHeight;
 		camera.aspect = width / height;
-		camera.fov = calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
+		camera.fov = Utils.calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
 		camera.updateProjectionMatrix();
-		// pipeline.setSize(width, height);
+		pipeline.setSize(width, height);
 
 	}
 
@@ -196,8 +191,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		fpsGraph.begin();
 		controls.update(timestamp);
-		// pipeline.render(timestamp);
+		pipeline.render(timestamp);
 		fpsGraph.end();
+
 		requestAnimationFrame(render);
 
 	});

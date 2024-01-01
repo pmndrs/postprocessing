@@ -8,39 +8,36 @@ import {
 	SRGBColorSpace,
 	WebGLRenderer,
 	Texture,
-	Material
+	Material,
+	HalfFloatType
 } from "three";
 
 import {
-	BlendFunction,
-	// DepthOfFieldEffect,
-	EffectPass,
+	ClearPass,
 	GeometryPass,
-	KernelSize,
 	RenderPipeline
-	// TextureEffect
 } from "postprocessing";
 
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+
 import { Pane } from "tweakpane";
-import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, createFPSGraph, getSkyboxUrls } from "../utils/index.js";
 import * as DefaultEnvironment from "../objects/DefaultEnvironment.js";
+import * as Utils from "../utils/index.js";
 
-function load(): Promise<Map<string, unknown>> {
+function load(): Promise<Map<string, Texture | GLTF>> {
 
-	const assets = new Map<string, unknown>();
+	const assets = new Map<string, Texture | GLTF>();
 	const loadingManager = new LoadingManager();
 	const gltfLoader = new GLTFLoader(loadingManager);
 	const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
-	return new Promise<Map<string, unknown>>((resolve, reject) => {
+	return new Promise<Map<string, Texture | GLTF>>((resolve, reject) => {
 
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		cubeTextureLoader.load(getSkyboxUrls("space-00"), (t) => {
+		cubeTextureLoader.load(Utils.getSkyboxUrls("space"), (t) => {
 
 			t.colorSpace = SRGBColorSpace;
 			assets.set("sky", t);
@@ -69,7 +66,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	});
 
 	renderer.setClearColor(0x000000, 0);
-	renderer.debug.checkShaderErrors = (window.location.hostname === "localhost");
+	renderer.debug.checkShaderErrors = Utils.isLocalhost;
 	const container = document.querySelector(".viewport") as HTMLElement;
 	container.prepend(renderer.domElement);
 
@@ -90,7 +87,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const skyMap = assets.get("sky") as Texture;
 	scene.background = skyMap;
 	scene.environment = skyMap;
-	scene.fog = new FogExp2(0x000000, 0.025);
+	scene.fog = new FogExp2(0x000000, 0.03);
 	scene.add(DefaultEnvironment.createEnvironment());
 
 	const gltfRock14 = assets.get("rock-14") as GLTF;
@@ -118,6 +115,14 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
+	const pipeline = new RenderPipeline(renderer);
+	pipeline.autoRenderToScreen = false;
+	pipeline.addPass(new ClearPass());
+	pipeline.addPass(new GeometryPass(scene, camera, {
+		frameBufferType: HalfFloatType,
+		samples: 4
+	}));
+
 	/*
 	const effect = new DepthOfFieldEffect({
 		kernelSize: KernelSize.SMALL,
@@ -129,26 +134,23 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const effectPass = new EffectPass(effect);
 
-	// BEGIN DEBUG
+	// #region DEBUG
 	const cocDebugPass = new EffectPass(new TextureEffect({ texture: effect.cocTexture }));
 	effectPass.output.defaultBuffer = null;
 	cocDebugPass.output.defaultBuffer = null;
 	cocDebugPass.enabled = false;
 	cocDebugPass.fullscreenMaterial.encodeOutput = false;
-	// END DEBUG
+	// #endregion DEBUG
 
-	const pipeline = new RenderPipeline(renderer);
-	pipeline.autoRenderToScreen = false;
-	pipeline.addPass(new GeometryPass(scene, camera, { samples: 4 }));
-	pipeline.addPass(new EffectPass(effect));
+	effect.blendMode.blendFunction = new MixBlendFunction();
+	pipeline.addPass(new EffectPass(effect, new ToneMappingEffect()));
 	pipeline.addPass(cocDebugPass);
 	*/
 
 	// Settings
 
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
-	pane.registerPlugin(EssentialsPlugin);
-	const fpsGraph = createFPSGraph(pane);
+	const fpsGraph = Utils.createFPSGraph(pane);
 
 	/*
 	const cocMaterial = effect.cocMaterial;
@@ -160,8 +162,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 	folder.addBinding(cocMaterial, "worldFocusDistance", { min: 0, max: 50, step: 0.1 });
 	folder.addBinding(cocMaterial, "worldFocusRange", { min: 0, max: 20, step: 0.1 });
 	folder.addBinding(effect, "bokehScale", { min: 0, max: 7, step: 1e-2 });
-	folder.addBinding(effect.blendMode, "opacity", { min: 0, max: 1, step: 0.01 });
-	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
+
+	Utils.addBlendModeBindings(folder, effect.blendMode);
 	*/
 
 	// Resize Handler
@@ -170,9 +172,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		const width = container.clientWidth, height = container.clientHeight;
 		camera.aspect = width / height;
-		camera.fov = calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
+		camera.fov = Utils.calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
 		camera.updateProjectionMatrix();
-		// pipeline.setSize(width, height);
+		pipeline.setSize(width, height);
 
 	}
 
@@ -185,8 +187,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		fpsGraph.begin();
 		controls.update(timestamp);
-		// pipeline.render(timestamp);
+		pipeline.render(timestamp);
 		fpsGraph.end();
+
 		requestAnimationFrame(render);
 
 	});

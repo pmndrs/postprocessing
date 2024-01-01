@@ -1,8 +1,8 @@
 ---
 layout: single
 collection: sections
-draft: false
 title: God Rays
+draft: true
 menu:
   demos:
     parent: light-shadow

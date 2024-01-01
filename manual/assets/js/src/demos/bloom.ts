@@ -11,32 +11,31 @@ import {
 } from "three";
 
 import {
-	// BloomEffect,
-	EffectPass,
+	ClearPass,
 	GeometryPass,
 	RenderPipeline
 } from "postprocessing";
 
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+
 import { Pane } from "tweakpane";
-import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, createFPSGraph, getSkyboxUrls } from "../utils/index.js";
 import * as DefaultEnvironment from "../objects/DefaultEnvironment.js";
+import * as Utils from "../utils/index.js";
 
-function load(): Promise<Map<string, unknown>> {
+function load(): Promise<Map<string, Texture | GLTF>> {
 
-	const assets = new Map<string, unknown>();
+	const assets = new Map<string, Texture | GLTF>();
 	const loadingManager = new LoadingManager();
 	const gltfLoader = new GLTFLoader(loadingManager);
 	const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
-	return new Promise<Map<string, unknown>>((resolve, reject) => {
+	return new Promise<Map<string, Texture | GLTF>>((resolve, reject) => {
 
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		cubeTextureLoader.load(getSkyboxUrls("space-00"), (t) => {
+		cubeTextureLoader.load(Utils.getSkyboxUrls("space"), (t) => {
 
 			t.colorSpace = SRGBColorSpace;
 			assets.set("sky", t);
@@ -61,7 +60,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 		depth: false
 	});
 
-	renderer.debug.checkShaderErrors = (window.location.hostname === "localhost");
+	renderer.debug.checkShaderErrors = Utils.isLocalhost;
 	const container = document.querySelector(".viewport") as HTMLElement;
 	container.prepend(renderer.domElement);
 
@@ -82,13 +81,20 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const skyMap = assets.get("sky") as Texture;
 	scene.background = skyMap;
 	scene.environment = skyMap;
-	scene.fog = new FogExp2(0x000000, 0.025);
+	scene.fog = new FogExp2(0x000000, 0.03);
 	scene.add(DefaultEnvironment.createEnvironment());
 
 	const model = assets.get("emissive-strength-test") as GLTF;
 	scene.add(model.scene);
 
 	// Post Processing
+
+	const pipeline = new RenderPipeline(renderer);
+	pipeline.addPass(new ClearPass());
+	pipeline.addPass(new GeometryPass(scene, camera, {
+		frameBufferType: HalfFloatType,
+		samples: 4
+	}));
 
 	/*
 	const effect = new BloomEffect({
@@ -97,45 +103,14 @@ window.addEventListener("load", () => void load().then((assets) => {
 		intensity: 1.0
 	});
 
-	const geoPass = new GeometryPass(scene, camera, {
-		frameBufferType: HalfFloatType,
-		samples: 4
-	});
-
-	const pipeline = new RenderPipeline(renderer);
-	pipeline.addPass(geoPass);
-	pipeline.addPass(new EffectPass(effect));
-	*/
-
-	// Object Picking
-
-	/*
-	const ndc = new Vector2();
-	const raycaster = new Raycaster();
-	renderer.domElement.addEventListener("pointerdown", (event) => {
-
-		const clientRect = container.getBoundingClientRect();
-		const clientX = event.clientX - clientRect.left;
-		const clientY = event.clientY - clientRect.top;
-		ndc.x = (clientX / container.clientWidth) * 2.0 - 1.0;
-		ndc.y = -(clientY / container.clientHeight) * 2.0 + 1.0;
-		raycaster.setFromCamera(ndc, camera);
-		const intersects = raycaster.intersectObjects(orbs.children, true);
-
-		if(intersects.length > 0) {
-
-			effect.selection.toggle(intersects[0].object);
-
-		}
-
-	});
+	effect.blendMode.blendFunction = new MixBlendFunction();
+	pipeline.addPass(new EffectPass(effect, new ToneMappingEffect()));
 	*/
 
 	// Settings
 
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
-	pane.registerPlugin(EssentialsPlugin);
-	const fpsGraph = createFPSGraph(pane);
+	const fpsGraph = Utils.createFPSGraph(pane);
 
 	/*
 	const folder = pane.addFolder({ title: "Settings" });
@@ -152,8 +127,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	subfolder.addBinding(effect, "inverted");
 	subfolder.addBinding(effect, "ignoreBackground");
 
-	folder.addBinding(effect.blendMode, "opacity", { min: 0, max: 1, step: 0.01 });
-	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
+	Utils.addBlendModeBindings(folder, effect.blendMode);
 	*/
 
 	// Resize Handler
@@ -162,9 +136,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		const width = container.clientWidth, height = container.clientHeight;
 		camera.aspect = width / height;
-		camera.fov = calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
+		camera.fov = Utils.calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
 		camera.updateProjectionMatrix();
-		// pipeline.setSize(width, height);
+		pipeline.setSize(width, height);
 
 	}
 
@@ -177,8 +151,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		fpsGraph.begin();
 		controls.update(timestamp);
-		// pipeline.render(timestamp);
+		pipeline.render(timestamp);
 		fpsGraph.end();
+
 		requestAnimationFrame(render);
 
 	});

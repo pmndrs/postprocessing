@@ -8,29 +8,27 @@ import {
 	TextureLoader,
 	WebGLRenderer,
 	Texture,
-	SRGBColorSpace
+	SRGBColorSpace,
+	HalfFloatType
 } from "three";
 
 import {
-	BlendFunction,
-	EffectPass,
+	ClearPass,
 	GeometryPass,
 	RenderPipeline
-	// SepiaEffect
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
-import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, createFPSGraph } from "../utils/index.js";
+import * as Utils from "../utils/index.js";
 
-function load(): Promise<Map<string, unknown>> {
+function load(): Promise<Map<string, Texture>> {
 
-	const assets = new Map<string, unknown>();
+	const assets = new Map<string, Texture>();
 	const loadingManager = new LoadingManager();
 	const textureLoader = new TextureLoader(loadingManager);
 
-	return new Promise<Map<string, unknown>>((resolve, reject) => {
+	return new Promise<Map<string, Texture>>((resolve, reject) => {
 
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
@@ -57,7 +55,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 		depth: false
 	});
 
-	renderer.debug.checkShaderErrors = (window.location.hostname === "localhost");
+	renderer.debug.checkShaderErrors = Utils.isLocalhost;
 	renderer.setClearAlpha(0);
 
 	const container = document.querySelector(".viewport") as HTMLElement;
@@ -90,23 +88,27 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
+	const pipeline = new RenderPipeline(renderer);
+	pipeline.addPass(new ClearPass());
+	pipeline.addPass(new GeometryPass(scene, camera, {
+		frameBufferType: HalfFloatType,
+		samples: 4
+	}));
+
 	/*
 	const effect = new SepiaEffect();
-	const pipeline = new RenderPipeline(renderer);
-	pipeline.addPass(new GeometryPass(scene, camera));
-	pipeline.addPass(new EffectPass(effect));
+	effect.blendMode.blendFunction = new MixBlendFunction();
+	pipeline.addPass(new EffectPass(effect, new ToneMappingEffect()));
 	*/
 
 	// Settings
 
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
-	pane.registerPlugin(EssentialsPlugin);
-	const fpsGraph = createFPSGraph(pane);
+	const fpsGraph = Utils.createFPSGraph(pane);
 
 	/*
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addBinding(effect.blendMode, "opacity", { min: 0, max: 1, step: 0.01 });
-	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
+	Utils.addBlendModeBindings(folder, effect.blendMode);
 	*/
 
 	// Resize Handler
@@ -115,9 +117,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		const width = container.clientWidth, height = container.clientHeight;
 		camera.aspect = width / height;
-		camera.fov = calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
+		camera.fov = Utils.calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
 		camera.updateProjectionMatrix();
-		// pipeline.setSize(width, height);
+		pipeline.setSize(width, height);
 
 	}
 
@@ -130,8 +132,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		fpsGraph.begin();
 		controls.update(timestamp);
-		// pipeline.render(timestamp);
+		pipeline.render(timestamp);
 		fpsGraph.end();
+
 		requestAnimationFrame(render);
 
 	});

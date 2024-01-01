@@ -2,7 +2,7 @@
 layout: single
 collection: sections
 title: Texture
-draft: false
+draft: true
 menu:
   demos:
     parent: utility

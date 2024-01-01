@@ -10,25 +10,23 @@ import {
 	SRGBColorSpace,
 	TextureLoader,
 	Texture,
-	WebGLRenderer
+	WebGLRenderer,
+	HalfFloatType
 } from "three";
 
 import {
-	BlendFunction,
-	EffectPass,
+	ClearPass,
 	GeometryPass,
 	LookupTexture,
-	// LUT3DEffect,
-	RawImageData,
 	RenderPipeline
 } from "postprocessing";
 
 import { LUT3dlLoader } from "three/addons/loaders/LUT3dlLoader.js";
 import { LUTCubeLoader } from "three/addons/loaders/LUTCubeLoader.js";
+
 import { Pane } from "tweakpane";
-import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
 import { ControlMode, SpatialControls } from "spatial-controls";
-import { calculateVerticalFoV, createFPSGraph, arrayToRecord } from "../utils/index.js";
+import * as Utils from "../utils/index.js";
 
 const luts = new Map<string, string | null>([
 	["neutral-2", null],
@@ -50,9 +48,9 @@ const luts = new Map<string, string | null>([
 	["cube/django-25", "cube/django-25.cube"]
 ]);
 
-function load(): Promise<Map<string, unknown>> {
+function load(): Promise<Map<string, Texture>> {
 
-	const assets = new Map<string, unknown>();
+	const assets = new Map<string, Texture>();
 	const loadingManager = new LoadingManager();
 	const textureLoader = new TextureLoader(loadingManager);
 	const lut3dlLoader = new LUT3dlLoader(loadingManager);
@@ -70,7 +68,7 @@ function load(): Promise<Map<string, unknown>> {
 	lutNeutral8.name = "neutral-8";
 	assets.set(lutNeutral8.name, lutNeutral8);
 
-	return new Promise<Map<string, unknown>>((resolve, reject) => {
+	return new Promise<Map<string, Texture>>((resolve, reject) => {
 
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
@@ -142,7 +140,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 		depth: false
 	});
 
-	renderer.debug.checkShaderErrors = (window.location.hostname === "localhost");
+	renderer.debug.checkShaderErrors = Utils.isLocalhost;
 	renderer.setClearAlpha(0);
 
 	const container = document.querySelector(".viewport") as HTMLElement;
@@ -182,23 +180,26 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
+	const pipeline = new RenderPipeline(renderer);
+	pipeline.addPass(new ClearPass());
+	pipeline.addPass(new GeometryPass(scene, camera, {
+		frameBufferType: HalfFloatType,
+		samples: 4
+	}));
+
 	/*
 	const lut = LookupTexture.from(assets.get("png/filmic1") as Texture);
 	const effect = renderer.capabilities.isWebGL2 ? new LUT3DEffect(lut) :
 		new LUT3DEffect(lut.convertToUint8().toDataTexture());
 
-	effect.blendMode.blendFunction = BlendFunction.NORMAL;
-
-	const pipeline = new RenderPipeline(renderer);
-	pipeline.addPass(new GeometryPass(scene, camera));
-	pipeline.addPass(new EffectPass(effect));
+	effect.blendMode.blendFunction = new MixBlendFunction();
+	pipeline.addPass(new EffectPass(effect, new ToneMappingEffect()));
 	*/
 
 	// Settings
 
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
-	pane.registerPlugin(EssentialsPlugin);
-	const fpsGraph = createFPSGraph(pane);
+	const fpsGraph = Utils.createFPSGraph(pane);
 
 	/*
 	const params = {
@@ -300,8 +301,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 	folder.addBinding(params, "base size", { readonly: true, format: (v) => v.toFixed(0) });
 	folder.addBinding(params, "scale up").on("change", changeLUT);
 	folder.addBinding(params, "target size", { options: toRecord([32, 48, 64, 128]) }).on("change", changeLUT);
-	folder.addBinding(effect.blendMode, "opacity", { min: 0, max: 1, step: 0.01 });
-	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
+
+	Utils.addBlendModeBindings(folder, effect.blendMode);
 	*/
 
 	// Resize Handler
@@ -310,9 +311,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		const width = container.clientWidth, height = container.clientHeight;
 		camera.aspect = width / height;
-		camera.fov = calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
+		camera.fov = Utils.calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
 		camera.updateProjectionMatrix();
-		// pipeline.setSize(width, height);
+		pipeline.setSize(width, height);
 
 	}
 
@@ -325,8 +326,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		fpsGraph.begin();
 		controls.update(timestamp);
-		// pipeline.render(timestamp);
+		pipeline.render(timestamp);
 		fpsGraph.end();
+
 		requestAnimationFrame(render);
 
 	});
