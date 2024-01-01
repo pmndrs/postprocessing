@@ -171,12 +171,6 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 
 	private updateMaterial(): void {
 
-		if(this.effects.length === 0) {
-
-			throw new Error("There are no effects to merge");
-
-		}
-
 		const data = new EffectShaderData();
 		let id = 0;
 
