@@ -263,12 +263,13 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 	protected override onInputChange(): void {
 
 		const entries: [string, Texture | null][] = [];
+		const input = this.input;
 
-		for(const component of this.input.gBuffer) {
+		for(const component of input.gBuffer) {
 
 			entries.push([
 				EffectPass.gBufferStructFields.get(component) as string,
-				this.input.buffers.get(component) || null
+				component === GBuffer.COLOR ? input.defaultBuffer : input.buffers.get(component) || null
 			]);
 
 		}
