@@ -1,6 +1,13 @@
 // Location 0 is already defined in built-in materials.
 #ifndef gl_FragColor
 
+	#ifndef GBUFFER_COLOR
+
+		// Fall back to index 0 if no GBuffer indices have been defined.
+		#define GBUFFER_COLOR 0
+
+	#endif
+
 	#ifdef GBUFFER_COLOR
 
 		layout(location = GBUFFER_COLOR) out OUTPUT_COLOR_PRECISION vec4 outputColor;
