@@ -210,6 +210,7 @@ export class BufferDebugPass extends CopyPass {
 	override render(): void {
 
 		super.render();
+
 		this.renderer?.render(this.debugScene, this.debugCamera);
 
 	}
