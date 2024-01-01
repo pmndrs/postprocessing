@@ -8,11 +8,11 @@
 #include <pp_camera_pars_fragment>
 #include <pp_colorspace_pars_fragment>
 #include <pp_colorspace_conversion_pars_fragment>
+#include <pp_default_output_pars_fragment>
 #include <pp_depth_precision_pars_fragment>
 #include <pp_depth_utils_pars_fragment>
 #include <pp_frame_buffer_precision_pars_fragment>
 #include <pp_input_buffer_pars_fragment>
-#include <pp_gbuffer_output_pars_fragment>
 #include <pp_resolution_pars_fragment>
 
 #define packFloatToRGBA(v) packDepthToRGBA(v)
