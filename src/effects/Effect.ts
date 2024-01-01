@@ -163,7 +163,7 @@ export abstract class Effect extends Pass {
 
 	get hasMainSupportFunction(): boolean {
 
-		const regExp = /void\s+mainSupport\s*\(.*\)/;
+		const regExp = /void\s+mainSupport\s*\(.*vec2\s+\w+\)/;
 		return this.vertexShader !== null && regExp.test(this.vertexShader);
 
 	}
