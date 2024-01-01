@@ -31,14 +31,4 @@ jobs:
           ignore-scripts: false
       - if: ${{ steps.publish.outputs.type }}
         run: |
-          echo "Version changed: ${{ steps.publish.outputs.old-version }} → ${{ steps.publish.outputs.version }}"
-      - if: ${{ !steps.publish.outputs.type }}
-        run: |
-          pnpm run prepublishOnly
-      - name: Deploy
-        run: pnpm run deploy
-      - uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: gh-pages
-          folder: public
-          single-commit: true
+          echo "Published version: ${{ steps.publish.outputs.version }}"
