@@ -25,7 +25,6 @@ import { Selective } from "../core/Selective.js";
 import { Selection } from "../utils/Selection.js";
 import { ObservableSet } from "../utils/ObservableSet.js";
 import { GBuffer } from "../enums/GBuffer.js";
-import { Resolution } from "../utils/Resolution.js";
 import { CopyPass } from "./CopyPass.js";
 
 /**
@@ -173,12 +172,6 @@ export class GeometryPass extends Pass implements Selective {
 
 		super.renderer = value;
 		this.updateOutputBufferColorSpace();
-
-	}
-
-	protected override onResolutionChange(resolution: Resolution): void {
-
-		this.output.defaultBuffer?.setSize(resolution.width, resolution.height);
 
 	}
 

@@ -26,18 +26,6 @@ export class CopyPass extends Pass<CopyMaterial> {
 
 	}
 
-	protected override onResolutionChange(resolution: Resolution): void {
-
-		this.output.defaultBuffer?.setSize(resolution.width, resolution.height);
-
-	}
-
-	protected override onInputChange(): void {
-
-		this.fullscreenMaterial.inputBuffer = this.input.defaultBuffer;
-
-	}
-
 	render(): void {
 
 		this.renderer?.setRenderTarget(this.output.defaultBuffer);

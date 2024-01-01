@@ -52,12 +52,6 @@ export class Resolution extends EventDispatcher<BaseEventMap> {
 	private _scale: number;
 
 	/**
-	 * Indicates whether a `change` event has recently been dispatched.
-	 */
-
-	private locked: boolean;
-
-	/**
 	 * Constructs a new resolution.
 	 *
 	 * @param width - The preferred width.
@@ -73,7 +67,6 @@ export class Resolution extends EventDispatcher<BaseEventMap> {
 		this.preferredSize = new Vector2(width, height);
 		this.effectiveSize = new Vector2();
 		this._scale = scale;
-		this.locked = false;
 
 		this.addEventListener(Resolution.EVENT_CHANGE, () => this.updateEffectiveSize());
 		this.updateEffectiveSize();
@@ -303,17 +296,7 @@ export class Resolution extends EventDispatcher<BaseEventMap> {
 
 	private setChanged() {
 
-		if(!this.locked) {
-
-			this.locked = true;
-			this.dispatchEvent({ type: Resolution.EVENT_CHANGE });
-			this.locked = false;
-
-		} else {
-
-			throw new Error("The resolution may not be changed during a change event");
-
-		}
+		this.dispatchEvent({ type: Resolution.EVENT_CHANGE });
 
 	}
 

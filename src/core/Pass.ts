@@ -168,6 +168,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		this.disposables = new Set<Disposable>();
 		this.resolution = new Resolution();
+		this.resolution.addEventListener(Resolution.EVENT_CHANGE, () => this.updateOutputBufferSize(this.resolution));
 		this.resolution.addEventListener(Resolution.EVENT_CHANGE, () => this.onResolutionChange(this.resolution));
 
 		this.input = new Input();
@@ -344,6 +345,16 @@ export abstract class Pass<TMaterial extends Material | null = null>
 			this.fullscreenScene.add(this.screen);
 
 		}
+
+	}
+
+	/**
+	 * Updates the size of the default output buffer, if it exists.
+	 */
+
+	private updateOutputBufferSize(resolution: Resolution): void {
+
+		this.output.defaultBuffer?.setSize(resolution.width, resolution.height);
 
 	}
 

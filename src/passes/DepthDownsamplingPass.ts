@@ -44,8 +44,6 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 
 	protected override onResolutionChange(resolution: Resolution): void {
 
-		this.output.defaultBuffer?.setSize(resolution.width, resolution.height);
-
 		// Use the full resolution to calculate the depth/normal buffer texel size.
 		this.fullscreenMaterial.setSize(resolution.baseWidth, resolution.baseHeight);
 
