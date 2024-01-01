@@ -29,15 +29,19 @@ import { CopyPass } from "./CopyPass.js";
 
 /**
  * Supported MSAA sample counts.
+ *
+ * @group Passes
  */
 
 export declare type MSAASamples = 0 | 2 | 4 | 8;
 
 /**
  * GeometryPass constructor options.
+ *
+ * @group Passes
  */
 
-interface GeometryPassOptions {
+export interface GeometryPassOptions {
 
 	/**
 	 * Determines whether a stencil buffer should be created. Default is `false`.
@@ -69,6 +73,8 @@ interface GeometryPassOptions {
 
 /**
  * A geometry pass.
+ *
+ * @group Passes
  */
 
 export class GeometryPass extends Pass implements Selective {
@@ -218,7 +224,7 @@ export class GeometryPass extends Pass implements Selective {
 	}
 
 	/**
-	 * Alias for {@link output.defaultBuffer}.
+	 * Alias for `output.defaultBuffer`.
 	 */
 
 	get gBuffer(): WebGLMultipleRenderTargets | null {
