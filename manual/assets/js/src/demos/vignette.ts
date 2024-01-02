@@ -12,14 +12,19 @@ import {
 
 import {
 	ClearPass,
+	EffectPass,
 	GeometryPass,
-	RenderPipeline
+	MixBlendFunction,
+	RenderPipeline,
+	ToneMappingEffect,
+	VignetteTechnique
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
 import { SpatialControls } from "spatial-controls";
 import * as DefaultEnvironment from "../objects/DefaultEnvironment.js";
 import * as Utils from "../utils/index.js";
+import { VignetteEffect } from "../../../../../src/effects/VignetteEffect.js";
 
 function load(): Promise<Map<string, Texture>> {
 
@@ -87,31 +92,30 @@ window.addEventListener("load", () => void load().then((assets) => {
 		samples: 4
 	}));
 
-	/*
 	const effect = new VignetteEffect({
 		technique: VignetteTechnique.DEFAULT,
-		offset: 0.0,
-		darkness: 1.0
+		offset: 0.5,
+		feather: 0.5
 	});
 
-	const effect = new ToneMappingEffect();
 	effect.blendMode.blendFunction = new MixBlendFunction();
 	const effectPass = new EffectPass(effect, new ToneMappingEffect());
 	effectPass.dithering = true;
 	pipeline.addPass(effectPass);
-	*/
 
 	// Settings
 
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
 	const fpsGraph = Utils.createFPSGraph(pane);
 
-	// const folder = pane.addFolder({ title: "Settings" });
-	// folder.addBinding(effect, "technique", { options: Utils.enumToRecord(VignetteTechnique) });
-	// folder.addBinding(effect, "offset", { min: 0, max: 1, step: 1e-3 });
-	// folder.addBinding(effect, "darkness", { min: 0, max: 1, step: 1e-3 });
-	// folder.addBinding(effectPass, "dithering");
-	// Utils.addBlendModeBindings(folder, effect.blendMode);
+	const folder = pane.addFolder({ title: "Settings" });
+	folder.addBinding(effect, "technique", { options: Utils.enumToRecord(VignetteTechnique) });
+	folder.addBinding(effect, "offset", { min: 0, max: 1, step: 1e-3 });
+	folder.addBinding(effect, "feather", { min: 0, max: 1, step: 1e-3 });
+	folder.addBinding(effect, "color", { color: { type: "float" } });
+	folder.addBinding(effectPass, "dithering");
+
+	Utils.addBlendModeBindings(folder, effect.blendMode);
 
 	// Resize Handler
 
