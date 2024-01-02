@@ -54,7 +54,7 @@ export class IOManager {
 		}
 
 		this.updateInput(pipeline, geoPass);
-		this.updateOutput(pipeline);
+		this.updateOutput(pipeline, geoPass);
 		IOManager.syncDefaultBufferType(pipeline);
 
 	}
@@ -125,7 +125,7 @@ export class IOManager {
 	 * @param pipeline - The pipeline to update.
 	 */
 
-	private updateOutput(pipeline: RenderPipeline): void {
+	private updateOutput(pipeline: RenderPipeline, geoPass?: GeometryPass): void {
 
 		const outputDefaultBuffers = this.outputDefaultBuffers;
 
@@ -145,13 +145,22 @@ export class IOManager {
 
 			}
 
-			// Assign output buffers.
+			if(pass instanceof GeometryPass && geoPass !== undefined && pass !== geoPass &&
+				pass.output.defaultBuffer !== null && pass.output.defaultBuffer !== geoPass.output.defaultBuffer) {
+
+				// Reuse the main gBuffer if there are multiple geometry passes.
+				geoPass.output.defines.forEach((value, key) => pass.output.defines.set(key, value));
+				geoPass.output.uniforms.forEach((value, key) => pass.output.uniforms.set(key, value));
+				pass.output.defaultBuffer = geoPass.output.defaultBuffer;
+
+			}
+
 			if(j === l) {
 
 				// This is the last pass.
 				if(pipeline.autoRenderToScreen) {
 
-					// Remember the original buffer and set to null.
+					// Remember the original buffer and set the default buffer to null.
 					outputDefaultBuffers.set(pass.output, pass.output.defaultBuffer);
 					pass.output.defaultBuffer = null;
 
