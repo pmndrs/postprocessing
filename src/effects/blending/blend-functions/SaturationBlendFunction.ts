@@ -5,7 +5,7 @@ import shader from "./shaders/saturation.frag";
 /**
  * Converts the colors to HSL and blends based on saturation.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class SaturationBlendFunction extends BlendFunction {

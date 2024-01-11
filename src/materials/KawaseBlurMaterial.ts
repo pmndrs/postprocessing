@@ -22,7 +22,7 @@ const kernelPresets = [
  *
  * @see https://genderi.org/frame-buffer-postprocessing-effects-in-double-s-t-e-a-l-wreckl.html
  * @see https://www.intel.com/content/www/us/en/developer/articles/technical/an-investigation-of-fast-real-time-gpu-based-image-blur-algorithms.html
- * @group Materials
+ * @category Materials
  */
 
 export class KawaseBlurMaterial extends FullscreenMaterial {

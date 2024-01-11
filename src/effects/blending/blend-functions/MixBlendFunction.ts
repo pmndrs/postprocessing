@@ -5,7 +5,7 @@ import shader from "./shaders/mix.frag";
 /**
  * Linearly interpolates from the base color to the new one. Supports HDR.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class MixBlendFunction extends BlendFunction {

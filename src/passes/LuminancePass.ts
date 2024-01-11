@@ -4,7 +4,7 @@ import { LuminanceMaterial } from "../materials/LuminanceMaterial.js";
 /**
  * A luminance pass.
  *
- * @group Passes
+ * @category Passes
  */
 
 export class LuminancePass extends Pass<LuminanceMaterial> {

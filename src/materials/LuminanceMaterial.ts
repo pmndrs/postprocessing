@@ -14,7 +14,7 @@ import vertexShader from "./shaders/common.vert";
  *
  * @see https://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC9
  * @see https://hsto.org/getpro/habr/post_images/2ab/69d/084/2ab69d084f9a597e032624bcd74d57a7.png
- * @group Materials
+ * @category Materials
  */
 
 export class LuminanceMaterial extends FullscreenMaterial {

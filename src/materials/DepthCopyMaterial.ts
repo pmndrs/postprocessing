@@ -8,7 +8,7 @@ import vertexShader from "./shaders/depth-copy.vert";
 /**
  * A depth copy shader material.
  *
- * @group Materials
+ * @category Materials
  */
 
 export class DepthCopyMaterial extends FullscreenMaterial {

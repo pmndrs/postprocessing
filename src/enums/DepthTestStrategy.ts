@@ -1,7 +1,7 @@
 /**
  * An enumeration of depth test strategies.
  *
- * @group Enums
+ * @category Enums
  */
 
 export enum DepthTestStrategy {

@@ -5,7 +5,7 @@ import shader from "./shaders/negation.frag";
 /**
  * Negates the base color using the new color.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class NegationBlendFunction extends BlendFunction {

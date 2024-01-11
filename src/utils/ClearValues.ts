@@ -3,7 +3,7 @@ import { Color, Vector3 } from "three";
 /**
  * A collection of clear values.
  *
- * @group Utils
+ * @category Utils
  */
 
 export class ClearValues {

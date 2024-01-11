@@ -8,7 +8,7 @@ import vertexShader from "./shaders/convolution.gaussian.vert";
 /**
  * Gaussian blur material options.
  *
- * @group Materials
+ * @category Materials
  */
 
 export interface GaussianBlurMaterialOptions {
@@ -26,13 +26,13 @@ export interface GaussianBlurMaterialOptions {
  *
  * Based on "An investigation of fast real-time GPU-based image blur algorithms" by Filip Strugar, Intel, 2014.
  * @see https://www.intel.com/content/www/us/en/developer/articles/technical/an-investigation-of-fast-real-time-gpu-based-image-blur-algorithms.html)
- * @group Materials
+ * @category Materials
  */
 
 export class GaussianBlurMaterial extends FullscreenMaterial {
 
 	/**
-	 * @see kernelSize
+	 * @see {@link kernelSize}
 	 */
 
 	private _kernelSize: number;

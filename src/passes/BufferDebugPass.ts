@@ -8,7 +8,7 @@ import { CopyPass } from "./CopyPass.js";
 /**
  * A debug pass that visualizes all input buffers.
  *
- * @group Passes
+ * @category Passes
  */
 
 export class BufferDebugPass extends CopyPass {

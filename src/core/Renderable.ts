@@ -1,7 +1,7 @@
 /**
  * Describes objects that can perform render operations.
  *
- * @group Core
+ * @category Core
  */
 
 export interface Renderable {

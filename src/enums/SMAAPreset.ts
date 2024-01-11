@@ -1,7 +1,7 @@
 /**
  * An enumeration of SMAA presets.
  *
- * @group Enums
+ * @category Enums
  */
 
 export enum SMAAPreset {

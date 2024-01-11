@@ -1,5 +1,9 @@
 import { TetrahedralUpscaler } from "./TetrahedralUpscaler.js";
 
+/**
+ * A LUT request message.
+ */
+
 interface LUTMessage {
 
 	data: Uint8Array | Float32Array;
@@ -11,6 +15,7 @@ interface LUTMessage {
  * Performs long-running LUT transformations.
  *
  * @param event - A message event.
+ * @category Textures
  */
 
 self.addEventListener("message", (event: MessageEvent<LUTMessage>) => {

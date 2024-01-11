@@ -8,7 +8,7 @@ import vertexShader from "./shaders/convolution.box.vert";
 /**
  * Box blur material options.
  *
- * @group Materials
+ * @category Materials
  */
 
 export interface BoxBlurMaterialOptions {
@@ -30,7 +30,7 @@ export interface BoxBlurMaterialOptions {
 /**
  * A fast box blur material that supports depth-based bilateral filtering.
  *
- * @group Materials
+ * @category Materials
  */
 
 export class BoxBlurMaterial extends FullscreenMaterial {

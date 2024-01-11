@@ -1,7 +1,7 @@
 /**
  * Describes objects that can free internal resources.
  *
- * @group Core
+ * @category Core
  */
 
 export interface Disposable {

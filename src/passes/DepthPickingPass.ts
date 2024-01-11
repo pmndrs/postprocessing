@@ -9,7 +9,7 @@ const uint8PixelBuffer = new Uint8Array(4);
 /**
  * A depth picking pass.
  *
- * @group Passes
+ * @category Passes
  */
 
 export class DepthPickingPass extends DepthCopyPass {

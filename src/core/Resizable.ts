@@ -1,7 +1,7 @@
 /**
  * Describes objects that can be resized.
  *
- * @group Core
+ * @category Core
  */
 
 export interface Resizable {

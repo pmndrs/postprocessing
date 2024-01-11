@@ -5,7 +5,7 @@ import shader from "./shaders/linear-burn.frag";
 /**
  * Linear burn.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class LinearBurnBlendFunction extends BlendFunction {

@@ -5,7 +5,7 @@ import shader from "./shaders/lighten.frag";
 /**
  * Prioritizes lighter colors. Supports HDR.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class LightenBlendFunction extends BlendFunction {

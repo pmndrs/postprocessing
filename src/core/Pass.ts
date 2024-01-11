@@ -27,7 +27,7 @@ import { Renderable } from "./Renderable.js";
 /**
  * An abstract pass.
  *
- * @group Core
+ * @category Core
  */
 
 export abstract class Pass<TMaterial extends Material | null = null>
@@ -408,9 +408,9 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	}
 
 	/**
-	 * Checks if his pass uses convolution shaders.
+	 * Checks if this pass uses convolution shaders.
 	 *
-	 * Only works on passes that use `FullscreenMaterial`.
+	 * Only works on passes that use a `FullscreenMaterial`.
 	 *
 	 * @param recursive - Controls whether subpasses should be checked recursively.
 	 * @return True if the pass uses convolution shaders.

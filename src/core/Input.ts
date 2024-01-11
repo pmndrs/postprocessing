@@ -10,7 +10,7 @@ import { ShaderData } from "./ShaderData.js";
  *
  * Listen for events of type {@link EVENT_CHANGE} to react to resource updates.
  *
- * @group Core
+ * @category Core
  */
 
 export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {

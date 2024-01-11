@@ -5,7 +5,7 @@ import shader from "./shaders/average.frag";
 /**
  * Calculates the average of the new color and the base color. Supports HDR.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class AverageBlendFunction extends BlendFunction {

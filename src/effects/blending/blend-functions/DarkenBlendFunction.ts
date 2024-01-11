@@ -5,7 +5,7 @@ import shader from "./shaders/darken.frag";
 /**
  * Prioritizes darker colors. Supports HDR.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class DarkenBlendFunction extends BlendFunction {

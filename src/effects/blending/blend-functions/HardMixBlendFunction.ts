@@ -5,7 +5,7 @@ import shader from "./shaders/hard-mix.frag";
 /**
  * Hard mix.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class HardMixBlendFunction extends BlendFunction {

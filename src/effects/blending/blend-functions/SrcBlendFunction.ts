@@ -5,7 +5,7 @@ import shader from "./shaders/src.frag";
 /**
  * Overwrites the base color with the new one and ignores opacity. Supports HDR.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class SrcBlendFunction extends BlendFunction {

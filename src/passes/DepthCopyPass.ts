@@ -6,7 +6,7 @@ import { DepthCopyMaterial } from "../materials/DepthCopyMaterial.js";
 /**
  * A pass that copies depth into a render target.
  *
- * @group Passes
+ * @category Passes
  */
 
 export class DepthCopyPass extends Pass<DepthCopyMaterial> {

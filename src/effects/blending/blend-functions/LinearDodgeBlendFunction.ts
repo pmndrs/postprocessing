@@ -5,7 +5,7 @@ import shader from "./shaders/linear-dodge.frag";
 /**
  * Same as add but limits the result to 1.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class LinearDodgeBlendFunction extends BlendFunction {

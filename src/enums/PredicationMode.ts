@@ -1,7 +1,7 @@
 /**
  * An enumeration of SMAA predication modes.
  *
- * @group Enums
+ * @category Enums
  */
 
 export enum PredicationMode {

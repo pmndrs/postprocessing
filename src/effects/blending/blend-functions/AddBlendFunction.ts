@@ -5,7 +5,7 @@ import shader from "./shaders/add.frag";
 /**
  * Additive blending. Supports HDR.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class AddBlendFunction extends BlendFunction {

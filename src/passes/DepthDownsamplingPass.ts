@@ -7,7 +7,7 @@ import { Resolution } from "../utils/Resolution.js";
 /**
  * A downsampling pass that picks the most representative depth (and normal) in 2x2 texel neighborhoods.
  *
- * @group Passes
+ * @category Passes
  */
 
 export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {

@@ -10,7 +10,7 @@ const fv = /* @__PURE__ */ new Float32Array(4);
 /**
  * A clear pass.
  *
- * @group Passes
+ * @category Passes
  */
 
 export class ClearPass extends Pass {

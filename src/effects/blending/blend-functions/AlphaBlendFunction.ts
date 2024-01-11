@@ -5,7 +5,7 @@ import shader from "./shaders/alpha.frag";
 /**
  * Blends based on the alpha value of the new color. Supports HDR.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class AlphaBlendFunction extends BlendFunction {

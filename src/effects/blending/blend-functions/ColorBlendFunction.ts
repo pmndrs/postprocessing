@@ -5,7 +5,7 @@ import shader from "./shaders/color.frag";
 /**
  * Converts the colors to HSL and blends based on color.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class ColorBlendFunction extends BlendFunction {

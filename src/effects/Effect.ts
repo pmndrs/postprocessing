@@ -8,7 +8,7 @@ import { BlendMode } from "./blending/BlendMode.js";
  *
  * Effects are subpasses that can be merged using the {@link EffectPass}.
  *
- * @group Effects
+ * @category Effects
  */
 
 export abstract class Effect extends Pass {

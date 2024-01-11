@@ -5,7 +5,7 @@ import shader from "./shaders/soft-light.frag";
 /**
  * Soft light.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class SoftLightBlendFunction extends BlendFunction {

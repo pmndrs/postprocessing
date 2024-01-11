@@ -5,7 +5,7 @@ import shader from "./shaders/exclusion.frag";
 /**
  * Color exclusion.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class ExclusionBlendFunction extends BlendFunction {

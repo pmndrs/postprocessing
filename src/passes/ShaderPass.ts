@@ -6,7 +6,7 @@ import { Pass } from "../core/Pass.js";
  *
  * To render multiple chained fullscreen effects, consider using {@link EffectPass} instead.
  *
- * @group Passes
+ * @category Passes
  */
 
 export class ShaderPass extends Pass<ShaderMaterial> {

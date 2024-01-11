@@ -1,7 +1,7 @@
 /**
  * An enumeration of log levels.
  *
- * @group Enums
+ * @category Enums
  */
 
 export enum LogLevel {

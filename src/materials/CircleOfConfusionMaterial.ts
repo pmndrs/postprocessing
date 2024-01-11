@@ -8,7 +8,7 @@ import vertexShader from "./shaders/common.vert";
 /**
  * A circle of confusion shader material.
  *
- * @group Materials
+ * @category Materials
  */
 
 export class CircleOfConfusionMaterial extends FullscreenMaterial {

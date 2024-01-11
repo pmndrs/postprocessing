@@ -4,7 +4,7 @@ import { BlendFunction } from "./BlendFunction.js";
 /**
  * BlendMode events.
  *
- * @group Blending
+ * @category Blending
  */
 
 export interface BlendModeEventMap {
@@ -16,7 +16,7 @@ export interface BlendModeEventMap {
 /**
  * A blend mode.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class BlendMode extends EventDispatcher<BlendModeEventMap> {

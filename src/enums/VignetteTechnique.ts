@@ -1,7 +1,7 @@
 /**
  * An enumeration of Vignette techniques.
  *
- * @group Enums
+ * @category Enums
  */
 
 export enum VignetteTechnique {

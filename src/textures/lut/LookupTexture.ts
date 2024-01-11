@@ -17,6 +17,8 @@ import workerProgram from "temp/lut/worker.txt";
 
 /**
  * LUT input domain bounds.
+ *
+ * @category Textures
  */
 
 export interface LUTDomainBounds {
@@ -41,6 +43,8 @@ const c = new Color();
  * A 3D lookup texture (LUT).
  *
  * This texture can be used as-is in a WebGL 2 context. It can also be converted into a 2D texture.
+ *
+ * @category Textures
  */
 
 export class LookupTexture extends Data3DTexture implements LUTDomainBounds {

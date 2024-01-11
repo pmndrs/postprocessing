@@ -3,6 +3,8 @@ import { SMAASearchImageData } from "./SMAASearchImageData.js";
 
 /**
  * Generates the SMAA area and search lookup tables.
+ *
+ * @category Textures
  */
 
 self.addEventListener("message", () => {

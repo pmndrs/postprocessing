@@ -8,7 +8,7 @@ import vertexShader from "./shaders/convolution.tilt-shift.vert";
 /**
  * Tilt shift blur material options.
  *
- * @group Materials
+ * @category Materials
  */
 
 export interface TiltShiftBlurMaterialOptions {
@@ -48,7 +48,7 @@ export interface TiltShiftBlurMaterialOptions {
 /**
  * A tilt shift material.
  *
- * @group Materials
+ * @category Materials
  */
 
 export class TiltShiftBlurMaterial extends KawaseBlurMaterial {

@@ -4,6 +4,8 @@
  * @param prefix - A prefix.
  * @param substrings - The substrings.
  * @param namedValues - A collection of named values such as shaders or macros.
+ * @category Utils
+ * @internal
  */
 
 export function prefixSubstrings(prefix: string, substrings: Iterable<string>,

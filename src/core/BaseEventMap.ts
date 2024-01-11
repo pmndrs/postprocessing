@@ -3,7 +3,7 @@ import { BaseEvent } from "three";
 /**
  * Common events.
  *
- * @group Core
+ * @category Core
  */
 
 export interface BaseEventMap {

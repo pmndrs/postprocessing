@@ -8,8 +8,9 @@ import vertexShader from "./shaders/depth-downsampling.vert";
  * A depth downsampling shader material.
  *
  * Based on an article by Eleni Maria Stea.
+ *
  * @see https://eleni.mutantstargoat.com/hikiko/depth-aware-upsampling-6
- * @group Materials
+ * @category Materials
  */
 
 export class DepthDownsamplingMaterial extends FullscreenMaterial {

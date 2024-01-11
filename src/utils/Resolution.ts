@@ -6,7 +6,7 @@ const AUTO_SIZE = -1;
 /**
  * A resolution.
  *
- * @group Utils
+ * @category Utils
  */
 
 export class Resolution extends EventDispatcher<BaseEventMap> {

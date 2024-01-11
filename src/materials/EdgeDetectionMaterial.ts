@@ -9,7 +9,7 @@ import vertexShader from "./shaders/edge-detection.vert";
 /**
  * An edge detection material.
  *
- * @group Materials
+ * @category Materials
  */
 
 export class EdgeDetectionMaterial extends FullscreenMaterial {

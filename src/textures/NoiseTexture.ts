@@ -65,7 +65,7 @@ function getNoise(size: number, format: PixelFormat, type: TextureDataType): Buf
 /**
  * A noise texture.
  *
- * @group Textures
+ * @category Textures
  */
 
 export class NoiseTexture extends DataTexture {

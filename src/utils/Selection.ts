@@ -6,7 +6,7 @@ import { Log } from "./Log.js";
  *
  * Object selections use render layers to facilitate quick and efficient visibility changes.
  *
- * @group Utils
+ * @category Utils
  */
 
 export class Selection extends Set<Object3D> {

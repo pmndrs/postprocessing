@@ -1040,7 +1040,7 @@ function assemble(baseX: number, baseY: number, patterns: RawImageData[], edges:
  * This texture allows to obtain the area for a certain pattern and distances to the left and right of identified lines.
  *
  * @see https://github.com/iryoku/smaa/tree/master/Scripts
- * @group Textures
+ * @category Textures
  */
 
 export abstract class SMAAAreaImageData {

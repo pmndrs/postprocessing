@@ -5,7 +5,7 @@ import shader from "./shaders/vivid-light.frag";
 /**
  * Vivid light.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class VividLightBlendFunction extends BlendFunction {

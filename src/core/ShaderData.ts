@@ -3,7 +3,7 @@ import { Uniform } from "three";
 /**
  * Basic shader data.
  *
- * @group Core
+ * @category Core
  */
 
 export interface ShaderData {

@@ -5,7 +5,7 @@ import shader from "./shaders/screen.frag";
 /**
  * Screen blending. The two colors are effectively projected on a white screen simultaneously.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class ScreenBlendFunction extends BlendFunction {

@@ -10,7 +10,7 @@ import vertexShader from "./shaders/common.vert";
  * This material should be applied twice in a row, with `fill` mode enabled for the second pass. Enabling the
  * `foreground` option causes the shader to combine the near and far CoC values around foreground objects.
  *
- * @group Materials
+ * @category Materials
  */
 
 export class BokehMaterial extends FullscreenMaterial {

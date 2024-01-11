@@ -7,7 +7,7 @@ import vertexShader from "./shaders/common.vert";
 /**
  * An adaptive luminance shader material.
  *
- * @group Materials
+ * @category Materials
  */
 
 export class AdaptiveLuminanceMaterial extends FullscreenMaterial {

@@ -5,7 +5,7 @@ import shader from "./shaders/divide.frag";
 /**
  * Color division. Supports HDR.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class DivideBlendFunction extends BlendFunction {

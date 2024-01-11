@@ -6,7 +6,7 @@ import vertexShader from "./shaders/common.vert";
 /**
  * A copy shader material.
  *
- * @group Materials
+ * @category Materials
  */
 
 export class CopyMaterial extends FullscreenMaterial {

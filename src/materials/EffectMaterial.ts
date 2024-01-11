@@ -9,7 +9,7 @@ import vertexTemplate from "./shaders/effect.vert";
 /**
  * An effect material.
  *
- * @group Materials
+ * @category Materials
  */
 
 export class EffectMaterial extends FullscreenMaterial {

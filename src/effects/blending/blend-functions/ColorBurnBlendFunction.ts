@@ -5,7 +5,7 @@ import shader from "./shaders/color-burn.frag";
 /**
  * Color burn.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class ColorBurnBlendFunction extends BlendFunction {

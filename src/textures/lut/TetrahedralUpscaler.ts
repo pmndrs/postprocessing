@@ -59,7 +59,6 @@ const T = [
 /**
  * Calculates the volume of a given tetrahedron.
  *
- * @private
  * @param a - A tetrahedron vertex.
  * @param b - A tetrahedron vertex.
  * @param c - A tetrahedron vertex.
@@ -236,8 +235,9 @@ function tetrahedralSample(data: ArrayLike<number>, size: number,
  * A tetrahedral upscaler that can be used to improve the precision of 3D LUTs.
  *
  * Based on an implementation by Garrett Johnson.
+ *
  * @see https://github.com/gkjohnson/threejs-sandbox/blob/master/3d-lut
- * @group Textures
+ * @category Textures
  */
 
 export class TetrahedralUpscaler {

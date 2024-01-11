@@ -5,7 +5,7 @@ import shader from "./shaders/overlay.frag";
 /**
  * Color overlay.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class OverlayBlendFunction extends BlendFunction {

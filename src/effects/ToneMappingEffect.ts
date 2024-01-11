@@ -5,6 +5,8 @@ import fragmentShader from "./shaders/tone-mapping.frag";
 
 /**
  * ToneMappingEffect options.
+ *
+ * @category Effects
  */
 
 export interface ToneMappingEffectOptions {
@@ -19,6 +21,8 @@ export interface ToneMappingEffectOptions {
 
 /**
  * A tone mapping effect.
+ *
+ * @category Effects
  */
 
 export class ToneMappingEffect extends Effect {

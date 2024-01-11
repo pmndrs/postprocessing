@@ -5,7 +5,7 @@ import shader from "./shaders/color-dodge.frag";
 /**
  * Color dodge.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class ColorDodgeBlendFunction extends BlendFunction {

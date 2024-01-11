@@ -5,7 +5,7 @@ import shader from "./shaders/difference.frag";
 /**
  * Color difference. Supports HDR.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class DifferenceBlendFunction extends BlendFunction {

@@ -21,7 +21,7 @@ import { Resizable } from "../core/Resizable.js";
 /**
  * Supported precision constants.
  *
- * @group Materials
+ * @category Materials
  */
 
 export type OutputPrecision = "highp" | "mediump" | "lowp";
@@ -36,12 +36,12 @@ export type OutputPrecision = "highp" | "mediump" | "lowp";
  * - `vec4` resolution
  * - `sampler2D` inputBuffer
  *
- * Requires WebGL 2.
+ * Uses GLSL3 by default.
  *
  * @see {@link inputBuffer} for setting an input buffer.
  * @see {@link copyCameraSettings} for copying camera settings.
  * @see {@link setSize} for setting the resolution.
- * @group Materials
+ * @category Materials
  */
 
 export abstract class FullscreenMaterial extends RawShaderMaterial implements Resizable {

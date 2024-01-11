@@ -5,7 +5,7 @@ import shader from "./shaders/pin-light.frag";
 /**
  * Pin light.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class PinLightBlendFunction extends BlendFunction {

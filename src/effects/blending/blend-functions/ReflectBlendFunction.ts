@@ -5,7 +5,7 @@ import shader from "./shaders/reflect.frag";
 /**
  * Color reflection.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class ReflectBlendFunction extends BlendFunction {

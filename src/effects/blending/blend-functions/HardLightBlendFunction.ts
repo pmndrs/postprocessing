@@ -5,7 +5,7 @@ import shader from "./shaders/hard-light.frag";
 /**
  * Hard light.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class HardLightBlendFunction extends BlendFunction {

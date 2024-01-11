@@ -9,7 +9,7 @@ import { Output } from "./Output.js";
 /**
  * An I/O manager.
  *
- * @group Core
+ * @category Core
  */
 
 export class IOManager {

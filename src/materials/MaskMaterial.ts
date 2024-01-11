@@ -9,7 +9,7 @@ import vertexShader from "./shaders/common.vert";
 /**
  * A mask shader material.
  *
- * @group Materials
+ * @category Materials
  */
 
 export class MaskMaterial extends FullscreenMaterial {

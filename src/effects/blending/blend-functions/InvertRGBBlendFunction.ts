@@ -5,7 +5,7 @@ import shader from "./shaders/invert-rgb.frag";
 /**
  * Multiplies the new color with the inverted base color.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class InvertRGBBlendFunction extends BlendFunction {

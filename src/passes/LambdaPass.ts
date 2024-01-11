@@ -3,7 +3,7 @@ import { Pass } from "../core/Pass.js";
 /**
  * A pass that executes a given function.
  *
- * @group Passes
+ * @category Passes
  */
 
 export class LambdaPass extends Pass {

@@ -9,6 +9,8 @@ import vertexShader from "./shaders/fxaa.vert";
  *
  * Based on an implementation by Simon Rodriguez:
  * https://github.com/kosua20/Rendu/blob/master/resources/common/shaders/screens/fxaa.frag
+ *
+ * @category Effects
  */
 
 export class FXAAEffect extends Effect {

@@ -38,7 +38,7 @@ function createCanvas(width: number, height: number, data: ArrayLike<number> | H
 /**
  * A container for raw RGBA image data.
  *
- * @group Textures
+ * @category Textures
  */
 
 export class RawImageData implements ImageData {

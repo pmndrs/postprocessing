@@ -7,8 +7,9 @@ import vertexShader from "./shaders/convolution.downsampling.vert";
  * A downsampling material.
  *
  * Based on an article by Fabrice Piquet.
+ *
  * @see https://www.froyok.fr/blog/2021-12-ue4-custom-bloom/
- * @group Materials
+ * @category Materials
  */
 
 export class DownsamplingMaterial extends FullscreenMaterial {

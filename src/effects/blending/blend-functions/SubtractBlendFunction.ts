@@ -5,7 +5,7 @@ import shader from "./shaders/subtract.frag";
 /**
  * Subtracts the new color from the base color.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class SubtractBlendFunction extends BlendFunction {

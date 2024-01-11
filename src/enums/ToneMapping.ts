@@ -1,7 +1,7 @@
 /**
  * An enumeration of tone mapping techniques.
  *
- * @group Enums
+ * @category Enums
  */
 
 export enum ToneMapping {

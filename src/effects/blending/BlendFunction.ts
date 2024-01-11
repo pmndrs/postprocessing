@@ -1,7 +1,7 @@
 /**
  * An abstract blend function.
  *
- * @group Blending
+ * @category Blending
  */
 
 export abstract class BlendFunction {

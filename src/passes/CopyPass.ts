@@ -5,7 +5,7 @@ import { CopyMaterial } from "../materials/CopyMaterial.js";
 /**
  * Copies the contents of the default input buffer to another buffer or to screen.
  *
- * @group Passes
+ * @category Passes
  */
 
 export class CopyPass extends Pass<CopyMaterial> {

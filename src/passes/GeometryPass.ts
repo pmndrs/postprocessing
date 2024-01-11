@@ -30,7 +30,7 @@ import { CopyPass } from "./CopyPass.js";
 /**
  * Supported MSAA sample counts.
  *
- * @group Passes
+ * @category Passes
  */
 
 export declare type MSAASamples = 0 | 2 | 4 | 8;
@@ -38,7 +38,7 @@ export declare type MSAASamples = 0 | 2 | 4 | 8;
 /**
  * GeometryPass constructor options.
  *
- * @group Passes
+ * @category Passes
  */
 
 export interface GeometryPassOptions {
@@ -74,7 +74,7 @@ export interface GeometryPassOptions {
 /**
  * A geometry pass.
  *
- * @group Passes
+ * @category Passes
  */
 
 export class GeometryPass extends Pass implements Selective {

@@ -1,7 +1,7 @@
 /**
  * An enumeration of geometry data that is available to Effects.
  *
- * @group Enums
+ * @category Enums
  */
 
 export enum GData {

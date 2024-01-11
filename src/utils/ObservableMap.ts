@@ -4,7 +4,7 @@ import { BaseEventMap } from "../core/BaseEventMap.js";
 /**
  * A map that emits events of type {@link EVENT_CHANGE} when its data changes.
  *
- * @group Utils
+ * @category Utils
  */
 
 export class ObservableMap<K, V> extends EventDispatcher<BaseEventMap> implements Map<K, V> {

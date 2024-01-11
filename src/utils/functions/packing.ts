@@ -8,10 +8,10 @@ const unpackFactors = new Float32Array([
 /**
  * Unpacks an RGBA-encoded float value.
  *
- * @ignore
  * @param packedDepth - The packed float.
  * @return The unpacked float.
- * @group Utils
+ * @category Utils
+ * @internal
  */
 
 export function unpackRGBAToFloat(packedDepth: Uint8Array): number {

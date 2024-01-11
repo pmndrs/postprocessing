@@ -118,7 +118,7 @@ function deltaRight(left: number[], top: number[]): number {
  * This image stores information about how many pixels the line search algorithm must advance in the last step.
  *
  * @see https://github.com/iryoku/smaa/tree/master/Scripts
- * @group Textures
+ * @category Textures
  */
 
 export class SMAASearchImageData {

@@ -22,8 +22,8 @@ import gbufferMetalnessFragment from "./shaders/gbuffer-metalness.frag";
 /**
  * A collection of custom shader chunks.
  *
+ * @category Shader Chunks
  * @internal
- * @group Shader Chunks
  */
 
 export class ShaderChunkExtensions {

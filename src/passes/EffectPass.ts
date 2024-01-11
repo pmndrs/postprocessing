@@ -24,7 +24,7 @@ import { Resolution } from "../utils/Resolution.js";
  *
  * Use this pass to combine {@link Effect} instances.
  *
- * @group Passes
+ * @category Passes
  */
 
 export class EffectPass extends Pass<EffectMaterial> implements EventListenerObject {

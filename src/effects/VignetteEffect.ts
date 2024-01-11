@@ -6,6 +6,8 @@ import fragmentShader from "./shaders/vignette.frag";
 
 /**
  * VignetteEffect options.
+ *
+ * @category Effects
  */
 
 export interface VignetteEffectOptions {
@@ -38,6 +40,8 @@ export interface VignetteEffectOptions {
 
 /**
  * A vignette effect.
+ *
+ * @category Effects
  */
 
 export class VignetteEffect extends Effect {

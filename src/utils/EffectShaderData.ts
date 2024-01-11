@@ -10,8 +10,8 @@ import { prefixSubstrings } from "../utils/functions/string.js";
 /**
  * A collection of shader data.
  *
+ * @category Utils
  * @internal
- * @group Utils
  */
 
 export class EffectShaderData implements ShaderData {

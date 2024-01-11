@@ -9,7 +9,7 @@ import vertexShader from "./shaders/smaa-weights.vert";
  *
  * This material computes weights for detected edges.
  *
- * @group Materials
+ * @category Materials
  */
 
 export class SMAAWeightsMaterial extends FullscreenMaterial {

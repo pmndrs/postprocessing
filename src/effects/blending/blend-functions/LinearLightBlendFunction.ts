@@ -5,7 +5,7 @@ import shader from "./shaders/linear-light.frag";
 /**
  * Linear light.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class LinearLightBlendFunction extends BlendFunction {

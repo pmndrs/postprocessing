@@ -3,7 +3,7 @@
  *
  * The string values of the enum constants double as shader macro names.
  *
- * @group Enums
+ * @category Enums
  */
 
 export enum GBuffer {

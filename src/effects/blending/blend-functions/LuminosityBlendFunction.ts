@@ -5,7 +5,7 @@ import shader from "./shaders/luminosity.frag";
 /**
  * Converts the colors to HSL and blends based on luminosity.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class LuminosityBlendFunction extends BlendFunction {

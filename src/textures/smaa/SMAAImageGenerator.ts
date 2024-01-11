@@ -61,7 +61,7 @@ function generate(useCache = true): Promise<string[]> {
  * This class uses a worker thread to generate the search and area images. The generated data URLs will be cached using
  * localStorage, if available. To disable caching set {@link cacheEnabled} to `false`.
  *
- * @group Textures
+ * @category Textures
  */
 
 export class SMAAImageGenerator {

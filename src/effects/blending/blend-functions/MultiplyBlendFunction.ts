@@ -5,7 +5,7 @@ import shader from "./shaders/multiply.frag";
 /**
  * Color multiplication. Supports HDR.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class MultiplyBlendFunction extends BlendFunction {

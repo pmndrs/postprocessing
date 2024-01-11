@@ -5,7 +5,7 @@ import shader from "./shaders/invert.frag";
 /**
  * Overwrites the base color with the inverted new color.
  *
- * @group Blending
+ * @category Blending
  */
 
 export class InvertBlendFunction extends BlendFunction {
