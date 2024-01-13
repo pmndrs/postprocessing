@@ -191,7 +191,7 @@ export class ViewportManager implements Component, EventListenerObject {
 		// Scrolling
 
 		const main = document.getElementById("main");
-		main?.addEventListener("wheel", this);
+		main?.addEventListener("wheel", this, { passive: false });
 
 		// Fullscreen
 
