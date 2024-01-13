@@ -1,8 +1,6 @@
 /**
  * An enumeration of G-Buffer components.
  *
- * The string values of the enum constants double as shader macro names.
- *
  * @category Enums
  */
 
