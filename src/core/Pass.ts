@@ -174,8 +174,9 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		this.input = new Input();
 		this.output = new Output();
-		this.input.addEventListener(Input.EVENT_CHANGE, () => this.updateFullscreenMaterial());
+		this.input.addEventListener(Input.EVENT_CHANGE, () => this.updateFullscreenMaterialInput());
 		this.input.addEventListener(Input.EVENT_CHANGE, () => this.onInputChange());
+		this.output.addEventListener(Input.EVENT_CHANGE, () => this.updateFullscreenMaterialOutput());
 		this.output.addEventListener(Output.EVENT_CHANGE, () => this.onOutputChange());
 
 		this._subpasses = [];
@@ -363,7 +364,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 * Updates the shader input data of the fullscreen material, if it exists.
 	 */
 
-	private updateFullscreenMaterial(): void {
+	private updateFullscreenMaterialInput(): void {
 
 		const fullscreenMaterial = this.fullscreenMaterial;
 
@@ -404,6 +405,23 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		}
 
 		fullscreenMaterial.needsUpdate = true;
+
+	}
+
+	/**
+	 * Updates the shader output data of the fullscreen material, if it exists.
+	 */
+
+	private updateFullscreenMaterialOutput(): void {
+
+		const fullscreenMaterial = this.fullscreenMaterial;
+
+		if(fullscreenMaterial instanceof FullscreenMaterial) {
+
+			// High precision buffers use HalfFloatType (mediump).
+			fullscreenMaterial.outputPrecision = this.output.frameBufferPrecisionHigh ? "mediump" : "lowp";
+
+		}
 
 	}
 
