@@ -94,7 +94,7 @@ export class GeometryPass extends Pass implements Selective {
 	private readonly copyPass: CopyPass;
 
 	/**
-	 * Controls which gBuffer components should be rendered by this pass.
+	 * Controls which G-Buffer components should be rendered by this pass.
 	 *
 	 * This will be automatically configured based on the requirements of other passes in the same pipeline.
 	 */
@@ -244,8 +244,9 @@ export class GeometryPass extends Pass implements Selective {
 	}
 
 	/**
-	 * Enables rendering to GBuffer components for a given material.
+	 * Enables rendering to G-Buffer components for a given material.
 	 *
+	 * @todo Remove when three supports output layout definitions for MRT.
 	 * @param material - The material.
 	 */
 
@@ -464,7 +465,7 @@ export class GeometryPass extends Pass implements Selective {
 		this.renderer.setRenderTarget(this.output.defaultBuffer);
 		this.renderer.render(this.scene, this.camera);
 
-		// Restore original values.
+		// Restore the original values.
 		this.camera.layers.mask = mask;
 		this.scene.background = background;
 		this.renderer.shadowMap.autoUpdate = shadowMapAutoUpdate;
