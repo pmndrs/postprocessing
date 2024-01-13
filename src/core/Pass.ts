@@ -354,7 +354,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 * Updates the size of the default output buffer, if it exists.
 	 */
 
-	private updateOutputBufferSize(resolution: Resolution): void {
+	protected updateOutputBufferSize(resolution: Resolution): void {
 
 		this.output.defaultBuffer?.setSize(resolution.width, resolution.height);
 
