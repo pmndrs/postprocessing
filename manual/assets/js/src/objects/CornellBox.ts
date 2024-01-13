@@ -1,6 +1,5 @@
 import {
 	BoxGeometry,
-	CylinderGeometry,
 	Group,
 	LightProbe,
 	Mesh,
@@ -34,15 +33,15 @@ export function createLights(): Group {
 
 	const lightProbe = new LightProbe();
 	lightProbe.sh.coefficients = shCoefficients.map(x => new Vector3(x[0], x[1], x[2]));
-	lightProbe.intensity = 1.3;
 
-	const lightCeiling = new PointLight(0xfee2b0, 1, 10);
-	lightCeiling.position.set(0, 0.93, 0);
+	const lightCeiling = new PointLight(0xd9a859, 1, 10);
+	lightCeiling.position.set(0, 0.84, 0);
 	lightCeiling.castShadow = true;
 	lightCeiling.shadow.bias = -0.015;
 	lightCeiling.shadow.mapSize.width = 1024;
 	lightCeiling.shadow.mapSize.height = 1024;
 	lightCeiling.shadow.radius = 4;
+	lightCeiling.shadow.camera.near = 0.1;
 
 	const lights = new Group();
 	lights.add(lightProbe, lightCeiling);
@@ -107,6 +106,14 @@ export function createEnvironment(): Group {
 		})
 	);
 
+	const plane07 = new Mesh(
+		planeGeometry,
+		new MeshStandardMaterial({
+			color: 0xffffff,
+			emissive: 0xffffff
+		})
+	);
+
 	plane05.position.x = -1;
 	plane05.rotation.y = Math.PI * 0.5;
 	plane05.scale.set(2, 2, 1);
@@ -117,10 +124,14 @@ export function createEnvironment(): Group {
 	plane06.scale.set(2, 2, 1);
 	plane06.receiveShadow = true;
 
+	plane07.position.y = 1 - 0.004;
+	plane07.rotation.x = Math.PI * 0.5;
+	plane07.scale.set(0.4, 0.4, 1);
+
 	const environment = new Group();
 	environment.add(
 		plane00, plane01, plane02, plane03,
-		plane04, plane05, plane06
+		plane04, plane05, plane06, plane07
 	);
 
 	return environment;
@@ -136,7 +147,7 @@ export function createEnvironment(): Group {
 export function createActors(): Group {
 
 	const actor01 = new Mesh(
-		new CylinderGeometry(0.6, 0.6, 1),
+		new BoxGeometry(1, 1, 1),
 		new MeshStandardMaterial({
 			color: 0xffffff,
 			roughness: 0.5,
@@ -147,7 +158,7 @@ export function createActors(): Group {
 	const actor02 = new Mesh(
 		new BoxGeometry(1, 1, 1),
 		new MeshStandardMaterial({
-			color: 0xffaaff,
+			color: 0xffffff,
 			roughness: 1,
 			metalness: 0
 		})
@@ -155,7 +166,7 @@ export function createActors(): Group {
 
 	const actor03 = new Mesh(
 		new SphereGeometry(1, 32, 32), new MeshStandardMaterial({
-			color: 0xaaffff,
+			color: 0xffffff,
 			roughness: 0,
 			metalness: 0.1
 		})
