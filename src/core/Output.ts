@@ -1,4 +1,4 @@
-import { EventDispatcher, Uniform, WebGLMultipleRenderTargets, WebGLRenderTarget } from "three";
+import { EventDispatcher, Uniform, UnsignedByteType, WebGLMultipleRenderTargets, WebGLRenderTarget } from "three";
 import { ObservableMap } from "../utils/ObservableMap.js";
 import { BaseEventMap } from "./BaseEventMap.js";
 import { ShaderData } from "./ShaderData.js";
@@ -81,6 +81,29 @@ export class Output extends EventDispatcher<BaseEventMap> implements ShaderData 
 	set defaultBuffer(value: WebGLRenderTarget | WebGLMultipleRenderTargets | null) {
 
 		this.renderTargets.set(Output.BUFFER_DEFAULT, value);
+
+	}
+
+	/**
+	 * Indicates whether the default buffer uses high precision.
+	 */
+
+	get frameBufferPrecisionHigh(): boolean {
+
+		const outputBuffer = this.defaultBuffer;
+
+		if(outputBuffer === null) {
+
+			return false;
+
+		}
+
+		// Assuming index 0 is the albedo attachment.
+		const type = outputBuffer instanceof WebGLMultipleRenderTargets ?
+			outputBuffer.texture[0].type :
+			outputBuffer.texture.type;
+
+		return type !== UnsignedByteType;
 
 	}
 
