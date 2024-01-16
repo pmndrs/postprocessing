@@ -14,24 +14,32 @@ export interface VignetteEffectOptions {
 
 	/**
 	 * Defines the Vignette shape.
+	 *
+	 * @defaultValue {@link VignetteTechnique.DEFAULT}
 	 */
 
 	technique?: VignetteTechnique;
 
 	/**
-	 * The Vignette offset. Default is `0.5`.
+	 * The Vignette offset.
+	 *
+	 * @defaultValue 0.5
 	 */
 
 	offset?: number;
 
 	/**
-	 * The Vignette softness. Acts as a color scale when using {@link VignetteTechnique.ESKIL}. Default is `0.5`.
+	 * The Vignette softness. Acts as a color scale when using {@link VignetteTechnique.ESKIL}.
+	 *
+	 * @defaultValue 0.5
 	 */
 
 	feather?: number;
 
 	/**
-	 * The Vignette color. Default is `0x000000`.
+	 * The Vignette color.
+	 *
+	 * @defaultValue 0x000000
 	 */
 
 	color?: Color | number;

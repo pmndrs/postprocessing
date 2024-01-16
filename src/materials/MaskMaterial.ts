@@ -58,7 +58,9 @@ export class MaskMaterial extends FullscreenMaterial {
 	}
 
 	/**
-	 * The color channel to use for masking. Default is `ColorChannel.RED`.
+	 * The color channel to use for masking.
+	 *
+	 * @defaultValue ColorChannel.RED
 	 */
 
 	get colorChannel(): ColorChannel {
@@ -75,7 +77,9 @@ export class MaskMaterial extends FullscreenMaterial {
 	}
 
 	/**
-	 * The masking technique. Default is `MaskFunction.DISCARD`.
+	 * The masking technique.
+	 *
+	 * @defaultValue MaskFunction.DISCARD
 	 */
 
 	get maskFunction(): MaskFunction {

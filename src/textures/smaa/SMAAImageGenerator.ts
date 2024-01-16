@@ -67,7 +67,9 @@ function generate(useCache = true): Promise<string[]> {
 export class SMAAImageGenerator {
 
 	/**
-	 * Indicates whether data image caching is enabled. Default is true.
+	 * Indicates whether data image caching is enabled.
+	 *
+	 * @defaultValue true
 	 */
 
 	cacheEnabled: boolean;

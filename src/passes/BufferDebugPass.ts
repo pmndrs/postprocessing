@@ -1,8 +1,8 @@
 import { Mesh, MeshBasicMaterial, OrthographicCamera, PlaneGeometry, Scene, Texture } from "three";
 import { GBuffer } from "../enums/GBuffer.js";
 import { Input } from "../core/Input.js";
-import { Resolution } from "../utils/Resolution.js";
 import { Log } from "../utils/Log.js";
+import { Resolution } from "../utils/Resolution.js";
 import { CopyPass } from "./CopyPass.js";
 
 /**
@@ -14,13 +14,17 @@ import { CopyPass } from "./CopyPass.js";
 export class BufferDebugPass extends CopyPass {
 
 	/**
-	 * The size of each texture view relative to the screen size. Default is `0.1`.
+	 * The size of each texture view relative to the screen size.
+	 *
+	 * @defaultValue 0.1
 	 */
 
 	viewSize: number;
 
 	/**
-	 * Limits the amount of texture views per row. Default is `4`.
+	 * Limits the amount of texture views per row.
+	 *
+	 * @defaultValue 4
 	 */
 
 	columns: number;

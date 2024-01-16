@@ -14,7 +14,9 @@ import vertexShader from "./shaders/convolution.gaussian.vert";
 export interface GaussianBlurMaterialOptions {
 
 	/**
-	 * The kernel size. Must be an odd number. Default is 35.
+	 * The kernel size. Must be an odd number.
+	 *
+	 * @defaultValue 35
 	 */
 
 	kernelSize?: number;

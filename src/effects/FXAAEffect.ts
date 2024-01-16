@@ -4,6 +4,48 @@ import fragmentShader from "./shaders/fxaa.frag";
 import vertexShader from "./shaders/fxaa.vert";
 
 /**
+ * FXAAEffect options.
+ *
+ * @category Effects
+ */
+
+export interface FXAAEffectOptions {
+
+	/**
+	 * The minimum edge detection threshold. Range is [0.0, 1.0].
+	 *
+	 * @defaultValue 0.0312
+	 */
+
+	minEdgeThreshold?: number;
+
+	/**
+	 * The maximum edge detection threshold. Range is [0.0, 1.0].
+	 *
+	 * @defaultValue 0.125
+	 */
+
+	maxEdgeThreshold?: number;
+
+	/**
+	 * The subpixel blend quality. Range is [0.0, 1.0].
+	 *
+	 * @defaultValue 0.75
+	 */
+
+	subpixelQuality?: number;
+
+	/**
+	 * The maximum amount of edge detection samples.
+	 *
+	 * @defaultValue 12
+	 */
+
+	samples?: number;
+
+}
+
+/**
  * NVIDIA FXAA 3.11 by Timothy Lottes:
  * https://developer.download.nvidia.com/assets/gamedev/files/sdk/11/FXAA_WhitePaper.pdf
  *
@@ -17,19 +59,26 @@ export class FXAAEffect extends Effect {
 
 	/**
 	 * Constructs a new FXAA effect.
+	 *
+	 * @param options - The options.
 	 */
 
-	constructor() {
+	constructor({
+		minEdgeThreshold = 0.0312,
+		maxEdgeThreshold = 0.125,
+		subpixelQuality = 0.75,
+		samples = 12
+	}: FXAAEffectOptions = {}) {
 
 		super("FXAAEffect");
 
 		this.fragmentShader = fragmentShader;
 		this.vertexShader = vertexShader;
 
-		this.minEdgeThreshold = 0.0312;
-		this.maxEdgeThreshold = 0.125;
-		this.subpixelQuality = 0.75;
-		this.samples = 12;
+		this.minEdgeThreshold = minEdgeThreshold;
+		this.maxEdgeThreshold = maxEdgeThreshold;
+		this.subpixelQuality = subpixelQuality;
+		this.samples = samples;
 
 	}
 

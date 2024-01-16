@@ -70,12 +70,14 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 	}
 
 	/**
-	 * The local contrast adaptation factor. Has no effect if the edge detection mode is set to DEPTH. Default is `2.0`.
+	 * The local contrast adaptation factor. Has no effect if the edge detection mode is set to DEPTH.
 	 *
 	 * If a neighbor edge has _factor_ times bigger contrast than the current edge, the edge will be discarded.
 	 *
 	 * This allows to eliminate spurious crossing edges and is based on the fact that if there is too much contrast in a
 	 * direction, the perceptual contrast in the other neighbors will be hidden.
+	 *
+	 * @defaultValue 2
 	 */
 
 	get localContrastAdaptationFactor(): number {
@@ -181,8 +183,6 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 
 	/**
 	 * The predication threshold.
-	 *
-	 * @type {Number}
 	 */
 
 	get predicationThreshold(): number {

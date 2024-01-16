@@ -9,13 +9,17 @@ import { Color, Vector3 } from "three";
 export class ClearValues {
 
 	/**
-	 * A clear color that overrides the clear color of the renderer. Default is `null`, meaning disabled.
+	 * A clear color that overrides the clear color of the renderer.
+	 *
+	 * @defaultValue null
 	 */
 
 	color: Color | null;
 
 	/**
-	 * A clear alpha value that overrides the clear alpha of the renderer. Default is `null`, meaning disabled.
+	 * A clear alpha value that overrides the clear alpha of the renderer.
+	 *
+	 * @defaultValue null
 	 */
 
 	alpha: number | null;

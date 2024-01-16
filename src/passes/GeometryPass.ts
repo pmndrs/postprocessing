@@ -44,27 +44,35 @@ export declare type MSAASamples = 0 | 2 | 4 | 8;
 export interface GeometryPassOptions {
 
 	/**
-	 * Determines whether a stencil buffer should be created. Default is `false`.
+	 * Determines whether a stencil buffer should be created.
+	 *
+	 * @defaultValue false
 	 */
 
 	stencilBuffer?: boolean;
 
 	/**
-	 * Determines whether a depth buffer should be created. Default is `true`.
+	 * Determines whether a depth buffer should be created.
+	 *
+	 * @defaultValue true
 	 */
 
 	depthBuffer?: boolean;
 
 	/**
-	 * The type of the color buffer. Default is `UnsignedByteType`.
+	 * The type of the color buffer.
+	 *
+	 * @defaultValue {@link UnsignedByteType}
 	 */
 
 	frameBufferType?: TextureDataType;
 
 	/**
-	 * The amount of samples used for MSAA. Default is `0`.
+	 * The amount of samples used for MSAA.
 	 *
 	 * Will be limited to the maximum value supported by the device.
+	 *
+	 * @defaultValue 0
 	 */
 
 	samples?: MSAASamples;

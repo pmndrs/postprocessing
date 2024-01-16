@@ -9,7 +9,9 @@ import { LogLevel } from "../enums/LogLevel.js";
 export abstract class Log {
 
 	/**
-	 * The current log level. Default is {@link LogLevel.ERROR}.
+	 * The current log level.
+	 *
+	 * @defaultValue {@link LogLevel.ERROR}
 	 */
 
 	static level = LogLevel.ERROR;

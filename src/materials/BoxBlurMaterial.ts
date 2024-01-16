@@ -14,13 +14,17 @@ import vertexShader from "./shaders/convolution.box.vert";
 export interface BoxBlurMaterialOptions {
 
 	/**
-	 * The blur kernel size. Default is `false`.
+	 * The blur kernel size.
+	 *
+	 * @defaultValue false
 	 */
 
 	bilateral?: boolean;
 
 	/**
-	 * The blur kernel size. Default is `5`.
+	 * The blur kernel size.
+	 *
+	 * @defaultValue 5
 	 */
 
 	kernelSize?: number;
@@ -66,7 +70,9 @@ export class BoxBlurMaterial extends FullscreenMaterial {
 	/**
 	 * The maximum amount of varying vectors.
 	 *
-	 * Should be synced with `renderer.capabilities.maxVaryings`. Default is `8` (minimum).
+	 * Should be synced with `renderer.capabilities.maxVaryings`.
+	 *
+	 * @defaultValue 8
 	 */
 
 	set maxVaryingVectors(value: number) {
@@ -80,7 +86,8 @@ export class BoxBlurMaterial extends FullscreenMaterial {
 	 *
 	 * - Must be an odd number
 	 * - Kernel size `3` and `5` use optimized code paths
-	 * - Default is `5`
+	 *
+	 * @defaultValue 5
 	 */
 
 	get kernelSize(): number {

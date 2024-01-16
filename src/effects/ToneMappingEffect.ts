@@ -13,6 +13,8 @@ export interface ToneMappingEffectOptions {
 
 	/**
 	 * The tone mapping operator.
+	 *
+	 * @defaultValue {@link ToneMapping.AGX}
 	 */
 
 	toneMapping?: ToneMapping;
