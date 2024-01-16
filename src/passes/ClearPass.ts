@@ -3,6 +3,7 @@ import { Pass } from "../core/Pass.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { ClearFlags } from "../utils/ClearFlags.js";
 import { ClearValues } from "../utils/ClearValues.js";
+import { GBufferInfo } from "../utils/GBufferInfo.js";
 
 const color = /* @__PURE__ */ new Color();
 const fv = /* @__PURE__ */ new Float32Array(4);
@@ -45,16 +46,6 @@ export class ClearPass extends Pass {
 	}
 
 	/**
-	 * The current GBuffer component indices.
-	 */
-
-	private get gBufferIndices(): Map<GBuffer, number> {
-
-		return this.output.defines as Map<GBuffer, number>;
-
-	}
-
-	/**
 	 * Clears GBuffer components.
 	 *
 	 * @see https://www.khronos.org/opengl/wiki/Framebuffer#Buffer_clearing
@@ -68,10 +59,14 @@ export class ClearPass extends Pass {
 		const flags = this.clearFlags;
 		const values = this.clearValues;
 
-		if(flags.gBufferComponents.has(GBuffer.NORMAL) && this.gBufferIndices.has(GBuffer.NORMAL)) {
+		// The type of the default buffer has already been checked.
+		const gBuffer = this.output.defaultBuffer as WebGLMultipleRenderTargets;
+		const gBufferInfo = new GBufferInfo(gBuffer);
+
+		if(flags.gBufferComponents.has(GBuffer.NORMAL) && gBufferInfo.indices.has(GBuffer.NORMAL)) {
 
 			const clearNormal = values.normal;
-			const index = this.gBufferIndices.get(GBuffer.NORMAL) as number;
+			const index = gBufferInfo.indices.get(GBuffer.NORMAL) as number;
 
 			fv[0] = clearNormal.x;
 			fv[1] = clearNormal.y;
@@ -83,11 +78,11 @@ export class ClearPass extends Pass {
 		}
 
 		if((flags.gBufferComponents.has(GBuffer.ROUGHNESS) || flags.gBufferComponents.has(GBuffer.METALNESS)) &&
-			(this.gBufferIndices.has(GBuffer.ROUGHNESS) || this.gBufferIndices.has(GBuffer.METALNESS))) {
+			(gBufferInfo.indices.has(GBuffer.ROUGHNESS) || gBufferInfo.indices.has(GBuffer.METALNESS))) {
 
 			const clearRoughness = values.roughness;
 			const clearMetalness = values.metalness;
-			const index = this.gBufferIndices.get(GBuffer.ROUGHNESS) as number;
+			const index = gBufferInfo.indices.get(GBuffer.ROUGHNESS) as number;
 
 			fv[0] = clearRoughness;
 			fv[1] = clearMetalness;
