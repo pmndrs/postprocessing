@@ -5,6 +5,8 @@ uniform float scale;
 uniform float aspect;
 uniform vec2 rotation;
 
+in vec3 position;
+
 out vec2 vUv;
 out vec2 vUv2;
 out vec2 vOffset;

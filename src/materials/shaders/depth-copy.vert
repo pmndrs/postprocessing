@@ -1,3 +1,4 @@
+in vec3 position;
 out vec2 vUv;
 
 #if DEPTH_COPY_MODE == 1

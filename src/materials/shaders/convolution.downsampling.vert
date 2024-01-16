@@ -1,5 +1,7 @@
 #include <pp_resolution_pars_fragment>
 
+in vec3 position;
+
 out vec2 vUv;
 out vec2 vUv00, vUv01, vUv02, vUv03;
 out vec2 vUv04, vUv05, vUv06, vUv07;

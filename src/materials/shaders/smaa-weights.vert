@@ -1,5 +1,7 @@
 uniform vec4 resolution; // XY = resolution, ZW = texelSize
 
+in vec3 position;
+
 out vec2 vUv;
 out vec4 vOffset[3];
 out vec2 vPixCoord;
