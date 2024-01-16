@@ -1,4 +1,13 @@
-import { Mesh, MeshBasicMaterial, OrthographicCamera, PlaneGeometry, Scene, Texture } from "three";
+import {
+	Mesh,
+	MeshBasicMaterial,
+	OrthographicCamera,
+	PlaneGeometry,
+	Scene,
+	Texture,
+	WebGLProgramParametersWithUniforms
+} from "three";
+
 import { GBuffer } from "../enums/GBuffer.js";
 import { Input } from "../core/Input.js";
 import { Log } from "../utils/Log.js";
@@ -97,14 +106,25 @@ export class BufferDebugPass extends CopyPass {
 	set bufferFocus(value: string | null) {
 
 		this._bufferFocus = value;
+		this.updateInputBuffer();
 
-		if(value !== null && this.input.buffers.has(value)) {
+	}
 
-			this.fullscreenMaterial.inputBuffer = this.input.buffers.get(value) as Texture;
+	/**
+	 * Sets the input buffer based on the currently selected buffer.
+	 */
+
+	private updateInputBuffer(): void {
+
+		if(this.bufferFocus !== null && this.input.buffers.has(this.bufferFocus)) {
+
+			this.fullscreenMaterial.inputBuffer = this.input.buffers.get(this.bufferFocus) as Texture;
+			this.fullscreenMaterial.colorSpaceConversion = false;
 
 		} else {
 
 			this.fullscreenMaterial.inputBuffer = this.input.defaultBuffer;
+			this.fullscreenMaterial.colorSpaceConversion = true;
 
 		}
 
@@ -201,6 +221,13 @@ export class BufferDebugPass extends CopyPass {
 				})
 			);
 
+			view.material.onBeforeCompile = (parameters: WebGLProgramParametersWithUniforms) => {
+
+				// Disable color space conversion.
+				parameters.fragmentShader = parameters.fragmentShader.replace("#include <colorspace_fragment>", "");
+
+			};
+
 			view.name = entry[0];
 			this.views.push(view);
 			capturedTextures.add(entry[1]);
@@ -208,6 +235,7 @@ export class BufferDebugPass extends CopyPass {
 		}
 
 		this.updateViews();
+		this.updateInputBuffer();
 
 	}
 
