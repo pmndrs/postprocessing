@@ -22,9 +22,11 @@ import {
 
 import { Pass } from "../core/Pass.js";
 import { Selective } from "../core/Selective.js";
-import { Selection } from "../utils/Selection.js";
-import { ObservableSet } from "../utils/ObservableSet.js";
 import { GBuffer } from "../enums/GBuffer.js";
+import { GBufferTexture } from "../enums/GBufferTexture.js";
+import { GBufferInfo } from "../utils/GBufferInfo.js";
+import { ObservableSet } from "../utils/ObservableSet.js";
+import { Selection } from "../utils/Selection.js";
 import { CopyPass } from "./CopyPass.js";
 
 /**
@@ -223,9 +225,12 @@ export class GeometryPass extends Pass implements Selective {
 
 		this._samples = value;
 
-		if(this.output.defaultBuffer !== null) {
+		const buffer = this.output.defaultBuffer;
 
-			this.output.defaultBuffer.samples = value;
+		if(buffer !== null && buffer.samples !== value) {
+
+			buffer.samples = value;
+			buffer.dispose();
 
 		}
 
@@ -238,16 +243,6 @@ export class GeometryPass extends Pass implements Selective {
 	get gBuffer(): WebGLMultipleRenderTargets | null {
 
 		return this.output.defaultBuffer as WebGLMultipleRenderTargets;
-
-	}
-
-	/**
-	 * The GBuffer component indices.
-	 */
-
-	get gBufferIndices(): Map<GBuffer, number> {
-
-		return this.output.defines as Map<GBuffer, number>;
 
 	}
 
@@ -281,9 +276,15 @@ export class GeometryPass extends Pass implements Selective {
 
 			}
 
-			for(const entry of this.gBufferIndices) {
+			if(this.gBuffer !== null) {
 
-				shader.defines[entry[0]] = entry[1];
+				const gBufferInfo = new GBufferInfo(this.gBuffer);
+
+				for(const entry of gBufferInfo.defines) {
+
+					shader.defines[entry[0]] = entry[1];
+
+				}
 
 			}
 
@@ -332,18 +333,45 @@ export class GeometryPass extends Pass implements Selective {
 
 	private updateOutputBufferColorSpace(): void {
 
-		if(!this.gBufferComponents.has(GBuffer.COLOR)) {
+		const gBuffer = this.gBuffer;
+
+		if(!this.gBufferComponents.has(GBuffer.COLOR) || gBuffer === null) {
 
 			return;
 
 		}
 
-		const renderTarget = this.output.defaultBuffer as WebGLMultipleRenderTargets;
-		const index = this.gBufferIndices.get(GBuffer.COLOR) as number;
+		const gBufferInfo = new GBufferInfo(gBuffer);
+		const index = gBufferInfo.indices.get(GBuffer.COLOR) as number;
 
 		if(this.frameBufferType === UnsignedByteType && this.renderer?.outputColorSpace === SRGBColorSpace) {
 
-			renderTarget.texture[index].colorSpace = SRGBColorSpace;
+			gBuffer.texture[index].colorSpace = SRGBColorSpace;
+
+		}
+
+	}
+
+	/**
+	 * Updates the output macro definitions.
+	 */
+
+	private updateDefines(): void {
+
+		const gBuffer = this.gBuffer;
+		this.output.defines.clear();
+
+		if(gBuffer === null) {
+
+			return;
+
+		}
+
+		const gBufferInfo = new GBufferInfo(gBuffer);
+
+		for(const entry of gBufferInfo.defines) {
+
+			this.output.defines.set(entry[0], entry[1]);
 
 		}
 
@@ -356,21 +384,23 @@ export class GeometryPass extends Pass implements Selective {
 	private updateGBuffer(): void {
 
 		const gBufferComponents = this.gBufferComponents;
-		const gBufferIndices = this.gBufferIndices;
 		this.output.defaultBuffer?.dispose();
-		gBufferIndices.clear();
 
 		if(gBufferComponents.size === 0) {
 
+			this.copyPass.output.defaultBuffer = null;
 			this.output.defaultBuffer = null;
+			this.output.defines.clear();
+
 			return;
 
 		}
 
 		const exclusions = new Set<GBuffer>([GBuffer.DEPTH, GBuffer.METALNESS]);
 		const textureCount = Array.from(gBufferComponents).filter((x) => !exclusions.has(x)).length;
+		const { width, height } = this.resolution;
 
-		const renderTarget = new WebGLMultipleRenderTargets(1, 1, textureCount, {
+		const renderTarget = new WebGLMultipleRenderTargets(width, height, textureCount, {
 			stencilBuffer: this.stencilBuffer,
 			depthBuffer: this.depthBuffer,
 			samples: this.samples
@@ -381,40 +411,34 @@ export class GeometryPass extends Pass implements Selective {
 
 		if(gBufferComponents.has(GBuffer.COLOR)) {
 
-			textures[index].name = GBuffer.COLOR;
-			textures[index].minFilter = LinearFilter;
-			textures[index].magFilter = LinearFilter;
-			textures[index].type = this.frameBufferType;
-			textures[index].format = RGBAFormat;
-			gBufferIndices.set(GBuffer.COLOR, index++);
+			const texture = textures[index++];
+			texture.name = GBufferTexture.COLOR;
+			texture.minFilter = LinearFilter;
+			texture.magFilter = LinearFilter;
+			texture.type = this.frameBufferType;
+			texture.format = RGBAFormat;
 
 		}
 
 		if(gBufferComponents.has(GBuffer.NORMAL)) {
 
-			textures[index].name = GBuffer.NORMAL;
-			textures[index].minFilter = NearestFilter;
-			textures[index].magFilter = NearestFilter;
-			textures[index].type = HalfFloatType;
-			textures[index].format = RGBAFormat;
-			gBufferIndices.set(GBuffer.NORMAL, index++);
+			const texture = textures[index++];
+			texture.name = GBufferTexture.NORMAL;
+			texture.minFilter = NearestFilter;
+			texture.magFilter = NearestFilter;
+			texture.type = HalfFloatType;
+			texture.format = RGBAFormat;
 
 		}
 
-		if(gBufferComponents.has(GBuffer.ROUGHNESS)) {
+		if(gBufferComponents.has(GBuffer.ROUGHNESS) || gBufferComponents.has(GBuffer.METALNESS)) {
 
-			textures[index].name = GBuffer.ROUGHNESS;
-			textures[index].minFilter = LinearFilter;
-			textures[index].magFilter = LinearFilter;
-			textures[index].type = UnsignedByteType;
-			textures[index].format = RGFormat;
-			gBufferIndices.set(GBuffer.ROUGHNESS, index++);
-
-		}
-
-		if(gBufferComponents.has(GBuffer.METALNESS)) {
-
-			gBufferIndices.set(GBuffer.METALNESS, gBufferIndices.get(GBuffer.ROUGHNESS) as number);
+			const texture = textures[index++];
+			texture.name = GBufferTexture.ROUGHNESS_METALNESS;
+			texture.minFilter = LinearFilter;
+			texture.magFilter = LinearFilter;
+			texture.type = UnsignedByteType;
+			texture.format = RGFormat;
 
 		}
 
@@ -428,8 +452,8 @@ export class GeometryPass extends Pass implements Selective {
 
 		this.copyPass.output.defaultBuffer = renderTarget;
 		this.output.defaultBuffer = renderTarget;
-		this.onResolutionChange(this.resolution);
 		this.updateOutputBufferColorSpace();
+		this.updateDefines();
 
 	}
 
