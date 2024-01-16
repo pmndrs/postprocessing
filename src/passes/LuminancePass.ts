@@ -1,3 +1,4 @@
+import { Texture } from "three";
 import { Pass } from "../core/Pass.js";
 import { LuminanceMaterial } from "../materials/LuminanceMaterial.js";
 
@@ -19,6 +20,29 @@ export class LuminancePass extends Pass<LuminanceMaterial> {
 
 		this.output.defaultBuffer = this.createFramebuffer();
 		this.fullscreenMaterial = new LuminanceMaterial();
+
+	}
+
+	/**
+	 * The output texture.
+	 */
+
+	get texture(): Texture {
+
+		return this.output.defaultBuffer!.texture as Texture;
+
+	}
+
+	protected override onInputChange(): void {
+
+		if(this.input.defaultBuffer === null) {
+
+			return;
+
+		}
+
+		this.texture.type = this.input.defaultBuffer.type;
+		this.texture.colorSpace = this.input.defaultBuffer.colorSpace;
 
 	}
 
