@@ -15,6 +15,18 @@ import vertexTemplate from "./shaders/effect.vert";
 export class EffectMaterial extends FullscreenMaterial {
 
 	/**
+	 * Keeps track of custom uniforms.
+	 */
+
+	private readonly customUniforms: Map<string, Uniform>;
+
+	/**
+	 * Keeps track of custom defines.
+	 */
+
+	private readonly customDefines: Map<string, string | number | boolean>;
+
+	/**
 	 * Constructs a new effect material.
 	 */
 
@@ -30,6 +42,9 @@ export class EffectMaterial extends FullscreenMaterial {
 				time: new Uniform(0.0)
 			}
 		});
+
+		this.customUniforms = new Map<string, Uniform>();
+		this.customDefines = new Map<string, string | number | boolean>();
 
 	}
 
@@ -124,15 +139,27 @@ export class EffectMaterial extends FullscreenMaterial {
 	/**
 	 * Sets the shader macros.
 	 *
+	 * Macros that have previously been set will be removed before the new ones are added.
+	 *
 	 * @param defines - A collection of preprocessor macro definitions.
 	 * @return This material.
 	 */
 
 	setDefines(defines: Map<string, string | number | boolean>): this {
 
+		// Reset defines.
+		for(const key of this.customDefines.keys()) {
+
+			delete this.defines[key];
+
+		}
+
+		this.customDefines.clear();
+
 		for(const entry of defines.entries()) {
 
 			this.defines[entry[0]] = entry[1];
+			this.customDefines.set(entry[0], entry[1]);
 
 		}
 
@@ -144,19 +171,31 @@ export class EffectMaterial extends FullscreenMaterial {
 	/**
 	 * Sets the shader uniforms.
 	 *
+	 * Uniforms that have previously been set will be removed before the new ones are added.
+	 *
 	 * @param uniforms - A collection of uniforms.
 	 * @return This material.
 	 */
 
 	setUniforms(uniforms: Map<string, Uniform>): this {
 
-		for(const entry of uniforms.entries()) {
+		// Reset uniforms.
+		for(const key of this.customUniforms.keys()) {
 
-			this.uniforms[entry[0]] = entry[1];
+			delete this.uniforms[key];
 
 		}
 
-		this.needsUpdate = true;
+		this.customUniforms.clear();
+
+		for(const entry of uniforms.entries()) {
+
+			this.uniforms[entry[0]] = entry[1];
+			this.customUniforms.set(entry[0], entry[1]);
+
+		}
+
+		this.uniformsNeedUpdate = true;
 		return this;
 
 	}
