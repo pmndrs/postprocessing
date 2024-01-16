@@ -38,6 +38,38 @@ export class LuminanceMaterial extends FullscreenMaterial {
 	}
 
 	/**
+	 * Indicates whether the luminance threshold is enabled.
+	 */
+
+	private get thresholdEnabled(): boolean {
+
+		return (this.defines.THRESHOLD !== undefined);
+
+	}
+
+	private set thresholdEnabled(value: boolean) {
+
+		if(this.thresholdEnabled === value) {
+
+			return;
+
+		}
+
+		if(value) {
+
+			this.defines.THRESHOLD = true;
+
+		} else {
+
+			delete this.defines.THRESHOLD;
+
+		}
+
+		this.needsUpdate = true;
+
+	}
+
+	/**
 	 * The luminance threshold.
 	 */
 
@@ -49,16 +81,7 @@ export class LuminanceMaterial extends FullscreenMaterial {
 
 	set threshold(value: number) {
 
-		if(this.smoothing > 0 || value > 0) {
-
-			this.defines.THRESHOLD = true;
-
-		} else {
-
-			delete this.defines.THRESHOLD;
-
-		}
-
+		this.thresholdEnabled = (this.smoothing > 0.0 || value > 0.0);
 		this.uniforms.threshold.value = value;
 
 	}
@@ -75,16 +98,7 @@ export class LuminanceMaterial extends FullscreenMaterial {
 
 	set smoothing(value: number) {
 
-		if(this.threshold > 0 || value > 0) {
-
-			this.defines.THRESHOLD = true;
-
-		} else {
-
-			delete this.defines.THRESHOLD;
-
-		}
-
+		this.thresholdEnabled = (this.threshold > 0.0 || value > 0.0);
 		this.uniforms.smoothing.value = value;
 
 	}
