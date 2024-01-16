@@ -1,4 +1,5 @@
 import {
+	BaseEvent,
 	BufferAttribute,
 	BufferGeometry,
 	Camera,
@@ -25,13 +26,25 @@ import { Output } from "./Output.js";
 import { Renderable } from "./Renderable.js";
 
 /**
+ * Pass events.
+ *
+ * @category Core
+ */
+
+export interface PassEventMap extends BaseEventMap {
+
+	toggle: BaseEvent;
+
+}
+
+/**
  * An abstract pass.
  *
  * @category Core
  */
 
 export abstract class Pass<TMaterial extends Material | null = null>
-	extends EventDispatcher<BaseEventMap> implements Disposable, Renderable {
+	extends EventDispatcher<PassEventMap> implements Disposable, Renderable {
 
 	/**
 	 * Triggers when this pass has changed and requires a full update.
@@ -40,6 +53,14 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 */
 
 	static readonly EVENT_CHANGE = "change";
+
+	/**
+	 * Triggers when this pass changes its enabled state.
+	 *
+	 * @event
+	 */
+
+	static readonly EVENT_TOGGLE = "toggle";
 
 	/**
 	 * A shared fullscreen triangle.
@@ -82,6 +103,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 */
 
 	private _name: string;
+
+	/**
+	 * @see {@link enabled}
+	 */
+
+	private _enabled: boolean;
 
 	/**
 	 * @see {@link renderer}
@@ -142,12 +169,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	readonly output: Output;
 
 	/**
-	 * Indicates whether this pass is enabled.
-	 */
-
-	enabled: boolean;
-
-	/**
 	 * Constructs a new pass.
 	 *
 	 * @param name - A name that will be used for debugging purposes. Doesn't have to be unique.
@@ -168,19 +189,22 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this._camera = null;
 
 		this.disposables = new Set<Disposable>();
+
 		this.resolution = new Resolution();
 		this.resolution.addEventListener(Resolution.EVENT_CHANGE, () => this.updateOutputBufferSize(this.resolution));
 		this.resolution.addEventListener(Resolution.EVENT_CHANGE, () => this.onResolutionChange(this.resolution));
 
 		this.input = new Input();
-		this.output = new Output();
-		this.input.addEventListener(Input.EVENT_CHANGE, () => this.updateFullscreenMaterialInput());
 		this.input.addEventListener(Input.EVENT_CHANGE, () => this.onInputChange());
-		this.output.addEventListener(Input.EVENT_CHANGE, () => this.updateFullscreenMaterialOutput());
+		this.input.addEventListener(Input.EVENT_CHANGE, () => this.updateFullscreenMaterialInput());
+
+		this.output = new Output();
 		this.output.addEventListener(Output.EVENT_CHANGE, () => this.onOutputChange());
+		this.output.addEventListener(Output.EVENT_CHANGE, () => this.updateFullscreenMaterialOutput());
+		this.output.addEventListener(Output.EVENT_CHANGE, () => this.updateOutputBufferSize(this.resolution));
 
 		this._subpasses = [];
-		this.enabled = true;
+		this._enabled = true;
 
 	}
 
@@ -197,6 +221,23 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	protected set name(value: string) {
 
 		this._name = value;
+
+	}
+
+	/**
+	 * Indicates whether this pass is enabled.
+	 */
+
+	get enabled(): boolean {
+
+		return this._enabled;
+
+	}
+
+	set enabled(value: boolean) {
+
+		this._enabled = value;
+		this.dispatchEvent({ type: Pass.EVENT_TOGGLE });
 
 	}
 
@@ -354,7 +395,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 * Updates the size of the default output buffer, if it exists.
 	 */
 
-	protected updateOutputBufferSize(resolution: Resolution): void {
+	private updateOutputBufferSize(resolution: Resolution): void {
 
 		this.output.defaultBuffer?.setSize(resolution.width, resolution.height);
 
