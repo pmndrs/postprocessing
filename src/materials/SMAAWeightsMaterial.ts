@@ -154,15 +154,15 @@ export class SMAAWeightsMaterial extends FullscreenMaterial {
 
 	get cornerRounding(): number {
 
-		return this.defines.CORNER_ROUNDING as number;
+		return Number(this.defines.CORNER_ROUNDING);
 
 	}
 
 	set cornerRounding(value: number) {
 
 		const r = Math.min(Math.max(value, 0), 100);
-		this.defines.CORNER_ROUNDING = r;
-		this.defines.CORNER_ROUNDING_NORM = r / 100.0;
+		this.defines.CORNER_ROUNDING = r.toFixed(9);
+		this.defines.CORNER_ROUNDING_NORM = (r / 100.0).toFixed(9);
 		this.needsUpdate = true;
 
 	}

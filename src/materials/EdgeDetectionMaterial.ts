@@ -82,13 +82,13 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 
 	get localContrastAdaptationFactor(): number {
 
-		return this.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR as number;
+		return Number(this.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR);
 
 	}
 
 	set localContrastAdaptationFactor(value: number) {
 
-		this.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR = value;
+		this.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR = value.toFixed(9);
 		this.needsUpdate = true;
 
 	}
@@ -106,14 +106,14 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 
 	get edgeDetectionThreshold(): number {
 
-		return this.defines.EDGE_THRESHOLD as number;
+		return Number(this.defines.EDGE_THRESHOLD);
 
 	}
 
 	set edgeDetectionThreshold(value: number) {
 
-		this.defines.EDGE_THRESHOLD = value;
-		this.defines.DEPTH_THRESHOLD = value * 0.1;
+		this.defines.EDGE_THRESHOLD = value.toFixed(9);
+		this.defines.DEPTH_THRESHOLD = (value * 0.1).toFixed(9);
 		this.needsUpdate = true;
 
 	}
@@ -187,13 +187,13 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 
 	get predicationThreshold(): number {
 
-		return this.defines.PREDICATION_THRESHOLD as number;
+		return Number(this.defines.PREDICATION_THRESHOLD);
 
 	}
 
 	set predicationThreshold(value: number) {
 
-		this.defines.PREDICATION_THRESHOLD = value;
+		this.defines.PREDICATION_THRESHOLD = value.toFixed(9);
 		this.needsUpdate = true;
 
 	}
@@ -206,13 +206,13 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 
 	get predicationScale(): number {
 
-		return this.defines.PREDICATION_SCALE as number;
+		return Number(this.defines.PREDICATION_SCALE);
 
 	}
 
 	set predicationScale(value: number) {
 
-		this.defines.PREDICATION_SCALE = value;
+		this.defines.PREDICATION_SCALE = value.toFixed(9);
 		this.needsUpdate = true;
 
 	}
@@ -225,13 +225,13 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 
 	get predicationStrength(): number {
 
-		return this.defines.PREDICATION_STRENGTH as number;
+		return Number(this.defines.PREDICATION_STRENGTH);
 
 	}
 
 	set predicationStrength(value: number) {
 
-		this.defines.PREDICATION_STRENGTH = value;
+		this.defines.PREDICATION_STRENGTH = value.toFixed(9);
 		this.needsUpdate = true;
 
 	}

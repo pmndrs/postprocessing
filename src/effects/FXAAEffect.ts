@@ -88,13 +88,13 @@ export class FXAAEffect extends Effect {
 
 	get minEdgeThreshold(): number {
 
-		return this.input.defines.get("EDGE_THRESHOLD_MIN") as number;
+		return Number(this.input.defines.get("EDGE_THRESHOLD_MIN"));
 
 	}
 
 	set minEdgeThreshold(value: number) {
 
-		this.input.defines.set("EDGE_THRESHOLD_MIN", value);
+		this.input.defines.set("EDGE_THRESHOLD_MIN", value.toFixed(9));
 		this.setChanged();
 
 	}
@@ -105,13 +105,13 @@ export class FXAAEffect extends Effect {
 
 	get maxEdgeThreshold(): number {
 
-		return this.input.defines.get("EDGE_THRESHOLD_MAX") as number;
+		return Number(this.input.defines.get("EDGE_THRESHOLD_MAX"));
 
 	}
 
 	set maxEdgeThreshold(value: number) {
 
-		this.input.defines.set("EDGE_THRESHOLD_MAX", value);
+		this.input.defines.set("EDGE_THRESHOLD_MAX", value.toFixed(9));
 		this.setChanged();
 
 	}
@@ -122,13 +122,13 @@ export class FXAAEffect extends Effect {
 
 	get subpixelQuality(): number {
 
-		return this.input.defines.get("SUBPIXEL_QUALITY") as number;
+		return Number(this.input.defines.get("SUBPIXEL_QUALITY"));
 
 	}
 
 	set subpixelQuality(value: number) {
 
-		this.input.defines.set("SUBPIXEL_QUALITY", value);
+		this.input.defines.set("SUBPIXEL_QUALITY", value.toFixed(9));
 		this.setChanged();
 
 	}
