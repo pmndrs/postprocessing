@@ -7,7 +7,8 @@ import {
 	SRGBColorSpace,
 	WebGLRenderer,
 	Material,
-	Texture
+	Texture,
+	Uniform
 } from "three";
 
 import { Pass } from "../core/Pass.js";
@@ -48,6 +49,18 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 	private listener: EventListener<BaseEvent, string, Pass<Material | null>>;
 
 	/**
+	 * Keeps track of previous input defines.
+	 */
+
+	private readonly previousDefines: Map<string, string | number | boolean>;
+
+	/**
+	 * Keeps track of previous input uniforms.
+	 */
+
+	private readonly previousUniforms: Map<string, Uniform>;
+
+	/**
 	 * An animation time scale.
 	 */
 
@@ -66,6 +79,8 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 		this.output.defaultBuffer = this.createFramebuffer();
 		this.fullscreenMaterial = new EffectMaterial();
 		this.listener = (e: Event) => this.handleEvent(e);
+		this.previousDefines = new Map<string, string | number | boolean>();
+		this.previousUniforms = new Map<string, Uniform>();
 		this.effects = effects;
 		this.timeScale = 1.0;
 
@@ -215,6 +230,19 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 		// Ensure that leading preprocessor directives start on a new line.
 		data.shaderParts.forEach((v, k, map) => map.set(k, v.trim().replace(/^#/, "\n#")));
 
+		// Add input defines and uniforms.
+		for(const entry of this.input.defines) {
+
+			data.defines.set(entry[0], entry[1]);
+
+		}
+
+		for(const entry of this.input.uniforms) {
+
+			data.uniforms.set(entry[0], entry[1]);
+
+		}
+
 		this.fullscreenMaterial
 			.setShaderParts(data.shaderParts)
 			.setDefines(data.defines)
@@ -256,19 +284,67 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 
 	protected override onInputChange(): void {
 
-		const entries: [string, Texture | null][] = [];
+		// Construct the gBuffer uniform.
+
+		const gBufferEntries: [string, Texture | null][] = [];
+		const fullscreenMaterial = this.fullscreenMaterial;
 		const input = this.input;
 
 		for(const component of input.gBuffer) {
 
-			entries.push([
+			gBufferEntries.push([
 				EffectPass.gBufferStructFields.get(component) as string,
 				component === GBuffer.COLOR ? input.defaultBuffer : input.buffers.get(component) || null
 			]);
 
 		}
 
-		this.fullscreenMaterial.gBuffer = Object.fromEntries(entries);
+		fullscreenMaterial.gBuffer = Object.fromEntries(gBufferEntries);
+
+		// Remove previous input defines and uniforms.
+
+		for(const key of this.previousDefines.keys()) {
+
+			delete fullscreenMaterial.defines[key];
+
+		}
+
+		for(const key of this.previousUniforms.keys()) {
+
+			delete fullscreenMaterial.uniforms[key];
+
+		}
+
+		this.previousDefines.clear();
+		this.previousUniforms.clear();
+
+		for(const entry of input.defines) {
+
+			this.previousDefines.set(entry[0], entry[1]);
+
+		}
+
+		for(const entry of input.uniforms) {
+
+			this.previousUniforms.set(entry[0], entry[1]);
+
+		}
+
+		fullscreenMaterial.needsUpdate = true;
+
+		// Make the input buffers available to all effects.
+
+		for(const effect of this.effects) {
+
+			effect.input.buffers.clear();
+
+			for(const entry of input.buffers) {
+
+				effect.input.buffers.set(entry[0], entry[1]);
+
+			}
+
+		}
 
 	}
 
