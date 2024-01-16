@@ -2,9 +2,10 @@ import { Material, SRGBColorSpace, WebGLMultipleRenderTargets, WebGLRenderTarget
 import { GBuffer } from "../enums/GBuffer.js";
 import { ClearPass } from "../passes/ClearPass.js";
 import { GeometryPass } from "../passes/GeometryPass.js";
-import { RenderPipeline } from "./RenderPipeline.js";
-import { Pass } from "./Pass.js";
+import { GBufferInfo } from "../utils/GBufferInfo.js";
 import { Output } from "./Output.js";
+import { Pass } from "./Pass.js";
+import { RenderPipeline } from "./RenderPipeline.js";
 
 /**
  * An I/O manager.
@@ -53,8 +54,9 @@ export class IOManager {
 
 		}
 
-		this.updateInput(pipeline, geoPass);
-		this.updateOutput(pipeline, geoPass);
+		// Inputs depend on outputs.
+		this.updateOutput(pipeline);
+		this.updateInput(pipeline);
 		IOManager.syncDefaultBufferType(pipeline);
 
 	}
@@ -63,11 +65,11 @@ export class IOManager {
 	 * Updates the input buffers of all passes in a given pipeline.
 	 *
 	 * @param pipeline - The pipeline to update.
-	 * @param geoPass - The main geometry pass.
 	 */
 
-	private updateInput(pipeline: RenderPipeline, geoPass?: GeometryPass): void {
+	private updateInput(pipeline: RenderPipeline): void {
 
+		const geoPass = IOManager.findMainGeometryPass(pipeline);
 		let previousOutputBuffer;
 
 		for(let i = 0, j = -1, l = pipeline.passes.length; i < l; ++i, ++j) {
@@ -102,9 +104,11 @@ export class IOManager {
 
 			} else if(previousOutputBuffer instanceof WebGLMultipleRenderTargets) {
 
-				if(geoPass !== undefined && geoPass.gBufferIndices.has(GBuffer.COLOR)) {
+				const gBufferInfo = new GBufferInfo(previousOutputBuffer);
 
-					const index = geoPass.gBufferIndices.get(GBuffer.COLOR) as number;
+				if(gBufferInfo.indices.has(GBuffer.COLOR)) {
+
+					const index = gBufferInfo.indices.get(GBuffer.COLOR) as number;
 					pass.input.defaultBuffer = previousOutputBuffer.texture[index];
 
 				}
@@ -125,8 +129,9 @@ export class IOManager {
 	 * @param pipeline - The pipeline to update.
 	 */
 
-	private updateOutput(pipeline: RenderPipeline, geoPass?: GeometryPass): void {
+	private updateOutput(pipeline: RenderPipeline): void {
 
+		const geoPass = IOManager.findMainGeometryPass(pipeline);
 		const outputDefaultBuffers = this.outputDefaultBuffers;
 
 		for(let i = 0, j = 1, l = pipeline.passes.length; i < l; ++i, ++j) {
@@ -298,15 +303,17 @@ export class IOManager {
 
 		}
 
+		const gBufferInfo = new GBufferInfo(geoPass.gBuffer);
+
 		for(const component of pass.input.gBuffer) {
 
 			if(component === GBuffer.DEPTH) {
 
 				pass.input.buffers.set(component, geoPass.gBuffer.depthTexture);
 
-			} else if(geoPass.gBufferIndices.has(component)) {
+			} else if(gBufferInfo.indices.has(component)) {
 
-				const index = geoPass.gBufferIndices.get(component) as number;
+				const index = gBufferInfo.indices.get(component) as number;
 				pass.input.buffers.set(component, geoPass.gBuffer.texture[index]);
 
 			}
