@@ -11,12 +11,15 @@ import {
 } from "three";
 
 import {
+	BloomEffect,
 	ClearPass,
+	EffectPass,
 	GeometryPass,
-	RenderPipeline
+	RenderPipeline,
+	ToneMappingEffect
 } from "postprocessing";
 
-import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { GLTF, GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 import { Pane } from "tweakpane";
 import { SpatialControls } from "spatial-controls";
@@ -35,15 +38,17 @@ function load(): Promise<Map<string, Texture | GLTF>> {
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		cubeTextureLoader.load(Utils.getSkyboxUrls("space"), (t) => {
+		cubeTextureLoader.load(Utils.getSkyboxUrls("space", ".jpg"), (t) => {
 
 			t.colorSpace = SRGBColorSpace;
 			assets.set("sky", t);
 
 		});
 
-		gltfLoader.load(`${document.baseURI}models/emissive-strength-test/EmissiveStrengthTest.gltf`,
-			(gltf) => assets.set("emissive-strength-test", gltf));
+		gltfLoader.load(
+			`${document.baseURI}models/emissive-strength-test/EmissiveStrengthTest.gltf`,
+			(gltf) => assets.set("emissive-strength-test", gltf)
+		);
 
 	});
 
@@ -72,8 +77,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 	settings.rotation.sensitivity = 2.2;
 	settings.rotation.damping = 0.025;
 	settings.translation.damping = 0.1;
-	controls.position.set(0, 1, 2);
-	controls.lookAt(0, 0, 0);
+	controls.position.set(0, 3, 18);
+	controls.lookAt(0, 3, 0);
 
 	// Scene, Lights, Objects
 
@@ -85,6 +90,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	scene.add(DefaultEnvironment.createEnvironment());
 
 	const model = assets.get("emissive-strength-test") as GLTF;
+	model.scene.position.y = 3;
 	scene.add(model.scene);
 
 	// Post Processing
@@ -96,39 +102,32 @@ window.addEventListener("load", () => void load().then((assets) => {
 		samples: 4
 	}));
 
-	/*
 	const effect = new BloomEffect({
-		luminanceThreshold: 0.1,
-		luminanceSmoothing: 0.3,
-		intensity: 1.0
+		luminanceThreshold: 1.0,
+		luminanceSmoothing: 0.03,
+		intensity: 1.0,
+		radius: 0.85,
+		levels: 8
 	});
 
-	effect.blendMode.blendFunction = new MixBlendFunction();
 	pipeline.addPass(new EffectPass(effect, new ToneMappingEffect()));
-	*/
 
 	// Settings
 
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
 	const fpsGraph = Utils.createFPSGraph(pane);
 
-	/*
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addBinding(effect, "intensity", { min: 0, max: 10, step: 0.01 });
 	folder.addBinding(effect.mipmapBlurPass, "radius", { min: 0, max: 1, step: 1e-3 });
 	folder.addBinding(effect.mipmapBlurPass, "levels", { min: 1, max: 9, step: 1 });
 
-	let subfolder = folder.addFolder({ title: "Luminance Filter" });
+	const subfolder = folder.addFolder({ title: "Luminance Filter" });
 	subfolder.addBinding(effect.luminancePass, "enabled");
 	subfolder.addBinding(effect.luminanceMaterial, "threshold", { min: 0, max: 1, step: 0.01 });
 	subfolder.addBinding(effect.luminanceMaterial, "smoothing", { min: 0, max: 1, step: 0.01 });
 
-	subfolder = folder.addFolder({ title: "Selection" });
-	subfolder.addBinding(effect, "inverted");
-	subfolder.addBinding(effect, "ignoreBackground");
-
 	Utils.addBlendModeBindings(folder, effect.blendMode);
-	*/
 
 	// Resize Handler
 
