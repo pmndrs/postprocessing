@@ -91,8 +91,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.addPass(new ClearPass());
 	pipeline.addPass(new GeometryPass(scene, camera, {
-		frameBufferType: HalfFloatType,
-		samples: 4
+		frameBufferType: HalfFloatType
 	}));
 
 	/*
