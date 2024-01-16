@@ -1,5 +1,5 @@
-#ifdef GBUFFER_NORMAL
+#ifdef HAS_OUTPUTNORMAL
 
-	outputNormal = vec4(normal, 0.0);
+	outputNormal = vec4(normal, 1.0);
 
 #endif

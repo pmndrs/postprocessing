@@ -1,40 +1,32 @@
 // Location 0 is already defined in built-in materials.
 #ifndef gl_FragColor
 
-	#ifndef GBUFFER_COLOR
+	#ifndef LOCATION_OUTPUTCOLOR
 
-		// Fall back to index 0 if no GBuffer indices have been defined.
-		#define GBUFFER_COLOR 0
-
-	#endif
-
-	#ifdef GBUFFER_COLOR
-
-		layout(location = GBUFFER_COLOR) out OUTPUT_COLOR_PRECISION vec4 outputColor;
-
-		// Added for compatibility with built-in shader chunks.
-		#define gl_FragColor outputColor
+		#define LOCATION_OUTPUTCOLOR 0
 
 	#endif
+
+	layout(location = LOCATION_OUTPUTCOLOR) out OUTPUT_COLOR_PRECISION vec4 outputColor;
+	#define gl_FragColor outputColor
+	#define HAS_OUTPUTCOLOR
 
 #endif
 
+// Other outputs are only available when rendering to texture.
 #ifndef RENDER_TO_SCREEN
 
-	#ifdef GBUFFER_NORMAL
+	#ifdef LOCATION_OUTPUTNORMAL
 
-		layout(location = GBUFFER_NORMAL) out mediump vec4 outputNormal;
+		layout(location = LOCATION_OUTPUTNORMAL) out mediump vec4 outputNormal;
+		#define HAS_OUTPUTNORMAL
 
 	#endif
 
-	// Roughness and metalness use the same location.
-	#if defined(GBUFFER_ROUGHNESS)
+	#ifdef LOCATION_OUTPUTROUGHNESSMETALNESS
 
-		layout(location = GBUFFER_ROUGHNESS) out lowp vec2 outputRoughMetal;
-
-	#elif defined(GBUFFER_METALNESS)
-
-		layout(location = GBUFFER_METALNESS) out lowp vec2 outputRoughMetal;
+		layout(location = LOCATION_OUTPUTROUGHNESSMETALNESS) out lowp vec2 outputRoughnessMetalness;
+		#define HAS_OUTPUTROUGHNESSMETALNESS
 
 	#endif
 

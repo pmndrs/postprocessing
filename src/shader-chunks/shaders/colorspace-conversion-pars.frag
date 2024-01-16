@@ -8,10 +8,8 @@ vec4 sRGBToLinear(const in vec4 value) {
 
 }
 
-/**
- * Based on work by Sam Hocevar, Emil Persson and Ian Taylor.
- * https://www.chilliant.com/rgb2hsv.html
- */
+// Based on work by Sam Hocevar, Emil Persson and Ian Taylor.
+// https://www.chilliant.com/rgb2hsv.html
 
 vec3 RGBToHCV(const in vec3 RGB) {
 

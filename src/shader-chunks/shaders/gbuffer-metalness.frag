@@ -1,5 +1,5 @@
-#ifdef GBUFFER_METALNESS
+#ifdef HAS_OUTPUTROUGHNESSMETALNESS
 
-	outputRoughMetal.g = metalness;
+	outputRoughnessMetalness.y = metalness;
 
 #endif

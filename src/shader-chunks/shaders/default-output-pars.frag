@@ -1,4 +1,8 @@
-layout(location = 0) out OUTPUT_COLOR_PRECISION vec4 outputColor;
+#ifndef gl_FragColor
 
-// Added for compatibility with built-in shader chunks.
-#define gl_FragColor outputColor
+	layout(location = 0) out OUTPUT_COLOR_PRECISION vec4 outputColor;
+
+	// Added for compatibility with built-in shader chunks.
+	#define gl_FragColor outputColor
+
+#endif
