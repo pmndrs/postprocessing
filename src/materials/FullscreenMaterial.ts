@@ -101,9 +101,13 @@ export abstract class FullscreenMaterial extends RawShaderMaterial implements Re
 
 				}
 
-				// The canvas always uses 8 bits per channel since HDR is currently not supported in browsers.
-				this.outputPrecision = "lowp";
-				this.needsUpdate = false; // Prevent infinite loop.
+				if(this.outputPrecision !== "lowp") {
+
+					// The canvas always uses 8 bits per channel since HDR is currently not supported in browsers.
+					this.outputPrecision = "lowp";
+					this.needsUpdate = false; // Prevent infinite loop.
+
+				}
 
 			} else {
 
