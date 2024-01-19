@@ -1,6 +1,5 @@
 import {
 	CubeTextureLoader,
-	FogExp2,
 	HalfFloatType,
 	LoadingManager,
 	PerspectiveCamera,
@@ -87,6 +86,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	scene.background = skyMap;
 	scene.environment = skyMap;
 	scene.fog = new FogExp2(0x000000, 0.03);
+	scene.fog = DefaultEnvironment.createFog();
 	scene.add(DefaultEnvironment.createEnvironment());
 
 	const model = assets.get("emissive-strength-test") as GLTF;

@@ -1,5 +1,6 @@
 import {
 	AmbientLight,
+	Fog,
 	Group,
 	Mesh,
 	MeshStandardMaterial,
@@ -25,6 +26,18 @@ export function createLights(): Group {
 	lights.add(ambientLight);
 
 	return lights;
+
+}
+
+/**
+ * Creates fog.
+ *
+ * @return The fog, or null if this environment has no fog.
+ */
+
+export function createFog(): Fog {
+
+	return new Fog(0x000000, 10, 60);
 
 }
 

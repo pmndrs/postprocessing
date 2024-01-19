@@ -1,6 +1,5 @@
 import {
 	CubeTextureLoader,
-	FogExp2,
 	HalfFloatType,
 	LoadingManager,
 	PerspectiveCamera,
@@ -79,7 +78,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const skyMap = assets.get("sky") as Texture;
 	scene.background = skyMap;
 	scene.environment = skyMap;
-	scene.fog = new FogExp2(0x000000, 0.03);
+	scene.fog = DefaultEnvironment.createFog();
 	scene.add(DefaultEnvironment.createEnvironment());
 
 	// Post Processing
