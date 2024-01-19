@@ -6,6 +6,10 @@
 	box-sizing: border-box;
 	height: calc(100vh - 10rem);
 	position: relative;
+	canvas {
+		height: 100%;
+		width: 100%;
+	}
 	.icons {
 		bottom: 4px;
 		display: flex;
