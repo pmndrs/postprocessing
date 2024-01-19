@@ -17,14 +17,7 @@ import {
 } from "three";
 
 import { Resizable } from "../core/Resizable.js";
-
-/**
- * Supported precision constants.
- *
- * @category Materials
- */
-
-export type OutputPrecision = "highp" | "mediump" | "lowp";
+import { Precision } from "../enums/Precision.js";
 
 /**
  * A fullscreen shader material.
@@ -125,13 +118,13 @@ export abstract class FullscreenMaterial extends RawShaderMaterial implements Re
 	 * This setting will be set automatically by the I/O manager.
 	 */
 
-	get outputPrecision(): OutputPrecision {
+	get outputPrecision(): Precision {
 
-		return this.defines.OUTPUT_COLOR_PRECISION as OutputPrecision;
+		return this.defines.OUTPUT_COLOR_PRECISION as Precision;
 
 	}
 
-	set outputPrecision(value: OutputPrecision) {
+	set outputPrecision(value: Precision) {
 
 		this.defines.OUTPUT_COLOR_PRECISION = value;
 		this.needsUpdate = true;

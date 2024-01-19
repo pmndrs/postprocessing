@@ -24,18 +24,11 @@ import { Pass } from "../core/Pass.js";
 import { Selective } from "../core/Selective.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { GBufferTexture } from "../enums/GBufferTexture.js";
+import { MSAASamples } from "../enums/MSAASamples.js";
 import { GBufferInfo } from "../utils/GBufferInfo.js";
 import { ObservableSet } from "../utils/ObservableSet.js";
 import { Selection } from "../utils/Selection.js";
 import { CopyPass } from "./CopyPass.js";
-
-/**
- * Supported MSAA sample counts.
- *
- * @category Passes
- */
-
-export declare type MSAASamples = 0 | 2 | 4 | 8;
 
 /**
  * GeometryPass constructor options.
