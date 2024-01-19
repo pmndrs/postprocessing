@@ -91,7 +91,7 @@ export class BloomEffect extends Effect {
 	 */
 
 	constructor({
-		luminanceThreshold = 0.9,
+		luminanceThreshold = 1.0,
 		luminanceSmoothing = 0.03,
 		intensity = 1.0,
 		radius = 0.85,
