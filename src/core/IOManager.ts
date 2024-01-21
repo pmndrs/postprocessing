@@ -46,13 +46,7 @@ export class IOManager {
 
 	private updatePipeline(pipeline: RenderPipeline): void {
 
-		const geoPass = IOManager.findMainGeometryPass(pipeline);
-
-		if(geoPass !== undefined) {
-
-			IOManager.gatherGBufferComponents(geoPass, pipeline);
-
-		}
+		IOManager.gatherGBufferComponents(pipeline);
 
 		// Inputs depend on outputs.
 		this.updateOutput(pipeline);
@@ -131,7 +125,6 @@ export class IOManager {
 
 	private updateOutput(pipeline: RenderPipeline): void {
 
-		const geoPass = IOManager.findMainGeometryPass(pipeline);
 		const outputDefaultBuffers = this.outputDefaultBuffers;
 
 		for(let i = 0, j = 1, l = pipeline.passes.length; i < l; ++i, ++j) {
@@ -147,16 +140,6 @@ export class IOManager {
 				pass.output.defaultBuffer = nextPass.output.defaultBuffer;
 
 				continue;
-
-			}
-
-			if(pass instanceof GeometryPass && geoPass !== undefined && pass !== geoPass &&
-				pass.output.defaultBuffer !== null && pass.output.defaultBuffer !== geoPass.output.defaultBuffer) {
-
-				// Reuse the main gBuffer if there are multiple geometry passes.
-				geoPass.output.defines.forEach((value, key) => pass.output.defines.set(key, value));
-				geoPass.output.uniforms.forEach((value, key) => pass.output.uniforms.set(key, value));
-				pass.output.defaultBuffer = geoPass.output.defaultBuffer;
 
 			}
 
@@ -265,13 +248,20 @@ export class IOManager {
 	}
 
 	/**
-	 * Collects all required GBuffer components for a given pipeline.
+	 * Collects all required G-Buffer components for a given pipeline.
 	 *
-	 * @param geoPass - The primary geometry pass.
 	 * @param pipeline - The pipeline.
 	 */
 
-	private static gatherGBufferComponents(geoPass: GeometryPass, pipeline: RenderPipeline): void {
+	private static gatherGBufferComponents(pipeline: RenderPipeline): void {
+
+		const geoPass = IOManager.findMainGeometryPass(pipeline);
+
+		if(geoPass === undefined) {
+
+			return;
+
+		}
 
 		geoPass.gBufferComponents.clear();
 
@@ -285,14 +275,27 @@ export class IOManager {
 
 		}
 
+		const geoPasses = pipeline.passes.filter((x) => x instanceof GeometryPass) as GeometryPass[];
+
+		if(geoPasses.length > 1 && geoPass.gBufferComponents.has(GBuffer.COLOR)) {
+
+			// Let other GeometryPasses render to a buffer with a single color attachment.
+			for(let i = 1, l = geoPasses.length; i < l; ++i) {
+
+				geoPasses[i].gBufferComponents.add(GBuffer.COLOR);
+
+			}
+
+		}
+
 	}
 
 	/**
-	 * Assigns GBuffer components to a given pass.
+	 * Assigns G-Buffer components to a given pass.
 	 *
 	 * @param pass - A pass.
-	 * @param gBuffer - The GBuffer.
-	 * @param gBufferIndices - GBuffer component indices.
+	 * @param gBuffer - The G-Buffer.
+	 * @param gBufferIndices - G-Buffer component indices.
 	 */
 
 	private static assignGBufferTextures(pass: Pass<Material | null>, geoPass?: GeometryPass): void {
