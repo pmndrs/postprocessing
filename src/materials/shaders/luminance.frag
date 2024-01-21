@@ -21,13 +21,13 @@ void main() {
 
 	#ifdef THRESHOLD
 
-		l = smoothstep(threshold, threshold + smoothing, l);
+		l = smoothstep(threshold, threshold + smoothing, l) * l;
 
 	#endif
 
 	#ifdef COLOR
 
-		outputColor = vec4(texel.rgb * l, l);
+		outputColor = vec4(texel.rgb * clamp(l, 0.0, 1.0), l);
 
 	#else
 
