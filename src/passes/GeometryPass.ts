@@ -255,36 +255,33 @@ export class GeometryPass extends Pass implements Selective {
 		}
 
 		this.registeredMaterials.add(material);
-
-		// Binding to this doesn't do anything for arrow functions, but it satisfies eslint.
 		const onBeforeCompile = material.onBeforeCompile.bind(this);
 
 		material.onBeforeCompile = (shader: WebGLProgramParametersWithUniforms, renderer: WebGLRenderer) => {
 
 			onBeforeCompile(shader, renderer);
 
-			if(shader.defines === undefined || shader.defines === null) {
+			if(this.gBuffer === null) {
+
+				return;
+
+			}
+
+			if(shader.defines === undefined) {
 
 				shader.defines = {};
 
 			}
 
-			if(this.gBuffer !== null) {
+			const gBufferInfo = new GBufferInfo(this.gBuffer);
 
-				const gBufferInfo = new GBufferInfo(this.gBuffer);
+			for(const entry of gBufferInfo.defines) {
 
-				for(const entry of gBufferInfo.defines) {
-
-					shader.defines[entry[0]] = entry[1];
-
-				}
+				shader.defines[entry[0]] = entry[1];
 
 			}
 
-			shader.fragmentShader = shader.fragmentShader.replace(
-				/(void main)/,
-				"#include <pp_gbuffer_output_pars_fragment>\n\n$1"
-			);
+			shader.fragmentShader = gBufferInfo.outputDefinitions + "\n\n" + shader.fragmentShader;
 
 		};
 
