@@ -66,10 +66,10 @@ export abstract class FullscreenMaterial extends RawShaderMaterial implements Re
 		// Set the default precision.
 		this.outputPrecision = "lowp";
 
-		// Updates the output color space when rendering to screen.
+		// Updates the shader depending on the current render target.
 		this.onBeforeCompile = (shader: WebGLProgramParametersWithUniforms, renderer: WebGLRenderer) => {
 
-			if(shader.defines === undefined || shader.defines === null) {
+			if(shader.defines === undefined) {
 
 				shader.defines = {};
 
@@ -77,7 +77,7 @@ export abstract class FullscreenMaterial extends RawShaderMaterial implements Re
 
 			if(renderer.getRenderTarget() === null) {
 
-				shader.defines.RENDER_TO_SCREEN = true;
+				// Rendering to screen.
 
 				switch(renderer.outputColorSpace) {
 
@@ -96,14 +96,16 @@ export abstract class FullscreenMaterial extends RawShaderMaterial implements Re
 
 				if(this.outputPrecision !== "lowp") {
 
-					// The canvas always uses 8 bits per channel since HDR is currently not supported in browsers.
+					// The canvas uses 8 bits per channel (HDR is currently not supported in WebGL).
 					this.outputPrecision = "lowp";
-					this.needsUpdate = false; // Prevent infinite loop.
+					// Prevent infinite loop.
+					this.needsUpdate = false;
 
 				}
 
 			} else {
 
+				// Rendering to texture; disable conversion.
 				shader.defines.OUTPUT_COLOR_SPACE = 0;
 
 			}

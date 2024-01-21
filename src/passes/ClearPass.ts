@@ -46,7 +46,7 @@ export class ClearPass extends Pass {
 	}
 
 	/**
-	 * Clears GBuffer components.
+	 * Clears G-Buffer components.
 	 *
 	 * @see https://www.khronos.org/opengl/wiki/Framebuffer#Buffer_clearing
 	 * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/clearBuffer

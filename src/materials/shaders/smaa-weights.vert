@@ -1,4 +1,4 @@
-uniform vec4 resolution; // XY = resolution, ZW = texelSize
+#include <pp_resolution_pars_fragment>
 
 in vec3 position;
 

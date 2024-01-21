@@ -291,10 +291,11 @@ export class GeometryPass extends Pass implements Selective {
 	}
 
 	/**
-	 * Enables rendering to GBuffer components for all materials in a given scene.
+	 * Enables rendering to G-Buffer components for all materials in a given scene.
 	 *
 	 * Should be called when a mesh or material is added, removed or replaced at runtime.
 	 *
+	 * @todo Remove when three supports output layout definitions for MRT.
 	 * @param scene - The scene, or a subset of a scene.
 	 */
 
@@ -371,7 +372,7 @@ export class GeometryPass extends Pass implements Selective {
 	}
 
 	/**
-	 * Updates the GBuffer configuration.
+	 * Updates the G-Buffer configuration.
 	 */
 
 	private updateGBuffer(): void {
@@ -381,8 +382,8 @@ export class GeometryPass extends Pass implements Selective {
 
 		if(gBufferComponents.size === 0) {
 
-			this.copyPass.output.defaultBuffer = null;
 			this.output.defaultBuffer = null;
+			this.copyPass.output.defaultBuffer = null;
 			this.output.defines.clear();
 
 			return;
@@ -443,8 +444,8 @@ export class GeometryPass extends Pass implements Selective {
 
 		}
 
-		this.copyPass.output.defaultBuffer = renderTarget;
 		this.output.defaultBuffer = renderTarget;
+		this.copyPass.output.defaultBuffer = renderTarget;
 		this.updateOutputBufferColorSpace();
 		this.updateDefines();
 

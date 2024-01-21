@@ -1,13 +1,12 @@
 #include <pp_precision_fragment>
 #include <pp_default_output_pars_fragment>
 #include <pp_input_buffer_pars_fragment>
+#include <pp_resolution_pars_fragment>
 
 #define sampleLevelZeroOffset(t, coord, offset) texture(t, coord + offset * resolution.zw)
 
 uniform lowp sampler2D areaTexture;
 uniform lowp sampler2D searchTexture;
-
-uniform vec4 resolution; // XY = resolution, ZW = texelSize
 
 in vec2 vUv;
 in vec4 vOffset[3];
