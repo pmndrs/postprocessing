@@ -1,4 +1,4 @@
-#ifdef HAS_OUTPUTROUGHNESSMETALNESS
+#ifdef outputRoughnessMetalness
 
 	outputRoughnessMetalness.y = metalness;
 
