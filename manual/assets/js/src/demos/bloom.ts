@@ -85,7 +85,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const skyMap = assets.get("sky") as Texture;
 	scene.background = skyMap;
 	scene.environment = skyMap;
-	scene.fog = new FogExp2(0x000000, 0.03);
 	scene.fog = DefaultEnvironment.createFog();
 	scene.add(DefaultEnvironment.createEnvironment());
 
@@ -120,7 +119,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addBinding(effect, "intensity", { min: 0, max: 10, step: 0.01 });
 	folder.addBinding(effect.mipmapBlurPass, "radius", { min: 0, max: 1, step: 1e-3 });
-	folder.addBinding(effect.mipmapBlurPass, "levels", { min: 1, max: 9, step: 1 });
+	folder.addBinding(effect.mipmapBlurPass, "levels", { min: 1, max: 10, step: 1 });
 
 	const subfolder = folder.addFolder({ title: "Luminance Filter" });
 	subfolder.addBinding(effect.luminancePass, "enabled");
