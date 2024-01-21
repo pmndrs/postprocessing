@@ -5,7 +5,7 @@
 
 A post processing library that provides the means to implement image filter effects for [three.js](https://threejs.org/).
 
-*[Manual](https://pp.pmnd.rs/manual)&ensp;&middot;&ensp;[API Reference](https://pp.pmnd.rs/manual/docs)&ensp;&middot;&ensp;[Sandbox](https://codesandbox.io/s/postprocessing-25rts)*
+*[Manual](https://pp.pmnd.rs/manual)&ensp;&middot;&ensp;[API Reference](https://pp.pmnd.rs/manual/docs)&ensp;&middot;&ensp;[Sandbox](https://stackblitz.com/edit/postprocessing)*
 
 ## Contributing
 
