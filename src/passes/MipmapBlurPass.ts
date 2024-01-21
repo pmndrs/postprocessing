@@ -173,10 +173,11 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 			mipmap.texture.type = type;
 			mipmap.texture.colorSpace = colorSpace;
+			mipmap.dispose();
 
 		}
 
-		if(!this.input.frameBufferPrecisionHigh) {
+		if(this.input.frameBufferPrecisionHigh) {
 
 			this.downsamplingMaterial.defines.FRAME_BUFFER_PRECISION_HIGH = true;
 			this.upsamplingMaterial.defines.FRAME_BUFFER_PRECISION_HIGH = true;
