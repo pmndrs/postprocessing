@@ -1,6 +1,70 @@
-import { WebGLMultipleRenderTargets } from "three";
+import {
+	AnyPixelFormat,
+	FloatType,
+	HalfFloatType,
+	RGFormat,
+	RedFormat,
+	TextureDataType,
+	WebGLMultipleRenderTargets
+} from "three";
+
 import { GBuffer } from "../enums/GBuffer.js";
 import { GBufferTexture } from "../enums/GBufferTexture.js";
+import { Precision } from "../enums/Precision.js";
+
+/**
+ * Determines the GLSL texel type that corresponds to a given texture type.
+ *
+ * @param type - The texture type.
+ * @return The GLSL texel type.
+ */
+
+function getPrecision(type: TextureDataType): Precision {
+
+	switch(type) {
+
+		case FloatType:
+			return "highp";
+
+		case HalfFloatType:
+			return "highp";
+
+		default:
+			return "lowp";
+
+	}
+
+}
+
+/**
+ * A union of GLSL texel types.
+ */
+
+declare type TexelType = "float" | "vec2" | "vec4";
+
+/**
+ * Determines the GLSL texel type that corresponds to a given texture type.
+ *
+ * @param type - The texture type.
+ * @return The GLSL texel type.
+ */
+
+function getTexelType(format: AnyPixelFormat): TexelType {
+
+	switch(format) {
+
+		case RedFormat:
+			return "float";
+
+		case RGFormat:
+			return "vec2";
+
+		default:
+			return "vec4";
+
+	}
+
+}
 
 /**
  * G-Buffer meta data.
@@ -36,6 +100,12 @@ export class GBufferInfo {
 	readonly defines: Map<string, string | number | boolean>;
 
 	/**
+	 * @see {@link layoutDefinitions}
+	 */
+
+	private _outputDefinitions: string | null;
+
+	/**
 	 * Constructs new G-Buffer meta infos.
 	 *
 	 * @param renderTarget - A render target.
@@ -45,7 +115,20 @@ export class GBufferInfo {
 
 		this.indices = new Map<GBuffer, number>();
 		this.defines = new Map<string, string | number | boolean>();
+		this._outputDefinitions = null;
+
 		this.extractIndices(renderTarget);
+		this.extractOutputDefinitions(renderTarget);
+
+	}
+
+	/**
+	 * Shader output definitions.
+	 */
+
+	get outputDefinitions(): string {
+
+		return this._outputDefinitions as string;
 
 	}
 
@@ -69,7 +152,8 @@ export class GBufferInfo {
 
 			}
 
-			this.defines.set(`LOCATION_${gBufferTexture.toUpperCase()}`, i);
+			// TODO remove when three supports auto shader outputs.
+			this.defines.set(gBufferTexture, `pc_FragData${i}`);
 
 			for(const component of components) {
 
@@ -78,6 +162,44 @@ export class GBufferInfo {
 			}
 
 		}
+
+	}
+
+	/**
+	 * Creates output definitions from a given render target.
+	 *
+	 * @param renderTarget - A render target.
+	 */
+
+	private extractOutputDefinitions(renderTarget: WebGLMultipleRenderTargets): void {
+
+		const definitions: string[] = [];
+
+		for(let i = 0, l = renderTarget.texture.length; i < l; ++i) {
+
+			const texture = renderTarget.texture[i];
+			const precision = getPrecision(texture.type);
+			const type = getTexelType(texture.format);
+
+			if(i === 0) {
+
+				// TODO remove when three supports auto shader outputs.
+				definitions.push("#ifndef gl_FragColor");
+
+			}
+
+			definitions.push(`layout(location = ${i}) out ${precision} ${type} pc_FragData${i};`);
+
+			if(i === 0) {
+
+				definitions.push("#define gl_FragColor pc_FragData${i}");
+				definitions.push("#endif");
+
+			}
+
+		}
+
+		this._outputDefinitions = definitions.join("\n");
 
 	}
 
