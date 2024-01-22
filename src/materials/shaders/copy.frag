@@ -8,6 +8,12 @@
 #include <pp_default_output_pars_fragment>
 #include <pp_input_buffer_pars_fragment>
 
+#ifdef COPY_DEPTH
+
+	#include <pp_depth_buffer_pars_fragment>
+
+#endif
+
 in vec2 vUv;
 
 void main() {
@@ -21,5 +27,11 @@ void main() {
 	#endif
 
 	#include <dithering_fragment>
+
+	#ifdef COPY_DEPTH
+
+		gl_FragDepth = texture(depthBuffer, vUv).r;
+
+	#endif
 
 }

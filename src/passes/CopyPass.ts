@@ -1,5 +1,6 @@
 import { WebGLRenderTarget } from "three";
 import { Pass } from "../core/Pass.js";
+import { GBuffer } from "../enums/GBuffer.js";
 import { CopyMaterial } from "../materials/CopyMaterial.js";
 
 /**
@@ -22,6 +23,12 @@ export class CopyPass extends Pass<CopyMaterial> {
 
 		this.output.defaultBuffer = outputBuffer || this.createFramebuffer();
 		this.fullscreenMaterial = new CopyMaterial();
+
+	}
+
+	protected override onInputChange(): void {
+
+		this.fullscreenMaterial.depthBuffer = this.input.buffers.get(GBuffer.DEPTH) ?? null;
 
 	}
 

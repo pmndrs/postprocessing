@@ -1,3 +1,4 @@
+import { Texture, Uniform } from "three";
 import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentShader from "./shaders/copy.frag";
@@ -23,8 +24,61 @@ export class CopyMaterial extends FullscreenMaterial {
 			vertexShader,
 			defines: {
 				COLOR_SPACE_CONVERSION: true
+			},
+			uniforms: {
+				depthBuffer: new Uniform(null)
 			}
 		});
+
+	}
+
+	/**
+	 * Indicates whether depth should be copied.
+	 *
+	 * When enabled, the values from the {@link depthBuffer} will be written to the default output buffer.
+	 */
+
+	get depthCopy(): boolean {
+
+		return this.depthWrite;
+
+	}
+
+	set depthCopy(value: boolean) {
+
+		if(this.depthCopy !== value) {
+
+			if(value) {
+
+				this.defines.COPY_DEPTH = true;
+
+			} else {
+
+				delete this.defines.COPY_DEPTH;
+
+			}
+
+			this.depthTest = value;
+			this.depthWrite = value;
+			this.needsUpdate = true;
+
+		}
+
+	}
+
+	/**
+	 * A depth buffer.
+	 */
+
+	get depthBuffer(): Texture | null {
+
+		return this.uniforms.depthBuffer.value as Texture;
+
+	}
+
+	set depthBuffer(value: Texture | null) {
+
+		this.uniforms.depthBuffer.value = value;
 
 	}
 
