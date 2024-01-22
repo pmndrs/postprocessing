@@ -175,6 +175,7 @@ export class GeometryPass extends Pass implements Selective {
 		this.selection.enabled = false;
 		this.registeredMaterials = new WeakSet<Material>();
 		this.copyPass = new CopyPass();
+		this.copyPass.fullscreenMaterial.depthCopy = true;
 
 		const gBufferComponents = new ObservableSet<GBuffer>();
 		gBufferComponents.addEventListener(ObservableSet.EVENT_CHANGE, () => this.updateGBuffer());
@@ -182,6 +183,8 @@ export class GeometryPass extends Pass implements Selective {
 
 		this.updateGBuffer();
 		this.updateMaterials();
+
+		this.subpasses = [this.copyPass];
 
 	}
 
@@ -201,6 +204,13 @@ export class GeometryPass extends Pass implements Selective {
 	protected override onInputChange(): void {
 
 		this.copyPass.input.defaultBuffer = this.input.defaultBuffer;
+		this.copyPass.input.buffers.set(GBuffer.DEPTH, this.input.buffers.get(GBuffer.DEPTH) ?? null);
+
+	}
+
+	protected override onOutputChange(): void {
+
+		this.copyPass.output.defaultBuffer = this.output.defaultBuffer;
 
 	}
 
