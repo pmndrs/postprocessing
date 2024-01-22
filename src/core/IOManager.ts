@@ -64,23 +64,38 @@ export class IOManager {
 	private updateInput(pipeline: RenderPipeline): void {
 
 		const geoPass = IOManager.findMainGeometryPass(pipeline);
+
+		let previousPass = null;
 		let previousOutputBuffer;
 
 		for(let i = 0, j = -1, l = pipeline.passes.length; i < l; ++i, ++j) {
 
-			const previousPass = (j >= 0) ? pipeline.passes[j] : null;
 			const pass = pipeline.passes[i];
 
-			if(pass !== geoPass && geoPass !== undefined) {
+			if(geoPass !== undefined) {
 
-				IOManager.assignGBufferTextures(pass, geoPass);
+				if(pass !== geoPass) {
 
-				pass.scene = geoPass.scene;
-				pass.camera = geoPass.camera;
+					IOManager.assignGBufferTextures(pass, geoPass);
+
+				}
+
+				if(!(pass instanceof GeometryPass)) {
+
+					pass.scene = geoPass.scene;
+					pass.camera = geoPass.camera;
+
+				}
 
 			}
 
-			if(previousPass === null || previousPass instanceof ClearPass) {
+			if((j >= 0) && !(pipeline.passes[j] instanceof ClearPass)) {
+
+				previousPass = pipeline.passes[j];
+
+			}
+
+			if(previousPass === null) {
 
 				continue;
 
@@ -90,7 +105,7 @@ export class IOManager {
 			previousPass.output.uniforms.forEach((value, key) => pass.input.uniforms.set(key, value));
 
 			// Keep track of the last output buffer (some passes don't render anything).
-			previousOutputBuffer = previousPass.output.buffers.get(Output.BUFFER_DEFAULT) || previousOutputBuffer;
+			previousOutputBuffer = previousPass.output.buffers.get(Output.BUFFER_DEFAULT) ?? previousOutputBuffer;
 
 			if(previousOutputBuffer === null) {
 
@@ -131,18 +146,6 @@ export class IOManager {
 
 			const pass = pipeline.passes[i];
 
-			if(j < l && pass instanceof ClearPass) {
-
-				// Assign the output resources of the next pass to this clear pass.
-				const nextPass = pipeline.passes[j];
-				nextPass.output.defines.forEach((value, key) => pass.output.defines.set(key, value));
-				nextPass.output.uniforms.forEach((value, key) => pass.output.uniforms.set(key, value));
-				pass.output.defaultBuffer = nextPass.output.defaultBuffer;
-
-				continue;
-
-			}
-
 			if(j === l) {
 
 				// This is the last pass.
@@ -158,6 +161,23 @@ export class IOManager {
 
 				// Restore the original buffer.
 				pass.output.defaultBuffer = outputDefaultBuffers.get(pass.output)!;
+
+			}
+
+		}
+
+		// Clear passes depend on the output of the next pass.
+		for(let i = 0, j = 1, l = pipeline.passes.length; i < l; ++i, ++j) {
+
+			const pass = pipeline.passes[i];
+
+			if(j < l && pass instanceof ClearPass) {
+
+				// Assign the output resources of the next pass to this clear pass.
+				const nextPass = pipeline.passes[j];
+				nextPass.output.defines.forEach((value, key) => pass.output.defines.set(key, value));
+				nextPass.output.uniforms.forEach((value, key) => pass.output.uniforms.set(key, value));
+				pass.output.defaultBuffer = nextPass.output.defaultBuffer;
 
 			}
 
@@ -275,16 +295,24 @@ export class IOManager {
 
 		}
 
+		// Check if there are secondary geometry passes.
 		const geoPasses = pipeline.passes.filter((x) => x instanceof GeometryPass) as GeometryPass[];
 
 		if(geoPasses.length > 1 && geoPass.gBufferComponents.has(GBuffer.COLOR)) {
 
-			// Let other GeometryPasses render to a buffer with a single color attachment.
+			// Let the other passes render to another buffer with a single color attachment.
 			for(let i = 1, l = geoPasses.length; i < l; ++i) {
 
-				geoPasses[i].gBufferComponents.add(GBuffer.COLOR);
+				const pass = geoPasses[i];
+				pass.gBufferComponents.add(GBuffer.COLOR);
+				pass.gBufferComponents.add(GBuffer.DEPTH);
+
+				// Secondary geometry passes need to copy depth from the main pass.
+				pass.input.gBuffer.add(GBuffer.DEPTH);
 
 			}
+
+			geoPass.gBufferComponents.add(GBuffer.DEPTH);
 
 		}
 
