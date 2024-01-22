@@ -294,7 +294,7 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 
 			gBufferEntries.push([
 				EffectPass.gBufferStructFields.get(component) as string,
-				component === GBuffer.COLOR ? input.defaultBuffer : input.buffers.get(component) || null
+				component === GBuffer.COLOR ? input.defaultBuffer : input.buffers.get(component) ?? null
 			]);
 
 		}
