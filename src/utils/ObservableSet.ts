@@ -4,6 +4,7 @@ import { BaseEventMap } from "../core/BaseEventMap.js";
 /**
  * A set that emits events of type {@link EVENT_CHANGE} when its data changes.
  *
+ * @param T - The type of the items.
  * @category Utils
  */
 
@@ -32,6 +33,7 @@ export class ObservableSet<T> extends EventDispatcher<BaseEventMap> implements S
 	constructor(iterable?: Iterable<T>) {
 
 		super();
+
 		this.data = new Set<T>(iterable);
 
 	}
