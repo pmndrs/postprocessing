@@ -45,6 +45,12 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 	private _renderer: WebGLRenderer | null;
 
 	/**
+	 * @see {@link autoRenderToScreen}
+	 */
+
+	private _autoRenderToScreen: boolean;
+
+	/**
 	 * The current resolution.
 	 *
 	 * @see {@link updateStyle}
@@ -53,16 +59,12 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 	readonly resolution: Resolution;
 
 	/**
-	 * Determines whether the style of the canvas should be updated when the resolution is changed. Default is `true`.
+	 * Determines whether the style of the canvas should be updated when the resolution is changed.
+	 *
+	 * @defaultValue true
 	 */
 
 	updateStyle: boolean;
-
-	/**
-	 * Determines whether the last pass should automatically render to screen. Default is `true`.
-	 */
-
-	autoRenderToScreen: boolean;
 
 	/**
 	 * Constructs a new render pipeline.
@@ -83,8 +85,31 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 		this.resolution = new Resolution();
 		this.resolution.addEventListener("change", () => this.onResolutionChange());
 
+		this._autoRenderToScreen = true;
 		this.updateStyle = true;
-		this.autoRenderToScreen = true;
+
+	}
+
+	/**
+	 * Determines whether the last pass should automatically render to screen.
+	 *
+	 * @defaultValue true
+	 */
+
+	get autoRenderToScreen(): boolean {
+
+		return this._autoRenderToScreen;
+
+	}
+
+	set autoRenderToScreen(value: boolean) {
+
+		if(this.autoRenderToScreen !== value) {
+
+			this._autoRenderToScreen = value;
+			RenderPipeline.ioManager.update();
+
+		}
 
 	}
 
