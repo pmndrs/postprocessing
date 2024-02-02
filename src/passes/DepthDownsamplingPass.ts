@@ -37,8 +37,8 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 
 	protected override onInputChange(): void {
 
-		this.fullscreenMaterial.depthBuffer = this.input.buffers.get(GBuffer.DEPTH) as Texture;
-		this.fullscreenMaterial.normalBuffer = this.input.buffers.get(GBuffer.NORMAL) as Texture;
+		this.fullscreenMaterial.depthBuffer = this.input.buffers.get(GBuffer.DEPTH)?.value as Texture;
+		this.fullscreenMaterial.normalBuffer = this.input.buffers.get(GBuffer.NORMAL)?.value as Texture;
 
 	}
 
@@ -64,7 +64,7 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 
 	render(): void {
 
-		this.renderer?.setRenderTarget(this.output.defaultBuffer);
+		this.renderer?.setRenderTarget(this.output.defaultBuffer?.value ?? null);
 		this.renderFullscreen();
 
 	}

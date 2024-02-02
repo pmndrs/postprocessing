@@ -294,7 +294,7 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 
 			gBufferEntries.push([
 				EffectPass.gBufferStructFields.get(component) as string,
-				component === GBuffer.COLOR ? input.defaultBuffer : input.buffers.get(component) ?? null
+				((component === GBuffer.COLOR) ? input.defaultBuffer?.value : input.buffers.get(component)?.value) ?? null
 			]);
 
 		}
@@ -387,7 +387,7 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 		const material = this.fullscreenMaterial;
 		material.time += this.timer.getDelta() * this.timeScale;
 
-		this.renderer.setRenderTarget(this.output.defaultBuffer);
+		this.renderer.setRenderTarget(this.output.defaultBuffer?.value ?? null);
 		this.renderFullscreen();
 
 	}

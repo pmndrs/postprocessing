@@ -52,7 +52,7 @@ export class ShaderPass extends Pass<ShaderMaterial> {
 
 	render(): void {
 
-		this.renderer?.setRenderTarget(this.output.defaultBuffer);
+		this.renderer?.setRenderTarget(this.output.defaultBuffer?.value ?? null);
 		this.renderFullscreen();
 
 	}

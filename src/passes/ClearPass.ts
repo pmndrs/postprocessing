@@ -60,7 +60,7 @@ export class ClearPass extends Pass {
 		const values = this.clearValues;
 
 		// The type of the default buffer has already been checked.
-		const gBuffer = this.output.defaultBuffer as WebGLMultipleRenderTargets;
+		const gBuffer = this.output.defaultBuffer!.value as WebGLMultipleRenderTargets;
 		const gBufferInfo = new GBufferInfo(gBuffer);
 
 		if(flags.gBufferComponents.has(GBuffer.NORMAL) && gBufferInfo.indices.has(GBuffer.NORMAL)) {
@@ -126,10 +126,10 @@ export class ClearPass extends Pass {
 
 		}
 
-		renderer.setRenderTarget(this.output.defaultBuffer);
+		renderer.setRenderTarget(this.output.defaultBuffer?.value ?? null);
 		renderer.clear(flags.color, flags.depth, flags.stencil);
 
-		if(this.output.defaultBuffer instanceof WebGLMultipleRenderTargets) {
+		if(this.output.defaultBuffer?.value instanceof WebGLMultipleRenderTargets) {
 
 			this.clearGBuffer();
 

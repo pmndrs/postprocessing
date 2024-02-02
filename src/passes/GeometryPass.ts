@@ -228,7 +228,7 @@ export class GeometryPass extends Pass implements Selective {
 
 		this._samples = value;
 
-		const buffer = this.output.defaultBuffer;
+		const buffer = this.output.defaultBuffer?.value ?? null;
 
 		if(buffer !== null && buffer.samples !== value) {
 
@@ -385,7 +385,7 @@ export class GeometryPass extends Pass implements Selective {
 	private updateGBuffer(): void {
 
 		const gBufferComponents = this.gBufferComponents;
-		this.output.defaultBuffer?.dispose();
+		this.output.defaultBuffer?.value?.dispose();
 
 		if(gBufferComponents.size === 0) {
 
@@ -495,7 +495,7 @@ export class GeometryPass extends Pass implements Selective {
 
 		}
 
-		this.renderer.setRenderTarget(this.output.defaultBuffer);
+		this.renderer.setRenderTarget(this.output.defaultBuffer?.value ?? null);
 		this.renderer.render(this.scene, this.camera);
 
 		// Restore the original values.

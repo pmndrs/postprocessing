@@ -3,6 +3,7 @@ import {
 	BufferAttribute,
 	BufferGeometry,
 	Camera,
+	Event,
 	EventDispatcher,
 	Material,
 	Mesh,
@@ -19,11 +20,12 @@ import { FullscreenMaterial } from "../materials/FullscreenMaterial.js";
 import { ImmutableTimer } from "../utils/ImmutableTimer.js";
 import { Log } from "../utils/Log.js";
 import { Resolution } from "../utils/Resolution.js";
+import { Input } from "./io/Input.js";
+import { Output } from "./io/Output.js";
 import { BaseEventMap } from "./BaseEventMap.js";
 import { Disposable } from "./Disposable.js";
-import { Input } from "./Input.js";
-import { Output } from "./Output.js";
 import { Renderable } from "./Renderable.js";
+import { Resource } from "./io/Resource.js";
 
 /**
  * Pass events.
@@ -40,6 +42,7 @@ export interface PassEventMap extends BaseEventMap {
 /**
  * An abstract pass.
  *
+ * @param TMaterial - The type of the fullscreen material, or null if this pass has none.
  * @category Core
  */
 
@@ -183,28 +186,37 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this.screen = null;
 
 		this._name = name;
+		this._enabled = true;
 		this._renderer = null;
 		this._timer = null;
 		this._scene = null;
 		this._camera = null;
+		this._subpasses = [];
 
 		this.disposables = new Set<Disposable>();
 
 		this.resolution = new Resolution();
-		this.resolution.addEventListener(Resolution.EVENT_CHANGE, () => this.updateOutputBufferSize(this.resolution));
+		this.resolution.addEventListener(Resolution.EVENT_CHANGE, () => this.updateOutputBufferSize());
 		this.resolution.addEventListener(Resolution.EVENT_CHANGE, () => this.onResolutionChange(this.resolution));
 
+		const inputListener = (e: Event) => this.handleInputEvent(e);
+		const outputListener = (e: Event) => this.handleOutputEvent(e);
+
+		// Create I/O data and set up event listeners for global changes and individual resource changes.
+
 		this.input = new Input();
-		this.input.addEventListener(Input.EVENT_CHANGE, () => this.onInputChange());
-		this.input.addEventListener(Input.EVENT_CHANGE, () => this.updateFullscreenMaterialInput());
+		this.input.addEventListener(Input.EVENT_ADD,
+			(e) => e.value.addEventListener(Resource.EVENT_CHANGE, inputListener));
+		this.input.addEventListener(Input.EVENT_DELETE,
+			(e) => e.value.removeEventListener(Resource.EVENT_CHANGE, inputListener));
+		this.input.addEventListener(Output.EVENT_CHANGE, inputListener);
 
 		this.output = new Output();
-		this.output.addEventListener(Output.EVENT_CHANGE, () => this.onOutputChange());
-		this.output.addEventListener(Output.EVENT_CHANGE, () => this.updateFullscreenMaterialOutput());
-		this.output.addEventListener(Output.EVENT_CHANGE, () => this.updateOutputBufferSize(this.resolution));
-
-		this._subpasses = [];
-		this._enabled = true;
+		this.output.addEventListener(Output.EVENT_ADD,
+			(e) => e.value.addEventListener(Resource.EVENT_CHANGE, outputListener));
+		this.output.addEventListener(Output.EVENT_DELETE,
+			(e) => e.value.removeEventListener(Resource.EVENT_CHANGE, outputListener));
+		this.output.addEventListener(Output.EVENT_CHANGE, outputListener);
 
 	}
 
@@ -244,7 +256,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	/**
 	 * A list of subpasses.
 	 *
-	 * Subpasses are subject to automatic resource optimizations.
+	 * Subpasses are included in automatic resource optimizations.
 	 */
 
 	get subpasses(): ReadonlyArray<Pass<Material | null>> {
@@ -395,9 +407,9 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 * Updates the size of the default output buffer, if it exists.
 	 */
 
-	private updateOutputBufferSize(resolution: Resolution): void {
+	private updateOutputBufferSize(): void {
 
-		this.output.defaultBuffer?.setSize(resolution.width, resolution.height);
+		this.output.defaultBuffer?.value?.setSize(this.resolution.width, this.resolution.height);
 
 	}
 
@@ -419,7 +431,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		if(fullscreenMaterial instanceof FullscreenMaterial) {
 
-			fullscreenMaterial.inputBuffer = this.input.defaultBuffer;
+			fullscreenMaterial.inputBuffer = this.input.defaultBuffer?.value ?? null;
 
 		}
 
@@ -578,7 +590,44 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	}
 
-	abstract render(): void;
+	/**
+	 * Handles {@link input} events.
+	 *
+	 * @param event - An event.
+	 */
+
+	private handleInputEvent(event: Event): void {
+
+		switch(event.type) {
+
+			case "change":
+				this.onInputChange();
+				this.updateFullscreenMaterialInput();
+				break;
+
+		}
+
+	}
+
+	/**
+	 * Handles {@link output} events.
+	 *
+	 * @param event - An event.
+	 */
+
+	private handleOutputEvent(event: Event): void {
+
+		switch(event.type) {
+
+			case "change":
+				this.onOutputChange();
+				this.updateFullscreenMaterialOutput();
+				this.updateOutputBufferSize();
+				break;
+
+		}
+
+	}
 
 	dispose(): void {
 
@@ -597,5 +646,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this.fullscreenMaterial?.dispose();
 
 	}
+
+	abstract render(): void;
 
 }

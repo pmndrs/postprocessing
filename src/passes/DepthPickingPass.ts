@@ -52,7 +52,13 @@ export class DepthPickingPass extends DepthCopyPass {
 
 	private readDepthAt(x: number, y: number): number {
 
-		const renderTarget = this.output.defaultBuffer as WebGLRenderTarget;
+		if(this.output.defaultBuffer?.value === null) {
+
+			throw new Error("Unable to read depth from the back buffer");
+
+		}
+
+		const renderTarget = this.output.defaultBuffer!.value as WebGLRenderTarget;
 		const packed = (renderTarget.texture.type === UnsignedByteType);
 		const pixelBuffer = packed ? uint8PixelBuffer : floatPixelBuffer;
 		this.renderer?.readRenderTargetPixels(renderTarget, x, y, 1, 1, pixelBuffer);
@@ -92,10 +98,10 @@ export class DepthPickingPass extends DepthCopyPass {
 				// The specific depth value needs to be copied before it can be read.
 				this.callback = resolve;
 
-			} else {
+			} else if(this.output.defaultBuffer?.value !== null) {
 
 				// The depth values from the current or last frame are already available.
-				const renderTarget = this.output.defaultBuffer as WebGLRenderTarget;
+				const renderTarget = this.output.defaultBuffer!.value as WebGLRenderTarget;
 				const texelPosition = this.fullscreenMaterial.texelPosition;
 				const x = Math.round(texelPosition.x * renderTarget.width);
 				const y = Math.round(texelPosition.y * renderTarget.height);

@@ -27,28 +27,31 @@ export class LuminancePass extends Pass<LuminanceMaterial> {
 	 * The output texture.
 	 */
 
-	get texture(): Texture {
+	get texture(): Texture | null {
 
-		return this.output.defaultBuffer!.texture as Texture;
+		return this.output.defaultBuffer?.texture.value ?? null;
 
 	}
 
 	protected override onInputChange(): void {
 
-		if(this.input.defaultBuffer === null) {
+		const inputTexture = this.input.defaultBuffer?.value ?? null;
+		const outputTexture = this.texture;
+
+		if(inputTexture === null || outputTexture === null) {
 
 			return;
 
 		}
 
-		this.texture.type = this.input.defaultBuffer.type;
-		this.texture.colorSpace = this.input.defaultBuffer.colorSpace;
+		outputTexture.type = inputTexture.type;
+		outputTexture.colorSpace = inputTexture.colorSpace;
 
 	}
 
 	render(): void {
 
-		this.renderer?.setRenderTarget(this.output.defaultBuffer);
+		this.renderer?.setRenderTarget(this.output.defaultBuffer?.value ?? null);
 		this.renderFullscreen();
 
 	}

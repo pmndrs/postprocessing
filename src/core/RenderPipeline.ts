@@ -4,7 +4,7 @@ import { ShaderChunkExtensions } from "../shader-chunks/ShaderChunkExtensions.js
 import { ImmutableTimer } from "../utils/ImmutableTimer.js";
 import { Log } from "../utils/Log.js";
 import { Resolution } from "../utils/Resolution.js";
-import { IOManager } from "./IOManager.js";
+import { IOManager } from "./io/IOManager.js";
 import { Disposable } from "./Disposable.js";
 import { Renderable } from "./Renderable.js";
 import { Resizable } from "./Resizable.js";

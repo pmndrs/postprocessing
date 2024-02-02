@@ -63,9 +63,9 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 	 * A texture that contains the blurred result.
 	 */
 
-	get texture(): Texture {
+	get texture(): Texture | null {
 
-		return this.output.defaultBuffer!.texture as Texture;
+		return this.output.defaultBuffer?.texture.value ?? null;
 
 	}
 
@@ -83,13 +83,13 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 	set levels(value: number) {
 
-		if(this.levels === value) {
+		if(this.levels === value || this.output.defaultBuffer === null) {
 
 			return;
 
 		}
 
-		const renderTarget = this.output.defaultBuffer as WebGLRenderTarget;
+		const renderTarget = this.output.defaultBuffer.value as WebGLRenderTarget;
 
 		this.dispose();
 		this.disposables.clear();
@@ -161,13 +161,13 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 	protected override onInputChange(): void {
 
-		if(this.input.defaultBuffer === null) {
+		if(this.input.defaultBuffer === null || this.input.defaultBuffer.value === null) {
 
 			return;
 
 		}
 
-		const { type, colorSpace } = this.input.defaultBuffer;
+		const { type, colorSpace } = this.input.defaultBuffer.value;
 
 		for(const mipmap of this.downsamplingMipmaps.concat(this.upsamplingMipmaps)) {
 
@@ -196,7 +196,7 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 	override render(): void {
 
-		if(this.renderer === null || this.input.defaultBuffer === null) {
+		if(this.renderer === null || this.input.defaultBuffer?.value === null) {
 
 			return;
 
@@ -208,7 +208,7 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 		const downsamplingMipmaps = this.downsamplingMipmaps;
 		const upsamplingMipmaps = this.upsamplingMipmaps;
 
-		let previousBuffer = this.input.defaultBuffer;
+		let previousBuffer = this.input.defaultBuffer!.value;
 		let { width, height } = this.resolution;
 
 		// Downsample the input to the highest MIP level (smallest mipmap).

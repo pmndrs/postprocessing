@@ -1,8 +1,7 @@
+export * from "./io/index.js";
+
 export * from "./BaseEventMap.js";
 export * from "./Disposable.js";
-export * from "./Input.js";
-export * from "./IOManager.js";
-export * from "./Output.js";
 export * from "./Pass.js";
 export * from "./Renderable.js";
 export * from "./Resizable.js";

@@ -35,13 +35,13 @@ export class DepthCopyPass extends Pass<DepthCopyMaterial> {
 
 	protected override onInputChange(): void {
 
-		this.fullscreenMaterial.depthBuffer = this.input.buffers.get(GBuffer.DEPTH) as Texture;
+		this.fullscreenMaterial.depthBuffer = this.input.buffers.get(GBuffer.DEPTH)?.value as Texture;
 
 	}
 
 	render(): void {
 
-		this.renderer?.setRenderTarget(this.output.defaultBuffer);
+		this.renderer?.setRenderTarget(this.output.defaultBuffer?.value ?? null);
 		this.renderFullscreen();
 
 	}

@@ -8,8 +8,8 @@ import {
 	WebGLProgramParametersWithUniforms
 } from "three";
 
+import { Input } from "../core/io/Input.js";
 import { GBuffer } from "../enums/GBuffer.js";
-import { Input } from "../core/Input.js";
 import { Log } from "../utils/Log.js";
 import { Resolution } from "../utils/Resolution.js";
 import { CopyPass } from "./CopyPass.js";
@@ -72,7 +72,7 @@ export class BufferDebugPass extends CopyPass {
 
 		super();
 
-		this.name = "GBufferDebugPass";
+		this.name = "BufferDebugPass";
 
 		this.viewSize = 0.1;
 		this.columns = 4;
@@ -118,12 +118,12 @@ export class BufferDebugPass extends CopyPass {
 
 		if(this.bufferFocus !== null && this.input.buffers.has(this.bufferFocus)) {
 
-			this.fullscreenMaterial.inputBuffer = this.input.buffers.get(this.bufferFocus) as Texture;
+			this.fullscreenMaterial.inputBuffer = this.input.buffers.get(this.bufferFocus)?.value ?? null;
 			this.fullscreenMaterial.colorSpaceConversion = false;
 
 		} else {
 
-			this.fullscreenMaterial.inputBuffer = this.input.defaultBuffer;
+			this.fullscreenMaterial.inputBuffer = this.input.defaultBuffer?.value ?? null;
 			this.fullscreenMaterial.colorSpaceConversion = true;
 
 		}
@@ -208,7 +208,7 @@ export class BufferDebugPass extends CopyPass {
 
 		for(const entry of this.input.textures) {
 
-			if(entry[0] === Input.BUFFER_DEFAULT || entry[1] === null || capturedTextures.has(entry[1])) {
+			if(entry[0] === Input.BUFFER_DEFAULT || entry[1] === null || capturedTextures.has(entry[1].value!)) {
 
 				continue;
 
@@ -217,7 +217,7 @@ export class BufferDebugPass extends CopyPass {
 			const view = new Mesh(
 				new PlaneGeometry(),
 				new MeshBasicMaterial({
-					map: entry[1]
+					map: entry[1].value
 				})
 			);
 
@@ -230,7 +230,7 @@ export class BufferDebugPass extends CopyPass {
 
 			view.name = entry[0];
 			this.views.push(view);
-			capturedTextures.add(entry[1]);
+			capturedTextures.add(entry[1].value!);
 
 		}
 

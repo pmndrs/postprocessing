@@ -28,13 +28,13 @@ export class CopyPass extends Pass<CopyMaterial> {
 
 	protected override onInputChange(): void {
 
-		this.fullscreenMaterial.depthBuffer = this.input.buffers.get(GBuffer.DEPTH) ?? null;
+		this.fullscreenMaterial.depthBuffer = this.input.buffers.get(GBuffer.DEPTH)?.value ?? null;
 
 	}
 
 	render(): void {
 
-		this.renderer?.setRenderTarget(this.output.defaultBuffer);
+		this.renderer?.setRenderTarget(this.output.defaultBuffer?.value ?? null);
 		this.renderFullscreen();
 
 	}

@@ -1,16 +1,18 @@
 import { Material, SRGBColorSpace, WebGLMultipleRenderTargets, WebGLRenderTarget } from "three";
-import { GBuffer } from "../enums/GBuffer.js";
-import { ClearPass } from "../passes/ClearPass.js";
-import { GeometryPass } from "../passes/GeometryPass.js";
-import { GBufferInfo } from "../utils/GBufferInfo.js";
+import { GBuffer } from "../../enums/GBuffer.js";
+import { ClearPass } from "../../passes/ClearPass.js";
+import { GeometryPass } from "../../passes/GeometryPass.js";
+import { GBufferInfo } from "../../utils/GBufferInfo.js";
+import { Pass } from "../Pass.js";
+import { RenderPipeline } from "../RenderPipeline.js";
 import { Output } from "./Output.js";
-import { Pass } from "./Pass.js";
-import { RenderPipeline } from "./RenderPipeline.js";
+import { TextureResource } from "./TextureResource.js";
+import { Resource } from "./Resource.js";
 
 /**
  * An I/O manager.
  *
- * @category Core
+ * @category IO
  */
 
 export class IOManager {
@@ -22,10 +24,12 @@ export class IOManager {
 	private readonly pipelines: Set<RenderPipeline>;
 
 	/**
-	 * A collection of active render pipelines.
+	 * Keeps track of the original output default buffers.
+	 *
+	 * @see {@link RenderPipeline.autoRenderToScreen}
 	 */
 
-	private readonly outputDefaultBuffers: Map<Output, WebGLRenderTarget | WebGLMultipleRenderTargets | null>;
+	private readonly outputDefaultBuffers: WeakMap<Resource, WebGLRenderTarget | WebGLMultipleRenderTargets | null>;
 
 	/**
 	 * Constructs a new I/O manager.
@@ -34,7 +38,7 @@ export class IOManager {
 	constructor() {
 
 		this.pipelines = new Set<RenderPipeline>();
-		this.outputDefaultBuffers = new Map<Output, WebGLRenderTarget | WebGLMultipleRenderTargets | null>();
+		this.outputDefaultBuffers = new WeakMap<Resource, WebGLRenderTarget | WebGLMultipleRenderTargets | null>();
 
 	}
 
@@ -48,7 +52,7 @@ export class IOManager {
 
 		IOManager.gatherGBufferComponents(pipeline);
 
-		// Inputs depend on outputs.
+		// Update outputs before inputs to reduce update events.
 		this.updateOutput(pipeline);
 		this.updateInput(pipeline);
 		IOManager.syncDefaultBufferType(pipeline);
@@ -95,7 +99,10 @@ export class IOManager {
 
 			}
 
-			if(previousPass === null) {
+			// Keep track of the last output buffer (some passes don't render anything).
+			previousOutputBuffer = previousPass?.output.buffers.get(Output.BUFFER_DEFAULT)?.value ?? previousOutputBuffer;
+
+			if(previousPass === null || pass === geoPass) {
 
 				continue;
 
@@ -103,9 +110,6 @@ export class IOManager {
 
 			previousPass.output.defines.forEach((value, key) => pass.input.defines.set(key, value));
 			previousPass.output.uniforms.forEach((value, key) => pass.input.uniforms.set(key, value));
-
-			// Keep track of the last output buffer (some passes don't render anything).
-			previousOutputBuffer = previousPass.output.buffers.get(Output.BUFFER_DEFAULT) ?? previousOutputBuffer;
 
 			if(previousOutputBuffer === null) {
 
@@ -140,33 +144,6 @@ export class IOManager {
 
 	private updateOutput(pipeline: RenderPipeline): void {
 
-		const outputDefaultBuffers = this.outputDefaultBuffers;
-
-		for(let i = 0, j = 1, l = pipeline.passes.length; i < l; ++i, ++j) {
-
-			const pass = pipeline.passes[i];
-
-			if(j === l) {
-
-				// This is the last pass.
-				if(pipeline.autoRenderToScreen) {
-
-					// Remember the original buffer and set the default buffer to null.
-					outputDefaultBuffers.set(pass.output, pass.output.defaultBuffer);
-					pass.output.defaultBuffer = null;
-
-				}
-
-			} else if(pass.output.defaultBuffer === null && outputDefaultBuffers.has(pass.output)) {
-
-				// Restore the original buffer.
-				pass.output.defaultBuffer = outputDefaultBuffers.get(pass.output)!;
-
-			}
-
-		}
-
-		// Clear passes depend on the output of the next pass.
 		for(let i = 0, j = 1, l = pipeline.passes.length; i < l; ++i, ++j) {
 
 			const pass = pipeline.passes[i];
@@ -178,6 +155,34 @@ export class IOManager {
 				nextPass.output.defines.forEach((value, key) => pass.output.defines.set(key, value));
 				nextPass.output.uniforms.forEach((value, key) => pass.output.uniforms.set(key, value));
 				pass.output.defaultBuffer = nextPass.output.defaultBuffer;
+
+				continue;
+
+			}
+
+			if(pass.output.defaultBuffer === null) {
+
+				// No output resource has been set yet; default buffer is already null.
+				return;
+
+			}
+
+			const outputDefaultBuffers = this.outputDefaultBuffers;
+
+			if(outputDefaultBuffers.has(pass.output.defaultBuffer)) {
+
+				// Restore the original buffer.
+				const originalBuffer = outputDefaultBuffers.get(pass.output.defaultBuffer)!;
+				outputDefaultBuffers.delete(pass.output.defaultBuffer);
+				pass.output.defaultBuffer = originalBuffer;
+
+			}
+
+			if(pipeline.autoRenderToScreen && j === l && pass.output.defaultBuffer !== null) {
+
+				// Remember the original buffer and set the default buffer to null.
+				outputDefaultBuffers.set(pass.output.defaultBuffer, pass.output.defaultBuffer.value);
+				pass.output.defaultBuffer = null;
 
 			}
 
@@ -234,19 +239,21 @@ export class IOManager {
 
 		for(const pass of pipeline.passes) {
 
-			if(pass.input.defaultBuffer === null || pass.output.defaultBuffer === null ||
-				pass.output.defaultBuffer instanceof WebGLMultipleRenderTargets) {
+			const inputBuffer = pass.input.defaultBuffer?.value ?? null;
+			const outputBuffer = pass.output.defaultBuffer?.value ?? null;
+
+			if(inputBuffer === null || outputBuffer === null || outputBuffer instanceof WebGLMultipleRenderTargets) {
 
 				continue;
 
 			}
 
-			pass.output.defaultBuffer.texture.type = pass.input.defaultBuffer.type;
+			outputBuffer.texture.type = inputBuffer.type;
 
 			if(!pass.input.frameBufferPrecisionHigh && pipeline.renderer?.outputColorSpace === SRGBColorSpace) {
 
 				// If the output buffer uses low precision, enable sRGB encoding to reduce information loss.
-				pass.output.defaultBuffer.texture.colorSpace = SRGBColorSpace;
+				outputBuffer.texture.colorSpace = SRGBColorSpace;
 
 			}
 
@@ -305,14 +312,17 @@ export class IOManager {
 
 				const pass = geoPasses[i];
 				pass.gBufferComponents.add(GBuffer.COLOR);
-				pass.gBufferComponents.add(GBuffer.DEPTH);
 
-				// Secondary geometry passes need to copy depth from the main pass.
-				pass.input.gBuffer.add(GBuffer.DEPTH);
+				// Secondary geometry passes may need to copy depth from the main pass.
+				if(pass.depthBuffer) {
+
+					pass.gBufferComponents.add(GBuffer.DEPTH);
+					pass.input.gBuffer.add(GBuffer.DEPTH);
+					geoPass.gBufferComponents.add(GBuffer.DEPTH);
+
+				}
 
 			}
-
-			geoPass.gBufferComponents.add(GBuffer.DEPTH);
 
 		}
 
@@ -340,12 +350,12 @@ export class IOManager {
 
 			if(component === GBuffer.DEPTH) {
 
-				pass.input.buffers.set(component, geoPass.gBuffer.depthTexture);
+				pass.input.buffers.set(component, new TextureResource(geoPass.gBuffer.depthTexture));
 
 			} else if(gBufferInfo.indices.has(component)) {
 
 				const index = gBufferInfo.indices.get(component) as number;
-				pass.input.buffers.set(component, geoPass.gBuffer.texture[index]);
+				pass.input.buffers.set(component, new TextureResource(geoPass.gBuffer.texture[index]));
 
 			}
 
