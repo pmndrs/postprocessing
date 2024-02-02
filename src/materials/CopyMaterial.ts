@@ -1,4 +1,4 @@
-import { Texture, Uniform } from "three";
+import { AlwaysDepth, Texture, Uniform } from "three";
 import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentShader from "./shaders/copy.frag";
@@ -30,44 +30,37 @@ export class CopyMaterial extends FullscreenMaterial {
 			}
 		});
 
-	}
-
-	/**
-	 * Indicates whether depth should be copied.
-	 *
-	 * When enabled, the values from the {@link depthBuffer} will be written to the default output buffer.
-	 */
-
-	get depthCopy(): boolean {
-
-		return this.depthWrite;
+		this.depthFunc = AlwaysDepth;
 
 	}
 
-	set depthCopy(value: boolean) {
+	override set inputBuffer(value: Texture | null) {
 
-		if(this.depthCopy !== value) {
+		const colorWrite = value !== null;
 
-			if(value) {
+		if(this.colorWrite !== colorWrite) {
 
-				this.defines.COPY_DEPTH = true;
+			if(colorWrite) {
+
+				this.defines.COLOR_WRITE = true;
 
 			} else {
 
-				delete this.defines.COPY_DEPTH;
+				delete this.defines.COLOR_WRITE;
 
 			}
 
-			this.depthTest = value;
-			this.depthWrite = value;
+			this.colorWrite = colorWrite;
 			this.needsUpdate = true;
 
 		}
 
+		super.inputBuffer = value;
+
 	}
 
 	/**
-	 * A depth buffer.
+	 * A depth buffer that should be copied to the output buffer.
 	 */
 
 	get depthBuffer(): Texture | null {
@@ -77,6 +70,26 @@ export class CopyMaterial extends FullscreenMaterial {
 	}
 
 	set depthBuffer(value: Texture | null) {
+
+		const depthWrite = value !== null;
+
+		if(this.depthWrite !== depthWrite) {
+
+			if(depthWrite) {
+
+				this.defines.DEPTH_WRITE = true;
+
+			} else {
+
+				delete this.defines.DEPTH_WRITE;
+
+			}
+
+			this.depthTest = depthWrite;
+			this.depthWrite = depthWrite;
+			this.needsUpdate = true;
+
+		}
 
 		this.uniforms.depthBuffer.value = value;
 
