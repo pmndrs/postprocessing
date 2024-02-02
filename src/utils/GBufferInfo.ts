@@ -13,10 +13,10 @@ import { GBufferTexture } from "../enums/GBufferTexture.js";
 import { Precision } from "../enums/Precision.js";
 
 /**
- * Determines the GLSL texel type that corresponds to a given texture type.
+ * Determines the GLSL precision that corresponds to a given texture type.
  *
  * @param type - The texture type.
- * @return The GLSL texel type.
+ * @return The GLSL precision.
  */
 
 function getPrecision(type: TextureDataType): Precision {
@@ -27,7 +27,7 @@ function getPrecision(type: TextureDataType): Precision {
 			return "highp";
 
 		case HalfFloatType:
-			return "highp";
+			return "mediump";
 
 		default:
 			return "lowp";
@@ -37,15 +37,15 @@ function getPrecision(type: TextureDataType): Precision {
 }
 
 /**
- * A union of GLSL texel types.
+ * GLSL texel types.
  */
 
 declare type TexelType = "float" | "vec2" | "vec4";
 
 /**
- * Determines the GLSL texel type that corresponds to a given texture type.
+ * Determines the GLSL texel type that corresponds to a given pixel format.
  *
- * @param type - The texture type.
+ * @param type - The pixel format.
  * @return The GLSL texel type.
  */
 
@@ -76,7 +76,7 @@ function getTexelType(format: AnyPixelFormat): TexelType {
 export class GBufferInfo {
 
 	/**
-	 * A collection that maps G-Buffer texture IDs to atomic G-Buffer components.
+	 * A collection that maps G-Buffer texture IDs to G-Buffer components.
 	 */
 
 	private static readonly gBufferComponents = /* @__PURE__ */ new Map<GBufferTexture, GBuffer[]>([
@@ -100,7 +100,7 @@ export class GBufferInfo {
 	readonly defines: Map<string, string | number | boolean>;
 
 	/**
-	 * @see {@link layoutDefinitions}
+	 * @see {@link outputDefinitions}
 	 */
 
 	private _outputDefinitions: string | null;
