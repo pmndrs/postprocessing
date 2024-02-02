@@ -20,6 +20,7 @@ import {
 	WebGLRenderer
 } from "three";
 
+import { Resource } from "../core/io/Resource.js";
 import { Pass } from "../core/Pass.js";
 import { Selective } from "../core/Selective.js";
 import { GBuffer } from "../enums/GBuffer.js";
@@ -122,19 +123,25 @@ export class GeometryPass extends Pass implements Selective {
 	 * Indicates whether a stencil buffer should be created.
 	 */
 
-	private readonly stencilBuffer: boolean;
+	readonly stencilBuffer: boolean;
 
 	/**
 	 * Indicates whether a depth buffer should be created.
 	 */
 
-	private readonly depthBuffer: boolean;
+	readonly depthBuffer: boolean;
 
 	/**
 	 * The texture data type of the primary color buffer.
 	 */
 
-	private readonly frameBufferType: TextureDataType;
+	readonly frameBufferType: TextureDataType;
+
+	/**
+	 * The current G-Buffer resource.
+	 */
+
+	private gBufferResource: Resource | null;
 
 	/**
 	 * @see {@link samples}
@@ -175,11 +182,12 @@ export class GeometryPass extends Pass implements Selective {
 		this.selection.enabled = false;
 		this.registeredMaterials = new WeakSet<Material>();
 		this.copyPass = new CopyPass();
-		this.copyPass.fullscreenMaterial.depthCopy = true;
+		this.copyPass.enabled = false;
 
 		const gBufferComponents = new ObservableSet<GBuffer>();
 		gBufferComponents.addEventListener(ObservableSet.EVENT_CHANGE, () => this.updateGBuffer());
 		this.gBufferComponents = gBufferComponents;
+		this.gBufferResource = null;
 
 		this.updateGBuffer();
 		this.updateMaterials();
@@ -204,7 +212,19 @@ export class GeometryPass extends Pass implements Selective {
 	protected override onInputChange(): void {
 
 		this.copyPass.input.defaultBuffer = this.input.defaultBuffer;
-		this.copyPass.input.buffers.set(GBuffer.DEPTH, this.input.buffers.get(GBuffer.DEPTH) ?? null);
+
+		if(this.input.buffers.has(GBuffer.DEPTH)) {
+
+			this.copyPass.input.buffers.set(GBuffer.DEPTH, this.input.buffers.get(GBuffer.DEPTH)!);
+
+		} else {
+
+			this.copyPass.input.buffers.delete(GBuffer.DEPTH);
+
+		}
+
+		const inputBuffer = this.input.defaultBuffer?.value ?? null;
+		this.copyPass.enabled = inputBuffer !== null && this.gBuffer !== null;
 
 	}
 
@@ -240,12 +260,13 @@ export class GeometryPass extends Pass implements Selective {
 	}
 
 	/**
-	 * Alias for `output.defaultBuffer`.
+	 * Returns the G-Buffer render target, or null if the buffer is not of type `WebGLMultipleRenderTargets`.
 	 */
 
 	get gBuffer(): WebGLMultipleRenderTargets | null {
 
-		return this.output.defaultBuffer as WebGLMultipleRenderTargets;
+		const buffer = this.output.defaultBuffer?.value ?? null;
+		return buffer instanceof WebGLMultipleRenderTargets ? buffer : null;
 
 	}
 
@@ -384,13 +405,20 @@ export class GeometryPass extends Pass implements Selective {
 
 	private updateGBuffer(): void {
 
+		if(this.output.defaultBuffer !== this.gBufferResource) {
+
+			// Don't modify foreign resources.
+			return;
+
+		}
+
 		const gBufferComponents = this.gBufferComponents;
 		this.output.defaultBuffer?.value?.dispose();
 
 		if(gBufferComponents.size === 0) {
 
 			this.output.defaultBuffer = null;
-			this.copyPass.output.defaultBuffer = null;
+			this.gBufferResource = this.output.defaultBuffer;
 			this.output.defines.clear();
 
 			return;
@@ -452,7 +480,7 @@ export class GeometryPass extends Pass implements Selective {
 		}
 
 		this.output.defaultBuffer = renderTarget;
-		this.copyPass.output.defaultBuffer = renderTarget;
+		this.gBufferResource = this.output.defaultBuffer;
 		this.updateOutputBufferColorSpace();
 		this.updateDefines();
 
@@ -489,7 +517,7 @@ export class GeometryPass extends Pass implements Selective {
 
 		}
 
-		if(this.input.defaultBuffer !== null) {
+		if(this.copyPass.enabled) {
 
 			this.copyPass.render();
 
