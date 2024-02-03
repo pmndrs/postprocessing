@@ -8102,10 +8102,10 @@ declare module "postprocessing" {
 				normalDepthBuffer?: Texture;
 				samples?: number;
 				rings?: number;
-				worldDistanceThreshold: number;
-				worldDistanceFalloff: number;
-				worldProximityThreshold: number;
-				worldProximityFalloff: number;
+				worldDistanceThreshold?: number;
+				worldDistanceFalloff?: number;
+				worldProximityThreshold?: number;
+				worldProximityFalloff?: number;
 				distanceThreshold?: number;
 				distanceFalloff?: number;
 				rangeThreshold?: number;
