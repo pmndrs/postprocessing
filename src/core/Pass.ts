@@ -491,7 +491,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		const material = this.fullscreenMaterial;
 
-		if(material instanceof FullscreenMaterial && /texture\s*\(\s*inputBuffer/.test(material.fragmentShader)) {
+		if(material instanceof FullscreenMaterial && /texture\s*\(\s*gBuffer.color/.test(material.fragmentShader)) {
 
 			return true;
 
