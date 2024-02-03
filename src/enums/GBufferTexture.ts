@@ -10,7 +10,7 @@
 export enum GBufferTexture {
 
 	/**
-	 * The diffuse color of the scene.
+	 * The color of the scene.
 	 */
 
 	COLOR = "outputColor",
@@ -22,9 +22,15 @@ export enum GBufferTexture {
 	NORMAL = "outputNormal",
 
 	/**
-	 * Roughness and metalness.
+	 * Occlusion, roughness and metalness.
 	 */
 
-	ROUGHNESS_METALNESS = "outputRoughnessMetalness",
+	ORM = "outputORM",
+
+	/**
+	 * Total emissive radiance.
+	 */
+
+	EMISSION = "outputEmission"
 
 }

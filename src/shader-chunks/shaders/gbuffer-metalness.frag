@@ -1,5 +1,5 @@
-#ifdef outputRoughnessMetalness
+#ifdef outputORM
 
-	outputRoughnessMetalness.y = metalness;
+	outputORM.z = metalness;
 
 #endif

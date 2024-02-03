@@ -14,9 +14,12 @@ import precisionFragment from "./shaders/precision.frag";
 import resolutionParsFragment from "./shaders/resolution-pars.frag";
 
 // Extensions for built-in shaders.
+import gbufferDefaultOutputFragment from "./shaders/gbuffer-default-output.frag";
 import gbufferNormalFragment from "./shaders/gbuffer-normal.frag";
+import gbufferOcclusionFragment from "./shaders/gbuffer-occlusion.frag";
 import gbufferRoughnessFragment from "./shaders/gbuffer-roughness.frag";
 import gbufferMetalnessFragment from "./shaders/gbuffer-metalness.frag";
+import gbufferEmissionFragment from "./shaders/gbuffer-emission.frag";
 
 /**
  * A collection of custom shader chunks.
@@ -45,6 +48,7 @@ export class ShaderChunkExtensions {
 			"pp_colorspace_pars_fragment": { value: colorspaceParsFragment },
 			"pp_colorspace_conversion_pars_fragment": { value: colorspaceConversionParsFragment },
 			"pp_default_output_pars_fragment": { value: defaultOutputParsFragment },
+			"pp_default_output_fragment": { value: gbufferDefaultOutputFragment },
 			"pp_depth_buffer_pars_fragment": { value: depthBufferParsFragment },
 			"pp_depth_precision_pars_fragment": { value: depthPrecisionParsFragment },
 			"pp_depth_utils_pars_fragment": { value: depthUtilsParsFragment },
@@ -55,8 +59,10 @@ export class ShaderChunkExtensions {
 		});
 
 		ShaderChunk.normal_fragment_maps += "\n" + gbufferNormalFragment;
+		ShaderChunk.aomap_fragment += "\n" + gbufferOcclusionFragment;
 		ShaderChunk.roughnessmap_fragment += "\n" + gbufferRoughnessFragment;
 		ShaderChunk.metalnessmap_fragment += "\n" + gbufferMetalnessFragment;
+		ShaderChunk.emissivemap_fragment += "\n" + gbufferEmissionFragment;
 
 	}
 

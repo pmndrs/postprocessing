@@ -82,8 +82,15 @@ export class GBufferInfo {
 	private static readonly gBufferComponents = /* @__PURE__ */ new Map<GBufferTexture, GBuffer[]>([
 		[GBufferTexture.COLOR, [GBuffer.COLOR]],
 		[GBufferTexture.NORMAL, [GBuffer.NORMAL]],
-		[GBufferTexture.ROUGHNESS_METALNESS, [GBuffer.ROUGHNESS, GBuffer.METALNESS]]
+		[GBufferTexture.ORM, [GBuffer.OCCLUSION, GBuffer.ROUGHNESS, GBuffer.METALNESS]],
+		[GBufferTexture.EMISSION, [GBuffer.EMISSION]]
 	]);
+
+	/**
+	 * A collection of active G-Buffer textures.
+	 */
+
+	readonly textures: Set<GBufferTexture>;
 
 	/**
 	 * A collection that maps G-Buffer components to texture indices.
@@ -113,6 +120,7 @@ export class GBufferInfo {
 
 	constructor(renderTarget: WebGLMultipleRenderTargets) {
 
+		this.textures = new Set<GBufferTexture>();
 		this.indices = new Map<GBuffer, number>();
 		this.defines = new Map<string, string | number | boolean>();
 		this._outputDefinitions = null;
@@ -133,7 +141,7 @@ export class GBufferInfo {
 	}
 
 	/**
-	 * Extracts G-Buffer component indices from a given render target.
+	 * Extracts G-Buffer texture indices from a given render target.
 	 *
 	 * @param renderTarget - A render target.
 	 */

@@ -31,15 +31,17 @@ import { Resolution } from "../utils/Resolution.js";
 export class EffectPass extends Pass<EffectMaterial> implements EventListenerObject {
 
 	/**
-	 * A collection that maps GBuffer components to GBuffer struct field names.
+	 * A collection that maps G-Buffer components to G-Buffer struct field names.
 	 */
 
-	private static gBufferStructFields = /* @__PURE__ */ new Map([
+	private static readonly gBufferStructFields = /* @__PURE__ */ new Map([
 		[GBuffer.COLOR, "color"],
 		[GBuffer.DEPTH, "depth"],
 		[GBuffer.NORMAL, "normal"],
-		[GBuffer.ROUGHNESS, "roughnessMetalness"],
-		[GBuffer.METALNESS, "roughnessMetalness"]
+		[GBuffer.OCCLUSION, "orm"],
+		[GBuffer.ROUGHNESS, "orm"],
+		[GBuffer.METALNESS, "orm"],
+		[GBuffer.EMISSION, "emission"]
 	]);
 
 	/**

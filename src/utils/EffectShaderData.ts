@@ -327,9 +327,16 @@ export class EffectShaderData implements ShaderData {
 
 		}
 
-		if(gData.has(GData.ROUGHNESS) || gData.has(GData.METALNESS)) {
+		if(gData.has(GData.OCCLUSION) || gData.has(GData.ROUGHNESS) || gData.has(GData.METALNESS)) {
 
-			s += "\tlowp sampler2D roughnessMetalness;\n";
+			s += "\tlowp sampler2D orm;\n";
+
+		}
+
+		if(gData.has(GData.EMISSION)) {
+
+			// Precision depends on the configured frame buffer type.
+			s += "\tFRAME_BUFFER_PRECISION sampler2D emission;\n";
 
 		}
 
@@ -368,6 +375,12 @@ export class EffectShaderData implements ShaderData {
 
 		}
 
+		if(gData.has(GData.OCCLUSION)) {
+
+			s += "\tfloat occlusion;\n";
+
+		}
+
 		if(gData.has(GData.ROUGHNESS)) {
 
 			s += "\tfloat roughness;\n";
@@ -377,6 +390,12 @@ export class EffectShaderData implements ShaderData {
 		if(gData.has(GData.METALNESS)) {
 
 			s += "\tfloat metalness;\n";
+
+		}
+
+		if(gData.has(GData.EMISSION)) {
+
+			s += "\tvec3 emission;\n";
 
 		}
 
@@ -421,21 +440,33 @@ export class EffectShaderData implements ShaderData {
 
 		}
 
-		if(gData.has(GData.ROUGHNESS) || gData.has(GData.METALNESS)) {
+		if(gData.has(GData.OCCLUSION) || gData.has(GData.ROUGHNESS) || gData.has(GData.METALNESS)) {
 
-			s += "\tvec2 roughnessMetalness = texture(gBuffer.roughnessMetalness, UV).rg;\n";
+			s += "\tvec3 orm = texture(gBuffer.orm, UV).xyz;\n";
+
+		}
+
+		if(gData.has(GData.OCCLUSION)) {
+
+			s += "\tgData.occlusion = orm.x;\n";
 
 		}
 
 		if(gData.has(GData.ROUGHNESS)) {
 
-			s += "\tgData.roughness = roughnessMetalness.r;\n";
+			s += "\tgData.roughness = orm.y;\n";
 
 		}
 
 		if(gData.has(GData.METALNESS)) {
 
-			s += "\tgData.metalness = roughnessMetalness.g;\n";
+			s += "\tgData.metalness = orm.z;\n";
+
+		}
+
+		if(gData.has(GData.EMISSION)) {
+
+			s += "\tgData.emission = texture(gBuffer.emission, UV).rgb;\n";
 
 		}
 

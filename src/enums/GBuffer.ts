@@ -7,7 +7,7 @@
 export enum GBuffer {
 
 	/**
-	 * The albedo/diffuse color of the scene. Takes up one buffer, either 8 or 16 bit RGBA.
+	 * The color of the scene. Takes up one buffer, either 8 or 16 bit RGBA.
 	 */
 
 	COLOR = "GBUFFER_COLOR",
@@ -25,15 +25,27 @@ export enum GBuffer {
 	NORMAL = "GBUFFER_NORMAL",
 
 	/**
-	 * Roughness is stored in the RED channel of an 8 bit RG buffer that also contains metalness.
+	 * Ambient occlusion is stored in the RED channel of an 8 bit OcclusionRoughnessMetalness (RGB) buffer.
+	 */
+
+	OCCLUSION = "GBUFFER_OCCLUSION",
+
+	/**
+	 * Roughness is stored in the GREEN channel of an 8 bit OcclusionRoughnessMetalness (RGB) buffer.
 	 */
 
 	ROUGHNESS = "GBUFFER_ROUGHNESS",
 
 	/**
-	 * Metalness is stored in the GREEN channel of an 8 bit RG buffer that also contains roughness.
+	 * Metalness is stored in the BLUE channel of an 8 bit OcclusionRoughnessMetalness (RGB) buffer.
 	 */
 
-	METALNESS = "GBUFFER_METALNESS"
+	METALNESS = "GBUFFER_METALNESS",
+
+	/**
+	 * The total emissive radiance. Takes up one buffer, either 8 or 16 bit RGBA.
+	 */
+
+	EMISSION = "GBUFFER_EMISSION"
 
 }
