@@ -162,12 +162,12 @@ export class BloomEffect extends Effect {
 
 		if(this.luminancePass.enabled) {
 
-			this.luminancePass.input.defaultBuffer = this.input.defaultBuffer;
+			this.luminancePass.input.defaultBuffer = this.input.defaultBuffer?.value ?? null;
 			this.mipmapBlurPass.input.defaultBuffer = this.luminancePass.texture;
 
 		} else {
 
-			this.mipmapBlurPass.input.defaultBuffer = this.input.defaultBuffer;
+			this.mipmapBlurPass.input.defaultBuffer = this.input.defaultBuffer?.value ?? null;
 
 		}
 
