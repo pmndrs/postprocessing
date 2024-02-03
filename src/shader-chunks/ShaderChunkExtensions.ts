@@ -1,4 +1,4 @@
-import { ShaderChunk } from "three";
+import { ShaderChunk, ShaderLib } from "three";
 
 // Shader chunks for postprocessing shaders.
 import cameraParsFragment from "./shaders/camera-pars.frag";
@@ -63,6 +63,24 @@ export class ShaderChunkExtensions {
 		ShaderChunk.roughnessmap_fragment += "\n" + gbufferRoughnessFragment;
 		ShaderChunk.metalnessmap_fragment += "\n" + gbufferMetalnessFragment;
 		ShaderChunk.emissivemap_fragment += "\n" + gbufferEmissionFragment;
+
+		// Let non-PBR shaders write default values.
+
+		ShaderLib.background.fragmentShader = ShaderLib.background.fragmentShader.replace(
+			/(#include <tonemapping_fragment>)/,
+			"#include <pp_default_output_fragment>\n$1"
+		);
+
+		const shaders = [ShaderLib.basic, ShaderLib.phong, ShaderLib.points, ShaderLib.sprite];
+
+		for(const shader of shaders) {
+
+			shader.fragmentShader = shader.fragmentShader.replace(
+				/(#include <clipping_planes_fragment>)/,
+				"$1\n\n#include <pp_default_output_fragment>"
+			);
+
+		}
 
 	}
 
