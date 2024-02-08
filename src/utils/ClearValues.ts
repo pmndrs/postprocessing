@@ -1,4 +1,5 @@
-import { Color, Vector3 } from "three";
+import { Color, Vector4 } from "three";
+import { GBuffer } from "../enums/GBuffer.js";
 
 /**
  * A collection of clear values.
@@ -25,22 +26,10 @@ export class ClearValues {
 	alpha: number | null;
 
 	/**
-	 * The clear value for the normal buffer.
+	 * A collection that maps {@link GBuffer} components to clear values.
 	 */
 
-	normal: Vector3;
-
-	/**
-	 * The clear value for roughness.
-	 */
-
-	roughness: number;
-
-	/**
-	 * The clear value for metalness.
-	 */
-
-	metalness: number;
+	readonly gBuffer: Map<GBuffer | string, Vector4>;
 
 	/**
 	 * Constructs new clear values.
@@ -50,9 +39,12 @@ export class ClearValues {
 
 		this.color = null;
 		this.alpha = null;
-		this.normal = new Vector3(0.5, 0.5, 1);
-		this.roughness = 0;
-		this.metalness = 0;
+
+		this.gBuffer = new Map<GBuffer | string, Vector4>([
+			[GBuffer.NORMAL, new Vector4(0.5, 0.5, 1.0, 1.0)],
+			[GBuffer.ORM, new Vector4(1.0, 0.0, 0.0, 1.0)],
+			[GBuffer.EMISSION, new Vector4(0.0, 0.0, 0.0, 1.0)]
+		]);
 
 	}
 
