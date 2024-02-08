@@ -1,22 +1,9 @@
 import { EventDispatcher, Uniform, UnsignedByteType, WebGLMultipleRenderTargets, WebGLRenderTarget } from "three";
-import { MapEvent, ObservableMap } from "../../utils/ObservableMap.js";
+import { ObservableMap } from "../../utils/ObservableMap.js";
 import { BaseEventMap } from "../BaseEventMap.js";
 import { ShaderData } from "../ShaderData.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
 import { Resource } from "./Resource.js";
-
-/**
- * Output events.
- *
- * @category IO
- */
-
-export interface OutputEventMap extends BaseEventMap {
-
-	add: MapEvent<string, Resource>;
-	delete: MapEvent<string, Resource>;
-
-}
 
 /**
  * Output resources.
@@ -26,7 +13,7 @@ export interface OutputEventMap extends BaseEventMap {
  * @category Core
  */
 
-export class Output extends EventDispatcher<OutputEventMap> implements ShaderData {
+export class Output extends EventDispatcher<BaseEventMap> implements ShaderData {
 
 	/**
 	 * Triggers when an output resource is added, replaced or removed.
@@ -35,22 +22,6 @@ export class Output extends EventDispatcher<OutputEventMap> implements ShaderDat
 	 */
 
 	static readonly EVENT_CHANGE = "change";
-
-	/**
-	 * Triggers when a new output resource is added.
-	 *
-	 * @event
-	 */
-
-	static readonly EVENT_ADD = "add";
-
-	/**
-	 * Triggers when an output resource is removed or overwritten.
-	 *
-	 * @event
-	 */
-
-	static readonly EVENT_DELETE = "delete";
 
 	/**
 	 * Identifies the default output buffer in the {@link renderTargets} collection.
@@ -79,11 +50,14 @@ export class Output extends EventDispatcher<OutputEventMap> implements ShaderDat
 		const uniforms = new ObservableMap<string, Uniform>();
 		const renderTargets = new ObservableMap<string, RenderTargetResource>();
 
-		defines.addEventListener(ObservableMap.EVENT_CHANGE, (e) => this.dispatchEvent(e));
-		uniforms.addEventListener(ObservableMap.EVENT_CHANGE, (e) => this.dispatchEvent(e));
-		renderTargets.addEventListener(ObservableMap.EVENT_ADD, (e) => this.dispatchEvent(e));
-		renderTargets.addEventListener(ObservableMap.EVENT_DELETE, (e) => this.dispatchEvent(e));
-		renderTargets.addEventListener(ObservableMap.EVENT_CHANGE, (e) => this.dispatchEvent(e));
+		const listener = () => this.dispatchEvent({ type: Output.EVENT_CHANGE });
+		defines.addEventListener(ObservableMap.EVENT_CHANGE, listener);
+		uniforms.addEventListener(ObservableMap.EVENT_CHANGE, listener);
+		renderTargets.addEventListener(ObservableMap.EVENT_CHANGE, listener);
+		renderTargets.addEventListener(ObservableMap.EVENT_ADD,
+			(e) => e.value.addEventListener(Resource.EVENT_CHANGE, listener));
+		renderTargets.addEventListener(ObservableMap.EVENT_DELETE,
+			(e) => e.value.removeEventListener(Resource.EVENT_CHANGE, listener));
 
 		this.defines = defines;
 		this.uniforms = uniforms;

@@ -25,7 +25,6 @@ import { Output } from "./io/Output.js";
 import { BaseEventMap } from "./BaseEventMap.js";
 import { Disposable } from "./Disposable.js";
 import { Renderable } from "./Renderable.js";
-import { Resource } from "./io/Resource.js";
 
 /**
  * Pass events.
@@ -199,24 +198,10 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this.resolution.addEventListener(Resolution.EVENT_CHANGE, () => this.updateOutputBufferSize());
 		this.resolution.addEventListener(Resolution.EVENT_CHANGE, () => this.onResolutionChange(this.resolution));
 
-		const inputListener = (e: Event) => this.handleInputEvent(e);
-		const outputListener = (e: Event) => this.handleOutputEvent(e);
-
-		// Create I/O data and set up event listeners for global changes and individual resource changes.
-
 		this.input = new Input();
-		this.input.addEventListener(Input.EVENT_ADD,
-			(e) => e.value.addEventListener(Resource.EVENT_CHANGE, inputListener));
-		this.input.addEventListener(Input.EVENT_DELETE,
-			(e) => e.value.removeEventListener(Resource.EVENT_CHANGE, inputListener));
-		this.input.addEventListener(Output.EVENT_CHANGE, inputListener);
-
 		this.output = new Output();
-		this.output.addEventListener(Output.EVENT_ADD,
-			(e) => e.value.addEventListener(Resource.EVENT_CHANGE, outputListener));
-		this.output.addEventListener(Output.EVENT_DELETE,
-			(e) => e.value.removeEventListener(Resource.EVENT_CHANGE, outputListener));
-		this.output.addEventListener(Output.EVENT_CHANGE, outputListener);
+		this.input.addEventListener(Input.EVENT_CHANGE, (e) => this.handleInputEvent(e));
+		this.output.addEventListener(Output.EVENT_CHANGE, (e) => this.handleOutputEvent(e));
 
 	}
 

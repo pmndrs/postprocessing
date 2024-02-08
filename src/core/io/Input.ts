@@ -1,24 +1,12 @@
 import { EventDispatcher, Texture, Uniform, UnsignedByteType } from "three";
 import { GBuffer } from "../../enums/GBuffer.js";
-import { MapEvent, ObservableMap } from "../../utils/ObservableMap.js";
+import { ObservableMap } from "../../utils/ObservableMap.js";
 import { ObservableSet } from "../../utils/ObservableSet.js";
 import { BaseEventMap } from "../BaseEventMap.js";
 import { ShaderData } from "../ShaderData.js";
 import { Resource } from "./Resource.js";
 import { TextureResource } from "./TextureResource.js";
-
-/**
- * Input events.
- *
- * @category IO
- */
-
-export interface InputEventMap extends BaseEventMap {
-
-	add: MapEvent<string, Resource>;
-	delete: MapEvent<string, Resource>;
-
-}
+import { GBufferConfig } from "../../utils/GBufferConfig.js";
 
 /**
  * Input resources.
@@ -28,7 +16,7 @@ export interface InputEventMap extends BaseEventMap {
  * @category Core
  */
 
-export class Input extends EventDispatcher<InputEventMap> implements ShaderData {
+export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
 
 	/**
 	 * Triggers when an input resource is added, replaced or removed.
@@ -42,22 +30,6 @@ export class Input extends EventDispatcher<InputEventMap> implements ShaderData 
 	static readonly EVENT_CHANGE = "change";
 
 	/**
-	 * Triggers when a new input resource is added.
-	 *
-	 * @event
-	 */
-
-	static readonly EVENT_ADD = "add";
-
-	/**
-	 * Triggers when an input resource is removed or overwritten.
-	 *
-	 * @event
-	 */
-
-	static readonly EVENT_DELETE = "delete";
-
-	/**
 	 * Identifies the default input buffer in the {@link textures} collection.
 	 */
 
@@ -67,12 +39,12 @@ export class Input extends EventDispatcher<InputEventMap> implements ShaderData 
 	readonly uniforms: Map<string, Uniform>;
 
 	/**
-	 * Required gBuffer components.
+	 * Required {@link GBuffer} components.
 	 *
 	 * {@link GBuffer.COLOR} is included by default.
 	 */
 
-	readonly gBuffer: Set<GBuffer>;
+	readonly gBuffer: Set<GBuffer | string>;
 
 	/**
 	 * Input textures.
@@ -82,7 +54,13 @@ export class Input extends EventDispatcher<InputEventMap> implements ShaderData 
 	 * @see {@link EVENT_CHANGE}
 	 */
 
-	readonly textures: Map<string | GBuffer, TextureResource>;
+	readonly textures: Map<GBuffer | string, TextureResource>;
+
+	/**
+	 * @see {@link gBufferConfig}.
+	 */
+
+	private _gBufferConfig: GBufferConfig | null;
 
 	/**
 	 * Constructs new input resources.
@@ -92,21 +70,45 @@ export class Input extends EventDispatcher<InputEventMap> implements ShaderData 
 
 		super();
 
+		const gBuffer = new ObservableSet<GBuffer>([GBuffer.COLOR]);
 		const defines = new ObservableMap<string, string | number | boolean>();
 		const uniforms = new ObservableMap<string, Uniform>();
-		const textures = new ObservableMap<string | GBuffer, TextureResource>();
-		const gBuffer = new ObservableSet<GBuffer>([GBuffer.COLOR]);
+		const textures = new ObservableMap<GBuffer | string, TextureResource>();
 
-		uniforms.addEventListener(ObservableMap.EVENT_CHANGE, (e) => this.dispatchEvent(e));
-		textures.addEventListener(ObservableMap.EVENT_ADD, (e) => this.dispatchEvent(e));
-		textures.addEventListener(ObservableMap.EVENT_DELETE, (e) => this.dispatchEvent(e));
-		textures.addEventListener(ObservableMap.EVENT_CHANGE, (e) => this.dispatchEvent(e));
-		gBuffer.addEventListener(ObservableSet.EVENT_CHANGE, (e) => this.dispatchEvent(e));
+		const listener = () => this.dispatchEvent({ type: Input.EVENT_CHANGE });
+		gBuffer.addEventListener(ObservableSet.EVENT_CHANGE, listener);
+		defines.addEventListener(ObservableMap.EVENT_CHANGE, listener);
+		uniforms.addEventListener(ObservableMap.EVENT_CHANGE, listener);
+		textures.addEventListener(ObservableMap.EVENT_CHANGE, listener);
+		textures.addEventListener(ObservableMap.EVENT_ADD,
+			(e) => e.value.addEventListener(Resource.EVENT_CHANGE, listener));
+		textures.addEventListener(ObservableMap.EVENT_DELETE,
+			(e) => e.value.removeEventListener(Resource.EVENT_CHANGE, listener));
 
 		this.defines = defines;
 		this.uniforms = uniforms;
 		this.textures = textures;
 		this.gBuffer = gBuffer;
+		this._gBufferConfig = null;
+
+	}
+
+	/**
+	 * The current G-Buffer configuration.
+	 *
+	 * @internal
+	 */
+
+	get gBufferConfig(): GBufferConfig | null {
+
+		return this._gBufferConfig;
+
+	}
+
+	set gBufferConfig(value: GBufferConfig | null) {
+
+		this._gBufferConfig = value;
+		this.dispatchEvent({ type: Input.EVENT_CHANGE });
 
 	}
 
@@ -114,7 +116,7 @@ export class Input extends EventDispatcher<InputEventMap> implements ShaderData 
 	 * Alias for {@link textures}.
 	 */
 
-	get buffers(): Map<string | GBuffer, TextureResource> {
+	get buffers(): Map<GBuffer | string, TextureResource> {
 
 		return this.textures;
 
