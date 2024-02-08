@@ -1,8 +1,8 @@
 import { Material, SRGBColorSpace, WebGLMultipleRenderTargets, WebGLRenderTarget } from "three";
 import { GBuffer } from "../../enums/GBuffer.js";
 import { ClearPass } from "../../passes/ClearPass.js";
+import { extractIndices } from "../../utils/GBufferUtils.js";
 import { GeometryPass } from "../../passes/GeometryPass.js";
-import { GBufferInfo } from "../../utils/GBufferInfo.js";
 import { Pass } from "../Pass.js";
 import { RenderPipeline } from "../RenderPipeline.js";
 import { Output } from "./Output.js";
@@ -117,11 +117,11 @@ export class IOManager {
 
 			} else if(previousOutputBuffer instanceof WebGLMultipleRenderTargets) {
 
-				const gBufferInfo = new GBufferInfo(previousOutputBuffer);
+				const indices = extractIndices(previousOutputBuffer);
 
-				if(gBufferInfo.indices.has(GBuffer.COLOR)) {
+				if(indices.has(GBuffer.COLOR)) {
 
-					const index = gBufferInfo.indices.get(GBuffer.COLOR) as number;
+					const index = indices.get(GBuffer.COLOR) as number;
 					pass.input.defaultBuffer = previousOutputBuffer.texture[index];
 
 				}
@@ -344,17 +344,18 @@ export class IOManager {
 
 		}
 
-		const gBufferInfo = new GBufferInfo(geoPass.gBuffer);
+		pass.input.gBufferConfig = geoPass.gBufferConfig;
+		const indices = extractIndices(geoPass.gBuffer);
 
 		for(const component of pass.input.gBuffer) {
 
-			if(component === GBuffer.DEPTH) {
+			if(component === GBuffer.DEPTH as string) {
 
 				pass.input.buffers.set(component, new TextureResource(geoPass.gBuffer.depthTexture));
 
-			} else if(gBufferInfo.indices.has(component)) {
+			} else if(indices.has(component)) {
 
-				const index = gBufferInfo.indices.get(component) as number;
+				const index = indices.get(component) as number;
 				pass.input.buffers.set(component, new TextureResource(geoPass.gBuffer.texture[index]));
 
 			}
