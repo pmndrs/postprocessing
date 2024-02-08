@@ -25,22 +25,14 @@ export enum GBuffer {
 	NORMAL = "GBUFFER_NORMAL",
 
 	/**
-	 * Ambient occlusion is stored in the RED channel of an 8 bit OcclusionRoughnessMetalness (RGB) buffer.
+	 * An 8 bit OcclusionRoughnessMetalness (RGB) buffer.
+	 *
+	 * - Ambient occlusion is stored in the RED channel.
+	 * - Roughness is stored in the GREEN channel.
+	 * - Metalness is stored in the BLUE channel.
 	 */
 
-	OCCLUSION = "GBUFFER_OCCLUSION",
-
-	/**
-	 * Roughness is stored in the GREEN channel of an 8 bit OcclusionRoughnessMetalness (RGB) buffer.
-	 */
-
-	ROUGHNESS = "GBUFFER_ROUGHNESS",
-
-	/**
-	 * Metalness is stored in the BLUE channel of an 8 bit OcclusionRoughnessMetalness (RGB) buffer.
-	 */
-
-	METALNESS = "GBUFFER_METALNESS",
+	ORM = "GBUFFER_ORM",
 
 	/**
 	 * The total emissive radiance. Takes up one buffer, either 8 or 16 bit RGBA.

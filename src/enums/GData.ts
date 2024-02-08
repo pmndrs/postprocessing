@@ -9,9 +9,7 @@ export enum GData {
 	COLOR = "color",
 	DEPTH = "depth",
 	NORMAL = "normal",
-	OCCLUSION = "occlusion",
-	ROUGHNESS = "roughness",
-	METALNESS = "metalness",
+	ORM = "orm",
 	EMISSION = "emission",
 	LUMINANCE = "luminance"
 }
