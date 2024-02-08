@@ -89,7 +89,11 @@ export class Output extends EventDispatcher<BaseEventMap> implements ShaderData 
 
 		if(value instanceof RenderTargetResource) {
 
-			this.renderTargets.set(Output.BUFFER_DEFAULT, value);
+			if(this.renderTargets.get(Output.BUFFER_DEFAULT) !== value) {
+
+				this.renderTargets.set(Output.BUFFER_DEFAULT, value);
+
+			}
 
 		} else {
 

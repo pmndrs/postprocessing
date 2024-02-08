@@ -136,7 +136,11 @@ export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
 
 		if(value instanceof TextureResource) {
 
-			this.textures.set(Input.BUFFER_DEFAULT, value);
+			if(this.textures.get(Input.BUFFER_DEFAULT) !== value) {
+
+				this.textures.set(Input.BUFFER_DEFAULT, value);
+
+			}
 
 		} else {
 
