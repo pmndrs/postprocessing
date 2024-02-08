@@ -7,6 +7,7 @@ import {
 	Material,
 	Mesh,
 	NearestFilter,
+	NoColorSpace,
 	OrthographicCamera,
 	PerspectiveCamera,
 	RGBAFormat,
@@ -23,12 +24,13 @@ import { Resource } from "../core/io/Resource.js";
 import { Pass } from "../core/Pass.js";
 import { Selective } from "../core/Selective.js";
 import { GBuffer } from "../enums/GBuffer.js";
-import { GBufferTexture } from "../enums/GBufferTexture.js";
 import { MSAASamples } from "../enums/MSAASamples.js";
-import { GBufferInfo } from "../utils/GBufferInfo.js";
+import { GBufferConfig } from "../utils/GBufferConfig.js";
+import { extractDefines, extractIndices, extractOutputDefinitions } from "../utils/GBufferUtils.js";
 import { ObservableSet } from "../utils/ObservableSet.js";
 import { Selection } from "../utils/Selection.js";
 import { CopyPass } from "./CopyPass.js";
+import { GBufferTextureConfig } from "../utils/GBufferTextureConfig.js";
 
 /**
  * GeometryPass constructor options.
@@ -72,6 +74,12 @@ export interface GeometryPassOptions {
 
 	samples?: MSAASamples;
 
+	/**
+	 * A custom G-Buffer configuration.
+	 */
+
+	gBufferConfig?: GBufferConfig;
+
 }
 
 /**
@@ -82,20 +90,13 @@ export interface GeometryPassOptions {
 
 export class GeometryPass extends Pass implements Selective {
 
+	readonly selection: Selection;
+
 	/**
-	 * A collection that maps G-Buffer components to G-Buffer texture IDs.
+	 * The G-Buffer configuration.
 	 */
 
-	private static readonly gBufferTextures = /* @__PURE__ */ new Map<GBuffer, GBufferTexture>([
-		[GBuffer.COLOR, GBufferTexture.COLOR],
-		[GBuffer.NORMAL, GBufferTexture.NORMAL],
-		[GBuffer.OCCLUSION, GBufferTexture.ORM],
-		[GBuffer.ROUGHNESS, GBufferTexture.ORM],
-		[GBuffer.METALNESS, GBufferTexture.ORM],
-		[GBuffer.EMISSION, GBufferTexture.EMISSION]
-	]);
-
-	readonly selection: Selection;
+	readonly gBufferConfig: GBufferConfig;
 
 	/**
 	 * A collection of materials that have been modified with `onBeforeCompile`.
@@ -117,13 +118,7 @@ export class GeometryPass extends Pass implements Selective {
 	 * @internal
 	 */
 
-	readonly gBufferComponents: Set<GBuffer>;
-
-	/**
-	 * A collection of G-Buffer textures that correspond to the current G-Buffer components.
-	 */
-
-	private readonly gBufferTextures: Set<GBufferTexture>;
+	readonly gBufferComponents: Set<GBuffer | string>;
 
 	// #region Settings
 
@@ -183,7 +178,8 @@ export class GeometryPass extends Pass implements Selective {
 		stencilBuffer = false,
 		depthBuffer = true,
 		frameBufferType = UnsignedByteType,
-		samples = 0
+		samples = 0,
+		gBufferConfig = new GBufferConfig()
 	}: GeometryPassOptions = {}) {
 
 		super("GeometryPass");
@@ -200,21 +196,20 @@ export class GeometryPass extends Pass implements Selective {
 
 		this.selection = new Selection();
 		this.selection.enabled = false;
+		this.gBufferConfig = gBufferConfig;
 		this.registeredMaterials = new WeakSet<Material>();
 		this.copyPass = new CopyPass();
 		this.copyPass.enabled = false;
+		this.subpasses = [this.copyPass];
 
-		const gBufferComponents = new ObservableSet<GBuffer>();
-		gBufferComponents.addEventListener(ObservableSet.EVENT_CHANGE, () => this.updateGBufferTextures());
+		const gBufferComponents = new ObservableSet<GBuffer | string>();
 		gBufferComponents.addEventListener(ObservableSet.EVENT_CHANGE, () => this.updateGBuffer());
 		this.gBufferComponents = gBufferComponents;
-		this.gBufferTextures = new Set<GBufferTexture>();
 		this.gBufferResource = null;
 
+		this.updateTextureConfigs();
 		this.updateGBuffer();
 		this.updateMaterials();
-
-		this.subpasses = [this.copyPass];
 
 	}
 
@@ -254,6 +249,16 @@ export class GeometryPass extends Pass implements Selective {
 
 	}
 
+	/**
+	 * Returns the G-Buffer texture configs that correspond to the current G-Buffer components.
+	 */
+
+	private get textureConfigs(): Array<[string, GBufferTextureConfig]> {
+
+		return Array.from(this.gBufferConfig.textureConfigs).filter(x => this.gBufferComponents.has(x[0]));
+
+	}
+
 	override get renderer(): WebGLRenderer | null {
 
 		return super.renderer;
@@ -268,30 +273,49 @@ export class GeometryPass extends Pass implements Selective {
 	}
 
 	/**
-	 * Updates the collection of G-Buffer textures based on the current G-Buffer components.
+	 * Defines the primary G-Buffer texture configs.
 	 */
 
-	private updateGBufferTextures(): void {
+	private updateTextureConfigs(): void {
 
-		const gBufferTextures = this.gBufferTextures;
-		gBufferTextures.clear();
+		const textureConfigs = this.gBufferConfig.textureConfigs;
 
-		for(const component of this.gBufferComponents) {
+		textureConfigs.set(GBuffer.COLOR, {
+			minFilter: LinearFilter,
+			magFilter: LinearFilter,
+			type: this.frameBufferType,
+			format: RGBAFormat,
+			isColorBuffer: true
+		});
 
-			const texture = GeometryPass.gBufferTextures.get(component);
+		textureConfigs.set(GBuffer.NORMAL, {
+			minFilter: NearestFilter,
+			magFilter: NearestFilter,
+			type: HalfFloatType,
+			format: RGBAFormat,
+			isColorBuffer: false
+		});
 
-			if(texture !== undefined) {
+		textureConfigs.set(GBuffer.ORM, {
+			minFilter: LinearFilter,
+			magFilter: LinearFilter,
+			type: UnsignedByteType,
+			format: RGBAFormat,
+			isColorBuffer: false
+		});
 
-				gBufferTextures.add(texture);
-
-			}
-
-		}
+		textureConfigs.set(GBuffer.EMISSION, {
+			minFilter: LinearFilter,
+			magFilter: LinearFilter,
+			type: this.frameBufferType,
+			format: RGBAFormat,
+			isColorBuffer: true
+		});
 
 	}
 
 	/**
-	 * Enables rendering to G-Buffer components for a given material.
+	 * Enables rendering to {@link GBuffer} components for a given material.
 	 *
 	 * @todo Remove when three supports output layout definitions for MRT.
 	 * @param material - The material.
@@ -324,22 +348,21 @@ export class GeometryPass extends Pass implements Selective {
 
 			}
 
-			const gBufferInfo = new GBufferInfo(this.gBuffer);
-
-			for(const entry of gBufferInfo.defines) {
+			for(const entry of extractDefines(this.gBuffer, this.gBufferConfig)) {
 
 				shader.defines[entry[0]] = entry[1];
 
 			}
 
-			shader.fragmentShader = gBufferInfo.outputDefinitions + "\n\n" + shader.fragmentShader;
+			const outputDefinitions = extractOutputDefinitions(this.gBuffer);
+			shader.fragmentShader = outputDefinitions + "\n\n" + shader.fragmentShader;
 
 		};
 
 	}
 
 	/**
-	 * Enables rendering to G-Buffer components for all materials in a given scene.
+	 * Enables rendering to {@link GBuffer} components for all materials in a given scene.
 	 *
 	 * Should be called when a mesh or material is added, removed or replaced at runtime.
 	 *
@@ -376,24 +399,24 @@ export class GeometryPass extends Pass implements Selective {
 	private updateOutputBufferColorSpace(): void {
 
 		const gBuffer = this.gBuffer;
-		const frameBufferType = this.frameBufferType;
-		const outputColorSpace = this.renderer?.outputColorSpace;
+		const renderer = this.renderer;
 
-		if(frameBufferType === UnsignedByteType && outputColorSpace === SRGBColorSpace && gBuffer !== null) {
+		if(gBuffer === null || renderer === null) {
 
-			const gBufferInfo = new GBufferInfo(gBuffer);
-			const indexColor = gBufferInfo.indices.get(GBuffer.COLOR);
-			const indexEmission = gBufferInfo.indices.get(GBuffer.EMISSION);
+			return;
 
-			if(indexColor !== undefined) {
+		}
 
-				gBuffer.texture[indexColor].colorSpace = SRGBColorSpace;
+		const indices = extractIndices(gBuffer);
+		const useSRGB = (this.frameBufferType === UnsignedByteType && renderer.outputColorSpace === SRGBColorSpace);
+		const colorSpace = useSRGB ? SRGBColorSpace : NoColorSpace;
 
-			}
+		for(const entry of this.textureConfigs) {
 
-			if(indexEmission !== undefined) {
+			if(entry[1].isColorBuffer && indices.has(entry[0])) {
 
-				gBuffer.texture[indexEmission].colorSpace = SRGBColorSpace;
+				const index = indices.get(entry[0]) as number;
+				gBuffer.texture[index].colorSpace = colorSpace;
 
 			}
 
@@ -416,9 +439,7 @@ export class GeometryPass extends Pass implements Selective {
 
 		}
 
-		const gBufferInfo = new GBufferInfo(gBuffer);
-
-		for(const entry of gBufferInfo.defines) {
+		for(const entry of extractDefines(gBuffer, this.gBufferConfig)) {
 
 			this.output.defines.set(entry[0], entry[1]);
 
@@ -440,7 +461,6 @@ export class GeometryPass extends Pass implements Selective {
 		}
 
 		const gBufferComponents = this.gBufferComponents;
-		const gBufferTextures = this.gBufferTextures;
 		this.output.defaultBuffer?.value?.dispose();
 
 		if(gBufferComponents.size === 0) {
@@ -454,7 +474,8 @@ export class GeometryPass extends Pass implements Selective {
 		}
 
 		const { width, height } = this.resolution;
-		const renderTarget = new WebGLMultipleRenderTargets(width, height, gBufferTextures.size, {
+		const textureConfigs = this.textureConfigs;
+		const renderTarget = new WebGLMultipleRenderTargets(width, height, textureConfigs.length, {
 			stencilBuffer: this.stencilBuffer,
 			depthBuffer: this.depthBuffer,
 			samples: this.samples
@@ -463,54 +484,22 @@ export class GeometryPass extends Pass implements Selective {
 		const textures = renderTarget.texture;
 		let index = 0;
 
-		if(gBufferTextures.has(GBufferTexture.COLOR)) {
+		for(const entry of textureConfigs) {
 
 			const texture = textures[index++];
-			texture.name = GBufferTexture.COLOR;
-			texture.minFilter = LinearFilter;
-			texture.magFilter = LinearFilter;
-			texture.type = this.frameBufferType;
-			texture.format = RGBAFormat;
+			const textureConfig = entry[1];
+			texture.name = entry[0];
+			texture.minFilter = textureConfig.minFilter;
+			texture.magFilter = textureConfig.magFilter;
+			texture.format = textureConfig.format;
+			texture.type = textureConfig.type;
 
 		}
 
-		if(gBufferTextures.has(GBufferTexture.NORMAL)) {
-
-			const texture = textures[index++];
-			texture.name = GBufferTexture.NORMAL;
-			texture.minFilter = NearestFilter;
-			texture.magFilter = NearestFilter;
-			texture.type = HalfFloatType;
-			texture.format = RGBAFormat;
-
-		}
-
-		if(gBufferTextures.has(GBufferTexture.ORM)) {
-
-			const texture = textures[index++];
-			texture.name = GBufferTexture.ORM;
-			texture.minFilter = LinearFilter;
-			texture.magFilter = LinearFilter;
-			texture.type = UnsignedByteType;
-			texture.format = RGBAFormat;
-
-		}
-
-		if(gBufferTextures.has(GBufferTexture.EMISSION)) {
-
-			const texture = textures[index++];
-			texture.name = GBufferTexture.EMISSION;
-			texture.minFilter = LinearFilter;
-			texture.magFilter = LinearFilter;
-			texture.type = this.frameBufferType;
-			texture.format = RGBAFormat;
-
-		}
-
-		// Special case: DepthTexture
 		if(gBufferComponents.has(GBuffer.DEPTH)) {
 
 			const depthTexture = new DepthTexture(1, 1);
+			depthTexture.name = GBuffer.DEPTH;
 			depthTexture.format = this.stencilBuffer ? DepthStencilFormat : DepthFormat;
 			renderTarget.depthTexture = depthTexture;
 
