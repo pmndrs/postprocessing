@@ -9,10 +9,10 @@ import { GBuffer } from "../enums/GBuffer.js";
 export class ClearFlags {
 
 	/**
-	 * A collection of GBuffer components that should be cleared.
+	 * A collection of {@link GBuffer} components that should be cleared.
 	 */
 
-	gBufferComponents: Set<GBuffer>;
+	gBuffer: Set<GBuffer | string>;
 
 	/**
 	 * Indicates whether the depth buffer should be cleared.
@@ -36,11 +36,11 @@ export class ClearFlags {
 
 	constructor(color = true, depth = true, stencil = true) {
 
-		const gBufferComponents = new Set<GBuffer>();
-		gBufferComponents.add(GBuffer.NORMAL);
-		gBufferComponents.add(GBuffer.METALNESS);
-		gBufferComponents.add(GBuffer.ROUGHNESS);
-		this.gBufferComponents = gBufferComponents;
+		const gBuffer = new Set<GBuffer>();
+		gBuffer.add(GBuffer.NORMAL);
+		gBuffer.add(GBuffer.ORM);
+		gBuffer.add(GBuffer.EMISSION);
+		this.gBuffer = gBuffer;
 
 		this.color = color;
 		this.depth = depth;
@@ -57,7 +57,7 @@ export class ClearFlags {
 
 	get color(): boolean {
 
-		return this.gBufferComponents.has(GBuffer.COLOR);
+		return this.gBuffer.has(GBuffer.COLOR);
 
 	}
 
@@ -65,11 +65,11 @@ export class ClearFlags {
 
 		if(value) {
 
-			this.gBufferComponents.add(GBuffer.COLOR);
+			this.gBuffer.add(GBuffer.COLOR);
 
 		} else {
 
-			this.gBufferComponents.delete(GBuffer.COLOR);
+			this.gBuffer.delete(GBuffer.COLOR);
 
 		}
 
