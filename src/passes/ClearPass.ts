@@ -1,9 +1,8 @@
 import { Color, WebGLMultipleRenderTargets } from "three";
 import { Pass } from "../core/Pass.js";
-import { GBuffer } from "../enums/GBuffer.js";
 import { ClearFlags } from "../utils/ClearFlags.js";
 import { ClearValues } from "../utils/ClearValues.js";
-import { GBufferInfo } from "../utils/GBufferInfo.js";
+import { extractIndices } from "../utils/GBufferUtils.js";
 
 const color = /* @__PURE__ */ new Color();
 const fv = /* @__PURE__ */ new Float32Array(4);
@@ -29,6 +28,12 @@ export class ClearPass extends Pass {
 	readonly clearValues: ClearValues;
 
 	/**
+	 * G-Buffer texture indices.
+	 */
+
+	private gBufferIndices: Map<string, number> | null;
+
+	/**
 	 * Constructs a new clear pass.
 	 *
 	 * @param color - The color clear flag.
@@ -42,6 +47,7 @@ export class ClearPass extends Pass {
 
 		this.clearFlags = new ClearFlags(color, depth, stencil);
 		this.clearValues = new ClearValues();
+		this.gBufferIndices = null;
 
 	}
 
@@ -54,44 +60,43 @@ export class ClearPass extends Pass {
 
 	private clearGBuffer(): void {
 
-		const renderer = this.renderer!;
-		const gl = renderer.getContext() as WebGL2RenderingContext;
+		if(this.renderer === null || this.gBufferIndices === null) {
+
+			return;
+
+		}
+
 		const flags = this.clearFlags;
 		const values = this.clearValues;
+		const gBufferTextureIndices = this.gBufferIndices;
+		const gl = this.renderer.getContext() as WebGL2RenderingContext;
 
-		// The type of the default buffer has already been checked.
-		const gBuffer = this.output.defaultBuffer!.value as WebGLMultipleRenderTargets;
-		const gBufferInfo = new GBufferInfo(gBuffer);
+		for(const entry of values.gBuffer) {
 
-		if(flags.gBufferComponents.has(GBuffer.NORMAL) && gBufferInfo.indices.has(GBuffer.NORMAL)) {
+			const index = gBufferTextureIndices.get(entry[0]);
 
-			const clearNormal = values.normal;
-			const index = gBufferInfo.indices.get(GBuffer.NORMAL) as number;
+			if(!flags.gBuffer.has(entry[0]) || index === undefined) {
 
-			fv[0] = clearNormal.x;
-			fv[1] = clearNormal.y;
-			fv[2] = clearNormal.z;
-			fv[3] = 1.0;
+				continue;
 
-			gl.clearBufferfv(gl.COLOR, index, fv);
+			}
 
-		}
-
-		if((flags.gBufferComponents.has(GBuffer.ROUGHNESS) || flags.gBufferComponents.has(GBuffer.METALNESS)) &&
-			(gBufferInfo.indices.has(GBuffer.ROUGHNESS) || gBufferInfo.indices.has(GBuffer.METALNESS))) {
-
-			const clearRoughness = values.roughness;
-			const clearMetalness = values.metalness;
-			const index = gBufferInfo.indices.get(GBuffer.ROUGHNESS) as number;
-
-			fv[0] = clearRoughness;
-			fv[1] = clearMetalness;
-			fv[2] = 0.0;
-			fv[3] = 1.0;
+			const value = entry[1];
+			fv[0] = value.x;
+			fv[1] = value.y;
+			fv[2] = value.z;
+			fv[3] = value.w;
 
 			gl.clearBufferfv(gl.COLOR, index, fv);
 
 		}
+
+	}
+
+	protected override onOutputChange(): void {
+
+		const buffer = this.output.defaultBuffer?.value;
+		this.gBufferIndices = buffer instanceof WebGLMultipleRenderTargets ? extractIndices(buffer) : null;
 
 	}
 
