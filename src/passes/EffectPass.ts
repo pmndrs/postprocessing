@@ -108,8 +108,15 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 
 		super.subpasses = value;
 		Object.freeze(super.subpasses);
+		this.input.gBuffer.clear();
 
 		for(const effect of super.subpasses) {
+
+			for(const gBufferComponent of effect.input.gBuffer) {
+
+				this.input.gBuffer.add(gBufferComponent);
+
+			}
 
 			effect.addEventListener(Pass.EVENT_CHANGE, this.listener);
 
