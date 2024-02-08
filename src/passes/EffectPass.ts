@@ -31,20 +31,6 @@ import { Resolution } from "../utils/Resolution.js";
 export class EffectPass extends Pass<EffectMaterial> implements EventListenerObject {
 
 	/**
-	 * A collection that maps G-Buffer components to G-Buffer struct field names.
-	 */
-
-	private static readonly gBufferStructFields = /* @__PURE__ */ new Map([
-		[GBuffer.COLOR, "color"],
-		[GBuffer.DEPTH, "depth"],
-		[GBuffer.NORMAL, "normal"],
-		[GBuffer.OCCLUSION, "orm"],
-		[GBuffer.ROUGHNESS, "orm"],
-		[GBuffer.METALNESS, "orm"],
-		[GBuffer.EMISSION, "emission"]
-	]);
-
-	/**
 	 * An event listener that forwards events to {@link handleEvent}.
 	 */
 
@@ -188,7 +174,7 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 
 	private updateMaterial(): void {
 
-		const data = new EffectShaderData();
+		const data = new EffectShaderData(this.input.gBufferConfig);
 		let id = 0;
 
 		for(const effect of this.effects) {
@@ -202,8 +188,8 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 		}
 
 		data.shaderParts.set(Section.FRAGMENT_HEAD_GBUFFER, data.createGBufferStruct());
-		data.shaderParts.set(Section.FRAGMENT_HEAD_GDATA, data.createGDataStruct());
-		data.shaderParts.set(Section.FRAGMENT_MAIN_GDATA, data.createGDataSetup());
+		data.shaderParts.set(Section.FRAGMENT_HEAD_GDATA, data.createGDataStructDeclaration());
+		data.shaderParts.set(Section.FRAGMENT_MAIN_GDATA, data.createGDataStructInitialization());
 
 		const fragmentHead = data.shaderParts.get(Section.FRAGMENT_HEAD_EFFECTS) as string;
 		data.shaderParts.set(Section.FRAGMENT_HEAD_EFFECTS, fragmentHead + data.createBlendFunctions());
@@ -272,36 +258,14 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 
 	}
 
-	protected override onResolutionChange(resolution: Resolution): void {
+	/**
+	 * Updates macros and uniforms.
+	 */
 
-		this.fullscreenMaterial.setSize(resolution.width, resolution.height);
+	private updateDefinesAndUniforms(): void {
 
-		for(const effect of this.effects) {
-
-			effect.resolution.copy(resolution);
-
-		}
-
-	}
-
-	protected override onInputChange(): void {
-
-		// Construct the gBuffer uniform.
-
-		const gBufferEntries: [string, Texture | null][] = [];
 		const fullscreenMaterial = this.fullscreenMaterial;
 		const input = this.input;
-
-		for(const component of input.gBuffer) {
-
-			gBufferEntries.push([
-				EffectPass.gBufferStructFields.get(component) as string,
-				((component === GBuffer.COLOR) ? input.defaultBuffer?.value : input.buffers.get(component)?.value) ?? null
-			]);
-
-		}
-
-		fullscreenMaterial.gBuffer = Object.fromEntries(gBufferEntries);
 
 		// Remove previous input defines and uniforms.
 
@@ -320,6 +284,8 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 		this.previousDefines.clear();
 		this.previousUniforms.clear();
 
+		// Add the new input defines and uniforms.
+
 		for(const entry of input.defines) {
 
 			this.previousDefines.set(entry[0], entry[1]);
@@ -334,17 +300,68 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 
 		fullscreenMaterial.needsUpdate = true;
 
+	}
+
+	/**
+	 * Updates the G-Buffer struct uniform.
+	 */
+
+	private updateGBufferStruct(): void {
+
+		const input = this.input;
+		const gBufferConfig = input.gBufferConfig;
+
+		if(gBufferConfig === null) {
+
+			return;
+
+		}
+
+		const gBufferEntries: [string, Texture | null][] = [];
+
+		for(const component of input.gBuffer) {
+
+			const useDefaultBuffer = (component === GBuffer.COLOR as string);
+
+			gBufferEntries.push([
+				gBufferConfig.gBufferStructFields.get(component) as string,
+				(useDefaultBuffer ? input.defaultBuffer?.value : input.buffers.get(component)?.value) ?? null
+			]);
+
+		}
+
+		this.fullscreenMaterial.gBuffer = Object.fromEntries(gBufferEntries);
+
+	}
+
+	protected override onInputChange(): void {
+
+		this.updateGBufferStruct();
+		this.updateDefinesAndUniforms(); // TODO rebuild when gBufferConfig changed?
+
 		// Make the input buffers available to all effects.
 
 		for(const effect of this.effects) {
 
 			effect.input.buffers.clear();
 
-			for(const entry of input.buffers) {
+			for(const entry of this.input.buffers) {
 
 				effect.input.buffers.set(entry[0], entry[1]);
 
 			}
+
+		}
+
+	}
+
+	protected override onResolutionChange(resolution: Resolution): void {
+
+		this.fullscreenMaterial.setSize(resolution.width, resolution.height);
+
+		for(const effect of this.effects) {
+
+			effect.resolution.copy(resolution);
 
 		}
 
