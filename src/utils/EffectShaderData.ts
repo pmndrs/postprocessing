@@ -6,6 +6,7 @@ import { EffectShaderSection } from "../enums/EffectShaderSection.js";
 import { EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
 import { GData } from "../enums/GData.js";
 import { prefixSubstrings } from "../utils/functions/string.js";
+import { GBufferConfig } from "./GBufferConfig.js";
 
 /**
  * A collection of shader data.
@@ -41,7 +42,7 @@ export class EffectShaderData implements ShaderData {
 	 * A collection of required GBuffer data.
 	 */
 
-	readonly gData: Set<GData>;
+	readonly gData: Set<GData | string>;
 
 	/**
 	 * A list of effects that use convolution operations.
@@ -62,10 +63,18 @@ export class EffectShaderData implements ShaderData {
 	colorSpace: ColorSpace;
 
 	/**
+	 * A G-Buffer configuration.
+	 */
+
+	private readonly gBufferConfig: GBufferConfig;
+
+	/**
 	 * Constructs new shader data.
 	 */
 
-	constructor() {
+	constructor(gBufferConfig: GBufferConfig | null = null) {
+
+		this.gBufferConfig = gBufferConfig ?? new GBufferConfig();
 
 		this.shaderParts = new Map<EffectShaderSection, string>([
 			[EffectShaderSection.FRAGMENT_HEAD_GBUFFER, ""],
@@ -81,7 +90,7 @@ export class EffectShaderData implements ShaderData {
 		this.uniforms = new Map<string, Uniform>();
 		this.blendModes = new Map<number, BlendMode>();
 		this.varyings = new Set<string>();
-		this.gData = new Set<GData>([GData.COLOR]);
+		this.gData = new Set<GData | string>([GData.COLOR]);
 		this.convolutionEffects = new Set<Effect>();
 		this.uvTransformation = false;
 		this.colorSpace = LinearSRGBColorSpace;
@@ -297,186 +306,55 @@ export class EffectShaderData implements ShaderData {
 	}
 
 	/**
-	* Creates a struct that defines the required GBuffer components.
+	* Creates a GBuffer struct declaration shader code.
 	*
 	* @return The shader code.
 	*/
 
 	createGBufferStruct(): string {
 
-		const gData = this.gData;
-		let s = "struct GBuffer {\n";
-
-		if(gData.has(GData.COLOR)) {
-
-			// Precision depends on the configured frame buffer type.
-			s += "\tFRAME_BUFFER_PRECISION sampler2D color;\n";
-
-		}
-
-		if(gData.has(GData.DEPTH)) {
-
-			// Precision depends on the hardware.
-			s += "\tDEPTH_BUFFER_PRECISION sampler2D depth;\n";
-
-		}
-
-		if(gData.has(GData.NORMAL)) {
-
-			s += "\tmediump sampler2D normal;\n";
-
-		}
-
-		if(gData.has(GData.OCCLUSION) || gData.has(GData.ROUGHNESS) || gData.has(GData.METALNESS)) {
-
-			s += "\tlowp sampler2D orm;\n";
-
-		}
-
-		if(gData.has(GData.EMISSION)) {
-
-			// Precision depends on the configured frame buffer type.
-			s += "\tFRAME_BUFFER_PRECISION sampler2D emission;\n";
-
-		}
-
-		s += "};\n";
-
-		return s;
+		return [
+			"struct GBuffer {",
+			...Array.from(this.gBufferConfig.gBufferStructDeclaration)
+				.filter(x => this.gData.has(x[0]))
+				.map(x => `\t${x[1]}`),
+			"};\n"
+		].join("\n");
 
 	}
 
 	/**
-	* Creates a struct that defines the required GBuffer data.
+	* Creates a GData struct declaration shader code.
 	*
 	* @return The shader code.
 	*/
 
-	createGDataStruct(): string {
+	createGDataStructDeclaration(): string {
 
-		const gData = this.gData;
-		let s = "struct GData {\n";
-
-		if(gData.has(GData.COLOR)) {
-
-			s += "\tvec4 color;\n";
-
-		}
-
-		if(gData.has(GData.DEPTH)) {
-
-			s += "\tfloat depth;\n";
-
-		}
-
-		if(gData.has(GData.NORMAL)) {
-
-			s += "\tvec3 normal;\n";
-
-		}
-
-		if(gData.has(GData.OCCLUSION)) {
-
-			s += "\tfloat occlusion;\n";
-
-		}
-
-		if(gData.has(GData.ROUGHNESS)) {
-
-			s += "\tfloat roughness;\n";
-
-		}
-
-		if(gData.has(GData.METALNESS)) {
-
-			s += "\tfloat metalness;\n";
-
-		}
-
-		if(gData.has(GData.EMISSION)) {
-
-			s += "\tvec3 emission;\n";
-
-		}
-
-		if(gData.has(GData.LUMINANCE)) {
-
-			s += "\tfloat luminance;\n";
-
-		}
-
-		s += "};\n";
-
-		return s;
+		return [
+			"struct GData {",
+			...Array.from(this.gBufferConfig.gDataStructDeclaration)
+				.filter(x => this.gData.has(x[0]))
+				.map(x => `\t${x[1]}`),
+			"};\n"
+		].join("\n");
 
 	}
 
 	/**
-	* Creates the GData setup code.
+	* Creates the GData struct initialization shader code.
 	*
 	* @return The shader code.
 	*/
 
-	createGDataSetup(): string {
+	createGDataStructInitialization(): string {
 
-		const gData = this.gData;
-		let s = "GData gData;\n";
-
-		if(gData.has(GData.COLOR)) {
-
-			s += "\tgData.color = texture(gBuffer.color, UV);\n";
-
-		}
-
-		if(gData.has(GData.DEPTH)) {
-
-			s += "\tgData.depth = texture(gBuffer.depth, UV).r;\n";
-
-		}
-
-		if(gData.has(GData.NORMAL)) {
-
-			s += "\tgData.normal = texture(gBuffer.normal, UV).xyz;\n";
-
-		}
-
-		if(gData.has(GData.OCCLUSION) || gData.has(GData.ROUGHNESS) || gData.has(GData.METALNESS)) {
-
-			s += "\tvec3 orm = texture(gBuffer.orm, UV).xyz;\n";
-
-		}
-
-		if(gData.has(GData.OCCLUSION)) {
-
-			s += "\tgData.occlusion = orm.x;\n";
-
-		}
-
-		if(gData.has(GData.ROUGHNESS)) {
-
-			s += "\tgData.roughness = orm.y;\n";
-
-		}
-
-		if(gData.has(GData.METALNESS)) {
-
-			s += "\tgData.metalness = orm.z;\n";
-
-		}
-
-		if(gData.has(GData.EMISSION)) {
-
-			s += "\tgData.emission = texture(gBuffer.emission, UV).rgb;\n";
-
-		}
-
-		if(gData.has(GData.LUMINANCE)) {
-
-			s += "\tgData.luminance = luminance(gData.color.rgb);\n";
-
-		}
-
-		return s;
+		return [
+			"\tGData gData;",
+			...Array.from(this.gBufferConfig.gDataStructInitialization)
+				.filter(x => this.gData.has(x[0]))
+				.map(x => `\t${x[1]}`)
+		].join("\n");
 
 	}
 
