@@ -4,7 +4,6 @@ export * from "./DepthTestStrategy.js";
 export * from "./EdgeDetectionMode.js";
 export * from "./EffectShaderSection.js";
 export * from "./GBuffer.js";
-export * from "./GBufferTexture.js";
 export * from "./GData.js";
 export * from "./GlitchMode.js";
 export * from "./KernelSize.js";
