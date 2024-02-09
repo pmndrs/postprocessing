@@ -97,17 +97,19 @@ window.addEventListener("load", () => void load().then((assets) => {
 		samples: 4
 	}));
 
+	pipeline.addPass(new EffectPass(new ToneMappingEffect()));
+
 	const bufferDebugPass = new BufferDebugPass(
 		new Set([
 			GBuffer.COLOR,
 			GBuffer.DEPTH,
 			GBuffer.NORMAL,
-			GBuffer.ROUGHNESS,
-			GBuffer.METALNESS
+			GBuffer.ORM,
+			GBuffer.EMISSION
 		])
 	);
 
-	pipeline.addPass(new EffectPass(new ToneMappingEffect()));
+	bufferDebugPass.columns = 3;
 	pipeline.addPass(bufferDebugPass);
 
 	// Settings
