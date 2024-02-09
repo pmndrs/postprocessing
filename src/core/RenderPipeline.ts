@@ -281,8 +281,8 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 		}
 
-		// TODO r161
-		this._timer.update(/* timestamp */);
+		// @ts-expect-error Outdated types (will be fixed with next release of three-ts-types).
+		this._timer.update(timestamp);
 
 		for(const pass of this.passes) {
 
