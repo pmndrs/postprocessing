@@ -1,9 +1,6 @@
 import {
-	Event,
-	EventListener,
 	OrthographicCamera,
 	PerspectiveCamera,
-	BaseEvent,
 	SRGBColorSpace,
 	WebGLRenderer,
 	Material,
@@ -17,6 +14,7 @@ import { EffectShaderSection as Section } from "../enums/EffectShaderSection.js"
 import { GBuffer } from "../enums/GBuffer.js";
 import { EffectMaterial } from "../materials/EffectMaterial.js";
 import { EffectShaderData } from "../utils/EffectShaderData.js";
+import { GBufferConfig } from "../utils/GBufferConfig.js";
 import { Log } from "../utils/Log.js";
 import { Resolution } from "../utils/Resolution.js";
 
@@ -28,13 +26,7 @@ import { Resolution } from "../utils/Resolution.js";
  * @category Passes
  */
 
-export class EffectPass extends Pass<EffectMaterial> implements EventListenerObject {
-
-	/**
-	 * An event listener that forwards events to {@link handleEvent}.
-	 */
-
-	private listener: EventListener<BaseEvent, string, Pass<Material | null>>;
+export class EffectPass extends Pass<EffectMaterial> {
 
 	/**
 	 * Keeps track of previous input defines.
@@ -47,6 +39,18 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 	 */
 
 	private readonly previousUniforms: Map<string, Uniform>;
+
+	/**
+	 * Keeps track of the previous G-Buffer configuration.
+	 */
+
+	private previousGBufferConfig: GBufferConfig | null;
+
+	/**
+	 * An event listener that triggers {@link rebuild}.
+	 */
+
+	private rebuildListener: () => void;
 
 	/**
 	 * An animation time scale.
@@ -66,9 +70,10 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 
 		this.output.defaultBuffer = this.createFramebuffer();
 		this.fullscreenMaterial = new EffectMaterial();
-		this.listener = (e: Event) => this.handleEvent(e);
 		this.previousDefines = new Map<string, string | number | boolean>();
 		this.previousUniforms = new Map<string, Uniform>();
+		this.previousGBufferConfig = null;
+		this.rebuildListener = () => this.rebuild();
 		this.effects = effects;
 		this.timeScale = 1.0;
 
@@ -102,7 +107,7 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 
 		for(const effect of super.subpasses) {
 
-			effect.removeEventListener(Pass.EVENT_CHANGE, this.listener);
+			effect.removeEventListener(Pass.EVENT_CHANGE, this.rebuildListener);
 
 		}
 
@@ -118,7 +123,7 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 
 			}
 
-			effect.addEventListener(Pass.EVENT_CHANGE, this.listener);
+			effect.addEventListener(Pass.EVENT_CHANGE, this.rebuildListener);
 
 		}
 
@@ -296,12 +301,14 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 		for(const entry of input.defines) {
 
 			this.previousDefines.set(entry[0], entry[1]);
+			fullscreenMaterial.defines[entry[0]] = entry[1];
 
 		}
 
 		for(const entry of input.uniforms) {
 
 			this.previousUniforms.set(entry[0], entry[1]);
+			fullscreenMaterial.uniforms[entry[0]] = entry[1];
 
 		}
 
@@ -344,7 +351,7 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 	protected override onInputChange(): void {
 
 		this.updateGBufferStruct();
-		this.updateDefinesAndUniforms(); // TODO rebuild when gBufferConfig changed?
+		this.updateDefinesAndUniforms();
 
 		// Make the input buffers available to all effects.
 
@@ -359,6 +366,22 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 			}
 
 		}
+
+		// Clean up and configure listeners for the G-Buffer configuration.
+
+		if(this.previousGBufferConfig !== null) {
+
+			this.previousGBufferConfig.removeEventListener(GBufferConfig.EVENT_CHANGE, this.rebuildListener);
+
+		}
+
+		if(this.input.gBufferConfig !== null) {
+
+			this.input.gBufferConfig.addEventListener(GBufferConfig.EVENT_CHANGE, this.rebuildListener);
+
+		}
+
+		this.previousGBufferConfig = this.input.gBufferConfig;
 
 	}
 
@@ -388,7 +411,7 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 
 		for(const effect of this.effects) {
 
-			effect.removeEventListener("change", this.listener);
+			effect.removeEventListener("change", this.rebuildListener);
 
 		}
 
@@ -415,18 +438,6 @@ export class EffectPass extends Pass<EffectMaterial> implements EventListenerObj
 
 		this.renderer.setRenderTarget(this.output.defaultBuffer?.value ?? null);
 		this.renderFullscreen();
-
-	}
-
-	handleEvent(event: Event): void {
-
-		switch(event.type) {
-
-			case "change":
-				this.rebuild();
-				break;
-
-		}
 
 	}
 
