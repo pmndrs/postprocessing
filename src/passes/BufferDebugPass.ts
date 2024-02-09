@@ -17,6 +17,7 @@ import { CopyPass } from "./CopyPass.js";
 /**
  * A debug pass that visualizes all input buffers.
  *
+ * @remarks This pass should always be added last.
  * @category Passes
  */
 
