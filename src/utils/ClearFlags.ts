@@ -46,13 +46,12 @@ export class ClearFlags {
 		this.depth = depth;
 		this.stencil = stencil;
 
-
 	}
 
 	/**
 	 * Indicates whether the color buffer should be cleared.
 	 *
-	 * Alias for the {@link gBufferComponents} entry {@link GBuffer.COLOR}.
+	 * Alias for the {@link gBuffer} entry {@link GBuffer.COLOR}.
 	 */
 
 	get color(): boolean {
