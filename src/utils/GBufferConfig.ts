@@ -1,6 +1,9 @@
+import { EventDispatcher } from "three";
+import { BaseEventMap } from "../core/BaseEventMap.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { GData } from "../enums/GData.js";
 import { GBufferTextureConfig } from "./GBufferTextureConfig.js";
+import { ObservableMap } from "./ObservableMap.js";
 
 /**
  * A G-Buffer configuration.
@@ -9,7 +12,15 @@ import { GBufferTextureConfig } from "./GBufferTextureConfig.js";
  * @internal
  */
 
-export class GBufferConfig {
+export class GBufferConfig extends EventDispatcher<BaseEventMap> {
+
+	/**
+	 * Triggers when any of the data in this configuration is changed.
+	 *
+	 * @event
+	 */
+
+	static readonly EVENT_CHANGE = "change";
 
 	/**
 	 * A collection that maps {@link GBuffer} components to G-Buffer struct field names that are used in effects.
@@ -53,16 +64,18 @@ export class GBufferConfig {
 
 	constructor() {
 
-		this.textureConfigs = new Map<GBuffer | string, GBufferTextureConfig>();
+		super();
 
-		this.gBufferTextures = new Map<GBuffer | string, string>([
+		const textureConfigs = new ObservableMap<GBuffer | string, GBufferTextureConfig>();
+
+		const gBufferTextures = new ObservableMap<GBuffer | string, string>([
 			[GBuffer.COLOR, "outputColor"],
 			[GBuffer.NORMAL, "outputNormal"],
 			[GBuffer.ORM, "outputORM"],
 			[GBuffer.EMISSION, "outputEmission"]
 		]);
 
-		this.gBufferStructFields = new Map<GBuffer | string, string>([
+		const gBufferStructFields = new ObservableMap<GBuffer | string, string>([
 			[GBuffer.COLOR, "color"],
 			[GBuffer.DEPTH, "depth"],
 			[GBuffer.NORMAL, "normal"],
@@ -70,7 +83,7 @@ export class GBufferConfig {
 			[GBuffer.EMISSION, "emission"]
 		]);
 
-		this.gBufferStructDeclaration = new Map<GData | string, string>([
+		const gBufferStructDeclaration = new ObservableMap<GData | string, string>([
 			[GData.COLOR, "FRAME_BUFFER_PRECISION sampler2D color;"],
 			[GData.DEPTH, "DEPTH_BUFFER_PRECISION sampler2D depth;"],
 			[GData.NORMAL, "mediump sampler2D normal;"],
@@ -78,7 +91,7 @@ export class GBufferConfig {
 			[GData.EMISSION, "FRAME_BUFFER_PRECISION sampler2D emission;"]
 		]);
 
-		this.gDataStructDeclaration = new Map<GData | string, string>([
+		const gDataStructDeclaration = new ObservableMap<GData | string, string>([
 			[GData.COLOR, "vec4 color;"],
 			[GData.DEPTH, "float depth;"],
 			[GData.NORMAL, "vec3 normal;"],
@@ -87,7 +100,7 @@ export class GBufferConfig {
 			[GData.LUMINANCE, "float luminance;"]
 		]);
 
-		this.gDataStructInitialization = new Map<GData | string, string>([
+		const gDataStructInitialization = new ObservableMap<GData | string, string>([
 			[GData.COLOR, "gData.color = texture(gBuffer.color, UV);"],
 			[GData.DEPTH, "gData.depth = texture(gBuffer.depth, UV).r;"],
 			[GData.NORMAL, "gData.normal = texture(gBuffer.normal, UV).xyz;"],
@@ -95,6 +108,21 @@ export class GBufferConfig {
 			[GData.EMISSION, "gData.emission = texture(gBuffer.emission, UV).rgb;"],
 			[GData.LUMINANCE, "gData.luminance = luminance(gData.color.rgb);"]
 		]);
+
+		const listener = () => this.dispatchEvent({ type: GBufferConfig.EVENT_CHANGE });
+		textureConfigs.addEventListener(ObservableMap.EVENT_CHANGE, listener);
+		gBufferTextures.addEventListener(ObservableMap.EVENT_CHANGE, listener);
+		gBufferStructFields.addEventListener(ObservableMap.EVENT_CHANGE, listener);
+		gBufferStructDeclaration.addEventListener(ObservableMap.EVENT_CHANGE, listener);
+		gDataStructDeclaration.addEventListener(ObservableMap.EVENT_CHANGE, listener);
+		gDataStructInitialization.addEventListener(ObservableMap.EVENT_CHANGE, listener);
+
+		this.textureConfigs = textureConfigs;
+		this.gBufferTextures = gBufferTextures;
+		this.gBufferStructFields = gBufferStructFields;
+		this.gBufferStructDeclaration = gBufferStructDeclaration;
+		this.gDataStructDeclaration = gDataStructDeclaration;
+		this.gDataStructInitialization = gDataStructInitialization;
 
 	}
 
