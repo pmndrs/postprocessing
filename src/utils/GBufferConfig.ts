@@ -9,7 +9,6 @@ import { ObservableMap } from "./ObservableMap.js";
  * A G-Buffer configuration.
  *
  * @category Utils
- * @internal
  */
 
 export class GBufferConfig extends EventDispatcher<BaseEventMap> {

@@ -9,6 +9,7 @@ export * from "./GlitchMode.js";
 export * from "./KernelSize.js";
 export * from "./LogLevel.js";
 export * from "./MaskFunction.js";
+export * from "./MSAASamples.js";
 export * from "./Precision.js";
 export * from "./PredicationMode.js";
 export * from "./SMAAPreset.js";

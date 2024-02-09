@@ -4,6 +4,8 @@ export * from "./ClearFlags.js";
 export * from "./ClearValues.js";
 export * from "./EffectShaderData.js";
 export * from "./GaussKernel.js";
+export * from "./GBufferConfig.js";
+export * from "./GBufferTextureConfig.js";
 export * from "./ImmutableTimer.js";
 export * from "./Log.js";
 export * from "./ObservableMap.js";
