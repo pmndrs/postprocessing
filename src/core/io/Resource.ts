@@ -50,12 +50,8 @@ export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap
 
 	set value(value: T | null) {
 
-		if(this._value !== value) {
-
-			this._value = value;
-			this.dispatchEvent({ type: Resource.EVENT_CHANGE });
-
-		}
+		this._value = value;
+		this.dispatchEvent({ type: Resource.EVENT_CHANGE });
 
 	}
 
