@@ -63,6 +63,12 @@ export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
 	private _gBufferConfig: GBufferConfig | null;
 
 	/**
+	 * An event listener that triggers an {@link EVENT_CHANGE} event.
+	 */
+
+	private readonly listener: () => void;
+
+	/**
 	 * Constructs new input resources.
 	 */
 
@@ -85,6 +91,7 @@ export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
 		textures.addEventListener(ObservableMap.EVENT_DELETE,
 			(e) => e.value.removeEventListener(Resource.EVENT_CHANGE, listener));
 
+		this.listener = listener;
 		this.defines = defines;
 		this.uniforms = uniforms;
 		this.textures = textures;
@@ -106,6 +113,18 @@ export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
 	}
 
 	set gBufferConfig(value: GBufferConfig | null) {
+
+		if(this._gBufferConfig !== null) {
+
+			this._gBufferConfig.removeEventListener(GBufferConfig.EVENT_CHANGE, this.listener);
+
+		}
+
+		if(value !== null) {
+
+			value.addEventListener(GBufferConfig.EVENT_CHANGE, this.listener);
+
+		}
 
 		this._gBufferConfig = value;
 		this.dispatchEvent({ type: Input.EVENT_CHANGE });
