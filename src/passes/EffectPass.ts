@@ -50,7 +50,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 	 * An event listener that triggers {@link rebuild}.
 	 */
 
-	private rebuildListener: () => void;
+	private listener: () => void;
 
 	/**
 	 * An animation time scale.
@@ -73,7 +73,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 		this.previousDefines = new Map<string, string | number | boolean>();
 		this.previousUniforms = new Map<string, Uniform>();
 		this.previousGBufferConfig = null;
-		this.rebuildListener = () => this.rebuild();
+		this.listener = () => this.rebuild();
 		this.effects = effects;
 		this.timeScale = 1.0;
 
@@ -107,7 +107,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		for(const effect of super.subpasses) {
 
-			effect.removeEventListener(Pass.EVENT_CHANGE, this.rebuildListener);
+			effect.removeEventListener(Pass.EVENT_CHANGE, this.listener);
 
 		}
 
@@ -123,7 +123,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 			}
 
-			effect.addEventListener(Pass.EVENT_CHANGE, this.rebuildListener);
+			effect.addEventListener(Pass.EVENT_CHANGE, this.listener);
 
 		}
 
@@ -371,13 +371,13 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		if(this.previousGBufferConfig !== null) {
 
-			this.previousGBufferConfig.removeEventListener(GBufferConfig.EVENT_CHANGE, this.rebuildListener);
+			this.previousGBufferConfig.removeEventListener(GBufferConfig.EVENT_CHANGE, this.listener);
 
 		}
 
 		if(this.input.gBufferConfig !== null) {
 
-			this.input.gBufferConfig.addEventListener(GBufferConfig.EVENT_CHANGE, this.rebuildListener);
+			this.input.gBufferConfig.addEventListener(GBufferConfig.EVENT_CHANGE, this.listener);
 
 		}
 
@@ -411,7 +411,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		for(const effect of this.effects) {
 
-			effect.removeEventListener("change", this.rebuildListener);
+			effect.removeEventListener("change", this.listener);
 
 		}
 
