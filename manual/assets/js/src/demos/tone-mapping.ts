@@ -84,8 +84,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Post Processing
 
 	const pipeline = new RenderPipeline(renderer);
-	pipeline.addPass(new ClearPass());
-	pipeline.addPass(new GeometryPass(scene, camera, {
+	pipeline.add(new ClearPass());
+	pipeline.add(new GeometryPass(scene, camera, {
 		frameBufferType: HalfFloatType,
 		samples: 4
 	}));
@@ -93,7 +93,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const effect = new ToneMappingEffect();
 	effect.blendMode.blendFunction = new MixBlendFunction();
 	const effectPass = new EffectPass(effect);
-	pipeline.addPass(effectPass);
+	pipeline.add(effectPass);
 
 	// Settings
 

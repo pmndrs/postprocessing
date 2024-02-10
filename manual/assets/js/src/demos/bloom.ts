@@ -95,8 +95,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Post Processing
 
 	const pipeline = new RenderPipeline(renderer);
-	pipeline.addPass(new ClearPass());
-	pipeline.addPass(new GeometryPass(scene, camera, {
+	pipeline.add(new ClearPass());
+	pipeline.add(new GeometryPass(scene, camera, {
 		frameBufferType: HalfFloatType,
 		samples: 4
 	}));
@@ -109,7 +109,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 		levels: 8
 	});
 
-	pipeline.addPass(new EffectPass(effect, new ToneMappingEffect()));
+	pipeline.add(new EffectPass(effect, new ToneMappingEffect()));
 
 	// Settings
 

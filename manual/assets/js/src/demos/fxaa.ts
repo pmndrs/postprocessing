@@ -89,14 +89,14 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Post Processing
 
 	const pipeline = new RenderPipeline(renderer);
-	pipeline.addPass(new ClearPass());
-	pipeline.addPass(new GeometryPass(scene, camera, {
+	pipeline.add(new ClearPass());
+	pipeline.add(new GeometryPass(scene, camera, {
 		frameBufferType: HalfFloatType
 	}));
 
 	const effect = new FXAAEffect();
 	effect.blendMode.blendFunction = new MixBlendFunction();
-	pipeline.addPass(new EffectPass(effect, new ToneMappingEffect()));
+	pipeline.add(new EffectPass(effect, new ToneMappingEffect()));
 
 	// Settings
 

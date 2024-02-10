@@ -182,7 +182,7 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 	 * @param pass - The pass.
 	 */
 
-	private registerPass(pass: Pass<Material | null>) {
+	private registerPass(pass: Pass<Material | null>): void {
 
 		RenderPipeline.registeredPasses.add(pass);
 
@@ -204,7 +204,7 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 	 * @param pass - The pass.
 	 */
 
-	private unregisterPass(pass: Pass<Material | null>) {
+	private unregisterPass(pass: Pass<Material | null>): void {
 
 		RenderPipeline.registeredPasses.delete(pass);
 
@@ -214,41 +214,58 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 	}
 
 	/**
-	 * Adds a pass.
+	 * Adds one or more passes.
 	 *
-	 * @param pass - The pass.
+	 * @param passes - The passes to add.
 	 */
 
-	addPass(pass: Pass<Material | null>) {
+	add(...passes: Pass<Material | null>[]): void {
 
-		if(RenderPipeline.registeredPasses.has(pass)) {
+		for(const pass of passes) {
 
-			throw new Error(`The pass "${pass.name}" has already been added to a pipeline`);
+			if(RenderPipeline.registeredPasses.has(pass)) {
+
+				throw new Error(`The pass "${pass.name}" has already been added to a pipeline`);
+
+			}
+
+			this.registerPass(pass);
+			this._passes.push(pass);
 
 		}
 
-		this.registerPass(pass);
-		this._passes.push(pass);
 		RenderPipeline.ioManager.update();
 
 	}
 
 	/**
-	 * Removes a pass.
+	 * Removes one or more passes.
 	 *
-	 * @param pass - The pass.
+	 * @param passes - The passes to remove.
 	 */
 
-	removePass(pass: Pass<Material | null>): void {
+	remove(...passes: Pass<Material | null>[]): void {
 
-		const passes = this._passes;
-		const index = passes.indexOf(pass);
-		const exists = (index !== -1);
-		const removed = exists && (passes.splice(index, 1).length > 0);
+		let removedAny = false;
 
-		if(removed) {
+		for(const pass of passes) {
 
-			this.unregisterPass(pass);
+			const passes = this._passes;
+			const index = passes.indexOf(pass);
+			const exists = (index !== -1);
+			const removed = exists && (passes.splice(index, 1).length > 0);
+
+			if(removed) {
+
+				this.unregisterPass(pass);
+				removedAny = true;
+
+			}
+
+		}
+
+		if(removedAny) {
+
 			RenderPipeline.ioManager.update();
 
 		}

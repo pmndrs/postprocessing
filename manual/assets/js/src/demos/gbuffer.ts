@@ -91,13 +91,13 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Post Processing
 
 	const pipeline = new RenderPipeline(renderer);
-	pipeline.addPass(new ClearPass());
-	pipeline.addPass(new GeometryPass(scene, camera, {
+	pipeline.add(new ClearPass());
+	pipeline.add(new GeometryPass(scene, camera, {
 		frameBufferType: HalfFloatType,
 		samples: 4
 	}));
 
-	pipeline.addPass(new EffectPass(new ToneMappingEffect()));
+	pipeline.add(new EffectPass(new ToneMappingEffect()));
 
 	const bufferDebugPass = new BufferDebugPass(
 		new Set([
@@ -110,7 +110,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	);
 
 	bufferDebugPass.columns = 3;
-	pipeline.addPass(bufferDebugPass);
+	pipeline.add(bufferDebugPass);
 
 	// Settings
 

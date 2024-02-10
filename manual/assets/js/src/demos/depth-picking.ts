@@ -105,15 +105,15 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Post Processing
 
 	const pipeline = new RenderPipeline(renderer);
-	pipeline.addPass(new ClearPass());
-	pipeline.addPass(new GeometryPass(scene, camera, {
+	pipeline.add(new ClearPass());
+	pipeline.add(new GeometryPass(scene, camera, {
 		frameBufferType: HalfFloatType,
 		samples: 4
 	}));
 
 	const depthPickingPass = new DepthPickingPass();
-	pipeline.addPass(depthPickingPass);
-	pipeline.addPass(new EffectPass(new ToneMappingEffect()));
+	pipeline.add(depthPickingPass);
+	pipeline.add(new EffectPass(new ToneMappingEffect()));
 
 	const ndc = new Vector3();
 

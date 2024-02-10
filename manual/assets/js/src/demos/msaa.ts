@@ -92,9 +92,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 		samples: 4
 	});
 
-	pipeline.addPass(new ClearPass());
-	pipeline.addPass(geoPass);
-	pipeline.addPass(new EffectPass(new ToneMappingEffect()));
+	pipeline.add(new ClearPass());
+	pipeline.add(geoPass);
+	pipeline.add(new EffectPass(new ToneMappingEffect()));
 
 	// Settings
 
