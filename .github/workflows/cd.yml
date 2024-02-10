@@ -21,15 +21,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           cache: "pnpm"
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Install dependencies and test
+        run: pnpm install-test --frozen-lockfile
       - name: Publish
         id: publish
         uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
-          tag: next
-          ignore-scripts: false
       - if: ${{ steps.publish.outputs.type }}
         run: |
           echo "Published version: ${{ steps.publish.outputs.version }}"
