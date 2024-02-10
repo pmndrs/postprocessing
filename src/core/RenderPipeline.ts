@@ -27,6 +27,12 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 	private static readonly ioManager = /* @__PURE__ */ new IOManager();
 
 	/**
+	 * Keeps track of passes that have been added to a pipeline.
+	 */
+
+	private static readonly registeredPasses = /* @__PURE__ */ new WeakSet<Pass<Material | null>>();
+
+	/**
 	 * A timer.
 	 */
 
@@ -178,6 +184,8 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 	private registerPass(pass: Pass<Material | null>) {
 
+		RenderPipeline.registeredPasses.add(pass);
+
 		if(this.renderer !== null) {
 
 			this.renderer.getDrawingBufferSize(v);
@@ -198,6 +206,8 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 	private unregisterPass(pass: Pass<Material | null>) {
 
+		RenderPipeline.registeredPasses.delete(pass);
+
 		pass.renderer = null;
 		pass.timer = null;
 
@@ -211,16 +221,14 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 	addPass(pass: Pass<Material | null>) {
 
-		const passes = this._passes;
+		if(RenderPipeline.registeredPasses.has(pass)) {
 
-		if(passes.indexOf(pass) !== -1) {
-
-			throw new Error(`Unable to add pass "${pass.name}" because it was already added`);
+			throw new Error(`The pass "${pass.name}" has already been added to a pipeline`);
 
 		}
 
 		this.registerPass(pass);
-		passes.push(pass);
+		this._passes.push(pass);
 		RenderPipeline.ioManager.update();
 
 	}
