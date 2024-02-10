@@ -51,11 +51,15 @@
 			"test/**/*.js"
 		]
 	},
+	"publishConfig": {
+		"tag": "alpha"
+	},
 	"eslintConfig": {
 		"extends": "aether/typescript"
 	},
 	"scripts": {
 		"ava": "ava",
+		"build": "npm run clean && run-p build:css build:js:min build:dts",
 		"build:css": "sass --no-source-map -I manual/assets/css/src/values manual/assets/css/src:manual/assets/css/dist",
 		"build:js": "node esbuild",
 		"build:js:min": "node esbuild -m",
@@ -65,14 +69,14 @@
 		"doc": "typedoc --plugin typedoc-plugin-mdn-links",
 		"gzip": "gzipper c public",
 		"hugo": "hugo -s manual --minify",
-		"lint": "run-s lint:*",
+		"lint": "run-p lint:*",
 		"lint:css": "stylelint --fix manual/assets/css/src",
 		"lint:js": "eslint --ext .ts --fix src manual/assets/js/src",
 		"lint:tsc": "tsc --noemit",
 		"postcss": "postcss manual/assets/css/dist/index.css -o manual/assets/css/dist/index.css -c manual",
-		"prepublishOnly": "run-s test doc",
+		"prepublishOnly": "npm test",
 		"prewatch": "run-s clean build:css build:js",
-		"test": "run-s lint clean build:css build:js:min build:dts ava",
+		"test": "run-s lint build ava doc",
 		"start": "hugo server -s manual -e development",
 		"watch": "run-p watch:* start",
 		"watch:css": "sass --no-source-map -I manual/assets/css/src/values manual/assets/css/src:manual/assets/css/dist -w",
