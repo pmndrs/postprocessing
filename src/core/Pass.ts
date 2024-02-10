@@ -147,7 +147,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	/**
 	 * A collection of objects that will be disposed when this pass is disposed.
 	 *
-	 * IO resources will be disposed separately.
+	 * IO resources and subpasses will be disposed separately and don't need to be added.
 	 */
 
 	protected readonly disposables: Set<Disposable>;
