@@ -10,7 +10,7 @@ import { Resource } from "./Resource.js";
  *
  * Listen for events of type {@link EVENT_CHANGE} to react to resource updates.
  *
- * @category Core
+ * @category IO
  */
 
 export class Output extends EventDispatcher<BaseEventMap> implements ShaderData {

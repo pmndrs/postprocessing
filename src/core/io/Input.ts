@@ -13,7 +13,7 @@ import { GBufferConfig } from "../../utils/GBufferConfig.js";
  *
  * Listen for events of type {@link EVENT_CHANGE} to react to resource updates.
  *
- * @category Core
+ * @category IO
  */
 
 export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {

@@ -1,7 +1,7 @@
 /**
  * Supported MSAA sample counts.
  *
- * @category Passes
+ * @category Enums
  */
 
 export declare type MSAASamples = 0 | 2 | 4 | 8;
