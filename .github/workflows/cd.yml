@@ -28,6 +28,7 @@ jobs:
         uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
+          tag: next
           ignore-scripts: false
       - if: ${{ steps.publish.outputs.type }}
         run: |
