@@ -80,11 +80,13 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Post Processing
 
 	const pipeline = new RenderPipeline(renderer);
-	pipeline.add(new ClearPass());
-	pipeline.add(new GeometryPass(scene, camera, {
-		frameBufferType: HalfFloatType,
-		samples: 4
-	}));
+	pipeline.add(
+		new ClearPass(),
+		new GeometryPass(scene, camera, {
+			frameBufferType: HalfFloatType,
+			samples: 4
+		})
+	);
 
 	/*
 	const effect = new PixelationEffect();

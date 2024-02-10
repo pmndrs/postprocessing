@@ -90,15 +90,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
-	const pipeline = new RenderPipeline(renderer);
-	pipeline.add(new ClearPass());
-	pipeline.add(new GeometryPass(scene, camera, {
-		frameBufferType: HalfFloatType,
-		samples: 4
-	}));
-
-	pipeline.add(new EffectPass(new ToneMappingEffect()));
-
 	const bufferDebugPass = new BufferDebugPass(
 		new Set([
 			GBuffer.COLOR,
@@ -110,7 +101,17 @@ window.addEventListener("load", () => void load().then((assets) => {
 	);
 
 	bufferDebugPass.columns = 3;
-	pipeline.add(bufferDebugPass);
+
+	const pipeline = new RenderPipeline(renderer);
+	pipeline.add(
+		new ClearPass(),
+		new GeometryPass(scene, camera, {
+			frameBufferType: HalfFloatType,
+			samples: 4
+		}),
+		new EffectPass(new ToneMappingEffect()),
+		bufferDebugPass
+	);
 
 	// Settings
 

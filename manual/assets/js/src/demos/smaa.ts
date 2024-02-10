@@ -86,10 +86,12 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.autoRenderToScreen = false;
-	pipeline.add(new ClearPass());
-	pipeline.add(new GeometryPass(scene, camera, {
-		frameBufferType: HalfFloatType
-	}));
+	pipeline.add(
+		new ClearPass(),
+		new GeometryPass(scene, camera, {
+			frameBufferType: HalfFloatType
+		})
+	);
 
 	/*
 	const effect = new SMAAEffect({

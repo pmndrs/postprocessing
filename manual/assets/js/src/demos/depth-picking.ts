@@ -104,16 +104,18 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
-	const pipeline = new RenderPipeline(renderer);
-	pipeline.add(new ClearPass());
-	pipeline.add(new GeometryPass(scene, camera, {
-		frameBufferType: HalfFloatType,
-		samples: 4
-	}));
-
 	const depthPickingPass = new DepthPickingPass();
-	pipeline.add(depthPickingPass);
-	pipeline.add(new EffectPass(new ToneMappingEffect()));
+
+	const pipeline = new RenderPipeline(renderer);
+	pipeline.add(
+		new ClearPass(),
+		new GeometryPass(scene, camera, {
+			frameBufferType: HalfFloatType,
+			samples: 4
+		}),
+		depthPickingPass,
+		new EffectPass(new ToneMappingEffect())
+	);
 
 	const ndc = new Vector3();
 

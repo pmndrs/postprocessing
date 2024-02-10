@@ -94,13 +94,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
-	const pipeline = new RenderPipeline(renderer);
-	pipeline.add(new ClearPass());
-	pipeline.add(new GeometryPass(scene, camera, {
-		frameBufferType: HalfFloatType,
-		samples: 4
-	}));
-
 	const effect = new BloomEffect({
 		luminanceThreshold: 1.0,
 		luminanceSmoothing: 0.03,
@@ -109,7 +102,15 @@ window.addEventListener("load", () => void load().then((assets) => {
 		levels: 8
 	});
 
-	pipeline.add(new EffectPass(effect, new ToneMappingEffect()));
+	const pipeline = new RenderPipeline(renderer);
+	pipeline.add(
+		new ClearPass(),
+		new GeometryPass(scene, camera, {
+			frameBufferType: HalfFloatType,
+			samples: 4
+		}),
+		new EffectPass(effect, new ToneMappingEffect())
+	);
 
 	// Settings
 
