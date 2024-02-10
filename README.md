@@ -3,7 +3,7 @@
 [![CI](https://github.com/pmndrs/postprocessing/actions/workflows/ci.yml/badge.svg)](https://github.com/pmndrs/postprocessing/actions/workflows/ci.yml)
 [![Version](https://badgen.net/npm/v/postprocessing?color=green)](https://www.npmjs.com/package/postprocessing)
 
-A post processing library that provides the means to implement image filter effects for [three.js](https://threejs.org/).
+A post processing library for [three.js](https://threejs.org/).
 
 *[Demo](https://pmndrs.github.io/postprocessing/public/demo)&ensp;&middot;&ensp;[Sandbox](https://codesandbox.io/s/postprocessing-25rts)&ensp;&middot;&ensp;[Documentation](https://pmndrs.github.io/postprocessing/public/docs)&ensp;&middot;&ensp;[Wiki](https://github.com/pmndrs/postprocessing/wiki)*
 
