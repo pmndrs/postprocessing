@@ -1,4 +1,4 @@
-import { Material, Vector2, WebGLRenderer } from "three";
+import { Material, NoToneMapping, Vector2, WebGLRenderer } from "three";
 import { Timer } from "three/addons/misc/Timer.js";
 import { ShaderChunkExtensions } from "../shader-chunks/ShaderChunkExtensions.js";
 import { ImmutableTimer } from "../utils/ImmutableTimer.js";
@@ -140,6 +140,12 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 		}
 
 		if(value !== null) {
+
+			if(value.toneMapping !== NoToneMapping) {
+
+				Log.info("Consider using a ToneMappingEffect instead of inline tone mapping");
+
+			}
 
 			// Clearing will be done with ClearPass instances.
 			value.autoClear = false;
