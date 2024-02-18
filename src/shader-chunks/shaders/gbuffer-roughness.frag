@@ -1,5 +1,5 @@
-#ifdef outputORM
+#ifdef out_ORM
 
-	outputORM.y = roughnessFactor;
+	out_ORM.y = roughnessFactor;
 
 #endif

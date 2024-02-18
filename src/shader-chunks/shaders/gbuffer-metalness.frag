@@ -1,5 +1,5 @@
-#ifdef outputORM
+#ifdef out_ORM
 
-	outputORM.z = metalness;
+	out_ORM.z = metalness;
 
 #endif

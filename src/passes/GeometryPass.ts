@@ -26,7 +26,7 @@ import { Selective } from "../core/Selective.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { MSAASamples } from "../enums/MSAASamples.js";
 import { GBufferConfig } from "../utils/GBufferConfig.js";
-import { extractDefines, extractIndices, extractOutputDefinitions } from "../utils/GBufferUtils.js";
+import { extractIndices, extractOutputDefinitions } from "../utils/GBufferUtils.js";
 import { ObservableSet } from "../utils/ObservableSet.js";
 import { Selection } from "../utils/Selection.js";
 import { CopyPass } from "./CopyPass.js";
@@ -342,18 +342,6 @@ export class GeometryPass extends Pass implements Selective {
 
 			}
 
-			if(shader.defines === undefined) {
-
-				shader.defines = {};
-
-			}
-
-			for(const entry of extractDefines(this.gBuffer, this.gBufferConfig)) {
-
-				shader.defines[entry[0]] = entry[1];
-
-			}
-
 			const outputDefinitions = extractOutputDefinitions(this.gBuffer);
 			shader.fragmentShader = outputDefinitions + "\n\n" + shader.fragmentShader;
 
@@ -425,29 +413,6 @@ export class GeometryPass extends Pass implements Selective {
 	}
 
 	/**
-	 * Updates the output macro definitions.
-	 */
-
-	private updateDefines(): void {
-
-		const gBuffer = this.gBuffer;
-		this.output.defines.clear();
-
-		if(gBuffer === null) {
-
-			return;
-
-		}
-
-		for(const entry of extractDefines(gBuffer, this.gBufferConfig)) {
-
-			this.output.defines.set(entry[0], entry[1]);
-
-		}
-
-	}
-
-	/**
 	 * Updates the G-Buffer configuration.
 	 */
 
@@ -508,7 +473,6 @@ export class GeometryPass extends Pass implements Selective {
 		this.output.defaultBuffer = renderTarget;
 		this.gBufferResource = this.output.defaultBuffer;
 		this.updateOutputBufferColorSpace();
-		this.updateDefines();
 
 	}
 

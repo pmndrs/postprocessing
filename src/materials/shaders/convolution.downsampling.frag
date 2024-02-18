@@ -59,6 +59,6 @@ void main() {
 	c += w.w * texture(inputBuffer, vUv11);
 
 	c += WEIGHT_OUTER * texture(inputBuffer, vUv);
-	outputColor = c;
+	out_Color = c;
 
 }

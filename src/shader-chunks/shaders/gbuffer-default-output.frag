@@ -1,17 +1,17 @@
-#ifdef outputNormal
+#ifdef out_Normal
 
-	outputNormal = vec4(0.0);
-
-#endif
-
-#ifdef outputORM
-
-	outputORM = vec4(0.0);
+	out_Normal = vec4(0.0);
 
 #endif
 
-#ifdef outputEmission
+#ifdef out_ORM
 
-	outputEmission = vec4(0.0);
+	out_ORM = vec4(0.0);
+
+#endif
+
+#ifdef out_Emission
+
+	out_Emission = vec4(0.0);
 
 #endif

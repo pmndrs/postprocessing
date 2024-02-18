@@ -27,11 +27,11 @@ void main() {
 
 	#ifdef COLOR
 
-		outputColor = vec4(texel.rgb * clamp(l, 0.0, 1.0), l);
+		out_Color = vec4(texel.rgb * clamp(l, 0.0, 1.0), l);
 
 	#else
 
-		outputColor = vec4(l);
+		out_Color = vec4(l);
 
 	#endif
 

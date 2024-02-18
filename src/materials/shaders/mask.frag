@@ -70,17 +70,17 @@ void main() {
 
 		// MULTIPLY_RGB
 		vec4 texel = texture(inputBuffer, vUv);
-		outputColor = vec4(mask * texel.rgb, texel.a);
+		out_Color = vec4(mask * texel.rgb, texel.a);
 
 	#elif MASK_FUNCTION == 2
 
 		// MULTIPLY_RGB_SET_ALPHA
-		outputColor = vec4(mask * texture(inputBuffer, vUv).rgb, mask);
+		out_Color = vec4(mask * texture(inputBuffer, vUv).rgb, mask);
 
 	#else
 
 		// MULTIPLY
-		outputColor = mask * texture(inputBuffer, vUv);
+		out_Color = mask * texture(inputBuffer, vUv);
 
 	#endif
 

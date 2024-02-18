@@ -26,6 +26,6 @@ in vec2 vUv;
 
 void main() {
 
-	outputColor = vec4(getDepth(vUv));
+	out_Color = vec4(getDepth(vUv));
 
 }

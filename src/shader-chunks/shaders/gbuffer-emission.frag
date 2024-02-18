@@ -1,5 +1,5 @@
-#ifdef outputEmission
+#ifdef out_Emission
 
-	outputEmission = vec4(totalEmissiveRadiance, 1.0);
+	out_Emission = vec4(totalEmissiveRadiance, 1.0);
 
 #endif

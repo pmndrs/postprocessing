@@ -20,6 +20,6 @@ void main() {
 
 	}
 
-	outputColor = result;
+	out_Color = result;
 
 }

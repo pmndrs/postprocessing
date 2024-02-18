@@ -121,6 +121,6 @@ void main() {
 
 	#endif
 
-	outputColor = vec4(n[index], d[index]);
+	out_Color = vec4(n[index], d[index]);
 
 }

@@ -10,6 +10,6 @@ void main() {
 	sum += texture(inputBuffer, vUv1); // Top right
 	sum += texture(inputBuffer, vUv2); // Bottom right
 	sum += texture(inputBuffer, vUv3); // Bottom left
-	outputColor = sum * 0.25; // Compute the average
+	out_Color = sum * 0.25; // Compute the average
 
 }

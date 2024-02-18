@@ -1,5 +1,5 @@
-#ifdef outputNormal
+#ifdef out_Normal
 
-	outputNormal = vec4(normal, 1.0);
+	out_Normal = vec4(normal, 1.0);
 
 #endif

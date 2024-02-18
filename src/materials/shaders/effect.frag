@@ -37,7 +37,7 @@ void main() {
 	$FRAGMENT_MAIN_IMAGE
 
 	color0.a = clamp(color0.a, 0.0, 1.0);
-	outputColor = color0;
+	out_Color = color0;
 
 	#ifdef COLOR_SPACE_CONVERSION
 

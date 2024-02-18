@@ -34,7 +34,7 @@ void main() {
 	if(coc == 0.0) {
 
 		// Skip blurring.
-		outputColor = texture(inputBuffer, vUv);
+		out_Color = texture(inputBuffer, vUv);
 
 	} else {
 
@@ -66,7 +66,7 @@ void main() {
 
 			}
 
-			outputColor = acc / 64.0;
+			out_Color = acc / 64.0;
 
 		#else
 
@@ -86,7 +86,7 @@ void main() {
 
 			}
 
-			outputColor = maxValue;
+			out_Color = maxValue;
 
 		#endif
 

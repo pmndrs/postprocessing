@@ -28,12 +28,6 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 	readonly textureConfigs: Map<GBuffer | string, GBufferTextureConfig>;
 
 	/**
-	 * A collection that maps {@link GBuffer} components to texture names.
-	 */
-
-	readonly gBufferTextures: Map<GBuffer | string, string>;
-
-	/**
 	 * A collection that maps {@link GBuffer} components to G-Buffer struct field names that are used in effects.
 	 */
 
@@ -66,13 +60,6 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 		super();
 
 		const textureConfigs = new ObservableMap<GBuffer | string, GBufferTextureConfig>();
-
-		const gBufferTextures = new ObservableMap<GBuffer | string, string>([
-			[GBuffer.COLOR, "outputColor"],
-			[GBuffer.NORMAL, "outputNormal"],
-			[GBuffer.ORM, "outputORM"],
-			[GBuffer.EMISSION, "outputEmission"]
-		]);
 
 		const gBufferStructFields = new ObservableMap<GBuffer | string, string>([
 			[GBuffer.COLOR, "color"],
@@ -110,14 +97,12 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 
 		const listener = () => this.dispatchEvent({ type: GBufferConfig.EVENT_CHANGE });
 		textureConfigs.addEventListener(ObservableMap.EVENT_CHANGE, listener);
-		gBufferTextures.addEventListener(ObservableMap.EVENT_CHANGE, listener);
 		gBufferStructFields.addEventListener(ObservableMap.EVENT_CHANGE, listener);
 		gBufferStructDeclaration.addEventListener(ObservableMap.EVENT_CHANGE, listener);
 		gDataStructDeclaration.addEventListener(ObservableMap.EVENT_CHANGE, listener);
 		gDataStructInitialization.addEventListener(ObservableMap.EVENT_CHANGE, listener);
 
 		this.textureConfigs = textureConfigs;
-		this.gBufferTextures = gBufferTextures;
 		this.gBufferStructFields = gBufferStructFields;
 		this.gBufferStructDeclaration = gBufferStructDeclaration;
 		this.gDataStructDeclaration = gDataStructDeclaration;

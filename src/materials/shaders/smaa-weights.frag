@@ -540,6 +540,6 @@ void main() {
 
 	}
 
-	outputColor = weights;
+	out_Color = weights;
 
 }

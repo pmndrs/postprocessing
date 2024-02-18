@@ -127,7 +127,7 @@ void main() {
 
 		}
 
-		outputColor = vec4(edges, 0.0, 1.0);
+		out_Color = vec4(edges, 0.0, 1.0);
 
 	#elif EDGE_DETECTION_MODE == 1
 
@@ -168,7 +168,7 @@ void main() {
 		// Local contrast adaptation.
 		edges.xy *= step(finalDelta, LOCAL_CONTRAST_ADAPTATION_FACTOR * delta.xy);
 
-		outputColor = vec4(edges, 0.0, 1.0);
+		out_Color = vec4(edges, 0.0, 1.0);
 
 	#elif EDGE_DETECTION_MODE == 2
 
@@ -221,7 +221,7 @@ void main() {
 		// Local contrast adaptation.
 		edges *= step(finalDelta, LOCAL_CONTRAST_ADAPTATION_FACTOR * delta.xy);
 
-		outputColor = vec4(edges, 0.0, 1.0);
+		out_Color = vec4(edges, 0.0, 1.0);
 
 	#endif
 

@@ -159,7 +159,7 @@ void main() {
 
 		#endif
 
-		outputColor = result / max(w, 1.0);
+		out_Color = result / max(w, 1.0);
 
 	#else
 
@@ -189,7 +189,7 @@ void main() {
 
 		#endif
 
-		outputColor = result * INV_KERNEL_SIZE_SQ;
+		out_Color = result * INV_KERNEL_SIZE_SQ;
 
 	#endif
 

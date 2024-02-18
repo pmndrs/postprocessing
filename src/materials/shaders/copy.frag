@@ -26,7 +26,7 @@ void main() {
 
 	#ifdef COLOR_WRITE
 
-		outputColor = texture(inputBuffer, vUv);
+		out_Color = texture(inputBuffer, vUv);
 
 		#ifdef COLOR_SPACE_CONVERSION
 
@@ -38,7 +38,7 @@ void main() {
 
 	#else
 
-		outputColor = vec4(0.0);
+		out_Color = vec4(0.0);
 
 	#endif
 

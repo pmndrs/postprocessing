@@ -12,7 +12,6 @@ import {
 
 import { GBuffer } from "../enums/GBuffer.js";
 import { Precision } from "../enums/Precision.js";
-import { GBufferConfig } from "./GBufferConfig.js";
 
 /**
  * Maps texture data types to the GLSL precision modifiers.
@@ -75,39 +74,6 @@ export function extractIndices(renderTarget: WebGLMultipleRenderTargets): Map<st
 }
 
 /**
- * Extracts macro definitions that map G-Buffer texture names to shader output variables.
- *
- * @todo Remove when three supports auto shader outputs.
- * @param renderTarget - A render target.
- * @param gBufferConfig - A G-Buffer Configuration.
- * @return The macro definitions.
- * @category Utils
- * @internal
- */
-
-export function extractDefines(renderTarget: WebGLMultipleRenderTargets,
-	gBufferConfig: GBufferConfig): Map<string, string | number | boolean> {
-
-	const defines = new Map<string, string | number | boolean>();
-
-	for(let i = 0, l = renderTarget.texture.length; i < l; ++i) {
-
-		const texture = renderTarget.texture[i];
-		const gBufferComponent = texture.name as GBuffer;
-
-		if(gBufferConfig.gBufferTextures.has(gBufferComponent)) {
-
-			defines.set(gBufferConfig.gBufferTextures.get(gBufferComponent)!, `pc_FragData${i}`);
-
-		}
-
-	}
-
-	return defines;
-
-}
-
-/**
  * Creates output definitions from a given render target.
  *
  * @todo Remove when three supports auto shader outputs.
@@ -126,6 +92,7 @@ export function extractOutputDefinitions(renderTarget: WebGLMultipleRenderTarget
 		const texture = renderTarget.texture[i];
 		const precision = textureTypeToPrecision.get(texture.type);
 		const type = pixelFormatToTexelType.get(texture.format);
+		const name = texture.name.replace(/\W*/g, "");
 
 		if(i === 0) {
 
@@ -133,11 +100,17 @@ export function extractOutputDefinitions(renderTarget: WebGLMultipleRenderTarget
 
 		}
 
-		definitions.push(`layout(location = ${i}) out ${precision} ${type} pc_FragData${i};`);
+		definitions.push(`layout(location = ${i}) out ${precision} ${type} out_FragData${i};`);
+
+		if(name !== "") {
+
+			definitions.push(`#define out_${name} out_FragData${i}`);
+
+		}
 
 		if(i === 0) {
 
-			definitions.push("#define gl_FragColor pc_FragData${i}");
+			definitions.push("#define gl_FragColor out_FragData${i}");
 			definitions.push("#endif");
 
 		}

@@ -21,6 +21,6 @@ void main() {
 	sum += texture(inputBuffer, vec2(vUv.x + dUv.x, vUv.y + dUv.y)); // Top right
 	sum += texture(inputBuffer, vec2(vUv.x + dUv.x, vUv.y - dUv.y)); // Bottom right
 	sum += texture(inputBuffer, vec2(vUv.x - dUv.x, vUv.y - dUv.y)); // Bottom left
-	outputColor = sum * 0.25; // Compute the average
+	out_Color = sum * 0.25; // Compute the average
 
 }

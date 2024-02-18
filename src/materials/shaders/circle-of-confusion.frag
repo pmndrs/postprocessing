@@ -26,7 +26,7 @@ void main() {
 	float signedDistance = depth - focusDistance;
 	float magnitude = smoothstep(0.0, focusRange, abs(signedDistance));
 
-	outputColor.rg = magnitude * vec2(
+	out_Color.rg = magnitude * vec2(
 		step(signedDistance, 0.0),
 		step(0.0, signedDistance)
 	);

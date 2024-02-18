@@ -27,6 +27,6 @@ void main() {
 
 	// Adapt the luminance using Pattanaik's technique.
 	float adaptedLum = l0 + (l1 - l0) * (1.0 - exp(-deltaTime * tau));
-	outputColor = (adaptedLum == 1.0) ? vec4(1.0) : packFloatToRGBA(adaptedLum);
+	out_Color = (adaptedLum == 1.0) ? vec4(1.0) : packFloatToRGBA(adaptedLum);
 
 }

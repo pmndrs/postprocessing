@@ -32,6 +32,6 @@ void main() {
 	c += texture(inputBuffer, vUv7) * 0.0625;
 
 	vec4 baseColor = texture(supportBuffer, vUv);
-	outputColor = mix(baseColor, c, radius);
+	out_Color = mix(baseColor, c, radius);
 
 }

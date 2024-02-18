@@ -1,12 +1,12 @@
-#ifdef outputORM
+#ifdef out_ORM
 
 	#ifdef USE_AOMAP
 
-		outputORM.x = ambientOcclusion;
+		out_ORM.x = ambientOcclusion;
 
 	#else
 
-		outputORM.x = 1.0;
+		out_ORM.x = 1.0;
 
 	#endif
 
