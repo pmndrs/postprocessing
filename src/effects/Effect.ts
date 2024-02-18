@@ -168,6 +168,6 @@ export abstract class Effect extends Pass {
 
 	}
 
-	render(): void {}
+	override render(): void {}
 
 }
