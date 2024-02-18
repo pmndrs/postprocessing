@@ -71,7 +71,15 @@ export class ShaderChunkExtensions {
 			"#include <pp_default_output_fragment>\n$1"
 		);
 
-		const shaders = [ShaderLib.basic, ShaderLib.phong, ShaderLib.points, ShaderLib.sprite];
+		const shaders = [
+			ShaderLib.basic,
+			ShaderLib.lambert,
+			ShaderLib.phong,
+			ShaderLib.matcap,
+			ShaderLib.points,
+			ShaderLib.dashed,
+			ShaderLib.sprite
+		];
 
 		for(const shader of shaders) {
 
