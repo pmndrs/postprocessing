@@ -22,7 +22,7 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 	static readonly EVENT_CHANGE = "change";
 
 	/**
-	 * A collection that maps {@link GBuffer} components to G-Buffer struct field names that are used in effects.
+	 * A collection that maps {@link GBuffer} components to G-Buffer texture configurations.
 	 */
 
 	readonly textureConfigs: Map<GBuffer | string, GBufferTextureConfig>;
