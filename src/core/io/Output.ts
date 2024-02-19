@@ -54,8 +54,10 @@ export class Output extends EventDispatcher<BaseEventMap> implements ShaderData 
 		defines.addEventListener(ObservableMap.EVENT_CHANGE, listener);
 		uniforms.addEventListener(ObservableMap.EVENT_CHANGE, listener);
 		renderTargets.addEventListener(ObservableMap.EVENT_CHANGE, listener);
+
 		renderTargets.addEventListener(ObservableMap.EVENT_ADD,
 			(e) => e.value.addEventListener(Resource.EVENT_CHANGE, listener));
+
 		renderTargets.addEventListener(ObservableMap.EVENT_DELETE,
 			(e) => e.value.removeEventListener(Resource.EVENT_CHANGE, listener));
 
