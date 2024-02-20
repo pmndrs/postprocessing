@@ -50,7 +50,7 @@ export class ScanlineEffect extends Effect {
 	/**
 	 * Constructs a new scanline effect.
 	 *
-	 * @param {Object} [options] - The options.
+	 * @param options - The options.
 	 */
 
 	constructor({
@@ -84,7 +84,7 @@ export class ScanlineEffect extends Effect {
 	set density(value: number) {
 
 		this._density = value;
-		this.updateCount(this.resolution.height);
+		this.onResolutionChange(this.resolution);
 
 	}
 
@@ -121,13 +121,7 @@ export class ScanlineEffect extends Effect {
 
 	protected override onResolutionChange(resolution: Resolution) {
 
-		this.updateCount(resolution.height);
-
-	}
-
-	private updateCount(height: number) {
-
-		this.input.uniforms.get("count")!.value = Math.round(height * this.density);
+		this.input.uniforms.get("count")!.value = Math.round(resolution.height * this.density);
 
 	}
 
