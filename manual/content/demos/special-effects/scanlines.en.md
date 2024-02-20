@@ -2,7 +2,7 @@
 layout: single
 collection: sections
 title: Scanlines
-draft: true
+draft: false
 menu:
   demos:
     parent: special-effects
