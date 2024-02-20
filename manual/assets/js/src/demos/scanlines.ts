@@ -84,10 +84,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Post Processing
 
 	const effect = new ScanlineEffect({ scrollSpeed: 0.006 });
-
 	effect.blendMode.opacity = 0.25;
 	effect.blendMode.blendFunction = new OverlayBlendFunction();
-
 	const effectPass = new EffectPass(effect, new ToneMappingEffect());
 
 	const pipeline = new RenderPipeline(renderer);
