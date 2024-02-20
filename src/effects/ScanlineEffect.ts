@@ -65,16 +65,6 @@ export class ScanlineEffect extends Effect {
 		uniforms.set("scrollSpeed", new Uniform(0.0));
 
 		/**
-		 * The original resolution.
-		 *
-		 * @type {Vector2}
-		 * @private
-		 */
-
-		// TODO: here
-		// this.resolution = new Vector2();
-
-		/**
 		 * The amount of scanlines, relative to the screen height.
 		 *
 		 * @type {Number}
@@ -172,8 +162,6 @@ export class ScanlineEffect extends Effect {
 
 	setSize(width: number, height: number) {
 
-		// TODO: here
-		// this.resolution.set(width, height);
 		this.input.uniforms.get("count")!.value = Math.round(height * this.density);
 
 	}
