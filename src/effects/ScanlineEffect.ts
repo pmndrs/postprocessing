@@ -59,21 +59,12 @@ export class ScanlineEffect extends Effect {
 		super("ScanlineEffectOptions");
 
 		this.fragmentShader = fragmentShader;
+		this.d = density;
+		this.scrollSpeed = scrollSpeed;
 
 		const uniforms = this.input.uniforms;
 		uniforms.set("count", new Uniform(0.0));
 		uniforms.set("scrollSpeed", new Uniform(0.0));
-
-		/**
-		 * The amount of scanlines, relative to the screen height.
-		 *
-		 * @type {Number}
-		 * @private
-		 */
-
-		this.d = density;
-
-		this.scrollSpeed = scrollSpeed;
 
 	}
 
