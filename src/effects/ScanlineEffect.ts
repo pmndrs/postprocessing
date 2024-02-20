@@ -84,7 +84,7 @@ export class ScanlineEffect extends Effect {
 	set density(value: number) {
 
 		this._density = value;
-		this.input.uniforms.get("count")!.value = Math.round(this.resolution.height * this.density);
+		this.updateCount(this.resolution.height);
 
 	}
 
@@ -121,7 +121,13 @@ export class ScanlineEffect extends Effect {
 
 	protected override onResolutionChange(resolution: Resolution) {
 
-		this.input.uniforms.get("count")!.value = Math.round(resolution.height * this.density);
+		this.updateCount(resolution.height);
+
+	}
+
+	private updateCount(height: number) {
+
+		this.input.uniforms.get("count")!.value = Math.round(height * this.density);
 
 	}
 
