@@ -10,9 +10,13 @@ import {
 } from "three";
 
 import {
+	ColorDepthEffect,
 	ClearPass,
+	EffectPass,
 	GeometryPass,
-	RenderPipeline
+	MixBlendFunction,
+	RenderPipeline,
+	ToneMappingEffect
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
@@ -31,8 +35,7 @@ function load(): Promise<Map<string, Texture>> {
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		cubeTextureLoader.load(Utils.getSkyboxUrls("space"), (t) => {
-
+		cubeTextureLoader.load(Utils.getSkyboxUrls("space", ".jpg"), (t) => {
 			t.colorSpace = SRGBColorSpace;
 			assets.set("sky", t);
 
@@ -65,8 +68,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 	settings.rotation.sensitivity = 2.2;
 	settings.rotation.damping = 0.05;
 	settings.translation.damping = 0.1;
-	controls.position.set(0, 0, 1);
-	controls.lookAt(0, 0, 0);
+	controls.position.set(0, 1.5, 10);
+	controls.lookAt(0, 1.35, 0);
 
 	// Scene, Lights, Objects
 
@@ -79,32 +82,32 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
+	const effect = new ColorDepthEffect();
+
+	effect.blendMode.blendFunction = new MixBlendFunction();
+	const effectPass = new EffectPass(effect, new ToneMappingEffect());
+	effectPass.dithering = true;
+
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.add(
 		new ClearPass(),
 		new GeometryPass(scene, camera, {
 			frameBufferType: HalfFloatType,
 			samples: 4
-		})
+		}),
+		effectPass
 	);
-
-	/*
-	const effect = new ColorDepthEffect({ bits: 21 });
-	effect.blendMode.blendFunction = new MixBlendFunction();
-	pipeline.addPass(new EffectPass(effect, new ToneMappingEffect()));
-	*/
 
 	// Settings
 
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
 	const fpsGraph = Utils.createFPSGraph(pane);
 
-	/*
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addBinding(effect, "bitDepth", { min: 1, max: 32, step: 1 });
+	folder.addBinding(effectPass, "dithering");
 
 	Utils.addBlendModeBindings(folder, effect.blendMode);
-	*/
 
 	// Resize Handler
 
