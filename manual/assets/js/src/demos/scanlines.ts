@@ -11,14 +11,18 @@ import {
 
 import {
 	ClearPass,
+	EffectPass,
 	GeometryPass,
-	RenderPipeline
+	OverlayBlendFunction,
+	RenderPipeline,
+	ToneMappingEffect
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
 import { SpatialControls } from "spatial-controls";
 import * as DefaultEnvironment from "../objects/DefaultEnvironment.js";
 import * as Utils from "../utils/index.js";
+import { ScanlineEffect } from "src/effects/ScanlineEffect.js";
 
 function load(): Promise<Map<string, Texture>> {
 
@@ -31,7 +35,7 @@ function load(): Promise<Map<string, Texture>> {
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		cubeTextureLoader.load(Utils.getSkyboxUrls("space"), (t) => {
+		cubeTextureLoader.load(Utils.getSkyboxUrls("space", ".jpg"), (t) => {
 
 			t.colorSpace = SRGBColorSpace;
 			assets.set("sky", t);
@@ -79,33 +83,33 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
+	const effect = new ScanlineEffect({ scrollSpeed: 0.006 });
+
+	effect.blendMode.opacity = 0.25;
+	effect.blendMode.blendFunction = new OverlayBlendFunction();
+
+	const effectPass = new EffectPass(effect, new ToneMappingEffect());
+
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.add(
 		new ClearPass(),
 		new GeometryPass(scene, camera, {
 			frameBufferType: HalfFloatType,
 			samples: 4
-		})
+		}),
+		effectPass
 	);
-
-	/*
-	const effect = new ScanlineEffect({ scrollSpeed: 0.006 });
-	effect.blendMode.opacity = 0.25;
-	pipeline.addPass(new EffectPass(effect, new ToneMappingEffect()));
-	*/
 
 	// Settings
 
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
 	const fpsGraph = Utils.createFPSGraph(pane);
 
-	/*
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addBinding(effect, "density", { min: 0, max: 2, step: 1e-3 });
 	folder.addBinding(effect, "scrollSpeed", { min: -0.02, max: 0.02, step: 1e-3 });
 
 	Utils.addBlendModeBindings(folder, effect.blendMode);
-	*/
 
 	// Resize Handler
 
