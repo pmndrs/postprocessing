@@ -1,8 +1,8 @@
 import { Uniform } from "three";
 import { Effect } from "./Effect.js";
+import { Resolution } from "../utils/Resolution.js";
 
 import fragmentShader from "./shaders/scanline.frag";
-import { Resolution } from "src/utils/Resolution.js";
 
 /**
  * ScanlineEffect options.
@@ -45,7 +45,7 @@ export class ScanlineEffect extends Effect {
 	 * @see {@link density}
 	 */
 
-	private d: number;
+	private _density: number;
 
 	/**
 	 * Constructs a new scanline effect.
@@ -66,7 +66,7 @@ export class ScanlineEffect extends Effect {
 		uniforms.set("count", new Uniform(0.0));
 		uniforms.set("scrollSpeed", new Uniform(0.0));
 
-		this.d = density;
+		this._density = density;
 		this.scrollSpeed = scrollSpeed;
 
 	}
@@ -77,19 +77,19 @@ export class ScanlineEffect extends Effect {
 
 	get density() {
 
-		return this.d;
+		return this._density;
 
 	}
 
 	set density(value: number) {
 
-		this.d = value;
-		this.updateCount(this.resolution.height);
+		this._density = value;
+		this.input.uniforms.get("count")!.value = Math.round(this.resolution.height * this.density);
 
 	}
 
 	/**
-	 * The scanline scroll speed. Default is 0 (disabled).
+	 * The scanline scroll speed.
 	 */
 
 	get scrollSpeed() {
@@ -119,25 +119,9 @@ export class ScanlineEffect extends Effect {
 
 	}
 
-	private updateCount(height: number) {
-
-		this.input.uniforms.get("count")!.value = Math.round(height * this.density);
-
-	}
-
 	protected override onResolutionChange(resolution: Resolution) {
 
-		this.updateCount(resolution.height);
-
-	}
-
-	/**
-	 * Updates the size of this pass.
-	 */
-
-	setSize(width: number, height: number) {
-
-		this.updateCount(height);
+		this.input.uniforms.get("count")!.value = Math.round(resolution.height * this.density);
 
 	}
 

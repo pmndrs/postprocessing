@@ -15,6 +15,7 @@ import {
 	GeometryPass,
 	OverlayBlendFunction,
 	RenderPipeline,
+	ScanlineEffect,
 	ToneMappingEffect
 } from "postprocessing";
 
@@ -22,7 +23,6 @@ import { Pane } from "tweakpane";
 import { SpatialControls } from "spatial-controls";
 import * as DefaultEnvironment from "../objects/DefaultEnvironment.js";
 import * as Utils from "../utils/index.js";
-import { ScanlineEffect } from "src/effects/ScanlineEffect.js";
 
 function load(): Promise<Map<string, Texture>> {
 
@@ -86,7 +86,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const effect = new ScanlineEffect({ scrollSpeed: 0.006 });
 	effect.blendMode.opacity = 0.25;
 	effect.blendMode.blendFunction = new OverlayBlendFunction();
-	const effectPass = new EffectPass(effect, new ToneMappingEffect());
 
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.add(
@@ -95,7 +94,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 			frameBufferType: HalfFloatType,
 			samples: 4
 		}),
-		effectPass
+		new EffectPass(effect, new ToneMappingEffect())
 	);
 
 	// Settings
