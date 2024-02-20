@@ -13,7 +13,7 @@ import { Resolution } from "src/utils/Resolution.js";
 export interface ScanlineEffectOptions {
 
 	/**
-	 * The Scanline density.
+	 * The scanline density.
 	 *
 	 * @defaultValue 1.25
 	 */
@@ -21,7 +21,7 @@ export interface ScanlineEffectOptions {
 	density?: number;
 
 	/**
-	 * The Scanline scroll speed.
+	 * The scanline scroll speed.
 	 *
 	 * @defaultValue 0.0
 	 */
@@ -35,12 +35,14 @@ export interface ScanlineEffectOptions {
  *
  * Based on an implementation by Georg 'Leviathan' Steinrohder (CC BY 3.0):
  * http://www.truevision3d.com/forums/showcase/staticnoise_colorblackwhite_scanline_shaders-t18698.0.html
+ *
+ * @category Effects
  */
 
 export class ScanlineEffect extends Effect {
 
 	/**
-	 * Effect density.
+	 * @see {@link density}
 	 */
 
 	private d: number;
@@ -83,31 +85,6 @@ export class ScanlineEffect extends Effect {
 
 		this.d = value;
 		this.updateCount(this.resolution.height);
-
-	}
-
-	/**
-	 * Returns the current scanline density.
-	 *
-	 * @deprecated Use density instead.
-	 * @return {Number} The scanline density.
-	 */
-
-	getDensity() {
-
-		return this.density;
-
-	}
-
-	/**
-	 * Sets the scanline density.
-	 *
-	 * @deprecated Use density instead.
-	 */
-
-	setDensity(value: number) {
-
-		this.density = value;
 
 	}
 
