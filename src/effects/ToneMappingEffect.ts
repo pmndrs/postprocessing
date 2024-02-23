@@ -65,6 +65,10 @@ export class ToneMappingEffect extends Effect {
 			// Use one of three's built-in tone mapping operators.
 			switch(value) {
 
+				case ToneMapping.LINEAR:
+					defines.set("toneMapping(texel)", "LinearToneMapping(texel)");
+					break;
+
 				case ToneMapping.REINHARD:
 					defines.set("toneMapping(texel)", "ReinhardToneMapping(texel)");
 					break;
