@@ -36,6 +36,7 @@ function load(): Promise<Map<string, Texture>> {
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
 		cubeTextureLoader.load(Utils.getSkyboxUrls("space", ".jpg"), (t) => {
+
 			t.colorSpace = SRGBColorSpace;
 			assets.set("sky", t);
 
@@ -83,10 +84,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Post Processing
 
 	const effect = new ColorDepthEffect();
-
 	effect.blendMode.blendFunction = new MixBlendFunction();
-	const effectPass = new EffectPass(effect, new ToneMappingEffect());
-	effectPass.dithering = true;
 
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.add(
@@ -95,7 +93,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 			frameBufferType: HalfFloatType,
 			samples: 4
 		}),
-		effectPass
+		new EffectPass(effect, new ToneMappingEffect())
 	);
 
 	// Settings
@@ -105,7 +103,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addBinding(effect, "bitDepth", { min: 1, max: 32, step: 1 });
-	folder.addBinding(effectPass, "dithering");
 
 	Utils.addBlendModeBindings(folder, effect.blendMode);
 
