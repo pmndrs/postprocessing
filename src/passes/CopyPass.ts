@@ -21,7 +21,7 @@ export class CopyPass extends Pass<CopyMaterial> {
 
 		super("CopyPass");
 
-		this.output.defaultBuffer = outputBuffer || this.createFramebuffer();
+		this.output.defaultBuffer = outputBuffer ?? this.createFramebuffer();
 		this.fullscreenMaterial = new CopyMaterial();
 
 	}
