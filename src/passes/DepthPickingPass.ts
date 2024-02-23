@@ -1,10 +1,8 @@
-import { UnsignedByteType, Vector2, Vector3, WebGLRenderTarget } from "three";
+import { Vector2, Vector3 } from "three";
 import { DepthCopyMode } from "../enums/DepthCopyMode.js";
-import { unpackRGBAToFloat } from "../utils/functions/packing.js";
 import { DepthCopyPass } from "./DepthCopyPass.js";
 
-const floatPixelBuffer = new Float32Array(4);
-const uint8PixelBuffer = new Uint8Array(4);
+const pixelBuffer = new Float32Array(4);
 
 /**
  * A depth picking pass.
@@ -52,18 +50,10 @@ export class DepthPickingPass extends DepthCopyPass {
 
 	private readDepthAt(x: number, y: number): number {
 
-		if(this.output.defaultBuffer?.value === null) {
-
-			throw new Error("Unable to read depth from the back buffer");
-
-		}
-
-		const renderTarget = this.output.defaultBuffer!.value as WebGLRenderTarget;
-		const packed = (renderTarget.texture.type === UnsignedByteType);
-		const pixelBuffer = packed ? uint8PixelBuffer : floatPixelBuffer;
+		const renderTarget = this.renderTarget;
 		this.renderer?.readRenderTargetPixels(renderTarget, x, y, 1, 1, pixelBuffer);
 
-		return packed ? unpackRGBAToFloat(uint8PixelBuffer) : floatPixelBuffer[0];
+		return pixelBuffer[0];
 
 	}
 
@@ -98,10 +88,10 @@ export class DepthPickingPass extends DepthCopyPass {
 				// The specific depth value needs to be copied before it can be read.
 				this.callback = resolve;
 
-			} else if(this.output.defaultBuffer?.value !== null) {
+			} else {
 
 				// The depth values from the current or last frame are already available.
-				const renderTarget = this.output.defaultBuffer!.value as WebGLRenderTarget;
+				const renderTarget = this.renderTarget;
 				const texelPosition = this.fullscreenMaterial.texelPosition;
 				const x = Math.round(texelPosition.x * renderTarget.width);
 				const y = Math.round(texelPosition.y * renderTarget.height);

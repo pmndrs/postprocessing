@@ -1,6 +1,7 @@
-import { Texture } from "three";
+import { Texture, WebGLRenderTarget } from "three";
 import { Pass } from "../core/Pass.js";
 import { LuminanceMaterial } from "../materials/LuminanceMaterial.js";
+import { Resolution } from "../utils/Resolution.js";
 
 /**
  * A luminance pass.
@@ -11,6 +12,12 @@ import { LuminanceMaterial } from "../materials/LuminanceMaterial.js";
 export class LuminancePass extends Pass<LuminanceMaterial> {
 
 	/**
+	 * Identifies the luminance output buffer.
+	 */
+
+	private static readonly BUFFER_LUMINANCE = "BUFFER_LUMINANCE";
+
+	/**
 	 * Constructs a new luminance pass.
 	 */
 
@@ -18,8 +25,24 @@ export class LuminancePass extends Pass<LuminanceMaterial> {
 
 		super("LuminancePass");
 
-		this.output.defaultBuffer = this.createFramebuffer();
+		this.renderTarget = this.createFramebuffer();
 		this.fullscreenMaterial = new LuminanceMaterial();
+
+	}
+
+	/**
+	 * The luminance render target.
+	 */
+
+	private get renderTarget(): WebGLRenderTarget {
+
+		return this.output.buffers.get(LuminancePass.BUFFER_LUMINANCE)!.value as WebGLRenderTarget;
+
+	}
+
+	private set renderTarget(value: WebGLRenderTarget) {
+
+		this.output.setBuffer(LuminancePass.BUFFER_LUMINANCE, value);
 
 	}
 
@@ -27,31 +50,36 @@ export class LuminancePass extends Pass<LuminanceMaterial> {
 	 * The output texture.
 	 */
 
-	get texture(): Texture | null {
+	get texture(): Texture {
 
-		return this.output.defaultBuffer?.texture.value ?? null;
+		return this.renderTarget.texture;
 
 	}
 
 	protected override onInputChange(): void {
 
 		const inputTexture = this.input.defaultBuffer?.value ?? null;
-		const outputTexture = this.texture;
 
-		if(inputTexture === null || outputTexture === null) {
+		if(inputTexture === null) {
 
 			return;
 
 		}
 
-		outputTexture.type = inputTexture.type;
-		outputTexture.colorSpace = inputTexture.colorSpace;
+		this.texture.type = inputTexture.type;
+		this.texture.colorSpace = inputTexture.colorSpace;
+
+	}
+
+	protected override onResolutionChange(resolution: Resolution): void {
+
+		this.renderTarget.setSize(resolution.width, resolution.height);
 
 	}
 
 	render(): void {
 
-		this.renderer?.setRenderTarget(this.output.defaultBuffer?.value ?? null);
+		this.renderer?.setRenderTarget(this.renderTarget);
 		this.renderFullscreen();
 
 	}

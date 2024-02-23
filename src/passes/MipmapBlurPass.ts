@@ -16,6 +16,12 @@ import { Resolution } from "../utils/Resolution.js";
 export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMaterial> {
 
 	/**
+	 * Identifies the main output buffer.
+	 */
+
+	private static readonly BUFFER_MAIN = "UPSAMPLING.MIPMAP0";
+
+	/**
 	 * The mipmaps used for downsampling.
 	 */
 
@@ -47,9 +53,8 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 		super("MipmapBlurPass");
 
-		const renderTarget = new WebGLRenderTarget(1, 1, { depthBuffer: false });
-		renderTarget.texture.name = "Upsampling.Mipmap0";
-		this.output.defaultBuffer = renderTarget;
+		this.renderTarget = this.createFramebuffer();
+		this.renderTarget.texture.name = "Upsampling.Mipmap0";
 
 		this.downsamplingMipmaps = [];
 		this.upsamplingMipmaps = [];
@@ -57,15 +62,33 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 		this.downsamplingMaterial = new DownsamplingMaterial();
 		this.upsamplingMaterial = new UpsamplingMaterial();
 
+		this.levels = 8;
+
+	}
+
+	/**
+	 * The luminance render target.
+	 */
+
+	private get renderTarget(): WebGLRenderTarget {
+
+		return this.output.buffers.get(MipmapBlurPass.BUFFER_MAIN)!.value as WebGLRenderTarget;
+
+	}
+
+	private set renderTarget(value: WebGLRenderTarget) {
+
+		this.output.setBuffer(MipmapBlurPass.BUFFER_MAIN, value);
+
 	}
 
 	/**
 	 * A texture that contains the blurred result.
 	 */
 
-	get texture(): Texture | null {
+	get texture(): Texture {
 
-		return this.output.defaultBuffer?.texture.value ?? null;
+		return this.renderTarget.texture;
 
 	}
 
@@ -83,16 +106,18 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 	set levels(value: number) {
 
-		if(this.levels === value || this.output.defaultBuffer === null) {
+		if(this.levels === value) {
 
 			return;
 
 		}
 
-		const renderTarget = this.output.defaultBuffer.value as WebGLRenderTarget;
+		const renderTarget = this.renderTarget;
+		const output = this.output;
 
 		this.dispose();
 		this.disposables.clear();
+		output.buffers.clear();
 
 		this.downsamplingMipmaps = [];
 		this.upsamplingMipmaps = [];
@@ -103,10 +128,12 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 			mipmap.texture.name = "Downsampling.Mipmap" + i;
 			this.downsamplingMipmaps.push(mipmap);
 			this.disposables.add(mipmap);
+			output.setBuffer(mipmap.texture.name.toUpperCase(), mipmap);
 
 		}
 
 		this.upsamplingMipmaps.push(renderTarget);
+		output.setBuffer(MipmapBlurPass.BUFFER_MAIN, renderTarget);
 
 		for(let i = 1, l = value - 1; i < l; ++i) {
 
@@ -114,6 +141,7 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 			mipmap.texture.name = "Upsampling.Mipmap" + i;
 			this.upsamplingMipmaps.push(mipmap);
 			this.disposables.add(mipmap);
+			output.setBuffer(mipmap.texture.name.toUpperCase(), mipmap);
 
 		}
 
@@ -123,6 +151,8 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 	/**
 	 * The blur radius.
+	 *
+	 * @defaultValue 0.85
 	 */
 
 	get radius(): number {
@@ -134,28 +164,6 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 	set radius(value: number) {
 
 		this.upsamplingMaterial.radius = value;
-
-	}
-
-	protected override onResolutionChange(resolution: Resolution): void {
-
-		let w = resolution.width;
-		let h = resolution.height;
-
-		for(let i = 0, l = this.downsamplingMipmaps.length; i < l; ++i) {
-
-			w = Math.round(w * 0.5);
-			h = Math.round(h * 0.5);
-
-			this.downsamplingMipmaps[i].setSize(w, h);
-
-			if(i < this.upsamplingMipmaps.length) {
-
-				this.upsamplingMipmaps[i].setSize(w, h);
-
-			}
-
-		}
 
 	}
 
@@ -191,6 +199,28 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 		this.downsamplingMaterial.needsUpdate = true;
 		this.upsamplingMaterial.needsUpdate = true;
+
+	}
+
+	protected override onResolutionChange(resolution: Resolution): void {
+
+		let w = resolution.width;
+		let h = resolution.height;
+
+		for(let i = 0, l = this.downsamplingMipmaps.length; i < l; ++i) {
+
+			w = Math.round(w * 0.5);
+			h = Math.round(h * 0.5);
+
+			this.downsamplingMipmaps[i].setSize(w, h);
+
+			if(i < this.upsamplingMipmaps.length) {
+
+				this.upsamplingMipmaps[i].setSize(w, h);
+
+			}
+
+		}
 
 	}
 

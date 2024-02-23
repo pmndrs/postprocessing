@@ -13,6 +13,12 @@ import { Resolution } from "../utils/Resolution.js";
 export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 
 	/**
+	 * Identifies the depth output buffer.
+	 */
+
+	private static readonly BUFFER_DEPTH = "BUFFER_DEPTH";
+
+	/**
 	 * Constructs a new depth downsampling pass.
 	 */
 
@@ -24,14 +30,38 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 		this.input.gBuffer.add(GBuffer.DEPTH);
 		this.input.gBuffer.add(GBuffer.NORMAL);
 
-		const renderTarget = new WebGLRenderTarget(1, 1, {
+		this.renderTarget = new WebGLRenderTarget(1, 1, {
 			minFilter: NearestFilter,
 			magFilter: NearestFilter,
 			depthBuffer: false,
 			type: FloatType
 		});
 
-		this.output.defaultBuffer = renderTarget;
+	}
+
+	/**
+	 * The depth render target.
+	 */
+
+	private get renderTarget(): WebGLRenderTarget {
+
+		return this.output.buffers.get(DepthDownsamplingPass.BUFFER_DEPTH)!.value as WebGLRenderTarget;
+
+	}
+
+	private set renderTarget(value: WebGLRenderTarget) {
+
+		this.output.setBuffer(DepthDownsamplingPass.BUFFER_DEPTH, value);
+
+	}
+
+	/**
+	 * The output texture.
+	 */
+
+	get texture(): Texture {
+
+		return this.renderTarget.texture;
 
 	}
 
@@ -64,7 +94,7 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 
 	render(): void {
 
-		this.renderer?.setRenderTarget(this.output.defaultBuffer?.value ?? null);
+		this.renderer?.setRenderTarget(this.renderTarget);
 		this.renderFullscreen();
 
 	}
