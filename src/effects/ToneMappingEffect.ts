@@ -85,6 +85,10 @@ export class ToneMappingEffect extends Effect {
 					defines.set("toneMapping(texel)", "AgXToneMapping(texel)");
 					break;
 
+				case ToneMapping.NEUTRAL:
+					defines.set("toneMapping(texel)", "NeutralToneMapping(texel)");
+					break;
+
 				default:
 					defines.set("toneMapping(texel)", "texel");
 					break;

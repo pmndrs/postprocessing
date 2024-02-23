@@ -41,6 +41,14 @@ export enum ToneMapping {
 	 * @see https://github.com/EaryChow/AgX
 	 */
 
-	AGX
+	AGX,
+
+	/**
+	 * Neutral tone mapping by Khronos.
+	 *
+	 * @see https://modelviewer.dev/examples/tone-mapping
+	 */
+
+	NEUTRAL
 
 }
