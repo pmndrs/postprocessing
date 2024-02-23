@@ -9,14 +9,12 @@
 	flex-direction: column;
 	height: 100vh;
 	left: 0;
-	max-width: 400px;
-	min-width: 320px;
 	pointer-events: none;
 	position: absolute;
 	top: 0;
 	transform: translateX(-100%);
 	transition: transform durations.$short;
-	width: 15%;
+	width: 320px;
 	z-index: layers.$hud + 1;
 	h1, h2, h3 {
 		color: var(--sidebar-heading-color);
