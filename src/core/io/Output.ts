@@ -89,29 +89,7 @@ export class Output extends EventDispatcher<BaseEventMap> implements ShaderData 
 
 	set defaultBuffer(value: RenderTargetResource | WebGLRenderTarget | WebGLMultipleRenderTargets | null) {
 
-		if(value instanceof RenderTargetResource) {
-
-			if(this.renderTargets.get(Output.BUFFER_DEFAULT) !== value) {
-
-				this.renderTargets.set(Output.BUFFER_DEFAULT, value);
-
-			}
-
-		} else {
-
-			const resource = this.defaultBuffer;
-
-			if(resource !== null) {
-
-				resource.value = value;
-
-			} else {
-
-				this.renderTargets.set(Output.BUFFER_DEFAULT, new RenderTargetResource(value));
-
-			}
-
-		}
+		this.setBuffer(Output.BUFFER_DEFAULT, value);
 
 	}
 
@@ -135,6 +113,43 @@ export class Output extends EventDispatcher<BaseEventMap> implements ShaderData 
 			outputBuffer.texture.type;
 
 		return type !== UnsignedByteType;
+
+	}
+
+	/**
+	 * Sets a buffer.
+	 *
+	 * A new resource will be created if the buffer doesn't already exist.
+	 *
+	 * @param key - A buffer key.
+	 * @param value - The buffer.
+	 */
+
+	setBuffer(key: string, value: RenderTargetResource | WebGLRenderTarget | WebGLMultipleRenderTargets | null): void {
+
+		if(value instanceof RenderTargetResource) {
+
+			if(this.renderTargets.get(key) !== value) {
+
+				this.renderTargets.set(key, value);
+
+			}
+
+		} else {
+
+			const resource = this.defaultBuffer;
+
+			if(resource !== null) {
+
+				resource.value = value;
+
+			} else {
+
+				this.renderTargets.set(key, new RenderTargetResource(value));
+
+			}
+
+		}
 
 	}
 

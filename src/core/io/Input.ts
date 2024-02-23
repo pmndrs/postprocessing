@@ -155,11 +155,36 @@ export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
 
 	set defaultBuffer(value: TextureResource | Texture | null) {
 
+		this.setBuffer(Input.BUFFER_DEFAULT, value);
+
+	}
+
+	/**
+	 * Indicates whether the default buffer uses high precision.
+	 */
+
+	get frameBufferPrecisionHigh(): boolean {
+
+		return (this.defaultBuffer?.value?.type !== UnsignedByteType);
+
+	}
+
+	/**
+	 * Sets a buffer.
+	 *
+	 * A new resource will be created if the buffer doesn't already exist.
+	 *
+	 * @param key - A buffer key.
+	 * @param value - The buffer.
+	 */
+
+	setBuffer(key: string, value: TextureResource | Texture | null): void {
+
 		if(value instanceof TextureResource) {
 
-			if(this.textures.get(Input.BUFFER_DEFAULT) !== value) {
+			if(this.textures.get(key) !== value) {
 
-				this.textures.set(Input.BUFFER_DEFAULT, value);
+				this.textures.set(key, value);
 
 			}
 
@@ -173,21 +198,11 @@ export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
 
 			} else {
 
-				this.textures.set(Input.BUFFER_DEFAULT, new TextureResource(value));
+				this.textures.set(key, new TextureResource(value));
 
 			}
 
 		}
-
-	}
-
-	/**
-	 * Indicates whether the default buffer uses high precision.
-	 */
-
-	get frameBufferPrecisionHigh(): boolean {
-
-		return (this.defaultBuffer?.value?.type !== UnsignedByteType);
 
 	}
 
