@@ -48,6 +48,8 @@ export class UpsamplingMaterial extends FullscreenMaterial {
 
 	/**
 	 * The blur radius.
+	 *
+	 * @defaultValue 0.85
 	 */
 
 	get radius(): number {
