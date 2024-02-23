@@ -57,10 +57,10 @@ export class ColorDepthEffect extends Effect {
 	}
 
 	/**
-	* The virtual amount of color bits.
-	*
-	* Each color channel effectively uses a fourth of the total amount of bits. Alpha remains unaffected.
-	*/
+	 * The virtual amount of color bits.
+	 *
+	 * Each color channel effectively uses a fourth of the total amount of bits. Alpha remains unaffected.
+	 */
 
 	get bitDepth(): number {
 
