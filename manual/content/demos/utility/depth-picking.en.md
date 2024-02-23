@@ -2,7 +2,7 @@
 layout: single
 collection: sections
 title: Depth Picking
-draft: true
+draft: false
 menu:
   demos:
     parent: utility
@@ -32,3 +32,6 @@ const worldPosition = ndc.unproject(camera);
 If the depth picking mode is set to `DepthCopyMode.SINGLE`, only one depth value can be picked per frame. Calling the `readDepth` method multiple times per frame will then overwrite the picking coordinates and unresolved promises will be abandoned. Depth values are returned immediately when using `DepthCopyMode.FULL`, but this mode requires more bandwidth.
 
 ### External Resources
+
+* https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/readPixels
+* https://carmencincotti.com/2022-11-28/from-clip-space-to-ndc-space/
