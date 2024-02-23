@@ -13,7 +13,6 @@ import {
 	ClearPass,
 	EffectPass,
 	GeometryPass,
-	OverlayBlendFunction,
 	RenderPipeline,
 	ScanlineEffect,
 	ToneMappingEffect
@@ -69,8 +68,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 	settings.rotation.sensitivity = 2.2;
 	settings.rotation.damping = 0.05;
 	settings.translation.damping = 0.1;
-	controls.position.set(0, 0, 1);
-	controls.lookAt(0, 0, 0);
+	controls.position.set(0, 1.5, 10);
+	controls.lookAt(0, 1.35, 0);
 
 	// Scene, Lights, Objects
 
@@ -83,9 +82,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
-	const effect = new ScanlineEffect({ scrollSpeed: 0.006 });
+	const effect = new ScanlineEffect();
 	effect.blendMode.opacity = 0.25;
-	effect.blendMode.blendFunction = new OverlayBlendFunction();
 
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.add(
