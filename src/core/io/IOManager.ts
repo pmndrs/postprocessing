@@ -162,8 +162,7 @@ export class IOManager {
 
 			if(pass.output.defaultBuffer === null) {
 
-				// No output resource has been set yet; default buffer is already null.
-				return;
+				continue;
 
 			}
 
