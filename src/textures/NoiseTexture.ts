@@ -73,12 +73,11 @@ export class NoiseTexture extends DataTexture {
 	/**
 	 * Constructs a new noise texture.
 	 *
-	 * Supported texture formats: `RGBAFormat` (default), `LuminanceFormat`.
-	 * Supported texture formats (WebGL 2): `RedFormat`, `RGFormat`.
+	 * Supported texture formats: `RGBAFormat`, `LuminanceFormat`, `RedFormat`, `RGFormat`.
 	 *
 	 * @param width - The width.
 	 * @param height - The height.
-	 * @param format - The texture format.
+	 * @param format - The texture format. Default is `RGBAFormat`.
 	 * @param type - The texture type.
 	 */
 
