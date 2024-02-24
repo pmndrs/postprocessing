@@ -2,13 +2,13 @@
 
 uniform float whitePoint;
 
-#if TONE_MAPPING_MODE == 1 || TONE_MAPPING_MODE == 2
+#if TONE_MAPPING_MODE == 2 || TONE_MAPPING_MODE == 3
 
 	// Reinhard 2
 
 	uniform float middleGrey;
 
-	#if TONE_MAPPING_MODE == 2
+	#if TONE_MAPPING_MODE == 3
 
 		uniform lowp sampler2D luminanceBuffer;
 
@@ -25,7 +25,7 @@ uniform float whitePoint;
 		// Calculate the luminance of the current pixel.
 		float l = luminance(color);
 
-		#if TONE_MAPPING_MODE == 2
+		#if TONE_MAPPING_MODE == 3
 
 			// Get the average luminance from the adaptive 1x1 buffer.
 			float lumAvg = unpackRGBAToFloat(texture2D(luminanceBuffer, vec2(0.5)));
@@ -44,7 +44,7 @@ uniform float whitePoint;
 
 	}
 
-#elif TONE_MAPPING_MODE == 3
+#elif TONE_MAPPING_MODE == 4
 
 	// Uncharted 2: http://filmicworlds.com/blog/filmic-tonemapping-operators
 
@@ -72,11 +72,11 @@ uniform float whitePoint;
 
 void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
 
-	#if TONE_MAPPING_MODE == 1 || TONE_MAPPING_MODE == 2
+	#if TONE_MAPPING_MODE == 2 || TONE_MAPPING_MODE == 3
 
 		outputColor = vec4(Reinhard2ToneMapping(inputColor.rgb), inputColor.a);
 
-	#elif TONE_MAPPING_MODE == 3
+	#elif TONE_MAPPING_MODE == 4
 
 		outputColor = vec4(Uncharted2ToneMapping(inputColor.rgb), inputColor.a);
 

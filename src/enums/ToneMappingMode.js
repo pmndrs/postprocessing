@@ -2,6 +2,7 @@
  * A tone mapping mode enumeration.
  *
  * @type {Object}
+ * @property {Number} LINEAR - No tone mapping, only exposure.
  * @property {Number} REINHARD - Simple Reinhard tone mapping.
  * @property {Number} REINHARD2 - Modified Reinhard tone mapping.
  * @property {Number} REINHARD2_ADAPTIVE - Simulates the optic nerve responding to the amount of light it is receiving.
@@ -12,11 +13,12 @@
  */
 
 export const ToneMappingMode = {
-	REINHARD: 0,
-	REINHARD2: 1,
-	REINHARD2_ADAPTIVE: 2,
-	UNCHARTED2: 3,
-	OPTIMIZED_CINEON: 4,
-	ACES_FILMIC: 5,
-	AGX: 6
+	LINEAR: 0,
+	REINHARD: 1,
+	REINHARD2: 2,
+	REINHARD2_ADAPTIVE: 3,
+	UNCHARTED2: 4,
+	OPTIMIZED_CINEON: 5,
+	ACES_FILMIC: 6,
+	AGX: 7
 };
