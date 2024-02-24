@@ -2,12 +2,6 @@ varying vec2 vUv;
 varying vec2 vUv0;
 varying vec2 vUv1;
 
-#if THREE_REVISION < 143
-
-	#define luminance(v) linearToRelativeLuminance(v)
-
-#endif
-
 #if EDGE_DETECTION_MODE != 0
 
 	varying vec2 vUv2;

@@ -1,8 +1,6 @@
-import { BasicDepthPacking, UnsignedByteType, WebGLRenderTarget } from "three";
+import { BasicDepthPacking, SRGBColorSpace, UnsignedByteType, WebGLRenderTarget } from "three";
 import { Resolution } from "../core/index.js";
-import { SRGBColorSpace } from "../enums/index.js";
 import { CopyMaterial, BoxBlurMaterial } from "../materials/index.js";
-import { getOutputColorSpace, setTextureColorSpace } from "../utils/index.js";
 import { Pass } from "./Pass.js";
 
 /**
@@ -194,10 +192,10 @@ export class BoxBlurPass extends Pass {
 
 				this.fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
-			} else if(getOutputColorSpace(renderer) === SRGBColorSpace) {
+			} else if(renderer.colorSpace === SRGBColorSpace) {
 
-				setTextureColorSpace(this.renderTargetA.texture, SRGBColorSpace);
-				setTextureColorSpace(this.renderTargetB.texture, SRGBColorSpace);
+				this.renderTargetA.texture.colorSpace = SRGBColorSpace;
+				this.renderTargetB.texture.colorSpace = SRGBColorSpace;
 
 			}
 

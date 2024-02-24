@@ -11,12 +11,6 @@
  * THE USE OF OR INABILITY TO USE THIS SOFTWARE, EVEN IF NVIDIA HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
  */
 
-#if THREE_REVISION < 143
-
-	#define luminance(v) linearToRelativeLuminance(v)
-
-#endif
-
 #define QUALITY(q) ((q) < 5 ? 1.0 : ((q) > 5 ? ((q) < 10 ? 2.0 : ((q) < 11 ? 4.0 : 8.0)) : 1.5))
 #define ONE_OVER_TWELVE 0.08333333333333333
 

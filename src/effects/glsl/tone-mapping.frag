@@ -1,11 +1,5 @@
 #include <tonemapping_pars_fragment>
 
-#if THREE_REVISION < 143
-
-	#define luminance(v) linearToRelativeLuminance(v)
-
-#endif
-
 uniform float whitePoint;
 
 #if TONE_MAPPING_MODE == 1 || TONE_MAPPING_MODE == 2

@@ -4,14 +4,13 @@ import {
 	HalfFloatType,
 	LinearFilter,
 	NearestFilter,
-	sRGBEncoding,
+	SRGBColorSpace,
 	Uniform,
 	Vector3
 } from "three";
 
 import { BlendFunction } from "../enums/index.js";
 import { LookupTexture } from "../textures/index.js";
-import { encodingToColorSpace } from "../utils/index.js";
 import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/lut-3d.frag";
@@ -41,15 +40,13 @@ export class LUT3DEffect extends Effect {
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SRC] - The blend function of this effect.
 	 * @param {Boolean} [options.tetrahedralInterpolation=false] - Enables or disables tetrahedral interpolation.
-	 * @param {TextureEncoding} [options.inputEncoding=sRGBEncoding] - Deprecated.
 	 * @param {ColorSpace} [options.inputColorSpace=SRGBColorSpace] - The input color space.
 	 */
 
 	constructor(lut, {
 		blendFunction = BlendFunction.SRC,
 		tetrahedralInterpolation = false,
-		inputEncoding = sRGBEncoding,
-		inputColorSpace
+		inputColorSpace = SRGBColorSpace
 	} = {}) {
 
 		super("LUT3DEffect", fragmentShader, {
@@ -64,7 +61,7 @@ export class LUT3DEffect extends Effect {
 		});
 
 		this.tetrahedralInterpolation = tetrahedralInterpolation;
-		this.inputColorSpace = inputColorSpace || encodingToColorSpace.get(inputEncoding);
+		this.inputColorSpace = inputColorSpace;
 		this.lut = lut;
 
 	}

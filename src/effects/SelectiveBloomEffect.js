@@ -4,14 +4,14 @@ import {
 	NotEqualDepth,
 	EqualDepth,
 	RGBADepthPacking,
+	SRGBColorSpace,
 	WebGLRenderTarget
 } from "three";
 
 import { Selection } from "../core/index.js";
-import { DepthTestStrategy, EffectAttribute, SRGBColorSpace } from "../enums/index.js";
+import { DepthTestStrategy, EffectAttribute } from "../enums/index.js";
 import { DepthMaskMaterial } from "../materials/index.js";
 import { ClearPass, DepthPass, ShaderPass } from "../passes/index.js";
-import { getOutputColorSpace, setTextureColorSpace } from "../utils/index.js";
 import { BloomEffect } from "./BloomEffect.js";
 
 /**
@@ -343,9 +343,9 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 			this.renderTargetMasked.texture.type = frameBufferType;
 
-			if(getOutputColorSpace(renderer) === SRGBColorSpace) {
+			if(renderer.colorSpace === SRGBColorSpace) {
 
-				setTextureColorSpace(this.renderTargetMasked.texture, SRGBColorSpace);
+				this.renderTargetMasked.texture.colorSpace = SRGBColorSpace;
 
 			}
 

@@ -1,9 +1,9 @@
-import { BasicDepthPacking, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
+import { BasicDepthPacking, SRGBColorSpace, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
 import { Resolution } from "../core/index.js";
-import { ColorChannel, EffectAttribute, KernelSize, MaskFunction, SRGBColorSpace } from "../enums/index.js";
+import { ColorChannel, EffectAttribute, KernelSize, MaskFunction } from "../enums/index.js";
 import { BokehMaterial, CircleOfConfusionMaterial, MaskMaterial } from "../materials/index.js";
 import { KawaseBlurPass, ShaderPass } from "../passes/index.js";
-import { getOutputColorSpace, setTextureColorSpace, viewZToOrthographicDepth } from "../utils/index.js";
+import { viewZToOrthographicDepth } from "../utils/index.js";
 import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/depth-of-field.frag";
@@ -565,12 +565,12 @@ export class DepthOfFieldEffect extends Effect {
 			this.renderTargetFar.texture.type = frameBufferType;
 			this.renderTargetMasked.texture.type = frameBufferType;
 
-			if(getOutputColorSpace(renderer) === SRGBColorSpace) {
+			if(renderer.colorSpace === SRGBColorSpace) {
 
-				setTextureColorSpace(this.renderTarget.texture, SRGBColorSpace);
-				setTextureColorSpace(this.renderTargetNear.texture, SRGBColorSpace);
-				setTextureColorSpace(this.renderTargetFar.texture, SRGBColorSpace);
-				setTextureColorSpace(this.renderTargetMasked.texture, SRGBColorSpace);
+				this.renderTarget.texture.colorSpace = SRGBColorSpace;
+				this.renderTargetNear.texture.colorSpace = SRGBColorSpace;
+				this.renderTargetFar.texture.colorSpace = SRGBColorSpace;
+				this.renderTargetMasked.texture.colorSpace = SRGBColorSpace;
 
 			}
 
