@@ -6,7 +6,6 @@ draft: true
 menu:
   demos:
     parent: anti-aliasing
-    weight: 20
 script: smaa
 ---
 

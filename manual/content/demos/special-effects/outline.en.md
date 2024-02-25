@@ -1,15 +1,14 @@
 ---
 layout: single
 collection: sections
-title: Grid
+title: Outline
 draft: true
 menu:
   demos:
     parent: special-effects
-    weight: 60
-script: grid
+script: outline
 ---
 
-# Grid
+# Outline
 
 ### External Resources

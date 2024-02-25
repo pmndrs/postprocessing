@@ -1,15 +1,14 @@
 ---
 layout: single
 collection: sections
-title: God Rays
+title: Volumetric Light Scattering
 draft: true
 menu:
   demos:
     parent: light-shadow
-    weight: 20
-script: god-rays
+script: vls
 ---
 
-# God Rays
+# Volumetric Light Scattering
 
 ### External Resources

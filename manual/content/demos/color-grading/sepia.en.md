@@ -6,7 +6,6 @@ draft: true
 menu:
   demos:
     parent: color-grading
-    weight: 50
 script: sepia
 ---
 

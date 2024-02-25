@@ -6,7 +6,6 @@ draft: true
 menu:
   demos:
     parent: special-effects
-    weight: 30
 script: depth-of-field
 ---
 

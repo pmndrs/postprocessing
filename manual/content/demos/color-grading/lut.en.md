@@ -6,7 +6,6 @@ draft: true
 menu:
   demos:
     parent: color-grading
-    weight: 40
 script: lut
 ---
 

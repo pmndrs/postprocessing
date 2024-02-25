@@ -6,7 +6,6 @@ draft: false
 menu:
   demos:
     parent: special-effects
-    weight: 20
 script: color-depth
 ---
 

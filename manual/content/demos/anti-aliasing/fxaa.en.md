@@ -6,7 +6,6 @@ draft: false
 menu:
   demos:
     parent: anti-aliasing
-    weight: 30
 script: fxaa
 ---
 

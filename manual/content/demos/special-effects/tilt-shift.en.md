@@ -6,7 +6,6 @@ draft: true
 menu:
   demos:
     parent: special-effects
-    weight: 90
 script: tilt-shift
 ---
 

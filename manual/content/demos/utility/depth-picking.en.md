@@ -6,7 +6,6 @@ draft: false
 menu:
   demos:
     parent: utility
-    weight: 30
 script: depth-picking
 ---
 
@@ -33,5 +32,5 @@ If the depth picking mode is set to `DepthCopyMode.SINGLE`, only one depth value
 
 ### External Resources
 
-* https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/readPixels
-* https://carmencincotti.com/2022-11-28/from-clip-space-to-ndc-space/
+* [WebGLRenderingContext.readPixels](https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/readPixels)
+* [From clip space to NDC space](https://carmencincotti.com/2022-11-28/from-clip-space-to-ndc-space/)
