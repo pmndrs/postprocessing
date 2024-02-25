@@ -21,7 +21,7 @@ __shader.frag__
 ```glsl
 uniform vec3 weights;
 
-vec4 mainImage(in vec4 inputColor, in vec2 uv, in GData data) {
+vec4 mainImage(const in vec4 inputColor, const in vec2 uv, const in GData gData) {
 
 	return vec4(inputColor.rgb * weights, inputColor.a);
 
@@ -34,18 +34,19 @@ __CustomEffect.js__
 import { Uniform, Vector3 } from "three";
 import { Effect } from "postprocessing";
 
-// Use a bundler plugin like esbuild-plugin-glsl to import shaders as text.
+// Tip: Use a bundler plugin like esbuild-plugin-glsl to import shaders as text.
 import fragmentShader from "./shader.frag";
 
 export class CustomEffect extends Effect {
 
 	constructor() {
 
-		super("CustomEffect", fragmentShader, {
-			uniforms: new Map([
-				["weights", new Uniform(new Vector3())]
-			])
-		});
+		super("CustomEffect");
+
+		this.fragmentShader = fragmentShader;
+
+		const uniforms = this.input.uniforms;
+		uniforms.set("weights", new Uniform(new Vector3()));
 
 	}
 
@@ -77,15 +78,17 @@ void mainSupport(in vec2 uv);
 
 ### Geometry Data
 
-Effects have access to the geometry data of the current fragment via the `data` parameter of the `mainImage` function. The `EffectPass` detects whether an effect reads a value from this struct and only fetches the relevant data from the respective textures when it's actually needed. If you wish to sample depth at another coordinate, use the predefined function `float readDepth(in vec2 uv)`. To calculate the view Z based on depth, you can use the predefined function `float getViewZ(in float depth)`. The `GData` is defined as follows:
+Effects have access to the geometry data of the current fragment via the `data` parameter of the `mainImage` function. The `EffectPass` detects whether an effect reads a value from this struct and only fetches the relevant data from the respective textures when it's actually needed. If you wish to sample depth at another coordinate, use the predefined function `float readDepth(vec2 uv)`. To calculate the view Z based on depth, you can use the predefined function `float getViewZ(float depth)`. The `GData` is defined as follows:
 
 ```glsl
 struct GData {
-	vec3 position;
+	vec4 color;
+	float depth
 	vec3 normal;
-	float depth;
+	vec3 orm;
+	vec3 emission;
+	vec3 velocity;
 	float luminance;
-	float roughness;
 }
 ```
 
@@ -109,8 +112,10 @@ The fragment shader has access to the following additional uniforms:
 struct GBuffer {
 	sampler2D color;
 	sampler2D depth;
-	sampler2D position;
 	sampler2D normal;
+	sampler2D orm;
+	sampler2D emission;
+	sampler2D velocity;
 }
 
 uniform GBuffer gBuffer;
@@ -137,21 +142,3 @@ _Effects may define custom uniforms, varyings, functions and preprocessor macros
 
 Furthermore, the shader chunks [common](https://github.com/mrdoob/three.js/blob/dev/src/renderers/shaders/ShaderChunk/common.glsl.js)
 and [packing](https://github.com/mrdoob/three.js/blob/dev/src/renderers/shaders/ShaderChunk/packing.glsl.js) are included in the fragment shader by default. The functions `packDepthToRGBA(v)` and `unpackRGBAToDepth(v)` are also available under the aliases `packFloatToRGBA(v)` and `unpackRGBAToFloat(v)`.
-
-## WebGL Extensions
-
-Effects can enable WebGL 1 shader extensions via the `extensions` constructor option. The available [WebGLExtensions]() are `DERIVATIVES`, `FRAG_DEPTH`, `DRAW_BUFFERS` and `SHADER_TEXTURE_LOD`.
-
-```js
-class MyEffect extends Effect {
-
-	constructor() {
-
-		super(name, fragmentShader, {
-			extensions: new Set([WebGLExtension.DERIVATIVES])
-		});
-
-	}
-
-}
-```
