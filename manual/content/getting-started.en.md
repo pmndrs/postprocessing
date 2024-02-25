@@ -90,11 +90,13 @@ container.prepend(renderer.domElement);
 
 const scene = new Scene();
 const camera = new PerspectiveCamera();
-
 const pipeline = new RenderPipeline(renderer);
-pipeline.addPass(new ClearPass());
-pipeline.addPass(new GeometryPass(scene, camera, { samples: 4 }));
-pipeline.addPass(new EffectPass(new BloomEffect()));
+
+pipeline.add(
+	new ClearPass(),
+	new GeometryPass(scene, camera),
+	new EffectPass(new BloomEffect())
+);
 
 function onResize(): void {
 
