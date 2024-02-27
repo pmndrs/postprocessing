@@ -30,7 +30,13 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 	 * Keeps track of passes that have been added to a pipeline.
 	 */
 
-	private static readonly registeredPasses = /* @__PURE__ */ new WeakSet<Pass<Material | null>>();
+	private static readonly registeredPasses = new WeakSet<Pass<Material | null>>();
+
+	/**
+	 * A listener that triggers an I/O update.
+	 */
+
+	private static readonly listener = () => RenderPipeline.ioManager.update();
 
 	/**
 	 * A timer.
@@ -199,6 +205,7 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 		}
 
+		pass.addEventListener(Pass.EVENT_TOGGLE, RenderPipeline.listener);
 		pass.renderer = this.renderer;
 		pass.timer = this.timer;
 
@@ -214,6 +221,7 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 		RenderPipeline.registeredPasses.delete(pass);
 
+		pass.removeEventListener(Pass.EVENT_TOGGLE, RenderPipeline.listener);
 		pass.renderer = null;
 		pass.timer = null;
 
