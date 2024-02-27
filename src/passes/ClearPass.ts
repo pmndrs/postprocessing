@@ -1,5 +1,6 @@
-import { Color, WebGLMultipleRenderTargets } from "three";
+import { Color, Scene, WebGLMultipleRenderTargets } from "three";
 import { Pass } from "../core/Pass.js";
+import { Background } from "../utils/Background.js";
 import { ClearFlags } from "../utils/ClearFlags.js";
 import { ClearValues } from "../utils/ClearValues.js";
 import { extractIndices } from "../utils/GBufferUtils.js";
@@ -34,6 +35,18 @@ export class ClearPass extends Pass {
 	private gBufferIndices: Map<string, number> | null;
 
 	/**
+	 * A background object.
+	 */
+
+	private readonly background: Background;
+
+	/**
+	 * A background scene.
+	 */
+
+	private readonly backgroundScene: Scene;
+
+	/**
 	 * Constructs a new clear pass.
 	 *
 	 * @param color - The color clear flag.
@@ -48,6 +61,14 @@ export class ClearPass extends Pass {
 		this.clearFlags = new ClearFlags(color, depth, stencil);
 		this.clearValues = new ClearValues();
 		this.gBufferIndices = null;
+
+		this.background = new Background();
+		this.background.setClearValues(this.clearValues);
+		this.clearValues.addEventListener(ClearValues.EVENT_CHANGE,
+			() => this.background.setClearValues(this.clearValues));
+
+		this.backgroundScene = new Scene();
+		this.backgroundScene.add(this.background);
 
 	}
 
@@ -93,30 +114,20 @@ export class ClearPass extends Pass {
 
 	}
 
-	protected override onOutputChange(): void {
+	/**
+	 * Clears the default output buffer using the current clear values.
+	 *
+	 * @param overrideClearColor - An override clear color.
+	 */
 
-		const buffer = this.output.defaultBuffer?.value;
-		this.gBufferIndices = buffer instanceof WebGLMultipleRenderTargets ? extractIndices(buffer) : null;
+	private clear(overrideClearColor = this.clearValues.color): void {
 
-	}
-
-	render(): void {
-
-		const renderer = this.renderer;
-
-		if(renderer === null) {
-
-			return;
-
-		}
-
-		const values = this.clearValues;
-		const overrideClearColor = values.color;
-		const overrideClearAlpha = values.alpha;
+		const renderer = this.renderer!;
+		const flags = this.clearFlags;
+		const overrideClearAlpha = this.clearValues.alpha;
 		const hasOverrideClearColor = overrideClearColor !== null;
 		const hasOverrideClearAlpha = overrideClearAlpha !== null;
 		const clearAlpha = renderer.getClearAlpha();
-		const flags = this.clearFlags;
 
 		if(hasOverrideClearColor) {
 
@@ -134,12 +145,6 @@ export class ClearPass extends Pass {
 		renderer.setRenderTarget(this.output.defaultBuffer?.value ?? null);
 		renderer.clear(flags.color, flags.depth, flags.stencil);
 
-		if(this.output.defaultBuffer?.value instanceof WebGLMultipleRenderTargets) {
-
-			this.clearGBuffer();
-
-		}
-
 		if(hasOverrideClearColor) {
 
 			renderer.setClearColor(color, clearAlpha);
@@ -147,6 +152,66 @@ export class ClearPass extends Pass {
 		} else if(hasOverrideClearAlpha) {
 
 			renderer.setClearAlpha(clearAlpha);
+
+		}
+
+		if(this.output.defaultBuffer?.value instanceof WebGLMultipleRenderTargets) {
+
+			this.clearGBuffer();
+
+		}
+
+	}
+
+	/**
+	 * Clears the default output buffer using the scene background.
+	 */
+
+	private clearWithBackground(): void {
+
+		const scene = this.scene!;
+		const camera = this.camera!;
+		const renderer = this.renderer!;
+		const flags = this.clearFlags;
+
+		renderer.setRenderTarget(this.output.defaultBuffer?.value ?? null);
+
+		if(scene.background instanceof Color) {
+
+			this.clear(scene.background);
+
+		} else {
+
+			renderer.clear(false, flags.depth, flags.stencil);
+			this.background.update(scene);
+			renderer.render(this.backgroundScene, camera);
+
+		}
+
+	}
+
+	protected override onOutputChange(): void {
+
+		const buffer = this.output.defaultBuffer?.value;
+		this.gBufferIndices = buffer instanceof WebGLMultipleRenderTargets ? extractIndices(buffer) : null;
+
+	}
+
+	override render(): void {
+
+		if(this.renderer === null) {
+
+			return;
+
+		}
+
+		if(this.scene !== null && this.camera !== null && this.scene.background !== null) {
+
+			this.clearWithBackground();
+
+		} else {
+
+			this.clear();
 
 		}
 

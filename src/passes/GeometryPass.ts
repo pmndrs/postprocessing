@@ -495,10 +495,12 @@ export class GeometryPass extends Pass implements Selective {
 
 		}
 
-		const selection = this.selection;
-		const mask = this.camera.layers.mask;
-		const background = this.scene.background;
-		const shadowMapAutoUpdate = this.renderer.shadowMap.autoUpdate;
+		const { scene, camera, selection } = this;
+		const mask = camera.layers.mask;
+		const background = scene.background;
+
+		// The background is rendered by the ClearPass, if present.
+		scene.background = null;
 
 		if(this.selection.enabled) {
 
@@ -513,12 +515,11 @@ export class GeometryPass extends Pass implements Selective {
 		}
 
 		this.renderer.setRenderTarget(this.output.defaultBuffer?.value ?? null);
-		this.renderer.render(this.scene, this.camera);
+		this.renderer.render(scene, camera);
 
 		// Restore the original values.
-		this.camera.layers.mask = mask;
-		this.scene.background = background;
-		this.renderer.shadowMap.autoUpdate = shadowMapAutoUpdate;
+		camera.layers.mask = mask;
+		scene.background = background;
 
 	}
 
