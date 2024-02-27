@@ -72,9 +72,11 @@ export class IOManager {
 		let previousPass = null;
 		let previousOutputBuffer;
 
-		for(let i = 0, j = -1, l = pipeline.passes.length; i < l; ++i, ++j) {
+		const passes = pipeline.passes.filter(x => x.enabled);
 
-			const pass = pipeline.passes[i];
+		for(let i = 0, j = -1, l = passes.length; i < l; ++i, ++j) {
+
+			const pass = passes[i];
 
 			if(geoPass !== undefined) {
 
@@ -93,9 +95,9 @@ export class IOManager {
 
 			}
 
-			if((j >= 0) && !(pipeline.passes[j] instanceof ClearPass)) {
+			if((j >= 0) && !(passes[j] instanceof ClearPass)) {
 
-				previousPass = pipeline.passes[j];
+				previousPass = passes[j];
 
 			}
 
@@ -144,14 +146,16 @@ export class IOManager {
 
 	private updateOutput(pipeline: RenderPipeline): void {
 
-		for(let i = 0, j = 1, l = pipeline.passes.length; i < l; ++i, ++j) {
+		const passes = pipeline.passes.filter(x => x.enabled);
 
-			const pass = pipeline.passes[i];
+		for(let i = 0, j = 1, l = passes.length; i < l; ++i, ++j) {
+
+			const pass = passes[i];
 
 			if(j < l && pass instanceof ClearPass) {
 
 				// Assign the output resources of the next pass to this clear pass.
-				const nextPass = pipeline.passes[j];
+				const nextPass = passes[j];
 				nextPass.output.defines.forEach((value, key) => pass.output.defines.set(key, value));
 				nextPass.output.uniforms.forEach((value, key) => pass.output.uniforms.set(key, value));
 				pass.output.defaultBuffer = nextPass.output.defaultBuffer;
@@ -236,7 +240,7 @@ export class IOManager {
 
 	private static syncDefaultBufferType(pipeline: RenderPipeline): void {
 
-		for(const pass of pipeline.passes) {
+		for(const pass of pipeline.passes.filter(x => x.enabled)) {
 
 			const inputBuffer = pass.input.defaultBuffer?.value ?? null;
 			const outputBuffer = pass.output.defaultBuffer?.value ?? null;
@@ -269,7 +273,7 @@ export class IOManager {
 
 	private static findMainGeometryPass(pipeline: RenderPipeline): GeometryPass | undefined {
 
-		return pipeline.passes.find((x) => x instanceof GeometryPass) as GeometryPass;
+		return pipeline.passes.find((x) => x.enabled && x instanceof GeometryPass) as GeometryPass;
 
 	}
 
@@ -291,7 +295,7 @@ export class IOManager {
 
 		geoPass.gBufferComponents.clear();
 
-		for(const pass of pipeline.passes) {
+		for(const pass of pipeline.passes.filter(x => x.enabled)) {
 
 			for(const component of pass.input.gBuffer) {
 
@@ -302,7 +306,7 @@ export class IOManager {
 		}
 
 		// Check if there are secondary geometry passes.
-		const geoPasses = pipeline.passes.filter((x) => x instanceof GeometryPass) as GeometryPass[];
+		const geoPasses = pipeline.passes.filter((x) => x.enabled && x instanceof GeometryPass) as GeometryPass[];
 
 		if(geoPasses.length > 1 && geoPass.gBufferComponents.has(GBuffer.COLOR)) {
 
