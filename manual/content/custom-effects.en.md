@@ -78,7 +78,7 @@ void mainSupport(in vec2 uv);
 
 ### Geometry Data
 
-Effects have access to the geometry data of the current fragment via the `data` parameter of the `mainImage` function. The `EffectPass` detects whether an effect reads a value from this struct and only fetches the relevant data from the respective textures when it's actually needed. If you wish to sample depth at another coordinate, use the predefined function `float readDepth(vec2 uv)`. To calculate the view Z based on depth, you can use the predefined function `float getViewZ(float depth)`. The `GData` is defined as follows:
+Effects have access to the geometry data of the current fragment via the `data` parameter of the `mainImage` function. The `EffectPass` detects whether an effect reads a value from this struct and only fetches the relevant data from the respective textures when it's actually needed. The `GData` struct is defined as follows:
 
 ```glsl
 struct GData {
@@ -101,12 +101,15 @@ Effects that fetch additional samples from the input buffer inside the fragment 
 All shaders have access to the following uniforms:
 
 ```glsl
-uniform vec4 resolution; // screen resolution (xy), texel size (zw)
+uniform mat4 projectionMatrix;
+uniform mat4 projectionMatrixInverse;
 uniform vec3 cameraParams; // near, far, aspect
+uniform vec4 resolution; // screen resolution (xy), texel size (zw)
+uniform sampler2D inputBuffer;
 uniform float time;
 ```
 
-The fragment shader has access to the following additional uniforms:
+The fragment shader has access to the following G-Buffer uniform:
 
 ```glsl
 struct GBuffer {
@@ -124,13 +127,13 @@ uniform GBuffer gBuffer;
 The following varyings are reserved:
 
 ```glsl
-varying vec2 vUv;
+inout vec2 vUv;
 ```
 
 Available vertex attributes:
 
 ```glsl
-attribute vec3 position;
+in vec3 position;
 ```
 
 Available macros:
@@ -140,5 +143,12 @@ Available macros:
 
 _Effects may define custom uniforms, varyings, functions and preprocessor macros as usual, but should not define global variables or constants._
 
-Furthermore, the shader chunks [common](https://github.com/mrdoob/three.js/blob/dev/src/renderers/shaders/ShaderChunk/common.glsl.js)
-and [packing](https://github.com/mrdoob/three.js/blob/dev/src/renderers/shaders/ShaderChunk/packing.glsl.js) are included in the fragment shader by default. The functions `packDepthToRGBA(v)` and `unpackRGBAToDepth(v)` are also available under the aliases `packFloatToRGBA(v)` and `unpackRGBAToFloat(v)`.
+## Functions
+
+The shader chunks [common](https://github.com/mrdoob/three.js/blob/dev/src/renderers/shaders/ShaderChunk/common.glsl.js)
+and [packing](https://github.com/mrdoob/three.js/blob/dev/src/renderers/shaders/ShaderChunk/packing.glsl.js) are included in the fragment shader by default.
+
+* The functions `packDepthToRGBA(v)` and `unpackRGBAToDepth(v)` are also available as `packFloatToRGBA(v)` and `unpackRGBAToFloat(v)`
+* To sample depth at any location, use `readDepth(depthBuffer, uv, near, far)`
+* To calculate the view Z based on depth, use `getViewZ(depth, near, far)`
+* To calculate the view position, use `getViewPosition(screenPosition, depth, viewZ, projectionMatrix, inverseProjectionMatrix)`
