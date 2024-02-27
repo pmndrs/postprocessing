@@ -123,18 +123,6 @@ export class GeometryPass extends Pass implements Selective {
 	// #region Settings
 
 	/**
-	 * Indicates whether the scene background should be ignored.
-	 */
-
-	ignoreBackground: boolean;
-
-	/**
-	 * Indicates whether the shadow map auto update should be skipped.
-	 */
-
-	skipShadowMapUpdate: boolean;
-
-	/**
 	 * Indicates whether a stencil buffer should be created.
 	 */
 
@@ -187,8 +175,6 @@ export class GeometryPass extends Pass implements Selective {
 		this.scene = scene;
 		this.camera = camera;
 
-		this.ignoreBackground = false;
-		this.skipShadowMapUpdate = false;
 		this.stencilBuffer = stencilBuffer;
 		this.depthBuffer = depthBuffer;
 		this.frameBufferType = frameBufferType;
@@ -517,18 +503,6 @@ export class GeometryPass extends Pass implements Selective {
 		if(this.selection.enabled) {
 
 			this.camera.layers.set(selection.layer);
-
-		}
-
-		if(this.skipShadowMapUpdate) {
-
-			this.renderer.shadowMap.autoUpdate = false;
-
-		}
-
-		if(this.ignoreBackground) {
-
-			this.scene.background = null;
 
 		}
 
