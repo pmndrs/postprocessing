@@ -108,7 +108,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addBinding(effect, "samples", { min: 0, max: 24, step: 1 });
 	folder.addBinding(effect, "minEdgeThreshold", { min: 0.01, max: 0.3, step: 1e-4 });
-	folder.addBinding(effect, "maxEdgeThreshold", { min: 0.01, max: 0.3, step: 1e-4 });
+	folder.addBinding(effect, "maxEdgeThreshold", { min: 0.01, max: 0.5, step: 1e-4 });
 	folder.addBinding(effect, "subpixelQuality", { min: 0, max: 1.0, step: 1e-4 });
 	Utils.addBlendModeBindings(folder, effect.blendMode);
 
