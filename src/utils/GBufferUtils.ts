@@ -110,7 +110,7 @@ export function extractOutputDefinitions(renderTarget: WebGLMultipleRenderTarget
 
 		if(i === 0) {
 
-			definitions.push("#define gl_FragColor out_FragData${i}");
+			definitions.push(`#define gl_FragColor out_FragData${i}`);
 			definitions.push("#endif");
 
 		}
