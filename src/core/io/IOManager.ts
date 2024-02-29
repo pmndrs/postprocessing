@@ -152,19 +152,7 @@ export class IOManager {
 
 			const pass = passes[i];
 
-			if(j < l && pass instanceof ClearPass) {
-
-				// Assign the output resources of the next pass to this clear pass.
-				const nextPass = passes[j];
-				nextPass.output.defines.forEach((value, key) => pass.output.defines.set(key, value));
-				nextPass.output.uniforms.forEach((value, key) => pass.output.uniforms.set(key, value));
-				pass.output.defaultBuffer = nextPass.output.defaultBuffer;
-
-				continue;
-
-			}
-
-			if(pass.output.defaultBuffer === null) {
+			if(pass instanceof ClearPass || pass.output.defaultBuffer === null) {
 
 				continue;
 
@@ -186,6 +174,23 @@ export class IOManager {
 				// Remember the original buffer and set the default buffer to null.
 				outputDefaultBuffers.set(pass.output.defaultBuffer, pass.output.defaultBuffer.value);
 				pass.output.defaultBuffer = null;
+
+			}
+
+		}
+
+		// Update ClearPasses separately.
+		for(let i = 0, j = 1, l = passes.length; i < l; ++i, ++j) {
+
+			const pass = passes[i];
+
+			if(j < l && pass instanceof ClearPass) {
+
+				// Assign the output resources of the next pass to this clear pass.
+				const nextPass = passes[j];
+				nextPass.output.defines.forEach((value, key) => pass.output.defines.set(key, value));
+				nextPass.output.uniforms.forEach((value, key) => pass.output.uniforms.set(key, value));
+				pass.output.defaultBuffer = nextPass.output.defaultBuffer;
 
 			}
 
