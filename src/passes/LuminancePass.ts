@@ -25,7 +25,7 @@ export class LuminancePass extends Pass<LuminanceMaterial> {
 
 		super("LuminancePass");
 
-		this.renderTarget = this.createFramebuffer();
+		this.output.setBuffer(LuminancePass.BUFFER_LUMINANCE, this.createFramebuffer());
 		this.fullscreenMaterial = new LuminanceMaterial();
 
 	}
@@ -37,12 +37,6 @@ export class LuminancePass extends Pass<LuminanceMaterial> {
 	private get renderTarget(): WebGLRenderTarget {
 
 		return this.output.buffers.get(LuminancePass.BUFFER_LUMINANCE)!.value as WebGLRenderTarget;
-
-	}
-
-	private set renderTarget(value: WebGLRenderTarget) {
-
-		this.output.setBuffer(LuminancePass.BUFFER_LUMINANCE, value);
 
 	}
 

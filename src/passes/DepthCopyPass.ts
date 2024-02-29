@@ -29,12 +29,12 @@ export class DepthCopyPass extends Pass<DepthCopyMaterial> {
 		this.fullscreenMaterial = new DepthCopyMaterial();
 		this.input.gBuffer.add(GBuffer.DEPTH);
 
-		this.renderTarget = new WebGLRenderTarget(1, 1, {
+		this.output.setBuffer(DepthCopyPass.BUFFER_DEPTH, new WebGLRenderTarget(1, 1, {
 			minFilter: NearestFilter,
 			magFilter: NearestFilter,
 			depthBuffer: false,
 			type: FloatType
-		});
+		}));
 
 	}
 
@@ -45,12 +45,6 @@ export class DepthCopyPass extends Pass<DepthCopyMaterial> {
 	protected get renderTarget(): WebGLRenderTarget {
 
 		return this.output.buffers.get(DepthCopyPass.BUFFER_DEPTH)!.value as WebGLRenderTarget;
-
-	}
-
-	private set renderTarget(value: WebGLRenderTarget) {
-
-		this.output.setBuffer(DepthCopyPass.BUFFER_DEPTH, value);
 
 	}
 

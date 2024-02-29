@@ -53,7 +53,7 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 		super("MipmapBlurPass");
 
-		this.renderTarget = this.createFramebuffer();
+		this.output.setBuffer(MipmapBlurPass.BUFFER_MAIN, this.createFramebuffer());
 		this.renderTarget.texture.name = "Upsampling.Mipmap0";
 
 		this.downsamplingMipmaps = [];
@@ -73,12 +73,6 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 	private get renderTarget(): WebGLRenderTarget {
 
 		return this.output.buffers.get(MipmapBlurPass.BUFFER_MAIN)!.value as WebGLRenderTarget;
-
-	}
-
-	private set renderTarget(value: WebGLRenderTarget) {
-
-		this.output.setBuffer(MipmapBlurPass.BUFFER_MAIN, value);
 
 	}
 
