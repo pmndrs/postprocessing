@@ -206,4 +206,17 @@ export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
 
 	}
 
+	/**
+	 * Retrieves a buffer.
+	 *
+	 * @param key - A buffer key.
+	 * @return The buffer, or `null` if it doesn't exist.
+	 */
+
+	getBuffer(key: string): Texture | null {
+
+		return this.textures.get(key)?.value ?? null;
+
+	}
+
 }
