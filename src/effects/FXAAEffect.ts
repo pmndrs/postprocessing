@@ -46,12 +46,12 @@ export interface FXAAEffectOptions {
 }
 
 /**
- * NVIDIA FXAA 3.11 by Timothy Lottes:
- * https://developer.download.nvidia.com/assets/gamedev/files/sdk/11/FXAA_WhitePaper.pdf
+ * NVIDIA FXAA 3.11 by Timothy Lottes.
  *
- * Based on an implementation by Simon Rodriguez:
- * https://github.com/kosua20/Rendu/blob/master/resources/common/shaders/screens/fxaa.frag
+ * Based on an implementation by Simon Rodriguez.
  *
+ * @see https://developer.download.nvidia.com/assets/gamedev/files/sdk/11/FXAA_WhitePaper.pdf
+ * @see https://github.com/kosua20/Rendu/blob/master/resources/common/shaders/screens/fxaa.frag
  * @category Effects
  */
 
