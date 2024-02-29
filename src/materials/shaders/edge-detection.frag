@@ -99,11 +99,7 @@ in vec2 vUv1;
 
 void main() {
 
-	#if EDGE_DETECTION_MODE == 0
-
-		const vec2 threshold = vec2(DEPTH_THRESHOLD);
-
-	#elif PREDICATION_MODE != 0
+	#if PREDICATION_MODE != 0 && EDGE_DETECTION_MODE != 0
 
 		vec2 threshold = calculatePredicatedThreshold();
 

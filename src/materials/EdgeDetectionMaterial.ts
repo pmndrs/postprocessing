@@ -27,10 +27,9 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 			defines: {
 				LOCAL_CONTRAST_ADAPTATION_FACTOR: 2,
 				EDGE_DETECTION_MODE: EdgeDetectionMode.COLOR,
-				EDGE_THRESHOLD: 0.1,
-				DEPTH_THRESHOLD: 0.01,
-				PREDICATION_MODE: PredicationMode.DISABLED,
-				PREDICATION_THRESHOLD: 0.01,
+				EDGE_THRESHOLD: 0.01,
+				PREDICATION_MODE: PredicationMode.DEPTH,
+				PREDICATION_THRESHOLD: 0.001,
 				PREDICATION_SCALE: 2,
 				PREDICATION_STRENGTH: 1
 			},
@@ -54,6 +53,8 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 
 	/**
 	 * The edge detection mode.
+	 *
+	 * @defaultValue {@link EdgeDetectionMode.COLOR}
 	 */
 
 	get edgeDetectionMode(): EdgeDetectionMode {
@@ -101,7 +102,9 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 	 * For luma- and chroma-based edge detection, 0.1 is a reasonable value and allows to catch most visible edges. 0.05
 	 * is a rather overkill value that allows to catch 'em all. Darker scenes may require an even lower threshold.
 	 *
-	 * If depth-based edge detection is used, the threshold will depend on the scene depth.
+	 * If depth-based edge detection is used, the threshold must be adjusted to match the scene depth distribution.
+	 *
+	 * @defaultValue 0.01
 	 */
 
 	get edgeDetectionThreshold(): number {
@@ -113,7 +116,6 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 	set edgeDetectionThreshold(value: number) {
 
 		this.defines.EDGE_THRESHOLD = value.toFixed(9);
-		this.defines.DEPTH_THRESHOLD = (value * 0.1).toFixed(9);
 		this.needsUpdate = true;
 
 	}
@@ -123,6 +125,8 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 	 *
 	 * Predicated thresholding allows to better preserve texture details and to improve edge detection using an additional
 	 * buffer such as a light accumulation or depth buffer.
+	 *
+	 * @defaultValue {@link PredicationMode.DEPTH}
 	 */
 
 	get predicationMode(): PredicationMode {
@@ -183,6 +187,8 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 
 	/**
 	 * The predication threshold.
+	 *
+	 * @defaultValue 0.001
 	 */
 
 	get predicationThreshold(): number {
@@ -202,6 +208,8 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 	 * The predication scale. Range: [1.0, 5.0].
 	 *
 	 * Determines how much the edge detection threshold should be scaled when using predication.
+	 *
+	 * @defaultValue 2
 	 */
 
 	get predicationScale(): number {
@@ -221,6 +229,8 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 	 * The predication strength. Range: [0.0, 1.0].
 	 *
 	 * Determines how much the edge detection threshold should be decreased locally when using predication.
+	 *
+	 * @defaultValue 1
 	 */
 
 	get predicationStrength(): number {
