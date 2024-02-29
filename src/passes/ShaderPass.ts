@@ -6,10 +6,11 @@ import { Pass } from "../core/Pass.js";
  *
  * To render multiple chained fullscreen effects, consider using {@link EffectPass} instead.
  *
+ * @param TMaterial - The type of the fullscreen material.
  * @category Passes
  */
 
-export class ShaderPass extends Pass<ShaderMaterial> {
+export class ShaderPass<TMaterial extends ShaderMaterial = ShaderMaterial> extends Pass<TMaterial> {
 
 	/**
 	 * The name of the input buffer uniform.
@@ -27,7 +28,7 @@ export class ShaderPass extends Pass<ShaderMaterial> {
 	 * @param uniformName - The name of the input buffer uniform. Default is `inputBuffer`.
 	 */
 
-	constructor(material: ShaderMaterial, uniformName = "inputBuffer") {
+	constructor(material: TMaterial, uniformName = "inputBuffer") {
 
 		super("ShaderPass");
 
