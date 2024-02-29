@@ -7,7 +7,7 @@ import {
 	RedFormat,
 	TextureDataType,
 	UnsignedByteType,
-	WebGLMultipleRenderTargets
+	WebGLRenderTarget
 } from "three";
 
 import { GBuffer } from "../enums/GBuffer.js";
@@ -51,14 +51,14 @@ const pixelFormatToTexelType = /* @__PURE__ */ new Map<AnyPixelFormat, TexelType
  * @internal
  */
 
-export function extractIndices(renderTarget: WebGLMultipleRenderTargets): Map<string, number> {
+export function extractIndices(renderTarget: WebGLRenderTarget): Map<string, number> {
 
 	const validGBufferComponents = new Set<GBuffer>(Object.values(GBuffer));
 	const indices = new Map<GBuffer | string, number>();
 
-	for(let i = 0, l = renderTarget.texture.length; i < l; ++i) {
+	for(let i = 0, l = renderTarget.textures.length; i < l; ++i) {
 
-		const texture = renderTarget.texture[i];
+		const texture = renderTarget.textures[i];
 		const gBufferComponent = texture.name as GBuffer;
 
 		if(validGBufferComponents.has(gBufferComponent)) {
@@ -83,13 +83,13 @@ export function extractIndices(renderTarget: WebGLMultipleRenderTargets): Map<st
  * @internal
  */
 
-export function extractOutputDefinitions(renderTarget: WebGLMultipleRenderTargets): string {
+export function extractOutputDefinitions(renderTarget: WebGLRenderTarget): string {
 
 	const definitions: string[] = [];
 
-	for(let i = 0, l = renderTarget.texture.length; i < l; ++i) {
+	for(let i = 0, l = renderTarget.textures.length; i < l; ++i) {
 
-		const texture = renderTarget.texture[i];
+		const texture = renderTarget.textures[i];
 		const precision = textureTypeToPrecision.get(texture.type);
 		const type = pixelFormatToTexelType.get(texture.format);
 		const name = texture.name.replace(/\W*/g, "");

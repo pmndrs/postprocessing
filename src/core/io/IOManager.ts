@@ -1,4 +1,4 @@
-import { Material, SRGBColorSpace, WebGLMultipleRenderTargets, WebGLRenderTarget } from "three";
+import { Material, SRGBColorSpace, WebGLRenderTarget } from "three";
 import { GBuffer } from "../../enums/GBuffer.js";
 import { ClearPass } from "../../passes/ClearPass.js";
 import { extractIndices } from "../../utils/GBufferUtils.js";
@@ -29,7 +29,7 @@ export class IOManager {
 	 * @see {@link RenderPipeline.autoRenderToScreen}
 	 */
 
-	private readonly outputDefaultBuffers: WeakMap<Resource, WebGLRenderTarget | WebGLMultipleRenderTargets | null>;
+	private readonly outputDefaultBuffers: WeakMap<Resource, WebGLRenderTarget | null>;
 
 	/**
 	 * Constructs a new I/O manager.
@@ -38,7 +38,7 @@ export class IOManager {
 	constructor() {
 
 		this.pipelines = new Set<RenderPipeline>();
-		this.outputDefaultBuffers = new WeakMap<Resource, WebGLRenderTarget | WebGLMultipleRenderTargets | null>();
+		this.outputDefaultBuffers = new WeakMap<Resource, WebGLRenderTarget | null>();
 
 	}
 
@@ -117,7 +117,7 @@ export class IOManager {
 
 				pass.input.defaultBuffer = null;
 
-			} else if(previousOutputBuffer instanceof WebGLMultipleRenderTargets) {
+			} else if(previousOutputBuffer.textures.length > 1) {
 
 				const indices = extractIndices(previousOutputBuffer);
 
@@ -245,7 +245,7 @@ export class IOManager {
 			const inputBuffer = pass.input.defaultBuffer?.value ?? null;
 			const outputBuffer = pass.output.defaultBuffer?.value ?? null;
 
-			if(inputBuffer === null || outputBuffer === null || outputBuffer instanceof WebGLMultipleRenderTargets) {
+			if(inputBuffer === null || outputBuffer === null || outputBuffer.textures.length > 1) {
 
 				continue;
 

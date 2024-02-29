@@ -1,4 +1,4 @@
-import { WebGLRenderTarget, WebGLMultipleRenderTargets, Texture } from "three";
+import { WebGLRenderTarget, Texture } from "three";
 import { Resource } from "./Resource.js";
 import { TextureResource } from "./TextureResource.js";
 
@@ -8,7 +8,7 @@ import { TextureResource } from "./TextureResource.js";
  * @category IO
  */
 
-export class RenderTargetResource extends Resource<WebGLRenderTarget | WebGLMultipleRenderTargets | null> {
+export class RenderTargetResource extends Resource<WebGLRenderTarget | null> {
 
 	/**
 	 * A live resource that wraps the texture of the render target.
@@ -22,7 +22,7 @@ export class RenderTargetResource extends Resource<WebGLRenderTarget | WebGLMult
 	 * @param value - A render target.
 	 */
 
-	constructor(value: WebGLRenderTarget | WebGLMultipleRenderTargets | null = null) {
+	constructor(value: WebGLRenderTarget | null = null) {
 
 		super(value);
 
@@ -30,13 +30,13 @@ export class RenderTargetResource extends Resource<WebGLRenderTarget | WebGLMult
 
 	}
 
-	override get value(): WebGLRenderTarget | WebGLMultipleRenderTargets | null {
+	override get value(): WebGLRenderTarget | null {
 
 		return super.value;
 
 	}
 
-	override set value(value: WebGLRenderTarget | WebGLMultipleRenderTargets | null) {
+	override set value(value: WebGLRenderTarget | null) {
 
 		super.value = value;
 

@@ -1,4 +1,4 @@
-import { EventDispatcher, Uniform, UnsignedByteType, WebGLMultipleRenderTargets, WebGLRenderTarget } from "three";
+import { EventDispatcher, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
 import { ObservableMap } from "../../utils/ObservableMap.js";
 import { BaseEventMap } from "../BaseEventMap.js";
 import { ShaderData } from "../ShaderData.js";
@@ -87,7 +87,7 @@ export class Output extends EventDispatcher<BaseEventMap> implements ShaderData 
 
 	}
 
-	set defaultBuffer(value: RenderTargetResource | WebGLRenderTarget | WebGLMultipleRenderTargets | null) {
+	set defaultBuffer(value: RenderTargetResource | WebGLRenderTarget | null) {
 
 		this.setBuffer(Output.BUFFER_DEFAULT, value);
 
@@ -107,12 +107,8 @@ export class Output extends EventDispatcher<BaseEventMap> implements ShaderData 
 
 		}
 
-		// Assuming index 0 is the albedo attachment.
-		const type = outputBuffer instanceof WebGLMultipleRenderTargets ?
-			outputBuffer.texture[0].type :
-			outputBuffer.texture.type;
-
-		return type !== UnsignedByteType;
+		// Assuming index 0 is the main color attachment.
+		return outputBuffer.texture.type !== UnsignedByteType;
 
 	}
 
@@ -125,7 +121,7 @@ export class Output extends EventDispatcher<BaseEventMap> implements ShaderData 
 	 * @param value - The buffer.
 	 */
 
-	setBuffer(key: string, value: RenderTargetResource | WebGLRenderTarget | WebGLMultipleRenderTargets | null): void {
+	setBuffer(key: string, value: RenderTargetResource | WebGLRenderTarget | null): void {
 
 		if(value instanceof RenderTargetResource) {
 

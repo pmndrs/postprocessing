@@ -15,8 +15,8 @@ import {
 	Scene,
 	TextureDataType,
 	UnsignedByteType,
-	WebGLMultipleRenderTargets,
 	WebGLProgramParametersWithUniforms,
+	WebGLRenderTarget,
 	WebGLRenderer
 } from "three";
 
@@ -228,10 +228,10 @@ export class GeometryPass extends Pass implements Selective {
 	 * Returns the G-Buffer render target, or null if the buffer is not of type `WebGLMultipleRenderTargets`.
 	 */
 
-	get gBuffer(): WebGLMultipleRenderTargets | null {
+	get gBuffer(): WebGLRenderTarget | null {
 
 		const buffer = this.output.defaultBuffer?.value ?? null;
-		return buffer instanceof WebGLMultipleRenderTargets ? buffer : null;
+		return (buffer !== null && buffer.textures.length > 1) ? buffer : null;
 
 	}
 
@@ -426,10 +426,11 @@ export class GeometryPass extends Pass implements Selective {
 
 		const { width, height } = this.resolution;
 		const textureConfigs = this.textureConfigs;
-		const renderTarget = new WebGLMultipleRenderTargets(width, height, textureConfigs.length, {
+		const renderTarget = new WebGLRenderTarget(width, height, {
 			stencilBuffer: this.stencilBuffer,
 			depthBuffer: this.depthBuffer,
-			samples: this.samples
+			samples: this.samples,
+			count: textureConfigs.length
 		});
 
 		const textures = renderTarget.texture;
