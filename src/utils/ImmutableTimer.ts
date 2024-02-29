@@ -13,12 +13,6 @@ export interface ImmutableTimer {
 	getDelta(): number;
 
 	/**
-	 * Returns the fixed delta time in seconds.
-	 */
-
-	getFixedDelta(): number;
-
-	/**
 	 * Returns the elapsed time in seconds.
 	 */
 
