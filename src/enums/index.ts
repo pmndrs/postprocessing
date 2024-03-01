@@ -1,7 +1,6 @@
 export * from "./ColorChannel.js";
 export * from "./DepthCopyMode.js";
 export * from "./DepthTestStrategy.js";
-export * from "./EdgeDetectionMode.js";
 export * from "./EffectShaderSection.js";
 export * from "./GBuffer.js";
 export * from "./GData.js";
@@ -11,7 +10,8 @@ export * from "./LogLevel.js";
 export * from "./MaskFunction.js";
 export * from "./MSAASamples.js";
 export * from "./Precision.js";
-export * from "./PredicationMode.js";
+export * from "./SMAAEdgeDetectionMode.js";
+export * from "./SMAAPredicationMode.js";
 export * from "./SMAAPreset.js";
 export * from "./ToneMapping.js";
 export * from "./VignetteTechnique.js";

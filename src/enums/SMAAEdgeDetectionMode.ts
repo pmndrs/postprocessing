@@ -4,7 +4,7 @@
  * @category Enums
  */
 
-export enum EdgeDetectionMode {
+export enum SMAAEdgeDetectionMode {
 
 	/**
 	 * Depth-based edge detection.

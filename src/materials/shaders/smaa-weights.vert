@@ -17,7 +17,7 @@ void main() {
 
 	// This indicates the ends of the loops.
 	vOffset[2] = vec4(vOffset[0].xz, vOffset[1].yw) +
-		vec4(-2.0, 2.0, -2.0, 2.0) * resolution.zzww * MAX_SEARCH_STEPS_FLOAT;
+		vec4(-2.0, 2.0, -2.0, 2.0) * resolution.zzww * vec4(MAX_SEARCH_STEPS);
 
 	gl_Position = vec4(position.xy, 1.0, 1.0);
 

@@ -12,8 +12,16 @@ import {
 
 import {
 	ClearPass,
+	EffectPass,
 	GeometryPass,
-	RenderPipeline
+	MixBlendFunction,
+	RenderPipeline,
+	SMAAEdgeDetectionMode,
+	SMAAPredicationMode,
+	SMAAEffect,
+	SMAAPreset,
+	TextureEffect,
+	ToneMappingEffect
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
@@ -84,29 +92,24 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
+	const effect = new SMAAEffect({
+		preset: SMAAPreset.MEDIUM,
+		edgeDetectionMode: SMAAEdgeDetectionMode.COLOR,
+		predicationMode: SMAAPredicationMode.DEPTH
+	});
+
+	const effectPass = new EffectPass(effect, new ToneMappingEffect());
+
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.autoRenderToScreen = false;
+
 	pipeline.add(
 		new ClearPass(),
 		new GeometryPass(scene, camera, {
 			frameBufferType: HalfFloatType
-		})
+		}),
+		effectPass
 	);
-
-	/*
-	const effect = new SMAAEffect({
-		blendFunction: BlendFunction.NORMAL,
-		preset: SMAAPreset.MEDIUM,
-		edgeDetectionMode: EdgeDetectionMode.COLOR,
-		predicationMode: PredicationMode.DEPTH
-	});
-
-	const edgeDetectionMaterial = effect.edgeDetectionMaterial;
-	edgeDetectionMaterial.edgeDetectionThreshold = 0.02;
-	edgeDetectionMaterial.predicationThreshold = 0.002;
-	edgeDetectionMaterial.predicationScale = 1;
-
-	const effectPass = new EffectPass(effect, new ToneMappingEffect());
 
 	// #region DEBUG
 	const smaaEdgesDebugPass = new EffectPass(effect, new TextureEffect({ texture: effect.edgesTexture }));
@@ -118,21 +121,18 @@ window.addEventListener("load", () => void load().then((assets) => {
 	smaaWeightsDebugPass.output.defaultBuffer = null;
 	smaaEdgesDebugPass.enabled = false;
 	smaaWeightsDebugPass.enabled = false;
-	smaaEdgesDebugPass.fullscreenMaterial.encodeOutput = false;
-	smaaWeightsDebugPass.fullscreenMaterial.encodeOutput = false;
-	// #endregion DEBUG
+	smaaEdgesDebugPass.fullscreenMaterial.colorSpaceConversion = false;
+	smaaWeightsDebugPass.fullscreenMaterial.colorSpaceConversion = false;
 
-	pipeline.addPass(effectPass);
-	pipeline.addPass(smaaEdgesDebugPass);
-	pipeline.addPass(smaaWeightsDebugPass);
-	*/
+	pipeline.add(smaaEdgesDebugPass, smaaWeightsDebugPass);
+	// #endregion DEBUG
 
 	// Settings
 
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
 	const fpsGraph = Utils.createFPSGraph(pane);
+	const edgeDetectionMaterial = effect.edgeDetectionMaterial;
 
-	/*
 	const smaaDebug = {
 		OFF: 0,
 		EDGES: 1,
@@ -161,16 +161,18 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	});
 
+	const edgeDetectionOptions = Utils.enumToRecord(SMAAEdgeDetectionMode);
+	const predicationOptions = Utils.enumToRecord(SMAAPredicationMode);
+
 	const subfolder = folder.addFolder({ title: "Edge Detection", expanded: false });
-	subfolder.addBinding(edgeDetectionMaterial, "edgeDetectionMode", { options: Utils.enumToRecord(EdgeDetectionMode) });
-	subfolder.addBinding(edgeDetectionMaterial, "edgeDetectionThreshold", { min: 0.01, max: 0.3, step: 1e-4 });
-	subfolder.addBinding(edgeDetectionMaterial, "predicationMode", { options: Utils.enumToRecord(PredicationMode) });
-	subfolder.addBinding(edgeDetectionMaterial, "predicationThreshold", { min: 4e-4, max: 0.01, step: 1e-4 });
+	subfolder.addBinding(edgeDetectionMaterial, "edgeDetectionMode", { options: edgeDetectionOptions });
+	subfolder.addBinding(edgeDetectionMaterial, "edgeDetectionThreshold", { min: 1e-5, max: 0.1, step: 1e-5 });
+	subfolder.addBinding(edgeDetectionMaterial, "predicationMode", { options: predicationOptions });
+	subfolder.addBinding(edgeDetectionMaterial, "predicationThreshold", { min: 1e-4, max: 0.01, step: 1e-4 });
 	subfolder.addBinding(edgeDetectionMaterial, "predicationStrength", { min: 0, max: 1, step: 1e-4 });
-	subfolder.addBinding(edgeDetectionMaterial, "predicationScale", { min: 1, max: 2, step: 0.01 });
+	subfolder.addBinding(edgeDetectionMaterial, "predicationScale", { min: 1, max: 5, step: 0.01 });
 
 	Utils.addBlendModeBindings(folder, effect.blendMode);
-	*/
 
 	// Resize Handler
 
