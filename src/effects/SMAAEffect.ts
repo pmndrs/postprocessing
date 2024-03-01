@@ -45,7 +45,7 @@ export interface SMAAEffectOptions {
 	preset?: SMAAPreset;
 
 	/**
-	 * The quality preset.
+	 * The edge detection mode.
 	 *
 	 * @defaultValue {@link SMAAEdgeDetectionMode.COLOR}
 	 */
@@ -53,9 +53,9 @@ export interface SMAAEffectOptions {
 	edgeDetectionMode?: SMAAEdgeDetectionMode;
 
 	/**
-	 * The quality preset.
+	 * The predication mode.
 	 *
-	 * @defaultValue {@link SMAAPredicationMode.DISABLED}
+	 * @defaultValue {@link SMAAPredicationMode.DEPTH}
 	 */
 
 	predicationMode?: SMAAPredicationMode;
@@ -292,14 +292,14 @@ export class SMAAEffect extends Effect {
 		switch(preset) {
 
 			case SMAAPreset.LOW:
-				edgeDetectionMaterial.edgeDetectionThreshold = 0.1;
+				edgeDetectionMaterial.edgeDetectionThreshold = 0.05;
 				weightsMaterial.orthogonalSearchSteps = 4;
 				weightsMaterial.diagonalDetection = false;
 				weightsMaterial.cornerDetection = false;
 				break;
 
 			case SMAAPreset.MEDIUM:
-				edgeDetectionMaterial.edgeDetectionThreshold = 0.05;
+				edgeDetectionMaterial.edgeDetectionThreshold = 0.02;
 				weightsMaterial.orthogonalSearchSteps = 8;
 				weightsMaterial.diagonalDetection = false;
 				weightsMaterial.cornerDetection = false;
