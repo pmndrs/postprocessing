@@ -178,7 +178,12 @@ export class ClearPass extends Pass {
 
 		} else {
 
-			renderer.clear(false, flags.depth, flags.stencil);
+			if(flags.depth || flags.stencil) {
+
+				renderer.clear(false, flags.depth, flags.stencil);
+
+			}
+
 			this.background.update(scene);
 			renderer.render(this.backgroundScene, camera);
 
