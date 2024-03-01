@@ -93,7 +93,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Post Processing
 
 	const effect = new SMAAEffect({
-		preset: SMAAPreset.HIGH,
+		preset: SMAAPreset.MEDIUM,
 		edgeDetectionMode: SMAAEdgeDetectionMode.COLOR,
 		predicationMode: SMAAPredicationMode.DEPTH
 	});
@@ -140,7 +140,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	};
 
 	const params = {
-		"preset": SMAAPreset.HIGH,
+		"preset": SMAAPreset.MEDIUM,
 		"debug": smaaDebug.OFF
 	};
 
@@ -166,7 +166,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const subfolder = folder.addFolder({ title: "Edge Detection", expanded: false });
 	subfolder.addBinding(edgeDetectionMaterial, "edgeDetectionMode", { options: edgeDetectionOptions });
-	subfolder.addBinding(edgeDetectionMaterial, "edgeDetectionThreshold", { min: 1e-5, max: 0.2, step: 1e-5 });
+	subfolder.addBinding(edgeDetectionMaterial, "edgeDetectionThreshold", { min: 1e-5, max: 0.1, step: 1e-5 });
 	subfolder.addBinding(edgeDetectionMaterial, "predicationMode", { options: predicationOptions });
 	subfolder.addBinding(edgeDetectionMaterial, "predicationThreshold", { min: 1e-4, max: 0.01, step: 1e-4 });
 	subfolder.addBinding(edgeDetectionMaterial, "predicationStrength", { min: 0, max: 1, step: 1e-4 });
