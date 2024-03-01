@@ -1,4 +1,4 @@
-import { Color, Scene, WebGLMultipleRenderTargets } from "three";
+import { Color, Scene } from "three";
 import { Pass } from "../core/Pass.js";
 import { Background } from "../utils/Background.js";
 import { ClearFlags } from "../utils/ClearFlags.js";
@@ -155,11 +155,7 @@ export class ClearPass extends Pass {
 
 		}
 
-		if(this.output.defaultBuffer?.value instanceof WebGLMultipleRenderTargets) {
-
-			this.clearGBuffer();
-
-		}
+		this.clearGBuffer();
 
 	}
 
@@ -192,8 +188,8 @@ export class ClearPass extends Pass {
 
 	protected override onOutputChange(): void {
 
-		const buffer = this.output.defaultBuffer?.value;
-		this.gBufferIndices = buffer instanceof WebGLMultipleRenderTargets ? extractIndices(buffer) : null;
+		const buffer = this.output.defaultBuffer?.value ?? null;
+		this.gBufferIndices = (buffer !== null) ? extractIndices(buffer) : null;
 
 	}
 
