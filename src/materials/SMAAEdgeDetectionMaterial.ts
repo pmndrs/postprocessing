@@ -27,7 +27,7 @@ export class SMAAEdgeDetectionMaterial extends FullscreenMaterial {
 			defines: {
 				LOCAL_CONTRAST_ADAPTATION_FACTOR: "2.0",
 				EDGE_DETECTION_MODE: SMAAEdgeDetectionMode.COLOR,
-				EDGE_THRESHOLD: "0.1",
+				EDGE_THRESHOLD: "0.05",
 				PREDICATION_MODE: SMAAPredicationMode.DISABLED,
 				PREDICATION_THRESHOLD: "0.0002",
 				PREDICATION_SCALE: "2.0",
@@ -104,7 +104,7 @@ export class SMAAEdgeDetectionMaterial extends FullscreenMaterial {
 	 *
 	 * If depth-based edge detection is used, the threshold must be adjusted to match the scene depth distribution.
 	 *
-	 * @defaultValue 0.1
+	 * @defaultValue 0.05
 	 */
 
 	get edgeDetectionThreshold(): number {
