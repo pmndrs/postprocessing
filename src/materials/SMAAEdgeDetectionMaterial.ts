@@ -1,37 +1,37 @@
 import { Texture, Uniform, UnsignedByteType } from "three";
-import { EdgeDetectionMode } from "../enums/EdgeDetectionMode.js";
-import { PredicationMode } from "../enums/PredicationMode.js";
+import { SMAAEdgeDetectionMode } from "../enums/SMAAEdgeDetectionMode.js";
+import { SMAAPredicationMode } from "../enums/SMAAPredicationMode.js";
 import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
-import fragmentShader from "./shaders/edge-detection.frag";
-import vertexShader from "./shaders/edge-detection.vert";
+import fragmentShader from "./shaders/smaa-edge-detection.frag";
+import vertexShader from "./shaders/smaa-edge-detection.vert";
 
 /**
- * An edge detection material.
+ * An SMAA edge detection material.
  *
  * @category Materials
  */
 
-export class EdgeDetectionMaterial extends FullscreenMaterial {
+export class SMAAEdgeDetectionMaterial extends FullscreenMaterial {
 
 	/**
-	 * Constructs a new edge detection material.
+	 * Constructs a new SMAA edge detection material.
 	 */
 
 	constructor() {
 
 		super({
-			name: "EdgeDetectionMaterial",
+			name: "SMAAEdgeDetectionMaterial",
 			fragmentShader,
 			vertexShader,
 			defines: {
-				LOCAL_CONTRAST_ADAPTATION_FACTOR: 2,
-				EDGE_DETECTION_MODE: EdgeDetectionMode.COLOR,
-				EDGE_THRESHOLD: 0.01,
-				PREDICATION_MODE: PredicationMode.DEPTH,
-				PREDICATION_THRESHOLD: 0.001,
-				PREDICATION_SCALE: 2,
-				PREDICATION_STRENGTH: 1
+				LOCAL_CONTRAST_ADAPTATION_FACTOR: "2.0",
+				EDGE_DETECTION_MODE: SMAAEdgeDetectionMode.COLOR,
+				EDGE_THRESHOLD: "0.1",
+				PREDICATION_MODE: SMAAPredicationMode.DISABLED,
+				PREDICATION_THRESHOLD: "0.0002",
+				PREDICATION_SCALE: "2.0",
+				PREDICATION_STRENGTH: "1.0"
 			},
 			uniforms: {
 				depthBuffer: new Uniform(null),
@@ -54,16 +54,16 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 	/**
 	 * The edge detection mode.
 	 *
-	 * @defaultValue {@link EdgeDetectionMode.COLOR}
+	 * @defaultValue {@link SMAAEdgeDetectionMode.COLOR}
 	 */
 
-	get edgeDetectionMode(): EdgeDetectionMode {
+	get edgeDetectionMode(): SMAAEdgeDetectionMode {
 
-		return this.defines.EDGE_DETECTION_MODE as EdgeDetectionMode;
+		return this.defines.EDGE_DETECTION_MODE as SMAAEdgeDetectionMode;
 
 	}
 
-	set edgeDetectionMode(value: EdgeDetectionMode) {
+	set edgeDetectionMode(value: SMAAEdgeDetectionMode) {
 
 		this.defines.EDGE_DETECTION_MODE = value;
 		this.needsUpdate = true;
@@ -104,7 +104,7 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 	 *
 	 * If depth-based edge detection is used, the threshold must be adjusted to match the scene depth distribution.
 	 *
-	 * @defaultValue 0.01
+	 * @defaultValue 0.1
 	 */
 
 	get edgeDetectionThreshold(): number {
@@ -126,16 +126,16 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 	 * Predicated thresholding allows to better preserve texture details and to improve edge detection using an additional
 	 * buffer such as a light accumulation or depth buffer.
 	 *
-	 * @defaultValue {@link PredicationMode.DEPTH}
+	 * @defaultValue {@link SMAAPredicationMode.DISABLED}
 	 */
 
-	get predicationMode(): PredicationMode {
+	get predicationMode(): SMAAPredicationMode {
 
-		return this.defines.PREDICATION_MODE as PredicationMode;
+		return this.defines.PREDICATION_MODE as SMAAPredicationMode;
 
 	}
 
-	set predicationMode(value: PredicationMode) {
+	set predicationMode(value: SMAAPredicationMode) {
 
 		this.defines.PREDICATION_MODE = value;
 		this.needsUpdate = true;
@@ -188,7 +188,7 @@ export class EdgeDetectionMaterial extends FullscreenMaterial {
 	/**
 	 * The predication threshold.
 	 *
-	 * @defaultValue 0.001
+	 * @defaultValue 0.0002
 	 */
 
 	get predicationThreshold(): number {

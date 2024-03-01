@@ -26,7 +26,7 @@ in vec2 vUv1;
 
 	float getOrthographicDepth(sampler2D depthBuffer, const in vec2 uv, const in float near, const in float far) {
 
-		float depth = readDepth(depthBuffer, uv);
+		float depth = readDepth(depthBuffer, uv, near, far);
 
 		#ifdef PERSPECTIVE_CAMERA
 

@@ -4,7 +4,7 @@
  * @category Enums
  */
 
-export enum PredicationMode {
+export enum SMAAPredicationMode {
 
 	/**
 	 * No predicated thresholding.
