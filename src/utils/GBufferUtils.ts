@@ -17,7 +17,7 @@ import { Precision } from "../enums/Precision.js";
  * Maps texture data types to the GLSL precision modifiers.
  */
 
-const textureTypeToPrecision = /* @__PURE__ */ new Map<TextureDataType, Precision>([
+const textureTypeToPrecision = new Map<TextureDataType, Precision>([
 	[FloatType, "highp"],
 	[HalfFloatType, "mediump"],
 	[UnsignedByteType, "lowp"]
@@ -36,7 +36,7 @@ declare type TexelType = "float" | "vec2" | "vec4";
  * @return The GLSL texel type.
  */
 
-const pixelFormatToTexelType = /* @__PURE__ */ new Map<AnyPixelFormat, TexelType>([
+const pixelFormatToTexelType = new Map<AnyPixelFormat, TexelType>([
 	[RedFormat, "float"],
 	[RGFormat, "vec2"],
 	[RGBAFormat, "vec4"]
@@ -53,19 +53,12 @@ const pixelFormatToTexelType = /* @__PURE__ */ new Map<AnyPixelFormat, TexelType
 
 export function extractIndices(renderTarget: WebGLRenderTarget): Map<string, number> {
 
-	const validGBufferComponents = new Set<GBuffer>(Object.values(GBuffer));
-	const indices = new Map<GBuffer | string, number>();
+	const indices = new Map<string, number>();
 
 	for(let i = 0, l = renderTarget.textures.length; i < l; ++i) {
 
 		const texture = renderTarget.textures[i];
-		const gBufferComponent = texture.name as GBuffer;
-
-		if(validGBufferComponents.has(gBufferComponent)) {
-
-			indices.set(gBufferComponent, i);
-
-		}
+		indices.set(texture.name, i);
 
 	}
 
