@@ -14,8 +14,12 @@ import {
 
 import {
 	ClearPass,
+	ColorDodgeBlendFunction,
+	EffectPass,
 	GeometryPass,
-	RenderPipeline
+	RenderPipeline,
+	TextureEffect,
+	ToneMappingEffect
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
@@ -80,10 +84,10 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 	const settings = controls.settings;
 	settings.rotation.sensitivity = 2.2;
-	settings.rotation.damping = 0.025;
+	settings.rotation.damping = 0.05;
 	settings.translation.damping = 0.1;
-	controls.position.set(0, 1, 2);
-	controls.lookAt(0, 0, 0);
+	controls.position.set(0, 1.5, 10);
+	controls.lookAt(0, 1.35, 0);
 
 	// Scene, Lights, Objects
 
@@ -96,31 +100,25 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
+	const effect = new TextureEffect({ texture: assets.get("scratches") });
+	effect.blendMode.blendFunction = new ColorDodgeBlendFunction();
+
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.add(
 		new ClearPass(),
 		new GeometryPass(scene, camera, {
 			frameBufferType: HalfFloatType,
 			samples: 4
-		})
+		}),
+		new EffectPass(effect, new ToneMappingEffect())
 	);
-
-	/*
-	const effect = new TextureEffect({
-		texture: assets.get("scratches")
-	});
-
-	effect.blendMode.blendFunction = new ColorDodgeBlendFunction();
-	pipeline.addPass(new EffectPass(effect, new ToneMappingEffect()));
-	*/
 
 	// Settings
 
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
 	const fpsGraph = Utils.createFPSGraph(pane);
 
-	/*
-	const texture = effect.texture;
+	const texture = effect.texture as Texture;
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addBinding(texture, "rotation", { min: 0, max: 2 * Math.PI, step: 0.001 });
 
@@ -135,7 +133,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 	subFolder.addBinding(texture.center, "y", { min: 0, max: 1, step: 0.001 });
 
 	Utils.addBlendModeBindings(folder, effect.blendMode);
-	*/
 
 	// Resize Handler
 
