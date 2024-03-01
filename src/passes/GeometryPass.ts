@@ -230,8 +230,7 @@ export class GeometryPass extends Pass implements Selective {
 
 	get gBuffer(): WebGLRenderTarget | null {
 
-		const buffer = this.output.defaultBuffer?.value ?? null;
-		return (buffer !== null && buffer.textures.length > 1) ? buffer : null;
+		return this.output.defaultBuffer?.value ?? null;
 
 	}
 
@@ -390,7 +389,7 @@ export class GeometryPass extends Pass implements Selective {
 			if(entry[1].isColorBuffer && indices.has(entry[0])) {
 
 				const index = indices.get(entry[0]) as number;
-				gBuffer.texture[index].colorSpace = colorSpace;
+				gBuffer.textures[index].colorSpace = colorSpace;
 
 			}
 
@@ -433,12 +432,10 @@ export class GeometryPass extends Pass implements Selective {
 			count: textureConfigs.length
 		});
 
-		const textures = renderTarget.texture;
-		let index = 0;
+		for(let i = 0, l = textureConfigs.length; i < l; ++i) {
 
-		for(const entry of textureConfigs) {
-
-			const texture = textures[index++];
+			const entry = textureConfigs[i];
+			const texture = renderTarget.textures[i];
 			const textureConfig = entry[1];
 			texture.name = entry[0];
 			texture.minFilter = textureConfig.minFilter;
