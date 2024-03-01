@@ -5,13 +5,13 @@ import {
 	CubeUVReflectionMapping,
 	Euler,
 	Group,
+	Matrix3,
 	Matrix4,
 	Mesh,
 	PlaneGeometry,
 	Scene,
 	Texture,
 	Uniform,
-	WebGLMultipleRenderTargets,
 	WebGLProgramParametersWithUniforms,
 	WebGLRenderer
 } from "three";
@@ -124,7 +124,7 @@ export class Background extends Group {
 
 				const renderTarget = renderer.getRenderTarget();
 
-				if(!(renderTarget instanceof WebGLMultipleRenderTargets)) {
+				if(renderTarget === null) {
 
 					return;
 
@@ -167,15 +167,16 @@ export class Background extends Group {
 		if(scene.background instanceof CubeTexture || scene.background.mapping === CubeUVReflectionMapping) {
 
 			const flipEnvMap = scene.background.isRenderTargetTexture ? 1 : -1;
-			// euler.copy(scene.backgroundRotation);
-			// euler.x *= -1; euler.y *= -1; euler.z *= -1;
-			// euler.y *= flipEnvMap; euler.z *= flipEnvMap;
+			euler.copy(scene.backgroundRotation);
+			euler.x *= -1; euler.y *= -1; euler.z *= -1;
+			euler.y *= flipEnvMap; euler.z *= flipEnvMap;
 
 			skyBox.material.envMap = scene.background;
 			skyBox.material.uniforms.flipEnvMap.value = flipEnvMap;
 			skyBox.material.uniforms.backgroundBlurriness.value = scene.backgroundBlurriness;
 			skyBox.material.uniforms.backgroundIntensity.value = scene.backgroundIntensity;
-			// skyBox.material.uniforms.backgroundRotation.value.setFromMatrix4(matrix4.makeRotationFromEuler(euler));
+			const backgroundRotation = skyBox.material.uniforms.backgroundRotation.value as Matrix3;
+			backgroundRotation.setFromMatrix4(matrix4.makeRotationFromEuler(euler));
 			skyBox.visible = true;
 
 		} else {
