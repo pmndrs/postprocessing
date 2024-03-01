@@ -69,8 +69,8 @@ export class IOManager {
 
 		const geoPass = IOManager.findMainGeometryPass(pipeline);
 
-		let previousPass = null;
-		let previousOutputBuffer;
+		let previousPass: Pass<Material | null> | null = null;
+		let previousOutputBuffer: WebGLRenderTarget | null | undefined;
 
 		const passes = pipeline.passes.filter(x => x.enabled);
 
@@ -95,13 +95,13 @@ export class IOManager {
 
 			}
 
-			if((j >= 0) && !(passes[j] instanceof ClearPass)) {
+			if(j >= 0 && !(passes[j] instanceof ClearPass)) {
 
 				previousPass = passes[j];
 
 			}
 
-			// Keep track of the last output buffer (some passes don't render anything).
+			// Keep track of the last output buffer (some passes don't render to the default buffer).
 			previousOutputBuffer = previousPass?.output.buffers.get(Output.BUFFER_DEFAULT)?.value ?? previousOutputBuffer;
 
 			if(previousPass === null || pass === geoPass) {
@@ -117,20 +117,20 @@ export class IOManager {
 
 				pass.input.defaultBuffer = null;
 
-			} else if(previousOutputBuffer.textures.length > 1) {
+			} else if(previousOutputBuffer !== undefined) {
 
 				const indices = extractIndices(previousOutputBuffer);
 
 				if(indices.has(GBuffer.COLOR)) {
 
 					const index = indices.get(GBuffer.COLOR) as number;
-					pass.input.defaultBuffer = previousOutputBuffer.texture[index];
+					pass.input.defaultBuffer = previousOutputBuffer.textures[index];
+
+				} else {
+
+					pass.input.defaultBuffer = previousOutputBuffer.texture;
 
 				}
-
-			} else if(previousOutputBuffer !== undefined) {
-
-				pass.input.defaultBuffer = previousOutputBuffer.texture;
 
 			}
 
@@ -152,7 +152,7 @@ export class IOManager {
 
 			const pass = passes[i];
 
-			if(pass instanceof ClearPass || pass.output.defaultBuffer === null) {
+			if(pass.output.defaultBuffer === null) {
 
 				continue;
 
@@ -179,7 +179,7 @@ export class IOManager {
 
 		}
 
-		// Update ClearPasses separately.
+		// Connect clear passes with subsequent passes.
 		for(let i = 0, j = 1, l = passes.length; i < l; ++i, ++j) {
 
 			const pass = passes[i];
@@ -250,7 +250,7 @@ export class IOManager {
 			const inputBuffer = pass.input.defaultBuffer?.value ?? null;
 			const outputBuffer = pass.output.defaultBuffer?.value ?? null;
 
-			if(inputBuffer === null || outputBuffer === null || outputBuffer.textures.length > 1) {
+			if(inputBuffer === null || outputBuffer === null || pass instanceof GeometryPass) {
 
 				continue;
 
@@ -364,7 +364,7 @@ export class IOManager {
 			} else if(indices.has(component)) {
 
 				const index = indices.get(component) as number;
-				pass.input.buffers.set(component, new TextureResource(geoPass.gBuffer.texture[index]));
+				pass.input.buffers.set(component, new TextureResource(geoPass.gBuffer.textures[index]));
 
 			}
 
