@@ -217,7 +217,7 @@ export abstract class FullscreenMaterial extends RawShaderMaterial implements Re
 		this.uniforms.projectionMatrix.value = camera.projectionMatrix;
 		this.uniforms.projectionMatrixInverse.value = camera.projectionMatrixInverse;
 		const cameraParams = this.uniforms.cameraParams.value as Vector3;
-		cameraParams.set(camera.near, camera.far, 1);
+		cameraParams.set(camera.near, camera.far, cameraParams.z);
 
 		if(camera instanceof PerspectiveCamera) {
 
