@@ -36,7 +36,7 @@ function load(): Promise<Map<string, Texture | GLTF>> {
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		cubeTextureLoader.load(Utils.getSkyboxUrls("space"), (t) => {
+		cubeTextureLoader.load(Utils.getSkyboxUrls("space", ".jpg"), (t) => {
 
 			t.colorSpace = SRGBColorSpace;
 			assets.set("sky", t);

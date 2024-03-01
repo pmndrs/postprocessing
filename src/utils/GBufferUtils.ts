@@ -10,7 +10,6 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { GBuffer } from "../enums/GBuffer.js";
 import { Precision } from "../enums/Precision.js";
 
 /**
