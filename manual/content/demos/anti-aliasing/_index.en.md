@@ -2,7 +2,6 @@
 layout: section
 collection: sections
 title: Anti-Aliasing
-headless: true
 draft: false
 menu:
   demos:
