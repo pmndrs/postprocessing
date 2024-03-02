@@ -30,7 +30,7 @@ devDependencies:
     version: 6.21.0(eslint@8.57.0)(typescript@5.3.3)
   autoprefixer:
     specifier: 10.x.x
-    version: 10.4.17(postcss@8.4.35)
+    version: 10.4.18(postcss@8.4.35)
   ava:
     specifier: 6.x.x
     version: 6.1.2
@@ -60,7 +60,7 @@ devDependencies:
     version: 7.2.0
   hugo-bin:
     specifier: 0.x.x
-    version: 0.120.6
+    version: 0.120.7
   npm-run-all:
     specifier: 4.x.x
     version: 4.1.5
@@ -1394,8 +1394,8 @@ packages:
     resolution: {integrity: sha512-tLRNUXati5MFePdAk8dw7Qt7DpxPB60ofAgn8WRhW6a2rcimZnYBP9oxHiv0OHy+Wz7kPMG+t4LGdt31+4EmGg==}
     dev: true
 
-  /autoprefixer@10.4.17(postcss@8.4.35):
-    resolution: {integrity: sha512-/cpVNRLSfhOtcGflT13P2794gVSgmPgTR+erw5ifnMLZb0UnSlkK4tquLmkd3BhA+nLo5tX8Cu0upUsGKvKbmg==}
+  /autoprefixer@10.4.18(postcss@8.4.35):
+    resolution: {integrity: sha512-1DKbDfsr6KUElM6wg+0zRNkB/Q7WcKYAaK+pzXn+Xqmszm/5Xa9coeNdtP88Vi+dPzZnMjhge8GIV49ZQkDa+g==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
     peerDependencies:
@@ -1556,7 +1556,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001591
-      electron-to-chromium: 1.4.689
+      electron-to-chromium: 1.4.690
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.23.0)
     dev: true
@@ -2202,8 +2202,8 @@ packages:
       stream-shift: 1.0.3
     dev: true
 
-  /electron-to-chromium@1.4.689:
-    resolution: {integrity: sha512-GatzRKnGPS1go29ep25reM94xxd1Wj8ritU0yRhCJ/tr1Bg8gKnm6R9O/yPOhGQBoLMZ9ezfrpghNaTw97C/PQ==}
+  /electron-to-chromium@1.4.690:
+    resolution: {integrity: sha512-+2OAGjUx68xElQhydpcbqH50hE8Vs2K6TkAeLhICYfndb67CVH0UsZaijmRUE3rHlIxU1u0jxwhgVe6fK3YANA==}
     dev: true
 
   /emittery@1.0.3:
@@ -3049,8 +3049,8 @@ packages:
       - supports-color
     dev: true
 
-  /hugo-bin@0.120.6:
-    resolution: {integrity: sha512-+PSaRNOQpR8OnmkSCc+1aoFZSnNU/4VH6YVH0nzmNBCS5gFk28VapsP1V4oc9+fxZZ3nv3gF0xAKDjumzvkLdQ==}
+  /hugo-bin@0.120.7:
+    resolution: {integrity: sha512-xx0JUuHI+4PY3P+EIwsYexU2NSKBQKxbcPPba9lTR9gI52EU59TcXaDjtLaXK9OPufm1TZzaWE2qncxQq/DnIw==}
     engines: {node: '>=16'}
     hasBin: true
     requiresBuild: true
@@ -4676,7 +4676,7 @@ packages:
       '@csstools/postcss-text-decoration-shorthand': 3.0.4(postcss@8.4.35)
       '@csstools/postcss-trigonometric-functions': 3.0.5(postcss@8.4.35)
       '@csstools/postcss-unset-value': 3.0.1(postcss@8.4.35)
-      autoprefixer: 10.4.17(postcss@8.4.35)
+      autoprefixer: 10.4.18(postcss@8.4.35)
       browserslist: 4.23.0
       css-blank-pseudo: 6.0.1(postcss@8.4.35)
       css-has-pseudo: 6.0.2(postcss@8.4.35)
