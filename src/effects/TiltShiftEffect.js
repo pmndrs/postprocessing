@@ -1,8 +1,7 @@
-import { Uniform, Vector2, WebGLRenderTarget } from "three";
+import { SRGBColorSpace, Uniform, Vector2, WebGLRenderTarget } from "three";
 import { Resolution } from "../core/index.js";
-import { KernelSize, SRGBColorSpace } from "../enums/index.js";
+import { KernelSize } from "../enums/index.js";
 import { TiltShiftBlurPass } from "../passes/index.js";
-import { getOutputColorSpace, setTextureColorSpace } from "../utils/index.js";
 import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/tilt-shift.frag";
@@ -270,9 +269,9 @@ export class TiltShiftEffect extends Effect {
 
 			this.renderTarget.texture.type = frameBufferType;
 
-			if(getOutputColorSpace(renderer) === SRGBColorSpace) {
+			if(renderer.outputColorSpace === SRGBColorSpace) {
 
-				setTextureColorSpace(this.renderTarget.texture, SRGBColorSpace);
+				this.renderTarget.texture.colorSpace = SRGBColorSpace;
 
 			}
 

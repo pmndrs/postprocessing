@@ -1,6 +1,5 @@
 import { Uniform, Vector2, Vector4 } from "three";
 import { KernelSize } from "../enums/index.js";
-import { updateFragmentShader } from "../utils/index.js";
 import { KawaseBlurMaterial } from "./KawaseBlurMaterial.js";
 
 import fragmentShader from "./glsl/convolution.tilt-shift.frag";
@@ -35,8 +34,6 @@ export class TiltShiftBlurMaterial extends KawaseBlurMaterial {
 		this.fragmentShader = fragmentShader;
 		this.vertexShader = vertexShader;
 		this.kernelSize = kernelSize;
-
-		this.fragmentShader = updateFragmentShader(this.fragmentShader);
 
 		this.uniforms.aspect = new Uniform(1.0);
 		this.uniforms.rotation = new Uniform(new Vector2());

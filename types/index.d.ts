@@ -21,7 +21,6 @@ declare module "postprocessing" {
 		EventDispatcher,
 		Color,
 		ColorSpace,
-		TextureEncoding,
 		Data3DTexture
 	} from "three";
 
@@ -6817,7 +6816,6 @@ declare module "postprocessing" {
 		 * @param {Object} [options] - The options.
 		 * @param {BlendFunction} [options.blendFunction=BlendFunction.SET] - The blend function of this effect.
 		 * @param {Boolean} [options.tetrahedralInterpolation=false] - Enables or disables tetrahedral interpolation.
-		 * @param {TextureEncoding} [options.inputEncoding=sRGBEncoding] - Deprecated.
 		 * @param {ColorSpace} [options.inputColorSpace=SRGBColorSpace] - The input color space.
 		 */
 		constructor(
@@ -6830,7 +6828,6 @@ declare module "postprocessing" {
 			}?: {
 				blendFunction?: BlendFunction;
 				tetrahedralInterpolation?: boolean;
-				inputEncoding?: TextureEncoding;
 				inputColorSpace?: ColorSpace;
 			}
 		);
@@ -6845,43 +6842,12 @@ declare module "postprocessing" {
 		get tetrahedralInterpolation(): boolean;
 		set tetrahedralInterpolation(arg: boolean);
 		/**
-		 * The input encoding. Default is `sRGBEncoding`.
-		 *
-		 * Set this to `LinearEncoding` if your LUT expects linear color input.
-		 *
-		 * @deprecated Use inputColorSpace instead.
-		 * @type {TextureEncoding}
-		 */
-		get inputEncoding(): TextureEncoding;
-		set inputEncoding(arg: TextureEncoding);
-		/**
 		 * The LUT.
 		 *
 		 * @type {Texture}
 		 */
 		get lut(): Texture;
 		set lut(arg: Texture);
-		/**
-		 * Returns the output encoding.
-		 *
-		 * @deprecated
-		 * @return {TextureEncoding} The encoding.
-		 */
-		getOutputEncoding(): TextureEncoding;
-		/**
-		 * Returns the input encoding.
-		 *
-		 * @deprecated Use inputEncoding instead.
-		 * @return {TextureEncoding} The encoding.
-		 */
-		getInputEncoding(): TextureEncoding;
-		/**
-		 * Sets the input encoding.
-		 *
-		 * @deprecated Use inputEncoding instead.
-		 * @param {TextureEncoding} value - The encoding.
-		 */
-		setInputEncoding(value: TextureEncoding): void;
 		/**
 		 * Returns the current LUT.
 		 *
@@ -8388,6 +8354,7 @@ declare module "postprocessing" {
 	 * A tone mapping mode enumeration.
 	 *
 	 * @type {Object}
+	 * @property {Number} LINEAR - No tone mapping, only exposure.
 	 * @property {Number} REINHARD - Simple Reinhard tone mapping.
 	 * @property {Number} REINHARD2 - Modified Reinhard tone mapping.
 	 * @property {Number} REINHARD2_ADAPTIVE - Simulates the optic nerve responding to the amount of light it is receiving.
@@ -8395,8 +8362,10 @@ declare module "postprocessing" {
 	 * @property {Number} OPTIMIZED_CINEON - Optimized filmic operator by Jim Hejl and Richard Burgess-Dawson.
 	 * @property {Number} ACES_FILMIC - ACES tone mapping with a scale of 1.0/0.6.
 	 * @property {Number} AGX - Filmic tone mapping. Requires three r160 or higher. https://github.com/EaryChow/AgX.
+	 * @property {Number} NEUTRAL - Neutral tone mapping by Khronos. Requires three r162 or higher. https://modelviewer.dev/examples/tone-mapping.
 	 */
 	export enum ToneMappingMode {
+		LINEAR,
 		REINHARD,
 		REINHARD2,
 		REINHARD2_ADAPTIVE,
@@ -8404,6 +8373,7 @@ declare module "postprocessing" {
 		OPTIMIZED_CINEON,
 		ACES_FILMIC,
 		AGX,
+		NEUTRAL
 	}
 
 	/**

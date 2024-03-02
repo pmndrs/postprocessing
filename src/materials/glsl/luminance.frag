@@ -1,11 +1,5 @@
 #include <common>
 
-#if THREE_REVISION < 143
-
-	#define luminance(v) linearToRelativeLuminance(v)
-
-#endif
-
 #ifdef FRAMEBUFFER_PRECISION_HIGH
 
 	uniform mediump sampler2D inputBuffer;

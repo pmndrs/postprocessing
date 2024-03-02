@@ -1,6 +1,6 @@
 {
 	"name": "postprocessing",
-	"version": "6.34.3",
+	"version": "6.35.0",
 	"description": "A post processing library for three.js.",
 	"homepage": "https://github.com/pmndrs/postprocessing",
 	"license": "Zlib",
@@ -63,6 +63,7 @@
 	},
 	"scripts": {
 		"ava": "ava",
+		"build": "npm run clean && run-p build:css build:js:min build:dts",
 		"build:css": "sass --no-source-map -I manual/assets/css/src/values manual/assets/css/src:manual/assets/css/dist",
 		"build:js": "node esbuild",
 		"build:js:min": "node esbuild -m",
@@ -73,13 +74,13 @@
 		"doc": "esdoc",
 		"gzip": "gzipper c public",
 		"hugo": "hugo -s manual --minify",
-		"lint": "run-s lint:*",
+		"lint": "run-p lint:*",
 		"lint:css": "stylelint --fix manual/assets/css/src",
 		"lint:js": "eslint --ext .js --fix src demo/src manual/assets/js/src",
 		"postcss": "postcss manual/assets/css/dist/index.css -o manual/assets/css/dist/index.css -c manual",
-		"prepublishOnly": "run-s test doc",
+		"prepublishOnly": "npm test",
 		"prewatch": "run-s clean copy build:css build:js",
-		"test": "run-s clean lint build:css build:js:min build:dts ava",
+		"test": "run-s lint build ava doc",
 		"start": "hugo server -s manual -e development",
 		"watch": "run-p watch:* start",
 		"watch:css": "sass --no-source-map -I manual/assets/css/src/values manual/assets/css/src:manual/assets/css/dist -w",
@@ -87,7 +88,7 @@
 		"watch:js": "node esbuild -w"
 	},
 	"peerDependencies": {
-		"three": ">= 0.138.0 < 0.162.0"
+		"three": ">= 0.152.0 < 0.163.0"
 	},
 	"devDependencies": {
 		"@tweakpane/core": "2.x.x",

@@ -5,13 +5,14 @@ import {
 	Data3DTexture,
 	FloatType,
 	LinearFilter,
+	LinearSRGBColorSpace,
 	RGBAFormat,
+	SRGBColorSpace,
 	UnsignedByteType,
 	Vector3
 } from "three";
 
-import { LinearSRGBColorSpace, LUTOperation, SRGBColorSpace } from "../../enums/index.js";
-import { copyTextureColorSpace, setTextureColorSpace } from "../../utils/index.js";
+import { LUTOperation } from "../../enums/index.js";
 import { RawImageData } from "../RawImageData.js";
 import workerProgram from "../../../tmp/lut/worker.txt";
 
@@ -46,7 +47,7 @@ export class LookupTexture extends Data3DTexture {
 		this.unpackAlignment = 1;
 		this.needsUpdate = true;
 
-		setTextureColorSpace(this, LinearSRGBColorSpace);
+		this.colorSpace = LinearSRGBColorSpace;
 
 		/**
 		 * The lower bounds of the input domain.
@@ -109,7 +110,7 @@ export class LookupTexture extends Data3DTexture {
 				worker.addEventListener("message", (event) => {
 
 					const lut = new LookupTexture(event.data, size);
-					copyTextureColorSpace(this, lut);
+					this.colorSpace = lut.colorSpace;
 					lut.type = this.type;
 					lut.name = this.name;
 
@@ -283,7 +284,7 @@ export class LookupTexture extends Data3DTexture {
 
 			}
 
-			setTextureColorSpace(this, SRGBColorSpace);
+			this.colorSpace = SRGBColorSpace;
 			this.needsUpdate = true;
 
 		} else {
@@ -314,7 +315,7 @@ export class LookupTexture extends Data3DTexture {
 
 			}
 
-			setTextureColorSpace(this, LinearSRGBColorSpace);
+			this.colorSpace = LinearSRGBColorSpace;
 			this.needsUpdate = true;
 
 		} else {
@@ -351,7 +352,7 @@ export class LookupTexture extends Data3DTexture {
 		texture.generateMipmaps = false;
 		texture.needsUpdate = true;
 
-		copyTextureColorSpace(this, texture);
+		this.colorSpace = texture.colorSpace;
 
 		return texture;
 
@@ -426,7 +427,7 @@ export class LookupTexture extends Data3DTexture {
 		lut.type = texture.type;
 		lut.name = texture.name;
 
-		copyTextureColorSpace(texture, lut);
+		texture.colorSpace = lut.colorSpace;
 
 		return lut;
 

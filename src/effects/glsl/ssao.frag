@@ -2,12 +2,6 @@ uniform lowp sampler2D aoBuffer;
 uniform float luminanceInfluence;
 uniform float intensity;
 
-#if THREE_REVISION < 143
-
-	#define luminance(v) linearToRelativeLuminance(v)
-
-#endif
-
 #if defined(DEPTH_AWARE_UPSAMPLING) && defined(NORMAL_DEPTH)
 
 	#ifdef GL_FRAGMENT_PRECISION_HIGH

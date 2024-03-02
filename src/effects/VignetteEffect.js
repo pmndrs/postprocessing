@@ -23,8 +23,8 @@ export class VignetteEffect extends Effect {
 
 	constructor({
 		blendFunction,
-		technique = VignetteTechnique.DEFAULT,
 		eskil = false,
+		technique = eskil ? VignetteTechnique.ESKIL : VignetteTechnique.DEFAULT,
 		offset = 0.5,
 		darkness = 0.5
 	} = {}) {

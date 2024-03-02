@@ -2,6 +2,7 @@ import {
 	DepthStencilFormat,
 	DepthTexture,
 	LinearFilter,
+	SRGBColorSpace,
 	UnsignedByteType,
 	UnsignedIntType,
 	UnsignedInt248Type,
@@ -10,8 +11,6 @@ import {
 } from "three";
 
 import { ClearMaskPass, CopyPass, MaskPass } from "../passes/index.js";
-import { SRGBColorSpace } from "../enums/ColorSpace.js";
-import { getOutputColorSpace, setTextureColorSpace } from "../utils/BackCompat.js";
 import { Timer } from "./Timer.js";
 
 /**
@@ -217,10 +216,10 @@ export class EffectComposer {
 			const alpha = renderer.getContext().getContextAttributes().alpha;
 			const frameBufferType = this.inputBuffer.texture.type;
 
-			if(frameBufferType === UnsignedByteType && getOutputColorSpace(renderer) === SRGBColorSpace) {
+			if(frameBufferType === UnsignedByteType && renderer.outputColorSpace === SRGBColorSpace) {
 
-				setTextureColorSpace(this.inputBuffer.texture, SRGBColorSpace);
-				setTextureColorSpace(this.outputBuffer.texture, SRGBColorSpace);
+				this.inputBuffer.texture.colorSpace = SRGBColorSpace;
+				this.outputBuffer.texture.colorSpace = SRGBColorSpace;
 
 				this.inputBuffer.dispose();
 				this.outputBuffer.dispose();
@@ -366,9 +365,9 @@ export class EffectComposer {
 
 		}
 
-		if(type === UnsignedByteType && getOutputColorSpace(renderer) === SRGBColorSpace) {
+		if(type === UnsignedByteType && renderer.outputColorSpace === SRGBColorSpace) {
 
-			setTextureColorSpace(renderTarget.texture, SRGBColorSpace);
+			renderTarget.texture.colorSpace = SRGBColorSpace;
 
 		}
 

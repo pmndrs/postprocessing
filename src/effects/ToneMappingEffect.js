@@ -1,7 +1,6 @@
 import { LinearMipmapLinearFilter, Uniform, WebGLRenderTarget } from "three";
 import { AdaptiveLuminancePass, LuminancePass } from "../passes/index.js";
 import { BlendFunction, ToneMappingMode } from "../enums/index.js";
-import { validateToneMappingMode } from "../utils/index.js";
 import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/tone-mapping.frag";
@@ -124,10 +123,12 @@ export class ToneMappingEffect extends Effect {
 			this.defines.clear();
 			this.defines.set("TONE_MAPPING_MODE", value.toFixed(0));
 
-			value = validateToneMappingMode(value);
-
 			// Use one of the built-in tone mapping operators.
 			switch(value) {
+
+				case ToneMappingMode.LINEAR:
+					this.defines.set("toneMapping(texel)", "LinearToneMapping(texel)");
+					break;
 
 				case ToneMappingMode.REINHARD:
 					this.defines.set("toneMapping(texel)", "ReinhardToneMapping(texel)");
@@ -143,6 +144,10 @@ export class ToneMappingEffect extends Effect {
 
 				case ToneMappingMode.AGX:
 					this.defines.set("toneMapping(texel)", "AgXToneMapping(texel)");
+					break;
+
+				case ToneMappingMode.NEUTRAL:
+					this.defines.set("toneMapping(texel)", "NeutralToneMapping(texel)");
 					break;
 
 				default:
