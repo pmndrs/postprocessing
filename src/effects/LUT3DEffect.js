@@ -67,66 +67,6 @@ export class LUT3DEffect extends Effect {
 	}
 
 	/**
-	 * The input encoding. Default is `sRGBEncoding`.
-	 *
-	 * Set this to `LinearEncoding` if your LUT expects linear color input.
-	 *
-	 * @deprecated Use inputColorSpace instead.
-	 * @type {TextureEncoding}
-	 */
-
-	get inputEncoding() {
-
-		return this.inputColorSpace;
-
-	}
-
-	set inputEncoding(value) {
-
-		this.inputColorSpace = value;
-
-	}
-
-	/**
-	 * Returns the input encoding.
-	 *
-	 * @deprecated Use inputColorSpace instead.
-	 * @return {TextureEncoding} The encoding.
-	 */
-
-	getInputEncoding() {
-
-		return this.inputColorSpace;
-
-	}
-
-	/**
-	 * Sets the input encoding.
-	 *
-	 * @deprecated Use inputColorSpace instead.
-	 * @param {TextureEncoding} value - The encoding.
-	 */
-
-	setInputEncoding(value) {
-
-		this.inputColorSpace = value;
-
-	}
-
-	/**
-	 * Returns the output encoding.
-	 *
-	 * @deprecated Use outputColorSpace instead.
-	 * @return {TextureEncoding} The encoding.
-	 */
-
-	getOutputEncoding() {
-
-		return this.outputColorSpace;
-
-	}
-
-	/**
 	 * The LUT.
 	 *
 	 * @type {Texture}

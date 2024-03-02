@@ -21,7 +21,6 @@ declare module "postprocessing" {
 		EventDispatcher,
 		Color,
 		ColorSpace,
-		TextureEncoding,
 		Data3DTexture
 	} from "three";
 
@@ -6817,7 +6816,6 @@ declare module "postprocessing" {
 		 * @param {Object} [options] - The options.
 		 * @param {BlendFunction} [options.blendFunction=BlendFunction.SET] - The blend function of this effect.
 		 * @param {Boolean} [options.tetrahedralInterpolation=false] - Enables or disables tetrahedral interpolation.
-		 * @param {TextureEncoding} [options.inputEncoding=sRGBEncoding] - Deprecated.
 		 * @param {ColorSpace} [options.inputColorSpace=SRGBColorSpace] - The input color space.
 		 */
 		constructor(
@@ -6830,7 +6828,6 @@ declare module "postprocessing" {
 			}?: {
 				blendFunction?: BlendFunction;
 				tetrahedralInterpolation?: boolean;
-				inputEncoding?: TextureEncoding;
 				inputColorSpace?: ColorSpace;
 			}
 		);
@@ -6845,43 +6842,12 @@ declare module "postprocessing" {
 		get tetrahedralInterpolation(): boolean;
 		set tetrahedralInterpolation(arg: boolean);
 		/**
-		 * The input encoding. Default is `sRGBEncoding`.
-		 *
-		 * Set this to `LinearEncoding` if your LUT expects linear color input.
-		 *
-		 * @deprecated Use inputColorSpace instead.
-		 * @type {TextureEncoding}
-		 */
-		get inputEncoding(): TextureEncoding;
-		set inputEncoding(arg: TextureEncoding);
-		/**
 		 * The LUT.
 		 *
 		 * @type {Texture}
 		 */
 		get lut(): Texture;
 		set lut(arg: Texture);
-		/**
-		 * Returns the output encoding.
-		 *
-		 * @deprecated
-		 * @return {TextureEncoding} The encoding.
-		 */
-		getOutputEncoding(): TextureEncoding;
-		/**
-		 * Returns the input encoding.
-		 *
-		 * @deprecated Use inputEncoding instead.
-		 * @return {TextureEncoding} The encoding.
-		 */
-		getInputEncoding(): TextureEncoding;
-		/**
-		 * Sets the input encoding.
-		 *
-		 * @deprecated Use inputEncoding instead.
-		 * @param {TextureEncoding} value - The encoding.
-		 */
-		setInputEncoding(value: TextureEncoding): void;
 		/**
 		 * Returns the current LUT.
 		 *
