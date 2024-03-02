@@ -12,15 +12,7 @@ export class ImmutableTimer {
 	 * @type {Number}
 	 */
 
-	get delta() { return NaN; }
-
-	/**
-	 * The fixed delta time in seconds.
-	 *
-	 * @type {Number}
-	 */
-
-	get fixedDelta() { return NaN; }
+	getDelta() { return NaN; }
 
 	/**
 	 * The elapsed time in seconds.
@@ -28,6 +20,6 @@ export class ImmutableTimer {
 	 * @type {Number}
 	 */
 
-	get elapsed() { return NaN; }
+	getElapsed() { return NaN; }
 
 }

@@ -8,6 +8,7 @@ export function require(name) {
 
 		case "three":
 		case "three/examples/jsm/loaders/GLTFLoader.js":
+		case "three/addons/misc/Timer.js":
 		case "tweakpane":
 		case "spatial-controls":
 			return window.VENDOR;

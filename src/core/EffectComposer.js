@@ -10,8 +10,8 @@ import {
 	WebGLRenderTarget
 } from "three";
 
+import { Timer } from "three/addons/misc/Timer.js";
 import { ClearMaskPass, CopyPass, MaskPass } from "../passes/index.js";
-import { Timer } from "./Timer.js";
 
 /**
  * The EffectComposer may be used in place of a normal WebGLRenderer.
@@ -584,7 +584,7 @@ export class EffectComposer {
 		if(deltaTime === undefined) {
 
 			this.timer.update();
-			deltaTime = this.timer.delta;
+			deltaTime = this.timer.getDelta();
 
 		}
 
@@ -677,10 +677,8 @@ export class EffectComposer {
 
 	reset() {
 
-		const autoReset = this.timer.autoReset;
 		this.dispose();
 		this.autoRenderToScreen = true;
-		this.timer.autoReset = autoReset;
 
 	}
 
