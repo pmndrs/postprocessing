@@ -6823,7 +6823,6 @@ declare module "postprocessing" {
 			{
 				blendFunction,
 				tetrahedralInterpolation,
-				inputEncoding,
 				inputColorSpace
 			}?: {
 				blendFunction?: BlendFunction;
