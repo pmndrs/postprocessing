@@ -70,6 +70,8 @@ export class ClearPass extends Pass {
 		this.backgroundScene = new Scene();
 		this.backgroundScene.add(this.background);
 
+		this.disposables.add(this.background);
+
 	}
 
 	/**

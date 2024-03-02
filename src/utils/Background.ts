@@ -16,6 +16,7 @@ import {
 	WebGLRenderer
 } from "three";
 
+import { Disposable } from "../core/Disposable.js";
 import { BackgroundMaterial } from "../materials/BackgroundMaterial.js";
 import { SkyBoxMaterial } from "../materials/SkyBoxMaterial.js";
 import { ClearValues } from "./ClearValues.js";
@@ -31,7 +32,7 @@ const matrix4 = /* @__PURE__ */ new Matrix4();
  * @internal
  */
 
-export class Background extends Group {
+export class Background extends Group implements Disposable {
 
 	/**
 	 * A sky box.
@@ -186,6 +187,13 @@ export class Background extends Group {
 			background.visible = true;
 
 		}
+
+	}
+
+	dispose(): void {
+
+		this.skyBox.material.dispose();
+		this.background.material.dispose();
 
 	}
 
