@@ -451,7 +451,7 @@ export class BloomEffect extends Effect {
 
 			this.renderTarget.texture.type = frameBufferType;
 
-			if(renderer.colorSpace === SRGBColorSpace) {
+			if(renderer.outputColorSpace === SRGBColorSpace) {
 
 				this.renderTarget.texture.colorSpace = SRGBColorSpace;
 

@@ -262,7 +262,7 @@ export class MipmapBlurPass extends Pass {
 				this.downsamplingMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 				this.upsamplingMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
-			} else if(renderer.colorSpace === SRGBColorSpace) {
+			} else if(renderer.outputColorSpace === SRGBColorSpace) {
 
 				for(const mipmap of mipmaps) {
 

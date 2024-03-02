@@ -343,7 +343,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 			this.renderTargetMasked.texture.type = frameBufferType;
 
-			if(renderer.colorSpace === SRGBColorSpace) {
+			if(renderer.outputColorSpace === SRGBColorSpace) {
 
 				this.renderTargetMasked.texture.colorSpace = SRGBColorSpace;
 

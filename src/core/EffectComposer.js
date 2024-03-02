@@ -216,7 +216,7 @@ export class EffectComposer {
 			const alpha = renderer.getContext().getContextAttributes().alpha;
 			const frameBufferType = this.inputBuffer.texture.type;
 
-			if(frameBufferType === UnsignedByteType && renderer.colorSpace === SRGBColorSpace) {
+			if(frameBufferType === UnsignedByteType && renderer.outputColorSpace === SRGBColorSpace) {
 
 				this.inputBuffer.texture.colorSpace = SRGBColorSpace;
 				this.outputBuffer.texture.colorSpace = SRGBColorSpace;
@@ -365,7 +365,7 @@ export class EffectComposer {
 
 		}
 
-		if(type === UnsignedByteType && renderer.colorSpace === SRGBColorSpace) {
+		if(type === UnsignedByteType && renderer.outputColorSpace === SRGBColorSpace) {
 
 			renderTarget.texture.colorSpace = SRGBColorSpace;
 

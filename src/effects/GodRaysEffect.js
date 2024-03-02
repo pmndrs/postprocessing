@@ -623,7 +623,7 @@ export class GodRaysEffect extends Effect {
 			this.renderTargetB.texture.type = frameBufferType;
 			this.renderTargetLight.texture.type = frameBufferType;
 
-			if(renderer.colorSpace === SRGBColorSpace) {
+			if(renderer.outputColorSpace === SRGBColorSpace) {
 
 				this.renderTargetA.texture.colorSpace = SRGBColorSpace;
 				this.renderTargetB.texture.colorSpace = SRGBColorSpace;

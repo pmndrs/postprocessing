@@ -192,7 +192,7 @@ export class BoxBlurPass extends Pass {
 
 				this.fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
-			} else if(renderer.colorSpace === SRGBColorSpace) {
+			} else if(renderer.outputColorSpace === SRGBColorSpace) {
 
 				this.renderTargetA.texture.colorSpace = SRGBColorSpace;
 				this.renderTargetB.texture.colorSpace = SRGBColorSpace;

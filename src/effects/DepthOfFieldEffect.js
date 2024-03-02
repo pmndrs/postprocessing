@@ -565,7 +565,7 @@ export class DepthOfFieldEffect extends Effect {
 			this.renderTargetFar.texture.type = frameBufferType;
 			this.renderTargetMasked.texture.type = frameBufferType;
 
-			if(renderer.colorSpace === SRGBColorSpace) {
+			if(renderer.outputColorSpace === SRGBColorSpace) {
 
 				this.renderTarget.texture.colorSpace = SRGBColorSpace;
 				this.renderTargetNear.texture.colorSpace = SRGBColorSpace;

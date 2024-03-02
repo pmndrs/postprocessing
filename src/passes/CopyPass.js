@@ -164,7 +164,7 @@ export class CopyPass extends Pass {
 
 				this.fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
-			} else if(renderer.colorSpace === SRGBColorSpace) {
+			} else if(renderer.outputColorSpace === SRGBColorSpace) {
 
 				this.renderTarget.texture.colorSpace = SRGBColorSpace;
 
