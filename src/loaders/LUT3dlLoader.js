@@ -10,7 +10,7 @@ import { LookupTexture } from "../textures/index.js";
  * For more details see:
  * http://download.autodesk.com/us/systemdocs/help/2011/lustre/index.html?url=./files/WSc4e151a45a3b785a24c3d9a411df9298473-7ffd.htm,topicNumber=d0e9492
  *
- * @deprecated Use `three/addons/loaders/LUT3dlLoader.js` instead
+ * @deprecated Use `three/addons/loaders/LUT3dlLoader.js` instead.
  */
 
 export class LUT3dlLoader extends Loader {
