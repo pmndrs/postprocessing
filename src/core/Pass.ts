@@ -16,12 +16,12 @@ import {
 	WebGLRenderer
 } from "three";
 
+import { Input } from "./io/Input.js";
+import { Output } from "./io/Output.js";
 import { FullscreenMaterial } from "../materials/FullscreenMaterial.js";
 import { ImmutableTimer } from "../utils/ImmutableTimer.js";
 import { Log } from "../utils/Log.js";
 import { Resolution } from "../utils/Resolution.js";
-import { Input } from "./io/Input.js";
-import { Output } from "./io/Output.js";
 import { BaseEventMap } from "./BaseEventMap.js";
 import { Disposable } from "./Disposable.js";
 import { Renderable } from "./Renderable.js";

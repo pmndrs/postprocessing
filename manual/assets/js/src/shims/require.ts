@@ -10,10 +10,10 @@ export function require(name: string): unknown {
 	switch(name) {
 
 		case "three":
-		case "three/addons/loaders/GLTFLoader.js":
-		case "three/addons/loaders/LUT3dlLoader.js":
-		case "three/addons/loaders/LUTCubeLoader.js":
-		case "three/addons/misc/Timer.js":
+		case "three/examples/jsm/loaders/GLTFLoader.js":
+		case "three/examples/jsm/loaders/LUT3dlLoader.js":
+		case "three/examples/jsm/loaders/LUTCubeLoader.js":
+		case "three/examples/jsm/misc/Timer.js":
 		case "tweakpane":
 		case "@tweakpane/plugin-essentials":
 		case "spatial-controls":

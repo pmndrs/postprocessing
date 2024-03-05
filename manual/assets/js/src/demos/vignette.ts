@@ -16,6 +16,7 @@ import {
 	MixBlendFunction,
 	RenderPipeline,
 	ToneMappingEffect,
+	VignetteEffect,
 	VignetteTechnique
 } from "postprocessing";
 
@@ -23,7 +24,6 @@ import { Pane } from "tweakpane";
 import { SpatialControls } from "spatial-controls";
 import * as DefaultEnvironment from "../objects/DefaultEnvironment.js";
 import * as Utils from "../utils/index.js";
-import { VignetteEffect } from "../../../../../src/effects/VignetteEffect.js";
 
 function load(): Promise<Map<string, Texture>> {
 
