@@ -18,7 +18,7 @@ import {
 	ToneMappingEffect
 } from "postprocessing";
 
-import { GLTF, GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 import { Pane } from "tweakpane";
 import { SpatialControls } from "spatial-controls";
