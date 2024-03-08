@@ -59,7 +59,7 @@
 	},
 	"scripts": {
 		"ava": "ava",
-		"build": "npm run clean && run-p build:css build:js:min build:dts",
+		"build": "run-p build:css build:js:min build:dts",
 		"build:css": "sass --no-source-map -I manual/assets/css/src/values manual/assets/css/src:manual/assets/css/dist",
 		"build:js": "node esbuild",
 		"build:js:min": "node esbuild -m",
@@ -76,7 +76,7 @@
 		"postcss": "postcss manual/assets/css/dist/index.css -o manual/assets/css/dist/index.css -c manual",
 		"prepublishOnly": "npm test",
 		"prewatch": "run-s clean build:css build:js",
-		"test": "run-s lint build ava doc",
+		"test": "run-s lint clean build ava doc",
 		"start": "hugo server -s manual -e development",
 		"watch": "run-p watch:* start",
 		"watch:css": "sass --no-source-map -I manual/assets/css/src/values manual/assets/css/src:manual/assets/css/dist -w",
