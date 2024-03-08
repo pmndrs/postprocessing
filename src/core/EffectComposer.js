@@ -365,7 +365,7 @@ export class EffectComposer {
 
 		}
 
-		if(type === UnsignedByteType && renderer.outputColorSpace === SRGBColorSpace) {
+		if(type === UnsignedByteType && renderer !== null && renderer.outputColorSpace === SRGBColorSpace) {
 
 			renderTarget.texture.colorSpace = SRGBColorSpace;
 
