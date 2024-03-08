@@ -34,6 +34,12 @@ export class CopyMaterial extends FullscreenMaterial {
 
 	}
 
+	override get inputBuffer(): Texture | null {
+
+		return super.inputBuffer;
+
+	}
+
 	override set inputBuffer(value: Texture | null) {
 
 		const colorWrite = value !== null;
