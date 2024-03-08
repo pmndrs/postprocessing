@@ -180,7 +180,7 @@ export class GaussianBlurPass extends Pass {
 				this.blurMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 				this.copyMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
-			} else if(renderer.outputColorSpace === SRGBColorSpace) {
+			} else if(renderer !== null && renderer.outputColorSpace === SRGBColorSpace) {
 
 				this.renderTargetA.texture.colorSpace = SRGBColorSpace;
 				this.renderTargetB.texture.colorSpace = SRGBColorSpace;

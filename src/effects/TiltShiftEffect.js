@@ -269,7 +269,7 @@ export class TiltShiftEffect extends Effect {
 
 			this.renderTarget.texture.type = frameBufferType;
 
-			if(renderer.outputColorSpace === SRGBColorSpace) {
+			if(renderer !== null && renderer.outputColorSpace === SRGBColorSpace) {
 
 				this.renderTarget.texture.colorSpace = SRGBColorSpace;
 

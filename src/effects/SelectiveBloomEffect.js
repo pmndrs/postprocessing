@@ -333,7 +333,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 		this.depthPass.initialize(renderer, alpha, frameBufferType);
 		this.depthMaskPass.initialize(renderer, alpha, frameBufferType);
 
-		if(renderer.capabilities.logarithmicDepthBuffer) {
+		if(renderer !== null && renderer.capabilities.logarithmicDepthBuffer) {
 
 			this.depthMaskPass.fullscreenMaterial.defines.LOG_DEPTH = "1";
 
@@ -343,7 +343,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 			this.renderTargetMasked.texture.type = frameBufferType;
 
-			if(renderer.outputColorSpace === SRGBColorSpace) {
+			if(renderer !== null && renderer.outputColorSpace === SRGBColorSpace) {
 
 				this.renderTargetMasked.texture.colorSpace = SRGBColorSpace;
 
