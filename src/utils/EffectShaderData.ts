@@ -367,17 +367,17 @@ export class EffectShaderData implements ShaderData {
 	createBlendFunctions(): string {
 
 		const blendRegExp = /\bblend\b/g;
-		let s = "";
+		const parts: string[] = [];
 
 		for(const blendMode of this.blendModes.values()) {
 
 			const blendFunctionShader = blendMode.blendFunction.shader!;
 			const blendFunctionName = `blend${blendMode.blendFunction.id}`;
-			s += blendFunctionShader.replace(blendRegExp, blendFunctionName) + "\n";
+			parts.push(blendFunctionShader.replace(blendRegExp, blendFunctionName));
 
 		}
 
-		return s;
+		return parts.join("\n");
 
 	}
 
