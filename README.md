@@ -5,7 +5,7 @@
 
 A post processing library for [three.js](https://threejs.org/).
 
-*[Demo](https://pmndrs.github.io/postprocessing/public/demo)&ensp;&middot;&ensp;[Sandbox](https://codesandbox.io/s/postprocessing-25rts)&ensp;&middot;&ensp;[Documentation](https://pmndrs.github.io/postprocessing/public/docs)&ensp;&middot;&ensp;[Wiki](https://github.com/pmndrs/postprocessing/wiki)*
+*[Demo](https://pmndrs.github.io/postprocessing/public/demo)&ensp;&middot;&ensp;[Sandbox](https://stackblitz.com/edit/postprocessing-v6)&ensp;&middot;&ensp;[Documentation](https://pmndrs.github.io/postprocessing/public/docs)&ensp;&middot;&ensp;[Wiki](https://github.com/pmndrs/postprocessing/wiki)*
 
 ## Installation
 
