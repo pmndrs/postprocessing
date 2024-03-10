@@ -1,5 +1,5 @@
 import { LinearFilter, SRGBColorSpace, UnsignedByteType, WebGLRenderTarget } from "three";
-import { CopyMaterial } from "../materials/index.js";
+import { CopyMaterial } from "../materials/CopyMaterial.js";
 import { Pass } from "./Pass.js";
 
 /**
@@ -164,7 +164,7 @@ export class CopyPass extends Pass {
 
 				this.fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
-			} else if(renderer.outputColorSpace === SRGBColorSpace) {
+			} else if(renderer !== null && renderer.outputColorSpace === SRGBColorSpace) {
 
 				this.renderTarget.texture.colorSpace = SRGBColorSpace;
 

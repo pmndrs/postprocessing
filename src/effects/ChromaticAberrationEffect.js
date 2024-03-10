@@ -1,5 +1,5 @@
 import { Uniform, Vector2 } from "three";
-import { EffectAttribute } from "../enums/index.js";
+import { EffectAttribute } from "../enums/EffectAttribute.js";
 import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/chromatic-aberration.frag";

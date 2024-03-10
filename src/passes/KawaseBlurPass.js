@@ -1,7 +1,8 @@
 import { SRGBColorSpace, UnsignedByteType, WebGLRenderTarget } from "three";
-import { Resolution } from "../core/index.js";
-import { KernelSize } from "../enums/index.js";
-import { CopyMaterial, KawaseBlurMaterial } from "../materials/index.js";
+import { Resolution } from "../core/Resolution.js";
+import { KernelSize } from "../enums/KernelSize.js";
+import { CopyMaterial } from "../materials/CopyMaterial.js";
+import { KawaseBlurMaterial } from "../materials/KawaseBlurMaterial.js";
 import { Pass } from "./Pass.js";
 
 /**
@@ -396,7 +397,7 @@ export class KawaseBlurPass extends Pass {
 				this.blurMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 				this.copyMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
-			} else if(renderer.outputColorSpace === SRGBColorSpace) {
+			} else if(renderer !== null && renderer.outputColorSpace === SRGBColorSpace) {
 
 				this.renderTargetA.texture.colorSpace = SRGBColorSpace;
 				this.renderTargetB.texture.colorSpace = SRGBColorSpace;

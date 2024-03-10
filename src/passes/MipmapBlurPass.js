@@ -1,5 +1,6 @@
 import { SRGBColorSpace, UnsignedByteType, Vector2, WebGLRenderTarget } from "three";
-import { DownsamplingMaterial, UpsamplingMaterial } from "../materials/index.js";
+import { DownsamplingMaterial } from "../materials/DownsamplingMaterial.js";
+import { UpsamplingMaterial } from "../materials/UpsamplingMaterial.js";
 import { Pass } from "./Pass.js";
 
 /**
@@ -262,7 +263,7 @@ export class MipmapBlurPass extends Pass {
 				this.downsamplingMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 				this.upsamplingMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = "1";
 
-			} else if(renderer.outputColorSpace === SRGBColorSpace) {
+			} else if(renderer !== null && renderer.outputColorSpace === SRGBColorSpace) {
 
 				for(const mipmap of mipmaps) {
 

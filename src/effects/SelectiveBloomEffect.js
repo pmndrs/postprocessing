@@ -8,10 +8,13 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { Selection } from "../core/index.js";
-import { DepthTestStrategy, EffectAttribute } from "../enums/index.js";
-import { DepthMaskMaterial } from "../materials/index.js";
-import { ClearPass, DepthPass, ShaderPass } from "../passes/index.js";
+import { Selection } from "../core/Selection.js";
+import { DepthTestStrategy } from "../enums/DepthTestStrategy.js";
+import { EffectAttribute } from "../enums/EffectAttribute.js";
+import { DepthMaskMaterial } from "../materials/DepthMaskMaterial.js";
+import { ClearPass } from "../passes/ClearPass.js";
+import { DepthPass } from "../passes/DepthPass.js";
+import { ShaderPass } from "../passes/ShaderPass.js";
 import { BloomEffect } from "./BloomEffect.js";
 
 /**
@@ -333,7 +336,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 		this.depthPass.initialize(renderer, alpha, frameBufferType);
 		this.depthMaskPass.initialize(renderer, alpha, frameBufferType);
 
-		if(renderer.capabilities.logarithmicDepthBuffer) {
+		if(renderer !== null && renderer.capabilities.logarithmicDepthBuffer) {
 
 			this.depthMaskPass.fullscreenMaterial.defines.LOG_DEPTH = "1";
 
@@ -343,7 +346,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 			this.renderTargetMasked.texture.type = frameBufferType;
 
-			if(renderer.outputColorSpace === SRGBColorSpace) {
+			if(renderer !== null && renderer.outputColorSpace === SRGBColorSpace) {
 
 				this.renderTargetMasked.texture.colorSpace = SRGBColorSpace;
 

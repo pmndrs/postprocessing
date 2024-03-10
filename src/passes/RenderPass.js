@@ -1,4 +1,4 @@
-import { OverrideMaterialManager } from "../core/index.js";
+import { OverrideMaterialManager } from "../core/OverrideMaterialManager.js";
 import { ClearPass } from "./ClearPass.js";
 import { Pass } from "./Pass.js";
 

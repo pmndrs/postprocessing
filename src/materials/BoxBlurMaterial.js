@@ -1,5 +1,6 @@
 import { NoBlending, PerspectiveCamera, ShaderMaterial, Uniform, Vector2 } from "three";
-import { orthographicDepthToViewZ, viewZToOrthographicDepth } from "../utils/index.js";
+import { orthographicDepthToViewZ } from "../utils/orthographicDepthToViewZ.js";
+import { viewZToOrthographicDepth } from "../utils/viewZToOrthographicDepth.js";
 
 import fragmentShader from "./glsl/convolution.box.frag";
 import vertexShader from "./glsl/convolution.box.vert";

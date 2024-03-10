@@ -1,7 +1,10 @@
 import { SRGBColorSpace, Uniform, WebGLRenderTarget } from "three";
-import { Resolution } from "../core/index.js";
-import { BlendFunction, KernelSize } from "../enums/index.js";
-import { KawaseBlurPass, LuminancePass, MipmapBlurPass } from "../passes/index.js";
+import { Resolution } from "../core/Resolution.js";
+import { BlendFunction } from "../enums/BlendFunction.js";
+import { KernelSize } from "../enums/KernelSize.js";
+import { KawaseBlurPass } from "../passes/KawaseBlurPass.js";
+import { LuminancePass } from "../passes/LuminancePass.js";
+import { MipmapBlurPass } from "../passes/MipmapBlurPass.js";
 import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/bloom.frag";
@@ -451,7 +454,7 @@ export class BloomEffect extends Effect {
 
 			this.renderTarget.texture.type = frameBufferType;
 
-			if(renderer.outputColorSpace === SRGBColorSpace) {
+			if(renderer !== null && renderer.outputColorSpace === SRGBColorSpace) {
 
 				this.renderTarget.texture.colorSpace = SRGBColorSpace;
 

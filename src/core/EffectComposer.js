@@ -10,8 +10,10 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { Timer } from "three/examples/jsm/misc/Timer.js";
-import { ClearMaskPass, CopyPass, MaskPass } from "../passes/index.js";
+import { Timer } from "./Timer.js";
+import { ClearMaskPass } from "../passes/ClearMaskPass.js";
+import { CopyPass } from "../passes/CopyPass.js";
+import { MaskPass } from "../passes/MaskPass.js";
 
 /**
  * The EffectComposer may be used in place of a normal WebGLRenderer.
@@ -365,7 +367,7 @@ export class EffectComposer {
 
 		}
 
-		if(type === UnsignedByteType && renderer.outputColorSpace === SRGBColorSpace) {
+		if(type === UnsignedByteType && renderer !== null && renderer.outputColorSpace === SRGBColorSpace) {
 
 			renderTarget.texture.colorSpace = SRGBColorSpace;
 

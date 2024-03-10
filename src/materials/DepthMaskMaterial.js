@@ -15,7 +15,7 @@ import {
 	Vector2
 } from "three";
 
-import { DepthTestStrategy } from "../enums/index.js";
+import { DepthTestStrategy } from "../enums/DepthTestStrategy.js";
 
 import fragmentShader from "./glsl/depth-mask.frag";
 import vertexShader from "./glsl/common.vert";

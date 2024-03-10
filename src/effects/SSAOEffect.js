@@ -1,9 +1,11 @@
 import { BasicDepthPacking, Color, RepeatWrapping, RGBAFormat, Uniform, WebGLRenderTarget } from "three";
-import { Resolution } from "../core/index.js";
-import { BlendFunction, EffectAttribute } from "../enums/index.js";
-import { NoiseTexture } from "../textures/index.js";
-import { SSAOMaterial } from "../materials/index.js";
-import { DepthDownsamplingPass, ShaderPass } from "../passes/index.js";
+import { Resolution } from "../core/Resolution.js";
+import { BlendFunction } from "../enums/BlendFunction.js";
+import { EffectAttribute } from "../enums/EffectAttribute.js";
+import { NoiseTexture } from "../textures/NoiseTexture.js";
+import { SSAOMaterial } from "../materials/SSAOMaterial.js";
+import { DepthDownsamplingPass } from "../passes/DepthDownsamplingPass.js";
+import { ShaderPass } from "../passes/ShaderPass.js";
 import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/ssao.frag";

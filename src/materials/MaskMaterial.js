@@ -1,5 +1,6 @@
 import { NoBlending, ShaderMaterial, Uniform, UnsignedByteType } from "three";
-import { ColorChannel, MaskFunction } from "../enums/index.js";
+import { ColorChannel } from "../enums/ColorChannel.js";
+import { MaskFunction } from "../enums/MaskFunction.js";
 
 import fragmentShader from "./glsl/mask.frag";
 import vertexShader from "./glsl/common.vert";

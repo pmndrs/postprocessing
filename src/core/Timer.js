@@ -7,6 +7,7 @@ const SECONDS_TO_MILLISECONDS = 1e3;
  * Original implementation by Michael Herzog (Mugen87).
  *
  * @deprecated Use `three/addons/misc/Timer.js` instead.
+ * @implements {ImmutableTimer}
  * @implements {EventListenerObject}
  * @implements {Disposable}
  */
@@ -196,6 +197,18 @@ export class Timer {
 		this._delta = 0;
 		this._elapsed = 0;
 		this.currentTime = performance.now() - this.startTime;
+
+	}
+
+	getDelta() {
+
+		return this.delta;
+
+	}
+
+	getElapsed() {
+
+		return this.elapsed;
 
 	}
 

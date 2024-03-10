@@ -1,8 +1,10 @@
 import { BasicDepthPacking, NoColorSpace, SRGBColorSpace, UnsignedByteType } from "three";
-import { EffectShaderData } from "../core/index.js";
-import { BlendFunction, EffectAttribute, EffectShaderSection as Section } from "../enums/index.js";
+import { EffectShaderData } from "../core/EffectShaderData.js";
+import { BlendFunction } from "../enums/BlendFunction.js";
+import { EffectAttribute } from "../enums/EffectAttribute.js";
+import { EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
 
-import { EffectMaterial } from "../materials/index.js";
+import { EffectMaterial } from "../materials/EffectMaterial.js";
 import { Pass } from "./Pass.js";
 
 /**

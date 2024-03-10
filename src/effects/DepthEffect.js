@@ -1,4 +1,5 @@
-import { BlendFunction, EffectAttribute } from "../enums/index.js";
+import { BlendFunction } from "../enums/BlendFunction.js";
+import { EffectAttribute } from "../enums/EffectAttribute.js";
 import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/depth.frag";

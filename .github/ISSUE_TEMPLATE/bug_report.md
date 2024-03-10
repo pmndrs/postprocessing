@@ -11,7 +11,7 @@ assignees: ''
 A clear and concise description of what the bug is.
 
 
-### To Reproduce
+### To reproduce
 
 Describe the steps to reproduce the behavior and provide a minimal example that demonstrates the issue. You can use the demo sandbox as a starting point: https://stackblitz.com/edit/postprocessing-v6
 
