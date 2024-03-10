@@ -1,5 +1,5 @@
 import { Color, MeshNormalMaterial, NearestFilter, WebGLRenderTarget } from "three";
-import { Resolution } from "../core/index.js";
+import { Resolution } from "../core/Resolution.js";
 import { RenderPass } from "./RenderPass.js";
 import { Pass } from "./Pass.js";
 

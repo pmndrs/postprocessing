@@ -8,9 +8,10 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { BlendFunction, EffectAttribute } from "../enums/index.js";
-import { Pass } from "../passes/index.js";
-import { BlendMode } from "./blending/index.js";
+import { BlendFunction } from "../enums/BlendFunction.js";
+import { EffectAttribute } from "../enums/EffectAttribute.js";
+import { Pass } from "../passes/Pass.js";
+import { BlendMode } from "./blending/BlendMode.js";
 
 /**
  * An abstract effect.

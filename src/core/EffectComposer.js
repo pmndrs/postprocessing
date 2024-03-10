@@ -11,7 +11,9 @@ import {
 } from "three";
 
 import { Timer } from "./Timer.js";
-import { ClearMaskPass, CopyPass, MaskPass } from "../passes/index.js";
+import { ClearMaskPass } from "../passes/ClearMaskPass.js";
+import { CopyPass } from "../passes/CopyPass.js";
+import { MaskPass } from "../passes/MaskPass.js";
 
 /**
  * The EffectComposer may be used in place of a normal WebGLRenderer.

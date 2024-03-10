@@ -9,8 +9,8 @@ import {
 	Vector3
 } from "three";
 
-import { BlendFunction } from "../enums/index.js";
-import { LookupTexture } from "../textures/index.js";
+import { BlendFunction } from "../enums/BlendFunction.js";
+import { LookupTexture } from "../textures/LookupTexture.js";
 import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/lut-3d.frag";

@@ -12,7 +12,7 @@ import {
 	Vector3
 } from "three";
 
-import { LUTOperation } from "../../enums/index.js";
+import { LUTOperation } from "../../enums/LUTOperation.js";
 import { RawImageData } from "../RawImageData.js";
 import workerProgram from "../../../tmp/lut/worker.txt";
 

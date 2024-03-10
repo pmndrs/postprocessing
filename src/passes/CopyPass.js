@@ -1,5 +1,5 @@
 import { LinearFilter, SRGBColorSpace, UnsignedByteType, WebGLRenderTarget } from "three";
-import { CopyMaterial } from "../materials/index.js";
+import { CopyMaterial } from "../materials/CopyMaterial.js";
 import { Pass } from "./Pass.js";
 
 /**

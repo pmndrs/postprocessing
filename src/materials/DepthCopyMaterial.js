@@ -1,5 +1,5 @@
 import { BasicDepthPacking, NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
-import { DepthCopyMode } from "../enums/index.js";
+import { DepthCopyMode } from "../enums/DepthCopyMode.js";
 
 import fragmentShader from "./glsl/depth-copy.frag";
 import vertexShader from "./glsl/depth-copy.vert";

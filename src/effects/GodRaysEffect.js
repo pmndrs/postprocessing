@@ -11,10 +11,16 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { Resolution } from "../core/index.js";
-import { BlendFunction, EffectAttribute, KernelSize } from "../enums/index.js";
-import { DepthMaskMaterial, GodRaysMaterial } from "../materials/index.js";
-import { KawaseBlurPass, ClearPass, RenderPass, ShaderPass } from "../passes/index.js";
+import { Resolution } from "../core/Resolution.js";
+import { BlendFunction } from "../enums/BlendFunction.js";
+import { EffectAttribute } from "../enums/EffectAttribute.js";
+import { KernelSize } from "../enums/KernelSize.js";
+import { DepthMaskMaterial } from "../materials/DepthMaskMaterial.js";
+import { GodRaysMaterial } from "../materials/GodRaysMaterial.js";
+import { KawaseBlurPass } from "../passes/KawaseBlurPass.js";
+import { ClearPass } from "../passes/ClearPass.js";
+import { RenderPass } from "../passes/RenderPass.js";
+import { ShaderPass } from "../passes/ShaderPass.js";
 import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/god-rays.frag";

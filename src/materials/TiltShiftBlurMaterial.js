@@ -1,5 +1,5 @@
 import { Uniform, Vector2, Vector4 } from "three";
-import { KernelSize } from "../enums/index.js";
+import { KernelSize } from "../enums/KernelSize.js";
 import { updateFragmentShader } from "../utils/BackCompat.js";
 import { KawaseBlurMaterial } from "./KawaseBlurMaterial.js";
 

@@ -1,6 +1,7 @@
 import { SRGBColorSpace, UnsignedByteType, WebGLRenderTarget } from "three";
-import { Resolution } from "../core/index.js";
-import { CopyMaterial, GaussianBlurMaterial } from "../materials/index.js";
+import { Resolution } from "../core/Resolution.js";
+import { CopyMaterial } from "../materials/CopyMaterial.js";
+import { GaussianBlurMaterial } from "../materials/GaussianBlurMaterial.js";
 import { Pass } from "./Pass.js";
 
 /**

@@ -1,5 +1,5 @@
 import { EventDispatcher, Uniform } from "three";
-import { BlendFunction } from "../../enums/index.js";
+import { BlendFunction } from "../../enums/BlendFunction.js";
 
 import add from "./glsl/add.frag";
 import alpha from "./glsl/alpha.frag";

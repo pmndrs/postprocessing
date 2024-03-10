@@ -1,9 +1,15 @@
 import { BasicDepthPacking, SRGBColorSpace, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
-import { Resolution } from "../core/index.js";
-import { ColorChannel, EffectAttribute, KernelSize, MaskFunction } from "../enums/index.js";
-import { BokehMaterial, CircleOfConfusionMaterial, MaskMaterial } from "../materials/index.js";
-import { KawaseBlurPass, ShaderPass } from "../passes/index.js";
-import { viewZToOrthographicDepth } from "../utils/index.js";
+import { Resolution } from "../core/Resolution.js";
+import { ColorChannel } from "../enums/ColorChannel.js";
+import { EffectAttribute } from "../enums/EffectAttribute.js";
+import { KernelSize } from "../enums/KernelSize.js";
+import { MaskFunction } from "../enums/MaskFunction.js";
+import { BokehMaterial } from "../materials/BokehMaterial.js";
+import { CircleOfConfusionMaterial } from "../materials/CircleOfConfusionMaterial.js";
+import { MaskMaterial } from "../materials/MaskMaterial.js";
+import { KawaseBlurPass } from "../passes/KawaseBlurPass.js";
+import { ShaderPass } from "../passes/ShaderPass.js";
+import { viewZToOrthographicDepth } from "../utils/viewZToOrthographicDepth.js";
 import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/depth-of-field.frag";

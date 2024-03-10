@@ -1,6 +1,6 @@
 import { BasicDepthPacking, FloatType, NearestFilter, WebGLRenderTarget } from "three";
-import { Resolution } from "../core/index.js";
-import { DepthDownsamplingMaterial } from "../materials/index.js";
+import { Resolution } from "../core/Resolution.js";
+import { DepthDownsamplingMaterial } from "../materials/DepthDownsamplingMaterial.js";
 import { Pass } from "./Pass.js";
 
 /**

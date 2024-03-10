@@ -9,9 +9,15 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { BlendFunction, EdgeDetectionMode, EffectAttribute, PredicationMode, SMAAPreset } from "../enums/index.js";
-import { EdgeDetectionMaterial, SMAAWeightsMaterial } from "../materials/index.js";
-import { ClearPass, ShaderPass } from "../passes/index.js";
+import { BlendFunction } from "../enums/BlendFunction.js";
+import { EdgeDetectionMode } from "../enums/EdgeDetectionMode.js";
+import { EffectAttribute } from "../enums/EffectAttribute.js";
+import { PredicationMode } from "../enums/PredicationMode.js";
+import { SMAAPreset } from "../enums/SMAAPreset.js";
+import { EdgeDetectionMaterial } from "../materials/EdgeDetectionMaterial.js";
+import { SMAAWeightsMaterial } from "../materials/SMAAWeightsMaterial.js";
+import { ClearPass } from "../passes/ClearPass.js";
+import { ShaderPass } from "../passes/ShaderPass.js";
 import { Effect } from "./Effect.js";
 
 import searchImageDataURL from "../textures/smaa/searchImageDataURL.js";

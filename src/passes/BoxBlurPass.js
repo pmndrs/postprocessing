@@ -1,6 +1,7 @@
 import { BasicDepthPacking, SRGBColorSpace, UnsignedByteType, WebGLRenderTarget } from "three";
-import { Resolution } from "../core/index.js";
-import { CopyMaterial, BoxBlurMaterial } from "../materials/index.js";
+import { Resolution } from "../core/Resolution.js";
+import { CopyMaterial } from "../materials/CopyMaterial.js";
+import { BoxBlurMaterial } from "../materials/BoxBlurMaterial.js";
 import { Pass } from "./Pass.js";
 
 /**

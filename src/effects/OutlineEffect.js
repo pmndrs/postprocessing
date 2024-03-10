@@ -1,8 +1,15 @@
 import { Color, RepeatWrapping, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
-import { Resolution, Selection } from "../core/index.js";
-import { BlendFunction, KernelSize } from "../enums/index.js";
-import { DepthComparisonMaterial, OutlineMaterial } from "../materials/index.js";
-import { KawaseBlurPass, ClearPass, DepthPass, RenderPass, ShaderPass } from "../passes/index.js";
+import { Resolution } from "../core/Resolution.js";
+import { Selection } from "../core/Selection.js";
+import { BlendFunction } from "../enums/BlendFunction.js";
+import { KernelSize } from "../enums/KernelSize.js";
+import { DepthComparisonMaterial } from "../materials/DepthComparisonMaterial.js";
+import { OutlineMaterial } from "../materials/OutlineMaterial.js";
+import { KawaseBlurPass } from "../passes/KawaseBlurPass.js";
+import { ClearPass } from "../passes/ClearPass.js";
+import { DepthPass } from "../passes/DepthPass.js";
+import { RenderPass } from "../passes/RenderPass.js";
+import { ShaderPass } from "../passes/ShaderPass.js";
 import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/outline.frag";

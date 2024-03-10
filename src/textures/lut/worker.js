@@ -1,4 +1,4 @@
-import { LUTOperation } from "../../enums/index.js";
+import { LUTOperation } from "../../enums/LUTOperation.js";
 import { TetrahedralUpscaler } from "./TetrahedralUpscaler.js";
 
 /**

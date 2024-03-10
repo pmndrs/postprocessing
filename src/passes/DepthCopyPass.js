@@ -7,7 +7,7 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { DepthCopyMaterial } from "../materials/index.js";
+import { DepthCopyMaterial } from "../materials/DepthCopyMaterial.js";
 import { Pass } from "./Pass.js";
 
 /**

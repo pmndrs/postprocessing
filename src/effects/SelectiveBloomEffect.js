@@ -8,10 +8,13 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { Selection } from "../core/index.js";
-import { DepthTestStrategy, EffectAttribute } from "../enums/index.js";
-import { DepthMaskMaterial } from "../materials/index.js";
-import { ClearPass, DepthPass, ShaderPass } from "../passes/index.js";
+import { Selection } from "../core/Selection.js";
+import { DepthTestStrategy } from "../enums/DepthTestStrategy.js";
+import { EffectAttribute } from "../enums/EffectAttribute.js";
+import { DepthMaskMaterial } from "../materials/DepthMaskMaterial.js";
+import { ClearPass } from "../passes/ClearPass.js";
+import { DepthPass } from "../passes/DepthPass.js";
+import { ShaderPass } from "../passes/ShaderPass.js";
 import { BloomEffect } from "./BloomEffect.js";
 
 /**

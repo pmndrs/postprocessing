@@ -1,5 +1,6 @@
 import { SRGBColorSpace, UnsignedByteType, Vector2, WebGLRenderTarget } from "three";
-import { DownsamplingMaterial, UpsamplingMaterial } from "../materials/index.js";
+import { DownsamplingMaterial } from "../materials/DownsamplingMaterial.js";
+import { UpsamplingMaterial } from "../materials/UpsamplingMaterial.js";
 import { Pass } from "./Pass.js";
 
 /**

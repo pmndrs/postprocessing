@@ -1,5 +1,5 @@
 import { Uniform, UnsignedByteType } from "three";
-import { ColorChannel } from "../enums/index.js";
+import { ColorChannel } from "../enums/ColorChannel.js";
 import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/texture.frag";
