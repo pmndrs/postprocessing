@@ -10,7 +10,7 @@ import {
 } from "three";
 
 import { BlendFunction } from "../enums/BlendFunction.js";
-import { LookupTexture } from "../textures/LookupTexture.js";
+import { LookupTexture } from "../textures/lut/LookupTexture.js";
 import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/lut-3d.frag";
