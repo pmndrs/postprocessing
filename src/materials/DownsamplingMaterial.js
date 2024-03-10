@@ -1,4 +1,5 @@
 import { NoBlending, ShaderMaterial, Uniform, Vector2 } from "three";
+import { updateFragmentShader } from "../utils/BackCompat.js";
 
 import fragmentShader from "./glsl/convolution.downsampling.frag";
 import vertexShader from "./glsl/convolution.downsampling.vert";
@@ -33,6 +34,8 @@ export class DownsamplingMaterial extends ShaderMaterial {
 			fragmentShader,
 			vertexShader
 		});
+
+		this.fragmentShader = updateFragmentShader(this.fragmentShader);
 
 	}
 
