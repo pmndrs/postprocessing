@@ -24,8 +24,6 @@ declare module "postprocessing" {
 		Data3DTexture
 	} from "three";
 
-	import { Timer as Timer3 } from "three/examples/jsm/misc/Timer.js";
-
 	/**
 	 * A color channel enumeration.
 	 *
@@ -4785,7 +4783,7 @@ declare module "postprocessing" {
 		 *
 		 * @return {Timer} The timer.
 		 */
-		getTimer(): Timer3;
+		getTimer(): Timer;
 		/**
 		 * Returns the renderer.
 		 *
@@ -5085,12 +5083,12 @@ declare module "postprocessing" {
 	 * Original implementation by Michael Herzog (Mugen87).
 	 *
  	 * @deprecated Use `three/addons/misc/Timer.js` instead.
+	 * @implements {ImmutableTimer}
 	 * @implements {Disposable}
 	 * @implements {EventListenerObject}
 	 */
-	export class Timer implements Disposable, EventListenerObject {
+	export class Timer implements Disposable, ImmutableTimer, EventListenerObject {
 		handleEvent(object: Event): void;
-
 		/**
 		 * The current delta time in seconds.
 		 */
@@ -5122,6 +5120,9 @@ declare module "postprocessing" {
 		 */
 		get autoReset(): boolean;
 		set autoReset(value: boolean);
+
+		getDelta(): number;
+		getElapsed(): number;
 		/**
 		 * Updates this timer.
 		 *

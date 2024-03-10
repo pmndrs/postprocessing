@@ -10,7 +10,7 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { Timer } from "three/examples/jsm/misc/Timer.js";
+import { Timer } from "./Timer.js";
 import { ClearMaskPass, CopyPass, MaskPass } from "../passes/index.js";
 
 /**
