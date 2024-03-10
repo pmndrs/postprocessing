@@ -135,6 +135,8 @@ export class Resolution extends EventDispatcher<BaseEventMap> {
 
 	/**
 	 * The resolution scale.
+	 *
+	 * @defaultValue 1
 	 */
 
 	get scale(): number {
@@ -157,6 +159,8 @@ export class Resolution extends EventDispatcher<BaseEventMap> {
 
 	/**
 	 * The base width.
+	 *
+	 * @defaultValue 1
 	 */
 
 	get baseWidth(): number {
@@ -178,6 +182,8 @@ export class Resolution extends EventDispatcher<BaseEventMap> {
 
 	/**
 	 * The base height.
+	 *
+	 * @defaultValue 1
 	 */
 
 	get baseHeight(): number {
@@ -217,6 +223,8 @@ export class Resolution extends EventDispatcher<BaseEventMap> {
 
 	/**
 	 * The preferred width.
+	 *
+	 * @defaultValue {@link Resolution.AUTO_SIZE}
 	 */
 
 	get preferredWidth(): number {
@@ -238,6 +246,8 @@ export class Resolution extends EventDispatcher<BaseEventMap> {
 
 	/**
 	 * The preferred height.
+	 *
+	 * @defaultValue {@link Resolution.AUTO_SIZE}
 	 */
 
 	get preferredHeight(): number {
@@ -276,6 +286,16 @@ export class Resolution extends EventDispatcher<BaseEventMap> {
 	}
 
 	/**
+	 * Dispatches a `change` event.
+	 */
+
+	private setChanged(): void {
+
+		this.dispatchEvent({ type: Resolution.EVENT_CHANGE });
+
+	}
+
+	/**
 	 * Copies the given resolution.
 	 *
 	 * @param resolution - The resolution.
@@ -284,19 +304,27 @@ export class Resolution extends EventDispatcher<BaseEventMap> {
 	copy(resolution: Resolution): void {
 
 		this._scale = resolution.scale;
-		this.baseSize.set(resolution.baseWidth, resolution.baseHeight);
 		this.preferredSize.set(resolution.preferredWidth, resolution.preferredHeight);
+		this.baseSize.set(resolution.baseWidth, resolution.baseHeight);
 		this.setChanged();
 
 	}
 
 	/**
-	 * Dispatches a `change` event.
+	 * Resets the {@link scale} and preferred size and sets the base size.
+	 *
+	 * @see {@link setBaseSize} to set the base size.
+	 * @see {@link setPreferredSize} to set the preferred size.
+	 * @param width - The width.
+	 * @param height - The height.
 	 */
 
-	private setChanged(): void {
+	set(width: number, height: number): void {
 
-		this.dispatchEvent({ type: Resolution.EVENT_CHANGE });
+		this._scale = 1.0;
+		this.preferredSize.set(AUTO_SIZE, AUTO_SIZE);
+		this.baseSize.set(width, height);
+		this.setChanged();
 
 	}
 
