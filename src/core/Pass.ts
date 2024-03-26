@@ -506,8 +506,8 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 * Override this method to check if the current device supports the necessary features.
 	 * This method should throw an error if the requirements are not met.
 	 *
-	 * @param renderer - The current renderer.
 	 * @throws If the device doesn't meet the requirements.
+	 * @param renderer - The current renderer.
 	 */
 
 	checkRequirements(renderer: WebGLRenderer): void {}

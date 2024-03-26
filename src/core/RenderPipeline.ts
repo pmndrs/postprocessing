@@ -230,7 +230,7 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 	/**
 	 * Adds one or more passes.
 	 *
-	 * @throws {@link Error} If the pass has already been added to a pipeline.
+	 * @throws If the pass has already been added to a pipeline.
 	 * @param passes - The passes to add.
 	 */
 
