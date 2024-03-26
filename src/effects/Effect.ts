@@ -141,7 +141,7 @@ export abstract class Effect extends Pass {
 
 	get hasMainImageFunction(): boolean {
 
-		const regExp = /vec4\s+mainImage\s*\(.*vec4\s+\w+,.*vec2\s+\w+,.*GData\s+\w+\)/;
+		const regExp = /vec4\s+mainImage\s*\([a-z\s]*vec4\s+\w+,[a-z\s]*vec2\s+\w+,[a-z\s]*GData\s+\w+\)/;
 		return this.fragmentShader !== null && regExp.test(this.fragmentShader);
 
 	}
@@ -152,7 +152,7 @@ export abstract class Effect extends Pass {
 
 	get hasMainUvFunction(): boolean {
 
-		const regExp = /void\s+mainUv\s*\(.*inout\s+vec2\s+\w+\)/;
+		const regExp = /void\s+mainUv\s*\(\s*inout\s+vec2\s+\w+\)/;
 		return this.fragmentShader !== null && regExp.test(this.fragmentShader);
 
 	}
@@ -163,7 +163,7 @@ export abstract class Effect extends Pass {
 
 	get hasMainSupportFunction(): boolean {
 
-		const regExp = /void\s+mainSupport\s*\(.*vec2\s+\w+\)/;
+		const regExp = /void\s+mainSupport\s*\([a-z\s]*vec2\s+\w+\)/;
 		return this.vertexShader !== null && regExp.test(this.vertexShader);
 
 	}
