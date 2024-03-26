@@ -84,4 +84,3 @@ if(process.argv.includes("-w")) {
 	await esbuild.build(manual);
 
 }
-
