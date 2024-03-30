@@ -25,6 +25,7 @@ import { Precision } from "../enums/Precision.js";
  * This material defines the following commonly used uniforms:
  * - `mat4` projectionMatrix
  * - `mat4` projectionMatrixInverse
+ * - `mat4` viewMatrix
  * - `vec3` cameraParams
  * - `vec4` resolution
  * - `sampler2D` inputBuffer
@@ -58,6 +59,7 @@ export abstract class FullscreenMaterial extends RawShaderMaterial implements Re
 		Object.assign(this.uniforms, {
 			projectionMatrix: new Uniform(null),
 			projectionMatrixInverse: new Uniform(null),
+			viewMatrix: new Uniform(null),
 			cameraParams: new Uniform(new Vector3()),
 			resolution: new Uniform(new Vector4()),
 			inputBuffer: new Uniform(null)
@@ -207,7 +209,7 @@ export abstract class FullscreenMaterial extends RawShaderMaterial implements Re
 	/**
 	 * Copies the settings of the given camera.
 	 *
-	 * Updates the `cameraParams` uniform and updates the `PERSPECTIVE_CAMERA` macro.
+	 * Updates the camera-related uniforms and macros.
 	 *
 	 * @param camera - A camera.
 	 */
@@ -216,6 +218,8 @@ export abstract class FullscreenMaterial extends RawShaderMaterial implements Re
 
 		this.uniforms.projectionMatrix.value = camera.projectionMatrix;
 		this.uniforms.projectionMatrixInverse.value = camera.projectionMatrixInverse;
+		this.uniforms.viewMatrix.value = camera.matrixWorldInverse;
+
 		const cameraParams = this.uniforms.cameraParams.value as Vector3;
 		cameraParams.set(camera.near, camera.far, cameraParams.z);
 
