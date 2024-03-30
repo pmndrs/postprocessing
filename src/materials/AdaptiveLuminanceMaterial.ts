@@ -31,9 +31,6 @@ export class AdaptiveLuminanceMaterial extends FullscreenMaterial {
 				minLuminance: new Uniform(0.01),
 				deltaTime: new Uniform(0.0),
 				tau: new Uniform(1.0)
-			},
-			extensions: {
-				shaderTextureLOD: true
 			}
 		});
 
