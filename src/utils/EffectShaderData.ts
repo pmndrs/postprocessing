@@ -178,8 +178,8 @@ export class EffectShaderData implements ShaderData {
 			vertexMainSupport += `\t${prefix}MainSupport(`;
 			vertexMainSupport += needsUv ? "vUv);\n" : ");\n";
 
-			// Collect names of varyings and functions.
-			for(const m of vertexShader.matchAll(/(?:out\s+\w+\s+([\S\s]*?);)/g)) {
+			// Collect names of varyings.
+			for(const m of vertexShader.matchAll(/(?:out\s+\w+\s+(\w*?);)/g)) {
 
 				// Handle unusual formatting and commas.
 				for(const n of m[1].split(/\s*,\s*/)) {
@@ -192,6 +192,7 @@ export class EffectShaderData implements ShaderData {
 
 			}
 
+			// Collect names of functions.
 			for(const m of vertexShader.matchAll(functionRegExp)) {
 
 				names.add(m[1]);
