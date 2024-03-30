@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   three:
-    specifier: '>= 0.162.0 < 0.163.0'
-    version: 0.162.0
+    specifier: '>= 0.163.0 < 0.164.0'
+    version: 0.163.0
 
 devDependencies:
   '@tweakpane/core':
@@ -18,10 +18,10 @@ devDependencies:
     version: 0.2.1(tweakpane@4.0.3)
   '@types/node':
     specifier: 20.x.x
-    version: 20.11.30
+    version: 20.12.2
   '@types/three':
     specifier: 0.x.x
-    version: 0.162.0
+    version: 0.163.0
   '@typescript-eslint/eslint-plugin':
     specifier: 7.x.x
     version: 7.4.0(@typescript-eslint/parser@7.4.0)(eslint@8.57.0)(typescript@5.4.3)
@@ -78,7 +78,7 @@ devDependencies:
     version: 1.72.0
   spatial-controls:
     specifier: 6.x.x
-    version: 6.1.1(three@0.162.0)
+    version: 6.1.1(three@0.163.0)
   stylelint:
     specifier: 16.x.x
     version: 16.3.1(typescript@5.4.3)
@@ -938,8 +938,8 @@ packages:
     resolution: {integrity: sha512-hov8bUuiLiyFPGyFPE1lwWhmzYbirOXQNNo40+y3zow8aFVTeyn3VWL0VFFfdNddA8S4Vf0Tc062rzyNr7Paag==}
     dev: true
 
-  /@types/node@20.11.30:
-    resolution: {integrity: sha512-dHM6ZxwlmuZaRmUPfv1p+KrdD1Dci04FbdEm/9wEMouFqxYoFl5aMkt0VMAUtYRQDyYvD41WJLukhq/ha3YuTw==}
+  /@types/node@20.12.2:
+    resolution: {integrity: sha512-zQ0NYO87hyN6Xrclcqp7f8ZbXNbRfoGWNcMvHTPQp9UUrwI0mI7XBz+cu7/W6/VClYo2g63B0cjull/srU7LgQ==}
     dependencies:
       undici-types: 5.26.5
     dev: true
@@ -956,13 +956,13 @@ packages:
     resolution: {integrity: sha512-pXNfAD3KHOdif9EQXZ9deK82HVNaXP5ZIF5RP2QG6OQFNTaY2YIetfrE9t528vEreGQvEPRDDc8muaoYeK0SxQ==}
     dev: true
 
-  /@types/three@0.162.0:
-    resolution: {integrity: sha512-0j5yZcVukVIhrhSIC7+LmBPkkMoMuEJ1AfYBZfgNytdYqYREMuiyXWhYOMeZLBElTEAlJIZn7r2W3vqTIgjWlg==}
+  /@types/three@0.163.0:
+    resolution: {integrity: sha512-uIdDhsXRpQiBUkflBS/i1l3JX14fW6Ot9csed60nfbZNXHDTRsnV2xnTVwXcgbvTiboAR4IW+t+lTL5f1rqIqA==}
     dependencies:
       '@tweenjs/tween.js': 23.1.1
       '@types/stats.js': 0.17.3
       '@types/webxr': 0.5.14
-      fflate: 0.6.10
+      fflate: 0.8.2
       meshoptimizer: 0.18.1
     dev: true
 
@@ -1114,7 +1114,7 @@ packages:
       '@mapbox/node-pre-gyp': 1.0.11
       '@rollup/pluginutils': 4.2.1
       acorn: 8.11.3
-      acorn-import-attributes: 1.9.4(acorn@8.11.3)
+      acorn-import-attributes: 1.9.5(acorn@8.11.3)
       async-sema: 3.1.1
       bindings: 1.5.0
       estree-walker: 2.0.2
@@ -1223,8 +1223,8 @@ packages:
     resolution: {integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==}
     dev: true
 
-  /acorn-import-attributes@1.9.4(acorn@8.11.3):
-    resolution: {integrity: sha512-dNIX/5UEnZvVL94dV2scl4VIooK36D8AteP4xiz7cPKhDbhLhSuWkzG580g+Q7TXJklp+Z21SiaK7/HpLO84Qg==}
+  /acorn-import-attributes@1.9.5(acorn@8.11.3):
+    resolution: {integrity: sha512-n02Vykv5uA3eHGM/Z2dQrcD56kL8TyDb2p1+0P83PClMnC/nc+anbQRhIOWnSq4Ke/KvDPrY3C9hDtC/A3eHnQ==}
     peerDependencies:
       acorn: ^8
     dependencies:
@@ -1377,7 +1377,7 @@ packages:
       array-buffer-byte-length: 1.0.1
       call-bind: 1.0.7
       define-properties: 1.2.1
-      es-abstract: 1.23.2
+      es-abstract: 1.23.3
       es-errors: 1.3.0
       get-intrinsic: 1.2.4
       is-array-buffer: 3.0.4
@@ -1570,7 +1570,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001600
-      electron-to-chromium: 1.4.717
+      electron-to-chromium: 1.4.722
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.23.0)
     dev: true
@@ -2244,8 +2244,8 @@ packages:
       stream-shift: 1.0.3
     dev: true
 
-  /electron-to-chromium@1.4.717:
-    resolution: {integrity: sha512-6Fmg8QkkumNOwuZ/5mIbMU9WI3H2fmn5ajcVya64I5Yr5CcNmO7vcLt0Y7c96DCiMO5/9G+4sI2r6eEvdg1F7A==}
+  /electron-to-chromium@1.4.722:
+    resolution: {integrity: sha512-5nLE0TWFFpZ80Crhtp4pIp8LXCztjYX41yUcV6b+bKR2PqzjskTMOOlBi1VjBHlvHwS+4gar7kNKOrsbsewEZQ==}
     dev: true
 
   /emittery@1.0.3:
@@ -2283,8 +2283,8 @@ packages:
       is-arrayish: 0.2.1
     dev: true
 
-  /es-abstract@1.23.2:
-    resolution: {integrity: sha512-60s3Xv2T2p1ICykc7c+DNDPLDMm9t4QxCOUU0K9JxiLjM3C1zB9YVdN7tjxrFd4+AkZ8CdX1ovUga4P2+1e+/w==}
+  /es-abstract@1.23.3:
+    resolution: {integrity: sha512-e+HfNH61Bj1X9/jLc5v1owaLYuHdeHHSQlkhCBiTK8rBvKaULl/beGMxwrMXjpYrv4pz22BlY570vVePA2ho4A==}
     engines: {node: '>= 0.4'}
     dependencies:
       array-buffer-byte-length: 1.0.1
@@ -2658,8 +2658,8 @@ packages:
       pend: 1.2.0
     dev: true
 
-  /fflate@0.6.10:
-    resolution: {integrity: sha512-IQrh3lEPM93wVCEczc9SaAOvkmcoQn/G8Bo1e8ZPlY3X3bnAxWaBdvTdvM1hP62iZp0BXWDy4vTAy4fF0+Dlpg==}
+  /fflate@0.8.2:
+    resolution: {integrity: sha512-cPJU47OaAoCbg0pBvzsgpTPhmhqI5eJjh/JIu8tPj5q+T7iLvW/JAYUqmE7KOB4R1ZyEhzBaIQpQpardBF5z8A==}
     dev: true
 
   /figures@6.1.0:
@@ -2817,7 +2817,7 @@ packages:
     dependencies:
       call-bind: 1.0.7
       define-properties: 1.2.1
-      es-abstract: 1.23.2
+      es-abstract: 1.23.3
       functions-have-names: 1.2.3
     dev: true
 
@@ -3767,6 +3767,13 @@ packages:
 
   /minimatch@9.0.3:
     resolution: {integrity: sha512-RHiac9mvaRw0x3AYRgDC1CxAP7HTcNrrECeA8YYJeWnpo+2Q5CegtZjaotWTWxDG3UeGA1coE05iH1mPjT/2mg==}
+    engines: {node: '>=16 || 14 >=14.17'}
+    dependencies:
+      brace-expansion: 2.0.1
+    dev: true
+
+  /minimatch@9.0.4:
+    resolution: {integrity: sha512-KqWh+VchfxcMNRAJjj2tnsSJdNbHsVgnkBhTNrW7AjVo6OvLtxw8zfT9oLw1JSohlFzJ8jCoTgaoXvJ+kHt6fw==}
     engines: {node: '>=16 || 14 >=14.17'}
     dependencies:
       brace-expansion: 2.0.1
@@ -5351,13 +5358,13 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /spatial-controls@6.1.1(three@0.162.0):
+  /spatial-controls@6.1.1(three@0.163.0):
     resolution: {integrity: sha512-ajuftYnjyLdQ6G4bTh9lme57nzxQpODeZyG8bWNhet5fGpPCUKAosT/wSMCwKXn3LSwYq1b3AxzpHK/EjiTWvA==}
     engines: {node: '>= 0.16.0'}
     peerDependencies:
       three: 0.x.x
     dependencies:
-      three: 0.162.0
+      three: 0.163.0
     dev: true
 
   /spdx-correct@3.2.0:
@@ -5437,7 +5444,7 @@ packages:
     dependencies:
       call-bind: 1.0.7
       define-properties: 1.2.1
-      es-abstract: 1.23.2
+      es-abstract: 1.23.3
       es-object-atoms: 1.0.0
     dev: true
 
@@ -5447,7 +5454,7 @@ packages:
     dependencies:
       call-bind: 1.0.7
       define-properties: 1.2.1
-      es-abstract: 1.23.2
+      es-abstract: 1.23.3
       es-object-atoms: 1.0.0
     dev: true
 
@@ -5774,8 +5781,8 @@ packages:
     resolution: {integrity: sha512-89Gi5raiWA3QZ4b2ePcEwswC3me9JIg+ToSgtE0JWeCynLnLxNr/f9G+xfo9K+Oj4AFdom8YNJjibIARTJmapQ==}
     dev: true
 
-  /three@0.162.0:
-    resolution: {integrity: sha512-xfCYj4RnlozReCmUd+XQzj6/5OjDNHBy5nT6rVwrOKGENAvpXe2z1jL+DZYaMu4/9pNsjH/4Os/VvS9IrH7IOQ==}
+  /three@0.163.0:
+    resolution: {integrity: sha512-HlMgCb2TF/dTLRtknBnjUTsR8FsDqBY43itYop2+Zg822I+Kd0Ua2vs8CvfBVefXkBdNDrLMoRTGCIIpfCuDew==}
 
   /through2@2.0.5:
     resolution: {integrity: sha512-/mrRod8xqpA+IHSLyGCQ2s8SPHiCDEeQJSep1jqLYeEUClOFG2Qsh+4FU6G9VeqpZnGW/Su8LQGc4YKni5rYSQ==}
@@ -5930,7 +5937,7 @@ packages:
     dependencies:
       lunr: 2.3.9
       marked: 4.3.0
-      minimatch: 9.0.3
+      minimatch: 9.0.4
       shiki: 0.14.7
       typescript: 5.4.3
     dev: true
