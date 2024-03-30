@@ -46,6 +46,7 @@ export enum ToneMapping {
 	/**
 	 * Neutral tone mapping by Khronos.
 	 *
+	 * @see https://github.com/KhronosGroup/ToneMapping
 	 * @see https://modelviewer.dev/examples/tone-mapping
 	 */
 
