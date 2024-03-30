@@ -8,6 +8,7 @@ import {
 	Mesh,
 	NearestFilter,
 	NoColorSpace,
+	Object3D,
 	OrthographicCamera,
 	PerspectiveCamera,
 	RGBAFormat,
@@ -93,6 +94,18 @@ export class GeometryPass extends Pass implements Selective {
 	readonly selection: Selection;
 
 	/**
+	 * A listener for `childadded` events dispatched by the scene.
+	 */
+
+	private readonly onChildAdded: (event: { child: Object3D | null }) => void;
+
+	/**
+	 * A listener for `childremoved` events dispatched by the scene.
+	 */
+
+	private readonly onChildRemoved: (event: { child: Object3D | null }) => void;
+
+	/**
 	 * The G-Buffer configuration.
 	 */
 
@@ -172,8 +185,28 @@ export class GeometryPass extends Pass implements Selective {
 
 		super("GeometryPass");
 
-		this.scene = scene;
-		this.camera = camera;
+		this.onChildAdded = (event: { child: Object3D | null }) => {
+
+			event.child?.traverse((node) => {
+
+				node.addEventListener("childadded", this.onChildAdded);
+				node.addEventListener("childremoved", this.onChildRemoved);
+				this.updateMaterial(node);
+
+			});
+
+		};
+
+		this.onChildRemoved = (event: { child: Object3D | null }) => {
+
+			event.child?.traverse((node) => {
+
+				node.removeEventListener("childadded", this.onChildAdded);
+				node.removeEventListener("childremoved", this.onChildRemoved);
+
+			});
+
+		};
 
 		this.stencilBuffer = stencilBuffer;
 		this.depthBuffer = depthBuffer;
@@ -193,9 +226,25 @@ export class GeometryPass extends Pass implements Selective {
 		this.gBufferComponents = gBufferComponents;
 		this.gBufferResource = null;
 
+		this.scene = scene;
+		this.camera = camera;
+
 		this.updateTextureConfigs();
 		this.updateGBuffer();
-		this.updateMaterials();
+
+	}
+
+	override get scene(): Scene | null {
+
+		return super.scene;
+
+	}
+
+	override set scene(value: Scene | null) {
+
+		this.onChildRemoved({ child: this.scene });
+		super.scene = value;
+		this.onChildAdded({ child: value });
 
 	}
 
@@ -300,68 +349,51 @@ export class GeometryPass extends Pass implements Selective {
 	}
 
 	/**
-	 * Enables rendering to {@link GBuffer} components for a given material.
+	 * Enables rendering to {@link GBuffer} components for the materials of a given mesh.
+	 *
+	 * Should be called when a material is added, removed or replaced at runtime.
 	 *
 	 * @todo Remove when three supports output layout definitions for MRT.
-	 * @param material - The material.
+	 * @param object - The object to update.
 	 */
 
-	private updateMaterial(material: Material): void {
+	private updateMaterial(object: Object3D | null): void {
 
-		if(this.registeredMaterials.has(material)) {
+		if(!(object instanceof Mesh)) {
 
 			return;
 
 		}
 
-		this.registeredMaterials.add(material);
-		const onBeforeCompile = material.onBeforeCompile.bind(this);
+		const mesh = object as Mesh;
 
-		material.onBeforeCompile = (shader: WebGLProgramParametersWithUniforms, renderer: WebGLRenderer) => {
+		for(const material of Array.isArray(mesh.material) ? mesh.material : [mesh.material]) {
 
-			onBeforeCompile(shader, renderer);
-
-			if(this.gBuffer === null) {
+			if(this.registeredMaterials.has(material)) {
 
 				return;
 
 			}
 
-			const outputDefinitions = extractOutputDefinitions(this.gBuffer);
-			shader.fragmentShader = outputDefinitions + "\n\n" + shader.fragmentShader;
+			this.registeredMaterials.add(material);
+			const onBeforeCompile = material.onBeforeCompile.bind(this);
 
-		};
+			material.onBeforeCompile = (shader: WebGLProgramParametersWithUniforms, renderer: WebGLRenderer) => {
 
-	}
+				onBeforeCompile(shader, renderer);
 
-	/**
-	 * Enables rendering to {@link GBuffer} components for all materials in a given scene.
-	 *
-	 * Should be called when a mesh or material is added, removed or replaced at runtime.
-	 *
-	 * @todo Remove when three supports output layout definitions for MRT.
-	 * @param scene - The scene, or a subset of a scene.
-	 */
+				if(this.gBuffer === null) {
 
-	updateMaterials(scene = this.scene): void {
+					return;
 
-		scene?.traverse((node) => {
+				}
 
-			const mesh = (node instanceof Mesh) ? node as Mesh : null;
+				const outputDefinitions = extractOutputDefinitions(this.gBuffer);
+				shader.fragmentShader = outputDefinitions + "\n\n" + shader.fragmentShader;
 
-			if(mesh === null) {
+			};
 
-				return;
-
-			}
-
-			for(const material of Array.isArray(mesh.material) ? mesh.material : [mesh.material]) {
-
-				this.updateMaterial(material);
-
-			}
-
-		});
+		}
 
 	}
 
