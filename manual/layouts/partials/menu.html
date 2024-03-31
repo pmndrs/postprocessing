@@ -13,7 +13,7 @@
 
 			<li class="{{ delimit $class ` ` }}">
 				<h3>{{ .Name }}</h3>
-				<ul class="sub-menu">
+				<ul class="submenu">
 					{{ range .Children }}
 						{{ partial "menu-item.html" (dict "context" . "currentPage" $currentPage "menuName" $menuName) }}
 					{{ end }}
