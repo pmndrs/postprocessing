@@ -10,7 +10,7 @@
 		align-items: center;
 		color: var(--nav-anchor-color);
 		display: flex;
-		padding: 0.5rem dimensions.$nav-padding;
+		padding: 0.5rem dimensions.$nav-padding 0.5rem dimensions.$nav-menu-item-padding;
 		position: relative;
 		&:focus,
 		&:hover {
@@ -26,7 +26,7 @@
 				display: inline-block;
 				height: 1rem;
 				margin-left: 0.5rem;
-				opacity: 0;
+				opacity: 0.25;
 				transition: opacity durations.$short;
 				width: 1rem;
 			}
@@ -42,6 +42,9 @@
 		list-style: none;
 		margin: 0;
 		padding: 0;
+		ul a {
+			padding-left:dimensions.$nav-submenu-item-padding;
+		}
 	}
 	li {
 		margin: 0;

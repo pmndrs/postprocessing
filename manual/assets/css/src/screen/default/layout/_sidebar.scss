@@ -31,6 +31,16 @@
 		pointer-events: initial;
 		transform: none;
 	}
+	ul {
+		h2, h3 {
+			margin-left:dimensions.$nav-menu-item-padding;
+		}
+		ul {
+			h2, h3 {
+				margin-left:dimensions.$nav-submenu-item-padding;
+			}
+		}
+	}
 }
 
 .sidebar-button-open,
