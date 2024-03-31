@@ -68,7 +68,7 @@ vec3 getViewPosition(const in vec2 screenPosition, const in float depth, const i
  * Calculates the model view position based on a given view position and view matrix.
  *
  * @param viewPosition - The view position.
- * @param viewMatrix - The inverse camera transformation matrix.
+ * @param viewMatrix - The inverse camera transformation matrix (matrixWorldInverse).
  * @return The model view position.
  */
 
@@ -76,5 +76,20 @@ vec3 getModelViewPosition(const in vec3 viewPosition, const in mat4 viewMatrix) 
 
 	vec4 mvPosition = viewMatrix * vec4(viewPosition, 1.0);
 	return -mvPosition.xyz;
+
+}
+
+/**
+ * Calculates the world position based on a given view position and camera transformation matrix.
+ *
+ * @param viewPosition - The view position.
+ * @param viewMatrixInverse - The camera transformation matrix (matrixWorld).
+ * @return The world position.
+ */
+
+vec3 getWorldPosition(const in vec3 viewPosition, const in mat4 viewMatrixInverse) {
+
+	vec4 worldPosition = viewMatrixInverse * vec4(viewPosition, 1.0);
+	return worldPosition.xyz;
 
 }
