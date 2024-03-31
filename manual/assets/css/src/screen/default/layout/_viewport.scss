@@ -15,8 +15,9 @@
 		z-index: layers.$hud;
 	}
 	.icon {
-		background: no-repeat center/cover transparent;
+		background: no-repeat center/cover rgba(black, 0.2);
 		background-origin: content-box;
+		border-radius: 25%;
 		box-sizing: border-box;
 		cursor: pointer;
 		display: inline-block;
