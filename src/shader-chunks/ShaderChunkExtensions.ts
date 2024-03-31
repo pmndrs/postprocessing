@@ -6,7 +6,7 @@ import colorspaceParsFragment from "./shaders/colorspace-pars.frag";
 import colorspaceConversionParsFragment from "./shaders/colorspace-conversion-pars.frag";
 import defaultOutputParsFragment from "./shaders/default-output-pars.frag";
 import depthBufferParsFragment from "./shaders/depth-buffer-pars.frag";
-import depthPrecisionParsFragment from "./shaders/depth-precision-pars.frag";
+import depthBufferPrecisionParsFragment from "./shaders/depth-buffer-precision-pars.frag";
 import depthUtilsParsFragment from "./shaders/depth-utils-pars.frag";
 import frameBufferPrecisionParsFragment from "./shaders/frame-buffer-precision-pars.frag";
 import inputBufferParsFragment from "./shaders/input-buffer-pars.frag";
@@ -50,7 +50,7 @@ export class ShaderChunkExtensions {
 			"pp_default_output_pars_fragment": { value: defaultOutputParsFragment },
 			"pp_default_output_fragment": { value: gbufferDefaultOutputFragment },
 			"pp_depth_buffer_pars_fragment": { value: depthBufferParsFragment },
-			"pp_depth_precision_pars_fragment": { value: depthPrecisionParsFragment },
+			"pp_depth_buffer_precision_pars_fragment": { value: depthBufferPrecisionParsFragment },
 			"pp_depth_utils_pars_fragment": { value: depthUtilsParsFragment },
 			"pp_frame_buffer_precision_pars_fragment": { value: frameBufferPrecisionParsFragment },
 			"pp_input_buffer_pars_fragment": { value: inputBufferParsFragment },
