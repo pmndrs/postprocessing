@@ -24,10 +24,7 @@ in vec2 vUvUpRight;
 in vec2 vUvUpLeft;
 in vec2 vUvDownRight;
 
-vec4 fxaa(sampler2D inputBuffer, const in vec4 inputColor, const in vec2 uv) {
-
-	// Luma at the current fragment.
-	float lumaCenter = luminance(inputColor.rgb);
+vec4 fxaa(sampler2D inputBuffer, const in vec4 inputColor, const in vec2 uv, const in float lumaCenter) {
 
 	// Luma at the four direct neighbours of the current fragment.
 	float lumaDown = luminance(texture(inputBuffer, vUvDown).rgb);
@@ -265,6 +262,6 @@ vec4 fxaa(sampler2D inputBuffer, const in vec4 inputColor, const in vec2 uv) {
 
 vec4 mainImage(const in vec4 inputColor, const in vec2 uv, const in GData gData) {
 
-	return fxaa(gBuffer.color, inputColor, uv);
+	return fxaa(gBuffer.color, inputColor, uv, gData.luminance);
 
 }
