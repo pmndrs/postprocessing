@@ -78,6 +78,12 @@ export abstract class FullscreenMaterial extends RawShaderMaterial implements Re
 
 			}
 
+			if(renderer.capabilities.logarithmicDepthBuffer) {
+
+				shader.defines.LOG_DEPTH = true;
+
+			}
+
 			if(renderer.getRenderTarget() === null) {
 
 				// Rendering to screen.
