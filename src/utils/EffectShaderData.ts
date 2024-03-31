@@ -243,7 +243,7 @@ export class EffectShaderData implements ShaderData {
 		if(effect.hasMainImageFunction) {
 
 			// Already checked param existence during effect validation.
-			const gDataParamName = fragmentShader.match(/GData\s+(\w+)/)![0];
+			const gDataParamName = fragmentShader.match(/GData\s+(\w+)/)![1];
 
 			// Detect GData usage.
 			for(const value of Object.values(GData)) {
