@@ -1,6 +1,6 @@
-#include <pp_camera_pars_fragment>
 #include <pp_resolution_pars_fragment>
 
+uniform vec3 cameraParams;
 uniform float time;
 
 in vec3 position;

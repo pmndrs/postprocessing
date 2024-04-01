@@ -12,6 +12,7 @@ import frameBufferPrecisionParsFragment from "./shaders/frame-buffer-precision-p
 import inputBufferParsFragment from "./shaders/input-buffer-pars.frag";
 import precisionFragment from "./shaders/precision.frag";
 import resolutionParsFragment from "./shaders/resolution-pars.frag";
+import worldUtilsParsFragment from "./shaders/world-utils-pars.frag";
 
 // Extensions for built-in shaders.
 import gbufferDefaultOutputFragment from "./shaders/gbuffer-default-output.frag";
@@ -55,7 +56,8 @@ export class ShaderChunkExtensions {
 			"pp_frame_buffer_precision_pars_fragment": { value: frameBufferPrecisionParsFragment },
 			"pp_input_buffer_pars_fragment": { value: inputBufferParsFragment },
 			"pp_precision_fragment": { value: precisionFragment },
-			"pp_resolution_pars_fragment": { value: resolutionParsFragment }
+			"pp_resolution_pars_fragment": { value: resolutionParsFragment },
+			"pp_world_utils_pars_fragment": { value: worldUtilsParsFragment }
 		});
 
 		ShaderChunk.normal_fragment_maps += "\n" + gbufferNormalFragment;
