@@ -52,7 +52,7 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 	readonly gDataStructInitialization: Map<GData | string, string>;
 
 	/**
-	 * A collection that describes {@link GData} cross-dependencies.
+	 * A collection that describes {@link GData} interdependencies.
 	 */
 
 	readonly gDataDependencies: Map<GData | string, Set<GData | string>>;
