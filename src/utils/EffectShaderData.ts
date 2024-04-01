@@ -313,7 +313,7 @@ export class EffectShaderData implements ShaderData {
 	}
 
 	/**
-	* Creates a GBuffer struct declaration shader code.
+	* Creates a {@link GBuffer} struct declaration shader code.
 	*
 	* @return The shader code.
 	*/
@@ -331,7 +331,7 @@ export class EffectShaderData implements ShaderData {
 	}
 
 	/**
-	* Creates a GData struct declaration shader code.
+	* Creates a {@link GData} struct declaration shader code.
 	*
 	* @return The shader code.
 	*/
@@ -349,7 +349,7 @@ export class EffectShaderData implements ShaderData {
 	}
 
 	/**
-	* Creates the GData struct initialization shader code.
+	* Creates the {@link GData} struct initialization shader code.
 	*
 	* @return The shader code.
 	*/
