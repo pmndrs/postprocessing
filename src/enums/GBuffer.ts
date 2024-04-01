@@ -19,17 +19,17 @@ export enum GBuffer {
 	DEPTH = "Depth",
 
 	/**
-	 * The screen-space normals are stored in a 16-bit RGB buffer.
+	 * The view-space normals are stored in a 16-bit RGB buffer.
 	 */
 
 	NORMAL = "Normal",
 
 	/**
-	 * An 8 bit OcclusionRoughnessMetalness (RGB) buffer.
+	 * An 8 bit OcclusionRoughnessMetalness RGB buffer.
 	 *
-	 * - Ambient occlusion is stored in the RED channel.
-	 * - Roughness is stored in the GREEN channel.
-	 * - Metalness is stored in the BLUE channel.
+	 * - R = Ambient Occlusion
+	 * - G = Roughness
+	 * - B = Metalness
 	 */
 
 	ORM = "ORM",
