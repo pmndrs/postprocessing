@@ -114,6 +114,7 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 		gBufferStructDeclaration.addEventListener(ObservableMap.EVENT_CHANGE, listener);
 		gDataStructDeclaration.addEventListener(ObservableMap.EVENT_CHANGE, listener);
 		gDataStructInitialization.addEventListener(ObservableMap.EVENT_CHANGE, listener);
+		gDataDependencies.addEventListener(ObservableMap.EVENT_CHANGE, listener);
 
 		this.textureConfigs = textureConfigs;
 		this.gBufferStructFields = gBufferStructFields;
