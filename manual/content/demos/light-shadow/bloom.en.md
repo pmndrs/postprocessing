@@ -12,3 +12,5 @@ script: bloom
 # Bloom
 
 ### External Resources
+
+* [UE4 Custom Bloom](https://www.froyok.fr/blog/2021-12-ue4-custom-bloom/)
