@@ -52,6 +52,12 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 	readonly gDataStructInitialization: Map<GData | string, string>;
 
 	/**
+	 * A collection that describes {@link GData} cross-dependencies.
+	 */
+
+	readonly gDataDependencies: Map<GData | string, Set<GData | string>>;
+
+	/**
 	 * Constructs new a new G-Buffer config.
 	 */
 
@@ -81,6 +87,7 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 			[GData.COLOR, "vec4 color;"],
 			[GData.DEPTH, "float depth;"],
 			[GData.NORMAL, "vec3 normal;"],
+			[GData.POSITION, "vec3 position;"],
 			[GData.ORM, "vec3 orm;"],
 			[GData.EMISSION, "vec3 emission;"],
 			[GData.LUMINANCE, "float luminance;"]
@@ -90,9 +97,14 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 			[GData.COLOR, "gData.color = texture(gBuffer.color, UV);"],
 			[GData.DEPTH, "gData.depth = texture(gBuffer.depth, UV).r;"],
 			[GData.NORMAL, "gData.normal = texture(gBuffer.normal, UV).xyz;"],
+			[GData.POSITION, "gData.position = getViewPosition(UV, gData.depth);"],
 			[GData.ORM, "gData.orm = texture(gBuffer.orm, UV).xyz;"],
 			[GData.EMISSION, "gData.emission = texture(gBuffer.emission, UV).rgb;"],
 			[GData.LUMINANCE, "gData.luminance = luminance(gData.color.rgb);"]
+		]);
+
+		const gDataDependencies = new ObservableMap<GData | string, Set<GData | string>>([
+			[GData.POSITION, new Set<GData>([GData.DEPTH])]
 		]);
 
 		const listener = () => this.dispatchEvent({ type: GBufferConfig.EVENT_CHANGE });
@@ -107,6 +119,7 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 		this.gBufferStructDeclaration = gBufferStructDeclaration;
 		this.gDataStructDeclaration = gDataStructDeclaration;
 		this.gDataStructInitialization = gDataStructInitialization;
+		this.gDataDependencies = gDataDependencies;
 
 	}
 

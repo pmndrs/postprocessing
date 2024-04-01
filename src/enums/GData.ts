@@ -26,6 +26,12 @@ export enum GData {
 	NORMAL = "normal",
 
 	/**
+	 * The view-space position.
+	 */
+
+	POSITION = "position",
+
+	/**
 	 * Occlusion, roughness and metalness.
 	 */
 

@@ -252,6 +252,12 @@ export class EffectShaderData implements ShaderData {
 
 				if(regExpGData.test(fragmentShader)) {
 
+					for(const dependency of this.gBufferConfig.gDataDependencies.get(value) ?? []) {
+
+						this.gData.add(dependency);
+
+					}
+
 					this.gData.add(value);
 
 				}
@@ -350,10 +356,13 @@ export class EffectShaderData implements ShaderData {
 
 	createGDataStructInitialization(): string {
 
+		const gDataDependencies = this.gBufferConfig.gDataDependencies;
+
 		return [
 			"\tGData gData;",
 			...Array.from(this.gBufferConfig.gDataStructInitialization)
 				.filter(x => this.gData.has(x[0]))
+				.sort((a, b) => gDataDependencies.has(a[0]) && gDataDependencies.get(a[0])!.has(b[0]) ? 1 : -1)
 				.map(x => `\t${x[1]}`)
 		].join("\n");
 
