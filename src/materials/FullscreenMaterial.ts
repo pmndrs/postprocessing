@@ -22,10 +22,11 @@ import { Precision } from "../enums/Precision.js";
 /**
  * A fullscreen shader material.
  *
- * This material defines the following commonly used uniforms:
+ * This material provides the following commonly used uniforms:
  * - `mat4` projectionMatrix
  * - `mat4` projectionMatrixInverse
  * - `mat4` viewMatrix
+ * - `mat4` viewMatrixInverse
  * - `vec3` cameraParams
  * - `vec4` resolution
  * - `sampler2D` inputBuffer
