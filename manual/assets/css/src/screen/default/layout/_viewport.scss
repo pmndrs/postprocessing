@@ -6,7 +6,7 @@
 	box-sizing: border-box;
 	height: calc(100vh - 10rem);
 	position: relative;
-	.icons {
+	.buttons {
 		bottom: 4px;
 		display: flex;
 		left: 4px;
@@ -15,7 +15,7 @@
 		z-index: layers.$hud;
 	}
 	.icon {
-		background: no-repeat center/cover rgba(black, 0.2);
+		background: no-repeat center/cover var(--viewport-button-background-color);
 		background-origin: content-box;
 		border-radius: 25%;
 		box-sizing: border-box;
@@ -52,7 +52,7 @@
 		}
 	}
 	&.loading {
-		.icons {
+		.buttons {
 			display: none;
 		}
 	}

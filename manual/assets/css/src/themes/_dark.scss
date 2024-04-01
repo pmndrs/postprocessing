@@ -1,10 +1,11 @@
+@use "sass:color";
 @use "colors";
 
 .dark {
 	color-scheme: dark;
 
 	--anchor-color: #{colors.$shiny};
-	--anchor-color-focus: #{colors.$whimsical};
+	--anchor-color-focus: white;
 	--body-background-color: #{colors.$blind};
 	--button-background-color: #{colors.$grey_200};
 	--button-background-color-darker: #{colors.$grey_300};
@@ -28,5 +29,6 @@
 	--sidebar-heading-color: #{colors.$whimsical};
 	--spinner-background-color: #{colors.$shiny};
 	--spinner-accent-color: #{colors.$space};
+	--viewport-button-background-color: #{rgba(black, 0.2)};
 	--viewport-separator-color: #{colors.$grey_900};
 }
