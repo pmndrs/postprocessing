@@ -104,7 +104,8 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 		]);
 
 		const gDataDependencies = new ObservableMap<GData | string, Set<GData | string>>([
-			[GData.POSITION, new Set<GData>([GData.DEPTH])]
+			[GData.POSITION, new Set<GData>([GData.DEPTH])],
+			[GData.LUMINANCE, new Set<GData>([GData.COLOR])]
 		]);
 
 		const listener = () => this.dispatchEvent({ type: GBufferConfig.EVENT_CHANGE });
