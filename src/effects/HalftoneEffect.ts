@@ -52,6 +52,7 @@ export class HalftoneEffect extends Effect {
 
 		this.fragmentShader = fragmentShader;
 		this.samples = samples;
+		this.shape = shape;
 
 		this.blendMode.blendFunction = new OverlayBlendFunction();
 
@@ -59,7 +60,6 @@ export class HalftoneEffect extends Effect {
 		uniforms.set("radius", new Uniform(radius));
 		uniforms.set("rotationRGB", new Uniform(new Vector3(rotationR, rotationG, rotationB)));
 		uniforms.set("scatterFactor", new Uniform(scatterFactor));
-		uniforms.set("shape", new Uniform(shape));
 
 	}
 
@@ -158,13 +158,15 @@ export class HalftoneEffect extends Effect {
 
 	get shape() {
 
-		return this.input.uniforms.get("shape")!.value as HalftoneShape;
+		return this.input.defines.get("SHAPE") as number;
 
 	}
 
 	set shape(value: HalftoneShape) {
 
-		this.input.uniforms.get("shape")!.value = value;
+
+		this.input.defines.set("SHAPE", value);
+		this.setChanged();
 
 	}
 

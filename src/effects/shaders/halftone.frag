@@ -23,11 +23,11 @@ float distanceToDotRadius(float channel, vec2 coord, vec2 normal, vec2 p, float 
 	float dist = hypot(coord.x - p.x, coord.y - p.y);
 	float rad = channel;
 
-	if (shape == SHAPE_DOT) {
+	# if SHAPE == SHAPE_DOT
 
 		rad = pow(abs(rad), 1.125) * radMax;
-
-	} else if (shape == SHAPE_ELLIPSE) {
+	
+	# elif SHAPE == SHAPE_ELLIPSE
 
 		rad = pow(abs(rad), 1.125) * radMax;
 
@@ -35,14 +35,14 @@ float distanceToDotRadius(float channel, vec2 coord, vec2 normal, vec2 p, float 
 			float dotP = abs((p.x - coord.x) / dist * normal.x + (p.y - coord.y) / dist * normal.y);
 			dist = (dist * (1.0 - SQRT2_HALF_MINUS_ONE)) + dotP * dist * SQRT2_MINUS_ONE;
 		}
-
-	} else if (shape == SHAPE_LINE) {
+	
+	# elif SHAPE == SHAPE_LINE
 
 		rad = pow(abs(rad), 1.5) * radMax;
 		float dotP = (p.x - coord.x) * normal.x + (p.y - coord.y) * normal.y;
 		dist = hypot(normal.x * dotP, normal.y * dotP);
-
-	} else if (shape == SHAPE_SQUARE) {
+	
+	# elif SHAPE == SHAPE_SQUARE
 
 		float theta = atan(p.y - coord.y, p.x - coord.x) - angle;
 		float sinT = abs(sin(theta));
@@ -50,7 +50,7 @@ float distanceToDotRadius(float channel, vec2 coord, vec2 normal, vec2 p, float 
 		rad = pow(abs(rad), 1.4);
 		rad = radMax * (rad + ((sinT > cosT) ? rad - sinT * rad : rad - cosT * rad));
 
-	}
+	# endif
 
 	return rad - dist;
 
