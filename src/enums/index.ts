@@ -5,6 +5,7 @@ export * from "./EffectShaderSection.js";
 export * from "./GBuffer.js";
 export * from "./GData.js";
 export * from "./GlitchMode.js";
+export * from "./HalftoneShape.js";
 export * from "./KernelSize.js";
 export * from "./LogLevel.js";
 export * from "./MaskFunction.js";

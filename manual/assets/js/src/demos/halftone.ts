@@ -11,8 +11,12 @@ import {
 
 import {
 	ClearPass,
+	EffectPass,
 	GeometryPass,
-	RenderPipeline
+	HalftoneEffect,
+	HalftoneShape,
+	RenderPipeline,
+	ToneMappingEffect
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
@@ -65,7 +69,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	settings.rotation.sensitivity = 2.2;
 	settings.rotation.damping = 0.05;
 	settings.translation.damping = 0.1;
-	controls.position.set(1, 10, 1);
+	controls.position.set(-1, 10, -1);
 	controls.lookAt(0, 10, 0);
 
 	// Scene, Lights, Objects
@@ -79,32 +83,34 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
+	const effect = new HalftoneEffect();
+
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.add(
 		new ClearPass(),
 		new GeometryPass(scene, camera, {
 			frameBufferType: HalfFloatType,
 			samples: 4
-		})
+		}),
+		new EffectPass(effect, new ToneMappingEffect())
 	);
-
-	/*
-	const effect = new HalftoneEffect({ angle: 1.4, scale: 0.7 });
-	pipeline.addPass(new EffectPass(effect, new ToneMappingEffect()));
-	*/
 
 	// Settings
 
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
 	const fpsGraph = Utils.createFPSGraph(pane);
 
-	/*
+
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addBinding(effect, "angle", { min: 0, max: Math.PI, step: 1e-3 });
-	folder.addBinding(effect, "scale", { min: 0, max: 2, step: 1e-3 });
-	folder.addBinding(effect.blendMode, "opacity", { min: 0, max: 1, step: 0.01 });
-	folder.addBinding(effect.blendMode, "blendFunction", { options: BlendFunction });
-	*/
+	folder.addBinding(effect, "radius", { min: 1, max: 25, step: 1e-3 });
+	folder.addBinding(effect, "samples", { min: 0, max: 24, step: 1 });
+	folder.addBinding(effect, "scatterFactor", { min: 0, max: 1, step: 1e-3 });
+	folder.addBinding(effect, "rotationR", { min: 0, max: Math.PI / 2, step: 1e-3 });
+	folder.addBinding(effect, "rotationG", { min: 0, max: Math.PI / 2, step: 1e-3 });
+	folder.addBinding(effect, "rotationB", { min: 0, max: Math.PI / 2, step: 1e-3 });
+	folder.addBinding(effect, "shape", { options: Utils.enumToRecord(HalftoneShape) });
+
+	Utils.addBlendModeBindings(folder, effect.blendMode);
 
 	// Resize Handler
 

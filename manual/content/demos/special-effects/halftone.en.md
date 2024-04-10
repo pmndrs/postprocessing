@@ -2,7 +2,7 @@
 layout: single
 collection: sections
 title: Halftone
-draft: true
+draft: false
 menu:
   demos:
     parent: special-effects
