@@ -122,6 +122,8 @@ export class HalftoneEffect extends Effect {
 		this.shape = shape;
 		this.samples = samples;
 
+		this.updateRGBRotation();
+
 	}
 
 	/**
