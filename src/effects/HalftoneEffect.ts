@@ -1,9 +1,9 @@
+import { Uniform, Vector3 } from "three";
 import { HalftoneShape } from "../enums/HalftoneShape.js";
+import { LinearDodgeBlendFunction } from "./blending/blend-functions/LinearDodgeBlendFunction.js";
 import { Effect } from "./Effect.js";
-import { OverlayBlendFunction } from "./blending/blend-functions/OverlayBlendFunction.js";
 
 import fragmentShader from "./shaders/halftone.frag";
-import { Uniform, Vector3 } from "three";
 
 /**
  * HalftoneEffect options.
@@ -12,13 +12,73 @@ import { Uniform, Vector3 } from "three";
  */
 
 export interface HalftoneEffectOptions {
+
+	/**
+	 * The halftone shape.
+	 *
+	 * @defaultValue {@link HalftoneShape.DOT}
+	 */
+
 	shape?: HalftoneShape;
+
+	/**
+	 * The pattern radius.
+	 *
+	 * @defaultValue 6
+	 */
+
 	radius?: number;
+
+	/**
+	 * The grid rotation for all color channels in radians.
+	 *
+	 * This setting yields better performance compared to individual rotations per channel.
+	 *
+	 * @defaultValue 0
+	 */
+
+	rotation?: number;
+
+	/**
+	 * The grid rotation for the red channel in radians.
+	 *
+	 * @defaultValue {@link rotation}
+	 */
+
 	rotationR?: number;
+
+	/**
+	 * The grid rotation for the green channel in radians.
+	 *
+	 * @defaultValue {@link rotationR}
+	 */
+
 	rotationG?: number;
+
+	/**
+	 * The grid rotation for the blue channel in radians.
+	 *
+	 * @defaultValue {@link rotationG}
+	 */
+
 	rotationB?: number;
+
+	/**
+	 * The halftone scatter factor.
+	 *
+	 * @defaultValue 0
+	 */
+
 	scatterFactor?: number;
+
+	/**
+	 * The sample count.
+	 *
+	 * @defaultValue 8
+	 */
+
 	samples?: number;
+
 }
 
 /**
@@ -39,11 +99,12 @@ export class HalftoneEffect extends Effect {
 	 */
 
 	constructor({
-		shape = HalftoneShape.ELLIPSE,
+		shape = HalftoneShape.DOT,
 		radius = 6,
-		rotationR = 14,
-		rotationG = 45,
-		rotationB = 30,
+		rotation = 0,
+		rotationR = rotation,
+		rotationG = rotationR,
+		rotationB = rotationG,
 		scatterFactor = 0,
 		samples = 8
 	}: HalftoneEffectOptions = {}) {
@@ -51,109 +112,20 @@ export class HalftoneEffect extends Effect {
 		super("HalftoneEffect");
 
 		this.fragmentShader = fragmentShader;
-		this.samples = samples;
-		this.shape = shape;
-
-		this.blendMode.blendFunction = new OverlayBlendFunction();
+		this.blendMode.blendFunction = new LinearDodgeBlendFunction();
 
 		const uniforms = this.input.uniforms;
 		uniforms.set("radius", new Uniform(radius));
 		uniforms.set("rotationRGB", new Uniform(new Vector3(rotationR, rotationG, rotationB)));
 		uniforms.set("scatterFactor", new Uniform(scatterFactor));
 
-	}
-
-	/**
-	 * The halftone dot radius.
-	 */
-
-	get radius() {
-
-		return this.input.uniforms.get("radius")!.value as number;
-
-	}
-
-	set radius(value: number) {
-
-		this.input.uniforms.get("radius")!.value = value;
+		this.shape = shape;
+		this.samples = samples;
 
 	}
 
 	/**
-	 * The halftone dot scatterFactor.
-	 */
-
-	get scatterFactor() {
-
-		return this.input.uniforms.get("scatterFactor")!.value as number;
-
-	}
-
-	set scatterFactor(value: number) {
-
-		this.input.uniforms.get("scatterFactor")!.value = value;
-
-	}
-
-	/**
-	 * The halftone dot grid rotation in the red channel.
-	 */
-
-	get rotationR() {
-
-		const rotationRGB = this.input.uniforms.get("rotationRGB")!.value as Vector3;
-		return rotationRGB.x;
-
-	}
-
-	set rotationR(value: number) {
-
-		const rotationRGB = this.input.uniforms.get("rotationRGB")!.value as Vector3;
-		rotationRGB.x = value;
-		this.input.uniforms.get("rotationRGB")!.value = rotationRGB;
-
-	}
-
-	/**
-	 * The halftone dot grid rotation in the green channel.
-	 */
-
-	get rotationG() {
-
-		const rotationRGB = this.input.uniforms.get("rotationRGB")!.value as Vector3;
-		return rotationRGB.y;
-
-	}
-
-	set rotationG(value: number) {
-
-		const rotationRGB = this.input.uniforms.get("rotationRGB")!.value as Vector3;
-		rotationRGB.y = value;
-		this.input.uniforms.get("rotationRGB")!.value = rotationRGB;
-
-	}
-
-	/**
-	 * The halftone dot grid rotation in the red channel.
-	 */
-
-	get rotationB() {
-
-		const rotationRGB = this.input.uniforms.get("rotationRGB")!.value as Vector3;
-		return rotationRGB.z;
-
-	}
-
-	set rotationB(value: number) {
-
-		const rotationRGB = this.input.uniforms.get("rotationRGB")!.value as Vector3;
-		rotationRGB.z = value;
-		this.input.uniforms.get("rotationRGB")!.value = rotationRGB;
-
-	}
-
-	/**
-	 * The halftone dot shape.
+	 * The halftone shape.
 	 */
 
 	get shape() {
@@ -163,7 +135,6 @@ export class HalftoneEffect extends Effect {
 	}
 
 	set shape(value: HalftoneShape) {
-
 
 		this.input.defines.set("SHAPE", value);
 		this.setChanged();
@@ -182,8 +153,152 @@ export class HalftoneEffect extends Effect {
 
 	set samples(value: number) {
 
+		value = Math.max(value, 1);
+
 		this.input.defines.set("SAMPLES", value);
+		this.input.defines.set("INV_SAMPLES", (1.0 / value).toFixed(9));
+		this.input.defines.set("INV_SAMPLES_PLUS_ONE", (1.0 / (value + 1.0)).toFixed(9));
 		this.setChanged();
+
+	}
+
+	/**
+	 * The pattern radius.
+	 */
+
+	get radius() {
+
+		return this.input.uniforms.get("radius")!.value as number;
+
+	}
+
+	set radius(value: number) {
+
+		this.input.uniforms.get("radius")!.value = value;
+
+	}
+
+	/**
+	 * The halftone scatter factor.
+	 */
+
+	get scatterFactor() {
+
+		return this.input.uniforms.get("scatterFactor")!.value as number;
+
+	}
+
+	set scatterFactor(value: number) {
+
+		this.input.uniforms.get("scatterFactor")!.value = value;
+
+	}
+
+	/**
+	 * The grid rotation in radians.
+	 */
+
+	get rotation() {
+
+		const rotationRGB = this.input.uniforms.get("rotationRGB")!.value as Vector3;
+		return rotationRGB.x;
+
+	}
+
+	set rotation(value: number) {
+
+		const rotationRGB = this.input.uniforms.get("rotationRGB")!.value as Vector3;
+		rotationRGB.setScalar(value);
+		this.updateRGBRotation();
+
+	}
+
+	/**
+	 * The grid rotation for the red channel in radians.
+	 */
+
+	get rotationR() {
+
+		const rotationRGB = this.input.uniforms.get("rotationRGB")!.value as Vector3;
+		return rotationRGB.x;
+
+	}
+
+	set rotationR(value: number) {
+
+		const rotationRGB = this.input.uniforms.get("rotationRGB")!.value as Vector3;
+		rotationRGB.x = value;
+		this.updateRGBRotation();
+
+	}
+
+	/**
+	 * The grid rotation for the green channel in radians.
+	 */
+
+	get rotationG() {
+
+		const rotationRGB = this.input.uniforms.get("rotationRGB")!.value as Vector3;
+		return rotationRGB.y;
+
+	}
+
+	set rotationG(value: number) {
+
+		const rotationRGB = this.input.uniforms.get("rotationRGB")!.value as Vector3;
+		rotationRGB.y = value;
+		this.updateRGBRotation();
+
+	}
+
+	/**
+	 * The grid rotation for the blue channel in radians.
+	 */
+
+	get rotationB() {
+
+		const rotationRGB = this.input.uniforms.get("rotationRGB")!.value as Vector3;
+		return rotationRGB.z;
+
+	}
+
+	set rotationB(value: number) {
+
+		const rotationRGB = this.input.uniforms.get("rotationRGB")!.value as Vector3;
+		rotationRGB.z = value;
+		this.updateRGBRotation();
+
+	}
+
+	/**
+	 * Enables or disables RGB rotation based on the current rotation settings.
+	 */
+
+	private updateRGBRotation() {
+
+		const currentlyEnabled = this.input.defines.has("RGB_ROTATION");
+
+		const shouldBeEnabled = (
+			this.rotationR !== this.rotationG ||
+			this.rotationR !== this.rotationB ||
+			this.rotationG !== this.rotationB
+		);
+
+		if(shouldBeEnabled) {
+
+			this.input.defines.set("RGB_ROTATION", true);
+
+		} else {
+
+			this.input.defines.delete("RGB_ROTATION");
+
+		}
+
+		if(currentlyEnabled !== shouldBeEnabled) {
+
+			this.setChanged();
+
+		}
 
 	}
 
