@@ -69,8 +69,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 	settings.rotation.sensitivity = 2.2;
 	settings.rotation.damping = 0.05;
 	settings.translation.damping = 0.1;
-	controls.position.set(-1, 10, -1);
-	controls.lookAt(0, 10, 0);
+	controls.position.set(0, 2, 0);
+	controls.lookAt(1, 2, 0);
 
 	// Scene, Lights, Objects
 
@@ -83,7 +83,11 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
-	const effect = new HalftoneEffect();
+	const effect = new HalftoneEffect({
+		shape: HalftoneShape.LINE,
+		radius: 3.89,
+		rotation: Math.PI / 4
+	});
 
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.add(
@@ -100,15 +104,16 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
 	const fpsGraph = Utils.createFPSGraph(pane);
 
-
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addBinding(effect, "radius", { min: 1, max: 25, step: 1e-3 });
-	folder.addBinding(effect, "samples", { min: 0, max: 24, step: 1 });
-	folder.addBinding(effect, "scatterFactor", { min: 0, max: 1, step: 1e-3 });
-	folder.addBinding(effect, "rotationR", { min: 0, max: Math.PI / 2, step: 1e-3 });
-	folder.addBinding(effect, "rotationG", { min: 0, max: Math.PI / 2, step: 1e-3 });
-	folder.addBinding(effect, "rotationB", { min: 0, max: Math.PI / 2, step: 1e-3 });
 	folder.addBinding(effect, "shape", { options: Utils.enumToRecord(HalftoneShape) });
+	folder.addBinding(effect, "radius", { min: 1, max: 25, step: 1e-3 });
+	folder.addBinding(effect, "samples", { min: 1, max: 24, step: 1 });
+	folder.addBinding(effect, "scatterFactor", { min: 0, max: 1, step: 1e-3 });
+
+	const subfolder = folder.addFolder({ title: "Rotation" });
+	subfolder.addBinding(effect, "rotationR", { min: 0, max: Math.PI, step: 1e-3 });
+	subfolder.addBinding(effect, "rotationG", { min: 0, max: Math.PI, step: 1e-3 });
+	subfolder.addBinding(effect, "rotationB", { min: 0, max: Math.PI, step: 1e-3 });
 
 	Utils.addBlendModeBindings(folder, effect.blendMode);
 
