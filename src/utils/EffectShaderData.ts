@@ -170,6 +170,8 @@ export class EffectShaderData implements ShaderData {
 		}
 
 		const functionRegExp = /\w+\s+(\w+)\([\w\s,]*\)\s*{/g;
+		const structRegExp = /struct\s+(\w*)/g;
+		const defineRegExp = /^\s*#define\s+(\w*)/gm;
 
 		if(vertexShader !== null && effect.hasMainSupportFunction) {
 
@@ -192,8 +194,19 @@ export class EffectShaderData implements ShaderData {
 
 			}
 
-			// Collect names of functions.
 			for(const m of vertexShader.matchAll(functionRegExp)) {
+
+				names.add(m[1]);
+
+			}
+
+			for(const m of vertexShader.matchAll(structRegExp)) {
+
+				names.add(m[1]);
+
+			}
+
+			for(const m of vertexShader.matchAll(defineRegExp)) {
 
 				names.add(m[1]);
 
@@ -202,6 +215,18 @@ export class EffectShaderData implements ShaderData {
 		}
 
 		for(const m of fragmentShader.matchAll(functionRegExp)) {
+
+			names.add(m[1]);
+
+		}
+
+		for(const m of fragmentShader.matchAll(structRegExp)) {
+
+			names.add(m[1]);
+
+		}
+
+		for(const m of fragmentShader.matchAll(defineRegExp)) {
 
 			names.add(m[1]);
 
