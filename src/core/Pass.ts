@@ -20,7 +20,6 @@ import { Input } from "./io/Input.js";
 import { Output } from "./io/Output.js";
 import { FullscreenMaterial } from "../materials/FullscreenMaterial.js";
 import { ImmutableTimer } from "../utils/ImmutableTimer.js";
-import { Log } from "../utils/Log.js";
 import { Resolution } from "../utils/Resolution.js";
 import { BaseEventMap } from "./BaseEventMap.js";
 import { Disposable } from "./Disposable.js";
@@ -302,8 +301,8 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		} catch(e) {
 
-			Log.warn(e);
-			Log.info("Disabling pass:", this);
+			console.warn(e);
+			console.info("Disabling pass:", this);
 			this.enabled = false;
 
 		}

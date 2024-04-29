@@ -2,7 +2,6 @@ import { Material, NoToneMapping, Vector2, WebGLRenderer } from "three";
 import { Timer } from "three/examples/jsm/misc/Timer.js";
 import { ShaderChunkExtensions } from "../shader-chunks/ShaderChunkExtensions.js";
 import { ImmutableTimer } from "../utils/ImmutableTimer.js";
-import { Log } from "../utils/Log.js";
 import { Resolution } from "../utils/Resolution.js";
 import { IOManager } from "./io/IOManager.js";
 import { Disposable } from "./Disposable.js";
@@ -149,7 +148,7 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 			if(value.toneMapping !== NoToneMapping) {
 
-				Log.info("Consider using a ToneMappingEffect instead of inline tone mapping");
+				console.info("Consider using a ToneMappingEffect instead of inline tone mapping");
 
 			}
 
@@ -345,7 +344,7 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 		if(this.renderer === null) {
 
-			Log.debug("Unable to update the render size because the renderer is null");
+			console.debug("Unable to update the render size because the renderer is null");
 			return;
 
 		}

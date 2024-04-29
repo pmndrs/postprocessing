@@ -15,7 +15,6 @@ import { GBuffer } from "../enums/GBuffer.js";
 import { EffectMaterial } from "../materials/EffectMaterial.js";
 import { EffectShaderData } from "../utils/EffectShaderData.js";
 import { GBufferConfig } from "../utils/GBufferConfig.js";
-import { Log } from "../utils/Log.js";
 import { Resolution } from "../utils/Resolution.js";
 
 /**
@@ -165,7 +164,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 			if(value && this.fullscreenMaterial.outputPrecision !== "lowp") {
 
-				Log.info("Dithering only works on low precision colors");
+				console.info("Dithering only works on low precision colors");
 
 			} else {
 
@@ -262,8 +261,8 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		} catch(e) {
 
-			Log.error(e);
-			Log.info("Disabling pass:", this);
+			console.error(e);
+			console.info("Disabling pass:", this);
 			this.enabled = false;
 
 		}

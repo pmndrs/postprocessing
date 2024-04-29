@@ -10,7 +10,6 @@ import {
 
 import { Input } from "../core/io/Input.js";
 import { GBuffer } from "../enums/GBuffer.js";
-import { Log } from "../utils/Log.js";
 import { Resolution } from "../utils/Resolution.js";
 import { CopyPass } from "./CopyPass.js";
 
@@ -145,7 +144,7 @@ export class BufferDebugPass extends CopyPass {
 
 		if(views.length * size > 1.0 || (views.length / rows) * size > 1.0) {
 
-			Log.warn("Unable to fit texture views");
+			console.warn("Unable to fit texture views");
 			return;
 
 		}

@@ -1,5 +1,4 @@
 import { Object3D } from "three";
-import { Log } from "./Log.js";
 
 /**
  * An object selection.
@@ -50,7 +49,7 @@ export class Selection extends Set<Object3D> {
 
 			if(Selection.nextId > 31) {
 
-				Log.warn("Layer ID exceeded 31, resetting to 2");
+				console.warn("Layer ID exceeded 31, resetting to 2");
 				Selection.nextId = 2;
 
 			}

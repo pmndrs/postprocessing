@@ -8,7 +8,6 @@ export * from "./GaussKernel.js";
 export * from "./GBufferConfig.js";
 export * from "./GBufferTextureConfig.js";
 export * from "./ImmutableTimer.js";
-export * from "./Log.js";
 export * from "./ObservableMap.js";
 export * from "./ObservableSet.js";
 export * from "./Resolution.js";
