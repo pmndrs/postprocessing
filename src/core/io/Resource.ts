@@ -1,5 +1,7 @@
 import { EventDispatcher } from "three";
+import { IdManager } from "../../utils/IdManager.js";
 import { BaseEventMap } from "../BaseEventMap.js";
+import { Identifiable } from "../Identifiable.js";
 
 /**
  * A resource wrapper base class.
@@ -8,7 +10,7 @@ import { BaseEventMap } from "../BaseEventMap.js";
  * @category IO
  */
 
-export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap> {
+export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap> implements Identifiable {
 
 	/**
 	 * Triggers when this resource's value has changed.
@@ -17,6 +19,14 @@ export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap
 	 */
 
 	static readonly EVENT_CHANGE = "change";
+
+	/**
+	 * An ID manager.
+	 */
+
+	private static idManager = new IdManager();
+
+	readonly id: number;
 
 	/**
 	 * @see {@link value}
@@ -34,6 +44,7 @@ export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap
 
 		super();
 
+		this.id = Resource.idManager.getNextId();
 		this._value = value;
 
 	}

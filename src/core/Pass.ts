@@ -19,10 +19,12 @@ import {
 import { Input } from "./io/Input.js";
 import { Output } from "./io/Output.js";
 import { FullscreenMaterial } from "../materials/FullscreenMaterial.js";
+import { IdManager } from "../utils/IdManager.js";
 import { ImmutableTimer } from "../utils/ImmutableTimer.js";
 import { Resolution } from "../utils/Resolution.js";
 import { BaseEventMap } from "./BaseEventMap.js";
 import { Disposable } from "./Disposable.js";
+import { Identifiable } from "./Identifiable.js";
 import { Renderable } from "./Renderable.js";
 
 /**
@@ -45,7 +47,7 @@ export interface PassEventMap extends BaseEventMap {
  */
 
 export abstract class Pass<TMaterial extends Material | null = null>
-	extends EventDispatcher<PassEventMap> implements Disposable, Renderable {
+	extends EventDispatcher<PassEventMap> implements Disposable, Identifiable, Renderable {
 
 	/**
 	 * Triggers when this pass has changed and requires a full update.
@@ -78,6 +80,14 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		return geometry;
 
 	})();
+
+	/**
+	 * An ID manager.
+	 */
+
+	private static idManager = new IdManager();
+
+	readonly id: number;
 
 	/**
 	 * A scene that contains the fullscreen mesh.
@@ -172,7 +182,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	/**
 	 * Constructs a new pass.
 	 *
-	 * @param name - A name that will be used for debugging purposes. Doesn't have to be unique.
+	 * @param name - A name that will be used for debugging purposes.
 	 */
 
 	constructor(name: string) {
@@ -191,6 +201,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this._camera = null;
 		this._subpasses = [];
 
+		this.id = Pass.idManager.getNextId();
 		this.disposables = new Set<Disposable>();
 
 		this.resolution = new Resolution();
