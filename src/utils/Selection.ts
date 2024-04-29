@@ -1,4 +1,5 @@
 import { Object3D } from "three";
+import { IdManager } from "./IdManager.js";
 
 /**
  * An object selection.
@@ -11,10 +12,10 @@ import { Object3D } from "three";
 export class Selection extends Set<Object3D> {
 
 	/**
-	 * The next layer ID.
+	 * An ID manager.
 	 */
 
-	private static nextId = 2;
+	private static idManager = new IdManager(2);
 
 	/**
 	 * @see {@link layer}
@@ -41,24 +42,17 @@ export class Selection extends Set<Object3D> {
 	 * @param layer - A dedicated render layer for selected objects. Range is `[2, 31]`. Starts at 2 if omitted.
 	 */
 
-	constructor(iterable?: Iterable<Object3D>, layer?: number) {
+	constructor(iterable?: Iterable<Object3D>, layer = Selection.idManager.getNextId()) {
 
 		super();
 
-		if(layer === undefined) {
+		this._layer = layer;
 
-			if(Selection.nextId > 31) {
+		if(this._layer < 1 || this._layer > 31) {
 
-				console.warn("Layer ID exceeded 31, resetting to 2");
-				Selection.nextId = 2;
-
-			}
-
-			this._layer = Selection.nextId++;
-
-		} else {
-
-			this._layer = layer;
+			console.warn("Layer out of range, resetting to 2");
+			Selection.idManager.reset(2);
+			this._layer = Selection.idManager.getNextId();
 
 		}
 

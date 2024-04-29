@@ -7,6 +7,7 @@ export * from "./EffectShaderData.js";
 export * from "./GaussKernel.js";
 export * from "./GBufferConfig.js";
 export * from "./GBufferTextureConfig.js";
+export * from "./IdManager.js";
 export * from "./ImmutableTimer.js";
 export * from "./ObservableMap.js";
 export * from "./ObservableSet.js";
