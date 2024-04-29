@@ -3,6 +3,7 @@ export * from "./functions/index.js";
 export * from "./Background.js";
 export * from "./ClearFlags.js";
 export * from "./ClearValues.js";
+export * from "./DebugTools.js";
 export * from "./EffectShaderData.js";
 export * from "./GaussKernel.js";
 export * from "./GBufferConfig.js";
