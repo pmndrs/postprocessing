@@ -23,7 +23,8 @@ export class CopyMaterial extends FullscreenMaterial {
 			fragmentShader,
 			vertexShader,
 			defines: {
-				COLOR_SPACE_CONVERSION: true
+				COLOR_SPACE_CONVERSION: true,
+				COLOR_WRITE: true
 			},
 			uniforms: {
 				depthBuffer: new Uniform(null)
