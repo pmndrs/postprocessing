@@ -190,9 +190,9 @@ export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
 
 		} else {
 
-			const resource = this.defaultBuffer;
+			const resource = this.textures.get(key);
 
-			if(resource !== null) {
+			if(resource !== undefined && resource !== null) {
 
 				resource.value = value;
 

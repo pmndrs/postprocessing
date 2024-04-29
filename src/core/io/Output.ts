@@ -133,9 +133,9 @@ export class Output extends EventDispatcher<BaseEventMap> implements ShaderData 
 
 		} else {
 
-			const resource = this.defaultBuffer;
+			const resource = this.renderTargets.get(key);
 
-			if(resource !== null) {
+			if(resource !== undefined && resource !== null) {
 
 				resource.value = value;
 
