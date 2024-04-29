@@ -2,7 +2,7 @@
 layout: single
 collection: sections
 title: Blur
-draft: true
+draft: false
 menu:
   demos:
     parent: utility

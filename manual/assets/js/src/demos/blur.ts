@@ -12,8 +12,12 @@ import {
 
 import {
 	ClearPass,
+	EffectPass,
+	GaussianBlurPass,
 	GeometryPass,
-	RenderPipeline
+	RenderPipeline,
+	TextureEffect,
+	ToneMappingEffect
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
@@ -85,69 +89,68 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
+	const gaussianBlurPass = new GaussianBlurPass({
+		kernelSize: 35,
+		iterations: 1,
+		resolutionScale: 0.5
+	});
+
+	const textureEffect = new TextureEffect({ texture: gaussianBlurPass.texture });
+
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.add(
 		new ClearPass(),
 		new GeometryPass(scene, camera, {
 			frameBufferType: HalfFloatType,
 			samples: 4
-		})
+		}),
+		gaussianBlurPass,
+		new EffectPass(
+			textureEffect,
+			new ToneMappingEffect()
+		)
 	);
-
-	/*
-	const gaussianBlurPass = new GaussianBlurPass({ resolutionScale: 0.5, kernelSize: 35 });
-	const kawaseBlurPass = new KawaseBlurPass({ resolutionScale: 0.5, kernelSize: KernelSize.MEDIUM });
-
-	gaussianBlurPass.output.defaultBuffer = null;
-	kawaseBlurPass.output.defaultBuffer = null;
-	kawaseBlurPass.enabled = false;
-
-	pipeline.addPass(gaussianBlurPass);
-	pipeline.addPass(kawaseBlurPass);
-	pipeline.addPass(new EffectPass(effect, new ToneMappingEffect()));
-	*/
 
 	// Settings
 
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
 	const fpsGraph = Utils.createFPSGraph(pane);
 
-	/*
 	const folder = pane.addFolder({ title: "Settings" });
 	const tab = folder.addTab({
 		pages: [
-			{ title: "Gaussian" },
-			{ title: "Kawase" }
+			{ title: "Gauss" }
+			// { title: "Kawase" }
 		]
 	});
 
 	tab.on("select", (event) => {
 
 		gaussianBlurPass.enabled = (event.index === 0);
-		kawaseBlurPass.enabled = (event.index === 1);
+		// kawaseBlurPass.enabled = (event.index === 1);
 
 	});
 
-	tab.pages[0].addBinding(gaussianBlurPass.blurMaterial, "kernelSize", {
-		options: {
-			"7x7": 7,
-			"15x15": 15,
-			"25x25": 25,
-			"35x35": 35,
-			"63x63": 63,
-			"127x127": 127,
-			"255x255": 255
-		}
-	});
+	const gaussKernels = {
+		"7x7": 7,
+		"15x15": 15,
+		"25x25": 25,
+		"35x35": 35,
+		"63x63": 63,
+		"127x127": 127,
+		"255x255": 255
+	};
 
-	tab.pages[0].addBinding(gaussianBlurPass.blurMaterial, "scale", { min: 0, max: 2, step: 0.01 });
-	tab.pages[0].addBinding(gaussianBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
-	tab.pages[0].addBinding(gaussianBlurPass, "iterations", { min: 1, max: 8, step: 1 });
+	const p0 = tab.pages[0];
+	tab.pages[0].addBinding(gaussianBlurPass.fullscreenMaterial, "kernelSize", { options: gaussKernels });
+	p0.addBinding(gaussianBlurPass.fullscreenMaterial, "scale", { min: 0, max: 2, step: 0.01 });
+	p0.addBinding(gaussianBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
+	p0.addBinding(gaussianBlurPass, "iterations", { min: 1, max: 8, step: 1 });
 
-	tab.pages[1].addBinding(kawaseBlurPass.blurMaterial, "kernelSize", { options: KernelSize });
-	tab.pages[1].addBinding(kawaseBlurPass.blurMaterial, "scale", { min: 0, max: 2, step: 0.01 });
-	tab.pages[1].addBinding(kawaseBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
-	*/
+	// const p1 = tab.pages[1];
+	// p1.addBinding(kawaseBlurPass.fullscreenMaterial, "kernelSize", { options: KernelSize });
+	// p1.addBinding(kawaseBlurPass.fullscreenMaterial, "scale", { min: 0, max: 2, step: 0.01 });
+	// p1.addBinding(kawaseBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
 
 	// Resize Handler
 
