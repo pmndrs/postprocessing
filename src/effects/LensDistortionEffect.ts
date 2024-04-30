@@ -1,6 +1,6 @@
 import { Uniform, Vector2 } from "three";
-
 import { Effect } from "./Effect.js";
+
 import fragmentShader from "./shaders/lens-distortion.frag";
 
 export interface LensDistortionEffectOptions {
