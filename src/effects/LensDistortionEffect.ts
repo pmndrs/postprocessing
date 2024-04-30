@@ -1,6 +1,6 @@
 import { Uniform, Vector2 } from "three";
-import { Effect } from "./Effect.js";
 
+import { Effect } from "./Effect.js";
 import fragmentShader from "./shaders/lens-distortion.frag";
 
 export interface LensDistortionEffectOptions {
@@ -19,10 +19,11 @@ export interface LensDistortionEffectOptions {
 export class LensDistortionEffect extends Effect {
 
 	/**
-   * Constructs a new lens distortion effect.
-   *
-   * @param {Object} options - The options.
-   */
+	 * Constructs a new lens distortion effect.
+	 *
+	 * @param {Object} options - The options.
+	 */
+
 	constructor({
 		distortion = new Vector2(0, 0),
 		principalPoint = new Vector2(0, 0),
@@ -42,10 +43,8 @@ export class LensDistortionEffect extends Effect {
 	}
 
 	/**
-   * The radial distortion coefficients. Default is (0, 0).
-   *
-   * @type {Vector2}
-   */
+	 * The radial distortion coefficients. Default is (0, 0).
+	 */
 
 	get distortion() {
 
@@ -60,10 +59,8 @@ export class LensDistortionEffect extends Effect {
 	}
 
 	/**
-   * The principal point. Default is (0, 0).
-   *
-   * @type {Vector2}
-   */
+	 * The principal point. Default is (0, 0).
+	 */
 
 	get principalPoint() {
 
@@ -78,10 +75,8 @@ export class LensDistortionEffect extends Effect {
 	}
 
 	/**
-   * The focal length. Default is (1, 1).
-   *
-   * @type {Vector2}
-   */
+	 * The focal length. Default is (1, 1).
+	 */
 
 	get focalLength() {
 
@@ -96,10 +91,8 @@ export class LensDistortionEffect extends Effect {
 	}
 
 	/**
-   * The skew factor in radians.
-   *
-   * @type {Number}
-   */
+	 * The skew factor in radians.
+	 */
 
 	get skew() {
 
