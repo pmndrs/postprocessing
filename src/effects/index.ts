@@ -5,6 +5,7 @@ export * from "./ColorDepthEffect.js";
 export * from "./Effect.js";
 export * from "./FXAAEffect.js";
 export * from "./HalftoneEffect.js";
+export * from "./LensDistortionEffect.js";
 export * from "./ScanlineEffect.js";
 export * from "./SMAAEffect.js";
 export * from "./TextureEffect.js";
