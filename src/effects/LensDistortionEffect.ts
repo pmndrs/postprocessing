@@ -1,13 +1,48 @@
 import { Uniform, Vector2 } from "three";
-
 import { Effect } from "./Effect.js";
+
 import fragmentShader from "./shaders/lens-distortion.frag";
 
+/**
+ * LensDistortionEffect options.
+ *
+ * @category Effects
+ */
+
 export interface LensDistortionEffectOptions {
+
+	/**
+	 * The radial distortion coefficients.
+	 *
+	 * @defaultValue (0, 0)
+	 */
+
 	distortion?: Vector2;
+
+	/**
+	 * The principal point.
+	 *
+	 * @defaultValue (0, 0)
+	 */
+
 	principalPoint?: Vector2;
+
+	/**
+	 * The focal length.
+	 *
+	 * @defaultValue (1, 1)
+	 */
+
 	focalLength?: Vector2;
+
+	/**
+	 * The skew factor in radians.
+	 *
+	 * @defaultValue 0
+	 */
+
 	skew?: number;
+
 }
 
 /**
@@ -21,7 +56,7 @@ export class LensDistortionEffect extends Effect {
 	/**
 	 * Constructs a new lens distortion effect.
 	 *
-	 * @param {Object} options - The options.
+	 * @param options - The options.
 	 */
 
 	constructor({
@@ -43,10 +78,12 @@ export class LensDistortionEffect extends Effect {
 	}
 
 	/**
-	 * The radial distortion coefficients. Default is (0, 0).
+	 * The radial distortion coefficients.
+	 *
+	 * @defaultValue (0, 0)
 	 */
 
-	get distortion() {
+	get distortion(): Vector2 {
 
 		return this.input.uniforms.get("distortion")!.value as Vector2;
 
@@ -59,10 +96,12 @@ export class LensDistortionEffect extends Effect {
 	}
 
 	/**
-	 * The principal point. Default is (0, 0).
+	 * The principal point.
+	 *
+	 * @defaultValue (0, 0)
 	 */
 
-	get principalPoint() {
+	get principalPoint(): Vector2 {
 
 		return this.input.uniforms.get("principalPoint")!.value as Vector2;
 
@@ -75,10 +114,12 @@ export class LensDistortionEffect extends Effect {
 	}
 
 	/**
-	 * The focal length. Default is (1, 1).
+	 * The focal length.
+	 *
+	 * @defaultValue (1, 1)
 	 */
 
-	get focalLength() {
+	get focalLength(): Vector2 {
 
 		return this.input.uniforms.get("focalLength")!.value as Vector2;
 
@@ -92,9 +133,11 @@ export class LensDistortionEffect extends Effect {
 
 	/**
 	 * The skew factor in radians.
+	 *
+	 * @defaultValue 0
 	 */
 
-	get skew() {
+	get skew(): number {
 
 		return this.input.uniforms.get("skew")!.value as number;
 
