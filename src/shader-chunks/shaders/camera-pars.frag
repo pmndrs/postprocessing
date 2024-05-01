@@ -2,6 +2,10 @@ uniform mat4 projectionMatrix;
 uniform mat4 projectionMatrixInverse;
 uniform vec3 cameraParams;
 
+#define CAMERA_NEAR cameraParams.x
+#define CAMERA_FAR cameraParams.y
+#define CAMERA_ASPECT cameraParams.z
+
 // Define macro functions for calculating viewZ depending on the camera type.
 #ifdef PERSPECTIVE_CAMERA
 
