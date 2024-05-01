@@ -85,6 +85,7 @@ struct GData {
 	vec4 color;
 	float depth
 	vec3 normal;
+	vec3 position;
 	vec3 orm;
 	vec3 emission;
 	vec3 velocity;
@@ -149,6 +150,6 @@ The shader chunks [common](https://github.com/mrdoob/three.js/blob/dev/src/rende
 and [packing](https://github.com/mrdoob/three.js/blob/dev/src/renderers/shaders/ShaderChunk/packing.glsl.js) are included in the fragment shader by default.
 
 * The functions `packDepthToRGBA(v)` and `unpackRGBAToDepth(v)` are also available as `packFloatToRGBA(v)` and `unpackRGBAToFloat(v)`
-* To sample depth at any location, use `readDepth(depthBuffer, uv, near, far)`
-* To calculate the view Z based on depth, use `getViewZ(depth, near, far)`
-* To calculate the view position, use `getViewPosition(screenPosition, depth, viewZ, projectionMatrix, inverseProjectionMatrix)`
+* To sample depth at any location, use `readDepth(depthBuffer, uv)`
+* To calculate the view Z based on depth, use `getViewZ(depth)`
+* To calculate the view position, use `getViewPosition(screenPosition, depth)`
