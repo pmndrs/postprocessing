@@ -17,47 +17,6 @@ This library requires the peer dependency [three](https://github.com/mrdoob/thre
 npm install three postprocessing
 ```
 
-## Build Setup
-
-To get started, pick a bundler of your choice:
-- [esbuild](https://github.com/evanw/esbuild)
-- [swc](https://github.com/swc-project/swc)
-- [rollup](https://github.com/rollup/rollup)
-- [webpack](https://github.com/webpack/webpack)
-- [parcel](https://github.com/parcel-bundler/parcel)
-
-This list is not exhaustive, so feel free to look around for another tool that best suits your needs. For more information about configuration, features and plugins, see the official documentation of your chosen bundler.
-
-### Example
-
-The following example uses esbuild for bundling.
-
-__package.json__
-
-```json
-{
-	"scripts": {
-		"build": "esbuild src/app.js --bundle --minify --outfile=dist/app.js"
-	},
-	"dependencies": {
-		"postprocessing": "x.x.x",
-		"three": "x.x.x"
-	},
-	"devDependencies": {
-		"esbuild": "x.x.x"
-	}
-}
-```
-
-__src/app.js__
-
-```ts
-import { RenderPipeline } from "postprocessing";
-console.log(RenderPipeline);
-```
-
-Install [node.js](https://nodejs.org) and use the command `npm run build` to generate the code bundle. Include the bundle in an HTML file to run it in a browser.
-
 ## Usage
 
 Postprocessing extends the common rendering workflow with fullscreen image manipulation tools. The following WebGL attributes should be used for an optimal workflow:
@@ -120,7 +79,7 @@ requestAnimationFrame(function render(timestamp: number): void {
 
 ## Color Space Considerations
 
-New applications should follow a [linear workflow](https://docs.unity3d.com/Manual/LinearRendering-LinearOrGammaWorkflow.html) for color management and postprocessing supports this automatically. Simply set `WebGLRenderer.canvasColorSpace` to `SRGBColorSpace` and postprocessing will follow suit. Built-in passes automatically encode colors when they render to screen and internal render operations are always performed in the most appropriate color space.
+New applications should follow a [linear workflow](https://docs.unity3d.com/Manual/LinearRendering-LinearOrGammaWorkflow.html) for color management and postprocessing supports this automatically. Simply set `WebGLRenderer.outputColorSpace` to `SRGBColorSpace` and postprocessing will follow suit. Built-in passes automatically convert colors when they render to screen and internal render operations are always performed in the correct color space.
 
 Postprocessing uses `UnsignedByteType` sRGB frame buffers to store intermediate results due to good hardware support and resource efficiency. This is a compromise because linear results normally require at least 12 bits per color channel to prevent [color degradation and banding](https://blog.demofox.org/2018/03/10/dont-convert-srgb-u8-to-linear-u8/). With low precision sRGB buffers, colors will be clamped to [0.0, 1.0] and information loss will shift to the darker spectrum which leads to noticable banding in dark scenes. Linear, high precision `HalfFloatType` buffers don't have these issues and are the preferred option for HDR-like workflows on desktop devices. You can enable high precision frame buffers like so:
 
