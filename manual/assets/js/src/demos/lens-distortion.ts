@@ -63,11 +63,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Camera & Controls
 
 	const camera = new PerspectiveCamera();
-	const controls = new SpatialControls(
-		camera.position,
-		camera.quaternion,
-		renderer.domElement
-	);
+	const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 	const settings = controls.settings;
 	settings.rotation.sensitivity = 2.2;
 	settings.rotation.damping = 0.05;
