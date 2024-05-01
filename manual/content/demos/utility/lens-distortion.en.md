@@ -5,7 +5,7 @@ title: Lens Distortion
 draft: false
 menu:
   demos:
-    parent: special-effects
+    parent: utility
 script: lens-distortion
 ---
 
