@@ -4,12 +4,12 @@ import { Resolution } from "../utils/Resolution.js";
 import { KawaseDownsamplingMaterial, KawaseUpsamplingMaterial } from "postprocessing";
 
 /**
- * DualPassKawaseBlurPass constructor options.
+ * MultiPassKawaseBlurPass constructor options.
  *
  * @category Passes
  */
 
-export interface DualPassKawaseBlurPassOptions {
+export interface MultiPassKawaseBlurPassOptions {
 
 	/**
 	 * The scale of the blur kernel.
@@ -35,7 +35,7 @@ export interface DualPassKawaseBlurPassOptions {
  * @category Passes
  */
 
-export class DualPassKawaseBlurPass extends Pass<KawaseDownsamplingMaterial | KawaseUpsamplingMaterial> {
+export class MultiPassKawaseBlurPass extends Pass<KawaseDownsamplingMaterial | KawaseUpsamplingMaterial> {
 
 	private static readonly BUFFER_KAWASE = "BUFFER_KAWASE";
 
@@ -70,11 +70,11 @@ export class DualPassKawaseBlurPass extends Pass<KawaseDownsamplingMaterial | Ka
 	constructor({
 		levels = 2,
 		scale = 0.35
-	}: DualPassKawaseBlurPassOptions = {}) {
+	}: MultiPassKawaseBlurPassOptions = {}) {
 
-		super("DualPassKawaseBlurPass");
+		super("MultiPassKawaseBlurPass");
 
-		this.output.setBuffer(DualPassKawaseBlurPass.BUFFER_KAWASE, this.createFramebuffer());
+		this.output.setBuffer(MultiPassKawaseBlurPass.BUFFER_KAWASE, this.createFramebuffer());
 		this.renderTarget.texture.name = "BUFFER_KAWASE";
 
 		this.downsamplingTargets = [];
@@ -89,13 +89,13 @@ export class DualPassKawaseBlurPass extends Pass<KawaseDownsamplingMaterial | Ka
 
 	private get renderTarget(): WebGLRenderTarget {
 
-		return this.output.buffers.get(DualPassKawaseBlurPass.BUFFER_KAWASE)!.value as WebGLRenderTarget;
+		return this.output.buffers.get(MultiPassKawaseBlurPass.BUFFER_KAWASE)!.value as WebGLRenderTarget;
 
 	}
 
 	private set renderTarget(value: WebGLRenderTarget) {
 
-		this.output.setBuffer(DualPassKawaseBlurPass.BUFFER_KAWASE, value);
+		this.output.setBuffer(MultiPassKawaseBlurPass.BUFFER_KAWASE, value);
 
 	}
 
@@ -150,7 +150,7 @@ export class DualPassKawaseBlurPass extends Pass<KawaseDownsamplingMaterial | Ka
 		}
 
 		this.upsamplingTargets.push(renderTarget);
-		output.setBuffer(DualPassKawaseBlurPass.BUFFER_KAWASE, renderTarget);
+		output.setBuffer(MultiPassKawaseBlurPass.BUFFER_KAWASE, renderTarget);
 
 		for(let i = 0; i < value; ++i) {
 

@@ -14,7 +14,7 @@ script: blur
 Demonstrates two Blur passes:
 
 - Gaussian Blur
-- Dual Pass Kawase Blur
+- Multi Pass Kawase Blur
 
 ### External Resources
 

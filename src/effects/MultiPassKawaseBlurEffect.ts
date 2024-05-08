@@ -3,8 +3,8 @@ import { Resolution } from "../utils/Resolution.js";
 import { Effect } from "./Effect.js";
 
 import fragmentShader from "./shaders/bloom.frag";
-import { DualPassKawaseBlurPass } from "src/passes/DualPassKawaseBlurPass.js";
 import { SrcBlendFunction } from "./blending/index.js";
+import { MultiPassKawaseBlurPass } from "postprocessing";
 
 /**
  * KawaseBlurEffect options.
@@ -12,7 +12,7 @@ import { SrcBlendFunction } from "./blending/index.js";
  * @category Effects
  */
 
-export interface DualPassKawaseBlurEffectOptions {
+export interface MultiPassKawaseBlurEffectOptions {
 
 	/**
 	 * The scale of the blur kernel.
@@ -49,16 +49,16 @@ export interface DualPassKawaseBlurEffectOptions {
  * @category Effects
  */
 
-export class DualPassKawaseBlurEffect extends Effect {
+export class MultiPassKawaseBlurEffect extends Effect {
 
 	/**
-	 * A dual pass pawase blur pass.
+	 * A multi pass Kawase blur pass.
 	 */
 
-	readonly dualPassKawaseBlurPass: DualPassKawaseBlurPass;
+	readonly multiPassKawaseBlurPass: MultiPassKawaseBlurPass;
 
 	/**
-	 * Constructs a new bloom effect.
+	 * Constructs a new blur effect.
 	 *
 	 * @param options - The options.
 	 */
@@ -67,23 +67,23 @@ export class DualPassKawaseBlurEffect extends Effect {
 		intensity = 1,
 		scale = 0.35,
 		levels = 2
-	}: DualPassKawaseBlurEffectOptions = {}) {
+	}: MultiPassKawaseBlurEffectOptions = {}) {
 
-		super("DualPassKawaseBlurEffect");
+		super("MultiPassKawaseBlurEffect");
 
 		this.fragmentShader = fragmentShader;
 		this.blendMode.blendFunction = new SrcBlendFunction();
 
-		this.dualPassKawaseBlurPass = new DualPassKawaseBlurPass({
+		this.multiPassKawaseBlurPass = new MultiPassKawaseBlurPass({
 			scale,
 			levels
 		});
 
 		const uniforms = this.input.uniforms;
-		uniforms.set("map", new Uniform(this.dualPassKawaseBlurPass.texture));
+		uniforms.set("map", new Uniform(this.multiPassKawaseBlurPass.texture));
 		uniforms.set("intensity", new Uniform(intensity));
 
-		this.subpasses = [this.dualPassKawaseBlurPass];
+		this.subpasses = [this.multiPassKawaseBlurPass];
 
 	}
 
@@ -105,19 +105,19 @@ export class DualPassKawaseBlurEffect extends Effect {
 
 	protected override onResolutionChange(resolution: Resolution) {
 
-		this.dualPassKawaseBlurPass.resolution.copy(resolution);
+		this.multiPassKawaseBlurPass.resolution.copy(resolution);
 
 	}
 
 	protected override onInputChange(): void {
 
-		this.dualPassKawaseBlurPass.input.defaultBuffer = this.input.defaultBuffer?.value ?? null;
+		this.multiPassKawaseBlurPass.input.defaultBuffer = this.input.defaultBuffer?.value ?? null;
 
 	}
 
 	override render(): void {
 
-		this.dualPassKawaseBlurPass.render();
+		this.multiPassKawaseBlurPass.render();
 
 	}
 

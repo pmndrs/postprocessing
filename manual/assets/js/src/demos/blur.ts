@@ -15,6 +15,7 @@ import {
 	EffectPass,
 	GaussianBlurPass,
 	GeometryPass,
+	MultiPassKawaseBlurPass,
 	RenderPipeline,
 	TextureEffect,
 	ToneMappingEffect
@@ -24,7 +25,6 @@ import { Pane } from "tweakpane";
 import { ControlMode, SpatialControls } from "spatial-controls";
 import * as CornellBox from "../objects/CornellBox.js";
 import * as Utils from "../utils/index.js";
-import { DualPassKawaseBlurPass } from "src/passes/DualPassKawaseBlurPass.js";
 
 function load(): Promise<Map<string, Texture>> {
 
@@ -96,7 +96,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 		resolutionScale: 0.5
 	});
 
-	const dualPassKawaseBlurPass = new DualPassKawaseBlurPass({
+	const multiPassKawaseBlurPass = new MultiPassKawaseBlurPass({
 		scale: 0.35,
 		levels: 2
 	});
@@ -111,7 +111,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 			samples: 4
 		}),
 		gaussianBlurPass,
-		dualPassKawaseBlurPass,
+		multiPassKawaseBlurPass,
 		new EffectPass(
 			textureEffect,
 			new ToneMappingEffect()
@@ -134,9 +134,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 	tab.on("select", (event) => {
 
 		gaussianBlurPass.enabled = (event.index === 0);
-		dualPassKawaseBlurPass.enabled = (event.index === 1);
+		multiPassKawaseBlurPass.enabled = (event.index === 1);
 
-		textureEffect.texture = event.index === 0 ? gaussianBlurPass.texture : dualPassKawaseBlurPass.texture;
+		textureEffect.texture = event.index === 0 ? gaussianBlurPass.texture : multiPassKawaseBlurPass.texture;
 
 	});
 
@@ -159,11 +159,11 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const p1 = tab.pages[1];
 	// TODO: is it ok that the following two scale parameters are independant from each other?
 	p1.addBinding(
-		dualPassKawaseBlurPass.downsamplingMaterial, "scale", { label: "downsample scale", min: 0, max: 2, step: 0.01 });
+		multiPassKawaseBlurPass.downsamplingMaterial, "scale", { label: "downsample scale", min: 0, max: 2, step: 0.01 });
 	p1.addBinding(
-		dualPassKawaseBlurPass.upsamplingMaterial, "scale", { label: "upsample scale", min: 0, max: 2, step: 0.01 });
-	p1.addBinding(dualPassKawaseBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.01 });
-	p1.addBinding(dualPassKawaseBlurPass, "levels", { min: 1, max: 8, step: 1 });
+		multiPassKawaseBlurPass.upsamplingMaterial, "scale", { label: "upsample scale", min: 0, max: 2, step: 0.01 });
+	p1.addBinding(multiPassKawaseBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.01 });
+	p1.addBinding(multiPassKawaseBlurPass, "levels", { min: 1, max: 8, step: 1 });
 
 	// Resize Handler
 

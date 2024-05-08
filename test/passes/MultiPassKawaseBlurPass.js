@@ -1,9 +1,9 @@
 import test from "ava";
-import { DualPassKawaseBlurPass } from "postprocessing";
+import { MultiPassKawaseBlurPass } from "postprocessing";
 
 test("can be created and destroyed", t => {
 
-	const object = new DualPassKawaseBlurPass();
+	const object = new MultiPassKawaseBlurPass();
 	object.dispose();
 
 	t.pass();

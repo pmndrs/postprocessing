@@ -2,7 +2,7 @@ export * from "./blending/index.js";
 
 export * from "./BloomEffect.js";
 export * from "./ColorDepthEffect.js";
-export * from "./DualPassKawaseBlurEffect.js";
+export * from "./MultiPassKawaseBlurEffect.js";
 export * from "./Effect.js";
 export * from "./FXAAEffect.js";
 export * from "./HalftoneEffect.js";
