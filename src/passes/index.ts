@@ -4,6 +4,7 @@ export * from "./CopyPass.js";
 export * from "./DepthDownsamplingPass.js";
 export * from "./DepthPickingPass.js";
 export * from "./DepthCopyPass.js";
+export * from "./DualPassKawaseBlurPass.js";
 export * from "./EffectPass.js";
 export * from "./GaussianBlurPass.js";
 export * from "./GeometryPass.js";
