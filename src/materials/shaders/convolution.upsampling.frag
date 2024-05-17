@@ -2,17 +2,21 @@
 #include <pp_default_output_pars_fragment>
 #include <pp_input_buffer_pars_fragment>
 
-#ifdef FRAMEBUFFER_PRECISION_HIGH
+#ifdef USE_SUPPORT_BUFFER
 
-	uniform mediump sampler2D supportBuffer;
+	#ifdef FRAMEBUFFER_PRECISION_HIGH
 
-#else
+		uniform mediump sampler2D supportBuffer;
 
-	uniform lowp sampler2D supportBuffer;
+	#else
+
+		uniform lowp sampler2D supportBuffer;
+
+	#endif
+
+	uniform float radius;
 
 #endif
-
-uniform float radius;
 
 in vec2 vUv;
 in vec2 vUv0, vUv1, vUv2, vUv3;
@@ -31,7 +35,15 @@ void main() {
 	c += texture(inputBuffer, vUv6) * 0.125;
 	c += texture(inputBuffer, vUv7) * 0.0625;
 
-	vec4 baseColor = texture(supportBuffer, vUv);
-	out_Color = mix(baseColor, c, radius);
+	#ifdef USE_SUPPORT_BUFFER
+
+		vec4 baseColor = texture(supportBuffer, vUv);
+		out_Color = mix(baseColor, c, radius);
+
+	#else
+
+		out_Color = c;
+
+	#endif
 
 }
