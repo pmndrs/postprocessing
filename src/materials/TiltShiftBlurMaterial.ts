@@ -6,7 +6,7 @@ import fragmentShader from "./shaders/convolution.tilt-shift.frag";
 import vertexShader from "./shaders/convolution.tilt-shift.vert";
 
 /**
- * Tilt shift blur material options.
+ * TiltShiftBlurMaterial constructor options.
  *
  * @category Materials
  */
