@@ -69,7 +69,7 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> {
 	 * @param options - The options.
 	 */
 
-	constructor({ kernelSize = 35, iterations = 1, resolutionScale = 1 } = {}) {
+	constructor({ kernelSize = 35, iterations = 1, resolutionScale = 1 }: GaussianBlurPassOptions = {}) {
 
 		super("GaussianBlurPass");
 
