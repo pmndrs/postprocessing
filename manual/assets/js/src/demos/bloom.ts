@@ -121,6 +121,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	folder.addBinding(effect, "intensity", { min: 0, max: 10, step: 0.01 });
 	folder.addBinding(effect.mipmapBlurPass, "radius", { min: 0, max: 1, step: 1e-3 });
 	folder.addBinding(effect.mipmapBlurPass, "levels", { min: 1, max: 10, step: 1 });
+	folder.addBinding(effect.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
 
 	const subfolder = folder.addFolder({ title: "Luminance Filter" });
 	subfolder.addBinding(effect.luminancePass, "enabled");
