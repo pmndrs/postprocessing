@@ -1,8 +1,26 @@
 import { Texture, WebGLRenderTarget } from "three";
 import { Pass } from "../core/Pass.js";
-import { DownsamplingMaterial } from "../materials/DownsamplingMaterial.js";
-import { UpsamplingMaterial } from "../materials/UpsamplingMaterial.js";
+import { DownsamplingMaterial, DownsamplingMaterialOptions } from "../materials/DownsamplingMaterial.js";
+import { UpsamplingMaterial, UpsamplingMaterialOptions } from "../materials/UpsamplingMaterial.js";
 import { Resolution } from "../utils/Resolution.js";
+
+/**
+ * MipmapBlurPass constructor options.
+ *
+ * @category Passes
+ */
+
+export interface MipmapBlurPassOptions extends DownsamplingMaterialOptions, UpsamplingMaterialOptions {
+
+	/**
+	 * The MIP levels.
+	 *
+	 * @defaultValue 8
+	 */
+
+	levels?: number;
+
+}
 
 /**
  * A blur pass that produces a wide blur by downsampling and upsampling the input over multiple MIP levels.
@@ -47,9 +65,11 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 	/**
 	 * Constructs a new mipmap blur pass.
+	 *
+	 * @param options - The options.
 	 */
 
-	constructor() {
+	constructor({ levels = 8, radius, clampToBorder }: MipmapBlurPassOptions = {}) {
 
 		super("MipmapBlurPass");
 
@@ -59,10 +79,10 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 		this.downsamplingMipmaps = [];
 		this.upsamplingMipmaps = [];
 
-		this.downsamplingMaterial = new DownsamplingMaterial();
-		this.upsamplingMaterial = new UpsamplingMaterial();
+		this.downsamplingMaterial = new DownsamplingMaterial({ clampToBorder });
+		this.upsamplingMaterial = new UpsamplingMaterial({ radius });
 
-		this.levels = 8;
+		this.levels = levels;
 
 	}
 
