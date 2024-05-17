@@ -14,7 +14,15 @@ in vec2 vUv08, vUv09, vUv10, vUv11;
 
 float clampToBorder(const in vec2 uv) {
 
-	return float(uv.s >= 0.0 && uv.s <= 1.0 && uv.t >= 0.0 && uv.t <= 1.0);
+	#ifdef CLAMP_TO_BORDER
+
+		return float(uv.s >= 0.0 && uv.s <= 1.0 && uv.t >= 0.0 && uv.t <= 1.0);
+
+	#else
+
+		return 1.0;
+
+	#endif
 
 }
 
