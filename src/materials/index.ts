@@ -11,6 +11,8 @@ export * from "./EffectMaterial.js";
 export * from "./FullscreenMaterial.js";
 export * from "./GaussianBlurMaterial.js";
 export * from "./KawaseBlurMaterial.js";
+export * from "./KawaseDownsamplingMaterial.js";
+export * from "./KawaseUpsamplingMaterial.js";
 export * from "./LuminanceMaterial.js";
 export * from "./MaskMaterial.js";
 export * from "./SkyBoxMaterial.js";

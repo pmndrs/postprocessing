@@ -10,4 +10,5 @@ export * from "./GeometryPass.js";
 export * from "./LambdaPass.js";
 export * from "./LuminancePass.js";
 export * from "./MipmapBlurPass.js";
+export * from "./MultiPassKawaseBlurPass.js";
 export * from "./ShaderPass.js";

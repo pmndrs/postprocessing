@@ -15,6 +15,7 @@ import {
 	EffectPass,
 	GaussianBlurPass,
 	GeometryPass,
+	MultiPassKawaseBlurPass,
 	RenderPipeline,
 	TextureEffect,
 	ToneMappingEffect
@@ -95,6 +96,11 @@ window.addEventListener("load", () => void load().then((assets) => {
 		resolutionScale: 0.5
 	});
 
+	const multiPassKawaseBlurPass = new MultiPassKawaseBlurPass({
+		scale: 0.35,
+		levels: 2
+	});
+
 	const textureEffect = new TextureEffect({ texture: gaussianBlurPass.texture });
 
 	const pipeline = new RenderPipeline(renderer);
@@ -105,6 +111,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 			samples: 4
 		}),
 		gaussianBlurPass,
+		multiPassKawaseBlurPass,
 		new EffectPass(
 			textureEffect,
 			new ToneMappingEffect()
@@ -119,15 +126,17 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const folder = pane.addFolder({ title: "Settings" });
 	const tab = folder.addTab({
 		pages: [
-			{ title: "Gauss" }
-			// { title: "Kawase" }
+			{ title: "Gauss" },
+			{ title: "Kawase" }
 		]
 	});
 
 	tab.on("select", (event) => {
 
 		gaussianBlurPass.enabled = (event.index === 0);
-		// kawaseBlurPass.enabled = (event.index === 1);
+		multiPassKawaseBlurPass.enabled = (event.index === 1);
+
+		textureEffect.texture = event.index === 0 ? gaussianBlurPass.texture : multiPassKawaseBlurPass.texture;
 
 	});
 
@@ -142,15 +151,19 @@ window.addEventListener("load", () => void load().then((assets) => {
 	};
 
 	const p0 = tab.pages[0];
-	tab.pages[0].addBinding(gaussianBlurPass.fullscreenMaterial, "kernelSize", { options: gaussKernels });
+	p0.addBinding(gaussianBlurPass.fullscreenMaterial, "kernelSize", { options: gaussKernels });
 	p0.addBinding(gaussianBlurPass.fullscreenMaterial, "scale", { min: 0, max: 2, step: 0.01 });
-	p0.addBinding(gaussianBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
+	p0.addBinding(gaussianBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.01 });
 	p0.addBinding(gaussianBlurPass, "iterations", { min: 1, max: 8, step: 1 });
 
-	// const p1 = tab.pages[1];
-	// p1.addBinding(kawaseBlurPass.fullscreenMaterial, "kernelSize", { options: KernelSize });
-	// p1.addBinding(kawaseBlurPass.fullscreenMaterial, "scale", { min: 0, max: 2, step: 0.01 });
-	// p1.addBinding(kawaseBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
+	const p1 = tab.pages[1];
+	// TODO: is it ok that the following two scale parameters are independant from each other?
+	p1.addBinding(
+		multiPassKawaseBlurPass.downsamplingMaterial, "scale", { label: "downsample scale", min: 0, max: 2, step: 0.01 });
+	p1.addBinding(
+		multiPassKawaseBlurPass.upsamplingMaterial, "scale", { label: "upsample scale", min: 0, max: 2, step: 0.01 });
+	p1.addBinding(multiPassKawaseBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.01 });
+	p1.addBinding(multiPassKawaseBlurPass, "levels", { min: 1, max: 8, step: 1 });
 
 	// Resize Handler
 
