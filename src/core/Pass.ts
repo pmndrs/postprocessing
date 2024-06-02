@@ -264,6 +264,15 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		this._subpasses = value;
 
+		for(const pass of this.subpasses) {
+
+			pass.timer = this.timer;
+			pass.renderer = this.renderer;
+			pass.scene = this.scene;
+			pass.camera = this.camera;
+
+		}
+
 	}
 
 	/**
