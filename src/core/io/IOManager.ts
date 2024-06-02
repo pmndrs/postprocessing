@@ -179,15 +179,15 @@ export class IOManager {
 
 		}
 
-		// Connect clear passes with subsequent passes.
-		for(let i = 0, j = 1, l = passes.length; i < l; ++i, ++j) {
+		// Connect clear passes with subsequent passes in reverse order.
+		for(let i = passes.length - 2; i >= 0; --i) {
 
 			const pass = passes[i];
+			const nextPass = passes[i + 1];
 
-			if(j < l && pass instanceof ClearPass) {
+			if(pass instanceof ClearPass) {
 
 				// Assign the output resources of the next pass to this clear pass.
-				const nextPass = passes[j];
 				nextPass.output.defines.forEach((value, key) => pass.output.defines.set(key, value));
 				nextPass.output.uniforms.forEach((value, key) => pass.output.uniforms.set(key, value));
 				pass.output.defaultBuffer = nextPass.output.defaultBuffer;
