@@ -100,21 +100,21 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const fpsGraph = Utils.createFPSGraph(pane);
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addBinding(effect, "skew", { min: -90, max: 90, step: 0.1 });
+	folder.addBinding(effect, "skew", { min: -Math.PI * 2, max: Math.PI * 2, step: 1e-3 });
 
 	folder.addBinding(effect, "distortion", {
-		x: { min: -1, max: 1, step: 0.01 },
-		y: { min: -1, max: 1, step: 0.01 }
+		x: { min: -1, max: 1, step: 1e-3 },
+		y: { min: -1, max: 1, step: 1e-3 }
 	});
 
 	folder.addBinding(effect, "principalPoint", {
-		x: { min: -1, max: 1, step: 0.01 },
-		y: { min: -1, max: 1, step: 0.01 }
+		x: { min: -1, max: 1, step: 1e-3 },
+		y: { min: -1, max: 1, step: 1e-3 }
 	});
 
 	folder.addBinding(effect, "focalLength", {
-		x: { min: 0, max: 2, step: 0.01 },
-		y: { min: 0, max: 2, step: 0.01 }
+		x: { min: 0, max: 2, step: 1e-3 },
+		y: { min: 0, max: 2, step: 1e-3 }
 	});
 
 	// Resize Handler
