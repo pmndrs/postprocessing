@@ -126,6 +126,14 @@ export class GeometryPass extends Pass implements Selective {
 	private readonly copyPass: CopyPass;
 
 	/**
+	 * A list of prepasses that run right before this pass.
+	 *
+	 * The output of the prepasses will be synchronized with the output of this pass.
+	 */
+
+	private readonly prepasses: Pass<Material | null>[];
+
+	/**
 	 * Controls which G-Buffer components should be rendered by this pass.
 	 *
 	 * This will be automatically configured based on the requirements of other passes in the same pipeline.
@@ -222,6 +230,7 @@ export class GeometryPass extends Pass implements Selective {
 		this.copyPass = new CopyPass();
 		this.copyPass.enabled = false;
 		this.subpasses = [this.copyPass];
+		this.prepasses = [];
 
 		const gBufferComponents = new ObservableSet<GBuffer | string>();
 		gBufferComponents.addEventListener(ObservableSet.EVENT_CHANGE, () => this.updateGBuffer());
@@ -495,6 +504,41 @@ export class GeometryPass extends Pass implements Selective {
 
 	}
 
+	/**
+	 * Adds a prepass to this pass.
+	 *
+	 * @throws Error if the prepass has already been added.
+	 * @param prepass - The prepass to add.
+	 */
+
+	addPrepass(prepass: Pass<Material | null>): void {
+
+		if(this.prepasses.includes(prepass)) {
+
+			throw new Error(`The prepass "${prepass.name}" has already been added`);
+
+		}
+
+		this.prepasses.push(prepass);
+		this.subpasses = this.prepasses.concat([this.copyPass]);
+		prepass.output.defaultBuffer = this.output.defaultBuffer;
+
+	}
+
+	/**
+	 * Renders the prepasses.
+	 */
+
+	protected renderPrepasses(): void {
+
+		for(const prepass of this.prepasses) {
+
+			prepass.render();
+
+		}
+
+	}
+
 	protected override onInputChange(): void {
 
 		this.copyPass.input.defaultBuffer = this.input.defaultBuffer;
@@ -540,6 +584,8 @@ export class GeometryPass extends Pass implements Selective {
 			this.camera.layers.set(selection.layer);
 
 		}
+
+		this.renderPrepasses();
 
 		if(this.copyPass.enabled) {
 
