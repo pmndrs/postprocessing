@@ -106,7 +106,7 @@ export class Selection extends Set<Object3D> {
 
 		}
 
-		return super.clear();
+		super.clear();
 
 	}
 
