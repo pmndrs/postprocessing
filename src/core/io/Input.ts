@@ -1,12 +1,12 @@
 import { EventDispatcher, Texture, Uniform, UnsignedByteType } from "three";
 import { GBuffer } from "../../enums/GBuffer.js";
+import { GBufferConfig } from "../../utils/GBufferConfig.js";
 import { ObservableMap } from "../../utils/ObservableMap.js";
 import { ObservableSet } from "../../utils/ObservableSet.js";
 import { BaseEventMap } from "../BaseEventMap.js";
 import { ShaderData } from "../ShaderData.js";
 import { Resource } from "./Resource.js";
 import { TextureResource } from "./TextureResource.js";
-import { GBufferConfig } from "../../utils/GBufferConfig.js";
 
 /**
  * Input resources.
@@ -98,6 +98,7 @@ export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
 		this.uniforms = uniforms;
 		this.textures = textures;
 		this.gBuffer = gBuffer;
+
 		this._gBufferConfig = null;
 
 	}
