@@ -11,7 +11,7 @@ footer {
 	flex-grow: 0;
 	justify-content: space-between;
 	padding: 0.6rem dimensions.$nav-padding;
-	.menu {
+	ul {
 		font-size: 75%;
 		list-style: none;
 		margin: 0 0.25rem 0 0;
@@ -36,7 +36,7 @@ footer {
 			width: 1px;
 		}
 	}
-	.menu,
+	ul,
 	.contentinfo {
 		align-items: center;
 		display: flex;
