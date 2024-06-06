@@ -169,6 +169,18 @@ export class EffectPass extends Pass<EffectMaterial> {
 			} else {
 
 				material.dithering = value;
+
+				// The macro needs to be updated manually because RawShaderMaterial doesn't honor the property.
+				if(value) {
+
+					material.defines.DITHERING = true;
+
+				} else {
+
+					delete material.defines.DITHERING;
+
+				}
+
 				material.needsUpdate = true;
 
 			}
