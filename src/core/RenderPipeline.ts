@@ -146,12 +146,6 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 		if(value !== null) {
 
-			if(value.toneMapping !== NoToneMapping) {
-
-				console.info("Consider using a ToneMappingEffect instead of inline tone mapping");
-
-			}
-
 			// Clearing will be done with ClearPass instances.
 			value.autoClear = false;
 
