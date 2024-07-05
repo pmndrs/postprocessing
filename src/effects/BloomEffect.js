@@ -76,6 +76,7 @@ export class BloomEffect extends Effect {
 		 *
 		 * @type {KawaseBlurPass}
 		 * @readonly
+		 * @deprecated Use mipmapBlurPass instead.
 		 */
 
 		this.blurPass = new KawaseBlurPass({ kernelSize });
@@ -97,7 +98,7 @@ export class BloomEffect extends Effect {
 		 * A mipmap blur pass.
 		 *
 		 * @type {MipmapBlurPass}
-		 * @private
+		 * @readonly
 		 */
 
 		this.mipmapBlurPass = new MipmapBlurPass();
@@ -112,7 +113,6 @@ export class BloomEffect extends Effect {
 		 *
 		 * @type {Resolution}
 		 * @readonly
-		 * @deprecated
 		 */
 
 		const resolution = this.resolution = new Resolution(this, resolutionX, resolutionY, resolutionScale);

@@ -38,6 +38,7 @@ export class MipmapBlurPass extends Pass {
 		 * The mipmaps used for downsampling.
 		 *
 		 * @type {WebGLRenderTarget[]}
+		 * @private
 		 * @readonly
 		 */
 
@@ -47,6 +48,7 @@ export class MipmapBlurPass extends Pass {
 		 * The mipmaps used for upsampling.
 		 *
 		 * @type {WebGLRenderTarget[]}
+		 * @private
 		 * @readonly
 		 */
 
