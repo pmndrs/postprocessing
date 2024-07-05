@@ -23,7 +23,7 @@ struct Cell {
 
 float getPattern(float cellSample, vec2 coord, vec2 n, vec2 p, float angle, float maxRadius) {
 
-	float magnetude = length(coord - p);
+	float magnitude = length(coord - p);
 	float r = cellSample;
 
 	#if SHAPE == SHAPE_DOT
@@ -34,12 +34,12 @@ float getPattern(float cellSample, vec2 coord, vec2 n, vec2 p, float angle, floa
 
 		r = pow(abs(r), 1.125) * maxRadius;
 
-		if(magnetude != 0.0) {
+		if(magnitude != 0.0) {
 
-			float dotP = abs(dot((p - coord) / magnetude, n));
+			float dotP = abs(dot((p - coord) / magnitude, n));
 
-			magnetude = dot(
-				vec2(magnetude, magnetude * dotP),
+			magnitude = dot(
+				vec2(magnitude, magnitude * dotP),
 				vec2(1.0 - SQRT2_HALF_MINUS_ONE, SQRT2_MINUS_ONE)
 			);
 
@@ -49,7 +49,7 @@ float getPattern(float cellSample, vec2 coord, vec2 n, vec2 p, float angle, floa
 
 		r = pow(abs(r), 1.5) * maxRadius;
 		float dotP = dot(p - coord, n);
-		magnetude = length(n * dotP);
+		magnitude = length(n * dotP);
 	
 	#elif SHAPE == SHAPE_SQUARE
 
@@ -62,7 +62,7 @@ float getPattern(float cellSample, vec2 coord, vec2 n, vec2 p, float angle, floa
 
 	#endif
 
-	return r - magnetude;
+	return r - magnitude;
 
 }
 
@@ -71,12 +71,12 @@ vec4 getSample(vec2 point) {
 	vec4 texel = texture(gBuffer.color, point * resolution.zw);
 	float base = rand(floor(point)) * PI2;
 	float step = PI2 * INV_SAMPLES;
-	float magnetude = radius * 0.66;
+	float magnitude = radius * 0.66;
 
 	for(int i = 0; i < SAMPLES; ++i) {
 
 		float r = base + step * float(i);
-		vec2 coord = point + vec2(cos(r), sin(r)) * magnetude;
+		vec2 coord = point + vec2(cos(r), sin(r)) * magnitude;
 		texel += texture(gBuffer.color, coord * resolution.zw);
 
 	}
