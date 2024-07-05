@@ -138,12 +138,12 @@ export class EffectShaderData implements ShaderData {
 	}
 
 	/**
-	* Integrates the given effect by collecting relevant shader data.
-	*
-	* @param prefix - A prefix.
-	* @param effect - The effect.
-	* @throws {@link Error} if the effect is invalid or cannot be merged.
-	*/
+	 * Integrates the given effect by collecting relevant shader data.
+	 *
+	 * @param prefix - A prefix.
+	 * @param effect - The effect.
+	 * @throws {@link Error} if the effect is invalid or cannot be merged.
+	 */
 
 	integrateEffect(prefix: string, effect: Effect): void {
 
@@ -338,10 +338,10 @@ export class EffectShaderData implements ShaderData {
 	}
 
 	/**
-	* Creates a {@link GBuffer} struct declaration shader code.
-	*
-	* @return The shader code.
-	*/
+	 * Creates a {@link GBuffer} struct declaration shader code.
+	 *
+	 * @return The shader code.
+	 */
 
 	createGBufferStruct(): string {
 
@@ -356,10 +356,10 @@ export class EffectShaderData implements ShaderData {
 	}
 
 	/**
-	* Creates a {@link GData} struct declaration shader code.
-	*
-	* @return The shader code.
-	*/
+	 * Creates a {@link GData} struct declaration shader code.
+	 *
+	 * @return The shader code.
+	 */
 
 	createGDataStructDeclaration(): string {
 
@@ -374,10 +374,10 @@ export class EffectShaderData implements ShaderData {
 	}
 
 	/**
-	* Creates the {@link GData} struct initialization shader code.
-	*
-	* @return The shader code.
-	*/
+	 * Creates the {@link GData} struct initialization shader code.
+	 *
+	 * @return The shader code.
+	 */
 
 	createGDataStructInitialization(): string {
 
@@ -394,10 +394,10 @@ export class EffectShaderData implements ShaderData {
 	}
 
 	/**
-	* Creates the relevant blend function declarations.
-	*
-	* @return The shader code.
-	*/
+	 * Creates the relevant blend function declarations.
+	 *
+	 * @return The shader code.
+	 */
 
 	createBlendFunctions(): string {
 
