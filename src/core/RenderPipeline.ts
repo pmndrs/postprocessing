@@ -1,4 +1,4 @@
-import { Material, NoToneMapping, Vector2, WebGLRenderer } from "three";
+import { Material, Vector2, WebGLRenderer } from "three";
 import { Timer } from "three/examples/jsm/misc/Timer.js";
 import { ShaderChunkExtensions } from "../shader-chunks/ShaderChunkExtensions.js";
 import { ImmutableTimer } from "../utils/ImmutableTimer.js";
