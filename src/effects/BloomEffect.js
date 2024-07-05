@@ -97,7 +97,7 @@ export class BloomEffect extends Effect {
 		 * A mipmap blur pass.
 		 *
 		 * @type {MipmapBlurPass}
-		 * @private
+		 * @readonly
 		 */
 
 		this.mipmapBlurPass = new MipmapBlurPass();
