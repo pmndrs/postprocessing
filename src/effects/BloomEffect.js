@@ -76,6 +76,7 @@ export class BloomEffect extends Effect {
 		 *
 		 * @type {KawaseBlurPass}
 		 * @readonly
+		 * @deprecated Use mipmapBlurPass instead.
 		 */
 
 		this.blurPass = new KawaseBlurPass({ kernelSize });
