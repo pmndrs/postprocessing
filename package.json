@@ -72,7 +72,7 @@
 		"copy": "cpy \"demo/static/**/*\" public/demo",
 		"deploy": "run-s copy postcss hugo gzip",
 		"doc": "esdoc",
-		"gzip": "gzipper c public",
+		"gzip": "gzipper c \"public\"",
 		"hugo": "hugo -s manual --minify",
 		"lint": "run-p lint:*",
 		"lint:css": "stylelint --fix manual/assets/css/src",
