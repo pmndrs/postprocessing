@@ -46,7 +46,7 @@ export abstract class Effect extends Pass {
 	/**
 	 * Constructs a new effect.
 	 *
-	 * @param name - A name that will be used for debugging purposes. Doesn't have to be unique.
+	 * @param name - A name that will be used for debugging purposes.
 	 */
 
 	constructor(name: string) {
