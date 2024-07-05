@@ -113,7 +113,6 @@ export class BloomEffect extends Effect {
 		 *
 		 * @type {Resolution}
 		 * @readonly
-		 * @deprecated
 		 */
 
 		const resolution = this.resolution = new Resolution(this, resolutionX, resolutionY, resolutionScale);
