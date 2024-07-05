@@ -3189,6 +3189,37 @@ declare module "postprocessing" {
 	export type BlurPass = KawaseBlurPass;
 
 	/**
+	 * A blur pass that produces a wide blur by downsampling and upsampling the input over multiple MIP levels.
+	 *
+	 * Based on an article by Fabrice Piquet:
+	 * https://www.froyok.fr/blog/2021-12-ue4-custom-bloom/
+	 */
+	export class MipmapBlurPass extends Pass {
+
+		/**
+		 * A texture that contains the blurred result.
+		 *
+		 * @type {Texture}
+		 */
+		get texture(): Texture;
+		/**
+		 * The MIP levels. Default is 8.
+		 *
+		 * @type {Number}
+		 */
+		get levels(): number;
+		set levels(value: number);
+		/**
+		 * The blur radius. Default is 0.85.
+		 *
+		 * @type {Number}
+		 */
+		get radius(): number;
+		set radius(value: number);
+
+	}
+
+	/**
 	 * A pass that disables the stencil test.
 	 */
 	export class ClearMaskPass extends Pass {
@@ -5203,14 +5234,24 @@ declare module "postprocessing" {
 		 * This pass can be disabled to skip luminance filtering.
 		 *
 		 * @type {LuminancePass}
+		 * @readonly
 		 */
-		luminancePass: LuminancePass;
+		readonly luminancePass: LuminancePass;
 		/**
 		 * A blur pass.
 		 *
 		 * @type {KawaseBlurPass}
+		 * @readonly
+		 * @deprecated Use mipmapBlurPass instead.
 		 */
-		blurPass: KawaseBlurPass;
+		readonly blurPass: KawaseBlurPass;
+		/**
+		 * A mipmap blur pass.
+		 *
+		 * @type {MipmapBlurPass}
+		 * @readonly
+		 */
+		readonly mipmapBlurPass: MipmapBlurPass;
 		/**
 		 * A texture that contains the intermediate result of this effect.
 		 *
