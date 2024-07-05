@@ -67,7 +67,7 @@
 		"clean": "del-cli dist temp public manual/resources manual/assets/css/dist manual/assets/js/dist",
 		"deploy": "run-s postcss hugo gzip",
 		"doc": "typedoc --plugin typedoc-plugin-mdn-links",
-		"gzip": "gzipper c public",
+		"gzip": "gzipper c \"public\"",
 		"hugo": "hugo -s manual --minify",
 		"lint": "run-p lint:*",
 		"lint:css": "stylelint --fix manual/assets/css/src",
