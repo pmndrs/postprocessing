@@ -40,7 +40,7 @@ export abstract class DebugTools {
 
 					const defaultBufferId = input.defaultBuffer?.id;
 					const otherBuffers = Array.from(input.buffers.values()).filter(x => x.id !== defaultBufferId);
-					console.debug("reads", input.defaultBuffer?.id, otherBuffers.map(x => x.id).join(", "));
+					console.debug("reads", input.defaultBuffer?.id, "&", otherBuffers.map(x => x.id).join(" "));
 
 				} else if(input.buffers.size > 0) {
 
@@ -52,7 +52,7 @@ export abstract class DebugTools {
 
 					const defaultBufferId = output.defaultBuffer?.id;
 					const otherBuffers = Array.from(output.buffers.values()).filter(x => x.id !== defaultBufferId);
-					console.debug("writes", output.defaultBuffer?.id, otherBuffers.map(x => x.id).join(", "));
+					console.debug("writes", output.defaultBuffer?.id, "&", otherBuffers.map(x => x.id).join(" "));
 
 				} else if(output.buffers.size > 0) {
 
@@ -88,7 +88,7 @@ export abstract class DebugTools {
 
 			for(const resource of pass.output.buffers.values()) {
 
-				console.debug(resource.id, "→", resource.texture.id, resource.texture.value?.uuid);
+				console.debug(resource.id, "→", resource.texture.id, resource.texture.value?.uuid ?? "Canvas");
 
 			}
 
