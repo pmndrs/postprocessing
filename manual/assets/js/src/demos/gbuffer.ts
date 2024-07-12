@@ -13,6 +13,7 @@ import {
 import {
 	BufferDebugPass,
 	ClearPass,
+	DebugTools,
 	EffectPass,
 	GBuffer,
 	GeometryPass,
@@ -112,6 +113,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 		new EffectPass(new ToneMappingEffect()),
 		bufferDebugPass
 	);
+
+	console.log(DebugTools.analyzePipeline(pipeline));
 
 	// Settings
 
