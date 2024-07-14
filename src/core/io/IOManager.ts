@@ -104,7 +104,7 @@ export class IOManager {
 			// Keep track of the last output buffer (some passes don't render to the default buffer).
 			previousOutputBuffer = previousPass?.output.buffers.get(Output.BUFFER_DEFAULT)?.value ?? previousOutputBuffer;
 
-			if(previousPass === null || pass === geoPass) {
+			if(previousPass === null) {
 
 				continue;
 
