@@ -39,6 +39,12 @@ export class Output extends EventDispatcher<BaseEventMap> implements ShaderData 
 	readonly renderTargets: Map<string, RenderTargetResource>;
 
 	/**
+	 * @see {@link muted}.
+	 */
+
+	private _muted: boolean;
+
+	/**
 	 * Constructs new output resources.
 	 */
 
@@ -49,8 +55,8 @@ export class Output extends EventDispatcher<BaseEventMap> implements ShaderData 
 		const defines = new ObservableMap<string, string | number | boolean>();
 		const uniforms = new ObservableMap<string, Uniform>();
 		const renderTargets = new ObservableMap<string, RenderTargetResource>();
+		const listener = () => this.setChanged();
 
-		const listener = () => this.dispatchEvent({ type: Output.EVENT_CHANGE });
 		defines.addEventListener(ObservableMap.EVENT_CHANGE, listener);
 		uniforms.addEventListener(ObservableMap.EVENT_CHANGE, listener);
 		renderTargets.addEventListener(ObservableMap.EVENT_CHANGE, listener);
@@ -64,6 +70,26 @@ export class Output extends EventDispatcher<BaseEventMap> implements ShaderData 
 		this.defines = defines;
 		this.uniforms = uniforms;
 		this.renderTargets = renderTargets;
+
+		this._muted = true;
+
+	}
+
+	/**
+	 * Indicates whether events are currently disabled.
+	 *
+	 * @internal
+	 */
+
+	get muted(): boolean {
+
+		return this._muted;
+
+	}
+
+	set muted(value: boolean) {
+
+		this._muted = value;
 
 	}
 
@@ -107,8 +133,22 @@ export class Output extends EventDispatcher<BaseEventMap> implements ShaderData 
 
 		}
 
-		// Assuming index 0 is the main color attachment.
+		// Assuming index 0 is the main color attachment if this is a G-Buffer.
 		return outputBuffer.texture.type !== UnsignedByteType;
+
+	}
+
+	/**
+	 * Dispatches a `change` event.
+	 */
+
+	private setChanged(): void {
+
+		if(!this.muted) {
+
+			this.dispatchEvent({ type: Output.EVENT_CHANGE });
+
+		}
 
 	}
 

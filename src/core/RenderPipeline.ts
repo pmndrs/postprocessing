@@ -201,6 +201,7 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 		pass.addEventListener(Pass.EVENT_TOGGLE, RenderPipeline.listener);
 		pass.renderer = this.renderer;
 		pass.timer = this.timer;
+		pass.attached = true;
 
 	}
 
@@ -217,6 +218,7 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 		pass.removeEventListener(Pass.EVENT_TOGGLE, RenderPipeline.listener);
 		pass.renderer = null;
 		pass.timer = null;
+		pass.attached = false;
 
 	}
 

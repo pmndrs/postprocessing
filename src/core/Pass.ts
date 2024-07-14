@@ -49,6 +49,8 @@ export interface PassEventMap extends BaseEventMap {
 export abstract class Pass<TMaterial extends Material | null = null>
 	extends EventDispatcher<PassEventMap> implements Disposable, Identifiable, Renderable {
 
+	// #region Events
+
 	/**
 	 * Triggers when this pass has changed and requires a full update.
 	 *
@@ -64,6 +66,8 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 */
 
 	static readonly EVENT_TOGGLE = "toggle";
+
+	// #endregion
 
 	/**
 	 * A shared fullscreen triangle.
@@ -120,6 +124,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 */
 
 	private _enabled: boolean;
+
+	/**
+	 * @see {@link attached}
+	 */
+
+	private _attached: boolean;
 
 	/**
 	 * @see {@link renderer}
@@ -195,6 +205,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		this._name = name;
 		this._enabled = true;
+		this._attached = false;
 		this._renderer = null;
 		this._timer = null;
 		this._scene = null;
@@ -245,6 +256,30 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		this._enabled = value;
 		this.dispatchEvent({ type: Pass.EVENT_TOGGLE });
+
+	}
+
+	/**
+	 * Indicates whether this pass is currently attached to a render pipeline.
+	 */
+
+	get attached(): boolean {
+
+		return this._attached;
+
+	}
+
+	set attached(value: boolean) {
+
+		this._attached = value;
+		this.input.muted = !value;
+		this.output.muted = !value;
+
+		for(const pass of this.subpasses) {
+
+			pass.attached = value;
+
+		}
 
 	}
 

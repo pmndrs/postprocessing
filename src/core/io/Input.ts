@@ -63,6 +63,12 @@ export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
 	private _gBufferConfig: GBufferConfig | null;
 
 	/**
+	 * @see {@link muted}.
+	 */
+
+	private _muted: boolean;
+
+	/**
 	 * An event listener that triggers an {@link EVENT_CHANGE} event.
 	 */
 
@@ -80,8 +86,8 @@ export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
 		const defines = new ObservableMap<string, string | number | boolean>();
 		const uniforms = new ObservableMap<string, Uniform>();
 		const textures = new ObservableMap<GBuffer | string, TextureResource>();
+		const listener = () => this.setChanged();
 
-		const listener = () => this.dispatchEvent({ type: Input.EVENT_CHANGE });
 		gBuffer.addEventListener(ObservableSet.EVENT_CHANGE, listener);
 		defines.addEventListener(ObservableMap.EVENT_CHANGE, listener);
 		uniforms.addEventListener(ObservableMap.EVENT_CHANGE, listener);
@@ -100,6 +106,7 @@ export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
 		this.gBuffer = gBuffer;
 
 		this._gBufferConfig = null;
+		this._muted = true;
 
 	}
 
@@ -131,6 +138,24 @@ export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
 
 		this._gBufferConfig = value;
 		this.dispatchEvent({ type: Input.EVENT_CHANGE });
+
+	}
+
+	/**
+	 * Indicates whether events are currently disabled.
+	 *
+	 * @internal
+	 */
+
+	get muted(): boolean {
+
+		return this._muted;
+
+	}
+
+	set muted(value: boolean) {
+
+		this._muted = value;
 
 	}
 
@@ -167,6 +192,20 @@ export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
 	get frameBufferPrecisionHigh(): boolean {
 
 		return (this.defaultBuffer?.value?.type !== UnsignedByteType);
+
+	}
+
+	/**
+	 * Dispatches a `change` event.
+	 */
+
+	private setChanged(): void {
+
+		if(!this.muted) {
+
+			this.dispatchEvent({ type: Input.EVENT_CHANGE });
+
+		}
 
 	}
 
