@@ -24,8 +24,8 @@ void mainUv(inout vec2 uv) {
 
 }
 
-void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
+vec4 mainImage(const in vec4 inputColor, const in vec2 uv, const in GData gData) {
 
-	outputColor = mask(uv) * inputColor;
+	return mask(uv) * inputColor;
 
 }
