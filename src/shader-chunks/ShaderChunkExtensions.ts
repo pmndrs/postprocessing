@@ -43,21 +43,21 @@ export class ShaderChunkExtensions {
 
 		}
 
-		Object.defineProperties(ShaderChunk, {
-			"pp_extensions": { value: null }, // Serves as a registration indicator.
-			"pp_camera_pars_fragment": { value: cameraParsFragment },
-			"pp_colorspace_pars_fragment": { value: colorspaceParsFragment },
-			"pp_colorspace_conversion_pars_fragment": { value: colorspaceConversionParsFragment },
-			"pp_default_output_pars_fragment": { value: defaultOutputParsFragment },
-			"pp_default_output_fragment": { value: gbufferDefaultOutputFragment },
-			"pp_depth_buffer_pars_fragment": { value: depthBufferParsFragment },
-			"pp_depth_buffer_precision_pars_fragment": { value: depthBufferPrecisionParsFragment },
-			"pp_depth_utils_pars_fragment": { value: depthUtilsParsFragment },
-			"pp_frame_buffer_precision_pars_fragment": { value: frameBufferPrecisionParsFragment },
-			"pp_input_buffer_pars_fragment": { value: inputBufferParsFragment },
-			"pp_precision_fragment": { value: precisionFragment },
-			"pp_resolution_pars_fragment": { value: resolutionParsFragment },
-			"pp_world_utils_pars_fragment": { value: worldUtilsParsFragment }
+		Object.assign(ShaderChunk, {
+			"pp_extensions": null, // Serves as a registration indicator.
+			"pp_camera_pars_fragment": cameraParsFragment,
+			"pp_colorspace_pars_fragment": colorspaceParsFragment,
+			"pp_colorspace_conversion_pars_fragment": colorspaceConversionParsFragment,
+			"pp_default_output_pars_fragment": defaultOutputParsFragment,
+			"pp_default_output_fragment": gbufferDefaultOutputFragment,
+			"pp_depth_buffer_pars_fragment": depthBufferParsFragment,
+			"pp_depth_buffer_precision_pars_fragment": depthBufferPrecisionParsFragment,
+			"pp_depth_utils_pars_fragment": depthUtilsParsFragment,
+			"pp_frame_buffer_precision_pars_fragment": frameBufferPrecisionParsFragment,
+			"pp_input_buffer_pars_fragment": inputBufferParsFragment,
+			"pp_precision_fragment": precisionFragment,
+			"pp_resolution_pars_fragment": resolutionParsFragment,
+			"pp_world_utils_pars_fragment": worldUtilsParsFragment
 		});
 
 		ShaderChunk.normal_fragment_maps += "\n" + gbufferNormalFragment;
