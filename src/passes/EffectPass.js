@@ -164,7 +164,7 @@ function integrateEffect(prefix, effect, data) {
 			if(effect.inputColorSpace !== null && effect.inputColorSpace !== data.colorSpace) {
 
 				fragmentMainImage += (effect.inputColorSpace === SRGBColorSpace) ?
-					"color0 = LinearTosRGB(color0);\n\t" :
+					"color0 = sRGBTransferOETF(color0);\n\t" :
 					"color0 = sRGBToLinear(color0);\n\t";
 
 			}

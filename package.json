@@ -1,6 +1,6 @@
 {
 	"name": "postprocessing",
-	"version": "6.35.6",
+	"version": "6.36.0",
 	"description": "A post processing library for three.js.",
 	"homepage": "https://github.com/pmndrs/postprocessing",
 	"license": "Zlib",
@@ -49,9 +49,6 @@
 	"files": [
 		"./build"
 	],
-	"engines": {
-		"node": ">= 0.13.2"
-	},
 	"ava": {
 		"failFast": true,
 		"files": [
@@ -72,7 +69,7 @@
 		"copy": "cpy \"demo/static/**/*\" public/demo",
 		"deploy": "run-s copy postcss hugo gzip",
 		"doc": "esdoc",
-		"gzip": "gzipper c public",
+		"gzip": "gzipper c \"public\"",
 		"hugo": "hugo -s manual --minify",
 		"lint": "run-p lint:*",
 		"lint:css": "stylelint --fix manual/assets/css/src",
@@ -88,7 +85,7 @@
 		"watch:js": "node esbuild -w"
 	},
 	"peerDependencies": {
-		"three": ">= 0.152.0 < 0.167.0"
+		"three": ">= 0.157.0 < 0.168.0"
 	},
 	"devDependencies": {
 		"@tweakpane/core": "2.x.x",
@@ -109,7 +106,7 @@
 		"eslint": "8.x.x",
 		"eslint-config-aether": "1.x.x",
 		"eslint-watch": "8.x.x",
-		"gzipper": "7.x.x",
+		"gzipper": "8.x.x",
 		"hugo-bin": "0.x.x",
 		"npm-run-all": "4.x.x",
 		"postcss": "8.x.x",
