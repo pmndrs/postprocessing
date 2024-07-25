@@ -1,12 +1,22 @@
-import { FloatType, RGBADepthPacking } from "three";
+import { BasicDepthPacking, FloatType, REVISION, RGBADepthPacking } from "three";
 import { DepthCopyMode } from "../enums/DepthCopyMode.js";
 import { DepthCopyPass } from "./DepthCopyPass.js";
 
+const threeRevision = Number(REVISION.replace(/\D+/g, ""));
+const unpackDownscale = 255 / 256; // 0..1 -> fraction (excluding 1)
+
+const unpackFactorsLegacy = new Float32Array([
+	unpackDownscale / (256 ** 3),
+	unpackDownscale / (256 ** 2),
+	unpackDownscale / 256,
+	unpackDownscale
+]);
+
 const unpackFactors = new Float32Array([
-	(255 / 256) / (256 ** 3),
-	(255 / 256) / (256 ** 2),
-	(255 / 256) / 256,
-	(255 / 256)
+	unpackDownscale,
+	unpackDownscale / 256,
+	unpackDownscale / (256 ** 2),
+	1 / (256 ** 3)
 ]);
 
 /**
@@ -19,11 +29,14 @@ const unpackFactors = new Float32Array([
 
 function unpackRGBAToDepth(packedDepth) {
 
+	// Packing was changed in r167.
+	const f = (threeRevision >= 167) ? unpackFactors : unpackFactorsLegacy;
+
 	return (
-		packedDepth[0] * unpackFactors[0] +
-		packedDepth[1] * unpackFactors[1] +
-		packedDepth[2] * unpackFactors[2] +
-		packedDepth[3] * unpackFactors[3]
+		packedDepth[0] * f[0] +
+		packedDepth[1] * f[1] +
+		packedDepth[2] * f[2] +
+		packedDepth[3] * f[3]
 	) / 255;
 
 }
@@ -43,6 +56,12 @@ export class DepthPickingPass extends DepthCopyPass {
 	 */
 
 	constructor({ depthPacking = RGBADepthPacking, mode = DepthCopyMode.SINGLE } = {}) {
+
+		if(depthPacking !== RGBADepthPacking && depthPacking !== BasicDepthPacking) {
+
+			throw new Error(`Unsupported depth packing: ${depthPacking}`);
+
+		}
 
 		super({ depthPacking });
 
