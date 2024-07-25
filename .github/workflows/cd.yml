@@ -20,7 +20,7 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v4
         with:
-          node-version: 'lts'
+          node-version: 20
           cache: "pnpm"
       - name: Install dependencies and test
         run: pnpm install-test --frozen-lockfile
