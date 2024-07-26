@@ -1,11 +1,16 @@
 import {
 	BoxGeometry,
+	Color,
+	Euler,
 	Group,
+	InstancedMesh,
 	LightProbe,
+	Matrix4,
 	Mesh,
 	MeshStandardMaterial,
 	PlaneGeometry,
 	PointLight,
+	Quaternion,
 	SphereGeometry,
 	Vector3
 } from "three";
@@ -59,54 +64,31 @@ export function createLights(): Group {
 export function createEnvironment(): Group {
 
 	const planeGeometry = new PlaneGeometry();
-	const planeMaterial = new MeshStandardMaterial({
-		color: 0xffffff
-	});
+	const planeMaterial = new MeshStandardMaterial({ color: 0xffffff });
 
-	const plane00 = new Mesh(planeGeometry, planeMaterial);
-	const plane01 = new Mesh(planeGeometry, planeMaterial);
-	const plane02 = new Mesh(planeGeometry, planeMaterial);
-	const plane03 = new Mesh(planeGeometry, planeMaterial);
-	const plane04 = new Mesh(planeGeometry, planeMaterial);
+	const mesh = new InstancedMesh(planeGeometry, planeMaterial, 7);
+	mesh.receiveShadow = true;
 
-	plane00.position.y = -1;
-	plane00.rotation.x = Math.PI * 0.5;
-	plane00.scale.set(2, 2, 1);
+	const p = new Vector3();
+	const q = new Quaternion();
+	const e = new Euler();
+	const s = new Vector3();
+	const m = new Matrix4();
+	const c = new Color();
 
-	plane01.position.y = -1;
-	plane01.rotation.x = Math.PI * -0.5;
-	plane01.scale.set(2, 2, 1);
-	plane01.receiveShadow = true;
+	mesh.setMatrixAt(0, m.compose(p.set(0, -1, 0), q.setFromEuler(e.set(Math.PI * 0.5, 0, 0)), s.set(2, 2, 1)));
+	mesh.setMatrixAt(1, m.compose(p.set(0, -1, 0), q.setFromEuler(e.set(Math.PI * -0.5, 0, 0)), s.set(2, 2, 1)));
+	mesh.setMatrixAt(2, m.compose(p.set(0, 1, 0), q.setFromEuler(e.set(Math.PI * 0.5, 0, 0)), s.set(2, 2, 1)));
+	mesh.setMatrixAt(3, m.compose(p.set(0, 0, -1), q.identity(), s.set(2, 2, 1)));
+	mesh.setMatrixAt(4, m.compose(p.set(0, 0, 1), q.setFromEuler(e.set(0, Math.PI, 0)), s.set(2, 2, 1)));
 
-	plane02.position.y = 1;
-	plane02.rotation.x = Math.PI * 0.5;
-	plane02.scale.set(2, 2, 1);
-	plane02.receiveShadow = true;
+	mesh.setMatrixAt(5, m.compose(p.set(-1, 0, 0), q.setFromEuler(e.set(0, Math.PI * 0.5, 0)), s.set(2, 2, 1)));
+	mesh.setMatrixAt(6, m.compose(p.set(1, 0, 0), q.setFromEuler(e.set(0, Math.PI * -0.5, 0)), s.set(2, 2, 1)));
 
-	plane03.position.z = -1;
-	plane03.scale.set(2, 2, 1);
-	plane03.receiveShadow = true;
+	mesh.setColorAt(5, c.setHex(0xff0000));
+	mesh.setColorAt(6, c.setHex(0x00ff00));
 
-	plane04.position.z = 1;
-	plane04.rotation.y = Math.PI;
-	plane04.scale.set(2, 2, 1);
-	plane04.receiveShadow = true;
-
-	const plane05 = new Mesh(
-		planeGeometry,
-		new MeshStandardMaterial({
-			color: 0xff0000
-		})
-	);
-
-	const plane06 = new Mesh(
-		planeGeometry,
-		new MeshStandardMaterial({
-			color: 0x00ff00
-		})
-	);
-
-	const plane07 = new Mesh(
+	const ceilingLightMesh = new Mesh(
 		planeGeometry,
 		new MeshStandardMaterial({
 			color: 0xffffff,
@@ -114,25 +96,12 @@ export function createEnvironment(): Group {
 		})
 	);
 
-	plane05.position.x = -1;
-	plane05.rotation.y = Math.PI * 0.5;
-	plane05.scale.set(2, 2, 1);
-	plane05.receiveShadow = true;
-
-	plane06.position.x = 1;
-	plane06.rotation.y = Math.PI * -0.5;
-	plane06.scale.set(2, 2, 1);
-	plane06.receiveShadow = true;
-
-	plane07.position.y = 1 - 0.004;
-	plane07.rotation.x = Math.PI * 0.5;
-	plane07.scale.set(0.4, 0.4, 1);
+	ceilingLightMesh.position.y = 1 - 0.004;
+	ceilingLightMesh.rotation.x = Math.PI * 0.5;
+	ceilingLightMesh.scale.set(0.4, 0.4, 1);
 
 	const environment = new Group();
-	environment.add(
-		plane00, plane01, plane02, plane03,
-		plane04, plane05, plane06, plane07
-	);
+	environment.add(mesh, ceilingLightMesh);
 
 	return environment;
 
