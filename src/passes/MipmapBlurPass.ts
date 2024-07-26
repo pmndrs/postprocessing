@@ -87,7 +87,7 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 	}
 
 	/**
-	 * The luminance render target.
+	 * The output render target.
 	 */
 
 	private get renderTarget(): WebGLRenderTarget {
