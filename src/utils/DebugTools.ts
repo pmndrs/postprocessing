@@ -68,7 +68,6 @@ export abstract class DebugTools {
 
 		console.groupEnd();
 		console.groupCollapsed("Resources");
-
 		console.group("Input Buffers");
 
 		for(const pass of pipeline.passes) {
