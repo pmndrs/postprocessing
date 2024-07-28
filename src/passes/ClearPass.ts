@@ -29,6 +29,14 @@ export class ClearPass extends Pass {
 	readonly clearValues: ClearValues;
 
 	/**
+	 * Indicates whether the background of the main scene should be ignored.
+	 *
+	 * @defaultValue false
+	 */
+
+	ignoreBackground: boolean;
+
+	/**
 	 * G-Buffer texture indices.
 	 */
 
@@ -60,6 +68,7 @@ export class ClearPass extends Pass {
 
 		this.clearFlags = new ClearFlags(color, depth, stencil);
 		this.clearValues = new ClearValues();
+		this.ignoreBackground = false;
 		this.gBufferIndices = null;
 
 		this.background = new Background();
@@ -208,7 +217,9 @@ export class ClearPass extends Pass {
 
 		}
 
-		if(this.scene !== null && this.camera !== null && this.scene.background !== null) {
+		const background = this.scene?.background ?? null;
+
+		if(!this.ignoreBackground && this.camera !== null && background !== null) {
 
 			this.clearWithBackground();
 
