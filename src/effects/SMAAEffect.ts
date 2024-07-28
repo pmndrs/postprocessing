@@ -5,7 +5,6 @@ import {
 	NearestFilter,
 	OrthographicCamera,
 	PerspectiveCamera,
-	Scene,
 	Texture,
 	Uniform,
 	WebGLRenderTarget
@@ -26,7 +25,6 @@ import searchImageDataURL from "../textures/smaa/searchImageDataURL.js";
 import areaImageDataURL from "../textures/smaa/areaImageDataURL.js";
 
 import fragmentShader from "./shaders/smaa.frag";
-import vertexShader from "./shaders/smaa.vert";
 
 /**
  * SMAAEffect options.
@@ -116,10 +114,10 @@ export class SMAAEffect extends Effect {
 		super("SMAAEffect");
 
 		this.fragmentShader = fragmentShader;
-		this.vertexShader = vertexShader;
-
 		this.output.setBuffer(SMAAEffect.BUFFER_EDGES, this.createFramebuffer());
 		this.output.setBuffer(SMAAEffect.BUFFER_WEIGHTS, this.createFramebuffer());
+		this.input.uniforms.set("weightMap", new Uniform(this.weightsTexture));
+		this.input.gBuffer.add(GBuffer.DEPTH);
 
 		this.clearPass = new ClearPass(true, false, false);
 		this.clearPass.output.defaultBuffer = this.renderTargetEdges;
@@ -137,11 +135,6 @@ export class SMAAEffect extends Effect {
 
 		this.subpasses = [this.clearPass, this.edgeDetectionPass, this.weightsPass];
 
-		const uniforms = this.input.uniforms;
-		uniforms.set("weightMap", new Uniform(this.weightsTexture));
-
-		this.input.gBuffer.add(GBuffer.DEPTH);
-
 		this.loadTextures();
 		this.applyPreset(preset);
 
@@ -155,6 +148,8 @@ export class SMAAEffect extends Effect {
 
 	override set camera(value: OrthographicCamera | PerspectiveCamera | null) {
 
+		super.camera = value;
+
 		if(value !== null) {
 
 			this.edgeDetectionMaterial.copyCameraSettings(value);
@@ -163,16 +158,13 @@ export class SMAAEffect extends Effect {
 
 	}
 
-	override get scene(): Scene | null { return super.scene; }
-	override set scene(_value: Scene | null) {}
-
 	/**
 	 * A render target for the SMAA edge detection.
 	 */
 
 	private get renderTargetEdges(): WebGLRenderTarget {
 
-		return this.output.buffers.get(SMAAEffect.BUFFER_EDGES)!.value as WebGLRenderTarget;
+		return this.output.getBuffer(SMAAEffect.BUFFER_EDGES)!;
 
 	}
 
@@ -182,7 +174,7 @@ export class SMAAEffect extends Effect {
 
 	private get renderTargetWeights(): WebGLRenderTarget {
 
-		return this.output.buffers.get(SMAAEffect.BUFFER_WEIGHTS)!.value as WebGLRenderTarget;
+		return this.output.getBuffer(SMAAEffect.BUFFER_WEIGHTS)!;
 
 	}
 
