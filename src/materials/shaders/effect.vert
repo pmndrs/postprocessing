@@ -3,7 +3,6 @@
 uniform vec3 cameraParams;
 uniform float time;
 
-in vec3 position;
 out vec2 vUv;
 
 $VERTEX_HEAD

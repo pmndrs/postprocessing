@@ -1,7 +1,5 @@
 #include <pp_resolution_pars_fragment>
 
-in vec3 position;
-
 out vec2 vUv;
 out vec4 vOffset[3];
 out vec2 vPixCoord;

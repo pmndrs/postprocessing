@@ -1,11 +1,9 @@
 import {
 	GLSL3,
-	LinearSRGBColorSpace,
 	NoBlending,
 	OrthographicCamera,
 	PerspectiveCamera,
-	RawShaderMaterial,
-	SRGBColorSpace,
+	ShaderMaterial,
 	ShaderMaterialParameters,
 	Texture,
 	Uniform,
@@ -39,7 +37,7 @@ import { Precision } from "../enums/Precision.js";
  * @category Materials
  */
 
-export abstract class FullscreenMaterial extends RawShaderMaterial implements Resizable {
+export abstract class FullscreenMaterial extends ShaderMaterial implements Resizable {
 
 	/**
 	 * Constructs a new fullscreen shader material.
@@ -60,7 +58,6 @@ export abstract class FullscreenMaterial extends RawShaderMaterial implements Re
 		Object.assign(this.uniforms, {
 			projectionMatrix: new Uniform(null),
 			projectionMatrixInverse: new Uniform(null),
-			viewMatrix: new Uniform(null),
 			viewMatrixInverse: new Uniform(null),
 			cameraParams: new Uniform(new Vector3()),
 			resolution: new Uniform(new Vector4()),
@@ -71,52 +68,14 @@ export abstract class FullscreenMaterial extends RawShaderMaterial implements Re
 		this.outputPrecision = "lowp";
 
 		// Updates the shader depending on the current render target.
-		this.onBeforeCompile = (shader: WebGLProgramParametersWithUniforms, renderer: WebGLRenderer) => {
+		this.onBeforeCompile = (_shader: WebGLProgramParametersWithUniforms, renderer: WebGLRenderer) => {
 
-			if(shader.defines === undefined) {
+			if(renderer.getRenderTarget() === null && this.outputPrecision !== "lowp") {
 
-				shader.defines = {};
-
-			}
-
-			if(renderer.capabilities.logarithmicDepthBuffer) {
-
-				shader.defines.LOG_DEPTH = true;
-
-			}
-
-			if(renderer.getRenderTarget() === null) {
-
-				// Rendering to screen.
-
-				switch(renderer.outputColorSpace) {
-
-					case SRGBColorSpace:
-						shader.defines.OUTPUT_COLOR_SPACE = 1;
-						break;
-
-					case LinearSRGBColorSpace:
-						shader.defines.OUTPUT_COLOR_SPACE = 0;
-						break;
-
-					default:
-						throw new Error(`Unsupported color space: ${renderer.outputColorSpace}`);
-
-				}
-
-				if(this.outputPrecision !== "lowp") {
-
-					// The canvas uses 8 bits per channel (HDR is currently not supported in WebGL).
-					this.outputPrecision = "lowp";
-					// Prevent infinite loop.
-					this.needsUpdate = false;
-
-				}
-
-			} else {
-
-				// Rendering to texture; disable conversion.
-				shader.defines.OUTPUT_COLOR_SPACE = 0;
+				// The canvas uses 8 bits per channel.
+				this.outputPrecision = "lowp";
+				// Prevent infinite loop.
+				this.needsUpdate = false;
 
 			}
 
@@ -138,8 +97,12 @@ export abstract class FullscreenMaterial extends RawShaderMaterial implements Re
 
 	set outputPrecision(value: Precision) {
 
-		this.defines.OUTPUT_COLOR_PRECISION = value;
-		this.needsUpdate = true;
+		if(this.defines.OUTPUT_COLOR_PRECISION !== value) {
+
+			this.defines.OUTPUT_COLOR_PRECISION = value;
+			this.needsUpdate = true;
+
+		}
 
 	}
 
@@ -226,7 +189,6 @@ export abstract class FullscreenMaterial extends RawShaderMaterial implements Re
 
 		this.uniforms.projectionMatrix.value = camera.projectionMatrix;
 		this.uniforms.projectionMatrixInverse.value = camera.projectionMatrixInverse;
-		this.uniforms.viewMatrix.value = camera.matrixWorldInverse;
 		this.uniforms.viewMatrixInverse.value = camera.matrixWorld;
 
 		const cameraParams = this.uniforms.cameraParams.value as Vector3;

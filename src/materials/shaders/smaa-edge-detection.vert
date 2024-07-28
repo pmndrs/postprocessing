@@ -1,10 +1,6 @@
 #include <pp_resolution_pars_fragment>
 
-in vec3 position;
-
-out vec2 vUv;
-out vec2 vUv0;
-out vec2 vUv1;
+out vec2 vUv, vUv0, vUv1;
 
 #if EDGE_DETECTION_MODE != 0
 

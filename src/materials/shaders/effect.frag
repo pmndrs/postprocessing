@@ -1,12 +1,8 @@
-#include <pp_precision_fragment>
-
 #include <common>
-#include <colorspace_pars_fragment>
 #include <dithering_pars_fragment>
 #include <packing>
 
 #include <pp_camera_pars_fragment>
-#include <pp_colorspace_pars_fragment>
 #include <pp_colorspace_conversion_pars_fragment>
 #include <pp_default_output_pars_fragment>
 #include <pp_depth_buffer_precision_pars_fragment>

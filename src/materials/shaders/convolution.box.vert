@@ -2,8 +2,6 @@
 
 uniform float scale;
 
-in vec3 position;
-
 #if KERNEL_SIZE == 3
 
 	// Optimized 3x3

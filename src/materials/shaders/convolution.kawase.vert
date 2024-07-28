@@ -3,8 +3,6 @@
 uniform float kernel;
 uniform float scale;
 
-in vec3 position;
-
 out vec2 vUv0, vUv1, vUv2, vUv3;
 
 void main() {

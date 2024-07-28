@@ -1,9 +1,6 @@
-#include <pp_precision_fragment>
 #include <pp_default_output_pars_fragment>
 
-in vec2 vUv;
-in vec2 vUv0;
-in vec2 vUv1;
+in vec2 vUv, vUv0, vUv1;
 
 #if EDGE_DETECTION_MODE != 0
 

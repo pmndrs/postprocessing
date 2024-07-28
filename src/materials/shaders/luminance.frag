@@ -1,7 +1,4 @@
-#include <pp_precision_fragment>
-
 #include <common>
-
 #include <pp_default_output_pars_fragment>
 #include <pp_input_buffer_pars_fragment>
 

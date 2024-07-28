@@ -3,8 +3,6 @@
 uniform vec2 direction;
 uniform float scale;
 
-in vec3 position;
-
 out vec2 vOffset;
 out vec2 vUv;
 

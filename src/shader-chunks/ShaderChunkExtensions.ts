@@ -2,7 +2,6 @@ import { ShaderChunk, ShaderLib } from "three";
 
 // Shader chunks for postprocessing shaders.
 import cameraParsFragment from "./shaders/camera-pars.frag";
-import colorspaceParsFragment from "./shaders/colorspace-pars.frag";
 import colorspaceConversionParsFragment from "./shaders/colorspace-conversion-pars.frag";
 import defaultOutputParsFragment from "./shaders/default-output-pars.frag";
 import depthBufferParsFragment from "./shaders/depth-buffer-pars.frag";
@@ -10,7 +9,6 @@ import depthBufferPrecisionParsFragment from "./shaders/depth-buffer-precision-p
 import depthUtilsParsFragment from "./shaders/depth-utils-pars.frag";
 import frameBufferPrecisionParsFragment from "./shaders/frame-buffer-precision-pars.frag";
 import inputBufferParsFragment from "./shaders/input-buffer-pars.frag";
-import precisionFragment from "./shaders/precision.frag";
 import resolutionParsFragment from "./shaders/resolution-pars.frag";
 import worldUtilsParsFragment from "./shaders/world-utils-pars.frag";
 
@@ -46,7 +44,6 @@ export class ShaderChunkExtensions {
 		Object.assign(ShaderChunk, {
 			"pp_extensions": null, // Serves as a registration indicator.
 			"pp_camera_pars_fragment": cameraParsFragment,
-			"pp_colorspace_pars_fragment": colorspaceParsFragment,
 			"pp_colorspace_conversion_pars_fragment": colorspaceConversionParsFragment,
 			"pp_default_output_pars_fragment": defaultOutputParsFragment,
 			"pp_default_output_fragment": gbufferDefaultOutputFragment,
@@ -55,7 +52,6 @@ export class ShaderChunkExtensions {
 			"pp_depth_utils_pars_fragment": depthUtilsParsFragment,
 			"pp_frame_buffer_precision_pars_fragment": frameBufferPrecisionParsFragment,
 			"pp_input_buffer_pars_fragment": inputBufferParsFragment,
-			"pp_precision_fragment": precisionFragment,
 			"pp_resolution_pars_fragment": resolutionParsFragment,
 			"pp_world_utils_pars_fragment": worldUtilsParsFragment
 		});
