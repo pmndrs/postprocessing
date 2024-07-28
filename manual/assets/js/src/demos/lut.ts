@@ -16,9 +16,14 @@ import {
 
 import {
 	ClearPass,
+	EffectPass,
 	GeometryPass,
 	LookupTexture,
-	RenderPipeline
+	LUT3DEffect,
+	MixBlendFunction,
+	RawImageData,
+	RenderPipeline,
+	ToneMappingEffect
 } from "postprocessing";
 
 import { LUT3dlLoader } from "three/examples/jsm/loaders/LUT3dlLoader.js";
@@ -48,9 +53,9 @@ const luts = new Map<string, string | null>([
 	["cube/django-25", "cube/django-25.cube"]
 ]);
 
-function load(): Promise<Map<string, Texture>> {
+function load(): Promise<Map<string, Texture | LookupTexture>> {
 
-	const assets = new Map<string, Texture>();
+	const assets = new Map<string, Texture | LookupTexture>();
 	const loadingManager = new LoadingManager();
 	const textureLoader = new TextureLoader(loadingManager);
 	const lut3dlLoader = new LUT3dlLoader(loadingManager);
@@ -68,7 +73,7 @@ function load(): Promise<Map<string, Texture>> {
 	lutNeutral8.name = "neutral-8";
 	assets.set(lutNeutral8.name, lutNeutral8);
 
-	return new Promise<Map<string, Texture>>((resolve, reject) => {
+	return new Promise<Map<string, Texture | LookupTexture>>((resolve, reject) => {
 
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
@@ -117,7 +122,7 @@ function load(): Promise<Map<string, Texture>> {
 					t.wrapS = ClampToEdgeWrapping;
 					t.wrapT = ClampToEdgeWrapping;
 					t.flipY = false;
-					assets.set(entry[0], t);
+					assets.set(entry[0], LookupTexture.from(t));
 
 				});
 
@@ -180,29 +185,24 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
+	const lut = assets.get("png/filmic1") as LookupTexture;
+	const effect = new LUT3DEffect(lut);
+	effect.blendMode.blendFunction = new MixBlendFunction();
+
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.add(
 		new ClearPass(),
 		new GeometryPass(scene, camera, {
 			frameBufferType: HalfFloatType
-		})
+		}),
+		new EffectPass(new ToneMappingEffect(), effect)
 	);
-
-	/*
-	const lut = LookupTexture.from(assets.get("png/filmic1") as Texture);
-	const effect = renderer.capabilities.isWebGL2 ? new LUT3DEffect(lut) :
-		new LUT3DEffect(lut.convertToUint8().toDataTexture());
-
-	effect.blendMode.blendFunction = new MixBlendFunction();
-	pipeline.addPass(new EffectPass(effect, new ToneMappingEffect()));
-	*/
 
 	// Settings
 
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
 	const fpsGraph = Utils.createFPSGraph(pane);
 
-	/*
 	const params = {
 		"lut": effect.lut.name,
 		"3D texture": true,
@@ -215,8 +215,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	function updateLUTPreview() {
 
-		const lut = LookupTexture.from(effect.lut);
-		const { image } = lut.convertToUint8().toDataTexture();
+		const image = effect.lut.clone().convertToUint8().toDataTexture().image as ImageData;
 		RawImageData.from(image).toCanvas().toBlob((blob) => {
 
 			if(blob !== null) {
@@ -235,7 +234,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	function changeLUT(): void {
 
-		const original = assets.get(params.lut) as Texture;
+		const original = assets.get(params.lut) as LookupTexture;
 		const size = Math.min(original.image.width, original.image.height);
 		const scaleUp = params["scale up"] && (params["target size"] > size);
 
@@ -243,14 +242,13 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		if(scaleUp) {
 
-			const lut = (original instanceof LookupTexture) ? original : LookupTexture.from(original);
 			console.time("Tetrahedral Upscaling");
-			promise = lut.scaleUp(params["target size"], false);
+			promise = original.scaleUp(params["target size"], false);
 			document.body.classList.add("progress");
 
 		} else {
 
-			promise = Promise.resolve(LookupTexture.from(original));
+			promise = Promise.resolve(original.clone());
 
 		}
 
@@ -266,23 +264,14 @@ window.addEventListener("load", () => void load().then((assets) => {
 			effect.lut.dispose();
 			params["base size"] = size;
 
-			if(renderer.capabilities.isWebGL2) {
+			if(renderer.getContext().getExtension("OES_texture_float_linear") === null) {
 
-				if(renderer.getContext().getExtension("OES_texture_float_linear") === null) {
-
-					console.log("Linear float filtering not supported, converting to Uint8");
-					lut.convertToUint8();
-
-				}
-
-				effect.lut = (params["3D texture"] ? lut : lut.toDataTexture());
-
-			} else {
-
-				effect.lut = lut.convertToUint8().toDataTexture();
+				console.log("Linear float filtering not supported, converting to Uint8");
+				lut.convertToUint8();
 
 			}
 
+			effect.lut = lut;
 			updateLUTPreview();
 
 		}).catch((error) => console.error(error));
@@ -290,21 +279,13 @@ window.addEventListener("load", () => void load().then((assets) => {
 	}
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addBinding(params, "lut", { options: toRecord([...luts.keys()]) }).on("change", changeLUT);
-
-	if(renderer.capabilities.isWebGL2) {
-
-		folder.addBinding(params, "3D texture").on("change", changeLUT);
-		folder.addBinding(effect, "tetrahedralInterpolation");
-
-	}
-
+	folder.addBinding(params, "lut", { options: Utils.arrayToRecord([...luts.keys()]) }).on("change", changeLUT);
+	folder.addBinding(effect, "tetrahedralInterpolation");
 	folder.addBinding(params, "base size", { readonly: true, format: (v) => v.toFixed(0) });
 	folder.addBinding(params, "scale up").on("change", changeLUT);
-	folder.addBinding(params, "target size", { options: toRecord([32, 48, 64, 128]) }).on("change", changeLUT);
+	folder.addBinding(params, "target size", { options: Utils.arrayToRecord([32, 48, 64, 128]) }).on("change", changeLUT);
 
 	Utils.addBlendModeBindings(folder, effect.blendMode);
-	*/
 
 	// Resize Handler
 

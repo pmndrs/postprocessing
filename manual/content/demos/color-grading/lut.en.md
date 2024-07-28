@@ -2,7 +2,7 @@
 layout: single
 collection: sections
 title: LUT
-draft: true
+draft: false
 menu:
   demos:
     parent: color-grading
