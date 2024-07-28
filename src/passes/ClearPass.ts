@@ -24,17 +24,12 @@ export class ClearPass extends Pass {
 
 	/**
 	 * The clear values.
+	 *
+	 * - If an override clear color is set, the scene background will be ignored.
+	 * - The override alpha setting has no effect when a scene background is used.
 	 */
 
 	readonly clearValues: ClearValues;
-
-	/**
-	 * Indicates whether the background of the main scene should be ignored.
-	 *
-	 * @defaultValue false
-	 */
-
-	ignoreBackground: boolean;
 
 	/**
 	 * G-Buffer texture indices.
@@ -68,7 +63,6 @@ export class ClearPass extends Pass {
 
 		this.clearFlags = new ClearFlags(color, depth, stencil);
 		this.clearValues = new ClearValues();
-		this.ignoreBackground = false;
 		this.gBufferIndices = null;
 
 		this.background = new Background();
@@ -218,8 +212,9 @@ export class ClearPass extends Pass {
 		}
 
 		const background = this.scene?.background ?? null;
+		const hasOverrideClearColor = this.clearValues.color !== null;
 
-		if(!this.ignoreBackground && this.camera !== null && background !== null) {
+		if(!hasOverrideClearColor && this.camera !== null && background !== null) {
 
 			this.clearWithBackground();
 
