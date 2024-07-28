@@ -39,12 +39,6 @@ export class Output extends EventDispatcher<BaseEventMap> implements ShaderData 
 	readonly renderTargets: Map<string, RenderTargetResource>;
 
 	/**
-	 * @see {@link muted}.
-	 */
-
-	private _muted: boolean;
-
-	/**
 	 * Constructs new output resources.
 	 */
 
@@ -70,26 +64,6 @@ export class Output extends EventDispatcher<BaseEventMap> implements ShaderData 
 		this.defines = defines;
 		this.uniforms = uniforms;
 		this.renderTargets = renderTargets;
-
-		this._muted = true;
-
-	}
-
-	/**
-	 * Indicates whether events are currently disabled.
-	 *
-	 * @internal
-	 */
-
-	get muted(): boolean {
-
-		return this._muted;
-
-	}
-
-	set muted(value: boolean) {
-
-		this._muted = value;
 
 	}
 
@@ -144,11 +118,7 @@ export class Output extends EventDispatcher<BaseEventMap> implements ShaderData 
 
 	private setChanged(): void {
 
-		if(!this.muted) {
-
-			this.dispatchEvent({ type: Output.EVENT_CHANGE });
-
-		}
+		this.dispatchEvent({ type: Output.EVENT_CHANGE });
 
 	}
 
@@ -186,6 +156,19 @@ export class Output extends EventDispatcher<BaseEventMap> implements ShaderData 
 			}
 
 		}
+
+	}
+
+	/**
+	 * Retrieves a buffer.
+	 *
+	 * @param key - A buffer key.
+	 * @return The buffer, or `null` if it doesn't exist.
+	 */
+
+	getBuffer(key: string): WebGLRenderTarget | null {
+
+		return this.renderTargets.get(key)?.value ?? null;
 
 	}
 

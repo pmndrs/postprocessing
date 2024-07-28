@@ -63,12 +63,6 @@ export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
 	private _gBufferConfig: GBufferConfig | null;
 
 	/**
-	 * @see {@link muted}.
-	 */
-
-	private _muted: boolean;
-
-	/**
 	 * An event listener that triggers an {@link EVENT_CHANGE} event.
 	 */
 
@@ -106,7 +100,6 @@ export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
 		this.gBuffer = gBuffer;
 
 		this._gBufferConfig = null;
-		this._muted = true;
 
 	}
 
@@ -137,25 +130,7 @@ export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
 		}
 
 		this._gBufferConfig = value;
-		this.dispatchEvent({ type: Input.EVENT_CHANGE });
-
-	}
-
-	/**
-	 * Indicates whether events are currently disabled.
-	 *
-	 * @internal
-	 */
-
-	get muted(): boolean {
-
-		return this._muted;
-
-	}
-
-	set muted(value: boolean) {
-
-		this._muted = value;
+		this.setChanged();
 
 	}
 
@@ -201,11 +176,7 @@ export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
 
 	private setChanged(): void {
 
-		if(!this.muted) {
-
-			this.dispatchEvent({ type: Input.EVENT_CHANGE });
-
-		}
+		this.dispatchEvent({ type: Input.EVENT_CHANGE });
 
 	}
 

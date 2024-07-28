@@ -272,8 +272,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	set attached(value: boolean) {
 
 		this._attached = value;
-		this.input.muted = !value;
-		this.output.muted = !value;
 
 		for(const pass of this.subpasses) {
 
@@ -637,6 +635,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	private handleInputEvent(event: Event): void {
 
+		if(!this.attached) {
+
+			return;
+
+		}
+
 		switch(event.type) {
 
 			case "change":
@@ -655,6 +659,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 */
 
 	private handleOutputEvent(event: Event): void {
+
+		if(!this.attached) {
+
+			return;
+
+		}
 
 		switch(event.type) {
 
