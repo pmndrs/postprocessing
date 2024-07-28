@@ -291,7 +291,14 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	/**
 	 * A list of subpasses.
 	 *
-	 * Subpasses are included in automatic resource optimizations.
+	 * Subpasses are included in automatic resource optimizations and will be disposed when the parent pass is disposed.
+	 *
+	 * They also gain access to the following data:
+	 * - {@link timer}
+	 * - {@link renderer}
+	 * - {@link scene}
+	 * - {@link camera}
+	 * - {@link attached}
 	 */
 
 	get subpasses(): ReadonlyArray<Pass<Material | null>> {
@@ -582,7 +589,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	/**
 	 * Performs tasks when the input resources have changed.
 	 *
-	 * Override this method to handle input changes.
+	 * Override this empty method to handle input changes.
 	 */
 
 	protected onInputChange(): void {}
@@ -590,7 +597,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	/**
 	 * Performs tasks when the output resources have changed.
 	 *
-	 * Override this method to handle output changes.
+	 * Override this empty method to handle output changes.
 	 */
 
 	protected onOutputChange(): void {}
@@ -598,7 +605,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	/**
 	 * Performs tasks when the resolution has changed.
 	 *
-	 * Override this method to handle resolution changes.
+	 * Override this empty method to handle resolution changes.
 	 *
 	 * @param resolution - The updated resolution of this pass.
 	 */
