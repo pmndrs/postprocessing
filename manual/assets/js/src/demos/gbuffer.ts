@@ -114,17 +114,18 @@ window.addEventListener("load", () => void load().then((assets) => {
 		bufferDebugPass
 	);
 
-	console.log(DebugTools.analyzePipeline(pipeline));
+	DebugTools.analyzePipeline(pipeline);
 
 	// Settings
 
-	const gBufferOptions = Object.assign({ NONE: "NONE" }, Utils.enumToRecord(GBuffer));
+	const gBufferOptions = Object.assign({ NONE: "" }, Utils.enumToRecord(GBuffer));
 	bufferDebugPass.bufferFocus = gBufferOptions.NONE;
 
 	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
 	const fpsGraph = Utils.createFPSGraph(pane);
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addBinding(bufferDebugPass, "bufferFocus", { options: gBufferOptions });
+	folder.addBinding(bufferDebugPass, "reconstructPosition");
 
 	// Resize Handler
 
