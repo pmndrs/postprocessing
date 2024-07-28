@@ -292,17 +292,17 @@ export class EffectShaderData implements ShaderData {
 			if(effect.inputColorSpace !== NoColorSpace && effect.inputColorSpace !== this.colorSpace) {
 
 				fragmentMainImage += (effect.inputColorSpace === SRGBColorSpace) ?
-					"color0 = LinearTosRGB(color0);\n\t" :
+					"color0 = sRGBTransferOETF(color0);\n\t" :
 					"color0 = sRGBToLinear(color0);\n\t";
 
 			}
 
 			// Remember the color space at this stage.
-			if(effect.outputColorSpace !== null) {
+			if(effect.outputColorSpace !== NoColorSpace) {
 
 				this.colorSpace = effect.outputColorSpace;
 
-			} else if(effect.inputColorSpace !== null) {
+			} else if(effect.inputColorSpace !== NoColorSpace) {
 
 				this.colorSpace = effect.inputColorSpace;
 
