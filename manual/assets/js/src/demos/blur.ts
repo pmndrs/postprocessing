@@ -90,20 +90,25 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
-	const gaussianBlurPass = new GaussianBlurPass({
-		kernelSize: 15,
-		iterations: 1,
-		resolutionScale: 0.5
-	});
-
 	const mipmapBlurPass = new MipmapBlurPass({
 		clampToBorder: false,
 		radius: 1.0,
 		levels: 1
 	});
 
-	mipmapBlurPass.enabled = false;
-	const textureEffect = new TextureEffect({ texture: gaussianBlurPass.texture });
+	const gaussianBlurPass = new GaussianBlurPass({
+		kernelSize: 15,
+		iterations: 1,
+		resolutionScale: 0.5
+	});
+
+	gaussianBlurPass.enabled = false;
+	const textureEffect = new TextureEffect({ texture: mipmapBlurPass.texture });
+
+	const outputPass = new EffectPass(
+		textureEffect,
+		new ToneMappingEffect()
+	);
 
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.add(
@@ -112,12 +117,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 			frameBufferType: HalfFloatType,
 			samples: 4
 		}),
-		gaussianBlurPass,
 		mipmapBlurPass,
-		new EffectPass(
-			textureEffect,
-			new ToneMappingEffect()
-		)
+		gaussianBlurPass,
+		outputPass
 	);
 
 	// Settings
@@ -126,17 +128,19 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const fpsGraph = Utils.createFPSGraph(pane);
 
 	const folder = pane.addFolder({ title: "Settings" });
+	folder.addBinding(outputPass, "dithering");
+
 	const tab = folder.addTab({
 		pages: [
-			{ title: "Gaussian" },
-			{ title: "Mipmap" }
+			{ title: "Mipmap" },
+			{ title: "Gaussian" }
 		]
 	});
 
 	tab.on("select", (event) => {
 
-		gaussianBlurPass.enabled = (event.index === 0);
-		mipmapBlurPass.enabled = (event.index === 1);
+		mipmapBlurPass.enabled = (event.index === 0);
+		gaussianBlurPass.enabled = (event.index === 1);
 		textureEffect.texture = gaussianBlurPass.enabled ? gaussianBlurPass.texture : mipmapBlurPass.texture;
 
 	});
@@ -152,14 +156,14 @@ window.addEventListener("load", () => void load().then((assets) => {
 	};
 
 	const p0 = tab.pages[0];
-	tab.pages[0].addBinding(gaussianBlurPass.fullscreenMaterial, "kernelSize", { options: gaussKernels });
-	p0.addBinding(gaussianBlurPass.fullscreenMaterial, "scale", { min: 0, max: 2, step: 0.01 });
-	p0.addBinding(gaussianBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
-	p0.addBinding(gaussianBlurPass, "iterations", { min: 1, max: 8, step: 1 });
+	p0.addBinding(mipmapBlurPass, "radius", { min: 0, max: 1, step: 0.01 });
+	p0.addBinding(mipmapBlurPass, "levels", { min: 1, max: 10, step: 1 });
 
 	const p1 = tab.pages[1];
-	p1.addBinding(mipmapBlurPass, "radius", { min: 0, max: 1, step: 0.01 });
-	p1.addBinding(mipmapBlurPass, "levels", { min: 1, max: 10, step: 1 });
+	p1.addBinding(gaussianBlurPass.fullscreenMaterial, "kernelSize", { options: gaussKernels });
+	p1.addBinding(gaussianBlurPass.fullscreenMaterial, "scale", { min: 0, max: 2, step: 0.01 });
+	p1.addBinding(gaussianBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
+	p1.addBinding(gaussianBlurPass, "iterations", { min: 1, max: 8, step: 1 });
 
 	// Resize Handler
 
