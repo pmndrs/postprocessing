@@ -1,6 +1,4 @@
 import {
-	OrthographicCamera,
-	PerspectiveCamera,
 	SRGBColorSpace,
 	WebGLRenderer,
 	Material,
@@ -75,24 +73,6 @@ export class EffectPass extends Pass<EffectMaterial> {
 		this.listener = () => this.rebuild();
 		this.effects = effects;
 		this.timeScale = 1.0;
-
-	}
-
-	override get camera(): OrthographicCamera | PerspectiveCamera | null {
-
-		return super.camera;
-
-	}
-
-	override set camera(value: OrthographicCamera | PerspectiveCamera | null) {
-
-		super.camera = value;
-
-		if(value !== null) {
-
-			this.fullscreenMaterial.copyCameraSettings(value);
-
-		}
 
 	}
 

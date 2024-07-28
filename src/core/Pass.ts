@@ -413,6 +413,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		this._camera = value;
 
+		if(value !== null && this.fullscreenMaterial instanceof FullscreenMaterial) {
+
+			this.fullscreenMaterial.copyCameraSettings(value);
+
+		}
+
 		for(const pass of this.subpasses) {
 
 			pass.camera = value;
