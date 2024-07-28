@@ -303,6 +303,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	protected set subpasses(value: Pass<Material | null>[]) {
 
 		this._subpasses = value;
+		Object.freeze(this._subpasses);
 
 		for(const pass of this.subpasses) {
 
