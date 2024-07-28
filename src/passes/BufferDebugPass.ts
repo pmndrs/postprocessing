@@ -9,9 +9,10 @@ import {
 } from "three";
 
 import { Input } from "../core/io/Input.js";
+import { Pass } from "../core/Pass.js";
 import { GBuffer } from "../enums/GBuffer.js";
+import { GBufferDebugMaterial } from "../materials/GBufferDebugMaterial.js";
 import { Resolution } from "../utils/Resolution.js";
-import { CopyPass } from "./CopyPass.js";
 
 /**
  * A debug pass that visualizes all input buffers.
@@ -20,7 +21,7 @@ import { CopyPass } from "./CopyPass.js";
  * @category Passes
  */
 
-export class BufferDebugPass extends CopyPass {
+export class BufferDebugPass extends Pass<GBufferDebugMaterial> {
 
 	/**
 	 * The size of each texture view relative to the screen size.
@@ -70,9 +71,10 @@ export class BufferDebugPass extends CopyPass {
 
 	constructor(gBufferComponents?: Set<GBuffer>) {
 
-		super();
+		super("BufferDebugPass");
 
-		this.name = "BufferDebugPass";
+		this.output.defaultBuffer = this.createFramebuffer();
+		this.fullscreenMaterial = new GBufferDebugMaterial();
 
 		this.viewSize = 0.1;
 		this.columns = 4;
@@ -111,20 +113,38 @@ export class BufferDebugPass extends CopyPass {
 	}
 
 	/**
+	 * Enables or disables view space position reconstruction.
+	 */
+
+	get reconstructPosition(): boolean {
+
+		return this.fullscreenMaterial.reconstructPosition;
+
+	}
+
+	set reconstructPosition(value: boolean) {
+
+		this.fullscreenMaterial.reconstructPosition = value;
+
+	}
+
+	/**
 	 * Sets the input buffer based on the currently selected buffer.
 	 */
 
 	private updateInputBuffer(): void {
 
+		const material = this.fullscreenMaterial;
+
 		if(this.bufferFocus !== null && this.input.buffers.has(this.bufferFocus)) {
 
-			this.fullscreenMaterial.inputBuffer = this.input.buffers.get(this.bufferFocus)?.value ?? null;
-			this.fullscreenMaterial.colorSpaceConversion = false;
+			material.inputBuffer = this.input.buffers.get(this.bufferFocus)?.value ?? null;
+			material.colorSpaceConversion = false;
 
 		} else {
 
-			this.fullscreenMaterial.inputBuffer = this.input.defaultBuffer?.value ?? null;
-			this.fullscreenMaterial.colorSpaceConversion = true;
+			material.inputBuffer = this.input.defaultBuffer?.value ?? null;
+			material.colorSpaceConversion = true;
 
 		}
 
@@ -194,7 +214,7 @@ export class BufferDebugPass extends CopyPass {
 
 	protected override onInputChange(): void {
 
-		super.onInputChange();
+		this.fullscreenMaterial.depthBuffer = this.input.getBuffer(GBuffer.DEPTH);
 
 		for(const view of this.views) {
 
@@ -241,8 +261,8 @@ export class BufferDebugPass extends CopyPass {
 
 	override render(): void {
 
-		super.render();
-
+		this.renderer?.setRenderTarget(this.output.defaultBuffer?.value ?? null);
+		this.renderFullscreen();
 		this.renderer?.render(this.debugScene, this.debugCamera);
 
 	}
