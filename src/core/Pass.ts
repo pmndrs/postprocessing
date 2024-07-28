@@ -311,6 +311,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 			pass.renderer = this.renderer;
 			pass.scene = this.scene;
 			pass.camera = this.camera;
+			pass.attached = this.attached;
 
 		}
 
