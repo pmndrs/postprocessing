@@ -2,7 +2,7 @@
 #include <pp_input_buffer_pars_fragment>
 #include <pp_resolution_pars_fragment>
 
-#define sampleLevelZeroOffset(t, coord, offset) texture(t, coord + offset * resolution.zw)
+#define sampleLevelZeroOffset(t, coord, offset) textureOffset(t, coord, offset, 0.0)
 
 uniform lowp sampler2D areaTexture;
 uniform lowp sampler2D searchTexture;
@@ -171,17 +171,17 @@ vec2 calculateDiagWeights(const in vec2 texCoord, const in vec2 e, const in vec4
 		// Fetch the crossing edges.
 		vec4 coords = vec4(-d.x + 0.25, d.x, d.y, -d.y - 0.25) * resolution.zwzw + texCoord.xyxy;
 		vec4 c;
-		c.xy = sampleLevelZeroOffset(inputBuffer, coords.xy, vec2(-1, 0)).rg;
-		c.zw = sampleLevelZeroOffset(inputBuffer, coords.zw, vec2(1, 0)).rg;
+		c.xy = sampleLevelZeroOffset(inputBuffer, coords.xy, ivec2(-1, 0)).rg;
+		c.zw = sampleLevelZeroOffset(inputBuffer, coords.zw, ivec2(1, 0)).rg;
 		c.yxwz = decodeDiagBilinearAccess(c.xyzw);
 
 		// Non-optimized version:
 		// vec4 coords = vec4(-d.x, d.x, d.y, -d.y) * resolution.zwzw + texCoord.xyxy;
 		// vec4 c;
-		// c.x = sampleLevelZeroOffset(inputBuffer, coords.xy, vec2(-1, 0)).g;
-		// c.y = sampleLevelZeroOffset(inputBuffer, coords.xy, vec2(0, 0)).r;
-		// c.z = sampleLevelZeroOffset(inputBuffer, coords.zw, vec2(1, 0)).g;
-		// c.w = sampleLevelZeroOffset(inputBuffer, coords.zw, vec2(1, -1)).r;
+		// c.x = sampleLevelZeroOffset(inputBuffer, coords.xy, ivec2(-1, 0)).g;
+		// c.y = sampleLevelZeroOffset(inputBuffer, coords.xy, ivec2(0, 0)).r;
+		// c.z = sampleLevelZeroOffset(inputBuffer, coords.zw, ivec2(1, 0)).g;
+		// c.w = sampleLevelZeroOffset(inputBuffer, coords.zw, ivec2(1, -1)).r;
 
 		// Merge crossing edges at each side into a single value.
 		vec2 cc = vec2(2.0) * c.xz + c.yw;
@@ -197,7 +197,7 @@ vec2 calculateDiagWeights(const in vec2 texCoord, const in vec2 e, const in vec4
 	// Search for the line ends.
 	d.xz = searchDiag2(texCoord, vec2(-1.0, -1.0), end);
 
-	if(sampleLevelZeroOffset(inputBuffer, texCoord, vec2(1, 0)).r > 0.0) {
+	if(sampleLevelZeroOffset(inputBuffer, texCoord, ivec2(1, 0)).r > 0.0) {
 
 		d.yw = searchDiag2(texCoord, vec2(1.0), end);
 		d.y += float(end.y > 0.9);
@@ -213,9 +213,9 @@ vec2 calculateDiagWeights(const in vec2 texCoord, const in vec2 e, const in vec4
 		// Fetch the crossing edges.
 		vec4 coords = vec4(-d.x, -d.x, d.y, d.y) * resolution.zwzw + texCoord.xyxy;
 		vec4 c;
-		c.x = sampleLevelZeroOffset(inputBuffer, coords.xy, vec2(-1, 0)).g;
-		c.y = sampleLevelZeroOffset(inputBuffer, coords.xy, vec2(0, -1)).r;
-		c.zw = sampleLevelZeroOffset(inputBuffer, coords.zw, vec2(1, 0)).gr;
+		c.x = sampleLevelZeroOffset(inputBuffer, coords.xy, ivec2(-1, 0)).g;
+		c.y = sampleLevelZeroOffset(inputBuffer, coords.xy, ivec2(0, -1)).r;
+		c.zw = sampleLevelZeroOffset(inputBuffer, coords.zw, ivec2(1, 0)).gr;
 		vec2 cc = vec2(2.0) * c.xz + c.yw;
 
 		// Remove the crossing edge if no end of the line could be found.
@@ -405,10 +405,10 @@ void detectHorizontalCornerPattern(inout vec2 weights, const in vec4 texCoord, c
 		rounding /= leftRight.x + leftRight.y;
 
 		vec2 factor = vec2(1.0);
-		factor.x -= rounding.x * sampleLevelZeroOffset(inputBuffer, texCoord.xy, vec2(0, 1)).r;
-		factor.x -= rounding.y * sampleLevelZeroOffset(inputBuffer, texCoord.zw, vec2(1, 1)).r;
-		factor.y -= rounding.x * sampleLevelZeroOffset(inputBuffer, texCoord.xy, vec2(0, -2)).r;
-		factor.y -= rounding.y * sampleLevelZeroOffset(inputBuffer, texCoord.zw, vec2(1, -2)).r;
+		factor.x -= rounding.x * sampleLevelZeroOffset(inputBuffer, texCoord.xy, ivec2(0, 1)).r;
+		factor.x -= rounding.y * sampleLevelZeroOffset(inputBuffer, texCoord.zw, ivec2(1, 1)).r;
+		factor.y -= rounding.x * sampleLevelZeroOffset(inputBuffer, texCoord.xy, ivec2(0, -2)).r;
+		factor.y -= rounding.y * sampleLevelZeroOffset(inputBuffer, texCoord.zw, ivec2(1, -2)).r;
 
 		weights *= clamp(factor, 0.0, 1.0);
 
@@ -426,10 +426,10 @@ void detectVerticalCornerPattern(inout vec2 weights, const in vec4 texCoord, con
 		rounding /= leftRight.x + leftRight.y;
 
 		vec2 factor = vec2(1.0);
-		factor.x -= rounding.x * sampleLevelZeroOffset(inputBuffer, texCoord.xy, vec2(1, 0)).g;
-		factor.x -= rounding.y * sampleLevelZeroOffset(inputBuffer, texCoord.zw, vec2(1, 1)).g;
-		factor.y -= rounding.x * sampleLevelZeroOffset(inputBuffer, texCoord.xy, vec2(-2, 0)).g;
-		factor.y -= rounding.y * sampleLevelZeroOffset(inputBuffer, texCoord.zw, vec2(-2, 1)).g;
+		factor.x -= rounding.x * sampleLevelZeroOffset(inputBuffer, texCoord.xy, ivec2(1, 0)).g;
+		factor.x -= rounding.y * sampleLevelZeroOffset(inputBuffer, texCoord.zw, ivec2(1, 1)).g;
+		factor.y -= rounding.x * sampleLevelZeroOffset(inputBuffer, texCoord.xy, ivec2(-2, 0)).g;
+		factor.y -= rounding.y * sampleLevelZeroOffset(inputBuffer, texCoord.zw, ivec2(-2, 1)).g;
 
 		weights *= clamp(factor, 0.0, 1.0);
 
@@ -480,7 +480,7 @@ void main() {
 		vec2 sqrtD = sqrt(abs(d));
 
 		// Fetch the right crossing edges.
-		float e2 = sampleLevelZeroOffset(inputBuffer, coords.zy, vec2(1, 0)).r;
+		float e2 = sampleLevelZeroOffset(inputBuffer, coords.zy, ivec2(1, 0)).r;
 
 		// Pattern recognized, now get the actual area.
 		weights.rg = area(sqrtD, e1, e2, subsampleIndices.y);
@@ -528,7 +528,7 @@ void main() {
 		vec2 sqrtD = sqrt(abs(d));
 
 		// Fetch the bottom crossing edges.
-		float e2 = sampleLevelZeroOffset(inputBuffer, coords.xz, vec2(0, 1)).g;
+		float e2 = sampleLevelZeroOffset(inputBuffer, coords.xz, ivec2(0, 1)).g;
 
 		// Get the area for this direction.
 		weights.ba = area(sqrtD, e1, e2, subsampleIndices.x);
