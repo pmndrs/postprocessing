@@ -10,6 +10,7 @@ export * from "./DownsamplingMaterial.js";
 export * from "./EffectMaterial.js";
 export * from "./FullscreenMaterial.js";
 export * from "./GaussianBlurMaterial.js";
+export * from "./GBufferDebugMaterial.js";
 export * from "./KawaseBlurMaterial.js";
 export * from "./LuminanceMaterial.js";
 export * from "./MaskMaterial.js";
