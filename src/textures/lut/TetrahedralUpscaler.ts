@@ -245,9 +245,9 @@ export class TetrahedralUpscaler {
 	/**
 	 * Expands the given data to the target size.
 	 *
-	 * @param {TypedArray} data - The input RGBA data. Assumed to be cubic.
-	 * @param {Number} size - The target size.
-	 * @return {TypedArray} The new data.
+	 * @param data - The input RGBA data. Assumed to be cubic.
+	 * @param size - The target size.
+	 * @return The new data.
 	 */
 
 	static expand(data: Uint8Array | Float32Array, size: number): ArrayBufferView {
