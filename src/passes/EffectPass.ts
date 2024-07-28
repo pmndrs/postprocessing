@@ -91,7 +91,6 @@ export class EffectPass extends Pass<EffectMaterial> {
 		}
 
 		super.subpasses = value;
-		Object.freeze(super.subpasses);
 		this.input.gBuffer.clear();
 
 		for(const effect of super.subpasses) {
