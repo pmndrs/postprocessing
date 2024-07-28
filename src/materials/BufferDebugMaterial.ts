@@ -5,21 +5,21 @@ import fragmentShader from "./shaders/gbuffer-debug.frag";
 import vertexShader from "./shaders/common.vert";
 
 /**
- * A G-Buffer debug shader material.
+ * A buffer debug shader material.
  *
  * @category Materials
  */
 
-export class GBufferDebugMaterial extends FullscreenMaterial {
+export class BufferDebugMaterial extends FullscreenMaterial {
 
 	/**
-	 * Constructs a new G-Buffer debug material.
+	 * Constructs a new buffer debug material.
 	 */
 
 	constructor() {
 
 		super({
-			name: "GBufferDebugMaterial",
+			name: "BufferDebugMaterial",
 			fragmentShader,
 			vertexShader,
 			uniforms: {

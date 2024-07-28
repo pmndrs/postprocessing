@@ -11,7 +11,7 @@ import {
 import { Input } from "../core/io/Input.js";
 import { Pass } from "../core/Pass.js";
 import { GBuffer } from "../enums/GBuffer.js";
-import { GBufferDebugMaterial } from "../materials/GBufferDebugMaterial.js";
+import { BufferDebugMaterial } from "../materials/BufferDebugMaterial.js";
 import { Resolution } from "../utils/Resolution.js";
 
 /**
@@ -21,7 +21,7 @@ import { Resolution } from "../utils/Resolution.js";
  * @category Passes
  */
 
-export class BufferDebugPass extends Pass<GBufferDebugMaterial> {
+export class BufferDebugPass extends Pass<BufferDebugMaterial> {
 
 	/**
 	 * The size of each texture view relative to the screen size.
@@ -74,7 +74,7 @@ export class BufferDebugPass extends Pass<GBufferDebugMaterial> {
 		super("BufferDebugPass");
 
 		this.output.defaultBuffer = this.createFramebuffer();
-		this.fullscreenMaterial = new GBufferDebugMaterial();
+		this.fullscreenMaterial = new BufferDebugMaterial();
 
 		this.viewSize = 0.1;
 		this.columns = 4;
