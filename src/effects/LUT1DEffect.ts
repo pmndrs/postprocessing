@@ -6,6 +6,7 @@ import fragmentShader from "./shaders/lut-1d.frag";
 /**
  * A 1D LUT effect.
  *
+ * @see https://affinityspotlight.com/article/1d-vs-3d-luts/
  * @category Effects
  */
 
