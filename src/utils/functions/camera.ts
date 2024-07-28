@@ -22,7 +22,7 @@ export function orthographicDepthToViewZ(depth: number, near: number, far: numbe
  * @internal
  * @see https://github.com/mrdoob/three.js/blob/0de4e75ee65c3238957318b88ef91b6597e23c1e/src/renderers/shaders/ShaderChunk/packing.glsl.js#L39
  * @param viewZ - The view Z. Expected to be negative.
- * @paramn near - The camera near plane.
+ * @param near - The camera near plane.
  * @param far - The camera far plane.
  * @return The depth.
  * @group Utils

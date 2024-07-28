@@ -355,7 +355,8 @@ export class GeometryPass extends Pass implements Selective {
 	 *
 	 * Should be called when a material is added, removed or replaced at runtime.
 	 *
-	 * @todo Remove when three supports output layout definitions for MRT.
+	 * TODO Remove when `three` supports output layout definitions for MRT.
+	 *
 	 * @param object - The object to update.
 	 */
 
