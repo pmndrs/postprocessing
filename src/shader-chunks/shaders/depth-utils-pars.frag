@@ -25,6 +25,8 @@ float readDepth(sampler2D depthBuffer, const in vec2 uv, const in float near, co
 
 }
 
+// Requires <camera_pars_fragment>
+
 #if defined(CAMERA_NEAR) && defined(CAMERA_FAR)
 
 	#define readDepth(depthBuffer, uv) readDepth(depthBuffer, uv, CAMERA_NEAR, CAMERA_FAR);
