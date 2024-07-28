@@ -1,8 +1,5 @@
 uniform lowp sampler2D weightMap;
 
-in vec2 vOffset0;
-in vec2 vOffset1;
-
 /**
  * Moves values to a target vector based on a given conditional vector.
  */
@@ -25,8 +22,8 @@ vec4 smaa(sampler2D inputBuffer, const in vec4 inputColor, const in vec2 uv) {
 
 	// Fetch the blending weights for the current pixel.
 	vec4 a;
-	a.x = texture(weightMap, vOffset0).a;
-	a.y = texture(weightMap, vOffset1).g;
+	a.x = textureOffset(weightMap, uv, ivec2(1, 0)).a;
+	a.y = textureOffset(weightMap, uv, ivec2(0, 1)).g;
 	a.wz = texture(weightMap, uv).rb;
 
 	vec4 color = inputColor;
