@@ -273,6 +273,13 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		this._attached = value;
 
+		this.onInputChange();
+		this.updateFullscreenMaterialInput();
+
+		this.onOutputChange();
+		this.updateFullscreenMaterialOutput();
+		this.updateOutputBufferSize();
+
 		for(const pass of this.subpasses) {
 
 			pass.attached = value;
