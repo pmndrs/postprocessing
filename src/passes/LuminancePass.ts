@@ -36,7 +36,7 @@ export class LuminancePass extends Pass<LuminanceMaterial> {
 
 	private get renderTarget(): WebGLRenderTarget {
 
-		return this.output.buffers.get(LuminancePass.BUFFER_LUMINANCE)!.value as WebGLRenderTarget;
+		return this.output.getBuffer(LuminancePass.BUFFER_LUMINANCE)!;
 
 	}
 

@@ -44,7 +44,7 @@ export class DepthCopyPass extends Pass<DepthCopyMaterial> {
 
 	protected get renderTarget(): WebGLRenderTarget {
 
-		return this.output.buffers.get(DepthCopyPass.BUFFER_DEPTH)!.value as WebGLRenderTarget;
+		return this.output.getBuffer(DepthCopyPass.BUFFER_DEPTH)!;
 
 	}
 

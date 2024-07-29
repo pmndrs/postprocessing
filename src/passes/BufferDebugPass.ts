@@ -138,7 +138,7 @@ export class BufferDebugPass extends Pass<BufferDebugMaterial> {
 
 		if(this.bufferFocus !== null && this.input.buffers.has(this.bufferFocus)) {
 
-			material.inputBuffer = this.input.buffers.get(this.bufferFocus)?.value ?? null;
+			material.inputBuffer = this.input.getBuffer(this.bufferFocus);
 			material.colorSpaceConversion = false;
 
 		} else {

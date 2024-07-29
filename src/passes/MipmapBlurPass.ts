@@ -92,7 +92,7 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 	private get renderTarget(): WebGLRenderTarget {
 
-		return this.output.buffers.get(MipmapBlurPass.BUFFER_MAIN)!.value as WebGLRenderTarget;
+		return this.output.getBuffer(MipmapBlurPass.BUFFER_MAIN)!;
 
 	}
 
