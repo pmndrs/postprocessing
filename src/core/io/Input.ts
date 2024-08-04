@@ -205,11 +205,7 @@ export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
 
 		if(value instanceof TextureResource) {
 
-			if(this.textures.get(key) !== value) {
-
-				this.textures.set(key, value);
-
-			}
+			this.textures.set(key, value);
 
 		} else {
 
