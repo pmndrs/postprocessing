@@ -114,9 +114,11 @@ export class Output extends EventDispatcher<BaseEventMap> implements ShaderData 
 
 	/**
 	 * Dispatches a `change` event.
+	 *
+	 * @internal
 	 */
 
-	private setChanged(): void {
+	setChanged(): void {
 
 		this.dispatchEvent({ type: Output.EVENT_CHANGE });
 

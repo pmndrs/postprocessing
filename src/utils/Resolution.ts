@@ -287,9 +287,11 @@ export class Resolution extends EventDispatcher<BaseEventMap> {
 
 	/**
 	 * Dispatches a `change` event.
+	 *
+	 * @internal
 	 */
 
-	private setChanged(): void {
+	setChanged(): void {
 
 		this.dispatchEvent({ type: Resolution.EVENT_CHANGE });
 
