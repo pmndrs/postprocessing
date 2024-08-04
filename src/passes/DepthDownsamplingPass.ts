@@ -92,7 +92,7 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 
 	}
 
-	render(): void {
+	override render(): void {
 
 		this.renderer?.setRenderTarget(this.renderTarget);
 		this.renderFullscreen();

@@ -314,10 +314,11 @@ export class EffectPass extends Pass<EffectMaterial> {
 		for(const component of input.gBuffer) {
 
 			const useDefaultBuffer = (component === GBuffer.COLOR as string);
+			const buffer = useDefaultBuffer ? input.defaultBuffer?.value : input.buffers.get(component)?.value;
 
 			gBufferEntries.push([
 				gBufferConfig.gBufferStructFields.get(component) as string,
-				(useDefaultBuffer ? input.defaultBuffer?.value : input.buffers.get(component)?.value) ?? null
+				buffer ?? null
 			]);
 
 		}
@@ -397,7 +398,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 	}
 
-	render(): void {
+	override render(): void {
 
 		if(this.renderer === null || this.timer === null) {
 

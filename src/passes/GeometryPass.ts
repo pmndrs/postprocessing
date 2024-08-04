@@ -276,7 +276,7 @@ export class GeometryPass extends Pass implements Selective {
 	}
 
 	/**
-	 * Returns the G-Buffer render target, or null if the buffer is not of type `WebGLMultipleRenderTargets`.
+	 * Returns the G-Buffer render target, or null if this pass renders to screen.
 	 */
 
 	get gBuffer(): WebGLRenderTarget | null {
@@ -521,7 +521,7 @@ export class GeometryPass extends Pass implements Selective {
 
 	}
 
-	render(): void {
+	override render(): void {
 
 		if(this.renderer === null || this.scene === null || this.camera === null) {
 

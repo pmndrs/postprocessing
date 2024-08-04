@@ -51,7 +51,7 @@ export class ShaderPass<TMaterial extends ShaderMaterial = ShaderMaterial> exten
 
 	}
 
-	render(): void {
+	override render(): void {
 
 		this.renderer?.setRenderTarget(this.output.defaultBuffer?.value ?? null);
 		this.renderFullscreen();

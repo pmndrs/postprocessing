@@ -27,7 +27,7 @@ export class LambdaPass extends Pass {
 
 	}
 
-	override render() {
+	override render(): void {
 
 		this.f();
 

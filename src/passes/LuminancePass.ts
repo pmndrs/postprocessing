@@ -60,8 +60,8 @@ export class LuminancePass extends Pass<LuminanceMaterial> {
 
 		}
 
-		this.texture.type = inputTexture.type;
-		this.texture.colorSpace = inputTexture.colorSpace;
+		this.renderTarget.texture.type = inputTexture.type;
+		this.renderTarget.texture.colorSpace = inputTexture.colorSpace;
 
 	}
 
@@ -71,7 +71,7 @@ export class LuminancePass extends Pass<LuminanceMaterial> {
 
 	}
 
-	render(): void {
+	override render(): void {
 
 		this.renderer?.setRenderTarget(this.renderTarget);
 		this.renderFullscreen();

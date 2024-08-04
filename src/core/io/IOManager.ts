@@ -313,22 +313,24 @@ export class IOManager {
 		// Check if there are secondary geometry passes.
 		const geoPasses = pipeline.passes.filter((x) => x.enabled && x instanceof GeometryPass) as GeometryPass[];
 
-		if(geoPasses.length > 1 && geoPass.gBufferComponents.has(GBuffer.COLOR)) {
+		if(geoPasses.length <= 1 || !geoPass.gBufferComponents.has(GBuffer.COLOR)) {
 
-			// Let the other passes render to another buffer with a single color attachment.
-			for(let i = 1, l = geoPasses.length; i < l; ++i) {
+			return;
 
-				const pass = geoPasses[i];
-				pass.gBufferComponents.add(GBuffer.COLOR);
+		}
 
-				// Secondary geometry passes may need to copy depth from the main pass.
-				if(pass.depthBuffer) {
+		// Let the other passes render to another buffer with a single color attachment.
+		for(let i = 1, l = geoPasses.length; i < l; ++i) {
 
-					pass.gBufferComponents.add(GBuffer.DEPTH);
-					pass.input.gBuffer.add(GBuffer.DEPTH);
-					geoPass.gBufferComponents.add(GBuffer.DEPTH);
+			const pass = geoPasses[i];
+			pass.gBufferComponents.add(GBuffer.COLOR);
 
-				}
+			// Secondary geometry passes may need to copy depth from the main pass.
+			if(pass.depthBuffer) {
+
+				pass.gBufferComponents.add(GBuffer.DEPTH);
+				pass.input.gBuffer.add(GBuffer.DEPTH);
+				geoPass.gBufferComponents.add(GBuffer.DEPTH);
 
 			}
 
@@ -340,8 +342,7 @@ export class IOManager {
 	 * Assigns G-Buffer components to a given pass.
 	 *
 	 * @param pass - A pass.
-	 * @param gBuffer - The G-Buffer.
-	 * @param gBufferIndices - G-Buffer component indices.
+	 * @param geoPass - The main geometry pass.
 	 */
 
 	private static assignGBufferTextures(pass: Pass<Material | null>, geoPass?: GeometryPass): void {

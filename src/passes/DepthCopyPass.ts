@@ -70,7 +70,7 @@ export class DepthCopyPass extends Pass<DepthCopyMaterial> {
 
 	}
 
-	render(): void {
+	override render(): void {
 
 		this.renderer?.setRenderTarget(this.renderTarget);
 		this.renderFullscreen();

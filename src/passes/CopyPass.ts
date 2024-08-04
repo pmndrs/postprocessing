@@ -32,7 +32,7 @@ export class CopyPass extends Pass<CopyMaterial> {
 
 	}
 
-	render(): void {
+	override render(): void {
 
 		this.renderer?.setRenderTarget(this.output.defaultBuffer?.value ?? null);
 		this.renderFullscreen();

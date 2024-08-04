@@ -273,12 +273,8 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		this._attached = value;
 
-		this.onInputChange();
-		this.updateFullscreenMaterialInput();
-
-		this.onOutputChange();
-		this.updateFullscreenMaterialOutput();
-		this.updateOutputBufferSize();
+		this.input.setChanged();
+		this.output.setChanged();
 
 		for(const pass of this.subpasses) {
 
@@ -652,7 +648,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	/**
 	 * Handles {@link input} events.
 	 *
-	 * @param event - An event.
+	 * @param event - An input event.
 	 */
 
 	private handleInputEvent(event: Event): void {
@@ -677,7 +673,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	/**
 	 * Handles {@link output} events.
 	 *
-	 * @param event - An event.
+	 * @param event - An output event.
 	 */
 
 	private handleOutputEvent(event: Event): void {
