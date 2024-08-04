@@ -136,8 +136,8 @@ export function createActors(): Group {
 	const actor03 = new Mesh(
 		new SphereGeometry(1, 32, 32), new MeshStandardMaterial({
 			color: 0xffffff,
-			roughness: 0,
-			metalness: 0.1
+			roughness: 0.25,
+			metalness: 0.25
 		})
 	);
 
