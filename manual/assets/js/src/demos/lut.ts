@@ -48,6 +48,7 @@ const luts = new Map<string, string | null>([
 	["png/filmic2", "png/filmic2.png"],
 	["png/matrix-green", "png/matrix-green.png"],
 	["png/strong-amber", "png/strong-amber.png"],
+	["3dl/sepia", "3dl/sepia.3dl"],
 	["3dl/cinematic", "3dl/presetpro-cinematic.3dl"],
 	["cube/cinematic", "cube/presetpro-cinematic.cube"],
 	["cube/django-25", "cube/django-25.cube"]

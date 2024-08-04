@@ -6,3 +6,6 @@ https://www.freepresets.com/product/free-luts-cinematic/
 
 "35 Free LUTs for Color Grading Videos" (Cube) by Rocketstock. No license specified. 
 https://www.rocketstock.com/free-after-effects-templates/35-free-luts-for-color-grading-videos/
+
+"20 Sepia LUTs Pack" (3DL) by Eldamar Studio. Free commercial license.
+https://eldamar-studio.com/product/20-sepia-luts-pack/
