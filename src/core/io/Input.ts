@@ -145,6 +145,16 @@ export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
 	}
 
 	/**
+	 * Indicates whether a default input buffer has been set.
+	 */
+
+	get hasDefaultBuffer(): boolean {
+
+		return this.textures.has(Input.BUFFER_DEFAULT);
+
+	}
+
+	/**
 	 * The default input buffer.
 	 */
 

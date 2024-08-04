@@ -78,6 +78,16 @@ export class Output extends EventDispatcher<BaseEventMap> implements ShaderData 
 	}
 
 	/**
+	 * Indicates whether a default output buffer has been set.
+	 */
+
+	get hasDefaultBuffer(): boolean {
+
+		return this.renderTargets.has(Output.BUFFER_DEFAULT);
+
+	}
+
+	/**
 	 * The default output buffer.
 	 */
 
