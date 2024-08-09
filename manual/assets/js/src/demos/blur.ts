@@ -91,6 +91,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Post Processing
 
 	const mipmapBlurPass = new MipmapBlurPass({
+		fullResolutionUpsampling: true,
 		clampToBorder: false,
 		radius: 1.0,
 		levels: 1
@@ -103,7 +104,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	});
 
 	gaussianBlurPass.enabled = false;
-	const textureEffect = new TextureEffect({ texture: mipmapBlurPass.texture });
+	const textureEffect = new TextureEffect({ texture: mipmapBlurPass.texture.value });
 
 	const outputPass = new EffectPass(
 		textureEffect,
@@ -141,7 +142,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		mipmapBlurPass.enabled = (event.index === 0);
 		gaussianBlurPass.enabled = (event.index === 1);
-		textureEffect.texture = gaussianBlurPass.enabled ? gaussianBlurPass.texture : mipmapBlurPass.texture;
+		textureEffect.texture = gaussianBlurPass.enabled ?
+			gaussianBlurPass.texture.value :
+			mipmapBlurPass.texture.value;
 
 	});
 
@@ -158,11 +161,12 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const p0 = tab.pages[0];
 	p0.addBinding(mipmapBlurPass, "radius", { min: 0, max: 1, step: 0.01 });
 	p0.addBinding(mipmapBlurPass, "levels", { min: 1, max: 10, step: 1 });
+	p0.addBinding(mipmapBlurPass, "fullResolutionUpsampling", { label: "fullResUpscale" });
 
 	const p1 = tab.pages[1];
+	p1.addBinding(gaussianBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
 	p1.addBinding(gaussianBlurPass.fullscreenMaterial, "kernelSize", { options: gaussKernels });
 	p1.addBinding(gaussianBlurPass.fullscreenMaterial, "scale", { min: 0, max: 2, step: 0.01 });
-	p1.addBinding(gaussianBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
 	p1.addBinding(gaussianBlurPass, "iterations", { min: 1, max: 8, step: 1 });
 
 	// Resize Handler
