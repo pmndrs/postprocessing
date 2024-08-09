@@ -438,7 +438,7 @@ export class GeometryPass extends Pass implements Selective {
 
 	private updateGBuffer(): void {
 
-		if(this.output.defaultBuffer !== this.gBufferResource) {
+		if(this.output.hasDefaultBuffer && this.output.defaultBuffer !== this.gBufferResource) {
 
 			// Don't modify foreign resources.
 			return;
@@ -496,6 +496,20 @@ export class GeometryPass extends Pass implements Selective {
 
 	}
 
+	private updateCopyPass(): void {
+
+		const inputBuffer = this.input.defaultBuffer?.value ?? null;
+		const outputBuffer = this.output.defaultBuffer?.value ?? null;
+		const textureCount = outputBuffer?.textures.length ?? 0;
+
+		this.copyPass.enabled = (
+			inputBuffer !== null &&
+			inputBuffer !== outputBuffer?.texture &&
+			textureCount < 2
+		);
+
+	}
+
 	protected override onInputChange(): void {
 
 		this.copyPass.input.defaultBuffer = this.input.defaultBuffer;
@@ -510,14 +524,20 @@ export class GeometryPass extends Pass implements Selective {
 
 		}
 
-		const inputBuffer = this.input.defaultBuffer?.value ?? null;
-		this.copyPass.enabled = inputBuffer !== null && this.gBuffer !== null;
+		this.updateCopyPass();
 
 	}
 
 	protected override onOutputChange(): void {
 
+		if(!this.output.hasDefaultBuffer) {
+
+			this.updateGBuffer();
+
+		}
+
 		this.copyPass.output.defaultBuffer = this.output.defaultBuffer;
+		this.updateCopyPass();
 
 	}
 
