@@ -158,7 +158,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 	/**
 	 * Updates the composite shader material.
 	 *
-	 * @throws {@link Error} if the current effects cannot be merged.
+	 * @throws If the current effects cannot be merged.
 	 */
 
 	private updateMaterial(): void {
