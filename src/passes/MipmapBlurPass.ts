@@ -213,25 +213,50 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 		this.downsamplingMaterial.needsUpdate = true;
 		this.upsamplingMaterial.needsUpdate = true;
 
+		this.onResolutionChange();
+
 	}
 
-	protected override onResolutionChange(resolution: Resolution): void {
+	protected override onResolutionChange(): void {
 
-		let w = resolution.width;
-		let h = resolution.height;
+		if(this.input.defaultBuffer === null || this.input.defaultBuffer.value === null) {
+
+			return;
+
+		}
+
+		// The size of the mipmaps depends on the main input buffer size.
+		const inputBuffer = this.input.defaultBuffer.value;
+		const imgData = inputBuffer.source.data as ImageData;
+		let { width, height } = imgData;
 
 		for(let i = 0, l = this.downsamplingMipmaps.length; i < l; ++i) {
 
-			w = Math.round(w * 0.5);
-			h = Math.round(h * 0.5);
+			width = Math.round(width / 2);
+			height = Math.round(height / 2);
 
-			this.downsamplingMipmaps[i].setSize(w, h);
+			this.downsamplingMipmaps[i].value?.setSize(width, height);
 
-			if(i < this.upsamplingMipmaps.length) {
+		}
 
-				this.upsamplingMipmaps[i].setSize(w, h);
+		if(this.fullResolutionUpsampling) {
 
-			}
+			width = imgData.width;
+			height = imgData.height;
+
+		} else {
+
+			width = Math.round(imgData.width / 2);
+			height = Math.round(imgData.height / 2);
+
+		}
+
+		for(let i = 0, l = this.upsamplingMipmaps.length; i < l; ++i) {
+
+			this.upsamplingMipmaps[i].value?.setSize(width, height);
+
+			width = Math.round(width / 2);
+			height = Math.round(height / 2);
 
 		}
 
@@ -239,7 +264,7 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 	override render(): void {
 
-		if(this.renderer === null || this.input.defaultBuffer?.value === null) {
+		if(this.renderer === null || this.input.defaultBuffer === null || this.input.defaultBuffer.value === null) {
 
 			return;
 
@@ -251,8 +276,9 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 		const downsamplingMipmaps = this.downsamplingMipmaps;
 		const upsamplingMipmaps = this.upsamplingMipmaps;
 
-		let previousBuffer = this.input.defaultBuffer!.value;
-		let { width, height } = this.resolution;
+		let previousBuffer = this.input.defaultBuffer.value;
+		const imgData = previousBuffer.source.data as ImageData;
+		let { width, height } = imgData;
 
 		// Downsample the input to the highest MIP level (smallest mipmap).
 		this.fullscreenMaterial = downsamplingMaterial;
