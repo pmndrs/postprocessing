@@ -139,6 +139,36 @@ export class IOManager {
 	}
 
 	/**
+	 * Restores the original output buffers.
+	 *
+	 * @param passes - The passes to update.
+	 */
+
+	private restoreOutputBuffers(passes: Pass<Material | null>[]): void {
+
+		const outputDefaultBuffers = this.outputDefaultBuffers;
+
+		for(const pass of passes) {
+
+			if(pass.output.defaultBuffer === null) {
+
+				continue;
+
+			}
+
+			if(outputDefaultBuffers.has(pass.output.defaultBuffer)) {
+
+				const originalBuffer = outputDefaultBuffers.get(pass.output.defaultBuffer)!;
+				outputDefaultBuffers.delete(pass.output.defaultBuffer);
+				pass.output.defaultBuffer = originalBuffer;
+
+			}
+
+		}
+
+	}
+
+	/**
 	 * Updates the output buffers of all passes in a given pipeline.
 	 *
 	 * @param pipeline - The pipeline to update.
@@ -148,51 +178,45 @@ export class IOManager {
 
 		const passes = pipeline.passes.filter(x => x.enabled);
 
-		for(let i = 0, j = 1, l = passes.length; i < l; ++i, ++j) {
+		if(pipeline.autoRenderToScreen && passes.length > 0) {
 
-			const pass = passes[i];
-
-			if(pass.output.defaultBuffer === null) {
-
-				continue;
-
-			}
+			this.restoreOutputBuffers(passes);
 
 			const outputDefaultBuffers = this.outputDefaultBuffers;
+			const lastPass = passes[passes.length - 1];
 
-			if(outputDefaultBuffers.has(pass.output.defaultBuffer)) {
-
-				// Restore the original buffer.
-				const originalBuffer = outputDefaultBuffers.get(pass.output.defaultBuffer)!;
-				outputDefaultBuffers.delete(pass.output.defaultBuffer);
-				pass.output.defaultBuffer = originalBuffer;
-
-			}
-
-			if(pipeline.autoRenderToScreen && j === l && pass.output.defaultBuffer !== null) {
+			if(lastPass.output.defaultBuffer !== null) {
 
 				// Remember the original buffer and set the default buffer to null.
-				outputDefaultBuffers.set(pass.output.defaultBuffer, pass.output.defaultBuffer.value);
-				pass.output.defaultBuffer = null;
+				outputDefaultBuffers.set(lastPass.output.defaultBuffer, lastPass.output.defaultBuffer.value);
+				lastPass.output.defaultBuffer = null;
+
+				if(passes.filter(x => x.output.defaultBuffer === lastPass.output.defaultBuffer).length > 1) {
+
+					console.warn("Encountered multiple passes that use the same default output buffer");
+
+				}
 
 			}
 
 		}
 
 		// Connect clear passes with subsequent passes.
-		for(let i = 0, j = 1, l = passes.length; i < l; ++i, ++j) {
+		for(let i = 0, j = 1, l = passes.length; j < l; ++i, ++j) {
 
 			const pass = passes[i];
 
-			if(j < l && pass instanceof ClearPass) {
+			if(!(pass instanceof ClearPass)) {
 
-				// Assign the output resources of the next pass to this clear pass.
-				const nextPass = passes[j];
-				nextPass.output.defines.forEach((value, key) => pass.output.defines.set(key, value));
-				nextPass.output.uniforms.forEach((value, key) => pass.output.uniforms.set(key, value));
-				pass.output.defaultBuffer = nextPass.output.defaultBuffer;
+				continue;
 
 			}
+
+			// Assign the output resources of the next pass to this clear pass.
+			const nextPass = passes[j];
+			nextPass.output.defines.forEach((value, key) => pass.output.defines.set(key, value));
+			nextPass.output.uniforms.forEach((value, key) => pass.output.uniforms.set(key, value));
+			pass.output.defaultBuffer = nextPass.output.defaultBuffer;
 
 		}
 
