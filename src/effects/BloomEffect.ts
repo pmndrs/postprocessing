@@ -1,7 +1,7 @@
 import { Uniform } from "three";
 import { Pass } from "../core/Pass.js";
 import { LuminancePass } from "../passes/LuminancePass.js";
-import { MipmapBlurPass } from "../passes/MipmapBlurPass.js";
+import { MipmapBlurPass, MipmapBlurPassOptions } from "../passes/MipmapBlurPass.js";
 import { LuminanceMaterial } from "../materials/LuminanceMaterial.js";
 import { AddBlendFunction } from "./blending/blend-functions/AddBlendFunction.js";
 import { Effect } from "./Effect.js";
@@ -14,7 +14,7 @@ import fragmentShader from "./shaders/bloom.frag";
  * @category Effects
  */
 
-export interface BloomEffectOptions {
+export interface BloomEffectOptions extends MipmapBlurPassOptions {
 
 	/**
 	 * The luminance threshold. Raise this value to mask out darker elements in the scene.
@@ -39,24 +39,6 @@ export interface BloomEffectOptions {
 	 */
 
 	intensity?: number;
-
-	/**
-	 * The blur radius.
-	 *
-	 * @defaultValue 0.85
-	 */
-
-	radius?: number;
-
-	/**
-	 * The amount of MIP levels.
-	 *
-	 * At 720p 8 steps are likely too much, while at 4K a they might not be enough.
-	 *
-	 * @defaultValue 8
-	 */
-
-	levels?: number;
 
 }
 
@@ -94,7 +76,9 @@ export class BloomEffect extends Effect {
 		luminanceSmoothing = 0.03,
 		intensity = 1.0,
 		radius = 0.85,
-		levels = 8
+		levels = 8,
+		fullResolutionUpsampling,
+		clampToBorder
 	}: BloomEffectOptions = {}) {
 
 		super("BloomEffect");
@@ -111,14 +95,13 @@ export class BloomEffect extends Effect {
 		luminanceMaterial.smoothing = luminanceSmoothing;
 		luminanceMaterial.colorOutput = true;
 
-		const mipmapBlurPass = new MipmapBlurPass();
-		mipmapBlurPass.radius = radius;
-		mipmapBlurPass.levels = levels;
+		const mipmapBlurPass = new MipmapBlurPass({ levels, radius, fullResolutionUpsampling, clampToBorder });
 		this.mipmapBlurPass = mipmapBlurPass;
 
 		const uniforms = this.input.uniforms;
-		uniforms.set("map", new Uniform(this.mipmapBlurPass.texture));
 		uniforms.set("intensity", new Uniform(intensity));
+		uniforms.set("map", new Uniform(null));
+		mipmapBlurPass.texture.bindUniform(uniforms.get("map")!);
 
 		this.subpasses = [luminancePass, mipmapBlurPass];
 
@@ -162,12 +145,12 @@ export class BloomEffect extends Effect {
 
 		if(this.luminancePass.enabled) {
 
-			this.luminancePass.input.defaultBuffer = this.input.defaultBuffer?.value ?? null;
+			this.luminancePass.input.defaultBuffer = this.input.defaultBuffer;
 			this.mipmapBlurPass.input.defaultBuffer = this.luminancePass.texture;
 
 		} else {
 
-			this.mipmapBlurPass.input.defaultBuffer = this.input.defaultBuffer?.value ?? null;
+			this.mipmapBlurPass.input.defaultBuffer = this.input.defaultBuffer;
 
 		}
 

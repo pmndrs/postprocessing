@@ -1,4 +1,5 @@
-import { Texture, WebGLRenderTarget } from "three";
+import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
+import { TextureResource } from "../core/io/TextureResource.js";
 import { Pass } from "../core/Pass.js";
 import { DownsamplingMaterial, DownsamplingMaterialOptions } from "../materials/DownsamplingMaterial.js";
 import { UpsamplingMaterial, UpsamplingMaterialOptions } from "../materials/UpsamplingMaterial.js";
@@ -12,12 +13,24 @@ import { UpsamplingMaterial, UpsamplingMaterialOptions } from "../materials/Upsa
 export interface MipmapBlurPassOptions extends DownsamplingMaterialOptions, UpsamplingMaterialOptions {
 
 	/**
-	 * The MIP levels.
+	 * The amount of MIP levels.
+	 *
+	 * At 720p 8 steps are likely too much, while at 4K a they might not be enough.
 	 *
 	 * @defaultValue 8
 	 */
 
 	levels?: number;
+
+	/**
+	 * Controls whether the image should be scaled up to the original resolution.
+	 *
+	 * If disabled, the upsampling process will stop at half resolution.
+	 *
+	 * @defaultValue false
+	 */
+
+	fullResolutionUpsampling?: boolean;
 
 }
 
@@ -36,19 +49,19 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 	 * Identifies the main output buffer.
 	 */
 
-	private static readonly BUFFER_MAIN = "UPSAMPLING.MIPMAP0";
+	private static readonly BUFFER_MAIN = "BUFFER_MAIN";
 
 	/**
 	 * The mipmaps used for downsampling.
 	 */
 
-	private downsamplingMipmaps: WebGLRenderTarget[];
+	private downsamplingMipmaps: RenderTargetResource[];
 
 	/**
 	 * The mipmaps used for upsampling.
 	 */
 
-	private upsamplingMipmaps: WebGLRenderTarget[];
+	private upsamplingMipmaps: RenderTargetResource[];
 
 	/**
 	 * A downsampling material.
@@ -63,17 +76,24 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 	private upsamplingMaterial: UpsamplingMaterial;
 
 	/**
+	 * @see {@link fullResolutionUpsampling}
+	*/
+
+	private _fullResolutionUpsampling: boolean;
+
+	/**
 	 * Constructs a new mipmap blur pass.
 	 *
 	 * @param options - The options.
 	 */
 
-	constructor({ levels = 8, radius, clampToBorder }: MipmapBlurPassOptions = {}) {
+	constructor({ levels = 8, radius, fullResolutionUpsampling = false, clampToBorder }: MipmapBlurPassOptions = {}) {
 
 		super("MipmapBlurPass");
 
-		this.output.setBuffer(MipmapBlurPass.BUFFER_MAIN, this.createFramebuffer());
-		this.renderTarget.texture.name = "Upsampling.Mipmap0";
+		const renderTarget = this.createFramebuffer();
+		renderTarget.texture.name = MipmapBlurPass.BUFFER_MAIN;
+		this.output.setBuffer(MipmapBlurPass.BUFFER_MAIN, renderTarget);
 
 		this.downsamplingMipmaps = [];
 		this.upsamplingMipmaps = [];
@@ -81,33 +101,28 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 		this.downsamplingMaterial = new DownsamplingMaterial({ clampToBorder });
 		this.upsamplingMaterial = new UpsamplingMaterial({ radius });
 
+		this.disposables.add(this.downsamplingMaterial);
+		this.disposables.add(this.upsamplingMaterial);
+
+		this._fullResolutionUpsampling = fullResolutionUpsampling;
 		this.levels = levels;
 
 	}
 
 	/**
-	 * The output render target.
+	 * The output texture.
 	 */
 
-	private get renderTarget(): WebGLRenderTarget {
+	get texture(): TextureResource {
 
-		return this.output.getBuffer(MipmapBlurPass.BUFFER_MAIN)!;
-
-	}
-
-	/**
-	 * A texture that contains the blurred result.
-	 */
-
-	get texture(): Texture {
-
-		return this.renderTarget.texture;
+		return this.output.buffers.get(MipmapBlurPass.BUFFER_MAIN)!.texture;
 
 	}
 
 	/**
 	 * The MIP levels.
 	 *
+	 * @throws If the number of levels is lower than 0.
 	 * @defaultValue 8
 	 */
 
@@ -119,46 +134,17 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 	set levels(value: number) {
 
-		if(this.levels === value) {
+		if(value <= 0) {
 
-			return;
-
-		}
-
-		const renderTarget = this.renderTarget;
-		const output = this.output;
-
-		this.dispose();
-		this.disposables.clear();
-		output.buffers.clear();
-
-		this.downsamplingMipmaps = [];
-		this.upsamplingMipmaps = [];
-
-		for(let i = 0; i < value; ++i) {
-
-			const mipmap = renderTarget.clone();
-			mipmap.texture.name = "Downsampling.Mipmap" + i;
-			this.downsamplingMipmaps.push(mipmap);
-			this.disposables.add(mipmap);
-			output.setBuffer(mipmap.texture.name.toUpperCase(), mipmap);
+			throw new Error("The level count must be greater than 0");
 
 		}
 
-		this.upsamplingMipmaps.push(renderTarget);
-		output.setBuffer(MipmapBlurPass.BUFFER_MAIN, renderTarget);
+		if(this.levels !== value) {
 
-		for(let i = 1, l = value - 1; i < l; ++i) {
-
-			const mipmap = renderTarget.clone();
-			mipmap.texture.name = "Upsampling.Mipmap" + i;
-			this.upsamplingMipmaps.push(mipmap);
-			this.disposables.add(mipmap);
-			output.setBuffer(mipmap.texture.name.toUpperCase(), mipmap);
+			this.createMipmaps(value);
 
 		}
-
-		this.onResolutionChange(this.resolution);
 
 	}
 
@@ -180,6 +166,90 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 	}
 
+	/**
+	 * Controls whether the image should be scaled up to the original resolution.
+	 *
+	 * If disabled, the upsampling process will stop at half resolution.
+	 *
+	 * @defaultValue false
+	 */
+
+	get fullResolutionUpsampling(): boolean {
+
+		return this._fullResolutionUpsampling;
+
+	}
+
+	set fullResolutionUpsampling(value: boolean) {
+
+		if(this._fullResolutionUpsampling !== value) {
+
+			this._fullResolutionUpsampling = value;
+			this.createMipmaps(this.levels);
+
+		}
+
+	}
+
+	/**
+	 * Updates the mipmap render targets.
+	 *
+	 * @param levels - The mipmap level count.
+	 */
+
+	private createMipmaps(levels: number): void {
+
+		const output = this.output;
+		const mainBufferResource = output.buffers.get(MipmapBlurPass.BUFFER_MAIN)!;
+		const renderTarget = mainBufferResource.value!;
+
+		this.dispose();
+		this.disposables.clear();
+		this.disposables.add(this.downsamplingMaterial);
+		this.disposables.add(this.upsamplingMaterial);
+
+		output.buffers.clear();
+
+		this.downsamplingMipmaps = [];
+		this.upsamplingMipmaps = [];
+
+		if(levels === 1 && !this.fullResolutionUpsampling) {
+
+			// Only need one render target for downsampling.
+			output.setBuffer(MipmapBlurPass.BUFFER_MAIN, mainBufferResource);
+			this.downsamplingMipmaps.push(mainBufferResource);
+
+			return;
+
+		}
+
+		for(let i = 0; i < levels; ++i) {
+
+			const mipmap = renderTarget.clone();
+			mipmap.texture.name = "DOWNSAMPLING_MIPMAP" + i;
+			const mipmapResource = new RenderTargetResource(mipmap);
+			output.setBuffer(mipmap.texture.name, mipmapResource);
+			this.downsamplingMipmaps.push(mipmapResource);
+
+		}
+
+		output.setBuffer(MipmapBlurPass.BUFFER_MAIN, mainBufferResource);
+		this.upsamplingMipmaps.push(mainBufferResource);
+
+		for(let i = 1, l = this.fullResolutionUpsampling ? levels : levels - 1; i < l; ++i) {
+
+			const mipmap = renderTarget.clone();
+			mipmap.texture.name = "UPSAMPLING_MIPMAP" + i;
+			const mipmapResource = new RenderTargetResource(mipmap);
+			output.setBuffer(mipmap.texture.name, mipmapResource);
+			this.upsamplingMipmaps.push(mipmapResource);
+
+		}
+
+		this.onResolutionChange();
+
+	}
+
 	protected override onInputChange(): void {
 
 		if(this.input.defaultBuffer === null || this.input.defaultBuffer.value === null) {
@@ -192,9 +262,9 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 		for(const mipmap of this.downsamplingMipmaps.concat(this.upsamplingMipmaps)) {
 
-			mipmap.texture.type = type;
-			mipmap.texture.colorSpace = colorSpace;
-			mipmap.dispose();
+			mipmap.value!.texture.type = type;
+			mipmap.value!.texture.colorSpace = colorSpace;
+			mipmap.value!.dispose();
 
 		}
 
@@ -285,7 +355,7 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 		for(let i = 0, l = downsamplingMipmaps.length; i < l; ++i) {
 
-			const mipmap = downsamplingMipmaps[i];
+			const mipmap = downsamplingMipmaps[i].value!;
 			downsamplingMaterial.setSize(width, height);
 			downsamplingMaterial.inputBuffer = previousBuffer;
 			renderer.setRenderTarget(mipmap);
@@ -297,16 +367,20 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 		}
 
-		// Upsample the result back to the lowest MIP level (largest mipmap, half resolution).
+		// Upsample the result back to the lowest MIP level (largest mipmap).
 		this.fullscreenMaterial = upsamplingMaterial;
 
 		// A + B = C, then D + C = F, etc.
 		for(let i = upsamplingMipmaps.length - 1; i >= 0; --i) {
 
-			const mipmap = upsamplingMipmaps[i];
+			// Full resolution upsampling uses one additional buffer.
+			const j = this.fullResolutionUpsampling ? i - 1 : i;
+			const supportBuffer = (j >= 0) ? downsamplingMipmaps[j].value!.texture : this.input.defaultBuffer.value;
+
+			const mipmap = upsamplingMipmaps[i].value!;
 			upsamplingMaterial.setSize(width, height);
 			upsamplingMaterial.inputBuffer = previousBuffer;
-			upsamplingMaterial.supportBuffer = downsamplingMipmaps[i].texture;
+			upsamplingMaterial.supportBuffer = supportBuffer;
 			renderer.setRenderTarget(mipmap);
 			this.renderFullscreen();
 
