@@ -4,6 +4,7 @@ import { GBufferConfig } from "../../utils/GBufferConfig.js";
 import { ObservableMap } from "../../utils/ObservableMap.js";
 import { ObservableSet } from "../../utils/ObservableSet.js";
 import { BaseEventMap } from "../BaseEventMap.js";
+import { Disposable } from "../Disposable.js";
 import { ShaderData } from "../ShaderData.js";
 import { Resource } from "./Resource.js";
 import { TextureResource } from "./TextureResource.js";
@@ -16,7 +17,7 @@ import { TextureResource } from "./TextureResource.js";
  * @category IO
  */
 
-export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
+export class Input extends EventDispatcher<BaseEventMap> implements Disposable, ShaderData {
 
 	/**
 	 * Triggers when an input resource is added, replaced or removed.
@@ -235,6 +236,16 @@ export class Input extends EventDispatcher<BaseEventMap> implements ShaderData {
 	getBuffer(key: string): Texture | null {
 
 		return this.textures.get(key)?.value ?? null;
+
+	}
+
+	dispose(): void {
+
+		for(const disposable of this.textures.values()) {
+
+			disposable.value?.dispose();
+
+		}
 
 	}
 

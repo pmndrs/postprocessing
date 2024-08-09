@@ -1,6 +1,7 @@
 import { EventDispatcher, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
 import { ObservableMap } from "../../utils/ObservableMap.js";
 import { BaseEventMap } from "../BaseEventMap.js";
+import { Disposable } from "../Disposable.js";
 import { ShaderData } from "../ShaderData.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
 import { Resource } from "./Resource.js";
@@ -13,7 +14,7 @@ import { Resource } from "./Resource.js";
  * @category IO
  */
 
-export class Output extends EventDispatcher<BaseEventMap> implements ShaderData {
+export class Output extends EventDispatcher<BaseEventMap> implements Disposable, ShaderData {
 
 	/**
 	 * Triggers when an output resource is added, replaced or removed.
@@ -181,6 +182,16 @@ export class Output extends EventDispatcher<BaseEventMap> implements ShaderData 
 	getBuffer(key: string): WebGLRenderTarget | null {
 
 		return this.renderTargets.get(key)?.value ?? null;
+
+	}
+
+	dispose(): void {
+
+		for(const disposable of this.renderTargets.values()) {
+
+			disposable.value?.dispose();
+
+		}
 
 	}
 
