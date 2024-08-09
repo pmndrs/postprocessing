@@ -222,6 +222,23 @@ export class Resolution extends EventDispatcher<BaseEventMap> {
 	}
 
 	/**
+	 * Copies the base size of a given resolution.
+	 *
+	 * @param resolution - A resolution.
+	 */
+
+	copyBaseSize(resolution: Resolution): void {
+
+		if(!this.baseSize.equals(resolution.baseSize)) {
+
+			this.baseSize.copy(resolution.baseSize);
+			this.setChanged();
+
+		}
+
+	}
+
+	/**
 	 * The preferred width.
 	 *
 	 * @defaultValue {@link Resolution.AUTO_SIZE}
@@ -286,6 +303,23 @@ export class Resolution extends EventDispatcher<BaseEventMap> {
 	}
 
 	/**
+	 * Copies the preferred size of a given resolution.
+	 *
+	 * @param resolution - A resolution.
+	 */
+
+	copyPreferredSize(resolution: Resolution): void {
+
+		if(!this.preferredSize.equals(resolution.preferredSize)) {
+
+			this.preferredSize.copy(resolution.preferredSize);
+			this.setChanged();
+
+		}
+
+	}
+
+	/**
 	 * Dispatches a `change` event.
 	 *
 	 * @internal
@@ -306,8 +340,8 @@ export class Resolution extends EventDispatcher<BaseEventMap> {
 	copy(resolution: Resolution): void {
 
 		this._scale = resolution.scale;
-		this.preferredSize.set(resolution.preferredWidth, resolution.preferredHeight);
-		this.baseSize.set(resolution.baseWidth, resolution.baseHeight);
+		this.preferredSize.copy(resolution.preferredSize);
+		this.baseSize.copy(resolution.baseSize);
 		this.setChanged();
 
 	}
