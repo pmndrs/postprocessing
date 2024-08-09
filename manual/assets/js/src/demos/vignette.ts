@@ -91,7 +91,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	});
 
 	effect.blendMode.blendFunction = new MixBlendFunction();
-	const effectPass = new EffectPass(effect, new ToneMappingEffect());
+	const effectPass = new EffectPass(new ToneMappingEffect(), effect);
 	effectPass.dithering = true;
 
 	const pipeline = new RenderPipeline(renderer);
