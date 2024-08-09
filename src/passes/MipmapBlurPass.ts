@@ -2,7 +2,6 @@ import { Texture, WebGLRenderTarget } from "three";
 import { Pass } from "../core/Pass.js";
 import { DownsamplingMaterial, DownsamplingMaterialOptions } from "../materials/DownsamplingMaterial.js";
 import { UpsamplingMaterial, UpsamplingMaterialOptions } from "../materials/UpsamplingMaterial.js";
-import { Resolution } from "../utils/Resolution.js";
 
 /**
  * MipmapBlurPass constructor options.

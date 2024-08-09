@@ -12,7 +12,6 @@ import { Input } from "../core/io/Input.js";
 import { Pass } from "../core/Pass.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { BufferDebugMaterial } from "../materials/BufferDebugMaterial.js";
-import { Resolution } from "../utils/Resolution.js";
 
 /**
  * A debug pass that visualizes all input buffers.
@@ -196,11 +195,11 @@ export class BufferDebugPass extends Pass<BufferDebugMaterial> {
 
 	}
 
-	protected override onResolutionChange(resolution: Resolution): void {
+	protected override onResolutionChange(): void {
 
-		super.onResolutionChange(resolution);
+		super.onResolutionChange();
 
-		const { width, height } = resolution;
+		const { width, height } = this.resolution;
 		const debugCamera = this.debugCamera;
 		debugCamera.left = 0;
 		debugCamera.right = width;

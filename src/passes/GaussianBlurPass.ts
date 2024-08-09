@@ -1,7 +1,6 @@
 import { Texture, WebGLRenderTarget } from "three";
 import { Pass } from "../core/Pass.js";
 import { GaussianBlurMaterial } from "../materials/GaussianBlurMaterial.js";
-import { Resolution } from "../utils/Resolution.js";
 
 /**
  * GaussianBlurPass constructor options.
@@ -140,13 +139,14 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> {
 
 	}
 
-	protected override onResolutionChange(resolution: Resolution): void {
+	protected override onResolutionChange(): void {
 
-		const w = resolution.width;
-		const h = resolution.height;
+		const resolution = this.resolution;
+		const width = resolution.width;
+		const height = resolution.height;
 
-		this.renderTargetA.setSize(w, h);
-		this.renderTargetB.setSize(w, h);
+		this.renderTargetA.setSize(width, height);
+		this.renderTargetB.setSize(width, height);
 
 		// Optimization: 1 / (TexelSize * ResolutionScale) = FullResolution
 		this.blurMaterial.setSize(resolution.baseWidth, resolution.baseHeight);

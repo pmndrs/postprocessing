@@ -13,7 +13,6 @@ import { GBuffer } from "../enums/GBuffer.js";
 import { EffectMaterial } from "../materials/EffectMaterial.js";
 import { EffectShaderData } from "../utils/EffectShaderData.js";
 import { GBufferConfig } from "../utils/GBufferConfig.js";
-import { Resolution } from "../utils/Resolution.js";
 
 /**
  * An effect pass.
@@ -364,8 +363,9 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 	}
 
-	protected override onResolutionChange(resolution: Resolution): void {
+	protected override onResolutionChange(): void {
 
+		const resolution = this.resolution;
 		this.fullscreenMaterial.setSize(resolution.width, resolution.height);
 
 		for(const effect of this.effects) {

@@ -1,6 +1,5 @@
 import { Uniform } from "three";
 import { Effect } from "./Effect.js";
-import { Resolution } from "../utils/Resolution.js";
 import { OverlayBlendFunction } from "./blending/blend-functions/OverlayBlendFunction.js";
 
 import fragmentShader from "./shaders/scanline.frag";
@@ -86,7 +85,7 @@ export class ScanlineEffect extends Effect {
 	set density(value: number) {
 
 		this._density = value;
-		this.onResolutionChange(this.resolution);
+		this.onResolutionChange();
 
 	}
 
@@ -121,8 +120,9 @@ export class ScanlineEffect extends Effect {
 
 	}
 
-	protected override onResolutionChange(resolution: Resolution): void {
+	protected override onResolutionChange(): void {
 
+		const resolution = this.resolution;
 		this.input.uniforms.get("count")!.value = Math.round(resolution.height * this.density);
 
 	}

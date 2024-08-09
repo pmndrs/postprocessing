@@ -602,11 +602,9 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 * Performs tasks when the resolution has changed.
 	 *
 	 * Override this empty method to handle resolution changes.
-	 *
-	 * @param resolution - The updated resolution of this pass.
 	 */
 
-	protected onResolutionChange(resolution: Resolution): void {}
+	protected onResolutionChange(): void {}
 
 	/**
 	 * Creates a framebuffer.

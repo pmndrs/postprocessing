@@ -18,7 +18,6 @@ import { SMAAEdgeDetectionMaterial } from "../materials/SMAAEdgeDetectionMateria
 import { SMAAWeightsMaterial } from "../materials/SMAAWeightsMaterial.js";
 import { ClearPass } from "../passes/ClearPass.js";
 import { ShaderPass } from "../passes/ShaderPass.js";
-import { Resolution } from "../utils/Resolution.js";
 import { Effect } from "./Effect.js";
 
 import searchImageDataURL from "../textures/smaa/searchImageDataURL.js";
@@ -326,10 +325,9 @@ export class SMAAEffect extends Effect {
 
 	}
 
-	protected override onResolutionChange(resolution: Resolution): void {
+	protected override onResolutionChange(): void {
 
-		const { width, height } = resolution;
-
+		const { width, height } = this.resolution;
 		this.edgeDetectionMaterial.setSize(width, height);
 		this.weightsMaterial.setSize(width, height);
 		this.renderTargetEdges.setSize(width, height);

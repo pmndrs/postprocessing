@@ -3,7 +3,6 @@ import { Pass } from "../core/Pass.js";
 import { LuminancePass } from "../passes/LuminancePass.js";
 import { MipmapBlurPass } from "../passes/MipmapBlurPass.js";
 import { LuminanceMaterial } from "../materials/LuminanceMaterial.js";
-import { Resolution } from "../utils/Resolution.js";
 import { AddBlendFunction } from "./blending/blend-functions/AddBlendFunction.js";
 import { Effect } from "./Effect.js";
 
@@ -151,8 +150,9 @@ export class BloomEffect extends Effect {
 
 	}
 
-	protected override onResolutionChange(resolution: Resolution) {
+	protected override onResolutionChange(): void {
 
+		const resolution = this.resolution;
 		this.luminancePass.resolution.copy(resolution);
 		this.mipmapBlurPass.resolution.copy(resolution);
 

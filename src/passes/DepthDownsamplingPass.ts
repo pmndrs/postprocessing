@@ -2,7 +2,6 @@ import { FloatType, NearestFilter, Texture, WebGLRenderer, WebGLRenderTarget } f
 import { Pass } from "../core/Pass.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { DepthDownsamplingMaterial } from "../materials/DepthDownsamplingMaterial.js";
-import { Resolution } from "../utils/Resolution.js";
 
 /**
  * A downsampling pass that picks the most representative depth (and normal) in 2x2 texel neighborhoods.
@@ -72,9 +71,10 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 
 	}
 
-	protected override onResolutionChange(resolution: Resolution): void {
+	protected override onResolutionChange(): void {
 
 		// Use the full resolution to calculate the depth/normal buffer texel size.
+		const resolution = this.resolution;
 		this.fullscreenMaterial.setSize(resolution.baseWidth, resolution.baseHeight);
 
 	}

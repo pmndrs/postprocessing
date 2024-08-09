@@ -1,7 +1,6 @@
 import { Texture, WebGLRenderTarget } from "three";
 import { Pass } from "../core/Pass.js";
 import { LuminanceMaterial } from "../materials/LuminanceMaterial.js";
-import { Resolution } from "../utils/Resolution.js";
 
 /**
  * A luminance pass.
@@ -65,8 +64,9 @@ export class LuminancePass extends Pass<LuminanceMaterial> {
 
 	}
 
-	protected override onResolutionChange(resolution: Resolution): void {
+	protected override onResolutionChange(): void {
 
+		const resolution = this.resolution;
 		this.renderTarget.setSize(resolution.width, resolution.height);
 
 	}

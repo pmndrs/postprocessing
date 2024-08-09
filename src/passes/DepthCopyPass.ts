@@ -2,7 +2,6 @@ import { FloatType, NearestFilter, Texture, WebGLRenderTarget } from "three";
 import { Pass } from "../core/Pass.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { DepthCopyMaterial } from "../materials/DepthCopyMaterial.js";
-import { Resolution } from "../utils/Resolution.js";
 
 /**
  * A pass that copies depth into a render target.
@@ -64,8 +63,9 @@ export class DepthCopyPass extends Pass<DepthCopyMaterial> {
 
 	}
 
-	protected override onResolutionChange(resolution: Resolution): void {
+	protected override onResolutionChange(): void {
 
+		const resolution = this.resolution;
 		this.renderTarget.setSize(resolution.width, resolution.height);
 
 	}
