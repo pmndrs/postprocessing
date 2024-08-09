@@ -216,8 +216,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this.disposables = new Set<Disposable>();
 
 		this.resolution = new Resolution();
-		this.resolution.addEventListener(Resolution.EVENT_CHANGE, () => this.updateOutputBufferSize());
-		this.resolution.addEventListener(Resolution.EVENT_CHANGE, () => this.onResolutionChange(this.resolution));
+		this.resolution.addEventListener(Resolution.EVENT_CHANGE, (e) => this.handleResolutionEvent(e));
 
 		this.input = new Input();
 		this.output = new Output();
@@ -275,6 +274,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		this.input.setChanged();
 		this.output.setChanged();
+		this.resolution.setChanged();
 
 		for(const pass of this.subpasses) {
 
@@ -288,6 +288,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 * A list of subpasses.
 	 *
 	 * Subpasses are included in automatic resource optimizations and will be disposed when the parent pass is disposed.
+	 * The resolution of the subpasses is also kept in sync with the base resolution of the parent pass.
 	 *
 	 * They also gain access to the following data:
 	 * - {@link timer}
@@ -307,6 +308,8 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		this._subpasses = value;
 		Object.freeze(this._subpasses);
+
+		this.updateSubpassResolution();
 
 		for(const pass of this.subpasses) {
 
@@ -453,6 +456,22 @@ export abstract class Pass<TMaterial extends Material | null = null>
 			this.fullscreenScene = new Scene();
 			this.fullscreenCamera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
 			this.fullscreenScene.add(this.screen);
+
+		}
+
+	}
+
+	/**
+	 * Updates the resolution of all subpasses.
+	 */
+
+	private updateSubpassResolution(): void {
+
+		const { baseWidth, baseHeight } = this.resolution;
+
+		for(const pass of this.subpasses) {
+
+			pass.resolution.setBaseSize(baseWidth, baseHeight);
 
 		}
 
@@ -638,6 +657,32 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		if(this.renderer !== null && this.fullscreenMaterial !== null) {
 
 			this.renderer.render(this.fullscreenScene as Scene, this.fullscreenCamera as Camera);
+
+		}
+
+	}
+
+	/**
+	 * Handles {@link resolution} events.
+	 *
+	 * @param event - A resolution event.
+	 */
+
+	private handleResolutionEvent(event: Event): void {
+
+		if(!this.attached) {
+
+			return;
+
+		}
+
+		switch(event.type) {
+
+			case "change":
+				this.onResolutionChange();
+				this.updateOutputBufferSize();
+				this.updateSubpassResolution();
+				break;
 
 		}
 

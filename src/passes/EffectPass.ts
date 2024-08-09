@@ -370,7 +370,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		for(const effect of this.effects) {
 
-			effect.resolution.copy(resolution);
+			effect.resolution.setBaseSize(resolution.baseWidth, resolution.baseHeight);
 
 		}
 
