@@ -1,4 +1,5 @@
-import { FloatType, NearestFilter, Texture, WebGLRenderTarget } from "three";
+import { FloatType, NearestFilter, WebGLRenderTarget } from "three";
+import { TextureResource } from "../core/io/TextureResource.js";
 import { Pass } from "../core/Pass.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { DepthCopyMaterial } from "../materials/DepthCopyMaterial.js";
@@ -51,9 +52,9 @@ export class DepthCopyPass extends Pass<DepthCopyMaterial> {
 	 * The output texture.
 	 */
 
-	get texture(): Texture {
+	get texture(): TextureResource {
 
-		return this.renderTarget.texture;
+		return this.output.buffers.get(DepthCopyPass.BUFFER_DEPTH)!.texture;
 
 	}
 

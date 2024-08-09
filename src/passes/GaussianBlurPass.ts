@@ -1,4 +1,5 @@
-import { Texture, WebGLRenderTarget } from "three";
+import { WebGLRenderTarget } from "three";
+import { TextureResource } from "../core/io/TextureResource.js";
 import { Pass } from "../core/Pass.js";
 import { GaussianBlurMaterial } from "../materials/GaussianBlurMaterial.js";
 
@@ -45,16 +46,16 @@ export interface GaussianBlurPassOptions {
 export class GaussianBlurPass extends Pass<GaussianBlurMaterial> {
 
 	/**
-	 * The first blur buffer.
+	 * Identifies the first blur buffer.
 	 */
 
-	private readonly renderTargetA: WebGLRenderTarget;
+	private static readonly BUFFER_A = "BUFFER_A";
 
 	/**
-	 * The second blur buffer.
+	 * Identifies the second blur buffer.
 	 */
 
-	private readonly renderTargetB: WebGLRenderTarget;
+	private static readonly BUFFER_B = "BUFFER_B";
 
 	/**
 	 * The amount of blur iterations.
@@ -72,14 +73,8 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> {
 
 		super("GaussianBlurPass");
 
-		const renderTargetA = this.createFramebuffer();
-		const renderTargetB = this.createFramebuffer();
-		renderTargetA.texture.name = "BUFFER_0";
-		renderTargetB.texture.name = "BUFFER_1";
-		this.output.setBuffer(renderTargetA.texture.name, renderTargetA);
-		this.output.setBuffer(renderTargetB.texture.name, renderTargetB);
-		this.renderTargetA = renderTargetA;
-		this.renderTargetB = renderTargetB;
+		this.output.setBuffer(GaussianBlurPass.BUFFER_A, this.createFramebuffer());
+		this.output.setBuffer(GaussianBlurPass.BUFFER_B, this.createFramebuffer());
 
 		this.fullscreenMaterial = new GaussianBlurMaterial({ kernelSize });
 		this.resolution.scale = resolutionScale;
@@ -98,12 +93,32 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> {
 	}
 
 	/**
+	 * The first blur render target.
+	 */
+
+	private get renderTargetA(): WebGLRenderTarget {
+
+		return this.output.getBuffer(GaussianBlurPass.BUFFER_A)!;
+
+	}
+
+	/**
+	 * The second blur render target.
+	 */
+
+	private get renderTargetB(): WebGLRenderTarget {
+
+		return this.output.getBuffer(GaussianBlurPass.BUFFER_B)!;
+
+	}
+
+	/**
 	 * A texture that contains the blurred result.
 	 */
 
-	get texture(): Texture {
+	get texture(): TextureResource {
 
-		return this.renderTargetB.texture;
+		return this.output.buffers.get(GaussianBlurPass.BUFFER_B)!.texture;
 
 	}
 
@@ -117,13 +132,13 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> {
 
 		const { type, colorSpace } = this.input.defaultBuffer.value;
 
-		this.renderTargetA.texture.type = type;
-		this.renderTargetA.texture.colorSpace = colorSpace;
-		this.renderTargetA.dispose();
+		for(const renderTarget of [this.renderTargetA, this.renderTargetB]) {
 
-		this.renderTargetB.texture.type = type;
-		this.renderTargetB.texture.colorSpace = colorSpace;
-		this.renderTargetB.dispose();
+			renderTarget.texture.type = type;
+			renderTarget.texture.colorSpace = colorSpace;
+			renderTarget.dispose();
+
+		}
 
 		if(this.input.frameBufferPrecisionHigh) {
 
@@ -155,7 +170,7 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> {
 
 	override render(): void {
 
-		if(this.renderer === null || this.input.defaultBuffer?.value === null) {
+		if(this.renderer === null || this.input.defaultBuffer === null || this.input.defaultBuffer.value === null) {
 
 			return;
 
@@ -166,7 +181,7 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> {
 		const renderTargetB = this.renderTargetB;
 		const blurMaterial = this.blurMaterial;
 
-		let previousBuffer = this.input.defaultBuffer!.value;
+		let previousBuffer = this.input.defaultBuffer.value;
 
 		for(let i = 0, l = Math.max(this.iterations, 1); i < l; ++i) {
 

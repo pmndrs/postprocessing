@@ -1,4 +1,5 @@
-import { Texture, WebGLRenderTarget } from "three";
+import { WebGLRenderTarget } from "three";
+import { TextureResource } from "../core/io/TextureResource.js";
 import { Pass } from "../core/Pass.js";
 import { LuminanceMaterial } from "../materials/LuminanceMaterial.js";
 
@@ -43,9 +44,9 @@ export class LuminancePass extends Pass<LuminanceMaterial> {
 	 * The output texture.
 	 */
 
-	get texture(): Texture {
+	get texture(): TextureResource {
 
-		return this.renderTarget.texture;
+		return this.output.buffers.get(LuminancePass.BUFFER_LUMINANCE)!.texture;
 
 	}
 

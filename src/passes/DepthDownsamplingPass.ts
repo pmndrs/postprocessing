@@ -1,4 +1,5 @@
-import { FloatType, NearestFilter, Texture, WebGLRenderer, WebGLRenderTarget } from "three";
+import { FloatType, NearestFilter, WebGLRenderer, WebGLRenderTarget } from "three";
+import { TextureResource } from "../core/io/TextureResource.js";
 import { Pass } from "../core/Pass.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { DepthDownsamplingMaterial } from "../materials/DepthDownsamplingMaterial.js";
@@ -29,12 +30,15 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 		this.input.gBuffer.add(GBuffer.DEPTH);
 		this.input.gBuffer.add(GBuffer.NORMAL);
 
-		this.renderTarget = new WebGLRenderTarget(1, 1, {
-			minFilter: NearestFilter,
-			magFilter: NearestFilter,
-			depthBuffer: false,
-			type: FloatType
-		});
+		this.output.setBuffer(
+			DepthDownsamplingPass.BUFFER_DEPTH,
+			new WebGLRenderTarget(1, 1, {
+				minFilter: NearestFilter,
+				magFilter: NearestFilter,
+				depthBuffer: false,
+				type: FloatType
+			})
+		);
 
 	}
 
@@ -48,19 +52,13 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 
 	}
 
-	private set renderTarget(value: WebGLRenderTarget) {
-
-		this.output.setBuffer(DepthDownsamplingPass.BUFFER_DEPTH, value);
-
-	}
-
 	/**
 	 * The output texture.
 	 */
 
-	get texture(): Texture {
+	get texture(): TextureResource {
 
-		return this.renderTarget.texture;
+		return this.output.buffers.get(DepthDownsamplingPass.BUFFER_DEPTH)!.texture;
 
 	}
 

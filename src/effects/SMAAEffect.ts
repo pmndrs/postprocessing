@@ -6,10 +6,11 @@ import {
 	OrthographicCamera,
 	PerspectiveCamera,
 	Texture,
-	Uniform,
-	WebGLRenderTarget
+	Uniform
 } from "three";
 
+import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
+import { TextureResource } from "../core/io/TextureResource.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { SMAAEdgeDetectionMode } from "../enums/SMAAEdgeDetectionMode.js";
 import { SMAAPredicationMode } from "../enums/SMAAPredicationMode.js";
@@ -115,8 +116,9 @@ export class SMAAEffect extends Effect {
 		this.fragmentShader = fragmentShader;
 		this.output.setBuffer(SMAAEffect.BUFFER_EDGES, this.createFramebuffer());
 		this.output.setBuffer(SMAAEffect.BUFFER_WEIGHTS, this.createFramebuffer());
-		this.input.uniforms.set("weightMap", new Uniform(this.weightsTexture));
 		this.input.gBuffer.add(GBuffer.DEPTH);
+		this.input.uniforms.set("weightMap", new Uniform(null));
+		this.weightsTexture.bindUniform(this.input.uniforms.get("weightMap")!);
 
 		this.clearPass = new ClearPass(true, false, false);
 		this.clearPass.output.defaultBuffer = this.renderTargetEdges;
@@ -161,9 +163,9 @@ export class SMAAEffect extends Effect {
 	 * A render target for the SMAA edge detection.
 	 */
 
-	private get renderTargetEdges(): WebGLRenderTarget {
+	private get renderTargetEdges(): RenderTargetResource {
 
-		return this.output.getBuffer(SMAAEffect.BUFFER_EDGES)!;
+		return this.output.buffers.get(SMAAEffect.BUFFER_EDGES)!;
 
 	}
 
@@ -171,9 +173,9 @@ export class SMAAEffect extends Effect {
 	 * A render target for the SMAA edge weights.
 	 */
 
-	private get renderTargetWeights(): WebGLRenderTarget {
+	private get renderTargetWeights(): RenderTargetResource {
 
-		return this.output.getBuffer(SMAAEffect.BUFFER_WEIGHTS)!;
+		return this.output.buffers.get(SMAAEffect.BUFFER_WEIGHTS)!;
 
 	}
 
@@ -181,9 +183,9 @@ export class SMAAEffect extends Effect {
 	 * The edges texture.
 	 */
 
-	get edgesTexture(): Texture {
+	get edgesTexture(): TextureResource {
 
-		return this.renderTargetEdges.texture;
+		return this.output.buffers.get(SMAAEffect.BUFFER_EDGES)!.texture;
 
 	}
 
@@ -191,9 +193,9 @@ export class SMAAEffect extends Effect {
 	 * The edge weights texture.
 	 */
 
-	get weightsTexture(): Texture {
+	get weightsTexture(): TextureResource {
 
-		return this.renderTargetWeights.texture;
+		return this.output.buffers.get(SMAAEffect.BUFFER_WEIGHTS)!.texture;
 
 	}
 
@@ -330,8 +332,8 @@ export class SMAAEffect extends Effect {
 		const { width, height } = this.resolution;
 		this.edgeDetectionMaterial.setSize(width, height);
 		this.weightsMaterial.setSize(width, height);
-		this.renderTargetEdges.setSize(width, height);
-		this.renderTargetWeights.setSize(width, height);
+		this.renderTargetEdges.value!.setSize(width, height);
+		this.renderTargetWeights.value!.setSize(width, height);
 
 	}
 
