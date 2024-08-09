@@ -219,7 +219,6 @@ export class IOManager {
 	removePipeline(pipeline: RenderPipeline): void {
 
 		this.pipelines.delete(pipeline);
-		// Dispose related buffers.
 
 	}
 
