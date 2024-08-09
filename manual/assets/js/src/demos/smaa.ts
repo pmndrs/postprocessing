@@ -112,8 +112,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 	);
 
 	// #region DEBUG
-	const smaaEdgesDebugPass = new EffectPass(effect, new TextureEffect({ texture: effect.edgesTexture }));
-	const smaaWeightsDebugPass = new EffectPass(effect, new TextureEffect({ texture: effect.weightsTexture }));
+	const smaaEdgesDebugPass = new EffectPass(effect, new TextureEffect({ texture: effect.edgesTexture.value }));
+	const smaaWeightsDebugPass = new EffectPass(effect, new TextureEffect({ texture: effect.weightsTexture.value }));
 
 	effect.blendMode.blendFunction = new MixBlendFunction();
 	effectPass.output.defaultBuffer = null;
