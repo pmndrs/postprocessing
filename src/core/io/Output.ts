@@ -148,11 +148,7 @@ export class Output extends EventDispatcher<BaseEventMap> implements Disposable,
 
 		if(value instanceof RenderTargetResource) {
 
-			if(this.renderTargets.get(key) !== value) {
-
-				this.renderTargets.set(key, value);
-
-			}
+			this.renderTargets.set(key, value);
 
 		} else {
 
