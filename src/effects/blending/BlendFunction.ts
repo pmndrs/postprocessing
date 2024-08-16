@@ -1,20 +1,19 @@
+import { Identifiable } from "../../core/Identifiable.js";
+import { IdManager } from "../../utils/IdManager.js";
+
 /**
  * An abstract blend function.
  *
  * @category Blending
  */
 
-export abstract class BlendFunction {
+export abstract class BlendFunction implements Identifiable {
 
 	/**
-	 * The next blend function ID.
+	 * An ID manager.
 	 */
 
-	private static nextId = 0;
-
-	/**
-	 * A unique blend function ID.
-	 */
+	private static idManager = /* @__PURE__ */ new IdManager();
 
 	readonly id: number;
 
@@ -48,7 +47,7 @@ export abstract class BlendFunction {
 
 	constructor(name: string, shader: string | null, supportsHDR = false) {
 
-		this.id = BlendFunction.nextId++;
+		this.id = BlendFunction.idManager.getNextId();
 		this.name = name;
 		this.shader = shader;
 		this.supportsHDR = supportsHDR;
