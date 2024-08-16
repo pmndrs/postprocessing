@@ -394,6 +394,8 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 		this.removeAllPasses();
 		this._timer.dispose();
 
+		Pass.fullscreenGeometry.dispose();
+
 	}
 
 }
