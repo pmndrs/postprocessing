@@ -90,7 +90,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 * An ID manager.
 	 */
 
-	private static idManager = new IdManager();
+	private static idManager = /* @__PURE__ */ new IdManager();
 
 	readonly id: number;
 

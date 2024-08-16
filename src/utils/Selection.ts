@@ -15,7 +15,7 @@ export class Selection extends Set<Object3D> {
 	 * An ID manager.
 	 */
 
-	private static idManager = new IdManager(2);
+	private static idManager = /* @__PURE__ */ new IdManager(2);
 
 	/**
 	 * @see {@link layer}

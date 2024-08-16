@@ -29,13 +29,13 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 	 * Keeps track of passes that have been added to a pipeline.
 	 */
 
-	private static readonly registeredPasses = new WeakSet<Pass<Material | null>>();
+	private static readonly registeredPasses = /* @__PURE__ */ new WeakSet<Pass<Material | null>>();
 
 	/**
 	 * A listener that triggers an I/O update.
 	 */
 
-	private static readonly listener = () => RenderPipeline.ioManager.update();
+	private static readonly listener = /* @__PURE__ */ () => RenderPipeline.ioManager.update();
 
 	/**
 	 * A timer.
