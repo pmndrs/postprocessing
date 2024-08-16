@@ -15,7 +15,7 @@ export interface MipmapBlurPassOptions extends DownsamplingMaterialOptions, Upsa
 	/**
 	 * The amount of MIP levels.
 	 *
-	 * At 720p 8 steps are likely too much, while at 4K a they might not be enough.
+	 * At 720p 8 steps are likely too much, while at 4K they might not be enough.
 	 *
 	 * @defaultValue 8
 	 */
