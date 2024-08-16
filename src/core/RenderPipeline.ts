@@ -332,11 +332,9 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 	/**
 	 * Handles resolution change events.
-	 *
-	 * @param resolution - The resolution.
 	 */
 
-	private onResolutionChange(resolution = this.resolution): void {
+	private onResolutionChange(): void {
 
 		if(this.renderer === null) {
 
@@ -345,6 +343,7 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 		}
 
+		const resolution = this.resolution;
 		const width = resolution.width;
 		const height = resolution.height;
 		const logicalSize = this.renderer.getSize(v);
