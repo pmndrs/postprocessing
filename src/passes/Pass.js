@@ -387,6 +387,12 @@ export class Pass {
 
 		}
 
+		if(this.fullscreenMaterial !== null) {
+
+			this.fullscreenMaterial.dispose();
+
+		}
+
 	}
 
 }
