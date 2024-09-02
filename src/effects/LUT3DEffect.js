@@ -251,12 +251,7 @@ export class LUT3DEffect extends Effect {
 
 			}
 
-			// TODO Added for compatibility with r138. Remove later.
-			if(lut.source === undefined) {
-
-				lut.needsUpdate = true;
-
-			}
+			lut.needsUpdate = true;
 
 		}
 

@@ -1,6 +1,6 @@
 {
 	"name": "postprocessing",
-	"version": "6.36.0",
+	"version": "6.36.1",
 	"description": "A post processing library for three.js.",
 	"homepage": "https://github.com/pmndrs/postprocessing",
 	"license": "Zlib",
@@ -85,7 +85,7 @@
 		"watch:js": "node esbuild -w"
 	},
 	"peerDependencies": {
-		"three": ">= 0.157.0 < 0.168.0"
+		"three": ">= 0.157.0 < 0.169.0"
 	},
 	"devDependencies": {
 		"@tweakpane/core": "2.x.x",
@@ -111,7 +111,7 @@
 		"npm-run-all": "4.x.x",
 		"postcss": "8.x.x",
 		"postcss-cli": "11.x.x",
-		"postcss-preset-env": "9.x.x",
+		"postcss-preset-env": "10.x.x",
 		"sass": "1.x.x",
 		"spatial-controls": "6.x.x",
 		"stylelint": "16.x.x",

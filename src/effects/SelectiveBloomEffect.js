@@ -95,14 +95,11 @@ export class SelectiveBloomEffect extends BloomEffect {
 		/**
 		 * A selection of objects.
 		 *
-		 * The default layer of this selection is 11.
-		 *
 		 * @type {Selection}
 		 * @readonly
 		 */
 
 		this.selection = new Selection();
-		this.selection.layer = 11;
 
 		/**
 		 * Backing data for {@link inverted}.
