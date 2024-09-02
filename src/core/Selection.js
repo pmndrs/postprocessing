@@ -1,3 +1,5 @@
+import { IdManager } from "../utils/IdManager.js";
+
 /**
  * An object selection.
  *
@@ -7,15 +9,29 @@
 export class Selection extends Set {
 
 	/**
+	 * An ID manager.
+	 *
+	 * @private
+	 */
+
+	static idManager = /* @__PURE__ */ new IdManager(2);
+
+	/**
 	 * Constructs a new selection.
 	 *
 	 * @param {Iterable<Object3D>} [iterable] - A collection of objects that should be added to this selection.
-	 * @param {Number} [layer=10] - A dedicated render layer for selected objects.
+	 * @param {Number} [layer] - A dedicated render layer for selected objects. Range is `[2, 31]`. Starts at 2 if omitted.
 	 */
 
-	constructor(iterable, layer = 10) {
+	constructor(iterable, layer = Selection.idManager.getNextId()) {
 
 		super();
+
+		/**
+		 * Controls whether objects that are added to this selection should be removed from all other layers.
+		 */
+
+		this.exclusive = false;
 
 		/**
 		 * The current render layer for selected objects.
@@ -24,15 +40,15 @@ export class Selection extends Set {
 		 * @private
 		 */
 
-		this.l = layer;
+		this._layer = layer;
 
-		/**
-		 * Controls whether objects that are added to this selection should be removed from all other layers.
-		 *
-		 * @type {Boolean}
-		 */
+		if(this._layer < 1 || this._layer > 31) {
 
-		this.exclusive = false;
+			console.warn("Layer out of range, resetting to 2");
+			Selection.idManager.reset(2);
+			this._layer = Selection.idManager.getNextId();
+
+		}
 
 		if(iterable !== undefined) {
 
@@ -50,13 +66,13 @@ export class Selection extends Set {
 
 	get layer() {
 
-		return this.l;
+		return this._layer;
 
 	}
 
 	set layer(value) {
 
-		const currentLayer = this.l;
+		const currentLayer = this._layer;
 
 		for(const object of this) {
 
@@ -65,14 +81,14 @@ export class Selection extends Set {
 
 		}
 
-		this.l = value;
+		this._layer = value;
 
 	}
 
 	/**
 	 * Returns the current render layer for selected objects.
 	 *
-	 * The default layer is 10. If this collides with your own custom layers, please change it before rendering!
+	 * The default layer is 2. If this collides with your own custom layers, please change it before rendering!
 	 *
 	 * @deprecated Use layer instead.
 	 * @return {Number} The layer.
