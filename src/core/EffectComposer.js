@@ -14,6 +14,7 @@ import { Timer } from "./Timer.js";
 import { ClearMaskPass } from "../passes/ClearMaskPass.js";
 import { CopyPass } from "../passes/CopyPass.js";
 import { MaskPass } from "../passes/MaskPass.js";
+import { Pass } from "../passes/Pass.js";
 
 /**
  * The EffectComposer may be used in place of a normal WebGLRenderer.
@@ -713,6 +714,8 @@ export class EffectComposer {
 		this.deleteDepthTexture();
 		this.copyPass.dispose();
 		this.timer.dispose();
+
+		Pass.fullscreenGeometry.dispose();
 
 	}
 

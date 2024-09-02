@@ -10,45 +10,6 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-const dummyCamera = /* @__PURE__ */ new Camera();
-let geometry = null;
-
-/**
- * Returns a shared fullscreen triangle.
- *
- * The screen size is 2x2 units (NDC). A triangle needs to be 4x4 units to fill the screen.
- *
- * @private
- * @return {BufferGeometry} The fullscreen geometry.
- */
-
-function getFullscreenTriangle() {
-
-	if(geometry === null) {
-
-		const vertices = new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]);
-		const uvs = new Float32Array([0, 0, 2, 0, 0, 2]);
-		geometry = new BufferGeometry();
-
-		// Added for backward compatibility (setAttribute was added in three r110).
-		if(geometry.setAttribute !== undefined) {
-
-			geometry.setAttribute("position", new BufferAttribute(vertices, 3));
-			geometry.setAttribute("uv", new BufferAttribute(uvs, 2));
-
-		} else {
-
-			geometry.addAttribute("position", new BufferAttribute(vertices, 3));
-			geometry.addAttribute("uv", new BufferAttribute(uvs, 2));
-
-		}
-
-	}
-
-	return geometry;
-
-}
-
 /**
  * An abstract pass.
  *
@@ -63,6 +24,26 @@ function getFullscreenTriangle() {
 export class Pass {
 
 	/**
+	 * A shared fullscreen triangle.
+	 *
+	 * The screen size is 2x2 units (NDC). A triangle needs to be 4x4 units to fill the screen.
+	 * @see https://michaldrobot.com/2014/04/01/gcn-execution-patterns-in-full-screen-passes/
+	 * @type {BufferGeometry}
+	 * @internal
+	 */
+
+	static fullscreenGeometry = /* @__PURE__ */ (() => {
+
+		const vertices = new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]);
+		const uvs = new Float32Array([0, 0, 2, 0, 0, 2]);
+		const geometry = new BufferGeometry();
+		geometry.setAttribute("position", new BufferAttribute(vertices, 3));
+		geometry.setAttribute("uv", new BufferAttribute(uvs, 2));
+		return geometry;
+
+	})();
+
+	/**
 	 * Constructs a new pass.
 	 *
 	 * @param {String} [name] - The name of this pass. Does not have to be unique.
@@ -70,7 +51,7 @@ export class Pass {
 	 * @param {Camera} [camera] - A camera. Fullscreen effect passes don't require a camera.
 	 */
 
-	constructor(name = "Pass", scene = new Scene(), camera = dummyCamera) {
+	constructor(name = "Pass", scene = new Scene(), camera = new Camera()) {
 
 		/**
 		 * The name of this pass.
@@ -268,7 +249,7 @@ export class Pass {
 
 		} else {
 
-			screen = new Mesh(getFullscreenTriangle(), value);
+			screen = new Mesh(Pass.fullscreenGeometry, value);
 			screen.frustumCulled = false;
 
 			if(this.scene === null) {
