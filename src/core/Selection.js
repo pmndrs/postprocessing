@@ -1,5 +1,7 @@
 import { IdManager } from "../utils/IdManager.js";
 
+const idManager = /* @__PURE__ */ new IdManager(2);
+
 /**
  * An object selection.
  *
@@ -9,21 +11,13 @@ import { IdManager } from "../utils/IdManager.js";
 export class Selection extends Set {
 
 	/**
-	 * An ID manager.
-	 *
-	 * @private
-	 */
-
-	static idManager = /* @__PURE__ */ new IdManager(2);
-
-	/**
 	 * Constructs a new selection.
 	 *
 	 * @param {Iterable<Object3D>} [iterable] - A collection of objects that should be added to this selection.
 	 * @param {Number} [layer] - A dedicated render layer for selected objects. Range is `[2, 31]`. Starts at 2 if omitted.
 	 */
 
-	constructor(iterable, layer = Selection.idManager.getNextId()) {
+	constructor(iterable, layer = idManager.getNextId()) {
 
 		super();
 
@@ -45,8 +39,8 @@ export class Selection extends Set {
 		if(this._layer < 1 || this._layer > 31) {
 
 			console.warn("Layer out of range, resetting to 2");
-			Selection.idManager.reset(2);
-			this._layer = Selection.idManager.getNextId();
+			idManager.reset(2);
+			this._layer = idManager.getNextId();
 
 		}
 

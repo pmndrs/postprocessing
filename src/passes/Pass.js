@@ -10,6 +10,17 @@ import {
 	WebGLRenderTarget
 } from "three";
 
+const fullscreenGeometry = /* @__PURE__ */ (() => {
+
+	const vertices = new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]);
+	const uvs = new Float32Array([0, 0, 2, 0, 0, 2]);
+	const geometry = new BufferGeometry();
+	geometry.setAttribute("position", new BufferAttribute(vertices, 3));
+	geometry.setAttribute("uv", new BufferAttribute(uvs, 2));
+	return geometry;
+
+})();
+
 /**
  * An abstract pass.
  *
@@ -32,16 +43,11 @@ export class Pass {
 	 * @internal
 	 */
 
-	static fullscreenGeometry = /* @__PURE__ */ (() => {
+	static get fullscreenGeometry() {
 
-		const vertices = new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]);
-		const uvs = new Float32Array([0, 0, 2, 0, 0, 2]);
-		const geometry = new BufferGeometry();
-		geometry.setAttribute("position", new BufferAttribute(vertices, 3));
-		geometry.setAttribute("uv", new BufferAttribute(uvs, 2));
-		return geometry;
+		return fullscreenGeometry;
 
-	})();
+	}
 
 	/**
 	 * Constructs a new pass.
