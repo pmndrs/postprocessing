@@ -75,7 +75,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	renderer.shadowMap.needsUpdate = true;
 	renderer.shadowMap.enabled = true;
 
-	const container = document.querySelector(".viewport") as HTMLElement;
+	const container = document.querySelector(".viewport")!;
 	container.prepend(renderer.domElement);
 
 	// Camera & Controls
@@ -92,7 +92,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Scene, Lights, Objects
 
 	const scene = new Scene();
-	const skyMap = assets.get("sky") as Texture;
+	const skyMap = assets.get("sky")!;
 	scene.background = skyMap;
 	scene.environment = skyMap;
 	scene.fog = DefaultEnvironment.createFog();
@@ -115,10 +115,10 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Settings
 
-	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
+	const pane = new Pane({ container: container.querySelector(".tp")! });
 	const fpsGraph = Utils.createFPSGraph(pane);
 
-	const texture = effect.texture as Texture;
+	const texture = effect.texture!;
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addBinding(texture, "rotation", { min: 0, max: 2 * Math.PI, step: 0.001 });
 

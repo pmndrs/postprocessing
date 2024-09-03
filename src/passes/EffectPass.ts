@@ -75,7 +75,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 	}
 
-	override get subpasses(): ReadonlyArray<Pass<Material | null>> {
+	override get subpasses(): readonly Pass<Material | null>[] {
 
 		return super.subpasses;
 
@@ -112,9 +112,9 @@ export class EffectPass extends Pass<EffectMaterial> {
 	 * The effects.
 	 */
 
-	get effects(): ReadonlyArray<Effect> {
+	get effects(): readonly Effect[] {
 
-		return this.subpasses as ReadonlyArray<Effect>;
+		return this.subpasses as readonly Effect[];
 
 	}
 
@@ -180,13 +180,13 @@ export class EffectPass extends Pass<EffectMaterial> {
 		data.shaderParts.set(Section.FRAGMENT_HEAD_GDATA, data.createGDataStructDeclaration());
 		data.shaderParts.set(Section.FRAGMENT_MAIN_GDATA, data.createGDataStructInitialization());
 
-		const fragmentHead = data.shaderParts.get(Section.FRAGMENT_HEAD_EFFECTS) as string;
+		const fragmentHead = data.shaderParts.get(Section.FRAGMENT_HEAD_EFFECTS)!;
 		data.shaderParts.set(Section.FRAGMENT_HEAD_EFFECTS, fragmentHead + data.createBlendFunctions());
 
 		if(data.colorSpace === SRGBColorSpace) {
 
 			// Convert back to linear.
-			const fragmentMainImage = data.shaderParts.get(Section.FRAGMENT_MAIN_IMAGE) as string;
+			const fragmentMainImage = data.shaderParts.get(Section.FRAGMENT_MAIN_IMAGE)!;
 			data.shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, fragmentMainImage + "color0 = sRGBToLinear(color0);\n\t");
 
 		}
@@ -194,7 +194,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 		// Check if any effect transforms UVs in the fragment shader.
 		if(data.uvTransformation) {
 
-			const fragmentMainUv = data.shaderParts.get(Section.FRAGMENT_MAIN_UV) as string;
+			const fragmentMainUv = data.shaderParts.get(Section.FRAGMENT_MAIN_UV)!;
 			data.shaderParts.set(Section.FRAGMENT_MAIN_UV, "vec2 transformedUv = vUv;\n" + fragmentMainUv);
 			data.defines.set("UV", "transformedUv");
 
@@ -316,7 +316,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 			const buffer = useDefaultBuffer ? input.defaultBuffer?.value : input.buffers.get(component)?.value;
 
 			gBufferEntries.push([
-				gBufferConfig.gBufferStructFields.get(component) as string,
+				gBufferConfig.gBufferStructFields.get(component)!,
 				buffer ?? null
 			]);
 

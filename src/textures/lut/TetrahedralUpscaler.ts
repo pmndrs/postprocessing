@@ -253,7 +253,7 @@ export class TetrahedralUpscaler {
 	static expand(data: Uint8Array | Float32Array, size: number): ArrayBufferView {
 
 		const originalSize = Math.cbrt(data.length / 4);
-		const array = new (<typeof Uint8Array | typeof Float32Array> data.constructor)(size ** 3 * 4);
+		const array = new (data.constructor as typeof Uint8Array | typeof Float32Array)(size ** 3 * 4);
 		const maxValue = (data instanceof Uint8Array) ? 255 : 1.0;
 		const rgb = new Float32Array(3);
 		const sizeSq = size ** 2;

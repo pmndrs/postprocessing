@@ -289,7 +289,7 @@ export class GeometryPass extends Pass implements Selective {
 	 * Returns the G-Buffer texture configs that correspond to the current G-Buffer components.
 	 */
 
-	private get textureConfigs(): Array<[string, GBufferTextureConfig]> {
+	private get textureConfigs(): [string, GBufferTextureConfig][] {
 
 		return Array.from(this.gBufferConfig.textureConfigs).filter(x => this.gBufferComponents.has(x[0]));
 
@@ -423,7 +423,7 @@ export class GeometryPass extends Pass implements Selective {
 
 			if(entry[1].isColorBuffer && indices.has(entry[0])) {
 
-				const index = indices.get(entry[0]) as number;
+				const index = indices.get(entry[0])!;
 				gBuffer.textures[index].colorSpace = colorSpace;
 
 			}

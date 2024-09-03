@@ -71,7 +71,7 @@ export class LookupTexture extends Data3DTexture {
 
 			const workerURL = URL.createObjectURL(new Blob([workerProgram], { type: "text/javascript" }));
 			const worker = new Worker(workerURL);
-			worker.addEventListener("error", (event) => reject(event.error));
+			worker.addEventListener("error", (event) => reject(event.error as Error));
 			worker.addEventListener("message", (event: MessageEvent<ArrayBufferView>) => {
 
 				const lut = new LookupTexture(event.data, size);

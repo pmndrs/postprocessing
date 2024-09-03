@@ -1,4 +1,4 @@
-import { WebGLRenderTarget, Texture } from "three";
+import { WebGLRenderTarget } from "three";
 import { Resource } from "./Resource.js";
 import { TextureResource } from "./TextureResource.js";
 
@@ -26,7 +26,7 @@ export class RenderTargetResource extends Resource<WebGLRenderTarget | null> {
 
 		super(value);
 
-		this.texture = new TextureResource(this.value?.texture as Texture);
+		this.texture = new TextureResource(this.value?.texture);
 
 	}
 
@@ -39,8 +39,7 @@ export class RenderTargetResource extends Resource<WebGLRenderTarget | null> {
 	override set value(value: WebGLRenderTarget | null) {
 
 		super.value = value;
-
-		this.texture.value = value?.texture as Texture;
+		this.texture.value = value !== null ? value.texture : null;
 
 	}
 

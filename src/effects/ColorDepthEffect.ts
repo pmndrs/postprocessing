@@ -35,7 +35,7 @@ export class ColorDepthEffect extends Effect {
 	 * The current amount of bits.
 	 */
 
-	private _bits: number = 0;
+	private _bits = 0;
 
 	/**
 	 * Constructs a new color depth effect.

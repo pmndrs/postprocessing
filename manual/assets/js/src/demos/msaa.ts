@@ -61,7 +61,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	renderer.shadowMap.needsUpdate = true;
 	renderer.shadowMap.enabled = true;
 
-	const container = document.querySelector(".viewport") as HTMLElement;
+	const container = document.querySelector(".viewport")!;
 	container.prepend(renderer.domElement);
 
 	// Camera & Controls
@@ -79,7 +79,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Scene, Lights, Objects
 
 	const scene = new Scene();
-	scene.background = assets.get("sky") as Texture;
+	scene.background = assets.get("sky")!;
 	scene.add(CornellBox.createLights());
 	scene.add(CornellBox.createEnvironment());
 	scene.add(CornellBox.createActors());
@@ -100,7 +100,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Settings
 
-	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
+	const pane = new Pane({ container: container.querySelector(".tp")! });
 	const fpsGraph = Utils.createFPSGraph(pane);
 
 	const folder = pane.addFolder({ title: "Settings" });

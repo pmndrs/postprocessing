@@ -57,7 +57,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	});
 
 	renderer.debug.checkShaderErrors = Utils.isLocalhost;
-	const container = document.querySelector(".viewport") as HTMLElement;
+	const container = document.querySelector(".viewport")!;
 	container.prepend(renderer.domElement);
 
 	// Camera & Controls
@@ -74,7 +74,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Scene, Lights, Objects
 
 	const scene = new Scene();
-	const skyMap = assets.get("sky") as Texture;
+	const skyMap = assets.get("sky")!;
 	scene.background = skyMap;
 	scene.environment = skyMap;
 	scene.fog = DefaultEnvironment.createFog();
@@ -96,7 +96,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Settings
 
-	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
+	const pane = new Pane({ container: container.querySelector(".tp")! });
 	const fpsGraph = Utils.createFPSGraph(pane);
 
 	const folder = pane.addFolder({ title: "Settings" });

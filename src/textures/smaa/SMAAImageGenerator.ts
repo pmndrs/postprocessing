@@ -27,7 +27,7 @@ function generate(useCache = true): Promise<string[]> {
 
 	return new Promise((resolve, reject) => {
 
-		worker.addEventListener("error", (event) => reject(event.error));
+		worker.addEventListener("error", (event) => reject(event.error as Error));
 		worker.addEventListener("message", (event: MessageEvent<SMAAImageData>) => {
 
 			const searchImageData = RawImageData.from(event.data.searchImageData);
@@ -122,8 +122,8 @@ export class SMAAImageGenerator {
 			areaImage.addEventListener("load", () => manager.itemEnd("smaa-area"));
 			manager.itemStart("smaa-search");
 			manager.itemStart("smaa-area");
-			searchImage.src = urls[0] as string;
-			areaImage.src = urls[1] as string;
+			searchImage.src = urls[0]!;
+			areaImage.src = urls[1]!;
 
 		});
 

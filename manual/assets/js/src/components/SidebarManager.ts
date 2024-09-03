@@ -10,7 +10,7 @@ export class SidebarManager implements Component {
 
 		const sidebar = document.querySelector(".sidebar");
 		const sidebarButtonOpen = document.querySelector(".sidebar-button-open");
-		const sidebarButtonClose = document.querySelector(".sidebar-button-close") as HTMLElement;
+		const sidebarButtonClose = document.querySelector(".sidebar-button-close")!;
 
 		if(sidebar === null || sidebarButtonOpen === null || sidebarButtonClose === null) {
 

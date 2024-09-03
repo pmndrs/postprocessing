@@ -151,8 +151,8 @@ export class SMAASearchImageData {
 
 				if(edges.has(s) && edges.has(t)) {
 
-					const e1 = edges.get(s) as number[];
-					const e2 = edges.get(t) as number[];
+					const e1 = edges.get(s)!;
+					const e2 = edges.get(t)!;
 
 					const i = y * width + x;
 

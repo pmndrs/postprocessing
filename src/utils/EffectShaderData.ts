@@ -153,11 +153,11 @@ export class EffectShaderData implements ShaderData {
 		let vertexShader = effect.vertexShader;
 
 		const shaderParts = this.shaderParts;
-		let fragmentHead = shaderParts.get(Section.FRAGMENT_HEAD_EFFECTS) as string;
-		let fragmentMainUv = shaderParts.get(Section.FRAGMENT_MAIN_UV) as string;
-		let fragmentMainImage = shaderParts.get(Section.FRAGMENT_MAIN_IMAGE) as string;
-		let vertexHead = shaderParts.get(Section.VERTEX_HEAD) as string;
-		let vertexMainSupport = shaderParts.get(Section.VERTEX_MAIN_SUPPORT) as string;
+		let fragmentHead = shaderParts.get(Section.FRAGMENT_HEAD_EFFECTS)!;
+		let fragmentMainUv = shaderParts.get(Section.FRAGMENT_MAIN_UV)!;
+		let fragmentMainImage = shaderParts.get(Section.FRAGMENT_MAIN_IMAGE)!;
+		let vertexHead = shaderParts.get(Section.VERTEX_HEAD)!;
+		let vertexMainSupport = shaderParts.get(Section.VERTEX_MAIN_SUPPORT)!;
 
 		const varyings = new Set<string>();
 		const names = new Set<string>();
@@ -258,8 +258,8 @@ export class EffectShaderData implements ShaderData {
 		const shaders = new Map([["fragment", fragmentShader], ["vertex", vertexShader]]);
 		prefixSubstrings(prefix, names, this.defines);
 		prefixSubstrings(prefix, names, shaders);
-		fragmentShader = shaders.get("fragment") as string;
-		vertexShader = shaders.get("vertex") as string;
+		fragmentShader = shaders.get("fragment")!;
+		vertexShader = shaders.get("vertex")!;
 
 		// Collect unique blend modes.
 		const blendMode = effect.blendMode;
@@ -268,7 +268,7 @@ export class EffectShaderData implements ShaderData {
 		if(effect.hasMainImageFunction) {
 
 			// Already checked param existence during effect validation.
-			const gDataParamName = fragmentShader.match(/GData\s+(\w+)/)![1];
+			const gDataParamName = /GData\s+(\w+)/.exec(fragmentShader)![1];
 
 			// Detect GData usage.
 			for(const value of Object.values(GData)) {

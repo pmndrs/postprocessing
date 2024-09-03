@@ -80,7 +80,7 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 	override checkRequirements(renderer: WebGLRenderer): void {
 
 		const gl = renderer.getContext();
-		const renderable = gl.getExtension("EXT_color_buffer_float") || gl.getExtension("EXT_color_buffer_half_float");
+		const renderable = gl.getExtension("EXT_color_buffer_float") ?? gl.getExtension("EXT_color_buffer_half_float");
 
 		if(!renderable) {
 

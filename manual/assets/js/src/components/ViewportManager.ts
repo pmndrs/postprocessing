@@ -120,7 +120,7 @@ export class ViewportManager implements Component, EventListenerObject {
 
 	private handleScroll(event: Event): void {
 
-		if(this.viewport !== null && this.viewport.matches(":hover")) {
+		if(this.viewport?.matches(":hover") === true) {
 
 			event.preventDefault();
 

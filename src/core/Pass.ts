@@ -299,7 +299,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 * - {@link attached}
 	 */
 
-	get subpasses(): ReadonlyArray<Pass<Material | null>> {
+	get subpasses(): readonly Pass<Material | null>[] {
 
 		return this._subpasses;
 
@@ -362,7 +362,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		try {
 
-			if(value !== null && value.capabilities !== undefined) {
+			if(value?.capabilities !== undefined) {
 
 				this.checkRequirements(value);
 
@@ -448,11 +448,11 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		if(this.screen !== null) {
 
-			this.screen.material = value as Material;
+			this.screen.material = value!;
 
 		} else {
 
-			this.screen = new Mesh(Pass.fullscreenGeometry, value as Material);
+			this.screen = new Mesh(Pass.fullscreenGeometry, value!);
 			this.screen.frustumCulled = false;
 			this.fullscreenScene = new Scene();
 			this.fullscreenCamera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
@@ -657,7 +657,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		if(this.renderer !== null && this.fullscreenMaterial !== null) {
 
-			this.renderer.render(this.fullscreenScene as Scene, this.fullscreenCamera as Camera);
+			this.renderer.render(this.fullscreenScene!, this.fullscreenCamera!);
 
 		}
 

@@ -149,7 +149,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	renderer.debug.checkShaderErrors = Utils.isLocalhost;
 	renderer.setClearAlpha(0);
 
-	const container = document.querySelector(".viewport") as HTMLElement;
+	const container = document.querySelector(".viewport")!;
 	container.prepend(renderer.domElement);
 
 	// Camera & Controls
@@ -201,7 +201,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Settings
 
-	const pane = new Pane({ container: container.querySelector(".tp") as HTMLElement });
+	const pane = new Pane({ container: container.querySelector(".tp")! });
 	const fpsGraph = Utils.createFPSGraph(pane);
 
 	const params = {

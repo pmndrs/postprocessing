@@ -175,7 +175,7 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 	 * A list of all registered passes.
 	 */
 
-	get passes(): ReadonlyArray<Pass<Material | null>> {
+	get passes(): readonly Pass<Material | null>[] {
 
 		return this._passes;
 

@@ -123,7 +123,7 @@ export class IOManager {
 
 				if(indices.has(GBuffer.COLOR)) {
 
-					const index = indices.get(GBuffer.COLOR) as number;
+					const index = indices.get(GBuffer.COLOR)!;
 					pass.input.defaultBuffer = previousOutputBuffer.textures[index];
 
 				} else {
@@ -387,7 +387,7 @@ export class IOManager {
 
 			} else if(indices.has(component)) {
 
-				const index = indices.get(component) as number;
+				const index = indices.get(component)!;
 				pass.input.buffers.set(component, new TextureResource(geoPass.gBuffer.textures[index]));
 
 			}
