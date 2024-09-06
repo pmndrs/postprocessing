@@ -121,7 +121,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const gBufferOptions = Object.assign({ NONE: "" }, Utils.enumToRecord(GBuffer));
 	bufferDebugPass.bufferFocus = gBufferOptions.NONE;
 
-	const pane = new Pane({ container: container.querySelector(".tp")! });
+	const pane = new Pane({ container: container.querySelector<HTMLElement>(".tp")! });
 	const fpsGraph = Utils.createFPSGraph(pane);
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addBinding(bufferDebugPass, "bufferFocus", { options: gBufferOptions });

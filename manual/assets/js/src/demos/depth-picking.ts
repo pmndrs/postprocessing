@@ -135,11 +135,11 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	}
 
-	container.addEventListener("pointermove", (e) => void pickDepth(e), { passive: true });
+	container.addEventListener("pointermove", (e) => void pickDepth(e as PointerEvent), { passive: true });
 
 	// Settings
 
-	const pane = new Pane({ container: container.querySelector(".tp")! });
+	const pane = new Pane({ container: container.querySelector<HTMLElement>(".tp")! });
 	const fpsGraph = Utils.createFPSGraph(pane);
 
 	// Resize Handler

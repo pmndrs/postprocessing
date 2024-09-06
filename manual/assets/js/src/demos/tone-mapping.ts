@@ -98,7 +98,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Settings
 
-	const pane = new Pane({ container: container.querySelector(".tp")! });
+	const pane = new Pane({ container: container.querySelector<HTMLElement>(".tp")! });
 	const fpsGraph = Utils.createFPSGraph(pane);
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addBinding(renderer, "toneMappingExposure", { min: 0, max: 4, step: 1e-3 });

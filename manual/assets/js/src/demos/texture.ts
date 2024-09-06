@@ -115,7 +115,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Settings
 
-	const pane = new Pane({ container: container.querySelector(".tp")! });
+	const pane = new Pane({ container: container.querySelector<HTMLElement>(".tp")! });
 	const fpsGraph = Utils.createFPSGraph(pane);
 
 	const texture = effect.texture!;
