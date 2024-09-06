@@ -136,6 +136,10 @@ export class ToneMappingEffect extends Effect {
 					this.defines.set("toneMapping(texel)", "ReinhardToneMapping(texel)");
 					break;
 
+				case ToneMappingMode.CINEON:
+					this.defines.set("toneMapping(texel)", "CineonToneMapping(texel)");
+					break;
+
 				case ToneMappingMode.OPTIMIZED_CINEON:
 					this.defines.set("toneMapping(texel)", "OptimizedCineonToneMapping(texel)");
 					break;
