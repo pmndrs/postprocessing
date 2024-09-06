@@ -27,7 +27,7 @@ export enum ToneMapping {
 	 * @see http://filmicworlds.com/blog/filmic-tonemapping-operators
 	 */
 
-	OPTIMIZED_CINEON,
+	CINEON,
 
 	/**
 	 * ACES filmic tone mapping with a scale of 1.0/0.6.
