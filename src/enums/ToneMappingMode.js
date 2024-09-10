@@ -21,8 +21,8 @@ export const ToneMappingMode = {
 	REINHARD2_ADAPTIVE: 3,
 	UNCHARTED2: 4,
 	OPTIMIZED_CINEON: 5,
-	CINEON: 6,
-	ACES_FILMIC: 7,
-	AGX: 8,
-	NEUTRAL: 9
+	CINEON: 5,
+	ACES_FILMIC: 6,
+	AGX: 7,
+	NEUTRAL: 8
 };
