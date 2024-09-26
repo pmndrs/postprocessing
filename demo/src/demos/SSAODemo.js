@@ -182,8 +182,8 @@ export class SSAODemo extends PostProcessingDemo {
 			rings: 7,
 			distanceThreshold: 0.02,	// Render up to a distance of ~20 world units
 			distanceFalloff: 0.0025,	// with an additional ~2.5 units of falloff.
-			rangeThreshold: 0.0003,		// Occlusion proximity of ~0.3 world units
-			rangeFalloff: 0.0001,			// with ~0.1 units of falloff.
+			rangeThreshold: 0.0003, // Occlusion proximity of ~0.3 world units
+			rangeFalloff: 0.0001, // with ~0.1 units of falloff.
 			luminanceInfluence: 0.7,
 			minRadiusScale: 0.33,
 			radius: 0.1,
