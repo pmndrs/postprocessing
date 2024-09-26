@@ -17,4 +17,5 @@ export enum VignetteTechnique {
 	 */
 
 	ESKIL
+
 }
