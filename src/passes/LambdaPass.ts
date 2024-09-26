@@ -12,7 +12,7 @@ export class LambdaPass extends Pass {
 	 * The function to execute.
 	 */
 
-	f: CallableFunction;
+	f: () => void;
 
 	/**
 	 * Constructs a new lambda pass.
@@ -20,7 +20,7 @@ export class LambdaPass extends Pass {
 	 * @param f - A function.
 	 */
 
-	constructor(f: CallableFunction) {
+	constructor(f: () => void) {
 
 		super("LambdaPass");
 		this.f = f;
