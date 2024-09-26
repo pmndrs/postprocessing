@@ -55,9 +55,6 @@
 			"./test/**/*"
 		]
 	},
-	"eslintConfig": {
-		"extends": "aether"
-	},
 	"scripts": {
 		"ava": "ava",
 		"build": "npm run clean && run-p build:css build:js:min build:dts",
@@ -73,7 +70,7 @@
 		"hugo": "hugo -s manual --minify",
 		"lint": "run-p lint:*",
 		"lint:css": "stylelint --fix manual/assets/css/src",
-		"lint:js": "eslint --ext .js --fix src demo/src manual/assets/js/src",
+		"lint:js": "eslint --fix src demo/src manual/assets/js/src",
 		"postcss": "postcss manual/assets/css/dist/index.css -o manual/assets/css/dist/index.css -c manual",
 		"prepublishOnly": "npm test",
 		"prewatch": "run-s clean copy build:css build:js",
@@ -81,7 +78,6 @@
 		"start": "hugo server -s manual -e development",
 		"watch": "run-p watch:* start",
 		"watch:css": "sass --no-source-map -I manual/assets/css/src/values manual/assets/css/src:manual/assets/css/dist -w",
-		"watch:eslint": "esw -w --ext .js --color src demo/src manual/assets/js/src",
 		"watch:js": "node esbuild -w"
 	},
 	"peerDependencies": {
@@ -90,8 +86,8 @@
 	"devDependencies": {
 		"@tweakpane/core": "2.x.x",
 		"@types/three": "0.x.x",
-		"@typescript-eslint/eslint-plugin": "7.x.x",
-		"@typescript-eslint/parser": "7.x.x",
+		"@typescript-eslint/eslint-plugin": "8.x.x",
+		"@typescript-eslint/parser": "8.x.x",
 		"autoprefixer": "10.x.x",
 		"ava": "6.x.x",
 		"cpy-cli": "5.x.x",
@@ -103,9 +99,8 @@
 		"esdoc": "1.x.x",
 		"esdoc-importpath-plugin": "1.x.x",
 		"esdoc-standard-plugin": "1.x.x",
-		"eslint": "8.x.x",
-		"eslint-config-aether": "1.x.x",
-		"eslint-watch": "8.x.x",
+		"eslint": "9.x.x",
+		"eslint-config-aether": "2.x.x",
 		"gzipper": "8.x.x",
 		"hugo-bin": "0.x.x",
 		"npm-run-all": "4.x.x",
