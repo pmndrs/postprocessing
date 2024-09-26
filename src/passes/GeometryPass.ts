@@ -62,7 +62,7 @@ export interface GeometryPassOptions {
 	/**
 	 * The type of the color buffer.
 	 *
-	 * @defaultValue {@link UnsignedByteType}
+	 * @defaultValue UnsignedByteType
 	 */
 
 	frameBufferType?: TextureDataType;
