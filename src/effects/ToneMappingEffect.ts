@@ -3,6 +3,15 @@ import { Effect } from "./Effect.js";
 
 import fragmentShader from "./shaders/tone-mapping.frag";
 
+const toneMappingOperators = new Map<ToneMapping, string>([
+	[ToneMapping.LINEAR, "LinearToneMapping(texel)"],
+	[ToneMapping.REINHARD, "ReinhardToneMapping(texel)"],
+	[ToneMapping.CINEON, "CineonToneMapping(texel)"],
+	[ToneMapping.ACES_FILMIC, "ACESFilmicToneMapping(texel)"],
+	[ToneMapping.AGX, "AgXToneMapping(texel)"],
+	[ToneMapping.NEUTRAL, "NeutralToneMapping(texel)"]
+]);
+
 /**
  * ToneMappingEffect options.
  *
@@ -62,39 +71,16 @@ export class ToneMappingEffect extends Effect {
 			defines.clear();
 			defines.set("TONE_MAPPING", value);
 
-			// Use one of three's built-in tone mapping operators.
-			switch(value) {
+			const operator = toneMappingOperators.get(value);
 
-				case ToneMapping.LINEAR:
-					defines.set("toneMapping(texel)", "LinearToneMapping(texel)");
-					break;
+			if(operator === undefined) {
 
-				case ToneMapping.REINHARD:
-					defines.set("toneMapping(texel)", "ReinhardToneMapping(texel)");
-					break;
-
-				case ToneMapping.CINEON:
-					defines.set("toneMapping(texel)", "CineonToneMapping(texel)");
-					break;
-
-				case ToneMapping.ACES_FILMIC:
-					defines.set("toneMapping(texel)", "ACESFilmicToneMapping(texel)");
-					break;
-
-				case ToneMapping.AGX:
-					defines.set("toneMapping(texel)", "AgXToneMapping(texel)");
-					break;
-
-				case ToneMapping.NEUTRAL:
-					defines.set("toneMapping(texel)", "NeutralToneMapping(texel)");
-					break;
-
-				default:
-					defines.set("toneMapping(texel)", "texel");
-					break;
+				throw new Error(`Invalid tone mapping: ${value}`);
 
 			}
 
+			// Use one of three's built-in tone mapping operators.
+			defines.set("toneMapping(texel)", operator);
 			this.setChanged();
 
 		}
