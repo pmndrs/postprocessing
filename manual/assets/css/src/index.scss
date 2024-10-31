@@ -1,3 +1,4 @@
+@use "sass:meta";
 @use "breakpoints";
 @use "fonts";
 @use "keyframes";
@@ -5,13 +6,13 @@
 @use "screen/default";
 
 @media (min-width: breakpoints.$small) {
-	@import "screen/small";
+	@include meta.load-css("screen/small");
 }
 
 @media (min-width: breakpoints.$medium) {
-	@import "screen/medium";
+	@include meta.load-css("screen/medium");
 }
 
 @media (min-width: breakpoints.$large) {
-	@import "screen/large";
+	@include meta.load-css("screen/large");
 }
