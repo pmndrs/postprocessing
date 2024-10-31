@@ -379,11 +379,18 @@ export class GeometryPass extends Pass implements Selective {
 			}
 
 			this.registeredMaterials.add(material);
-			const onBeforeCompile = material.onBeforeCompile.bind(this);
+
+			/* eslint-disable @typescript-eslint/unbound-method */
+			const onBeforeCompile = material.onBeforeCompile;
 
 			material.onBeforeCompile = (shader: WebGLProgramParametersWithUniforms, renderer: WebGLRenderer) => {
 
-				onBeforeCompile(shader, renderer);
+				// Workaround for troika-three-text, see #660.
+				if(material.onBeforeCompile !== onBeforeCompile) {
+
+					onBeforeCompile.call(material, shader, renderer);
+
+				}
 
 				if(this.gBuffer === null) {
 
