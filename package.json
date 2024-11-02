@@ -51,9 +51,6 @@
 	"publishConfig": {
 		"tag": "beta"
 	},
-	"eslintConfig": {
-		"extends": "aether/typescript"
-	},
 	"scripts": {
 		"ava": "ava",
 		"build": "run-p build:css build:js:min build:dts",
