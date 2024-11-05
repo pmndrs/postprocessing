@@ -14,7 +14,7 @@ weight: 30
 This library requires the peer dependency [three](https://github.com/mrdoob/three.js/). Check the [release notes](https://github.com/vanruesc/postprocessing/releases) for supported versions.
 
 ```sh
-npm install three postprocessing
+npm install postprocessing
 ```
 
 ## Usage
