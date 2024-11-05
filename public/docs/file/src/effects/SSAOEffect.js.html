@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/effects/SSAOEffect.js | postprocessing</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="A post processing library for three.js."><meta property="twitter:card" content="summary"><meta property="twitter:title" content="postprocessing"><meta property="twitter:description" content="A post processing library for three.js."></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/pmndrs/postprocessing"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectShaderData.js~EffectShaderData.html">EffectShaderData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/GaussKernel.js~GaussKernel.html">GaussKernel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/OverrideMaterialManager.js~OverrideMaterialManager.html">OverrideMaterialManager</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Resolution.js~Resolution.html">Resolution</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Selection.js~Selection.html">Selection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Timer.js~Timer.html">Timer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/ImmutableTimer.js~ImmutableTimer.html">ImmutableTimer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Initializable.js~Initializable.html">Initializable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects">effects</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html">BloomEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BokehEffect.js~BokehEffect.html">BokehEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BrightnessContrastEffect.js~BrightnessContrastEffect.html">BrightnessContrastEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ChromaticAberrationEffect.js~ChromaticAberrationEffect.html">ChromaticAberrationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ColorAverageEffect.js~ColorAverageEffect.html">ColorAverageEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ColorDepthEffect.js~ColorDepthEffect.html">ColorDepthEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/DepthEffect.js~DepthEffect.html">DepthEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect.html">DepthOfFieldEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/DotScreenEffect.js~DotScreenEffect.html">DotScreenEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html">Effect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/FXAAEffect.js~FXAAEffect.html">FXAAEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GammaCorrectionEffect.js~GammaCorrectionEffect.html">GammaCorrectionEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GlitchEffect.js~GlitchEffect.html">GlitchEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html">GodRaysEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GridEffect.js~GridEffect.html">GridEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/HueSaturationEffect.js~HueSaturationEffect.html">HueSaturationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/LUT1DEffect.js~LUT1DEffect.html">LUT1DEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/LUT3DEffect.js~LUT3DEffect.html">LUT3DEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/LensDistortionEffect.js~LensDistortionEffect.html">LensDistortionEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/NoiseEffect.js~NoiseEffect.html">NoiseEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html">OutlineEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/PixelationEffect.js~PixelationEffect.html">PixelationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html">RealisticBokehEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SMAAEffect.js~SMAAEffect.html">SMAAEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SSAOEffect.js~SSAOEffect.html">SSAOEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ScanlineEffect.js~ScanlineEffect.html">ScanlineEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html">SelectiveBloomEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SepiaEffect.js~SepiaEffect.html">SepiaEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ShockWaveEffect.js~ShockWaveEffect.html">ShockWaveEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/TextureEffect.js~TextureEffect.html">TextureEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/TiltShiftEffect.js~TiltShiftEffect.html">TiltShiftEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html">ToneMappingEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/VignetteEffect.js~VignetteEffect.html">VignetteEffect</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects-blending">effects/blending</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/blending/BlendMode.js~BlendMode.html">BlendMode</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#enums">enums</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-BlendFunction">BlendFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ColorChannel">ColorChannel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DepthCopyMode">DepthCopyMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DepthTestStrategy">DepthTestStrategy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EdgeDetectionMode">EdgeDetectionMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EffectAttribute">EffectAttribute</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EffectShaderSection">EffectShaderSection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GlitchMode">GlitchMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-KernelSize">KernelSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LUTOperation">LUTOperation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MaskFunction">MaskFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-PredicationMode">PredicationMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SMAAPreset">SMAAPreset</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ToneMappingMode">ToneMappingMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-VignetteTechnique">VignetteTechnique</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-WebGLExtension">WebGLExtension</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#loaders">loaders</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/loaders/LUT3dlLoader.js~LUT3dlLoader.html">LUT3dlLoader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/loaders/LUTCubeLoader.js~LUTCubeLoader.html">LUTCubeLoader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/loaders/SMAAImageLoader.js~SMAAImageLoader.html">SMAAImageLoader</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#materials">materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/AdaptiveLuminanceMaterial.js~AdaptiveLuminanceMaterial.html">AdaptiveLuminanceMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/BokehMaterial.js~BokehMaterial.html">BokehMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/BoxBlurMaterial.js~BoxBlurMaterial.html">BoxBlurMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CircleOfConfusionMaterial.js~CircleOfConfusionMaterial.html">CircleOfConfusionMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthCopyMaterial.js~DepthCopyMaterial.html">DepthCopyMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthDownsamplingMaterial.js~DepthDownsamplingMaterial.html">DepthDownsamplingMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html">DepthMaskMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DownsamplingMaterial.js~DownsamplingMaterial.html">DownsamplingMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial.html">EdgeDetectionMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GaussianBlurMaterial.js~GaussianBlurMaterial.html">GaussianBlurMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/KawaseBlurMaterial.js~KawaseBlurMaterial.html">KawaseBlurMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/MaskMaterial.js~MaskMaterial.html">MaskMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/OutlineMaterial.js~OutlineMaterial.html">OutlineMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/SSAOMaterial.js~SSAOMaterial.html">SSAOMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/TiltShiftBlurMaterial.js~TiltShiftBlurMaterial.html">TiltShiftBlurMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/UpsamplingMaterial.js~UpsamplingMaterial.html">UpsamplingMaterial</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#passes">passes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/AdaptiveLuminancePass.js~AdaptiveLuminancePass.html">AdaptiveLuminancePass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BoxBlurPass.js~BoxBlurPass.html">BoxBlurPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearMaskPass.js~ClearMaskPass.html">ClearMaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/CopyPass.js~CopyPass.html">CopyPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthCopyPass.js~DepthCopyPass.html">DepthCopyPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass.html">DepthDownsamplingPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthPass.js~DepthPass.html">DepthPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthPickingPass.js~DepthPickingPass.html">DepthPickingPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/EffectPass.js~EffectPass.html">EffectPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/GaussianBlurPass.js~GaussianBlurPass.html">GaussianBlurPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/KawaseBlurPass.js~KawaseBlurPass.html">KawaseBlurPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/LambdaPass.js~LambdaPass.html">LambdaPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/LuminancePass.js~LuminancePass.html">LuminancePass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/MaskPass.js~MaskPass.html">MaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/MipmapBlurPass.js~MipmapBlurPass.html">MipmapBlurPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/NormalPass.js~NormalPass.html">NormalPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html">Pass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ShaderPass.js~ShaderPass.html">ShaderPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/TiltShiftBlurPass.js~TiltShiftBlurPass.html">TiltShiftBlurPass</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#textures">textures</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/NoiseTexture.js~NoiseTexture.html">NoiseTexture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/RawImageData.js~RawImageData.html">RawImageData</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#textures-lut">textures/lut</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/lut/LookupTexture.js~LookupTexture.html">LookupTexture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/lut/TetrahedralUpscaler.js~TetrahedralUpscaler.html">TetrahedralUpscaler</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#textures-smaa">textures/smaa</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/smaa/SMAAAreaImageData.js~SMAAAreaImageData.html">SMAAAreaImageData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/smaa/SMAAImageGenerator.js~SMAAImageGenerator.html">SMAAImageGenerator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/smaa/SMAASearchImageData.js~SMAASearchImageData.html">SMAASearchImageData</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/utils/IdManager.js~IdManager.html">IdManager</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/effects/SSAOEffect.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { BasicDepthPacking, Color, RepeatWrapping, RGBAFormat, Uniform, WebGLRenderTarget } from &quot;three&quot;;
+import { Resolution } from &quot;../core/Resolution.js&quot;;
+import { BlendFunction } from &quot;../enums/BlendFunction.js&quot;;
+import { EffectAttribute } from &quot;../enums/EffectAttribute.js&quot;;
+import { NoiseTexture } from &quot;../textures/NoiseTexture.js&quot;;
+import { SSAOMaterial } from &quot;../materials/SSAOMaterial.js&quot;;
+import { DepthDownsamplingPass } from &quot;../passes/DepthDownsamplingPass.js&quot;;
+import { ShaderPass } from &quot;../passes/ShaderPass.js&quot;;
+import { Effect } from &quot;./Effect.js&quot;;
+
+import fragmentShader from &quot;./glsl/ssao.frag&quot;;
+
+const NOISE_TEXTURE_SIZE = 64;
+
+/**
+ * A Screen Space Ambient Occlusion effect.
+ *
+ * Based on &quot;Scalable Ambient Obscurance&quot; by Morgan McGuire et al.
+ * and &quot;Depth-aware upsampling experiments&quot; by Eleni Maria Stea:
+ * https://research.nvidia.com/publication/scalable-ambient-obscurance
+ * https://eleni.mutantstargoat.com/hikiko/on-depth-aware-upsampling
+ *
+ * The view position calculation is based on a shader by Norbert Nopper:
+ * https://github.com/McNopper/OpenGL/blob/master/Example28/shader/ssao.frag.glsl
+ */
+
+export class SSAOEffect extends Effect {
+
+	/**
+	 * Constructs a new SSAO effect.
+	 *
+	 * @todo Move normalBuffer to options.
+	 * @param {Camera} [camera] - The main camera.
+	 * @param {Texture} [normalBuffer] - A texture that contains the scene normals.
+	 * @param {Object} [options] - The options.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
+	 * @param {Boolean} [options.distanceScaling=true] - Deprecated.
+	 * @param {Boolean} [options.depthAwareUpsampling=true] - Enables or disables depth-aware upsampling. Has no effect if WebGL 2 is not supported.
+	 * @param {Texture} [options.normalDepthBuffer=null] - Deprecated.
+	 * @param {Number} [options.samples=9] - The amount of samples per pixel. Should not be a multiple of the ring count.
+	 * @param {Number} [options.rings=7] - The amount of spiral turns in the occlusion sampling pattern. Should be a prime number.
+	 * @param {Number} [options.worldDistanceThreshold] - The world distance threshold at which the occlusion effect starts to fade out.
+	 * @param {Number} [options.worldDistanceFalloff] - The world distance falloff. Influences the smoothness of the occlusion cutoff.
+	 * @param {Number} [options.worldProximityThreshold] - The world proximity threshold at which the occlusion starts to fade out.
+	 * @param {Number} [options.worldProximityFalloff] - The world proximity falloff. Influences the smoothness of the proximity cutoff.
+	 * @param {Number} [options.distanceThreshold=0.97] - Deprecated.
+	 * @param {Number} [options.distanceFalloff=0.03] - Deprecated.
+	 * @param {Number} [options.rangeThreshold=0.0005] - Deprecated.
+	 * @param {Number} [options.rangeFalloff=0.001] - Deprecated.
+	 * @param {Number} [options.minRadiusScale=0.1] - The minimum radius scale.
+	 * @param {Number} [options.luminanceInfluence=0.7] - Determines how much the luminance of the scene influences the ambient occlusion.
+	 * @param {Number} [options.radius=0.1825] - The occlusion sampling radius, expressed as a scale relative to the resolution. Range [1e-6, 1.0].
+	 * @param {Number} [options.intensity=1.0] - The intensity of the ambient occlusion.
+	 * @param {Number} [options.bias=0.025] - An occlusion bias. Eliminates artifacts caused by depth discontinuities.
+	 * @param {Number} [options.fade=0.01] - Influences the smoothness of the shadows. A lower value results in higher contrast.
+	 * @param {Color} [options.color=null] - The color of the ambient occlusion.
+	 * @param {Number} [options.resolutionScale=1.0] - The resolution scale.
+	 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
+	 * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
+	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprecated. Use resolutionX instead.
+	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use resolutionY instead.
+	 */
+
+	constructor(camera, normalBuffer, {
+		blendFunction = BlendFunction.MULTIPLY,
+		samples = 9,
+		rings = 7,
+		normalDepthBuffer = null,
+		depthAwareUpsampling = true,
+		worldDistanceThreshold,
+		worldDistanceFalloff,
+		worldProximityThreshold,
+		worldProximityFalloff,
+		distanceThreshold = 0.97,
+		distanceFalloff = 0.03,
+		rangeThreshold = 0.0005,
+		rangeFalloff = 0.001,
+		minRadiusScale = 0.1,
+		luminanceInfluence = 0.7,
+		radius = 0.1825,
+		intensity = 1.0,
+		bias = 0.025,
+		fade = 0.01,
+		color = null,
+		resolutionScale = 1.0,
+		width = Resolution.AUTO_SIZE,
+		height = Resolution.AUTO_SIZE,
+		resolutionX = width,
+		resolutionY = height
+	} = {}) {
+
+		super(&quot;SSAOEffect&quot;, fragmentShader, {
+			blendFunction,
+			attributes: EffectAttribute.DEPTH,
+			defines: new Map([
+				[&quot;THRESHOLD&quot;, &quot;0.997&quot;]
+			]),
+			uniforms: new Map([
+				[&quot;aoBuffer&quot;, new Uniform(null)],
+				[&quot;normalDepthBuffer&quot;, new Uniform(normalDepthBuffer)],
+				[&quot;luminanceInfluence&quot;, new Uniform(luminanceInfluence)],
+				[&quot;color&quot;, new Uniform(null)],
+				[&quot;intensity&quot;, new Uniform(intensity)],
+				[&quot;scale&quot;, new Uniform(0.0)] // Unused.
+			])
+		});
+
+		/**
+		 * A render target.
+		 *
+		 * @type {WebGLRenderTarget}
+		 * @private
+		 */
+
+		this.renderTarget = new WebGLRenderTarget(1, 1, { depthBuffer: false });
+		this.renderTarget.texture.name = &quot;AO.Target&quot;;
+		this.uniforms.get(&quot;aoBuffer&quot;).value = this.renderTarget.texture;
+
+		/**
+		 * The resolution.
+		 *
+		 * @type {Resolution}
+		 */
+
+		const resolution = this.resolution = new Resolution(this, resolutionX, resolutionY, resolutionScale);
+		resolution.addEventListener(&quot;change&quot;, (e) =&gt; this.setSize(resolution.baseWidth, resolution.baseHeight));
+
+		/**
+		 * The main camera.
+		 *
+		 * @type {Camera}
+		 * @private
+		 */
+
+		this.camera = camera;
+
+		/**
+		 * A depth downsampling pass.
+		 *
+		 * @type {DepthDownsamplingPass}
+		 * @private
+		 */
+
+		this.depthDownsamplingPass = new DepthDownsamplingPass({ normalBuffer, resolutionScale });
+		this.depthDownsamplingPass.enabled = (normalDepthBuffer === null);
+
+		/**
+		 * An SSAO pass.
+		 *
+		 * @type {ShaderPass}
+		 * @private
+		 */
+
+		this.ssaoPass = new ShaderPass(new SSAOMaterial(camera));
+
+		const noiseTexture = new NoiseTexture(NOISE_TEXTURE_SIZE, NOISE_TEXTURE_SIZE, RGBAFormat);
+		noiseTexture.wrapS = noiseTexture.wrapT = RepeatWrapping;
+
+		const ssaoMaterial = this.ssaoMaterial;
+		ssaoMaterial.normalBuffer = normalBuffer;
+		ssaoMaterial.noiseTexture = noiseTexture;
+		ssaoMaterial.minRadiusScale = minRadiusScale;
+		ssaoMaterial.samples = samples;
+		ssaoMaterial.radius = radius;
+		ssaoMaterial.rings = rings;
+		ssaoMaterial.fade = fade;
+		ssaoMaterial.bias = bias;
+
+		ssaoMaterial.distanceThreshold = distanceThreshold;
+		ssaoMaterial.distanceFalloff = distanceFalloff;
+		ssaoMaterial.proximityThreshold = rangeThreshold;
+		ssaoMaterial.proximityFalloff = rangeFalloff;
+
+		if(worldDistanceThreshold !== undefined) {
+
+			ssaoMaterial.worldDistanceThreshold = worldDistanceThreshold;
+
+		}
+
+		if(worldDistanceFalloff !== undefined) {
+
+			ssaoMaterial.worldDistanceFalloff = worldDistanceFalloff;
+
+		}
+
+		if(worldProximityThreshold !== undefined) {
+
+			ssaoMaterial.worldProximityThreshold = worldProximityThreshold;
+
+		}
+
+		if(worldProximityFalloff !== undefined) {
+
+			ssaoMaterial.worldProximityFalloff = worldProximityFalloff;
+
+		}
+
+		if(normalDepthBuffer !== null) {
+
+			this.ssaoMaterial.normalDepthBuffer = normalDepthBuffer;
+			this.defines.set(&quot;NORMAL_DEPTH&quot;, &quot;1&quot;);
+
+		}
+
+		this.depthAwareUpsampling = depthAwareUpsampling;
+		this.color = color;
+
+	}
+
+	set mainCamera(value) {
+
+		this.camera = value;
+		this.ssaoMaterial.copyCameraSettings(value);
+
+	}
+
+	/**
+	 * Sets the normal buffer.
+	 *
+	 * @type {Texture}
+	 */
+
+	get normalBuffer() {
+
+		return this.ssaoMaterial.normalBuffer;
+
+	}
+
+	set normalBuffer(value) {
+
+		this.ssaoMaterial.normalBuffer = value;
+		this.depthDownsamplingPass.fullscreenMaterial.normalBuffer = value;
+
+	}
+
+	/**
+	 * Returns the resolution settings.
+	 *
+	 * @deprecated Use resolution instead.
+	 * @return {Resolution} The resolution.
+	 */
+
+	getResolution() {
+
+		return this.resolution;
+
+	}
+
+	/**
+	 * The SSAO material.
+	 *
+	 * @type {SSAOMaterial}
+	 */
+
+	get ssaoMaterial() {
+
+		return this.ssaoPass.fullscreenMaterial;
+
+	}
+
+	/**
+	 * Returns the SSAO material.
+	 *
+	 * @deprecated Use ssaoMaterial instead.
+	 * @return {SSAOMaterial} The material.
+	 */
+
+	getSSAOMaterial() {
+
+		return this.ssaoMaterial;
+
+	}
+
+	/**
+	 * The amount of occlusion samples per pixel.
+	 *
+	 * @type {Number}
+	 * @deprecated Use ssaoMaterial.samples instead.
+	 */
+
+	get samples() {
+
+		return this.ssaoMaterial.samples;
+
+	}
+
+	set samples(value) {
+
+		this.ssaoMaterial.samples = value;
+
+	}
+
+	/**
+	 * The amount of spiral turns in the occlusion sampling pattern.
+	 *
+	 * @type {Number}
+	 * @deprecated Use ssaoMaterial.rings instead.
+	 */
+
+	get rings() {
+
+		return this.ssaoMaterial.rings;
+
+	}
+
+	set rings(value) {
+
+		this.ssaoMaterial.rings = value;
+
+	}
+
+	/**
+	 * The occlusion sampling radius.
+	 *
+	 * @type {Number}
+	 * @deprecated Use ssaoMaterial.radius instead.
+	 */
+
+	get radius() {
+
+		return this.ssaoMaterial.radius;
+
+	}
+
+	set radius(value) {
+
+		this.ssaoMaterial.radius = value;
+
+	}
+
+	/**
+	 * Indicates whether depth-aware upsampling is enabled.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get depthAwareUpsampling() {
+
+		return this.defines.has(&quot;DEPTH_AWARE_UPSAMPLING&quot;);
+
+	}
+
+	set depthAwareUpsampling(value) {
+
+		if(this.depthAwareUpsampling !== value) {
+
+			if(value) {
+
+				this.defines.set(&quot;DEPTH_AWARE_UPSAMPLING&quot;, &quot;1&quot;);
+
+			} else {
+
+				this.defines.delete(&quot;DEPTH_AWARE_UPSAMPLING&quot;);
+
+			}
+
+			this.setChanged();
+
+		}
+
+	}
+
+	/**
+	 * Indicates whether depth-aware upsampling is enabled.
+	 *
+	 * @deprecated Use depthAwareUpsampling instead.
+	 * @return {Boolean} Whether depth-aware upsampling is enabled.
+	 */
+
+	isDepthAwareUpsamplingEnabled() {
+
+		return this.depthAwareUpsampling;
+
+	}
+
+	/**
+	 * Enables or disables depth-aware upsampling.
+	 *
+	 * @deprecated Use depthAwareUpsampling instead.
+	 * @param {Boolean} value - Whether depth-aware upsampling should be enabled.
+	 */
+
+	setDepthAwareUpsamplingEnabled(value) {
+
+		this.depthAwareUpsampling = value;
+
+	}
+
+	/**
+	 * Indicates whether distance-based radius scaling is enabled.
+	 *
+	 * @type {Boolean}
+	 * @deprecated
+	 */
+
+	get distanceScaling() { return true; }
+	set distanceScaling(value) {}
+
+	/**
+	 * The color of the ambient occlusion. Set to `null` to disable.
+	 *
+	 * @type {Color}
+	 */
+
+	get color() {
+
+		return this.uniforms.get(&quot;color&quot;).value;
+
+	}
+
+	set color(value) {
+
+		const uniforms = this.uniforms;
+		const defines = this.defines;
+
+		if(value !== null) {
+
+			if(defines.has(&quot;COLORIZE&quot;)) {
+
+				uniforms.get(&quot;color&quot;).value.set(value);
+
+			} else {
+
+				defines.set(&quot;COLORIZE&quot;, &quot;1&quot;);
+				uniforms.get(&quot;color&quot;).value = new Color(value);
+				this.setChanged();
+
+			}
+
+		} else if(defines.has(&quot;COLORIZE&quot;)) {
+
+			defines.delete(&quot;COLORIZE&quot;);
+			uniforms.get(&quot;color&quot;).value = null;
+			this.setChanged();
+
+		}
+
+	}
+
+	/**
+	 * The luminance influence factor. Range: [0.0, 1.0].
+	 *
+	 * @type {Boolean}
+	 */
+
+	get luminanceInfluence() {
+
+		return this.uniforms.get(&quot;luminanceInfluence&quot;).value;
+
+	}
+
+	set luminanceInfluence(value) {
+
+		this.uniforms.get(&quot;luminanceInfluence&quot;).value = value;
+
+	}
+
+	/**
+	 * The intensity.
+	 *
+	 * @type {Number}
+	 */
+
+	get intensity() {
+
+		return this.uniforms.get(&quot;intensity&quot;).value;
+
+	}
+
+	set intensity(value) {
+
+		this.uniforms.get(&quot;intensity&quot;).value = value;
+
+	}
+
+	/**
+	 * Returns the color of the ambient occlusion.
+	 *
+	 * @deprecated Use color instead.
+	 * @return {Color} The color.
+	 */
+
+	getColor() {
+
+		return this.color;
+
+	}
+
+	/**
+	 * Sets the color of the ambient occlusion. Set to `null` to disable colorization.
+	 *
+	 * @deprecated Use color instead.
+	 * @param {Color} value - The color.
+	 */
+
+	setColor(value) {
+
+		this.color = value;
+
+	}
+
+	/**
+	 * Sets the occlusion distance cutoff.
+	 *
+	 * @deprecated Use ssaoMaterial instead.
+	 * @param {Number} threshold - The distance threshold. Range [0.0, 1.0].
+	 * @param {Number} falloff - The falloff. Range [0.0, 1.0].
+	 */
+
+	setDistanceCutoff(threshold, falloff) {
+
+		this.ssaoMaterial.distanceThreshold = threshold;
+		this.ssaoMaterial.distanceFalloff = falloff;
+
+	}
+
+	/**
+	 * Sets the occlusion proximity cutoff.
+	 *
+	 * @deprecated Use ssaoMaterial instead.
+	 * @param {Number} threshold - The proximity threshold. Range [0.0, 1.0].
+	 * @param {Number} falloff - The falloff. Range [0.0, 1.0].
+	 */
+
+	setProximityCutoff(threshold, falloff) {
+
+		this.ssaoMaterial.proximityThreshold = threshold;
+		this.ssaoMaterial.proximityFalloff = falloff;
+
+	}
+
+	/**
+	 * Sets the depth texture.
+	 *
+	 * @param {Texture} depthTexture - A depth texture.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing.
+	 */
+
+	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
+
+		this.depthDownsamplingPass.setDepthTexture(depthTexture, depthPacking);
+		this.ssaoMaterial.depthBuffer = depthTexture;
+		this.ssaoMaterial.depthPacking = depthPacking;
+
+	}
+
+	/**
+	 * Updates this effect.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
+	 */
+
+	update(renderer, inputBuffer, deltaTime) {
+
+		const renderTarget = this.renderTarget;
+
+		if(this.depthDownsamplingPass.enabled) {
+
+			this.depthDownsamplingPass.render(renderer);
+
+		}
+
+		this.ssaoPass.render(renderer, null, renderTarget);
+
+	}
+
+	/**
+	 * Sets the size.
+	 *
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		const resolution = this.resolution;
+		resolution.setBaseSize(width, height);
+		const w = resolution.width, h = resolution.height;
+
+		this.ssaoMaterial.copyCameraSettings(this.camera);
+		this.ssaoMaterial.setSize(w, h);
+		this.renderTarget.setSize(w, h);
+
+		this.depthDownsamplingPass.resolution.scale = resolution.scale;
+		this.depthDownsamplingPass.setSize(width, height);
+
+	}
+
+	/**
+	 * Performs initialization tasks.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 * @param {Number} frameBufferType - The type of the main frame buffers.
+	 */
+
+	initialize(renderer, alpha, frameBufferType) {
+
+		try {
+
+			let normalDepthBuffer = this.uniforms.get(&quot;normalDepthBuffer&quot;).value;
+
+			if(normalDepthBuffer === null) {
+
+				this.depthDownsamplingPass.initialize(renderer, alpha, frameBufferType);
+				normalDepthBuffer = this.depthDownsamplingPass.texture;
+				this.uniforms.get(&quot;normalDepthBuffer&quot;).value = normalDepthBuffer;
+				this.ssaoMaterial.normalDepthBuffer = normalDepthBuffer;
+				this.defines.set(&quot;NORMAL_DEPTH&quot;, &quot;1&quot;);
+
+			}
+
+		} catch(e) {
+
+			// Not supported.
+			this.depthDownsamplingPass.enabled = false;
+
+		}
+
+	}
+
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
