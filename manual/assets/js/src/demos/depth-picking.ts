@@ -135,7 +135,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	}
 
-	container.addEventListener("pointermove", (e) => void pickDepth(e as PointerEvent), { passive: true });
+	container.addEventListener("pointermove", (e) => void pickDepth(e), { passive: true });
 
 	// Settings
 
