@@ -8396,7 +8396,8 @@ declare module "postprocessing" {
 	 * @property {Number} REINHARD2 - Modified Reinhard tone mapping.
 	 * @property {Number} REINHARD2_ADAPTIVE - Simulates the optic nerve responding to the amount of light it is receiving.
 	 * @property {Number} UNCHARTED2 - Uncharted 2 tone mapping. http://filmicworlds.com/blog/filmic-tonemapping-operators.
-	 * @property {Number} OPTIMIZED_CINEON - Optimized filmic operator by Jim Hejl and Richard Burgess-Dawson.
+	 * @property {Number} OPTIMIZED_CINEON - Deprecated. Use CINEON instead.
+	 * @property {Number} CINEON - Optimized filmic operator by Jim Hejl and Richard Burgess-Dawson.
 	 * @property {Number} ACES_FILMIC - ACES tone mapping with a scale of 1.0/0.6.
 	 * @property {Number} AGX - Filmic tone mapping. Requires three r160 or higher. https://github.com/EaryChow/AgX.
 	 * @property {Number} NEUTRAL - Neutral tone mapping by Khronos. Requires three r162 or higher. https://modelviewer.dev/examples/tone-mapping.
@@ -8408,6 +8409,7 @@ declare module "postprocessing" {
 		REINHARD2_ADAPTIVE,
 		UNCHARTED2,
 		OPTIMIZED_CINEON,
+		CINEON,
 		ACES_FILMIC,
 		AGX,
 		NEUTRAL
