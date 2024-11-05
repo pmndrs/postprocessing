@@ -62,7 +62,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	});
 
 	renderer.debug.checkShaderErrors = Utils.isLocalhost;
-	const container = document.querySelector<HTMLElement>(".viewport")!;
+	const container = document.getElementById("viewport")!;
 	container.dataset.epilepsyWarning = "1";
 	container.prepend(renderer.domElement);
 

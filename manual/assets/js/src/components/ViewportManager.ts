@@ -176,7 +176,7 @@ export class ViewportManager implements Component, EventListenerObject {
 
 	initialize(): void {
 
-		const viewport = this.viewport = document.querySelector(".viewport");
+		const viewport = this.viewport = document.getElementById("viewport");
 
 		if(viewport === null) {
 

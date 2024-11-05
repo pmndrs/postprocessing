@@ -1,7 +1,7 @@
 @use "durations";
 @use "layers";
 
-.viewport {
+#viewport {
 	border-bottom: 1px solid var(--viewport-separator-color);
 	box-sizing: border-box;
 	height: calc(100vh - 10rem);
@@ -112,7 +112,7 @@
 // Dark Mode
 
 .dark {
-	.viewport {
+	#viewport {
 		.fullscreen {
 			background-image: url("/img/svg/fullscreen_white_24dp.svg");
 			&.active {

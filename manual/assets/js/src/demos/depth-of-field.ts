@@ -66,7 +66,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	renderer.setClearColor(0x000000, 0);
 	renderer.debug.checkShaderErrors = Utils.isLocalhost;
-	const container = document.querySelector(".viewport")!;
+	const container = document.getElementById("viewport")!;
 	container.prepend(renderer.domElement);
 
 	// Camera & Controls
