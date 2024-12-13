@@ -320,6 +320,17 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 	}
 
 	/**
+	 * Resets the preferred size.
+	 */
+
+	resetPreferredSize(): void {
+
+		this.preferredSize.set(AUTO_SIZE, AUTO_SIZE);
+		this.setChanged();
+
+	}
+
+	/**
 	 * Sets the preferred size and resets the scale.
 	 *
 	 * @param width - The width.
