@@ -69,12 +69,7 @@ function onResize(): void {
 window.addEventListener("resize", onResize);
 onResize();
 
-requestAnimationFrame(function render(timestamp: number): void {
-
-	requestAnimationFrame(render);
-	pipeline.render(timestamp);
-
-});
+renderer.setAnimationLoop((timestamp: number) => pipeline.render(timestamp));
 ```
 
 ## Color Space Considerations

@@ -3,8 +3,8 @@ import {
 	HalfFloatType,
 	LoadingManager,
 	PerspectiveCamera,
-	SRGBColorSpace,
 	Scene,
+	SRGBColorSpace,
 	Texture,
 	VSMShadowMap,
 	WebGLRenderer
@@ -13,16 +13,14 @@ import {
 import {
 	ClearPass,
 	EffectPass,
-	GaussianBlurPass,
 	GeometryPass,
-	MipmapBlurPass,
 	RenderPipeline,
-	TextureEffect,
 	ToneMappingEffect
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
 import { ControlMode, SpatialControls } from "spatial-controls";
+import * as DefaultEnvironment from "../objects/DefaultEnvironment.js";
 import * as CornellBox from "../objects/CornellBox.js";
 import * as Utils from "../utils/index.js";
 
@@ -37,10 +35,17 @@ function load(): Promise<Map<string, Texture>> {
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
+		cubeTextureLoader.load(Utils.getSkyboxUrls("space", ".jpg"), (t) => {
+
+			t.colorSpace = SRGBColorSpace;
+			assets.set("sky-space", t);
+
+		});
+
 		cubeTextureLoader.load(Utils.getSkyboxUrls("sunset"), (t) => {
 
 			t.colorSpace = SRGBColorSpace;
-			assets.set("sky", t);
+			assets.set("sky-sunset", t);
 
 		});
 
@@ -70,7 +75,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Camera & Controls
 
-	const camera = new PerspectiveCamera();
+	const camera = new PerspectiveCamera(50, 1, 1, 1000);
 	const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 	const settings = controls.settings;
 	settings.general.mode = ControlMode.THIRD_PERSON;
@@ -82,102 +87,71 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Scene, Lights, Objects
 
-	const scene = new Scene();
-	scene.background = assets.get("sky")!;
-	scene.add(CornellBox.createLights());
-	scene.add(CornellBox.createEnvironment());
-	scene.add(CornellBox.createActors());
+	const sceneA = new Scene();
+	sceneA.background = assets.get("sky-space")!;
+	sceneA.environment = sceneA.background;
+	sceneA.fog = DefaultEnvironment.createFog();
+	sceneA.add(DefaultEnvironment.createLights());
+	sceneA.add(DefaultEnvironment.createEnvironment());
+
+	const sceneB = new Scene();
+	sceneB.background = assets.get("sky-sunset")!;
+	sceneB.add(CornellBox.createLights());
+	sceneB.add(CornellBox.createEnvironment());
+	sceneB.add(CornellBox.createActors());
 
 	// Post Processing
 
-	const mipmapBlurPass = new MipmapBlurPass({
-		fullResolutionUpsampling: true,
-		clampToBorder: false,
-		radius: 1.0,
-		levels: 1
-	});
-
-	const gaussianBlurPass = new GaussianBlurPass({
-		kernelSize: 15,
-		iterations: 1,
-		resolutionScale: 0.5
-	});
-
-	gaussianBlurPass.enabled = false;
-	const textureEffect = new TextureEffect({ texture: mipmapBlurPass.texture.value });
-
-	const outputPass = new EffectPass(
-		textureEffect,
-		new ToneMappingEffect()
-	);
-
 	const pipeline = new RenderPipeline(renderer);
-	pipeline.add(
-		new ClearPass(),
-		new GeometryPass(scene, camera, {
-			frameBufferType: HalfFloatType,
-			samples: 4
-		}),
-		mipmapBlurPass,
-		gaussianBlurPass,
-		outputPass
-	);
+	const clearPassA = new ClearPass();
+	const clearPassB = new ClearPass();
+	const geometryPassA = new GeometryPass(sceneA, camera, { frameBufferType: HalfFloatType, samples: 4 });
+	const geometryPassB = new GeometryPass(sceneB, camera, { frameBufferType: HalfFloatType, samples: 4 });
+	const effectPass = new EffectPass(new ToneMappingEffect());
+
+	geometryPassA.scissor.enabled = true;
+	geometryPassB.scissor.enabled = true;
+	geometryPassA.viewport.enabled = true;
+	geometryPassB.viewport.enabled = true;
+
+	clearPassA.scissor.enabled = true;
+	clearPassB.scissor.enabled = true;
+	clearPassA.viewport.enabled = true;
+	clearPassB.viewport.enabled = true;
+
+	//clearPassB.clearFlags.depth = false;
+
+	geometryPassB.output.defaultBuffer = geometryPassA.output.defaultBuffer;
+
+	pipeline.add(clearPassA, geometryPassA, clearPassB, geometryPassB, effectPass);
 
 	// Settings
 
 	const pane = new Pane({ container: container.querySelector<HTMLElement>(".tp")! });
 	const fpsGraph = Utils.createFPSGraph(pane);
 
-	const folder = pane.addFolder({ title: "Settings" });
-	folder.addBinding(outputPass, "dithering");
-
-	const tab = folder.addTab({
-		pages: [
-			{ title: "Mipmap" },
-			{ title: "Gaussian" }
-		]
-	});
-
-	tab.on("select", (event) => {
-
-		mipmapBlurPass.enabled = (event.index === 0);
-		gaussianBlurPass.enabled = (event.index === 1);
-		textureEffect.texture = gaussianBlurPass.enabled ?
-			gaussianBlurPass.texture.value :
-			mipmapBlurPass.texture.value;
-
-	});
-
-	const gaussKernels = {
-		"7x7": 7,
-		"15x15": 15,
-		"25x25": 25,
-		"35x35": 35,
-		"63x63": 63,
-		"127x127": 127,
-		"255x255": 255
-	};
-
-	const p0 = tab.pages[0];
-	p0.addBinding(mipmapBlurPass, "radius", { min: 0, max: 1, step: 0.01 });
-	p0.addBinding(mipmapBlurPass, "levels", { min: 1, max: 10, step: 1 });
-	p0.addBinding(mipmapBlurPass, "fullResolutionUpsampling", { label: "fullResUpscale" });
-
-	const p1 = tab.pages[1];
-	p1.addBinding(gaussianBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
-	p1.addBinding(gaussianBlurPass.fullscreenMaterial, "kernelSize", { options: gaussKernels });
-	p1.addBinding(gaussianBlurPass.fullscreenMaterial, "scale", { min: 0, max: 2, step: 0.01 });
-	p1.addBinding(gaussianBlurPass, "iterations", { min: 1, max: 8, step: 1 });
-
 	// Resize Handler
 
 	function onResize(): void {
 
-		const width = container.clientWidth, height = container.clientHeight;
-		camera.aspect = width / height;
+		const width = container.clientWidth;
+		const height = container.clientHeight;
+		const widthHalf = Math.round(width / 2);
+
+		camera.aspect = widthHalf / height;
 		camera.fov = Utils.calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
 		camera.updateProjectionMatrix();
 		pipeline.setSize(width, height);
+
+		geometryPassA.scissor.set(0, 0, widthHalf, height);
+		geometryPassB.scissor.set(widthHalf, 0, widthHalf, height);
+		geometryPassA.viewport.set(0, 0, widthHalf, height);
+		geometryPassB.viewport.set(widthHalf, 0, widthHalf, height);
+
+		clearPassA.scissor.set(0, 0, widthHalf, height);
+		clearPassB.scissor.set(widthHalf, 0, widthHalf, height);
+		clearPassA.viewport.set(0, 0, widthHalf, height);
+		clearPassB.viewport.set(widthHalf, 0, widthHalf, height);
 
 	}
 

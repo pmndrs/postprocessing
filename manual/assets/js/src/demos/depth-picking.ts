@@ -159,14 +159,12 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Render Loop
 
-	requestAnimationFrame(function render(timestamp: number): void {
+	renderer.setAnimationLoop((timestamp: number) => {
 
 		fpsGraph.begin();
 		controls.update(timestamp);
 		pipeline.render(timestamp);
 		fpsGraph.end();
-
-		requestAnimationFrame(render);
 
 	});
 
