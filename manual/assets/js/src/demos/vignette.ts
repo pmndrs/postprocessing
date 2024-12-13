@@ -122,7 +122,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	function onResize(): void {
 
-		const width = container.clientWidth, height = container.clientHeight;
+		const width = container.clientWidth;
+		const height = container.clientHeight;
 		camera.aspect = width / height;
 		camera.fov = Utils.calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
 		camera.updateProjectionMatrix();
