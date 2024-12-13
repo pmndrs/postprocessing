@@ -16,13 +16,14 @@ Welcome to the postprocessing manual!
 
 ## Motivation
 
-The purpose of the postprocessing library is to provide advanced, up-to-date and fully documented filter effects for the popular 3D library [three.js](https://threejs.org/). It was originally created based on the [three.js examples](https://threejs.org/examples/?q=postprocessing) in the context of a university research project in 2015 and continues to evolve as a free, open-source library.
+The purpose of the postprocessing library is to provide advanced real-time image effects for the popular 3D library [three.js](https://threejs.org/). It was originally created based on the [three.js examples](https://threejs.org/examples/?q=postprocessing) in the context of a university research project in 2015 and continues to evolve as a free, open-source library.
 
 ## Compatibility Policy
 
 Postprocessing aims to support the six most recent releases of three. Older releases may still work but are not officially supported. The release schedule of this library is not strictly tied to three, meaning that official support for the latest release can fall behind by a few days. Releases follow [semantic versioning](https://semver.org/).
 
-_Please note that this library is not compatible with the postprocessing examples from three due to API differences._
+> [!NOTE]
+> Please note that this library is not compatible with the postprocessing examples from three due to API differences.
 
 ## Concepts
 

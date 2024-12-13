@@ -142,7 +142,8 @@ Available macros:
 - If the main camera is a `PerspectiveCamera`, the macro `PERSPECTIVE_CAMERA` will be defined.
 - If the geometry pass uses a float type color buffer, the macro `FRAMEBUFFER_PRECISION_HIGH` will be defined.
 
-_Effects may define custom uniforms, varyings, functions and preprocessor macros as usual, but should not define global variables or constants._
+> [!WARNING]
+> Effects may define custom uniforms, varyings, functions and preprocessor macros as usual, but should not define global variables or constants.
 
 ## Functions
 
