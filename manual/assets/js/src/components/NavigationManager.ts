@@ -6,7 +6,13 @@ import { Component } from "./Component.js";
 
 export class NavigationManager implements Component {
 
-	initialize() {
+	/**
+	 * Initializes scroll state restoration.
+	 *
+	 * This feature saves the scroll offset of the navigation sidebar and restores it on page load.
+	 */
+
+	private initializeScrollRecall() {
 
 		const nav = document.querySelector(".navigation");
 		const main = document.getElementById("main");
@@ -53,6 +59,59 @@ export class NavigationManager implements Component {
 			}
 
 		});
+
+	}
+
+	/**
+	 * Initializes navigation menu features.
+	 */
+
+	private initializeNavMenus() {
+
+		function onClick(event: Event): void {
+
+			const element = event.target as HTMLElement | null;
+
+			if(element === null || element.parentElement === null) {
+
+				return;
+
+			}
+
+			element.parentElement.classList.toggle("expanded");
+			const nav = document.querySelector(".navigation");
+
+			if(nav !== null) {
+
+				// Save the current menu state.
+				const expandedMenus = Array.from(nav.querySelectorAll<HTMLLIElement>(".menu.expanded"));
+				const ids = expandedMenus.map(x => x.dataset.id);
+				sessionStorage.setItem("expanded-menus", JSON.stringify(ids));
+
+			}
+
+		}
+
+		const nav = document.querySelector(".navigation");
+
+		if(nav === null) {
+
+			return;
+
+		}
+
+		for(const h of nav.querySelectorAll("h2, h3")) {
+
+			h.addEventListener("click", onClick);
+
+		}
+
+	}
+
+	initialize() {
+
+		this.initializeScrollRecall();
+		this.initializeNavMenus();
 
 	}
 
