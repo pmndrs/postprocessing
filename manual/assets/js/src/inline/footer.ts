@@ -4,16 +4,17 @@
 
 function restoreMenuState(): void {
 
+	const nav = document.querySelector(".navigation");
 	const expandedMenusJSON = sessionStorage.getItem("expanded-menus");
 	const expandedMenus = (expandedMenusJSON !== null) ? JSON.parse(expandedMenusJSON) as string[] : null;
 
-	if(expandedMenus === null || !Array.isArray(expandedMenus) || expandedMenus.length === 0) {
+	if(nav === null || expandedMenus === null || !Array.isArray(expandedMenus) || expandedMenus.length === 0) {
 
 		return;
 
 	}
 
-	for(const menu of document.querySelectorAll("nav .menu")) {
+	for(const menu of nav.querySelectorAll(".menu")) {
 
 		menu.classList.remove("expanded");
 
@@ -21,7 +22,7 @@ function restoreMenuState(): void {
 
 	try {
 
-		for(const menu of document.querySelectorAll(expandedMenus.map(id => `.menu.${id}`).join(","))) {
+		for(const menu of nav.querySelectorAll(expandedMenus.map(id => `.menu.${id}`).join(","))) {
 
 			menu.classList.add("expanded");
 
