@@ -1,5 +1,23 @@
 main.plugins-tools {
+	h2 {
+		align-items: center;
+		display: flex;
+		margin-bottom: 0.75rem;
+		&::before {
+			background-color: var(--foreground-color);
+			mask-image: url("/img/svg/extension_black_24dp.svg");
+			mask-position: center;
+			content: "";
+			display: inline-block;
+			height: 24px;
+			margin-right: 0.5rem;
+			width: 24px;
+		}
+	}
 	p + h2 {
 		margin-top: 4rem;
+	}
+	p {
+		margin: 0.5rem 0;
 	}
 }

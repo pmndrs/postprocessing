@@ -1,4 +1,3 @@
-@use "dimensions";
 @use "durations";
 @use "layers";
 
@@ -7,6 +6,7 @@
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
+	font-weight: 400;
 	height: 100vh;
 	left: 0;
 	pointer-events: none;
@@ -16,30 +16,9 @@
 	transition: transform durations.$short;
 	width: 320px;
 	z-index: layers.$hud + 1;
-	h1, h2, h3 {
-		color: var(--sidebar-heading-color);
-		font-size: 100%;
-	}
-	h2 {
-		margin: 2rem dimensions.$nav-padding 0.5rem dimensions.$nav-padding;
-	}
-	h3 {
-		font-size: 80%;
-		margin: 1.25rem dimensions.$nav-padding 0.25rem dimensions.$nav-padding;
-	}
 	&.active {
 		pointer-events: initial;
 		transform: none;
-	}
-	ul {
-		h2, h3 {
-			margin-left:dimensions.$nav-menu-item-padding;
-		}
-		ul {
-			h2, h3 {
-				margin-left:dimensions.$nav-submenu-item-padding;
-			}
-		}
 	}
 }
 

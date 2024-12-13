@@ -3,9 +3,10 @@
 
 .navigation {
 	flex-grow: 1;
-	overflow-y: auto;
+	overflow-y: scroll;
 	padding-bottom: 1.5rem;
 	position: relative;
+	scrollbar-width: thin;
 	a {
 		align-items: center;
 		color: var(--nav-anchor-color);
@@ -38,13 +39,39 @@
 			}
 		}
 	}
-	ul {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		ul a {
-			padding-left:dimensions.$nav-submenu-item-padding;
+	h2, h3 {
+		align-items: center;
+		color: var(--sidebar-heading-color);
+		display: flex;
+		cursor: pointer;
+		font-size: 100%;
+		user-select: none;
+		&::after {
+			background-color: var(--sidebar-heading-color);
+			mask-image: url("/img/svg/chevron_left_black_24dp.svg");
+			mask-position: center;
+			content: "";
+			display: inline-block;
+			height: 1.25rem;
+			margin-left: 0.5rem;
+			opacity: 0.3;
+			transition: background-color durations.$long, opacity durations.$short, transform durations.$short;
+			transform: rotate(180deg);
+			width: 1rem;
 		}
+		&:focus,
+		&:hover {
+			&::after {
+				opacity: 1;
+			}
+		}
+	}
+	h2 {
+		margin: 2rem dimensions.$nav-padding 0.5rem dimensions.$nav-padding;
+	}
+	h3 {
+		font-size: 80%;
+		margin: 1.25rem dimensions.$nav-padding 0.25rem dimensions.$nav-padding;
 	}
 	li {
 		margin: 0;
@@ -69,8 +96,49 @@
 			content: none;
 		}
 	}
-	.demos {
-		margin-bottom: 1.5rem;
+	ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		position: relative;
+		transition: height durations.$short;
+		h2, h3 {
+			margin-left: dimensions.$nav-menu-item-padding;
+		}
+	}
+	.menu {
+		position: relative;
+		overflow-y: clip;
+		.menu {
+			a {
+				padding-left: dimensions.$nav-submenu-item-padding;
+			}
+			h2, h3 {
+				margin-left: dimensions.$nav-submenu-item-padding;
+			}
+		}
+		&:not(.expanded) {
+			ul {
+				height: 0;
+			}
+			&.active {
+				> h2,
+				> h3 {
+					&::after {
+						background-color: var(--nav-indicator-background-color);
+						opacity: 1;
+					}
+				}
+			}
+		}
+		&.expanded {
+			> h2,
+			> h3 {
+				&::after {
+					transform: rotate(270deg);
+				}
+			}
+		}
 	}
 }
 
