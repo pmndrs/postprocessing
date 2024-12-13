@@ -320,14 +320,17 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 	}
 
 	/**
-	 * Dispatches a `change` event.
+	 * Sets the preferred size and resets the scale.
 	 *
-	 * @internal
+	 * @param width - The width.
+	 * @param height - The height.
 	 */
 
-	setChanged(): void {
+	set(width: number, height: number): void {
 
-		this.dispatchEvent({ type: Resolution.EVENT_CHANGE });
+		this._scale = 1.0;
+		this.preferredSize.set(width, height);
+		this.setChanged();
 
 	}
 
@@ -347,20 +350,14 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 	}
 
 	/**
-	 * Resets the {@link scale} and preferred size and sets the base size.
+	 * Dispatches a `change` event.
 	 *
-	 * @see {@link setBaseSize} to set the base size.
-	 * @see {@link setPreferredSize} to set the preferred size.
-	 * @param width - The width.
-	 * @param height - The height.
+	 * @internal
 	 */
 
-	set(width: number, height: number): void {
+	setChanged(): void {
 
-		this._scale = 1.0;
-		this.preferredSize.set(AUTO_SIZE, AUTO_SIZE);
-		this.baseSize.set(width, height);
-		this.setChanged();
+		this.dispatchEvent({ type: Resolution.EVENT_CHANGE });
 
 	}
 
