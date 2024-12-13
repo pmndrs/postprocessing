@@ -37,8 +37,10 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 	private static readonly listener = /* @__PURE__ */ () => RenderPipeline.ioManager.update();
 
+	// #region Backing Data
+
 	/**
-	 * A timer.
+	 * @see {@link timer}
 	 */
 
 	private _timer: Timer;
@@ -50,7 +52,7 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 	private _passes: Pass<Material | null>[];
 
 	/**
-	 * The current renderer.
+	 * @see {@link renderer}
 	 */
 
 	private _renderer: WebGLRenderer | null;
@@ -60,6 +62,8 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 	 */
 
 	private _autoRenderToScreen: boolean;
+
+	// #endregion
 
 	/**
 	 * The current resolution.
@@ -91,12 +95,11 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 		this._timer = new Timer();
 		this._passes = [];
 		this._renderer = null;
-		this.renderer = renderer;
+		this._autoRenderToScreen = true;
 
+		this.renderer = renderer;
 		this.resolution = new Resolution();
 		this.resolution.addEventListener("change", () => this.onResolutionChange());
-
-		this._autoRenderToScreen = true;
 		this.updateStyle = true;
 
 	}
@@ -368,8 +371,8 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 	/**
 	 * Sets the render size.
 	 *
-	 * @param width - The width.
-	 * @param height - The height.
+	 * @param width - The width in logical pixels (before pixel ratio).
+	 * @param height - The height in logical pixels (before pixel ratio).
 	 * @param updateStyle - Whether the style of the canvas should be updated. Default is `true`.
 	 */
 

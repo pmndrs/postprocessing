@@ -55,6 +55,7 @@ export class IOManager {
 		// Update outputs before inputs to reduce update events.
 		this.updateOutput(pipeline);
 		this.updateInput(pipeline);
+
 		IOManager.syncDefaultBufferType(pipeline);
 
 	}

@@ -133,16 +133,16 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	private _attached: boolean;
 
 	/**
-	 * @see {@link renderer}
-	 */
-
-	private _renderer: WebGLRenderer | null;
-
-	/**
 	 * @see {@link timer}
 	 */
 
 	private _timer: ImmutableTimer | null;
+
+	/**
+	 * @see {@link renderer}
+	 */
+
+	private _renderer: WebGLRenderer | null;
 
 	/**
 	 * @see {@link scene}
@@ -619,7 +619,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	protected onOutputChange(): void {}
 
 	/**
-	 * Performs tasks when the resolution has changed.
+	 * Performs tasks when the {@link resolution} has changed.
 	 *
 	 * Override this empty method to handle resolution changes.
 	 */
