@@ -13,8 +13,10 @@
 		<base href="{{ .Site.BaseURL }}">
 		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
-		{{/* Prevent white flash on navigation in dark mode. */}}
-		<script>document.documentElement.classList[localStorage.getItem("dark-mode")?"add":"remove"]("dark")</script>
+		{{ with resources.Get "js/dist/inline/header.js" }}
+			{{ $script := .Content | safeJS }}
+			<script>{{ $script }}</script>
+		{{ end }}
 
 		{{ with resources.Get "css/dist/index.css" }}
 			{{ $stylesheet := . | fingerprint }}
@@ -67,11 +69,10 @@
 			</div>
 		</div>
 
-		{{/* Immediately restore scroll positions. */}}
-		<script>
-			document.querySelector(".navigation").scrollTop = Number(sessionStorage.getItem("nav-scroll"));
-			document.querySelector("main").scrollTop = Number(sessionStorage.getItem("main-scroll"));
-		</script>
+		{{ with resources.Get "js/dist/inline/footer.js" }}
+			{{ $script := .Content | safeJS }}
+			<script>{{ $script }}</script>
+		{{ end }}
 
 	</body>
 </html>
