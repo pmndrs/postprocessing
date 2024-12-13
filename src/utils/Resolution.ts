@@ -1,4 +1,4 @@
-import { EventDispatcher, Vector2 } from "three";
+import { EventDispatcher, Vector2, Vector2Like } from "three";
 import { BaseEventMap } from "../core/BaseEventMap.js";
 
 const AUTO_SIZE = -1;
@@ -9,7 +9,7 @@ const AUTO_SIZE = -1;
  * @category Utils
  */
 
-export class Resolution extends EventDispatcher<BaseEventMap> {
+export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2Like {
 
 	/**
 	 * Triggers when the resolution is changed.
@@ -363,5 +363,8 @@ export class Resolution extends EventDispatcher<BaseEventMap> {
 		this.setChanged();
 
 	}
+
+	get x(): number { return this.width; }
+	get y(): number { return this.height; }
 
 }
