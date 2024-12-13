@@ -1,24 +1,27 @@
-<div class="menu{{ with .class }} {{ . }}{{ end }}">
+<div>
 	<ul>
 
-		{{ $currentPage := .currentPage }}
 		{{ $menuName := .menuName }}
-
+		{{ $currentPage := .currentPage }}
 		{{ range .menu }}
 			{{ if .HasChildren }}
 
-				{{ $class := slice (path.Base .URL) }}
-				{{ if $currentPage.HasMenuCurrent $menuName . }}
-					{{ $class = $class | append "active" }}
+				{{ $active := $currentPage.HasMenuCurrent $menuName . }}
+				{{ $id := path.Base .URL }}
+				{{ $class := slice $id }}
+				{{ if $active }}
+					{{ $class = $class | append "active" | append "expanded" }}
 				{{ end }}
 
-				<li class="{{ delimit $class ` ` }}">
+				<li class="menu {{ delimit $class ` ` }}" data-id="{{ $id }}">
 					<h3>{{ .Name }}</h3>
-					<ul class="submenu">
-						{{ range .Children }}
-							{{ partial "menu-item.html" (dict "context" . "currentPage" $currentPage "menuName" $menuName) }}
-						{{ end }}
-					</ul>
+					<div>
+						<ul>
+							{{ range .Children }}
+								{{ partial "menu-item.html" (dict "context" . "currentPage" $currentPage "menuName" $menuName) }}
+							{{ end }}
+						</ul>
+					</div>
 				</li>
 
 			{{ else }}
