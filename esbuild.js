@@ -66,6 +66,18 @@ const manual = {
 	minify
 };
 
+const inline = {
+	entryPoints: await glob("./manual/assets/js/src/inline/*.ts"),
+	outdir: "./manual/assets/js/dist/inline",
+	logLevel: "info",
+	format: "iife",
+	target: "es6",
+	bundle: true,
+	external,
+	plugins,
+	minify
+};
+
 // #endregion
 
 await esbuild.build(vendor);
@@ -76,11 +88,14 @@ if(process.argv.includes("-w")) {
 	await ctxWorkers.watch();
 	const ctxManual = await esbuild.context(manual);
 	await ctxManual.watch();
+	const ctxInline = await esbuild.context(inline);
+	await ctxInline.watch();
 
 } else {
 
 	await esbuild.build(workers);
 	await esbuild.build(lib);
 	await esbuild.build(manual);
+	await esbuild.build(inline);
 
 }
