@@ -6,9 +6,16 @@
 	"paginate": 3,
 	"manualURL": "https://github.com/pmndrs/postprocessing/tree/main/manual",
 	"sidebarMenus": [
-		"main",
-		"community",
-		"demos"
+		{
+			"name": "main",
+			"expanded": true
+		}, {
+			"name": "community",
+			"expanded": true
+		}, {
+			"name": "demos",
+			"expanded": false
+		}
 	],
 	"footerIcons": [
 		{
