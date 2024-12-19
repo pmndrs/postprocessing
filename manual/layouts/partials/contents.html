@@ -1,17 +1,17 @@
 <ul class="contents">
 
-  {{ $paginate := .Site.Params.paginate }}
-  {{ with .Params.paginate }}
-    {{ $paginate = . }}
-  {{ end }}
+	{{ $paginate := .Site.Params.paginate }}
+	{{ with .Params.paginate }}
+		{{ $paginate = . }}
+	{{ end }}
 
-  {{ $section := .Section }}
-  {{ $paginator := .Paginate .Pages $paginate }}
-  {{ range $paginator.Pages }}
-    {{ .Scratch.Set "section" $section }}
-    <li>
-			<h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+	{{ $section := .Section }}
+	{{ $paginator := .Paginate .Pages $paginate }}
+	{{ range $paginator.Pages }}
+		{{ .Scratch.Set "section" $section }}
+		<li>
+			<h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
 		</li>
-  {{ end }}
+	{{ end }}
 
 </ul>
