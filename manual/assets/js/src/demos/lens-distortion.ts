@@ -6,6 +6,7 @@ import {
 	Scene,
 	SRGBColorSpace,
 	Texture,
+	Vector2,
 	WebGLRenderer
 } from "three";
 
@@ -82,7 +83,10 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
-	const effect = new LensDistortionEffect();
+	const effect = new LensDistortionEffect({
+		distortion: new Vector2(0.75, 0.5),
+		focalLength: new Vector2(0.4, 0.5)
+	});
 
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.add(
