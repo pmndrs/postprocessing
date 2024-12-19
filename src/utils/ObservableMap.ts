@@ -109,19 +109,21 @@ export class ObservableMap<K, V> extends EventDispatcher<ObservableMapEventMap<K
 
 	delete(key: K): boolean {
 
-		if(this.data.has(key)) {
+		if(!this.data.has(key)) {
 
-			this.dispatchEvent({
-				type: ObservableMap.EVENT_DELETE,
-				key: key,
-				value: this.data.get(key) as V
-			});
+			return false;
 
 		}
 
-		const result = this.data.delete(key);
+		this.dispatchEvent({
+			type: ObservableMap.EVENT_DELETE,
+			key: key,
+			value: this.data.get(key) as V
+		});
+
+		this.data.delete(key);
 		this.dispatchEvent({ type: ObservableMap.EVENT_CHANGE });
-		return result;
+		return true;
 
 	}
 
