@@ -5,7 +5,7 @@
 function restoreMenuState(): void {
 
 	const nav = document.querySelector(".navigation");
-	const expandedMenusJSON = sessionStorage.getItem("expanded-menus");
+	const expandedMenusJSON = localStorage.getItem("expanded-menus");
 	const expandedMenus = (expandedMenusJSON !== null) ? JSON.parse(expandedMenusJSON) as string[] : null;
 
 	if(nav === null || expandedMenus === null || !Array.isArray(expandedMenus) || expandedMenus.length === 0) {
@@ -30,7 +30,7 @@ function restoreMenuState(): void {
 
 	} catch(e) {
 
-		sessionStorage.removeItem("expanded-menus");
+		localStorage.removeItem("expanded-menus");
 		window.location.reload();
 
 	}
