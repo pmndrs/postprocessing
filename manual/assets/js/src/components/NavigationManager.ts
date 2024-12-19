@@ -68,30 +68,6 @@ export class NavigationManager implements Component {
 
 	private initializeNavMenus() {
 
-		function onClick(event: Event): void {
-
-			const element = event.target as HTMLElement | null;
-
-			if(element === null || element.parentElement === null) {
-
-				return;
-
-			}
-
-			element.parentElement.classList.toggle("expanded");
-			const nav = document.querySelector(".navigation");
-
-			if(nav !== null) {
-
-				// Save the current menu state.
-				const expandedMenus = Array.from(nav.querySelectorAll<HTMLLIElement>(".menu.expanded"));
-				const ids = expandedMenus.map(x => x.dataset.id);
-				sessionStorage.setItem("expanded-menus", JSON.stringify(ids));
-
-			}
-
-		}
-
 		const nav = document.querySelector(".navigation");
 
 		if(nav === null) {
@@ -100,11 +76,27 @@ export class NavigationManager implements Component {
 
 		}
 
+		function onClick(event: Event): void {
+
+			const element = event.target as HTMLElement | null;
+			element?.parentElement?.classList?.toggle("expanded");
+
+		}
+
 		for(const h of nav.querySelectorAll("h2, h3")) {
 
 			h.addEventListener("click", onClick);
 
 		}
+
+		window.addEventListener("beforeunload", () => {
+
+			// Save the current menu state.
+			const expandedMenus = Array.from(nav.querySelectorAll<HTMLLIElement>(".menu.expanded"));
+			const ids = expandedMenus.map(x => x.dataset.id);
+			localStorage.setItem("expanded-menus", JSON.stringify(ids));
+
+		});
 
 	}
 
