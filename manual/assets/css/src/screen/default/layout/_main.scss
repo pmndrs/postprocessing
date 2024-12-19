@@ -17,13 +17,13 @@ main {
 	min-height: 100vh;
 	padding-bottom: 3rem;
 	h1, h2, h3, h4, h5, h6 {
-		a {
+		span + a {
 			opacity: 0;
 			transition: color durations.$short, opacity durations.$short;
 		}
 		&:focus,
 		&:hover {
-			a {
+			span + a {
 				opacity: 1;
 			}
 		}

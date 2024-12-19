@@ -1,0 +1,31 @@
+@use "colors";
+
+.pagination {
+	display: flex;
+	justify-content: center;
+	list-style: none;
+	margin-top: 3rem;
+	padding: 0;
+	user-select: none;
+	a, span {
+		color: inherit;
+		padding: 0.25em 0.75em;
+	}
+	a {
+		text-decoration: none;
+		&:active,
+		&:focus,
+		&:hover {
+			background: colors.$mine-shaft;
+			color: colors.$grey_100;
+		}
+	}
+	li {
+		display: block;
+	}
+	.active {
+		background: colors.$mine-shaft;
+		color: colors.$grey_100;
+		cursor: default;
+	}
+}

@@ -1,7 +1,9 @@
 canvas {
 	background: var(--canvas-background-color);
 	display: block;
+	height: 100%;
 	margin: auto;
+	width: 100%;
 	&.hidden {
 		visibility: hidden;
 	}

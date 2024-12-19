@@ -4,7 +4,7 @@
 .navigation {
 	flex-grow: 1;
 	overflow-y: scroll;
-	padding-bottom: 1.5rem;
+	padding: 1.75rem 0;
 	position: relative;
 	scrollbar-width: thin;
 	a {
@@ -45,6 +45,8 @@
 		display: flex;
 		cursor: pointer;
 		font-size: 100%;
+		margin: 0;
+		padding-left: dimensions.$nav-menu-item-padding;
 		user-select: none;
 		&::after {
 			background-color: var(--sidebar-heading-color);
@@ -67,14 +69,13 @@
 		}
 	}
 	h2 {
-		margin: 2rem dimensions.$nav-padding 0.5rem dimensions.$nav-padding;
+		padding: 0.5rem dimensions.$nav-padding;
 	}
 	h3 {
 		font-size: 80%;
-		margin: 1.25rem dimensions.$nav-padding 0.25rem dimensions.$nav-padding;
+		padding: 0.6rem dimensions.$nav-padding;
 	}
 	li {
-		margin: 0;
 		padding: 0;
 		&.active {
 			> a {
@@ -97,24 +98,28 @@
 		}
 	}
 	ul {
+		box-sizing: border-box;
 		list-style: none;
 		margin: 0;
 		padding: 0;
 		position: relative;
 		transition: height durations.$short;
-		h2, h3 {
-			margin-left: dimensions.$nav-menu-item-padding;
-		}
 	}
 	.menu {
 		position: relative;
 		overflow-y: clip;
+		li:last-child {
+			padding-bottom: 1rem;
+		}
 		.menu {
 			a {
 				padding-left: dimensions.$nav-submenu-item-padding;
 			}
 			h2, h3 {
-				margin-left: dimensions.$nav-submenu-item-padding;
+				padding-left: dimensions.$nav-submenu-header-padding;
+			}
+			&:last-child {
+				padding-bottom: 0;
 			}
 		}
 		&:not(.expanded) {
@@ -138,6 +143,9 @@
 					transform: rotate(270deg);
 				}
 			}
+		}
+		&:last-child {
+			padding-bottom: 0;
 		}
 	}
 }

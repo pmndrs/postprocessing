@@ -5,8 +5,6 @@ ul {
 li {
 	padding: 0.125em 0;
 	&::marker {
-		color: var(--foreground-color);
 		content: "\2022\2002";
-		opacity: 0.9;
 	}
 }
