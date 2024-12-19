@@ -37,14 +37,14 @@ export function createLights(): Group {
 
 export function createFog(): Fog {
 
-	return new Fog(0x000000, 10, 60);
+	return new Fog(0x000000, 15, 60);
 
 }
 
 /**
  * Creates the environment.
  *
- * @return The mesh.
+ * @return The environment.
  */
 
 export function createEnvironment(): Group {

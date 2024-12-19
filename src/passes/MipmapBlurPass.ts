@@ -289,14 +289,15 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 	protected override onResolutionChange(): void {
 
-		if(this.input.defaultBuffer === null || this.input.defaultBuffer.value === null) {
+		const inputBuffer = this.input.defaultBuffer?.value ?? null;
+
+		if(inputBuffer === null) {
 
 			return;
 
 		}
 
 		// The size of the mipmaps depends on the main input buffer size.
-		const inputBuffer = this.input.defaultBuffer.value;
 		const imgData = inputBuffer.source.data as ImageData;
 		let { width, height } = imgData;
 

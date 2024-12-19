@@ -24,6 +24,7 @@ export class TextureResource extends Resource<Texture | null> {
 	constructor(value: Texture | null = null) {
 
 		super(value);
+
 		this.uniformListeners = new WeakMap<Uniform, EventListener<BaseEvent<string>, "change", this>>();
 
 	}
@@ -40,8 +41,9 @@ export class TextureResource extends Resource<Texture | null> {
 
 		if(!this.uniformListeners.has(uniform)) {
 
-			this.uniformListeners.set(uniform, () => uniform.value = this.value);
-			this.addEventListener(Resource.EVENT_CHANGE, this.uniformListeners.get(uniform)!);
+			const listener = () => { uniform.value = this.value; };
+			this.uniformListeners.set(uniform, listener);
+			this.addEventListener(Resource.EVENT_CHANGE, listener);
 
 		}
 
