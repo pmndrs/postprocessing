@@ -10,6 +10,7 @@
 	display: inline-flex;
 	font-family: inherit;
 	font-size: 85%;
+	font-weight: 400;
 	letter-spacing: 0.1em;
 	line-height: 1;
 	padding: 0;
@@ -18,6 +19,7 @@
 		color durations.$short,
 		background-color durations.$short,
 		transform 0.1s ease-out;
+	user-select: none;
 	width: auto;
 	figure {
 		align-items: center;
@@ -33,15 +35,14 @@
 		}
 	}
 	span {
-		align-items: center;
-		display: flex;
-		justify-content: center;
+		display: inline-block;
 		padding: 0.8em 1.5em;
 	}
 	&:active,
 	&:focus,
 	&:hover {
 		background-color: var(--button-background-color-focus);
+		color: var(--button-foreground-color-focus);
 		figure {
 			background-color: var(--button-background-color-focus-darker);
 		}

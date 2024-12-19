@@ -3,13 +3,14 @@
 html {
 	--anchor-color: #{colors.$cyan_800};
 	--anchor-color-focus: #{colors.$pale_rust};
-	--body-background-color: white;
-	--button-background-color: #{colors.$teal_400};
-	--button-background-color-darker: #{colors.$teal_500};
-	--button-background-color-focus: #{colors.$teal_500};
-	--button-background-color-focus-darker: #{colors.$teal_600};
+	--body-background-color: #{colors.$grey_100};
+	--button-background-color: #{colors.$cyan_500};
+	--button-background-color-darker: #{colors.$shiny};
+	--button-background-color-focus: #{colors.$shiny};
+	--button-background-color-focus-darker: #{colors.$shiny};
 	--button-foreground-color: white;
-	--canvas-background-color: #{colors.$grey_100};
+	--button-foreground-color-focus: white;
+	--canvas-background-color: #{colors.$grey_200};
 	--code-color: #{colors.$deep_orange_800};
 	--foreground-color: #{colors.$coal};
 	--footer-anchor-color: #{colors.$grey_600};
@@ -18,12 +19,12 @@ html {
 	--heading-foreground-color: #{colors.$mine-shaft};
 	--page-header-background-color: #{colors.$grey_900};
 	--page-title-foreground-color: #{colors.$grey_100};
-	--nav-anchor-background-color-focus: #{colors.$grey_200};
+	--nav-anchor-background-color-focus: #{colors.$grey_300};
 	--nav-anchor-color: #{colors.$grey_800};
 	--nav-anchor-color-active: black;
 	--nav-anchor-color-focus: #{colors.$grey_A100};
 	--nav-indicator-background-color: #{colors.$pale_rust};
-	--sidebar-background-color: #{colors.$grey_100};
+	--sidebar-background-color: #{colors.$grey_200};
 	--sidebar-heading-color: #{colors.$cyan_800};
 	--spinner-background-color: #{colors.$mine-shaft};
 	--spinner-accent-color: #{colors.$shiny};
