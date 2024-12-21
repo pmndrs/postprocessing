@@ -13,6 +13,9 @@
 		line-height: 1;
 		position: absolute;
 		z-index: layers.$hud;
+		&.hidden {
+			display: none;
+		}
 	}
 	.icon {
 		background: no-repeat center/cover var(--viewport-button-background-color);
