@@ -239,6 +239,32 @@ export class Input extends EventDispatcher<BaseEventMap> implements Disposable, 
 
 	}
 
+	/**
+	 * Removes a buffer.
+	 *
+	 * @param key - The key of the buffer.
+	 * @return True if the buffer existed and has been removed, or false if it doesn't exist.
+	 */
+
+	removeBuffer(key: string): boolean {
+
+		return this.textures.delete(key);
+
+	}
+
+	/**
+	 * Removes the default buffer.
+	 *
+	 * @param key - The key of the buffer.
+	 * @return True if the buffer existed and has been removed, or false if it doesn't exist.
+	 */
+
+	removeDefaultBuffer(): boolean {
+
+		return this.textures.delete(Input.BUFFER_DEFAULT);
+
+	}
+
 	dispose(): void {
 
 		for(const disposable of this.textures.values()) {
