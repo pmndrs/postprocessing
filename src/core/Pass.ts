@@ -95,6 +95,18 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	readonly id: number;
 
 	/**
+	 * Keeps track of previous input defines.
+	 */
+
+	private readonly previousDefines: Map<string, string | number | boolean>;
+
+	/**
+	 * Keeps track of previous input uniforms.
+	 */
+
+	private readonly previousUniforms: Map<string, Uniform>;
+
+	/**
 	 * A scene that contains the fullscreen mesh.
 	 */
 
@@ -199,6 +211,9 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	constructor(name: string) {
 
 		super();
+
+		this.previousDefines = new Map<string, string | number | boolean>();
+		this.previousUniforms = new Map<string, Uniform>();
 
 		this.fullscreenScene = null;
 		this.fullscreenCamera = null;
@@ -508,26 +523,49 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 			fullscreenMaterial.inputBuffer = this.input.defaultBuffer?.value ?? null;
 
-		}
-
-		if(this.input.frameBufferPrecisionHigh) {
-
-			fullscreenMaterial.defines.FRAME_BUFFER_PRECISION_HIGH = true;
-
 		} else {
 
-			delete fullscreenMaterial.defines.FRAME_BUFFER_PRECISION_HIGH;
+			if(this.input.frameBufferPrecisionHigh) {
+
+				fullscreenMaterial.defines.FRAME_BUFFER_PRECISION_HIGH = true;
+
+			} else {
+
+				delete fullscreenMaterial.defines.FRAME_BUFFER_PRECISION_HIGH;
+
+			}
 
 		}
+
+		// Remove previous input defines and uniforms.
+
+		for(const key of this.previousDefines.keys()) {
+
+			delete fullscreenMaterial.defines[key];
+
+		}
+
+		for(const key of this.previousUniforms.keys()) {
+
+			delete fullscreenMaterial.uniforms[key];
+
+		}
+
+		this.previousDefines.clear();
+		this.previousUniforms.clear();
+
+		// Add the new input defines and uniforms.
 
 		for(const entry of this.input.defines) {
 
+			this.previousDefines.set(entry[0], entry[1]);
 			fullscreenMaterial.defines[entry[0]] = entry[1];
 
 		}
 
 		for(const entry of this.input.uniforms) {
 
+			this.previousUniforms.set(entry[0], entry[1]);
 			fullscreenMaterial.uniforms[entry[0]] = entry[1];
 
 		}
@@ -758,6 +796,9 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		}
 
 		this.fullscreenMaterial?.dispose();
+
+		this.previousDefines.clear();
+		this.previousUniforms.clear();
 
 	}
 

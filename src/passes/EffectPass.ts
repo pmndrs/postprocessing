@@ -1,11 +1,4 @@
-import {
-	SRGBColorSpace,
-	WebGLRenderer,
-	Material,
-	Texture,
-	Uniform
-} from "three";
-
+import { SRGBColorSpace, WebGLRenderer, Material, Texture } from "three";
 import { Pass } from "../core/Pass.js";
 import { Effect } from "../effects/Effect.js";
 import { EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
@@ -23,18 +16,6 @@ import { GBufferConfig } from "../utils/GBufferConfig.js";
  */
 
 export class EffectPass extends Pass<EffectMaterial> {
-
-	/**
-	 * Keeps track of previous input defines.
-	 */
-
-	private readonly previousDefines: Map<string, string | number | boolean>;
-
-	/**
-	 * Keeps track of previous input uniforms.
-	 */
-
-	private readonly previousUniforms: Map<string, Uniform>;
 
 	/**
 	 * Keeps track of the previous G-Buffer configuration.
@@ -66,8 +47,6 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		this.output.defaultBuffer = this.createFramebuffer();
 		this.fullscreenMaterial = new EffectMaterial();
-		this.previousDefines = new Map<string, string | number | boolean>();
-		this.previousUniforms = new Map<string, Uniform>();
 		this.previousGBufferConfig = null;
 		this.listener = () => this.rebuild();
 		this.effects = effects;
@@ -248,52 +227,6 @@ export class EffectPass extends Pass<EffectMaterial> {
 	}
 
 	/**
-	 * Updates macros and uniforms.
-	 */
-
-	private updateDefinesAndUniforms(): void {
-
-		const fullscreenMaterial = this.fullscreenMaterial;
-		const input = this.input;
-
-		// Remove previous input defines and uniforms.
-
-		for(const key of this.previousDefines.keys()) {
-
-			delete fullscreenMaterial.defines[key];
-
-		}
-
-		for(const key of this.previousUniforms.keys()) {
-
-			delete fullscreenMaterial.uniforms[key];
-
-		}
-
-		this.previousDefines.clear();
-		this.previousUniforms.clear();
-
-		// Add the new input defines and uniforms.
-
-		for(const entry of input.defines) {
-
-			this.previousDefines.set(entry[0], entry[1]);
-			fullscreenMaterial.defines[entry[0]] = entry[1];
-
-		}
-
-		for(const entry of input.uniforms) {
-
-			this.previousUniforms.set(entry[0], entry[1]);
-			fullscreenMaterial.uniforms[entry[0]] = entry[1];
-
-		}
-
-		fullscreenMaterial.needsUpdate = true;
-
-	}
-
-	/**
 	 * Updates the G-Buffer struct uniform.
 	 */
 
@@ -329,7 +262,6 @@ export class EffectPass extends Pass<EffectMaterial> {
 	protected override onInputChange(): void {
 
 		this.updateGBufferStruct();
-		this.updateDefinesAndUniforms();
 
 		// Make the input buffers available to all effects.
 
