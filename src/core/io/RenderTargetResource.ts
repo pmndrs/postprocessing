@@ -1,5 +1,5 @@
 import { WebGLRenderTarget } from "three";
-import { Resource } from "./Resource.js";
+import { DisposableResource } from "./DisposableResource.js";
 import { TextureResource } from "./TextureResource.js";
 
 /**
@@ -8,10 +8,10 @@ import { TextureResource } from "./TextureResource.js";
  * @category IO
  */
 
-export class RenderTargetResource extends Resource<WebGLRenderTarget | null> {
+export class RenderTargetResource extends DisposableResource<WebGLRenderTarget | null> {
 
 	/**
-	 * A live resource that wraps the texture of the render target.
+	 * A live resource that wraps the texture of the current render target.
 	 */
 
 	readonly texture: TextureResource;
@@ -38,6 +38,7 @@ export class RenderTargetResource extends Resource<WebGLRenderTarget | null> {
 
 	override set value(value: WebGLRenderTarget | null) {
 
+		// Note: Three automatically deletes textures and depth textures of a render target on dispose.
 		super.value = value;
 		this.texture.value = value !== null ? value.texture : null;
 

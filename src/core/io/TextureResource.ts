@@ -1,4 +1,5 @@
 import { BaseEvent, EventListener, Texture, Uniform } from "three";
+import { DisposableResource } from "./DisposableResource.js";
 import { Resource } from "./Resource.js";
 
 /**
@@ -7,7 +8,7 @@ import { Resource } from "./Resource.js";
  * @category IO
  */
 
-export class TextureResource extends Resource<Texture | null> {
+export class TextureResource extends DisposableResource<Texture | null> {
 
 	/**
 	 * A collection of `change` listeners for bound uniforms.
