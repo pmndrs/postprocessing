@@ -292,19 +292,13 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this.output.setChanged();
 		this.resolution.setChanged();
 
-		for(const pass of this.subpasses) {
-
-			pass.attached = value;
-
-		}
-
 	}
 
 	/**
 	 * A list of subpasses.
 	 *
 	 * Subpasses are included in automatic resource optimizations and will be disposed when the parent pass is disposed.
-	 * The resolution of the subpasses is also kept in sync with the base resolution of the parent pass.
+	 * The resolution, viewport and scissor of the subpasses are also kept in sync with the parent pass.
 	 *
 	 * They also gain access to the following data:
 	 * - {@link timer}
@@ -322,20 +316,27 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	protected set subpasses(value: Pass<Material | null>[]) {
 
+		// Detach the current subpasses.
+		for(const pass of this.subpasses) {
+
+			pass.attached = false;
+
+		}
+
+		for(const pass of value) {
+
+			if(pass.attached) {
+
+				throw new Error(`${pass.name} is already attached to another pass`);
+
+			}
+
+		}
+
 		this._subpasses = value;
 		Object.freeze(this._subpasses);
 
-		this.updateSubpassResolution();
-
-		for(const pass of this.subpasses) {
-
-			pass.timer = this.timer;
-			pass.renderer = this.renderer;
-			pass.scene = this.scene;
-			pass.camera = this.camera;
-			pass.attached = this.attached;
-
-		}
+		this.initializeSubpasses();
 
 	}
 
@@ -472,6 +473,26 @@ export abstract class Pass<TMaterial extends Material | null = null>
 			this.fullscreenScene = new Scene();
 			this.fullscreenCamera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
 			this.fullscreenScene.add(this.screen);
+
+		}
+
+	}
+
+	/**
+	 * Sets the base settings of all subpasses.
+	 */
+
+	private initializeSubpasses(): void {
+
+		for(const pass of this.subpasses) {
+
+			pass.timer = this.timer;
+			pass.renderer = this.renderer;
+			pass.scene = this.scene;
+			pass.camera = this.camera;
+			pass.viewport.copy(this.viewport);
+			pass.scissor.copy(this.scissor);
+			pass.attached = true;
 
 		}
 
