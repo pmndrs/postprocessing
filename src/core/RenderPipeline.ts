@@ -1,4 +1,4 @@
-import { Material, Vector2, WebGLRenderer } from "three";
+import { Material, Vector2, Vector4, WebGLRenderer } from "three";
 import { Timer } from "three/examples/jsm/misc/Timer.js";
 import { ShaderChunkExtensions } from "../shader-chunks/ShaderChunkExtensions.js";
 import { ImmutableTimer } from "../utils/ImmutableTimer.js";
@@ -198,6 +198,8 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 			this.renderer.getDrawingBufferSize(v);
 			pass.resolution.setBaseSize(v.width, v.height);
+			pass.viewport.copyBaseSize(this.resolution);
+			pass.scissor.copyBaseSize(this.resolution);
 
 		}
 
@@ -363,6 +365,8 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 		for(const pass of this.passes) {
 
 			pass.resolution.setBaseSize(effectiveSize.width, effectiveSize.height);
+			pass.viewport.copyBaseSize(resolution);
+			pass.scissor.copyBaseSize(resolution);
 
 		}
 
@@ -380,6 +384,70 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 		this.updateStyle = updateStyle;
 		this.resolution.setBaseSize(width, height);
+
+	}
+
+	/**
+	 * Sets the viewport for all passes.
+	 *
+	 * Please note that viewport settings need to be enabled on a per-pass basis to take effect.
+	 *
+	 * @param x - The X-offset starting in the lower left corner, or a vector that describes the viewport.
+	 * @param y - The Y-offset starting in the lower left corner.
+	 * @param width - The width in logical pixels (before pixel ratio).
+	 * @param height - The height in logical pixels (before pixel ratio).
+	 */
+
+	setViewport(x: number | Vector4, y = 0, width = 0, height = 0): void {
+
+		if(x instanceof Vector4) {
+
+			const v = x;
+			x = v.x;
+			y = v.y;
+			width = v.z;
+			height = v.w;
+
+		}
+
+		for(const pass of this.passes) {
+
+			pass.viewport.setOffset(x, y);
+			pass.viewport.setBaseSize(width, height);
+
+		}
+
+	}
+
+	/**
+	 * Sets the scissor region for all passes.
+	 *
+	 * Please note that scissor settings need to be enabled on a per-pass basis to take effect.
+	 *
+	 * @param x - The X-offset, or a vector that describes the scissor region.
+	 * @param y - The Y-offset starting in the lower left corner.
+	 * @param width - The width in logical pixels (before pixel ratio).
+	 * @param height - The height in logical pixels (before pixel ratio).
+	 */
+
+	setScissor(x: number | Vector4, y = 0, width = 0, height = 0): void {
+
+		if(x instanceof Vector4) {
+
+			const v = x;
+			x = v.x;
+			y = v.y;
+			width = v.z;
+			height = v.w;
+
+		}
+
+		for(const pass of this.passes) {
+
+			pass.scissor.setOffset(x, y);
+			pass.scissor.setBaseSize(width, height);
+
+		}
 
 	}
 

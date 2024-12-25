@@ -74,7 +74,7 @@ export class LuminancePass extends Pass<LuminanceMaterial> {
 
 	override render(): void {
 
-		this.renderer?.setRenderTarget(this.renderTarget);
+		this.setRenderTarget(this.renderTarget);
 		this.renderFullscreen();
 
 	}

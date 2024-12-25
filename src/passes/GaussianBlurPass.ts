@@ -176,7 +176,6 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> {
 
 		}
 
-		const renderer = this.renderer;
 		const renderTargetA = this.renderTargetA;
 		const renderTargetB = this.renderTargetB;
 		const blurMaterial = this.blurMaterial;
@@ -188,13 +187,13 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> {
 			// Blur direction: Horizontal
 			blurMaterial.direction.set(1.0, 0.0);
 			blurMaterial.inputBuffer = previousBuffer;
-			renderer.setRenderTarget(renderTargetA);
+			this.setRenderTarget(renderTargetA);
 			this.renderFullscreen();
 
 			// Blur direction: Vertical
 			blurMaterial.direction.set(0.0, 1.0);
 			blurMaterial.inputBuffer = renderTargetA.texture;
-			renderer.setRenderTarget(renderTargetB);
+			this.setRenderTarget(renderTargetB);
 			this.renderFullscreen();
 
 			if(i === 0 && l > 1) {

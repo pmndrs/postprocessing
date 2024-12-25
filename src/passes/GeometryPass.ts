@@ -575,8 +575,8 @@ export class GeometryPass extends Pass implements Selective {
 
 		}
 
-		this.renderer.setRenderTarget(this.output.defaultBuffer?.value ?? null);
-		this.renderer.render(scene, camera);
+		this.setRenderTarget(this.output.defaultBuffer?.value ?? null);
+		renderer.render(scene, camera);
 
 		// Restore the original values.
 		camera.layers.mask = mask;

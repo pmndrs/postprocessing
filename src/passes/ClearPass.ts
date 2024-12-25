@@ -147,7 +147,6 @@ export class ClearPass extends Pass {
 
 		}
 
-		renderer.setRenderTarget(this.output.defaultBuffer?.value ?? null);
 		renderer.clear(flags.color, flags.depth, flags.stencil);
 
 		if(hasOverrideClearColor) {
@@ -174,8 +173,6 @@ export class ClearPass extends Pass {
 		const camera = this.camera!;
 		const renderer = this.renderer!;
 		const flags = this.clearFlags;
-
-		renderer.setRenderTarget(this.output.defaultBuffer?.value ?? null);
 
 		if(scene.background instanceof Color) {
 
@@ -213,6 +210,8 @@ export class ClearPass extends Pass {
 
 		const background = this.scene?.background ?? null;
 		const hasOverrideClearColor = this.clearValues.color !== null;
+
+		this.setRenderTarget(this.output.defaultBuffer?.value ?? null);
 
 		if(!hasOverrideClearColor && this.camera !== null && background !== null) {
 

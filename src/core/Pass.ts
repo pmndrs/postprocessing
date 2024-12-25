@@ -28,6 +28,8 @@ import { BaseEventMap } from "./BaseEventMap.js";
 import { Disposable } from "./Disposable.js";
 import { Identifiable } from "./Identifiable.js";
 import { Renderable } from "./Renderable.js";
+import { Viewport } from "../utils/Viewport.js";
+import { Scissor } from "../utils/Scissor.js";
 
 /**
  * Pass events.
@@ -193,6 +195,22 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	readonly resolution: Resolution;
 
 	/**
+	 * The viewport.
+	 *
+	 * @see {@link Viewport.enabled} to enable the viewport.
+	 */
+
+	readonly viewport: Viewport;
+
+	/**
+	 * A rectangular area inside the viewport. Fragments that are outside the area will not be rendered.
+	 *
+	 * @see {@link Scissor.enabled} to enable the scissor.
+	 */
+
+	readonly scissor: Scissor;
+
+	/**
 	 * The input resources of this pass.
 	 */
 
@@ -234,7 +252,11 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this.disposables = new Set<Disposable>();
 
 		this.resolution = new Resolution();
+		this.viewport = new Viewport();
+		this.scissor = new Scissor();
 		this.resolution.addEventListener(Resolution.EVENT_CHANGE, (e) => this.handleResolutionEvent(e));
+		this.viewport.addEventListener(Viewport.EVENT_CHANGE, (e) => this.handleViewportEvent(e));
+		this.scissor.addEventListener(Scissor.EVENT_CHANGE, (e) => this.handleScissorEvent(e));
 
 		this.input = new Input();
 		this.output = new Output();
@@ -517,6 +539,42 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	}
 
 	/**
+	 * Updates the viewport of all subpasses.
+	 */
+
+	private updateSubpassViewport(): void {
+
+		const { enabled, offsetX, offsetY, baseWidth, baseHeight } = this.viewport;
+
+		for(const pass of this.subpasses) {
+
+			pass.viewport.enabled = enabled;
+			pass.viewport.setOffset(offsetX, offsetY);
+			pass.viewport.setBaseSize(baseWidth, baseHeight);
+
+		}
+
+	}
+
+	/**
+	 * Updates the scissor of all subpasses.
+	 */
+
+	private updateSubpassScissor(): void {
+
+		const { enabled, offsetX, offsetY, baseWidth, baseHeight } = this.scissor;
+
+		for(const pass of this.subpasses) {
+
+			pass.scissor.enabled = enabled;
+			pass.scissor.setOffset(offsetX, offsetY);
+			pass.scissor.setBaseSize(baseWidth, baseHeight);
+
+		}
+
+	}
+
+	/**
 	 * Updates the size of the default output buffer, if it exists.
 	 */
 
@@ -688,6 +746,22 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	protected onResolutionChange(): void {}
 
 	/**
+	 * Performs tasks when the {@link viewport} has changed.
+	 *
+	 * Override this empty method to handle viewport changes.
+	 */
+
+	protected onViewportChange(): void {}
+
+	/**
+	 * Performs tasks when the {@link scissor} has changed.
+	 *
+	 * Override this empty method to handle scissor changes.
+	 */
+
+	protected onScissorChange(): void {}
+
+	/**
 	 * Creates a framebuffer.
 	 *
 	 * @return The framebuffer.
@@ -707,6 +781,100 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	protected setChanged(): void {
 
 		this.dispatchEvent({ type: Pass.EVENT_CHANGE });
+
+	}
+
+	/**
+	 * Applies the viewport of this pass to the current render target.
+	 */
+
+	protected applyViewport(): void {
+
+		if(this.renderer === null) {
+
+			return;
+
+		}
+
+		const renderTarget = this.renderer.getRenderTarget();
+		const viewport = this.viewport;
+
+		if(renderTarget === null) {
+
+			if(viewport.enabled) {
+
+				this.renderer.setViewport(viewport.x, viewport.y, viewport.z, viewport.w);
+
+			} else {
+
+				const { baseWidth, baseHeight } = this.resolution;
+				this.renderer.setViewport(0, 0, baseWidth, baseHeight);
+
+			}
+
+		} else {
+
+			if(viewport.enabled) {
+
+				renderTarget.viewport.copy(viewport);
+
+			} else {
+
+				const { width, height } = renderTarget;
+				renderTarget.viewport.set(0, 0, width, height);
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Applies the scissor region of this pass to the current render target.
+	 */
+
+	protected applyScissor(): void {
+
+		if(this.renderer === null) {
+
+			return;
+
+		}
+
+		const renderTarget = this.renderer.getRenderTarget();
+		const scissor = this.scissor;
+
+		if(renderTarget === null) {
+
+			if(scissor.enabled) {
+
+				this.renderer.setScissor(scissor.x, scissor.y, scissor.z, scissor.w);
+				this.renderer.setScissorTest(true);
+
+			} else {
+
+				const { baseWidth, baseHeight } = this.resolution;
+				this.renderer.setScissor(0, 0, baseWidth, baseHeight);
+				this.renderer.setScissorTest(false);
+
+			}
+
+		} else {
+
+			if(scissor.enabled) {
+
+				renderTarget.scissor.copy(scissor);
+				renderTarget.scissorTest = true;
+
+			} else {
+
+				const { baseWidth, baseHeight } = this.resolution;
+				renderTarget.scissor.set(0, 0, baseWidth, baseHeight);
+				renderTarget.scissorTest = false;
+
+			}
+
+		}
 
 	}
 
@@ -763,6 +931,56 @@ export abstract class Pass<TMaterial extends Material | null = null>
 				this.updateOutputBufferSize();
 				this.onResolutionChange();
 				this.updateSubpassResolution();
+				break;
+
+		}
+
+	}
+
+	/**
+	 * Handles {@link viewport} events.
+	 *
+	 * @param event - A viewport event.
+	 */
+
+	private handleViewportEvent(event: Event): void {
+
+		if(!this.attached) {
+
+			return;
+
+		}
+
+		switch(event.type) {
+
+			case "change":
+				this.onViewportChange();
+				this.updateSubpassViewport();
+				break;
+
+		}
+
+	}
+
+	/**
+	 * Handles {@link scissor} events.
+	 *
+	 * @param event - A scissor event.
+	 */
+
+	private handleScissorEvent(event: Event): void {
+
+		if(!this.attached) {
+
+			return;
+
+		}
+
+		switch(event.type) {
+
+			case "change":
+				this.onScissorChange();
+				this.updateSubpassScissor();
 				break;
 
 		}
