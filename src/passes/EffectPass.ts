@@ -277,7 +277,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		}
 
-		// Clean up and configure listeners for the G-Buffer configuration.
+		// Clean up and listen for G-Buffer config changes to rebuild the material when needed.
 
 		if(this.previousGBufferConfig !== null) {
 
@@ -340,7 +340,11 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		for(const effect of this.effects) {
 
-			effect.render();
+			if(effect.enabled) {
+
+				effect.render();
+
+			}
 
 		}
 
