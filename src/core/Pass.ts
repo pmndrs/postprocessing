@@ -12,6 +12,8 @@ import {
 	RawShaderMaterial,
 	Scene,
 	ShaderMaterial,
+	Texture,
+	Uniform,
 	WebGLRenderTarget,
 	WebGLRenderer
 } from "three";
@@ -705,6 +707,25 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	protected setChanged(): void {
 
 		this.dispatchEvent({ type: Pass.EVENT_CHANGE });
+
+	}
+
+	/**
+	 * Sets the active render target.
+	 *
+	 * This method also calls {@link applyViewport} and {@link applyScissor}.
+	 *
+	 * @param renderTarget - A render target. Use `null` to render to the canvas.
+	 * @param activeCubeFace - The active cube side (PX 0, NX 1, PY 2, NY 3, PZ 4, NZ 5) of `WebGLCubeRenderTarget`.
+	 * @param activeMipmapLevel - Specifies the active mipmap level.
+	 */
+
+	protected setRenderTarget(renderTarget: WebGLRenderTarget | WebGLRenderTarget<Texture[]> | null,
+		activeCubeFace?: number, activeMipmapLevel?: number): void {
+
+		this.renderer?.setRenderTarget(renderTarget, activeCubeFace, activeMipmapLevel);
+		this.applyViewport();
+		this.applyScissor();
 
 	}
 
