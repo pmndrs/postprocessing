@@ -23,7 +23,6 @@ import {
 	WebGLRenderer
 } from "three";
 
-import { Resource } from "../core/io/Resource.js";
 import { Pass } from "../core/Pass.js";
 import { Selective } from "../core/Selective.js";
 import { GBuffer } from "../enums/GBuffer.js";
@@ -34,6 +33,7 @@ import { ObservableSet } from "../utils/ObservableSet.js";
 import { Selection } from "../utils/Selection.js";
 import { CopyPass } from "./CopyPass.js";
 import { GBufferTextureConfig } from "../utils/GBufferTextureConfig.js";
+import { RenderTargetResource } from "../core/index.js";
 
 /**
  * GeometryPass constructor options.
@@ -69,8 +69,6 @@ export interface GeometryPassOptions {
 
 	/**
 	 * The amount of samples used for MSAA.
-	 *
-	 * Will be limited to the maximum value supported by the device.
 	 *
 	 * @defaultValue 0
 	 */
@@ -120,7 +118,7 @@ export class GeometryPass extends Pass implements Selective {
 	private readonly registeredMaterials: WeakSet<Material>;
 
 	/**
-	 * A copy pass that is used to blit the default input buffer to the output color buffer.
+	 * A pass that copies the default input buffer to the output color buffer.
 	 */
 
 	private readonly copyPass: CopyPass;
@@ -128,7 +126,7 @@ export class GeometryPass extends Pass implements Selective {
 	/**
 	 * Controls which G-Buffer components should be rendered by this pass.
 	 *
-	 * This will be automatically configured based on the requirements of other passes in the same pipeline.
+	 * This will automatically be configured based on the requirements of other passes in the same pipeline.
 	 *
 	 * @internal
 	 */
@@ -156,10 +154,10 @@ export class GeometryPass extends Pass implements Selective {
 	readonly frameBufferType: TextureDataType;
 
 	/**
-	 * The current G-Buffer resource.
+	 * A resource that wraps the G-Buffer.
 	 */
 
-	private gBufferResource: Resource | null;
+	private readonly gBufferResource: RenderTargetResource;
 
 	/**
 	 * @see {@link samples}
@@ -226,7 +224,8 @@ export class GeometryPass extends Pass implements Selective {
 		const gBufferComponents = new ObservableSet<GBuffer | string>();
 		gBufferComponents.addEventListener(ObservableSet.EVENT_CHANGE, () => this.updateGBuffer());
 		this.gBufferComponents = gBufferComponents;
-		this.gBufferResource = null;
+		this.gBufferResource = new RenderTargetResource();
+		this.output.defaultBuffer = this.gBufferResource;
 
 		this.scene = scene;
 		this.camera = camera;
@@ -281,7 +280,7 @@ export class GeometryPass extends Pass implements Selective {
 
 	get gBuffer(): WebGLRenderTarget | null {
 
-		return this.output.defaultBuffer?.value ?? null;
+		return this.gBufferResource.value;
 
 	}
 
@@ -445,26 +444,34 @@ export class GeometryPass extends Pass implements Selective {
 
 	private updateGBuffer(): void {
 
-		if(this.output.hasDefaultBuffer && this.output.defaultBuffer !== this.gBufferResource) {
+		const output = this.output;
+		const gBufferComponents = this.gBufferComponents;
+
+		if(output.hasDefaultBuffer && output.defaultBuffer !== this.gBufferResource) {
 
 			// Don't modify foreign resources.
 			return;
 
+		} else if(!output.hasDefaultBuffer) {
+
+			output.defaultBuffer = this.gBufferResource;
+
 		}
 
-		const gBufferComponents = this.gBufferComponents;
-		this.output.defaultBuffer?.value?.dispose();
+		// Dispose the current G-Buffer if it exists.
+		output.defaultBuffer!.value?.depthTexture?.dispose();
+		output.defaultBuffer!.value?.dispose();
 
 		if(gBufferComponents.size === 0) {
 
-			this.output.defaultBuffer = null;
-			this.gBufferResource = this.output.defaultBuffer;
-			this.output.defines.clear();
-
+			// Fall back to the canvas.
+			output.defaultBuffer = null;
+			output.defines.clear();
 			return;
 
 		}
 
+		// Create a new G-Buffer.
 		const { width, height } = this.resolution;
 		const textureConfigs = this.textureConfigs;
 		const renderTarget = new WebGLRenderTarget(width, height, {
@@ -487,51 +494,101 @@ export class GeometryPass extends Pass implements Selective {
 
 		}
 
-		if(gBufferComponents.has(GBuffer.DEPTH)) {
+		output.defaultBuffer = renderTarget;
+		this.configureDepthTexture();
+		this.updateOutputBufferColorSpace();
+
+	}
+
+	/**
+	 * Configures the depth texture.
+	 *
+	 * Uses the current {@link GBuffer.DEPTH} texture if available, or creates a new one.
+	 */
+
+	private configureDepthTexture(): void {
+
+		const output = this.output;
+
+		if(output.defaultBuffer !== this.gBufferResource) {
+
+			// Don't modify foreign resources.
+			return;
+
+		}
+
+		const outputBuffer = output.defaultBuffer.value;
+
+		if(outputBuffer === null) {
+
+			return;
+
+		}
+
+		if(!this.gBufferComponents.has(GBuffer.DEPTH)) {
+
+			outputBuffer.depthTexture?.dispose();
+			outputBuffer.depthTexture = null;
+			return;
+
+		}
+
+		const inputDepthTexture = this.input.getBuffer(GBuffer.DEPTH);
+
+		if(inputDepthTexture !== null) {
+
+			if(outputBuffer.depthTexture !== inputDepthTexture) {
+
+				outputBuffer.depthTexture?.dispose();
+				outputBuffer.depthTexture = inputDepthTexture as DepthTexture;
+
+			}
+
+		} else {
 
 			const depthTexture = new DepthTexture(1, 1);
 			depthTexture.name = GBuffer.DEPTH;
 			depthTexture.format = this.stencilBuffer ? DepthStencilFormat : DepthFormat;
 			depthTexture.type = this.stencilBuffer ? UnsignedInt248Type : UnsignedIntType;
-			renderTarget.depthTexture = depthTexture;
+			outputBuffer.depthTexture?.dispose();
+			outputBuffer.depthTexture = depthTexture;
 
 		}
 
-		this.output.defaultBuffer = renderTarget;
-		this.gBufferResource = this.output.defaultBuffer;
-		this.updateOutputBufferColorSpace();
-
 	}
+
+	/**
+	 * Updates the settings of the internal copy pass.
+	 */
 
 	private updateCopyPass(): void {
 
 		const inputBuffer = this.input.defaultBuffer?.value ?? null;
 		const outputBuffer = this.output.defaultBuffer?.value ?? null;
-		const textureCount = outputBuffer?.textures.length ?? 0;
+		const inputIsOutput = (inputBuffer === outputBuffer?.texture);
+		const outputIsMRT = ((outputBuffer?.textures.length ?? 0) > 1);
 
-		this.copyPass.enabled = (
-			inputBuffer !== null &&
-			inputBuffer !== outputBuffer?.texture &&
-			textureCount < 2
-		);
+		this.copyPass.enabled = (inputBuffer !== null && !inputIsOutput && !outputIsMRT);
 
 	}
 
 	protected override onInputChange(): void {
 
-		this.copyPass.input.defaultBuffer = this.input.defaultBuffer;
+		this.configureDepthTexture();
+
+		const copyPass = this.copyPass;
+		copyPass.input.defaultBuffer = this.input.defaultBuffer;
+		this.updateCopyPass();
 
 		if(this.input.buffers.has(GBuffer.DEPTH)) {
 
-			this.copyPass.input.buffers.set(GBuffer.DEPTH, this.input.buffers.get(GBuffer.DEPTH)!);
+			copyPass.input.buffers.set(GBuffer.DEPTH, this.input.buffers.get(GBuffer.DEPTH)!);
 
 		} else {
 
-			this.copyPass.input.buffers.delete(GBuffer.DEPTH);
+			copyPass.input.buffers.delete(GBuffer.DEPTH);
 
 		}
-
-		this.updateCopyPass();
 
 	}
 
@@ -539,7 +596,12 @@ export class GeometryPass extends Pass implements Selective {
 
 		if(!this.output.hasDefaultBuffer) {
 
+			// Restore the G-Buffer.
 			this.updateGBuffer();
+
+		} else {
+
+			this.configureDepthTexture();
 
 		}
 
@@ -548,15 +610,23 @@ export class GeometryPass extends Pass implements Selective {
 
 	}
 
+	protected override onResolutionChange(): void {
+
+		// Use the same resolution settings for the copy pass.
+		this.copyPass.resolution.copy(this.resolution);
+
+	}
+
 	override render(): void {
 
-		if(this.renderer === null || this.scene === null || this.camera === null) {
+		const { renderer, scene, camera } = this;
+
+		if(renderer === null || scene === null || camera === null) {
 
 			return;
 
 		}
 
-		const { scene, camera, selection } = this;
 		const mask = camera.layers.mask;
 		const background = scene.background;
 
@@ -565,7 +635,7 @@ export class GeometryPass extends Pass implements Selective {
 
 		if(this.selection.enabled) {
 
-			this.camera.layers.set(selection.layer);
+			camera.layers.set(this.selection.layer);
 
 		}
 
