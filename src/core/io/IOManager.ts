@@ -5,9 +5,10 @@ import { extractIndices } from "../../utils/GBufferUtils.js";
 import { GeometryPass } from "../../passes/GeometryPass.js";
 import { Pass } from "../Pass.js";
 import { RenderPipeline } from "../RenderPipeline.js";
-import { Output } from "./Output.js";
 import { TextureResource } from "./TextureResource.js";
 import { Resource } from "./Resource.js";
+import { Input } from "./Input.js";
+import { RenderTargetResource } from "./RenderTargetResource.js";
 
 /**
  * An I/O manager.
@@ -69,69 +70,64 @@ export class IOManager {
 	private updateInput(pipeline: RenderPipeline): void {
 
 		const geoPass = IOManager.findMainGeometryPass(pipeline);
-
-		let previousPass: Pass<Material | null> | null = null;
-		let previousOutputBuffer: WebGLRenderTarget | null | undefined;
-
 		const passes = pipeline.passes.filter(x => x.enabled);
 
-		for(let i = 0, j = -1, l = passes.length; i < l; ++i, ++j) {
+		// Assign scene, camera and gBuffer textures.
+		for(let i = 0, j = 1, l = passes.length; i < l; ++i, ++j) {
 
 			const pass = passes[i];
 
-			if(geoPass !== undefined) {
-
-				if(pass !== geoPass) {
-
-					IOManager.assignGBufferTextures(pass, geoPass);
-
-				}
-
-				if(!(pass instanceof GeometryPass)) {
-
-					pass.scene = geoPass.scene;
-					pass.camera = geoPass.camera;
-
-				}
-
-			}
-
-			if(j >= 0 && !(passes[j] instanceof ClearPass)) {
-
-				previousPass = passes[j];
-
-			}
-
-			// Keep track of the last output buffer (some passes don't render to the default buffer).
-			previousOutputBuffer = previousPass?.output.buffers.get(Output.BUFFER_DEFAULT)?.value ?? previousOutputBuffer;
-
-			if(previousPass === null) {
+			if(pass === geoPass) {
 
 				continue;
 
 			}
 
-			previousPass.output.defines.forEach((value, key) => pass.input.defines.set(key, value));
-			previousPass.output.uniforms.forEach((value, key) => pass.input.uniforms.set(key, value));
+			if(j < l && pass instanceof ClearPass) {
 
-			if(previousOutputBuffer === null) {
+				const nextPass = passes[j];
+				pass.scene = nextPass.scene;
+				pass.camera = nextPass.camera;
 
-				pass.input.defaultBuffer = null;
+			} else if(!(pass instanceof GeometryPass) && geoPass !== undefined) {
 
-			} else if(previousOutputBuffer !== undefined) {
+				pass.scene = geoPass.scene;
+				pass.camera = geoPass.camera;
 
-				const indices = extractIndices(previousOutputBuffer);
+			}
 
-				if(indices.has(GBuffer.COLOR)) {
+			IOManager.assignGBufferTextures(pass, geoPass);
 
-					const index = indices.get(GBuffer.COLOR)!;
-					pass.input.defaultBuffer = previousOutputBuffer.textures[index];
+		}
 
-				} else {
+		let outputBuffer: RenderTargetResource | undefined;
 
-					pass.input.defaultBuffer = previousOutputBuffer.texture;
+		// Connect default buffers and assign inputs.
+		for(let i = 0, j = 1, l = passes.length; j < l; ++i, ++j) {
 
-				}
+			const pass = passes[i];
+			const nextPass = passes[j];
+
+			// Keep track of the last output buffer.
+			if(!(pass instanceof ClearPass) && pass.output.hasDefaultBuffer &&
+				pass.output.defaultBuffer!.value !== null) {
+
+				outputBuffer = pass.output.defaultBuffer!;
+
+			}
+
+			// Use the outputs of this pass as inputs for the next pass.
+			pass.output.defines.forEach((value, key) => nextPass.input.defines.set(key, value));
+			pass.output.uniforms.forEach((value, key) => nextPass.input.uniforms.set(key, value));
+
+			if(outputBuffer === undefined) {
+
+				nextPass.input.buffers.delete(Input.BUFFER_DEFAULT);
+
+			} else if(outputBuffer !== undefined) {
+
+				// MRT: assuming texture 0 to be the main color attachment.
+				nextPass.input.defaultBuffer = outputBuffer.texture;
 
 			}
 
@@ -179,6 +175,7 @@ export class IOManager {
 
 		const passes = pipeline.passes.filter(x => x.enabled);
 
+		// Auto render to screen.
 		if(pipeline.autoRenderToScreen && passes.length > 0) {
 
 			this.restoreOutputBuffers(passes);
@@ -207,17 +204,15 @@ export class IOManager {
 
 			const pass = passes[i];
 
-			if(!(pass instanceof ClearPass)) {
+			if(pass instanceof ClearPass) {
 
-				continue;
+				// Assign the output resources of the next pass to this clear pass.
+				const nextPass = passes[j];
+				nextPass.output.defines.forEach((value, key) => pass.output.defines.set(key, value));
+				nextPass.output.uniforms.forEach((value, key) => pass.output.uniforms.set(key, value));
+				pass.output.defaultBuffer = nextPass.output.defaultBuffer;
 
 			}
-
-			// Assign the output resources of the next pass to this clear pass.
-			const nextPass = passes[j];
-			nextPass.output.defines.forEach((value, key) => pass.output.defines.set(key, value));
-			nextPass.output.uniforms.forEach((value, key) => pass.output.uniforms.set(key, value));
-			pass.output.defaultBuffer = nextPass.output.defaultBuffer;
 
 		}
 
