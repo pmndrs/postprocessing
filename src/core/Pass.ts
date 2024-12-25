@@ -739,8 +739,8 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		switch(event.type) {
 
 			case "change":
-				this.onResolutionChange();
 				this.updateOutputBufferSize();
+				this.onResolutionChange();
 				this.updateSubpassResolution();
 				break;
 
@@ -765,8 +765,8 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		switch(event.type) {
 
 			case "change":
-				this.onInputChange();
 				this.updateFullscreenMaterialInput();
+				this.onInputChange();
 				break;
 
 		}
@@ -790,9 +790,9 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		switch(event.type) {
 
 			case "change":
-				this.onOutputChange();
-				this.updateFullscreenMaterialOutput();
 				this.updateOutputBufferSize();
+				this.updateFullscreenMaterialOutput();
+				this.onOutputChange();
 				break;
 
 		}
