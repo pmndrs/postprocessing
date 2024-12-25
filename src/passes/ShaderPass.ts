@@ -41,11 +41,10 @@ export class ShaderPass<TMaterial extends ShaderMaterial = ShaderMaterial> exten
 	protected override onInputChange(): void {
 
 		const uniforms = this.fullscreenMaterial.uniforms;
-		const inputBuffer = this.input.defaultBuffer;
 
-		if(uniforms?.[this.uniformName] !== undefined) {
+		if(this.input.hasDefaultBuffer && uniforms[this.uniformName] !== undefined) {
 
-			uniforms[this.uniformName].value = inputBuffer;
+			uniforms[this.uniformName].value = this.input.defaultBuffer!.value;
 
 		}
 
