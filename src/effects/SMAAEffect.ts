@@ -267,6 +267,10 @@ export class SMAAEffect extends Effect {
 			searchImage.src = searchImageDataURL;
 			areaImage.src = areaImageDataURL;
 
+		} else {
+
+			console.warn("Failed to create search/area images");
+
 		}
 
 	}
