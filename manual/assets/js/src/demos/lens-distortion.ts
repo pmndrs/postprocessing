@@ -69,8 +69,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 	settings.rotation.sensitivity = 2.2;
 	settings.rotation.damping = 0.05;
 	settings.translation.damping = 0.1;
-	controls.position.set(0, 1.5, 10);
-	controls.lookAt(0, 1.35, 0);
+	controls.position.set(0, 0.5, 10);
+	controls.lookAt(0, 1.5, 0);
 
 	// Scene, Lights, Objects
 
@@ -84,8 +84,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Post Processing
 
 	const effect = new LensDistortionEffect({
-		distortion: new Vector2(0.75, 0.5),
-		focalLength: new Vector2(0.4, 0.5)
+		distortion: new Vector2(0.15, 0.15),
+		focalLength: new Vector2(0.75, 0.75)
 	});
 
 	const pipeline = new RenderPipeline(renderer);
