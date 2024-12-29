@@ -33,6 +33,12 @@ export class IOManager {
 	private readonly outputDefaultBuffers: WeakMap<Resource, WebGLRenderTarget | null>;
 
 	/**
+	 * Indicates whether this manager is currently updating resources.
+	 */
+
+	private updating: boolean;
+
+	/**
 	 * Constructs a new I/O manager.
 	 */
 
@@ -40,6 +46,7 @@ export class IOManager {
 
 		this.pipelines = new Set<RenderPipeline>();
 		this.outputDefaultBuffers = new WeakMap<Resource, WebGLRenderTarget | null>();
+		this.updating = false;
 
 	}
 
@@ -243,16 +250,26 @@ export class IOManager {
 	}
 
 	/**
-	 * Updates the input and output buffers of all pipelines.
+	 * Updates the input and output resources of all pipelines.
 	 */
 
 	update(): void {
+
+		if(this.updating) {
+
+			return;
+
+		}
+
+		this.updating = true;
 
 		for(const pipeline of this.pipelines) {
 
 			this.updatePipeline(pipeline);
 
 		}
+
+		this.updating = false;
 
 	}
 
