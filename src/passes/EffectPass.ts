@@ -322,7 +322,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		for(const effect of this.effects) {
 
-			effect.removeEventListener("change", this.listener);
+			effect.removeEventListener(Pass.EVENT_CHANGE, this.listener);
 
 		}
 
