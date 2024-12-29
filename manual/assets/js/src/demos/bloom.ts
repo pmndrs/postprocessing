@@ -89,9 +89,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 	scene.fog = DefaultEnvironment.createFog();
 	scene.add(DefaultEnvironment.createEnvironment());
 
-	const model = assets.get("emissive-strength-test") as GLTF;
-	model.scene.position.y = 3;
-	scene.add(model.scene);
+	const gltf = assets.get("emissive-strength-test") as GLTF;
+	gltf.scene.position.y = 3;
+	scene.add(gltf.scene);
 
 	// Post Processing
 
