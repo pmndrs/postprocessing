@@ -299,7 +299,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	}
 
 	/**
-	 * Indicates whether this pass is currently attached to a render pipeline.
+	 * Indicates whether this pass is currently attached to another pass or a render pipeline.
 	 */
 
 	get attached(): boolean {
@@ -762,7 +762,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	protected onScissorChange(): void {}
 
 	/**
-	 * Creates a framebuffer.
+	 * Creates a basic framebuffer that uses linear filtering and has no mipmaps and no depth.
 	 *
 	 * @return The framebuffer.
 	 */
