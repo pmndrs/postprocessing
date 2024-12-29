@@ -84,7 +84,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 	settings.rotation.damping = 0.05;
 	settings.zoom.damping = 0.1;
 	settings.translation.enabled = false;
-	controls.position.set(0, 0, 5);
+	controls.position.set(0, 1.7, 5);
+	controls.lookAt(0, 1, 0);
 
 	// Scene, Lights, Objects
 
@@ -100,6 +101,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	sceneB.add(CornellBox.createLights());
 	sceneB.add(CornellBox.createEnvironment());
 	sceneB.add(CornellBox.createActors());
+	sceneB.position.y = 1;
 
 	// Post Processing
 
@@ -107,8 +109,10 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const clearPassA = new ClearPass();
 	const clearPassB = new ClearPass();
 	const geometryPassA = new GeometryPass(sceneA, camera, { frameBufferType: HalfFloatType, samples: 4 });
-	const geometryPassB = new GeometryPass(sceneB, camera, { frameBufferType: HalfFloatType, samples: 4 });
+	const geometryPassB = new GeometryPass(sceneB, camera);
 	const effectPass = new EffectPass(new ToneMappingEffect());
+
+	geometryPassB.output.defaultBuffer = geometryPassA.output.defaultBuffer;
 
 	geometryPassA.scissor.enabled = true;
 	geometryPassB.scissor.enabled = true;
@@ -120,9 +124,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 	clearPassA.viewport.enabled = true;
 	clearPassB.viewport.enabled = true;
 
-	//clearPassB.clearFlags.depth = false;
-
-	geometryPassB.output.defaultBuffer = geometryPassA.output.defaultBuffer;
 
 	pipeline.add(clearPassA, geometryPassA, clearPassB, geometryPassB, effectPass);
 
