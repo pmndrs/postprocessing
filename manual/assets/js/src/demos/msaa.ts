@@ -56,6 +56,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 		depth: false
 	});
 
+	renderer.setPixelRatio(window.devicePixelRatio);
+	renderer.debug.checkShaderErrors = Utils.isLocalhost;
 	renderer.shadowMap.type = VSMShadowMap;
 	renderer.shadowMap.autoUpdate = false;
 	renderer.shadowMap.needsUpdate = true;

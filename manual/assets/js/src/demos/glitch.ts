@@ -61,6 +61,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 		depth: false
 	});
 
+	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.debug.checkShaderErrors = Utils.isLocalhost;
 	const container = document.getElementById("viewport")!;
 	container.dataset.epilepsyWarning = "1";

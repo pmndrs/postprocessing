@@ -62,6 +62,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 		depth: false
 	});
 
+	renderer.setPixelRatio(window.devicePixelRatio);
+	renderer.debug.checkShaderErrors = Utils.isLocalhost;
 	renderer.shadowMap.type = VSMShadowMap;
 	renderer.shadowMap.autoUpdate = false;
 	renderer.shadowMap.needsUpdate = true;
@@ -140,8 +142,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 	};
 
 	const params = {
-		"preset": SMAAPreset.MEDIUM,
-		"debug": smaaDebug.OFF
+		preset: SMAAPreset.MEDIUM,
+		debug: smaaDebug.OFF
 	};
 
 	const folder = pane.addFolder({ title: "Settings" });
