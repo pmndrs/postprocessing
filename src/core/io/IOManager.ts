@@ -51,7 +51,7 @@ export class IOManager {
 	}
 
 	/**
-	 * Updates the input and output buffers of all passes in a given pipeline.
+	 * Updates the input and output resources of a given pipeline.
 	 *
 	 * @param pipeline - The pipeline to update.
 	 */
@@ -79,7 +79,7 @@ export class IOManager {
 		const geoPass = IOManager.findMainGeometryPass(pipeline);
 		const passes = pipeline.passes.filter(x => x.enabled);
 
-		// Assign scene, camera and gBuffer textures.
+		// Assign scene, camera and G-Buffer textures.
 		for(let i = 0, j = 1, l = passes.length; i < l; ++i, ++j) {
 
 			const pass = passes[i];
