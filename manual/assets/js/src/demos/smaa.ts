@@ -94,33 +94,25 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
+	const geoPass = new GeometryPass(scene, camera, {
+		frameBufferType: HalfFloatType
+	});
+
 	const effect = new SMAAEffect({
 		preset: SMAAPreset.MEDIUM,
 		edgeDetectionMode: SMAAEdgeDetectionMode.COLOR,
 		predicationMode: SMAAPredicationMode.DEPTH
 	});
 
-	const effectPass = new EffectPass(effect, new ToneMappingEffect());
-
 	const pipeline = new RenderPipeline(renderer);
-	pipeline.autoRenderToScreen = false;
-
-	pipeline.add(
-		new ClearPass(),
-		new GeometryPass(scene, camera, {
-			frameBufferType: HalfFloatType
-		}),
-		effectPass
-	);
+	const effectPass = new EffectPass(effect, new ToneMappingEffect());
+	effect.blendMode.blendFunction = new MixBlendFunction();
+	pipeline.add(new ClearPass(), geoPass, effectPass);
 
 	// #region DEBUG
-	const smaaEdgesDebugPass = new EffectPass(effect, new TextureEffect({ texture: effect.edgesTexture.value }));
-	const smaaWeightsDebugPass = new EffectPass(effect, new TextureEffect({ texture: effect.weightsTexture.value }));
+	const smaaEdgesDebugPass = new EffectPass(new TextureEffect({ texture: effect.edgesTexture.value }));
+	const smaaWeightsDebugPass = new EffectPass(new TextureEffect({ texture: effect.weightsTexture.value }));
 
-	effect.blendMode.blendFunction = new MixBlendFunction();
-	effectPass.output.defaultBuffer = null;
-	smaaEdgesDebugPass.output.defaultBuffer = null;
-	smaaWeightsDebugPass.output.defaultBuffer = null;
 	smaaEdgesDebugPass.enabled = false;
 	smaaWeightsDebugPass.enabled = false;
 	smaaEdgesDebugPass.fullscreenMaterial.colorSpaceConversion = false;
@@ -149,7 +141,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addBinding(params, "debug", { options: smaaDebug }).on("change", (e) => {
 
-		effectPass.enabled = (e.value === smaaDebug.OFF);
 		smaaEdgesDebugPass.enabled = (e.value === smaaDebug.EDGES);
 		smaaWeightsDebugPass.enabled = (e.value === smaaDebug.WEIGHTS);
 
