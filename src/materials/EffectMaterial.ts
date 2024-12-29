@@ -52,9 +52,9 @@ export class EffectMaterial extends FullscreenMaterial {
 	 * The current gBuffer.
 	 */
 
-	get gBuffer(): Record<string, Texture | null> {
+	get gBuffer(): Record<string, Texture | null> | null {
 
-		return this.uniforms.gBuffer.value as Record<string, Texture | null>;
+		return this.uniforms.gBuffer.value as Record<string, Texture | null> | null;
 
 	}
 
