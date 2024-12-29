@@ -51,24 +51,6 @@ export class IOManager {
 	}
 
 	/**
-	 * Updates the input and output resources of a given pipeline.
-	 *
-	 * @param pipeline - The pipeline to update.
-	 */
-
-	private updatePipeline(pipeline: RenderPipeline): void {
-
-		IOManager.gatherGBufferComponents(pipeline);
-
-		// Update outputs before inputs to reduce update events.
-		this.updateOutput(pipeline);
-		this.updateInput(pipeline);
-
-		IOManager.syncDefaultBufferType(pipeline);
-
-	}
-
-	/**
 	 * Updates the input buffers of all passes in a given pipeline.
 	 *
 	 * @param pipeline - The pipeline to update.
@@ -240,6 +222,24 @@ export class IOManager {
 	removePipeline(pipeline: RenderPipeline): void {
 
 		this.pipelines.delete(pipeline);
+
+	}
+
+	/**
+	 * Updates the input and output resources of a given pipeline.
+	 *
+	 * @param pipeline - The pipeline to update.
+	 */
+
+	private updatePipeline(pipeline: RenderPipeline): void {
+
+		IOManager.gatherGBufferComponents(pipeline);
+
+		// Update outputs before inputs to reduce update events.
+		this.updateOutput(pipeline);
+		this.updateInput(pipeline);
+
+		IOManager.syncDefaultBufferType(pipeline);
 
 	}
 
