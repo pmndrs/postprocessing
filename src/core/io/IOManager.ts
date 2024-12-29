@@ -196,12 +196,6 @@ export class IOManager {
 				outputDefaultBuffers.set(lastPass.output.defaultBuffer, lastPass.output.defaultBuffer.value);
 				lastPass.output.defaultBuffer = null;
 
-				if(passes.filter(x => x.output.defaultBuffer === lastPass.output.defaultBuffer).length > 1) {
-
-					console.warn("Encountered multiple passes that use the same default output buffer");
-
-				}
-
 			}
 
 		}
