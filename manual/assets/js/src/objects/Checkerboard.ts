@@ -1,5 +1,6 @@
 import {
 	AmbientLight,
+	DoubleSide,
 	Fog,
 	Group,
 	Mesh,
@@ -72,6 +73,7 @@ export function createEnvironment(): Group {
 	const checkerboard = new Mesh(new PlaneGeometry(1, 1, 6, 6), material);
 	checkerboard.name = "Checkeboard";
 	checkerboard.material.onBeforeCompile = alphaFog;
+	checkerboard.material.side = DoubleSide;
 	checkerboard.rotation.x = -Math.PI * 0.5;
 	checkerboard.scale.set(planeSize, planeSize, 1);
 	group.add(checkerboard);
