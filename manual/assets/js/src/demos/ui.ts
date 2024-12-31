@@ -118,7 +118,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const nameplatePosition = actors.children[2].position.clone();
 
 	healthPosition.y += 0.8;
-	coinPosition.y += 0.5;
+	coinPosition.y += 0.45;
 	nameplatePosition.y += 0.4;
 
 	const nameplate = new Mesh(
