@@ -799,26 +799,22 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		const renderTarget = this.renderer.getRenderTarget();
 		const viewport = this.viewport;
 
-		if(renderTarget === null) {
+		if(viewport.enabled) {
 
-			if(viewport.enabled) {
+			this.renderer.setViewport(viewport.x, viewport.y, viewport.z, viewport.w);
 
-				this.renderer.setViewport(viewport.x, viewport.y, viewport.z, viewport.w);
+			if(renderTarget !== null) {
 
-			} else {
-
-				const { baseWidth, baseHeight } = this.resolution;
-				this.renderer.setViewport(0, 0, baseWidth, baseHeight);
+				renderTarget.viewport.copy(viewport);
 
 			}
 
 		} else {
 
-			if(viewport.enabled) {
+			const { baseWidth, baseHeight } = this.resolution;
+			this.renderer.setViewport(0, 0, baseWidth, baseHeight);
 
-				renderTarget.viewport.copy(viewport);
-
-			} else {
+			if(renderTarget !== null) {
 
 				const { width, height } = renderTarget;
 				renderTarget.viewport.set(0, 0, width, height);
@@ -844,29 +840,25 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		const renderTarget = this.renderer.getRenderTarget();
 		const scissor = this.scissor;
 
-		if(renderTarget === null) {
+		if(scissor.enabled) {
 
-			if(scissor.enabled) {
+			this.renderer.setScissor(scissor.x, scissor.y, scissor.z, scissor.w);
+			this.renderer.setScissorTest(true);
 
-				this.renderer.setScissor(scissor.x, scissor.y, scissor.z, scissor.w);
-				this.renderer.setScissorTest(true);
-
-			} else {
-
-				const { baseWidth, baseHeight } = this.resolution;
-				this.renderer.setScissor(0, 0, baseWidth, baseHeight);
-				this.renderer.setScissorTest(false);
-
-			}
-
-		} else {
-
-			if(scissor.enabled) {
+			if(renderTarget !== null) {
 
 				renderTarget.scissor.copy(scissor);
 				renderTarget.scissorTest = true;
 
-			} else {
+			}
+
+		} else if(this.renderer.getScissorTest()) {
+
+			const { baseWidth, baseHeight } = this.resolution;
+			this.renderer.setScissor(0, 0, baseWidth, baseHeight);
+			this.renderer.setScissorTest(false);
+
+			if(renderTarget !== null) {
 
 				const { baseWidth, baseHeight } = this.resolution;
 				renderTarget.scissor.set(0, 0, baseWidth, baseHeight);
