@@ -124,7 +124,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 	clearPassA.viewport.enabled = true;
 	clearPassB.viewport.enabled = true;
 
-
 	pipeline.add(clearPassA, geometryPassA, clearPassB, geometryPassB, effectPass);
 
 	// Settings
