@@ -255,7 +255,6 @@ export class Input extends EventDispatcher<BaseEventMap> implements Disposable, 
 	/**
 	 * Removes the default buffer.
 	 *
-	 * @param key - The key of the buffer.
 	 * @return True if the buffer existed and has been removed, or false if it doesn't exist.
 	 */
 
