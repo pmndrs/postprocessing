@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/passes/EffectPass.js | postprocessing</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="A post processing library for three.js."><meta property="twitter:card" content="summary"><meta property="twitter:title" content="postprocessing"><meta property="twitter:description" content="A post processing library for three.js."></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/pmndrs/postprocessing"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectShaderData.js~EffectShaderData.html">EffectShaderData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/GaussKernel.js~GaussKernel.html">GaussKernel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/OverrideMaterialManager.js~OverrideMaterialManager.html">OverrideMaterialManager</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Resolution.js~Resolution.html">Resolution</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Selection.js~Selection.html">Selection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Timer.js~Timer.html">Timer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/ImmutableTimer.js~ImmutableTimer.html">ImmutableTimer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Initializable.js~Initializable.html">Initializable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects">effects</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html">BloomEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BokehEffect.js~BokehEffect.html">BokehEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BrightnessContrastEffect.js~BrightnessContrastEffect.html">BrightnessContrastEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ChromaticAberrationEffect.js~ChromaticAberrationEffect.html">ChromaticAberrationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ColorAverageEffect.js~ColorAverageEffect.html">ColorAverageEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ColorDepthEffect.js~ColorDepthEffect.html">ColorDepthEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/DepthEffect.js~DepthEffect.html">DepthEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect.html">DepthOfFieldEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/DotScreenEffect.js~DotScreenEffect.html">DotScreenEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html">Effect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/FXAAEffect.js~FXAAEffect.html">FXAAEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GammaCorrectionEffect.js~GammaCorrectionEffect.html">GammaCorrectionEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GlitchEffect.js~GlitchEffect.html">GlitchEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html">GodRaysEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GridEffect.js~GridEffect.html">GridEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/HueSaturationEffect.js~HueSaturationEffect.html">HueSaturationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/LUT1DEffect.js~LUT1DEffect.html">LUT1DEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/LUT3DEffect.js~LUT3DEffect.html">LUT3DEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/LensDistortionEffect.js~LensDistortionEffect.html">LensDistortionEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/NoiseEffect.js~NoiseEffect.html">NoiseEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html">OutlineEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/PixelationEffect.js~PixelationEffect.html">PixelationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html">RealisticBokehEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SMAAEffect.js~SMAAEffect.html">SMAAEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SSAOEffect.js~SSAOEffect.html">SSAOEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ScanlineEffect.js~ScanlineEffect.html">ScanlineEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html">SelectiveBloomEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SepiaEffect.js~SepiaEffect.html">SepiaEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ShockWaveEffect.js~ShockWaveEffect.html">ShockWaveEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/TextureEffect.js~TextureEffect.html">TextureEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/TiltShiftEffect.js~TiltShiftEffect.html">TiltShiftEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html">ToneMappingEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/VignetteEffect.js~VignetteEffect.html">VignetteEffect</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects-blending">effects/blending</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/blending/BlendMode.js~BlendMode.html">BlendMode</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#enums">enums</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-BlendFunction">BlendFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ColorChannel">ColorChannel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DepthCopyMode">DepthCopyMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DepthTestStrategy">DepthTestStrategy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EdgeDetectionMode">EdgeDetectionMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EffectAttribute">EffectAttribute</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EffectShaderSection">EffectShaderSection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GlitchMode">GlitchMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-KernelSize">KernelSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LUTOperation">LUTOperation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MaskFunction">MaskFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-PredicationMode">PredicationMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SMAAPreset">SMAAPreset</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ToneMappingMode">ToneMappingMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-VignetteTechnique">VignetteTechnique</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-WebGLExtension">WebGLExtension</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#loaders">loaders</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/loaders/LUT3dlLoader.js~LUT3dlLoader.html">LUT3dlLoader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/loaders/LUTCubeLoader.js~LUTCubeLoader.html">LUTCubeLoader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/loaders/SMAAImageLoader.js~SMAAImageLoader.html">SMAAImageLoader</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#materials">materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/AdaptiveLuminanceMaterial.js~AdaptiveLuminanceMaterial.html">AdaptiveLuminanceMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/BokehMaterial.js~BokehMaterial.html">BokehMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/BoxBlurMaterial.js~BoxBlurMaterial.html">BoxBlurMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CircleOfConfusionMaterial.js~CircleOfConfusionMaterial.html">CircleOfConfusionMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthCopyMaterial.js~DepthCopyMaterial.html">DepthCopyMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthDownsamplingMaterial.js~DepthDownsamplingMaterial.html">DepthDownsamplingMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html">DepthMaskMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DownsamplingMaterial.js~DownsamplingMaterial.html">DownsamplingMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial.html">EdgeDetectionMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GaussianBlurMaterial.js~GaussianBlurMaterial.html">GaussianBlurMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/KawaseBlurMaterial.js~KawaseBlurMaterial.html">KawaseBlurMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/MaskMaterial.js~MaskMaterial.html">MaskMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/OutlineMaterial.js~OutlineMaterial.html">OutlineMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/SSAOMaterial.js~SSAOMaterial.html">SSAOMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/TiltShiftBlurMaterial.js~TiltShiftBlurMaterial.html">TiltShiftBlurMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/UpsamplingMaterial.js~UpsamplingMaterial.html">UpsamplingMaterial</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#passes">passes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/AdaptiveLuminancePass.js~AdaptiveLuminancePass.html">AdaptiveLuminancePass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BoxBlurPass.js~BoxBlurPass.html">BoxBlurPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearMaskPass.js~ClearMaskPass.html">ClearMaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/CopyPass.js~CopyPass.html">CopyPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthCopyPass.js~DepthCopyPass.html">DepthCopyPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass.html">DepthDownsamplingPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthPass.js~DepthPass.html">DepthPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthPickingPass.js~DepthPickingPass.html">DepthPickingPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/EffectPass.js~EffectPass.html">EffectPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/GaussianBlurPass.js~GaussianBlurPass.html">GaussianBlurPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/KawaseBlurPass.js~KawaseBlurPass.html">KawaseBlurPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/LambdaPass.js~LambdaPass.html">LambdaPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/LuminancePass.js~LuminancePass.html">LuminancePass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/MaskPass.js~MaskPass.html">MaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/MipmapBlurPass.js~MipmapBlurPass.html">MipmapBlurPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/NormalPass.js~NormalPass.html">NormalPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html">Pass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ShaderPass.js~ShaderPass.html">ShaderPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/TiltShiftBlurPass.js~TiltShiftBlurPass.html">TiltShiftBlurPass</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#textures">textures</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/NoiseTexture.js~NoiseTexture.html">NoiseTexture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/RawImageData.js~RawImageData.html">RawImageData</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#textures-lut">textures/lut</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/lut/LookupTexture.js~LookupTexture.html">LookupTexture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/lut/TetrahedralUpscaler.js~TetrahedralUpscaler.html">TetrahedralUpscaler</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#textures-smaa">textures/smaa</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/smaa/SMAAAreaImageData.js~SMAAAreaImageData.html">SMAAAreaImageData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/smaa/SMAAImageGenerator.js~SMAAImageGenerator.html">SMAAImageGenerator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/smaa/SMAASearchImageData.js~SMAASearchImageData.html">SMAASearchImageData</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/utils/IdManager.js~IdManager.html">IdManager</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/passes/EffectPass.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { BasicDepthPacking, NoColorSpace, SRGBColorSpace, UnsignedByteType } from &quot;three&quot;;
+import { EffectShaderData } from &quot;../core/EffectShaderData.js&quot;;
+import { BlendFunction } from &quot;../enums/BlendFunction.js&quot;;
+import { EffectAttribute } from &quot;../enums/EffectAttribute.js&quot;;
+import { EffectShaderSection as Section } from &quot;../enums/EffectShaderSection.js&quot;;
+
+import { EffectMaterial } from &quot;../materials/EffectMaterial.js&quot;;
+import { Pass } from &quot;./Pass.js&quot;;
+
+/**
+ * Prefixes substrings within the given strings.
+ *
+ * @private
+ * @param {String} prefix - A prefix.
+ * @param {Iterable&lt;String&gt;} substrings - The substrings.
+ * @param {Map&lt;String, String&gt;} strings - A collection of named strings.
+ */
+
+function prefixSubstrings(prefix, substrings, strings) {
+
+	for(const substring of substrings) {
+
+		// Prefix the substring and build a RegExp that searches for the unprefixed version.
+		const prefixed = &quot;$1&quot; + prefix + substring.charAt(0).toUpperCase() + substring.slice(1);
+		const regExp = new RegExp(&quot;([^\\.])(\\b&quot; + substring + &quot;\\b)&quot;, &quot;g&quot;);
+
+		for(const entry of strings.entries()) {
+
+			if(entry[1] !== null) {
+
+				// Replace all occurances of the substring with the prefixed version.
+				strings.set(entry[0], entry[1].replace(regExp, prefixed));
+
+			}
+
+		}
+
+	}
+
+}
+
+/**
+ * Integrates the given effect.
+ *
+ * @private
+ * @param {String} prefix - A prefix.
+ * @param {Effect} effect - The effect.
+ * @param {EffectShaderData} data - Cumulative shader data.
+ */
+
+function integrateEffect(prefix, effect, data) {
+
+	let fragmentShader = effect.getFragmentShader();
+	let vertexShader = effect.getVertexShader();
+
+	const mainImageExists = (fragmentShader !== undefined &amp;&amp; /mainImage/.test(fragmentShader));
+	const mainUvExists = (fragmentShader !== undefined &amp;&amp; /mainUv/.test(fragmentShader));
+
+	data.attributes |= effect.getAttributes();
+
+	if(fragmentShader === undefined) {
+
+		throw new Error(`Missing fragment shader (${effect.name})`);
+
+	} else if(mainUvExists &amp;&amp; (data.attributes &amp; EffectAttribute.CONVOLUTION) !== 0) {
+
+		throw new Error(`Effects that transform UVs are incompatible with convolution effects (${effect.name})`);
+
+	} else if(!mainImageExists &amp;&amp; !mainUvExists) {
+
+		throw new Error(`Could not find mainImage or mainUv function (${effect.name})`);
+
+	} else {
+
+		const functionRegExp = /\w+\s+(\w+)\([\w\s,]*\)\s*{/g;
+
+		const shaderParts = data.shaderParts;
+		let fragmentHead = shaderParts.get(Section.FRAGMENT_HEAD) || &quot;&quot;;
+		let fragmentMainUv = shaderParts.get(Section.FRAGMENT_MAIN_UV) || &quot;&quot;;
+		let fragmentMainImage = shaderParts.get(Section.FRAGMENT_MAIN_IMAGE) || &quot;&quot;;
+		let vertexHead = shaderParts.get(Section.VERTEX_HEAD) || &quot;&quot;;
+		let vertexMainSupport = shaderParts.get(Section.VERTEX_MAIN_SUPPORT) || &quot;&quot;;
+
+		const varyings = new Set();
+		const names = new Set();
+
+		if(mainUvExists) {
+
+			fragmentMainUv += `\t${prefix}MainUv(UV);\n`;
+			data.uvTransformation = true;
+
+		}
+
+		if(vertexShader !== null &amp;&amp; /mainSupport/.test(vertexShader)) {
+
+			// Build the mainSupport call (with optional uv parameter).
+			const needsUv = /mainSupport *\([\w\s]*?uv\s*?\)/.test(vertexShader);
+			vertexMainSupport += `\t${prefix}MainSupport(`;
+			vertexMainSupport += needsUv ? &quot;vUv);\n&quot; : &quot;);\n&quot;;
+
+			// Collect names of varyings and functions.
+			for(const m of vertexShader.matchAll(/(?:varying\s+\w+\s+([\S\s]*?);)/g)) {
+
+				// Handle unusual formatting and commas.
+				for(const n of m[1].split(/\s*,\s*/)) {
+
+					data.varyings.add(n);
+					varyings.add(n);
+					names.add(n);
+
+				}
+
+			}
+
+			for(const m of vertexShader.matchAll(functionRegExp)) {
+
+				names.add(m[1]);
+
+			}
+
+		}
+
+		for(const m of fragmentShader.matchAll(functionRegExp)) {
+
+			names.add(m[1]);
+
+		}
+
+		for(const d of effect.defines.keys()) {
+
+			// Ignore parameters of function-like macros.
+			names.add(d.replace(/\([\w\s,]*\)/g, &quot;&quot;));
+
+		}
+
+		for(const u of effect.uniforms.keys()) {
+
+			names.add(u);
+
+		}
+
+		// Remove potential false positives.
+		names.delete(&quot;while&quot;);
+		names.delete(&quot;for&quot;);
+		names.delete(&quot;if&quot;);
+
+		// Store prefixed uniforms and macros.
+		effect.uniforms.forEach((val, key) =&gt; data.uniforms.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), val));
+		effect.defines.forEach((val, key) =&gt; data.defines.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), val));
+
+		// Prefix varyings, functions, uniforms and macro values.
+		const shaders = new Map([[&quot;fragment&quot;, fragmentShader], [&quot;vertex&quot;, vertexShader]]);
+		prefixSubstrings(prefix, names, data.defines);
+		prefixSubstrings(prefix, names, shaders);
+		fragmentShader = shaders.get(&quot;fragment&quot;);
+		vertexShader = shaders.get(&quot;vertex&quot;);
+
+		// Collect unique blend modes.
+		const blendMode = effect.blendMode;
+		data.blendModes.set(blendMode.blendFunction, blendMode);
+
+		if(mainImageExists) {
+
+			if(effect.inputColorSpace !== null &amp;&amp; effect.inputColorSpace !== data.colorSpace) {
+
+				fragmentMainImage += (effect.inputColorSpace === SRGBColorSpace) ?
+					&quot;color0 = sRGBTransferOETF(color0);\n\t&quot; :
+					&quot;color0 = sRGBToLinear(color0);\n\t&quot;;
+
+			}
+
+			if(effect.outputColorSpace !== NoColorSpace) {
+
+				data.colorSpace = effect.outputColorSpace;
+
+			} else if(effect.inputColorSpace !== null) {
+
+				data.colorSpace = effect.inputColorSpace;
+
+			}
+
+			const depthParamRegExp = /MainImage *\([\w\s,]*?depth[\w\s,]*?\)/;
+			fragmentMainImage += `${prefix}MainImage(color0, UV, `;
+
+			// Check if the effect reads depth in the fragment shader.
+			if((data.attributes &amp; EffectAttribute.DEPTH) !== 0 &amp;&amp; depthParamRegExp.test(fragmentShader)) {
+
+				fragmentMainImage += &quot;depth, &quot;;
+				data.readDepth = true;
+
+			}
+
+			fragmentMainImage += &quot;color1);\n\t&quot;;
+
+			// Include the blend opacity uniform of this effect.
+			const blendOpacity = prefix + &quot;BlendOpacity&quot;;
+			data.uniforms.set(blendOpacity, blendMode.opacity);
+
+			// Blend the result of this effect with the input color (color0 = dst, color1 = src).
+			fragmentMainImage += `color0 = blend${blendMode.blendFunction}(color0, color1, ${blendOpacity});\n\n\t`;
+			fragmentHead += `uniform float ${blendOpacity};\n\n`;
+
+		}
+
+		// Include the modified code in the final shader.
+		fragmentHead += fragmentShader + &quot;\n&quot;;
+
+		if(vertexShader !== null) {
+
+			vertexHead += vertexShader + &quot;\n&quot;;
+
+		}
+
+		shaderParts.set(Section.FRAGMENT_HEAD, fragmentHead);
+		shaderParts.set(Section.FRAGMENT_MAIN_UV, fragmentMainUv);
+		shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, fragmentMainImage);
+		shaderParts.set(Section.VERTEX_HEAD, vertexHead);
+		shaderParts.set(Section.VERTEX_MAIN_SUPPORT, vertexMainSupport);
+
+		if(effect.extensions !== null) {
+
+			// Collect required WebGL extensions.
+			for(const extension of effect.extensions) {
+
+				data.extensions.add(extension);
+
+			}
+
+		}
+
+	}
+
+}
+
+/**
+ * An effect pass.
+ *
+ * Use this pass to combine {@link Effect} instances.
+ *
+ * @implements {EventListener}
+ */
+
+export class EffectPass extends Pass {
+
+	/**
+	 * Constructs a new effect pass.
+	 *
+	 * @param {Camera} camera - The main camera.
+	 * @param {...Effect} effects - The effects that will be rendered by this pass.
+	 */
+
+	constructor(camera, ...effects) {
+
+		super(&quot;EffectPass&quot;);
+
+		this.fullscreenMaterial = new EffectMaterial(null, null, null, camera);
+
+		/**
+		 * An event listener that forwards events to {@link handleEvent}.
+		 *
+		 * @type {EventListener}
+		 * @private
+		 */
+
+		this.listener = (event) =&gt; this.handleEvent(event);
+
+		/**
+		 * The effects.
+		 *
+		 * Use `updateMaterial` or `recompile` after changing the effects and consider calling `dispose` to free resources
+		 * of unused effects.
+		 *
+		 * @type {Effect[]}
+		 * @private
+		 */
+
+		this.effects = [];
+		this.setEffects(effects);
+
+		/**
+		 * Indicates whether this pass should skip rendering.
+		 *
+		 * Effects will still be updated, even if this flag is true.
+		 *
+		 * @type {Boolean}
+		 * @private
+		 */
+
+		this.skipRendering = false;
+
+		/**
+		 * A time offset.
+		 *
+		 * Elapsed time will start at this value.
+		 *
+		 * @type {Number}
+		 * @deprecated
+		 */
+
+		this.minTime = 1.0;
+
+		/**
+		 * The maximum time.
+		 *
+		 * If the elapsed time exceeds this value, it will be reset.
+		 *
+		 * @type {Number}
+		 * @deprecated
+		 */
+
+		this.maxTime = Number.POSITIVE_INFINITY;
+
+		/**
+		 * The animation time scale.
+		 *
+		 * @type {Number}
+		 */
+
+		this.timeScale = 1.0;
+
+	}
+
+	set mainScene(value) {
+
+		for(const effect of this.effects) {
+
+			effect.mainScene = value;
+
+		}
+
+	}
+
+	set mainCamera(value) {
+
+		this.fullscreenMaterial.copyCameraSettings(value);
+
+		for(const effect of this.effects) {
+
+			effect.mainCamera = value;
+
+		}
+
+	}
+
+	/**
+	 * Indicates whether this pass encodes its output when rendering to screen.
+	 *
+	 * @type {Boolean}
+	 * @deprecated Use fullscreenMaterial.encodeOutput instead.
+	 */
+
+	get encodeOutput() {
+
+		return this.fullscreenMaterial.encodeOutput;
+
+	}
+
+	set encodeOutput(value) {
+
+		this.fullscreenMaterial.encodeOutput = value;
+
+	}
+
+	/**
+	 * Indicates whether dithering is enabled.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get dithering() {
+
+		return this.fullscreenMaterial.dithering;
+
+	}
+
+	set dithering(value) {
+
+		const material = this.fullscreenMaterial;
+		material.dithering = value;
+		material.needsUpdate = true;
+
+	}
+
+	/**
+	 * Sets the effects.
+	 *
+	 * @param {Effect[]} effects - The effects.
+	 * @protected
+	 */
+
+	setEffects(effects) {
+
+		for(const effect of this.effects) {
+
+			effect.removeEventListener(&quot;change&quot;, this.listener);
+
+		}
+
+		this.effects = effects.sort((a, b) =&gt; (b.attributes - a.attributes));
+
+		for(const effect of this.effects) {
+
+			effect.addEventListener(&quot;change&quot;, this.listener);
+
+		}
+
+	}
+
+	/**
+	 * Updates the compound shader material.
+	 *
+	 * @protected
+	 */
+
+	updateMaterial() {
+
+		const data = new EffectShaderData();
+		let id = 0;
+
+		for(const effect of this.effects) {
+
+			if(effect.blendMode.blendFunction === BlendFunction.DST) {
+
+				// Check if this effect relies on depth and continue.
+				data.attributes |= (effect.getAttributes() &amp; EffectAttribute.DEPTH);
+
+			} else if((data.attributes &amp; effect.getAttributes() &amp; EffectAttribute.CONVOLUTION) !== 0) {
+
+				throw new Error(`Convolution effects cannot be merged (${effect.name})`);
+
+			} else {
+
+				integrateEffect(&quot;e&quot; + id++, effect, data);
+
+			}
+
+		}
+
+		let fragmentHead = data.shaderParts.get(Section.FRAGMENT_HEAD);
+		let fragmentMainImage = data.shaderParts.get(Section.FRAGMENT_MAIN_IMAGE);
+		let fragmentMainUv = data.shaderParts.get(Section.FRAGMENT_MAIN_UV);
+
+		// Integrate the relevant blend functions.
+		const blendRegExp = /\bblend\b/g;
+
+		for(const blendMode of data.blendModes.values()) {
+
+			fragmentHead += blendMode.getShaderCode().replace(blendRegExp, `blend${blendMode.blendFunction}`) + &quot;\n&quot;;
+
+		}
+
+		// Check if any effect relies on depth.
+		if((data.attributes &amp; EffectAttribute.DEPTH) !== 0) {
+
+			// Check if depth should be read.
+			if(data.readDepth) {
+
+				fragmentMainImage = &quot;float depth = readDepth(UV);\n\n\t&quot; + fragmentMainImage;
+
+			}
+
+			// Only request a depth texture if none has been provided yet.
+			this.needsDepthTexture = (this.getDepthTexture() === null);
+
+		} else {
+
+			this.needsDepthTexture = false;
+
+		}
+
+		if(data.colorSpace === SRGBColorSpace) {
+
+			// Convert back to linear.
+			fragmentMainImage += &quot;color0 = sRGBToLinear(color0);\n\t&quot;;
+
+		}
+
+		// Check if any effect transforms UVs in the fragment shader.
+		if(data.uvTransformation) {
+
+			fragmentMainUv = &quot;vec2 transformedUv = vUv;\n&quot; + fragmentMainUv;
+			data.defines.set(&quot;UV&quot;, &quot;transformedUv&quot;);
+
+		} else {
+
+			data.defines.set(&quot;UV&quot;, &quot;vUv&quot;);
+
+		}
+
+		data.shaderParts.set(Section.FRAGMENT_HEAD, fragmentHead);
+		data.shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, fragmentMainImage);
+		data.shaderParts.set(Section.FRAGMENT_MAIN_UV, fragmentMainUv);
+
+		// Ensure that leading preprocessor directives start on a new line.
+		for(const [key, value] of data.shaderParts) {
+
+			if(value !== null) {
+
+				data.shaderParts.set(key, value.trim().replace(/^#/, &quot;\n#&quot;));
+
+			}
+
+		}
+
+		this.skipRendering = (id === 0);
+		this.needsSwap = !this.skipRendering;
+		this.fullscreenMaterial.setShaderData(data);
+
+	}
+
+	/**
+	 * Rebuilds the shader material.
+	 */
+
+	recompile() {
+
+		this.updateMaterial();
+
+	}
+
+	/**
+	 * Returns the current depth texture.
+	 *
+	 * @return {Texture} The current depth texture, or null if there is none.
+	 */
+
+	getDepthTexture() {
+
+		return this.fullscreenMaterial.depthBuffer;
+
+	}
+
+	/**
+	 * Sets the depth texture.
+	 *
+	 * @param {Texture} depthTexture - A depth texture.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing.
+	 */
+
+	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
+
+		this.fullscreenMaterial.depthBuffer = depthTexture;
+		this.fullscreenMaterial.depthPacking = depthPacking;
+
+		for(const effect of this.effects) {
+
+			effect.setDepthTexture(depthTexture, depthPacking);
+
+		}
+
+	}
+
+	/**
+	 * Renders the effect.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
+	 * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
+	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
+	 */
+
+	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
+
+		for(const effect of this.effects) {
+
+			effect.update(renderer, inputBuffer, deltaTime);
+
+		}
+
+		if(!this.skipRendering || this.renderToScreen) {
+
+			const material = this.fullscreenMaterial;
+			material.inputBuffer = inputBuffer.texture;
+			material.time += deltaTime * this.timeScale;
+
+			renderer.setRenderTarget(this.renderToScreen ? null : outputBuffer);
+			renderer.render(this.scene, this.camera);
+
+		}
+
+	}
+
+	/**
+	 * Updates the size of this pass.
+	 *
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		this.fullscreenMaterial.setSize(width, height);
+
+		for(const effect of this.effects) {
+
+			effect.setSize(width, height);
+
+		}
+
+	}
+
+	/**
+	 * Performs initialization tasks.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 * @param {Number} frameBufferType - The type of the main frame buffers.
+	 */
+
+	initialize(renderer, alpha, frameBufferType) {
+
+		this.renderer = renderer;
+
+		// Initialize effects before building the shader.
+		for(const effect of this.effects) {
+
+			effect.initialize(renderer, alpha, frameBufferType);
+
+		}
+
+		// Initialize the fullscreen material.
+		this.updateMaterial();
+
+		if(frameBufferType !== undefined &amp;&amp; frameBufferType !== UnsignedByteType) {
+
+			this.fullscreenMaterial.defines.FRAMEBUFFER_PRECISION_HIGH = &quot;1&quot;;
+
+		}
+
+	}
+
+	/**
+	 * Deletes disposable objects.
+	 */
+
+	dispose() {
+
+		super.dispose();
+
+		for(const effect of this.effects) {
+
+			effect.removeEventListener(&quot;change&quot;, this.listener);
+			effect.dispose();
+
+		}
+
+	}
+
+	/**
+	 * Handles events.
+	 *
+	 * @param {Event} event - An event.
+	 */
+
+	handleEvent(event) {
+
+		switch(event.type) {
+
+			case &quot;change&quot;:
+				this.recompile();
+				break;
+
+		}
+
+	}
+
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

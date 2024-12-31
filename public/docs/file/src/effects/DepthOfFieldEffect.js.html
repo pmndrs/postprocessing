@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/effects/DepthOfFieldEffect.js | postprocessing</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="A post processing library for three.js."><meta property="twitter:card" content="summary"><meta property="twitter:title" content="postprocessing"><meta property="twitter:description" content="A post processing library for three.js."></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/pmndrs/postprocessing"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectShaderData.js~EffectShaderData.html">EffectShaderData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/GaussKernel.js~GaussKernel.html">GaussKernel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/OverrideMaterialManager.js~OverrideMaterialManager.html">OverrideMaterialManager</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Resolution.js~Resolution.html">Resolution</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Selection.js~Selection.html">Selection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Timer.js~Timer.html">Timer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/ImmutableTimer.js~ImmutableTimer.html">ImmutableTimer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Initializable.js~Initializable.html">Initializable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects">effects</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html">BloomEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BokehEffect.js~BokehEffect.html">BokehEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BrightnessContrastEffect.js~BrightnessContrastEffect.html">BrightnessContrastEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ChromaticAberrationEffect.js~ChromaticAberrationEffect.html">ChromaticAberrationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ColorAverageEffect.js~ColorAverageEffect.html">ColorAverageEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ColorDepthEffect.js~ColorDepthEffect.html">ColorDepthEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/DepthEffect.js~DepthEffect.html">DepthEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect.html">DepthOfFieldEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/DotScreenEffect.js~DotScreenEffect.html">DotScreenEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html">Effect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/FXAAEffect.js~FXAAEffect.html">FXAAEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GammaCorrectionEffect.js~GammaCorrectionEffect.html">GammaCorrectionEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GlitchEffect.js~GlitchEffect.html">GlitchEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html">GodRaysEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GridEffect.js~GridEffect.html">GridEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/HueSaturationEffect.js~HueSaturationEffect.html">HueSaturationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/LUT1DEffect.js~LUT1DEffect.html">LUT1DEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/LUT3DEffect.js~LUT3DEffect.html">LUT3DEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/LensDistortionEffect.js~LensDistortionEffect.html">LensDistortionEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/NoiseEffect.js~NoiseEffect.html">NoiseEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html">OutlineEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/PixelationEffect.js~PixelationEffect.html">PixelationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html">RealisticBokehEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SMAAEffect.js~SMAAEffect.html">SMAAEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SSAOEffect.js~SSAOEffect.html">SSAOEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ScanlineEffect.js~ScanlineEffect.html">ScanlineEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html">SelectiveBloomEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SepiaEffect.js~SepiaEffect.html">SepiaEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ShockWaveEffect.js~ShockWaveEffect.html">ShockWaveEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/TextureEffect.js~TextureEffect.html">TextureEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/TiltShiftEffect.js~TiltShiftEffect.html">TiltShiftEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html">ToneMappingEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/VignetteEffect.js~VignetteEffect.html">VignetteEffect</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects-blending">effects/blending</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/blending/BlendMode.js~BlendMode.html">BlendMode</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#enums">enums</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-BlendFunction">BlendFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ColorChannel">ColorChannel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DepthCopyMode">DepthCopyMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DepthTestStrategy">DepthTestStrategy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EdgeDetectionMode">EdgeDetectionMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EffectAttribute">EffectAttribute</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EffectShaderSection">EffectShaderSection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GlitchMode">GlitchMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-KernelSize">KernelSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LUTOperation">LUTOperation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MaskFunction">MaskFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-PredicationMode">PredicationMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SMAAPreset">SMAAPreset</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ToneMappingMode">ToneMappingMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-VignetteTechnique">VignetteTechnique</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-WebGLExtension">WebGLExtension</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#loaders">loaders</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/loaders/LUT3dlLoader.js~LUT3dlLoader.html">LUT3dlLoader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/loaders/LUTCubeLoader.js~LUTCubeLoader.html">LUTCubeLoader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/loaders/SMAAImageLoader.js~SMAAImageLoader.html">SMAAImageLoader</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#materials">materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/AdaptiveLuminanceMaterial.js~AdaptiveLuminanceMaterial.html">AdaptiveLuminanceMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/BokehMaterial.js~BokehMaterial.html">BokehMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/BoxBlurMaterial.js~BoxBlurMaterial.html">BoxBlurMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CircleOfConfusionMaterial.js~CircleOfConfusionMaterial.html">CircleOfConfusionMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthCopyMaterial.js~DepthCopyMaterial.html">DepthCopyMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthDownsamplingMaterial.js~DepthDownsamplingMaterial.html">DepthDownsamplingMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html">DepthMaskMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DownsamplingMaterial.js~DownsamplingMaterial.html">DownsamplingMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial.html">EdgeDetectionMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GaussianBlurMaterial.js~GaussianBlurMaterial.html">GaussianBlurMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/KawaseBlurMaterial.js~KawaseBlurMaterial.html">KawaseBlurMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/MaskMaterial.js~MaskMaterial.html">MaskMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/OutlineMaterial.js~OutlineMaterial.html">OutlineMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/SSAOMaterial.js~SSAOMaterial.html">SSAOMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/TiltShiftBlurMaterial.js~TiltShiftBlurMaterial.html">TiltShiftBlurMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/UpsamplingMaterial.js~UpsamplingMaterial.html">UpsamplingMaterial</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#passes">passes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/AdaptiveLuminancePass.js~AdaptiveLuminancePass.html">AdaptiveLuminancePass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BoxBlurPass.js~BoxBlurPass.html">BoxBlurPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearMaskPass.js~ClearMaskPass.html">ClearMaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/CopyPass.js~CopyPass.html">CopyPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthCopyPass.js~DepthCopyPass.html">DepthCopyPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass.html">DepthDownsamplingPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthPass.js~DepthPass.html">DepthPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthPickingPass.js~DepthPickingPass.html">DepthPickingPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/EffectPass.js~EffectPass.html">EffectPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/GaussianBlurPass.js~GaussianBlurPass.html">GaussianBlurPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/KawaseBlurPass.js~KawaseBlurPass.html">KawaseBlurPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/LambdaPass.js~LambdaPass.html">LambdaPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/LuminancePass.js~LuminancePass.html">LuminancePass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/MaskPass.js~MaskPass.html">MaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/MipmapBlurPass.js~MipmapBlurPass.html">MipmapBlurPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/NormalPass.js~NormalPass.html">NormalPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html">Pass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ShaderPass.js~ShaderPass.html">ShaderPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/TiltShiftBlurPass.js~TiltShiftBlurPass.html">TiltShiftBlurPass</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#textures">textures</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/NoiseTexture.js~NoiseTexture.html">NoiseTexture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/RawImageData.js~RawImageData.html">RawImageData</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#textures-lut">textures/lut</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/lut/LookupTexture.js~LookupTexture.html">LookupTexture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/lut/TetrahedralUpscaler.js~TetrahedralUpscaler.html">TetrahedralUpscaler</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#textures-smaa">textures/smaa</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/smaa/SMAAAreaImageData.js~SMAAAreaImageData.html">SMAAAreaImageData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/smaa/SMAAImageGenerator.js~SMAAImageGenerator.html">SMAAImageGenerator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/smaa/SMAASearchImageData.js~SMAASearchImageData.html">SMAASearchImageData</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/utils/IdManager.js~IdManager.html">IdManager</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/effects/DepthOfFieldEffect.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { BasicDepthPacking, SRGBColorSpace, Uniform, UnsignedByteType, WebGLRenderTarget } from &quot;three&quot;;
+import { Resolution } from &quot;../core/Resolution.js&quot;;
+import { ColorChannel } from &quot;../enums/ColorChannel.js&quot;;
+import { EffectAttribute } from &quot;../enums/EffectAttribute.js&quot;;
+import { KernelSize } from &quot;../enums/KernelSize.js&quot;;
+import { MaskFunction } from &quot;../enums/MaskFunction.js&quot;;
+import { BokehMaterial } from &quot;../materials/BokehMaterial.js&quot;;
+import { CircleOfConfusionMaterial } from &quot;../materials/CircleOfConfusionMaterial.js&quot;;
+import { MaskMaterial } from &quot;../materials/MaskMaterial.js&quot;;
+import { KawaseBlurPass } from &quot;../passes/KawaseBlurPass.js&quot;;
+import { ShaderPass } from &quot;../passes/ShaderPass.js&quot;;
+import { viewZToOrthographicDepth } from &quot;../utils/viewZToOrthographicDepth.js&quot;;
+import { Effect } from &quot;./Effect.js&quot;;
+
+import fragmentShader from &quot;./glsl/depth-of-field.frag&quot;;
+
+/**
+ * A depth of field effect.
+ *
+ * Based on a graphics study by Adrian Courr&#xE8;ges and an article by Steve Avery:
+ * https://www.adriancourreges.com/blog/2016/09/09/doom-2016-graphics-study/
+ * https://pixelmischiefblog.wordpress.com/2016/11/25/bokeh-depth-of-field/
+ */
+
+export class DepthOfFieldEffect extends Effect {
+
+	/**
+	 * Constructs a new depth of field effect.
+	 *
+	 * @param {Camera} camera - The main camera.
+	 * @param {Object} [options] - The options.
+	 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
+	 * @param {Number} [options.worldFocusDistance] - The focus distance in world units.
+	 * @param {Number} [options.worldFocusRange] - The focus distance in world units.
+	 * @param {Number} [options.focusDistance=0.0] - The normalized focus distance. Range is [0.0, 1.0].
+	 * @param {Number} [options.focusRange=0.1] - The focus range. Range is [0.0, 1.0].
+	 * @param {Number} [options.focalLength=0.1] - Deprecated.
+	 * @param {Number} [options.bokehScale=1.0] - The scale of the bokeh blur.
+	 * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
+	 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
+	 * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
+	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprecated. Use resolutionX instead.
+	 * @param {Number} [options.height=Resolution.AUTO_SIZE] - Deprecated. Use resolutionY instead.
+	 */
+
+	constructor(camera, {
+		blendFunction,
+		worldFocusDistance,
+		worldFocusRange,
+		focusDistance = 0.0,
+		focalLength = 0.1,
+		focusRange = focalLength,
+		bokehScale = 1.0,
+		resolutionScale = 1.0,
+		width = Resolution.AUTO_SIZE,
+		height = Resolution.AUTO_SIZE,
+		resolutionX = width,
+		resolutionY = height
+	} = {}) {
+
+		super(&quot;DepthOfFieldEffect&quot;, fragmentShader, {
+			blendFunction,
+			attributes: EffectAttribute.DEPTH,
+			uniforms: new Map([
+				[&quot;nearColorBuffer&quot;, new Uniform(null)],
+				[&quot;farColorBuffer&quot;, new Uniform(null)],
+				[&quot;nearCoCBuffer&quot;, new Uniform(null)],
+				[&quot;farCoCBuffer&quot;, new Uniform(null)],
+				[&quot;scale&quot;, new Uniform(1.0)]
+			])
+		});
+
+		/**
+		 * The main camera.
+		 *
+		 * @type {Camera}
+		 * @private
+		 */
+
+		this.camera = camera;
+
+		/**
+		 * A render target for intermediate results.
+		 *
+		 * @type {WebGLRenderTarget}
+		 * @private
+		 */
+
+		this.renderTarget = new WebGLRenderTarget(1, 1, { depthBuffer: false });
+		this.renderTarget.texture.name = &quot;DoF.Intermediate&quot;;
+
+		/**
+		 * A render target for masked background colors (premultiplied with CoC).
+		 *
+		 * @type {WebGLRenderTarget}
+		 * @private
+		 */
+
+		this.renderTargetMasked = this.renderTarget.clone();
+		this.renderTargetMasked.texture.name = &quot;DoF.Masked.Far&quot;;
+
+		/**
+		 * A render target for the blurred foreground colors.
+		 *
+		 * @type {WebGLRenderTarget}
+		 * @private
+		 */
+
+		this.renderTargetNear = this.renderTarget.clone();
+		this.renderTargetNear.texture.name = &quot;DoF.Bokeh.Near&quot;;
+		this.uniforms.get(&quot;nearColorBuffer&quot;).value = this.renderTargetNear.texture;
+
+		/**
+		 * A render target for the blurred background colors.
+		 *
+		 * @type {WebGLRenderTarget}
+		 * @private
+		 */
+
+		this.renderTargetFar = this.renderTarget.clone();
+		this.renderTargetFar.texture.name = &quot;DoF.Bokeh.Far&quot;;
+		this.uniforms.get(&quot;farColorBuffer&quot;).value = this.renderTargetFar.texture;
+
+		/**
+		 * A render target for the circle of confusion.
+		 *
+		 * - Negative values are stored in the `RED` channel (foreground).
+		 * - Positive values are stored in the `GREEN` channel (background).
+		 *
+		 * @type {WebGLRenderTarget}
+		 * @private
+		 */
+
+		this.renderTargetCoC = this.renderTarget.clone();
+		this.renderTargetCoC.texture.name = &quot;DoF.CoC&quot;;
+		this.uniforms.get(&quot;farCoCBuffer&quot;).value = this.renderTargetCoC.texture;
+
+		/**
+		 * A render target that stores a blurred copy of the circle of confusion.
+		 *
+		 * @type {WebGLRenderTarget}
+		 * @private
+		 */
+
+		this.renderTargetCoCBlurred = this.renderTargetCoC.clone();
+		this.renderTargetCoCBlurred.texture.name = &quot;DoF.CoC.Blurred&quot;;
+		this.uniforms.get(&quot;nearCoCBuffer&quot;).value = this.renderTargetCoCBlurred.texture;
+
+		/**
+		 * A circle of confusion pass.
+		 *
+		 * @type {ShaderPass}
+		 * @private
+		 */
+
+		this.cocPass = new ShaderPass(new CircleOfConfusionMaterial(camera));
+		const cocMaterial = this.cocMaterial;
+		cocMaterial.focusDistance = focusDistance;
+		cocMaterial.focusRange = focusRange;
+
+		if(worldFocusDistance !== undefined) {
+
+			cocMaterial.worldFocusDistance = worldFocusDistance;
+
+		}
+
+		if(worldFocusRange !== undefined) {
+
+			cocMaterial.worldFocusRange = worldFocusRange;
+
+		}
+
+		/**
+		 * This pass blurs the foreground CoC buffer to soften edges.
+		 *
+		 * @type {KawaseBlurPass}
+		 * @readonly
+		 */
+
+		this.blurPass = new KawaseBlurPass({ resolutionScale, resolutionX, resolutionY, kernelSize: KernelSize.MEDIUM });
+
+		/**
+		 * A mask pass.
+		 *
+		 * @type {ShaderPass}
+		 * @private
+		 */
+
+		this.maskPass = new ShaderPass(new MaskMaterial(this.renderTargetCoC.texture));
+		const maskMaterial = this.maskPass.fullscreenMaterial;
+		maskMaterial.colorChannel = ColorChannel.GREEN;
+		this.maskFunction = MaskFunction.MULTIPLY_RGB;
+
+		/**
+		 * A bokeh blur pass for the foreground colors.
+		 *
+		 * @type {ShaderPass}
+		 * @private
+		 */
+
+		this.bokehNearBasePass = new ShaderPass(new BokehMaterial(false, true));
+		this.bokehNearBasePass.fullscreenMaterial.cocBuffer = this.renderTargetCoCBlurred.texture;
+
+		/**
+		 * A bokeh fill pass for the foreground colors.
+		 *
+		 * @type {ShaderPass}
+		 * @private
+		 */
+
+		this.bokehNearFillPass = new ShaderPass(new BokehMaterial(true, true));
+		this.bokehNearFillPass.fullscreenMaterial.cocBuffer = this.renderTargetCoCBlurred.texture;
+
+		/**
+		 * A bokeh blur pass for the background colors.
+		 *
+		 * @type {ShaderPass}
+		 * @private
+		 */
+
+		this.bokehFarBasePass = new ShaderPass(new BokehMaterial(false, false));
+		this.bokehFarBasePass.fullscreenMaterial.cocBuffer = this.renderTargetCoC.texture;
+
+		/**
+		 * A bokeh fill pass for the background colors.
+		 *
+		 * @type {ShaderPass}
+		 * @private
+		 */
+
+		this.bokehFarFillPass = new ShaderPass(new BokehMaterial(true, false));
+		this.bokehFarFillPass.fullscreenMaterial.cocBuffer = this.renderTargetCoC.texture;
+
+		/**
+		 * A target position that should be kept in focus. Set to `null` to disable auto focus.
+		 *
+		 * @type {Vector3}
+		 */
+
+		this.target = null;
+
+		/**
+		 * The render resolution.
+		 *
+		 * @type {Resolution}
+		 * @readonly
+		 */
+
+		const resolution = this.resolution = new Resolution(this, resolutionX, resolutionY, resolutionScale);
+		resolution.addEventListener(&quot;change&quot;, (e) =&gt; this.setSize(resolution.baseWidth, resolution.baseHeight));
+
+		this.bokehScale = bokehScale;
+
+	}
+
+	set mainCamera(value) {
+
+		this.camera = value;
+		this.cocMaterial.copyCameraSettings(value);
+
+	}
+
+	/**
+	 * The circle of confusion texture.
+	 *
+	 * @type {Texture}
+	 */
+
+	get cocTexture() {
+
+		return this.renderTargetCoC.texture;
+
+	}
+
+	/**
+	 * The mask function. Default is `MULTIPLY_RGB`.
+	 *
+	 * @type {MaskFunction}
+	 */
+
+	get maskFunction() {
+
+		return this.maskPass.fullscreenMaterial.maskFunction;
+
+	}
+
+	set maskFunction(value) {
+
+		if(this.maskFunction !== value) {
+
+			this.defines.set(&quot;MASK_FUNCTION&quot;, value.toFixed(0));
+			this.maskPass.fullscreenMaterial.maskFunction = value;
+			this.setChanged();
+
+		}
+
+	}
+
+	/**
+	 * The circle of confusion material.
+	 *
+	 * @type {CircleOfConfusionMaterial}
+	 */
+
+	get cocMaterial() {
+
+		return this.cocPass.fullscreenMaterial;
+
+	}
+
+	/**
+	 * The circle of confusion material.
+	 *
+	 * @deprecated Use cocMaterial instead.
+	 * @type {CircleOfConfusionMaterial}
+	 */
+
+	get circleOfConfusionMaterial() {
+
+		return this.cocMaterial;
+
+	}
+
+	/**
+	 * Returns the circle of confusion material.
+	 *
+	 * @deprecated Use cocMaterial instead.
+	 * @return {CircleOfConfusionMaterial} The material.
+	 */
+
+	getCircleOfConfusionMaterial() {
+
+		return this.cocMaterial;
+
+	}
+
+	/**
+	 * Returns the pass that blurs the foreground CoC buffer to soften edges.
+	 *
+	 * @deprecated Use blurPass instead.
+	 * @return {KawaseBlurPass} The blur pass.
+	 */
+
+	getBlurPass() {
+
+		return this.blurPass;
+
+	}
+
+	/**
+	 * Returns the resolution settings.
+	 *
+	 * @deprecated Use resolution instead.
+	 * @return {Resolution} The resolution.
+	 */
+
+	getResolution() {
+
+		return this.resolution;
+
+	}
+
+	/**
+	 * The current bokeh scale.
+	 *
+	 * @type {Number}
+	 */
+
+	get bokehScale() {
+
+		return this.uniforms.get(&quot;scale&quot;).value;
+
+	}
+
+	set bokehScale(value) {
+
+		this.bokehNearBasePass.fullscreenMaterial.scale = value;
+		this.bokehNearFillPass.fullscreenMaterial.scale = value;
+		this.bokehFarBasePass.fullscreenMaterial.scale = value;
+		this.bokehFarFillPass.fullscreenMaterial.scale = value;
+		this.maskPass.fullscreenMaterial.strength = value;
+		this.uniforms.get(&quot;scale&quot;).value = value;
+
+	}
+
+	/**
+	 * Returns the current bokeh scale.
+	 *
+	 * @deprecated Use bokehScale instead.
+	 * @return {Number} The scale.
+	 */
+
+	getBokehScale() {
+
+		return this.bokehScale;
+
+	}
+
+	/**
+	 * Sets the bokeh scale.
+	 *
+	 * @deprecated Use bokehScale instead.
+	 * @param {Number} value - The scale.
+	 */
+
+	setBokehScale(value) {
+
+		this.bokehScale = value;
+
+	}
+
+	/**
+	 * Returns the current auto focus target.
+	 *
+	 * @deprecated Use target instead.
+	 * @return {Vector3} The target.
+	 */
+
+	getTarget() {
+
+		return this.target;
+
+	}
+
+	/**
+	 * Sets the auto focus target.
+	 *
+	 * @deprecated Use target instead.
+	 * @param {Vector3} value - The target.
+	 */
+
+	setTarget(value) {
+
+		this.target = value;
+
+	}
+
+	/**
+	 * Calculates the focus distance from the camera to the given position.
+	 *
+	 * @param {Vector3} target - The target.
+	 * @return {Number} The normalized focus distance.
+	 */
+
+	calculateFocusDistance(target) {
+
+		const camera = this.camera;
+		const distance = camera.position.distanceTo(target);
+		return viewZToOrthographicDepth(-distance, camera.near, camera.far);
+
+	}
+
+	/**
+	 * Sets the depth texture.
+	 *
+	 * @param {Texture} depthTexture - A depth texture.
+	 * @param {DepthPackingStrategies} [depthPacking=BasicDepthPacking] - The depth packing.
+	 */
+
+	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
+
+		this.cocMaterial.depthBuffer = depthTexture;
+		this.cocMaterial.depthPacking = depthPacking;
+
+	}
+
+	/**
+	 * Updates this effect.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
+	 */
+
+	update(renderer, inputBuffer, deltaTime) {
+
+		const renderTarget = this.renderTarget;
+		const renderTargetCoC = this.renderTargetCoC;
+		const renderTargetCoCBlurred = this.renderTargetCoCBlurred;
+		const renderTargetMasked = this.renderTargetMasked;
+
+		// Auto focus.
+		if(this.target !== null) {
+
+			const distance = this.calculateFocusDistance(this.target);
+			this.cocMaterial.focusDistance = distance;
+
+		}
+
+		// Render the CoC and create a blurred version for soft near field blending.
+		this.cocPass.render(renderer, null, renderTargetCoC);
+		this.blurPass.render(renderer, renderTargetCoC, renderTargetCoCBlurred);
+
+		// Prevent sharp colors from bleeding onto the background.
+		this.maskPass.render(renderer, inputBuffer, renderTargetMasked);
+
+		// Use the sharp CoC buffer and render the background bokeh.
+		this.bokehFarBasePass.render(renderer, renderTargetMasked, renderTarget);
+		this.bokehFarFillPass.render(renderer, renderTarget, this.renderTargetFar);
+
+		// Use the blurred CoC buffer and render the foreground bokeh.
+		this.bokehNearBasePass.render(renderer, inputBuffer, renderTarget);
+		this.bokehNearFillPass.render(renderer, renderTarget, this.renderTargetNear);
+
+	}
+
+	/**
+	 * Updates the size of internal render targets.
+	 *
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		const resolution = this.resolution;
+		resolution.setBaseSize(width, height);
+		const w = resolution.width, h = resolution.height;
+
+		this.cocPass.setSize(width, height);
+		this.blurPass.setSize(width, height);
+		this.maskPass.setSize(width, height);
+
+		// These buffers require full resolution to prevent color bleeding.
+		this.renderTargetFar.setSize(width, height);
+		this.renderTargetCoC.setSize(width, height);
+		this.renderTargetMasked.setSize(width, height);
+
+		this.renderTarget.setSize(w, h);
+		this.renderTargetNear.setSize(w, h);
+		this.renderTargetCoCBlurred.setSize(w, h);
+
+		// Optimization: 1 / (TexelSize * ResolutionScale) = FullResolution
+		this.bokehNearBasePass.fullscreenMaterial.setSize(width, height);
+		this.bokehNearFillPass.fullscreenMaterial.setSize(width, height);
+		this.bokehFarBasePass.fullscreenMaterial.setSize(width, height);
+		this.bokehFarFillPass.fullscreenMaterial.setSize(width, height);
+
+	}
+
+	/**
+	 * Performs initialization tasks.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 * @param {Number} frameBufferType - The type of the main frame buffers.
+	 */
+
+	initialize(renderer, alpha, frameBufferType) {
+
+		this.cocPass.initialize(renderer, alpha, frameBufferType);
+		this.maskPass.initialize(renderer, alpha, frameBufferType);
+		this.bokehNearBasePass.initialize(renderer, alpha, frameBufferType);
+		this.bokehNearFillPass.initialize(renderer, alpha, frameBufferType);
+		this.bokehFarBasePass.initialize(renderer, alpha, frameBufferType);
+		this.bokehFarFillPass.initialize(renderer, alpha, frameBufferType);
+
+		// The blur pass operates on the CoC buffer.
+		this.blurPass.initialize(renderer, alpha, UnsignedByteType);
+
+		if(renderer.capabilities.logarithmicDepthBuffer) {
+
+			this.cocPass.fullscreenMaterial.defines.LOG_DEPTH = &quot;1&quot;;
+
+		}
+
+		if(frameBufferType !== undefined) {
+
+			this.renderTarget.texture.type = frameBufferType;
+			this.renderTargetNear.texture.type = frameBufferType;
+			this.renderTargetFar.texture.type = frameBufferType;
+			this.renderTargetMasked.texture.type = frameBufferType;
+
+			if(renderer !== null &amp;&amp; renderer.outputColorSpace === SRGBColorSpace) {
+
+				this.renderTarget.texture.colorSpace = SRGBColorSpace;
+				this.renderTargetNear.texture.colorSpace = SRGBColorSpace;
+				this.renderTargetFar.texture.colorSpace = SRGBColorSpace;
+				this.renderTargetMasked.texture.colorSpace = SRGBColorSpace;
+
+			}
+
+		}
+
+	}
+
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

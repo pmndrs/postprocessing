@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Introduction on Post Processing Manual</title><link>//pp.pmnd.rs/</link><description>Recent content in Introduction on Post Processing Manual</description><generator>Hugo</generator><language>en</language><atom:link href="//pp.pmnd.rs/index.xml" rel="self" type="application/rss+xml"/><item><title>Legal</title><link>//pp.pmnd.rs/legal/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/legal/</guid><description>&lt;h1 id="legal-details">
+	Legal Details &lt;a href="//pp.pmnd.rs/legal/#legal-details">¶&lt;/a>
+&lt;/h1>
+&lt;h2 id="information-in-accordance-with--5-tmg">
+	Information in Accordance with § 5 TMG &lt;a href="//pp.pmnd.rs/legal/#information-in-accordance-with--5-tmg">¶&lt;/a>
+&lt;/h2>
+&lt;p>Raoul van Rüschen&lt;br>
+Kampweg 1&lt;br>
+26683 Saterland&lt;/p>
+&lt;h2 id="contact">
+	Contact &lt;a href="//pp.pmnd.rs/legal/#contact">¶&lt;/a>
+&lt;/h2>
+&lt;p>E-Mail: vanruesc@outlook.de&lt;br>
+Twitter: &lt;a href="https://twitter.com/vanruesc">@vanruesc&lt;/a>&lt;/p>
+&lt;h2 id="sales-tax">
+	Sales Tax &lt;a href="//pp.pmnd.rs/legal/#sales-tax">¶&lt;/a>
+&lt;/h2>
+&lt;p>Sales tax identification number in accordance with § 27a sales tax law:&lt;br>
+&lt;strong>DE322584571&lt;/strong>&lt;/p>
+&lt;h2 id="dispute-resolution">
+	Dispute Resolution &lt;a href="//pp.pmnd.rs/legal/#dispute-resolution">¶&lt;/a>
+&lt;/h2>
+&lt;p>The European Commission provides a platform for Online Dispute Resolutions:&lt;br>
+&lt;a href="https://ec.europa.eu/consumers/odr/">https://ec.europa.eu/consumers/odr/&lt;/a>&lt;/p>
+&lt;h3 id="accountability-for-content">
+	Accountability for Content &lt;a href="//pp.pmnd.rs/legal/#accountability-for-content">¶&lt;/a>
+&lt;/h3>
+&lt;p>The contents of our pages have been created with the utmost care. However, we cannot guarantee the contents&amp;rsquo; accuracy, completeness or topicality. According to statutory provisions, we are furthermore responsible for our own content on these web pages. In this matter, please note that we are not obliged to monitor the transmitted or saved information of third parties, or investigate circumstances pointing to illegal activity.&lt;/p></description></item><item><title>Privacy Policy</title><link>//pp.pmnd.rs/privacy/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/privacy/</guid><description>&lt;h1 id="privacy-policy">
+	Privacy Policy &lt;a href="//pp.pmnd.rs/privacy/#privacy-policy">¶&lt;/a>
+&lt;/h1>
+&lt;h2 id="introduction">
+	Introduction &lt;a href="//pp.pmnd.rs/privacy/#introduction">¶&lt;/a>
+&lt;/h2>
+&lt;p>Personal data (usually referred to just as &amp;ldquo;data&amp;rdquo; below) is any information related to you which by itself or in cumulation with other pieces of information gives the opportunity to the person that collects and processes such information to identify you as a person. It can be your name, your identification number, your location data, or information related to your physical, physiological, genetic, mental, economic, cultural or social life. Such data will only be processed by us to the extent necessary and for the purpose of providing a functional and user-friendly website, including its contents, and the services offered there. The party responsible for this website (the &amp;ldquo;controller&amp;rdquo;) for purposes of data protection law can be found in the [legal details](/legal/) page.&lt;/p></description></item><item><title>Getting Started</title><link>//pp.pmnd.rs/getting-started/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/getting-started/</guid><description>&lt;h1 id="getting-started">
+	Getting Started &lt;a href="//pp.pmnd.rs/getting-started/#getting-started">¶&lt;/a>
+&lt;/h1>
+&lt;h2 id="installation">
+	Installation &lt;a href="//pp.pmnd.rs/getting-started/#installation">¶&lt;/a>
+&lt;/h2>
+&lt;p>This library requires the peer dependency &lt;a href="https://github.com/mrdoob/three.js/">three&lt;/a>. Check the &lt;a href="https://github.com/vanruesc/postprocessing/releases">release notes&lt;/a> for supported versions.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">npm install three postprocessing
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="build-setup">
+	Build Setup &lt;a href="//pp.pmnd.rs/getting-started/#build-setup">¶&lt;/a>
+&lt;/h2>
+&lt;p>To get started, pick a bundler of your choice:&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://github.com/evanw/esbuild">esbuild&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://github.com/swc-project/swc">swc&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://github.com/rollup/rollup">rollup&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://github.com/webpack/webpack">webpack&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://github.com/parcel-bundler/parcel">parcel&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;p>This list is not exhaustive, so feel free to look around for another tool that best suits your needs. For more information about configuration, features and plugins, see the official documentation of your chosen bundler.&lt;/p></description></item><item><title>Custom Effects</title><link>//pp.pmnd.rs/custom-effects/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/custom-effects/</guid><description>&lt;h1 id="custom-effects">
+	Custom Effects &lt;a href="//pp.pmnd.rs/custom-effects/#custom-effects">¶&lt;/a>
+&lt;/h1>
+&lt;h2 id="introduction">
+	Introduction &lt;a href="//pp.pmnd.rs/custom-effects/#introduction">¶&lt;/a>
+&lt;/h2>
+&lt;p>&lt;a href="">Effects&lt;/a> are headless fullscreen passes. They can be combined and rendered using the &lt;a href="">EffectPass&lt;/a>. Just like passes, effects may perform initialization tasks, react to render size changes and execute supporting render operations if needed but they don&amp;rsquo;t have access to an output buffer and are not supposed to render to screen by themselves.&lt;/p>
+&lt;details>&lt;summary>TL;DR&lt;/summary>
+&lt;p>
+&lt;p>&lt;strong>shader.frag&lt;/strong>&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-glsl" data-lang="glsl">&lt;span class="line">&lt;span class="cl">&lt;span class="k">uniform&lt;/span> &lt;span class="k">vec3&lt;/span> &lt;span class="n">weights&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">vec4&lt;/span> &lt;span class="n">mainImage&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">in&lt;/span> &lt;span class="k">vec4&lt;/span> &lt;span class="n">inputColor&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">in&lt;/span> &lt;span class="k">vec2&lt;/span> &lt;span class="n">uv&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">in&lt;/span> &lt;span class="n">GData&lt;/span> &lt;span class="n">data&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">	&lt;span class="k">return&lt;/span> &lt;span class="k">vec4&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">inputColor&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">rgb&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="n">weights&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">inputColor&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">a&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;strong>CustomEffect.js&lt;/strong>&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">Uniform&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">Vector3&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="nx">from&lt;/span> &lt;span class="s2">&amp;#34;three&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">Effect&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="nx">from&lt;/span> &lt;span class="s2">&amp;#34;postprocessing&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// Use a bundler plugin like esbuild-plugin-glsl to import shaders as text.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kr">import&lt;/span> &lt;span class="nx">fragmentShader&lt;/span> &lt;span class="nx">from&lt;/span> &lt;span class="s2">&amp;#34;./shader.frag&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">export&lt;/span> &lt;span class="kr">class&lt;/span> &lt;span class="nx">CustomEffect&lt;/span> &lt;span class="kr">extends&lt;/span> &lt;span class="nx">Effect&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">	&lt;span class="nx">constructor&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">		&lt;span class="kr">super&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;CustomEffect&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">fragmentShader&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">			&lt;span class="nx">uniforms&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nx">Map&lt;/span>&lt;span class="p">([&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">				&lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;weights&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nx">Uniform&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">new&lt;/span> &lt;span class="nx">Vector3&lt;/span>&lt;span class="p">())]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">			&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">		&lt;span class="p">});&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">	&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/p></description></item><item><title>Migration Guide</title><link>//pp.pmnd.rs/migration-guide/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/migration-guide/</guid><description>&lt;h1 id="migration-guide">
+	Migration Guide &lt;a href="//pp.pmnd.rs/migration-guide/#migration-guide">¶&lt;/a>
+&lt;/h1>
+&lt;h2 id="v6-rarr-v7">
+	v6 → v7 &lt;a href="//pp.pmnd.rs/migration-guide/#v6-rarr-v7">¶&lt;/a>
+&lt;/h2>
+&lt;p>WIP&lt;/p></description></item><item><title>Plugins and Tools</title><link>//pp.pmnd.rs/plugins-tools/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/plugins-tools/</guid><description>&lt;h1 id="plugins-and-tools">
+	Plugins and Tools &lt;a href="//pp.pmnd.rs/plugins-tools/#plugins-and-tools">¶&lt;/a>
+&lt;/h1>
+&lt;p>The following third-party plugins and tools augment postprocessing and/or connect it with other technologies.&lt;/p>
+&lt;h2 id="react-postprocessing">
+	react-postprocessing &lt;a href="//pp.pmnd.rs/plugins-tools/#react-postprocessing">¶&lt;/a>
+&lt;/h2>
+&lt;p>A postprocessing wrapper for &lt;a href="https://github.com/pmndrs/react-three-fiber">react-three-fiber&lt;/a>.&lt;/p>
+&lt;p>&lt;em>&lt;a href="https://github.com/pmndrs/react-postprocessing">Repository&lt;/a> · &lt;a href="https://github.com/pmndrs">@Poimandres&lt;/a>&lt;/em>&lt;/p>
+&lt;h2 id="hyper-postprocessing">
+	hyper-postprocessing &lt;a href="//pp.pmnd.rs/plugins-tools/#hyper-postprocessing">¶&lt;/a>
+&lt;/h2>
+&lt;p>A &lt;a href="https://github.com/vercel/hyper">Hyper&lt;/a> plugin that makes it easy to attach fragment shaders to the terminal window.&lt;/p>
+&lt;p>&lt;em>&lt;a href="https://github.com/slammayjammay/hyper-postprocessing">Repository&lt;/a> · &lt;a href="https://github.com/slammayjammay">@slammayjammay&lt;/a>&lt;/em>&lt;/p>
+&lt;h2 id="three-material-editor">
+	three-material-editor &lt;a href="//pp.pmnd.rs/plugins-tools/#three-material-editor">¶&lt;/a>
+&lt;/h2>
+&lt;p>A GLSL editor for Threejs materials. Automatically detect the WebGL programs and provide live edit for the shaders.&lt;/p>
+&lt;p>&lt;em>&lt;a href="https://github.com/RenaudRohlinger/three-material-editor">Repository&lt;/a> · &lt;a href="https://pb3d1.csb.app/">Shader Editor&lt;/a> · &lt;a href="https://github.com/RenaudRohlinger">@RenaudRohlinger&lt;/a>&lt;/em>&lt;/p></description></item><item><title>Attribution</title><link>//pp.pmnd.rs/attribution/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/attribution/</guid><description>&lt;h1 id="attribution">
+	Attribution &lt;a href="//pp.pmnd.rs/attribution/#attribution">¶&lt;/a>
+&lt;/h1>
+&lt;h2 id="resources">
+	Resources &lt;a href="//pp.pmnd.rs/attribution/#resources">¶&lt;/a>
+&lt;/h2>
+&lt;h4 id="cinematic-lut">
+	Cinematic LUT &lt;a href="//pp.pmnd.rs/attribution/#cinematic-lut">¶&lt;/a>
+&lt;/h4>
+&lt;p>&lt;a href="https://www.freepresets.com/product/free-luts-cinematic/">Free cinematic LUTs&lt;/a> by Presetpro.&lt;/p>
+&lt;h4 id="django-25-lut">
+	Django 25 LUT &lt;a href="//pp.pmnd.rs/attribution/#django-25-lut">¶&lt;/a>
+&lt;/h4>
+&lt;p>&lt;a href="https://www.rocketstock.com/free-after-effects-templates/35-free-luts-for-color-grading-videos/">35 Free LUTs for Color Grading Videos&lt;/a> by Rocketstock.&lt;/p>
+&lt;h4 id="free-lut-pack">
+	Free LUT Pack &lt;a href="//pp.pmnd.rs/attribution/#free-lut-pack">¶&lt;/a>
+&lt;/h4>
+&lt;p>&lt;a href="https://forums.unrealengine.com/community/community-content-tools-and-tutorials/19151-lut-table-pack?48641-LUT-Table-Pack=">Free LUT Pack&lt;/a> by Tom Shannon.&lt;/p>
+&lt;h4 id="lens-dirt">
+	Lens Dirt &lt;a href="//pp.pmnd.rs/attribution/#lens-dirt">¶&lt;/a>
+&lt;/h4>
+&lt;p>&lt;a href="https://www.inscapedigital.com/lens-dirt">Lens Dirt&lt;/a> by Javert Valbarr. Licensed under &lt;a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0&lt;/a>.&lt;/p>
+&lt;h4 id="material-design-icons">
+	Material design icons &lt;a href="//pp.pmnd.rs/attribution/#material-design-icons">¶&lt;/a>
+&lt;/h4>
+&lt;p>Material design icons is the official icon set from Google. They can be browsed at &lt;a href="https://fonts.google.com/icons">https://fonts.google.com/icons&lt;/a>. The icons are designed under the material design guidelines and released under the &lt;a href="https://github.com/google/material-design-icons/blob/master/LICENSE">Apache-2.0 License&lt;/a>.&lt;/p></description></item><item><title>Bloom</title><link>//pp.pmnd.rs/demos/light-shadow/bloom/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/demos/light-shadow/bloom/</guid><description>&lt;h1 id="bloom">
+	Bloom &lt;a href="//pp.pmnd.rs/demos/light-shadow/bloom/#bloom">¶&lt;/a>
+&lt;/h1>
+&lt;h3 id="external-resources">
+	External Resources &lt;a href="//pp.pmnd.rs/demos/light-shadow/bloom/#external-resources">¶&lt;/a>
+&lt;/h3></description></item><item><title>Blur</title><link>//pp.pmnd.rs/demos/utility/blur/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/demos/utility/blur/</guid><description>&lt;h1 id="blur">
+	Blur &lt;a href="//pp.pmnd.rs/demos/utility/blur/#blur">¶&lt;/a>
+&lt;/h1>
+&lt;h3 id="external-resources">
+	External Resources &lt;a href="//pp.pmnd.rs/demos/utility/blur/#external-resources">¶&lt;/a>
+&lt;/h3></description></item><item><title>Brightness and Contrast</title><link>//pp.pmnd.rs/demos/color-grading/brightness-contrast/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/demos/color-grading/brightness-contrast/</guid><description>&lt;h1 id="brightness--contrast">
+	Brightness &amp;amp; Contrast &lt;a href="//pp.pmnd.rs/demos/color-grading/brightness-contrast/#brightness--contrast">¶&lt;/a>
+&lt;/h1>
+&lt;h3 id="external-resources">
+	External Resources &lt;a href="//pp.pmnd.rs/demos/color-grading/brightness-contrast/#external-resources">¶&lt;/a>
+&lt;/h3></description></item><item><title>Chromatic Aberration</title><link>//pp.pmnd.rs/demos/special-effects/chromatic-aberration/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/demos/special-effects/chromatic-aberration/</guid><description>&lt;h1 id="chromatic-aberration">
+	Chromatic Aberration &lt;a href="//pp.pmnd.rs/demos/special-effects/chromatic-aberration/#chromatic-aberration">¶&lt;/a>
+&lt;/h1>
+&lt;h3 id="external-resources">
+	External Resources &lt;a href="//pp.pmnd.rs/demos/special-effects/chromatic-aberration/#external-resources">¶&lt;/a>
+&lt;/h3></description></item><item><title>Color Depth</title><link>//pp.pmnd.rs/demos/special-effects/color-depth/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/demos/special-effects/color-depth/</guid><description>&lt;h1 id="color-depth">
+	Color Depth &lt;a href="//pp.pmnd.rs/demos/special-effects/color-depth/#color-depth">¶&lt;/a>
+&lt;/h1>
+&lt;h3 id="external-resources">
+	External Resources &lt;a href="//pp.pmnd.rs/demos/special-effects/color-depth/#external-resources">¶&lt;/a>
+&lt;/h3></description></item><item><title>Depth of Field</title><link>//pp.pmnd.rs/demos/special-effects/depth-of-field/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/demos/special-effects/depth-of-field/</guid><description>&lt;h1 id="depth-of-field">
+	Depth of Field &lt;a href="//pp.pmnd.rs/demos/special-effects/depth-of-field/#depth-of-field">¶&lt;/a>
+&lt;/h1>
+&lt;h3 id="external-resources">
+	External Resources &lt;a href="//pp.pmnd.rs/demos/special-effects/depth-of-field/#external-resources">¶&lt;/a>
+&lt;/h3></description></item><item><title>Depth Picking</title><link>//pp.pmnd.rs/demos/utility/depth-picking/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/demos/utility/depth-picking/</guid><description>&lt;h1 id="depth-picking">
+	Depth Picking &lt;a href="//pp.pmnd.rs/demos/utility/depth-picking/#depth-picking">¶&lt;/a>
+&lt;/h1>
+&lt;h3 id="external-resources">
+	External Resources &lt;a href="//pp.pmnd.rs/demos/utility/depth-picking/#external-resources">¶&lt;/a>
+&lt;/h3></description></item><item><title>Dot Screen</title><link>//pp.pmnd.rs/demos/special-effects/dot-screen/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/demos/special-effects/dot-screen/</guid><description>&lt;h1 id="dot-screen--halftone">
+	Dot Screen / Halftone &lt;a href="//pp.pmnd.rs/demos/special-effects/dot-screen/#dot-screen--halftone">¶&lt;/a>
+&lt;/h1>
+&lt;h3 id="external-resources">
+	External Resources &lt;a href="//pp.pmnd.rs/demos/special-effects/dot-screen/#external-resources">¶&lt;/a>
+&lt;/h3></description></item><item><title>FXAA</title><link>//pp.pmnd.rs/demos/anti-aliasing/fxaa/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/demos/anti-aliasing/fxaa/</guid><description>&lt;h1 id="fast-approximate-anti-aliasing">
+	Fast Approximate Anti-Aliasing &lt;a href="//pp.pmnd.rs/demos/anti-aliasing/fxaa/#fast-approximate-anti-aliasing">¶&lt;/a>
+&lt;/h1>
+&lt;h3 id="external-resources">
+	External Resources &lt;a href="//pp.pmnd.rs/demos/anti-aliasing/fxaa/#external-resources">¶&lt;/a>
+&lt;/h3>
+&lt;ul>
+&lt;li>&lt;a href="https://developer.download.nvidia.com/assets/gamedev/files/sdk/11/FXAA_WhitePaper.pdf">FXAA white paper&lt;/a>&lt;/li>
+&lt;li>&lt;a href="http://blog.simonrodriguez.fr/articles/2016/07/implementing_fxaa.html">Implementing FXAA&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>Glitch</title><link>//pp.pmnd.rs/demos/special-effects/glitch/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/demos/special-effects/glitch/</guid><description>&lt;h1 id="glitch">
+	Glitch &lt;a href="//pp.pmnd.rs/demos/special-effects/glitch/#glitch">¶&lt;/a>
+&lt;/h1>
+&lt;h3 id="external-resources">
+	External Resources &lt;a href="//pp.pmnd.rs/demos/special-effects/glitch/#external-resources">¶&lt;/a>
+&lt;/h3></description></item><item><title>God Rays</title><link>//pp.pmnd.rs/demos/light-shadow/god-rays/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/demos/light-shadow/god-rays/</guid><description>&lt;h1 id="god-rays">
+	God Rays &lt;a href="//pp.pmnd.rs/demos/light-shadow/god-rays/#god-rays">¶&lt;/a>
+&lt;/h1>
+&lt;h3 id="external-resources">
+	External Resources &lt;a href="//pp.pmnd.rs/demos/light-shadow/god-rays/#external-resources">¶&lt;/a>
+&lt;/h3></description></item><item><title>Grid</title><link>//pp.pmnd.rs/demos/special-effects/grid/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/demos/special-effects/grid/</guid><description>&lt;h1 id="grid">
+	Grid &lt;a href="//pp.pmnd.rs/demos/special-effects/grid/#grid">¶&lt;/a>
+&lt;/h1>
+&lt;h3 id="external-resources">
+	External Resources &lt;a href="//pp.pmnd.rs/demos/special-effects/grid/#external-resources">¶&lt;/a>
+&lt;/h3></description></item><item><title>Hue and Saturation</title><link>//pp.pmnd.rs/demos/color-grading/hue-saturation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/demos/color-grading/hue-saturation/</guid><description>&lt;h1 id="hue--saturation">
+	Hue &amp;amp; Saturation &lt;a href="//pp.pmnd.rs/demos/color-grading/hue-saturation/#hue--saturation">¶&lt;/a>
+&lt;/h1>
+&lt;h3 id="external-resources">
+	External Resources &lt;a href="//pp.pmnd.rs/demos/color-grading/hue-saturation/#external-resources">¶&lt;/a>
+&lt;/h3></description></item><item><title>LUT</title><link>//pp.pmnd.rs/demos/color-grading/lut/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/demos/color-grading/lut/</guid><description>&lt;h1 id="color-grading-lut">
+	Color Grading: LUT &lt;a href="//pp.pmnd.rs/demos/color-grading/lut/#color-grading-lut">¶&lt;/a>
+&lt;/h1>
+&lt;h3 id="external-resources">
+	External Resources &lt;a href="//pp.pmnd.rs/demos/color-grading/lut/#external-resources">¶&lt;/a>
+&lt;/h3>
+&lt;ul>
+&lt;li>&lt;a href="https://developer.nvidia.com/gpugems/gpugems2/part-iii-high-quality-rendering/chapter-24-using-lookup-tables-accelerate-color">Using Lookup Tables to Accelerate Color Transformations&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://www.nvidia.com/content/GTC/posters/2010/V01-Real-Time-Color-Space-Conversion-for-High-Resolution-Video.pdf">Real-Time Color Space Conversion for High Resolution Video&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>MSAA</title><link>//pp.pmnd.rs/demos/anti-aliasing/msaa/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/demos/anti-aliasing/msaa/</guid><description>&lt;h1 id="multisample-anti-aliasing">
+	Multisample Anti-Aliasing &lt;a href="//pp.pmnd.rs/demos/anti-aliasing/msaa/#multisample-anti-aliasing">¶&lt;/a>
+&lt;/h1>
+&lt;h3 id="external-resources">
+	External Resources &lt;a href="//pp.pmnd.rs/demos/anti-aliasing/msaa/#external-resources">¶&lt;/a>
+&lt;/h3>
+&lt;ul>
+&lt;li>&lt;a href="https://learnopengl.com/Advanced-OpenGL/Anti-Aliasing">Learn OpenGL - Anti Aliasing&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://developer.arm.com/documentation/102479/0100/Multi-sample-anti-aliasing">ARM Documentation&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://docs.microsoft.com/en-us/windows/win32/direct3d11/d3d10-graphics-programming-guide-rasterizer-stage-rules#multisample-anti-aliasing-rasterization-rules">Multisample Anti-Aliasing Rasterization Rules&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://www.khronos.org/opengl/wiki/Type_Qualifier_%5C%28GLSL%5C%29#Interpolation_qualifiers">Interpolation qualifiers&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>Outline</title><link>//pp.pmnd.rs/demos/utility/outline/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/demos/utility/outline/</guid><description>&lt;h1 id="outline">
+	Outline &lt;a href="//pp.pmnd.rs/demos/utility/outline/#outline">¶&lt;/a>
+&lt;/h1>
+&lt;h3 id="external-resources">
+	External Resources &lt;a href="//pp.pmnd.rs/demos/utility/outline/#external-resources">¶&lt;/a>
+&lt;/h3></description></item><item><title>Pixelation</title><link>//pp.pmnd.rs/demos/special-effects/pixelation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/demos/special-effects/pixelation/</guid><description>&lt;h1 id="pixelation">
+	Pixelation &lt;a href="//pp.pmnd.rs/demos/special-effects/pixelation/#pixelation">¶&lt;/a>
+&lt;/h1>
+&lt;h3 id="external-resources">
+	External Resources &lt;a href="//pp.pmnd.rs/demos/special-effects/pixelation/#external-resources">¶&lt;/a>
+&lt;/h3></description></item><item><title>Scanlines</title><link>//pp.pmnd.rs/demos/special-effects/scanlines/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/demos/special-effects/scanlines/</guid><description>&lt;h1 id="scanlines">
+	Scanlines &lt;a href="//pp.pmnd.rs/demos/special-effects/scanlines/#scanlines">¶&lt;/a>
+&lt;/h1>
+&lt;h3 id="external-resources">
+	External Resources &lt;a href="//pp.pmnd.rs/demos/special-effects/scanlines/#external-resources">¶&lt;/a>
+&lt;/h3></description></item><item><title>Sepia</title><link>//pp.pmnd.rs/demos/color-grading/sepia/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/demos/color-grading/sepia/</guid><description>&lt;h1 id="sepia">
+	Sepia &lt;a href="//pp.pmnd.rs/demos/color-grading/sepia/#sepia">¶&lt;/a>
+&lt;/h1>
+&lt;h3 id="external-resources">
+	External Resources &lt;a href="//pp.pmnd.rs/demos/color-grading/sepia/#external-resources">¶&lt;/a>
+&lt;/h3></description></item><item><title>SMAA</title><link>//pp.pmnd.rs/demos/anti-aliasing/smaa/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/demos/anti-aliasing/smaa/</guid><description>&lt;h1 id="subpixel-morphological-anti-aliasing">
+	Subpixel Morphological Anti-Aliasing &lt;a href="//pp.pmnd.rs/demos/anti-aliasing/smaa/#subpixel-morphological-anti-aliasing">¶&lt;/a>
+&lt;/h1>
+&lt;h3 id="external-resources">
+	External Resources &lt;a href="//pp.pmnd.rs/demos/anti-aliasing/smaa/#external-resources">¶&lt;/a>
+&lt;/h3>
+&lt;ul>
+&lt;li>&lt;a href="https://github.com/iryoku/smaa">iryoku/smaa&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>SSAO</title><link>//pp.pmnd.rs/demos/light-shadow/ssao/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/demos/light-shadow/ssao/</guid><description>&lt;h1 id="screen-space-ambient-occlusion">
+	Screen Space Ambient Occlusion &lt;a href="//pp.pmnd.rs/demos/light-shadow/ssao/#screen-space-ambient-occlusion">¶&lt;/a>
+&lt;/h1>
+&lt;h3 id="external-resources">
+	External Resources &lt;a href="//pp.pmnd.rs/demos/light-shadow/ssao/#external-resources">¶&lt;/a>
+&lt;/h3></description></item><item><title>Texture</title><link>//pp.pmnd.rs/demos/utility/texture/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/demos/utility/texture/</guid><description>&lt;h1 id="texture">
+	Texture &lt;a href="//pp.pmnd.rs/demos/utility/texture/#texture">¶&lt;/a>
+&lt;/h1>
+&lt;h3 id="external-resources">
+	External Resources &lt;a href="//pp.pmnd.rs/demos/utility/texture/#external-resources">¶&lt;/a>
+&lt;/h3></description></item><item><title>Tilt Shift</title><link>//pp.pmnd.rs/demos/special-effects/tilt-shift/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/demos/special-effects/tilt-shift/</guid><description>&lt;h1 id="tilt-shift">
+	Tilt Shift &lt;a href="//pp.pmnd.rs/demos/special-effects/tilt-shift/#tilt-shift">¶&lt;/a>
+&lt;/h1>
+&lt;h3 id="external-resources">
+	External Resources &lt;a href="//pp.pmnd.rs/demos/special-effects/tilt-shift/#external-resources">¶&lt;/a>
+&lt;/h3></description></item><item><title>Tone Mapping</title><link>//pp.pmnd.rs/demos/color-grading/tone-mapping/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/demos/color-grading/tone-mapping/</guid><description>&lt;h1 id="tone-mapping">
+	Tone Mapping &lt;a href="//pp.pmnd.rs/demos/color-grading/tone-mapping/#tone-mapping">¶&lt;/a>
+&lt;/h1>
+&lt;h3 id="external-resources">
+	External Resources &lt;a href="//pp.pmnd.rs/demos/color-grading/tone-mapping/#external-resources">¶&lt;/a>
+&lt;/h3></description></item><item><title>Vignette</title><link>//pp.pmnd.rs/demos/special-effects/vignette/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>//pp.pmnd.rs/demos/special-effects/vignette/</guid><description>&lt;h1 id="vignette">
+	Vignette &lt;a href="//pp.pmnd.rs/demos/special-effects/vignette/#vignette">¶&lt;/a>
+&lt;/h1>
+&lt;h3 id="external-resources">
+	External Resources &lt;a href="//pp.pmnd.rs/demos/special-effects/vignette/#external-resources">¶&lt;/a>
+&lt;/h3></description></item></channel></rss>
