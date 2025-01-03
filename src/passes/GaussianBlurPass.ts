@@ -130,12 +130,15 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> {
 
 		}
 
-		const { type, colorSpace } = this.input.defaultBuffer.value;
+		const { format, internalFormat, type, colorSpace } = this.input.defaultBuffer.value;
 
 		for(const renderTarget of [this.renderTargetA, this.renderTargetB]) {
 
-			renderTarget.texture.type = type;
-			renderTarget.texture.colorSpace = colorSpace;
+			const texture = renderTarget.texture;
+			texture.format = format;
+			texture.internalFormat = internalFormat;
+			texture.type = type;
+			texture.colorSpace = colorSpace;
 			renderTarget.dispose();
 
 		}

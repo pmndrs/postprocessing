@@ -295,6 +295,8 @@ export class IOManager {
 
 			}
 
+			outputBuffer.texture.format = inputBuffer.format;
+			outputBuffer.texture.internalFormat = inputBuffer.internalFormat;
 			outputBuffer.texture.type = inputBuffer.type;
 
 			if(!pass.input.frameBufferPrecisionHigh && pipeline.renderer?.outputColorSpace === SRGBColorSpace) {

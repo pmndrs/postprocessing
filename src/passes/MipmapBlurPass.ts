@@ -258,13 +258,17 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 		}
 
-		const { type, colorSpace } = this.input.defaultBuffer.value;
+		const { format, internalFormat, type, colorSpace } = this.input.defaultBuffer.value;
 
 		for(const mipmap of this.downsamplingMipmaps.concat(this.upsamplingMipmaps)) {
 
-			mipmap.value!.texture.type = type;
-			mipmap.value!.texture.colorSpace = colorSpace;
-			mipmap.value!.dispose();
+			const renderTarget = mipmap.value!;
+			const texture = renderTarget.texture;
+			texture.format = format;
+			texture.internalFormat = internalFormat;
+			texture.type = type;
+			texture.colorSpace = colorSpace;
+			renderTarget.dispose();
 
 		}
 

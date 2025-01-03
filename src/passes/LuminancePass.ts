@@ -60,8 +60,11 @@ export class LuminancePass extends Pass<LuminanceMaterial> {
 
 		}
 
-		this.renderTarget.texture.type = inputTexture.type;
-		this.renderTarget.texture.colorSpace = inputTexture.colorSpace;
+		const texture = this.renderTarget.texture;
+		texture.format = inputTexture.format;
+		texture.internalFormat = inputTexture.internalFormat;
+		texture.type = inputTexture.type;
+		texture.colorSpace = inputTexture.colorSpace;
 
 	}
 
