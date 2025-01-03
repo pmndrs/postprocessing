@@ -94,7 +94,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 			frameBufferType: HalfFloatType,
 			samples: 4
 		}),
-		new EffectPass(effect, new ToneMappingEffect())
+		new EffectPass(new ToneMappingEffect(), effect)
 	);
 
 	// Settings
@@ -103,7 +103,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const fpsGraph = Utils.createFPSGraph(pane);
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addBinding(effect, "bitDepth", { min: 1, max: 32, step: 1 });
+	folder.addBinding(effect, "r", { min: 0, max: 16, step: 1 });
+	folder.addBinding(effect, "g", { min: 0, max: 16, step: 1 });
+	folder.addBinding(effect, "b", { min: 0, max: 16, step: 1 });
 
 	Utils.addBlendModeBindings(folder, effect.blendMode);
 

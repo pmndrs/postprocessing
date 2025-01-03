@@ -1,4 +1,4 @@
-import { Uniform } from "three";
+import { Uniform, Vector3 } from "three";
 import { Effect } from "./Effect.js";
 
 import fragmentShader from "./shaders/color-depth.frag";
@@ -12,19 +12,35 @@ import fragmentShader from "./shaders/color-depth.frag";
 export interface ColorDepthEffectOptions {
 
 	/**
-	 * The color bit depth.
+	 * The bit depth of the red channel.
 	 *
 	 * @defaultValue 16
 	 */
 
-	bits?: number;
+	r?: number;
+
+	/**
+	 * The bit depth of the green channel.
+	 *
+	 * @defaultValue 16
+	 */
+
+	g?: number;
+
+	/**
+	 * The bit depth of the blue channel.
+	 *
+	 * @defaultValue 16
+	 */
+
+	b?: number;
 
 }
 
 /**
  * A color depth effect.
  *
- * Simulates a hardware limitation to create a retro feel. The real color depth remains unchanged.
+ * Simulates a hardware limitation to create a retro aesthetic. The real color depth remains unchanged.
  *
  * @category Effects
  */
@@ -32,10 +48,10 @@ export interface ColorDepthEffectOptions {
 export class ColorDepthEffect extends Effect {
 
 	/**
-	 * The current amount of bits.
+	 * The current color bit depths.
 	 */
 
-	private _bits = 0;
+	private readonly bits: Vector3;
 
 	/**
 	 * Constructs a new color depth effect.
@@ -43,35 +59,85 @@ export class ColorDepthEffect extends Effect {
 	 * @param options - The options.
 	 */
 
-	constructor({ bits = 16 }: ColorDepthEffectOptions = {}) {
+	constructor({ r = 16, g = 16, b = 16 }: ColorDepthEffectOptions = {}) {
 
 		super("ColorDepthEffect");
 
 		this.fragmentShader = fragmentShader;
 
 		const uniforms = this.input.uniforms;
-		uniforms.set("factor", new Uniform(0.0));
+		uniforms.set("colorRanges", new Uniform(new Vector3()));
 
-		this.bitDepth = bits;
+		this.bits = new Vector3(r, g, b);
+		this.updateFactors();
 
 	}
 
 	/**
-	 * The virtual amount of color bits.
-	 *
-	 * Each color channel effectively uses a fourth of the total amount of bits. Alpha remains unaffected.
+	 * Updates the color ranges.
 	 */
 
-	get bitDepth(): number {
+	private updateFactors(): void {
 
-		return this._bits;
+		const colorRanges = this.input.uniforms.get("colorRanges")!.value as Vector3;
+		const bits = this.bits;
+
+		colorRanges.set(
+			Math.pow(2.0, bits.x),
+			Math.pow(2.0, bits.y),
+			Math.pow(2.0, bits.z)
+		);
 
 	}
 
-	set bitDepth(value: number) {
+	/**
+	 * The virtual bit depth of the red channel.
+	 */
 
-		this._bits = value;
-		this.input.uniforms.get("factor")!.value = Math.pow(2.0, value / 3.0);
+	get r(): number {
+
+		return this.bits.x;
+
+	}
+
+	set r(value: number) {
+
+		this.bits.x = value;
+		this.updateFactors();
+
+	}
+
+	/**
+	 * The virtual bit depth of the green channel.
+	 */
+
+	get g(): number {
+
+		return this.bits.y;
+
+	}
+
+	set g(value: number) {
+
+		this.bits.y = value;
+		this.updateFactors();
+
+	}
+
+	/**
+	 * The virtual bit depth of the blue channel.
+	 */
+
+	get b(): number {
+
+		return this.bits.z;
+
+	}
+
+	set b(value: number) {
+
+		this.bits.z = value;
+		this.updateFactors();
 
 	}
 
