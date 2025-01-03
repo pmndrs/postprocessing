@@ -197,8 +197,6 @@ export class BufferDebugPass extends Pass<BufferDebugMaterial> {
 
 	protected override onResolutionChange(): void {
 
-		super.onResolutionChange();
-
 		const { width, height } = this.resolution;
 		const debugCamera = this.debugCamera;
 		debugCamera.left = 0;
