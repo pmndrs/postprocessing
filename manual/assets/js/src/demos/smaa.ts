@@ -1,6 +1,5 @@
 import {
 	CubeTextureLoader,
-	HalfFloatType,
 	LoadingManager,
 	PerspectiveCamera,
 	SRGBColorSpace,
@@ -94,9 +93,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
-	const geoPass = new GeometryPass(scene, camera, {
-		frameBufferType: HalfFloatType
-	});
+	const geoPass = new GeometryPass(scene, camera);
 
 	const effect = new SMAAEffect({
 		preset: SMAAPreset.MEDIUM,

@@ -10,8 +10,7 @@ import {
 	SRGBColorSpace,
 	TextureLoader,
 	Texture,
-	WebGLRenderer,
-	HalfFloatType
+	WebGLRenderer
 } from "three";
 
 import {
@@ -194,9 +193,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.add(
 		new ClearPass(),
-		new GeometryPass(scene, camera, {
-			frameBufferType: HalfFloatType
-		}),
+		new GeometryPass(scene, camera),
 		new EffectPass(new ToneMappingEffect(), effect)
 	);
 

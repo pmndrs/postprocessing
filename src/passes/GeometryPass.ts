@@ -2,6 +2,7 @@ import {
 	DepthFormat,
 	DepthStencilFormat,
 	DepthTexture,
+	FloatType,
 	HalfFloatType,
 	LinearFilter,
 	Material,
@@ -62,7 +63,7 @@ export interface GeometryPassOptions {
 	/**
 	 * The type of the color buffer.
 	 *
-	 * @defaultValue UnsignedByteType
+	 * @defaultValue HalfFloatType
 	 */
 
 	frameBufferType?: TextureDataType;
@@ -178,7 +179,7 @@ export class GeometryPass extends Pass implements Selective {
 	constructor(scene: Scene, camera: OrthographicCamera | PerspectiveCamera, {
 		stencilBuffer = false,
 		depthBuffer = true,
-		frameBufferType = UnsignedByteType,
+		frameBufferType = HalfFloatType,
 		samples = 0,
 		gBufferConfig = new GBufferConfig()
 	}: GeometryPassOptions = {}) {

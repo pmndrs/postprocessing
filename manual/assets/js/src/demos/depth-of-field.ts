@@ -1,14 +1,13 @@
 import {
 	CubeTextureLoader,
 	LoadingManager,
+	Material,
 	Mesh,
 	PerspectiveCamera,
 	Scene,
 	SRGBColorSpace,
-	WebGLRenderer,
 	Texture,
-	Material,
-	HalfFloatType
+	WebGLRenderer
 } from "three";
 
 import {
@@ -118,10 +117,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	pipeline.autoRenderToScreen = false;
 	pipeline.add(
 		new ClearPass(),
-		new GeometryPass(scene, camera, {
-			frameBufferType: HalfFloatType,
-			samples: 4
-		})
+		new GeometryPass(scene, camera, { samples: 4 })
 	);
 
 	/*

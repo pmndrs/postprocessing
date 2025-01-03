@@ -1,6 +1,5 @@
 import {
 	CubeTextureLoader,
-	HalfFloatType,
 	LoadingManager,
 	PerspectiveCamera,
 	SRGBColorSpace,
@@ -88,10 +87,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
-	const geoPass = new GeometryPass(scene, camera, {
-		frameBufferType: HalfFloatType,
-		samples: 4
-	});
+	const geoPass = new GeometryPass(scene, camera, { samples: 4 });
 
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.add(

@@ -5,7 +5,6 @@ import {
 	CylinderGeometry,
 	DirectionalLight,
 	Group,
-	HalfFloatType,
 	LoadingManager,
 	Mesh,
 	MeshBasicMaterial,
@@ -169,9 +168,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const pipeline = new RenderPipeline(renderer);
 	const clearPass = new ClearPass();
-	const geometryPass = new GeometryPass(scene, camera, { frameBufferType: HalfFloatType });
+	const geometryPass = new GeometryPass(scene, camera);
 	const effectPass = new EffectPass(new ToneMappingEffect());
-	const uiPass = new GeometryPass(uiScene, camera, { frameBufferType: HalfFloatType, depthBuffer: true });
+	const uiPass = new GeometryPass(uiScene, camera);
 	const antialiasingPass = new EffectPass(new FXAAEffect());
 
 	pipeline.add(clearPass, geometryPass, effectPass, uiPass, antialiasingPass);

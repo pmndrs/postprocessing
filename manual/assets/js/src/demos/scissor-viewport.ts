@@ -1,6 +1,5 @@
 import {
 	CubeTextureLoader,
-	HalfFloatType,
 	LoadingManager,
 	PerspectiveCamera,
 	Scene,
@@ -108,7 +107,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const pipeline = new RenderPipeline(renderer);
 	const clearPassA = new ClearPass();
 	const clearPassB = new ClearPass();
-	const geometryPassA = new GeometryPass(sceneA, camera, { frameBufferType: HalfFloatType, samples: 4 });
+	const geometryPassA = new GeometryPass(sceneA, camera, { samples: 4 });
 	const geometryPassB = new GeometryPass(sceneB, camera);
 	const effectPass = new EffectPass(new ToneMappingEffect());
 

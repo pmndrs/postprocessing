@@ -1,15 +1,14 @@
 import {
 	LoadingManager,
-	PerspectiveCamera,
-	PlaneGeometry,
 	Mesh,
 	MeshBasicMaterial,
+	PerspectiveCamera,
+	PlaneGeometry,
 	Scene,
-	TextureLoader,
-	WebGLRenderer,
-	Texture,
 	SRGBColorSpace,
-	HalfFloatType
+	TextureLoader,
+	Texture,
+	WebGLRenderer
 } from "three";
 
 import {
@@ -92,9 +91,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.add(
 		new ClearPass(),
-		new GeometryPass(scene, camera, {
-			frameBufferType: HalfFloatType
-		})
+		new GeometryPass(scene, camera)
 	);
 
 	/*
