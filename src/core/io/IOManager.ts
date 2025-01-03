@@ -9,6 +9,7 @@ import { TextureResource } from "./TextureResource.js";
 import { Resource } from "./Resource.js";
 import { Input } from "./Input.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
+import { ResourceManager } from "./ResourceManager.js";
 
 /**
  * An I/O manager.
@@ -23,6 +24,12 @@ export class IOManager {
 	 */
 
 	private readonly pipelines: Set<RenderPipeline>;
+
+	/**
+	 * A resource manager.
+	 */
+
+	private readonly resourceManager: ResourceManager;
 
 	/**
 	 * Keeps track of the original output default buffers.
@@ -45,6 +52,7 @@ export class IOManager {
 	constructor() {
 
 		this.pipelines = new Set<RenderPipeline>();
+		this.resourceManager = new ResourceManager(this.pipelines);
 		this.outputDefaultBuffers = new WeakMap<Resource, WebGLRenderTarget | null>();
 		this.updating = false;
 
@@ -263,6 +271,7 @@ export class IOManager {
 
 		}
 
+		this.resourceManager.optimize();
 		this.updating = false;
 
 	}
