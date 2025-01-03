@@ -83,7 +83,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
-	const effect = new ColorDepthEffect();
+	const effect = new ColorDepthEffect({ r: 6, g: 6, b: 6 });
 	effect.blendMode.blendFunction = new MixBlendFunction();
 
 	const pipeline = new RenderPipeline(renderer);
@@ -95,13 +95,28 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Settings
 
+	const params = { bitDepth: 6 };
+
 	const pane = new Pane({ container: container.querySelector<HTMLElement>(".tp")! });
 	const fpsGraph = Utils.createFPSGraph(pane);
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addBinding(effect, "r", { min: 0, max: 16, step: 1 });
-	folder.addBinding(effect, "g", { min: 0, max: 16, step: 1 });
-	folder.addBinding(effect, "b", { min: 0, max: 16, step: 1 });
+	const subfolder = folder.addFolder({ title: "Channels", expanded: false });
+	const bindingR = subfolder.addBinding(effect, "r", { min: 0, max: 16, step: 1 });
+	const bindingG = subfolder.addBinding(effect, "g", { min: 0, max: 16, step: 1 });
+	const bindingB = subfolder.addBinding(effect, "b", { min: 0, max: 16, step: 1 });
+
+	folder.addBinding(params, "bitDepth", { min: 0, max: 16, step: 1 }).on("change", (e) => {
+
+		effect.r = e.value;
+		effect.g = e.value;
+		effect.b = e.value;
+
+		bindingR.refresh();
+		bindingG.refresh();
+		bindingB.refresh();
+
+	});
 
 	Utils.addBlendModeBindings(folder, effect.blendMode);
 
