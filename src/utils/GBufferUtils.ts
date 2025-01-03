@@ -3,6 +3,7 @@ import {
 	FloatType,
 	HalfFloatType,
 	RGBAFormat,
+	RGBFormat,
 	RGFormat,
 	RedFormat,
 	TextureDataType,
@@ -38,6 +39,7 @@ declare type TexelType = "float" | "vec2" | "vec4";
 const pixelFormatToTexelType = new Map<AnyPixelFormat, TexelType>([
 	[RedFormat, "float"],
 	[RGFormat, "vec2"],
+	[RGBFormat, "vec4"],
 	[RGBAFormat, "vec4"]
 ]);
 
