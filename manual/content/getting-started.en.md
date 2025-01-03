@@ -59,7 +59,8 @@ pipeline.add(
 
 function onResize(): void {
 
-	const width = container.clientWidth, height = container.clientHeight;
+	const width = container.clientWidth;
+	const height = container.clientHeight;
 	camera.aspect = width / height;
 	camera.updateProjectionMatrix();
 	pipeline.setSize(width, height);
@@ -69,20 +70,22 @@ function onResize(): void {
 window.addEventListener("resize", onResize);
 onResize();
 
-renderer.setAnimationLoop((timestamp: number) => pipeline.render(timestamp));
+renderer.setAnimationLoop((timestamp) => pipeline.render(timestamp));
 ```
 
 ## Color Space Considerations
 
-New applications should follow a [linear workflow](https://docs.unity3d.com/Manual/LinearRendering-LinearOrGammaWorkflow.html) for color management and postprocessing supports this automatically. Simply set `WebGLRenderer.outputColorSpace` to `SRGBColorSpace` and postprocessing will follow suit. Built-in passes automatically convert colors when they render to screen and internal render operations are always performed in the correct color space.
+New applications should follow a [linear workflow](https://docs.unity3d.com/Manual/LinearRendering-LinearOrGammaWorkflow.html) for color management and postprocessing supports this automatically. In most cases, `WebGLRenderer.outputColorSpace` can be left at default and postprocessing will follow suit. Built-in passes automatically convert colors when they render to screen and internal render operations are always performed in the correct color space.
 
-Postprocessing uses `UnsignedByteType` sRGB frame buffers to store intermediate results due to good hardware support and resource efficiency. This is a compromise because linear results normally require at least 12 bits per color channel to prevent [color degradation and banding](https://blog.demofox.org/2018/03/10/dont-convert-srgb-u8-to-linear-u8/). With low precision sRGB buffers, colors will be clamped to [0.0, 1.0] and information loss will shift to the darker spectrum which leads to noticable banding in dark scenes. Linear, high precision `HalfFloatType` buffers don't have these issues and are the preferred option for HDR-like workflows on desktop devices. You can enable high precision frame buffers like so:
+Postprocessing uses `HalfFloatType` frame buffers by default to store intermediate results with minimal information loss. Linear colors normally require at least 12 bits per color channel to prevent [color degradation and banding](https://blog.demofox.org/2018/03/10/dont-convert-srgb-u8-to-linear-u8/). The default buffer type supports HDR-like workflows with correct tone mapping.
+
+If hardware support and resource efficiency is a concern, postprocessing can be configured to use `UnsignedByteType` sRGB frame buffers as shown below. With low precision sRGB buffers, colors will be clamped to [0.0, 1.0] and information loss will shift to the darker spectrum which still leads to noticable banding in dark scenes. Linear, high precision `HalfFloatType` buffers don't have these issues and are generally the preferred option.
 
 ```ts
-import { HalfFloatType } from "three";
+import { UnsignedByteType } from "three";
 
 const geoPass = new GeometryPass(scene, camera, {
-	frameBufferType: HalfFloatType
+	frameBufferType: UnsignedByteType // enables low precision buffers
 });
 ```
 
