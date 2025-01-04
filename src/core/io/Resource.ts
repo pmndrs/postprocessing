@@ -35,6 +35,12 @@ export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap
 	private _value: T | null;
 
 	/**
+	 * @see {@link overrideValue}
+	 */
+
+	private _overrideValue: T | null;
+
+	/**
 	 * Constructs a new resource wrapper.
 	 *
 	 * @param value - A resource value.
@@ -46,6 +52,7 @@ export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap
 
 		this.id = Resource.idManager.getNextId();
 		this._value = value;
+		this._overrideValue = null;
 
 	}
 
@@ -55,13 +62,32 @@ export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap
 
 	get value(): T | null {
 
-		return this._value;
+		return this._overrideValue ?? this._value;
 
 	}
 
 	set value(value: T | null) {
 
 		this._value = value;
+		this.dispatchEvent({ type: Resource.EVENT_CHANGE });
+
+	}
+
+	/**
+	 * An additional value that overrides the main {@link value}.
+	 *
+	 * @internal
+	 */
+
+	get overrideValue(): T | null {
+
+		return this._overrideValue;
+
+	}
+
+	set overrideValue(value: T | null) {
+
+		this._overrideValue = value;
 		this.dispatchEvent({ type: Resource.EVENT_CHANGE });
 
 	}
