@@ -351,7 +351,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 		const material = this.fullscreenMaterial;
 		material.time += this.timer.getDelta() * this.timeScale;
 
-		this.setRenderTarget(this.output.defaultBuffer?.value ?? null);
+		this.setRenderTarget(this.output.defaultBuffer?.value);
 		this.renderFullscreen();
 
 	}

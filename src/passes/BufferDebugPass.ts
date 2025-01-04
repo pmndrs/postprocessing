@@ -258,7 +258,7 @@ export class BufferDebugPass extends Pass<BufferDebugMaterial> {
 
 	override render(): void {
 
-		this.setRenderTarget(this.output.defaultBuffer?.value ?? null);
+		this.setRenderTarget(this.output.defaultBuffer?.value);
 		this.renderFullscreen();
 		this.renderer?.render(this.debugScene, this.debugCamera);
 

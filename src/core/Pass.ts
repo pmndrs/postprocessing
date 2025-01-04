@@ -880,7 +880,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 * @param activeMipmapLevel - Specifies the active mipmap level.
 	 */
 
-	protected setRenderTarget(renderTarget: WebGLRenderTarget | WebGLRenderTarget<Texture[]> | null,
+	protected setRenderTarget(renderTarget: WebGLRenderTarget | WebGLRenderTarget<Texture[]> | null = null,
 		activeCubeFace?: number, activeMipmapLevel?: number): void {
 
 		this.renderer?.setRenderTarget(renderTarget, activeCubeFace, activeMipmapLevel);

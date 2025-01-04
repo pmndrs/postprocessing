@@ -133,7 +133,7 @@ export class CopyPass extends Pass<CopyMaterial> {
 		if(!this.blit()) {
 
 			// Blit failed: use a shader to copy the input buffer.
-			this.setRenderTarget(this.output.defaultBuffer?.value ?? null);
+			this.setRenderTarget(this.output.defaultBuffer?.value);
 			this.renderFullscreen();
 
 		}

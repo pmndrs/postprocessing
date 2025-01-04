@@ -211,7 +211,7 @@ export class ClearPass extends Pass {
 		const background = this.scene?.background ?? null;
 		const hasOverrideClearColor = this.clearValues.color !== null;
 
-		this.setRenderTarget(this.output.defaultBuffer?.value ?? null);
+		this.setRenderTarget(this.output.defaultBuffer?.value);
 
 		if(!hasOverrideClearColor && this.camera !== null && background !== null) {
 
