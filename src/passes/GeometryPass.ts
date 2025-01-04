@@ -2,7 +2,6 @@ import {
 	DepthFormat,
 	DepthStencilFormat,
 	DepthTexture,
-	FloatType,
 	HalfFloatType,
 	LinearFilter,
 	Material,
@@ -24,17 +23,17 @@ import {
 	WebGLRenderer
 } from "three";
 
+import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 import { Pass } from "../core/Pass.js";
 import { Selective } from "../core/Selective.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { MSAASamples } from "../enums/MSAASamples.js";
 import { GBufferConfig } from "../utils/GBufferConfig.js";
+import { GBufferTextureConfig } from "../utils/GBufferTextureConfig.js";
 import { extractIndices, extractOutputDefinitions } from "../utils/GBufferUtils.js";
 import { ObservableSet } from "../utils/ObservableSet.js";
 import { Selection } from "../utils/Selection.js";
 import { CopyPass } from "./CopyPass.js";
-import { GBufferTextureConfig } from "../utils/GBufferTextureConfig.js";
-import { RenderTargetResource } from "../core/index.js";
 
 /**
  * GeometryPass constructor options.
