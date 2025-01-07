@@ -65,9 +65,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 	renderer.shadowMap.needsUpdate = true;
 	renderer.shadowMap.enabled = true;
 
-	const container = document.getElementById("viewport")!;
-	container.prepend(renderer.domElement);
-
 	// Camera & Controls
 
 	const camera = new PerspectiveCamera(50, 1, 1, 1000);
@@ -118,6 +115,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const gBufferOptions = Object.assign({ NONE: "" }, Utils.enumToRecord(GBuffer));
 	bufferDebugPass.bufferFocus = gBufferOptions.NONE;
 
+	const container = document.getElementById("viewport")!;
 	const pane = new Pane({ container: container.querySelector<HTMLElement>(".tp")! });
 	const fpsGraph = Utils.createFPSGraph(pane);
 	const folder = pane.addFolder({ title: "Settings" });
@@ -142,13 +140,19 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Render Loop
 
-	renderer.setAnimationLoop((timestamp: number) => {
+	pipeline.compile().then(() => {
 
-		fpsGraph.begin();
-		controls.update(timestamp);
-		pipeline.render(timestamp);
-		fpsGraph.end();
+		container.prepend(renderer.domElement);
 
-	});
+		renderer.setAnimationLoop((timestamp) => {
+
+			fpsGraph.begin();
+			controls.update(timestamp);
+			pipeline.render(timestamp);
+			fpsGraph.end();
+
+		});
+
+	}).catch((e) => console.error(e));
 
 }));

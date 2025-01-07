@@ -83,9 +83,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 	renderer.shadowMap.needsUpdate = true;
 	renderer.shadowMap.enabled = true;
 
-	const container = document.getElementById("viewport")!;
-	container.prepend(renderer.domElement);
-
 	// Camera & Controls
 
 	const camera = new PerspectiveCamera(50, 1, 1, 1000);
@@ -177,10 +174,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Settings
 
-	const params = {
-		depthAware: true
-	};
+	const params = { depthAware: true };
 
+	const container = document.getElementById("viewport")!;
 	const pane = new Pane({ container: container.querySelector<HTMLElement>(".tp")! });
 	const fpsGraph = Utils.createFPSGraph(pane);
 
@@ -219,18 +215,22 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const timer = new Timer();
 
-	renderer.setAnimationLoop((timestamp: number) => {
+	pipeline.compile().then(() => {
 
-		fpsGraph.begin();
-		controls.update(timestamp);
-		timer.update(timestamp);
+		container.prepend(renderer.domElement);
 
-		coin.rotation.y = (coin.rotation.y + timer.getDelta() * 5) % Math.PI;
-		health.position.y = (healthPosition.y + Math.sin(timer.getElapsed()) * 0.025);
+		renderer.setAnimationLoop((timestamp) => {
 
-		pipeline.render(timestamp);
-		fpsGraph.end();
+			fpsGraph.begin();
+			controls.update(timestamp);
+			timer.update(timestamp);
+			coin.rotation.y = (coin.rotation.y + timer.getDelta() * 5) % Math.PI;
+			health.position.y = (healthPosition.y + Math.sin(timer.getElapsed()) * 0.025);
+			pipeline.render(timestamp);
+			fpsGraph.end();
 
-	});
+		});
+
+	}).catch((e) => console.error(e));
 
 }));

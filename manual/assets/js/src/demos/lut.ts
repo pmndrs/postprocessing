@@ -149,9 +149,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 	renderer.debug.checkShaderErrors = Utils.isLocalhost;
 	renderer.setClearAlpha(0);
 
-	const container = document.getElementById("viewport")!;
-	container.prepend(renderer.domElement);
-
 	// Camera & Controls
 
 	const camera = new PerspectiveCamera();
@@ -179,6 +176,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// LUT Preview
 
+	const container = document.getElementById("viewport")!;
 	const img = document.createElement("img");
 	img.title = "This is a compressed preview image";
 	img.classList.add("lut", "hidden");
@@ -304,13 +302,19 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Render Loop
 
-	renderer.setAnimationLoop((timestamp: number) => {
+	pipeline.compile().then(() => {
 
-		fpsGraph.begin();
-		controls.update(timestamp);
-		pipeline.render(timestamp);
-		fpsGraph.end();
+		container.prepend(renderer.domElement);
 
-	});
+		renderer.setAnimationLoop((timestamp) => {
+
+			fpsGraph.begin();
+			controls.update(timestamp);
+			pipeline.render(timestamp);
+			fpsGraph.end();
+
+		});
+
+	}).catch((e) => console.error(e));
 
 }));

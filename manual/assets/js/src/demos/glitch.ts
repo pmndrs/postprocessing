@@ -62,9 +62,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.debug.checkShaderErrors = Utils.isLocalhost;
-	const container = document.getElementById("viewport")!;
-	container.dataset.epilepsyWarning = "1";
-	container.prepend(renderer.domElement);
 
 	// Camera & Controls
 
@@ -105,6 +102,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Settings
 
+	const container = document.getElementById("viewport")!;
 	const pane = new Pane({ container: container.querySelector<HTMLElement>(".tp")! });
 	const fpsGraph = Utils.createFPSGraph(pane);
 
@@ -146,13 +144,20 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Render Loop
 
-	renderer.setAnimationLoop((timestamp: number) => {
+	pipeline.compile().then(() => {
 
-		fpsGraph.begin();
-		controls.update(timestamp);
-		pipeline.render(timestamp);
-		fpsGraph.end();
+		container.dataset.epilepsyWarning = "1";
+		container.prepend(renderer.domElement);
 
-	});
+		renderer.setAnimationLoop((timestamp) => {
+
+			fpsGraph.begin();
+			controls.update(timestamp);
+			pipeline.render(timestamp);
+			fpsGraph.end();
+
+		});
+
+	}).catch((e) => console.error(e));
 
 }));
