@@ -276,6 +276,8 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	}
 
+	// #region Accessors
+
 	/**
 	 * The name of this pass.
 	 */
@@ -514,6 +516,8 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	}
 
+	// #endregion
+
 	/**
 	 * Sets the base settings of all subpasses.
 	 */
@@ -721,42 +725,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	}
 
-	/**
-	 * Compiles the materials used by this pass.
-	 *
-	 * @return A promise that resolves when the compilation has finished.
-	 */
-
-	async compile(): Promise<void> {
-
-		if(this.renderer === null) {
-
-			return;
-
-		}
-
-		const currentMaterial = this.fullscreenMaterial;
-
-		for(const material of this.materials) {
-
-			this.fullscreenMaterial = material;
-			await this.renderer.compileAsync(this.fullscreenScene!, this.fullscreenCamera!);
-
-		}
-
-		this.fullscreenMaterial = currentMaterial;
-
-		const promises: Promise<Object3D | void>[] = [];
-
-		for(const pass of this.subpasses) {
-
-			promises.push(pass.compile());
-
-		}
-
-		await Promise.all(promises);
-
-	}
+	// #region Lifecycle Hooks
 
 	/**
 	 * Checks if the current renderer supports all features that are required by this pass.
@@ -809,6 +778,45 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 */
 
 	protected onScissorChange(): void {}
+
+	// #endregion
+
+	/**
+	 * Compiles the materials used by this pass.
+	 *
+	 * @return A promise that resolves when the compilation has finished.
+	 */
+
+	async compile(): Promise<void> {
+
+		if(this.renderer === null) {
+
+			return;
+
+		}
+
+		const currentMaterial = this.fullscreenMaterial;
+
+		for(const material of this.materials) {
+
+			this.fullscreenMaterial = material;
+			await this.renderer.compileAsync(this.fullscreenScene!, this.fullscreenCamera!);
+
+		}
+
+		this.fullscreenMaterial = currentMaterial;
+
+		const promises: Promise<Object3D | void>[] = [];
+
+		for(const pass of this.subpasses) {
+
+			promises.push(pass.compile());
+
+		}
+
+		await Promise.all(promises);
+
+	}
 
 	/**
 	 * Creates a basic framebuffer that uses linear filtering and has no mipmaps and no depth.
@@ -952,6 +960,8 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	}
 
+	// #region Event Handlers
+
 	/**
 	 * Handles {@link resolution} events.
 	 *
@@ -1078,6 +1088,8 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		}
 
 	}
+
+	// #endregion
 
 	dispose(): void {
 

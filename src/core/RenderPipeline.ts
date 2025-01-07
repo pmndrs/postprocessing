@@ -313,37 +313,6 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 	}
 
 	/**
-	 * Renders this pipeline.
-	 *
-	 * This method should be called once per frame via `requestAnimationFrame`.
-	 *
-	 * @see https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
-	 * @param timestamp - The current time in milliseconds.
-	 */
-
-	render(timestamp?: number): void {
-
-		if(this.renderer === null) {
-
-			return;
-
-		}
-
-		this._timer.update(timestamp);
-
-		for(const pass of this.passes) {
-
-			if(pass.enabled) {
-
-				pass.render();
-
-			}
-
-		}
-
-	}
-
-	/**
 	 * Handles resolution change events.
 	 */
 
@@ -476,6 +445,37 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 		}
 
 		await Promise.all(promises);
+
+	}
+
+	/**
+	 * Renders this pipeline.
+	 *
+	 * This method should be called once per frame via `requestAnimationFrame`.
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
+	 * @param timestamp - The current time in milliseconds.
+	 */
+
+	render(timestamp?: number): void {
+
+		if(this.renderer === null) {
+
+			return;
+
+		}
+
+		this._timer.update(timestamp);
+
+		for(const pass of this.passes) {
+
+			if(pass.enabled) {
+
+				pass.render();
+
+			}
+
+		}
 
 	}
 
