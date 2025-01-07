@@ -617,6 +617,21 @@ export class GeometryPass extends Pass implements Selective {
 
 	}
 
+	override async compile(): Promise<void> {
+
+		if(this.renderer === null || this.scene === null || this.camera === null) {
+
+			return;
+
+		}
+
+		const promises: Promise<Object3D | void>[] = [];
+		promises.push(super.compile());
+		promises.push(this.renderer.compileAsync(this.scene, this.camera));
+		await Promise.all(promises);
+
+	}
+
 	override render(): void {
 
 		const { renderer, scene, camera } = this;

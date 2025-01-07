@@ -200,6 +200,21 @@ export class ClearPass extends Pass {
 
 	}
 
+	override async compile(): Promise<void> {
+
+		if(this.renderer === null || this.camera === null) {
+
+			return;
+
+		}
+
+		await Promise.all([
+			super.compile(),
+			this.renderer.compileAsync(this.backgroundScene, this.camera)
+		]);
+
+	}
+
 	override render(): void {
 
 		if(this.renderer === null) {

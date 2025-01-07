@@ -459,6 +459,26 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 	}
 
+	/**
+	 * Compiles all passes in this pipeline.
+	 *
+	 * @return A promise that resolves when the compilation has finished.
+	 */
+
+	async compile(): Promise<void> {
+
+		const promises: Promise<void>[] = [];
+
+		for(const pass of this.passes) {
+
+			promises.push(pass.compile());
+
+		}
+
+		await Promise.all(promises);
+
+	}
+
 	dispose(): void {
 
 		RenderPipeline.ioManager.removePipeline(this);

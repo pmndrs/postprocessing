@@ -7,6 +7,7 @@ import {
 	EventDispatcher,
 	Material,
 	Mesh,
+	Object3D,
 	OrthographicCamera,
 	PerspectiveCamera,
 	RawShaderMaterial,
@@ -183,10 +184,19 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	/**
 	 * A collection of objects that will be disposed when this pass is disposed.
 	 *
-	 * IO resources and subpasses will be disposed separately and don't need to be added.
+	 * IO resources, materials and subpasses will be disposed separately and don't need to be added.
 	 */
 
 	protected readonly disposables: Set<Disposable>;
+
+	/**
+	 * A collection of materials that are used by this pass.
+	 *
+	 * This only needs to be filled if multiple fullscreen materials are used. The initial {@link fullscreenMaterial}
+	 * will automatically be added.
+	 */
+
+	protected readonly materials: Set<TMaterial>;
 
 	/**
 	 * The current resolution.
@@ -250,6 +260,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		this.id = Pass.idManager.getNextId();
 		this.disposables = new Set<Disposable>();
+		this.materials = new Set<TMaterial>();
 
 		this.resolution = new Resolution();
 		this.viewport = new Viewport();
@@ -497,6 +508,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 			this.fullscreenScene = new Scene();
 			this.fullscreenCamera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
 			this.fullscreenScene.add(this.screen);
+			this.materials.add(value);
 
 		}
 
@@ -706,6 +718,43 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		}
 
 		return false;
+
+	}
+
+	/**
+	 * Compiles the materials used by this pass.
+	 *
+	 * @return A promise that resolves when the compilation has finished.
+	 */
+
+	async compile(): Promise<void> {
+
+		if(this.renderer === null) {
+
+			return;
+
+		}
+
+		const currentMaterial = this.fullscreenMaterial;
+
+		for(const material of this.materials) {
+
+			this.fullscreenMaterial = material;
+			await this.renderer.compileAsync(this.fullscreenScene!, this.fullscreenCamera!);
+
+		}
+
+		this.fullscreenMaterial = currentMaterial;
+
+		const promises: Promise<Object3D | void>[] = [];
+
+		for(const pass of this.subpasses) {
+
+			promises.push(pass.compile());
+
+		}
+
+		await Promise.all(promises);
 
 	}
 
@@ -1034,6 +1083,14 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		this.input.dispose();
 		this.output.dispose();
+		this.previousDefines.clear();
+		this.previousUniforms.clear();
+
+		for(const material of this.materials) {
+
+			material?.dispose();
+
+		}
 
 		for(const disposable of this.disposables) {
 
@@ -1046,11 +1103,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 			pass.dispose();
 
 		}
-
-		this.fullscreenMaterial?.dispose();
-
-		this.previousDefines.clear();
-		this.previousUniforms.clear();
 
 	}
 
