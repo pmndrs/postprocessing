@@ -8,6 +8,7 @@ import {
 	RGBAFormat,
 	SRGBColorSpace,
 	Texture,
+	TypedArray,
 	UnsignedByteType,
 	Vector3
 } from "three";
@@ -125,8 +126,8 @@ export class LookupTexture extends Data3DTexture {
 
 		}
 
-		const data0 = img0.data;
-		const data1 = img1.data;
+		const data0 = img0.data as TypedArray;
+		const data1 = img1.data as TypedArray;
 		const size = size0;
 		const sizeSq = size ** 2;
 		const s = size - 1;
@@ -164,7 +165,7 @@ export class LookupTexture extends Data3DTexture {
 		if(this.type === FloatType) {
 
 			const img = this.image;
-			const floatData = img.data;
+			const floatData = img.data as TypedArray;
 			const uint8Data = new Uint8Array(floatData.length);
 
 			for(let i = 0, l = floatData.length; i < l; ++i) {
@@ -194,7 +195,7 @@ export class LookupTexture extends Data3DTexture {
 		if(this.type === UnsignedByteType) {
 
 			const img = this.image;
-			const uint8Data = img.data;
+			const uint8Data = img.data as TypedArray;
 			const floatData = new Float32Array(uint8Data.length);
 
 			for(let i = 0, l = uint8Data.length; i < l; ++i) {
@@ -222,7 +223,7 @@ export class LookupTexture extends Data3DTexture {
 	convertLinearToSRGB(): this {
 
 		const img = this.image;
-		const data = img.data;
+		const data = img.data as TypedArray;
 
 		if(this.type !== FloatType) {
 
@@ -252,7 +253,7 @@ export class LookupTexture extends Data3DTexture {
 	convertSRGBToLinear(): this {
 
 		const img = this.image;
-		const data = img.data;
+		const data = img.data as TypedArray;
 
 		if(this.type !== FloatType) {
 
