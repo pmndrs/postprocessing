@@ -842,39 +842,46 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	}
 
 	/**
-	 * Applies the viewport of this pass to the current render target.
+	 * Applies the viewport of this pass to the given render target.
+	 *
+	 * Note: viewport/scissor on render targets use absolute pixels whereas the renderer expects logical pixels.
 	 */
 
-	protected applyViewport(): void {
+	protected applyViewport(renderTarget: WebGLRenderTarget | WebGLRenderTarget<Texture[]> | null = null): void {
 
-		if(this.renderer === null) {
+		const renderer = this.renderer;
+
+		if(renderer === null) {
 
 			return;
 
 		}
 
-		const renderTarget = this.renderer.getRenderTarget();
 		const viewport = this.viewport;
 
 		if(viewport.enabled) {
-
-			this.renderer.setViewport(viewport.x, viewport.y, viewport.z, viewport.w);
 
 			if(renderTarget !== null) {
 
 				renderTarget.viewport.copy(viewport);
 
+			} else {
+
+				renderer.setViewport(viewport.x, viewport.y, viewport.z, viewport.w);
+
 			}
 
 		} else {
-
-			const { baseWidth, baseHeight } = this.resolution;
-			this.renderer.setViewport(0, 0, baseWidth, baseHeight);
 
 			if(renderTarget !== null) {
 
 				const { width, height } = renderTarget;
 				renderTarget.viewport.set(0, 0, width, height);
+
+			} else {
+
+				const { width, height } = renderer.getSize(v);
+				renderer.setViewport(0, 0, width, height);
 
 			}
 
@@ -883,43 +890,50 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	}
 
 	/**
-	 * Applies the scissor region of this pass to the current render target.
+	 * Applies the scissor region of this pass to the given render target.
+	 *
+	 * Note: viewport/scissor on render targets use absolute pixels whereas the renderer expects logical pixels.
 	 */
 
-	protected applyScissor(): void {
+	protected applyScissor(renderTarget: WebGLRenderTarget | WebGLRenderTarget<Texture[]> | null = null): void {
 
-		if(this.renderer === null) {
+		const renderer = this.renderer;
+
+		if(renderer === null) {
 
 			return;
 
 		}
 
-		const renderTarget = this.renderer.getRenderTarget();
 		const scissor = this.scissor;
 
 		if(scissor.enabled) {
-
-			this.renderer.setScissor(scissor.x, scissor.y, scissor.z, scissor.w);
-			this.renderer.setScissorTest(true);
 
 			if(renderTarget !== null) {
 
 				renderTarget.scissor.copy(scissor);
 				renderTarget.scissorTest = true;
 
+			} else {
+
+				renderer.setScissor(scissor.x, scissor.y, scissor.z, scissor.w);
+				renderer.setScissorTest(true);
+
 			}
 
-		} else if(this.renderer.getScissorTest()) {
-
-			const { baseWidth, baseHeight } = this.resolution;
-			this.renderer.setScissor(0, 0, baseWidth, baseHeight);
-			this.renderer.setScissorTest(false);
+		} else {
 
 			if(renderTarget !== null) {
 
-				const { baseWidth, baseHeight } = this.resolution;
-				renderTarget.scissor.set(0, 0, baseWidth, baseHeight);
+				const { width, height } = renderTarget;
+				renderTarget.scissor.set(0, 0, width, height);
 				renderTarget.scissorTest = false;
+
+			} else if(renderer.getScissorTest()) {
+
+				const { width, height } = renderer.getSize(v);
+				renderer.setScissor(0, 0, width, height);
+				renderer.setScissorTest(false);
 
 			}
 
@@ -940,9 +954,10 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	protected setRenderTarget(renderTarget: WebGLRenderTarget | WebGLRenderTarget<Texture[]> | null = null,
 		activeCubeFace?: number, activeMipmapLevel?: number): void {
 
+		// Viewport and scissor need to be set before setting the render target.
+		this.applyViewport(renderTarget);
+		this.applyScissor(renderTarget);
 		this.renderer?.setRenderTarget(renderTarget, activeCubeFace, activeMipmapLevel);
-		this.applyViewport();
-		this.applyScissor();
 
 	}
 
