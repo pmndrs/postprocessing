@@ -425,9 +425,25 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 	}
 
 	/**
-	 * Dispatches a `change` event.
+	 * Checks if this resolution equals the given resolution.
 	 *
-	 * @internal
+	 * @param resolution - A resolution.
+	 * @return True if the resolutions are the same.
+	 */
+
+	equals(resolution: Resolution): boolean {
+
+		return (
+			this.scale === resolution.scale &&
+			this.pixelRatio === resolution.pixelRatio &&
+			this.baseSize.equals(resolution.baseSize) &&
+			this.preferredSize.equals(resolution.preferredSize)
+		);
+
+	}
+
+	/**
+	 * Dispatches a `change` event.
 	 */
 
 	setChanged(): void {
