@@ -145,26 +145,27 @@ export class Viewport extends Resolution implements Vector4Like {
 	}
 
 	/**
-	 * Sets the offset and preferred size.
+	 * Sets the offset and the preferred size.
 	 *
 	 * If the width and height are omitted, x and y will be used for the size instead.
 	 *
-	 * @param x - The X-offset.
-	 * @param y - The Y-offset.
-	 * @param width - The width.
-	 * @param height - The height.
+	 * @param x - The X-offset in logical pixels (before pixel ratio).
+	 * @param y - The Y-offset in logical pixels (before pixel ratio).
+	 * @param width - The width in logical pixels (before pixel ratio).
+	 * @param height - The height in logical pixels (before pixel ratio).
 	 */
 
-	override set(x: number, y: number, width?: number, height?: number): void {
+	set(x: number, y: number, width?: number, height?: number): void {
 
 		if(width === undefined || height === undefined) {
 
-			super.set(x, y);
+			super.setPreferredSize(x, y);
 
 		} else {
 
 			this.offset.set(x, y);
-			super.set(width, height);
+			this.updateEffectiveOffset();
+			super.setPreferredSize(width, height);
 
 		}
 
