@@ -171,13 +171,37 @@ export class Viewport extends Resolution implements Vector4Like {
 
 	}
 
-	override copy(viewport: Viewport): void {
+	override copy(viewport: Viewport | Resolution): void {
 
-		this.offset.copy(viewport.offset);
-		this.enabled = viewport.enabled;
-		super.copy(viewport);
+		if(viewport instanceof Viewport) {
+
+			if(!this.equals(viewport)) {
+
+				this.enabled = viewport.enabled;
+				this.offset.copy(viewport.offset);
+				this.effectiveOffset.copy(viewport.effectiveOffset);
+				super.copy(viewport);
+
+			}
+
+		} else {
+
+			super.copy(viewport);
+
+		}
 
 	}
+
+	override equals(viewport: Viewport): boolean {
+
+		return (
+			this.enabled === viewport.enabled &&
+			this.offset.equals(viewport.offset) &&
+			super.equals(viewport)
+		);
+
+	}
+
 	override get x(): number { return this.effectiveOffset.x; }
 	override get y(): number { return this.effectiveOffset.y; }
 	get z(): number { return this.width; }
