@@ -418,8 +418,7 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 		for(const pass of this.passes) {
 
-			pass.viewport.setOffset(x, y);
-			pass.viewport.setBaseSize(width, height);
+			pass.viewport.set(x, y, width, height);
 
 		}
 
@@ -450,8 +449,7 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 		for(const pass of this.passes) {
 
-			pass.scissor.setOffset(x, y);
-			pass.scissor.setBaseSize(width, height);
+			pass.scissor.set(x, y, width, height);
 
 		}
 
