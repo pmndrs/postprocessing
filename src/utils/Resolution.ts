@@ -281,6 +281,19 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 	}
 
 	/**
+	 * Alias for {@link setBaseSize}.
+	 *
+	 * @param width - The width.
+	 * @param height - The height.
+	 */
+
+	setSize(width: number, height: number): void {
+
+		this.setBaseSize(width, height);
+
+	}
+
+	/**
 	 * Copies the base size of a given resolution.
 	 *
 	 * @param resolution - A resolution.
