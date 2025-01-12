@@ -70,7 +70,7 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 	/**
 	 * The current resolution.
 	 *
-	 * @see {@link updateStyle}
+	 * @see {@link updateStyle} to control whether the style of the canvas should be updated.
 	 */
 
 	readonly resolution: Resolution;
@@ -326,26 +326,45 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 		}
 
 		const resolution = this.resolution;
-		const width = resolution.width;
-		const height = resolution.height;
+		const width = resolution.logicalWidth;
+		const height = resolution.logicalHeight;
 		const logicalSize = this.renderer.getSize(v);
+
+		if(this.renderer.getPixelRatio() !== resolution.pixelRatio) {
+
+			this.renderer.setPixelRatio(resolution.pixelRatio);
+
+		}
 
 		if(logicalSize.width !== width || logicalSize.height !== height) {
 
+			// Apply the scaled logical size to the canvas.
 			this.renderer.setSize(width, height, this.updateStyle);
 
 		}
 
-		// The drawing buffer size takes the device pixel ratio into account.
-		const effectiveSize = this.renderer.getDrawingBufferSize(v);
-
 		for(const pass of this.passes) {
 
-			pass.resolution.setBaseSize(effectiveSize.width, effectiveSize.height);
-			pass.viewport.copyBaseSize(resolution);
-			pass.scissor.copyBaseSize(resolution);
+			// Set the pixel ratio and use the scaled logical size as the base size for the passes.
+			pass.resolution.pixelRatio = resolution.pixelRatio;
+			pass.resolution.setBaseSize(width, height);
 
 		}
+
+	}
+
+	/**
+	 * Sets the device pixel ratio.
+	 *
+	 * @param pixelRatio - The pixel ratio.
+	 */
+
+	setPixelRatio(pixelRatio: number): void {
+
+		const previousUpdateStyle = this.updateStyle;
+		this.updateStyle = false;
+		this.resolution.pixelRatio = pixelRatio;
+		this.updateStyle = previousUpdateStyle;
 
 	}
 
@@ -359,8 +378,18 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 	setSize(width: number, height: number, updateStyle = true): void {
 
+		const previousUpdateStyle = this.updateStyle;
+		this.updateStyle = false;
+
+		if(this.renderer !== null) {
+
+			this.resolution.pixelRatio = this.renderer.getPixelRatio();
+
+		}
+
 		this.updateStyle = updateStyle;
-		this.resolution.setBaseSize(width, height);
+		this.resolution.setSize(width, height);
+		this.updateStyle = previousUpdateStyle;
 
 	}
 

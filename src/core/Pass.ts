@@ -15,6 +15,7 @@ import {
 	ShaderMaterial,
 	Texture,
 	Uniform,
+	Vector2,
 	WebGLRenderTarget,
 	WebGLRenderer
 } from "three";
@@ -31,6 +32,8 @@ import { Identifiable } from "./Identifiable.js";
 import { Renderable } from "./Renderable.js";
 import { Viewport } from "../utils/Viewport.js";
 import { Scissor } from "../utils/Scissor.js";
+
+const v = /* @__PURE__ */ new Vector2();
 
 /**
  * Pass events.
@@ -530,6 +533,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 			pass.renderer = this.renderer;
 			pass.scene = this.scene;
 			pass.camera = this.camera;
+			pass.resolution.copy(this.resolution);
 			pass.viewport.copy(this.viewport);
 			pass.scissor.copy(this.scissor);
 			pass.attached = true;
@@ -544,11 +548,13 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	private updateSubpassResolution(): void {
 
-		const { baseWidth, baseHeight } = this.resolution;
+		const { pixelRatio, logicalWidth, logicalHeight } = this.resolution;
 
 		for(const pass of this.subpasses) {
 
-			pass.resolution.setBaseSize(baseWidth, baseHeight);
+			// Set the pixel ratio and use the scaled logical size as the base size for the subpasses.
+			pass.resolution.pixelRatio = pixelRatio;
+			pass.resolution.setBaseSize(logicalWidth, logicalHeight);
 
 		}
 
@@ -560,12 +566,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	private updateSubpassViewport(): void {
 
-		const { enabled, offsetX, offsetY, baseWidth, baseHeight } = this.viewport;
+		const { pixelRatio, scale, baseWidth, baseHeight } = this.viewport;
 
 		for(const pass of this.subpasses) {
 
-			pass.viewport.enabled = enabled;
-			pass.viewport.setOffset(offsetX, offsetY);
+			pass.viewport.pixelRatio = pixelRatio;
+			pass.viewport.scale = scale;
 			pass.viewport.setBaseSize(baseWidth, baseHeight);
 
 		}
@@ -578,12 +584,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	private updateSubpassScissor(): void {
 
-		const { enabled, offsetX, offsetY, baseWidth, baseHeight } = this.scissor;
+		const { pixelRatio, scale, baseWidth, baseHeight } = this.scissor;
 
 		for(const pass of this.subpasses) {
 
-			pass.scissor.enabled = enabled;
-			pass.scissor.setOffset(offsetX, offsetY);
+			pass.scissor.pixelRatio = pixelRatio;
+			pass.scissor.scale = scale;
 			pass.scissor.setBaseSize(baseWidth, baseHeight);
 
 		}
@@ -597,6 +603,26 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	private updateOutputBufferSize(): void {
 
 		this.output.defaultBuffer?.value?.setSize(this.resolution.width, this.resolution.height);
+
+	}
+
+	/**
+	 * Updates the viewport and scissor based on the current resolution.
+	 */
+
+	private updateViewportAndScissor(): void {
+
+		const { pixelRatio, scale, baseWidth, baseHeight } = this.resolution;
+
+		const viewport = this.viewport;
+		viewport.pixelRatio = pixelRatio;
+		viewport.scale = scale;
+		viewport.setBaseSize(baseWidth, baseHeight);
+
+		const scissor = this.scissor;
+		scissor.pixelRatio = pixelRatio;
+		scissor.scale = scale;
+		scissor.setBaseSize(baseWidth, baseHeight);
 
 	}
 
@@ -997,6 +1023,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 				this.updateOutputBufferSize();
 				this.onResolutionChange();
 				this.updateSubpassResolution();
+				this.updateViewportAndScissor();
 				break;
 
 		}

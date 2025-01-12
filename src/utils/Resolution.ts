@@ -28,22 +28,34 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 	static readonly AUTO_SIZE = AUTO_SIZE;
 
 	/**
-	 * The base resolution.
+	 * The unscaled base resolution in logical pixels.
 	*/
 
 	protected baseSize: Vector2;
 
 	/**
-	 * The preferred resolution.
+	 * The unscaled preferred resolution in logical pixels.
 	 */
 
 	protected preferredSize: Vector2;
 
 	/**
-	 * The effective resolution.
+	 * The logical resolution in logical pixels.
+	 */
+
+	protected logicalSize: Vector2;
+
+	/**
+	 * The effective resolution in absolute pixels.
 	 */
 
 	protected effectiveSize: Vector2;
+
+	/**
+	 * @see {@link pixelRatio}
+	 */
+
+	protected _pixelRatio: number;
 
 	/**
 	 * @see {@link scale}
@@ -65,7 +77,9 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 
 		this.baseSize = new Vector2(1, 1);
 		this.preferredSize = new Vector2(width, height);
+		this.logicalSize = new Vector2();
 		this.effectiveSize = new Vector2();
+		this._pixelRatio = 1.0;
 		this._scale = scale;
 
 		this.addEventListener(Resolution.EVENT_CHANGE, () => this.updateEffectiveSize());
@@ -81,40 +95,62 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 
 		const base = this.baseSize;
 		const preferred = this.preferredSize;
+		const logical = this.logicalSize;
 		const effective = this.effectiveSize;
 
-		effective.copy(base);
+		logical.copy(base);
 
 		if(preferred.width !== AUTO_SIZE) {
 
 			// Absolute width.
-			effective.width = preferred.width;
+			logical.width = preferred.width;
 
 		} else if(preferred.height !== AUTO_SIZE) {
 
 			// Dynamic width, absolute height.
-			effective.width = Math.round(preferred.height * (base.width / Math.max(base.height, 1)));
+			logical.width = Math.round(preferred.height * (base.width / Math.max(base.height, 1)));
 
 		}
 
 		if(preferred.height !== AUTO_SIZE) {
 
 			// Absolute height.
-			effective.height = preferred.height;
+			logical.height = preferred.height;
 
 		} else if(preferred.width !== AUTO_SIZE) {
 
 			// Dynamic height, absolute width.
-			effective.height = Math.round(preferred.width / Math.max(base.width / Math.max(base.height, 1), 1));
+			logical.height = Math.round(preferred.width / Math.max(base.width / Math.max(base.height, 1), 1));
 
 		}
 
-		effective.multiplyScalar(this.scale).round();
+		logical.multiplyScalar(this.scale).round();
+		effective.copy(logical).multiplyScalar(this.pixelRatio).floor();
 
 	}
 
 	/**
-	 * The effective width, calculated based on the preferred size and resolution scale.
+	 * The scaled base width in logical pixels.
+	 */
+
+	get logicalWidth(): number {
+
+		return this.logicalSize.width;
+
+	}
+
+	/**
+	 * The scaled base height in logical pixels.
+	 */
+
+	get logicalHeight(): number {
+
+		return this.logicalSize.height;
+
+	}
+
+	/**
+	 * The effective width, calculated based on the preferred size, pixel ratio and resolution scale.
 	 */
 
 	get width(): number {
@@ -124,7 +160,7 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 	}
 
 	/**
-	 * The effective height, calculated based on the preferred size and resolution scale.
+	 * The effective height, calculated based on the preferred size, pixel ratio and resolution scale.
 	 */
 
 	get height(): number {
@@ -134,9 +170,32 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 	}
 
 	/**
+	 * The device pixel ratio.
+	 *
+	 * @defaultValue 1.0
+	 */
+
+	get pixelRatio(): number {
+
+		return this._pixelRatio;
+
+	}
+
+	set pixelRatio(value: number) {
+
+		if(this._pixelRatio !== value) {
+
+			this._pixelRatio = value;
+			this.setChanged();
+
+		}
+
+	}
+
+	/**
 	 * The resolution scale.
 	 *
-	 * @defaultValue 1
+	 * @defaultValue 1.0
 	 */
 
 	get scale(): number {
@@ -158,7 +217,7 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 	}
 
 	/**
-	 * The base width.
+	 * The unscaled base width in logical pixels.
 	 *
 	 * @defaultValue 1
 	 */
@@ -181,7 +240,7 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 	}
 
 	/**
-	 * The base height.
+	 * The unscaled base height in logical pixels.
 	 *
 	 * @defaultValue 1
 	 */
@@ -204,7 +263,7 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 	}
 
 	/**
-	 * Sets the base size.
+	 * Sets the base size in logical pixels.
 	 *
 	 * @param width - The width.
 	 * @param height - The height.
@@ -239,7 +298,7 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 	}
 
 	/**
-	 * The preferred width.
+	 * The unscaled preferred width in logical pixels.
 	 *
 	 * @defaultValue {@link Resolution.AUTO_SIZE}
 	 */
@@ -262,7 +321,7 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 	}
 
 	/**
-	 * The preferred height.
+	 * The unscaled preferred height in logical pixels.
 	 *
 	 * @defaultValue {@link Resolution.AUTO_SIZE}
 	 */
@@ -285,7 +344,7 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 	}
 
 	/**
-	 * Sets the preferred size.
+	 * Sets the preferred size in logical pixels.
 	 *
 	 * @param width - The width.
 	 * @param height - The height.

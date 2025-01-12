@@ -10,10 +10,16 @@ import { Resolution } from "./Resolution.js";
 export class Viewport extends Resolution implements Vector4Like {
 
 	/**
-	 * The current offset.
+	 * The offset in logical pixels.
 	 */
 
 	private offset: Vector2;
+
+	/**
+	 * The effective offset.
+	 */
+
+	private effectiveOffset: Vector2;
 
 	/**
 	 * @see {@link enabled}
@@ -30,7 +36,21 @@ export class Viewport extends Resolution implements Vector4Like {
 		super();
 
 		this.offset = new Vector2();
+		this.effectiveOffset = new Vector2();
 		this._enabled = false;
+
+		this.addEventListener(Resolution.EVENT_CHANGE, () => this.updateEffectiveOffset());
+
+	}
+
+	/**
+	 * Calculates the effective offset.
+	 */
+
+	private updateEffectiveOffset(): void {
+
+		this.effectiveOffset.copy(this.offset).multiplyScalar(this.scale).round();
+		this.effectiveOffset.multiplyScalar(this.pixelRatio).floor();
 
 	}
 
@@ -58,7 +78,7 @@ export class Viewport extends Resolution implements Vector4Like {
 	}
 
 	/**
-	 * The current offset along the X-axis in logical pixels.
+	 * The offset along the X-axis in logical pixels.
 	 *
 	 * @defaultValue 0
 	 */
@@ -74,6 +94,7 @@ export class Viewport extends Resolution implements Vector4Like {
 		if(this.offsetX !== value) {
 
 			this.offset.x = value;
+			this.updateEffectiveOffset();
 			this.setChanged();
 
 		}
@@ -81,7 +102,7 @@ export class Viewport extends Resolution implements Vector4Like {
 	}
 
 	/**
-	 * The current offset along the Y-axis in logical pixels.
+	 * The offset along the Y-axis in logical pixels.
 	 *
 	 * @defaultValue 0
 	 */
@@ -97,6 +118,7 @@ export class Viewport extends Resolution implements Vector4Like {
 		if(this.offsetY !== value) {
 
 			this.offset.y = value;
+			this.updateEffectiveOffset();
 			this.setChanged();
 
 		}
@@ -106,8 +128,8 @@ export class Viewport extends Resolution implements Vector4Like {
 	/**
 	 * Sets the offset.
 	 *
-	 * @param x - The X-offset.
-	 * @param y - The Y-offset.
+	 * @param x - The X-offset in logical pixels (before pixel ratio).
+	 * @param y - The Y-offset in logical pixels (before pixel ratio).
 	 */
 
 	setOffset(x: number, y: number): void {
@@ -115,6 +137,7 @@ export class Viewport extends Resolution implements Vector4Like {
 		if(this.offset.x !== x || this.offset.y !== y) {
 
 			this.offset.set(x, y);
+			this.updateEffectiveOffset();
 			this.setChanged();
 
 		}
