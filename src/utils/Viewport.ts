@@ -144,11 +144,6 @@ export class Viewport extends Resolution implements Vector4Like {
 
 	}
 
-	override get x(): number { return this.offset.x; }
-	override get y(): number { return this.offset.y; }
-	get z(): number { return this.width; }
-	get w(): number { return this.height; }
-
 	/**
 	 * Sets the offset and preferred size.
 	 *
@@ -182,5 +177,9 @@ export class Viewport extends Resolution implements Vector4Like {
 		super.copy(viewport);
 
 	}
+	override get x(): number { return this.effectiveOffset.x; }
+	override get y(): number { return this.effectiveOffset.y; }
+	get z(): number { return this.width; }
+	get w(): number { return this.height; }
 
 }
