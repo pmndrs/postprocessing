@@ -390,21 +390,6 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 	}
 
 	/**
-	 * Sets the preferred size and resets the scale.
-	 *
-	 * @param width - The width.
-	 * @param height - The height.
-	 */
-
-	set(width: number, height: number): void {
-
-		this._scale = 1.0;
-		this.preferredSize.set(width, height);
-		this.setChanged();
-
-	}
-
-	/**
 	 * Copies the given resolution.
 	 *
 	 * @param resolution - The resolution.
