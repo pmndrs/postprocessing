@@ -412,10 +412,15 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 
 	copy(resolution: Resolution): void {
 
-		this._scale = resolution.scale;
-		this.preferredSize.copy(resolution.preferredSize);
-		this.baseSize.copy(resolution.baseSize);
-		this.setChanged();
+		if(!this.equals(resolution)) {
+
+			this.preferredSize.copy(resolution.preferredSize);
+			this.baseSize.copy(resolution.baseSize);
+			this._pixelRatio = resolution.pixelRatio;
+			this._scale = resolution.scale;
+			this.setChanged();
+
+		}
 
 	}
 
