@@ -28,7 +28,7 @@ export class Viewport extends Resolution implements Vector4Like {
 	private _enabled: boolean;
 
 	/**
-	 * Constructs a new viewport/scissor.
+	 * Constructs a new viewport.
 	 */
 
 	constructor() {
@@ -55,7 +55,7 @@ export class Viewport extends Resolution implements Vector4Like {
 	}
 
 	/**
-	 * Indicates whether this viewport/scissor is enabled.
+	 * Indicates whether this viewport is enabled.
 	 *
 	 * @defaultValue false
 	 */
@@ -126,10 +126,10 @@ export class Viewport extends Resolution implements Vector4Like {
 	}
 
 	/**
-	 * Sets the offset.
+	 * Sets the offset in logical pixels.
 	 *
-	 * @param x - The X-offset in logical pixels (before pixel ratio).
-	 * @param y - The Y-offset in logical pixels (before pixel ratio).
+	 * @param x - The X-offset.
+	 * @param y - The Y-offset.
 	 */
 
 	setOffset(x: number, y: number): void {
@@ -145,14 +145,14 @@ export class Viewport extends Resolution implements Vector4Like {
 	}
 
 	/**
-	 * Sets the offset and the preferred size.
+	 * Sets the offset and the preferred size in logical pixels.
 	 *
 	 * If the width and height are omitted, x and y will be used for the size instead.
 	 *
-	 * @param x - The X-offset in logical pixels (before pixel ratio).
-	 * @param y - The Y-offset in logical pixels (before pixel ratio).
-	 * @param width - The width in logical pixels (before pixel ratio).
-	 * @param height - The height in logical pixels (before pixel ratio).
+	 * @param x - The X-offset.
+	 * @param y - The Y-offset.
+	 * @param width - The width.
+	 * @param height - The height.
 	 */
 
 	set(x: number, y: number, width?: number, height?: number): void {
