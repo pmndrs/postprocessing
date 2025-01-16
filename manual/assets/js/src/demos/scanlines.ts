@@ -80,7 +80,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
-	const effect = new ScanlineEffect();
+	const effect = new ScanlineEffect({ density: 2.0 });
 	effect.blendMode.opacity = 0.25;
 
 	const pipeline = new RenderPipeline(renderer);
@@ -97,8 +97,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const fpsGraph = Utils.createFPSGraph(pane);
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addBinding(effect, "density", { min: 0, max: 2, step: 1e-3 });
-	folder.addBinding(effect, "scrollSpeed", { min: -0.02, max: 0.02, step: 1e-3 });
+	folder.addBinding(effect, "offset", { min: 0, max: 1, step: 1e-3 });
+	folder.addBinding(effect, "density", { min: 0, max: 4, step: 1e-3 });
+	folder.addBinding(effect, "scrollSpeed", { min: -0.1, max: 0.1, step: 1e-3 });
 
 	Utils.addBlendModeBindings(folder, effect.blendMode);
 
