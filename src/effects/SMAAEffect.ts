@@ -289,21 +289,21 @@ export class SMAAEffect extends Effect {
 		switch(preset) {
 
 			case SMAAPreset.LOW:
-				edgeDetectionMaterial.edgeDetectionThreshold = 0.05;
+				edgeDetectionMaterial.edgeDetectionThreshold = 0.01;
 				weightsMaterial.orthogonalSearchSteps = 4;
 				weightsMaterial.diagonalDetection = false;
 				weightsMaterial.cornerDetection = false;
 				break;
 
 			case SMAAPreset.MEDIUM:
-				edgeDetectionMaterial.edgeDetectionThreshold = 0.02;
+				edgeDetectionMaterial.edgeDetectionThreshold = 0.006;
 				weightsMaterial.orthogonalSearchSteps = 8;
 				weightsMaterial.diagonalDetection = false;
 				weightsMaterial.cornerDetection = false;
 				break;
 
 			case SMAAPreset.HIGH:
-				edgeDetectionMaterial.edgeDetectionThreshold = 0.02;
+				edgeDetectionMaterial.edgeDetectionThreshold = 0.005;
 				weightsMaterial.orthogonalSearchSteps = 16;
 				weightsMaterial.diagonalSearchSteps = 8;
 				weightsMaterial.cornerRounding = 25;
@@ -312,7 +312,7 @@ export class SMAAEffect extends Effect {
 				break;
 
 			case SMAAPreset.ULTRA:
-				edgeDetectionMaterial.edgeDetectionThreshold = 0.01;
+				edgeDetectionMaterial.edgeDetectionThreshold = 0.004;
 				weightsMaterial.orthogonalSearchSteps = 32;
 				weightsMaterial.diagonalSearchSteps = 16;
 				weightsMaterial.cornerRounding = 25;
