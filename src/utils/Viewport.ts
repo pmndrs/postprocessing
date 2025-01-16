@@ -49,8 +49,7 @@ export class Viewport extends Resolution implements Vector4Like {
 
 	private updateEffectiveOffset(): void {
 
-		this.effectiveOffset.copy(this.offset).multiplyScalar(this.scale).round();
-		this.effectiveOffset.multiplyScalar(this.pixelRatio).floor();
+		this.effectiveOffset.copy(this.offset).multiplyScalar(this.scaledPixelRatio).floor();
 
 	}
 
