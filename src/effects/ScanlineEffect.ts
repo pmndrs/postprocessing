@@ -1,4 +1,4 @@
-import { Uniform } from "three";
+import { Uniform, Vector2 } from "three";
 import { Effect } from "./Effect.js";
 import { OverlayBlendFunction } from "./blending/blend-functions/OverlayBlendFunction.js";
 
@@ -15,10 +15,18 @@ export interface ScanlineEffectOptions {
 	/**
 	 * The scanline density.
 	 *
-	 * @defaultValue 1.25
+	 * @defaultValue 1.0
 	 */
 
 	density?: number;
+
+	/**
+	 * A scanline offset in the range [0.0, 1.0].
+	 *
+	 * @defaultValue 0.0
+	 */
+
+	offset?: number;
 
 	/**
 	 * The scanline scroll speed.
@@ -54,7 +62,8 @@ export class ScanlineEffect extends Effect {
 	 */
 
 	constructor({
-		density = 1.25,
+		density = 1.0,
+		offset = 0.0,
 		scrollSpeed = 0.0
 	}: ScanlineEffectOptions = {}) {
 
@@ -64,7 +73,7 @@ export class ScanlineEffect extends Effect {
 		this.blendMode.blendFunction = new OverlayBlendFunction();
 
 		const uniforms = this.input.uniforms;
-		uniforms.set("count", new Uniform(0.0));
+		uniforms.set("params", new Uniform(new Vector2(offset, 0.0)));
 		uniforms.set("scrollSpeed", new Uniform(0.0));
 
 		this._density = density;
@@ -86,6 +95,24 @@ export class ScanlineEffect extends Effect {
 
 		this._density = value;
 		this.onResolutionChange();
+
+	}
+
+	/**
+	 * The scanline offset.
+	 */
+
+	get offset() {
+
+		const params = this.input.uniforms.get("params")!.value as Vector2;
+		return params.x;
+
+	}
+
+	set offset(value: number) {
+
+		const params = this.input.uniforms.get("params")!.value as Vector2;
+		params.x = value;
 
 	}
 
@@ -123,8 +150,9 @@ export class ScanlineEffect extends Effect {
 	protected override onResolutionChange(): void {
 
 		const resolution = this.resolution;
-		const f = this.density / resolution.scaledPixelRatio;
-		this.input.uniforms.get("count")!.value = f * resolution.height;
+		const aspect = resolution.aspectRatio;
+		const params = this.input.uniforms.get("params")!.value as Vector2;
+		params.y = this.density * 1000.0 / aspect;
 
 	}
 

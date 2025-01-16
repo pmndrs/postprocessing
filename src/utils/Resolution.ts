@@ -141,6 +141,16 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 	}
 
 	/**
+	 * The aspect ratio.
+	 */
+
+	get aspectRatio(): number {
+
+		return this.baseSize.width / this.baseSize.height;
+
+	}
+
+	/**
 	 * The device pixel ratio.
 	 *
 	 * @defaultValue 1.0

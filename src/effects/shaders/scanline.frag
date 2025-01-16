@@ -1,4 +1,4 @@
-uniform float count;
+uniform vec2 params;
 
 #ifdef SCROLL
 
@@ -8,7 +8,7 @@ uniform float count;
 
 vec4 mainImage(const in vec4 inputColor, const in vec2 uv, const in GData gData) {
 
-	float y = uv.y;
+	float y = uv.y + params.x;
 
 	#ifdef SCROLL
 
@@ -16,7 +16,7 @@ vec4 mainImage(const in vec4 inputColor, const in vec2 uv, const in GData gData)
 
 	#endif
 
-	float f = y * count;
+	float f = y * params.y;
 	vec2 sl = vec2(sin(f), cos(f));
 
 	return vec4(sl.xyx, inputColor.a);
