@@ -4,6 +4,7 @@ import { Effect } from "./Effect.js";
 import fragmentShader from "./shaders/tone-mapping.frag";
 
 const toneMappingOperators = new Map<ToneMapping, string>([
+	[ToneMapping.CUSTOM, "CustomToneMapping(texel)"],
 	[ToneMapping.LINEAR, "LinearToneMapping(texel)"],
 	[ToneMapping.REINHARD, "ReinhardToneMapping(texel)"],
 	[ToneMapping.CINEON, "CineonToneMapping(texel)"],
@@ -79,7 +80,6 @@ export class ToneMappingEffect extends Effect {
 
 			}
 
-			// Use one of three's built-in tone mapping operators.
 			defines.set("toneMapping(texel)", operator);
 			this.setChanged();
 

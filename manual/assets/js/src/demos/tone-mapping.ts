@@ -4,6 +4,7 @@ import {
 	PerspectiveCamera,
 	SRGBColorSpace,
 	Scene,
+	ShaderChunk,
 	Texture,
 	WebGLRenderer
 } from "three";
@@ -78,6 +79,19 @@ window.addEventListener("load", () => void load().then((assets) => {
 	scene.environment = skyMap;
 	scene.fog = DefaultEnvironment.createFog();
 	scene.add(DefaultEnvironment.createEnvironment());
+
+	// Custom Tone Mapping Example
+
+	ShaderChunk.tonemapping_pars_fragment = ShaderChunk.tonemapping_pars_fragment.replace(
+		// Replace the standard function
+		"vec3 CustomToneMapping( vec3 color ) { return color; }",
+		// with a custom one such as Uncharted 2 Filmic
+		"vec3 uncharted2_tonemap_partial(vec3 x){float A=0.15;float B=0.5;float C=0.1;float D=0.2;float E=0.0;" +
+		"float F=0.3;return((x*(A*x+C*B)+D*E)/(x*(A*x+B)+D*F))-E/F;}vec3 uncharted2_filmic(vec3 v){" +
+		"vec3 curr=uncharted2_tonemap_partial(v*toneMappingExposure);vec3 W=vec3(11.2);" +
+		"vec3 white_scale=vec3(1.0)/uncharted2_tonemap_partial(W);return curr*white_scale;}" +
+		"vec3 CustomToneMapping(vec3 c){return uncharted2_filmic(c);}"
+	);
 
 	// Post Processing
 
