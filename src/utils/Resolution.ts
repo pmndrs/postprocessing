@@ -31,31 +31,31 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 	 * The unscaled base resolution in logical pixels.
 	*/
 
-	protected baseSize: Vector2;
+	private baseSize: Vector2;
 
 	/**
 	 * The unscaled preferred resolution in logical pixels.
 	 */
 
-	protected preferredSize: Vector2;
+	private preferredSize: Vector2;
 
 	/**
 	 * The effective resolution in absolute pixels.
 	 */
 
-	protected effectiveSize: Vector2;
+	private effectiveSize: Vector2;
 
 	/**
 	 * @see {@link pixelRatio}
 	 */
 
-	protected _pixelRatio: number;
+	private _pixelRatio: number;
 
 	/**
 	 * @see {@link scale}
 	 */
 
-	protected _scale: number;
+	private _scale: number;
 
 	/**
 	 * Constructs a new resolution.
