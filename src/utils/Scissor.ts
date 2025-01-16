@@ -1,7 +1,7 @@
 import { Viewport } from "./Viewport.js";
 
 /**
- * A scissor.
+ * A specialized viewport that defines a scissor region.
  *
  * @category Utils
  */
