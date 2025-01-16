@@ -21,8 +21,9 @@ struct Cell {
 	float sample4;
 };
 
-float getPattern(float cellSample, vec2 coord, vec2 n, vec2 p, float angle, float maxRadius) {
+float getPattern(float cellSample, vec2 coord, vec2 n, vec2 p, float angle) {
 
+	float maxRadius = radius;
 	float magnitude = length(coord - p);
 	float r = cellSample;
 
@@ -86,10 +87,11 @@ vec4 getSample(vec2 point) {
 
 }
 
-Cell getReferenceCell(vec2 p, vec2 origin, float gridAngle, float step) {
+Cell getReferenceCell(vec2 p, vec2 origin, float gridAngle) {
 
 	Cell cell;
 
+	float step = radius;
 	vec2 n = vec2(cos(gridAngle), sin(gridAngle));
 
 	vec2 v = p - origin;
@@ -115,9 +117,9 @@ Cell getReferenceCell(vec2 p, vec2 origin, float gridAngle, float step) {
 
 	if(scatterFactor != 0.0) {
 
-		float offMag = scatterFactor * threshold * 0.5;
+		float offMagnitude = scatterFactor * threshold * 0.5;
 		float offAngle = rand(floor(cell.p1)) * PI2;
-		cell.p1 += vec2(cos(offAngle), sin(offAngle)) * offMag;
+		cell.p1 += vec2(cos(offAngle), sin(offAngle)) * offMagnitude;
 
 	}
 
@@ -134,15 +136,15 @@ Cell getReferenceCell(vec2 p, vec2 origin, float gridAngle, float step) {
 
 float halftone(Cell cell, vec2 p, float angle, float aa) {
 
-	float distC1 = getPattern(cell.sample1, cell.p1, cell.n, p, angle, radius);
-	float distC2 = getPattern(cell.sample2, cell.p2, cell.n, p, angle, radius);
-	float distC3 = getPattern(cell.sample3, cell.p3, cell.n, p, angle, radius);
-	float distC4 = getPattern(cell.sample4, cell.p4, cell.n, p, angle, radius);
+	float distC1 = getPattern(cell.sample1, cell.p1, cell.n, p, angle);
+	float distC2 = getPattern(cell.sample2, cell.p2, cell.n, p, angle);
+	float distC3 = getPattern(cell.sample3, cell.p3, cell.n, p, angle);
+	float distC4 = getPattern(cell.sample4, cell.p4, cell.n, p, angle);
 
-	float result = (distC1 > 0.0) ? clamp(distC1 * aa, 0.0, 1.0) : 0.0;
-	result += (distC2 > 0.0) ? clamp(distC2 * aa, 0.0, 1.0) : 0.0;
-	result += (distC3 > 0.0) ? clamp(distC3 * aa, 0.0, 1.0) : 0.0;
-	result += (distC4 > 0.0) ? clamp(distC4 * aa, 0.0, 1.0) : 0.0;
+	float result = (distC1 > 0.0) ? min(distC1 * aa, 1.0) : 0.0;
+	result += (distC2 > 0.0) ? min(distC2 * aa, 1.0) : 0.0;
+	result += (distC3 > 0.0) ? min(distC3 * aa, 1.0) : 0.0;
+	result += (distC4 > 0.0) ? min(distC4 * aa, 1.0) : 0.0;
 	result = clamp(result, 0.0, 1.0);
 
 	return result;
@@ -157,9 +159,9 @@ vec4 mainImage(const in vec4 inputColor, const in vec2 uv, const in GData gData)
 
 	#ifdef RGB_ROTATION
 
-		Cell cellR = getReferenceCell(p, origin, rotationRGB.r, radius);
-		Cell cellG = getReferenceCell(p, origin, rotationRGB.g, radius);
-		Cell cellB = getReferenceCell(p, origin, rotationRGB.b, radius);
+		Cell cellR = getReferenceCell(p, origin, rotationRGB.r);
+		Cell cellG = getReferenceCell(p, origin, rotationRGB.g);
+		Cell cellB = getReferenceCell(p, origin, rotationRGB.b);
 
 		cellR.sample1 = getSample(cellR.p1).r;
 		cellR.sample2 = getSample(cellR.p2).r;
@@ -178,7 +180,7 @@ vec4 mainImage(const in vec4 inputColor, const in vec2 uv, const in GData gData)
 
 	#else
 
-		Cell cell = getReferenceCell(p, origin, rotationRGB.r, radius);
+		Cell cell = getReferenceCell(p, origin, rotationRGB.r);
 		Cell cellR = cell;
 		Cell cellG = cell;
 		Cell cellB = cell;
