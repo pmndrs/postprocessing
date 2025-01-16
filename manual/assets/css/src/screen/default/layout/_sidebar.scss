@@ -24,7 +24,9 @@
 
 .sidebar-button-open,
 .sidebar-button-close {
-	background: no-repeat center url("/img/svg/chevron_left_white_24dp.svg");
+	background: no-repeat center transparent;
+	background-image: url("/img/svg/chevron_left_white_24dp.svg");
+	border-radius: 25%;
 	cursor: pointer;
 	display: block;
 	opacity: 0.5;
@@ -42,6 +44,7 @@
 }
 
 .sidebar-button-open {
+	background-color: var(--viewport-button-background-color);
 	background-image: url("/img/svg/menu_open_black_24dp.svg");
 	height: 32px;
 	left: 0.5rem;
