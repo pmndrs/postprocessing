@@ -123,7 +123,7 @@ export class ScanlineEffect extends Effect {
 	protected override onResolutionChange(): void {
 
 		const resolution = this.resolution;
-		const f = this.density / (resolution.pixelRatio * resolution.scale);
+		const f = this.density / resolution.scaledPixelRatio;
 		this.input.uniforms.get("count")!.value = f * resolution.height;
 
 	}

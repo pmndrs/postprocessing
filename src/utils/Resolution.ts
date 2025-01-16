@@ -40,12 +40,6 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 	protected preferredSize: Vector2;
 
 	/**
-	 * The logical resolution in logical pixels.
-	 */
-
-	protected logicalSize: Vector2;
-
-	/**
 	 * The effective resolution in absolute pixels.
 	 */
 
@@ -77,7 +71,6 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 
 		this.baseSize = new Vector2(1, 1);
 		this.preferredSize = new Vector2(width, height);
-		this.logicalSize = new Vector2();
 		this.effectiveSize = new Vector2();
 		this._pixelRatio = 1.0;
 		this._scale = scale;
@@ -95,57 +88,35 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 
 		const base = this.baseSize;
 		const preferred = this.preferredSize;
-		const logical = this.logicalSize;
 		const effective = this.effectiveSize;
 
-		logical.copy(base);
+		effective.copy(base);
 
 		if(preferred.width !== AUTO_SIZE) {
 
 			// Absolute width.
-			logical.width = preferred.width;
+			effective.width = preferred.width;
 
 		} else if(preferred.height !== AUTO_SIZE) {
 
 			// Dynamic width, absolute height.
-			logical.width = Math.round(preferred.height * (base.width / Math.max(base.height, 1)));
+			effective.width = Math.round(preferred.height * (base.width / Math.max(base.height, 1)));
 
 		}
 
 		if(preferred.height !== AUTO_SIZE) {
 
 			// Absolute height.
-			logical.height = preferred.height;
+			effective.height = preferred.height;
 
 		} else if(preferred.width !== AUTO_SIZE) {
 
 			// Dynamic height, absolute width.
-			logical.height = Math.round(preferred.width / Math.max(base.width / Math.max(base.height, 1), 1));
+			effective.height = Math.round(preferred.width / Math.max(base.width / Math.max(base.height, 1), 1));
 
 		}
 
-		logical.multiplyScalar(this.scale).round();
-		effective.copy(logical).multiplyScalar(this.pixelRatio).floor();
-
-	}
-
-	/**
-	 * The scaled base width in logical pixels.
-	 */
-
-	get logicalWidth(): number {
-
-		return this.logicalSize.width;
-
-	}
-
-	/**
-	 * The scaled base height in logical pixels.
-	 */
-
-	get logicalHeight(): number {
-
-		return this.logicalSize.height;
+		effective.multiplyScalar(this.scaledPixelRatio).floor();
 
 	}
 
@@ -213,6 +184,16 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 			this.setChanged();
 
 		}
+
+	}
+
+	/**
+	 * The scaled device pixel ratio.
+	 */
+
+	get scaledPixelRatio(): number {
+
+		return this._pixelRatio * this._scale;
 
 	}
 

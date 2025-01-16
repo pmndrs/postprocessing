@@ -325,29 +325,26 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 		}
 
-		const resolution = this.resolution;
-		const width = resolution.logicalWidth;
-		const height = resolution.logicalHeight;
+		const { baseWidth, baseHeight, scaledPixelRatio } = this.resolution;
 		const logicalSize = this.renderer.getSize(v);
 
-		if(this.renderer.getPixelRatio() !== resolution.pixelRatio) {
+		if(this.renderer.getPixelRatio() !== scaledPixelRatio) {
 
-			this.renderer.setPixelRatio(resolution.pixelRatio);
+			this.renderer.setPixelRatio(scaledPixelRatio);
 
 		}
 
-		if(logicalSize.width !== width || logicalSize.height !== height) {
+		if(logicalSize.width !== baseWidth || logicalSize.height !== baseHeight) {
 
-			// Apply the scaled logical size to the canvas.
-			this.renderer.setSize(width, height, this.updateStyle);
+			this.renderer.setSize(baseWidth, baseHeight, this.updateStyle);
 
 		}
 
 		for(const pass of this.passes) {
 
-			// Set the pixel ratio and use the scaled logical size as the base size for the passes.
-			pass.resolution.pixelRatio = resolution.pixelRatio;
-			pass.resolution.setBaseSize(width, height);
+			// Use the scaled pixel ratio to keep the resolution scale of the passes intact.
+			pass.resolution.pixelRatio = scaledPixelRatio;
+			pass.resolution.setBaseSize(baseWidth, baseHeight);
 
 		}
 

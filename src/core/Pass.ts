@@ -548,13 +548,13 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	private updateSubpassResolution(): void {
 
-		const { pixelRatio, logicalWidth, logicalHeight } = this.resolution;
+		const { baseWidth, baseHeight, scaledPixelRatio } = this.resolution;
 
 		for(const pass of this.subpasses) {
 
-			// Set the pixel ratio and use the scaled logical size as the base size for the subpasses.
-			pass.resolution.pixelRatio = pixelRatio;
-			pass.resolution.setBaseSize(logicalWidth, logicalHeight);
+			// Use the scaled pixel ratio to keep the resolution scale of the subpasses intact.
+			pass.resolution.pixelRatio = scaledPixelRatio;
+			pass.resolution.setBaseSize(baseWidth, baseHeight);
 
 		}
 
@@ -566,12 +566,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	private updateSubpassViewport(): void {
 
-		const { pixelRatio, scale, baseWidth, baseHeight } = this.viewport;
+		const { baseWidth, baseHeight, scaledPixelRatio } = this.viewport;
 
 		for(const pass of this.subpasses) {
 
-			pass.viewport.pixelRatio = pixelRatio;
-			pass.viewport.scale = scale;
+			// Use the scaled pixel ratio to keep the viewport scale of the subpasses intact.
+			pass.viewport.pixelRatio = scaledPixelRatio;
 			pass.viewport.setBaseSize(baseWidth, baseHeight);
 
 		}
@@ -584,12 +584,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	private updateSubpassScissor(): void {
 
-		const { pixelRatio, scale, baseWidth, baseHeight } = this.scissor;
+		const { baseWidth, baseHeight, scaledPixelRatio } = this.scissor;
 
 		for(const pass of this.subpasses) {
 
-			pass.scissor.pixelRatio = pixelRatio;
-			pass.scissor.scale = scale;
+			// Use the scaled pixel ratio to keep the scissor scale of the subpasses intact.
+			pass.scissor.pixelRatio = scaledPixelRatio;
 			pass.scissor.setBaseSize(baseWidth, baseHeight);
 
 		}
@@ -612,17 +612,11 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	private updateViewportAndScissor(): void {
 
-		const { pixelRatio, scale, baseWidth, baseHeight } = this.resolution;
-
-		const viewport = this.viewport;
-		viewport.pixelRatio = pixelRatio;
-		viewport.scale = scale;
-		viewport.setBaseSize(baseWidth, baseHeight);
-
-		const scissor = this.scissor;
-		scissor.pixelRatio = pixelRatio;
-		scissor.scale = scale;
-		scissor.setBaseSize(baseWidth, baseHeight);
+		const { baseWidth, baseHeight, scaledPixelRatio } = this.resolution;
+		this.viewport.pixelRatio = scaledPixelRatio;
+		this.viewport.setBaseSize(baseWidth, baseHeight);
+		this.scissor.pixelRatio = scaledPixelRatio;
+		this.scissor.setBaseSize(baseWidth, baseHeight);
 
 	}
 
