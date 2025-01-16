@@ -188,7 +188,7 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 	}
 
 	/**
-	 * The scaled device pixel ratio.
+	 * The {@link pixelRatio} multiplied by the {@link scale}.
 	 */
 
 	get scaledPixelRatio(): number {
