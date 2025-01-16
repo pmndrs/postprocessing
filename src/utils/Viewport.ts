@@ -78,50 +78,26 @@ export class Viewport extends Resolution implements Vector4Like {
 	}
 
 	/**
-	 * The offset along the X-axis in logical pixels.
+	 * The effective offset along the X-axis, calculated based on the scale and pixel ratio.
 	 *
 	 * @defaultValue 0
 	 */
 
 	get offsetX(): number {
 
-		return this.offset.x;
-
-	}
-
-	set offsetX(value: number) {
-
-		if(this.offsetX !== value) {
-
-			this.offset.x = value;
-			this.updateEffectiveOffset();
-			this.setChanged();
-
-		}
+		return this.effectiveOffset.x;
 
 	}
 
 	/**
-	 * The offset along the Y-axis in logical pixels.
+	 * The effective offset along the Y-axis, calculated based on the scale and pixel ratio.
 	 *
 	 * @defaultValue 0
 	 */
 
 	get offsetY(): number {
 
-		return this.offset.y;
-
-	}
-
-	set offsetY(value: number) {
-
-		if(this.offsetY !== value) {
-
-			this.offset.y = value;
-			this.updateEffectiveOffset();
-			this.setChanged();
-
-		}
+		return this.effectiveOffset.y;
 
 	}
 
