@@ -98,7 +98,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addBinding(effect, "offset", { min: 0, max: 1, step: 1e-3 });
-	folder.addBinding(effect, "density", { min: 0, max: 4, step: 1e-3 });
+	folder.addBinding(effect, "density", { min: 0, max: 2, step: 1e-3 });
 	folder.addBinding(effect, "scrollSpeed", { min: -0.1, max: 0.1, step: 1e-3 });
 
 	Utils.addBlendModeBindings(folder, effect.blendMode);
