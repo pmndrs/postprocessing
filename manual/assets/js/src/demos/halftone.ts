@@ -96,6 +96,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Settings
 
+	const params = { rotation: effect.rotationR };
+
 	const container = document.getElementById("viewport")!;
 	const pane = new Pane({ container: container.querySelector<HTMLElement>(".tp")! });
 	const fpsGraph = Utils.createFPSGraph(pane);
@@ -106,10 +108,20 @@ window.addEventListener("load", () => void load().then((assets) => {
 	folder.addBinding(effect, "samples", { min: 1, max: 24, step: 1 });
 	folder.addBinding(effect, "scatterFactor", { min: 0, max: 1, step: 1e-3 });
 
-	const subfolder = folder.addFolder({ title: "Rotation" });
-	subfolder.addBinding(effect, "rotationR", { min: 0, max: Math.PI, step: 1e-3 });
-	subfolder.addBinding(effect, "rotationG", { min: 0, max: Math.PI, step: 1e-3 });
-	subfolder.addBinding(effect, "rotationB", { min: 0, max: Math.PI, step: 1e-3 });
+	const subfolder = folder.addFolder({ title: "Rotation", expanded: false });
+	const bindingR = subfolder.addBinding(effect, "rotationR", { min: 0, max: Math.PI, step: 1e-4 });
+	const bindingG = subfolder.addBinding(effect, "rotationG", { min: 0, max: Math.PI, step: 1e-4 });
+	const bindingB = subfolder.addBinding(effect, "rotationB", { min: 0, max: Math.PI, step: 1e-4 });
+
+	folder.addBinding(params, "rotation", { min: 0, max: Math.PI, step: 1e-4 }).on("change", (e) => {
+
+		effect.rotation = e.value;
+
+		bindingR.refresh();
+		bindingG.refresh();
+		bindingB.refresh();
+
+	});
 
 	Utils.addBlendModeBindings(folder, effect.blendMode);
 
