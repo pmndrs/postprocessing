@@ -150,9 +150,8 @@ export class ScanlineEffect extends Effect {
 	protected override onResolutionChange(): void {
 
 		const resolution = this.resolution;
-		const aspect = resolution.aspectRatio;
 		const params = this.input.uniforms.get("params")!.value as Vector2;
-		params.y = this.density * 1000.0 / aspect;
+		params.y = this.density * resolution.baseHeight;
 
 	}
 

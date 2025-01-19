@@ -1,4 +1,4 @@
-uniform vec2 params;
+uniform vec2 params; // X = offset, Y = count
 
 #ifdef SCROLL
 
@@ -12,7 +12,7 @@ vec4 mainImage(const in vec4 inputColor, const in vec2 uv, const in GData gData)
 
 	#ifdef SCROLL
 
-		y += time * scrollSpeed;
+		y += fract(time * scrollSpeed);
 
 	#endif
 

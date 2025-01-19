@@ -80,7 +80,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
-	const effect = new ScanlineEffect({ density: 2.0 });
+	const effect = new ScanlineEffect({ density: 1.25 });
 	effect.blendMode.opacity = 0.25;
 
 	const pipeline = new RenderPipeline(renderer);
