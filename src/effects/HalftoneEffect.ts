@@ -24,7 +24,7 @@ export interface HalftoneEffectOptions {
 	/**
 	 * The pattern radius.
 	 *
-	 * @defaultValue 6
+	 * @defaultValue 6.0
 	 */
 
 	radius?: number;
@@ -93,6 +93,12 @@ export interface HalftoneEffectOptions {
 export class HalftoneEffect extends Effect {
 
 	/**
+	 * @see {@link radius}
+	 */
+
+	private _radius: number;
+
+	/**
 	 * Constructs a new halftone effect.
 	 *
 	 * @param options - The options.
@@ -100,7 +106,7 @@ export class HalftoneEffect extends Effect {
 
 	constructor({
 		shape = HalftoneShape.DOT,
-		radius = 6,
+		radius = 6.0,
 		rotation = 0,
 		rotationR = rotation,
 		rotationG = rotationR,
@@ -115,10 +121,11 @@ export class HalftoneEffect extends Effect {
 		this.blendMode.blendFunction = new LinearDodgeBlendFunction();
 
 		const uniforms = this.input.uniforms;
-		uniforms.set("radius", new Uniform(radius));
+		uniforms.set("radius", new Uniform(1.0));
 		uniforms.set("rotationRGB", new Uniform(new Vector3(rotationR, rotationG, rotationB)));
 		uniforms.set("scatterFactor", new Uniform(scatterFactor));
 
+		this._radius = radius;
 		this.shape = shape;
 		this.samples = samples;
 
@@ -170,13 +177,14 @@ export class HalftoneEffect extends Effect {
 
 	get radius() {
 
-		return this.input.uniforms.get("radius")!.value as number;
+		return this._radius;
 
 	}
 
 	set radius(value: number) {
 
-		this.input.uniforms.get("radius")!.value = value;
+		this._radius = value;
+		this.onResolutionChange();
 
 	}
 
@@ -199,13 +207,6 @@ export class HalftoneEffect extends Effect {
 	/**
 	 * The grid rotation in radians.
 	 */
-
-	get rotation() {
-
-		const rotationRGB = this.input.uniforms.get("rotationRGB")!.value as Vector3;
-		return rotationRGB.x;
-
-	}
 
 	set rotation(value: number) {
 
@@ -301,6 +302,12 @@ export class HalftoneEffect extends Effect {
 			this.setChanged();
 
 		}
+
+	}
+
+	protected override onResolutionChange(): void {
+
+		this.input.uniforms.get("radius")!.value = this.radius * this.resolution.scaledPixelRatio;
 
 	}
 

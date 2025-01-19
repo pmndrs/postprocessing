@@ -1,5 +1,6 @@
 #define SQRT2_MINUS_ONE 0.41421356
 #define SQRT2_HALF_MINUS_ONE 0.20710678
+
 #define SHAPE_DOT 1
 #define SHAPE_ELLIPSE 2
 #define SHAPE_LINE 3
@@ -30,7 +31,7 @@ float getPattern(float cellSample, vec2 coord, vec2 n, vec2 p, float angle) {
 	#if SHAPE == SHAPE_DOT
 
 		r = pow(abs(r), 1.125) * maxRadius;
-	
+
 	#elif SHAPE == SHAPE_ELLIPSE
 
 		r = pow(abs(r), 1.125) * maxRadius;
@@ -51,7 +52,7 @@ float getPattern(float cellSample, vec2 coord, vec2 n, vec2 p, float angle) {
 		r = pow(abs(r), 1.5) * maxRadius;
 		float dotP = dot(p - coord, n);
 		magnitude = length(n * dotP);
-	
+
 	#elif SHAPE == SHAPE_SQUARE
 
 		float theta = atan(p.y - coord.y, p.x - coord.x) - angle;
@@ -67,18 +68,19 @@ float getPattern(float cellSample, vec2 coord, vec2 n, vec2 p, float angle) {
 
 }
 
-vec4 getSample(vec2 point) {
+vec4 getSample(vec2 p) {
 
-	vec4 texel = texture(gBuffer.color, point * resolution.zw);
-	float base = rand(floor(point)) * PI2;
+	vec2 uv = p * resolution.zw;
+	vec4 texel = texture(gBuffer.color, uv);
+	float base = rand(floor(p)) * PI2;
 	float step = PI2 * INV_SAMPLES;
-	float magnitude = radius * 0.66;
+	vec2 magnitude = radius * 0.666667 * resolution.zw;
 
 	for(int i = 0; i < SAMPLES; ++i) {
 
-		float r = base + step * float(i);
-		vec2 coord = point + vec2(cos(r), sin(r)) * magnitude;
-		texel += texture(gBuffer.color, coord * resolution.zw);
+		float angle = base + step * float(i);
+		vec2 offset = vec2(cos(angle), sin(angle)) * magnitude;
+		texel += texture(gBuffer.color, uv + offset);
 
 	}
 
@@ -87,12 +89,12 @@ vec4 getSample(vec2 point) {
 
 }
 
-Cell getReferenceCell(vec2 p, vec2 origin, float gridAngle) {
+Cell getReferenceCell(vec2 p, vec2 origin, float angle) {
 
 	Cell cell;
 
 	float step = radius;
-	vec2 n = vec2(cos(gridAngle), sin(gridAngle));
+	vec2 n = vec2(cos(angle), sin(angle));
 
 	vec2 v = p - origin;
 	float dotNormal = dot(v, n);
@@ -126,9 +128,10 @@ Cell getReferenceCell(vec2 p, vec2 origin, float gridAngle) {
 	// Find corners.
 	float normalStep = normalDir * ((offsetNormal < threshold) ? step : -step);
 	float lineStep = lineDir * ((offsetLine < threshold) ? step : -step);
-	cell.p2 = cell.p1 - n.xy * normalStep;
-	cell.p3 = cell.p1 + vec2(n.y, -n.x) * lineStep;
-	cell.p4 = cell.p1 - n * normalStep + vec2(n.y, -n.x) * lineStep;
+	vec2 lineOffset = vec2(n.y, -n.x) * lineStep;
+	cell.p2 = cell.p1 - n * normalStep;
+	cell.p3 = cell.p1 + lineOffset;
+	cell.p4 = cell.p2 + lineOffset;
 
 	return cell;
 
@@ -141,10 +144,10 @@ float halftone(Cell cell, vec2 p, float angle, float aa) {
 	float distC3 = getPattern(cell.sample3, cell.p3, cell.n, p, angle);
 	float distC4 = getPattern(cell.sample4, cell.p4, cell.n, p, angle);
 
-	float result = (distC1 > 0.0) ? min(distC1 * aa, 1.0) : 0.0;
-	result += (distC2 > 0.0) ? min(distC2 * aa, 1.0) : 0.0;
-	result += (distC3 > 0.0) ? min(distC3 * aa, 1.0) : 0.0;
-	result += (distC4 > 0.0) ? min(distC4 * aa, 1.0) : 0.0;
+	float result = clamp(distC1 * aa, 0.0, 1.0);
+	result += clamp(distC2 * aa, 0.0, 1.0);
+	result += clamp(distC3 * aa, 0.0, 1.0);
+	result += clamp(distC4 * aa, 0.0, 1.0);
 	result = clamp(result, 0.0, 1.0);
 
 	return result;
@@ -155,7 +158,6 @@ vec4 mainImage(const in vec4 inputColor, const in vec2 uv, const in GData gData)
 
 	vec2 p = uv * resolution.xy;
 	vec2 origin = vec2(0.0);
-	float aa = (radius < 2.5) ? 1.0 / (radius * 0.5) : 0.8; // 1.0 / 1.25 = 0.8
 
 	#ifdef RGB_ROTATION
 
@@ -206,6 +208,8 @@ vec4 mainImage(const in vec4 inputColor, const in vec2 uv, const in GData gData)
 		cellB.sample4 = sample4.b;
 
 	#endif
+
+	float aa = 2.0 / radius;
 
 	vec3 pattern = vec3(
 		halftone(cellR, p, rotationRGB.r, aa),
