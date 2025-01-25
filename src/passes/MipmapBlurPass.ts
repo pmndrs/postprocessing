@@ -252,13 +252,16 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 	protected override onInputChange(): void {
 
-		if(this.input.defaultBuffer === null || this.input.defaultBuffer.value === null) {
+		// The output buffer settings depend on the input buffer.
+		const inputTexture = this.input.defaultBuffer?.value ?? null;
+
+		if(inputTexture === null) {
 
 			return;
 
 		}
 
-		const { format, internalFormat, type, colorSpace } = this.input.defaultBuffer.value;
+		const { format, internalFormat, type, colorSpace } = inputTexture;
 
 		for(const mipmap of this.downsamplingMipmaps.concat(this.upsamplingMipmaps)) {
 
@@ -274,18 +277,15 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 		if(this.input.frameBufferPrecisionHigh) {
 
-			this.downsamplingMaterial.defines.FRAME_BUFFER_PRECISION_HIGH = true;
-			this.upsamplingMaterial.defines.FRAME_BUFFER_PRECISION_HIGH = true;
+			this.downsamplingMaterial.outputPrecision = "mediump";
+			this.upsamplingMaterial.outputPrecision = "mediump";
 
 		} else {
 
-			delete this.downsamplingMaterial.defines.FRAME_BUFFER_PRECISION_HIGH;
-			delete this.upsamplingMaterial.defines.FRAME_BUFFER_PRECISION_HIGH;
+			this.downsamplingMaterial.outputPrecision = "lowp";
+			this.upsamplingMaterial.outputPrecision = "lowp";
 
 		}
-
-		this.downsamplingMaterial.needsUpdate = true;
-		this.upsamplingMaterial.needsUpdate = true;
 
 		this.onResolutionChange();
 

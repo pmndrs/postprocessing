@@ -52,6 +52,7 @@ export class LuminancePass extends Pass<LuminanceMaterial> {
 
 	protected override onInputChange(): void {
 
+		// The output buffer settings depend on the input buffer.
 		const inputTexture = this.input.defaultBuffer?.value ?? null;
 
 		if(inputTexture === null) {
@@ -65,6 +66,16 @@ export class LuminancePass extends Pass<LuminanceMaterial> {
 		texture.internalFormat = inputTexture.internalFormat;
 		texture.type = inputTexture.type;
 		texture.colorSpace = inputTexture.colorSpace;
+
+		if(this.input.frameBufferPrecisionHigh) {
+
+			this.fullscreenMaterial.outputPrecision = "mediump";
+
+		} else {
+
+			this.fullscreenMaterial.outputPrecision = "lowp";
+
+		}
 
 	}
 

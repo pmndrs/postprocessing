@@ -124,13 +124,16 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> {
 
 	protected override onInputChange(): void {
 
-		if(this.input.defaultBuffer === null || this.input.defaultBuffer.value === null) {
+		// The output buffer settings depend on the input buffer.
+		const inputTexture = this.input.defaultBuffer?.value ?? null;
+
+		if(inputTexture === null) {
 
 			return;
 
 		}
 
-		const { format, internalFormat, type, colorSpace } = this.input.defaultBuffer.value;
+		const { format, internalFormat, type, colorSpace } = inputTexture;
 
 		for(const renderTarget of [this.renderTargetA, this.renderTargetB]) {
 
@@ -145,15 +148,13 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> {
 
 		if(this.input.frameBufferPrecisionHigh) {
 
-			this.blurMaterial.defines.FRAME_BUFFER_PRECISION_HIGH = true;
+			this.blurMaterial.outputPrecision = "mediump";
 
 		} else {
 
-			delete this.blurMaterial.defines.FRAME_BUFFER_PRECISION_HIGH;
+			this.blurMaterial.outputPrecision = "lowp";
 
 		}
-
-		this.blurMaterial.needsUpdate = true;
 
 	}
 
