@@ -68,7 +68,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	static readonly EVENT_CHANGE = "change";
 
 	/**
-	 * Triggers when this pass changes its enabled state.
+	 * Triggers when this pass gets enabled or disabled.
 	 *
 	 * @event
 	 */
@@ -1014,6 +1014,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		switch(event.type) {
 
 			case "change":
+				// The fullscreen material is not updated automatically to avoid interference with custom logic.
 				this.updateOutputBufferSize();
 				this.onResolutionChange();
 				this.updateSubpassResolution();
