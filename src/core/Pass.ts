@@ -704,12 +704,10 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	private updateFullscreenMaterialOutput(): void {
 
-		const fullscreenMaterial = this.fullscreenMaterial;
-
-		if(fullscreenMaterial instanceof FullscreenMaterial) {
+		if(this.fullscreenMaterial instanceof FullscreenMaterial) {
 
 			// High precision buffers use HalfFloatType (mediump).
-			fullscreenMaterial.outputPrecision = this.output.frameBufferPrecisionHigh ? "mediump" : "lowp";
+			this.fullscreenMaterial.outputPrecision = this.output.frameBufferPrecisionHigh ? "mediump" : "lowp";
 
 		}
 
