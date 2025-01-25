@@ -209,7 +209,7 @@ vec4 mainImage(const in vec4 inputColor, const in vec2 uv, const in GData gData)
 
 	#endif
 
-	float aa = 2.0 / radius;
+	float aa = 2.0 / min(radius, 2.5); 
 
 	vec3 pattern = vec3(
 		halftone(cellR, p, rotationRGB.r, aa),

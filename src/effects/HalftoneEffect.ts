@@ -307,7 +307,8 @@ export class HalftoneEffect extends Effect {
 
 	protected override onResolutionChange(): void {
 
-		this.input.uniforms.get("radius")!.value = this.radius * this.resolution.scaledPixelRatio;
+		const r = this.radius * this.resolution.scaledPixelRatio;
+		this.input.uniforms.get("radius")!.value = Math.max(r, 1e-9);
 
 	}
 
