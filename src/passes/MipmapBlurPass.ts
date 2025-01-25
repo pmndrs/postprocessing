@@ -100,9 +100,8 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 		this.downsamplingMaterial = new DownsamplingMaterial({ clampToBorder });
 		this.upsamplingMaterial = new UpsamplingMaterial({ radius });
-
-		this.disposables.add(this.downsamplingMaterial);
-		this.disposables.add(this.upsamplingMaterial);
+		this.materials.add(this.downsamplingMaterial);
+		this.materials.add(this.upsamplingMaterial);
 
 		this._fullResolutionUpsampling = fullResolutionUpsampling;
 		this.levels = levels;
@@ -205,8 +204,6 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 		this.dispose();
 		this.disposables.clear();
-		this.disposables.add(this.downsamplingMaterial);
-		this.disposables.add(this.upsamplingMaterial);
 
 		output.buffers.clear();
 
