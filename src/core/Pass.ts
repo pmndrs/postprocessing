@@ -309,8 +309,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	set enabled(value: boolean) {
 
-		this._enabled = value;
-		this.dispatchEvent({ type: Pass.EVENT_TOGGLE });
+		if(this._enabled !== value) {
+
+			this._enabled = value;
+			this.dispatchEvent({ type: Pass.EVENT_TOGGLE });
+
+		}
 
 	}
 
@@ -326,11 +330,14 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	set attached(value: boolean) {
 
-		this._attached = value;
+		if(this._attached !== value) {
 
-		this.input.setChanged();
-		this.output.setChanged();
-		this.resolution.setChanged();
+			this._attached = value;
+			this.input.setChanged();
+			this.output.setChanged();
+			this.resolution.setChanged();
+
+		}
 
 	}
 
