@@ -83,7 +83,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const effect = new HalftoneEffect({
 		shape: HalftoneShape.LINE,
-		radius: 3.89,
+		radius: 7.073,
 		rotation: Math.PI / 4
 	});
 
