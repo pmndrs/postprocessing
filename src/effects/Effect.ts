@@ -44,6 +44,16 @@ export abstract class Effect extends Pass {
 	private _outputColorSpace: ColorSpace;
 
 	/**
+	 * A hint that indicates whether this effect will be toggled at runtime.
+	 *
+	 * Toggling an effect will also set this flag to `true`.
+	 *
+	 * @defaultValue false
+	 */
+
+	optional: boolean;
+
+	/**
 	 * Constructs a new effect.
 	 *
 	 * @param name - A name that will be used for debugging purposes.
@@ -60,6 +70,26 @@ export abstract class Effect extends Pass {
 		this._vertexShader = null;
 		this._inputColorSpace = NoColorSpace;
 		this._outputColorSpace = NoColorSpace;
+
+		this.optional = false;
+
+	}
+
+	override get enabled(): boolean {
+
+		return super.enabled;
+
+	}
+
+	override set enabled(value: boolean) {
+
+		if(super.enabled !== value) {
+
+			this.optional = true;
+
+		}
+
+		super.enabled = value;
 
 	}
 
