@@ -1,11 +1,10 @@
-import { SRGBColorSpace, WebGLRenderer, Material, Texture } from "three";
+import { WebGLRenderer, Material, Texture } from "three";
 import { Pass } from "../core/Pass.js";
 import { Effect } from "../effects/Effect.js";
-import { EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { EffectMaterial } from "../materials/EffectMaterial.js";
-import { EffectShaderData } from "../utils/EffectShaderData.js";
 import { GBufferConfig } from "../utils/GBufferConfig.js";
+import { EffectMaterialManager } from "../utils/EffectMaterialManager.js";
 
 /**
  * An effect pass.
@@ -18,16 +17,28 @@ import { GBufferConfig } from "../utils/GBufferConfig.js";
 export class EffectPass extends Pass<EffectMaterial> {
 
 	/**
+	 * An effect material manager.
+	 */
+
+	private readonly effectMaterialManager: EffectMaterialManager;
+
+	/**
+	 * An event listener that calls {@link updateMaterial} and invalidates the material cache.
+	 */
+
+	private readonly changeListener: () => void;
+
+	/**
+	 * An event listener that calls {@link updateMaterial} without invalidating the material cache.
+	 */
+
+	private readonly toggleListener: () => void;
+
+	/**
 	 * Keeps track of the previous G-Buffer configuration.
 	 */
 
 	private previousGBufferConfig: GBufferConfig | null;
-
-	/**
-	 * An event listener that triggers {@link rebuild}.
-	 */
-
-	private listener: () => void;
 
 	/**
 	 * An animation time scale.
@@ -46,9 +57,10 @@ export class EffectPass extends Pass<EffectMaterial> {
 		super("EffectPass");
 
 		this.output.defaultBuffer = this.createFramebuffer();
-		this.fullscreenMaterial = new EffectMaterial();
+		this.effectMaterialManager = new EffectMaterialManager(this.input);
+		this.changeListener = () => this.updateMaterial(true);
+		this.toggleListener = () => this.updateMaterial(false);
 		this.previousGBufferConfig = null;
-		this.listener = () => this.rebuild();
 		this.effects = effects;
 		this.timeScale = 1.0;
 
@@ -64,7 +76,8 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		for(const effect of super.subpasses) {
 
-			effect.removeEventListener(Pass.EVENT_CHANGE, this.listener);
+			effect.removeEventListener(Pass.EVENT_CHANGE, this.changeListener);
+			effect.removeEventListener(Pass.EVENT_TOGGLE, this.toggleListener);
 
 		}
 
@@ -79,11 +92,12 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 			}
 
-			effect.addEventListener(Pass.EVENT_CHANGE, this.listener);
+			effect.addEventListener(Pass.EVENT_CHANGE, this.changeListener);
+			effect.addEventListener(Pass.EVENT_TOGGLE, this.toggleListener);
 
 		}
 
-		this.rebuild();
+		this.updateMaterial(true);
 
 	}
 
@@ -99,6 +113,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 	protected set effects(value: Effect[]) {
 
+		this.effectMaterialManager.effects = value;
 		this.subpasses = value;
 
 	}
@@ -109,112 +124,45 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 	get dithering(): boolean {
 
-		return this.fullscreenMaterial.dithering;
+		return this.effectMaterialManager.dithering;
 
 	}
 
 	set dithering(value: boolean) {
 
-		const material = this.fullscreenMaterial;
-
-		if(material.dithering !== value) {
-
-			if(value && this.fullscreenMaterial.outputPrecision !== "lowp") {
-
-				console.info("Dithering only works on low precision colors");
-
-			} else {
-
-				material.dithering = value;
-				material.needsUpdate = true;
-
-			}
-
-		}
+		this.effectMaterialManager.dithering = value;
 
 	}
 
 	/**
-	 * Updates the composite shader material.
+	 * Updates the fullscreen material based on the current effect combination.
 	 *
-	 * @throws If the current effects cannot be merged.
+	 * The required material will be swapped in if it exists. Otherwise, a new material will be created.
+	 *
+	 * @param invalidateCache - Controls whether the material cache should be rebuild. Defaults to `false`.
 	 */
 
-	private updateMaterial(): void {
-
-		const data = new EffectShaderData(this.input.gBufferConfig);
-		let id = 0;
-
-		for(const effect of this.effects) {
-
-			if(effect.blendMode.blendFunction.shader !== null) {
-
-				data.integrateEffect(`e${id++}`, effect);
-
-			}
-
-		}
-
-		data.shaderParts.set(Section.FRAGMENT_HEAD_GBUFFER, data.createGBufferStruct());
-		data.shaderParts.set(Section.FRAGMENT_HEAD_GDATA, data.createGDataStructDeclaration());
-		data.shaderParts.set(Section.FRAGMENT_MAIN_GDATA, data.createGDataStructInitialization());
-
-		const fragmentHead = data.shaderParts.get(Section.FRAGMENT_HEAD_EFFECTS)!;
-		data.shaderParts.set(Section.FRAGMENT_HEAD_EFFECTS, fragmentHead + data.createBlendFunctions());
-
-		if(data.colorSpace === SRGBColorSpace) {
-
-			// Convert back to linear.
-			const fragmentMainImage = data.shaderParts.get(Section.FRAGMENT_MAIN_IMAGE)!;
-			data.shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, fragmentMainImage + "color0 = sRGBToLinear(color0);\n\t");
-
-		}
-
-		// Check if any effect transforms UVs in the fragment shader.
-		if(data.uvTransformation) {
-
-			const fragmentMainUv = data.shaderParts.get(Section.FRAGMENT_MAIN_UV)!;
-			data.shaderParts.set(Section.FRAGMENT_MAIN_UV, "vec2 transformedUv = vUv;\n" + fragmentMainUv);
-			data.defines.set("UV", "transformedUv");
-
-		} else {
-
-			data.defines.set("UV", "vUv");
-
-		}
-
-		// Ensure that leading preprocessor directives start on a new line.
-		data.shaderParts.forEach((v, k, map) => map.set(k, v.trim().replace(/^#/, "\n#")));
-
-		// Add input defines and uniforms.
-		for(const entry of this.input.defines) {
-
-			data.defines.set(entry[0], entry[1]);
-
-		}
-
-		for(const entry of this.input.uniforms) {
-
-			data.uniforms.set(entry[0], entry[1]);
-
-		}
-
-		this.fullscreenMaterial
-			.setShaderParts(data.shaderParts)
-			.setDefines(data.defines)
-			.setUniforms(data.uniforms);
-
-	}
-
-	/**
-	 * Rebuilds the composite shader material.
-	 */
-
-	protected rebuild(): void {
+	protected updateMaterial(invalidateCache = false): void {
 
 		try {
 
-			this.updateMaterial();
+			if(invalidateCache) {
+
+				// Remove all materials.
+				this.effectMaterialManager.invalidateMaterialCache();
+				this.materials.clear();
+
+			}
+
+			// Get the material for the current effect combination.
+			this.fullscreenMaterial = this.effectMaterialManager.getMaterial();
+
+			// Pick up new materials.
+			for(const material of this.effectMaterialManager.materials) {
+
+				this.materials.add(material);
+
+			}
 
 		} catch(e) {
 
@@ -247,15 +195,11 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 			const useDefaultBuffer = (component === GBuffer.COLOR as string);
 			const buffer = useDefaultBuffer ? input.defaultBuffer?.value : input.buffers.get(component)?.value;
-
-			gBufferEntries.push([
-				gBufferConfig.gBufferStructFields.get(component)!,
-				buffer ?? null
-			]);
+			gBufferEntries.push([gBufferConfig.gBufferStructFields.get(component)!, buffer ?? null]);
 
 		}
 
-		this.fullscreenMaterial.gBuffer = Object.fromEntries(gBufferEntries);
+		this.effectMaterialManager.gBuffer = Object.fromEntries(gBufferEntries);
 
 	}
 
@@ -279,19 +223,24 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		// Clean up and listen for G-Buffer config changes to rebuild the material when needed.
 
-		if(this.previousGBufferConfig !== null) {
+		if(this.previousGBufferConfig !== this.input.gBufferConfig) {
 
-			this.previousGBufferConfig.removeEventListener(GBufferConfig.EVENT_CHANGE, this.listener);
+			if(this.previousGBufferConfig !== null) {
+
+				this.previousGBufferConfig.removeEventListener(GBufferConfig.EVENT_CHANGE, this.changeListener);
+
+			}
+
+			if(this.input.gBufferConfig !== null) {
+
+				this.input.gBufferConfig.addEventListener(GBufferConfig.EVENT_CHANGE, this.changeListener);
+
+			}
+
+			this.previousGBufferConfig = this.input.gBufferConfig;
+			this.effectMaterialManager.gBufferConfig = this.input.gBufferConfig;
 
 		}
-
-		if(this.input.gBufferConfig !== null) {
-
-			this.input.gBufferConfig.addEventListener(GBufferConfig.EVENT_CHANGE, this.listener);
-
-		}
-
-		this.previousGBufferConfig = this.input.gBufferConfig;
 
 	}
 
@@ -322,10 +271,12 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		for(const effect of this.effects) {
 
-			effect.removeEventListener(Pass.EVENT_CHANGE, this.listener);
+			effect.removeEventListener(Pass.EVENT_CHANGE, this.changeListener);
+			effect.removeEventListener(Pass.EVENT_TOGGLE, this.toggleListener);
 
 		}
 
+		this.effectMaterialManager.dispose();
 		super.dispose();
 
 	}

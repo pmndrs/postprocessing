@@ -45,16 +45,16 @@ export class EffectShaderData implements ShaderData {
 	readonly convolutionEffects: Set<Effect>;
 
 	/**
-	 * Indicates whether the shader transforms UV coordinates in the fragment shader.
+	 * @see {@link uvTransformation}
 	 */
 
-	uvTransformation: boolean;
+	private _uvTransformation: boolean;
 
 	/**
-	 * Keeps track of the current color space.
+	 * @see {@link colorSpace}
 	 */
 
-	colorSpace: ColorSpace;
+	private _colorSpace: ColorSpace;
 
 	/**
 	 * A G-Buffer configuration.
@@ -85,8 +85,41 @@ export class EffectShaderData implements ShaderData {
 		this.blendModes = new Map<number, BlendMode>();
 		this.gData = new Set<GData | string>([GData.COLOR]);
 		this.convolutionEffects = new Set<Effect>();
-		this.uvTransformation = false;
-		this.colorSpace = LinearSRGBColorSpace;
+
+		this._uvTransformation = false;
+		this._colorSpace = LinearSRGBColorSpace;
+
+	}
+
+	/**
+	 * Indicates whether any effect transforms UV coordinates in the fragment shader.
+	 */
+
+	get uvTransformation(): boolean {
+
+		return this._uvTransformation;
+
+	}
+
+	private set uvTransformation(value: boolean) {
+
+		this._uvTransformation = value;
+
+	}
+
+	/**
+	 * The resulting color space of the effect chain.
+	 */
+
+	get colorSpace(): ColorSpace {
+
+		return this._colorSpace;
+
+	}
+
+	private set colorSpace(value: ColorSpace) {
+
+		this._colorSpace = value;
 
 	}
 
@@ -94,7 +127,7 @@ export class EffectShaderData implements ShaderData {
 	 * Validates the given effect.
 	 *
 	 * @param effect - The effect.
-	 * @throws {@link Error} if the effect is invalid or cannot be merged.
+	 * @throws {@link Error} If the effect is invalid or cannot be merged.
 	 */
 
 	private validateEffect(effect: Effect): void {
@@ -135,7 +168,7 @@ export class EffectShaderData implements ShaderData {
 	 *
 	 * @param prefix - A prefix.
 	 * @param effect - The effect.
-	 * @throws {@link Error} if the effect is invalid or cannot be merged.
+	 * @throws {@link Error} If the effect is invalid.
 	 */
 
 	integrateEffect(prefix: string, effect: Effect): void {
@@ -330,7 +363,50 @@ export class EffectShaderData implements ShaderData {
 	}
 
 	/**
-	 * Creates a {@link GBuffer} struct declaration shader code.
+	 * Adds the given effect shader data to this data.
+	 *
+	 * @param data - The data to add.
+	 * @throws {@link Error} If the data cannot be merged.
+	 */
+
+	add(data: EffectShaderData): void {
+
+		data.convolutionEffects.forEach((v) => this.convolutionEffects.add(v));
+		data.uniforms.forEach((v, k) => this.uniforms.set(k, v));
+		data.defines.forEach((v, k) => this.defines.set(k, v));
+		data.blendModes.forEach((v, k) => this.blendModes.set(k, v));
+		data.gData.forEach((v) => this.gData.add(v));
+
+		const shaderParts = this.shaderParts;
+		let fragmentHead = shaderParts.get(Section.FRAGMENT_HEAD_EFFECTS)!;
+		let fragmentMainUv = shaderParts.get(Section.FRAGMENT_MAIN_UV)!;
+		let fragmentMainImage = shaderParts.get(Section.FRAGMENT_MAIN_IMAGE)!;
+		let vertexHead = shaderParts.get(Section.VERTEX_HEAD)!;
+		let vertexMainSupport = shaderParts.get(Section.VERTEX_MAIN_SUPPORT)!;
+
+		fragmentHead += data.shaderParts.get(Section.FRAGMENT_HEAD_EFFECTS)!;
+		fragmentMainUv += data.shaderParts.get(Section.FRAGMENT_MAIN_UV)!;
+		fragmentMainImage += data.shaderParts.get(Section.FRAGMENT_MAIN_IMAGE)!;
+		vertexHead += data.shaderParts.get(Section.VERTEX_HEAD)!;
+		vertexMainSupport += data.shaderParts.get(Section.VERTEX_MAIN_SUPPORT)!;
+
+		shaderParts.set(Section.FRAGMENT_HEAD_EFFECTS, fragmentHead);
+		shaderParts.set(Section.FRAGMENT_MAIN_UV, fragmentMainUv);
+		shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, fragmentMainImage);
+		shaderParts.set(Section.VERTEX_HEAD, vertexHead);
+		shaderParts.set(Section.VERTEX_MAIN_SUPPORT, vertexMainSupport);
+
+		// Update the working color space.
+		if(this.colorSpace !== data.colorSpace && data.colorSpace !== NoColorSpace) {
+
+			this.colorSpace = data.colorSpace;
+
+		}
+
+	}
+
+	/**
+	 * Creates a `GBuffer` struct declaration shader code.
 	 *
 	 * @return The shader code.
 	 */
@@ -348,7 +424,7 @@ export class EffectShaderData implements ShaderData {
 	}
 
 	/**
-	 * Creates a {@link GData} struct declaration shader code.
+	 * Creates a `GData` struct declaration shader code.
 	 *
 	 * @return The shader code.
 	 */
@@ -366,7 +442,7 @@ export class EffectShaderData implements ShaderData {
 	}
 
 	/**
-	 * Creates the {@link GData} struct initialization shader code.
+	 * Creates the `GData` struct initialization shader code.
 	 *
 	 * @return The shader code.
 	 */
