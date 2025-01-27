@@ -58,7 +58,7 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 	readonly gDataDependencies: Map<GData | string, Set<GData | string>>;
 
 	/**
-	 * Constructs new a new G-Buffer config.
+	 * Constructs a new G-Buffer config.
 	 */
 
 	constructor() {

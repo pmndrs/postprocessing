@@ -49,7 +49,7 @@ export class EffectMaterial extends FullscreenMaterial {
 	}
 
 	/**
-	 * The current gBuffer.
+	 * The current gBuffer struct.
 	 */
 
 	get gBuffer(): Record<string, Texture | null> | null {
