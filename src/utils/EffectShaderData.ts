@@ -300,10 +300,12 @@ export class EffectShaderData implements ShaderData {
 			// Remember the color space at this stage.
 			if(effect.outputColorSpace !== NoColorSpace) {
 
+				// The effect itself converts colors into a specific color space.
 				this.colorSpace = effect.outputColorSpace;
 
 			} else if(effect.inputColorSpace !== NoColorSpace) {
 
+				// Colors have been converted into a specific color space by request of this effect.
 				this.colorSpace = effect.inputColorSpace;
 
 			}
