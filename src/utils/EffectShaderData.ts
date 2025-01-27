@@ -33,12 +33,6 @@ export class EffectShaderData implements ShaderData {
 	readonly blendModes: Map<number, BlendMode>;
 
 	/**
-	 * A set of varyings.
-	 */
-
-	readonly varyings: Set<string>;
-
-	/**
 	 * A collection of required GBuffer data.
 	 */
 
@@ -89,7 +83,6 @@ export class EffectShaderData implements ShaderData {
 		this.defines = new Map<string, string | number | boolean>();
 		this.uniforms = new Map<string, Uniform>();
 		this.blendModes = new Map<number, BlendMode>();
-		this.varyings = new Set<string>();
 		this.gData = new Set<GData | string>([GData.COLOR]);
 		this.convolutionEffects = new Set<Effect>();
 		this.uvTransformation = false;
@@ -159,7 +152,6 @@ export class EffectShaderData implements ShaderData {
 		let vertexHead = shaderParts.get(Section.VERTEX_HEAD)!;
 		let vertexMainSupport = shaderParts.get(Section.VERTEX_MAIN_SUPPORT)!;
 
-		const varyings = new Set<string>();
 		const names = new Set<string>();
 
 		if(effect.hasMainUvFunction) {
@@ -186,8 +178,6 @@ export class EffectShaderData implements ShaderData {
 				// Handle unusual formatting and commas.
 				for(const n of m[1].split(/\s*,\s*/)) {
 
-					this.varyings.add(n); // Varyings of all effects combined.
-					varyings.add(n); // Varyings of this effect.
 					names.add(n);
 
 				}
