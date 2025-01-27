@@ -160,15 +160,21 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> {
 
 	protected override onResolutionChange(): void {
 
+		const inputBuffer = this.input.defaultBuffer?.value ?? null;
+
+		if(inputBuffer === null) {
+
+			return;
+
+		}
+
 		const resolution = this.resolution;
-		const width = resolution.width;
-		const height = resolution.height;
+		this.renderTargetA.setSize(resolution.width, resolution.height);
+		this.renderTargetB.setSize(resolution.width, resolution.height);
 
-		this.renderTargetA.setSize(width, height);
-		this.renderTargetB.setSize(width, height);
-
-		// Optimization: 1 / (TexelSize * ResolutionScale) = FullResolution
-		this.blurMaterial.setSize(resolution.baseWidth, resolution.baseHeight);
+		// Use the size of the input texture to calculate the texel size for sampling.
+		const imgData = inputBuffer.source.data as ImageData;
+		this.blurMaterial.setSize(imgData.width, imgData.height);
 
 	}
 
