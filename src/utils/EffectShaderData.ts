@@ -124,46 +124,6 @@ export class EffectShaderData implements ShaderData {
 	}
 
 	/**
-	 * Validates the given effect.
-	 *
-	 * @param effect - The effect.
-	 * @throws {@link Error} If the effect is invalid or cannot be merged.
-	 */
-
-	private validateEffect(effect: Effect): void {
-
-		const fragmentShader = effect.fragmentShader;
-
-		if(fragmentShader === null) {
-
-			throw new Error(`Missing fragment shader (${effect.name})`);
-
-		}
-
-		if(effect.isConvolutionPass(false)) {
-
-			this.convolutionEffects.add(effect);
-
-		}
-
-		if(this.convolutionEffects.size > 1) {
-
-			const effectNames = Array.from(this.convolutionEffects).map(x => x.name).join(", ");
-			throw new Error(`Convolution effects cannot be merged (${effectNames})`);
-
-		} else if(effect.hasMainUvFunction && this.convolutionEffects.size > 0) {
-
-			throw new Error(`Effects that transform UVs are incompatible with convolution effects (${effect.name})`);
-
-		} else if(!effect.hasMainImageFunction && !effect.hasMainUvFunction) {
-
-			throw new Error(`Could not find a valid mainImage or mainUv function (${effect.name})`);
-
-		}
-
-	}
-
-	/**
 	 * Integrates the given effect by collecting relevant shader data.
 	 *
 	 * @param prefix - A prefix.
@@ -173,7 +133,13 @@ export class EffectShaderData implements ShaderData {
 
 	integrateEffect(prefix: string, effect: Effect): void {
 
-		this.validateEffect(effect);
+		effect.validate();
+
+		if(effect.isConvolutionPass(false)) {
+
+			this.convolutionEffects.add(effect);
+
+		}
 
 		let fragmentShader = effect.fragmentShader!;
 		let vertexShader = effect.vertexShader;
@@ -371,6 +337,8 @@ export class EffectShaderData implements ShaderData {
 
 	add(data: EffectShaderData): void {
 
+		this.uvTransformation ||= data.uvTransformation;
+
 		data.convolutionEffects.forEach((v) => this.convolutionEffects.add(v));
 		data.uniforms.forEach((v, k) => this.uniforms.set(k, v));
 		data.defines.forEach((v, k) => this.defines.set(k, v));
@@ -400,6 +368,27 @@ export class EffectShaderData implements ShaderData {
 		if(this.colorSpace !== data.colorSpace && data.colorSpace !== NoColorSpace) {
 
 			this.colorSpace = data.colorSpace;
+
+		}
+
+	}
+
+	/**
+	 * Checks if this data is valid.
+	 *
+	 * @throws {@link Error} If the data is invalid.
+	 */
+
+	validate(): void {
+
+		if(this.convolutionEffects.size > 1) {
+
+			const effectNames = Array.from(this.convolutionEffects).map(x => x.name).join(", ");
+			throw new Error(`Convolution effects cannot be merged (${effectNames})`);
+
+		} else if(this.convolutionEffects.size > 0 && this.uvTransformation) {
+
+			throw new Error("Effects that transform UVs are incompatible with convolution effects");
 
 		}
 

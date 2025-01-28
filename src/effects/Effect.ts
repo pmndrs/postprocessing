@@ -198,6 +198,30 @@ export abstract class Effect extends Pass {
 
 	}
 
+	/**
+	 * Validates this effect.
+	 *
+	 * @throws {@link Error} If the effect is invalid.
+	 */
+
+	validate(): void {
+
+		const fragmentShader = this.fragmentShader;
+
+		if(fragmentShader === null) {
+
+			throw new Error(`Missing fragment shader (${this.name})`);
+
+		}
+
+		if(!this.hasMainImageFunction && !this.hasMainUvFunction) {
+
+			throw new Error(`Could not find a valid mainImage or mainUv function (${this.name})`);
+
+		}
+
+	}
+
 	override render(): void {}
 
 }
