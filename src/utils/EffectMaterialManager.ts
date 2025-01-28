@@ -374,21 +374,38 @@ export class EffectMaterialManager implements Disposable {
 	/**
 	 * Returns all possible effect combinations based on the {@link Effect.optional} flag.
 	 *
-	 * @param effects - A list of effects.
+	 * @see https://www.geeksforgeeks.org/find-all-the-combinations-of-the-array-values-in-javascript/
 	 * @return An iterator that returns the effect combinations.
 	 */
 
 	private *getEffectCombinations(): IterableIterator<Effect[]> {
 
-		yield this.effects;
+		const effects = this.effects;
+		const optionalEffects = effects.filter(x => x.optional);
+		const n = optionalEffects.length;
+		const m = 1 << n;
 
-		for(let i = 0, il = this.effects.length; i < il; ++i) {
+		for(let i = 1; i < m; ++i) {
 
-			for(let j = i + 1, jl = this.effects.length; j < jl; ++j) {
+			const combination: Effect[] = [];
 
-				//?
+			for(let j = 0; j < n; ++j) {
+
+				if(i & (1 << j)) {
+
+					combination.push(optionalEffects[j]);
+
+				}
 
 			}
+
+			yield effects.filter(x => !x.optional || combination.includes(x));
+
+		}
+
+		if(optionalEffects.length === effects.length) {
+
+			yield [];
 
 		}
 
