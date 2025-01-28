@@ -829,7 +829,11 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		}
 
-		this.fullscreenMaterial = currentMaterial;
+		if(currentMaterial !== undefined) {
+
+			this.fullscreenMaterial = currentMaterial;
+
+		}
 
 		const promises: Promise<Object3D | void>[] = [];
 
