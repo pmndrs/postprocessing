@@ -222,12 +222,14 @@ export class EffectMaterialManager implements Disposable {
 		const result = new EffectShaderData(this.gBufferConfig);
 		const effectShaderDataCache = this.effectShaderDataCache;
 
-		for(const effect of effects) {
+		for(let i = 0, l = effects.length; i < l; ++i) {
+
+			const effect = effects[i];
 
 			if(!effectShaderDataCache.has(effect)) {
 
 				const data = new EffectShaderData(this.gBufferConfig);
-				data.integrateEffect(`e${effect.id}`, effect);
+				data.integrateEffect(`e${i}`, effect);
 				effectShaderDataCache.set(effect, data);
 
 			}
