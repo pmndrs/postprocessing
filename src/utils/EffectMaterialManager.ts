@@ -249,7 +249,7 @@ export class EffectMaterialManager implements Disposable {
 	/**
 	 * Creates materials based on the possible effect combinations.
 	 *
-	 * @throws {@link Error} If the materials couldn't be created.
+	 * @throws {@link Error} If the material couldn't be created.
 	 */
 
 	private createMaterial(effects: Effect[]): EffectMaterial {
@@ -355,7 +355,7 @@ export class EffectMaterialManager implements Disposable {
 	 * The material will be created if it doesn't exist yet. Materials for other possible effect combinations will also be
 	 * created and cached for later use.
 	 *
-	 * @throws If the current effects cannot be merged.
+	 * @throws {@link Error} If the current effects cannot be merged.
 	 */
 
 	getMaterial(): EffectMaterial {
