@@ -360,7 +360,7 @@ export class EffectMaterialManager implements Disposable {
 
 	getMaterial(): EffectMaterial {
 
-		const effects = this.effects;
+		const effects = this.effects.filter(x => x.enabled);
 		const id = EffectMaterialManager.createMaterialId(effects);
 
 		if(!this.materialCache.has(id)) {
