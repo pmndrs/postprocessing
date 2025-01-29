@@ -8,16 +8,6 @@
 export enum ToneMapping {
 
 	/**
-	 * Custom tone mapping.
-	 *
-	 * This mode expects a custom implementation by modifying the `tonemapping_pars_fragment` shader chunk.
-	 *
-	 * @see https://threejs.org/docs/?q=shader#api/en/renderers/shaders/ShaderChunk
-	 */
-
-	CUSTOM,
-
-	/**
 	 * No tone mapping, only exposure. Colors will be clamped to the output range.
 	 */
 
@@ -60,6 +50,16 @@ export enum ToneMapping {
 	 * @see https://modelviewer.dev/examples/tone-mapping
 	 */
 
-	NEUTRAL
+	NEUTRAL,
+
+	/**
+	 * Custom tone mapping.
+	 *
+	 * This mode expects a custom implementation by modifying the `tonemapping_pars_fragment` shader chunk.
+	 *
+	 * @see https://threejs.org/docs/?q=shader#api/en/renderers/shaders/ShaderChunk
+	 */
+
+	CUSTOM
 
 }

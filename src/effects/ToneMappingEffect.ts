@@ -4,13 +4,13 @@ import { Effect } from "./Effect.js";
 import fragmentShader from "./shaders/tone-mapping.frag";
 
 const toneMappingOperators = new Map<ToneMapping, string>([
-	[ToneMapping.CUSTOM, "CustomToneMapping(texel)"],
 	[ToneMapping.LINEAR, "LinearToneMapping(texel)"],
 	[ToneMapping.REINHARD, "ReinhardToneMapping(texel)"],
 	[ToneMapping.CINEON, "CineonToneMapping(texel)"],
 	[ToneMapping.ACES_FILMIC, "ACESFilmicToneMapping(texel)"],
 	[ToneMapping.AGX, "AgXToneMapping(texel)"],
-	[ToneMapping.NEUTRAL, "NeutralToneMapping(texel)"]
+	[ToneMapping.NEUTRAL, "NeutralToneMapping(texel)"],
+	[ToneMapping.CUSTOM, "CustomToneMapping(texel)"]
 ]);
 
 /**
