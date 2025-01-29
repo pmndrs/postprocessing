@@ -326,6 +326,8 @@ export class EffectShaderData implements ShaderData {
 		shaderParts.set(Section.VERTEX_HEAD, vertexHead);
 		shaderParts.set(Section.VERTEX_MAIN_SUPPORT, vertexMainSupport);
 
+		this.validate();
+
 	}
 
 	/**
@@ -338,7 +340,6 @@ export class EffectShaderData implements ShaderData {
 	add(data: EffectShaderData): void {
 
 		this.uvTransformation ||= data.uvTransformation;
-
 		data.convolutionEffects.forEach((v) => this.convolutionEffects.add(v));
 		data.uniforms.forEach((v, k) => this.uniforms.set(k, v));
 		data.defines.forEach((v, k) => this.defines.set(k, v));
@@ -371,6 +372,8 @@ export class EffectShaderData implements ShaderData {
 
 		}
 
+		this.validate();
+
 	}
 
 	/**
@@ -379,7 +382,7 @@ export class EffectShaderData implements ShaderData {
 	 * @throws {@link Error} If the data is invalid.
 	 */
 
-	validate(): void {
+	private validate(): void {
 
 		if(this.convolutionEffects.size > 1) {
 
