@@ -26,13 +26,13 @@ export class EffectPass extends Pass<EffectMaterial> {
 	 * An event listener that calls {@link updateMaterial} and invalidates the material cache.
 	 */
 
-	private readonly changeListener: () => void;
+	private readonly effectChangeListener: () => void;
 
 	/**
 	 * An event listener that calls {@link updateMaterial} without invalidating the material cache.
 	 */
 
-	private readonly toggleListener: () => void;
+	private readonly effectToggleListener: () => void;
 
 	/**
 	 * Keeps track of the previous G-Buffer configuration.
@@ -58,8 +58,8 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		this.output.defaultBuffer = this.createFramebuffer();
 		this.effectMaterialManager = new EffectMaterialManager(this.input);
-		this.changeListener = () => this.updateMaterial(true);
-		this.toggleListener = () => this.updateMaterial(false);
+		this.effectChangeListener = () => this.updateMaterial(true);
+		this.effectToggleListener = () => this.updateMaterial(false);
 		this.previousGBufferConfig = null;
 		this.effects = effects;
 		this.timeScale = 1.0;
@@ -76,8 +76,8 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		for(const effect of super.subpasses) {
 
-			effect.removeEventListener(Pass.EVENT_CHANGE, this.changeListener);
-			effect.removeEventListener(Pass.EVENT_TOGGLE, this.toggleListener);
+			effect.removeEventListener(Pass.EVENT_CHANGE, this.effectChangeListener);
+			effect.removeEventListener(Pass.EVENT_TOGGLE, this.effectToggleListener);
 
 		}
 
@@ -92,8 +92,8 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 			}
 
-			effect.addEventListener(Pass.EVENT_CHANGE, this.changeListener);
-			effect.addEventListener(Pass.EVENT_TOGGLE, this.toggleListener);
+			effect.addEventListener(Pass.EVENT_CHANGE, this.effectChangeListener);
+			effect.addEventListener(Pass.EVENT_TOGGLE, this.effectToggleListener);
 
 		}
 
@@ -227,13 +227,13 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 			if(this.previousGBufferConfig !== null) {
 
-				this.previousGBufferConfig.removeEventListener(GBufferConfig.EVENT_CHANGE, this.changeListener);
+				this.previousGBufferConfig.removeEventListener(GBufferConfig.EVENT_CHANGE, this.effectChangeListener);
 
 			}
 
 			if(this.input.gBufferConfig !== null) {
 
-				this.input.gBufferConfig.addEventListener(GBufferConfig.EVENT_CHANGE, this.changeListener);
+				this.input.gBufferConfig.addEventListener(GBufferConfig.EVENT_CHANGE, this.effectChangeListener);
 
 			}
 
@@ -271,8 +271,8 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		for(const effect of this.effects) {
 
-			effect.removeEventListener(Pass.EVENT_CHANGE, this.changeListener);
-			effect.removeEventListener(Pass.EVENT_TOGGLE, this.toggleListener);
+			effect.removeEventListener(Pass.EVENT_CHANGE, this.effectChangeListener);
+			effect.removeEventListener(Pass.EVENT_TOGGLE, this.effectToggleListener);
 
 		}
 
