@@ -119,7 +119,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 	}
 
 	/**
-	 * Indicates whether dithering is enabled.
+	 * Controls whether dithering is enabled.
 	 */
 
 	get dithering(): boolean {
@@ -139,10 +139,10 @@ export class EffectPass extends Pass<EffectMaterial> {
 	 *
 	 * The required material will be swapped in if it exists. Otherwise, a new material will be created.
 	 *
-	 * @param invalidateCache - Controls whether the material cache should be rebuild. Defaults to `false`.
+	 * @param invalidateCache - Controls whether the material cache should be rebuild.
 	 */
 
-	protected updateMaterial(invalidateCache = false): void {
+	protected updateMaterial(invalidateCache: boolean): void {
 
 		try {
 
@@ -199,7 +199,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		}
 
-		this.effectMaterialManager.gBuffer = Object.fromEntries(gBufferEntries);
+		this.fullscreenMaterial.gBuffer = Object.fromEntries(gBufferEntries);
 
 	}
 
@@ -239,6 +239,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 			this.previousGBufferConfig = this.input.gBufferConfig;
 			this.effectMaterialManager.gBufferConfig = this.input.gBufferConfig;
+			this.updateMaterial(false); // Cache has already been invalidated.
 
 		}
 
@@ -264,6 +265,13 @@ export class EffectPass extends Pass<EffectMaterial> {
 			effect.checkRequirements(renderer);
 
 		}
+
+	}
+
+	override async compile(): Promise<void> {
+
+		this.updateMaterial(false);
+		return super.compile();
 
 	}
 

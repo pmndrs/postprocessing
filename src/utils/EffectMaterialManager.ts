@@ -26,16 +26,24 @@ export class EffectMaterialManager implements Disposable {
 	static readonly MAX_OPTIONAL_EFFECTS = 6;
 
 	/**
+	 * The ID of the default material.
+	 */
+
+	private static readonly DEFAULT_MATERIAL_ID = "default";
+
+	/**
 	 * A collection of shader data that will be applied to new materials.
 	 */
 
 	private readonly shaderData: ShaderData;
 
 	/**
-	 * A collection that maps effects to extracted shader data for integration into materials.
+	 * A default effect material.
+	 *
+	 * The base `uniforms` and `defines` of this material are shared between all materials.
 	 */
 
-	private readonly effectShaderDataCache: Map<Effect, EffectShaderData>;
+	private readonly defaultMaterial: EffectMaterial;
 
 	/**
 	 * A collection that maps combined effect IDs to effect materials.
@@ -44,10 +52,22 @@ export class EffectMaterialManager implements Disposable {
 	private readonly materialCache: Map<string, EffectMaterial>;
 
 	/**
+	 * A collection that maps effects to extracted shader data for integration into materials.
+	 */
+
+	private readonly effectShaderDataCache: Map<Effect, EffectShaderData>;
+
+	/**
 	 * An event listener that calls {@link invalidateShaderData}.
 	 */
 
-	private readonly changeListener: (e: Event3) => void;
+	private readonly effectChangeListener: (e: Event3) => void;
+
+	/**
+	 * A material that is currently active.
+	 */
+
+	private activeMaterial: EffectMaterial | null;
 
 	// #region Backing Data
 
@@ -86,9 +106,11 @@ export class EffectMaterialManager implements Disposable {
 	constructor(shaderData: ShaderData) {
 
 		this.shaderData = shaderData;
-		this.effectShaderDataCache = new Map<Effect, EffectShaderData>();
+		this.defaultMaterial = new EffectMaterial();
 		this.materialCache = new Map<string, EffectMaterial>();
-		this.changeListener = (e: Event3) => this.effectShaderDataCache.delete(e.target as Effect);
+		this.effectShaderDataCache = new Map<Effect, EffectShaderData>();
+		this.effectChangeListener = (e: Event3) => this.effectShaderDataCache.delete(e.target as Effect);
+		this.activeMaterial = null;
 
 		this._effects = [];
 		this._gBufferConfig = null;
@@ -126,7 +148,7 @@ export class EffectMaterialManager implements Disposable {
 
 		for(const effect of this._effects) {
 
-			effect.addEventListener(Pass.EVENT_CHANGE, this.changeListener);
+			effect.addEventListener(Pass.EVENT_CHANGE, this.effectChangeListener);
 
 		}
 
@@ -146,28 +168,10 @@ export class EffectMaterialManager implements Disposable {
 
 	set gBufferConfig(value: GBufferConfig | null) {
 
-		this.dispose();
-		this._gBufferConfig = value;
+		if(this._gBufferConfig !== value) {
 
-	}
-
-	/**
-	 * The current gBuffer struct.
-	 */
-
-	get gBuffer(): Record<string, Texture | null> | null {
-
-		return this._gBuffer;
-
-	}
-
-	set gBuffer(value: Record<string, Texture | null>) {
-
-		this._gBuffer = value;
-
-		for(const material of this.materialCache.values()) {
-
-			material.gBuffer = value;
+			this.dispose();
+			this._gBufferConfig = value;
 
 		}
 
@@ -212,9 +216,11 @@ export class EffectMaterialManager implements Disposable {
 	}
 
 	/**
-	 * Creates materials based on the possible effect combinations.
+	 * Creates effect shader data based on the given effects.
 	 *
-	 * @throws {@link Error} If the current effects cannot be merged.
+	 * @param effects - The effects.
+	 * @return The shader data.
+	 * @throws If the current effects cannot be merged.
 	 */
 
 	private getEffectShaderData(effects: Effect[]): EffectShaderData {
@@ -222,14 +228,12 @@ export class EffectMaterialManager implements Disposable {
 		const result = new EffectShaderData(this.gBufferConfig);
 		const effectShaderDataCache = this.effectShaderDataCache;
 
-		for(let i = 0, l = effects.length; i < l; ++i) {
-
-			const effect = effects[i];
+		for(const effect of effects) {
 
 			if(!effectShaderDataCache.has(effect)) {
 
 				const data = new EffectShaderData(this.gBufferConfig);
-				data.integrateEffect(`e${i}`, effect);
+				data.integrateEffect(`e${effect.id}`, effect);
 				effectShaderDataCache.set(effect, data);
 
 			}
@@ -247,14 +251,17 @@ export class EffectMaterialManager implements Disposable {
 	}
 
 	/**
-	 * Creates materials based on the possible effect combinations.
+	 * Creates a material based on the given effects.
 	 *
-	 * @throws {@link Error} If the material couldn't be created.
+	 * @param effects - The effects.
+	 * @return The material.
+	 * @throws If the material couldn't be created.
 	 */
 
 	private createMaterial(effects: Effect[]): EffectMaterial {
 
-		const result = new EffectMaterial();
+		const id = EffectMaterialManager.getMaterialId(effects);
+		const result = (id === EffectMaterialManager.DEFAULT_MATERIAL_ID) ? this.defaultMaterial : new EffectMaterial();
 		const data = this.getEffectShaderData(effects);
 
 		data.shaderParts.set(Section.FRAGMENT_HEAD_GBUFFER, data.createGBufferStruct());
@@ -285,7 +292,7 @@ export class EffectMaterialManager implements Disposable {
 
 		}
 
-		// Ensure that leading preprocessor directives start on a new line.
+		// Ensure that leading preprocessor directives start on a new line after getting merged.
 		data.shaderParts.forEach((v, k, map) => map.set(k, v.trim().replace(/^#/, "\n#")));
 
 		// Add input defines and uniforms.
@@ -298,6 +305,23 @@ export class EffectMaterialManager implements Disposable {
 		for(const entry of this.shaderData.uniforms) {
 
 			data.uniforms.set(entry[0], entry[1]);
+
+		}
+
+		if(result !== this.defaultMaterial) {
+
+			// Share base uniforms and defines between all materials.
+			for(const entry of Object.entries(this.defaultMaterial.uniforms)) {
+
+				result.uniforms[entry[0]] = entry[1];
+
+			}
+
+			for(const entry of Object.entries(this.defaultMaterial.defines)) {
+
+				result.defines[entry[0]] = entry[1] as string | number | boolean;
+
+			}
 
 		}
 
@@ -314,10 +338,10 @@ export class EffectMaterialManager implements Disposable {
 	 * If there are no optional effects or if there are too many optional effects, only the required material for the
 	 * currently active effects will be created.
 	 *
-	 * @throws {@link Error} If the materials couldn't be created.
+	 * @throws If the materials couldn't be created.
 	 */
 
-	private updateMaterials(): void {
+	private createMaterials(): void {
 
 		const effects = this.effects;
 		const optionalEffects = effects.filter(x => x.optional);
@@ -327,7 +351,7 @@ export class EffectMaterialManager implements Disposable {
 
 			// Only create the required material for the active effects.
 			const combination = effects.filter(x => x.enabled);
-			const id = EffectMaterialManager.createMaterialId(combination);
+			const id = EffectMaterialManager.getMaterialId(combination);
 			this.materialCache.set(id, this.createMaterial(combination));
 
 		} else {
@@ -335,7 +359,7 @@ export class EffectMaterialManager implements Disposable {
 			// Create materials for all effect combinations.
 			for(const combination of this.getEffectCombinations()) {
 
-				const id = EffectMaterialManager.createMaterialId(combination);
+				const id = EffectMaterialManager.getMaterialId(combination);
 
 				if(!this.materialCache.has(id)) {
 
@@ -350,26 +374,91 @@ export class EffectMaterialManager implements Disposable {
 	}
 
 	/**
-	 * Returns the current shader material.
+	 * Synchronizes the base macros of all materials based on the active material.
+	 */
+
+	private synchronizeMaterials(): void {
+
+		if(this.activeMaterial === null) {
+
+			return;
+
+		}
+
+		const activeMaterial = this.activeMaterial;
+		const defaultMaterial = this.defaultMaterial;
+
+		// Compare and synchronize the base macros.
+		for(const entry of Object.entries(defaultMaterial.defines)) {
+
+			if(entry[1] !== activeMaterial.defines[entry[0]]) {
+
+				defaultMaterial.defines[entry[0]] = activeMaterial.defines[entry[0]] as string | number | boolean;
+				defaultMaterial.needsUpdate = true;
+
+			}
+
+		}
+
+		if(!defaultMaterial.needsUpdate) {
+
+			return;
+
+		}
+
+		// Update the other materials.
+		for(const material of this.materialCache.values()) {
+
+			if(material === defaultMaterial) {
+
+				// Skip self.
+				continue;
+
+			}
+
+			for(const entry of Object.entries(defaultMaterial.defines)) {
+
+				material.defines[entry[0]] = entry[1] as string | number | boolean;
+
+			}
+
+			material.needsUpdate = true;
+
+		}
+
+	}
+
+	/**
+	 * Returns a shader material for the current effect configuration.
 	 *
-	 * The material will be created if it doesn't exist yet. Materials for other possible effect combinations will also be
-	 * created and cached for later use.
+	 * The required material will be created if it doesn't exist yet. Materials for other possible effect combinations
+	 * will also be created and cached for later use.
 	 *
-	 * @throws {@link Error} If the current effects cannot be merged.
+	 * @throws If the current effects cannot be merged.
 	 */
 
 	getMaterial(): EffectMaterial {
 
-		const effects = this.effects.filter(x => x.enabled);
-		const id = EffectMaterialManager.createMaterialId(effects);
+		if(this.gBufferConfig === null) {
 
-		if(!this.materialCache.has(id)) {
-
-			this.updateMaterials();
+			// Effects don't need to be processed if there is no G-Buffer configuration.
+			return this.defaultMaterial;
 
 		}
 
-		return this.materialCache.get(id)!;
+		this.synchronizeMaterials();
+
+		const activeEffects = this.effects.filter(x => x.enabled);
+		const id = EffectMaterialManager.getMaterialId(activeEffects);
+
+		if(!this.materialCache.has(id)) {
+
+			this.createMaterials();
+
+		}
+
+		this.activeMaterial = this.materialCache.get(id)!;
+		return this.activeMaterial;
 
 	}
 
@@ -387,7 +476,7 @@ export class EffectMaterialManager implements Disposable {
 		const n = optionalEffects.length;
 		const m = 1 << n;
 
-		for(let i = 1; i < m; ++i) {
+		for(let i = 0; i < m; ++i) {
 
 			const combination: Effect[] = [];
 
@@ -401,13 +490,8 @@ export class EffectMaterialManager implements Disposable {
 
 			}
 
+			// Keep effects that are always enabled or part of the current combination.
 			yield effects.filter(x => !x.optional || combination.includes(x));
-
-		}
-
-		if(optionalEffects.length === effects.length) {
-
-			yield [];
 
 		}
 
@@ -433,12 +517,13 @@ export class EffectMaterialManager implements Disposable {
 
 		for(const effect of this._effects) {
 
-			effect.removeEventListener(Pass.EVENT_CHANGE, this.changeListener);
+			effect.removeEventListener(Pass.EVENT_CHANGE, this.effectChangeListener);
 
 		}
 
 		this.invalidateMaterialCache();
 		this.effectShaderDataCache.clear();
+		this.activeMaterial = null;
 
 	}
 
@@ -451,9 +536,11 @@ export class EffectMaterialManager implements Disposable {
 	 * @return The ID.
 	 */
 
-	private static createMaterialId(effects: Effect[]): string {
+	private static getMaterialId(effects: Effect[]): string {
 
-		return effects.map(x => x.id).join("-");
+		return (effects.length === 0) ?
+			EffectMaterialManager.DEFAULT_MATERIAL_ID :
+			effects.map(x => x.id).join("-");
 
 	}
 
