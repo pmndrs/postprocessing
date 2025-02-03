@@ -42,6 +42,9 @@
 	"files": [
 		"./dist"
 	],
+	"publishConfig": {
+		"tag": "beta"
+	},
 	"ava": {
 		"failFast": true,
 		"files": [
@@ -54,9 +57,6 @@
 			"esbuild",
 			"hugo-bin"
 		]
-	},
-	"publishConfig": {
-		"tag": "beta"
 	},
 	"scripts": {
 		"ava": "ava",
