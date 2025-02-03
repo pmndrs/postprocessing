@@ -71,8 +71,9 @@ export class EffectShaderData implements ShaderData {
 		this.gBufferConfig = gBufferConfig ?? new GBufferConfig();
 
 		this.shaderParts = new Map<EffectShaderSection, string>([
-			[EffectShaderSection.FRAGMENT_HEAD_GBUFFER, ""],
 			[EffectShaderSection.FRAGMENT_HEAD_EFFECTS, ""],
+			[EffectShaderSection.FRAGMENT_HEAD_GBUFFER, ""],
+			[EffectShaderSection.FRAGMENT_HEAD_GDATA, ""],
 			[EffectShaderSection.FRAGMENT_MAIN_UV, ""],
 			[EffectShaderSection.FRAGMENT_MAIN_GDATA, ""],
 			[EffectShaderSection.FRAGMENT_MAIN_IMAGE, ""],
