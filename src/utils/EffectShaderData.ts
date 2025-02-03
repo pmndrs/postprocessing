@@ -8,6 +8,10 @@ import { GData } from "../enums/GData.js";
 import { prefixSubstrings } from "../utils/functions/string.js";
 import { GBufferConfig } from "./GBufferConfig.js";
 
+const functionRegExp = /\w+\s+(\w+)\([\w\s,]*\)\s*{/g;
+const structRegExp = /struct\s+(\w*)/g;
+const defineRegExp = /^\s*#define\s+(\w*)/gm;
+
 /**
  * A collection of shader data.
  *
@@ -109,7 +113,7 @@ export class EffectShaderData implements ShaderData {
 	}
 
 	/**
-	 * The resulting color space of the effect chain.
+	 * The effective output color space of this effect shader data.
 	 */
 
 	get colorSpace(): ColorSpace {
@@ -121,6 +125,131 @@ export class EffectShaderData implements ShaderData {
 	private set colorSpace(value: ColorSpace) {
 
 		this._colorSpace = value;
+
+	}
+
+	/**
+	 * Extracts token names from a given vertex shader.
+	 *
+	 * @param prefix - A prefix.
+	 * @param shader - The vertex shader.
+	 * @param names - A set to be filled with the tokens.
+	 */
+
+	private gatherVertexShaderTokens(shader: string, names: Set<string>): void {
+
+		// Collect names of varyings.
+		for(const m of shader.matchAll(/(?:out\s+\w+\s+(\w*?);)/g)) {
+
+			// Handle unusual formatting and commas.
+			for(const n of m[1].split(/\s*,\s*/)) {
+
+				names.add(n);
+
+			}
+
+		}
+
+		for(const m of shader.matchAll(functionRegExp)) {
+
+			names.add(m[1]);
+
+		}
+
+		for(const m of shader.matchAll(structRegExp)) {
+
+			names.add(m[1]);
+
+		}
+
+		for(const m of shader.matchAll(defineRegExp)) {
+
+			names.add(m[1]);
+
+		}
+
+	}
+
+	/**
+	 * Extracts token names from a given fragment shader.
+	 *
+	 * @param prefix - A prefix.
+	 * @param shader - The fragment shader.
+	 * @param names - A set to be filled with the tokens.
+	 */
+
+	private gatherFragmentShaderTokens(shader: string, names: Set<string>): void {
+
+		for(const m of shader.matchAll(functionRegExp)) {
+
+			names.add(m[1]);
+
+		}
+
+		for(const m of shader.matchAll(structRegExp)) {
+
+			names.add(m[1]);
+
+		}
+
+		for(const m of shader.matchAll(defineRegExp)) {
+
+			names.add(m[1]);
+
+		}
+
+	}
+
+	/**
+	 * Checks the given fragment shader for `GData` usage.
+	 *
+	 * @param shader - The fragment shader.
+	 */
+
+	private detectGDataUsage(shader: string): void {
+
+		// Already checked param existence during effect validation.
+		const gDataParamName = /GData\s+(\w+)/.exec(shader)![1];
+
+		for(const value of Object.values(GData)) {
+
+			const regExpGData = new RegExp(`${gDataParamName}.${value}`);
+
+			if(regExpGData.test(shader)) {
+
+				for(const dependency of this.gBufferConfig.gDataDependencies.get(value) ?? []) {
+
+					this.gData.add(dependency);
+
+				}
+
+				this.gData.add(value);
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Updates the current working color space based on the given effect.
+	 *
+	 * @param effect - The effect.
+	 */
+
+	private updateWorkingColorSpace(effect: Effect): void {
+
+		if(effect.outputColorSpace !== NoColorSpace) {
+
+			// The effect itself converts colors into a specific color space.
+			this.colorSpace = effect.outputColorSpace;
+
+		} else if(effect.inputColorSpace !== NoColorSpace) {
+
+			// Colors have been converted into a specific color space by request of this effect.
+			this.colorSpace = effect.inputColorSpace;
+
+		}
 
 	}
 
@@ -154,6 +283,17 @@ export class EffectShaderData implements ShaderData {
 
 		const names = new Set<string>();
 
+		if(vertexShader !== null && effect.hasMainSupportFunction) {
+
+			this.gatherVertexShaderTokens(vertexShader, names);
+
+			// Build the mainSupport call (with optional uv parameter).
+			const needsUv = /mainSupport\s*\([\w\s]*?uv\s*?\)/.test(vertexShader);
+			vertexMainSupport += `\t${prefix}MainSupport(`;
+			vertexMainSupport += needsUv ? "vUv);\n" : ");\n";
+
+		}
+
 		if(effect.hasMainUvFunction) {
 
 			fragmentMainUv += `\t${prefix}MainUv(UV);\n`;
@@ -161,64 +301,36 @@ export class EffectShaderData implements ShaderData {
 
 		}
 
-		const functionRegExp = /\w+\s+(\w+)\([\w\s,]*\)\s*{/g;
-		const structRegExp = /struct\s+(\w*)/g;
-		const defineRegExp = /^\s*#define\s+(\w*)/gm;
+		if(effect.hasMainImageFunction) {
 
-		if(vertexShader !== null && effect.hasMainSupportFunction) {
+			this.detectGDataUsage(fragmentShader);
+			this.gatherFragmentShaderTokens(fragmentShader, names);
 
-			// Build the mainSupport call (with optional uv parameter).
-			const needsUv = /mainSupport\s*\([\w\s]*?uv\s*?\)/.test(vertexShader);
-			vertexMainSupport += `\t${prefix}MainSupport(`;
-			vertexMainSupport += needsUv ? "vUv);\n" : ");\n";
+			if(effect.inputColorSpace !== NoColorSpace && effect.inputColorSpace !== this.colorSpace) {
 
-			// Collect names of varyings.
-			for(const m of vertexShader.matchAll(/(?:out\s+\w+\s+(\w*?);)/g)) {
-
-				// Handle unusual formatting and commas.
-				for(const n of m[1].split(/\s*,\s*/)) {
-
-					names.add(n);
-
-				}
+				// Convert the input color to the required color space.
+				fragmentMainImage += (effect.inputColorSpace === SRGBColorSpace) ?
+					"color0 = sRGBTransferOETF(color0);\n\t" :
+					"color0 = sRGBToLinear(color0);\n\t";
 
 			}
 
-			for(const m of vertexShader.matchAll(functionRegExp)) {
+			// Apply the effect by calling its mainImage function.
+			fragmentMainImage += `color1 = ${prefix}MainImage(color0, UV, gData);\n\t`;
 
-				names.add(m[1]);
+			// Collect unique blend modes.
+			const blendMode = effect.blendMode;
+			this.blendModes.set(blendMode.blendFunction.id, blendMode);
 
-			}
+			// Include the blend opacity uniform of this effect.
+			const blendOpacity = prefix + "BlendOpacity";
+			this.uniforms.set(blendOpacity, blendMode.opacityUniform);
 
-			for(const m of vertexShader.matchAll(structRegExp)) {
+			// Blend the result of this effect with the input color (color0 = dst, color1 = src).
+			fragmentMainImage += `color0 = blend${blendMode.blendFunction.id}(color0, color1, ${blendOpacity});\n\n\t`;
+			fragmentHead += `uniform float ${blendOpacity};\n\n`;
 
-				names.add(m[1]);
-
-			}
-
-			for(const m of vertexShader.matchAll(defineRegExp)) {
-
-				names.add(m[1]);
-
-			}
-
-		}
-
-		for(const m of fragmentShader.matchAll(functionRegExp)) {
-
-			names.add(m[1]);
-
-		}
-
-		for(const m of fragmentShader.matchAll(structRegExp)) {
-
-			names.add(m[1]);
-
-		}
-
-		for(const m of fragmentShader.matchAll(defineRegExp)) {
-
-			names.add(m[1]);
+			this.updateWorkingColorSpace(effect);
 
 		}
 
@@ -250,67 +362,6 @@ export class EffectShaderData implements ShaderData {
 		prefixSubstrings(prefix, names, shaders);
 		fragmentShader = shaders.get("fragment")!;
 		vertexShader = shaders.get("vertex")!;
-
-		// Collect unique blend modes.
-		const blendMode = effect.blendMode;
-		this.blendModes.set(blendMode.blendFunction.id, blendMode);
-
-		if(effect.hasMainImageFunction) {
-
-			// Already checked param existence during effect validation.
-			const gDataParamName = /GData\s+(\w+)/.exec(fragmentShader)![1];
-
-			// Detect GData usage.
-			for(const value of Object.values(GData)) {
-
-				const regExpGData = new RegExp(`${gDataParamName}.${value}`);
-
-				if(regExpGData.test(fragmentShader)) {
-
-					for(const dependency of this.gBufferConfig.gDataDependencies.get(value) ?? []) {
-
-						this.gData.add(dependency);
-
-					}
-
-					this.gData.add(value);
-
-				}
-
-			}
-
-			if(effect.inputColorSpace !== NoColorSpace && effect.inputColorSpace !== this.colorSpace) {
-
-				fragmentMainImage += (effect.inputColorSpace === SRGBColorSpace) ?
-					"color0 = sRGBTransferOETF(color0);\n\t" :
-					"color0 = sRGBToLinear(color0);\n\t";
-
-			}
-
-			// Remember the color space at this stage.
-			if(effect.outputColorSpace !== NoColorSpace) {
-
-				// The effect itself converts colors into a specific color space.
-				this.colorSpace = effect.outputColorSpace;
-
-			} else if(effect.inputColorSpace !== NoColorSpace) {
-
-				// Colors have been converted into a specific color space by request of this effect.
-				this.colorSpace = effect.inputColorSpace;
-
-			}
-
-			fragmentMainImage += `color1 = ${prefix}MainImage(color0, UV, gData);\n\t`;
-
-			// Include the blend opacity uniform of this effect.
-			const blendOpacity = prefix + "BlendOpacity";
-			this.uniforms.set(blendOpacity, blendMode.opacityUniform);
-
-			// Blend the result of this effect with the input color (color0 = dst, color1 = src).
-			fragmentMainImage += `color0 = blend${blendMode.blendFunction.id}(color0, color1, ${blendOpacity});\n\n\t`;
-			fragmentHead += `uniform float ${blendOpacity};\n\n`;
-
-		}
 
 		// Include the modified code in the final shader.
 		fragmentHead += fragmentShader + "\n";
