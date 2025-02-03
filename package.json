@@ -48,6 +48,13 @@
 			"test/**/*.js"
 		]
 	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"@parcel/watcher",
+			"esbuild",
+			"hugo-bin"
+		]
+	},
 	"publishConfig": {
 		"tag": "beta"
 	},
