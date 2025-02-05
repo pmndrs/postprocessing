@@ -103,6 +103,8 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 	/**
 	 * The effects.
+	 *
+	 * @throws If there are duplicate effects.
 	 */
 
 	get effects(): readonly Effect[] {
@@ -112,6 +114,15 @@ export class EffectPass extends Pass<EffectMaterial> {
 	}
 
 	protected set effects(value: Effect[]) {
+
+		const distinctEffects = new Set(value);
+
+		if(distinctEffects.size < value.length) {
+
+			const duplicates = value.filter(x => !distinctEffects.has(x)).map(x => x.name);
+			throw new Error(`Encountered duplicate effects: ${duplicates.join(", ")}`);
+
+		}
 
 		this.effectMaterialManager.effects = value;
 		this.subpasses = value;
