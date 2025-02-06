@@ -21,8 +21,19 @@ declare module "postprocessing" {
 		EventDispatcher,
 		Color,
 		ColorSpace,
-		Data3DTexture
+		Data3DTexture,
+		BaseEvent
 	} from "three";
+
+	/**
+	 * Common events.
+	 */
+
+	export interface BaseEventMap {
+
+		change: BaseEvent;
+
+	}
 
 	/**
 	 * A color channel enumeration.
@@ -2506,7 +2517,7 @@ declare module "postprocessing" {
 	/**
 	 * A resolution.
 	 */
-	export class Resolution extends EventDispatcher<import("three").Event> {
+	export class Resolution extends EventDispatcher<BaseEventMap> {
 
 		/**
 		 * An auto sizing constant.
@@ -3915,7 +3926,7 @@ declare module "postprocessing" {
 	/**
 	 * A blend mode.
 	 */
-	export class BlendMode extends EventDispatcher<import("three").Event> {
+	export class BlendMode extends EventDispatcher<BaseEventMap> {
 
 		/**
 		 * Constructs a new blend mode.
@@ -3983,7 +3994,7 @@ declare module "postprocessing" {
 	 * @implements {Disposable}
 	 */
 	export class Effect
-		extends EventDispatcher<import("three").Event>
+		extends EventDispatcher<BaseEventMap>
 		implements Initializable, Resizable, Disposable {
 
 		/**
