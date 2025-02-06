@@ -55,6 +55,13 @@
 			"./test/**/*"
 		]
 	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"@parcel/watcher",
+			"esbuild",
+			"hugo-bin"
+		]
+	},
 	"scripts": {
 		"ava": "ava",
 		"build": "npm run clean && run-p build:css build:js:min build:dts",
