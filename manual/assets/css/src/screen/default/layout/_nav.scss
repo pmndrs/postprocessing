@@ -42,22 +42,22 @@
 	h2, h3 {
 		align-items: center;
 		color: var(--sidebar-heading-color);
-		display: flex;
 		cursor: pointer;
+		display: flex;
 		font-size: 100%;
 		margin: 0;
 		padding-left: dimensions.$nav-menu-item-padding;
 		&::after {
 			background-color: var(--sidebar-heading-color);
-			mask-image: url("/img/svg/chevron_left_black_24dp.svg");
-			mask-position: center;
 			content: "";
 			display: inline-block;
 			height: 1.25rem;
 			margin-left: 0.5rem;
+			mask-image: url("/img/svg/chevron_left_black_24dp.svg");
+			mask-position: center;
 			opacity: 0.3;
-			transition: background-color durations.$long, opacity durations.$short, transform durations.$short;
 			transform: rotate(180deg);
+			transition: background-color durations.$long, opacity durations.$short, transform durations.$short;
 			width: 1rem;
 		}
 		&:focus,
@@ -105,8 +105,8 @@
 		transition: height durations.$short;
 	}
 	.menu {
-		position: relative;
 		overflow-y: clip;
+		position: relative;
 		li:last-child {
 			padding-bottom: 1rem;
 		}
