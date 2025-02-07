@@ -69,7 +69,7 @@ export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap
 	set value(value: T | null) {
 
 		this._value = value;
-		this.dispatchEvent({ type: Resource.EVENT_CHANGE });
+		this.setChanged();
 
 	}
 
@@ -88,6 +88,16 @@ export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap
 	set overrideValue(value: T | null) {
 
 		this._overrideValue = value;
+		this.setChanged();
+
+	}
+
+	/**
+	 * Dispatches a `change` event.
+	 */
+
+	protected setChanged(): void {
+
 		this.dispatchEvent({ type: Resource.EVENT_CHANGE });
 
 	}
