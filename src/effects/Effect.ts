@@ -201,7 +201,7 @@ export abstract class Effect extends Pass {
 	/**
 	 * Validates this effect.
 	 *
-	 * @throws {@link Error} If the effect is invalid.
+	 * @throws If the effect is invalid.
 	 */
 
 	validate(): void {

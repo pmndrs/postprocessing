@@ -258,7 +258,7 @@ export class EffectShaderData implements ShaderData {
 	 *
 	 * @param prefix - A prefix.
 	 * @param effect - The effect.
-	 * @throws {@link Error} If the effect is invalid.
+	 * @throws If the effect is invalid.
 	 */
 
 	integrateEffect(prefix: string, effect: Effect): void {
@@ -386,7 +386,7 @@ export class EffectShaderData implements ShaderData {
 	 * Adds the given effect shader data to this data.
 	 *
 	 * @param data - The data to add.
-	 * @throws {@link Error} If the data cannot be merged.
+	 * @throws If the data cannot be merged.
 	 */
 
 	add(data: EffectShaderData): void {
@@ -431,7 +431,7 @@ export class EffectShaderData implements ShaderData {
 	/**
 	 * Checks if this data is valid.
 	 *
-	 * @throws {@link Error} If the data is invalid.
+	 * @throws If the data is invalid.
 	 */
 
 	private validate(): void {
