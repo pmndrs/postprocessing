@@ -14,8 +14,8 @@ test("should use scale if width and height are both set to AUTO_SIZE", t => {
 	resolution.setBaseSize(1920, 1080);
 	resolution.scale = 0.5;
 
-	t.is(resolution.width, 1920 * 0.5);
-	t.is(resolution.height, 1080 * 0.5);
+	t.is(resolution.width, 960);
+	t.is(resolution.height, 540);
 
 });
 
@@ -58,5 +58,17 @@ test("properly calculates sizes when using AUTO_SIZE", t => {
 	resolution.preferredHeight = Resolution.AUTO_SIZE;
 
 	t.is(resolution.height, Math.round(720 / aspect));
+
+});
+
+test("properly applies pixel ratio", t => {
+
+	const resolution = new Resolution();
+
+	resolution.setBaseSize(960, 540);
+	resolution.pixelRatio = 2;
+
+	t.is(resolution.width, 1920);
+	t.is(resolution.height, 1080);
 
 });
