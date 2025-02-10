@@ -3,7 +3,7 @@
 [![CI](https://github.com/pmndrs/postprocessing/actions/workflows/ci.yml/badge.svg)](https://github.com/pmndrs/postprocessing/actions/workflows/ci.yml)
 [![Version](https://badgen.net/npm/v/postprocessing?color=green)](https://www.npmjs.com/package/postprocessing)
 
-A post processing library for [three.js](https://threejs.org/).
+An advanced post processing library for [three.js](https://threejs.org/).
 
 *[Manual](https://pp.pmnd.rs/manual)&ensp;&middot;&ensp;[Documentation](https://pp.pmnd.rs/manual/docs)&ensp;&middot;&ensp;[Sandbox](https://stackblitz.com/edit/postprocessing)*
 
