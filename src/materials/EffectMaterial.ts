@@ -46,6 +46,9 @@ export class EffectMaterial extends FullscreenMaterial {
 		this.customUniforms = new Map<string, Uniform>();
 		this.customDefines = new Map<string, string | number | boolean>();
 
+		// Ensure that gl_FragColor is defined in the default shader.
+		this.fragmentShader = "#include <pp_default_output_pars_fragment>\n\n" + this.fragmentShader;
+
 	}
 
 	/**
