@@ -250,7 +250,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 			this.previousGBufferConfig = this.input.gBufferConfig;
 			this.effectMaterialManager.gBufferConfig = this.input.gBufferConfig;
-			this.updateMaterial(false); // Cache has already been invalidated.
+			this.updateMaterial(true); // Discard outdated materials.
 
 		}
 
