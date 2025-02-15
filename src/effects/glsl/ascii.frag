@@ -3,6 +3,7 @@ uniform float uCharactersCount;
 uniform float uCellSize;
 uniform bool uInvert;
 uniform vec3 uColor;
+uniform bool uUseSceneColor;
   
 const vec2 SIZE = vec2(16.);
 
@@ -32,7 +33,7 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
     vec2 charUV = mod(uv * (cell / SIZE), 1.0 / SIZE) - vec2(0., 1.0 / SIZE) + offset;
     vec4 asciiCharacter = texture2D(uCharacters, charUV);
 
-    asciiCharacter.rgb = uColor * asciiCharacter.r;
+    asciiCharacter.rgb = (uUseSceneColor ? pixelized.rgb : uColor) * asciiCharacter.r;
     asciiCharacter.a = pixelized.a;
 
     if(asciiCharacter.r == 0.0 && asciiCharacter.g == 0.0 && asciiCharacter.b == 0.0) {

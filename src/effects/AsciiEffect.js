@@ -11,123 +11,6 @@ import { Effect } from "./Effect.js";
 import fragmentShader from "./glsl/ascii.frag";
 
 
-// export class AsciiEffect extends Effect {
-
-//     /**
-//      * Constructs a new pixelation effect.
-//      *
-//      * @param {Object} [granularity=30.0] - The pixel granularity.
-//      */
-
-//     constructor(granularity = 30.0) {
-
-//         super("AsciiEffect", fragmentShader, {
-//             uniforms: new Map([
-//                 ["active", new Uniform(false)],
-//                 ["d", new Uniform(new Vector4())]
-//             ])
-//         });
-
-//         /**
-//          * The original resolution.
-//          *
-//          * @type {Vector2}
-//          * @private
-//          */
-
-//         this.resolution = new Vector2();
-
-//         /**
-//          * Backing data for {@link granularity}.
-//          *
-//          * @type {Number}
-//          * @private
-//          */
-
-//         this._granularity = 0;
-//         this.granularity = granularity;
-
-//     }
-
-//     /**
-//      * The pixel granularity.
-//      *
-//      * A higher value yields coarser visuals.
-//      *
-//      * @type {Number}
-//      */
-
-//     get granularity() {
-
-//         return this._granularity;
-
-//     }
-
-//     set granularity(value) {
-
-//         let d = Math.floor(value);
-
-//         if (d % 2 > 0) {
-
-//             d += 1;
-
-//         }
-
-//         this._granularity = d;
-//         this.uniforms.get("active").value = (d > 0);
-//         this.setSize(this.resolution.width, this.resolution.height);
-
-//     }
-
-//     /**
-//      * Returns the pixel granularity.
-//      *
-//      * @deprecated Use granularity instead.
-//      * @return {Number} The granularity.
-//      */
-
-//     getGranularity() {
-
-//         return this.granularity;
-
-//     }
-
-//     /**
-//      * Sets the pixel granularity.
-//      *
-//      * @deprecated Use granularity instead.
-//      * @param {Number} value - The new granularity.
-//      */
-
-//     setGranularity(value) {
-
-//         this.granularity = value;
-
-//     }
-
-//     /**
-//      * Updates the granularity.
-//      *
-//      * @param {Number} width - The width.
-//      * @param {Number} height - The height.
-//      */
-
-//     setSize(width, height) {
-
-//         const resolution = this.resolution;
-//         resolution.set(width, height);
-
-//         const d = this.granularity;
-//         const x = d / resolution.x;
-//         const y = d / resolution.y;
-//         this.uniforms.get("d").value.set(x, y, 1.0 / x, 1.0 / y);
-
-//     }
-
-// }
-
-
-
 /**
  * ASCII effect.
  *
@@ -141,14 +24,16 @@ export class AsciiEffect extends Effect {
         fontSize = 54,
         cellSize = 16,
         color = "#ffffff",
-        invert = false
+        invert = false,
+        sceneColor = false
     } = {}) {
         const uniforms = new Map([
             ["uCharacters", new Uniform(new Texture())],
             ["uCellSize", new Uniform(cellSize)],
             ["uCharactersCount", new Uniform(characters.length)],
             ["uColor", new Uniform(new Color(color))],
-            ["uInvert", new Uniform(invert)]
+            ["uInvert", new Uniform(invert)],
+            ["uUseSceneColor", new Uniform(sceneColor)]
         ])
 
         super("ASCII", fragmentShader, { uniforms })
@@ -191,5 +76,9 @@ export class AsciiEffect extends Effect {
 
         texture.needsUpdate = true
         return texture
+    }
+
+    setUseSceneColor(value) {
+        this.uniforms.get("uUseSceneColor").value = value;
     }
 }

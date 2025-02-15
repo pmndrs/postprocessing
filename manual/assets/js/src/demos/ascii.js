@@ -93,7 +93,8 @@ window.addEventListener("load", () => load().then((assets) => {
         fontSize: 35,
         cellSize: 16,
         color: "#ffffff",
-        invert: false
+        invert: false,
+        sceneColor: true
     });
     composer.addPass(new RenderPass(scene, camera));
     composer.addPass(new EffectPass(camera, effect));
