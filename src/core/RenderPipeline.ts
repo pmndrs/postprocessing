@@ -196,14 +196,9 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 		RenderPipeline.registeredPasses.add(pass);
 
-		if(this.renderer !== null) {
-
-			this.renderer.getDrawingBufferSize(v);
-			pass.resolution.setBaseSize(v.width, v.height);
-			pass.viewport.copyBaseSize(this.resolution);
-			pass.scissor.copyBaseSize(this.resolution);
-
-		}
+		// Use the scaled pixel ratio to keep the resolution scale of the pass intact.
+		pass.resolution.pixelRatio = this.resolution.scaledPixelRatio;
+		pass.resolution.copyBaseSize(this.resolution);
 
 		pass.renderer = this.renderer;
 		pass.timer = this.timer;
