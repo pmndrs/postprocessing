@@ -33,7 +33,7 @@ export class ScanlineEffect extends Effect {
 		});
 
 		/**
-		 * The original resolution.
+		 * The current resolution.
 		 *
 		 * @type {Vector2}
 		 * @private
