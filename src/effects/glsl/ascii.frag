@@ -1,44 +1,39 @@
-uniform sampler2D uCharacters;
-uniform float uCharactersCount;
-uniform float uCellSize;
-uniform bool uInvert;
-uniform vec3 uColor;
-uniform bool uUseSceneColor;
-  
-const vec2 SIZE = vec2(16.);
+uniform sampler2D asciiTexture;
+uniform vec4 cellCount; // XY = cell count, ZW = inv cell count
 
-vec3 greyscale(vec3 color, float strength) {
-    float g = dot(color, vec3(0.299, 0.587, 0.114));
-    return mix(color, vec3(g), strength);
-}
+#ifdef USE_COLOR
 
-vec3 greyscale(vec3 color) {
-    return greyscale(color, 1.0);
-}
-  
+	uniform vec3 color;
+
+#endif
+
 void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
-    vec2 cell = resolution / uCellSize;
-    vec2 grid = 1.0 / cell;
-    vec2 pixelizedUV = grid * (0.5 + floor(uv / grid));
-    vec4 pixelized = texture2D(inputBuffer, pixelizedUV);
-    float greyscaled = greyscale(pixelized.rgb).r;
 
-    if (uInvert) {
-        greyscaled = 1.0 - greyscaled;
-    }
+	vec2 pixelizedUv = cellCount.zw * (0.5 + floor(uv * cellCount.xy));
+	vec4 texel = texture2D(inputBuffer, pixelizedUv);
+	float lum = luminance(texel.rgb);
 
-    float characterIndex = floor((uCharactersCount - 1.0) * greyscaled);
-    vec2 characterPosition = vec2(mod(characterIndex, SIZE.x), floor(characterIndex / SIZE.y));
-    vec2 offset = vec2(characterPosition.x, -characterPosition.y) / SIZE;
-    vec2 charUV = mod(uv * (cell / SIZE), 1.0 / SIZE) - vec2(0., 1.0 / SIZE) + offset;
-    vec4 asciiCharacter = texture2D(uCharacters, charUV);
+	#ifdef INVERTED
 
-    asciiCharacter.rgb = (uUseSceneColor ? pixelized.rgb : uColor) * asciiCharacter.r;
-    asciiCharacter.a = pixelized.a;
+		// Only LDR colors can be inverted, so make sure lum doesn't exceed 1.
+		lum = 1.0 - min(lum, 1.0);
 
-    if(asciiCharacter.r == 0.0 && asciiCharacter.g == 0.0 && asciiCharacter.b == 0.0) {
-        asciiCharacter = vec4(0.0, 0.0, 0.0, 0.0);
-    }
+	#endif
 
-    outputColor = asciiCharacter;
+	float characterIndex = floor(CHAR_COUNT_MINUS_ONE * lum);
+	vec2 characterPosition = vec2(mod(characterIndex, CELL_COUNT), floor(characterIndex * INV_CELL_COUNT));
+	vec2 offset = vec2(characterPosition.x, -characterPosition.y) * INV_CELL_COUNT;
+	vec2 characterUv = mod(uv * (cellCount.xy * INV_CELL_COUNT), INV_CELL_COUNT) - vec2(0.0, INV_CELL_COUNT) + offset;
+	vec4 asciiCharacter = texture2D(asciiTexture, characterUv);
+
+	#ifdef USE_COLOR
+
+		outputColor = vec4(color * asciiCharacter.r, inputColor.a);
+
+	#else
+
+		outputColor = vec4(texel.rgb * asciiCharacter.r, inputColor.a);
+
+	#endif
+
 }
