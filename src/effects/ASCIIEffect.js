@@ -75,7 +75,14 @@ export class ASCIIEffect extends Effect {
 
 	set asciiTexture(value) {
 
+		const currentTexture = this.uniforms.get("asciiTexture").value;
 		this.uniforms.get("asciiTexture").value = value;
+
+		if(currentTexture !== null && currentTexture !== value) {
+
+			currentTexture.dispose();
+
+		}
 
 		if(value !== null) {
 
