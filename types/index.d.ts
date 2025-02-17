@@ -5184,6 +5184,65 @@ declare module "postprocessing" {
 
 	}
 
+	/**
+	 * An ASCII effect.
+	 *
+	 * Warning: This effect cannot be merged with convolution effects.
+	 */
+	export class ASCIIEffect extends Effect {
+
+		/**
+		 * Constructs a new ASCII effect.
+		 *
+		 * @param {Object} [options] - The options.
+		 * @param {ASCIITexture} [options.asciiTexture] - An ASCII character lookup texture.
+		 * @param {Number} [options.cellSize=16] - The cell size. It's recommended to use even numbers.
+		 * @param {Number} [options.color=null] - A color to use instead of the scene colors.
+		 * @param {Boolean} [options.inverted=false] - Inverts the effect.
+		 */
+		constructor({
+			asciiTexture,
+			cellSize,
+			color,
+			inverted
+		}?: {
+			asciiTexture?: ASCIITexture;
+			cellSize?: number;
+			color?: Color | string | number | null;
+			inverted?: boolean;
+		});
+
+		/**
+		 * The current ASCII lookup texture.
+		 *
+		 * @type {ASCIITexture}
+		 */
+		get asciiTexture(): ASCIITexture;
+		set asciiTexture(value: ASCIITexture);
+		/**
+		 * A color that overrides the scene colors.
+		 *
+		 * @type {Color | string | number | null}
+		 */
+		get color(): Color;
+		set color(value: Color | string | number | null);
+		/**
+		 * Controls whether the effect should be inverted.
+		 *
+		 * @type {Boolean}
+		 */
+		get inverted(): boolean;
+		set inverted(value: boolean);
+		/**
+		 * The cell size.
+		 *
+		 * @type {Number}
+		 */
+		get cellSize(): number;
+		set cellSize(value: number);
+
+	}
+
 	export type BloomEffectOptions = {
 		blendFunction?: BlendFunction;
 		luminanceThreshold?: number;
@@ -8957,6 +9016,52 @@ declare module "postprocessing" {
 		 * @param {Number} [type=UnsignedByteType] - The texture type.
 		 */
 		constructor(width: number, height: number, format?: number, type?: number);
+
+	}
+
+	/**
+	 * An ASCII character lookup texture.
+	 */
+	export class ASCIITexture extends CanvasTexture {
+
+		/**
+		 * Constructs a new ASCII texture.
+		 *
+		 * @param {Object} [options] - The options.
+		 * @param {String} [options.characters] - The character set to render. Defaults to a common ASCII art charset.
+		 * @param {String} [options.font="Arial"] - The font.
+		 * @param {Number} [options.fontSize=54] - The font size in pixels.
+		 * @param {Number} [options.size=1024] - The texture size.
+		 * @param {Number} [options.cellCount=16] - The cell count along each side of the texture.
+		 */
+		constructor({
+			characters,
+			font,
+			fontSize,
+			size,
+			cellCount
+		}?: {
+			characters?: string;
+			font?: string;
+			fontSize?: number;
+			size?: number;
+			cellCount?: number;
+		});
+
+		/**
+		 * The amount of characters in this texture.
+		 *
+		 * @type {Number}
+		 * @readonly
+		 */
+		readonly characterCount: number;
+		/**
+		 * The cell count along each side of the texture.
+		 *
+		 * @type {Number}
+		 * @readonly
+		 */
+		readonly cellCount: number;
 
 	}
 

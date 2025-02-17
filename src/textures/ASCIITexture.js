@@ -11,10 +11,10 @@ export class ASCIITexture extends CanvasTexture {
 	 *
 	 * @param {Object} [options] - The options.
 	 * @param {String} [options.characters] - The character set to render. Defaults to a common ASCII art charset.
-	 * @param {String} [font="Arial"] - The font.
-	 * @param {Number} [fontSize=54] - The font size in pixels.
-	 * @param {Number} [size=1024] - The texture size.
-	 * @param {Number} [cellCount=16] - The cell count along each side of the texture.
+	 * @param {String} [options.font="Arial"] - The font.
+	 * @param {Number} [options.fontSize=54] - The font size in pixels.
+	 * @param {Number} [options.size=1024] - The texture size.
+	 * @param {Number} [options.cellCount=16] - The cell count along each side of the texture.
 	 */
 
 	constructor({

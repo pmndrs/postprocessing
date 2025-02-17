@@ -17,9 +17,9 @@ export class ASCIIEffect extends Effect {
 	 *
 	 * @param {Object} [options] - The options.
 	 * @param {ASCIITexture} [options.asciiTexture] - An ASCII character lookup texture.
-	 * @param {Number} [cellSize=16] - The cell size. It's recommended to use even numbers.
-	 * @param {Number} [color=null] - A color to use instead of the scene colors.
-	 * @param {Boolean} [inverted=false] - Inverts the effect.
+	 * @param {Number} [options.cellSize=16] - The cell size. It's recommended to use even numbers.
+	 * @param {Number} [options.color=null] - A color to use instead of the scene colors.
+	 * @param {Boolean} [options.inverted=false] - Inverts the effect.
 	 */
 
 	constructor({
