@@ -4,6 +4,13 @@ import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/ascii.frag";
 
+export interface ASCIIEffectOptions {
+  asciiTexture?: ASCIITexture;
+  cellSize?: number;
+  color?: number | Color;
+  inverted?: boolean;
+}
+
 /**
  * An ASCII effect.
  *
@@ -21,9 +28,9 @@ export class ASCIIEffect extends Effect {
    * @param {Boolean} [options.inverted=false] - Inverts the effect.
    */
 
-  constructor({ asciiTexture = new ASCIITexture(), cellSize = 16, color = null, inverted = false } = {}) {
+  constructor({ asciiTexture = new ASCIITexture(), cellSize = 16, color, inverted = false }: ASCIIEffectOptions = {}) {
     super("ASCIIEffect", fragmentShader, {
-      uniforms: new Map([
+      uniforms: new Map<string, Uniform>([
         ["asciiTexture", new Uniform(null)],
         ["cellCount", new Uniform(new Vector4())],
         ["color", new Uniform(new Color())],
@@ -49,7 +56,7 @@ export class ASCIIEffect extends Effect {
 
     this.asciiTexture = asciiTexture;
     this.cellSize = cellSize;
-    this.color = color;
+    this.color = color ?? null;
     this.inverted = inverted;
   }
 
@@ -59,13 +66,13 @@ export class ASCIIEffect extends Effect {
    * @type {ASCIITexture}
    */
 
-  get asciiTexture() {
-    return this.uniforms.get("asciiTexture").value;
+  get asciiTexture(): ASCIITexture {
+    return this.uniforms.get("asciiTexture")!.value as ASCIITexture;
   }
 
-  set asciiTexture(value) {
-    const currentTexture = this.uniforms.get("asciiTexture").value;
-    this.uniforms.get("asciiTexture").value = value;
+  set asciiTexture(value: ASCIITexture) {
+    const currentTexture = this.uniforms.get("asciiTexture")!.value as ASCIITexture;
+    this.uniforms.get("asciiTexture")!.value = value;
 
     if (currentTexture !== null && currentTexture !== value) {
       currentTexture.dispose();
@@ -86,13 +93,13 @@ export class ASCIIEffect extends Effect {
    * @type {Color | String | Number | null}
    */
 
-  get color() {
-    return this.uniforms.get("color").value;
+  get color(): Color | null {
+    return this.uniforms.get("color")!.value as Color;
   }
 
-  set color(value) {
+  set color(value: Color | number | null) {
     if (value !== null) {
-      this.uniforms.get("color").value.set(value);
+      this.uniforms.get("color")!.value.set(value);
     }
 
     if (this.defines.has("USE_COLOR") && value === null) {
@@ -110,11 +117,11 @@ export class ASCIIEffect extends Effect {
    * @type {Boolean}
    */
 
-  get inverted() {
+  get inverted(): boolean {
     return this.defines.has("INVERTED");
   }
 
-  set inverted(value) {
+  set inverted(value: boolean) {
     if (this.inverted !== value) {
       if (value) {
         this.defines.set("INVERTED", "1");
@@ -132,11 +139,11 @@ export class ASCIIEffect extends Effect {
    * @type {Number}
    */
 
-  get cellSize() {
+  get cellSize(): number {
     return this._cellSize;
   }
 
-  set cellSize(value) {
+  set cellSize(value: number) {
     if (this._cellSize !== value) {
       this._cellSize = value;
       this.updateCellCount();
@@ -150,11 +157,11 @@ export class ASCIIEffect extends Effect {
    */
 
   updateCellCount() {
-    const cellCount = this.uniforms.get("cellCount").value;
+    const cellCount = this.uniforms.get("cellCount")!.value as Vector4;
     const resolution = this.resolution;
 
-    cellCount.x = resolution.width / this.cellSize;
-    cellCount.y = resolution.height / this.cellSize;
+    cellCount.x = resolution.x / this.cellSize;
+    cellCount.y = resolution.y / this.cellSize;
     cellCount.z = 1.0 / cellCount.x;
     cellCount.w = 1.0 / cellCount.y;
   }
@@ -166,7 +173,7 @@ export class ASCIIEffect extends Effect {
    * @param {Number} height - The height.
    */
 
-  setSize(width, height) {
+  setSize(width: number, height: number) {
     this.resolution.set(width, height);
     this.updateCellCount();
   }
