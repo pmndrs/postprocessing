@@ -1,31 +1,46 @@
-import { Color, Uniform, Vector2, Vector4 } from "three";
+import { Color, Uniform, Vector4 } from "three";
 import { ASCIITexture } from "../textures/ASCIITexture.js";
 import { Effect } from "./Effect.js";
+import { AddBlendFunction } from "./blending/index.js";
 
 import fragmentShader from "./shaders/ascii.frag";
 
 /**
- * An ASCII effect.
+ * ASCIIEffect options.
  *
+ * @category Effects
  */
 
 export interface ASCIIEffectOptions {
   asciiTexture?: ASCIITexture;
   cellSize?: number;
-  color?: Color | null;
+  color?: Color;
   inverted?: boolean;
 }
 
+/**
+ * An ASCII effect.
+ *
+ * @category Effects
+ */
+
 export class ASCIIEffect extends Effect {
+  /**
+   * @see {@link cellSize}
+   */
+
+  private _cellSize = -1;
+
   constructor({
     asciiTexture = new ASCIITexture(),
     cellSize = 16,
-    color = null,
+    color = new Color(1.0, 1.0, 1.0),
     inverted = false,
   }: ASCIIEffectOptions = {}) {
     super("ASCIIEffect");
 
     this.fragmentShader = fragmentShader;
+    this.blendMode.blendFunction = new AddBlendFunction();
 
     const uniforms = this.input.uniforms;
     uniforms.set("asciiTexture", new Uniform(null));
@@ -41,16 +56,15 @@ export class ASCIIEffect extends Effect {
   /**
    * The current ASCII lookup texture.
    *
-   * @type {ASCIITexture}
    */
 
   get asciiTexture(): ASCIITexture {
-    return this.input.uniforms.get("asciiTexture").value;
+    return this.input.uniforms.get("asciiTexture")!.value as ASCIITexture;
   }
 
   set asciiTexture(value: ASCIITexture) {
-    const currentTexture = this.input.uniforms.get("asciiTexture").value;
-    this.input.uniforms.get("asciiTexture").value = value;
+    const currentTexture = this.input.uniforms.get("asciiTexture")!.value as ASCIITexture;
+    this.input.uniforms.get("asciiTexture")!.value = value;
 
     if (currentTexture !== null && currentTexture !== value) {
       currentTexture.dispose();
@@ -70,16 +84,18 @@ export class ASCIIEffect extends Effect {
   /**
    * A color that overrides the scene colors.
    *
-   * @type {Color | String | Number | null}
    */
 
-  get color() {
-    return this.input.uniforms.get("color").value;
+  get color(): Color {
+    return this.input.uniforms.get("color")!.value as Color;
   }
 
-  set color(value) {
+  set color(value: Color) {
     if (value !== null) {
-      this.input.uniforms.get("color").value.set(value);
+      const colorUniform = this.input.uniforms.get("color");
+      if (colorUniform && colorUniform.value instanceof Color) {
+        colorUniform.value.set(value);
+      }
     }
 
     if (this.input.defines.has("USE_COLOR") && value === null) {
@@ -94,7 +110,6 @@ export class ASCIIEffect extends Effect {
   /**
    * Controls whether the effect should be inverted.
    *
-   * @type {Boolean}
    */
 
   get inverted(): boolean {
@@ -116,7 +131,6 @@ export class ASCIIEffect extends Effect {
   /**
    * The cell size.
    *
-   * @type {Number}
    */
 
   get cellSize(): number {
@@ -135,8 +149,8 @@ export class ASCIIEffect extends Effect {
    *
    */
 
-  private updateCellCount() {
-    const cellCount = this.input.uniforms.get("cellCount").value;
+  private updateCellCount(): void {
+    const cellCount = this.input.uniforms.get("cellCount")!.value as Vector4;
     const resolution = this.resolution;
 
     cellCount.x = resolution.width / this.cellSize;
@@ -150,8 +164,8 @@ export class ASCIIEffect extends Effect {
    *
    */
 
-  setSize(width: number, height: number) {
-    this.resolution.set(width, height);
-    this.updateCellCount();
-  }
+  // setSize(width: number, height: number) {
+  //   this.resolution.set(width, height);
+  //   this.updateCellCount();
+  // }
 }

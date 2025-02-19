@@ -7,7 +7,7 @@ uniform vec4 cellCount; // XY = cell count, ZW = inv cell count
 
 #endif
 
-void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
+vec4 mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
 
 	vec2 pixelizedUv = cellCount.zw * (0.5 + floor(uv * cellCount.xy));
 	vec4 texel = texture2D(inputBuffer, pixelizedUv);
@@ -35,5 +35,6 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
 		outputColor = vec4(texel.rgb * asciiCharacter.r, inputColor.a);
 
 	#endif
+
 
 }
