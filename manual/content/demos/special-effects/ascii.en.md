@@ -2,13 +2,13 @@
 layout: single
 collection: sections
 title: ASCII
-draft: true
+draft: false
 menu:
   demos:
     parent: special-effects
 script: ascii
 ---
 
-# Depth of Field
+# ASCII
 
 ### External Resources

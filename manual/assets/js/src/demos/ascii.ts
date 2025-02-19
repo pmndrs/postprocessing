@@ -9,11 +9,14 @@ import {
 } from "three";
 
 import {
+  ColorDepthEffect,
   ClearPass,
   EffectPass,
   GeometryPass,
+  MixBlendFunction,
   RenderPipeline,
-  // ASCIIEffect,
+  ToneMappingEffect,
+  ASCIIEffect,
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
@@ -75,25 +78,42 @@ window.addEventListener(
 
       // Post Processing
 
+      const effect = new ASCIIEffect({
+        characters: " .:,'-^=*+?!|0#X%WM@",
+        font: "Arial",
+        fontSize: 54,
+        size: 1024,
+        cellCount: 16,
+      });
+
       const pipeline = new RenderPipeline(renderer);
-      pipeline.add(
-        new ClearPass(),
-        new GeometryPass(scene, camera, { samples: 4 }),
-        // new EffectPass(effect, new ASCIIEffect()),
-      );
+      pipeline.add(new ClearPass(), new GeometryPass(scene, camera, { samples: 4 }), new EffectPass(effect));
 
       // Settings
+
+      const params = { bitDepth: 6 };
 
       const container = document.getElementById("viewport")!;
       const pane = new Pane({ container: container.querySelector<HTMLElement>(".tp")! });
       const fpsGraph = Utils.createFPSGraph(pane);
 
-      const folder = pane.addFolder({ title: "Settings" });
-      folder.addBinding(effect, "offset", { min: 0, max: 1, step: 1e-3 });
-      folder.addBinding(effect, "density", { min: 0, max: 2, step: 1e-3 });
-      folder.addBinding(effect, "scrollSpeed", { min: -0.1, max: 0.1, step: 1e-3 });
+      // const folder = pane.addFolder({ title: "Settings" });
+      // const subfolder = folder.addFolder({ title: "Channels", expanded: false });
+      // const bindingR = subfolder.addBinding(effect, "r", { min: 0, max: 16, step: 1 });
+      // const bindingG = subfolder.addBinding(effect, "g", { min: 0, max: 16, step: 1 });
+      // const bindingB = subfolder.addBinding(effect, "b", { min: 0, max: 16, step: 1 });
 
-      Utils.addBlendModeBindings(folder, effect.blendMode);
+      // folder.addBinding(params, "bitDepth", { min: 0, max: 16, step: 1 }).on("change", (e) => {
+      //   effect.r = e.value;
+      //   effect.g = e.value;
+      //   effect.b = e.value;
+
+      //   bindingR.refresh();
+      //   bindingG.refresh();
+      //   bindingB.refresh();
+      // });
+
+      // Utils.addBlendModeBindings(folder, effect.blendMode);
 
       // Resize Handler
 

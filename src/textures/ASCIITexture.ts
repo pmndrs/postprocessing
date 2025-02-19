@@ -1,13 +1,5 @@
 import { CanvasTexture, RepeatWrapping } from "three";
 
-export interface ASCIITextureOptions {
-  characters?: string;
-  font?: string;
-  fontSize?: number;
-  size?: number;
-  cellCount?: number;
-}
-
 /**
  * An ASCII character lookup texture.
  */
@@ -30,13 +22,13 @@ export class ASCIITexture extends CanvasTexture {
     fontSize = 54,
     size = 1024,
     cellCount = 16,
-  }: ASCIITextureOptions = {}) {
+  } = {}) {
     super(document.createElement("canvas"), undefined, RepeatWrapping, RepeatWrapping);
 
-    const canvas = this.image as HTMLCanvasElement;
+    const canvas = this.image;
     canvas.width = canvas.height = size;
 
-    const context = canvas.getContext("2d") as CanvasRenderingContext2D;
+    const context = canvas.getContext("2d");
     const cellSize = size / cellCount;
     context.font = `${fontSize}px ${font}`;
     context.textAlign = "center";

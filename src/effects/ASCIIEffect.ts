@@ -2,61 +2,39 @@ import { Color, Uniform, Vector2, Vector4 } from "three";
 import { ASCIITexture } from "../textures/ASCIITexture.js";
 import { Effect } from "./Effect.js";
 
-import fragmentShader from "./glsl/ascii.frag";
-
-export interface ASCIIEffectOptions {
-  asciiTexture?: ASCIITexture;
-  cellSize?: number;
-  color?: number | Color;
-  inverted?: boolean;
-}
+import fragmentShader from "./shaders/ascii.frag";
 
 /**
  * An ASCII effect.
  *
- * Warning: This effect cannot be merged with convolution effects.
  */
 
+export interface ASCIIEffectOptions {
+  asciiTexture?: ASCIITexture;
+  cellSize?: number;
+  color?: Color | null;
+  inverted?: boolean;
+}
+
 export class ASCIIEffect extends Effect {
-  /**
-   * Constructs a new ASCII effect.
-   *
-   * @param {Object} [options] - The options.
-   * @param {ASCIITexture} [options.asciiTexture] - An ASCII character lookup texture.
-   * @param {Number} [options.cellSize=16] - The cell size. It's recommended to use even numbers.
-   * @param {Number} [options.color=null] - A color to use instead of the scene colors.
-   * @param {Boolean} [options.inverted=false] - Inverts the effect.
-   */
+  constructor({
+    asciiTexture = new ASCIITexture(),
+    cellSize = 16,
+    color = null,
+    inverted = false,
+  }: ASCIIEffectOptions = {}) {
+    super("ASCIIEffect");
 
-  constructor({ asciiTexture = new ASCIITexture(), cellSize = 16, color, inverted = false }: ASCIIEffectOptions = {}) {
-    super("ASCIIEffect", fragmentShader, {
-      uniforms: new Map<string, Uniform>([
-        ["asciiTexture", new Uniform(null)],
-        ["cellCount", new Uniform(new Vector4())],
-        ["color", new Uniform(new Color())],
-      ]),
-    });
+    this.fragmentShader = fragmentShader;
 
-    /**
-     * @see {@link cellSize}
-     * @type {Number}
-     * @private
-     */
-
-    this._cellSize = -1;
-
-    /**
-     * The current resolution.
-     *
-     * @type {Vector2}
-     * @private
-     */
-
-    this.resolution = new Vector2();
+    const uniforms = this.input.uniforms;
+    uniforms.set("asciiTexture", new Uniform(null));
+    uniforms.set("color", new Uniform(new Vector4()));
+    uniforms.set("cellCount", new Uniform(new Color()));
 
     this.asciiTexture = asciiTexture;
     this.cellSize = cellSize;
-    this.color = color ?? null;
+    this.color = color;
     this.inverted = inverted;
   }
 
@@ -67,12 +45,12 @@ export class ASCIIEffect extends Effect {
    */
 
   get asciiTexture(): ASCIITexture {
-    return this.uniforms.get("asciiTexture")!.value as ASCIITexture;
+    return this.input.uniforms.get("asciiTexture").value;
   }
 
   set asciiTexture(value: ASCIITexture) {
-    const currentTexture = this.uniforms.get("asciiTexture")!.value as ASCIITexture;
-    this.uniforms.get("asciiTexture")!.value = value;
+    const currentTexture = this.input.uniforms.get("asciiTexture").value;
+    this.input.uniforms.get("asciiTexture").value = value;
 
     if (currentTexture !== null && currentTexture !== value) {
       currentTexture.dispose();
@@ -80,9 +58,11 @@ export class ASCIIEffect extends Effect {
 
     if (value !== null) {
       const cellCount = value.cellCount;
-      this.defines.set("CHAR_COUNT_MINUS_ONE", (value.characterCount - 1).toFixed(1));
-      this.defines.set("CELL_COUNT", cellCount.toFixed(1));
-      this.defines.set("INV_CELL_COUNT", (1.0 / cellCount).toFixed(9));
+
+      this.input.defines.set("CHAR_COUNT_MINUS_ONE", (value.characterCount - 1).toFixed(1));
+      this.input.defines.set("CELL_COUNT", cellCount.toFixed(1));
+      this.input.defines.set("INV_CELL_COUNT", (1.0 / cellCount).toFixed(9));
+
       this.setChanged();
     }
   }
@@ -93,20 +73,20 @@ export class ASCIIEffect extends Effect {
    * @type {Color | String | Number | null}
    */
 
-  get color(): Color | null {
-    return this.uniforms.get("color")!.value as Color;
+  get color() {
+    return this.input.uniforms.get("color").value;
   }
 
-  set color(value: Color | number | null) {
+  set color(value) {
     if (value !== null) {
-      this.uniforms.get("color")!.value.set(value);
+      this.input.uniforms.get("color").value.set(value);
     }
 
-    if (this.defines.has("USE_COLOR") && value === null) {
-      this.defines.delete("USE_COLOR");
+    if (this.input.defines.has("USE_COLOR") && value === null) {
+      this.input.defines.delete("USE_COLOR");
       this.setChanged();
-    } else if (!this.defines.has("USE_COLOR") && value !== null) {
-      this.defines.set("USE_COLOR", "1");
+    } else if (!this.input.defines.has("USE_COLOR") && value !== null) {
+      this.input.defines.set("USE_COLOR", "1");
       this.setChanged();
     }
   }
@@ -118,15 +98,15 @@ export class ASCIIEffect extends Effect {
    */
 
   get inverted(): boolean {
-    return this.defines.has("INVERTED");
+    return this.input.defines.has("INVERTED");
   }
 
   set inverted(value: boolean) {
     if (this.inverted !== value) {
       if (value) {
-        this.defines.set("INVERTED", "1");
+        this.input.defines.set("INVERTED", "1");
       } else {
-        this.defines.delete("INVERTED");
+        this.input.defines.delete("INVERTED");
       }
 
       this.setChanged();
@@ -153,15 +133,14 @@ export class ASCIIEffect extends Effect {
   /**
    * Updates the cell count uniform.
    *
-   * @private
    */
 
-  updateCellCount() {
-    const cellCount = this.uniforms.get("cellCount")!.value as Vector4;
+  private updateCellCount() {
+    const cellCount = this.input.uniforms.get("cellCount").value;
     const resolution = this.resolution;
 
-    cellCount.x = resolution.x / this.cellSize;
-    cellCount.y = resolution.y / this.cellSize;
+    cellCount.x = resolution.width / this.cellSize;
+    cellCount.y = resolution.height / this.cellSize;
     cellCount.z = 1.0 / cellCount.x;
     cellCount.w = 1.0 / cellCount.y;
   }
@@ -169,8 +148,6 @@ export class ASCIIEffect extends Effect {
   /**
    * Updates the size of this pass.
    *
-   * @param {Number} width - The width.
-   * @param {Number} height - The height.
    */
 
   setSize(width: number, height: number) {
