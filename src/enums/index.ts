@@ -1,4 +1,5 @@
 export * from "./ColorChannel.js";
+export * from "./DitheringType.js";
 export * from "./DepthCopyMode.js";
 export * from "./DepthTestStrategy.js";
 export * from "./EffectShaderSection.js";
