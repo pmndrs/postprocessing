@@ -49,15 +49,13 @@ export interface ASCIITextureOptions {
 export class ASCIITexture extends CanvasTexture {
 
 	/**
-   * The amount of characters in this texture.
-   *
-   */
+    * The amount of characters in this texture.
+    */
 	readonly characterCount: number;
 
 	/**
-   * The amount of cells along each side of the texture.
-   *
-   */
+    * The amount of cells along each side of the texture.
+    */
 	readonly cellCount: number;
 
 	constructor({
@@ -68,7 +66,12 @@ export class ASCIITexture extends CanvasTexture {
 		cellCount = 16
 	}: ASCIITextureOptions = {}) {
 
-		super(document.createElement("canvas"), undefined, RepeatWrapping, RepeatWrapping);
+		super(
+			document.createElement("canvas"),
+			undefined,
+			RepeatWrapping,
+			RepeatWrapping
+		);
 
 		this.characterCount = characters.length;
 		this.cellCount = cellCount;

@@ -106,7 +106,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Settings
 
 	const params = {
-		inverted: false,
 		useSceneColor: true
 	};
 
@@ -115,11 +114,11 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const fpsGraph = Utils.createFPSGraph(pane);
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addBinding(effect, "inverted").on("change", (e) => effect.inverted = e.value);
-	folder.addBinding(effect, "cellSize", { min: 10, max: 100, step: 2 });
+	folder.addBinding(effect, "inverted");
+	folder.addBinding(effect, "cellSize", { min: 2, max: 24, step: 2 });
 	folder.addBinding(effect, "color", { color: { type: "float" } });
-	folder.addBinding(params, "useSceneColor")
-		.on("change", (e) => void (effect.color = e.value ? null : effect.color.getHex()));
+	folder.addBinding(params, "useSceneColor").on("change",
+		(e) => void (effect.color = e.value ? null : effect.color.getHex()));
 
 	Utils.addBlendModeBindings(folder, effect.blendMode);
 
