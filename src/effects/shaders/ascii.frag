@@ -7,10 +7,10 @@ uniform vec4 cellCount; // XY = cell count, ZW = inv cell count
 
 #endif
 
-vec4 mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
+vec4 mainImage(const in vec4 inputColor, const in vec2 uv, const in GData gData) {
 
 	vec2 pixelizedUv = cellCount.zw * (0.5 + floor(uv * cellCount.xy));
-	vec4 texel = texture2D(inputBuffer, pixelizedUv);
+	vec4 texel = texture2D(asciiTexture, pixelizedUv);
 	float lum = luminance(texel.rgb);
 
 	#ifdef INVERTED
@@ -28,11 +28,11 @@ vec4 mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
 
 	#ifdef USE_COLOR
 
-		outputColor = vec4(color * asciiCharacter.r, inputColor.a);
-
+		return vec4(color * asciiCharacter.r, inputColor.a);
+		
 	#else
 
-		outputColor = vec4(texel.rgb * asciiCharacter.r, inputColor.a);
+		return vec4(texel.rgb * asciiCharacter.r, inputColor.a);
 
 	#endif
 

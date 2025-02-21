@@ -1,7 +1,6 @@
 import { Color, Uniform, Vector4 } from "three";
 import { ASCIITexture } from "../textures/ASCIITexture.js";
 import { Effect } from "./Effect.js";
-import { AddBlendFunction } from "./blending/index.js";
 
 import fragmentShader from "./shaders/ascii.frag";
 
@@ -12,10 +11,34 @@ import fragmentShader from "./shaders/ascii.frag";
  */
 
 export interface ASCIIEffectOptions {
-  asciiTexture?: ASCIITexture;
-  cellSize?: number;
-  color?: Color;
-  inverted?: boolean;
+
+	/**
+	 * An ASCII lookup texture.
+	 *
+	 * @defaultValue ASCIITexture
+	 */
+
+	asciiTexture?: ASCIITexture;
+
+	/**
+	 * The size of a single cell in pixels.
+	 * @defaultValue 16
+	 */
+
+	cellSize?: number;
+
+	/**
+	 * A color that overrides the scene colors.
+	 * @defaultValue new Color(1.0, 1.0, 1.0)
+	 */
+
+	color?: Color | string | number | null;
+
+	/**
+	 * Whether the effect should be inverted.
+	 * @defaultValue false
+	 */
+	inverted?: boolean;
 }
 
 /**
@@ -25,147 +48,180 @@ export interface ASCIIEffectOptions {
  */
 
 export class ASCIIEffect extends Effect {
-  /**
-   * @see {@link cellSize}
-   */
 
-  private _cellSize = -1;
+	/**
+    * @see {@link cellSize}
+    */
 
-  constructor({
-    asciiTexture = new ASCIITexture(),
-    cellSize = 16,
-    color = new Color(1.0, 1.0, 1.0),
-    inverted = false,
-  }: ASCIIEffectOptions = {}) {
-    super("ASCIIEffect");
+	private _cellSize!: number;
 
-    this.fragmentShader = fragmentShader;
-    this.blendMode.blendFunction = new AddBlendFunction();
+	constructor({
+		asciiTexture = new ASCIITexture(),
+		cellSize = 16,
+		color = new Color(1.0, 1.0, 1.0),
+		inverted = false
+	}: ASCIIEffectOptions = {}) {
 
-    const uniforms = this.input.uniforms;
-    uniforms.set("asciiTexture", new Uniform(null));
-    uniforms.set("color", new Uniform(new Vector4()));
-    uniforms.set("cellCount", new Uniform(new Color()));
+		super("ASCIIEffect");
 
-    this.asciiTexture = asciiTexture;
-    this.cellSize = cellSize;
-    this.color = color;
-    this.inverted = inverted;
-  }
+		this.fragmentShader = fragmentShader;
 
-  /**
-   * The current ASCII lookup texture.
-   *
-   */
+		const uniforms = this.input.uniforms;
+		uniforms.set("asciiTexture", new Uniform(null));
+		uniforms.set("cellCount", new Uniform(new Vector4()));
+		uniforms.set("color", new Uniform(new Color()));
 
-  get asciiTexture(): ASCIITexture {
-    return this.input.uniforms.get("asciiTexture")!.value as ASCIITexture;
-  }
 
-  set asciiTexture(value: ASCIITexture) {
-    const currentTexture = this.input.uniforms.get("asciiTexture")!.value as ASCIITexture;
-    this.input.uniforms.get("asciiTexture")!.value = value;
+		this.asciiTexture = asciiTexture;
+		this.cellSize = cellSize;
+		this.color = color;
+		this.inverted = inverted;
 
-    if (currentTexture !== null && currentTexture !== value) {
-      currentTexture.dispose();
-    }
+	}
 
-    if (value !== null) {
-      const cellCount = value.cellCount;
+	/**
+   	* The current ASCII lookup texture.
+   	*/
 
-      this.input.defines.set("CHAR_COUNT_MINUS_ONE", (value.characterCount - 1).toFixed(1));
-      this.input.defines.set("CELL_COUNT", cellCount.toFixed(1));
-      this.input.defines.set("INV_CELL_COUNT", (1.0 / cellCount).toFixed(9));
+	get asciiTexture(): ASCIITexture {
 
-      this.setChanged();
-    }
-  }
+		return this.input.uniforms.get("asciiTexture")!.value as ASCIITexture;
 
-  /**
+	}
+
+	set asciiTexture(value: ASCIITexture) {
+
+		const currentTexture = this.input.uniforms.get("asciiTexture")!.value as ASCIITexture;
+		this.input.uniforms.get("asciiTexture")!.value = value;
+
+		if(currentTexture !== null && currentTexture !== value) {
+
+			currentTexture.dispose();
+
+		}
+
+		if(value !== null) {
+
+			const cellCount = value.cellCount;
+
+			this.input.defines.set("CHAR_COUNT_MINUS_ONE", (value.characterCount - 1).toFixed(1));
+			this.input.defines.set("CELL_COUNT", cellCount.toFixed(1));
+			this.input.defines.set("INV_CELL_COUNT", (1.0 / cellCount).toFixed(9));
+
+			this.setChanged();
+
+		}
+
+	}
+
+	/**
    * A color that overrides the scene colors.
-   *
    */
 
-  get color(): Color {
-    return this.input.uniforms.get("color")!.value as Color;
-  }
+	get color(): Color {
 
-  set color(value: Color) {
-    if (value !== null) {
-      const colorUniform = this.input.uniforms.get("color");
-      if (colorUniform && colorUniform.value instanceof Color) {
-        colorUniform.value.set(value);
-      }
-    }
+		return this.input.uniforms.get("color")!.value as Color;
 
-    if (this.input.defines.has("USE_COLOR") && value === null) {
-      this.input.defines.delete("USE_COLOR");
-      this.setChanged();
-    } else if (!this.input.defines.has("USE_COLOR") && value !== null) {
-      this.input.defines.set("USE_COLOR", "1");
-      this.setChanged();
-    }
-  }
+	}
 
-  /**
+	set color(value: Color | string | number | null) {
+
+		if(value !== null) {
+
+			const color = this.input.uniforms.get("color")!.value as Color;
+			color.set(value);
+
+		}
+
+		if(this.input.defines.has("USE_COLOR") && value === null) {
+
+			this.input.defines.delete("USE_COLOR");
+			this.setChanged();
+
+		} else if(!this.input.defines.has("USE_COLOR") && value !== null) {
+
+			this.input.defines.set("USE_COLOR", "1");
+			this.setChanged();
+
+		}
+
+	}
+
+	/**
    * Controls whether the effect should be inverted.
-   *
    */
 
-  get inverted(): boolean {
-    return this.input.defines.has("INVERTED");
-  }
+	get inverted(): boolean {
 
-  set inverted(value: boolean) {
-    if (this.inverted !== value) {
-      if (value) {
-        this.input.defines.set("INVERTED", "1");
-      } else {
-        this.input.defines.delete("INVERTED");
-      }
+		return this.input.defines.has("INVERTED");
 
-      this.setChanged();
-    }
-  }
+	}
 
-  /**
-   * The cell size.
-   *
-   */
+	set inverted(value: boolean) {
 
-  get cellSize(): number {
-    return this._cellSize;
-  }
+		if(this.inverted !== value) {
 
-  set cellSize(value: number) {
-    if (this._cellSize !== value) {
-      this._cellSize = value;
-      this.updateCellCount();
-    }
-  }
+			if(value) {
 
-  /**
-   * Updates the cell count uniform.
-   *
-   */
+				this.input.defines.set("INVERTED", true);
 
-  private updateCellCount(): void {
-    const cellCount = this.input.uniforms.get("cellCount")!.value as Vector4;
-    const resolution = this.resolution;
+			} else {
 
-    cellCount.x = resolution.width / this.cellSize;
-    cellCount.y = resolution.height / this.cellSize;
-    cellCount.z = 1.0 / cellCount.x;
-    cellCount.w = 1.0 / cellCount.y;
-  }
+				this.input.defines.delete("INVERTED");
 
-  /**
-   * Updates the size of this pass.
-   *
-   */
+			}
 
-  // setSize(width: number, height: number) {
-  //   this.resolution.set(width, height);
-  //   this.updateCellCount();
-  // }
+			this.setChanged();
+
+		}
+
+	}
+
+	/**
+   	* The cell size.
+   	*/
+
+	get cellSize(): number {
+
+		return this._cellSize;
+
+	}
+
+	set cellSize(value: number) {
+
+		if(this._cellSize !== value) {
+
+			this._cellSize = value;
+			this.updateCellCount();
+
+		}
+
+	}
+
+	/**
+   	* Updates the cell count uniform.
+   	*/
+
+	private updateCellCount(): void {
+
+		const cellCount = this.input.uniforms.get("cellCount")!.value as Vector4;
+		const resolution = this.resolution;
+
+		cellCount.x = resolution.width / this.cellSize;
+		cellCount.y = resolution.height / this.cellSize;
+		cellCount.z = 1.0 / cellCount.x;
+		cellCount.w = 1.0 / cellCount.y;
+
+	}
+
+	/**
+   	* Updates the size of this pass.
+   	*/
+
+	protected override onResolutionChange(): void {
+
+		this.updateCellCount();
+
+	}
+
 }
