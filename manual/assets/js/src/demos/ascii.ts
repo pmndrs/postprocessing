@@ -140,22 +140,20 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Render Loop
 
-	pipeline
-		.compile()
-		.then(() => {
+	pipeline.compile().then(() => {
 
-			container.prepend(renderer.domElement);
+		container.prepend(renderer.domElement);
 
-			renderer.setAnimationLoop((timestamp) => {
+		renderer.setAnimationLoop((timestamp) => {
 
-				fpsGraph.begin();
-				controls.update(timestamp);
-				pipeline.render(timestamp);
-				fpsGraph.end();
+			fpsGraph.begin();
+			controls.update(timestamp);
+			pipeline.render(timestamp);
+			fpsGraph.end();
 
-			});
+		});
 
-		})
+	})
 		.catch((e) => console.error(e));
 
 })
