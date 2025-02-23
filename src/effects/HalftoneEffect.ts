@@ -84,10 +84,9 @@ export interface HalftoneEffectOptions {
 /**
  * A halftone effect.
  *
- * Based on the implementation found in Three.js:
- * https://github.com/mrdoob/three.js/blob/0bf3908b73b2cf73d7361cce17cfc8b816cb2a00/examples/jsm/postprocessing/HalftonePass.js
- *
  * @category Effects
+ * @see https://github.com/meatbags/after-effects-plugins/blob/master/Halftone/HalftoneSampler.hpp
+ * @see https://github.com/mrdoob/three.js/blob/0bf3908b73b2cf73d7361cce17cfc8b816cb2a00/examples/jsm/postprocessing/HalftonePass.js
  */
 
 export class HalftoneEffect extends Effect {
