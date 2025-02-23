@@ -124,7 +124,6 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		}
 
-		this.effectMaterialManager.effects = value;
 		this.subpasses = value;
 
 	}
@@ -166,7 +165,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 			}
 
 			// Get the material for the current effect combination.
-			this.fullscreenMaterial = this.effectMaterialManager.getMaterial();
+			this.fullscreenMaterial = this.effectMaterialManager.getMaterial(this.effects);
 
 			// Pick up new materials.
 			for(const material of this.effectMaterialManager.materials) {
