@@ -15,7 +15,7 @@ test("can be instantiated", t => {
 test("returns a material", t => {
 
 	const manager = new EffectMaterialManager();
-	t.truthy(manager.getMaterial());
+	t.truthy(manager.getMaterial([]));
 
 });
 
@@ -31,9 +31,8 @@ test("creates materials for all effect combinations", t => {
 
 	const manager = new EffectMaterialManager(emptyShaderData);
 	manager.gBufferConfig = new GBufferConfig();
-	manager.effects = effects;
 
-	t.truthy(manager.getMaterial());
+	t.truthy(manager.getMaterial(effects));
 	t.is(Array.from(manager.materials).length, 8 /* 2^3 */);
 
 });
@@ -55,9 +54,8 @@ test("creates materials on demand if there are too many optional effects", t => 
 
 	const manager = new EffectMaterialManager(emptyShaderData);
 	manager.gBufferConfig = new GBufferConfig();
-	manager.effects = effects;
 
-	t.truthy(manager.getMaterial());
+	t.truthy(manager.getMaterial(effects));
 	t.is(Array.from(manager.materials).length, 1);
 
 });
