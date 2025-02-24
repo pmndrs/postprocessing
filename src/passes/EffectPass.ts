@@ -29,7 +29,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 	private readonly effectListener: (e: Event3) => void;
 
 	/**
-	 * An event listener that calls {@link handleToggleEvent}.
+	 * An event listener that calls {@link handleGBufferConfigEvent}.
 	 */
 
 	private readonly gBufferConfigListener: (e: Event3) => void;
