@@ -64,7 +64,7 @@ export abstract class Effect extends Pass {
 		super(name);
 
 		this.blendMode = new BlendMode(new SrcBlendFunction());
-		this.blendMode.addEventListener(Pass.EVENT_CHANGE, () => this.setChanged());
+		this.blendMode.addEventListener(BlendMode.EVENT_CHANGE, () => this.setChanged());
 
 		this._fragmentShader = null;
 		this._vertexShader = null;

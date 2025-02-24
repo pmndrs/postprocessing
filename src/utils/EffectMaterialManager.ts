@@ -1,11 +1,10 @@
-import { Event as Event3, SRGBColorSpace, Texture } from "three";
+import { SRGBColorSpace } from "three";
 import { Disposable } from "../core/Disposable.js";
 import { Effect } from "../effects/Effect.js";
 import { EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
 import { GBufferConfig } from "./GBufferConfig.js";
 import { EffectShaderData } from "./EffectShaderData.js";
 import { EffectMaterial } from "../materials/EffectMaterial.js";
-import { Pass } from "../core/Pass.js";
 import { ShaderData } from "../core/ShaderData.js";
 
 /**
@@ -58,24 +57,12 @@ export class EffectMaterialManager implements Disposable {
 	private readonly effectShaderDataCache: Map<Effect, EffectShaderData>;
 
 	/**
-	 * An event listener that calls {@link invalidateShaderData}.
-	 */
-
-	private readonly effectChangeListener: (e: Event3) => void;
-
-	/**
 	 * A material that is currently active.
 	 */
 
 	private activeMaterial: EffectMaterial | null;
 
 	// #region Backing Data
-
-	/**
-	 * @see {@link effects}
-	 */
-
-	private _effects: Effect[];
 
 	/**
 	 * @see {@link gBufferConfig}
@@ -88,12 +75,6 @@ export class EffectMaterialManager implements Disposable {
 	 */
 
 	private _dithering: boolean;
-
-	/**
-	 * @see {@link gBuffer}
-	 */
-
-	private _gBuffer: Record<string, Texture | null> | null;
 
 	// #endregion
 
@@ -109,13 +90,10 @@ export class EffectMaterialManager implements Disposable {
 		this.defaultMaterial = new EffectMaterial();
 		this.materialCache = new Map<string, EffectMaterial>();
 		this.effectShaderDataCache = new Map<Effect, EffectShaderData>();
-		this.effectChangeListener = (e: Event3) => this.effectShaderDataCache.delete(e.target as Effect);
 		this.activeMaterial = null;
 
-		this._effects = [];
 		this._gBufferConfig = null;
 		this._dithering = false;
-		this._gBuffer = null;
 
 	}
 
@@ -126,31 +104,6 @@ export class EffectMaterialManager implements Disposable {
 	get materials(): Iterable<EffectMaterial> {
 
 		return this.materialCache.values();
-
-	}
-
-	/**
-	 * The current effects.
-	 *
-	 * Assigning new effects will invalidate all caches.
-	 */
-
-	get effects(): Effect[] {
-
-		return this._effects;
-
-	}
-
-	set effects(value: Effect[]) {
-
-		this.dispose();
-		this._effects = value;
-
-		for(const effect of this._effects) {
-
-			effect.addEventListener(Pass.EVENT_CHANGE, this.effectChangeListener);
-
-		}
 
 	}
 
@@ -253,7 +206,7 @@ export class EffectMaterialManager implements Disposable {
 	/**
 	 * Creates a material based on the given effects.
 	 *
-	 * @param effects - The effects.
+	 * @param effects - The effects that make up the material.
 	 * @return The material.
 	 * @throws If the material couldn't be created.
 	 */
@@ -338,12 +291,12 @@ export class EffectMaterialManager implements Disposable {
 	 * If there are no optional effects or if there are too many optional effects, only the required material for the
 	 * currently active effects will be created.
 	 *
+	 * @param effects - The effects.
 	 * @throws If the materials couldn't be created.
 	 */
 
-	private createMaterials(): void {
+	private createMaterials(effects: readonly Effect[]): void {
 
-		const effects = this.effects;
 		const optionalEffects = effects.filter(x => x.optional);
 		const tooManyOptionalEffects = optionalEffects.length > EffectMaterialManager.MAX_OPTIONAL_EFFECTS;
 
@@ -354,18 +307,18 @@ export class EffectMaterialManager implements Disposable {
 			const id = EffectMaterialManager.getMaterialId(combination);
 			this.materialCache.set(id, this.createMaterial(combination));
 
-		} else {
+			return;
 
-			// Create materials for all effect combinations.
-			for(const combination of this.getEffectCombinations()) {
+		}
 
-				const id = EffectMaterialManager.getMaterialId(combination);
+		// Create materials for all effect combinations.
+		for(const combination of this.getEffectCombinations(effects)) {
 
-				if(!this.materialCache.has(id)) {
+			const id = EffectMaterialManager.getMaterialId(combination);
 
-					this.materialCache.set(id, this.createMaterial(combination));
+			if(!this.materialCache.has(id)) {
 
-				}
+				this.materialCache.set(id, this.createMaterial(combination));
 
 			}
 
@@ -374,7 +327,7 @@ export class EffectMaterialManager implements Disposable {
 	}
 
 	/**
-	 * Synchronizes the base macros of all materials based on the active material.
+	 * Synchronizes the cached materials with the active material.
 	 */
 
 	private synchronizeMaterials(): void {
@@ -437,7 +390,7 @@ export class EffectMaterialManager implements Disposable {
 	 * @throws If the current effects cannot be merged.
 	 */
 
-	getMaterial(): EffectMaterial {
+	getMaterial(effects: readonly Effect[]): EffectMaterial {
 
 		if(this.gBufferConfig === null) {
 
@@ -448,12 +401,12 @@ export class EffectMaterialManager implements Disposable {
 
 		this.synchronizeMaterials();
 
-		const activeEffects = this.effects.filter(x => x.enabled);
+		const activeEffects = effects.filter(x => x.enabled);
 		const id = EffectMaterialManager.getMaterialId(activeEffects);
 
 		if(!this.materialCache.has(id)) {
 
-			this.createMaterials();
+			this.createMaterials(effects);
 
 		}
 
@@ -465,13 +418,13 @@ export class EffectMaterialManager implements Disposable {
 	/**
 	 * Returns all possible effect combinations based on the {@link Effect.optional} flag.
 	 *
-	 * @see https://www.geeksforgeeks.org/find-all-the-combinations-of-the-array-values-in-javascript/
+	 * @see https://www.geeksforgeeks.org/find-all-the-combinations-of-the-array-values-in-javascript
+	 * @param effects - The effects.
 	 * @return An iterator that returns the effect combinations.
 	 */
 
-	private *getEffectCombinations(): IterableIterator<Effect[]> {
+	private *getEffectCombinations(effects: readonly Effect[]): IterableIterator<Effect[]> {
 
-		const effects = this.effects;
 		const optionalEffects = effects.filter(x => x.optional);
 		const n = optionalEffects.length;
 		const m = 1 << n;
@@ -513,17 +466,22 @@ export class EffectMaterialManager implements Disposable {
 
 	}
 
+	/**
+	 * Invalidates the shader data associated with the given effect.
+	 *
+	 * @param effect - The effect for which the shader data should be deleted.
+	 */
+
+	invalidateShaderData(effect: Effect): void {
+
+		this.effectShaderDataCache.delete(effect);
+
+	}
+
 	dispose(): void {
-
-		for(const effect of this._effects) {
-
-			effect.removeEventListener(Pass.EVENT_CHANGE, this.effectChangeListener);
-
-		}
 
 		this.invalidateMaterialCache();
 		this.effectShaderDataCache.clear();
-		this.activeMaterial = null;
 
 	}
 
