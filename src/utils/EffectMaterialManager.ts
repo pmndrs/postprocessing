@@ -123,8 +123,7 @@ export class EffectMaterialManager implements Disposable {
 
 		if(this._gBufferConfig !== value) {
 
-			this.invalidateMaterialCache();
-			this.effectShaderDataCache.clear();
+			this.dispose();
 			this._gBufferConfig = value;
 
 		}
