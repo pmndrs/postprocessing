@@ -123,7 +123,8 @@ export class EffectMaterialManager implements Disposable {
 
 		if(this._gBufferConfig !== value) {
 
-			this.dispose();
+			this.invalidateMaterialCache();
+			this.effectShaderDataCache.clear();
 			this._gBufferConfig = value;
 
 		}
@@ -463,6 +464,18 @@ export class EffectMaterialManager implements Disposable {
 		}
 
 		this.materialCache.clear();
+
+	}
+
+	/**
+	 * Invalidates the shader data associated with the given effect.
+	 *
+	 * @param effect - The effect for which the shader data should be deleted.
+	 */
+
+	invalidateShaderData(effect: Effect): void {
+
+		this.effectShaderDataCache.delete(effect);
 
 	}
 
