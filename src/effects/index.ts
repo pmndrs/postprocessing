@@ -1,5 +1,6 @@
 export * from "./blending/index.js";
 
+export * from "./ASCIIEffect.js";
 export * from "./BloomEffect.js";
 export * from "./ColorDepthEffect.js";
 export * from "./Effect.js";
