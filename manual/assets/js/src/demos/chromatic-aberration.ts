@@ -2,6 +2,7 @@ import {
 	CubeTextureLoader,
 	LoadingManager,
 	PerspectiveCamera,
+	PointLight,
 	SRGBColorSpace,
 	Scene,
 	Texture,
@@ -11,40 +12,47 @@ import {
 
 import {
 	ClearPass,
+	EffectPass,
 	GeometryPass,
-	RenderPipeline
+	RenderPipeline,
+	ToneMappingEffect
 } from "postprocessing";
 
+import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { Pane } from "tweakpane";
 import { SpatialControls } from "spatial-controls";
-import * as DefaultEnvironment from "../objects/DefaultEnvironment.js";
 import * as Utils from "../utils/index.js";
 
-function load(): Promise<Map<string, Texture>> {
+function load(): Promise<Map<string, Texture | GLTF>> {
 
-	const assets = new Map<string, Texture>();
+	const assets = new Map<string, Texture | GLTF>();
 	const loadingManager = new LoadingManager();
-	const textureLoader = new TextureLoader(loadingManager);
+	const gltfLoader = new GLTFLoader(loadingManager);
 	const cubeTextureLoader = new CubeTextureLoader(loadingManager);
+	const textureLoader = new TextureLoader(loadingManager);
 
-	return new Promise<Map<string, Texture>>((resolve, reject) => {
+	return new Promise<Map<string, Texture | GLTF>>((resolve, reject) => {
 
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		cubeTextureLoader.load(Utils.getSkyboxUrls("space", ".jpg"), (t) => {
+		cubeTextureLoader.load(Utils.getSkyboxUrls("space-02", ".jpg"), (t) => {
 
 			t.colorSpace = SRGBColorSpace;
 			assets.set("sky", t);
 
 		});
 
-		textureLoader.load("img/textures/checkerboard.png", (t) => {
+		textureLoader.load("img/textures/perturb.jpg", (t) => {
 
-			t.colorSpace = SRGBColorSpace;
-			assets.set("checkerboard", t);
+			assets.set("perturb", t);
 
 		});
+
+		gltfLoader.load(
+			`${document.baseURI}models/venator-hallway/venator-hallway.glb`,
+			(gltf) => assets.set("model", gltf)
+		);
 
 	});
 
@@ -70,36 +78,54 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const controls = new SpatialControls(camera.position, camera.quaternion, renderer.domElement);
 	const settings = controls.settings;
 	settings.rotation.sensitivity = 2.2;
-	settings.rotation.damping = 0.025;
+	settings.rotation.damping = 0.05;
 	settings.translation.damping = 0.1;
-	controls.position.set(0, 1.75, 1);
-	controls.lookAt(0, 1.75, 0);
+	settings.translation.sensitivity = 2;
+	controls.position.set(0, 1.5, -1);
+	controls.lookAt(0, 1.45, 1);
 
 	// Scene, Lights, Objects
 
 	const scene = new Scene();
-	const skyMap = assets.get("sky")!;
+	const skyMap = assets.get("sky")! as Texture;
 	scene.background = skyMap;
 	scene.environment = skyMap;
-	scene.fog = DefaultEnvironment.createFog();
-	scene.add(DefaultEnvironment.createEnvironment());
+
+	const light0 = new PointLight(0xffffff, 20, 0, 2);
+	light0.position.set(0, 2, 0);
+	scene.add(light0);
+
+	const light1 = new PointLight(0xffffff, 10, 6, 2);
+	light1.position.set(0, 2, 8);
+	scene.add(light1);
+
+	const light2 = new PointLight(0xffffff, 20, 20, 2);
+	light2.position.set(15, 2, 0);
+	scene.add(light2);
+
+	const light3 = new PointLight(0xffffff, 10, 6, 2);
+	light3.position.set(-8, 2, 0);
+	scene.add(light3);
+
+	const gltf = assets.get("model") as GLTF;
+	Utils.setAnisotropy(gltf.scene, Math.min(8, renderer.capabilities.getMaxAnisotropy()));
+	scene.add(gltf.scene);
 
 	// Post Processing
-
-	const pipeline = new RenderPipeline(renderer);
-	pipeline.add(
-		new ClearPass(),
-		new GeometryPass(scene, camera, { samples: 4 })
-	);
 
 	/*
 	const effect = new ChromaticAberrationEffect({
 		offset: new Vector2(0.0025, 0.0025),
 		radialModulation: true
 	});
-
-	pipeline.addPass(new EffectPass(effect, new ToneMappingEffect()));
 	*/
+
+	const pipeline = new RenderPipeline(renderer);
+	pipeline.add(
+		new ClearPass(),
+		new GeometryPass(scene, camera, { samples: 4 }),
+		new EffectPass(new ToneMappingEffect())
+	);
 
 	// Settings
 
@@ -115,6 +141,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 		x: { min: -1e-2, max: 1e-2, step: 1e-5 },
 		y: { min: -1e-2, max: 1e-2, step: 1e-5, inverted: true }
 	});
+
+	Utils.addBlendModeBindings(folder, effect.blendMode);
 	*/
 
 	// Resize Handler

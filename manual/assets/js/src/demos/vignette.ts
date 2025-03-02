@@ -19,28 +19,36 @@ import {
 	VignetteTechnique
 } from "postprocessing";
 
+import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+
 import { Pane } from "tweakpane";
 import { SpatialControls } from "spatial-controls";
 import * as DefaultEnvironment from "../objects/DefaultEnvironment.js";
 import * as Utils from "../utils/index.js";
 
-function load(): Promise<Map<string, Texture>> {
+function load(): Promise<Map<string, Texture | GLTF>> {
 
-	const assets = new Map<string, Texture>();
+	const assets = new Map<string, Texture | GLTF>();
 	const loadingManager = new LoadingManager();
+	const gltfLoader = new GLTFLoader(loadingManager);
 	const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
-	return new Promise<Map<string, Texture>>((resolve, reject) => {
+	return new Promise<Map<string, Texture | GLTF>>((resolve, reject) => {
 
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		cubeTextureLoader.load(Utils.getSkyboxUrls("space", ".jpg"), (t) => {
+		cubeTextureLoader.load(Utils.getSkyboxUrls("sunset"), (t) => {
 
 			t.colorSpace = SRGBColorSpace;
 			assets.set("sky", t);
 
 		});
+
+		gltfLoader.load(
+			`${document.baseURI}models/plastic-garden-chair/plastic-garden-chair.glb`,
+			(gltf) => assets.set("model", gltf)
+		);
 
 	});
 
@@ -67,17 +75,23 @@ window.addEventListener("load", () => void load().then((assets) => {
 	settings.rotation.sensitivity = 2.2;
 	settings.rotation.damping = 0.05;
 	settings.translation.damping = 0.1;
-	controls.position.set(0, 1.5, 10);
-	controls.lookAt(0, 1.35, 0);
+	controls.position.set(0, 1.15, 0);
+	controls.lookAt(0, 1.15, -1);
 
 	// Scene, Lights, Objects
 
 	const scene = new Scene();
-	const skyMap = assets.get("sky")!;
+	const skyMap = assets.get("sky")! as Texture;
 	scene.background = skyMap;
 	scene.environment = skyMap;
 	scene.fog = DefaultEnvironment.createFog();
 	scene.add(DefaultEnvironment.createEnvironment());
+	scene.add(DefaultEnvironment.createLights());
+
+	const gltf = assets.get("model") as GLTF;
+	Utils.setAnisotropy(gltf.scene, Math.min(8, renderer.capabilities.getMaxAnisotropy()));
+	gltf.scene.rotateY(Math.PI);
+	scene.add(gltf.scene);
 
 	// Post Processing
 
@@ -89,7 +103,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	effect.blendMode.blendFunction = new MixBlendFunction();
 	const effectPass = new EffectPass(new ToneMappingEffect(), effect);
-	effectPass.dithering = true;
 
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.add(

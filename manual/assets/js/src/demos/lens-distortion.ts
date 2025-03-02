@@ -34,7 +34,7 @@ function load(): Promise<Map<string, Texture>> {
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		cubeTextureLoader.load(Utils.getSkyboxUrls("space", ".jpg"), (t) => {
+		cubeTextureLoader.load(Utils.getSkyboxUrls("sunset"), (t) => {
 
 			t.colorSpace = SRGBColorSpace;
 			assets.set("sky", t);
@@ -67,8 +67,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 	settings.rotation.sensitivity = 2.2;
 	settings.rotation.damping = 0.05;
 	settings.translation.damping = 0.1;
-	controls.position.set(0, 0.5, 10);
-	controls.lookAt(0, 1.5, 0);
+	controls.position.set(0, 1.5, 3);
+	controls.lookAt(0, 1.25, 0);
 
 	// Scene, Lights, Objects
 
@@ -78,12 +78,13 @@ window.addEventListener("load", () => void load().then((assets) => {
 	scene.environment = skyMap;
 	scene.fog = DefaultEnvironment.createFog();
 	scene.add(DefaultEnvironment.createEnvironment());
+	scene.add(DefaultEnvironment.createLights());
 
 	// Post Processing
 
 	const effect = new LensDistortionEffect({
-		distortion: new Vector2(0.15, 0.15),
-		focalLength: new Vector2(0.75, 0.75)
+		distortion: new Vector2(-0.2, -0.2),
+		focalLength: new Vector2(1, 1)
 	});
 
 	const pipeline = new RenderPipeline(renderer);

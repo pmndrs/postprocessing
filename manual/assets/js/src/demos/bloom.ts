@@ -18,7 +18,6 @@ import {
 } from "postprocessing";
 
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-
 import { Pane } from "tweakpane";
 import { SpatialControls } from "spatial-controls";
 import * as DefaultEnvironment from "../objects/DefaultEnvironment.js";
@@ -36,7 +35,7 @@ function load(): Promise<Map<string, Texture | GLTF>> {
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		cubeTextureLoader.load(Utils.getSkyboxUrls("space", ".jpg"), (t) => {
+		cubeTextureLoader.load(Utils.getSkyboxUrls("space-01", ".jpg"), (t) => {
 
 			t.colorSpace = SRGBColorSpace;
 			assets.set("sky", t);
@@ -44,8 +43,8 @@ function load(): Promise<Map<string, Texture | GLTF>> {
 		});
 
 		gltfLoader.load(
-			`${document.baseURI}models/emissive-strength-test/EmissiveStrengthTest.gltf`,
-			(gltf) => assets.set("emissive-strength-test", gltf)
+			`${document.baseURI}models/emissive-strength-test/emissive-strength-test.gltf`,
+			(gltf) => assets.set("model", gltf)
 		);
 
 	});
@@ -86,7 +85,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	scene.fog = DefaultEnvironment.createFog();
 	scene.add(DefaultEnvironment.createEnvironment());
 
-	const gltf = assets.get("emissive-strength-test") as GLTF;
+	const gltf = assets.get("model") as GLTF;
 	gltf.scene.position.y = 3;
 	scene.add(gltf.scene);
 
