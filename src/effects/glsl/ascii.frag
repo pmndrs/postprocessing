@@ -10,29 +10,31 @@ uniform vec4 cellCount; // XY = cell count, ZW = inv cell count
 void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
 
 	vec2 pixelizedUv = cellCount.zw * (0.5 + floor(uv * cellCount.xy));
-	vec4 texel = texture2D(inputBuffer, pixelizedUv);
-	float lum = luminance(texel.rgb);
+	vec4 texel = texture(inputBuffer, pixelizedUv);
+
+	// Use the luminance of the cell as a factor from 0 to 1 to index the character.
+	float lum = min(luminance(texel.rgb), 1.0);
 
 	#ifdef INVERTED
 
-		// Only LDR colors can be inverted, so make sure lum doesn't exceed 1.
-		lum = 1.0 - min(lum, 1.0);
+		lum = 1.0 - lum;
 
 	#endif
 
 	float characterIndex = floor(CHAR_COUNT_MINUS_ONE * lum);
-	vec2 characterPosition = vec2(mod(characterIndex, CELL_COUNT), floor(characterIndex * INV_CELL_COUNT));
-	vec2 offset = vec2(characterPosition.x, -characterPosition.y) * INV_CELL_COUNT;
-	vec2 characterUv = mod(uv * (cellCount.xy * INV_CELL_COUNT), INV_CELL_COUNT) - vec2(0.0, INV_CELL_COUNT) + offset;
-	vec4 asciiCharacter = texture2D(asciiTexture, characterUv);
+	vec2 characterPosition = vec2(mod(characterIndex, TEX_CELL_COUNT), floor(characterIndex * INV_TEX_CELL_COUNT));
+	vec2 offset = vec2(characterPosition.x, -characterPosition.y) * INV_TEX_CELL_COUNT;
+	vec2 characterUv = mod(uv * (cellCount.xy * INV_TEX_CELL_COUNT), INV_TEX_CELL_COUNT);
+	characterUv = characterUv - vec2(0.0, INV_TEX_CELL_COUNT) + offset;
+	float asciiCharacter = texture(asciiTexture, characterUv).r;
 
 	#ifdef USE_COLOR
 
-		outputColor = vec4(color * asciiCharacter.r, inputColor.a);
+		outputColor = vec4(color * asciiCharacter, inputColor.a);
 
 	#else
 
-		outputColor = vec4(texel.rgb * asciiCharacter.r, inputColor.a);
+		outputColor = vec4(texel.rgb * asciiCharacter, inputColor.a);
 
 	#endif
 

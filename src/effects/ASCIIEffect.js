@@ -87,9 +87,11 @@ export class ASCIIEffect extends Effect {
 		if(value !== null) {
 
 			const cellCount = value.cellCount;
+
 			this.defines.set("CHAR_COUNT_MINUS_ONE", (value.characterCount - 1).toFixed(1));
-			this.defines.set("CELL_COUNT", cellCount.toFixed(1));
-			this.defines.set("INV_CELL_COUNT", (1.0 / cellCount).toFixed(9));
+			this.defines.set("TEX_CELL_COUNT", cellCount.toFixed(1));
+			this.defines.set("INV_TEX_CELL_COUNT", (1.0 / cellCount).toFixed(9));
+
 			this.setChanged();
 
 		}
