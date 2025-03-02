@@ -1,6 +1,6 @@
 {
 	"name": "postprocessing",
-	"version": "6.36.7",
+	"version": "6.37.0",
 	"description": "A post processing library for three.js.",
 	"homepage": "https://github.com/pmndrs/postprocessing",
 	"license": "Zlib",
@@ -58,6 +58,7 @@
 	"pnpm": {
 		"onlyBuiltDependencies": [
 			"@parcel/watcher",
+			"core-js",
 			"esbuild",
 			"hugo-bin"
 		]
@@ -88,7 +89,7 @@
 		"watch:js": "node esbuild -w"
 	},
 	"peerDependencies": {
-		"three": ">= 0.157.0 < 0.174.0"
+		"three": ">= 0.157.0 < 0.175.0"
 	},
 	"devDependencies": {
 		"@tweakpane/core": "2.x.x",
@@ -101,7 +102,7 @@
 		"cssnano": "7.x.x",
 		"dat.gui": "0.x.x",
 		"del-cli": "6.x.x",
-		"esbuild": "0.24.x",
+		"esbuild": "0.25.x",
 		"esbuild-plugin-glsl": "1.x.x",
 		"esdoc": "1.x.x",
 		"esdoc-importpath-plugin": "1.x.x",
