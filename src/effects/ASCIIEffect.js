@@ -219,4 +219,20 @@ export class ASCIIEffect extends Effect {
 
 	}
 
+	/**
+	 * Deletes internal render targets and textures.
+	 */
+
+	dispose() {
+
+		if(this.asciiTexture !== null) {
+
+			this.asciiTexture.dispose();
+
+		}
+
+		super.dispose();
+
+	}
+
 }
