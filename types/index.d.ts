@@ -5206,7 +5206,7 @@ declare module "postprocessing" {
 			color,
 			inverted
 		}?: {
-			asciiTexture?: ASCIITexture;
+			asciiTexture?: ASCIITexture | null;
 			cellSize?: number;
 			color?: Color | string | number | null;
 			inverted?: boolean;
@@ -5217,8 +5217,8 @@ declare module "postprocessing" {
 		 *
 		 * @type {ASCIITexture}
 		 */
-		get asciiTexture(): ASCIITexture;
-		set asciiTexture(value: ASCIITexture);
+		get asciiTexture(): ASCIITexture | null;
+		set asciiTexture(value: ASCIITexture | null);
 		/**
 		 * A color that overrides the scene colors.
 		 *
