@@ -14,14 +14,15 @@ export interface ASCIIEffectOptions {
 
 	/**
 	 * An ASCII lookup texture.
-	 *
-	 * @defaultValue ASCIITexture
 	 */
 
-	asciiTexture?: ASCIITexture;
+	asciiTexture?: ASCIITexture | null;
 
 	/**
 	 * The size of a single cell in pixels.
+	 *
+	 * It's recommended to use even numbers.
+	 *
 	 * @defaultValue 16
 	 */
 
@@ -29,16 +30,20 @@ export interface ASCIIEffectOptions {
 
 	/**
 	 * A color that overrides the scene colors.
-	 * @defaultValue new Color(1.0, 1.0, 1.0)
+	 *
+	 * @defaultValue null
 	 */
 
 	color?: Color | string | number | null;
 
 	/**
 	 * Whether the effect should be inverted.
+	 *
 	 * @defaultValue false
 	 */
+
 	inverted?: boolean;
+
 }
 
 /**
@@ -50,15 +55,19 @@ export interface ASCIIEffectOptions {
 export class ASCIIEffect extends Effect {
 
 	/**
-    * @see {@link cellSize}
-    */
+	 * @see {@link cellSize}
+	 */
 
-	private _cellSize!: number;
+	private _cellSize: number;
+
+	/**
+	 * Constructs a new ASCIIEffect.
+	 */
 
 	constructor({
 		asciiTexture = new ASCIITexture(),
 		cellSize = 16,
-		color = new Color(1.0, 1.0, 1.0),
+		color = null,
 		inverted = false
 	}: ASCIIEffectOptions = {}) {
 
@@ -71,6 +80,7 @@ export class ASCIIEffect extends Effect {
 		uniforms.set("cellCount", new Uniform(new Vector4()));
 		uniforms.set("color", new Uniform(new Color()));
 
+		this._cellSize = -1;
 
 		this.asciiTexture = asciiTexture;
 		this.cellSize = cellSize;
@@ -80,16 +90,16 @@ export class ASCIIEffect extends Effect {
 	}
 
 	/**
-   	* The current ASCII lookup texture.
-   	*/
+	 * The current ASCII lookup texture.
+	 */
 
-	get asciiTexture(): ASCIITexture {
+	get asciiTexture(): ASCIITexture | null {
 
 		return this.input.uniforms.get("asciiTexture")!.value as ASCIITexture;
 
 	}
 
-	set asciiTexture(value: ASCIITexture) {
+	set asciiTexture(value: ASCIITexture | null) {
 
 		const currentTexture = this.input.uniforms.get("asciiTexture")!.value as ASCIITexture;
 		this.input.uniforms.get("asciiTexture")!.value = value;
@@ -105,8 +115,8 @@ export class ASCIIEffect extends Effect {
 			const cellCount = value.cellCount;
 
 			this.input.defines.set("CHAR_COUNT_MINUS_ONE", (value.characterCount - 1).toFixed(1));
-			this.input.defines.set("CELL_COUNT", cellCount.toFixed(1));
-			this.input.defines.set("INV_CELL_COUNT", (1.0 / cellCount).toFixed(9));
+			this.input.defines.set("TEX_CELL_COUNT", cellCount.toFixed(1));
+			this.input.defines.set("INV_TEX_CELL_COUNT", (1.0 / cellCount).toFixed(9));
 
 			this.setChanged();
 
@@ -115,8 +125,8 @@ export class ASCIIEffect extends Effect {
 	}
 
 	/**
-   * A color that overrides the scene colors.
-   */
+	 * A color that overrides the scene colors.
+	 */
 
 	get color(): Color {
 
@@ -140,7 +150,7 @@ export class ASCIIEffect extends Effect {
 
 		} else if(!this.input.defines.has("USE_COLOR") && value !== null) {
 
-			this.input.defines.set("USE_COLOR", "1");
+			this.input.defines.set("USE_COLOR", true);
 			this.setChanged();
 
 		}
@@ -148,8 +158,8 @@ export class ASCIIEffect extends Effect {
 	}
 
 	/**
-   * Controls whether the effect should be inverted.
-   */
+	 * Controls whether the effect should be inverted.
+	 */
 
 	get inverted(): boolean {
 
@@ -178,8 +188,8 @@ export class ASCIIEffect extends Effect {
 	}
 
 	/**
-   	* The cell size.
-   	*/
+	 * The cell size.
+	 */
 
 	get cellSize(): number {
 
@@ -199,8 +209,8 @@ export class ASCIIEffect extends Effect {
 	}
 
 	/**
-   	* Updates the cell count uniform.
-   	*/
+	 * Updates the cell count uniform.
+	 */
 
 	private updateCellCount(): void {
 
@@ -214,13 +224,16 @@ export class ASCIIEffect extends Effect {
 
 	}
 
-	/**
-   	* Updates the size of this pass.
-   	*/
-
 	protected override onResolutionChange(): void {
 
 		this.updateCellCount();
+
+	}
+
+	override dispose(): void {
+
+		super.dispose();
+		this.asciiTexture?.dispose();
 
 	}
 
