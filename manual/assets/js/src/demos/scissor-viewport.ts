@@ -17,24 +17,27 @@ import {
 	ToneMappingEffect
 } from "postprocessing";
 
+import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+
 import { Pane } from "tweakpane";
 import { ControlMode, SpatialControls } from "spatial-controls";
 import * as DefaultEnvironment from "../objects/DefaultEnvironment.js";
 import * as CornellBox from "../objects/CornellBox.js";
 import * as Utils from "../utils/index.js";
 
-function load(): Promise<Map<string, Texture>> {
+function load(): Promise<Map<string, Texture | GLTF>> {
 
-	const assets = new Map<string, Texture>();
+	const assets = new Map<string, Texture | GLTF>();
 	const loadingManager = new LoadingManager();
+	const gltfLoader = new GLTFLoader(loadingManager);
 	const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
-	return new Promise<Map<string, Texture>>((resolve, reject) => {
+	return new Promise<Map<string, Texture | GLTF>>((resolve, reject) => {
 
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		cubeTextureLoader.load(Utils.getSkyboxUrls("space", ".jpg"), (t) => {
+		cubeTextureLoader.load(Utils.getSkyboxUrls("space-01", ".jpg"), (t) => {
 
 			t.colorSpace = SRGBColorSpace;
 			assets.set("sky-space", t);
@@ -47,6 +50,11 @@ function load(): Promise<Map<string, Texture>> {
 			assets.set("sky-sunset", t);
 
 		});
+
+		gltfLoader.load(
+			`${document.baseURI}models/plastic-garden-chair/plastic-garden-chair.glb`,
+			(gltf) => assets.set("model", gltf)
+		);
 
 	});
 
@@ -86,18 +94,22 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Scene, Lights, Objects
 
 	const sceneA = new Scene();
-	sceneA.background = assets.get("sky-space")!;
+	sceneA.background = assets.get("sky-space")! as Texture;
 	sceneA.environment = sceneA.background;
 	sceneA.fog = DefaultEnvironment.createFog();
 	sceneA.add(DefaultEnvironment.createLights());
 	sceneA.add(DefaultEnvironment.createEnvironment());
 
 	const sceneB = new Scene();
-	sceneB.background = assets.get("sky-sunset")!;
+	sceneB.background = assets.get("sky-sunset")! as Texture;
 	sceneB.add(CornellBox.createLights());
 	sceneB.add(CornellBox.createEnvironment());
 	sceneB.add(CornellBox.createActors());
 	sceneB.position.y = 1;
+
+	const gltf = assets.get("model") as GLTF;
+	Utils.setAnisotropy(gltf.scene, 4);
+	sceneA.add(gltf.scene);
 
 	// Post Processing
 

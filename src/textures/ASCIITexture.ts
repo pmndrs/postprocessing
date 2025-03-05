@@ -1,13 +1,14 @@
 import { CanvasTexture, RepeatWrapping } from "three";
 
 /**
- * ASCII texture options.
+ * ASCIITexture options.
  */
 
 export interface ASCIITextureOptions {
 
-	/*
+	/**
 	 * A string of characters to use for the lookup texture.
+	 *
 	 * @defaultValue " .:,'-^=*+?!|0#X%WM@"
 	 */
 
@@ -15,6 +16,7 @@ export interface ASCIITextureOptions {
 
 	/**
 	 * The font to use.
+	 *
 	 * @defaultValue "Arial"
 	 */
 
@@ -22,13 +24,15 @@ export interface ASCIITextureOptions {
 
 	/**
 	 * The font size in pixels.
+	 *
 	 * @defaultValue 54
 	 */
 
 	fontSize?: number;
 
 	/**
-	 * The size of the texture in pixels.
+	 * The texture size.
+	 *
 	 * @defaultValue 1024
 	 */
 
@@ -36,10 +40,12 @@ export interface ASCIITextureOptions {
 
 	/**
 	 * The amount of cells along each side of the texture.
+	 *
 	 * @defaultValue 16
 	 */
 
 	cellCount?: number;
+
 }
 
 /**
@@ -49,14 +55,20 @@ export interface ASCIITextureOptions {
 export class ASCIITexture extends CanvasTexture {
 
 	/**
-    * The amount of characters in this texture.
-    */
+	 * The amount of characters in this texture.
+	 */
+
 	readonly characterCount: number;
 
 	/**
-    * The amount of cells along each side of the texture.
-    */
+	 * The amount of cells along each side of the texture.
+	 */
+
 	readonly cellCount: number;
+
+	/**
+	 * Constructs a new ASCIITexture.
+	 */
 
 	constructor({
 		characters = " .:,'-^=*+?!|0#X%WM@",

@@ -1,6 +1,6 @@
 {
 	"name": "postprocessing",
-	"version": "7.0.0-beta.6",
+	"version": "7.0.0-beta.7",
 	"description": "An advanced post processing library for three.js.",
 	"homepage": "https://github.com/pmndrs/postprocessing",
 	"license": "Zlib",
@@ -85,7 +85,7 @@
 		"watch:js": "node esbuild -w"
 	},
 	"peerDependencies": {
-		"three": ">= 0.173.0 < 0.174.0"
+		"three": ">= 0.174.0 < 0.175.0"
 	},
 	"devDependencies": {
 		"@tweakpane/core": "2.x.x",
@@ -117,7 +117,7 @@
 		"tslib": "2.x.x",
 		"tweakpane": "4.x.x",
 		"typedoc": "0.x.x",
-		"typedoc-plugin-mdn-links": "4.x.x",
+		"typedoc-plugin-mdn-links": "5.x.x",
 		"typescript": "5.7.x"
 	}
 }

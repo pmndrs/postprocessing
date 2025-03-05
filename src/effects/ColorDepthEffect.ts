@@ -42,6 +42,8 @@ export interface ColorDepthEffectOptions {
  *
  * Simulates a hardware limitation to create a retro aesthetic. The real color depth remains unchanged.
  *
+ * Note: This effect should be applied _after_ tone mapping because it expects LDR input colors.
+ *
  * @category Effects
  */
 

@@ -17,9 +17,9 @@ export function getSkyboxUrls(name: string, format: ImageFormat = ".png"): strin
 	const path = `${document.baseURI}img/textures/skies/${name}/`;
 
 	return [
-		path + "right" + format, path + "left" + format,
-		path + "top" + format, path + "bottom" + format,
-		path + "front" + format, path + "back" + format
+		path + "px" + format, path + "nx" + format,
+		path + "py" + format, path + "ny" + format,
+		path + "pz" + format, path + "nz" + format
 	];
 
 }

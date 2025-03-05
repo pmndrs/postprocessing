@@ -2,6 +2,7 @@ import {
 	CubeTextureLoader,
 	LoadingManager,
 	PerspectiveCamera,
+	PointLight,
 	SRGBColorSpace,
 	Scene,
 	ShaderChunk,
@@ -19,28 +20,34 @@ import {
 	ToneMappingEffect
 } from "postprocessing";
 
+import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { Pane } from "tweakpane";
 import { SpatialControls } from "spatial-controls";
-import * as DefaultEnvironment from "../objects/DefaultEnvironment.js";
 import * as Utils from "../utils/index.js";
 
-function load(): Promise<Map<string, Texture>> {
+function load(): Promise<Map<string, Texture | GLTF>> {
 
-	const assets = new Map<string, Texture>();
+	const assets = new Map<string, Texture | GLTF>();
 	const loadingManager = new LoadingManager();
+	const gltfLoader = new GLTFLoader(loadingManager);
 	const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
-	return new Promise<Map<string, Texture>>((resolve, reject) => {
+	return new Promise<Map<string, Texture | GLTF>>((resolve, reject) => {
 
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
 
-		cubeTextureLoader.load(Utils.getSkyboxUrls("space", ".jpg"), (t) => {
+		cubeTextureLoader.load(Utils.getSkyboxUrls("space-03", ".jpg"), (t) => {
 
 			t.colorSpace = SRGBColorSpace;
 			assets.set("sky", t);
 
 		});
+
+		gltfLoader.load(
+			`${document.baseURI}models/sci-fi-hallway/sci-fi-hallway.glb`,
+			(gltf) => assets.set("model", gltf)
+		);
 
 	});
 
@@ -68,17 +75,23 @@ window.addEventListener("load", () => void load().then((assets) => {
 	settings.rotation.sensitivity = 2.2;
 	settings.rotation.damping = 0.05;
 	settings.translation.damping = 0.1;
-	controls.position.set(0, 1.5, 10);
-	controls.lookAt(0, 1.35, 0);
+	controls.position.set(-1, 1, 4);
+	controls.lookAt(0, 1.25, -1);
 
 	// Scene, Lights, Objects
 
 	const scene = new Scene();
-	const skyMap = assets.get("sky")!;
+	const skyMap = assets.get("sky")! as Texture;
 	scene.background = skyMap;
 	scene.environment = skyMap;
-	scene.fog = DefaultEnvironment.createFog();
-	scene.add(DefaultEnvironment.createEnvironment());
+
+	const light = new PointLight(0xffffff, 10, 5, 2);
+	light.position.set(0, 1.25, -1);
+	scene.add(light);
+
+	const gltf = assets.get("model") as GLTF;
+	Utils.setAnisotropy(gltf.scene, Math.min(8, renderer.capabilities.getMaxAnisotropy()));
+	scene.add(gltf.scene);
 
 	// Custom Tone Mapping Example
 
@@ -111,7 +124,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const pane = new Pane({ container: container.querySelector<HTMLElement>(".tp")! });
 	const fpsGraph = Utils.createFPSGraph(pane);
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addBinding(renderer, "toneMappingExposure", { min: 0, max: 4, step: 1e-3 });
+	folder.addBinding(light, "intensity", { label: "lightIntensity", min: 0, max: 100, step: 0.1 });
+	folder.addBinding(renderer, "toneMappingExposure", { min: 0, max: 4, step: 0.01 });
 	folder.addBinding(effect, "toneMapping", { options: Utils.enumToRecord(ToneMapping) });
 	Utils.addBlendModeBindings(folder, effect.blendMode);
 

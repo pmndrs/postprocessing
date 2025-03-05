@@ -47,6 +47,7 @@
 		font-size: 100%;
 		margin: 0;
 		padding-left: dimensions.$nav-menu-item-padding;
+		user-select: none;
 		&::after {
 			background-color: var(--sidebar-heading-color);
 			content: "";
