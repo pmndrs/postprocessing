@@ -79,6 +79,7 @@
 		"lint": "run-p lint:*",
 		"lint:css": "stylelint --fix manual/assets/css/src",
 		"lint:js": "eslint --fix src demo/src manual/assets/js/src",
+		"lint:dts": "tsc types/index.d.ts --noEmit",
 		"postcss": "postcss manual/assets/css/dist/index.css -o manual/assets/css/dist/index.css -c manual",
 		"prepublishOnly": "npm test",
 		"prewatch": "run-s clean copy build:css build:js",
