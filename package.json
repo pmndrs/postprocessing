@@ -1,6 +1,6 @@
 {
 	"name": "postprocessing",
-	"version": "6.37.0",
+	"version": "6.37.1",
 	"description": "A post processing library for three.js.",
 	"homepage": "https://github.com/pmndrs/postprocessing",
 	"license": "Zlib",
@@ -70,7 +70,7 @@
 		"build:js": "node esbuild",
 		"build:js:min": "node esbuild -m",
 		"build:dts": "cpy \"types/*\" build/types && cpy \"types/*\" build/types --rename=index.d.cts",
-		"clean": "del-cli build tmp manual/resources \"manual/assets/**/dist\" public",
+		"clean": "del-cli build temp manual/resources \"manual/assets/**/dist\" public",
 		"copy": "cpy \"demo/static/**/*\" public/demo",
 		"deploy": "run-s copy postcss hugo gzip",
 		"doc": "esdoc",
@@ -79,6 +79,7 @@
 		"lint": "run-p lint:*",
 		"lint:css": "stylelint --fix manual/assets/css/src",
 		"lint:js": "eslint --fix src demo/src manual/assets/js/src",
+		"lint:dts": "tsc types/index.d.ts --noEmit",
 		"postcss": "postcss manual/assets/css/dist/index.css -o manual/assets/css/dist/index.css -c manual",
 		"prepublishOnly": "npm test",
 		"prewatch": "run-s clean copy build:css build:js",
@@ -93,6 +94,7 @@
 	},
 	"devDependencies": {
 		"@tweakpane/core": "2.x.x",
+		"@types/node": "22.x.x",
 		"@types/three": "0.x.x",
 		"@typescript-eslint/eslint-plugin": "8.x.x",
 		"@typescript-eslint/parser": "8.x.x",
@@ -125,6 +127,6 @@
 		"tiny-glob": "0.x.x",
 		"tslib": "2.x.x",
 		"tweakpane": "4.x.x",
-		"typescript": "5.7.x"
+		"typescript": "5.8.x"
 	}
 }

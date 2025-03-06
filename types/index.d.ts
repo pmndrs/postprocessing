@@ -22,7 +22,8 @@ declare module "postprocessing" {
 		Color,
 		ColorSpace,
 		Data3DTexture,
-		BaseEvent
+		BaseEvent,
+		CanvasTexture
 	} from "three";
 
 	/**

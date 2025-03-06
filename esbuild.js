@@ -21,7 +21,7 @@ const banner = `/**
 const workers = {
 	entryPoints: await glob("./src/**/worker.js"),
 	outExtension: { ".js": ".txt" },
-	outdir: "./tmp",
+	outdir: "./temp",
 	target: "es2019",
 	logLevel: "info",
 	format: "iife",
