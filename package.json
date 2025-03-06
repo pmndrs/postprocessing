@@ -70,7 +70,7 @@
 		"build:js": "node esbuild",
 		"build:js:min": "node esbuild -m",
 		"build:dts": "cpy \"types/*\" build/types && cpy \"types/*\" build/types --rename=index.d.cts",
-		"clean": "del-cli build tmp manual/resources \"manual/assets/**/dist\" public",
+		"clean": "del-cli build temp manual/resources \"manual/assets/**/dist\" public",
 		"copy": "cpy \"demo/static/**/*\" public/demo",
 		"deploy": "run-s copy postcss hugo gzip",
 		"doc": "esdoc",

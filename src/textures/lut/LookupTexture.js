@@ -14,7 +14,7 @@ import {
 
 import { LUTOperation } from "../../enums/LUTOperation.js";
 import { RawImageData } from "../RawImageData.js";
-import workerProgram from "../../../tmp/lut/worker.txt";
+import workerProgram from "../../../temp/lut/worker.txt";
 
 const c = /* @__PURE__ */ new Color();
 
