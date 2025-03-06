@@ -110,7 +110,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Settings
 
-	const params = { bitDepth: 6 };
+	const params = { bitDepth: effect.r };
 
 	const container = document.getElementById("viewport")!;
 	const pane = new Pane({ container: container.querySelector<HTMLElement>(".tp")! });
