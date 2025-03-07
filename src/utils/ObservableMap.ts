@@ -158,19 +158,19 @@ export class ObservableMap<K, V> extends EventDispatcher<ObservableMapEventMap<K
 
 	}
 
-	entries(): IterableIterator<[K, V]> {
+	entries(): MapIterator<[K, V]> {
 
 		return this.data.entries();
 
 	}
 
-	keys(): IterableIterator<K> {
+	keys(): MapIterator<K> {
 
 		return this.data.keys();
 
 	}
 
-	values(): IterableIterator<V> {
+	values(): MapIterator<V> {
 
 		return this.data.values();
 
@@ -182,7 +182,7 @@ export class ObservableMap<K, V> extends EventDispatcher<ObservableMapEventMap<K
 
 	}
 
-	[Symbol.iterator](): IterableIterator<[K, V]> {
+	[Symbol.iterator](): MapIterator<[K, V]> {
 
 		return this.data[Symbol.iterator]();
 

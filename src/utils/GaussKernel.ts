@@ -8,7 +8,7 @@
 
 function getCoefficients(n: number): Float64Array {
 
-	let result: Float64Array;
+	let result: Float64Array<ArrayBuffer>;
 
 	if(n < 0) {
 
