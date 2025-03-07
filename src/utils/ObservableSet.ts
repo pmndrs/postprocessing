@@ -110,46 +110,4 @@ export class ObservableSet<T> extends EventDispatcher<BaseEventMap> implements S
 
 	}
 
-	union<U>(other: ReadonlySetLike<U>): Set<T | U> {
-
-		return new ObservableSet<T | U>(this.data.union(other));
-
-	}
-
-	intersection<U>(other: ReadonlySetLike<U>): Set<T & U> {
-
-		return new ObservableSet<T & U>(this.data.intersection(other));
-
-	}
-
-	difference<U>(other: ReadonlySetLike<U>): Set<T> {
-
-		return new ObservableSet<T>(this.data.difference(other));
-
-	}
-
-	symmetricDifference<U>(other: ReadonlySetLike<U>): Set<T | U> {
-
-		return new ObservableSet<T | U>(this.data.symmetricDifference(other));
-
-	}
-
-	isSubsetOf(other: ReadonlySetLike<unknown>): boolean {
-
-		return this.data.isSubsetOf(other);
-
-	}
-
-	isSupersetOf(other: ReadonlySetLike<unknown>): boolean {
-
-		return this.data.isSupersetOf(other);
-
-	}
-
-	isDisjointFrom(other: ReadonlySetLike<unknown>): boolean {
-
-		return this.data.isDisjointFrom(other);
-
-	}
-
 }
