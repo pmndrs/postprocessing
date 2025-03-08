@@ -2,6 +2,8 @@ import { CanvasTexture, RepeatWrapping } from "three";
 
 /**
  * ASCIITexture options.
+ *
+ * @category Textures
  */
 
 export interface ASCIITextureOptions {
@@ -50,6 +52,8 @@ export interface ASCIITextureOptions {
 
 /**
  * An ASCII character lookup texture.
+ *
+ * @category Textures
  */
 
 export class ASCIITexture extends CanvasTexture {
