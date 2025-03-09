@@ -4,7 +4,7 @@ import fragmentShader from "./glsl/downsample-threshold.frag";
 import vertexShader from "./glsl/downsample-threshold.vert";
 
 /**
- * A downsample threshold shader material.
+ * A downsample threshold material.
  *
  * This down-samples the input buffer while applying threshold.
  * Based on the article:
@@ -28,7 +28,7 @@ export class DownsampleThresholdMaterial extends ShaderMaterial {
 			uniforms: {
 				inputBuffer: new Uniform(null),
 				texelSize: new Uniform(new Vector2()),
-				thresholdLevel: new Uniform(1.0),
+				thresholdLevel: new Uniform(0.5),
 				thresholdRange: new Uniform(0.1)
 			},
 			blending: NoBlending,

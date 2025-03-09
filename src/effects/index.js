@@ -18,6 +18,7 @@ export * from "./GodRaysEffect.js";
 export * from "./GridEffect.js";
 export * from "./HueSaturationEffect.js";
 export * from "./LensDistortionEffect.js";
+export * from "./LensFlareEffect.js";
 export * from "./LUT1DEffect.js";
 export * from "./LUT3DEffect.js";
 export * from "./NoiseEffect.js";

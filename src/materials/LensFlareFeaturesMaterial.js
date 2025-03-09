@@ -22,8 +22,8 @@ export class LensFlareFeaturesMaterial extends ShaderMaterial {
 			uniforms: {
 				inputBuffer: new Uniform(null),
 				texelSize: new Uniform(new Vector2()),
-				ghostAmount: new Uniform(0.001),
-				haloAmount: new Uniform(0.001),
+				ghostAmount: new Uniform(0.1),
+				haloAmount: new Uniform(0.1),
 				chromaticAberration: new Uniform(10)
 			},
 			blending: NoBlending,
