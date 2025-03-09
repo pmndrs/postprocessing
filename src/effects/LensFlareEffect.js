@@ -74,8 +74,8 @@ export class LensFlareEffect extends Effect {
 		 * @readonly
 		 */
 
-		const thresholdMaterial = new DownsampleThresholdMaterial();
-		this.thresholdPass = new ShaderPass(thresholdMaterial);
+		const downsampleMaterial = new DownsampleThresholdMaterial();
+		this.downsamplePass = new ShaderPass(downsampleMaterial);
 
 		/**
 		 * This pass blurs the input buffer to create non-starburst glare (bloom).
@@ -151,7 +151,7 @@ export class LensFlareEffect extends Effect {
 		const renderTarget1 = this.renderTarget1;
 		const renderTarget2 = this.renderTarget2;
 
-		this.thresholdPass.render(renderer, inputBuffer, renderTarget1);
+		this.downsamplePass.render(renderer, inputBuffer, renderTarget1);
 		this.blurPass.render(renderer, renderTarget1, null);
 		this.featuresBlurPass.render(renderer, renderTarget1, renderTarget2);
 		this.featuresPass.render(renderer, renderTarget2, renderTarget1);
@@ -173,7 +173,7 @@ export class LensFlareEffect extends Effect {
 
 		this.renderTarget1.setSize(w, h);
 		this.renderTarget2.setSize(w, h);
-		this.thresholdPass.fullscreenMaterial.setSize(w, h);
+		this.downsamplePass.fullscreenMaterial.setSize(w, h);
 		this.blurPass.setSize(w, h);
 		this.featuresBlurPass.setSize(w, h);
 		this.featuresPass.fullscreenMaterial.setSize(w, h);
@@ -190,7 +190,7 @@ export class LensFlareEffect extends Effect {
 
 	initialize(renderer, alpha, frameBufferType) {
 
-		this.thresholdPass.initialize(renderer, alpha, frameBufferType);
+		this.downsamplePass.initialize(renderer, alpha, frameBufferType);
 		this.blurPass.initialize(renderer, alpha, frameBufferType);
 		this.featuresBlurPass.initialize(renderer, alpha, frameBufferType);
 		this.featuresPass.initialize(renderer, alpha, frameBufferType);
