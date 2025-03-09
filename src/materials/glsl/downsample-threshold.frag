@@ -10,8 +10,8 @@
 
 #endif
 
-uniform float thresholdLevel;
-uniform float thresholdRange;
+uniform float luminanceThreshold;
+uniform float luminanceSmoothing;
 
 varying vec2 vCenterUv1;
 varying vec2 vCenterUv2;
@@ -78,7 +78,7 @@ void main() {
 	color += weight.w * texture2D(inputBuffer, vec2(vCenterUv4));
 
 	float l = luminance(color.rgb);
-	float scale = saturate(smoothstep(thresholdLevel, thresholdLevel + thresholdRange, l));
+	float scale = saturate(smoothstep(luminanceThreshold, luminanceThreshold + luminanceSmoothing, l));
 	gl_FragColor = color * scale;
 
 	#include <colorspace_fragment>

@@ -28,8 +28,8 @@ export class DownsampleThresholdMaterial extends ShaderMaterial {
 			uniforms: {
 				inputBuffer: new Uniform(null),
 				texelSize: new Uniform(new Vector2()),
-				thresholdLevel: new Uniform(0.5),
-				thresholdRange: new Uniform(0.1)
+				luminanceThreshold: new Uniform(0.5),
+				luminanceSmoothing: new Uniform(0.1)
 			},
 			blending: NoBlending,
 			toneMapped: false,
@@ -67,38 +67,38 @@ export class DownsampleThresholdMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * The level of threshold.
+	 * The luminance threshold.
 	 *
 	 * @type {Number}
 	 */
 
-	get thresholdLevel() {
+	get luminanceThreshold() {
 
-		return this.uniforms.thresholdLevel.value;
+		return this.uniforms.luminanceThreshold.value;
 
 	}
 
-	set thresholdLevel(value) {
+	set luminanceThreshold(value) {
 
-		this.uniforms.thresholdLevel.value = value;
+		this.uniforms.luminanceThreshold.value = value;
 
 	}
 
 	/**
-	 * The range of threshold.
+	 * The luminance threshold smoothing.
 	 *
 	 * @type {Number}
 	 */
 
-	get thresholdRange() {
+	get luminanceSmoothing() {
 
-		return this.uniforms.thresholdRange.value;
+		return this.uniforms.luminanceSmoothing.value;
 
 	}
 
-	set thresholdRange(value) {
+	set luminanceSmoothing(value) {
 
-		this.uniforms.thresholdRange.value = value;
+		this.uniforms.luminanceSmoothing.value = value;
 
 	}
 
