@@ -165,10 +165,10 @@ export class LensFlareEffect extends Effect {
 	 * @param {Number} height - The height.
 	 */
 
-	setSize(baseWidth, baseHeight) {
+	setSize(width, height) {
 
 		const resolution = this.resolution;
-		resolution.setBaseSize(baseWidth, baseHeight);
+		resolution.setBaseSize(width, height);
 		const w = resolution.width, h = resolution.height;
 
 		this.renderTarget1.setSize(w, h);
