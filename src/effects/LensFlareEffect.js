@@ -1,4 +1,5 @@
 import { SRGBColorSpace, Uniform, WebGLRenderTarget } from "three";
+import { Resolution } from "../core/Resolution.js";
 import { BlendFunction } from "../enums/BlendFunction.js";
 import { EffectAttribute } from "../enums/EffectAttribute.js";
 import { KernelSize } from "../enums/KernelSize.js";
@@ -10,7 +11,6 @@ import { ShaderPass } from "../passes/ShaderPass.js";
 import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/lens-flare.frag";
-import { Resolution } from "src/core/Resolution.js";
 
 /**
  * A lens flare effect.
