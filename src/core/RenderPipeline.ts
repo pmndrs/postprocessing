@@ -99,10 +99,10 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 		this._renderer = null;
 		this._autoRenderToScreen = true;
 
-		this.renderer = renderer;
 		this.resolution = new Resolution();
 		this.resolution.addEventListener("change", () => this.onResolutionChange());
 		this.updateStyle = true;
+		this.renderer = renderer;
 
 	}
 
@@ -154,10 +154,12 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 			// Clearing will be done with ClearPass instances.
 			value.autoClear = false;
 
+			// Updating the pixel ratio also triggers onResolutionChange.
+			this.resolution.pixelRatio = value.getPixelRatio();
+
 			if(this.passes.length > 0) {
 
-				// Update the render resolution and refresh the buffers.
-				this.onResolutionChange();
+				// Refresh the buffers.
 				RenderPipeline.ioManager.update();
 
 			}
@@ -313,31 +315,59 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 	private onResolutionChange(): void {
 
-		if(this.renderer === null) {
+		const renderer = this.renderer;
+
+		if(renderer === null) {
 
 			console.debug("Unable to update the render size because the renderer is null");
 			return;
 
 		}
 
-		const { baseWidth, baseHeight, scaledPixelRatio } = this.resolution;
-		const logicalSize = this.renderer.getSize(v);
+		const { baseWidth, baseHeight, pixelRatio, scaledPixelRatio, scale } = this.resolution;
+		const logicalSize = renderer.getSize(v);
 
-		if(this.renderer.getPixelRatio() !== scaledPixelRatio) {
+		if(renderer.getPixelRatio() !== pixelRatio) {
 
-			this.renderer.setPixelRatio(scaledPixelRatio);
+			// Sync the pixel ratio with the renderer.
+			renderer.setPixelRatio(pixelRatio);
 
 		}
 
-		if(logicalSize.width !== baseWidth || logicalSize.height !== baseHeight) {
+		if(scale === 1.0) {
 
-			this.renderer.setSize(baseWidth, baseHeight, this.updateStyle);
+			if(logicalSize.width !== baseWidth || logicalSize.height !== baseHeight) {
+
+				renderer.setSize(baseWidth, baseHeight, this.updateStyle);
+
+			}
+
+		} else {
+
+			// The scale acts like an additional pixel ratio.
+			const scaledWidth = baseWidth * scale;
+			const scaledHeight = baseHeight * scale;
+
+			// Three stores the exact width and height internally and floors the canvas size after applying the pixel ratio.
+			if(logicalSize.width !== scaledWidth || logicalSize.height !== scaledHeight) {
+
+				if(this.updateStyle) {
+
+					// Set the logical size and update the canvas style if needed.
+					renderer.setSize(baseWidth, baseHeight, true);
+
+				}
+
+				// Set the scaled logical size without changing the canvas style.
+				renderer.setSize(scaledWidth, scaledHeight, false);
+
+			}
 
 		}
 
 		for(const pass of this.passes) {
 
-			// Use the scaled pixel ratio to keep the resolution scale of the passes intact.
+			// Use the scaled pixel ratio as a baseline to keep the resolution scale of the passes intact.
 			pass.resolution.pixelRatio = scaledPixelRatio;
 			pass.resolution.setBaseSize(baseWidth, baseHeight);
 
@@ -370,15 +400,14 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 	setSize(width: number, height: number, updateStyle = true): void {
 
-		const previousUpdateStyle = this.updateStyle;
-		this.updateStyle = false;
-
 		if(this.renderer !== null) {
 
-			this.resolution.pixelRatio = this.renderer.getPixelRatio();
+			// Sync the pixel ratio with the renderer.
+			this.setPixelRatio(this.renderer.getPixelRatio());
 
 		}
 
+		const previousUpdateStyle = this.updateStyle;
 		this.updateStyle = updateStyle;
 		this.resolution.setSize(width, height);
 		this.updateStyle = previousUpdateStyle;
