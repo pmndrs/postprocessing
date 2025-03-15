@@ -1,9 +1,9 @@
-# Model Information:
+Model Information:
 * title:	Star Wars: The Clone Wars: Venator Prefab
 * source:	https://sketchfab.com/3d-models/star-wars-the-clone-wars-venator-prefab-8a1e1760391c4ac6a50373c2bf5efa2e
 * author:	ShineyFX (https://sketchfab.com/ShineyFX)
 
-# Model License:
+Model License:
 * license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
 * requirements:	Author must be credited. Commercial use is allowed.
 

@@ -1,9 +1,9 @@
-# Model Information:
+Model Information:
 * title:	Skateboard
 * source:	https://sketchfab.com/3d-models/skateboard-daba6e30f78d4604b5167b2f83b0d162
 * author:	George.Levchenko (https://sketchfab.com/George.Levchenko)
 
-# Model License:
+Model License:
 * license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
 * requirements:	Author must be credited. Commercial use is allowed.
 
