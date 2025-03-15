@@ -156,6 +156,8 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> {
 
 		}
 
+		this.onResolutionChange();
+
 	}
 
 	protected override onResolutionChange(): void {
