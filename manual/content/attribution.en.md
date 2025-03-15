@@ -10,9 +10,21 @@ draft: false
 
 ## 3D Models
 
+##### Chocolate Bar
+
+[Model](https://sketchfab.com/3d-models/chocolate-bar-0d2dc2567a784fd28e9cb9a43c9f6505) by [Fridge](https://sketchfab.com/youssefdarwish01). Licensed under [CC-BY 4.0](http://creativecommons.org/licenses/by-sa/4.0/).
+
+##### Crystal Stone
+
+[Model](https://sketchfab.com/3d-models/crystal-stone-rock-1ad829e2f464446fa4945562ab611255) by [GenEugene](https://sketchfab.com/geneugene). Licensed under [CC-BY 4.0](http://creativecommons.org/licenses/by-sa/4.0/).
+
 ##### Emissive Strength Test
 
 [Model](https://github.com/KhronosGroup/glTF-Sample-Assets/tree/eb4e2b0f96698a8f115ea7a70b60f8a442aca870/Models/EmissiveStrengthTest) and textures by Ed Mackey. Copyright 2022 Analytical Graphics, Inc. Licensed under [CC-BY 4.0](http://creativecommons.org/licenses/by-sa/4.0/).
+
+##### Enchanted Crystal
+
+[Model](https://sketchfab.com/3d-models/enchanted-crystal-6b01945a041d4ed3b80e14274f0e68c9) by [TheTallOne](https://sketchfab.com/TheTallOne). Licensed under [CC-BY 4.0](http://creativecommons.org/licenses/by-sa/4.0/).
 
 ##### Plastic Garden Chair
 
@@ -56,7 +68,7 @@ draft: false
 
 [Lens Dirt](https://www.inscapedigital.com/lens-dirt) by Javert Valbarr. Licensed under [CC-BY 4.0](http://creativecommons.org/licenses/by-sa/4.0/).
 
-##### Material design icons
+##### Material Design Icons
 
 Material design icons is the official icon set from Google. They can be browsed at https://fonts.google.com/icons. The icons are designed under the material design guidelines and released under the [Apache-2.0 License](https://github.com/google/material-design-icons/blob/master/LICENSE).
 
