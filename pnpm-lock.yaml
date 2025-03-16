@@ -47,7 +47,7 @@ importers:
         version: 0.25.1
       esbuild-plugin-glsl:
         specifier: 1.x.x
-        version: 1.3.0(esbuild@0.25.1)
+        version: 1.3.1(esbuild@0.25.1)
       eslint:
         specifier: 9.x.x
         version: 9.22.0
@@ -56,7 +56,7 @@ importers:
         version: 2.0.2(eslint@9.22.0)(typescript@5.8.2)
       gzipper:
         specifier: 8.x.x
-        version: 8.2.0
+        version: 8.2.1
       hugo-bin:
         specifier: 0.x.x
         version: 0.142.0
@@ -1456,8 +1456,8 @@ packages:
     resolution: {integrity: sha512-w+5mJ3GuFL+NjVtJlvydShqE1eN3h3PbI7/5LAsYJP/2qtuMXjfL2LpHSRqo4b4eSF5K/DH1JXKUAHSB2UW50g==}
     engines: {node: '>= 0.4'}
 
-  esbuild-plugin-glsl@1.3.0:
-    resolution: {integrity: sha512-Bi0kPkrENs2MtKtrKfmOZ6PJqKP564FlUsWc68pDYywuMocsr5cx3OcpTy6J4qZYxbjk2JeXY+CJA5isjyPeOg==}
+  esbuild-plugin-glsl@1.3.1:
+    resolution: {integrity: sha512-if2ob91BPE/3KHhpkLaCc2B6CJmfGhjncXe6wyMRmgppQfgKIt6/UxlUcayvO/uA1EUaN28wtfkV5lRK2dbvcA==}
     engines: {node: '>= 18'}
     peerDependencies:
       esbuild: 0.x.x
@@ -1778,8 +1778,8 @@ packages:
   graphemer@1.4.0:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
 
-  gzipper@8.2.0:
-    resolution: {integrity: sha512-JUvhzo8dHQWJp1eyYy1ShaPfcowsPbRc2rvwkD4LRyou/80UUz96bn+EOOYLWO4PG0Y5f3+UlUX9Gmu8RZhrtw==}
+  gzipper@8.2.1:
+    resolution: {integrity: sha512-Vp2vDpwU4xKtWxTaLPfNTR4euqHJamB6aKCfSEbSd/CrgqihwNxrjihJcWJG1+3Ku1ROsfF6fPXRoytTFLhFlw==}
     engines: {node: '>=20.11.0'}
     hasBin: true
 
@@ -4955,7 +4955,7 @@ snapshots:
       is-date-object: 1.1.0
       is-symbol: 1.1.1
 
-  esbuild-plugin-glsl@1.3.0(esbuild@0.25.1):
+  esbuild-plugin-glsl@1.3.1(esbuild@0.25.1):
     dependencies:
       esbuild: 0.25.1
 
@@ -5348,7 +5348,7 @@ snapshots:
 
   graphemer@1.4.0: {}
 
-  gzipper@8.2.0:
+  gzipper@8.2.1:
     dependencies:
       '@gfx/zopfli': 1.0.15
       commander: 12.1.0
