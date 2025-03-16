@@ -14,18 +14,20 @@ import {
 	RenderPipeline
 } from "postprocessing";
 
+import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { Pane } from "tweakpane";
 import { SpatialControls } from "spatial-controls";
 import * as DefaultEnvironment from "../objects/DefaultEnvironment.js";
 import * as Utils from "../utils/index.js";
 
-function load(): Promise<Map<string, Texture>> {
+function load(): Promise<Map<string, Texture | GLTF>> {
 
-	const assets = new Map<string, Texture>();
+	const assets = new Map<string, Texture | GLTF>();
 	const loadingManager = new LoadingManager();
+	const gltfLoader = new GLTFLoader(loadingManager);
 	const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
-	return new Promise<Map<string, Texture>>((resolve, reject) => {
+	return new Promise<Map<string, Texture | GLTF>>((resolve, reject) => {
 
 		loadingManager.onLoad = () => resolve(assets);
 		loadingManager.onError = (url) => reject(new Error(`Failed to load ${url}`));
@@ -36,6 +38,11 @@ function load(): Promise<Map<string, Texture>> {
 			assets.set("sky", t);
 
 		});
+
+		gltfLoader.load(
+			`${document.baseURI}models/enchanted-crystal/enchanted-crystal.glb`,
+			(gltf) => assets.set("model", gltf)
+		);
 
 	});
 
@@ -69,11 +76,17 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Scene, Lights, Objects
 
 	const scene = new Scene();
-	const skyMap = assets.get("sky")!;
+	const skyMap = assets.get("sky") as Texture;
 	scene.background = skyMap;
 	scene.environment = skyMap;
 	scene.fog = DefaultEnvironment.createFog();
 	scene.add(DefaultEnvironment.createEnvironment());
+
+	const gltf = assets.get("model") as GLTF;
+	Utils.setAnisotropy(gltf.scene, Math.min(8, renderer.capabilities.getMaxAnisotropy()));
+	gltf.scene.translateY(1);
+	gltf.scene.scale.setScalar(3);
+	scene.add(gltf.scene);
 
 	// Post Processing
 
@@ -125,6 +138,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 			fpsGraph.begin();
 			controls.update(timestamp);
+			gltf.scene.position.y = 1 + Math.sin(pipeline.timer.getElapsed()) * 0.01;
 			pipeline.render(timestamp);
 			fpsGraph.end();
 
