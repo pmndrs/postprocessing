@@ -2,6 +2,7 @@ import {
 	DepthFormat,
 	DepthStencilFormat,
 	DepthTexture,
+	Event as Event3,
 	HalfFloatType,
 	LinearFilter,
 	Material,
@@ -94,16 +95,10 @@ export class GeometryPass extends Pass implements Selective {
 	readonly selection: Selection;
 
 	/**
-	 * A listener for `childadded` events dispatched by the scene.
+	 * A listener for events dispatched by the {@link scene}.
 	 */
 
-	private readonly onChildAdded: (event: { child: Object3D | null }) => void;
-
-	/**
-	 * A listener for `childremoved` events dispatched by the scene.
-	 */
-
-	private readonly onChildRemoved: (event: { child: Object3D | null }) => void;
+	private readonly sceneListener: (event: Event3 & { child: Object3D | null }) => void;
 
 	/**
 	 * The G-Buffer configuration.
@@ -185,28 +180,7 @@ export class GeometryPass extends Pass implements Selective {
 
 		super("GeometryPass");
 
-		this.onChildAdded = (event: { child: Object3D | null }) => {
-
-			event.child?.traverse((node) => {
-
-				node.addEventListener("childadded", this.onChildAdded);
-				node.addEventListener("childremoved", this.onChildRemoved);
-				this.updateMaterial(node);
-
-			});
-
-		};
-
-		this.onChildRemoved = (event: { child: Object3D | null }) => {
-
-			event.child?.traverse((node) => {
-
-				node.removeEventListener("childadded", this.onChildAdded);
-				node.removeEventListener("childremoved", this.onChildRemoved);
-
-			});
-
-		};
+		this.sceneListener = (event) => this.handleSceneEvent(event);
 
 		this.stencilBuffer = stencilBuffer;
 		this.depthBuffer = depthBuffer;
@@ -243,9 +217,19 @@ export class GeometryPass extends Pass implements Selective {
 
 	override set scene(value: Scene | null) {
 
-		this.onChildRemoved({ child: this.scene });
+		this.handleSceneEvent({
+			type: "childremoved",
+			target: this.scene,
+			child: this.scene
+		});
+
 		super.scene = value;
-		this.onChildAdded({ child: value });
+
+		this.handleSceneEvent({
+			type: "childadded",
+			target: this.scene,
+			child: value
+		});
 
 	}
 
@@ -359,7 +343,7 @@ export class GeometryPass extends Pass implements Selective {
 	 * @param object - The object to update.
 	 */
 
-	private updateMaterial(object: Object3D | null): void {
+	private updateMaterial(object: Object3D): void {
 
 		if(!(object instanceof Mesh)) {
 
@@ -391,16 +375,71 @@ export class GeometryPass extends Pass implements Selective {
 
 				}
 
-				if(this.gBuffer === null) {
+				if(this.gBuffer !== null) {
 
-					return;
+					const outputDefinitions = extractOutputDefinitions(this.gBuffer);
+					shader.fragmentShader = outputDefinitions + "\n\n" + shader.fragmentShader;
 
 				}
 
-				const outputDefinitions = extractOutputDefinitions(this.gBuffer);
-				shader.fragmentShader = outputDefinitions + "\n\n" + shader.fragmentShader;
-
 			};
+
+		}
+
+	}
+
+	/**
+	 * Performs tasks when a child node is added to the {@link scene}.
+	 *
+	 * @param object - The child node that was added.
+	 */
+
+	protected onSceneChildAdded(object: Object3D): void {}
+
+	/**
+	 * Performs tasks when a child node is removed from the {@link scene}.
+	 *
+	 * @param object - The child node that was removed.
+	 */
+
+	protected onSceneChildRemoved(object: Object3D): void {}
+
+	/**
+	 * Handles scene graph events.
+	 */
+
+	private handleSceneEvent(event: Event3 & { child: Object3D | null }): void {
+
+		switch(event.type) {
+
+			case "childadded": {
+
+				event.child?.traverse((node) => {
+
+					node.addEventListener("childadded", this.sceneListener);
+					node.addEventListener("childremoved", this.sceneListener);
+					this.onSceneChildAdded(node);
+					this.updateMaterial(node);
+
+				});
+
+				break;
+
+			}
+
+			case "childremoved": {
+
+				event.child?.traverse((node) => {
+
+					node.removeEventListener("childadded", this.sceneListener);
+					node.removeEventListener("childremoved", this.sceneListener);
+					this.onSceneChildRemoved(node);
+
+				});
+
+				break;
+
+			}
 
 		}
 
