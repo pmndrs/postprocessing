@@ -406,6 +406,8 @@ export class GeometryPass extends Pass implements Selective {
 
 	/**
 	 * Handles scene graph events.
+	 *
+	 * @param event - A scene graph event.
 	 */
 
 	private handleSceneEvent(event: Event3 & { child: Object3D | null }): void {
