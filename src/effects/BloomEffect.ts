@@ -143,6 +143,16 @@ export class BloomEffect extends Effect {
 
 	protected override onInputChange(): void {
 
+		if(this.input.defaultBuffer === null) {
+
+			// Discard the texture resources.
+			this.luminancePass.input.removeDefaultBuffer();
+			this.mipmapBlurPass.input.removeDefaultBuffer();
+
+			return;
+
+		}
+
 		if(this.luminancePass.enabled) {
 
 			this.luminancePass.input.defaultBuffer = this.input.defaultBuffer;
