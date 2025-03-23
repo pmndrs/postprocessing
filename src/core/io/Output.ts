@@ -62,6 +62,16 @@ export class Output extends EventDispatcher<BaseEventMap> implements Disposable,
 		renderTargets.addEventListener(ObservableMap.EVENT_DELETE,
 			(e) => e.value.removeEventListener(Resource.EVENT_CHANGE, listener));
 
+		renderTargets.addEventListener(ObservableMap.EVENT_CLEAR, (e) => {
+
+			for(const value of e.target.values()) {
+
+				value.removeEventListener(Resource.EVENT_CHANGE, listener);
+
+			}
+
+		});
+
 		this.defines = defines;
 		this.uniforms = uniforms;
 		this.renderTargets = renderTargets;

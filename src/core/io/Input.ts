@@ -94,6 +94,16 @@ export class Input extends EventDispatcher<BaseEventMap> implements Disposable, 
 		textures.addEventListener(ObservableMap.EVENT_DELETE,
 			(e) => e.value.removeEventListener(Resource.EVENT_CHANGE, listener));
 
+		textures.addEventListener(ObservableMap.EVENT_CLEAR, (e) => {
+
+			for(const value of e.target.values()) {
+
+				value.removeEventListener(Resource.EVENT_CHANGE, listener);
+
+			}
+
+		});
+
 		this.listener = listener;
 		this.defines = defines;
 		this.uniforms = uniforms;
