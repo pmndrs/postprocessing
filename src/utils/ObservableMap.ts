@@ -28,11 +28,12 @@ export interface ObservableMapEventMap<K, V> extends BaseEventMap {
 
 	add: MapEvent<K, V>;
 	delete: MapEvent<K, V>;
+	clear: BaseEvent;
 
 }
 
 /**
- * A map that emits events of type {@link EVENT_CHANGE} when its data changes.
+ * A map that emits events when its data changes.
  *
  * @param K - The type of the keys.
  * @param V - The type of the values.
@@ -40,6 +41,8 @@ export interface ObservableMapEventMap<K, V> extends BaseEventMap {
  */
 
 export class ObservableMap<K, V> extends EventDispatcher<ObservableMapEventMap<K, V>> implements Map<K, V> {
+
+	// #region Events
 
 	/**
 	 * Triggers when an entry is added, replaced or removed.
@@ -66,6 +69,16 @@ export class ObservableMap<K, V> extends EventDispatcher<ObservableMapEventMap<K
 	 */
 
 	static readonly EVENT_DELETE = "delete";
+
+	/**
+	 * Triggers right before this maps is cleared.
+	 *
+	 * @event
+	 */
+
+	static readonly EVENT_CLEAR = "clear";
+
+	// #endregion
 
 	/**
 	 * The internal data collection.
@@ -101,6 +114,7 @@ export class ObservableMap<K, V> extends EventDispatcher<ObservableMapEventMap<K
 
 	clear(): void {
 
+		this.dispatchEvent({ type: ObservableMap.EVENT_CLEAR });
 		const result = this.data.clear();
 		this.dispatchEvent({ type: ObservableMap.EVENT_CHANGE });
 		return result;
