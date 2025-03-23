@@ -272,11 +272,15 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		this.updateGBufferStruct();
 
-		// Make the input buffers available to all effects.
+		// Clear the input buffers of all effects and then assign new ones to minimize event churn.
 
 		for(const effect of this.effects) {
 
 			effect.input.buffers.clear();
+
+		}
+
+		for(const effect of this.effects) {
 
 			for(const entry of this.input.buffers) {
 
