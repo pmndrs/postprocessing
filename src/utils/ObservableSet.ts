@@ -1,14 +1,44 @@
-import { EventDispatcher } from "three";
+import { BaseEvent, EventDispatcher } from "three";
 import { BaseEventMap } from "../core/BaseEventMap.js";
 
 /**
- * A set that emits events of type {@link EVENT_CHANGE} when its data changes.
+ * An event that contains information about a set value that was added or deleted.
  *
- * @param T - The type of the items.
+ * @param T - The type of the value.
  * @category Utils
  */
 
-export class ObservableSet<T> extends EventDispatcher<BaseEventMap> implements Set<T> {
+export interface SetEvent<T> extends BaseEvent {
+
+	value: T;
+
+}
+
+/**
+ * ObservableSet events.
+ *
+ * @param T - The type of the value.
+ * @category Utils
+ */
+
+export interface ObservableSetEventMap<T> extends BaseEventMap {
+
+	add: SetEvent<T>;
+	delete: SetEvent<T>;
+	clear: BaseEvent;
+
+}
+
+/**
+ * A set that emits events when its data changes.
+ *
+ * @param T - The type of the values.
+ * @category Utils
+ */
+
+export class ObservableSet<T> extends EventDispatcher<ObservableSetEventMap<T>> implements Set<T> {
+
+	// #region Events
 
 	/**
 	 * Triggers when an entry is added, replaced or removed.
@@ -19,6 +49,34 @@ export class ObservableSet<T> extends EventDispatcher<BaseEventMap> implements S
 	static readonly EVENT_CHANGE = "change";
 
 	/**
+	 * Triggers when a single entry is added through {@link add}.
+	 *
+	 * @event
+	 */
+
+	static readonly EVENT_ADD = "add";
+
+	/**
+	 * Triggers when a single entry is removed or overwritten, either through {@link delete} or {@link add}.
+	 *
+	 * Does not trigger when {@link clear} is called.
+	 *
+	 * @event
+	 */
+
+	static readonly EVENT_DELETE = "delete";
+
+	/**
+	 * Triggers right before this set is cleared.
+	 *
+	 * @event
+	 */
+
+	static readonly EVENT_CLEAR = "clear";
+
+	// #endregion
+
+	/**
 	 * The internal data collection.
 	 */
 
@@ -27,7 +85,7 @@ export class ObservableSet<T> extends EventDispatcher<BaseEventMap> implements S
 	/**
 	 * Constructs a new set.
 	 *
-	 * @param iterable - A list of entries to add to this set.
+	 * @param iterable - A list of values to add to this set.
 	 */
 
 	constructor(iterable?: Iterable<T>) {
@@ -58,6 +116,7 @@ export class ObservableSet<T> extends EventDispatcher<BaseEventMap> implements S
 
 	clear(): void {
 
+		this.dispatchEvent({ type: ObservableSet.EVENT_CLEAR });
 		const result = this.data.clear();
 		this.dispatchEvent({ type: ObservableSet.EVENT_CHANGE });
 		return result;
@@ -66,9 +125,16 @@ export class ObservableSet<T> extends EventDispatcher<BaseEventMap> implements S
 
 	delete(value: T): boolean {
 
-		const result = this.data.delete(value);
+		if(!this.data.has(value)) {
+
+			return false;
+
+		}
+
+		this.dispatchEvent({ type: ObservableSet.EVENT_DELETE, value });
+		this.data.delete(value);
 		this.dispatchEvent({ type: ObservableSet.EVENT_CHANGE });
-		return result;
+		return true;
 
 	}
 
@@ -81,6 +147,7 @@ export class ObservableSet<T> extends EventDispatcher<BaseEventMap> implements S
 	add(value: T): this {
 
 		this.data.add(value);
+		this.dispatchEvent({ type: ObservableSet.EVENT_ADD, value });
 		this.dispatchEvent({ type: ObservableSet.EVENT_CHANGE });
 		return this;
 
