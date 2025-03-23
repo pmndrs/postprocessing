@@ -66,6 +66,7 @@ export class LuminancePass extends Pass<LuminanceMaterial> {
 		texture.internalFormat = inputTexture.internalFormat;
 		texture.type = inputTexture.type;
 		texture.colorSpace = inputTexture.colorSpace;
+		texture.needsUpdate = true;
 
 		if(this.input.frameBufferPrecisionHigh) {
 
