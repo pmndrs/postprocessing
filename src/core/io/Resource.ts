@@ -41,6 +41,14 @@ export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap
 	private _overrideValue: T | null;
 
 	/**
+	 * Indicates whether this resource is currently locked.
+	 *
+	 * A resource will be locked for the duration of a `change` event dispatch.
+	 */
+
+	private locked: boolean;
+
+	/**
 	 * Constructs a new resource wrapper.
 	 *
 	 * @param value - A resource value.
@@ -53,6 +61,7 @@ export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap
 		this.id = Resource.idManager.getNextId();
 		this._value = value;
 		this._overrideValue = null;
+		this.locked = false;
 
 	}
 
@@ -98,7 +107,15 @@ export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap
 
 	protected setChanged(): void {
 
+		if(this.locked) {
+
+			throw new Error("Unable to change resource value inside change event handler");
+
+		}
+
+		this.locked = true;
 		this.dispatchEvent({ type: Resource.EVENT_CHANGE });
+		this.locked = false;
 
 	}
 

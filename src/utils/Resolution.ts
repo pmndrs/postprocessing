@@ -58,6 +58,14 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 	private _scale: number;
 
 	/**
+	 * Indicates whether this resolution is currently locked.
+	 *
+	 * A resolution will be locked for the duration of a `change` event dispatch.
+	 */
+
+	private locked: boolean;
+
+	/**
 	 * Constructs a new resolution.
 	 *
 	 * @param width - The preferred width.
@@ -74,6 +82,7 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 		this.effectiveSize = new Vector2();
 		this._pixelRatio = 1.0;
 		this._scale = scale;
+		this.locked = false;
 
 		this.addEventListener(Resolution.EVENT_CHANGE, () => this.updateEffectiveSize());
 		this.updateEffectiveSize();
@@ -441,7 +450,15 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 
 	setChanged(): void {
 
+		if(this.locked) {
+
+			throw new Error("Unable to change resolution inside change event handler");
+
+		}
+
+		this.locked = true;
 		this.dispatchEvent({ type: Resolution.EVENT_CHANGE });
+		this.locked = false;
 
 	}
 
