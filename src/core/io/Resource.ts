@@ -103,9 +103,11 @@ export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap
 
 	/**
 	 * Dispatches a `change` event.
+	 *
+	 * @internal
 	 */
 
-	protected setChanged(): void {
+	setChanged(): void {
 
 		if(this.locked) {
 
