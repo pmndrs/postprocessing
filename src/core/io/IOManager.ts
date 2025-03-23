@@ -307,6 +307,9 @@ export class IOManager {
 
 			}
 
+			// Notify listeners that this texture has changed.
+			pass.output.defaultBuffer!.texture.setChanged();
+
 		}
 
 	}
