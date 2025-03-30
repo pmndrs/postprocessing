@@ -2,7 +2,7 @@ import { BaseEvent, EventDispatcher } from "three";
 import { BaseEventMap } from "../core/BaseEventMap.js";
 
 /**
- * An event that contains information about a set value that was added or deleted.
+ * An event that contains information about a value that was added or deleted.
  *
  * @param T - The type of the value.
  * @category Utils
@@ -57,7 +57,7 @@ export class ObservableSet<T> extends EventDispatcher<ObservableSetEventMap<T>> 
 	static readonly EVENT_ADD = "add";
 
 	/**
-	 * Triggers when a single entry is removed or overwritten, either through {@link delete} or {@link add}.
+	 * Triggers when a single entry is removed through {@link delete}.
 	 *
 	 * Does not trigger when {@link clear} is called.
 	 *
