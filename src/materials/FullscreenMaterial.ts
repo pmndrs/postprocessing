@@ -17,6 +17,8 @@ import {
 import { Resizable } from "../core/Resizable.js";
 import { Precision } from "../enums/Precision.js";
 
+import vertexShader from "./shaders/common.vert";
+
 /**
  * A fullscreen shader material.
  *
@@ -50,7 +52,8 @@ export abstract class FullscreenMaterial extends ShaderMaterial implements Resiz
 			glslVersion: GLSL3,
 			blending: NoBlending,
 			depthWrite: false,
-			depthTest: false
+			depthTest: false,
+			vertexShader
 		}, parameters));
 
 		// Define commonly used uniforms in case they are needed.
