@@ -12,16 +12,24 @@ float readDepth(sampler2D depthBuffer, const in vec2 uv, const in float near, co
 
 	float depth = texture(depthBuffer, uv).r;
 
-	#ifdef LOG_DEPTH
+	#ifdef REVERSE_DEPTH
 
-		float d = pow(2.0, depth * log2(far + 1.0)) - 1.0;
-		float a = far / (far - near);
-		float b = far * near / (near - far);
-		depth = a + b / d;
+		return 1.0 - depth;
+
+	#else
+
+		#ifdef LOG_DEPTH
+
+			float d = pow(2.0, depth * log2(far + 1.0)) - 1.0;
+			float a = far / (far - near);
+			float b = far * near / (near - far);
+			depth = a + b / d;
+
+		#endif
+
+		return depth;
 
 	#endif
-
-	return depth;
 
 }
 

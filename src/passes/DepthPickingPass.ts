@@ -50,10 +50,14 @@ export class DepthPickingPass extends DepthCopyPass {
 
 	private readDepthAt(x: number, y: number): number {
 
-		const renderTarget = this.renderTarget;
-		this.renderer?.readRenderTargetPixels(renderTarget, x, y, 1, 1, pixelBuffer);
+		if(this.renderer === null) {
 
-		return pixelBuffer[0];
+			return 0.0;
+
+		}
+
+		this.renderer.readRenderTargetPixels(this.renderTarget, x, y, 1, 1, pixelBuffer);
+		return this.renderer.capabilities.reverseDepthBuffer ? 1.0 - pixelBuffer[0] : pixelBuffer[0];
 
 	}
 
