@@ -272,7 +272,7 @@ export class GeometryPass extends Pass implements Selective {
 	 * Returns the G-Buffer texture configs that correspond to the current G-Buffer components.
 	 */
 
-	private get textureConfigs(): [string, GBufferTextureConfig][] {
+	protected get textureConfigs(): [string, GBufferTextureConfig][] {
 
 		return Array.from(this.gBufferConfig.textureConfigs).filter(x => this.gBufferComponents.has(x[0]));
 
@@ -295,7 +295,7 @@ export class GeometryPass extends Pass implements Selective {
 	 * Defines the primary G-Buffer texture configs.
 	 */
 
-	private updateTextureConfigs(): void {
+	protected updateTextureConfigs(): void {
 
 		const textureConfigs = this.gBufferConfig.textureConfigs;
 
