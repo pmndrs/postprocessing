@@ -70,7 +70,8 @@ export function extractIndices(renderTarget: WebGLRenderTarget): Map<string, num
 /**
  * Creates output definitions from a given render target.
  *
- * @todo Remove when three supports auto shader outputs.
+ * TODO Remove when three supports auto shader outputs.
+ *
  * @param renderTarget - A render target.
  * @return The output definitions.
  * @category Utils
