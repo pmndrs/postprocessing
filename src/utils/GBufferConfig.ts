@@ -59,7 +59,7 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 
 		const textureConfigs = new ObservableMap<GBuffer | string, GBufferTextureConfig>();
 
-		const gBufferStructFields = new ObservableMap<GBuffer | string, string>([
+		const gBufferStructFields = new ObservableMap([
 			[GBuffer.COLOR, "color"],
 			[GBuffer.DEPTH, "depth"],
 			[GBuffer.NORMAL, "normal"],
@@ -67,7 +67,7 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 			[GBuffer.EMISSION, "emission"]
 		]);
 
-		const gBufferStructDeclaration = new ObservableMap<GData | string, string>([
+		const gBufferStructDeclaration = new ObservableMap([
 			[GData.COLOR, "FRAME_BUFFER_PRECISION sampler2D color;"],
 			[GData.DEPTH, "DEPTH_BUFFER_PRECISION sampler2D depth;"],
 			[GData.NORMAL, "mediump sampler2D normal;"],
@@ -75,7 +75,7 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 			[GData.EMISSION, "FRAME_BUFFER_PRECISION sampler2D emission;"]
 		]);
 
-		const gDataStructDeclaration = new ObservableMap<GData | string, string>([
+		const gDataStructDeclaration = new ObservableMap([
 			[GData.COLOR, "vec4 color;"],
 			[GData.DEPTH, "float depth;"],
 			[GData.NORMAL, "vec3 normal;"],
@@ -85,7 +85,7 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 			[GData.LUMINANCE, "float luminance;"]
 		]);
 
-		const gDataStructInitialization = new ObservableMap<GData | string, string>([
+		const gDataStructInitialization = new ObservableMap([
 			[GData.COLOR, "gData.color = texture(gBuffer.color, UV);"],
 			[GData.DEPTH, "gData.depth = texture(gBuffer.depth, UV).r;"],
 			[GData.NORMAL, "gData.normal = texture(gBuffer.normal, UV).xyz;"],
@@ -95,9 +95,9 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 			[GData.LUMINANCE, "gData.luminance = luminance(gData.color.rgb);"]
 		]);
 
-		const gDataDependencies = new ObservableMap<GData | string, Set<GData | string>>([
-			[GData.POSITION, new Set<GData>([GData.DEPTH])],
-			[GData.LUMINANCE, new Set<GData>([GData.COLOR])]
+		const gDataDependencies = new ObservableMap([
+			[GData.POSITION, new Set([GData.DEPTH])],
+			[GData.LUMINANCE, new Set([GData.COLOR])]
 		]);
 
 		const listener = () => this.dispatchEvent({ type: "change" });
