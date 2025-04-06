@@ -12,14 +12,6 @@ const AUTO_SIZE = -1;
 export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2Like {
 
 	/**
-	 * Triggers when the resolution is changed.
-	 *
-	 * @event
-	 */
-
-	static readonly EVENT_CHANGE = "change";
-
-	/**
 	 * An auto sizing constant.
 	 *
 	 * Can be used to automatically calculate the width or height based on the original aspect ratio.
@@ -84,7 +76,7 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 		this._scale = scale;
 		this.locked = false;
 
-		this.addEventListener(Resolution.EVENT_CHANGE, () => this.updateEffectiveSize());
+		this.addEventListener("change", () => this.updateEffectiveSize());
 		this.updateEffectiveSize();
 
 	}
@@ -457,7 +449,7 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 		}
 
 		this.locked = true;
-		this.dispatchEvent({ type: Resolution.EVENT_CHANGE });
+		this.dispatchEvent({ type: "change" });
 		this.locked = false;
 
 	}

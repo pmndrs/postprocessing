@@ -43,6 +43,12 @@ const v = /* @__PURE__ */ new Vector2();
 
 export interface PassEventMap extends BaseEventMap {
 
+	/**
+	 * Triggers when the pass gets enabled or disabled.
+	 *
+	 * @event
+	 */
+
 	toggle: BaseEvent;
 
 }
@@ -56,26 +62,6 @@ export interface PassEventMap extends BaseEventMap {
 
 export abstract class Pass<TMaterial extends Material | null = null>
 	extends EventDispatcher<PassEventMap> implements Disposable, Identifiable, Renderable {
-
-	// #region Events
-
-	/**
-	 * Triggers when this pass has changed and requires a full update.
-	 *
-	 * @event
-	 */
-
-	static readonly EVENT_CHANGE = "change";
-
-	/**
-	 * Triggers when this pass gets enabled or disabled.
-	 *
-	 * @event
-	 */
-
-	static readonly EVENT_TOGGLE = "toggle";
-
-	// #endregion
 
 	/**
 	 * A shared fullscreen triangle.
@@ -268,14 +254,14 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this.resolution = new Resolution();
 		this.viewport = new Viewport();
 		this.scissor = new Scissor();
-		this.resolution.addEventListener(Resolution.EVENT_CHANGE, (e) => this.handleResolutionEvent(e));
-		this.viewport.addEventListener(Viewport.EVENT_CHANGE, (e) => this.handleViewportEvent(e));
-		this.scissor.addEventListener(Scissor.EVENT_CHANGE, (e) => this.handleScissorEvent(e));
+		this.resolution.addEventListener("change", (e) => this.handleResolutionEvent(e));
+		this.viewport.addEventListener("change", (e) => this.handleViewportEvent(e));
+		this.scissor.addEventListener("change", (e) => this.handleScissorEvent(e));
 
 		this.input = new Input();
 		this.output = new Output();
-		this.input.addEventListener(Input.EVENT_CHANGE, (e) => this.handleInputEvent(e));
-		this.output.addEventListener(Output.EVENT_CHANGE, (e) => this.handleOutputEvent(e));
+		this.input.addEventListener("change", (e) => this.handleInputEvent(e));
+		this.output.addEventListener("change", (e) => this.handleOutputEvent(e));
 
 	}
 
@@ -312,7 +298,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		if(this._enabled !== value) {
 
 			this._enabled = value;
-			this.dispatchEvent({ type: Pass.EVENT_TOGGLE });
+			this.dispatchEvent({ type: "toggle" });
 
 		}
 
@@ -866,7 +852,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	protected setChanged(): void {
 
-		this.dispatchEvent({ type: Pass.EVENT_CHANGE });
+		this.dispatchEvent({ type: "change" });
 
 	}
 

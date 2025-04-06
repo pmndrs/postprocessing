@@ -85,8 +85,8 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		for(const effect of super.subpasses) {
 
-			effect.removeEventListener(Pass.EVENT_CHANGE, this.effectListener);
-			effect.removeEventListener(Pass.EVENT_TOGGLE, this.effectListener);
+			effect.removeEventListener("change", this.effectListener);
+			effect.removeEventListener("toggle", this.effectListener);
 
 		}
 
@@ -101,8 +101,8 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 			}
 
-			effect.addEventListener(Pass.EVENT_CHANGE, this.effectListener);
-			effect.addEventListener(Pass.EVENT_TOGGLE, this.effectListener);
+			effect.addEventListener("change", this.effectListener);
+			effect.addEventListener("toggle", this.effectListener);
 
 		}
 
@@ -235,12 +235,12 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		switch(e.type) {
 
-			case Pass.EVENT_CHANGE:
+			case "change":
 				this.effectMaterialManager.invalidateShaderData(e.target as Effect);
 				this.updateMaterial(true);
 				break;
 
-			case Pass.EVENT_TOGGLE:
+			case "toggle":
 				this.updateMaterial(false);
 				break;
 
@@ -258,7 +258,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		switch(e.type) {
 
-			case GBufferConfig.EVENT_CHANGE:
+			case "change":
 				this.updateMaterial(true);
 				break;
 
@@ -296,13 +296,13 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 			if(this.previousGBufferConfig !== null) {
 
-				this.previousGBufferConfig.removeEventListener(GBufferConfig.EVENT_CHANGE, this.gBufferConfigListener);
+				this.previousGBufferConfig.removeEventListener("change", this.gBufferConfigListener);
 
 			}
 
 			if(this.input.gBufferConfig !== null) {
 
-				this.input.gBufferConfig.addEventListener(GBufferConfig.EVENT_CHANGE, this.gBufferConfigListener);
+				this.input.gBufferConfig.addEventListener("change", this.gBufferConfigListener);
 
 			}
 
@@ -349,14 +349,14 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		for(const effect of this.effects) {
 
-			effect.removeEventListener(Pass.EVENT_CHANGE, this.effectListener);
-			effect.removeEventListener(Pass.EVENT_TOGGLE, this.effectListener);
+			effect.removeEventListener("change", this.effectListener);
+			effect.removeEventListener("toggle", this.effectListener);
 
 		}
 
 		if(this.input.gBufferConfig !== null) {
 
-			this.input.gBufferConfig.removeEventListener(GBufferConfig.EVENT_CHANGE, this.gBufferConfigListener);
+			this.input.gBufferConfig.removeEventListener("change", this.gBufferConfigListener);
 
 		}
 

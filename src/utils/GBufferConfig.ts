@@ -14,14 +14,6 @@ import { ObservableMap } from "./ObservableMap.js";
 export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 
 	/**
-	 * Triggers when any of the data in this configuration is changed.
-	 *
-	 * @event
-	 */
-
-	static readonly EVENT_CHANGE = "change";
-
-	/**
 	 * A collection that maps G-Buffer components to G-Buffer texture configurations.
 	 */
 
@@ -108,13 +100,13 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 			[GData.LUMINANCE, new Set<GData>([GData.COLOR])]
 		]);
 
-		const listener = () => this.dispatchEvent({ type: GBufferConfig.EVENT_CHANGE });
-		textureConfigs.addEventListener(ObservableMap.EVENT_CHANGE, listener);
-		gBufferStructFields.addEventListener(ObservableMap.EVENT_CHANGE, listener);
-		gBufferStructDeclaration.addEventListener(ObservableMap.EVENT_CHANGE, listener);
-		gDataStructDeclaration.addEventListener(ObservableMap.EVENT_CHANGE, listener);
-		gDataStructInitialization.addEventListener(ObservableMap.EVENT_CHANGE, listener);
-		gDataDependencies.addEventListener(ObservableMap.EVENT_CHANGE, listener);
+		const listener = () => this.dispatchEvent({ type: "change" });
+		textureConfigs.addEventListener("change", listener);
+		gBufferStructFields.addEventListener("change", listener);
+		gBufferStructDeclaration.addEventListener("change", listener);
+		gDataStructDeclaration.addEventListener("change", listener);
+		gDataStructInitialization.addEventListener("change", listener);
+		gDataDependencies.addEventListener("change", listener);
 
 		this.textureConfigs = textureConfigs;
 		this.gBufferStructFields = gBufferStructFields;

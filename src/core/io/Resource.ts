@@ -13,14 +13,6 @@ import { Identifiable } from "../Identifiable.js";
 export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap> implements Identifiable {
 
 	/**
-	 * Triggers when this resource's value has changed.
-	 *
-	 * @event
-	 */
-
-	static readonly EVENT_CHANGE = "change";
-
-	/**
 	 * An ID manager.
 	 */
 
@@ -116,7 +108,7 @@ export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap
 		}
 
 		this.locked = true;
-		this.dispatchEvent({ type: Resource.EVENT_CHANGE });
+		this.dispatchEvent({ type: "change" });
 		this.locked = false;
 
 	}

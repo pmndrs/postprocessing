@@ -8,8 +8,6 @@ import { Disposable } from "./Disposable.js";
 import { Renderable } from "./Renderable.js";
 import { Resizable } from "./Resizable.js";
 import { Pass } from "./Pass.js";
-import { Input } from "./io/Input.js";
-import { Output } from "./io/Output.js";
 
 const v = /* @__PURE__ */ new Vector2();
 
@@ -206,9 +204,9 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 		pass.timer = this.timer;
 		pass.attached = true;
 
-		pass.addEventListener(Pass.EVENT_TOGGLE, RenderPipeline.listener);
-		pass.input.addEventListener(Input.EVENT_CHANGE, RenderPipeline.listener);
-		pass.output.addEventListener(Output.EVENT_CHANGE, RenderPipeline.listener);
+		pass.addEventListener("toggle", RenderPipeline.listener);
+		pass.input.addEventListener("change", RenderPipeline.listener);
+		pass.output.addEventListener("change", RenderPipeline.listener);
 
 	}
 
@@ -226,9 +224,9 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 		pass.timer = null;
 		pass.attached = false;
 
-		pass.removeEventListener(Pass.EVENT_TOGGLE, RenderPipeline.listener);
-		pass.input.removeEventListener(Input.EVENT_CHANGE, RenderPipeline.listener);
-		pass.output.removeEventListener(Output.EVENT_CHANGE, RenderPipeline.listener);
+		pass.removeEventListener("toggle", RenderPipeline.listener);
+		pass.input.removeEventListener("change", RenderPipeline.listener);
+		pass.output.removeEventListener("change", RenderPipeline.listener);
 
 	}
 

@@ -1,6 +1,5 @@
 import { BaseEvent, EventListener, Texture, Uniform } from "three";
 import { DisposableResource } from "./DisposableResource.js";
-import { Resource } from "./Resource.js";
 
 /**
  * A texture resource wrapper.
@@ -44,7 +43,7 @@ export class TextureResource extends DisposableResource<Texture | null> {
 
 			const listener = () => { uniform.value = this.value; };
 			this.uniformListeners.set(uniform, listener);
-			this.addEventListener(Resource.EVENT_CHANGE, listener);
+			this.addEventListener("change", listener);
 
 		}
 
@@ -62,7 +61,7 @@ export class TextureResource extends DisposableResource<Texture | null> {
 
 		if(this.uniformListeners.has(uniform)) {
 
-			this.removeEventListener(Resource.EVENT_CHANGE, this.uniformListeners.get(uniform)!);
+			this.removeEventListener("change", this.uniformListeners.get(uniform)!);
 
 		}
 

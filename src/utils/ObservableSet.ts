@@ -23,8 +23,30 @@ export interface SetEvent<T> extends BaseEvent {
 
 export interface ObservableSetEventMap<T> extends BaseEventMap {
 
+	/**
+	 * Triggers when a single entry is added.
+	 *
+	 * @event
+	 */
+
 	add: SetEvent<T>;
+
+	/**
+	 * Triggers when a single entry is removed.
+	 *
+	 * Does not trigger when the set is cleared.
+	 *
+	 * @event
+	 */
+
 	delete: SetEvent<T>;
+
+	/**
+	 * Triggers right before the set is cleared.
+	 *
+	 * @event
+	 */
+
 	clear: BaseEvent;
 
 }
@@ -37,44 +59,6 @@ export interface ObservableSetEventMap<T> extends BaseEventMap {
  */
 
 export class ObservableSet<T> extends EventDispatcher<ObservableSetEventMap<T>> implements Set<T> {
-
-	// #region Events
-
-	/**
-	 * Triggers when an entry is added, replaced or removed.
-	 *
-	 * @event
-	 */
-
-	static readonly EVENT_CHANGE = "change";
-
-	/**
-	 * Triggers when a single entry is added through {@link add}.
-	 *
-	 * @event
-	 */
-
-	static readonly EVENT_ADD = "add";
-
-	/**
-	 * Triggers when a single entry is removed through {@link delete}.
-	 *
-	 * Does not trigger when {@link clear} is called.
-	 *
-	 * @event
-	 */
-
-	static readonly EVENT_DELETE = "delete";
-
-	/**
-	 * Triggers right before this set is cleared.
-	 *
-	 * @event
-	 */
-
-	static readonly EVENT_CLEAR = "clear";
-
-	// #endregion
 
 	/**
 	 * The internal data collection.
@@ -116,9 +100,9 @@ export class ObservableSet<T> extends EventDispatcher<ObservableSetEventMap<T>> 
 
 	clear(): void {
 
-		this.dispatchEvent({ type: ObservableSet.EVENT_CLEAR });
+		this.dispatchEvent({ type: "clear" });
 		const result = this.data.clear();
-		this.dispatchEvent({ type: ObservableSet.EVENT_CHANGE });
+		this.dispatchEvent({ type: "change" });
 		return result;
 
 	}
@@ -131,9 +115,9 @@ export class ObservableSet<T> extends EventDispatcher<ObservableSetEventMap<T>> 
 
 		}
 
-		this.dispatchEvent({ type: ObservableSet.EVENT_DELETE, value });
+		this.dispatchEvent({ type: "delete", value });
 		this.data.delete(value);
-		this.dispatchEvent({ type: ObservableSet.EVENT_CHANGE });
+		this.dispatchEvent({ type: "change" });
 		return true;
 
 	}
@@ -147,8 +131,8 @@ export class ObservableSet<T> extends EventDispatcher<ObservableSetEventMap<T>> 
 	add(value: T): this {
 
 		this.data.add(value);
-		this.dispatchEvent({ type: ObservableSet.EVENT_ADD, value });
-		this.dispatchEvent({ type: ObservableSet.EVENT_CHANGE });
+		this.dispatchEvent({ type: "add", value });
+		this.dispatchEvent({ type: "change" });
 		return this;
 
 	}

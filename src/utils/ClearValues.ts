@@ -12,14 +12,6 @@ import { ObservableMap } from "./ObservableMap.js";
 export class ClearValues extends EventDispatcher<BaseEventMap> {
 
 	/**
-	 * Triggers when any of the clear values is changed.
-	 *
-	 * @event
-	 */
-
-	static readonly EVENT_CHANGE = "change";
-
-	/**
 	 * @see {@link color}
 	 */
 
@@ -54,7 +46,7 @@ export class ClearValues extends EventDispatcher<BaseEventMap> {
 			[GBuffer.EMISSION, new Vector4(0.0, 0.0, 0.0, 1.0)]
 		]);
 
-		gBuffer.addEventListener(ObservableMap.EVENT_CHANGE, () => this.setChanged());
+		gBuffer.addEventListener("change", () => this.setChanged());
 		this.gBuffer = gBuffer;
 
 	}
@@ -103,7 +95,7 @@ export class ClearValues extends EventDispatcher<BaseEventMap> {
 
 	protected setChanged(): void {
 
-		this.dispatchEvent({ type: ClearValues.EVENT_CHANGE });
+		this.dispatchEvent({ type: "change" });
 
 	}
 

@@ -196,7 +196,7 @@ export class GeometryPass extends Pass implements Selective {
 		this.subpasses = [this.copyPass];
 
 		const gBufferComponents = new ObservableSet<GBuffer | string>();
-		gBufferComponents.addEventListener(ObservableSet.EVENT_CHANGE, () => this.updateGBuffer());
+		gBufferComponents.addEventListener("change", () => this.updateGBuffer());
 		this.gBufferComponents = gBufferComponents;
 		this.gBufferResource = new RenderTargetResource();
 		this.output.defaultBuffer = this.gBufferResource;

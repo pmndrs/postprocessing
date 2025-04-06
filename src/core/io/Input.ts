@@ -6,29 +6,15 @@ import { ObservableSet } from "../../utils/ObservableSet.js";
 import { BaseEventMap } from "../BaseEventMap.js";
 import { Disposable } from "../Disposable.js";
 import { ShaderData } from "../ShaderData.js";
-import { Resource } from "./Resource.js";
 import { TextureResource } from "./TextureResource.js";
 
 /**
  * Input resources.
  *
- * Listen for events of type {@link EVENT_CHANGE} to react to resource updates.
- *
  * @category IO
  */
 
 export class Input extends EventDispatcher<BaseEventMap> implements Disposable, ShaderData {
-
-	/**
-	 * Triggers when an input resource is added, replaced or removed.
-	 *
-	 * This event is also fired when gBuffer components are changed. The actual gBuffer textures can be accessed through
-	 * the {@link textures} map by using {@link GBuffer} values as keys.
-	 *
-	 * @event
-	 */
-
-	static readonly EVENT_CHANGE = "change";
 
 	/**
 	 * Identifies the default input buffer in the {@link textures} collection.
@@ -64,7 +50,7 @@ export class Input extends EventDispatcher<BaseEventMap> implements Disposable, 
 	private _gBufferConfig: GBufferConfig | null;
 
 	/**
-	 * An event listener that triggers an {@link EVENT_CHANGE} event.
+	 * An event listener that triggers a `change` event.
 	 */
 
 	private readonly listener: () => void;
@@ -83,22 +69,19 @@ export class Input extends EventDispatcher<BaseEventMap> implements Disposable, 
 		const textures = new ObservableMap<GBuffer | string, TextureResource>();
 		const listener = () => this.setChanged();
 
-		gBuffer.addEventListener(ObservableSet.EVENT_CHANGE, listener);
-		defines.addEventListener(ObservableMap.EVENT_CHANGE, listener);
-		uniforms.addEventListener(ObservableMap.EVENT_CHANGE, listener);
-		textures.addEventListener(ObservableMap.EVENT_CHANGE, listener);
+		gBuffer.addEventListener("change", listener);
+		defines.addEventListener("change", listener);
+		uniforms.addEventListener("change", listener);
+		textures.addEventListener("change", listener);
 
-		textures.addEventListener(ObservableMap.EVENT_ADD,
-			(e) => e.value.addEventListener(Resource.EVENT_CHANGE, listener));
+		textures.addEventListener("add", (e) => e.value.addEventListener("change", listener));
+		textures.addEventListener("delete", (e) => e.value.removeEventListener("change", listener));
 
-		textures.addEventListener(ObservableMap.EVENT_DELETE,
-			(e) => e.value.removeEventListener(Resource.EVENT_CHANGE, listener));
-
-		textures.addEventListener(ObservableMap.EVENT_CLEAR, (e) => {
+		textures.addEventListener("clear", (e) => {
 
 			for(const value of e.target.values()) {
 
-				value.removeEventListener(Resource.EVENT_CHANGE, listener);
+				value.removeEventListener("change", listener);
 
 			}
 
@@ -130,13 +113,13 @@ export class Input extends EventDispatcher<BaseEventMap> implements Disposable, 
 
 		if(this._gBufferConfig !== null) {
 
-			this._gBufferConfig.removeEventListener(GBufferConfig.EVENT_CHANGE, this.listener);
+			this._gBufferConfig.removeEventListener("change", this.listener);
 
 		}
 
 		if(value !== null) {
 
-			value.addEventListener(GBufferConfig.EVENT_CHANGE, this.listener);
+			value.addEventListener("change", this.listener);
 
 		}
 
@@ -199,7 +182,7 @@ export class Input extends EventDispatcher<BaseEventMap> implements Disposable, 
 
 	setChanged(): void {
 
-		this.dispatchEvent({ type: Input.EVENT_CHANGE });
+		this.dispatchEvent({ type: "change" });
 
 	}
 

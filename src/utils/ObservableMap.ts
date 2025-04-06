@@ -26,8 +26,30 @@ export interface MapEvent<K, V> extends BaseEvent {
 
 export interface ObservableMapEventMap<K, V> extends BaseEventMap {
 
+	/**
+	 * Triggers when a single entry is added.
+	 *
+	 * @event
+	 */
+
 	add: MapEvent<K, V>;
+
+	/**
+	 * Triggers when a single entry is removed or overwritten.
+	 *
+	 * Does not trigger when the map is cleared.
+	 *
+	 * @event
+	 */
+
 	delete: MapEvent<K, V>;
+
+	/**
+	 * Triggers right before the maps is cleared.
+	 *
+	 * @event
+	 */
+
 	clear: BaseEvent;
 
 }
@@ -41,44 +63,6 @@ export interface ObservableMapEventMap<K, V> extends BaseEventMap {
  */
 
 export class ObservableMap<K, V> extends EventDispatcher<ObservableMapEventMap<K, V>> implements Map<K, V> {
-
-	// #region Events
-
-	/**
-	 * Triggers when an entry is added, replaced or removed.
-	 *
-	 * @event
-	 */
-
-	static readonly EVENT_CHANGE = "change";
-
-	/**
-	 * Triggers when a single entry is added through {@link set}.
-	 *
-	 * @event
-	 */
-
-	static readonly EVENT_ADD = "add";
-
-	/**
-	 * Triggers when a single entry is removed or overwritten, either through {@link delete} or {@link set}.
-	 *
-	 * Does not trigger when {@link clear} is called.
-	 *
-	 * @event
-	 */
-
-	static readonly EVENT_DELETE = "delete";
-
-	/**
-	 * Triggers right before this maps is cleared.
-	 *
-	 * @event
-	 */
-
-	static readonly EVENT_CLEAR = "clear";
-
-	// #endregion
 
 	/**
 	 * The internal data collection.
@@ -114,9 +98,9 @@ export class ObservableMap<K, V> extends EventDispatcher<ObservableMapEventMap<K
 
 	clear(): void {
 
-		this.dispatchEvent({ type: ObservableMap.EVENT_CLEAR });
+		this.dispatchEvent({ type: "clear" });
 		const result = this.data.clear();
-		this.dispatchEvent({ type: ObservableMap.EVENT_CHANGE });
+		this.dispatchEvent({ type: "change" });
 		return result;
 
 	}
@@ -130,13 +114,13 @@ export class ObservableMap<K, V> extends EventDispatcher<ObservableMapEventMap<K
 		}
 
 		this.dispatchEvent({
-			type: ObservableMap.EVENT_DELETE,
+			type: "delete",
 			key: key,
 			value: this.data.get(key) as V
 		});
 
 		this.data.delete(key);
-		this.dispatchEvent({ type: ObservableMap.EVENT_CHANGE });
+		this.dispatchEvent({ type: "change" });
 		return true;
 
 	}
@@ -158,7 +142,7 @@ export class ObservableMap<K, V> extends EventDispatcher<ObservableMapEventMap<K
 		if(this.data.has(key)) {
 
 			this.dispatchEvent({
-				type: ObservableMap.EVENT_DELETE,
+				type: "delete",
 				key: key,
 				value: this.data.get(key) as V
 			});
@@ -166,8 +150,8 @@ export class ObservableMap<K, V> extends EventDispatcher<ObservableMapEventMap<K
 		}
 
 		this.data.set(key, value);
-		this.dispatchEvent({ type: ObservableMap.EVENT_ADD, key, value });
-		this.dispatchEvent({ type: ObservableMap.EVENT_CHANGE });
+		this.dispatchEvent({ type: "add", key, value });
+		this.dispatchEvent({ type: "change" });
 		return this;
 
 	}

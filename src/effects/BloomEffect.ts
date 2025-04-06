@@ -1,5 +1,4 @@
 import { Uniform } from "three";
-import { Pass } from "../core/Pass.js";
 import { LuminancePass } from "../passes/LuminancePass.js";
 import { MipmapBlurPass, MipmapBlurPassOptions } from "../passes/MipmapBlurPass.js";
 import { LuminanceMaterial } from "../materials/LuminanceMaterial.js";
@@ -87,7 +86,7 @@ export class BloomEffect extends Effect {
 		this.blendMode.blendFunction = new AddBlendFunction();
 
 		const luminancePass = new LuminancePass();
-		luminancePass.addEventListener(Pass.EVENT_TOGGLE, () => this.onInputChange());
+		luminancePass.addEventListener("change", () => this.onInputChange());
 		this.luminancePass = luminancePass;
 
 		const luminanceMaterial = this.luminanceMaterial;

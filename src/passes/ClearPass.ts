@@ -67,8 +67,7 @@ export class ClearPass extends Pass {
 
 		this.background = new Background();
 		this.background.setClearValues(this.clearValues);
-		this.clearValues.addEventListener(ClearValues.EVENT_CHANGE,
-			() => this.background.setClearValues(this.clearValues));
+		this.clearValues.addEventListener("change", () => this.background.setClearValues(this.clearValues));
 
 		this.backgroundScene = new Scene();
 		this.backgroundScene.add(this.background);

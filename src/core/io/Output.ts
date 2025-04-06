@@ -4,25 +4,14 @@ import { BaseEventMap } from "../BaseEventMap.js";
 import { Disposable } from "../Disposable.js";
 import { ShaderData } from "../ShaderData.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
-import { Resource } from "./Resource.js";
 
 /**
  * Output resources.
- *
- * Listen for events of type {@link EVENT_CHANGE} to react to resource updates.
  *
  * @category IO
  */
 
 export class Output extends EventDispatcher<BaseEventMap> implements Disposable, ShaderData {
-
-	/**
-	 * Triggers when an output resource is added, replaced or removed.
-	 *
-	 * @event
-	 */
-
-	static readonly EVENT_CHANGE = "change";
 
 	/**
 	 * Identifies the default output buffer in the {@link renderTargets} collection.
@@ -52,21 +41,18 @@ export class Output extends EventDispatcher<BaseEventMap> implements Disposable,
 		const renderTargets = new ObservableMap<string, RenderTargetResource>();
 		const listener = () => this.setChanged();
 
-		defines.addEventListener(ObservableMap.EVENT_CHANGE, listener);
-		uniforms.addEventListener(ObservableMap.EVENT_CHANGE, listener);
-		renderTargets.addEventListener(ObservableMap.EVENT_CHANGE, listener);
+		defines.addEventListener("change", listener);
+		uniforms.addEventListener("change", listener);
+		renderTargets.addEventListener("change", listener);
 
-		renderTargets.addEventListener(ObservableMap.EVENT_ADD,
-			(e) => e.value.addEventListener(Resource.EVENT_CHANGE, listener));
+		renderTargets.addEventListener("add", (e) => e.value.addEventListener("change", listener));
+		renderTargets.addEventListener("delete", (e) => e.value.removeEventListener("change", listener));
 
-		renderTargets.addEventListener(ObservableMap.EVENT_DELETE,
-			(e) => e.value.removeEventListener(Resource.EVENT_CHANGE, listener));
-
-		renderTargets.addEventListener(ObservableMap.EVENT_CLEAR, (e) => {
+		renderTargets.addEventListener("clear", (e) => {
 
 			for(const value of e.target.values()) {
 
-				value.removeEventListener(Resource.EVENT_CHANGE, listener);
+				value.removeEventListener("change", listener);
 
 			}
 
@@ -141,7 +127,7 @@ export class Output extends EventDispatcher<BaseEventMap> implements Disposable,
 
 	setChanged(): void {
 
-		this.dispatchEvent({ type: Output.EVENT_CHANGE });
+		this.dispatchEvent({ type: "change" });
 
 	}
 

@@ -39,7 +39,7 @@ export class Viewport extends Resolution implements Vector4Like {
 		this.effectiveOffset = new Vector2();
 		this._enabled = false;
 
-		this.addEventListener(Resolution.EVENT_CHANGE, () => this.updateEffectiveOffset());
+		this.addEventListener("change", () => this.updateEffectiveOffset());
 
 	}
 
