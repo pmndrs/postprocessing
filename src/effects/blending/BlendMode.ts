@@ -1,17 +1,6 @@
-import { BaseEvent, EventDispatcher, Uniform } from "three";
+import { EventDispatcher, Uniform } from "three";
+import { BaseEventMap } from "../../core/BaseEventMap.js";
 import { BlendFunction } from "./BlendFunction.js";
-
-/**
- * BlendMode events.
- *
- * @category Blending
- */
-
-export interface BlendModeEventMap {
-
-	change: BaseEvent;
-
-}
 
 /**
  * A blend mode.
@@ -19,15 +8,7 @@ export interface BlendModeEventMap {
  * @category Blending
  */
 
-export class BlendMode extends EventDispatcher<BlendModeEventMap> {
-
-	/**
-	 * Triggers when the blend function is changed.
-	 *
-	 * @event
-	 */
-
-	static readonly EVENT_CHANGE = "change";
+export class BlendMode extends EventDispatcher<BaseEventMap> {
 
 	/**
 	 * @see {@link blendFunction}
@@ -90,7 +71,7 @@ export class BlendMode extends EventDispatcher<BlendModeEventMap> {
 	set blendFunction(value) {
 
 		this._blendFunction = value;
-		this.dispatchEvent({ type: BlendMode.EVENT_CHANGE });
+		this.dispatchEvent({ type: "change" });
 
 	}
 
