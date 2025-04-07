@@ -2,11 +2,11 @@ import { ColorSpace, LinearSRGBColorSpace, NoColorSpace, SRGBColorSpace, Uniform
 import { ShaderData } from "../core/ShaderData.js";
 import { Effect } from "../effects/Effect.js";
 import { BlendMode } from "../effects/blending/BlendMode.js";
-import { EffectShaderSection } from "../enums/EffectShaderSection.js";
-import { EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
+import { EffectShaderSection, EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
 import { GData } from "../enums/GData.js";
 import { prefixSubstrings } from "../utils/functions/string.js";
 import { GBufferConfig } from "./GBufferConfig.js";
+import { topologicalSort } from "./functions/sorting.js";
 
 const functionRegExp = /\w+\s+(\w+)\([\w\s,]*\)\s*{/g;
 const structRegExp = /struct\s+(\w*)/g;
@@ -469,13 +469,18 @@ export class EffectShaderData implements ShaderData {
 	createGDataStructInitialization(): string {
 
 		const gDataDependencies = this.gBufferConfig.gDataDependencies;
+		const gDataStructInitialization = this.gBufferConfig.gDataStructInitialization;
+
+		const dependencyGraph = new Map<string, Iterable<string>>(
+			Array.from(this.gData)
+				.filter(x => gDataStructInitialization.has(x))
+				.map(x => [x, gDataDependencies.get(x) ?? []])
+		);
 
 		return [
 			"\tGData gData;",
-			...Array.from(this.gBufferConfig.gDataStructInitialization)
-				.filter(x => this.gData.has(x[0]))
-				.sort((a, b) => gDataDependencies.has(a[0]) && gDataDependencies.get(a[0])!.has(b[0]) ? 1 : -1)
-				.map(x => `\t${x[1]}`)
+			...topologicalSort(dependencyGraph, true)
+				.map(x => `\t${gDataStructInitialization.get(x)}`)
 		].join("\n");
 
 	}
