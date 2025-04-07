@@ -3,10 +3,10 @@ import { Data3DTexture, Texture } from "three";
 /**
  * Creates a hash string that identifies a given texture.
  *
- * @ignore
  * @param texture - A texture.
  * @return The hash value.
- * @group Utils
+ * @category Utils
+ * @internal
  */
 
 export function getHash(texture: Texture): string {

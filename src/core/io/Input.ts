@@ -37,8 +37,6 @@ export class Input extends EventDispatcher<BaseEventMap> implements Disposable, 
 	 * Input textures.
 	 *
 	 * Entries specified in {@link gBuffer} will be added automatically.
-	 *
-	 * @see {@link EVENT_CHANGE}
 	 */
 
 	readonly textures: Map<GBuffer | string, TextureResource>;
