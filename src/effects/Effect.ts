@@ -1,5 +1,6 @@
 import { ColorSpace, NoColorSpace } from "three";
 import { Pass } from "../core/Pass.js";
+import { GData } from "../enums/GData.js";
 import { SrcBlendFunction } from "./blending/blend-functions/SrcBlendFunction.js";
 import { BlendMode } from "./blending/BlendMode.js";
 
@@ -44,6 +45,16 @@ export abstract class Effect extends Pass {
 	private _outputColorSpace: ColorSpace;
 
 	/**
+	 * A collection of required GBuffer data.
+	 *
+	 * This data depends on the current fragment shader and will be updated automatically.
+	 *
+	 * @internal
+	 */
+
+	readonly gData: Set<GData | string>;
+
+	/**
 	 * A hint that indicates whether this effect will be toggled at runtime.
 	 *
 	 * Toggling an effect will also set this flag to `true`.
@@ -64,13 +75,15 @@ export abstract class Effect extends Pass {
 		super(name);
 
 		this.blendMode = new BlendMode(new SrcBlendFunction());
-		this.blendMode.addEventListener(BlendMode.EVENT_CHANGE, () => this.setChanged());
+		this.blendMode.addEventListener("change", () => this.setChanged());
+		this.input.addEventListener("change", () => this.detectGDataUsage());
 
 		this._fragmentShader = null;
 		this._vertexShader = null;
 		this._inputColorSpace = NoColorSpace;
 		this._outputColorSpace = NoColorSpace;
 
+		this.gData = new Set();
 		this.optional = false;
 
 	}
@@ -106,6 +119,7 @@ export abstract class Effect extends Pass {
 	set fragmentShader(value: string | null) {
 
 		this._fragmentShader = value;
+		this.detectGDataUsage();
 		this.setChanged();
 
 	}
@@ -171,8 +185,14 @@ export abstract class Effect extends Pass {
 
 	get hasMainImageFunction(): boolean {
 
+		if(this.fragmentShader === null) {
+
+			return false;
+
+		}
+
 		const regExp = /vec4\s+mainImage\s*\([a-z\s]*vec4\s+\w+,[a-z\s]*vec2\s+\w+,[a-z\s]*GData\s+\w+\)/;
-		return this.fragmentShader !== null && regExp.test(this.fragmentShader);
+		return regExp.test(this.fragmentShader);
 
 	}
 
@@ -182,8 +202,14 @@ export abstract class Effect extends Pass {
 
 	get hasMainUvFunction(): boolean {
 
+		if(this.fragmentShader === null) {
+
+			return false;
+
+		}
+
 		const regExp = /void\s+mainUv\s*\(\s*inout\s+vec2\s+\w+\)/;
-		return this.fragmentShader !== null && regExp.test(this.fragmentShader);
+		return regExp.test(this.fragmentShader);
 
 	}
 
@@ -193,8 +219,67 @@ export abstract class Effect extends Pass {
 
 	get hasMainSupportFunction(): boolean {
 
+		if(this.vertexShader === null) {
+
+			return false;
+
+		}
+
 		const regExp = /void\s+mainSupport\s*\([a-z\s]*vec2\s+\w+\)/;
-		return this.vertexShader !== null && regExp.test(this.vertexShader);
+		return regExp.test(this.vertexShader);
+
+	}
+
+	/**
+	 * Checks the fragment shader for `GData` usage.
+	 */
+
+	private detectGDataUsage(): void {
+
+		this.gData.clear();
+
+		if(this.input.gBufferConfig === null || !this.hasMainImageFunction) {
+
+			return;
+
+		}
+
+		const shader = this.fragmentShader!;
+		const gBufferConfig = this.input.gBufferConfig;
+		const gDataParamName = /GData\s+(\w+)/.exec(shader)![1];
+
+		for(const value of Object.values(GData)) {
+
+			if(!shader.includes(`${gDataParamName}.${value}`)) {
+
+				continue;
+
+			}
+
+			for(const dependency of gBufferConfig.gDataDependencies.get(value) ?? []) {
+
+				this.gData.add(dependency);
+
+			}
+
+			this.gData.add(value);
+
+		}
+
+		for(const gData of this.gData) {
+
+			for(const component of gBufferConfig.gDataBufferSources.get(gData) ?? []) {
+
+				if(!this.input.gBuffer.has(component)) {
+
+					this.input.gBuffer.add(component);
+					console.warn(`${this.name} uses ${gData} but does not declare input G-Buffer component ${component}`);
+
+				}
+
+			}
+
+		}
 
 	}
 

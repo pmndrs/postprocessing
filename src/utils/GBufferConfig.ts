@@ -50,6 +50,12 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 	readonly gDataDependencies: Map<GData | string, Set<GData | string>>;
 
 	/**
+	 * A collection that describes which G-Buffer components are required for the GData.
+	 */
+
+	readonly gDataBufferSources: Map<GData | string, Set<GBuffer | string>>;
+
+	/**
 	 * Constructs a new G-Buffer config.
 	 */
 
@@ -100,6 +106,16 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 			[GData.LUMINANCE, new Set([GData.COLOR])]
 		]);
 
+		const gDataBufferSources = new ObservableMap([
+			[GData.COLOR, new Set([GBuffer.COLOR])],
+			[GData.DEPTH, new Set([GBuffer.DEPTH])],
+			[GData.NORMAL, new Set([GBuffer.NORMAL])],
+			[GData.POSITION, new Set([GBuffer.DEPTH])],
+			[GData.ORM, new Set([GBuffer.ORM])],
+			[GData.EMISSION, new Set([GBuffer.EMISSION])],
+			[GData.LUMINANCE, new Set([GBuffer.COLOR])]
+		]);
+
 		const listener = () => this.dispatchEvent({ type: "change" });
 		textureConfigs.addEventListener("change", listener);
 		gBufferStructFields.addEventListener("change", listener);
@@ -107,6 +123,7 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 		gDataStructDeclaration.addEventListener("change", listener);
 		gDataStructInitialization.addEventListener("change", listener);
 		gDataDependencies.addEventListener("change", listener);
+		gDataBufferSources.addEventListener("change", listener);
 
 		this.textureConfigs = textureConfigs;
 		this.gBufferStructFields = gBufferStructFields;
@@ -114,6 +131,7 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 		this.gDataStructDeclaration = gDataStructDeclaration;
 		this.gDataStructInitialization = gDataStructInitialization;
 		this.gDataDependencies = gDataDependencies;
+		this.gDataBufferSources = gDataBufferSources;
 
 	}
 

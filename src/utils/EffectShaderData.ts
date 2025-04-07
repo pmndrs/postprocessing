@@ -201,37 +201,6 @@ export class EffectShaderData implements ShaderData {
 	}
 
 	/**
-	 * Checks the given fragment shader for `GData` usage.
-	 *
-	 * @param shader - The fragment shader.
-	 */
-
-	private detectGDataUsage(shader: string): void {
-
-		// Already checked param existence during effect validation.
-		const gDataParamName = /GData\s+(\w+)/.exec(shader)![1];
-
-		for(const value of Object.values(GData)) {
-
-			const regExpGData = new RegExp(`${gDataParamName}.${value}`);
-
-			if(regExpGData.test(shader)) {
-
-				for(const dependency of this.gBufferConfig.gDataDependencies.get(value) ?? []) {
-
-					this.gData.add(dependency);
-
-				}
-
-				this.gData.add(value);
-
-			}
-
-		}
-
-	}
-
-	/**
 	 * Updates the current working color space based on the given effect.
 	 *
 	 * @param effect - The effect.
@@ -301,9 +270,15 @@ export class EffectShaderData implements ShaderData {
 
 		}
 
+		// Collect GData usage.
+		for(const gData of effect.gData) {
+
+			this.gData.add(gData);
+
+		}
+
 		if(effect.hasMainImageFunction) {
 
-			this.detectGDataUsage(fragmentShader);
 			this.gatherFragmentShaderTokens(fragmentShader, names);
 
 			if(effect.inputColorSpace !== NoColorSpace && effect.inputColorSpace !== this.colorSpace) {

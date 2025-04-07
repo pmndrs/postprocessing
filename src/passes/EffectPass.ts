@@ -268,12 +268,45 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 	// #endregion
 
+	/**
+	 * Performs tasks when the {@link GBufferConfig} has changed.
+	 */
+
+	private onGBufferConfigChange(): void {
+
+		const gBufferConfig = this.input.gBufferConfig;
+
+		if(this.previousGBufferConfig !== null) {
+
+			this.previousGBufferConfig.removeEventListener("change", this.gBufferConfigListener);
+
+		}
+
+		if(this.input.gBufferConfig !== null) {
+
+			this.input.gBufferConfig.addEventListener("change", this.gBufferConfigListener);
+
+		}
+
+		this.effectMaterialManager.gBufferConfig = gBufferConfig;
+		this.previousGBufferConfig = gBufferConfig;
+
+		for(const effect of this.effects) {
+
+			effect.input.gBufferConfig = gBufferConfig;
+
+		}
+
+		// Discard outdated materials and rebuild.
+		this.updateMaterial(true);
+
+	}
+
 	protected override onInputChange(): void {
 
 		this.updateGBufferStruct();
 
-		// Clear the input buffers of all effects and then assign new ones to minimize event churn.
-
+		// Clear all input buffers before assigning new ones to minimize event churn.
 		for(const effect of this.effects) {
 
 			effect.input.buffers.clear();
@@ -290,25 +323,9 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		}
 
-		// Clean up and listen for G-Buffer config changes to rebuild the material when needed.
-
 		if(this.previousGBufferConfig !== this.input.gBufferConfig) {
 
-			if(this.previousGBufferConfig !== null) {
-
-				this.previousGBufferConfig.removeEventListener("change", this.gBufferConfigListener);
-
-			}
-
-			if(this.input.gBufferConfig !== null) {
-
-				this.input.gBufferConfig.addEventListener("change", this.gBufferConfigListener);
-
-			}
-
-			this.previousGBufferConfig = this.input.gBufferConfig;
-			this.effectMaterialManager.gBufferConfig = this.input.gBufferConfig;
-			this.updateMaterial(true); // Discard outdated materials.
+			this.onGBufferConfigChange();
 
 		}
 
