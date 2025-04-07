@@ -64,7 +64,7 @@ export class CustomEffect extends Effect {
 Every effect must provide a fragment shader that implements at least one of these two functions:
 
 ```glsl
-vec4 mainImage(in vec4 inputColor, in vec2 uv, in GData data);
+vec4 mainImage(in vec4 inputColor, in vec2 uv, in GData gData);
 void mainUv(inout vec2 uv);
 ```
 
@@ -151,6 +151,7 @@ The shader chunks [common](https://github.com/mrdoob/three.js/blob/dev/src/rende
 and [packing](https://github.com/mrdoob/three.js/blob/dev/src/renderers/shaders/ShaderChunk/packing.glsl.js) are included in the fragment shader by default.
 
 * The functions `packDepthToRGBA(v)` and `unpackRGBAToDepth(v)` are also available as `packFloatToRGBA(v)` and `unpackRGBAToFloat(v)`
-* To sample depth at any location, use `readDepth(depthBuffer, uv)`
+* To sample depth at any location, use `readDepth(gBuffer.depth, uv)`
 * To calculate the view Z based on depth, use `getViewZ(depth)`
-* To calculate the view position, use `getViewPosition(screenPosition, depth)`
+* To reconstruct the view position, use `getViewPosition(uv, depth)`
+* To calculate the world position, use `getWorldPosition(viewPosition)`
