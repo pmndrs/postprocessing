@@ -86,7 +86,7 @@ export class BloomEffect extends Effect {
 		this.blendMode.blendFunction = new AddBlendFunction();
 
 		const luminancePass = new LuminancePass();
-		luminancePass.addEventListener("change", () => this.onInputChange());
+		luminancePass.addEventListener("toggle", () => this.onInputChange());
 		this.luminancePass = luminancePass;
 
 		const luminanceMaterial = this.luminanceMaterial;
