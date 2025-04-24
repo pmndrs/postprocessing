@@ -1,6 +1,5 @@
 import {
 	DataTexture,
-	LuminanceFormat,
 	RedFormat,
 	RGFormat,
 	RGBAFormat,
@@ -22,7 +21,6 @@ import {
 function getNoise(size: number, format: PixelFormat, type: TextureDataType): TypedArray {
 
 	const channels = new Map<PixelFormat, number>([
-		[LuminanceFormat, 1],
 		[RedFormat, 1],
 		[RGFormat, 2],
 		[RGBAFormat, 4]
