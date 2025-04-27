@@ -125,7 +125,7 @@ export abstract class Effect extends Pass {
 	}
 
 	/**
-	 * The fragment shader.
+	 * The vertex shader.
 	 */
 
 	get vertexShader(): string | null {
