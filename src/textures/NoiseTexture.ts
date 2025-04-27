@@ -72,7 +72,7 @@ export class NoiseTexture extends DataTexture {
 	/**
 	 * Constructs a new noise texture.
 	 *
-	 * Supported texture formats: `RGBAFormat`, `LuminanceFormat`, `RedFormat`, `RGFormat`.
+	 * Supported texture formats: `RGBAFormat`, `RedFormat`, `RGFormat`.
 	 *
 	 * @param width - The width.
 	 * @param height - The height.
