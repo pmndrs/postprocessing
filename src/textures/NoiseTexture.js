@@ -1,6 +1,5 @@
 import {
 	DataTexture,
-	LuminanceFormat,
 	RedFormat,
 	RGFormat,
 	RGBAFormat,
@@ -20,7 +19,6 @@ import {
 function getNoise(size, format, type) {
 
 	const channels = new Map([
-		[LuminanceFormat, 1],
 		[RedFormat, 1],
 		[RGFormat, 2],
 		[RGBAFormat, 4]
