@@ -67,16 +67,15 @@ export class NoiseTexture extends DataTexture {
 	/**
 	 * Constructs a new noise texture.
 	 *
-	 * The texture format can be either `LuminanceFormat` or `RGBAFormat`. Additionally, the formats `RedFormat` and
-	 * `RGFormat` can be used in a WebGL 2 context.
+	 * Supported formats are `RGBAFormat`, `RedFormat` and `RGFormat`.
 	 *
 	 * @param {Number} width - The width.
 	 * @param {Number} height - The height.
-	 * @param {Number} [format=LuminanceFormat] - The texture format.
+	 * @param {Number} [format=RedFormat] - The texture format.
 	 * @param {Number} [type=UnsignedByteType] - The texture type.
 	 */
 
-	constructor(width, height, format = LuminanceFormat, type = UnsignedByteType) {
+	constructor(width, height, format = RedFormat, type = UnsignedByteType) {
 
 		super(getNoise(width * height, format, type), width, height, format, type);
 		this.needsUpdate = true;
