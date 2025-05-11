@@ -32,6 +32,7 @@ import { Identifiable } from "./Identifiable.js";
 import { Renderable } from "./Renderable.js";
 import { Viewport } from "../utils/Viewport.js";
 import { Scissor } from "../utils/Scissor.js";
+import { SceneEvent, SceneEventTarget } from "../utils/SceneEventTarget.js";
 
 const v = /* @__PURE__ */ new Vector2();
 
@@ -86,7 +87,21 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	private static idManager = /* @__PURE__ */ new IdManager();
 
+	/**
+	 * A collection of scene event helpers.
+	 *
+	 * One helper is created per scene to efficiently forward events of all child objects.
+	 */
+
+	private static sceneEventTargets = /* @__PURE__ */ new WeakMap<Scene, SceneEventTarget>();
+
 	readonly id: number;
+
+	/**
+	 * A listener for events dispatched by the {@link scene}.
+	 */
+
+	private readonly sceneListener: (event: SceneEvent) => void;
 
 	/**
 	 * Keeps track of previous input defines.
@@ -230,6 +245,8 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	constructor(name: string) {
 
 		super();
+
+		this.sceneListener = (event) => this.handleSceneEvent(event);
 
 		this.previousDefines = new Map<string, string | number | boolean>();
 		this.previousUniforms = new Map<string, Uniform>();
@@ -445,7 +462,35 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	set scene(value: Scene | null) {
 
+		if(this._scene === value) {
+
+			return;
+
+		}
+
+		if(this._scene !== null && Pass.sceneEventTargets.has(this._scene)) {
+
+			const sceneEventTarget = Pass.sceneEventTargets.get(this._scene)!;
+			sceneEventTarget.removeEventListener("childadded", this.sceneListener);
+			sceneEventTarget.removeEventListener("childremoved", this.sceneListener);
+
+		}
+
 		this._scene = value;
+
+		if(value !== null) {
+
+			if(!Pass.sceneEventTargets.has(value)) {
+
+				Pass.sceneEventTargets.set(value, new SceneEventTarget(value));
+
+			}
+
+			const sceneEventTarget = Pass.sceneEventTargets.get(value)!;
+			sceneEventTarget.addEventListener("childadded", this.sceneListener);
+			sceneEventTarget.addEventListener("childremoved", this.sceneListener);
+
+		}
 
 		for(const pass of this.subpasses) {
 
@@ -790,6 +835,26 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	protected onScissorChange(): void {}
 
+	/**
+	 * Performs tasks when a child node is added to the current {@link scene}.
+	 *
+	 * Note: This method will only be called for child nodes and not for the scene itself.
+	 *
+	 * @param object - The child node that was added.
+	 */
+
+	protected onSceneChildAdded(object: Object3D): void {}
+
+	/**
+	 * Performs tasks when a child node is removed from the current {@link scene}.
+	 *
+	 * Note: This method will only be called for child nodes and not for the scene itself.
+	 *
+	 * @param object - The child node that was removed.
+	 */
+
+	protected onSceneChildRemoved(object: Object3D): void {}
+
 	// #endregion
 
 	/**
@@ -1115,6 +1180,34 @@ export abstract class Pass<TMaterial extends Material | null = null>
 				this.updateOutputBufferSize();
 				this.updateFullscreenMaterialOutput();
 				this.onOutputChange();
+				break;
+
+		}
+
+	}
+
+	/**
+	 * Handles scene graph events.
+	 *
+	 * @param event - A scene graph event.
+	 */
+
+	private handleSceneEvent(event: SceneEvent): void {
+
+		if(!this.attached) {
+
+			return;
+
+		}
+
+		switch(event.type) {
+
+			case "childadded":
+				this.onSceneChildAdded(event.child);
+				break;
+
+			case "childremoved":
+				this.onSceneChildRemoved(event.child);
 				break;
 
 		}
