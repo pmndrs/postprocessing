@@ -21,8 +21,7 @@ import {
 	LUT3DEffect,
 	MixBlendFunction,
 	RawImageData,
-	RenderPipeline,
-	ToneMappingEffect
+	RenderPipeline
 } from "postprocessing";
 
 import { LUT3dlLoader } from "three/examples/jsm/loaders/LUT3dlLoader.js";
@@ -191,7 +190,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	pipeline.add(
 		new ClearPass(),
 		new GeometryPass(scene, camera),
-		new EffectPass(new ToneMappingEffect(), effect)
+		new EffectPass(effect)
 	);
 
 	// Settings
