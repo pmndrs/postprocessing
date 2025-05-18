@@ -44,8 +44,8 @@ import {
 	RenderPipeline
 } from "postprocessing";
 
-const container = document.querySelector(".viewport");
-container.prepend(renderer.domElement);
+const container = document.getElementById("viewport");
+container.append(renderer.domElement);
 
 const scene = new Scene();
 const camera = new PerspectiveCamera();
@@ -71,6 +71,16 @@ window.addEventListener("resize", onResize);
 onResize();
 
 renderer.setAnimationLoop((timestamp) => pipeline.render(timestamp));
+```
+
+## Precompilation
+
+Render pipelines can be precompiled to avoid frame stuttering during the initial render call. The `compile` method takes care of compiling fullscreen shaders as well as all shaders used by 3D objects that are rendered by a `GeometryPass`. It's also possible to recompile individual passes as needed if, for example, the `scene` of a `GeometryPass` is changed or the `effects` of an `EffectPass` are replaced.
+
+```ts
+pipeline.compile()
+	.then(() => renderer.setAnimationLoop((timestamp) => pipeline.render(timestamp)))
+	.catch((e) => console.error(e));
 ```
 
 ## Color Space Considerations

@@ -11,6 +11,20 @@ script: fxaa
 
 # Fast Approximate Anti-Aliasing
 
+FXAA is a lightweight, image-based anti-aliasing solution. It's less stable in terms of shimmering compared to MSAA but oftentimes much faster. Its edge detection algorithm is based on luminance. The current implementation is based on FXAA version 3.11.
+
+```ts
+const effect = new FXAAEffect({
+  minEdgeThreshold: 0.0312,
+  maxEdgeThreshold: 0.125,
+  subpixelQuality: 0.75,
+  samples: 12
+});
+```
+
+> [!TIP]
+> Anti-aliasing works best when applied after tone-mapping because the blurring around the detected edges is supposed to produce renderable LDR color gradients, i.e. values between 0.0 and 1.0. As such, the algorithm requires input colors in that same range.
+
 ### External Resources
 
 * [FXAA white paper](https://developer.download.nvidia.com/assets/gamedev/files/sdk/11/FXAA_WhitePaper.pdf)
