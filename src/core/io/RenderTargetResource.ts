@@ -44,4 +44,20 @@ export class RenderTargetResource extends DisposableResource<WebGLRenderTarget |
 
 	}
 
+	override mute() {
+
+		super.mute();
+
+		this.texture.mute();
+
+	}
+
+	override unmute() {
+
+		super.unmute();
+
+		this.texture.unmute();
+
+	}
+
 }

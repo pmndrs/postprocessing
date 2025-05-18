@@ -33,6 +33,14 @@ export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap
 	private _overrideValue: T | null;
 
 	/**
+	 * Indicates whether this resource is currently muted.
+	 *
+	 * Muted resources don't dispatch `change` events.
+	 */
+
+	private muted: boolean;
+
+	/**
 	 * Indicates whether this resource is currently locked.
 	 *
 	 * A resource will be locked for the duration of a `change` event dispatch.
@@ -54,6 +62,7 @@ export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap
 		this._value = value;
 		this._overrideValue = null;
 		this.locked = false;
+		this.muted = false;
 
 	}
 
@@ -94,12 +103,43 @@ export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap
 	}
 
 	/**
-	 * Dispatches a `change` event.
+	 * Mutes this resource.
 	 *
 	 * @internal
 	 */
 
+	mute() {
+
+		this.muted = true;
+
+	}
+
+	/**
+	 * Unmutes this resource.
+	 *
+	 * @internal
+	 */
+
+	unmute() {
+
+		this.muted = false;
+
+	}
+
+	/**
+	 * Dispatches a `change` event.
+	 *
+	 * @throws If the resource is currently locked.
+	 * @internal
+	 */
+
 	setChanged(): void {
+
+		if(this.muted) {
+
+			return;
+
+		}
 
 		if(this.locked) {
 
