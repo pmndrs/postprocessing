@@ -83,7 +83,7 @@ export class NoiseEffect extends Effect implements NoiseEffectOptions {
 		this.blendMode.blendFunction = new SoftLightBlendFunction();
 
 		this.input.uniforms.set("page", new Uniform(1.0));
-		this.input.defines.set("SEED", Math.round(Math.random() * 1000.0).toFixed(1));
+		this.input.defines.set("SEED", Math.max(1, Math.round(Math.random() * 1000)).toFixed(1));
 
 		this._fps = 0;
 		this.timeout = 0.0;
