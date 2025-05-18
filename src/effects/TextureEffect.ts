@@ -14,7 +14,7 @@ import vertexShader from "./shaders/texture.vert";
 export interface TextureEffectOptions {
 
 	/**
-	 * A texture.
+	 * The texture.
 	 */
 
 	texture?: Texture | null;
@@ -27,7 +27,7 @@ export interface TextureEffectOptions {
  * @category Effects
  */
 
-export class TextureEffect extends Effect {
+export class TextureEffect extends Effect implements TextureEffectOptions {
 
 	/**
 	 * Constructs a new texture effect.
@@ -51,10 +51,6 @@ export class TextureEffect extends Effect {
 		this.texture = texture;
 
 	}
-
-	/**
-	 * The current texture.
-	 */
 
 	get texture(): Texture | null {
 

@@ -47,7 +47,7 @@ export interface ScanlineEffectOptions {
  * @category Effects
  */
 
-export class ScanlineEffect extends Effect {
+export class ScanlineEffect extends Effect implements ScanlineEffectOptions {
 
 	/**
 	 * @see {@link density}
@@ -81,10 +81,6 @@ export class ScanlineEffect extends Effect {
 
 	}
 
-	/**
-	 * The scanline density.
-	 */
-
 	get density() {
 
 		return this._density;
@@ -97,10 +93,6 @@ export class ScanlineEffect extends Effect {
 		this.onResolutionChange();
 
 	}
-
-	/**
-	 * The scanline offset.
-	 */
 
 	get offset() {
 
@@ -115,10 +107,6 @@ export class ScanlineEffect extends Effect {
 		params.x = value;
 
 	}
-
-	/**
-	 * The scanline scroll speed.
-	 */
 
 	get scrollSpeed() {
 

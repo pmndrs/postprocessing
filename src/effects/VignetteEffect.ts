@@ -52,7 +52,7 @@ export interface VignetteEffectOptions {
  * @category Effects
  */
 
-export class VignetteEffect extends Effect {
+export class VignetteEffect extends Effect implements VignetteEffectOptions {
 
 	/**
 	 * Constructs a new vignette effect.
@@ -78,10 +78,6 @@ export class VignetteEffect extends Effect {
 
 	}
 
-	/**
-	 * The Vignette technique.
-	 */
-
 	get technique(): VignetteTechnique {
 
 		return this.input.defines.get("VIGNETTE_TECHNIQUE") as VignetteTechnique;
@@ -99,10 +95,6 @@ export class VignetteEffect extends Effect {
 
 	}
 
-	/**
-	 * The Vignette offset.
-	 */
-
 	get offset(): number {
 
 		const offsetFeather = this.input.uniforms.get("offsetFeather")!.value as Vector2;
@@ -117,10 +109,6 @@ export class VignetteEffect extends Effect {
 
 	}
 
-	/**
-	 * The Vignette softness.
-	 */
-
 	get feather(): number {
 
 		const offsetFeather = this.input.uniforms.get("offsetFeather")!.value as Vector2;
@@ -134,10 +122,6 @@ export class VignetteEffect extends Effect {
 		offsetFeather.y = value;
 
 	}
-
-	/**
-	 * The Vignette color.
-	 */
 
 	get color(): Color {
 

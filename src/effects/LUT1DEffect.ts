@@ -4,13 +4,29 @@ import { Effect } from "./Effect.js";
 import fragmentShader from "./shaders/lut-1d.frag";
 
 /**
+ * LUT1DEffect options.
+ *
+ * @category Effects
+ */
+
+export interface LUT1DEffectOptions {
+
+	/**
+	 * The LUT.
+	 */
+
+	lut?: Texture | null;
+
+}
+
+/**
  * A 1D LUT effect.
  *
  * @see https://affinityspotlight.com/article/1d-vs-3d-luts/
  * @category Effects
  */
 
-export class LUT1DEffect extends Effect {
+export class LUT1DEffect extends Effect implements LUT1DEffectOptions {
 
 	/**
 	 * Constructs a new LUT effect.
@@ -57,10 +73,6 @@ export class LUT1DEffect extends Effect {
 		}
 
 	}
-
-	/**
-	 * The LUT.
-	 */
 
 	get lut(): Texture | null {
 

@@ -40,7 +40,7 @@ export interface SMAAEffectOptions {
 	 * @defaultValue {@link SMAAPreset.MEDIUM}
 	 */
 
-	preset?: SMAAPreset;
+	preset?: SMAAPreset | null;
 
 	/**
 	 * The edge detection mode.
@@ -67,7 +67,7 @@ export interface SMAAEffectOptions {
  * @category Effects
  */
 
-export class SMAAEffect extends Effect {
+export class SMAAEffect extends Effect implements SMAAEffectOptions {
 
 	/**
 	 * Identifies the SMAA edges buffer.
@@ -209,6 +209,30 @@ export class SMAAEffect extends Effect {
 
 	}
 
+	get edgeDetectionMode(): SMAAEdgeDetectionMode {
+
+		return this.edgeDetectionMaterial.edgeDetectionMode;
+
+	}
+
+	set edgeDetectionMode(value: SMAAEdgeDetectionMode) {
+
+		this.edgeDetectionMaterial.edgeDetectionMode = value;
+
+	}
+
+	get predicationMode(): SMAAPredicationMode {
+
+		return this.edgeDetectionMaterial.predicationMode;
+
+	}
+
+	set predicationMode(value: SMAAPredicationMode) {
+
+		this.edgeDetectionMaterial.predicationMode = value;
+
+	}
+
 	/**
 	 * The edge weights material.
 	 */
@@ -281,7 +305,7 @@ export class SMAAEffect extends Effect {
 	 * @param preset - The preset.
 	 */
 
-	applyPreset(preset: SMAAPreset): void {
+	applyPreset(preset: SMAAPreset | null): void {
 
 		const edgeDetectionMaterial = this.edgeDetectionMaterial;
 		const weightsMaterial = this.weightsMaterial;

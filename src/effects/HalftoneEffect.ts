@@ -89,7 +89,7 @@ export interface HalftoneEffectOptions {
  * @see https://github.com/mrdoob/three.js/blob/0bf3908b73b2cf73d7361cce17cfc8b816cb2a00/examples/jsm/postprocessing/HalftonePass.js
  */
 
-export class HalftoneEffect extends Effect {
+export class HalftoneEffect extends Effect implements HalftoneEffectOptions {
 
 	/**
 	 * @see {@link radius}
@@ -132,10 +132,6 @@ export class HalftoneEffect extends Effect {
 
 	}
 
-	/**
-	 * The halftone shape.
-	 */
-
 	get shape() {
 
 		return this.input.defines.get("SHAPE") as number;
@@ -148,10 +144,6 @@ export class HalftoneEffect extends Effect {
 		this.setChanged();
 
 	}
-
-	/**
-	 * The amount of samples.
-	 */
 
 	get samples(): number {
 
@@ -170,10 +162,6 @@ export class HalftoneEffect extends Effect {
 
 	}
 
-	/**
-	 * The pattern radius.
-	 */
-
 	get radius() {
 
 		return this._radius;
@@ -187,10 +175,6 @@ export class HalftoneEffect extends Effect {
 
 	}
 
-	/**
-	 * The halftone scatter factor.
-	 */
-
 	get scatterFactor() {
 
 		return this.input.uniforms.get("scatterFactor")!.value as number;
@@ -203,10 +187,6 @@ export class HalftoneEffect extends Effect {
 
 	}
 
-	/**
-	 * The grid rotation in radians.
-	 */
-
 	set rotation(value: number) {
 
 		const rotationRGB = this.input.uniforms.get("rotationRGB")!.value as Vector3;
@@ -214,10 +194,6 @@ export class HalftoneEffect extends Effect {
 		this.updateRGBRotation();
 
 	}
-
-	/**
-	 * The grid rotation for the red channel in radians.
-	 */
 
 	get rotationR() {
 
@@ -234,10 +210,6 @@ export class HalftoneEffect extends Effect {
 
 	}
 
-	/**
-	 * The grid rotation for the green channel in radians.
-	 */
-
 	get rotationG() {
 
 		const rotationRGB = this.input.uniforms.get("rotationRGB")!.value as Vector3;
@@ -252,10 +224,6 @@ export class HalftoneEffect extends Effect {
 		this.updateRGBRotation();
 
 	}
-
-	/**
-	 * The grid rotation for the blue channel in radians.
-	 */
 
 	get rotationB() {
 

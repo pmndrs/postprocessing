@@ -52,7 +52,7 @@ export interface ASCIIEffectOptions {
  * @category Effects
  */
 
-export class ASCIIEffect extends Effect {
+export class ASCIIEffect extends Effect implements ASCIIEffectOptions {
 
 	/**
 	 * @see {@link cellSize}
@@ -89,10 +89,6 @@ export class ASCIIEffect extends Effect {
 
 	}
 
-	/**
-	 * The current ASCII lookup texture.
-	 */
-
 	get asciiTexture(): ASCIITexture | null {
 
 		return this.input.uniforms.get("asciiTexture")!.value as ASCIITexture;
@@ -124,10 +120,6 @@ export class ASCIIEffect extends Effect {
 
 	}
 
-	/**
-	 * A color that overrides the scene colors.
-	 */
-
 	get color(): Color {
 
 		return this.input.uniforms.get("color")!.value as Color;
@@ -157,10 +149,6 @@ export class ASCIIEffect extends Effect {
 
 	}
 
-	/**
-	 * Controls whether the effect should be inverted.
-	 */
-
 	get inverted(): boolean {
 
 		return this.input.defines.has("INVERTED");
@@ -186,10 +174,6 @@ export class ASCIIEffect extends Effect {
 		}
 
 	}
-
-	/**
-	 * The cell size.
-	 */
 
 	get cellSize(): number {
 

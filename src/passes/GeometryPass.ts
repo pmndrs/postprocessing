@@ -60,7 +60,7 @@ export interface GeometryPassOptions {
 	depthBuffer?: boolean;
 
 	/**
-	 * The type of the color buffer.
+	 * The texture data type of the primary color buffer.
 	 *
 	 * @defaultValue HalfFloatType
 	 */
@@ -89,15 +89,9 @@ export interface GeometryPassOptions {
  * @category Passes
  */
 
-export class GeometryPass extends Pass implements Selective {
+export class GeometryPass extends Pass implements GeometryPassOptions, Selective {
 
 	readonly selection: Selection;
-
-	/**
-	 * The G-Buffer configuration.
-	 */
-
-	readonly gBufferConfig: GBufferConfig;
 
 	/**
 	 * A collection of materials that have been modified with `onBeforeCompile`.
@@ -112,6 +106,12 @@ export class GeometryPass extends Pass implements Selective {
 	private readonly copyPass: CopyPass;
 
 	/**
+	 * A resource that wraps the G-Buffer.
+	 */
+
+	private readonly gBufferResource: RenderTargetResource;
+
+	/**
 	 * Controls which G-Buffer components should be rendered by this pass.
 	 *
 	 * This will automatically be configured based on the requirements of other passes in the same pipeline.
@@ -123,29 +123,10 @@ export class GeometryPass extends Pass implements Selective {
 
 	// #region Settings
 
-	/**
-	 * Indicates whether a stencil buffer should be created.
-	 */
-
 	readonly stencilBuffer: boolean;
-
-	/**
-	 * Indicates whether a depth buffer should be created.
-	 */
-
 	readonly depthBuffer: boolean;
-
-	/**
-	 * The texture data type of the primary color buffer.
-	 */
-
 	readonly frameBufferType: TextureDataType;
-
-	/**
-	 * A resource that wraps the G-Buffer.
-	 */
-
-	private readonly gBufferResource: RenderTargetResource;
+	readonly gBufferConfig: GBufferConfig;
 
 	/**
 	 * @see {@link samples}
@@ -217,10 +198,6 @@ export class GeometryPass extends Pass implements Selective {
 		}
 
 	}
-
-	/**
-	 * Sets the amount of MSAA samples.
-	 */
 
 	get samples(): MSAASamples {
 

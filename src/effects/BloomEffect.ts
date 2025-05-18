@@ -50,7 +50,7 @@ export interface BloomEffectOptions extends MipmapBlurPassOptions {
  * @category Effects
  */
 
-export class BloomEffect extends Effect {
+export class BloomEffect extends Effect implements BloomEffectOptions {
 
 	/**
 	 * A luminance pass.
@@ -116,9 +116,29 @@ export class BloomEffect extends Effect {
 
 	}
 
-	/**
-	 * The bloom intensity.
-	 */
+	get luminanceThreshold(): number {
+
+		return this.luminanceMaterial.threshold;
+
+	}
+
+	set luminanceThreshold(value: number) {
+
+		this.luminanceMaterial.threshold = value;
+
+	}
+
+	get luminanceSmoothing(): number {
+
+		return this.luminanceMaterial.smoothing;
+
+	}
+
+	set luminanceSmoothing(value: number) {
+
+		this.luminanceMaterial.smoothing = value;
+
+	}
 
 	get intensity(): number {
 

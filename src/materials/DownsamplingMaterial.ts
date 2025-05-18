@@ -30,7 +30,7 @@ export interface DownsamplingMaterialOptions {
  * @category Materials
  */
 
-export class DownsamplingMaterial extends FullscreenMaterial {
+export class DownsamplingMaterial extends FullscreenMaterial implements DownsamplingMaterialOptions {
 
 	/**
 	 * Constructs a new downsampling material.
@@ -50,12 +50,6 @@ export class DownsamplingMaterial extends FullscreenMaterial {
 		this.clampToBorder = clampToBorder;
 
 	}
-
-	/**
-	 * Controls whether the sampling coordinates should be clamped to a black border.
-	 *
-	 * @defaultValue true
-	 */
 
 	get clampToBorder(): boolean {
 

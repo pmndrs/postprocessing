@@ -24,7 +24,15 @@ import fragmentShader from "./shaders/lut-3d.frag";
 export interface LUT3DEffectOptions {
 
 	/**
-	 * Enables or disables tetrahedral interpolation.
+	 * The LUT.
+	 */
+
+	lut?: LookupTexture | null;
+
+	/**
+	 * Indicates whether tetrahedral interpolation is enabled.
+	 *
+	 * Tetrahedral interpolation produces highly accurate results but is slower than hardware interpolation.
 	 *
 	 * @defaultValue false
 	 */
@@ -42,13 +50,10 @@ export interface LUT3DEffectOptions {
 }
 
 /**
- * A LUT effect.
+ * A 3D LUT effect.
  *
  * The tetrahedral interpolation algorithm was inspired by an implementation from OpenColorIO which is licensed under
  * the BSD 3-Clause License.
- *
- * The manual trilinear interpolation algorithm is based on an implementation by Garret Johnson which is licensed under
- * the MIT License.
  *
  * @see https://developer.nvidia.com/gpugems/gpugems2/part-iii-high-quality-rendering/chapter-24-using-lookup-tables-accelerate-color
  * @see https://www.nvidia.com/content/GTC/posters/2010/V01-Real-Time-Color-Space-Conversion-for-High-Resolution-Video.pdf
@@ -57,12 +62,11 @@ export interface LUT3DEffectOptions {
  * @category Effects
  */
 
-export class LUT3DEffect extends Effect {
+export class LUT3DEffect extends Effect implements LUT3DEffectOptions {
 
 	/**
 	 * Constructs a new LUT effect.
 	 *
-	 * @param lut - The LUT.
 	 * @param options - The options.
 	 */
 
@@ -123,10 +127,6 @@ export class LUT3DEffect extends Effect {
 		}
 
 	}
-
-	/**
-	 * The LUT.
-	 */
 
 	get lut(): LookupTexture | null {
 
@@ -253,14 +253,6 @@ export class LUT3DEffect extends Effect {
 		lut.needsUpdate = true;
 
 	}
-
-	/**
-	 * Indicates whether tetrahedral interpolation is enabled.
-	 *
-	 * Tetrahedral interpolation produces highly accurate results but is slower than hardware interpolation.
-	 *
-	 * @defaultValue false
-	 */
 
 	get tetrahedralInterpolation(): boolean {
 

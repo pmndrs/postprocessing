@@ -14,15 +14,16 @@ import vertexShader from "./shaders/convolution.box.vert";
 export interface BoxBlurMaterialOptions {
 
 	/**
-	 * The blur kernel size.
-	 *
-	 * @defaultValue false
+	 * Indicates whether bilateral filtering is enabled.
 	 */
 
 	bilateral?: boolean;
 
 	/**
-	 * The blur kernel size.
+	 * The kernel size.
+	 *
+	 * - Must be an odd number
+	 * - Kernel size `3` and `5` use optimized code paths
 	 *
 	 * @defaultValue 5
 	 */
@@ -37,7 +38,7 @@ export interface BoxBlurMaterialOptions {
  * @category Materials
  */
 
-export class BoxBlurMaterial extends FullscreenMaterial {
+export class BoxBlurMaterial extends FullscreenMaterial implements BoxBlurMaterialOptions {
 
 	/**
 	 * Constructs a new box blur material.
@@ -80,15 +81,6 @@ export class BoxBlurMaterial extends FullscreenMaterial {
 		this.defines.MAX_VARYING_VECTORS = value;
 
 	}
-
-	/**
-	 * The kernel size.
-	 *
-	 * - Must be an odd number
-	 * - Kernel size `3` and `5` use optimized code paths
-	 *
-	 * @defaultValue 5
-	 */
 
 	get kernelSize(): number {
 
@@ -160,10 +152,6 @@ export class BoxBlurMaterial extends FullscreenMaterial {
 		this.needsUpdate = true;
 
 	}
-
-	/**
-	 * Indicates whether bilateral filtering is enabled.
-	 */
 
 	get bilateral(): boolean {
 

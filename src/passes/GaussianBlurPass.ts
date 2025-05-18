@@ -35,7 +35,7 @@ export interface GaussianBlurPassOptions {
  * @category Passes
  */
 
-export class GaussianBlurPass extends Pass<GaussianBlurMaterial> {
+export class GaussianBlurPass extends Pass<GaussianBlurMaterial> implements GaussianBlurPassOptions {
 
 	/**
 	 * Identifies the first blur buffer.
@@ -48,10 +48,6 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> {
 	 */
 
 	private static readonly BUFFER_B = "BUFFER_B";
-
-	/**
-	 * The amount of blur iterations.
-	 */
 
 	iterations: number;
 
@@ -80,6 +76,18 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> {
 	private get blurMaterial(): GaussianBlurMaterial {
 
 		return this.fullscreenMaterial;
+
+	}
+
+	get kernelSize(): number {
+
+		return this.blurMaterial.kernelSize;
+
+	}
+
+	set kernelSize(value: number) {
+
+		this.blurMaterial.kernelSize = value;
 
 	}
 

@@ -12,7 +12,7 @@ import fragmentShader from "./shaders/color-depth.frag";
 export interface ColorDepthEffectOptions {
 
 	/**
-	 * The bit depth of the red channel.
+	 * The virtual bit depth of the red channel.
 	 *
 	 * @defaultValue 16
 	 */
@@ -20,7 +20,7 @@ export interface ColorDepthEffectOptions {
 	r?: number;
 
 	/**
-	 * The bit depth of the green channel.
+	 * The virtual bit depth of the green channel.
 	 *
 	 * @defaultValue 16
 	 */
@@ -28,7 +28,7 @@ export interface ColorDepthEffectOptions {
 	g?: number;
 
 	/**
-	 * The bit depth of the blue channel.
+	 * The virtual bit depth of the blue channel.
 	 *
 	 * @defaultValue 16
 	 */
@@ -47,7 +47,7 @@ export interface ColorDepthEffectOptions {
  * @category Effects
  */
 
-export class ColorDepthEffect extends Effect {
+export class ColorDepthEffect extends Effect implements ColorDepthEffectOptions {
 
 	/**
 	 * The current color bit depths.
@@ -92,10 +92,6 @@ export class ColorDepthEffect extends Effect {
 
 	}
 
-	/**
-	 * The virtual bit depth of the red channel.
-	 */
-
 	get r(): number {
 
 		return this.bits.x;
@@ -109,10 +105,6 @@ export class ColorDepthEffect extends Effect {
 
 	}
 
-	/**
-	 * The virtual bit depth of the green channel.
-	 */
-
 	get g(): number {
 
 		return this.bits.y;
@@ -125,10 +117,6 @@ export class ColorDepthEffect extends Effect {
 		this.updateFactors();
 
 	}
-
-	/**
-	 * The virtual bit depth of the blue channel.
-	 */
 
 	get b(): number {
 

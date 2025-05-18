@@ -31,7 +31,7 @@ export interface GaussianBlurMaterialOptions {
  * @category Materials
  */
 
-export class GaussianBlurMaterial extends FullscreenMaterial {
+export class GaussianBlurMaterial extends FullscreenMaterial implements GaussianBlurMaterialOptions {
 
 	/**
 	 * @see {@link kernelSize}
@@ -65,10 +65,6 @@ export class GaussianBlurMaterial extends FullscreenMaterial {
 		this.kernelSize = kernelSize;
 
 	}
-
-	/**
-	 * The kernel size.
-	 */
 
 	get kernelSize(): number {
 

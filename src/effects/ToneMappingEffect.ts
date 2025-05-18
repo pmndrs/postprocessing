@@ -37,7 +37,7 @@ export interface ToneMappingEffectOptions {
  * @category Effects
  */
 
-export class ToneMappingEffect extends Effect {
+export class ToneMappingEffect extends Effect implements ToneMappingEffectOptions {
 
 	/**
 	 * Constructs a new tone mapping effect.
@@ -53,10 +53,6 @@ export class ToneMappingEffect extends Effect {
 		this.toneMapping = toneMapping;
 
 	}
-
-	/**
-	 * The tone mapping mode.
-	 */
 
 	get toneMapping(): ToneMapping {
 

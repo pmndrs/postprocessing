@@ -55,7 +55,7 @@ export interface FXAAEffectOptions {
  * @category Effects
  */
 
-export class FXAAEffect extends Effect {
+export class FXAAEffect extends Effect implements FXAAEffectOptions {
 
 	/**
 	 * Constructs a new FXAA effect.
@@ -82,10 +82,6 @@ export class FXAAEffect extends Effect {
 
 	}
 
-	/**
-	 * The minimum edge detection threshold. Range is [0.0, 1.0].
-	 */
-
 	get minEdgeThreshold(): number {
 
 		return Number(this.input.defines.get("EDGE_THRESHOLD_MIN"));
@@ -98,10 +94,6 @@ export class FXAAEffect extends Effect {
 		this.setChanged();
 
 	}
-
-	/**
-	 * The maximum edge detection threshold. Range is [0.0, 1.0].
-	 */
 
 	get maxEdgeThreshold(): number {
 
@@ -116,10 +108,6 @@ export class FXAAEffect extends Effect {
 
 	}
 
-	/**
-	 * The subpixel blend quality. Range is [0.0, 1.0].
-	 */
-
 	get subpixelQuality(): number {
 
 		return Number(this.input.defines.get("SUBPIXEL_QUALITY"));
@@ -132,10 +120,6 @@ export class FXAAEffect extends Effect {
 		this.setChanged();
 
 	}
-
-	/**
-	 * The maximum amount of edge detection samples.
-	 */
 
 	get samples(): number {
 

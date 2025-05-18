@@ -15,7 +15,7 @@ export interface MipmapBlurPassOptions extends DownsamplingMaterialOptions, Upsa
 	/**
 	 * The amount of MIP levels.
 	 *
-	 * At 720p 8 steps are likely too much, while at 4K they might not be enough.
+	 * At 720p 8 steps are likely too much, while at 4K they might not be enough. Must be greater than 0.
 	 *
 	 * @defaultValue 8
 	 */
@@ -43,7 +43,7 @@ export interface MipmapBlurPassOptions extends DownsamplingMaterialOptions, Upsa
  * @category Passes
  */
 
-export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMaterial> {
+export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMaterial> implements MipmapBlurPassOptions {
 
 	/**
 	 * Identifies the main output buffer.
@@ -118,12 +118,29 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 	}
 
-	/**
-	 * The MIP levels.
-	 *
-	 * @throws If the number of levels is lower than 0.
-	 * @defaultValue 8
-	 */
+	get clampToBorder(): boolean {
+
+		return this.downsamplingMaterial.clampToBorder;
+
+	}
+
+	set clampToBorder(value: boolean) {
+
+		this.downsamplingMaterial.clampToBorder = value;
+
+	}
+
+	get radius(): number {
+
+		return this.upsamplingMaterial.radius;
+
+	}
+
+	set radius(value: number) {
+
+		this.upsamplingMaterial.radius = value;
+
+	}
 
 	get levels(): number {
 
@@ -146,32 +163,6 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 		}
 
 	}
-
-	/**
-	 * The blur radius.
-	 *
-	 * @defaultValue 0.85
-	 */
-
-	get radius(): number {
-
-		return this.upsamplingMaterial.radius;
-
-	}
-
-	set radius(value: number) {
-
-		this.upsamplingMaterial.radius = value;
-
-	}
-
-	/**
-	 * Controls whether the image should be scaled up to the original resolution.
-	 *
-	 * If disabled, the upsampling process will stop at half resolution.
-	 *
-	 * @defaultValue false
-	 */
 
 	get fullResolutionUpsampling(): boolean {
 

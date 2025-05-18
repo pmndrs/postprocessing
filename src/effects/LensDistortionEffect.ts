@@ -51,7 +51,7 @@ export interface LensDistortionEffectOptions {
  * Original shader ported from https://github.com/ycw/three-lens-distortion
  */
 
-export class LensDistortionEffect extends Effect {
+export class LensDistortionEffect extends Effect implements LensDistortionEffectOptions {
 
 	/**
 	 * Constructs a new lens distortion effect.
@@ -77,12 +77,6 @@ export class LensDistortionEffect extends Effect {
 
 	}
 
-	/**
-	 * The radial distortion coefficients.
-	 *
-	 * @defaultValue (0, 0)
-	 */
-
 	get distortion(): Vector2 {
 
 		return this.input.uniforms.get("distortion")!.value as Vector2;
@@ -94,12 +88,6 @@ export class LensDistortionEffect extends Effect {
 		this.input.uniforms.get("distortion")!.value = value;
 
 	}
-
-	/**
-	 * The principal point.
-	 *
-	 * @defaultValue (0, 0)
-	 */
 
 	get principalPoint(): Vector2 {
 
@@ -113,12 +101,6 @@ export class LensDistortionEffect extends Effect {
 
 	}
 
-	/**
-	 * The focal length.
-	 *
-	 * @defaultValue (1, 1)
-	 */
-
 	get focalLength(): Vector2 {
 
 		return this.input.uniforms.get("focalLength")!.value as Vector2;
@@ -130,12 +112,6 @@ export class LensDistortionEffect extends Effect {
 		this.input.uniforms.get("focalLength")!.value = value;
 
 	}
-
-	/**
-	 * The skew factor in radians.
-	 *
-	 * @defaultValue 0
-	 */
 
 	get skew(): number {
 

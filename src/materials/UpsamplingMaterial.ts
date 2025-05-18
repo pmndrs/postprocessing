@@ -31,7 +31,7 @@ export interface UpsamplingMaterialOptions {
  * @category Materials
  */
 
-export class UpsamplingMaterial extends FullscreenMaterial {
+export class UpsamplingMaterial extends FullscreenMaterial implements UpsamplingMaterialOptions {
 
 	/**
 	 * Constructs a new upsampling material.
@@ -68,12 +68,6 @@ export class UpsamplingMaterial extends FullscreenMaterial {
 		this.uniforms.supportBuffer.value = value;
 
 	}
-
-	/**
-	 * The blur radius.
-	 *
-	 * @defaultValue 0.85
-	 */
 
 	get radius(): number {
 

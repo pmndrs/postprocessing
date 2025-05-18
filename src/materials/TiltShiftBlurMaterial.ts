@@ -23,13 +23,13 @@ export interface TiltShiftBlurMaterialOptions {
 	 * The rotation of the focus area in radians.
 	 */
 
-	offset?: number;
+	rotation?: number;
 
 	/**
 	 * The relative offset of the focus area.
 	 */
 
-	rotation?: number;
+	offset?: number;
 
 	/**
 	 * The relative size of the focus area.
@@ -51,7 +51,7 @@ export interface TiltShiftBlurMaterialOptions {
  * @category Materials
  */
 
-export class TiltShiftBlurMaterial extends KawaseBlurMaterial {
+export class TiltShiftBlurMaterial extends KawaseBlurMaterial implements TiltShiftBlurMaterialOptions {
 
 	/**
 	 * @see {@link offset}
@@ -121,10 +121,6 @@ export class TiltShiftBlurMaterial extends KawaseBlurMaterial {
 
 	}
 
-	/**
-	 * The rotation of the focus area in radians.
-	 */
-
 	get rotation(): number {
 
 		const rotation = this.uniforms.rotation.value as Vector2;
@@ -139,10 +135,6 @@ export class TiltShiftBlurMaterial extends KawaseBlurMaterial {
 
 	}
 
-	/**
-	 * The relative offset of the focus area.
-	 */
-
 	get offset(): number {
 
 		return this._offset;
@@ -156,10 +148,6 @@ export class TiltShiftBlurMaterial extends KawaseBlurMaterial {
 
 	}
 
-	/**
-	 * The relative size of the focus area.
-	 */
-
 	get focusArea(): number {
 
 		return this._focusArea;
@@ -172,10 +160,6 @@ export class TiltShiftBlurMaterial extends KawaseBlurMaterial {
 		this.updateParams();
 
 	}
-
-	/**
-	 * The softness of the focus area edges.
-	 */
 
 	get feather(): number {
 
