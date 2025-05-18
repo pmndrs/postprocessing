@@ -27,14 +27,6 @@ export interface GaussianBlurPassOptions {
 
 	iterations?: number;
 
-	/**
-	 * The resolution scale.
-	 *
-	 * @defaultValue 1
-	 */
-
-	resolutionScale?: number;
-
 }
 
 /**
@@ -69,7 +61,7 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> {
 	 * @param options - The options.
 	 */
 
-	constructor({ kernelSize = 35, iterations = 1, resolutionScale = 1 }: GaussianBlurPassOptions = {}) {
+	constructor({ kernelSize = 35, iterations = 1 }: GaussianBlurPassOptions = {}) {
 
 		super("GaussianBlurPass");
 
@@ -77,7 +69,6 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> {
 		this.output.setBuffer(GaussianBlurPass.BUFFER_B, this.createFramebuffer());
 
 		this.fullscreenMaterial = new GaussianBlurMaterial({ kernelSize });
-		this.resolution.scale = resolutionScale;
 		this.iterations = iterations;
 
 	}

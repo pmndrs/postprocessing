@@ -96,11 +96,11 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const gaussianBlurPass = new GaussianBlurPass({
 		kernelSize: 15,
-		iterations: 1,
-		resolutionScale: 0.5
+		iterations: 1
 	});
 
 	gaussianBlurPass.enabled = false;
+	gaussianBlurPass.resolution.scale = 0.5;
 	const textureEffect = new TextureEffect({ texture: mipmapBlurPass.texture.value });
 
 	const outputPass = new EffectPass(
