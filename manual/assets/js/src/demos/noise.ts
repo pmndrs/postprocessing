@@ -15,7 +15,6 @@ import {
 	ClearPass,
 	EffectPass,
 	GeometryPass,
-	MixBlendFunction,
 	NoiseEffect,
 	RenderPipeline
 } from "postprocessing";
@@ -88,7 +87,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Post Processing
 
 	const effect = new NoiseEffect();
-	//effect.blendMode.blendFunction = new MixBlendFunction();
 
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.add(
