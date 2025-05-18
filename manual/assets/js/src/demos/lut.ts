@@ -183,7 +183,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Post Processing
 
 	const lut = assets.get("png/filmic1") as LookupTexture;
-	const effect = new LUT3DEffect(lut);
+	const effect = new LUT3DEffect({ lut });
 	effect.blendMode.blendFunction = new MixBlendFunction();
 
 	const pipeline = new RenderPipeline(renderer);
@@ -199,9 +199,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const fpsGraph = Utils.createFPSGraph(pane);
 
 	const params = {
-		"lut": effect.lut.name,
+		"lut": effect.lut!.name,
 		"3D texture": true,
-		"base size": effect.lut.image.width,
+		"base size": effect.lut!.image.width,
 		"scale up": false,
 		"target size": 48
 	};
@@ -210,7 +210,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	function updateLUTPreview() {
 
-		const image = effect.lut.clone().convertToUint8().toDataTexture().image as ImageData;
+		const image = effect.lut!.clone().convertToUint8().toDataTexture().image as ImageData;
 		RawImageData.from(image).toCanvas().toBlob((blob) => {
 
 			if(blob !== null) {
@@ -256,7 +256,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 			}
 
-			effect.lut.dispose();
+			effect.lut!.dispose();
 			params["base size"] = size;
 
 			if(renderer.getContext().getExtension("OES_texture_float_linear") === null) {

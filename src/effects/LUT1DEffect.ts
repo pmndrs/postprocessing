@@ -14,9 +14,11 @@ export class LUT1DEffect extends Effect {
 
 	/**
 	 * Constructs a new LUT effect.
+	 *
+	 * @param options - The options.
 	 */
 
-	constructor(lut: Texture) {
+	constructor({ lut = null }: LUT1DEffectOptions = {}) {
 
 		super("LUT1DEffect");
 
@@ -60,16 +62,16 @@ export class LUT1DEffect extends Effect {
 	 * The LUT.
 	 */
 
-	get lut(): Texture {
+	get lut(): Texture | null {
 
 		return this.input.uniforms.get("lut")!.value as Texture;
 
 	}
 
-	set lut(value: Texture) {
+	set lut(value: Texture | null) {
 
 		this.input.uniforms.get("lut")!.value = value;
-		this.lutPrecisionHigh = (value.type === FloatType || value.type === HalfFloatType);
+		this.lutPrecisionHigh = (value?.type === FloatType || value?.type === HalfFloatType);
 
 	}
 

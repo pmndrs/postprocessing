@@ -66,7 +66,8 @@ export class LUT3DEffect extends Effect {
 	 * @param options - The options.
 	 */
 
-	constructor(lut: LookupTexture, {
+	constructor({
+		lut = null,
 		tetrahedralInterpolation = false,
 		inputColorSpace = SRGBColorSpace
 	}: LUT3DEffectOptions = {}) {
@@ -81,6 +82,11 @@ export class LUT3DEffect extends Effect {
 		uniforms.set("offset", new Uniform(new Vector3()));
 		uniforms.set("domainMin", new Uniform(null));
 		uniforms.set("domainMax", new Uniform(null));
+
+		const defines = this.input.defines;
+		defines.set("LUT_SIZE", "0");
+		defines.set("LUT_TEXEL_WIDTH", "0");
+		defines.set("LUT_TEXEL_HEIGHT", "0");
 
 		this.tetrahedralInterpolation = tetrahedralInterpolation;
 		this.inputColorSpace = inputColorSpace;
@@ -122,16 +128,22 @@ export class LUT3DEffect extends Effect {
 	 * The LUT.
 	 */
 
-	get lut(): LookupTexture {
+	get lut(): LookupTexture | null {
 
 		return this.input.uniforms.get("lut")!.value as LookupTexture;
 
 	}
 
-	set lut(value: LookupTexture) {
+	set lut(value: LookupTexture | null) {
 
 		const { defines, uniforms } = this.input;
 		uniforms.get("lut")!.value = value;
+
+		if(value === null) {
+
+			return;
+
+		}
 
 		const image = value.image;
 		defines.set("LUT_SIZE", Math.min(image.width, image.height).toFixed(16));
