@@ -2,7 +2,7 @@ main.plugins-tools {
 	h2 {
 		align-items: center;
 		display: flex;
-		margin-bottom: 0.75rem;
+		margin-bottom: 0.5rem;
 		&::before {
 			background-color: var(--foreground-color);
 			content: "";
@@ -15,9 +15,9 @@ main.plugins-tools {
 		}
 	}
 	p + h2 {
-		margin-top: 4rem;
+		margin-top: 3rem;
 	}
 	p {
-		margin: 0.5rem 0;
+		margin: 0.25rem 0;
 	}
 }
