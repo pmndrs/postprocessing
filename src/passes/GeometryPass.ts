@@ -563,8 +563,11 @@ export class GeometryPass extends Pass implements Selective {
 
 		if(!this.output.hasDefaultBuffer) {
 
-			// Restore the G-Buffer.
+			// Silently restore the G-Buffer to avoid a nested double update.
+			// The render pipeline will be updated right after this hook.
+			this.gBufferResource.mute();
 			this.updateGBuffer();
+			this.gBufferResource.unmute();
 
 		} else {
 
