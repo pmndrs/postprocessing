@@ -2,8 +2,13 @@
 
 	{{ with .Params.script }}
 		{{ with resources.Get (printf "js/dist/demos/%s.js" .) }}
-			{{ $script := . | fingerprint }}
-			<script defer src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
+			{{ if hugo.IsDevelopment }}
+				<script src="{{ .RelPermalink }}"></script>
+			{{ else }}
+				{{ with . | fingerprint }}
+					<script defer src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous"></script>
+				{{ end }}
+			{{ end }}
 		{{ end }}
 	{{ end }}
 

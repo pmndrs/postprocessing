@@ -19,18 +19,33 @@
 		{{ end }}
 
 		{{ with resources.Get "css/dist/index.css" }}
-			{{ $stylesheet := . | fingerprint }}
-			<link rel="stylesheet" href="{{ $stylesheet.RelPermalink }}" integrity="{{ $stylesheet.Data.Integrity }}">
+			{{ if hugo.IsDevelopment }}
+				<link rel="stylesheet" href="{{ .RelPermalink }}">
+			{{ else }}
+				{{ with . | fingerprint }}
+					<link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous">
+				{{ end }}
+			{{ end }}
 		{{ end }}
 		{{ block "styles" . }}{{ end }}
 
 		{{ with resources.Get "js/dist/index.js" }}
-			{{ $script := . | fingerprint }}
-			<script defer src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
+			{{ if hugo.IsDevelopment }}
+				<script src="{{ .RelPermalink }}"></script>
+			{{ else }}
+				{{ with . | fingerprint }}
+					<script defer src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous"></script>
+				{{ end }}
+			{{ end }}
 		{{ end }}
 		{{ with resources.Get "js/dist/libs/vendor.js" }}
-			{{ $script := . | fingerprint }}
-			<script defer src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
+			{{ if hugo.IsDevelopment }}
+				<script src="{{ .RelPermalink }}"></script>
+			{{ else }}
+				{{ with . | fingerprint }}
+					<script defer src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous"></script>
+				{{ end }}
+			{{ end }}
 		{{ end }}
 		{{ block "scripts" . }}{{ end }}
 
