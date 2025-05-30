@@ -1,4 +1,10 @@
-import { MagnificationTextureFilter, MinificationTextureFilter, PixelFormat, TextureDataType } from "three";
+import {
+	MagnificationTextureFilter,
+	MinificationTextureFilter,
+	PixelFormat,
+	PixelFormatGPU,
+	TextureDataType
+} from "three";
 
 /**
  * A G-Buffer texture configuration.
@@ -25,6 +31,12 @@ export interface GBufferTextureConfig {
 	 */
 
 	format: PixelFormat;
+
+	/**
+	 * The internal pixel format.
+	 */
+
+	internalFormat?: PixelFormatGPU;
 
 	/**
 	 * The texture data type.
