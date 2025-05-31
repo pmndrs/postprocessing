@@ -21,19 +21,5 @@
 		"en": {
 			"weight": 1
 		}
-	},
-	"module": {
-		"mounts": [
-			{
-				"source": "assets",
-				"target": "assets",
-				"excludeFiles": "**/src/*"
-			},
-			{
-				"source": "static",
-				"target": "static",
-				"disableWatch": true
-			}
-		]
 	}
 }
