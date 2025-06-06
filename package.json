@@ -77,7 +77,7 @@
 		"postcss": "postcss manual/assets/css/dist/index.css -o manual/assets/css/dist/index.css -c manual",
 		"prepublishOnly": "npm test",
 		"prewatch": "run-s clean build:css build:js",
-		"start": "hugo server -s manual -e development",
+		"start": "hugo server -s manual -e development --quiet --poll 700",
 		"test": "run-s lint clean build ava doc",
 		"watch": "run-p watch:* start",
 		"watch:css": "sass --no-source-map -I manual/assets/css/src/values manual/assets/css/src:manual/assets/css/dist -w",
