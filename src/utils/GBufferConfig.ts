@@ -93,8 +93,8 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 
 		const gDataStructInitialization = new ObservableMap([
 			[GData.COLOR, "gData.color = texture(gBuffer.color, UV);"],
-			[GData.DEPTH, "gData.depth = texture(gBuffer.depth, UV).r;"],
-			[GData.NORMAL, "gData.normal = texture(gBuffer.normal, UV).xyz;"],
+			[GData.DEPTH, "gData.depth = readDepth(gBuffer.depth, UV);"],
+			[GData.NORMAL, "gData.normal = readNormal(gBuffer.normal, UV);"],
 			[GData.POSITION, "gData.position = getViewPosition(UV, gData.depth);"],
 			[GData.ORM, "gData.orm = texture(gBuffer.orm, UV).xyz;"],
 			[GData.EMISSION, "gData.emission = texture(gBuffer.emission, UV).rgb;"],
