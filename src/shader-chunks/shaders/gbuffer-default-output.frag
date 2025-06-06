@@ -1,17 +1,5 @@
-#ifdef out_Normal
-
-	out_Normal = vec4(0.0);
-
-#endif
-
-#ifdef out_ORM
-
-	out_ORM = vec4(0.0);
-
-#endif
-
-#ifdef out_Emission
-
-	out_Emission = vec4(0.0);
-
-#endif
+#include "gbuffer-normal.frag"
+#include "gbuffer-occlusion.frag"
+#include "gbuffer-roughness.frag"
+#include "gbuffer-metalness.frag"
+#include "gbuffer-emission.frag"
