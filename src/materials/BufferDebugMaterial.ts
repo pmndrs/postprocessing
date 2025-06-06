@@ -23,8 +23,7 @@ export class BufferDebugMaterial extends FullscreenMaterial {
 			fragmentShader,
 			vertexShader,
 			uniforms: {
-				depthBuffer: new Uniform(null),
-				normalBuffer: new Uniform(null)
+				depthBuffer: new Uniform(null)
 			}
 		});
 
@@ -43,22 +42,6 @@ export class BufferDebugMaterial extends FullscreenMaterial {
 	set depthBuffer(value: Texture | null) {
 
 		this.uniforms.depthBuffer.value = value;
-
-	}
-
-	/**
-	 * A normal buffer.
-	 */
-
-	get normalBuffer(): Texture | null {
-
-		return this.uniforms.normalBuffer.value as Texture;
-
-	}
-
-	set normalBuffer(value: Texture | null) {
-
-		this.uniforms.normalBuffer.value = value;
 
 	}
 
