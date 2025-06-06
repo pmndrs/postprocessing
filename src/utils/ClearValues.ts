@@ -41,7 +41,7 @@ export class ClearValues extends EventDispatcher<BaseEventMap> {
 		this._alpha = null;
 
 		const gBuffer = new ObservableMap<GBuffer | string, Vector4>([
-			[GBuffer.NORMAL, new Vector4(0.5, 0.5, 1.0, 1.0)],
+			[GBuffer.NORMAL, new Vector4(0.0, 0.0, 1.0, 0.0)],
 			[GBuffer.ORM, new Vector4(1.0, 0.0, 0.0, 1.0)],
 			[GBuffer.EMISSION, new Vector4(0.0, 0.0, 0.0, 1.0)]
 		]);
