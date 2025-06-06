@@ -99,7 +99,7 @@ export class Background extends Group implements Disposable {
 		for(const entry of values.gBuffer) {
 
 			uniforms.set(`pp_${entry[0]}`, new Uniform(entry[1]));
-			uniformDeclarations.push(`uniform vec4 pp_${entry[0]};`);
+			uniformDeclarations.push(`uniform vec${entry[1].toArray().length} pp_${entry[0]};`);
 			mrtWrites.push(`\t#ifdef out_${entry[0]}\n\t\tout_${entry[0]} = pp_${entry[0]};\n#endif`);
 
 		}

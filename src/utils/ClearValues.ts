@@ -1,4 +1,4 @@
-import { Color, EventDispatcher, Vector4 } from "three";
+import { Color, EventDispatcher, Vector2, Vector3, Vector4 } from "three";
 import { BaseEventMap } from "../core/BaseEventMap.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { ObservableMap } from "./ObservableMap.js";
@@ -27,7 +27,7 @@ export class ClearValues extends EventDispatcher<BaseEventMap> {
 	 * A collection that maps {@link GBuffer} components to clear values.
 	 */
 
-	readonly gBuffer: Map<GBuffer | string, Vector4>;
+	readonly gBuffer: Map<GBuffer | string, Vector2 | Vector3 | Vector4>;
 
 	/**
 	 * Constructs new clear values.
@@ -40,7 +40,7 @@ export class ClearValues extends EventDispatcher<BaseEventMap> {
 		this._color = null;
 		this._alpha = null;
 
-		const gBuffer = new ObservableMap<GBuffer | string, Vector4>([
+		const gBuffer = new ObservableMap<GBuffer | string, Vector2 | Vector3 | Vector4>([
 			[GBuffer.NORMAL, new Vector4(0.0, 0.0, 1.0, 0.0)],
 			[GBuffer.ORM, new Vector4(1.0, 0.0, 0.0, 1.0)],
 			[GBuffer.EMISSION, new Vector4(0.0, 0.0, 0.0, 1.0)]
