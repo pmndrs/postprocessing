@@ -44,6 +44,17 @@ import { CopyPass } from "./CopyPass.js";
 export interface GeometryPassOptions {
 
 	/**
+	 * Controls whether color buffers should use an alpha channel.
+	 *
+	 * Disabling alpha enables small internal float formats for reduced memory consumption.
+	 *
+	 * @see https://www.khronos.org/opengl/wiki/Small_Float_Formats
+	 * @defaultValue true
+	 */
+
+	alpha?: boolean;
+
+	/**
 	 * Determines whether a stencil buffer should be created.
 	 *
 	 * @defaultValue false
@@ -60,7 +71,7 @@ export interface GeometryPassOptions {
 	depthBuffer?: boolean;
 
 	/**
-	 * The texture data type of the primary color buffer.
+	 * The texture data type used for color buffers.
 	 *
 	 * @defaultValue HalfFloatType
 	 */
@@ -76,7 +87,7 @@ export interface GeometryPassOptions {
 	samples?: MSAASamples;
 
 	/**
-	 * A custom G-Buffer configuration.
+	 * A G-Buffer configuration.
 	 */
 
 	gBufferConfig?: GBufferConfig;
@@ -123,6 +134,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 	// #region Settings
 
+	readonly alpha: boolean;
 	readonly stencilBuffer: boolean;
 	readonly depthBuffer: boolean;
 	readonly frameBufferType: TextureDataType;
@@ -145,6 +157,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 	 */
 
 	constructor(scene: Scene, camera: OrthographicCamera | PerspectiveCamera, {
+		alpha = true,
 		stencilBuffer = false,
 		depthBuffer = true,
 		frameBufferType = HalfFloatType,
@@ -154,6 +167,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		super("GeometryPass");
 
+		this.alpha = alpha;
 		this.stencilBuffer = stencilBuffer;
 		this.depthBuffer = depthBuffer;
 		this.frameBufferType = frameBufferType;
