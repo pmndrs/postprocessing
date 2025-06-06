@@ -14,7 +14,7 @@ vec2 pp_octWrap(vec2 v) {
 vec2 pp_encodeNormal(vec3 n) {
 
 	n /= (abs(n.x) + abs(n.y) + abs(n.z));
-	n.xy = (n.z >= 0.0) ? n.xy : octWrap(n.xy);
+	n.xy = (n.z >= 0.0) ? n.xy : pp_octWrap(n.xy);
 	return n.xy;
 
 }
