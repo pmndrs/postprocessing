@@ -9,7 +9,6 @@ import depthBufferPrecisionParsFragment from "./shaders/depth-buffer-precision-p
 import depthUtilsParsFragment from "./shaders/depth-utils-pars.frag";
 import frameBufferPrecisionParsFragment from "./shaders/frame-buffer-precision-pars.frag";
 import inputBufferParsFragment from "./shaders/input-buffer-pars.frag";
-import normalBufferParsFragment from "./shaders/normal-buffer-pars.frag";
 import normalUtilsParsFragment from "./shaders/normal-utils-pars.frag";
 import resolutionParsFragment from "./shaders/resolution-pars.frag";
 import worldUtilsParsFragment from "./shaders/world-utils-pars.frag";
@@ -55,7 +54,6 @@ export class ShaderChunkExtensions {
 			"pp_depth_utils_pars_fragment": depthUtilsParsFragment,
 			"pp_frame_buffer_precision_pars_fragment": frameBufferPrecisionParsFragment,
 			"pp_input_buffer_pars_fragment": inputBufferParsFragment,
-			"pp_normal_buffer_pars_fragment": normalBufferParsFragment,
 			"pp_normal_utils_pars_fragment": normalUtilsParsFragment,
 			"pp_resolution_pars_fragment": resolutionParsFragment,
 			"pp_world_utils_pars_fragment": worldUtilsParsFragment
