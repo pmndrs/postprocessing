@@ -2,6 +2,7 @@ import {
 	DepthFormat,
 	DepthStencilFormat,
 	DepthTexture,
+	FloatType,
 	HalfFloatType,
 	LinearFilter,
 	Material,
@@ -12,6 +13,7 @@ import {
 	OrthographicCamera,
 	PerspectiveCamera,
 	RGBAFormat,
+	RGBFormat,
 	SRGBColorSpace,
 	Scene,
 	TextureDataType,
@@ -73,6 +75,9 @@ export interface GeometryPassOptions {
 	/**
 	 * The texture data type used for color buffers.
 	 *
+	 * Disabling {@link alpha} enables small internal float formats for reduced memory consumption.
+	 *
+	 * @see https://www.khronos.org/opengl/wiki/Small_Float_Formats
 	 * @defaultValue HalfFloatType
 	 */
 
@@ -245,6 +250,16 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 	}
 
 	/**
+	 * Indicates whether the primary frame buffer is capable of storing HDR values.
+	 */
+
+	private get frameBufferPrecisionHigh(): boolean {
+
+		return this.frameBufferType === HalfFloatType || this.frameBufferType === FloatType;
+
+	}
+
+	/**
 	 * Returns the G-Buffer texture configs that correspond to the current G-Buffer components.
 	 */
 
@@ -268,18 +283,20 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 	}
 
 	/**
-	 * Defines the primary G-Buffer texture configs.
+	 * Defines all possible G-Buffer texture configs.
 	 */
 
 	protected updateTextureConfigs(): void {
 
 		const textureConfigs = this.gBufferConfig.textureConfigs;
+		const useSmallFloatFormat = (this.frameBufferPrecisionHigh && !this.alpha);
 
 		textureConfigs.set(GBuffer.COLOR, {
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
 			type: this.frameBufferType,
-			format: RGBAFormat,
+			format: useSmallFloatFormat ? RGBFormat : RGBAFormat,
+			internalFormat: useSmallFloatFormat ? "R11F_G11F_B10F" : undefined,
 			isColorBuffer: true
 		});
 
@@ -303,7 +320,8 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
 			type: this.frameBufferType,
-			format: RGBAFormat,
+			format: useSmallFloatFormat ? RGBFormat : RGBAFormat,
+			internalFormat: useSmallFloatFormat ? "R11F_G11F_B10F" : undefined,
 			isColorBuffer: true
 		});
 
@@ -380,7 +398,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 		}
 
 		const indices = extractIndices(gBuffer);
-		const useSRGB = (this.frameBufferType === UnsignedByteType && renderer.outputColorSpace === SRGBColorSpace);
+		const useSRGB = (!this.frameBufferPrecisionHigh && renderer.outputColorSpace === SRGBColorSpace);
 		const colorSpace = useSRGB ? SRGBColorSpace : NoColorSpace;
 
 		for(const entry of this.textureConfigs) {
@@ -449,6 +467,12 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 			texture.magFilter = textureConfig.magFilter;
 			texture.format = textureConfig.format;
 			texture.type = textureConfig.type;
+
+			if(textureConfig.internalFormat !== undefined) {
+
+				texture.internalFormat = textureConfig.internalFormat;
+
+			}
 
 		}
 
