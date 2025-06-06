@@ -81,7 +81,6 @@
 		"test": "run-s lint clean build ava doc",
 		"watch": "run-p watch:* start",
 		"watch:css": "sass --no-source-map -I manual/assets/css/src/values manual/assets/css/src:manual/assets/css/dist -w",
-		"watch:tsc": "tsc --noEmit --watch --preserveWatchOutput",
 		"watch:js": "node esbuild -w"
 	},
 	"peerDependencies": {
