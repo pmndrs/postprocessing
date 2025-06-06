@@ -134,8 +134,15 @@ export class BufferDebugPass extends Pass<BufferDebugMaterial> {
 	private updateInputBuffer(): void {
 
 		const material = this.fullscreenMaterial;
+		material.decodeNormal = false;
 
 		if(this.bufferFocus !== null && this.input.buffers.has(this.bufferFocus)) {
+
+			if(this.bufferFocus === GBuffer.NORMAL as string) {
+
+				material.decodeNormal = true;
+
+			}
 
 			material.inputBuffer = this.input.getBuffer(this.bufferFocus);
 			material.colorSpaceConversion = false;
