@@ -14,6 +14,7 @@ import resolutionParsFragment from "./shaders/resolution-pars.frag";
 import worldUtilsParsFragment from "./shaders/world-utils-pars.frag";
 
 // Extensions for built-in shaders.
+import normalCodecParsFragment from "./shaders/normal-codec-pars.frag";
 import gbufferDefaultOutputFragment from "./shaders/gbuffer-default-output.frag";
 import gbufferNormalFragment from "./shaders/gbuffer-normal.frag";
 import gbufferOcclusionFragment from "./shaders/gbuffer-occlusion.frag";
@@ -58,6 +59,7 @@ export class ShaderChunkExtensions {
 			"pp_world_utils_pars_fragment": worldUtilsParsFragment
 		});
 
+		ShaderChunk.packing += "\n" + normalCodecParsFragment;
 		ShaderChunk.normal_fragment_maps += "\n" + gbufferNormalFragment;
 		ShaderChunk.aomap_fragment += "\n" + gbufferOcclusionFragment;
 		ShaderChunk.roughnessmap_fragment += "\n" + gbufferRoughnessFragment;
