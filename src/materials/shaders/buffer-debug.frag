@@ -7,7 +7,6 @@
 #include <pp_input_buffer_pars_fragment>
 #include <pp_depth_buffer_pars_fragment>
 #include <pp_depth_utils_pars_fragment>
-#include <pp_normal_buffer_pars_fragment>
 #include <pp_normal_utils_pars_fragment>
 #include <pp_world_utils_pars_fragment>
 
@@ -23,7 +22,7 @@ void main() {
 
 	#elif defined(DECODE_NORMAL)
 
-		out_Color = vec4(readNormal(normalBuffer, vUv) * 0.5 + 0.5, 1.0);
+		out_Color = vec4(readNormal(inputBuffer, vUv) * 0.5 + 0.5, 1.0);
 
 	#else
 

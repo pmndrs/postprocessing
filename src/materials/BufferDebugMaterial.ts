@@ -1,7 +1,7 @@
 import { Texture, Uniform } from "three";
 import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
-import fragmentShader from "./shaders/gbuffer-debug.frag";
+import fragmentShader from "./shaders/buffer-debug.frag";
 import vertexShader from "./shaders/common.vert";
 
 /**
