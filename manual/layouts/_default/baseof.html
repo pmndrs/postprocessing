@@ -31,7 +31,7 @@
 
 		{{ with resources.Get "js/dist/index.js" }}
 			{{ if hugo.IsDevelopment }}
-				<script src="{{ .RelPermalink }}"></script>
+				<script defer src="{{ .RelPermalink }}"></script>
 			{{ else }}
 				{{ with . | fingerprint }}
 					<script defer src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous"></script>
@@ -40,7 +40,7 @@
 		{{ end }}
 		{{ with resources.Get "js/dist/libs/vendor.js" }}
 			{{ if hugo.IsDevelopment }}
-				<script src="{{ .RelPermalink }}"></script>
+				<script defer src="{{ .RelPermalink }}"></script>
 			{{ else }}
 				{{ with . | fingerprint }}
 					<script defer src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous"></script>
@@ -71,7 +71,7 @@
 				<a class="skip-main" href="#main">{{ i18n "skipToContent" . }}</a>
 				<div class="sidebar-button-open" aria-label="{{ i18n `openNav` . }}"></div>
 				<div class="sidebar">
-					{{ block "header" . }}{{ partial "header.html" . }}{{ end }}
+					{{ block "header" . }}{{ partialCached "header.html" . }}{{ end }}
 					{{ block "navigation" . }}{{ partial "navigation.html" . }}{{ end }}
 					{{ block "footer" . }}{{ partial "footer.html" . }}{{ end }}
 				</div>

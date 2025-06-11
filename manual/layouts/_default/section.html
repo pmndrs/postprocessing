@@ -4,6 +4,6 @@
 	{{ .Content }}
 
 	{{ partial "contents.html" . }}
-	{{ partial "pagination.html" . }}
+	{{ partialCached "pagination.html" . }}
 
 {{ end }}
