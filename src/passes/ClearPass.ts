@@ -106,13 +106,7 @@ export class ClearPass extends Pass {
 
 			}
 
-			const value = entry[1];
-			fv[0] = value.x;
-			fv[1] = value.y;
-			fv[2] = value.z;
-			fv[3] = value.w;
-
-			gl.clearBufferfv(gl.COLOR, index, fv);
+			gl.clearBufferfv(gl.COLOR, index, entry[1].toArray(fv) as Float32List);
 
 		}
 
