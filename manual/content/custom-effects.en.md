@@ -11,7 +11,7 @@ weight: 40
 
 ## Introduction
 
-[Effects]() are headless fullscreen passes. They can be combined and rendered using the [EffectPass](). Just like passes, effects may perform initialization tasks, react to render size changes and execute supporting render operations if needed but they don't have access to an output buffer and are not supposed to render to screen by themselves.
+[Effects]() are headless fullscreen passes. They can be combined and rendered using the [EffectPass](). Just like passes, effects may perform initialization tasks, react to render size changes and execute supporting render operations if needed but they don't have access to a default output buffer and are not supposed to render to screen by themselves.
 
 <details><summary>TL;DR</summary>
 <p>
@@ -78,24 +78,24 @@ void mainSupport(in vec2 uv);
 
 ### Geometry Data
 
-Effects have access to the geometry data of the current fragment via the `data` parameter of the `mainImage` function. The `EffectPass` detects whether an effect reads a value from this struct and only fetches the relevant data from the respective textures when it's actually needed. The `GData` struct is defined as follows:
+Effects have access to the geometry data of the current fragment via the `GData` parameter of the `mainImage` function. The `EffectPass` detects whether an effect reads a value from this struct and only fetches the relevant data from the respective textures when it's actually needed. The `GData` struct is defined as follows:
 
 ```glsl
 struct GData {
 	vec4 color;
 	float depth
 	vec3 normal;
+	vec2 velocity;
 	vec3 position;
 	vec3 orm;
 	vec3 emission;
-	vec3 velocity;
 	float luminance;
 }
 ```
 
 ### Convolution
 
-Effects that fetch additional samples from the input buffer inside the fragment shader are considered convolution effects. To prevent bad results, it is not allowed to have more than one convolution effect per `EffectPass`. These effects are also incompatible with effects that implement the `mainUv` function. The `EffectPass` will warn you when it encounters incompatible effects.
+Effects that fetch additional samples from the input buffer inside the fragment shader are considered convolution effects. To prevent bad results, it is not allowed to have more than one convolution effect per `EffectPass`. These effects are also incompatible with effects that implement the `mainUv` function. Creating an `EffectPass` with incompatible effects or assigning a new list of incompatible effects to an existing pass will throw an error.
 
 ## Uniforms, Macros and Varyings
 
