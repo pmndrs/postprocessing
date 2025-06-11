@@ -423,20 +423,20 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 		const output = this.output;
 		const gBufferComponents = this.gBufferComponents;
 
-		if(output.hasDefaultBuffer && output.defaultBuffer !== this.gBufferResource) {
+		if(!output.hasDefaultBuffer) {
+
+			output.defaultBuffer = this.gBufferResource;
+
+		} else if(output.defaultBuffer !== this.gBufferResource) {
 
 			// Don't modify foreign resources.
 			return;
 
-		} else if(!output.hasDefaultBuffer) {
-
-			output.defaultBuffer = this.gBufferResource;
-
 		}
 
 		// Dispose the current G-Buffer if it exists.
-		output.defaultBuffer!.value?.depthTexture?.dispose();
-		output.defaultBuffer!.value?.dispose();
+		output.defaultBuffer.value?.depthTexture?.dispose();
+		output.defaultBuffer.value?.dispose();
 
 		if(gBufferComponents.size === 0) {
 
@@ -499,7 +499,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		}
 
-		const outputBuffer = output.defaultBuffer.value;
+		const outputBuffer = output.defaultBuffer?.value ?? null;
 
 		if(outputBuffer === null) {
 
