@@ -16,6 +16,15 @@ main {
 	line-height: 1.5;
 	min-height: 100vh;
 	padding-bottom: 3rem;
+	p {
+		a {
+			&:active,
+			&:focus,
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
 	h1, h2, h3, h4, h5, h6 {
 		span + a {
 			opacity: 0;
