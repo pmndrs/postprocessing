@@ -114,7 +114,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 	/**
 	 * The effects.
 	 *
-	 * @throws If there are duplicate effects.
+	 * @throws If there are duplicate effects or if the effects cannot be merged.
 	 */
 
 	get effects(): readonly Effect[] {
@@ -160,35 +160,26 @@ export class EffectPass extends Pass<EffectMaterial> {
 	 * The required material will be swapped in if it exists. Otherwise, a new material will be created.
 	 *
 	 * @param invalidateCache - Controls whether the material cache should be rebuild.
+	 * @throws If the current effects cannot be merged.
 	 */
 
 	protected updateMaterial(invalidateCache: boolean): void {
 
-		try {
+		if(invalidateCache) {
 
-			if(invalidateCache) {
+			// Remove all materials.
+			this.effectMaterialManager.invalidateMaterialCache();
+			this.materials.clear();
 
-				// Remove all materials.
-				this.effectMaterialManager.invalidateMaterialCache();
-				this.materials.clear();
+		}
 
-			}
+		// Get the material for the current effect combination.
+		this.fullscreenMaterial = this.effectMaterialManager.getMaterial(this.effects);
 
-			// Get the material for the current effect combination.
-			this.fullscreenMaterial = this.effectMaterialManager.getMaterial(this.effects);
+		// Pick up new materials.
+		for(const material of this.effectMaterialManager.materials) {
 
-			// Pick up new materials.
-			for(const material of this.effectMaterialManager.materials) {
-
-				this.materials.add(material);
-
-			}
-
-		} catch(e) {
-
-			console.error(e);
-			console.info("Disabling pass:", this);
-			this.enabled = false;
+			this.materials.add(material);
 
 		}
 
