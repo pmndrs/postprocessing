@@ -49,10 +49,10 @@ export class EffectShaderData implements ShaderData {
 	readonly convolutionEffects: Set<Effect>;
 
 	/**
-	 * @see {@link uvTransformation}
+	 * A list of effects that transform UV coordinates in the fragment shader.
 	 */
 
-	private _uvTransformation: boolean;
+	readonly uvTransformationEffects: Set<Effect>;
 
 	/**
 	 * @see {@link colorSpace}
@@ -90,8 +90,7 @@ export class EffectShaderData implements ShaderData {
 		this.blendModes = new Map<number, BlendMode>();
 		this.gData = new Set<GData | string>([GData.COLOR]);
 		this.convolutionEffects = new Set<Effect>();
-
-		this._uvTransformation = false;
+		this.uvTransformationEffects = new Set<Effect>();
 		this._colorSpace = LinearSRGBColorSpace;
 
 	}
@@ -102,13 +101,7 @@ export class EffectShaderData implements ShaderData {
 
 	get uvTransformation(): boolean {
 
-		return this._uvTransformation;
-
-	}
-
-	private set uvTransformation(value: boolean) {
-
-		this._uvTransformation = value;
+		return this.uvTransformationEffects.size > 0;
 
 	}
 
@@ -266,7 +259,7 @@ export class EffectShaderData implements ShaderData {
 		if(effect.hasMainUvFunction) {
 
 			fragmentMainUv += `\t${prefix}MainUv(UV);\n`;
-			this.uvTransformation = true;
+			this.uvTransformationEffects.add(effect);
 
 		}
 
@@ -366,8 +359,8 @@ export class EffectShaderData implements ShaderData {
 
 	add(data: EffectShaderData): void {
 
-		this.uvTransformation ||= data.uvTransformation;
 		data.convolutionEffects.forEach((v) => this.convolutionEffects.add(v));
+		data.uvTransformationEffects.forEach((v) => this.uvTransformationEffects.add(v));
 		data.uniforms.forEach((v, k) => this.uniforms.set(k, v));
 		data.defines.forEach((v, k) => this.defines.set(k, v));
 		data.blendModes.forEach((v, k) => this.blendModes.set(k, v));
@@ -413,12 +406,13 @@ export class EffectShaderData implements ShaderData {
 
 		if(this.convolutionEffects.size > 1) {
 
-			const effectNames = Array.from(this.convolutionEffects).map(x => x.name).join(", ");
+			const effectNames = [...this.convolutionEffects].map(x => x.name).join(", ");
 			throw new Error(`Convolution effects cannot be merged (${effectNames})`);
 
 		} else if(this.convolutionEffects.size > 0 && this.uvTransformation) {
 
-			throw new Error("Effects that transform UVs are incompatible with convolution effects");
+			const effectNames = [...this.convolutionEffects, ...this.uvTransformationEffects].map(x => x.name).join(", ");
+			throw new Error(`Effects that transform UVs are incompatible with convolution effects (${effectNames})`);
 
 		}
 
