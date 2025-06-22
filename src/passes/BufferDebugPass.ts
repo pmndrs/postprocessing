@@ -65,7 +65,7 @@ export class BufferDebugPass extends Pass<BufferDebugMaterial> {
 	/**
 	 * Constructs a new buffer debug pass.
 	 *
-	 * @param gBufferComponents - GBuffer components that should be rendered and visualized.
+	 * @param gBufferComponents - G-Buffer components that should be rendered and visualized.
 	 */
 
 	constructor(gBufferComponents?: Set<GBuffer>) {

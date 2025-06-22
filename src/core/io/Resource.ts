@@ -103,7 +103,7 @@ export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap
 	}
 
 	/**
-	 * Mutes this resource.
+	 * Mutes all events dispatched by this resource.
 	 *
 	 * @internal
 	 */
@@ -115,7 +115,7 @@ export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap
 	}
 
 	/**
-	 * Unmutes this resource.
+	 * Unmutes this resource and resumes dispatching events.
 	 *
 	 * @internal
 	 */

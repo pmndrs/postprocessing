@@ -7,25 +7,25 @@
 export enum GBuffer {
 
 	/**
-	 * The color of the scene. Uses an 8 or 16 bit RGBA buffer.
+	 * The color of the scene.
 	 */
 
 	COLOR = "Color",
 
 	/**
-	 * The scene depth is stored in a 24 or 32 bit depth texture.
+	 * The scene depth.
 	 */
 
 	DEPTH = "Depth",
 
 	/**
-	 * The view-space normals are stored in a 16 bit RGBA buffer.
+	 * The view-space normals.
 	 */
 
 	NORMAL = "Normal",
 
 	/**
-	 * An 8 bit OcclusionRoughnessMetalness buffer.
+	 * An Occlusion-Roughness-Metalness buffer.
 	 *
 	 * - R = Ambient Occlusion
 	 * - G = Roughness
@@ -35,7 +35,7 @@ export enum GBuffer {
 	ORM = "ORM",
 
 	/**
-	 * The total emissive radiance. Uses an 8 or 16 bit RGBA buffer.
+	 * The total emissive radiance.
 	 */
 
 	EMISSION = "Emission"

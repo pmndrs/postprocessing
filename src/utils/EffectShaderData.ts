@@ -37,7 +37,7 @@ export class EffectShaderData implements ShaderData {
 	readonly blendModes: Map<number, BlendMode>;
 
 	/**
-	 * A collection of required GBuffer data.
+	 * A collection of required G-Buffer data.
 	 */
 
 	readonly gData: Set<GData | string>;
@@ -437,7 +437,7 @@ export class EffectShaderData implements ShaderData {
 	}
 
 	/**
-	 * Creates a `GData` struct declaration shader code.
+	 * Creates shader code for a `GData` struct declaration.
 	 *
 	 * @return The shader code.
 	 */
@@ -455,7 +455,7 @@ export class EffectShaderData implements ShaderData {
 	}
 
 	/**
-	 * Creates the `GData` struct initialization shader code.
+	 * Creates shader code for the `GData` struct initialization.
 	 *
 	 * @return The shader code.
 	 */
