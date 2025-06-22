@@ -330,6 +330,11 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 			this.onGBufferConfigChange();
 
+		} else {
+
+			// Discard outdated materials and rebuild.
+			this.updateMaterial(true);
+
 		}
 
 	}
