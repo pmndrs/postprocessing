@@ -309,8 +309,8 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 		});
 
 		textureConfigs.set(GBuffer.ORM, {
-			minFilter: LinearFilter,
-			magFilter: LinearFilter,
+			minFilter: NearestFilter,
+			magFilter: NearestFilter,
 			type: UnsignedByteType,
 			format: RGBAFormat,
 			isColorBuffer: false
