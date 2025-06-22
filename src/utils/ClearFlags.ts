@@ -1,4 +1,5 @@
 import { GBuffer } from "../enums/GBuffer.js";
+import { GBufferPacking } from "../enums/GBufferPacking.js";
 
 /**
  * A collection of clear flags.
@@ -12,7 +13,7 @@ export class ClearFlags {
 	 * A collection of {@link GBuffer} components that should be cleared.
 	 */
 
-	gBuffer: Set<GBuffer | string>;
+	gBuffer: Set<string>;
 
 	/**
 	 * Indicates whether the depth buffer should be cleared.
@@ -36,11 +37,11 @@ export class ClearFlags {
 
 	constructor(color = true, depth = true, stencil = true) {
 
-		const gBuffer = new Set<GBuffer>();
-		gBuffer.add(GBuffer.NORMAL);
-		gBuffer.add(GBuffer.ORM);
-		gBuffer.add(GBuffer.EMISSION);
-		this.gBuffer = gBuffer;
+		this.gBuffer = new Set([
+			GBuffer.NORMAL,
+			GBuffer.ORM,
+			GBuffer.EMISSION
+		]);
 
 		this.color = color;
 		this.depth = depth;

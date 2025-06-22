@@ -6,7 +6,6 @@ import { ClearValues } from "../utils/ClearValues.js";
 import { extractIndices } from "../utils/GBufferUtils.js";
 
 const color = /* @__PURE__ */ new Color();
-const fv = /* @__PURE__ */ new Float32Array(4);
 
 /**
  * A clear pass.
@@ -106,7 +105,7 @@ export class ClearPass extends Pass {
 
 			}
 
-			gl.clearBufferfv(gl.COLOR, index, entry[1].toArray(fv) as Float32List);
+			gl.clearBufferfv(gl.COLOR, index, entry[1]);
 
 		}
 
