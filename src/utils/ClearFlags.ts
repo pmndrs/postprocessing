@@ -1,5 +1,4 @@
 import { GBuffer } from "../enums/GBuffer.js";
-import { GBufferPacking } from "../enums/GBufferPacking.js";
 
 /**
  * A collection of clear flags.

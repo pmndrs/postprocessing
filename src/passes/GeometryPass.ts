@@ -6,7 +6,6 @@ import {
 	HalfFloatType,
 	LinearFilter,
 	Material,
-	Mesh,
 	NearestFilter,
 	NoColorSpace,
 	Object3D,

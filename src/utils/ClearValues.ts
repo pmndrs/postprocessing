@@ -2,7 +2,6 @@ import { Color, EventDispatcher } from "three";
 import { BaseEventMap } from "../core/BaseEventMap.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { ObservableMap } from "./ObservableMap.js";
-import { GBufferPacking } from "../enums/GBufferPacking.js";
 
 /**
  * A collection of clear values.

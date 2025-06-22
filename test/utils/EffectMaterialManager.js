@@ -1,5 +1,5 @@
 import test from "ava";
-import { EffectMaterialManager, GBufferConfig, ToneMappingEffect } from "postprocessing";
+import { EffectMaterialManager, GBuffer, GBufferConfig, ToneMappingEffect } from "postprocessing";
 
 const emptyShaderData = {
 	uniforms: new Map(),
@@ -30,6 +30,7 @@ test("creates materials for all effect combinations", t => {
 	effects.forEach((effect) => void (effect.optional = true));
 
 	const manager = new EffectMaterialManager(emptyShaderData);
+	manager.gBuffer = new Set([GBuffer.COLOR]);
 	manager.gBufferConfig = new GBufferConfig();
 
 	t.truthy(manager.getMaterial(effects));
@@ -53,6 +54,7 @@ test("creates materials on demand if there are too many optional effects", t => 
 	effects.forEach((effect) => void (effect.optional = true));
 
 	const manager = new EffectMaterialManager(emptyShaderData);
+	manager.gBuffer = new Set([GBuffer.COLOR]);
 	manager.gBufferConfig = new GBufferConfig();
 
 	t.truthy(manager.getMaterial(effects));
