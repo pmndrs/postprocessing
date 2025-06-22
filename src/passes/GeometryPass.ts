@@ -339,15 +339,15 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 	private updateMaterial(object: Object3D): void {
 
-		if(!(object instanceof Mesh)) {
+		if(!("material" in object)) {
 
 			return;
 
 		}
 
-		const mesh = object as Mesh;
+		const materials = (Array.isArray(object.material) ? object.material : [object.material]) as Material[];
 
-		for(const material of Array.isArray(mesh.material) ? mesh.material : [mesh.material]) {
+		for(const material of materials) {
 
 			if(this.registeredMaterials.has(material)) {
 
