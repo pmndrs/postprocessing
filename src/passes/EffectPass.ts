@@ -310,20 +310,19 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		this.updateGBufferStruct();
 
-		// Clear all input buffers before assigning new ones to minimize event churn.
 		for(const effect of this.effects) {
 
+			// Temporarily remove the listener to avoid unnecessary event churn.
+			effect.removeEventListener("change", this.effectListener);
 			effect.input.buffers.clear();
-
-		}
-
-		for(const effect of this.effects) {
 
 			for(const entry of this.input.buffers) {
 
 				effect.input.buffers.set(entry[0], entry[1]);
 
 			}
+
+			effect.addEventListener("change", this.effectListener);
 
 		}
 
