@@ -66,6 +66,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		this.output.defaultBuffer = this.createFramebuffer();
 		this.effectMaterialManager = new EffectMaterialManager(this.input);
+		this.effectMaterialManager.gBuffer = this.input.gBuffer;
 		this.effectListener = (e: Event3) => this.handleEffectEvent(e);
 		this.gBufferConfigListener = (e: Event3) => this.handleGBufferConfigEvent(e);
 		this.previousGBufferConfig = null;
