@@ -12,6 +12,17 @@ import { CopyMaterial } from "../materials/CopyMaterial.js";
 export class CopyPass extends Pass<CopyMaterial> {
 
 	/**
+	 * Indicates whether {@link WebGLRenderer.copyTextureToTexture} should be used for copying. Depending on the device
+	 * and graphics backend, this operation can be faster or slower than a fullscreen copy shader.
+	 *
+	 * This feature is disabled by default because it tends to be slower in most cases.
+	 *
+	 * @defaultValue false
+	 */
+
+	static blitEnabled = false;
+
+	/**
 	 * Constructs a new copy pass.
 	 *
 	 * @param outputBuffer - An output buffer. If not provided, a new framebuffer will be created.
@@ -95,6 +106,12 @@ export class CopyPass extends Pass<CopyMaterial> {
 	 */
 
 	private blit(): boolean {
+
+		if(!CopyPass.blitEnabled) {
+
+			return false;
+
+		}
 
 		const inputBuffer = this.input.defaultBuffer?.value ?? null;
 		const outputBuffer = this.output.defaultBuffer?.value ?? null;
