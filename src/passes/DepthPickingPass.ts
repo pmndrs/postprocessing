@@ -31,12 +31,7 @@ export class DepthPickingPass extends DepthCopyPass {
 		this.name = "DepthPickingPass";
 		this.fullscreenMaterial.mode = mode;
 		this.callback = null;
-
-		if(mode === DepthCopyMode.SINGLE) {
-
-			this.resolution.setPreferredSize(1, 1);
-
-		}
+		this.mode = mode;
 
 	}
 
@@ -50,14 +45,38 @@ export class DepthPickingPass extends DepthCopyPass {
 
 	private readDepthAt(x: number, y: number): number {
 
-		if(this.renderer === null) {
+		const renderer = this.renderer;
+
+		if(renderer === null) {
 
 			return 0.0;
 
 		}
 
-		this.renderer.readRenderTargetPixels(this.renderTarget, x, y, 1, 1, pixelBuffer);
-		return this.renderer.capabilities.reverseDepthBuffer ? 1.0 - pixelBuffer[0] : pixelBuffer[0];
+		renderer.readRenderTargetPixels(this.renderTarget, x, y, 1, 1, pixelBuffer);
+		const depth = pixelBuffer[0];
+
+		if(renderer.capabilities.reverseDepthBuffer) {
+
+			return 1.0 - depth;
+
+		} else if(renderer.capabilities.logarithmicDepthBuffer) {
+
+			if(this.camera === null) {
+
+				return 0.0;
+
+			}
+
+			const camera = this.camera;
+			const d = Math.pow(2.0, depth * Math.log2(camera.far + 1.0)) - 1.0;
+			const a = camera.far / (camera.far - camera.near);
+			const b = camera.far * camera.near / (camera.near - camera.far);
+			return a + b / d;
+
+		}
+
+		return depth;
 
 	}
 
