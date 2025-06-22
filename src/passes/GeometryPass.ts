@@ -51,7 +51,7 @@ export interface GeometryPassOptions {
 	 * Disabling alpha enables small internal float formats for reduced memory consumption.
 	 *
 	 * @see https://www.khronos.org/opengl/wiki/Small_Float_Formats
-	 * @defaultValue true
+	 * @defaultValue false
 	 */
 
 	alpha?: boolean;
@@ -162,7 +162,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 	 */
 
 	constructor(scene: Scene, camera: OrthographicCamera | PerspectiveCamera, {
-		alpha = true,
+		alpha = false,
 		stencilBuffer = false,
 		depthBuffer = true,
 		frameBufferType = HalfFloatType,
