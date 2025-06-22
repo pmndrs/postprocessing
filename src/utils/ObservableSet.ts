@@ -100,10 +100,15 @@ export class ObservableSet<T> extends EventDispatcher<ObservableSetEventMap<T>> 
 
 	clear(): void {
 
+		if(this.data.size === 0) {
+
+			return;
+
+		}
+
 		this.dispatchEvent({ type: "clear" });
-		const result = this.data.clear();
+		this.data.clear();
 		this.dispatchEvent({ type: "change" });
-		return result;
 
 	}
 
@@ -129,6 +134,12 @@ export class ObservableSet<T> extends EventDispatcher<ObservableSetEventMap<T>> 
 	}
 
 	add(value: T): this {
+
+		if(this.data.has(value)) {
+
+			return this;
+
+		}
 
 		this.data.add(value);
 		this.dispatchEvent({ type: "add", value });
