@@ -27,6 +27,8 @@ Postprocessing aims to support the six most recent releases of three. Older rele
 
 ## Concepts
 
+Postprocessing extends the common rendering workflow with fullscreen image manipulation tools. It uses render pipelines to group and run passes and connects resources through explicit inputs and outputs on the passes.
+
 WIP
 
 ## Performance

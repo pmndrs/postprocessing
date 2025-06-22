@@ -19,7 +19,7 @@ npm install postprocessing
 
 ## Usage
 
-Postprocessing extends the common rendering workflow with fullscreen image manipulation tools. The following WebGL attributes should be used for an optimal workflow:
+The following WebGL attributes should be used for an optimal workflow:
 
 ```ts
 import { WebGLRenderer } from "three";
