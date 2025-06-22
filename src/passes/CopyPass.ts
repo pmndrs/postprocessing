@@ -55,14 +55,29 @@ export class CopyPass extends Pass<CopyMaterial> {
 
 	}
 
+	/**
+	 * Configures the depth buffer for copying.
+	 */
+
+	private configureDepthBuffer(): void {
+
+		const inputDepthBuffer = this.input.getBuffer(GBuffer.DEPTH);
+		const outputDepthBuffer = this.output.defaultBuffer?.value?.depthTexture ?? null;
+		const inputIsOutput = (inputDepthBuffer === outputDepthBuffer);
+
+		this.fullscreenMaterial.depthBuffer = (inputDepthBuffer === null || inputIsOutput) ? null : inputDepthBuffer;
+
+	}
+
 	protected override onInputChange(): void {
 
-		this.fullscreenMaterial.depthBuffer = this.input.getBuffer(GBuffer.DEPTH);
+		this.configureDepthBuffer();
 
 	}
 
 	protected override onOutputChange(): void {
 
+		this.configureDepthBuffer();
 		this.initializeOutputBuffer();
 
 	}
