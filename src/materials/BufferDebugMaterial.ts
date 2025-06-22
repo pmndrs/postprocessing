@@ -1,4 +1,6 @@
 import { Texture, Uniform } from "three";
+import { GBuffer } from "../enums/GBuffer.js";
+import { GBufferDebug } from "../enums/GBufferDebug.js";
 import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentShader from "./shaders/buffer-debug.frag";
@@ -30,6 +32,37 @@ export class BufferDebugMaterial extends FullscreenMaterial {
 	}
 
 	/**
+	 * Sets the buffer focus.
+	 */
+
+	set bufferFocus(value: string | null) {
+
+		const defines = this.defines;
+		delete defines.DEPTH;
+		delete defines.NORMAL;
+		delete defines.POSITION;
+
+		switch(value) {
+
+			case GBuffer.DEPTH:
+				defines.DEPTH = true;
+				break;
+
+			case GBuffer.NORMAL:
+				defines.NORMAL = true;
+				break;
+
+			case GBufferDebug.POSITION:
+				defines.POSITION = true;
+				break;
+
+		}
+
+		this.needsUpdate = true;
+
+	}
+
+	/**
 	 * A depth buffer.
 	 */
 
@@ -42,66 +75,6 @@ export class BufferDebugMaterial extends FullscreenMaterial {
 	set depthBuffer(value: Texture | null) {
 
 		this.uniforms.depthBuffer.value = value;
-
-	}
-
-	/**
-	 * Enables or disables view space position reconstruction.
-	 */
-
-	get reconstructPosition(): boolean {
-
-		return (this.defines.RECONSTRUCT_POSITION !== undefined);
-
-	}
-
-	set reconstructPosition(value: boolean) {
-
-		if(this.reconstructPosition !== value) {
-
-			if(value) {
-
-				this.defines.RECONSTRUCT_POSITION = true;
-
-			} else {
-
-				delete this.defines.RECONSTRUCT_POSITION;
-
-			}
-
-			this.needsUpdate = true;
-
-		}
-
-	}
-
-	/**
-	 * Enables or disables normal decoding.
-	 */
-
-	get decodeNormal(): boolean {
-
-		return (this.defines.DECODE_NORMAL !== undefined);
-
-	}
-
-	set decodeNormal(value: boolean) {
-
-		if(this.decodeNormal !== value) {
-
-			if(value) {
-
-				this.defines.DECODE_NORMAL = true;
-
-			} else {
-
-				delete this.defines.DECODE_NORMAL;
-
-			}
-
-			this.needsUpdate = true;
-
-		}
 
 	}
 

@@ -14,15 +14,20 @@ in vec2 vUv;
 
 void main() {
 
-	#if defined(RECONSTRUCT_POSITION)
+	#if defined(DEPTH)
+
+		float depth = readDepth(depthBuffer, vUv);
+		out_Color = vec4(vec3(depth), 1.0);
+
+	#elif defined(NORMAL)
+
+		out_Color = vec4(readNormal(inputBuffer, vUv) * 0.5 + 0.5, 1.0);
+
+	#elif defined(POSITION)
 
 		float depth = readDepth(depthBuffer, vUv);
 		vec3 viewPosition = getViewPosition(vUv, depth);
 		out_Color = vec4(getWorldPosition(viewPosition), 1.0);
-
-	#elif defined(DECODE_NORMAL)
-
-		out_Color = vec4(readNormal(inputBuffer, vUv) * 0.5 + 0.5, 1.0);
 
 	#else
 
