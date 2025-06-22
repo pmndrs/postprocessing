@@ -12,6 +12,7 @@ import { Input } from "../core/io/Input.js";
 import { Pass } from "../core/Pass.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { BufferDebugMaterial } from "../materials/BufferDebugMaterial.js";
+import { GBufferDebug } from "../enums/GBufferDebug.js";
 
 /**
  * A debug pass that visualizes all input buffers.
@@ -95,7 +96,13 @@ export class BufferDebugPass extends Pass<BufferDebugMaterial> {
 	}
 
 	/**
-	 * A buffer that should be rendered in fullscreen mode.
+	 * The name of the buffer that should be rendered in fullscreen mode.
+	 *
+	 * The value must match with one of the buffer names. G-Buffer textures use the string value of the respective
+	 * {@link GBuffer} component as their name.
+	 *
+	 * @see {@link GBuffer} for rendering specific G-Buffer components.
+	 * @see {@link GBufferDebug} for computed G-Buffer components.
 	 */
 
 	get bufferFocus(): string | null {
@@ -104,26 +111,10 @@ export class BufferDebugPass extends Pass<BufferDebugMaterial> {
 
 	}
 
-	set bufferFocus(value: string | null) {
+	set bufferFocus(value: GBuffer | GBufferDebug | string | null) {
 
 		this._bufferFocus = value;
 		this.updateInputBuffer();
-
-	}
-
-	/**
-	 * Enables or disables view space position reconstruction.
-	 */
-
-	get reconstructPosition(): boolean {
-
-		return this.fullscreenMaterial.reconstructPosition;
-
-	}
-
-	set reconstructPosition(value: boolean) {
-
-		this.fullscreenMaterial.reconstructPosition = value;
 
 	}
 
@@ -134,15 +125,9 @@ export class BufferDebugPass extends Pass<BufferDebugMaterial> {
 	private updateInputBuffer(): void {
 
 		const material = this.fullscreenMaterial;
-		material.decodeNormal = false;
+		material.bufferFocus = this.bufferFocus;
 
 		if(this.bufferFocus !== null && this.input.buffers.has(this.bufferFocus)) {
-
-			if(this.bufferFocus === GBuffer.NORMAL as string) {
-
-				material.decodeNormal = true;
-
-			}
 
 			material.inputBuffer = this.input.getBuffer(this.bufferFocus);
 			material.colorSpaceConversion = false;
