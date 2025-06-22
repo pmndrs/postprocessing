@@ -6,6 +6,7 @@ import { GBufferConfig } from "./GBufferConfig.js";
 import { EffectShaderData } from "./EffectShaderData.js";
 import { EffectMaterial } from "../materials/EffectMaterial.js";
 import { ShaderData } from "../core/ShaderData.js";
+import { GBuffer } from "../enums/GBuffer.js";
 
 /**
  * An effect material manager that creates, updates and caches effect shader combinations.
@@ -71,6 +72,12 @@ export class EffectMaterialManager implements Disposable {
 	private _gBufferConfig: GBufferConfig | null;
 
 	/**
+	 * @see {@link gBufferConfig}
+	 */
+
+	private _gBuffer: Set<GBuffer | string> | null;
+
+	/**
 	 * @see {@link dithering}
 	 */
 
@@ -93,6 +100,7 @@ export class EffectMaterialManager implements Disposable {
 		this.activeMaterial = null;
 
 		this._gBufferConfig = null;
+		this._gBuffer = null;
 		this._dithering = false;
 
 	}
@@ -125,6 +133,29 @@ export class EffectMaterialManager implements Disposable {
 
 			this.dispose();
 			this._gBufferConfig = value;
+
+		}
+
+	}
+
+	/**
+	 * The current input G-Buffer components.
+	 *
+	 * Assigning a new G-Buffer will invalidate the material cache.
+	 */
+
+	get gBuffer(): Set<GBuffer | string> | null {
+
+		return this._gBuffer;
+
+	}
+
+	set gBuffer(value: Set<GBuffer | string> | null) {
+
+		if(this._gBuffer !== value) {
+
+			this.invalidateMaterialCache();
+			this._gBuffer = value;
 
 		}
 
@@ -178,14 +209,14 @@ export class EffectMaterialManager implements Disposable {
 
 	private getEffectShaderData(effects: Effect[]): EffectShaderData {
 
-		const result = new EffectShaderData(this.gBufferConfig);
+		const result = new EffectShaderData();
 		const effectShaderDataCache = this.effectShaderDataCache;
 
 		for(const effect of effects) {
 
 			if(!effectShaderDataCache.has(effect)) {
 
-				const data = new EffectShaderData(this.gBufferConfig);
+				const data = new EffectShaderData();
 				data.integrateEffect(`e${effect.id}`, effect);
 				effectShaderDataCache.set(effect, data);
 
@@ -204,6 +235,31 @@ export class EffectMaterialManager implements Disposable {
 	}
 
 	/**
+	 * Creates shader code for a `GBuffer` struct declaration.
+	 *
+	 * @param gBufferConfig - A G-Buffer config.
+	 * @return The shader code.
+	 */
+
+	private createGBufferStructDeclaration(gBufferConfig: GBufferConfig): string {
+
+		if(this.gBuffer === null) {
+
+			throw new Error("Missing G-Buffer information");
+
+		}
+
+		return [
+			"struct GBuffer {",
+			...Array.from(gBufferConfig.gBufferStructDeclaration)
+				.filter(x => this.gBuffer!.has(x[0]))
+				.map(x => `\t${x[1]}`),
+			"};\n"
+		].join("\n");
+
+	}
+
+	/**
 	 * Creates a material based on the given effects.
 	 *
 	 * @param effects - The effects that make up the material.
@@ -217,9 +273,15 @@ export class EffectMaterialManager implements Disposable {
 		const result = (id === EffectMaterialManager.DEFAULT_MATERIAL_ID) ? this.defaultMaterial : new EffectMaterial();
 		const data = this.getEffectShaderData(effects);
 
-		data.shaderParts.set(Section.FRAGMENT_HEAD_GBUFFER, data.createGBufferStruct());
-		data.shaderParts.set(Section.FRAGMENT_HEAD_GDATA, data.createGDataStructDeclaration());
-		data.shaderParts.set(Section.FRAGMENT_MAIN_GDATA, data.createGDataStructInitialization());
+		const gBufferConfig = this.gBufferConfig;
+
+		if(gBufferConfig !== null) {
+
+			data.shaderParts.set(Section.FRAGMENT_HEAD_GBUFFER, this.createGBufferStructDeclaration(gBufferConfig));
+			data.shaderParts.set(Section.FRAGMENT_HEAD_GDATA, data.createGDataStructDeclaration(gBufferConfig));
+			data.shaderParts.set(Section.FRAGMENT_MAIN_GDATA, data.createGDataStructInitialization(gBufferConfig));
+
+		}
 
 		const fragmentHead = data.shaderParts.get(Section.FRAGMENT_HEAD_EFFECTS)!;
 		data.shaderParts.set(Section.FRAGMENT_HEAD_EFFECTS, fragmentHead + data.createBlendFunctions());

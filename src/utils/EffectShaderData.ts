@@ -61,18 +61,10 @@ export class EffectShaderData implements ShaderData {
 	private _colorSpace: ColorSpace;
 
 	/**
-	 * A G-Buffer configuration.
-	 */
-
-	private readonly gBufferConfig: GBufferConfig;
-
-	/**
 	 * Constructs new shader data.
 	 */
 
-	constructor(gBufferConfig: GBufferConfig | null = null) {
-
-		this.gBufferConfig = gBufferConfig ?? new GBufferConfig();
+	constructor() {
 
 		this.shaderParts = new Map<EffectShaderSection, string>([
 			[EffectShaderSection.FRAGMENT_HEAD_EFFECTS, ""],
@@ -419,34 +411,17 @@ export class EffectShaderData implements ShaderData {
 	}
 
 	/**
-	 * Creates a `GBuffer` struct declaration shader code.
-	 *
-	 * @return The shader code.
-	 */
-
-	createGBufferStruct(): string {
-
-		return [
-			"struct GBuffer {",
-			...Array.from(this.gBufferConfig.gBufferStructDeclaration)
-				.filter(x => this.gData.has(x[0]))
-				.map(x => `\t${x[1]}`),
-			"};\n"
-		].join("\n");
-
-	}
-
-	/**
 	 * Creates shader code for a `GData` struct declaration.
 	 *
+	 * @param gBufferConfig - A G-Buffer config.
 	 * @return The shader code.
 	 */
 
-	createGDataStructDeclaration(): string {
+	createGDataStructDeclaration(gBufferConfig: GBufferConfig): string {
 
 		return [
 			"struct GData {",
-			...Array.from(this.gBufferConfig.gDataStructDeclaration)
+			...Array.from(gBufferConfig.gDataStructDeclaration)
 				.filter(x => this.gData.has(x[0]))
 				.map(x => `\t${x[1]}`),
 			"};\n"
@@ -457,13 +432,14 @@ export class EffectShaderData implements ShaderData {
 	/**
 	 * Creates shader code for the `GData` struct initialization.
 	 *
+	 * @param gBufferConfig - A G-Buffer config.
 	 * @return The shader code.
 	 */
 
-	createGDataStructInitialization(): string {
+	createGDataStructInitialization(gBufferConfig: GBufferConfig): string {
 
-		const gDataDependencies = this.gBufferConfig.gDataDependencies;
-		const gDataStructInitialization = this.gBufferConfig.gDataStructInitialization;
+		const gDataDependencies = gBufferConfig.gDataDependencies;
+		const gDataStructInitialization = gBufferConfig.gDataStructInitialization;
 
 		const dependencyGraph = new Map<string, Iterable<string>>(
 			Array.from(this.gData)
