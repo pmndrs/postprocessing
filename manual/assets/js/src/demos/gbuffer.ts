@@ -15,6 +15,7 @@ import {
 	DebugTools,
 	EffectPass,
 	GBuffer,
+	GBufferDebug,
 	GeometryPass,
 	RenderPipeline,
 	ToneMappingEffect
@@ -112,7 +113,12 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Settings
 
-	const gBufferOptions = Object.assign({ NONE: "" }, Utils.enumToRecord(GBuffer));
+	const gBufferOptions = Object.assign(
+		{ NONE: "" },
+		Utils.enumToRecord(GBuffer),
+		Utils.enumToRecord(GBufferDebug)
+	);
+
 	bufferDebugPass.bufferFocus = gBufferOptions.NONE;
 
 	const container = document.getElementById("viewport")!;
@@ -120,7 +126,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const fpsGraph = Utils.createFPSGraph(pane);
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addBinding(bufferDebugPass, "bufferFocus", { options: gBufferOptions });
-	folder.addBinding(bufferDebugPass, "reconstructPosition");
 
 	// Resize Handler
 
