@@ -8,7 +8,7 @@
 
 vec3 readNormal(mediump sampler2D normalBuffer, const in vec2 uv) {
 
-	#ifdef OCT_WRAP_NORMAL
+	#ifdef PP_NORMAL_VELOCITY
 
 		return pp_decodeNormal(texture(normalBuffer, uv).xy);
 
