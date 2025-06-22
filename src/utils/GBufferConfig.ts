@@ -74,11 +74,11 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 		]);
 
 		const gBufferStructDeclaration = new ObservableMap([
-			[GData.COLOR, "FRAME_BUFFER_PRECISION sampler2D color;"],
-			[GData.DEPTH, "DEPTH_BUFFER_PRECISION sampler2D depth;"],
-			[GData.NORMAL, "mediump sampler2D normal;"],
-			[GData.ORM, "lowp sampler2D orm;"],
-			[GData.EMISSION, "FRAME_BUFFER_PRECISION sampler2D emission;"]
+			[GBuffer.COLOR, "FRAME_BUFFER_PRECISION sampler2D color;"],
+			[GBuffer.DEPTH, "DEPTH_BUFFER_PRECISION sampler2D depth;"],
+			[GBuffer.NORMAL, "mediump sampler2D normal;"],
+			[GBuffer.ORM, "lowp sampler2D orm;"],
+			[GBuffer.EMISSION, "FRAME_BUFFER_PRECISION sampler2D emission;"]
 		]);
 
 		const gDataStructDeclaration = new ObservableMap([
