@@ -153,7 +153,7 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 			value.autoClear = false;
 
 			// Updating the pixel ratio also triggers onResolutionChange.
-			this.resolution.pixelRatio = value.getPixelRatio();
+			this.setPixelRatio(value.getPixelRatio());
 
 			if(this.passes.length > 0) {
 
