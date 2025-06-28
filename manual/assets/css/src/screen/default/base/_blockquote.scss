@@ -4,6 +4,10 @@ blockquote {
 	border-left: 3px solid;
 	margin: 2rem 0;
 	padding: 0.75rem 1.5rem;
+	code {
+		color: inherit;
+		font-weight: 500;
+	}
 	p {
 		margin: 0;
 		padding: 0;
@@ -27,6 +31,9 @@ blockquote {
 	}
 	&.alert {
 		background: rgba(colors.$grey_500, 0.05);
+		p {
+			margin-left: 4px;
+		}
 		.alert-icon {
 			background: colors.$grey_500;
 			mask-image: url("/img/svg/info_black_24dp.svg");
