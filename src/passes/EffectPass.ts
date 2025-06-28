@@ -1,4 +1,4 @@
-import { Event as Event3, WebGLRenderer, Material, Texture } from "three";
+import { Event as Event3, Material, Texture } from "three";
 import { Pass } from "../core/Pass.js";
 import { Effect } from "../effects/Effect.js";
 import { GBuffer } from "../enums/GBuffer.js";
@@ -353,11 +353,11 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 	}
 
-	override checkRequirements(renderer: WebGLRenderer): void {
+	override checkRequirements(): void {
 
 		for(const effect of this.effects) {
 
-			effect.checkRequirements(renderer);
+			effect.checkRequirements();
 
 		}
 

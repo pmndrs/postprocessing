@@ -430,7 +430,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 			if(value?.capabilities !== undefined) {
 
-				this.checkRequirements(value);
+				this.checkRequirements();
 
 			}
 
@@ -790,10 +790,9 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 * This method should throw an error if the requirements are not met.
 	 *
 	 * @throws If the device doesn't meet the requirements.
-	 * @param renderer - The current renderer.
 	 */
 
-	checkRequirements(renderer: WebGLRenderer): void {}
+	checkRequirements(): void {}
 
 	/**
 	 * Performs tasks when the input resources have changed.

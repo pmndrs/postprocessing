@@ -1,4 +1,4 @@
-import { FloatType, NearestFilter, WebGLRenderer, WebGLRenderTarget } from "three";
+import { FloatType, NearestFilter, WebGLRenderTarget } from "three";
 import { TextureResource } from "../core/io/TextureResource.js";
 import { Pass } from "../core/Pass.js";
 import { GBuffer } from "../enums/GBuffer.js";
@@ -87,9 +87,15 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 
 	}
 
-	override checkRequirements(renderer: WebGLRenderer): void {
+	override checkRequirements(): void {
 
-		const gl = renderer.getContext();
+		if(this.renderer === null) {
+
+			return;
+
+		}
+
+		const gl = this.renderer.getContext();
 		const renderable = gl.getExtension("EXT_color_buffer_float") ?? gl.getExtension("EXT_color_buffer_half_float");
 
 		if(!renderable) {
