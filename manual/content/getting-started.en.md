@@ -25,7 +25,7 @@ The following WebGL attributes should be used for an optimal workflow:
 import { WebGLRenderer } from "three";
 
 const renderer = new WebGLRenderer({
-	powerPreference: "high-performance",
+	powerPreference: "high-performance", // optional
 	antialias: false,
 	stencil: false,
 	depth: false
@@ -41,7 +41,8 @@ import {
 	ClearPass,
 	EffectPass,
 	GeometryPass,
-	RenderPipeline
+	RenderPipeline,
+	ToneMappingEffect
 } from "postprocessing";
 
 const container = document.getElementById("viewport");
@@ -54,7 +55,10 @@ const pipeline = new RenderPipeline(renderer);
 pipeline.add(
 	new ClearPass(),
 	new GeometryPass(scene, camera),
-	new EffectPass(new BloomEffect())
+	new EffectPass(
+		new BloomEffect(),
+		new ToneMappingEffect()
+	)
 );
 
 function onResize(): void {
@@ -72,6 +76,9 @@ onResize();
 
 renderer.setAnimationLoop((timestamp) => pipeline.render(timestamp));
 ```
+
+> [!TIP]
+> It's recommended to apply anti-aliasing effects with an additional, separate `EffectPass`. See the anti-aliasing demos for details.
 
 ## Precompilation
 

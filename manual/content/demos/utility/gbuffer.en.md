@@ -16,7 +16,7 @@ script: gbuffer
 The `GeometryPass` is responsible for rendering a scene and its output serves as the starting point in a render pipeline. This output is generally referred to as a "G-Buffer" and in its simplest form, it only consists of a single color texture attachment. With [MRT](https://registry.khronos.org/webgl/specs/latest/2.0/#3.7.11) it's possible to render to multiple buffers at once which enables more advanced effects. Without MRT, the entire scene would have to be rendered multiple times to obtain various types of geometry data.
 
 > [!NOTE]
-> The GeometryPass does not clear its output buffer automatically. Instead, an explicit ClearPass must be used before it:
+> The `GeometryPass` does not clear its output buffer automatically. Instead, an explicit `ClearPass` must be used before it.
 
 ```ts
 const pipeline = new RenderPipeline(renderer);
@@ -29,21 +29,16 @@ pipeline.add(
 
 Depending on the requirements of other passes in the pipeline, the `GeometryPass` will configure a G-Buffer that contains the needed texture attachments. The individual render textures will then be provided to the passes that requested them.
 
-## G-Buffer Packing
+## Alpha
 
-WebGL 2 guarantees that a compatible device supports at least 4 texture attachments per render target. For a broad device support, postprocessing stays within this limitation and packs certain combinations of G-Buffer components into a single texture attachment. To be able to unpack this data, special shader macros that control predefined unpacking functions are provided to the requesting passes via input `defines`. If a pass uses a fullscreen material that extends `FullscreenMaterial`, these `defines` will automatically be integrated into the shaders. To finally read the data, the following shader chunk must be included in the fragment shader:
+Postprocessing uses the compact `R11F_G11F_B10F` framebuffer format by default which requires alpha to be disabled. This reduces memory usage for most internal color buffers by 50% while still yielding sufficient precision to combat banding. However, if you need to use transparent framebuffers, you can enable alpha like this:
 
-```glsl
-#include <pp_gbuffer_packing>
+```ts
+const geoPass = new GeometryPass(scene, camera, { alpha: true });
 ```
 
-This include adds the following utility functions that should be used to read the respective G-Buffer data:
-
-```glsl
-float readDepth(sampler2D depthBuffer, vec2 uv);
-vec3 readNormal(sampler2D normalBuffer, vec2 uv);
-vec2 readVelocity(sampler2D velocityBuffer, vec2 uv);
-```
+> [!NOTE]
+> Enabling alpha changes the internal framebuffer format to `RGBA16F`.
 
 ### External Resources
 

@@ -4,7 +4,7 @@ collection: sections
 title: Custom Effects
 draft: false
 menu: main
-weight: 40
+weight: 50
 ---
 
 # Custom Effects
