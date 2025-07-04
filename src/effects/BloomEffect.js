@@ -23,8 +23,8 @@ export class BloomEffect extends Effect {
 	 *
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
-	 * @param {Number} [options.luminanceThreshold=0.9] - The luminance threshold. Raise this value to mask out darker elements in the scene.
-	 * @param {Number} [options.luminanceSmoothing=0.025] - Controls the smoothness of the luminance threshold.
+	 * @param {Number} [options.luminanceThreshold=1.0] - The luminance threshold. Raise this value to mask out darker elements in the scene.
+	 * @param {Number} [options.luminanceSmoothing=0.03] - Controls the smoothness of the luminance threshold.
 	 * @param {Boolean} [options.mipmapBlur=true] - Enables or disables mipmap blur.
 	 * @param {Number} [options.intensity=1.0] - The bloom intensity.
 	 * @param {Number} [options.radius=0.85] - The blur radius. Only applies to mipmap blur.
@@ -39,8 +39,8 @@ export class BloomEffect extends Effect {
 
 	constructor({
 		blendFunction = BlendFunction.SCREEN,
-		luminanceThreshold = 0.9,
-		luminanceSmoothing = 0.025,
+		luminanceThreshold = 1.0,
+		luminanceSmoothing = 0.03,
 		mipmapBlur = true,
 		intensity = 1.0,
 		radius = 0.85,
