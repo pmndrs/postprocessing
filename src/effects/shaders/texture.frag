@@ -26,6 +26,7 @@ vec4 mainImage(const in vec4 inputColor, const in vec2 uv, const in GData gData)
 
 	#endif
 
-	return TEXEL;
+	vec4 result = TEXEL;
+	return vec4(result.rgb, max(inputColor.a, result.a));
 
 }

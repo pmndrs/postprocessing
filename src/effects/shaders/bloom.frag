@@ -12,7 +12,7 @@ uniform float intensity;
 
 vec4 mainImage(const in vec4 inputColor, const in vec2 uv, const in GData gData) {
 
-	vec3 texel = texture(map, uv).rgb;
-	return vec4(texel * intensity, inputColor.a);
+	vec4 texel = texture(map, uv);
+	return vec4(texel.rgb * intensity, max(inputColor.a, texel.a));
 
 }
