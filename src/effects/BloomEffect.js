@@ -25,7 +25,7 @@ export class BloomEffect extends Effect {
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
 	 * @param {Number} [options.luminanceThreshold=0.9] - The luminance threshold. Raise this value to mask out darker elements in the scene.
 	 * @param {Number} [options.luminanceSmoothing=0.025] - Controls the smoothness of the luminance threshold.
-	 * @param {Boolean} [options.mipmapBlur=false] - Enables or disables mipmap blur.
+	 * @param {Boolean} [options.mipmapBlur=true] - Enables or disables mipmap blur.
 	 * @param {Number} [options.intensity=1.0] - The bloom intensity.
 	 * @param {Number} [options.radius=0.85] - The blur radius. Only applies to mipmap blur.
 	 * @param {Number} [options.levels=8] - The amount of MIP levels. Only applies to mipmap blur.
@@ -41,7 +41,7 @@ export class BloomEffect extends Effect {
 		blendFunction = BlendFunction.SCREEN,
 		luminanceThreshold = 0.9,
 		luminanceSmoothing = 0.025,
-		mipmapBlur = false,
+		mipmapBlur = true,
 		intensity = 1.0,
 		radius = 0.85,
 		levels = 8,
