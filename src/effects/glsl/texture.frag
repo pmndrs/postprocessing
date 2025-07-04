@@ -23,5 +23,6 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
 	#endif
 
 	outputColor = TEXEL;
+	outputColor.a = max(inputColor.a, outputColor.a);
 
 }
