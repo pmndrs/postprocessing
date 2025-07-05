@@ -303,25 +303,22 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 			minFilter: NearestFilter,
 			magFilter: NearestFilter,
 			type: HalfFloatType,
-			format: RGBAFormat,
-			isColorBuffer: false
+			format: RGBAFormat
 		});
 
 		textureConfigs.set(GBuffer.ORM, {
 			minFilter: NearestFilter,
 			magFilter: NearestFilter,
 			type: UnsignedByteType,
-			format: RGBAFormat,
-			isColorBuffer: false
+			format: RGBAFormat
 		});
 
 		textureConfigs.set(GBuffer.EMISSION, {
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
-			type: this.frameBufferType,
-			format: useSmallFloatFormat ? RGBFormat : RGBAFormat,
-			internalFormat: useSmallFloatFormat ? "R11F_G11F_B10F" : undefined,
-			isColorBuffer: true
+			type: HalfFloatType,
+			format: RGBFormat,
+			internalFormat: "R11F_G11F_B10F"
 		});
 
 	}
@@ -402,7 +399,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		for(const entry of this.textureConfigs) {
 
-			if(entry[1].isColorBuffer && indices.has(entry[0])) {
+			if(entry[1].isColorBuffer === true && indices.has(entry[0])) {
 
 				const index = indices.get(entry[0])!;
 				gBuffer.textures[index].colorSpace = colorSpace;

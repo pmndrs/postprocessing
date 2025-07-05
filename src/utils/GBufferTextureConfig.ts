@@ -48,6 +48,6 @@ export interface GBufferTextureConfig {
 	 * Indicates whether the texture stores color values.
 	 */
 
-	isColorBuffer: boolean;
+	isColorBuffer?: boolean;
 
 }
