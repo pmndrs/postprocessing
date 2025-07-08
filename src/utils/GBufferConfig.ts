@@ -78,7 +78,7 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 			[GBuffer.DEPTH, "DEPTH_BUFFER_PRECISION sampler2D depth;"],
 			[GBuffer.NORMAL, "mediump sampler2D normal;"],
 			[GBuffer.ORM, "lowp sampler2D orm;"],
-			[GBuffer.EMISSION, "FRAME_BUFFER_PRECISION sampler2D emission;"]
+			[GBuffer.EMISSION, "mediump sampler2D emission;"]
 		]);
 
 		const gDataStructDeclaration = new ObservableMap([
