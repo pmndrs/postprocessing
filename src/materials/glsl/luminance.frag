@@ -44,11 +44,12 @@ void main() {
 
 	#ifdef COLOR
 
-		gl_FragColor = vec4(texel.rgb * clamp(l, 0.0, 1.0), l);
+		float mask = clamp(l, 0.0, 1.0);
+		gl_FragColor = vec4(texel.rgb * mask, texel.a);
 
 	#else
 
-		gl_FragColor = vec4(l);
+		gl_FragColor = vec4(l, l, l, texel.a);
 
 	#endif
 
