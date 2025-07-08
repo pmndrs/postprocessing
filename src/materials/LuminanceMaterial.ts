@@ -7,10 +7,7 @@ import vertexShader from "./shaders/common.vert";
 /**
  * A luminance shader material.
  *
- * This shader produces a greyscale luminance map that describes the absolute amount of light emitted by a scene. It can
- * also be configured to output colors that are scaled with their respective luminance value.
- *
- * The alpha channel always contains the luminance value.
+ * Renders luminance, i.e. the absolute amount of light emitted by a scene.
  *
  * @see https://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC9
  * @see https://hsto.org/getpro/habr/post_images/2ab/69d/084/2ab69d084f9a597e032624bcd74d57a7.png

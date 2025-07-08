@@ -24,11 +24,12 @@ void main() {
 
 	#ifdef COLOR
 
-		out_Color = vec4(texel.rgb * clamp(l, 0.0, 1.0), l);
+		float mask = clamp(l, 0.0, 1.0);
+		out_Color = vec4(texel.rgb * mask, texel.a);
 
 	#else
 
-		out_Color = vec4(l);
+		out_Color = vec4(l, l, l, texel.a);
 
 	#endif
 
