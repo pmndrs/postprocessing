@@ -160,7 +160,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 	 * @param options - Additional options.
 	 */
 
-	constructor(scene: Scene, camera: OrthographicCamera | PerspectiveCamera, {
+	constructor(scene: Scene | null, camera: OrthographicCamera | PerspectiveCamera | null, {
 		alpha = false,
 		stencilBuffer = false,
 		depthBuffer = true,
