@@ -27,29 +27,29 @@ void main() {
 
 	vec4 texel = texture2D(inputBuffer, vUv);
 	float l = luminance(texel.rgb);
+	float mask = 1.0;
 
 	#ifdef RANGE
 
 		// Apply a luminance range mask.
 		float low = step(range.x, l);
 		float high = step(l, range.y);
-
-		l *= low * high;
+		mask = low * high;
 
 	#elif defined(THRESHOLD)
 
-		l = smoothstep(threshold, threshold + smoothing, l) * l;
+		// Apply a high pass filter.
+		mask = smoothstep(threshold, threshold + smoothing, l);
 
 	#endif
 
 	#ifdef COLOR
 
-		float mask = clamp(l, 0.0, 1.0);
-		gl_FragColor = vec4(texel.rgb * mask, texel.a);
+		gl_FragColor = texel * mask;
 
 	#else
 
-		gl_FragColor = vec4(l, l, l, texel.a);
+		gl_FragColor = vec4(l * mask);
 
 	#endif
 
