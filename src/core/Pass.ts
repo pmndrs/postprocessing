@@ -898,8 +898,9 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	}
 
 	/**
-	 * Creates a basic framebuffer that uses linear filtering and has no mipmaps and no depth.
+	 * Creates a standard render target with default settings and no depth.
 	 *
+	 * @see https://threejs.org/docs/?q=rendert#api/en/renderers/WebGLRenderTarget
 	 * @return The framebuffer.
 	 */
 

@@ -107,7 +107,7 @@ export class BloomEffect extends Effect implements BloomEffectOptions {
 	}
 
 	/**
-	 * The luminance material.
+	 * The luminance high-pass material.
 	 */
 
 	get luminanceMaterial(): LuminanceMaterial {
