@@ -1,7 +1,7 @@
 import { Uniform } from "three";
 import { LuminancePass } from "../passes/LuminancePass.js";
 import { MipmapBlurPass, MipmapBlurPassOptions } from "../passes/MipmapBlurPass.js";
-import { LuminanceMaterial } from "../materials/LuminanceMaterial.js";
+import { LuminanceHighPassMaterial } from "../materials/LuminanceHighPassMaterial.js";
 import { AddBlendFunction } from "./blending/blend-functions/AddBlendFunction.js";
 import { Effect } from "./Effect.js";
 
@@ -92,7 +92,6 @@ export class BloomEffect extends Effect implements BloomEffectOptions {
 		const luminanceMaterial = this.luminanceMaterial;
 		luminanceMaterial.threshold = luminanceThreshold;
 		luminanceMaterial.smoothing = luminanceSmoothing;
-		luminanceMaterial.colorOutput = true;
 
 		const mipmapBlurPass = new MipmapBlurPass({ levels, radius, fullResolutionUpsampling, clampToBorder });
 		this.mipmapBlurPass = mipmapBlurPass;
@@ -110,7 +109,7 @@ export class BloomEffect extends Effect implements BloomEffectOptions {
 	 * The luminance high-pass material.
 	 */
 
-	get luminanceMaterial(): LuminanceMaterial {
+	get luminanceMaterial(): LuminanceHighPassMaterial {
 
 		return this.luminancePass.fullscreenMaterial;
 

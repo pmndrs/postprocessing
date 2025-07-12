@@ -12,7 +12,7 @@ export * from "./EffectMaterial.js";
 export * from "./FullscreenMaterial.js";
 export * from "./GaussianBlurMaterial.js";
 export * from "./KawaseBlurMaterial.js";
-export * from "./LuminanceMaterial.js";
+export * from "./LuminanceHighPassMaterial.js";
 export * from "./MaskMaterial.js";
 export * from "./SkyBoxMaterial.js";
 export * from "./SMAAEdgeDetectionMaterial.js";

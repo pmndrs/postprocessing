@@ -1,7 +1,7 @@
 import { WebGLRenderTarget } from "three";
 import { TextureResource } from "../core/io/TextureResource.js";
 import { Pass } from "../core/Pass.js";
-import { LuminanceMaterial } from "../materials/LuminanceMaterial.js";
+import { LuminanceHighPassMaterial } from "../materials/LuminanceHighPassMaterial.js";
 
 /**
  * A luminance pass.
@@ -9,7 +9,7 @@ import { LuminanceMaterial } from "../materials/LuminanceMaterial.js";
  * @category Passes
  */
 
-export class LuminancePass extends Pass<LuminanceMaterial> {
+export class LuminancePass extends Pass<LuminanceHighPassMaterial> {
 
 	/**
 	 * Identifies the luminance output buffer.
@@ -26,7 +26,7 @@ export class LuminancePass extends Pass<LuminanceMaterial> {
 		super("LuminancePass");
 
 		this.output.setBuffer(LuminancePass.BUFFER_LUMINANCE, this.createFramebuffer());
-		this.fullscreenMaterial = new LuminanceMaterial();
+		this.fullscreenMaterial = new LuminanceHighPassMaterial();
 
 	}
 
