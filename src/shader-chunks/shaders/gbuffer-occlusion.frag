@@ -4,10 +4,6 @@
 
 		out_ORM.x = ambientOcclusion;
 
-	#else
-
-		out_ORM.x = 1.0;
-
 	#endif
 
 #endif
