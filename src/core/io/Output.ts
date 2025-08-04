@@ -1,4 +1,4 @@
-import { EventDispatcher, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
+import { EventDispatcher, IUniform, UnsignedByteType, WebGLRenderTarget } from "three";
 import { ObservableMap } from "../../utils/ObservableMap.js";
 import { BaseEventMap } from "../BaseEventMap.js";
 import { Disposable } from "../Disposable.js";
@@ -20,7 +20,7 @@ export class Output extends EventDispatcher<BaseEventMap> implements Disposable,
 	static readonly BUFFER_DEFAULT = "BUFFER_DEFAULT";
 
 	readonly defines: Map<string, string | number | boolean>;
-	readonly uniforms: Map<string, Uniform>;
+	readonly uniforms: Map<string, IUniform>;
 
 	/**
 	 * Output render targets.
@@ -37,7 +37,7 @@ export class Output extends EventDispatcher<BaseEventMap> implements Disposable,
 		super();
 
 		const defines = new ObservableMap<string, string | number | boolean>();
-		const uniforms = new ObservableMap<string, Uniform>();
+		const uniforms = new ObservableMap<string, IUniform>();
 		const renderTargets = new ObservableMap<string, RenderTargetResource>();
 		const listener = () => this.setChanged();
 

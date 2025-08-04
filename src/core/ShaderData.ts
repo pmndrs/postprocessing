@@ -1,4 +1,4 @@
-import { Uniform } from "three";
+import { IUniform } from "three";
 
 /**
  * Basic shader data.
@@ -18,6 +18,6 @@ export interface ShaderData {
 	 * A collection of uniforms.
 	 */
 
-	readonly uniforms: Map<string, Uniform>;
+	readonly uniforms: Map<string, IUniform>;
 
 }

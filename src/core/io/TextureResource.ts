@@ -1,4 +1,4 @@
-import { BaseEvent, EventListener, Texture, Uniform } from "three";
+import { BaseEvent, EventListener, IUniform, Texture } from "three";
 import { DisposableResource } from "./DisposableResource.js";
 
 /**
@@ -13,7 +13,7 @@ export class TextureResource extends DisposableResource<Texture | null> {
 	 * A collection of `change` listeners for bound uniforms.
 	 */
 
-	private uniformListeners: WeakMap<Uniform, EventListener<BaseEvent<string>, "change", this>>;
+	private uniformListeners: WeakMap<IUniform, EventListener<BaseEvent<string>, "change", this>>;
 
 	/**
 	 * Constructs a new texture resource.
@@ -25,7 +25,7 @@ export class TextureResource extends DisposableResource<Texture | null> {
 
 		super(value);
 
-		this.uniformListeners = new WeakMap<Uniform, EventListener<BaseEvent<string>, "change", this>>();
+		this.uniformListeners = new WeakMap();
 
 	}
 
@@ -37,7 +37,7 @@ export class TextureResource extends DisposableResource<Texture | null> {
 	 * @param uniform - The uniform.
 	 */
 
-	bindUniform(uniform: Uniform): void {
+	bindUniform(uniform: IUniform): void {
 
 		if(!this.uniformListeners.has(uniform)) {
 
@@ -57,7 +57,7 @@ export class TextureResource extends DisposableResource<Texture | null> {
 	 * @param uniform - The uniform.
 	 */
 
-	unbindUniform(uniform: Uniform): void {
+	unbindUniform(uniform: IUniform): void {
 
 		if(this.uniformListeners.has(uniform)) {
 

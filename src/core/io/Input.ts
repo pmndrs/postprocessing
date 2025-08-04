@@ -1,4 +1,4 @@
-import { EventDispatcher, Texture, Uniform, UnsignedByteType } from "three";
+import { EventDispatcher, IUniform, Texture, UnsignedByteType } from "three";
 import { GBuffer } from "../../enums/GBuffer.js";
 import { GBufferConfig } from "../../utils/gbuffer/GBufferConfig.js";
 import { ObservableMap } from "../../utils/ObservableMap.js";
@@ -23,7 +23,7 @@ export class Input extends EventDispatcher<BaseEventMap> implements Disposable, 
 	static readonly BUFFER_DEFAULT = "BUFFER_DEFAULT";
 
 	readonly defines: Map<string, string | number | boolean>;
-	readonly uniforms: Map<string, Uniform>;
+	readonly uniforms: Map<string, IUniform>;
 
 	/**
 	 * Required {@link GBuffer} components.
@@ -63,7 +63,7 @@ export class Input extends EventDispatcher<BaseEventMap> implements Disposable, 
 
 		const gBuffer = new ObservableSet<GBuffer>([GBuffer.COLOR]);
 		const defines = new ObservableMap<string, string | number | boolean>();
-		const uniforms = new ObservableMap<string, Uniform>();
+		const uniforms = new ObservableMap<string, IUniform>();
 		const textures = new ObservableMap<GBuffer | string, TextureResource>();
 		const listener = () => this.setChanged();
 

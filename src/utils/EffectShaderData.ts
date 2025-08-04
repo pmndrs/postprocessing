@@ -1,4 +1,4 @@
-import { ColorSpace, LinearSRGBColorSpace, NoColorSpace, SRGBColorSpace, Uniform } from "three";
+import { ColorSpace, IUniform, LinearSRGBColorSpace, NoColorSpace, SRGBColorSpace } from "three";
 import { ShaderData } from "../core/ShaderData.js";
 import { Effect } from "../effects/Effect.js";
 import { BlendMode } from "../effects/blending/BlendMode.js";
@@ -22,7 +22,7 @@ const defineRegExp = /^\s*#define\s+(\w*)/gm;
 export class EffectShaderData implements ShaderData {
 
 	readonly defines: Map<string, string | number | boolean>;
-	readonly uniforms: Map<string, Uniform>;
+	readonly uniforms: Map<string, IUniform>;
 
 	/**
 	 * The shader parts.
@@ -78,7 +78,7 @@ export class EffectShaderData implements ShaderData {
 		]);
 
 		this.defines = new Map<string, string | number | boolean>();
-		this.uniforms = new Map<string, Uniform>();
+		this.uniforms = new Map<string, IUniform>();
 		this.blendModes = new Map<number, BlendMode>();
 		this.gData = new Set<GData | string>([GData.COLOR]);
 		this.convolutionEffects = new Set<Effect>();
