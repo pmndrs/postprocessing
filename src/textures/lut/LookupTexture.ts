@@ -73,7 +73,7 @@ export class LookupTexture extends Data3DTexture {
 			const workerURL = URL.createObjectURL(new Blob([workerProgram], { type: "text/javascript" }));
 			const worker = new Worker(workerURL);
 			worker.addEventListener("error", (event) => reject(event.error as Error));
-			worker.addEventListener("message", (event: MessageEvent<ArrayBufferView>) => {
+			worker.addEventListener("message", (event: MessageEvent<ArrayBufferView<ArrayBuffer>>) => {
 
 				const lut = new LookupTexture(event.data, size);
 				lut.colorSpace = this.colorSpace;
@@ -332,7 +332,7 @@ export class LookupTexture extends Data3DTexture {
 		const { width, height } = image;
 		const size = Math.min(width, height);
 
-		let data: Uint8Array | Uint8ClampedArray;
+		let data: Uint8Array<ArrayBuffer> | Uint8ClampedArray<ArrayBuffer>;
 
 		if(image instanceof Image) {
 

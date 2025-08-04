@@ -1,5 +1,4 @@
-import { Material, Vector2, Vector4, WebGLRenderer } from "three";
-import { Timer } from "three/examples/jsm/misc/Timer.js";
+import { Material, Timer, Vector2, Vector4, WebGLRenderer } from "three";
 import { ShaderChunkExtensions } from "../shader-chunks/ShaderChunkExtensions.js";
 import { ImmutableTimer } from "../utils/ImmutableTimer.js";
 import { Resolution } from "../utils/Resolution.js";

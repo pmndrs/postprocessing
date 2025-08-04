@@ -15,6 +15,7 @@ import {
 	SRGBColorSpace,
 	Texture,
 	TextureLoader,
+	Timer,
 	VSMShadowMap,
 	WebGLRenderer
 } from "three";
@@ -28,7 +29,6 @@ import {
 	ToneMappingEffect
 } from "postprocessing";
 
-import { Timer } from "three/examples/jsm/misc/Timer.js";
 import { Pane } from "tweakpane";
 import { ControlMode, SpatialControls } from "spatial-controls";
 import * as CornellBox from "../objects/CornellBox.js";
