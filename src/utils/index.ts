@@ -14,6 +14,7 @@ export * from "./ObservableSet.js";
 export * from "./Resolution.js";
 export * from "./Scissor.js";
 export * from "./Selection.js";
+export * from "./ShaderDataTracker.js";
 export * from "./Viewport.js";
 
 export * as DebugTools from "./DebugTools.js";
