@@ -1,6 +1,7 @@
-import { Texture, Uniform } from "three";
+import { IUniform, Texture, Uniform } from "three";
 import { EffectShaderSection } from "../enums/EffectShaderSection.js";
 import { EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
+import { ShaderDataTracker } from "../utils/ShaderDataTracker.js";
 import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentTemplate from "./shaders/effect.frag";
@@ -15,16 +16,10 @@ import vertexTemplate from "./shaders/effect.vert";
 export class EffectMaterial extends FullscreenMaterial {
 
 	/**
-	 * Keeps track of custom uniforms.
+	 * Keeps track of shader data.
 	 */
 
-	private readonly customUniforms: Map<string, Uniform>;
-
-	/**
-	 * Keeps track of custom defines.
-	 */
-
-	private readonly customDefines: Map<string, string | number | boolean>;
+	private readonly shaderDataTracker: ShaderDataTracker;
 
 	/**
 	 * Constructs a new effect material.
@@ -43,8 +38,7 @@ export class EffectMaterial extends FullscreenMaterial {
 			}
 		});
 
-		this.customUniforms = new Map<string, Uniform>();
-		this.customDefines = new Map<string, string | number | boolean>();
+		this.shaderDataTracker = new ShaderDataTracker();
 
 		// Ensure that gl_FragColor is defined in the default shader.
 		this.fragmentShader = "#include <pp_default_output_pars_fragment>\n\n" + this.fragmentShader;
@@ -150,23 +144,10 @@ export class EffectMaterial extends FullscreenMaterial {
 
 	setDefines(defines: Map<string, string | number | boolean>): this {
 
-		// Reset defines.
-		for(const key of this.customDefines.keys()) {
+		this.shaderDataTracker
+			.applyDefines(this, defines)
+			.trackDefines(defines);
 
-			delete this.defines[key];
-
-		}
-
-		this.customDefines.clear();
-
-		for(const entry of defines.entries()) {
-
-			this.defines[entry[0]] = entry[1];
-			this.customDefines.set(entry[0], entry[1]);
-
-		}
-
-		this.needsUpdate = true;
 		return this;
 
 	}
@@ -180,26 +161,20 @@ export class EffectMaterial extends FullscreenMaterial {
 	 * @return This material.
 	 */
 
-	setUniforms(uniforms: Map<string, Uniform>): this {
+	setUniforms(uniforms: Map<string, IUniform>): this {
 
-		// Reset uniforms.
-		for(const key of this.customUniforms.keys()) {
+		this.shaderDataTracker
+			.applyUniforms(this, uniforms)
+			.trackUniforms(uniforms);
 
-			delete this.uniforms[key];
-
-		}
-
-		this.customUniforms.clear();
-
-		for(const entry of uniforms.entries()) {
-
-			this.uniforms[entry[0]] = entry[1];
-			this.customUniforms.set(entry[0], entry[1]);
-
-		}
-
-		this.uniformsNeedUpdate = true;
 		return this;
+
+	}
+
+	override dispose(): void {
+
+		super.dispose();
+		this.shaderDataTracker.dispose();
 
 	}
 
