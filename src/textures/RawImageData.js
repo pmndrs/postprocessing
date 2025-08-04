@@ -4,7 +4,7 @@
  * @private
  * @param {Number} width - The image width.
  * @param {Number} height - The image height.
- * @param {Uint8ClampedArray|Image} data - The image data.
+ * @param {Uint8ClampedArray<ArrayBuffer>|Image} data - The image data.
  * @return {Canvas} The canvas.
  */
 
@@ -45,7 +45,7 @@ export class RawImageData {
 	 *
 	 * @param {Number} [width=0] - The width of the image.
 	 * @param {Number} [height=0] - The height of the image.
-	 * @param {Uint8ClampedArray} [data=null] - The image data.
+	 * @param {Uint8ClampedArray<ArrayBuffer>} [data=null] - The image data.
 	 */
 
 	constructor(width = 0, height = 0, data = null) {
@@ -69,7 +69,7 @@ export class RawImageData {
 		/**
 		 * The RGBA image data.
 		 *
-		 * @type {Uint8ClampedArray}
+		 * @type {Uint8ClampedArray<ArrayBuffer>}
 		 */
 
 		this.data = data;
