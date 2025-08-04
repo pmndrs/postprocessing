@@ -5,6 +5,7 @@ import {
 	Camera,
 	Event,
 	EventDispatcher,
+	Group,
 	Material,
 	Mesh,
 	Object3D,
@@ -854,22 +855,17 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		}
 
-		const currentMaterial = this.fullscreenMaterial;
+		const group = new Group();
 
 		for(const material of this.materials) {
 
-			this.fullscreenMaterial = material;
-			await this.renderer.compileAsync(this.fullscreenScene!, this.fullscreenCamera!);
+			group.add(new Mesh(Pass.fullscreenGeometry, material!));
 
 		}
 
-		if(currentMaterial !== undefined) {
-
-			this.fullscreenMaterial = currentMaterial;
-
-		}
-
-		const promises: Promise<Object3D | void>[] = [];
+		const promises: Promise<Object3D | void>[] = [
+			this.renderer.compileAsync(group, this.fullscreenCamera!, this.fullscreenScene)
+		];
 
 		for(const pass of this.subpasses) {
 
