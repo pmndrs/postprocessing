@@ -61,6 +61,7 @@ export abstract class FullscreenMaterial extends ShaderMaterial implements Resiz
 		Object.assign(this.uniforms, {
 			projectionMatrix: new Uniform(null),
 			projectionMatrixInverse: new Uniform(null),
+			viewMatrix: new Uniform(null),
 			viewMatrixInverse: new Uniform(null),
 			cameraParams: new Uniform(new Vector3()),
 			resolution: new Uniform(new Vector4()),
@@ -190,6 +191,7 @@ export abstract class FullscreenMaterial extends ShaderMaterial implements Resiz
 
 		this.uniforms.projectionMatrix.value = camera.projectionMatrix;
 		this.uniforms.projectionMatrixInverse.value = camera.projectionMatrixInverse;
+		this.uniforms.viewMatrix.value = camera.matrixWorldInverse;
 		this.uniforms.viewMatrixInverse.value = camera.matrixWorld;
 
 		const cameraParams = this.uniforms.cameraParams.value as Vector3;
