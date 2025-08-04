@@ -1,9 +1,9 @@
 import { Color, Scene } from "three";
 import { Pass } from "../core/Pass.js";
+import { extractIndices } from "../utils/gbuffer/GBufferUtils.js";
 import { Background } from "../utils/Background.js";
 import { ClearFlags } from "../utils/ClearFlags.js";
 import { ClearValues } from "../utils/ClearValues.js";
-import { extractIndices } from "../utils/GBufferUtils.js";
 
 const color = /* @__PURE__ */ new Color();
 

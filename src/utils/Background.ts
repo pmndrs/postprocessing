@@ -19,8 +19,8 @@ import {
 import { Disposable } from "../core/Disposable.js";
 import { BackgroundMaterial } from "../materials/BackgroundMaterial.js";
 import { SkyBoxMaterial } from "../materials/SkyBoxMaterial.js";
+import { extractOutputDefinitions } from "./gbuffer/GBufferUtils.js";
 import { ClearValues } from "./ClearValues.js";
-import { extractOutputDefinitions } from "./GBufferUtils.js";
 
 const euler = /* @__PURE__ */ new Euler();
 const matrix4 = /* @__PURE__ */ new Matrix4();

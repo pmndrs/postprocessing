@@ -1,6 +1,6 @@
 import { EventDispatcher, Texture, Uniform, UnsignedByteType } from "three";
 import { GBuffer } from "../../enums/GBuffer.js";
-import { GBufferConfig } from "../../utils/GBufferConfig.js";
+import { GBufferConfig } from "../../utils/gbuffer/GBufferConfig.js";
 import { ObservableMap } from "../../utils/ObservableMap.js";
 import { ObservableSet } from "../../utils/ObservableSet.js";
 import { BaseEventMap } from "../BaseEventMap.js";

@@ -11,7 +11,7 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { Precision } from "../enums/Precision.js";
+import { Precision } from "../../enums/Precision.js";
 
 /**
  * Maps texture data types to the GLSL precision modifiers.

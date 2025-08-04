@@ -1,15 +1,15 @@
 import { Material, SRGBColorSpace, WebGLRenderTarget } from "three";
 import { GBuffer } from "../../enums/GBuffer.js";
 import { ClearPass } from "../../passes/ClearPass.js";
-import { extractIndices } from "../../utils/GBufferUtils.js";
 import { GeometryPass } from "../../passes/GeometryPass.js";
+import { extractIndices } from "../../utils/gbuffer/GBufferUtils.js";
 import { Pass } from "../Pass.js";
 import { RenderPipeline } from "../RenderPipeline.js";
-import { TextureResource } from "./TextureResource.js";
-import { Resource } from "./Resource.js";
 import { Input } from "./Input.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
+import { Resource } from "./Resource.js";
 import { ResourceManager } from "./ResourceManager.js";
+import { TextureResource } from "./TextureResource.js";
 
 /**
  * An I/O manager.

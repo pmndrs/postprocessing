@@ -20,19 +20,19 @@ import {
 	WebGLRenderer
 } from "three";
 
-import { Input } from "./io/Input.js";
-import { Output } from "./io/Output.js";
 import { FullscreenMaterial } from "../materials/FullscreenMaterial.js";
 import { IdManager } from "../utils/IdManager.js";
 import { ImmutableTimer } from "../utils/ImmutableTimer.js";
 import { Resolution } from "../utils/Resolution.js";
+import { SceneEvent, SceneEventTarget } from "../utils/SceneEventTarget.js";
+import { Scissor } from "../utils/Scissor.js";
+import { Viewport } from "../utils/Viewport.js";
 import { BaseEventMap } from "./BaseEventMap.js";
 import { Disposable } from "./Disposable.js";
 import { Identifiable } from "./Identifiable.js";
+import { Input } from "./io/Input.js";
+import { Output } from "./io/Output.js";
 import { Renderable } from "./Renderable.js";
-import { Viewport } from "../utils/Viewport.js";
-import { Scissor } from "../utils/Scissor.js";
-import { SceneEvent, SceneEventTarget } from "../utils/SceneEventTarget.js";
 
 const v = /* @__PURE__ */ new Vector2();
 

@@ -5,8 +5,8 @@ import { BlendMode } from "../effects/blending/BlendMode.js";
 import { EffectShaderSection, EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
 import { GData } from "../enums/GData.js";
 import { prefixSubstrings } from "../utils/functions/string.js";
-import { GBufferConfig } from "./GBufferConfig.js";
 import { topologicalSort } from "./functions/sorting.js";
+import { GBufferConfig } from "./gbuffer/GBufferConfig.js";
 
 const functionRegExp = /\w+\s+(\w+)\([\w\s,]*\)\s*{/g;
 const structRegExp = /struct\s+(\w*)/g;

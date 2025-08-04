@@ -1,9 +1,9 @@
 import { EventDispatcher } from "three";
-import { BaseEventMap } from "../core/BaseEventMap.js";
-import { GBuffer } from "../enums/GBuffer.js";
-import { GData } from "../enums/GData.js";
+import { BaseEventMap } from "../../core/BaseEventMap.js";
+import { GBuffer } from "../../enums/GBuffer.js";
+import { GData } from "../../enums/GData.js";
+import { ObservableMap } from "../ObservableMap.js";
 import { GBufferTextureConfig } from "./GBufferTextureConfig.js";
-import { ObservableMap } from "./ObservableMap.js";
 
 /**
  * A G-Buffer configuration.

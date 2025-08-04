@@ -3,7 +3,7 @@ import { Pass } from "../core/Pass.js";
 import { Effect } from "../effects/Effect.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { EffectMaterial } from "../materials/EffectMaterial.js";
-import { GBufferConfig } from "../utils/GBufferConfig.js";
+import { GBufferConfig } from "../utils/gbuffer/GBufferConfig.js";
 import { EffectMaterialManager } from "../utils/EffectMaterialManager.js";
 
 /**
