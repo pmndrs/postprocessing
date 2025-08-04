@@ -112,7 +112,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 	 * A collection of materials that have been modified with `onBeforeCompile`.
 	 */
 
-	private readonly registeredMaterials: WeakSet<Material>;
+	private static readonly registeredMaterials = new WeakSet<Material>();
 
 	/**
 	 * A pass that copies the default input buffer to the output color buffer.
@@ -180,7 +180,6 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 		this.selection = new Selection();
 		this.selection.enabled = false;
 		this.gBufferConfig = gBufferConfig;
-		this.registeredMaterials = new WeakSet<Material>();
 		this.copyPass = new CopyPass();
 		this.copyPass.enabled = false;
 		this.subpasses = [this.copyPass];
@@ -345,13 +344,13 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		for(const material of materials) {
 
-			if(this.registeredMaterials.has(material)) {
+			if(GeometryPass.registeredMaterials.has(material)) {
 
 				return;
 
 			}
 
-			this.registeredMaterials.add(material);
+			GeometryPass.registeredMaterials.add(material);
 
 			/* eslint-disable @typescript-eslint/unbound-method */
 			const onBeforeCompile = material.onBeforeCompile;
