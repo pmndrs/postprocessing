@@ -61,7 +61,7 @@ export class RawImageData implements ImageData {
 	 * The RGBA image data.
 	 */
 
-	data: Uint8ClampedArray;
+	data: Uint8ClampedArray<ArrayBuffer>;
 
 	/**
 	 * Constructs a new image data container.
@@ -71,7 +71,7 @@ export class RawImageData implements ImageData {
 	 * @param data - The image data.
 	 */
 
-	constructor(width = 0, height = 0, data: Uint8ClampedArray) {
+	constructor(width = 0, height = 0, data: Uint8ClampedArray<ArrayBuffer>) {
 
 		this.colorSpace = "srgb";
 		this.width = width;
@@ -108,7 +108,7 @@ export class RawImageData implements ImageData {
 	static from(image: ImageData | HTMLImageElement): RawImageData {
 
 		const { width, height } = image;
-		let data: Uint8ClampedArray;
+		let data: Uint8ClampedArray<ArrayBuffer>;
 
 		if(image instanceof Image) {
 
