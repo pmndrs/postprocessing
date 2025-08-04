@@ -1,4 +1,4 @@
-import { Material, SRGBColorSpace, WebGLRenderTarget } from "three";
+import { Material, WebGLRenderTarget } from "three";
 import { GBuffer } from "../../enums/GBuffer.js";
 import { ClearPass } from "../../passes/ClearPass.js";
 import { GeometryPass } from "../../passes/GeometryPass.js";
@@ -247,8 +247,6 @@ export class IOManager {
 		this.updateOutput(pipeline);
 		this.updateInput(pipeline);
 
-		IOManager.syncDefaultBufferType(pipeline);
-
 	}
 
 	/**
@@ -273,44 +271,6 @@ export class IOManager {
 
 		this.resourceManager.optimize();
 		this.updating = false;
-
-	}
-
-	/**
-	 * Synchronizes the texture type of input/output default buffers.
-	 *
-	 * @param pipeline - The pipeline to update.
-	 */
-
-	private static syncDefaultBufferType(pipeline: RenderPipeline): void {
-
-		for(const pass of pipeline.passes.filter(x => x.enabled)) {
-
-			const inputBuffer = pass.input.defaultBuffer?.value ?? null;
-			const outputBuffer = pass.output.defaultBuffer?.value ?? null;
-
-			if(inputBuffer === null || outputBuffer === null || pass instanceof GeometryPass) {
-
-				continue;
-
-			}
-
-			outputBuffer.texture.format = inputBuffer.format;
-			outputBuffer.texture.internalFormat = inputBuffer.internalFormat;
-			outputBuffer.texture.type = inputBuffer.type;
-			outputBuffer.texture.needsUpdate = true;
-
-			if(!pass.input.frameBufferPrecisionHigh && pipeline.renderer?.outputColorSpace === SRGBColorSpace) {
-
-				// If the output buffer uses low precision, enable sRGB encoding to reduce information loss.
-				outputBuffer.texture.colorSpace = SRGBColorSpace;
-
-			}
-
-			// Notify listeners that this texture has changed.
-			pass.output.defaultBuffer!.texture.setChanged();
-
-		}
 
 	}
 

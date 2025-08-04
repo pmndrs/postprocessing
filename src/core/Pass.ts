@@ -149,6 +149,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	private _attached: boolean;
 
 	/**
+	 * @see {@link autoSyncDefaultBuffers}
+	 */
+
+	private _autoSyncDefaultBuffers: boolean;
+
+	/**
 	 * @see {@link timer}
 	 */
 
@@ -251,6 +257,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this._name = name;
 		this._enabled = true;
 		this._attached = false;
+		this._autoSyncDefaultBuffers = true;
 		this._renderer = null;
 		this._timer = null;
 		this._scene = null;
@@ -334,6 +341,29 @@ export abstract class Pass<TMaterial extends Material | null = null>
 			this.input.setChanged();
 			this.output.setChanged();
 			this.resolution.setChanged();
+
+		}
+
+	}
+
+	/**
+	 * Controls whether the settings of the input and output default buffers should be synchronized.
+	 *
+	 * @defaultValue true
+	 */
+
+	protected get autoSyncDefaultBuffers(): boolean {
+
+		return this._autoSyncDefaultBuffers;
+
+	}
+
+	protected set autoSyncDefaultBuffers(value: boolean) {
+
+		if(this._autoSyncDefaultBuffers !== value) {
+
+			this._autoSyncDefaultBuffers = value;
+			this.syncDefaultBuffers();
 
 		}
 
@@ -724,6 +754,59 @@ export abstract class Pass<TMaterial extends Material | null = null>
 				material.outputPrecision = this.output.frameBufferPrecisionHigh ? "mediump" : "lowp";
 
 			}
+
+		}
+
+	}
+
+	/**
+	 * Synchronizes the texture settings of the input and output default buffers.
+	 *
+	 * This method ensures that the output buffer uses adequate settings for storing values from the input buffer.
+	 */
+
+	private syncDefaultBuffers(): void {
+
+		const renderer = this.renderer;
+		const inputBuffer = this.input.defaultBuffer?.value ?? null;
+		const outputBuffer = this.output.defaultBuffer?.value ?? null;
+
+		if(!this.autoSyncDefaultBuffers || renderer === null || inputBuffer === null || outputBuffer === null) {
+
+			return;
+
+		}
+
+		const texture = outputBuffer.texture;
+
+		texture.needsUpdate = (
+			texture.format !== inputBuffer.format ||
+			texture.internalFormat !== inputBuffer.internalFormat ||
+			texture.type !== inputBuffer.type
+		);
+
+		if(texture.needsUpdate) {
+
+			texture.format = inputBuffer.format;
+			texture.internalFormat = inputBuffer.internalFormat;
+			texture.type = inputBuffer.type;
+
+		}
+
+		// If the output buffer uses low precision, enable sRGB encoding to reduce information loss.
+		const useSRGBFramebuffer = !this.output.frameBufferPrecisionHigh && renderer.outputColorSpace === SRGBColorSpace;
+
+		if(useSRGBFramebuffer && texture.colorSpace !== SRGBColorSpace) {
+
+			texture.colorSpace = SRGBColorSpace;
+			texture.needsUpdate = true;
+
+		}
+
+		if(texture.needsUpdate) {
+
+			// Notify listeners.
+			this.output.defaultBuffer!.texture.setChanged();
 
 		}
 
@@ -1133,6 +1216,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 			case "change":
 				this.updateFullscreenMaterialsInput();
+				this.syncDefaultBuffers();
 				this.onInputChange();
 				break;
 
@@ -1159,6 +1243,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 			case "change":
 				this.updateOutputBufferSize();
 				this.updateFullscreenMaterialsOutput();
+				this.syncDefaultBuffers();
 				this.onOutputChange();
 				break;
 
