@@ -9089,9 +9089,9 @@ declare module "postprocessing" {
 		 *
 		 * @param {Number} [width=0] - The width of the image.
 		 * @param {Number} [height=0] - The height of the image.
-		 * @param {Uint8ClampedArray} [data=null] - The image data.
+		 * @param {Uint8ClampedArray<ArrayBuffer>} [data=null] - The image data.
 		 */
-		constructor(width?: number, height?: number, data?: Uint8ClampedArray);
+		constructor(width?: number, height?: number, data?: Uint8ClampedArray<ArrayBuffer>);
         colorSpace: PredefinedColorSpace;
 		/**
 		 * The width of the image.
@@ -9108,9 +9108,9 @@ declare module "postprocessing" {
 		/**
 		 * The RGBA image data.
 		 *
-		 * @type {Uint8ClampedArray}
+		 * @type {Uint8ClampedArray<ArrayBuffer>}
 		 */
-		data: Uint8ClampedArray;
+		data: Uint8ClampedArray<ArrayBuffer>;
 		/**
 		 * Creates a canvas from this image data.
 		 *

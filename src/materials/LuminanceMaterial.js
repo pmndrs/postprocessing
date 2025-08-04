@@ -10,8 +10,6 @@ import vertexShader from "./glsl/common.vert";
  * also be configured to output colors that are scaled with their respective luminance value. Additionally, a range may
  * be provided to mask out undesired texels.
  *
- * The alpha channel always contains the luminance value.
- *
  * On luminance coefficients:
  *  http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC9
  *
