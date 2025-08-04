@@ -194,7 +194,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	protected readonly disposables: Set<Disposable>;
 
 	/**
-	 * A collection of materials that are used by this pass.
+	 * A collection of fullscreen materials that are used by this pass.
 	 *
 	 * This only needs to be filled if multiple fullscreen materials are used. The initial {@link fullscreenMaterial}
 	 * will automatically be added.
@@ -302,6 +302,8 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	/**
 	 * Indicates whether this pass is enabled.
+	 *
+	 * @defaultValue true
 	 */
 
 	get enabled(): boolean {

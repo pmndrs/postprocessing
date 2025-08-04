@@ -390,6 +390,8 @@ export class EffectMaterialManager implements Disposable {
 
 	/**
 	 * Synchronizes the cached materials with the active material.
+	 *
+	 * This ensures that any changes to the backing data of the active material will be applied to all materials.
 	 */
 
 	private synchronizeMaterials(): void {
