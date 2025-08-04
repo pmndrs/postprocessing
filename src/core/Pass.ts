@@ -10,11 +10,10 @@ import {
 	Object3D,
 	OrthographicCamera,
 	PerspectiveCamera,
-	RawShaderMaterial,
+	SRGBColorSpace,
 	Scene,
 	ShaderMaterial,
 	Texture,
-	Uniform,
 	Vector2,
 	WebGLRenderTarget,
 	WebGLRenderer
@@ -25,6 +24,7 @@ import { IdManager } from "../utils/IdManager.js";
 import { ImmutableTimer } from "../utils/ImmutableTimer.js";
 import { Resolution } from "../utils/Resolution.js";
 import { SceneEvent, SceneEventTarget } from "../utils/SceneEventTarget.js";
+import { ShaderDataTracker } from "../utils/ShaderDataTracker.js";
 import { Scissor } from "../utils/Scissor.js";
 import { Viewport } from "../utils/Viewport.js";
 import { BaseEventMap } from "./BaseEventMap.js";
@@ -104,16 +104,10 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	private readonly sceneListener: (event: SceneEvent) => void;
 
 	/**
-	 * Keeps track of previous input defines.
+	 * A container that keeps track of input shader data.
 	 */
 
-	private readonly previousDefines: Map<string, string | number | boolean>;
-
-	/**
-	 * Keeps track of previous input uniforms.
-	 */
-
-	private readonly previousUniforms: Map<string, Uniform>;
+	private readonly shaderDataTracker: ShaderDataTracker;
 
 	/**
 	 * A scene that contains the fullscreen mesh.
@@ -247,9 +241,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		super();
 
 		this.sceneListener = (event) => this.handleSceneEvent(event);
-
-		this.previousDefines = new Map<string, string | number | boolean>();
-		this.previousUniforms = new Map<string, Uniform>();
+		this.shaderDataTracker = new ShaderDataTracker();
 
 		this.fullscreenScene = null;
 		this.fullscreenCamera = null;
@@ -542,18 +534,30 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	protected set fullscreenMaterial(value: TMaterial) {
 
+		if(value === null) {
+
+			return;
+
+		}
+
 		if(this.screen !== null) {
 
-			this.screen.material = value!;
+			this.screen.material = value;
 
 		} else {
 
-			this.screen = new Mesh(Pass.fullscreenGeometry, value!);
+			this.screen = new Mesh(Pass.fullscreenGeometry, value);
 			this.screen.frustumCulled = false;
 			this.fullscreenScene = new Scene();
 			this.fullscreenCamera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
 			this.fullscreenScene.add(this.screen);
+
+		}
+
+		if(!this.materials.has(value)) {
+
 			this.materials.add(value);
+			this.updateFullscreenMaterialInput(value);
 
 		}
 
@@ -661,86 +665,64 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	}
 
 	/**
-	 * Updates the shader input data of the fullscreen material, if it exists.
+	 * Updates the shader input data of the given fullscreen material.
+	 *
+	 * @param material - The material to update.
 	 */
 
-	private updateFullscreenMaterialInput(): void {
+	private updateFullscreenMaterialInput(material: Material | null): void {
 
-		const fullscreenMaterial = this.fullscreenMaterial;
+		if(!(material instanceof ShaderMaterial)) {
 
-		if(!(fullscreenMaterial instanceof RawShaderMaterial ||
-			fullscreenMaterial instanceof ShaderMaterial)) {
-
-			// No defines or uniforms available.
+			// No defines and uniforms available.
 			return;
 
 		}
 
-		if(fullscreenMaterial instanceof FullscreenMaterial) {
+		if(material instanceof FullscreenMaterial) {
 
-			fullscreenMaterial.inputBuffer = this.input.defaultBuffer?.value ?? null;
-
-		} else {
-
-			if(this.input.frameBufferPrecisionHigh) {
-
-				fullscreenMaterial.defines.FRAME_BUFFER_PRECISION_HIGH = true;
-
-			} else {
-
-				delete fullscreenMaterial.defines.FRAME_BUFFER_PRECISION_HIGH;
-
-			}
+			material.inputBuffer = this.input.defaultBuffer?.value ?? null;
 
 		}
 
-		// Remove previous input defines and uniforms.
-
-		for(const key of this.previousDefines.keys()) {
-
-			delete fullscreenMaterial.defines[key];
-
-		}
-
-		for(const key of this.previousUniforms.keys()) {
-
-			delete fullscreenMaterial.uniforms[key];
-
-		}
-
-		this.previousDefines.clear();
-		this.previousUniforms.clear();
-
-		// Add the new input defines and uniforms.
-
-		for(const entry of this.input.defines) {
-
-			this.previousDefines.set(entry[0], entry[1]);
-			fullscreenMaterial.defines[entry[0]] = entry[1];
-
-		}
-
-		for(const entry of this.input.uniforms) {
-
-			this.previousUniforms.set(entry[0], entry[1]);
-			fullscreenMaterial.uniforms[entry[0]] = entry[1];
-
-		}
-
-		fullscreenMaterial.needsUpdate = true;
+		this.shaderDataTracker
+			.applyDefines(material, this.input.defines)
+			.applyUniforms(material, this.input.uniforms);
 
 	}
 
 	/**
-	 * Updates the shader output data of the fullscreen material, if it exists.
+	 * Updates the shader input data of all fullscreen {@link materials}.
 	 */
 
-	private updateFullscreenMaterialOutput(): void {
+	private updateFullscreenMaterialsInput(): void {
 
-		if(this.fullscreenMaterial instanceof FullscreenMaterial) {
+		for(const material of this.materials) {
 
-			// High precision buffers use HalfFloatType (mediump).
-			this.fullscreenMaterial.outputPrecision = this.output.frameBufferPrecisionHigh ? "mediump" : "lowp";
+			this.updateFullscreenMaterialInput(material);
+
+		}
+
+		this.shaderDataTracker
+			.trackDefines(this.input.defines)
+			.trackUniforms(this.input.uniforms);
+
+	}
+
+	/**
+	 * Updates the shader output settings of all fullscreen {@link materials}.
+	 */
+
+	private updateFullscreenMaterialsOutput(): void {
+
+		for(const material of this.materials) {
+
+			if(material instanceof FullscreenMaterial) {
+
+				// High precision buffers use HalfFloatType (mediump).
+				material.outputPrecision = this.output.frameBufferPrecisionHigh ? "mediump" : "lowp";
+
+			}
 
 		}
 
@@ -1154,7 +1136,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		switch(event.type) {
 
 			case "change":
-				this.updateFullscreenMaterialInput();
+				this.updateFullscreenMaterialsInput();
 				this.onInputChange();
 				break;
 
@@ -1180,7 +1162,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 			case "change":
 				this.updateOutputBufferSize();
-				this.updateFullscreenMaterialOutput();
+				this.updateFullscreenMaterialsOutput();
 				this.onOutputChange();
 				break;
 
@@ -1222,8 +1204,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		this.input.dispose();
 		this.output.dispose();
-		this.previousDefines.clear();
-		this.previousUniforms.clear();
+		this.shaderDataTracker.dispose();
 
 		for(const material of this.materials) {
 
