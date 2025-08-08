@@ -9,11 +9,11 @@ uniform vec3 cameraParams;
 // Define macro functions for calculating viewZ depending on the camera type.
 #ifdef PERSPECTIVE_CAMERA
 
-	#define getViewZ(depth) perspectiveDepthToViewZ(depth, cameraParams.x, cameraParams.y)
+	#define getViewZ(depth) perspectiveDepthToViewZ(depth, CAMERA_NEAR, CAMERA_FAR)
 
 #else
 
-	#define getViewZ(depth) orthographicDepthToViewZ(depth, cameraParams.x, cameraParams.y)
+	#define getViewZ(depth) orthographicDepthToViewZ(depth, CAMERA_NEAR, CAMERA_FAR)
 
 #endif
 
