@@ -1,5 +1,5 @@
 /**
- * Reads a depth value from a given buffer. Supports logarithmic depth.
+ * Reads a depth value from a given buffer.
  *
  * @param depthBuffer - The depth texture.
  * @param uv - The texture coordinates.
