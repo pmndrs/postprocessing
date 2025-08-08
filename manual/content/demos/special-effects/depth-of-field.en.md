@@ -11,4 +11,4 @@ script: depth-of-field
 
 # Depth of Field
 
-### External Resources
+## External Resources

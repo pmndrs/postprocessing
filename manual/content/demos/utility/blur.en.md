@@ -11,4 +11,4 @@ script: blur
 
 # Blur
 
-### External Resources
+## External Resources

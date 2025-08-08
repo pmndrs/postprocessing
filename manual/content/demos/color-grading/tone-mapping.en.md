@@ -11,6 +11,6 @@ script: tone-mapping
 
 # Tone Mapping
 
-### External Resources
+## External Resources
 
 * [Tone Mapping Techniques](https://64.github.io/tonemapping)

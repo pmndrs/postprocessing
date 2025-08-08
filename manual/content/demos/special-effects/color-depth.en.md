@@ -16,6 +16,6 @@ This effect simulates a hardware limitation to create a retro aesthetic. The rea
 > [!TIP]
 > For best results, it's recommended to apply this effect last, i. e. after tone mapping and antialiasing.
 
-### External Resources
+## External Resources
 
 * [Color depth reference shader](https://www.shadertoy.com/view/ldfXDH)

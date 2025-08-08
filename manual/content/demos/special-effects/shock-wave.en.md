@@ -11,4 +11,4 @@ script: shock-wave
 
 # Shock Wave
 
-### External Resources
+## External Resources

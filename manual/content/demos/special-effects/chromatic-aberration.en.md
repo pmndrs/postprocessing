@@ -11,4 +11,4 @@ script: chromatic-aberration
 
 # Chromatic Aberration
 
-### External Resources
+## External Resources

@@ -24,6 +24,6 @@ const effect = new SMAAEffect({
 > [!TIP]
 > Anti-aliasing works best when applied after tone-mapping because it requires LDR input colors.
 
-### External Resources
+## External Resources
 
 * [iryoku/smaa](https://github.com/iryoku/smaa)

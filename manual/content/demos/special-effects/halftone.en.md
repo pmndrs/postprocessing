@@ -11,4 +11,4 @@ script: halftone
 
 # Halftone
 
-### External Resources
+## External Resources

@@ -25,7 +25,7 @@ const effect = new FXAAEffect({
 > [!TIP]
 > Anti-aliasing works best when applied after tone-mapping because it requires LDR input colors.
 
-### External Resources
+## External Resources
 
 * [FXAA white paper](https://developer.download.nvidia.com/assets/gamedev/files/sdk/11/FXAA_WhitePaper.pdf)
 * [Implementing FXAA](http://blog.simonrodriguez.fr/articles/2016/07/implementing_fxaa.html)

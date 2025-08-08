@@ -12,4 +12,4 @@ script: pixelation
 
 # Pixelation
 
-### External Resources
+## External Resources

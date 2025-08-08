@@ -11,4 +11,4 @@ script: sepia
 
 # Sepia
 
-### External Resources
+## External Resources

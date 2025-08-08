@@ -11,4 +11,4 @@ script: brightness-contrast
 
 # Brightness & Contrast
 
-### External Resources
+## External Resources

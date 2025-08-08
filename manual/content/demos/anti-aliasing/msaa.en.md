@@ -27,7 +27,7 @@ const geoPass = new GeometryPass(scene, camera, { samples: 4 });
 > [!WARNING]
 > MSAA is currently not compatible with depth-based effects.
 
-### External Resources
+## External Resources
 
 * [A Quick Overview of MSAA](https://mynameismjp.wordpress.com/2012/10/24/msaa-overview/)
 * [Learn OpenGL - Anti Aliasing](https://learnopengl.com/Advanced-OpenGL/Anti-Aliasing)

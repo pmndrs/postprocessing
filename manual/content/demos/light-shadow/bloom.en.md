@@ -21,6 +21,6 @@ The mipmap blur algorithm downsamples the input buffer multiple times based on t
 > [!TIP]
 > The number of levels does not have a big impact on performance because the working buffer size quickly shrinks to negligible sizes. However, there is an upper limit to the level count which can be calculated based on the resolution: `maxLevels = log2(min(width, height))`
 
-### External Resources
+## External Resources
 
 * [UE4 Custom Bloom](https://www.froyok.fr/blog/2021-12-ue4-custom-bloom/)
