@@ -120,7 +120,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 	}
 
-	protected set effects(value: Effect[]) {
+	set effects(value: Effect[]) {
 
 		const distinctEffects = new Set(value);
 
