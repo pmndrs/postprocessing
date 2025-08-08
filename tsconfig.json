@@ -7,21 +7,25 @@
 		"./test"
 	],
 	"compilerOptions": {
+		// File Layout
 		"baseUrl": ".",
 		"outDir": "./dist",
-		"moduleResolution": "bundler",
-		"module": "ES2022",
-		"target": "ES2022",
-		"strict": true,
-		"sourceMap": false,
-		"skipLibCheck": true,
-		"importHelpers": true,
-		"resolveJsonModule": true,
-		"noImplicitOverride": true,
-		"allowSyntheticDefaultImports": true,
 		"paths": {
 			"postprocessing": ["./src/index.js"],
 			"temp": ["./temp"]
-		}
+		},
+		// Environment Settings
+		"moduleResolution": "bundler",
+		"module": "es2022",
+		"target": "es2022",
+		// Style Options
+		"noImplicitReturns": true,
+		"noImplicitOverride": true,
+		// Other
+		"noUncheckedSideEffectImports": true,
+		"resolveJsonModule": true,
+		"strict": true,
+		"sourceMap": false,
+		"skipLibCheck": true
 	}
 }
