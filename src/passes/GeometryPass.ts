@@ -18,7 +18,6 @@ import {
 	TextureDataType,
 	UnsignedByteType,
 	UnsignedInt248Type,
-	UnsignedIntType,
 	WebGLProgramParametersWithUniforms,
 	WebGLRenderTarget,
 	WebGLRenderer
@@ -526,7 +525,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 			const depthTexture = new DepthTexture(1, 1);
 			depthTexture.name = GBuffer.DEPTH;
 			depthTexture.format = this.stencilBuffer ? DepthStencilFormat : DepthFormat;
-			depthTexture.type = this.stencilBuffer ? UnsignedInt248Type : UnsignedIntType;
+			depthTexture.type = this.stencilBuffer ? UnsignedInt248Type : FloatType;
 			outputBuffer.depthTexture?.dispose();
 			outputBuffer.depthTexture = depthTexture;
 
