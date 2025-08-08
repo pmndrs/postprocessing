@@ -215,21 +215,27 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const timer = new Timer();
 
+	function render(timestamp: number): void {
+
+		fpsGraph.begin();
+		controls.update(timestamp);
+		timer.update(timestamp);
+		coin.rotation.y = (coin.rotation.y + timer.getDelta() * 5) % Math.PI;
+		health.position.y = (healthPosition.y + Math.sin(timer.getElapsed()) * 0.025);
+		pipeline.render(timestamp);
+		fpsGraph.end();
+
+	}
+
 	pipeline.compile().then(() => {
 
+		// Only render when the canvas is visible.
+		const viewportObserver = new IntersectionObserver(
+			(entries) => renderer.setAnimationLoop(entries[0].isIntersecting ? render : null)
+		);
+
 		container.prepend(renderer.domElement);
-
-		renderer.setAnimationLoop((timestamp) => {
-
-			fpsGraph.begin();
-			controls.update(timestamp);
-			timer.update(timestamp);
-			coin.rotation.y = (coin.rotation.y + timer.getDelta() * 5) % Math.PI;
-			health.position.y = (healthPosition.y + Math.sin(timer.getElapsed()) * 0.025);
-			pipeline.render(timestamp);
-			fpsGraph.end();
-
-		});
+		viewportObserver.observe(container);
 
 	}).catch((e) => console.error(e));
 

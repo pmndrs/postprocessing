@@ -130,19 +130,25 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Render Loop
 
+	function render(timestamp: number): void {
+
+		fpsGraph.begin();
+		controls.update(timestamp);
+		gltf.scene.position.y = 1 + Math.sin(pipeline.timer.getElapsed()) * 0.01;
+		pipeline.render(timestamp);
+		fpsGraph.end();
+
+	}
+
 	pipeline.compile().then(() => {
 
+		// Only render when the canvas is visible.
+		const viewportObserver = new IntersectionObserver(
+			(entries) => renderer.setAnimationLoop(entries[0].isIntersecting ? render : null)
+		);
+
 		container.prepend(renderer.domElement);
-
-		renderer.setAnimationLoop((timestamp) => {
-
-			fpsGraph.begin();
-			controls.update(timestamp);
-			gltf.scene.position.y = 1 + Math.sin(pipeline.timer.getElapsed()) * 0.01;
-			pipeline.render(timestamp);
-			fpsGraph.end();
-
-		});
+		viewportObserver.observe(container);
 
 	}).catch((e) => console.error(e));
 
