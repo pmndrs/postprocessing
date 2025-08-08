@@ -22,7 +22,7 @@ const geoPass = new GeometryPass(scene, camera, { samples: 4 });
 > [!TIP]
 > Anti-aliasing works best when applied after tone-mapping because it requires LDR input colors.
 >
-> In practice, MSAA can work with postprocessing before tone-mapping is applied, but it may fail to properly smooth edges if HDR colors are present in the scene colors. Furthermore, MSAA is currently not compatible with depth-based effects.
+> In practice, MSAA can be applied before tone-mapping, but it may fail to properly smooth edges if HDR colors are present in the scene colors.
 
 > [!WARNING]
 > MSAA is currently not compatible with depth-based effects.
