@@ -22,7 +22,7 @@ const effect = new SMAAEffect({
 ```
 
 > [!TIP]
-> Anti-aliasing works best when applied after tone-mapping because the blurring around the detected edges is supposed to produce renderable LDR color gradients, i.e. values between 0.0 and 1.0. As such, the algorithm requires input colors in that same range.
+> Anti-aliasing works best when applied after tone-mapping because it requires LDR input colors.
 
 ### External Resources
 

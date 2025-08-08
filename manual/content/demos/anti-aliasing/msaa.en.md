@@ -20,13 +20,16 @@ const geoPass = new GeometryPass(scene, camera, { samples: 4 });
 ```
 
 > [!TIP]
-> Anti-aliasing works best when applied after tone-mapping because the blurring around the detected edges is supposed to produce renderable LDR color gradients, i.e. values between 0.0 and 1.0. As such, the algorithm requires input colors in that same range.
+> Anti-aliasing works best when applied after tone-mapping because it requires LDR input colors.
+>
+> In practice, MSAA can work with postprocessing before tone-mapping is applied, but it may fail to properly smooth edges if HDR colors are present in the scene colors. Furthermore, MSAA is currently not compatible with depth-based effects.
 
 > [!WARNING]
-> In practice, MSAA can work with postprocessing before tone-mapping is applied, but it may fail to properly smooth edges if HDR colors are present in the scene colors. Furthermore, MSAA is currently not compatible with depth-based effects.
+> MSAA is currently not compatible with depth-based effects.
 
 ### External Resources
 
+* [A Quick Overview of MSAA](https://mynameismjp.wordpress.com/2012/10/24/msaa-overview/)
 * [Learn OpenGL - Anti Aliasing](https://learnopengl.com/Advanced-OpenGL/Anti-Aliasing)
 * [ARM Documentation](https://developer.arm.com/documentation/102479/0100/Multi-Sample-Anti-Aliasing)
 * [Multisample Anti-Aliasing Rasterization Rules](https://docs.microsoft.com/en-us/windows/win32/direct3d11/d3d10-graphics-programming-guide-rasterizer-stage-rules#multisample-anti-aliasing-rasterization-rules)
