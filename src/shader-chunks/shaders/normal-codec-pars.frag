@@ -5,16 +5,10 @@
  * @see https://aras-p.info/texts/CompactNormalStorage.html
  */
 
-vec2 pp_octWrap(vec2 v) {
-
-	return (1.0 - abs(v.yx)) * vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);
-
-}
-
 vec2 pp_encodeNormal(vec3 n) {
 
 	n /= (abs(n.x) + abs(n.y) + abs(n.z));
-	n.xy = (n.z >= 0.0) ? n.xy : pp_octWrap(n.xy);
+	n.xy = (n.z >= 0.0) ? n.xy : (1.0 - abs(n.yx)) * sign(n.xy);
 	return n.xy;
 
 }
