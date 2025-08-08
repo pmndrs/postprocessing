@@ -26,31 +26,31 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 	readonly gBufferStructFields: Map<GBuffer | string, string>;
 
 	/**
-	 * A collection that maps GData to shader code that declares the G-Buffer struct.
+	 * A collection that maps G-Data to shader code that declares the G-Buffer struct.
 	 */
 
 	readonly gBufferStructDeclaration: Map<GData | string, string>;
 
 	/**
-	 * A collection that maps GData to shader code that declares the GData struct.
+	 * A collection that maps G-Data to shader code that declares the G-Data struct.
 	 */
 
 	readonly gDataStructDeclaration: Map<GData | string, string>;
 
 	/**
-	 * A collection that maps GData to shader code that fills the respective GData struct field.
+	 * A collection that maps G-Data to shader code that fills the respective G-Data struct field.
 	 */
 
 	readonly gDataStructInitialization: Map<GData | string, string>;
 
 	/**
-	 * A collection that describes GData interdependencies.
+	 * A collection that describes G-Data interdependencies.
 	 */
 
 	readonly gDataDependencies: Map<GData | string, Set<GData | string>>;
 
 	/**
-	 * A collection that describes which G-Buffer components are required for the GData.
+	 * A collection that describes which G-Buffer components are required for the G-Data.
 	 */
 
 	readonly gDataBufferSources: Map<GData | string, Set<GBuffer | string>>;
