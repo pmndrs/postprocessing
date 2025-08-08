@@ -14,26 +14,29 @@ main {
 	display: flex;
 	flex-direction: column;
 	line-height: 1.5;
-	min-height: 100vh;
+	min-height: calc(100vh + 1px);
 	padding-bottom: 3rem;
-	p {
-		a {
-			&:active,
-			&:focus,
-			&:hover {
-				text-decoration: underline;
-			}
+	a {
+		&:active,
+		&:focus,
+		&:hover {
+			text-decoration: underline;
 		}
 	}
 	h1, h2, h3, h4, h5, h6 {
 		span + a {
+			padding: 0 1rem 0 0.25rem;
 			opacity: 0;
+			text-decoration: none;
 			transition: color durations.$short, opacity durations.$short;
+			user-select: none;
 		}
+		&:active,
 		&:focus,
 		&:hover {
 			span + a {
 				opacity: 1;
+				text-decoration: none;
 			}
 		}
 	}

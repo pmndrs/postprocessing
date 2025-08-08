@@ -11,6 +11,9 @@ blockquote {
 	p {
 		margin: 0;
 		padding: 0;
+		& + p {
+			margin-top: 0.75rem;
+		}
 	}
 	div + p {
 		margin-top: 0.5rem;
