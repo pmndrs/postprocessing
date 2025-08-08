@@ -41,7 +41,7 @@ export class ClearValues extends EventDispatcher<BaseEventMap> {
 		this._alpha = null;
 
 		const gBuffer = new ObservableMap<string, Iterable<GLfloat>>([
-			[GBuffer.NORMAL, [0.0, 0.0, 1.0, 0.0]],
+			[GBuffer.NORMAL, [0.0, 0.0]],
 			[GBuffer.ORM, [1.0, 0.0, 0.0, 1.0]],
 			[GBuffer.EMISSION, [0.0, 0.0, 0.0, 1.0]]
 		]);

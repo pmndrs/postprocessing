@@ -1,5 +1,5 @@
 #ifdef out_Normal
 
-	out_Normal = vec4(normal, 1.0);
+	out_Normal.xy = pp_encodeNormal(normal);
 
 #endif

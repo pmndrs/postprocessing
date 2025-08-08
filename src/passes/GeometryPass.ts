@@ -13,6 +13,7 @@ import {
 	PerspectiveCamera,
 	RGBAFormat,
 	RGBFormat,
+	RGFormat,
 	SRGBColorSpace,
 	Scene,
 	TextureDataType,
@@ -301,7 +302,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 			minFilter: NearestFilter,
 			magFilter: NearestFilter,
 			type: HalfFloatType,
-			format: RGBAFormat
+			format: RGFormat
 		});
 
 		textureConfigs.set(GBuffer.ORM, {
