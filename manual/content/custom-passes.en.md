@@ -158,7 +158,7 @@ Passes can request [GBuffer]() components via `input.gBuffer`. The actual textur
 
 #### G-Buffer Packing
 
-WebGL 2 guarantees that a compatible device supports at least 4 texture attachments per render target. For a broad device support, postprocessing stays within this limitation and packs certain combinations of G-Buffer components into a single texture attachment. To be able to unpack this data, special shader macros that control predefined unpacking functions are provided to the requesting passes via input `defines`. If a pass uses a fullscreen material that extends `FullscreenMaterial`, these `defines` will automatically be integrated into the shaders. To finally read the data, the following shader chunk must be included in the fragment shader:
+WebGL 2 guarantees that a compatible device supports at least 4 texture attachments per render target. For broad device support, postprocessing stays within this limitation and packs certain combinations of G-Buffer components into a single texture attachment. To be able to unpack this data, special shader macros that control predefined unpacking functions are provided to the requesting passes via input `defines`. If a pass uses a fullscreen material that extends `FullscreenMaterial`, these `defines` will automatically be integrated into the shaders. To finally read the data, the following shader chunk must be included in the fragment shader:
 
 ```glsl
 #include <pp_gbuffer_packing>
