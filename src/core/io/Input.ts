@@ -51,7 +51,7 @@ export class Input extends EventDispatcher<BaseEventMap> implements Disposable, 
 	 * An event listener that triggers a `change` event.
 	 */
 
-	private readonly listener: () => void;
+	private readonly propagateChangeEvent: () => void;
 
 	/**
 	 * Constructs new input resources.
@@ -65,27 +65,27 @@ export class Input extends EventDispatcher<BaseEventMap> implements Disposable, 
 		const defines = new ObservableMap<string, string | number | boolean>();
 		const uniforms = new ObservableMap<string, IUniform>();
 		const textures = new ObservableMap<GBuffer | string, TextureResource>();
-		const listener = () => this.setChanged();
+		const propagateChangeEvent = () => this.setChanged();
 
-		gBuffer.addEventListener("change", listener);
-		defines.addEventListener("change", listener);
-		uniforms.addEventListener("change", listener);
-		textures.addEventListener("change", listener);
+		gBuffer.addEventListener("change", propagateChangeEvent);
+		defines.addEventListener("change", propagateChangeEvent);
+		uniforms.addEventListener("change", propagateChangeEvent);
+		textures.addEventListener("change", propagateChangeEvent);
 
-		textures.addEventListener("add", (e) => e.value.addEventListener("change", listener));
-		textures.addEventListener("delete", (e) => e.value.removeEventListener("change", listener));
+		textures.addEventListener("add", (e) => e.value.addEventListener("change", propagateChangeEvent));
+		textures.addEventListener("delete", (e) => e.value.removeEventListener("change", propagateChangeEvent));
 
 		textures.addEventListener("clear", (e) => {
 
 			for(const value of e.target.values()) {
 
-				value.removeEventListener("change", listener);
+				value.removeEventListener("change", propagateChangeEvent);
 
 			}
 
 		});
 
-		this.listener = listener;
+		this.propagateChangeEvent = propagateChangeEvent;
 		this.defines = defines;
 		this.uniforms = uniforms;
 		this.textures = textures;
@@ -111,13 +111,13 @@ export class Input extends EventDispatcher<BaseEventMap> implements Disposable, 
 
 		if(this._gBufferConfig !== null) {
 
-			this._gBufferConfig.removeEventListener("change", this.listener);
+			this._gBufferConfig.removeEventListener("change", this.propagateChangeEvent);
 
 		}
 
 		if(value !== null) {
 
-			value.addEventListener("change", this.listener);
+			value.addEventListener("change", this.propagateChangeEvent);
 
 		}
 

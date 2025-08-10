@@ -39,20 +39,20 @@ export class Output extends EventDispatcher<BaseEventMap> implements Disposable,
 		const defines = new ObservableMap<string, string | number | boolean>();
 		const uniforms = new ObservableMap<string, IUniform>();
 		const renderTargets = new ObservableMap<string, RenderTargetResource>();
-		const listener = () => this.setChanged();
+		const propagateChangeEvent = () => this.setChanged();
 
-		defines.addEventListener("change", listener);
-		uniforms.addEventListener("change", listener);
-		renderTargets.addEventListener("change", listener);
+		defines.addEventListener("change", propagateChangeEvent);
+		uniforms.addEventListener("change", propagateChangeEvent);
+		renderTargets.addEventListener("change", propagateChangeEvent);
 
-		renderTargets.addEventListener("add", (e) => e.value.addEventListener("change", listener));
-		renderTargets.addEventListener("delete", (e) => e.value.removeEventListener("change", listener));
+		renderTargets.addEventListener("add", (e) => e.value.addEventListener("change", propagateChangeEvent));
+		renderTargets.addEventListener("delete", (e) => e.value.removeEventListener("change", propagateChangeEvent));
 
 		renderTargets.addEventListener("clear", (e) => {
 
 			for(const value of e.target.values()) {
 
-				value.removeEventListener("change", listener);
+				value.removeEventListener("change", propagateChangeEvent);
 
 			}
 
