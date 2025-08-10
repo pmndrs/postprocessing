@@ -16,6 +16,7 @@ import {
 	RGFormat,
 	SRGBColorSpace,
 	Scene,
+	ShaderMaterial,
 	TextureDataType,
 	UnsignedByteType,
 	UnsignedInt248Type,
@@ -355,6 +356,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 			/* eslint-disable @typescript-eslint/unbound-method */
 			const onBeforeCompile = material.onBeforeCompile;
+			const customProgramCacheKey = material.customProgramCacheKey;
 
 			material.onBeforeCompile = (shader: WebGLProgramParametersWithUniforms, renderer: WebGLRenderer) => {
 
@@ -365,12 +367,38 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 				}
 
-				if(this.gBuffer !== null) {
+				if(this.gBuffer === null) {
 
-					const outputDefinitions = extractOutputDefinitions(this.gBuffer);
-					shader.fragmentShader = outputDefinitions + "\n\n" + shader.fragmentShader;
+					return;
 
 				}
+
+				if(material instanceof ShaderMaterial) {
+
+					shader.fragmentShader = shader.fragmentShader.replace(
+						/(^ *void\s+main\(\)\s+{.*)/m,
+						"$1\n\n#include <pp_default_output_fragment>"
+					);
+
+				}
+
+				const outputDefinitions = extractOutputDefinitions(this.gBuffer);
+				shader.fragmentShader = outputDefinitions + "\n\n" + shader.fragmentShader;
+
+			};
+
+			material.customProgramCacheKey = () => {
+
+				let key = this.gBuffer?.texture?.uuid ?? "";
+
+				// Workaround for troika-three-text, see #660.
+				if(material.customProgramCacheKey !== customProgramCacheKey) {
+
+					key += customProgramCacheKey.call(material);
+
+				}
+
+				return key;
 
 			};
 
