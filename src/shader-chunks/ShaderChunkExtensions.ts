@@ -75,12 +75,8 @@ export class ShaderChunkExtensions {
 
 		// Let non-PBR shaders write default values.
 
-		ShaderLib.background.fragmentShader = ShaderLib.background.fragmentShader.replace(
-			/(#include <tonemapping_fragment>)/,
-			"#include <pp_default_output_fragment>\n$1"
-		);
-
 		const shaders = [
+			ShaderLib.background,
 			ShaderLib.basic,
 			ShaderLib.lambert,
 			ShaderLib.phong,
@@ -93,7 +89,7 @@ export class ShaderChunkExtensions {
 		for(const shader of shaders) {
 
 			shader.fragmentShader = shader.fragmentShader.replace(
-				/(#include <clipping_planes_fragment>)/,
+				/(^ *void\s+main\(\)\s+{.*)/m,
 				"$1\n\n#include <pp_default_output_fragment>"
 			);
 
