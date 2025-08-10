@@ -280,7 +280,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 	}
 
 	/**
-	 * Defines all possible G-Buffer texture configs.
+	 * Defines all possible G-Buffer texture configs and updates the G-Buffer.
 	 */
 
 	protected updateTextureConfigs(): void {
