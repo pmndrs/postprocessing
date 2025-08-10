@@ -194,7 +194,6 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 		this.camera = camera;
 
 		this.updateTextureConfigs();
-		this.updateGBuffer();
 
 	}
 
@@ -319,6 +318,8 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 			format: RGBFormat,
 			internalFormat: "R11F_G11F_B10F"
 		});
+
+		this.updateGBuffer();
 
 	}
 
