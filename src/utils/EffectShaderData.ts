@@ -255,7 +255,7 @@ export class EffectShaderData implements ShaderData {
 
 		}
 
-		// Collect GData usage.
+		// Collect G-Data usage.
 		for(const gData of effect.gData) {
 
 			this.gData.add(gData);

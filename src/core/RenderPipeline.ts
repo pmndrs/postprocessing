@@ -232,7 +232,7 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 	/**
 	 * Adds one or more passes.
 	 *
-	 * @throws If the pass has already been added to a pipeline.
+	 * @throws If one of the passes has already been added to a pipeline.
 	 * @param passes - The passes to add.
 	 */
 
@@ -350,7 +350,7 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 				if(this.updateStyle) {
 
-					// Set the logical size and update the canvas style if needed.
+					// Set the logical size and update the canvas style.
 					renderer.setSize(baseWidth, baseHeight, true);
 
 				}
