@@ -42,7 +42,7 @@ export class Selection extends Set<Object3D> {
 	 * @param layer - A dedicated render layer for selected objects. Range is `[2, 31]`. Starts at 2 if omitted.
 	 */
 
-	constructor(iterable?: Iterable<Object3D>, layer = Selection.idManager.getNextId()) {
+	constructor(iterable?: Iterable<Object3D> | null, layer = Selection.idManager.getNextId()) {
 
 		super();
 
@@ -59,7 +59,7 @@ export class Selection extends Set<Object3D> {
 		this.enabled = true;
 		this.exclusive = false;
 
-		if(iterable !== undefined) {
+		if(iterable !== undefined && iterable !== null) {
 
 			this.set(iterable);
 
