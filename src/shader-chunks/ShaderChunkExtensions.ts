@@ -32,19 +32,26 @@ import gbufferEmissionFragment from "./shaders/gbuffer-emission.frag";
 export class ShaderChunkExtensions {
 
 	/**
+	 * Indicates whether the custom shader chunks have been registered.
+	 */
+
+	private static registered = false;
+
+	/**
 	 * Registers custom shader chunks.
 	 */
 
 	static register(): void {
 
-		if(Object.hasOwn(ShaderChunk, "pp_extensions")) {
+		if(ShaderChunkExtensions.registered) {
 
 			return;
 
 		}
 
+		ShaderChunkExtensions.registered = true;
+
 		Object.assign(ShaderChunk, {
-			"pp_extensions": null, // Serves as a registration indicator.
 			"pp_camera_pars_fragment": cameraParsFragment,
 			"pp_colorspace_conversion_pars_fragment": colorspaceConversionParsFragment,
 			"pp_default_output_pars_fragment": defaultOutputParsFragment,
