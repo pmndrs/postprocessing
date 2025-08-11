@@ -20,6 +20,7 @@ export * from "./HueSaturationEffect.js";
 export * from "./LensDistortionEffect.js";
 export * from "./LUT1DEffect.js";
 export * from "./LUT3DEffect.js";
+export * from "./MatcapEffect.js";
 export * from "./NoiseEffect.js";
 export * from "./OutlineEffect.js";
 export * from "./PixelationEffect.js";
