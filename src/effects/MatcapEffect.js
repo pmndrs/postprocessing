@@ -22,39 +22,21 @@ export class MatcapEffect extends Effect {
                     return vN;
                 }
                 vec3 get_matcap(const in vec2 uv, const in vec4 normalVec) { 
-                    // vec3 normal = texture2D(normalTexture, uv).xyz * 2. - 1.;
+					// Get matcap lookup coords from normal and depth
                     vec3 normal = normalVec.xyz * 2. - 1.;
-                    // vec3 eye = normalize( vec3( uv * 2. - 1., 1. ) ); 
-
-                    
 					float d = readDepth(uv) * 2. - 1.;
 					vec4 uvd = vec4(uv * 2. - 1., d, 1.);
 					vec4 xyz = camera_projectionMatrixInverse * uvd;
 					vec3 eye = vec3(xyz / xyz.w);
-
-
-                    // vec3 eye = normalize( vec3( modelViewMatrix * vec4( position, 1. ) ) ); 
-                    // if(uUseOrthographicCamera) { 
-                    //     eye = vec3(0., 0., -1.);
-                    // }
                     vec2 vN = get_vN(eye, normal);
-                    // return vec3(1., 0., 0.);
+
+					// Read matcap texture at lookup position
                     return texture2D(matcapTextureUniform, vN).rgb; 
                 }
-				
-				// float readDepth(const in vec2 uv). To calculate the view Z based on depth, you can use the predefined function float getViewZ(const in float depth)
-				// mat4 normalMatrix = transpose(inverse(modelView));
-				// float d = readDepth(uv);
-				// vec3 uvd = vec3(uv*0.5 - 0.5, d);
-				// vec3 xyz = camera_normalMatrix * uvd;
-				// vec2 texel = vec2( 1.0 / resolution.x, 1.0 / resolution.y );
-				// float tx0y0 = texture2D( inputBuffer, uv + texel * vec2( -1, -1 ) ).r;
 				
 				vec3 get_camera_space_coords_mat3 (const in vec2 uv_co) {
 					float d = readDepth(uv_co); //  * 2. - 1.;
 					vec3 uvd = vec3(uv_co * 2. - 1., d);
-					// vec3 uvd = vec3(uv_co * 0.5 - 0.5, readDepth(uv_co));
-					// vec3 uvd = vec3(uv_co, readDepth(uv_co));
 					vec3 xyz = camera_normalMatrix * uvd;
 					return xyz;
 				}
@@ -67,7 +49,6 @@ export class MatcapEffect extends Effect {
 				}
 
 				vec3 get_camera_space_coords (const in vec2 uv_co) {
-					// return get_camera_space_coords_mat3(uv_co);
 					return get_camera_space_coords_mat4(uv_co);
 				}
 
