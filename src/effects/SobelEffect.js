@@ -1,7 +1,7 @@
 
 import { Effect } from 'postprocessing';
 
-// https://github.com/mrdoob/three.js/blob/master/examples/jsm/shaders/SobelOperatorShader.js
+// Implementation from threejs postprocessing SobelOperatorShader https://github.com/mrdoob/three.js/blob/master/examples/jsm/shaders/SobelOperatorShader.js
 export class SobelEffect extends Effect {
 
 	constructor() {
