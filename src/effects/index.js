@@ -31,6 +31,7 @@ export * from "./SelectiveBloomEffect.js";
 export * from "./SepiaEffect.js";
 export * from "./ShockWaveEffect.js";
 export * from "./SMAAEffect.js";
+export * from "./SobelEffect.js";
 export * from "./SSAOEffect.js";
 export * from "./TextureEffect.js";
 export * from "./TiltShiftEffect.js";
