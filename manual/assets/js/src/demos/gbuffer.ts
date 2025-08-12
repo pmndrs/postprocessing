@@ -125,6 +125,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const pane = new Pane({ container: container.querySelector<HTMLElement>(".tp")! });
 	const fpsGraph = Utils.createFPSGraph(pane);
 	const folder = pane.addFolder({ title: "Settings" });
+	folder.addBinding(bufferDebugPass, "enabled", { label: "debug" });
 	folder.addBinding(bufferDebugPass, "bufferFocus", { options: gBufferOptions });
 
 	// Resize Handler
