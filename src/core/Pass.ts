@@ -696,6 +696,34 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	}
 
 	/**
+	 * Updates the size of the given material.
+	 */
+
+	private updateFullscreenMaterialResolution(material: Material | null): void {
+
+		if(material instanceof FullscreenMaterial) {
+
+			material.setSize(this.resolution.width, this.resolution.height);
+
+		}
+
+	}
+
+	/**
+	 * Updates the size of the fullscreen materials.
+	 */
+
+	private updateFullscreenMaterialsResolution(): void {
+
+		for(const material of this.materials) {
+
+			this.updateFullscreenMaterialResolution(material);
+
+		}
+
+	}
+
+	/**
 	 * Updates the shader input data of the given fullscreen material.
 	 *
 	 * @param material - The material to update.
@@ -1137,7 +1165,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		switch(event.type) {
 
 			case "change":
-				// The fullscreen material is not updated automatically to avoid interference with custom logic.
+				this.updateFullscreenMaterialsResolution();
 				this.updateOutputBufferSize();
 				this.onResolutionChange();
 				this.updateSubpassResolution();
