@@ -537,6 +537,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	set camera(value: OrthographicCamera | PerspectiveCamera | null) {
 
+		if(this._camera === value) {
+
+			return;
+
+		}
+
 		this._camera = value;
 
 		if(value !== null && this.fullscreenMaterial instanceof FullscreenMaterial) {
