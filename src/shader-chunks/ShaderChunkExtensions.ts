@@ -8,14 +8,14 @@ import depthBufferParsFragment from "./shaders/depth-buffer-pars.frag";
 import depthBufferPrecisionParsFragment from "./shaders/depth-buffer-precision-pars.frag";
 import depthUtilsParsFragment from "./shaders/depth-utils-pars.frag";
 import frameBufferPrecisionParsFragment from "./shaders/frame-buffer-precision-pars.frag";
+import gbufferDefaultOutputFragment from "./shaders/gbuffer-default-output.frag";
 import inputBufferParsFragment from "./shaders/input-buffer-pars.frag";
+import normalCodecParsFragment from "./shaders/normal-codec-pars.frag";
 import normalUtilsParsFragment from "./shaders/normal-utils-pars.frag";
 import resolutionParsFragment from "./shaders/resolution-pars.frag";
 import worldUtilsParsFragment from "./shaders/world-utils-pars.frag";
 
 // Extensions for built-in shaders.
-import normalCodecParsFragment from "./shaders/normal-codec-pars.frag";
-import gbufferDefaultOutputFragment from "./shaders/gbuffer-default-output.frag";
 import gbufferNormalFragment from "./shaders/gbuffer-normal.frag";
 import gbufferOcclusionFragment from "./shaders/gbuffer-occlusion.frag";
 import gbufferRoughnessFragment from "./shaders/gbuffer-roughness.frag";
@@ -61,36 +61,41 @@ export class ShaderChunkExtensions {
 			"pp_depth_utils_pars_fragment": depthUtilsParsFragment,
 			"pp_frame_buffer_precision_pars_fragment": frameBufferPrecisionParsFragment,
 			"pp_input_buffer_pars_fragment": inputBufferParsFragment,
+			"pp_normal_codec_pars_fragment": normalCodecParsFragment,
 			"pp_normal_utils_pars_fragment": normalUtilsParsFragment,
 			"pp_resolution_pars_fragment": resolutionParsFragment,
 			"pp_world_utils_pars_fragment": worldUtilsParsFragment
 		});
 
-		ShaderChunk.packing += "\n" + normalCodecParsFragment;
 		ShaderChunk.normal_fragment_maps += "\n" + gbufferNormalFragment;
 		ShaderChunk.aomap_fragment += "\n" + gbufferOcclusionFragment;
 		ShaderChunk.roughnessmap_fragment += "\n" + gbufferRoughnessFragment;
 		ShaderChunk.metalnessmap_fragment += "\n" + gbufferMetalnessFragment;
 		ShaderChunk.emissivemap_fragment += "\n" + gbufferEmissionFragment;
 
-		// Let non-PBR shaders write default values.
+		// Ensure that all shaders at least write default values.
 
 		const shaders = [
 			ShaderLib.background,
+			ShaderLib.backgroundCube,
 			ShaderLib.basic,
-			ShaderLib.lambert,
-			ShaderLib.phong,
-			ShaderLib.matcap,
-			ShaderLib.points,
+			ShaderLib.cube,
 			ShaderLib.dashed,
-			ShaderLib.sprite
+			ShaderLib.lambert,
+			ShaderLib.matcap,
+			ShaderLib.phong,
+			ShaderLib.physical,
+			ShaderLib.points,
+			ShaderLib.sprite,
+			ShaderLib.standard,
+			ShaderLib.toon
 		];
 
 		for(const shader of shaders) {
 
 			shader.fragmentShader = shader.fragmentShader.replace(
 				/(^ *void\s+main\(\)\s+{.*)/m,
-				"$1\n\n#include <pp_default_output_fragment>"
+				"#include <pp_normal_codec_pars_fragment>\n\n$1\n\n#include <pp_default_output_fragment>"
 			);
 
 		}

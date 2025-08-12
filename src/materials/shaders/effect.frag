@@ -8,6 +8,7 @@
 #include <pp_depth_buffer_precision_pars_fragment>
 #include <pp_depth_utils_pars_fragment>
 #include <pp_frame_buffer_precision_pars_fragment>
+#include <pp_normal_codec_pars_fragment>
 #include <pp_normal_utils_pars_fragment>
 #include <pp_resolution_pars_fragment>
 

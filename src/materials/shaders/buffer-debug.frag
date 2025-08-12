@@ -7,6 +7,7 @@
 #include <pp_input_buffer_pars_fragment>
 #include <pp_depth_buffer_pars_fragment>
 #include <pp_depth_utils_pars_fragment>
+#include <pp_normal_codec_pars_fragment>
 #include <pp_normal_utils_pars_fragment>
 #include <pp_world_utils_pars_fragment>
 

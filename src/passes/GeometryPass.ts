@@ -16,11 +16,9 @@ import {
 	RGFormat,
 	SRGBColorSpace,
 	Scene,
-	ShaderMaterial,
 	TextureDataType,
 	UnsignedByteType,
 	UnsignedInt248Type,
-	WebGLProgramParametersWithUniforms,
 	WebGLRenderTarget,
 	WebGLRenderer
 } from "three";
@@ -32,10 +30,11 @@ import { GBuffer } from "../enums/GBuffer.js";
 import { MSAASamples } from "../enums/MSAASamples.js";
 import { GBufferConfig } from "../utils/gbuffer/GBufferConfig.js";
 import { GBufferTextureConfig } from "../utils/gbuffer/GBufferTextureConfig.js";
-import { extractIndices, extractOutputDefinitions } from "../utils/gbuffer/GBufferUtils.js";
+import { extractIndices } from "../utils/gbuffer/GBufferUtils.js";
 import { ObservableSet } from "../utils/ObservableSet.js";
 import { Selection } from "../utils/Selection.js";
 import { CopyPass } from "./CopyPass.js";
+import { GBufferShaderPlugin } from "../utils/gbuffer/GBufferShaderPlugin.js";
 
 /**
  * GeometryPass constructor options.
@@ -110,16 +109,16 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 	readonly selection: Selection;
 
 	/**
-	 * A collection of materials that have been modified with `onBeforeCompile`.
-	 */
-
-	private static readonly registeredMaterials = new WeakSet<Material>();
-
-	/**
 	 * A pass that copies the default input buffer to the output color buffer.
 	 */
 
 	private readonly copyPass: CopyPass;
+
+	/**
+	 * A shader plugin that enables rendering to G-Buffer render targets.
+	 */
+
+	private readonly gBufferShaderPlugin: GBufferShaderPlugin;
 
 	/**
 	 * A resource that wraps the G-Buffer.
@@ -188,6 +187,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 		const gBufferComponents = new ObservableSet<GBuffer | string>();
 		gBufferComponents.addEventListener("change", () => this.updateGBuffer());
 		this.gBufferComponents = gBufferComponents;
+		this.gBufferShaderPlugin = new GBufferShaderPlugin();
 		this.gBufferResource = new RenderTargetResource();
 		this.output.defaultBuffer = this.gBufferResource;
 
@@ -325,11 +325,9 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 	}
 
 	/**
-	 * Enables rendering to {@link GBuffer} components for the materials of a given mesh.
+	 * Enables rendering to {@link GBuffer} components for the materials of a given object.
 	 *
-	 * Should be called when a material is added, removed or replaced at runtime.
-	 *
-	 * TODO Remove when `three` supports output layout definitions for MRT.
+	 * Should also be called when a material is added, removed or replaced at runtime.
 	 *
 	 * @param object - The object to update.
 	 */
@@ -346,61 +344,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		for(const material of materials) {
 
-			if(GeometryPass.registeredMaterials.has(material)) {
-
-				return;
-
-			}
-
-			GeometryPass.registeredMaterials.add(material);
-
-			/* eslint-disable @typescript-eslint/unbound-method */
-			const onBeforeCompile = material.onBeforeCompile;
-			const customProgramCacheKey = material.customProgramCacheKey;
-
-			material.onBeforeCompile = (shader: WebGLProgramParametersWithUniforms, renderer: WebGLRenderer) => {
-
-				// Workaround for troika-three-text, see #660.
-				if(material.onBeforeCompile !== onBeforeCompile) {
-
-					onBeforeCompile.call(material, shader, renderer);
-
-				}
-
-				if(this.gBuffer === null) {
-
-					return;
-
-				}
-
-				if(material instanceof ShaderMaterial) {
-
-					shader.fragmentShader = shader.fragmentShader.replace(
-						/(^ *void\s+main\(\)\s+{.*)/m,
-						"$1\n\n#include <pp_default_output_fragment>"
-					);
-
-				}
-
-				const outputDefinitions = extractOutputDefinitions(this.gBuffer);
-				shader.fragmentShader = outputDefinitions + "\n\n" + shader.fragmentShader;
-
-			};
-
-			material.customProgramCacheKey = () => {
-
-				let key = this.gBuffer?.texture?.uuid ?? "";
-
-				// Workaround for troika-three-text, see #660.
-				if(material.customProgramCacheKey !== customProgramCacheKey) {
-
-					key += customProgramCacheKey.call(material);
-
-				}
-
-				return key;
-
-			};
+			this.gBufferShaderPlugin.applyTo(material);
 
 		}
 
@@ -614,6 +558,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		}
 
+		this.gBufferShaderPlugin.gBuffer = this.output.defaultBuffer?.value ?? null;
 		this.copyPass.output.defaultBuffer = this.output.defaultBuffer;
 		this.updateCopyPass();
 
