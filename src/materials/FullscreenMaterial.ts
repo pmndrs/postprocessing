@@ -199,10 +199,14 @@ export abstract class FullscreenMaterial extends ShaderMaterial implements Resiz
 
 		const perspectiveCameraDefined = (this.defines.PERSPECTIVE_CAMERA !== undefined);
 
-		if(camera instanceof PerspectiveCamera && !perspectiveCameraDefined) {
+		if(camera instanceof PerspectiveCamera) {
 
-			this.defines.PERSPECTIVE_CAMERA = true;
-			this.needsUpdate = true;
+			if(!perspectiveCameraDefined) {
+
+				this.defines.PERSPECTIVE_CAMERA = true;
+				this.needsUpdate = true;
+
+			}
 
 		} else if(perspectiveCameraDefined) {
 
