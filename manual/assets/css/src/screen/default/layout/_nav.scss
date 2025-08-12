@@ -59,7 +59,7 @@
 			mask-position: center;
 			opacity: 0.3;
 			transform: rotate(180deg);
-			transition: background-color durations.$long, opacity durations.$short, transform durations.$short;
+			transition: background-color durations.$medium, opacity durations.$short, transform durations.$medium;
 			width: 1rem;
 		}
 		&:focus,
@@ -104,7 +104,7 @@
 		margin: 0;
 		padding: 0;
 		position: relative;
-		transition: height durations.$short;
+		transition: height durations.$medium;
 	}
 	.menu {
 		overflow-y: clip;
