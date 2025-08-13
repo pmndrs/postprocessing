@@ -30,6 +30,13 @@ void main() {
 		vec3 viewPosition = getViewPosition(vUv, depth);
 		out_Color = vec4(getWorldPosition(viewPosition), 1.0);
 
+	#elif defined(DISTANCE)
+
+		float depth = readDepth(depthBuffer, vUv);
+		vec3 viewPosition = getViewPosition(vUv, depth);
+		const float scaleForVisualization = 0.1;
+		out_Color = vec4(vec3(getDistance(viewPosition) * scaleForVisualization), 1.0);
+
 	#else
 
 		out_Color = texture(inputBuffer, vUv);

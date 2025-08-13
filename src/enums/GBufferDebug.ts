@@ -12,6 +12,12 @@ export enum GBufferDebug {
 	 * Reconstructs the world position from the depth buffer.
 	 */
 
-	POSITION = "Position"
+	POSITION = "Position",
+
+	/**
+	 * Calculates the distance from the fragment to the camera.
+	 */
+
+	DISTANCE = "Distance"
 
 }

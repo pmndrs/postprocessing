@@ -1,6 +1,4 @@
 import { Texture, Uniform } from "three";
-import { GBuffer } from "../enums/GBuffer.js";
-import { GBufferDebug } from "../enums/GBufferDebug.js";
 import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentShader from "./shaders/buffer-debug.frag";
@@ -13,6 +11,12 @@ import vertexShader from "./shaders/common.vert";
  */
 
 export class BufferDebugMaterial extends FullscreenMaterial {
+
+	/**
+	 * @see {@link bufferFocus}
+	 */
+
+	private _bufferFocus: string | null;
 
 	/**
 	 * Constructs a new buffer debug material.
@@ -29,35 +33,42 @@ export class BufferDebugMaterial extends FullscreenMaterial {
 			}
 		});
 
+		this._bufferFocus = null;
+
 	}
 
 	/**
 	 * Sets the buffer focus.
 	 */
 
+	get bufferFocus(): string | null {
+
+		return this._bufferFocus;
+
+	}
+
 	set bufferFocus(value: string | null) {
 
-		const defines = this.defines;
-		delete defines.DEPTH;
-		delete defines.NORMAL;
-		delete defines.POSITION;
+		if(this._bufferFocus === value) {
 
-		switch(value) {
-
-			case GBuffer.DEPTH:
-				defines.DEPTH = true;
-				break;
-
-			case GBuffer.NORMAL:
-				defines.NORMAL = true;
-				break;
-
-			case GBufferDebug.POSITION:
-				defines.POSITION = true;
-				break;
+			return;
 
 		}
 
+		if(this._bufferFocus !== null) {
+
+			delete this.defines[this._bufferFocus];
+
+		}
+
+		if(value !== null) {
+
+			value = value.toUpperCase();
+			this.defines[value] = true;
+
+		}
+
+		this._bufferFocus = value;
 		this.needsUpdate = true;
 
 	}
