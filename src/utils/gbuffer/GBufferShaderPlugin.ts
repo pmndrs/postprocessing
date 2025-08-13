@@ -91,7 +91,9 @@ export class GBufferShaderPlugin {
 			}
 
 			// Built-in materials have already been modified via ShaderLib.
-			if(material instanceof ShaderMaterial) {
+			if(material instanceof ShaderMaterial &&
+				// But custom materials may already include the required shader chunks.
+				!shader.fragmentShader.includes("pp_normal_codec_pars_fragment")) {
 
 				shader.fragmentShader = shader.fragmentShader.replace(
 					/(^ *void\s+main\(\)\s+{.*)/m,
