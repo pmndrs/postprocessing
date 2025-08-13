@@ -65,6 +65,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	});
 
 	renderer.debug.checkShaderErrors = Utils.isLocalhost;
+	renderer.setPixelRatio(window.devicePixelRatio);
 
 	// Camera & Controls
 
