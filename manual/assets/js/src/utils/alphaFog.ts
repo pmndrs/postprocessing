@@ -1,8 +1,9 @@
 import { WebGLProgramParametersWithUniforms } from "three";
-import alphaFogParsFragment from "./glsl/alpha-fog-pars.frag";
-import alphaFogFragment from "./glsl/alpha-fog.frag";
-import alphaFogParsVertex from "./glsl/alpha-fog-pars.vert";
-import alphaFogVertex from "./glsl/alpha-fog.vert";
+
+import alphaFogParsFragment from "./shaders/alpha-fog-pars.frag";
+import alphaFogFragment from "./shaders/alpha-fog.frag";
+import alphaFogParsVertex from "./shaders/alpha-fog-pars.vert";
+import alphaFogVertex from "./shaders/alpha-fog.vert";
 
 /**
  * Modifies the given shader to use range-based alpha fog.
