@@ -101,8 +101,12 @@ export class GBufferShaderPlugin {
 
 			}
 
-			const outputDefinitions = extractOutputDefinitions(this.gBuffer);
-			shader.fragmentShader = outputDefinitions + "\n\n" + shader.fragmentShader;
+			if(!shader.fragmentShader.includes("out_FragData")) {
+
+				const outputDefinitions = extractOutputDefinitions(this.gBuffer);
+				shader.fragmentShader = outputDefinitions + "\n\n" + shader.fragmentShader;
+
+			}
 
 		};
 
