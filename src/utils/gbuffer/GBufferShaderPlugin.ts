@@ -73,7 +73,6 @@ export class GBufferShaderPlugin {
 
 		/* eslint-disable @typescript-eslint/unbound-method */
 		const onBeforeCompile = material.onBeforeCompile;
-		const customProgramCacheKey = material.customProgramCacheKey;
 
 		material.onBeforeCompile = (shader: WebGLProgramParametersWithUniforms, renderer: WebGLRenderer) => {
 
@@ -104,21 +103,6 @@ export class GBufferShaderPlugin {
 
 			const outputDefinitions = extractOutputDefinitions(this.gBuffer);
 			shader.fragmentShader = outputDefinitions + "\n\n" + shader.fragmentShader;
-
-		};
-
-		material.customProgramCacheKey = () => {
-
-			let key = this.gBuffer?.texture?.uuid ?? "";
-
-			// Workaround for troika-three-text, see #660.
-			if(material.customProgramCacheKey !== customProgramCacheKey) {
-
-				key += customProgramCacheKey.call(material);
-
-			}
-
-			return key;
 
 		};
 
