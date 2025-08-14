@@ -208,6 +208,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		super.enabled = value;
 		this.gBufferShaderPlugin.enabled = value;
+		this.invalidateMaterials();
 
 	}
 
@@ -290,6 +291,40 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		super.renderer = value;
 		this.updateOutputBufferColorSpace();
+
+	}
+
+	/**
+	 * Refreshes the material of the given object.
+	 *
+	 * @param object - The object to update.
+	 */
+
+	private invalidateMaterial(object: Object3D): void {
+
+		if(!("material" in object)) {
+
+			return;
+
+		}
+
+		const materials = (Array.isArray(object.material) ? object.material : [object.material]) as Material[];
+
+		for(const material of materials) {
+
+			material.needsUpdate = true;
+
+		}
+
+	}
+
+	/**
+	 * Refreshes the materials of the scene objects.
+	 */
+
+	private invalidateMaterials(): void {
+
+		this.scene?.traverse((node) => this.invalidateMaterial(node));
 
 	}
 
