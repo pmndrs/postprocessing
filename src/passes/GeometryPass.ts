@@ -329,8 +329,8 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
 			type: HalfFloatType,
-			format: RGBFormat,
-			internalFormat: "R11F_G11F_B10F"
+			format: RGBAFormat
+			// R11F_G11F_B10F causes artifacts in some scenes.
 		});
 
 		this.updateGBuffer();
