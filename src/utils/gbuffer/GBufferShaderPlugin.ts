@@ -24,7 +24,13 @@ export class GBufferShaderPlugin {
 	private readonly registeredMaterials = new WeakSet<Material>();
 
 	/**
-	 * A collection of materials that have been modified with `onBeforeCompile`.
+	 * @see {@link enabled}
+	 */
+
+	private _enabled: boolean;
+
+	/**
+	 * @see {@link gBuffer}
 	 */
 
 	private _gBuffer: WebGLRenderTarget | null;
@@ -35,7 +41,24 @@ export class GBufferShaderPlugin {
 
 	constructor() {
 
+		this._enabled = true;
 		this._gBuffer = null;
+
+	}
+
+	/**
+	 * Indicates whether this plugin is enabled.
+	 */
+
+	get enabled(): boolean {
+
+		return this._enabled;
+
+	}
+
+	set enabled(value: boolean) {
+
+		this._enabled = value;
 
 	}
 
@@ -83,7 +106,7 @@ export class GBufferShaderPlugin {
 
 			}
 
-			if(this.gBuffer === null) {
+			if(!this.enabled || this.gBuffer === null) {
 
 				return;
 

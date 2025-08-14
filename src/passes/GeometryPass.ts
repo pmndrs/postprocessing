@@ -198,6 +198,19 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 	}
 
+	override get enabled(): boolean {
+
+		return super.enabled;
+
+	}
+
+	override set enabled(value: boolean) {
+
+		super.enabled = value;
+		this.gBufferShaderPlugin.enabled = value;
+
+	}
+
 	override get scene(): Scene | null {
 
 		return super.scene;
