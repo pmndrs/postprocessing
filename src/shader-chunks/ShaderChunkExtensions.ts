@@ -15,7 +15,7 @@ import normalUtilsParsFragment from "./shaders/normal-utils-pars.frag";
 import resolutionParsFragment from "./shaders/resolution-pars.frag";
 import worldUtilsParsFragment from "./shaders/world-utils-pars.frag";
 
-// Extensions for built-in shaders.
+// G-Buffer shader chunks for built-in materials.
 import gbufferNormalFragment from "./shaders/gbuffer-normal.frag";
 import gbufferOcclusionFragment from "./shaders/gbuffer-occlusion.frag";
 import gbufferRoughnessFragment from "./shaders/gbuffer-roughness.frag";
@@ -51,6 +51,8 @@ export class ShaderChunkExtensions {
 
 		ShaderChunkExtensions.registered = true;
 
+		// Custom Shader Chunk Registration
+
 		Object.assign(ShaderChunk, {
 			"pp_camera_pars_fragment": cameraParsFragment,
 			"pp_colorspace_conversion_pars_fragment": colorspaceConversionParsFragment,
@@ -67,13 +69,13 @@ export class ShaderChunkExtensions {
 			"pp_world_utils_pars_fragment": worldUtilsParsFragment
 		});
 
+		// G-Buffer Support
+
 		ShaderChunk.normal_fragment_maps += "\n" + gbufferNormalFragment;
 		ShaderChunk.aomap_fragment += "\n" + gbufferOcclusionFragment;
 		ShaderChunk.roughnessmap_fragment += "\n" + gbufferRoughnessFragment;
 		ShaderChunk.metalnessmap_fragment += "\n" + gbufferMetalnessFragment;
 		ShaderChunk.emissivemap_fragment += "\n" + gbufferEmissionFragment;
-
-		// Ensure that all shaders at least write default values.
 
 		const shaders = [
 			ShaderLib.background,
@@ -93,6 +95,7 @@ export class ShaderChunkExtensions {
 
 		for(const shader of shaders) {
 
+			// Ensure that all shaders write default values.
 			shader.fragmentShader = shader.fragmentShader.replace(
 				/(^ *void\s+main\(\)\s+{.*)/m,
 				"#include <pp_normal_codec_pars_fragment>\n\n$1\n\n#include <pp_default_output_fragment>"
