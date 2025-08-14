@@ -38,7 +38,7 @@ View space normals are encoded using Octahedron Normal Vector Encoding which con
 
 ## ClearPass
 
-Postprocessing pipelines process image data in a step-by-step fashion and it's crucial to not clear intermediate results unintentionally. Therefor, clearing has to be performed explicitly by using instances of `ClearPass` where needed. This special pass operates on the default output buffer of the next pass. If that next pass is a `GeometryPass`, clearing will be performed on the G-Buffer.
+Postprocessing pipelines process image data in a step-by-step fashion and it's crucial to not clear intermediate results unintentionally. Therefore, clearing has to be performed explicitly by using instances of `ClearPass` where needed. This special pass operates on the default output buffer of the next pass. If that next pass is a `GeometryPass`, clearing will be performed on the G-Buffer.
 
 > [!NOTE]
 > The `GeometryPass` does not clear its output buffer automatically. Instead, an explicit `ClearPass` must be used before it.
