@@ -27,7 +27,7 @@ const textureTypeToPrecision = new Map<TextureDataType, Precision>([
  * GLSL texel types.
  */
 
-declare type TexelType = "float" | "vec2" | "vec4";
+declare type TexelType = "float" | "vec2" | "vec3" | "vec4";
 
 /**
  * Determines the GLSL texel type that corresponds to a given pixel format.
@@ -39,7 +39,7 @@ declare type TexelType = "float" | "vec2" | "vec4";
 const pixelFormatToTexelType = new Map<AnyPixelFormat, TexelType>([
 	[RedFormat, "float"],
 	[RGFormat, "vec2"],
-	[RGBFormat, "vec4"], // Same as RGBA for simplicity
+	[RGBFormat, "vec3"],
 	[RGBAFormat, "vec4"]
 ]);
 
