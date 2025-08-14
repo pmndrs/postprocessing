@@ -151,14 +151,6 @@ export class BloomEffect extends Effect implements BloomEffectOptions {
 
 	}
 
-	protected override onResolutionChange(): void {
-
-		const resolution = this.resolution;
-		this.luminancePass.resolution.copy(resolution);
-		this.mipmapBlurPass.resolution.copy(resolution);
-
-	}
-
 	protected override onInputChange(): void {
 
 		if(this.input.defaultBuffer === null) {

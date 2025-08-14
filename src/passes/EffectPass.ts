@@ -340,19 +340,6 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 	}
 
-	protected override onResolutionChange(): void {
-
-		const resolution = this.resolution;
-		this.fullscreenMaterial.setSize(resolution.width, resolution.height);
-
-		for(const effect of this.effects) {
-
-			effect.resolution.setBaseSize(resolution.baseWidth, resolution.baseHeight);
-
-		}
-
-	}
-
 	override checkRequirements(): void {
 
 		for(const effect of this.effects) {

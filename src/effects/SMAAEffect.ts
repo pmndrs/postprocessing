@@ -358,8 +358,6 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 	protected override onResolutionChange(): void {
 
 		const { width, height } = this.resolution;
-		this.edgeDetectionMaterial.setSize(width, height);
-		this.weightsMaterial.setSize(width, height);
 		this.renderTargetEdges.value!.setSize(width, height);
 		this.renderTargetWeights.value!.setSize(width, height);
 
