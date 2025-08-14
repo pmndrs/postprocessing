@@ -21,7 +21,7 @@ export class GBufferShaderPlugin {
 	 * A collection of materials that have been modified with `onBeforeCompile`.
 	 */
 
-	private static readonly registeredMaterials = new WeakSet<Material>();
+	private readonly registeredMaterials = new WeakSet<Material>();
 
 	/**
 	 * A collection of materials that have been modified with `onBeforeCompile`.
@@ -63,13 +63,13 @@ export class GBufferShaderPlugin {
 
 	applyTo(material: Material) {
 
-		if(GBufferShaderPlugin.registeredMaterials.has(material)) {
+		if(this.registeredMaterials.has(material)) {
 
 			return;
 
 		}
 
-		GBufferShaderPlugin.registeredMaterials.add(material);
+		this.registeredMaterials.add(material);
 
 		/* eslint-disable @typescript-eslint/unbound-method */
 		const onBeforeCompile = material.onBeforeCompile;
