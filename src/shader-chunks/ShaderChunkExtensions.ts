@@ -1,4 +1,5 @@
 import { ShaderChunk, ShaderLib } from "three";
+import { addGBufferDefaultOutput } from "../utils/gbuffer/GBufferUtils.js";
 
 // Shader chunks for postprocessing shaders.
 import cameraParsFragment from "./shaders/camera-pars.frag";
@@ -57,11 +58,11 @@ export class ShaderChunkExtensions {
 			"pp_camera_pars_fragment": cameraParsFragment,
 			"pp_colorspace_conversion_pars_fragment": colorspaceConversionParsFragment,
 			"pp_default_output_pars_fragment": defaultOutputParsFragment,
-			"pp_default_output_fragment": gbufferDefaultOutputFragment,
 			"pp_depth_buffer_pars_fragment": depthBufferParsFragment,
 			"pp_depth_buffer_precision_pars_fragment": depthBufferPrecisionParsFragment,
 			"pp_depth_utils_pars_fragment": depthUtilsParsFragment,
 			"pp_frame_buffer_precision_pars_fragment": frameBufferPrecisionParsFragment,
+			"pp_gbuffer_default_output_fragment": gbufferDefaultOutputFragment,
 			"pp_input_buffer_pars_fragment": inputBufferParsFragment,
 			"pp_normal_codec_pars_fragment": normalCodecParsFragment,
 			"pp_normal_utils_pars_fragment": normalUtilsParsFragment,
@@ -95,11 +96,7 @@ export class ShaderChunkExtensions {
 
 		for(const shader of shaders) {
 
-			// Ensure that all shaders write default values.
-			shader.fragmentShader = shader.fragmentShader.replace(
-				/(^ *void\s+main\(\)\s+{.*)/m,
-				"#include <pp_normal_codec_pars_fragment>\n\n$1\n\n#include <pp_default_output_fragment>"
-			);
+			shader.fragmentShader = addGBufferDefaultOutput(shader.fragmentShader);
 
 		}
 

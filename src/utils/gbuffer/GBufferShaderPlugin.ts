@@ -6,7 +6,7 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { extractOutputDefinitions } from "./GBufferUtils.js";
+import { addGBufferDefaultOutput, extractOutputDefinitions } from "./GBufferUtils.js";
 
 /**
  * A shader plugin that enables rendering to G-Buffer render targets.
@@ -113,22 +113,19 @@ export class GBufferShaderPlugin {
 
 			}
 
-			// Built-in materials have already been modified via ShaderLib.
+			// Update unknown materials that haven't already been modified via ShaderLib.
 			if(material instanceof ShaderMaterial &&
-				// But custom materials may already include the required shader chunks.
-				!shader.fragmentShader.includes("pp_normal_codec_pars_fragment")) {
+				// However, custom materials may already include the required shader chunks.
+				!shader.fragmentShader.includes("pp_gbuffer_default_output_fragment")) {
 
-				shader.fragmentShader = shader.fragmentShader.replace(
-					/(^ *void\s+main\(\)\s+{.*)/m,
-					"#include <pp_normal_codec_pars_fragment>\n\n$1\n\n#include <pp_default_output_fragment>"
-				);
+				shader.fragmentShader = addGBufferDefaultOutput(shader.fragmentShader);
 
 			}
 
 			if(!shader.fragmentShader.includes("out_FragData")) {
 
 				const outputDefinitions = extractOutputDefinitions(this.gBuffer);
-				shader.fragmentShader = outputDefinitions + "\n\n" + shader.fragmentShader;
+				shader.fragmentShader = outputDefinitions + "\n" + shader.fragmentShader;
 
 			}
 

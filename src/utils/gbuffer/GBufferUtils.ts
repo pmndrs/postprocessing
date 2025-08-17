@@ -115,3 +115,28 @@ export function extractOutputDefinitions(renderTarget: WebGLRenderTarget): strin
 	return definitions.join("\n");
 
 }
+
+/**
+ * Ensures that the given shader writes default values to the G-Buffer.
+ *
+ * @param shader - A shader.
+ * @return The modified shader.
+ * @internal
+ */
+
+export function addGBufferDefaultOutput(shader: string): string {
+
+	shader = shader.replace(
+		/(void\s+main\(\)\s+{)/,
+		"\n#include <pp_normal_codec_pars_fragment>\n$1"
+	);
+
+	const usesClippingPlanes = shader.includes("clipping_planes_fragment");
+	shader = shader.replace(
+		usesClippingPlanes ? /(#include\s+<clipping_planes_fragment>)/ : /(void\s+main\(\)\s+{)/,
+		"$1\n#include <pp_gbuffer_default_output_fragment>\n"
+	);
+
+	return shader;
+
+}
