@@ -11,6 +11,7 @@ import {
 } from "three";
 
 import {
+	CDLPreset,
 	ClearPass,
 	EffectPass,
 	GeometryPass,
@@ -21,6 +22,7 @@ import {
 } from "postprocessing";
 
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { BindingApi } from "@tweakpane/core";
 import { Pane } from "tweakpane";
 import { SpatialControls } from "spatial-controls";
 import * as Utils from "../utils/index.js";
@@ -120,13 +122,25 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Settings
 
+	const params = {
+		preset: CDLPreset.DEFAULT
+	};
+
+	let binding: BindingApi | undefined;
+
 	const container = document.getElementById("viewport")!;
 	const pane = new Pane({ container: container.querySelector<HTMLElement>(".tp")! });
 	const fpsGraph = Utils.createFPSGraph(pane);
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addBinding(light, "intensity", { label: "lightIntensity", min: 0, max: 100, step: 0.1 });
 	folder.addBinding(renderer, "toneMappingExposure", { min: 0, max: 4, step: 0.01 });
-	folder.addBinding(effect, "toneMapping", { options: Utils.enumToRecord(ToneMapping) });
+
+	folder.addBinding(effect, "toneMapping", { options: Utils.enumToRecord(ToneMapping) })
+		.on("change", (e) => void (binding!.hidden = (e.value !== ToneMapping.AGX)));
+
+	binding = folder.addBinding(params, "preset", { label: "CDL preset", options: Utils.enumToRecord(CDLPreset) })
+		.on("change", (e) => effect.cdl.applyPreset(e.value));
+
 	Utils.addBlendModeBindings(folder, effect.blendMode);
 
 	// Resize Handler

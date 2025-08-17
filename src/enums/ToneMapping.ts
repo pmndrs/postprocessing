@@ -11,7 +11,7 @@ export enum ToneMapping {
 	 * No tone mapping, only exposure. Colors will be clamped to the output range.
 	 */
 
-	LINEAR,
+	LINEAR = 0,
 
 	/**
 	 * Basic Reinhard tone mapping.
@@ -19,7 +19,7 @@ export enum ToneMapping {
 	 * @see https://www.cs.utah.edu/docs/techreports/2002/pdf/UUCS-02-001.pdf
 	 */
 
-	REINHARD,
+	REINHARD = 1,
 
 	/**
 	 * Optimized filmic operator by Jim Hejl and Richard Burgess-Dawson.
@@ -27,13 +27,13 @@ export enum ToneMapping {
 	 * @see http://filmicworlds.com/blog/filmic-tonemapping-operators
 	 */
 
-	CINEON,
+	CINEON = 2,
 
 	/**
 	 * ACES filmic tone mapping with a scale of 1.0/0.6.
 	 */
 
-	ACES_FILMIC,
+	ACES_FILMIC = 3,
 
 	/**
 	 * Filmic tone mapping based on Blender's implementation using rec 2020 primaries.
@@ -41,7 +41,7 @@ export enum ToneMapping {
 	 * @see https://github.com/EaryChow/AgX
 	 */
 
-	AGX,
+	AGX = 4,
 
 	/**
 	 * Neutral tone mapping by Khronos.
@@ -50,7 +50,7 @@ export enum ToneMapping {
 	 * @see https://modelviewer.dev/examples/tone-mapping
 	 */
 
-	NEUTRAL,
+	NEUTRAL = 5,
 
 	/**
 	 * Custom tone mapping.
@@ -60,6 +60,6 @@ export enum ToneMapping {
 	 * @see https://threejs.org/docs/?q=shader#api/en/renderers/shaders/ShaderChunk
 	 */
 
-	CUSTOM
+	CUSTOM = 6
 
 }

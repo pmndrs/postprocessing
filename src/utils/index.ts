@@ -4,6 +4,7 @@ export * from "./gbuffer/index.js";
 export * from "./Background.js";
 export * from "./ClearFlags.js";
 export * from "./ClearValues.js";
+export * from "./ColorDecisionList.js";
 export * from "./EffectMaterialManager.js";
 export * from "./EffectShaderData.js";
 export * from "./GaussKernel.js";

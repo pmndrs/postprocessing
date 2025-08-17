@@ -25,6 +25,15 @@ const toneMappingEffect = new ToneMappingEffect({
 > [!TIP]
 > Tone mapping should generally be applied late in a render pipeline, but before anti-aliasing and the final color space conversion.
 
+## Primary Color Grading
+
+The `ToneMappingEffect` uses the American Society of Cinematographers Color Decision List (ASC CDL) format to configure primary
+color grading information. This format defines the math for Slope, Offset, Power and Saturation and provides a way to influence the look of the tone-mapped image.
+
+> [!INFO]
+> Only `ToneMapping.AGX` currently supports CDL parameters.
+
 ## External Resources
 
 * [Tone Mapping Techniques](https://64.github.io/tonemapping)
+* [ASC CDL](https://en.wikipedia.org/wiki/ASC_CDL)
