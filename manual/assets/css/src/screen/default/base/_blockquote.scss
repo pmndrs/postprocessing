@@ -4,6 +4,17 @@ blockquote {
 	border-left: 3px solid;
 	margin: 2rem 0;
 	padding: 0.75rem 1.5rem;
+	cite {
+		display: block;
+		margin: 0.5rem 0 0 0.5rem;
+		&::before {
+			content: "\2015";
+			display: inline-block;
+			height: 1rem;
+			margin-right: 0.5rem;
+			width: 1rem;
+		}
+	}
 	code {
 		color: inherit;
 		font-weight: 500;
