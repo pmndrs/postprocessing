@@ -23,11 +23,11 @@ import {
 	ToneMappingEffect
 } from "postprocessing";
 
+import { BindingApi } from "@tweakpane/core";
 import { Pane } from "tweakpane";
 import { ControlMode, SpatialControls } from "spatial-controls";
 import * as CornellBox from "../objects/CornellBox.js";
 import * as Utils from "../utils/index.js";
-import { BindingApi } from "@tweakpane/core";
 
 function load(): Promise<Map<string, Texture>> {
 
