@@ -142,7 +142,8 @@ export class GBufferShaderPlugin {
 
 			}
 
-			return key + this.enabled;
+			const gBufferId = this.gBuffer?.texture.uuid ?? "";
+			return key + this.enabled + gBufferId;
 
 		};
 
