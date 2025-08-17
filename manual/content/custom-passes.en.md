@@ -158,10 +158,13 @@ Passes can request [GBuffer]() components via `input.gBuffer`. The actual textur
 
 #### G-Buffer Packing
 
-WebGL 2 guarantees that a compatible device supports at least 4 texture attachments per render target. For broad device support, postprocessing stays within this limitation and packs certain combinations of G-Buffer components into a single texture attachment. To be able to unpack this data, special shader macros that control predefined unpacking functions are provided to the requesting passes via input `defines`. If a pass uses a fullscreen material that extends `FullscreenMaterial`, these `defines` will automatically be integrated into the shaders. To finally read the data, the following shader chunk must be included in the fragment shader:
+WebGL 2 guarantees that a compatible device supports at least 4 texture attachments per render target. For broad device support, postprocessing stays within this limitation and packs certain combinations of G-Buffer components into a single texture attachment. To be able to unpack this data, special shader macros that control predefined unpacking functions are provided to the requesting passes via input `defines`. If a pass uses a fullscreen material that extends `FullscreenMaterial`, these `defines` will automatically be integrated into the shaders. To finally read the data, the following shader chunks must be included in the fragment shader as needed:
 
 ```glsl
-#include <pp_gbuffer_packing>
+#include <pp_depth_utils_pars_fragment>
+#include <pp_normal_codec_pars_fragment>
+#include <pp_normal_utils_pars_fragment>
+#include <pp_velocity_utils_pars_fragment>
 ```
 
 This include adds the following utility functions that should be used to read the respective G-Buffer data:
@@ -185,16 +188,21 @@ The `Pass` base class defines lifecycle methods that can be overridden to react 
 * `onSceneChildAdded(): void;`
 * `onSceneChildRemoved(): void;`
 
-It depends on the use case which of these hooks will actually be needed.
-
 ### Fullscreen Passes
 
-It's recommended to use materials that extend [FullscreenMaterial]() when writing passes that perform fullscreen render operations. Materials of this type will benefit from the following automatic features:
-* The `inputBuffer` will be set based on `input.defaultBuffer`.
-* Input `defines` and `uniforms` will be assigned.
-* If the geometry pass uses a float type color buffer, the macro `FRAMEBUFFER_PRECISION_HIGH` will be defined.
+It's recommended to use materials that extend [FullscreenMaterial]() for passes that perform fullscreen render operations. This base class defines the following uniforms by default and populates them automatically:
 
-To render a fullscreen material, set the render target and use the `renderFullscreen` method:
+```glsl
+uniform mat4 projectionMatrix;
+uniform mat4 projectionMatrixInverse;
+uniform mat4 viewMatrix;
+uniform mat4 viewMatrixInverse;
+uniform vec3 cameraParams; // near, far, aspect
+uniform vec4 resolution; // screen resolution (xy), texel size (zw)
+uniform sampler2D inputBuffer;
+```
+
+To render a fullscreen material, first set the render target and then use the `renderFullscreen` method:
 
 ```ts
 override render(): void {

@@ -99,11 +99,13 @@ Effects that fetch additional samples from the input buffer inside the fragment 
 
 ## Uniforms, Macros and Varyings
 
-All shaders have access to the following uniforms:
+All effect shaders have access to the following uniforms:
 
 ```glsl
 uniform mat4 projectionMatrix;
 uniform mat4 projectionMatrixInverse;
+uniform mat4 viewMatrix;
+uniform mat4 viewMatrixInverse;
 uniform vec3 cameraParams; // near, far, aspect
 uniform vec4 resolution; // screen resolution (xy), texel size (zw)
 uniform sampler2D inputBuffer;
@@ -139,8 +141,8 @@ in vec3 position;
 
 Available macros:
 
-- If the main camera is a `PerspectiveCamera`, the macro `PERSPECTIVE_CAMERA` will be defined.
-- If the geometry pass uses a float type color buffer, the macro `FRAMEBUFFER_PRECISION_HIGH` will be defined.
+* If the main camera is a `PerspectiveCamera`, the macro `PERSPECTIVE_CAMERA` will be defined.
+* If the geometry pass uses a float type color buffer, the macro `FRAMEBUFFER_PRECISION_HIGH` will be defined.
 
 > [!WARNING]
 > Effects may define custom uniforms, varyings, functions and preprocessor macros as usual, but should not define global variables or constants.
@@ -148,10 +150,19 @@ Available macros:
 ## Functions
 
 The shader chunks [common](https://github.com/mrdoob/three.js/blob/dev/src/renderers/shaders/ShaderChunk/common.glsl.js)
-and [packing](https://github.com/mrdoob/three.js/blob/dev/src/renderers/shaders/ShaderChunk/packing.glsl.js) are included in the fragment shader by default.
+and [packing](https://github.com/mrdoob/three.js/blob/dev/src/renderers/shaders/ShaderChunk/packing.glsl.js) are included in the fragment shader by default. Additionally, the following utility functions are available:
 
-* The functions `packDepthToRGBA(v)` and `unpackRGBAToDepth(v)` are also available as `packFloatToRGBA(v)` and `unpackRGBAToFloat(v)`
-* To sample depth at any location, use `readDepth(gBuffer.depth, uv)`
-* To calculate the view Z based on depth, use `getViewZ(depth)`
-* To reconstruct the view position, use `getViewPosition(uv, depth)`
-* To calculate the world position, use `getWorldPosition(viewPosition)`
+```glsl
+float readDepth(sampler2D depthBuffer, vec2 uv);
+vec3 readNormal(sampler2D normalBuffer, vec2 uv);
+vec2 readVelocity(sampler2D velocityBuffer, vec2 uv);
+
+float getViewZ(float depth);
+vec3 getViewPosition(vec2 uv, float depth);
+vec3 getViewPosition(vec2 uv, float depth, float viewZ);
+vec3 getWorldPosition(vec3 viewPosition);
+float getDistance(vec3 viewPosition);
+```
+
+> [!INFO]
+> The required samplers for the read* functions above are available via the `gBuffer` uniform.
