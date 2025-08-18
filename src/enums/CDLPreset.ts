@@ -27,7 +27,7 @@ export enum CDLPreset {
 	PUNCHY,
 
 	/**
-	 * Similar to the punchy preset, but with lower contrast.
+	 * Adjusted for production use to have a similar feeling of contrast as ACES over a wide range of scenes.
 	 */
 
 	NEEDLE
