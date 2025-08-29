@@ -138,29 +138,29 @@ export class ColorDecisionList extends EventDispatcher<CDLEventMap> {
 		switch(preset) {
 
 			case CDLPreset.DEFAULT:
-				this.offset.set(0.0, 0.0, 0.0);
 				this.slope.set(1.0, 1.0, 1.0);
+				this.offset.set(0.0, 0.0, 0.0);
 				this.power.set(1.0, 1.0, 1.0);
 				this.saturation = 1.0;
 				break;
 
 			case CDLPreset.GOLDEN:
-				this.offset.set(0.0, 0.0, 0.0);
 				this.slope.set(1.0, 0.9, 0.5);
+				this.offset.set(0.0, 0.0, 0.0);
 				this.power.set(0.8, 0.8, 0.8);
 				this.saturation = 0.8;
 				break;
 
 			case CDLPreset.PUNCHY:
-				this.offset.set(0.0, 0.0, 0.0);
 				this.slope.set(1.0, 1.0, 1.0);
+				this.offset.set(0.0, 0.0, 0.0);
 				this.power.set(1.35, 1.35, 1.35);
 				this.saturation = 1.4;
 				break;
 
 			case CDLPreset.NEEDLE:
-				this.offset.set(0.0, 0.0, 0.0);
 				this.slope.set(1.05, 1.05, 1.05);
+				this.offset.set(0.0, 0.0, 0.0);
 				this.power.set(1.1, 1.1, 1.1);
 				this.saturation = 1.15;
 				break;
