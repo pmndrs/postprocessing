@@ -30,6 +30,18 @@ export enum CDLPreset {
 	 * Adjusted for production use to have a similar feeling of contrast as ACES over a wide range of scenes.
 	 */
 
-	NEEDLE
+	NEEDLE,
+
+	/**
+	 * A mellow look for a vintage appearance.
+	 */
+
+	SEPIA,
+
+	/**
+	 * A fully desaturated look.
+	 */
+
+	GRAYSCALE
 
 }

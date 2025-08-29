@@ -165,6 +165,20 @@ export class ColorDecisionList extends EventDispatcher<CDLEventMap> {
 				this.saturation = 1.15;
 				break;
 
+			case CDLPreset.SEPIA:
+				this.slope.set(1.0, 0.9, 0.6);
+				this.offset.set(0.0, 0.0, 0.0);
+				this.power.set(0.8, 0.8, 0.8);
+				this.saturation = 0.3;
+				break;
+
+			case CDLPreset.GRAYSCALE:
+				this.slope.set(1.0, 1.0, 1.0);
+				this.offset.set(0.0, 0.0, 0.0);
+				this.power.set(1.0, 1.0, 1.0);
+				this.saturation = 0.0;
+				break;
+
 		}
 
 	}
