@@ -1,4 +1,4 @@
-import { BaseEvent, EventDispatcher, Uniform, Vector3 } from "three";
+import { BaseEvent, EventDispatcher, MathUtils, Uniform, Vector3 } from "three";
 import { CDLPreset } from "../enums/CDLPreset.js";
 
 /**
@@ -166,6 +166,23 @@ export class ColorDecisionList extends EventDispatcher<CDLEventMap> {
 				break;
 
 		}
+
+	}
+
+	/**
+	 * Sets this CDL to the linearly interpolated result of two given CDLs.
+	 *
+	 * @param cdl1 - The start CDL.
+	 * @param cdl2 - The end CDL.
+	 * @param alpha - The interpolation factor in the range [0, 1].
+	 */
+
+	lerp(cdl1: ColorDecisionList, cdl2: ColorDecisionList, alpha: number): void {
+
+		this.slope.lerpVectors(cdl1.slope, cdl2.slope, alpha);
+		this.offset.lerpVectors(cdl1.offset, cdl2.offset, alpha);
+		this.power.lerpVectors(cdl1.power, cdl2.power, alpha);
+		this.saturation = MathUtils.lerp(cdl1.saturation, cdl2.saturation, alpha);
 
 	}
 
