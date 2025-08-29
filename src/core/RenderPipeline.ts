@@ -476,6 +476,7 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 	/**
 	 * Compiles all passes in this pipeline.
 	 *
+	 * @example pipeline.compile().then(() => renderer.setAnimationLoop(render));
 	 * @return A promise that resolves when the compilation has finished.
 	 */
 
@@ -496,9 +497,12 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 	/**
 	 * Renders this pipeline.
 	 *
-	 * This method should be called once per frame via `requestAnimationFrame`.
+	 * This method should be called once per frame via `requestAnimationFrame`. It's recommended to use three's method
+	 * `WebGLRenderer.setAnimationLoop()` to set up a render loop.
 	 *
+	 * @example renderer.setAnimationLoop((timestamp) => pipeline.render(timestamp));
 	 * @see https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
+	 * @see https://threejs.org/docs/?q=renderer#api/en/renderers/WebGLRenderer.setAnimationLoop
 	 * @param timestamp - The current time in milliseconds.
 	 */
 
