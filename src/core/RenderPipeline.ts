@@ -516,6 +516,16 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 
 		this._timer.update(timestamp);
 
+		const renderer = this.renderer;
+		const autoResetRenderInfo = renderer.info.autoReset;
+
+		if(autoResetRenderInfo) {
+
+			renderer.info.reset();
+			renderer.info.autoReset = false;
+
+		}
+
 		for(const pass of this.passes) {
 
 			if(pass.enabled) {
@@ -525,6 +535,8 @@ export class RenderPipeline implements Disposable, Renderable, Resizable {
 			}
 
 		}
+
+		renderer.info.autoReset = autoResetRenderInfo;
 
 	}
 
