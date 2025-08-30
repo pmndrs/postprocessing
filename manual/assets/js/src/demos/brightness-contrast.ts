@@ -142,7 +142,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		// Only render when the canvas is visible.
 		const viewportObserver = new IntersectionObserver(
-			(entries) => renderer.setAnimationLoop(entries[0].isIntersecting ? render : null)
+			(entries) => renderer.setAnimationLoop(entries[0].isIntersecting ? render : null),
+			{ threshold: 0.75 }
 		);
 
 		container.prepend(renderer.domElement);
