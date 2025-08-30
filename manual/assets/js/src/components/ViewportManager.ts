@@ -78,11 +78,9 @@ export class ViewportManager implements Component, EventListenerObject {
 
 	/**
 	 * Shows an epilepsy warning.
-	 *
-	 * @private
 	 */
 
-	showEpilepsyWarning() {
+	private showEpilepsyWarning(): void {
 
 		if(this.viewport === null) {
 
@@ -92,7 +90,7 @@ export class ViewportManager implements Component, EventListenerObject {
 
 		const viewport = this.viewport;
 		const canvas = viewport.querySelector("canvas");
-		const warning = viewport.querySelector(".warning");
+		const warning = viewport.querySelector("div.warning");
 		const tp = viewport.querySelector(".tp");
 		const a = warning?.querySelector("a");
 
@@ -109,6 +107,34 @@ export class ViewportManager implements Component, EventListenerObject {
 			tp?.classList.toggle("hidden");
 
 		});
+
+	}
+
+	/**
+	 * Enables or disables a pause indicator.
+	 *
+	 * @param value - True if the pause indicator should be shown. Otherwise false.
+	 */
+
+	setPaused(value: boolean): void {
+
+		if(this.viewport === null) {
+
+			return;
+
+		}
+
+		const paused = this.viewport.querySelector("div.paused");
+
+		if(value) {
+
+			paused?.classList.remove("hidden");
+
+		} else {
+
+			paused?.classList.add("hidden");
+
+		}
 
 	}
 
@@ -201,7 +227,7 @@ export class ViewportManager implements Component, EventListenerObject {
 
 		// Loading Animation
 
-		const observer = new MutationObserver((mutationsList, observer) => {
+		const mutationObserver = new MutationObserver((mutationsList, observer) => {
 
 			for(const mutation of mutationsList) {
 
@@ -227,7 +253,16 @@ export class ViewportManager implements Component, EventListenerObject {
 
 		});
 
-		observer.observe(viewport, { childList: true });
+		mutationObserver.observe(viewport, { childList: true });
+
+		// Pause Screen
+
+		const viewportObserver = new IntersectionObserver(
+			(entries) => this.setPaused(!entries[0].isIntersecting),
+			{ threshold: 0.75 }
+		);
+
+		viewportObserver.observe(viewport);
 
 	}
 
