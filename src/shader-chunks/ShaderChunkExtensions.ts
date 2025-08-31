@@ -20,6 +20,7 @@ import worldUtilsParsFragment from "./shaders/world-utils-pars.frag";
 import gbufferNormalFragment from "./shaders/gbuffer-normal.frag";
 import gbufferOcclusionFragment from "./shaders/gbuffer-occlusion.frag";
 import gbufferRoughnessFragment from "./shaders/gbuffer-roughness.frag";
+import gbufferRoughnessPhysicalFragment from "./shaders/gbuffer-roughness-physical.frag";
 import gbufferMetalnessFragment from "./shaders/gbuffer-metalness.frag";
 import gbufferEmissionFragment from "./shaders/gbuffer-emission.frag";
 
@@ -75,6 +76,7 @@ export class ShaderChunkExtensions {
 		ShaderChunk.normal_fragment_maps += "\n" + gbufferNormalFragment;
 		ShaderChunk.aomap_fragment += "\n" + gbufferOcclusionFragment;
 		ShaderChunk.roughnessmap_fragment += "\n" + gbufferRoughnessFragment;
+		ShaderChunk.lights_physical_fragment += "\n" + gbufferRoughnessPhysicalFragment;
 		ShaderChunk.metalnessmap_fragment += "\n" + gbufferMetalnessFragment;
 		ShaderChunk.emissivemap_fragment += "\n" + gbufferEmissionFragment;
 
