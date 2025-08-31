@@ -113,7 +113,7 @@ export class Background extends Group implements Disposable {
 
 			material.fragmentShader = material.fragmentShader.replace(
 				/(void main\(\) {)/,
-				`${shaderCodeHead}\n$1\n${shaderCodeBody}\n`
+				`\n${shaderCodeHead}\n$1\n${shaderCodeBody}\n`
 			);
 
 			for(const entry of uniforms) {
