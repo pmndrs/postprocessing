@@ -25,9 +25,11 @@ export class ClearValues extends EventDispatcher<BaseEventMap> {
 
 	/**
 	 * A collection that maps {@link GBuffer} components to clear values.
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext/clearBuffer
 	 */
 
-	readonly gBuffer: Map<string, Iterable<GLfloat>>;
+	readonly gBuffer: Map<string, GLfloat | GLfloat[]>;
 
 	/**
 	 * Constructs new clear values.
@@ -40,7 +42,7 @@ export class ClearValues extends EventDispatcher<BaseEventMap> {
 		this._color = null;
 		this._alpha = null;
 
-		const gBuffer = new ObservableMap<string, Iterable<GLfloat>>([
+		const gBuffer = new ObservableMap<string, GLfloat | GLfloat[]>([
 			[GBuffer.NORMAL, [0.0, 0.0]],
 			[GBuffer.ORM, [1.0, 0.0, 0.0, 1.0]],
 			[GBuffer.EMISSION, [0.0, 0.0, 0.0, 1.0]]
