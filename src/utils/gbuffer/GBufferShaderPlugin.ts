@@ -114,9 +114,7 @@ export class GBufferShaderPlugin {
 			}
 
 			// Update unknown materials that haven't already been modified via ShaderLib.
-			if(material instanceof ShaderMaterial &&
-				// However, custom materials may already include the required shader chunks.
-				!shader.fragmentShader.includes("pp_gbuffer_default_output_fragment")) {
+			if(material instanceof ShaderMaterial) {
 
 				shader.fragmentShader = addGBufferDefaultOutput(shader.fragmentShader);
 

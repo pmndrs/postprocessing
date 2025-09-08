@@ -126,16 +126,25 @@ export function extractOutputDefinitions(renderTarget: WebGLRenderTarget): strin
 
 export function addGBufferDefaultOutput(shader: string): string {
 
-	shader = shader.replace(
-		/(void\s+main\(\)\s+{)/,
-		"\n#include <pp_normal_codec_pars_fragment>\n$1"
-	);
+	if(!shader.includes("pp_normal_codec_pars_fragment")) {
 
-	const usesClippingPlanes = shader.includes("clipping_planes_fragment");
-	shader = shader.replace(
-		usesClippingPlanes ? /(#include\s+<clipping_planes_fragment>)/ : /(void\s+main\(\)\s+{)/,
-		"$1\n#include <pp_gbuffer_default_output_fragment>\n"
-	);
+		shader = shader.replace(
+			/(void\s+main\(\)\s+{)/,
+			"\n#include <pp_normal_codec_pars_fragment>\n$1"
+		);
+
+	}
+
+	if(!shader.includes("pp_gbuffer_default_output_fragment")) {
+
+		const usesClippingPlanes = shader.includes("clipping_planes_fragment");
+
+		shader = shader.replace(
+			usesClippingPlanes ? /(#include\s+<clipping_planes_fragment>)/ : /(void\s+main\(\)\s+{)/,
+			"$1\n#include <pp_gbuffer_default_output_fragment>\n"
+		);
+
+	}
 
 	return shader;
 
