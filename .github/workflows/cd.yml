@@ -32,3 +32,10 @@ jobs:
       - if: ${{ steps.publish.outputs.type }}
         run: |
           echo "Published version: ${{ steps.publish.outputs.version }}"
+      - name: Deploy
+        run: pnpm run deploy
+      - uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: public
+          single-commit: true
