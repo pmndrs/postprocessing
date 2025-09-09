@@ -29,7 +29,7 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 	 * A collection that maps G-Data to shader code that declares the G-Buffer struct.
 	 */
 
-	readonly gBufferStructDeclaration: Map<GData | string, string>;
+	readonly gBufferStructDeclaration: Map<GBuffer | string, string>;
 
 	/**
 	 * A collection that maps G-Data to shader code that declares the G-Data struct.
