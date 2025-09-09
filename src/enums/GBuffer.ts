@@ -25,6 +25,12 @@ export enum GBuffer {
 	NORMAL = "Normal",
 
 	/**
+	 * Fragment velocity.
+	 */
+
+	VELOCITY = "Velocity",
+
+	/**
 	 * An Occlusion-Roughness-Metalness buffer.
 	 *
 	 * - R = Ambient Occlusion

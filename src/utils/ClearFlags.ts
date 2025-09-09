@@ -1,4 +1,5 @@
 import { GBuffer } from "../enums/GBuffer.js";
+import { GBufferPacking } from "../enums/GBufferPacking.js";
 
 /**
  * A collection of clear flags.
@@ -38,6 +39,8 @@ export class ClearFlags {
 
 		this.gBuffer = new Set([
 			GBuffer.NORMAL,
+			GBuffer.VELOCITY,
+			GBufferPacking.NORMAL_VELOCITY,
 			GBuffer.ORM,
 			GBuffer.EMISSION
 		]);

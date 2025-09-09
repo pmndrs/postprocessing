@@ -1,6 +1,7 @@
 import { Color, EventDispatcher } from "three";
 import { BaseEventMap } from "../core/BaseEventMap.js";
 import { GBuffer } from "../enums/GBuffer.js";
+import { GBufferPacking } from "../enums/GBufferPacking.js";
 import { ObservableMap } from "./ObservableMap.js";
 
 /**
@@ -44,6 +45,8 @@ export class ClearValues extends EventDispatcher<BaseEventMap> {
 
 		const gBuffer = new ObservableMap<string, GLfloat | GLfloat[]>([
 			[GBuffer.NORMAL, [0.0, 0.0]],
+			[GBuffer.VELOCITY, [0.0, 0.0]],
+			[GBufferPacking.NORMAL_VELOCITY, [0.0, 0.0, 0.0, 0.0]],
 			[GBuffer.ORM, [1.0, 0.0, 0.0, 1.0]],
 			[GBuffer.EMISSION, [0.0, 0.0, 0.0, 1.0]]
 		]);

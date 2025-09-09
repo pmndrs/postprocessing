@@ -9,6 +9,7 @@
 #include <pp_depth_utils_pars_fragment>
 #include <pp_normal_codec_pars_fragment>
 #include <pp_normal_utils_pars_fragment>
+#include <pp_velocity_utils_pars_fragment>
 #include <pp_world_utils_pars_fragment>
 
 in vec2 vUv;
@@ -23,6 +24,10 @@ void main() {
 	#elif defined(NORMAL)
 
 		out_Color = vec4(readNormal(inputBuffer, vUv) * 0.5 + 0.5, 1.0);
+
+	#elif defined(VELOCITY)
+
+		out_Color = vec4(readVelocity(inputBuffer, vUv), 0.0, 1.0);
 
 	#elif defined(POSITION)
 

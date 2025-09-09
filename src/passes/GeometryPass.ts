@@ -27,6 +27,7 @@ import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 import { Pass } from "../core/Pass.js";
 import { Selective } from "../core/Selective.js";
 import { GBuffer } from "../enums/GBuffer.js";
+import { GBufferPacking } from "../enums/GBufferPacking.js";
 import { MSAASamples } from "../enums/MSAASamples.js";
 import { GBufferConfig } from "../utils/gbuffer/GBufferConfig.js";
 import { GBufferTextureConfig } from "../utils/gbuffer/GBufferTextureConfig.js";
@@ -353,6 +354,14 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 			format: RGFormat
 		});
 
+		textureConfigs.set(GBuffer.VELOCITY, {
+			minFilter: NearestFilter,
+			magFilter: NearestFilter,
+			type: HalfFloatType,
+			format: RGFormat,
+			isColorBuffer: false
+		});
+
 		textureConfigs.set(GBuffer.ORM, {
 			minFilter: NearestFilter,
 			magFilter: NearestFilter,
@@ -366,6 +375,15 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 			type: HalfFloatType,
 			format: RGBAFormat
 			// R11F_G11F_B10F causes artifacts in some scenes.
+		});
+
+		textureConfigs.set(GBufferPacking.NORMAL_VELOCITY, {
+			// packedComponents: new Set([GBuffer.NORMAL, GBuffer.VELOCITY]),
+			minFilter: NearestFilter,
+			magFilter: NearestFilter,
+			type: HalfFloatType,
+			format: RGBAFormat,
+			isColorBuffer: false
 		});
 
 		this.updateGBuffer();

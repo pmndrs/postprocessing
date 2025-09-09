@@ -14,10 +14,12 @@ import inputBufferParsFragment from "./shaders/input-buffer-pars.frag";
 import normalCodecParsFragment from "./shaders/normal-codec-pars.frag";
 import normalUtilsParsFragment from "./shaders/normal-utils-pars.frag";
 import resolutionParsFragment from "./shaders/resolution-pars.frag";
+import velocityUtilsParsFragment from "./shaders/velocity-utils-pars.frag";
 import worldUtilsParsFragment from "./shaders/world-utils-pars.frag";
 
 // G-Buffer shader chunks for built-in materials.
 import gbufferNormalFragment from "./shaders/gbuffer-normal.frag";
+// import gbufferVelocityFragment from "./shaders/gbuffer-velocity.frag";
 import gbufferOcclusionFragment from "./shaders/gbuffer-occlusion.frag";
 import gbufferRoughnessFragment from "./shaders/gbuffer-roughness.frag";
 import gbufferRoughnessPhysicalFragment from "./shaders/gbuffer-roughness-physical.frag";
@@ -73,12 +75,14 @@ export class ShaderChunkExtensions {
 			"pp_normal_codec_pars_fragment": normalCodecParsFragment,
 			"pp_normal_utils_pars_fragment": normalUtilsParsFragment,
 			"pp_resolution_pars_fragment": resolutionParsFragment,
+			"pp_velocity_utils_pars_fragment": velocityUtilsParsFragment,
 			"pp_world_utils_pars_fragment": worldUtilsParsFragment
 		});
 
 		// G-Buffer Support
 
 		ShaderChunk.normal_fragment_maps += "\n" + gbufferNormalFragment;
+		// TODO gbufferVelocityFragment
 		ShaderChunk.aomap_fragment += "\n" + gbufferOcclusionFragment;
 		ShaderChunk.roughnessmap_fragment += "\n" + gbufferRoughnessFragment;
 		ShaderChunk.lights_physical_fragment += "\n" + gbufferRoughnessPhysicalFragment;

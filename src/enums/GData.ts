@@ -26,6 +26,12 @@ export enum GData {
 	NORMAL = "normal",
 
 	/**
+	 * The fragment velocity.
+	 */
+
+	VELOCITY = "velocity",
+
+	/**
 	 * The view-space position.
 	 */
 

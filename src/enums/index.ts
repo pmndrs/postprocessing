@@ -5,6 +5,7 @@ export * from "./DepthTestStrategy.js";
 export * from "./EffectShaderSection.js";
 export * from "./GBuffer.js";
 export * from "./GBufferDebug.js";
+export * from "./GBufferPacking.js";
 export * from "./GData.js";
 export * from "./GlitchMode.js";
 export * from "./HalftoneShape.js";
