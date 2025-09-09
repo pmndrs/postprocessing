@@ -34,7 +34,7 @@ export class LookupTexture extends Data3DTexture {
 	 * @param size - The sidelength.
 	 */
 
-	constructor(data: BufferSource | null, size: number) {
+	constructor(data: TypedArray | null, size: number) {
 
 		super(data, size, size, size);
 
@@ -75,7 +75,7 @@ export class LookupTexture extends Data3DTexture {
 			worker.addEventListener("error", (event) => reject(event.error as Error));
 			worker.addEventListener("message", (event: MessageEvent<ArrayBufferView<ArrayBuffer>>) => {
 
-				const lut = new LookupTexture(event.data, size);
+				const lut = new LookupTexture(event.data as TypedArray, size);
 				lut.colorSpace = this.colorSpace;
 				lut.type = this.type;
 				lut.name = this.name;
@@ -126,8 +126,8 @@ export class LookupTexture extends Data3DTexture {
 
 		}
 
-		const data0 = img0.data as TypedArray;
-		const data1 = img1.data as TypedArray;
+		const data0 = img0.data;
+		const data1 = img1.data;
 		const size = size0;
 		const sizeSq = size ** 2;
 		const s = size - 1;
@@ -165,7 +165,7 @@ export class LookupTexture extends Data3DTexture {
 		if(this.type === FloatType) {
 
 			const img = this.image;
-			const floatData = img.data as TypedArray;
+			const floatData = img.data;
 			const uint8Data = new Uint8Array(floatData.length);
 
 			for(let i = 0, l = floatData.length; i < l; ++i) {
@@ -195,7 +195,7 @@ export class LookupTexture extends Data3DTexture {
 		if(this.type === UnsignedByteType) {
 
 			const img = this.image;
-			const uint8Data = img.data as TypedArray;
+			const uint8Data = img.data;
 			const floatData = new Float32Array(uint8Data.length);
 
 			for(let i = 0, l = uint8Data.length; i < l; ++i) {
@@ -223,7 +223,7 @@ export class LookupTexture extends Data3DTexture {
 	convertLinearToSRGB(): this {
 
 		const img = this.image;
-		const data = img.data as TypedArray;
+		const data = img.data;
 
 		if(this.type !== FloatType) {
 
@@ -253,7 +253,7 @@ export class LookupTexture extends Data3DTexture {
 	convertSRGBToLinear(): this {
 
 		const img = this.image;
-		const data = img.data as TypedArray;
+		const data = img.data;
 
 		if(this.type !== FloatType) {
 
