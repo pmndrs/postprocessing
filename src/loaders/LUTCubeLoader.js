@@ -22,7 +22,6 @@ export class LUTCubeLoader extends Loader {
 	 * @param {Function} [onLoad] - A callback that receives the loaded lookup texture.
 	 * @param {Function} [onProgress] - A progress callback that receives the XMLHttpRequest instance.
 	 * @param {Function} [onError] - An error callback that receives the URL of the file that failed to load.
-	 * @return {Promise<LookupTexture>} A promise that returns the lookup texture.
 	 */
 
 	load(url, onLoad = () => {}, onProgress = () => {}, onError = null) {
@@ -34,44 +33,49 @@ export class LUTCubeLoader extends Loader {
 		loader.setPath(this.path);
 		loader.setResponseType("text");
 
+		loader.load(url, (data) => {
+
+			try {
+
+				const result = this.parse(data);
+				externalManager.itemEnd(url);
+				onLoad(result);
+
+			} catch(e) {
+
+				internalManager.onError(url);
+				onError(e);
+
+			}
+
+		}, onProgress);
+
+	}
+
+	/**
+	 * Loads a LUT asynchronously.
+	 *
+	 * @param {String} url - The URL of the CUBE-file.
+	 * @param {Function} [onLoad] - A callback that receives the loaded lookup texture.
+	 * @param {Function} [onProgress] - A progress callback that receives the XMLHttpRequest instance.
+	 * @return {Promise<LookupTexture>} A promise that returns the lookup texture.
+	 */
+
+	loadAsync(url, onProgress = () => {}) {
+
+		const externalManager = this.manager;
+		const internalManager = new LoadingManager();
+
 		return new Promise((resolve, reject) => {
 
 			internalManager.onError = (url) => {
 
 				externalManager.itemError(url);
-
-				if(onError !== null) {
-
-					onError(`Failed to load ${url}`);
-					resolve();
-
-				} else {
-
-					reject(`Failed to load ${url}`);
-
-				}
+				reject(`Failed to load ${url}`);
 
 			};
 
-			externalManager.itemStart(url);
-
-			loader.load(url, (data) => {
-
-				try {
-
-					const result = this.parse(data);
-					externalManager.itemEnd(url);
-					onLoad(result);
-					resolve(result);
-
-				} catch(e) {
-
-					console.error(e);
-					internalManager.onError(url);
-
-				}
-
-			}, onProgress);
+			this.load(url, resolve, onProgress);
 
 		});
 
