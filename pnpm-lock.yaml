@@ -625,8 +625,8 @@ packages:
     resolution: {integrity: sha512-wgm9Ehl2jpeqP3zw/7mo3kRHFp5MEDhqAdwy1fTGkHAwnkGOVsgpvQhL8B5n1qlb01jV3n/bI0ZfZp5lWA1k4w==}
     engines: {node: '>=18.0.0'}
 
-  '@keyv/serialize@1.1.0':
-    resolution: {integrity: sha512-RlDgexML7Z63Q8BSaqhXdCYNBy/JQnqYIwxofUrNLGCblOMHp+xux2Q8nLMLlPpgHQPoU0Do8Z6btCpRBEqZ8g==}
+  '@keyv/serialize@1.1.1':
+    resolution: {integrity: sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA==}
 
   '@mapbox/node-pre-gyp@2.0.0':
     resolution: {integrity: sha512-llMXd39jtP0HpQLVI37Bf1m2ADlEb35GYSh1SDSLsBhR+5iCxiNGlT31yqbNtVHygHAtMy6dWFERpU2JgufhPg==}
@@ -1057,8 +1057,13 @@ packages:
   aws4@1.13.2:
     resolution: {integrity: sha512-lHe62zvbTB5eEABUVi/AwVh0ZKY9rMMDhmm+eeyuuUQbQ3+J+fONVQOZyj+DdrvD4BY33uYniyRJ4UJIaSKAfw==}
 
-  b4a@1.6.7:
-    resolution: {integrity: sha512-OnAYlL5b7LEkALw87fUVafQw5rVR9RjwGd4KUwNQ6DrrNmaVaUCgLipfVlzrPQ4tWOR9P0IXGNOx50jYCCdSJg==}
+  b4a@1.7.1:
+    resolution: {integrity: sha512-ZovbrBV0g6JxK5cGUF1Suby1vLfKjv4RWi8IxoaO/Mon8BDD9I21RxjHFtgQ+kskJqLAVyQZly3uMBui+vhc8Q==}
+    peerDependencies:
+      react-native-b4a: '*'
+    peerDependenciesMeta:
+      react-native-b4a:
+        optional: true
 
   babel-code-frame@6.26.0:
     resolution: {integrity: sha512-XqYMR2dfdGMW+hd0IUZ2PwK+fGeFkOxZJ0wY+JaQAHzt1Zx8LcvpiZD2NiGkEG8qx0CfkAOr5xt76d1e8vG90g==}
@@ -1589,8 +1594,8 @@ packages:
   ecc-jsbn@0.1.2:
     resolution: {integrity: sha512-eh9O+hwRHNbG4BLTjEl3nw044CkGm5X6LoaCf7LPp7UU8Qrt47JYNi6nPX8xjW97TKGKm1ouctg0QSpZe9qrnw==}
 
-  electron-to-chromium@1.5.215:
-    resolution: {integrity: sha512-TIvGp57UpeNetj/wV/xpFNpWGb0b/ROw372lHPx5Aafx02gjTBtWnEEcaSX3W2dLM3OSdGGyHX/cHl01JQsLaQ==}
+  electron-to-chromium@1.5.218:
+    resolution: {integrity: sha512-uwwdN0TUHs8u6iRgN8vKeWZMRll4gBkz+QMqdS7DDe49uiK68/UX92lFb61oiFPrpYZNeZIqa4bA7O6Aiasnzg==}
 
   emittery@1.2.0:
     resolution: {integrity: sha512-KxdRyyFcS85pH3dnU8Y5yFUm2YJdaHwcBZWrfG8o89ZY9a13/f9itbN+YG3ELbBo9Pg5zvIozstmuV8bX13q6g==}
@@ -2445,8 +2450,8 @@ packages:
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
 
-  keyv@5.5.0:
-    resolution: {integrity: sha512-QG7qR2tijh1ftOvClut4YKKg1iW6cx3GZsKoGyJPxHkGWK9oJhG9P3j5deP0QQOGDowBMVQFaP+Vm4NpGYvmIQ==}
+  keyv@5.5.1:
+    resolution: {integrity: sha512-eF3cHZ40bVsjdlRi/RvKAuB0+B61Q1xWvohnrJrnaQslM3h1n79IV+mc9EGag4nrA9ZOlNyr3TUzW5c8uy8vNA==}
 
   kind-of@6.0.3:
     resolution: {integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==}
@@ -2713,8 +2718,8 @@ packages:
     resolution: {integrity: sha512-bdok/XvKII3nUpklnV6P2hxtMNrCboOjAcyBuQnWEhO665FwrSNRxU+AqpsyvO6LgGYPspN+lu5CLtw4jPRKNA==}
     engines: {node: '>=0.10.0'}
 
-  normalize-url@8.0.2:
-    resolution: {integrity: sha512-Ee/R3SyN4BuynXcnTaekmaVdbDAEiNrHqjQIA37mHU8G9pf7aaAD4ZX3XjBLo6rsdcxA/gtkcNYZLt30ACgynw==}
+  normalize-url@8.1.0:
+    resolution: {integrity: sha512-X06Mfd/5aKsRHc0O0J5CUedwnPmnDtLF2+nq+KN9KSDlJHkPuh0JUviWjEWMe0SW/9TDdSLVPuk7L5gGTIA1/w==}
     engines: {node: '>=14.16'}
 
   npm-run-all@4.1.5:
@@ -4475,7 +4480,7 @@ snapshots:
     dependencies:
       minipass: 7.1.2
 
-  '@keyv/serialize@1.1.0': {}
+  '@keyv/serialize@1.1.1': {}
 
   '@mapbox/node-pre-gyp@2.0.0':
     dependencies:
@@ -4762,6 +4767,7 @@ snapshots:
       '@xhmikosr/os-filter-obj': 3.0.0
       bin-version-check: 5.1.0
     transitivePeerDependencies:
+      - react-native-b4a
       - supports-color
 
   '@xhmikosr/decompress-tar@8.1.0':
@@ -4770,6 +4776,7 @@ snapshots:
       is-stream: 2.0.1
       tar-stream: 3.1.7
     transitivePeerDependencies:
+      - react-native-b4a
       - supports-color
 
   '@xhmikosr/decompress-tarbz2@8.1.0':
@@ -4780,6 +4787,7 @@ snapshots:
       seek-bzip: 2.0.0
       unbzip2-stream: 1.4.3
     transitivePeerDependencies:
+      - react-native-b4a
       - supports-color
 
   '@xhmikosr/decompress-targz@8.1.0':
@@ -4788,6 +4796,7 @@ snapshots:
       file-type: 20.5.0
       is-stream: 2.0.1
     transitivePeerDependencies:
+      - react-native-b4a
       - supports-color
 
   '@xhmikosr/decompress-unzip@7.1.0':
@@ -4807,6 +4816,7 @@ snapshots:
       graceful-fs: 4.2.11
       strip-dirs: 3.0.0
     transitivePeerDependencies:
+      - react-native-b4a
       - supports-color
 
   '@xhmikosr/downloader@15.2.0':
@@ -4821,6 +4831,7 @@ snapshots:
       get-stream: 6.0.1
       got: 13.0.0
     transitivePeerDependencies:
+      - react-native-b4a
       - supports-color
 
   '@xhmikosr/os-filter-obj@3.0.0':
@@ -5008,7 +5019,7 @@ snapshots:
   aws4@1.13.2:
     optional: true
 
-  b4a@1.6.7: {}
+  b4a@1.7.1: {}
 
   babel-code-frame@6.26.0:
     dependencies:
@@ -5119,7 +5130,7 @@ snapshots:
   browserslist@4.25.4:
     dependencies:
       caniuse-lite: 1.0.30001741
-      electron-to-chromium: 1.5.215
+      electron-to-chromium: 1.5.218
       node-releases: 2.0.20
       update-browserslist-db: 1.1.3(browserslist@4.25.4)
 
@@ -5141,13 +5152,13 @@ snapshots:
       http-cache-semantics: 4.2.0
       keyv: 4.5.4
       mimic-response: 4.0.0
-      normalize-url: 8.0.2
+      normalize-url: 8.1.0
       responselike: 3.0.0
 
   cacheable@1.10.4:
     dependencies:
       hookified: 1.12.0
-      keyv: 5.5.0
+      keyv: 5.5.1
 
   call-bind-apply-helpers@1.0.2:
     dependencies:
@@ -5663,7 +5674,7 @@ snapshots:
       safer-buffer: 2.1.2
     optional: true
 
-  electron-to-chromium@1.5.215: {}
+  electron-to-chromium@1.5.218: {}
 
   emittery@1.2.0: {}
 
@@ -6357,6 +6368,7 @@ snapshots:
       '@xhmikosr/bin-wrapper': 13.2.0
       package-config: 5.0.0
     transitivePeerDependencies:
+      - react-native-b4a
       - supports-color
 
   human-signals@2.1.0: {}
@@ -6645,9 +6657,9 @@ snapshots:
     dependencies:
       json-buffer: 3.0.1
 
-  keyv@5.5.0:
+  keyv@5.5.1:
     dependencies:
-      '@keyv/serialize': 1.1.0
+      '@keyv/serialize': 1.1.1
 
   kind-of@6.0.3: {}
 
@@ -6842,7 +6854,7 @@ snapshots:
 
   normalize-range@0.1.2: {}
 
-  normalize-url@8.0.2: {}
+  normalize-url@8.1.0: {}
 
   npm-run-all@4.1.5:
     dependencies:
@@ -7811,6 +7823,8 @@ snapshots:
       text-decoder: 1.2.3
     optionalDependencies:
       bare-events: 2.6.1
+    transitivePeerDependencies:
+      - react-native-b4a
 
   string-width@4.2.3:
     dependencies:
@@ -8044,9 +8058,11 @@ snapshots:
 
   tar-stream@3.1.7:
     dependencies:
-      b4a: 1.6.7
+      b4a: 1.7.1
       fast-fifo: 1.3.2
       streamx: 2.22.1
+    transitivePeerDependencies:
+      - react-native-b4a
 
   tar@7.4.3:
     dependencies:
@@ -8061,7 +8077,9 @@ snapshots:
 
   text-decoder@1.2.3:
     dependencies:
-      b4a: 1.6.7
+      b4a: 1.7.1
+    transitivePeerDependencies:
+      - react-native-b4a
 
   thenby@1.3.4: {}
 
