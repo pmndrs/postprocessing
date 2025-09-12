@@ -9124,7 +9124,6 @@ export class RawImageData implements ImageData {
  * An SMAA image loader.
  *
  * @deprecated Preloading the SMAA lookup textures is no longer required.
- * @experimental Added for testing, API might change in patch or minor releases. Requires three >= r108.
  */
 export class SMAAImageLoader extends Loader {
 
@@ -9152,6 +9151,8 @@ export class SMAAImageLoader extends Loader {
  *
  * For more details see:
  * https://wwwimages2.adobe.com/content/dam/acom/en/products/speedgrade/cc/pdfs/cube-lut-specification-1.0.pdf
+ *
+ * @deprecated Use `three/addons/loaders/LUTCubeLoader.js` instead.
  */
 export class LUTCubeLoader extends Loader {
 
@@ -9169,6 +9170,19 @@ export class LUTCubeLoader extends Loader {
 		onProgress?: (event: ProgressEvent) => void,
 		onError?: (err: unknown) => void,
 	): void;
+
+	/**
+	 * Loads a LUT asynchronously.
+	 *
+	 * @param {String} url - The URL of the CUBE-file.
+	 * @param {Function} [onLoad] - A callback that receives the loaded lookup texture.
+	 * @param {Function} [onProgress] - A progress callback that receives the XMLHttpRequest instance.
+	 * @return {Promise<LookupTexture>} A promise that returns the lookup texture.
+	 */
+	loadAsync(
+		url: string,
+		onProgress?: (event: ProgressEvent) => void,
+	): Promise<LookupTexture>;
 
 	/**
 	 * Parses the given data.
@@ -9189,6 +9203,8 @@ export class LUTCubeLoader extends Loader {
  *
  * For more details see:
  * http://download.autodesk.com/us/systemdocs/help/2011/lustre/index.html?url=./files/WSc4e151a45a3b785a24c3d9a411df9298473-7ffd.htm,topicNumber=d0e9492
+ *
+ * @deprecated Use `three/addons/loaders/LUT3dlLoader.js` instead.
  */
 export class LUT3dlLoader extends Loader {
 
@@ -9206,6 +9222,19 @@ export class LUT3dlLoader extends Loader {
 		onProgress?: (event: ProgressEvent) => void,
 		onError?: (err: unknown) => void,
 	): void;
+
+	/**
+	 * Loads a LUT asynchronously.
+	 *
+	 * @param {String} url - The URL of the 3dl-file.
+	 * @param {Function} [onLoad] - A callback that receives the loaded lookup texture.
+	 * @param {Function} [onProgress] - A progress callback that receives the XMLHttpRequest instance.
+	 * @return {Promise<LookupTexture>} A promise that returns the lookup texture.
+	 */
+	loadAsync(
+		url: string,
+		onProgress?: (event: ProgressEvent) => void,
+	): Promise<LookupTexture>;
 
 	/**
 	 * Parses the given data.
