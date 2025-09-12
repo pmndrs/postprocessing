@@ -9,16 +9,14 @@
 		"baseUrl": ".",
 		"outDir": "./build",
 		"moduleResolution": "bundler",
-		"module": "ES2022",
-		"target": "ES2022",
+		"module": "es2022",
+		"target": "es2022",
 		"strict": true,
 		"allowJs": true,
 		"sourceMap": false,
 		"skipLibCheck": true,
-		"importHelpers": true,
 		"resolveJsonModule": true,
 		"noImplicitOverride": true,
-		"allowSyntheticDefaultImports": true,
 		"paths": {
 			"postprocessing": ["./src/index.js"],
 			"temp": ["./temp"]
