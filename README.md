@@ -5,7 +5,7 @@
 
 An advanced post processing library for [three.js](https://threejs.org/).
 
-*[Manual](https://pp.pmnd.rs/manual)&ensp;&middot;&ensp;[Documentation](https://pp.pmnd.rs/manual/docs)&ensp;&middot;&ensp;[Sandbox](https://stackblitz.com/edit/postprocessing)*
+*[Manual](https://pmndrs.github.io/postprocessing/manual)&ensp;&middot;&ensp;[Documentation](https://pmndrs.github.io/postprocessing/docs)&ensp;&middot;&ensp;[Sandbox](https://stackblitz.com/edit/postprocessing)*
 
 ## Contributing
 
