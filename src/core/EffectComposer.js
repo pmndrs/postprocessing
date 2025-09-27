@@ -363,7 +363,6 @@ export class EffectComposer {
 
 		if(multisampling > 0) {
 
-			renderTarget.ignoreDepthForMultisampleCopy = false;
 			renderTarget.samples = multisampling;
 
 		}
