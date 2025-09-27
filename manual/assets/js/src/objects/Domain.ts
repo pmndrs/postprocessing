@@ -26,10 +26,10 @@ export function createLights(): Group {
 /**
  * Creates the environment.
  *
- * @return {Group} The environment.
+ * @return The environment.
  */
 
-export function createEnvironment() {
+export function createEnvironment(): Group {
 
 	const environment = new Group();
 	const material = new MeshStandardMaterial({
@@ -103,7 +103,7 @@ export function createEnvironment() {
 /**
  * Creates the scene actors.
  *
- * @return {Group} The actors.
+ * @return The actors.
  */
 
 export function createActors(): Group {
