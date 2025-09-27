@@ -9,7 +9,7 @@
 vec2 pp_encodeNormal(vec3 n) {
 
 	n /= (abs(n.x) + abs(n.y) + abs(n.z));
-	n.xy = (n.z >= 0.0) ? n.xy : (1.0 - abs(n.yx)) * sign(n.xy);
+	n.xy = (n.z >= 0.0) ? n.xy : (1.0 - abs(n.yx)) * vec2(n.x >= 0.0 ? 1.0 : -1.0, n.y >= 0.0 ? 1.0 : -1.0);
 	return n.xy;
 
 }
