@@ -14,7 +14,7 @@ uniform lowp sampler2D nearCoCBuffer;
 uniform lowp sampler2D farCoCBuffer;
 uniform float scale;
 
-void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth, out vec4 outputColor) {
+void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
 
 	vec4 colorNear = texture2D(nearColorBuffer, uv);
 	vec4 colorFar = texture2D(farColorBuffer, uv);
