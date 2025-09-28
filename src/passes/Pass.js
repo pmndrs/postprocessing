@@ -2,9 +2,9 @@ import {
 	BasicDepthPacking,
 	BufferAttribute,
 	BufferGeometry,
-	Camera,
 	Material,
 	Mesh,
+	OrthographicCamera,
 	Scene,
 	Texture,
 	WebGLRenderTarget
@@ -57,7 +57,7 @@ export class Pass {
 	 * @param {Camera} [camera] - A camera. Fullscreen effect passes don't require a camera.
 	 */
 
-	constructor(name = "Pass", scene = new Scene(), camera = new Camera()) {
+	constructor(name = "Pass", scene = new Scene(), camera = new OrthographicCamera()) {
 
 		/**
 		 * The name of this pass.
