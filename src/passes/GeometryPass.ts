@@ -206,6 +206,12 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 	override set enabled(value: boolean) {
 
+		if(super.enabled === value) {
+
+			return;
+
+		}
+
 		super.enabled = value;
 		this.gBufferShaderPlugin.enabled = value;
 		this.invalidateMaterials();
