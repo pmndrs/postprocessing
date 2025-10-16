@@ -4,7 +4,11 @@ on:
   workflow_dispatch:
   push:
     tags:
-      - "*"
+      - "v*"
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   deploy:
@@ -20,13 +24,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24
+          registry-url: "https://registry.npmjs.org"
           cache: "pnpm"
       - name: Install dependencies and test
         run: pnpm install-test --frozen-lockfile
       - name: Publish
         run: pnpm publish --ignore-scripts
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
       - name: Pages
         run: pnpm run deploy
