@@ -127,6 +127,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addBinding(bufferDebugPass, "enabled", { label: "debug" });
 	folder.addBinding(bufferDebugPass, "bufferFocus", { options: gBufferOptions });
+	folder.addBinding(bufferDebugPass, "viewSize", { min: 0.0, max: 1.0, step: 0.025 });
+	folder.addBinding(bufferDebugPass, "columns", { min: 0, max: 5, step: 1 });
 
 	// Resize Handler
 

@@ -24,20 +24,16 @@ import { GBufferDebug } from "../enums/GBufferDebug.js";
 export class BufferDebugPass extends Pass<BufferDebugMaterial> {
 
 	/**
-	 * The size of each texture view relative to the screen size.
-	 *
-	 * @defaultValue 0.1
+	 * @see {@link viewSize}
 	 */
 
-	viewSize: number;
+	private _viewSize: number;
 
 	/**
-	 * Limits the amount of texture views per row.
-	 *
-	 * @defaultValue 4
+	 * @see {@link columns}
 	 */
 
-	columns: number;
+	private _columns: number;
 
 	/**
 	 * @see {@link bufferFocus}
@@ -66,7 +62,7 @@ export class BufferDebugPass extends Pass<BufferDebugMaterial> {
 	/**
 	 * Constructs a new buffer debug pass.
 	 *
-	 * @param gBufferComponents - G-Buffer components that should be rendered and visualized.
+	 * @param gBufferComponents - G-Buffer components that should be visualized.
 	 */
 
 	constructor(gBufferComponents?: Set<GBuffer>) {
@@ -76,10 +72,11 @@ export class BufferDebugPass extends Pass<BufferDebugMaterial> {
 		this.output.defaultBuffer = this.createFramebuffer();
 		this.fullscreenMaterial = new BufferDebugMaterial();
 
-		this.viewSize = 0.1;
-		this.columns = 4;
-		this.views = [];
+		this._viewSize = 0.1;
+		this._columns = 3;
 		this._bufferFocus = null;
+
+		this.views = [];
 		this.debugScene = new Scene();
 		this.debugCamera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
@@ -96,6 +93,48 @@ export class BufferDebugPass extends Pass<BufferDebugMaterial> {
 	}
 
 	/**
+	 * The size of each texture view relative to the screen size.
+	 *
+	 * Set to `0.0` to disable the buffer preview.
+	 *
+	 * @defaultValue 0.1
+	 */
+
+	get viewSize(): number {
+
+		return this._viewSize;
+
+	}
+
+	set viewSize(value: number) {
+
+		this._viewSize = value;
+		this.updateViews();
+
+	}
+
+	/**
+	 * Limits the amount of texture views per row.
+	 *
+	 * Set to `0` to disable the buffer preview.
+	 *
+	 * @defaultValue 3
+	 */
+
+	get columns(): number {
+
+		return this._columns;
+
+	}
+
+	set columns(value: number) {
+
+		this._columns = value;
+		this.updateViews();
+
+	}
+
+	/**
 	 * The name of the buffer that should be rendered in fullscreen mode.
 	 *
 	 * The value must match with one of the buffer names. G-Buffer textures use the string value of the respective
@@ -103,6 +142,7 @@ export class BufferDebugPass extends Pass<BufferDebugMaterial> {
 	 *
 	 * @see {@link GBuffer} for rendering specific G-Buffer components.
 	 * @see {@link GBufferDebug} for computed G-Buffer components.
+	 * @defaultValue null
 	 */
 
 	get bufferFocus(): string | null {
@@ -148,17 +188,25 @@ export class BufferDebugPass extends Pass<BufferDebugMaterial> {
 	private updateViews(): void {
 
 		const { width, height } = this.resolution;
-		const size = Math.min(Math.max(this.viewSize, 0.0), 1.0);
-		const columns = Math.max(this.columns, 0);
 		const views = this.views;
-		const rows = Math.ceil(views.length / columns);
 
-		if(views.length * size > 1.0 || (views.length / rows) * size > 1.0) {
+		for(const view of views) {
 
-			console.warn("Unable to fit texture views");
+			view.visible = false;
+
+		}
+
+		if(this.viewSize <= 0.0 || this.columns <= 0) {
+
 			return;
 
 		}
+
+		const columns = Math.min(this.columns, views.length);
+		const rows = Math.ceil(views.length / columns);
+		const maxViewHeight = 1.0 / rows;
+		const maxViewWidth = 1.0 / columns;
+		const size = Math.min(this.viewSize, maxViewHeight, maxViewWidth);
 
 		const sizeHalf = size * 0.5;
 		const viewSizeX = size * width;
@@ -176,6 +224,7 @@ export class BufferDebugPass extends Pass<BufferDebugMaterial> {
 				this.debugScene.add(view);
 				view.scale.set(viewSizeX, viewSizeY, 1);
 				view.position.set(offsetX, offsetY, 0);
+				view.visible = true;
 				offsetX -= viewSizeX;
 
 			}
