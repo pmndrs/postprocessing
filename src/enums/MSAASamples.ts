@@ -4,4 +4,4 @@
  * @category Enums
  */
 
-export declare type MSAASamples = 0 | 2 | 4 | 8;
+export type MSAASamples = 0 | 2 | 4 | 8;

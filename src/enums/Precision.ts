@@ -4,4 +4,4 @@
  * @category Enums
  */
 
-export declare type Precision = "lowp" | "mediump" | "highp";
+export type Precision = "lowp" | "mediump" | "highp";
