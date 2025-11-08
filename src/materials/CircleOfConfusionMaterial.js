@@ -15,7 +15,7 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 	 * @param {Camera} camera - A camera.
 	 */
 
-	constructor(camera) {
+	constructor(camera = null) {
 
 		super({
 			name: "CircleOfConfusionMaterial",
@@ -42,7 +42,11 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 		// TODO Added for backward-compatibility.
 		this.uniforms.focalLength = this.uniforms.focusRange;
 
-		this.copyCameraSettings(camera);
+		if(camera !== null) {
+
+			this.copyCameraSettings(camera);
+
+		}
 
 	}
 
