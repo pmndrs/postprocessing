@@ -29,7 +29,7 @@ jobs:
       - name: Install dependencies and test
         run: pnpm install-test --frozen-lockfile
       - name: Publish
-      - uses: JS-DevTools/npm-publish@v4
+        uses: JS-DevTools/npm-publish@v4
         id: publish
         with:
           provenance: true
