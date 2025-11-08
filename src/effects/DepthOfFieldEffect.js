@@ -52,7 +52,7 @@ export class DepthOfFieldEffect extends Effect {
 		focusDistance = worldFocusDistance || 3.0,
 		focusRange = worldFocusRange || focalLength || 2.0,
 		bokehScale = 1.0,
-		resolutionScale = 1.0,
+		resolutionScale = 0.5,
 		width,
 		height,
 		resolutionX = width || Resolution.AUTO_SIZE,
