@@ -22,7 +22,8 @@ import {
 	ColorSpace,
 	Data3DTexture,
 	BaseEvent,
-	CanvasTexture
+	CanvasTexture,
+	Vector4
 } from "three";
 
 /**
@@ -331,14 +332,13 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 		buffer: Texture,
 		depthPacking?: DepthPackingStrategies
 	): void;
-
-	set focusDistance(arg: number);
 	/**
-	 * The focus distance. Range: [0.0, 1.0].
+	 * The focus distance in world units.
 	 *
 	 * @type {Number}
 	 */
 	get focusDistance(): number;
+	set focusDistance(arg: number);
 	/**
 	 * Returns the focus distance.
 	 *
@@ -353,14 +353,14 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 	 * @param {Number} value - The focus distance.
 	 */
 	setFocusDistance(value: number): void;
-	set focalLength(arg: number);
 	/**
 	 * The focal length.
 	 *
-	 * @deprecated Renamed to focusRange.
+	 * @deprecated Use focusRange instead.
 	 * @type {Number}
 	 */
 	get focalLength(): number;
+	set focalLength(arg: number);
 	/**
 	 * Returns the focal length.
 	 *
@@ -381,31 +381,29 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 	 * @param {Camera} camera - A camera.
 	 */
 	adoptCameraSettings(camera: Camera): void;
-
 	/**
 	 * The focus distance in world units.
 	 *
+	 * @deprecated Use focusDistance instead.
 	 * @type {Number}
 	 */
 	get worldFocusDistance(): number;
 	set worldFocusDistance(value: number);
-
-	/**
-	 * The focus range. Range: [0.0, 1.0].
-	 *
-	 * @type {Number}
-	 */
-	get focusRange(): number;
-	set focusRange(value: number);
-
 	/**
 	 * The focus range in world units.
 	 *
 	 * @type {Number}
 	 */
+	get focusRange(): number;
+	set focusRange(value: number);
+	/**
+	 * The focus range in world units.
+	 *
+	 * @deprecated Use focusRange instead.
+	 * @type {Number}
+	 */
 	get worldFocusRange(): number;
 	set worldFocusRange(value: number);
-
 }
 
 /**
@@ -442,7 +440,30 @@ export class CopyMaterial extends ShaderMaterial {
 	 *
 	 * @type {Texture}
 	 */
+	get inputBuffer(): Texture;
 	set inputBuffer(arg: Texture);
+	/**
+	 * A depth buffer.
+	 *
+	 * @type {Texture}
+	 */
+	get depthBuffer(): Texture;
+	set depthBuffer(arg: Texture);
+	/**
+	 * The depth packing strategy of the depth buffer.
+	 *
+	 * @type {DepthPackingStrategies}
+	 */
+	set depthPacking(arg: DepthPackingStrategies);
+	/**
+	 * Color channel weights that modulate texels from the input buffer.
+	 *
+	 * Set to `null` to disable.
+	 *
+	 * @type {Vector4 | null}
+	 */
+	get channelWeights(): Vector4 | null;
+	set channelWeights(arg: Vector4 | null);
 	/**
 	 * Sets the input buffer.
 	 *
@@ -5776,15 +5797,14 @@ export class DepthOfFieldEffect extends Effect {
 	 *
 	 * @param {Camera} camera - The main camera.
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
-	 * @param {Number} [options.worldFocusDistance] - The focus distance in world units.
-	 * @param {Number} [options.worldFocusRange] - The focus distance in world units.
-	 * @param {Number} [options.focusDistance=0.0] - The normalized focus distance. Range is [0.0, 1.0].
-	 * @param {Number} [options.focalLength=0.1] - The focal length. Range is [0.0, 1.0].
-	 * @param {Number} [options.focusRange=0.1] - The focus range. Range is [0.0, 1.0].
-	 * @param {Number} [options.focalLength=0.1] - Deprecated.
+	 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
+	 * @param {Number} [options.worldFocusDistance] - Deprecated. Use focusRange instead.
+	 * @param {Number} [options.worldFocusRange] - Deprecated. Use focusRange instead.
+	 * @param {Number} [options.focusDistance=3.0] - The focus distance in world units.
+	 * @param {Number} [options.focusRange=2.0] - The focus range in world units.
+	 * @param {Number} [options.focalLength] - Deprecated. Use focusRange instead.
 	 * @param {Number} [options.bokehScale=1.0] - The scale of the bokeh blur.
-	 * @param {Number} [options.resolutionScale=1.0] - The resolution scale.
+	 * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
 	 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
 	 * @param {Number} [options.resolutionY=Resolution.AUTO_SIZE] - The vertical resolution.
 	 * @param {Number} [options.width=Resolution.AUTO_SIZE] - Deprecated. Use resolutionX instead.
@@ -5796,8 +5816,8 @@ export class DepthOfFieldEffect extends Effect {
 			blendFunction,
 			worldFocusDistance,
 			worldFocusRange,
-			focusDistance,
 			focalLength,
+			focusDistance,
 			focusRange,
 			bokehScale,
 			resolutionScale,
@@ -5809,8 +5829,8 @@ export class DepthOfFieldEffect extends Effect {
 			blendFunction?: BlendFunction;
 			worldFocusDistance?: number;
 			worldFocusRange?: number;
-			focusDistance?: number;
 			focalLength?: number;
+			focusDistance?: number;
 			focusRange?: number;
 			bokehScale?: number;
 			resolutionScale?: number;
@@ -5830,16 +5850,16 @@ export class DepthOfFieldEffect extends Effect {
 	/**
 	 * A target position that should be kept in focus. Set to `null` to disable auto focus.
 	 *
-	 * @type {Vector3}
+	 * @type {Vector3 | null}
 	 */
-	target: Vector3;
-	set bokehScale(arg: number);
+	target: Vector3 | null;
 	/**
-	 * The current bokeh scale.
+	 * The bokeh scale.
 	 *
 	 * @type {Number}
 	 */
 	get bokehScale(): number;
+	set bokehScale(arg: number);
 	/**
 	 * The circle of confusion texture.
 	 *
@@ -5925,7 +5945,7 @@ export class DepthOfFieldEffect extends Effect {
 	 * Calculates the focus distance from the camera to the given position.
 	 *
 	 * @param {Vector3} target - The target.
-	 * @return {Number} The normalized focus distance.
+	 * @return {Number} The focus distance in world units.
 	 */
 	calculateFocusDistance(target: Vector3): number;
 	/**
