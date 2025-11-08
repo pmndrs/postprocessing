@@ -7,6 +7,7 @@ import {
 	Uniform,
 	Vector2,
 	Vector3,
+	Vector4,
 	WebGLRenderTarget
 } from "three";
 
@@ -178,7 +179,7 @@ export class GodRaysEffect extends Effect {
 		 */
 
 		this.copyPass = new CopyPass(this.renderTargetLight);
-		this.copyPass.fullscreenMaterial.color = 0x000000;
+		this.copyPass.fullscreenMaterial.channelWeights = new Vector4(0.0, 0.0, 0.0, 1.0);
 
 		/**
 		 * A god rays blur pass.

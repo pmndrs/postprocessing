@@ -1,4 +1,4 @@
-import { AlwaysDepth, Color, NoBlending, ShaderMaterial, Uniform } from "three";
+import { AlwaysDepth, NoBlending, ShaderMaterial, Uniform } from "three";
 
 import fragmentShader from "./glsl/copy.frag";
 import vertexShader from "./glsl/common.vert";
@@ -24,7 +24,7 @@ export class CopyMaterial extends ShaderMaterial {
 			uniforms: {
 				inputBuffer: new Uniform(null),
 				depthBuffer: new Uniform(null),
-				color: new Uniform(new Color()),
+				channelWeights: new Uniform(null),
 				opacity: new Uniform(1.0)
 			},
 			blending: NoBlending,
@@ -128,21 +128,23 @@ export class CopyMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * A color that should be applied to the input buffer.
+	 * Color channel weights that modulate texels from the input buffer.
 	 *
-	 * @type {Color | Number}
+	 * Set to `null` to disable.
+	 *
+	 * @type {Vector4}
 	 */
 
-	set color(value) {
+	set channelWeights(value) {
 
 		if(value !== null) {
 
-			this.defines.USE_COLOR = "1";
-			this.uniforms.color.value.set(value);
+			this.defines.USE_WEIGHTS = "1";
+			this.uniforms.channelWeights.value = value;
 
 		} else {
 
-			delete this.defines.USE_COLOR;
+			delete this.defines.USE_WEIGHTS;
 
 		}
 

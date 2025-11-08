@@ -45,9 +45,9 @@
 
 #endif
 
-#ifdef USE_COLOR
+#ifdef USE_WEIGHTS
 
-	uniform vec3 color;
+	uniform vec4 channelWeights;
 
 #endif
 
@@ -61,9 +61,9 @@ void main() {
 
 		vec4 texel = texture2D(inputBuffer, vUv);
 
-		#ifdef USE_COLOR
+		#ifdef USE_WEIGHTS
 
-			texel.rgb *= color;
+			texel *= channelWeights;
 
 		#endif
 
