@@ -50,13 +50,11 @@ void main() {
 
 		#ifdef INVERTED
 
-			// (mask > 0.0) ? 0.0 : 1.0;
-			mask = step(mask, 0.0);
+			mask = (mask > 0.0) ? 0.0 : 1.0;
 
 		#else
 
-			// (mask > 0.0) ? 1.0 : 0.0;
-			mask = 1.0 - step(mask, 0.0);
+			mask = (mask > 0.0) ? 1.0 : 0.0;
 
 		#endif
 
