@@ -1,6 +1,10 @@
 #include <common>
 #include <packing>
 
+uniform vec2 cameraNearFar;
+#define cameraNear cameraNearFar.x
+#define cameraFar cameraNearFar.y
+
 #ifdef NORMAL_DEPTH
 
 	#ifdef GL_FRAGMENT_PRECISION_HIGH
@@ -15,7 +19,18 @@
 
 	float readDepth(const in vec2 uv) {
 
-		return texture2D(normalDepthBuffer, uv).a;
+		float depth = texture2D(normalDepthBuffer, uv).a;
+
+		#if defined(USE_LOGARITHMIC_DEPTH_BUFFER) || defined(LOG_DEPTH)
+
+			float d = pow(2.0, depth * log2(cameraFar + 1.0)) - 1.0;
+			float a = cameraFar / (cameraFar - cameraNear);
+			float b = cameraFar * cameraNear / (cameraNear - cameraFar);
+			depth = a + b / d;
+
+		#endif
+
+		return depth;
 
 	}
 
@@ -41,13 +56,24 @@
 
 		#if DEPTH_PACKING == 3201
 
-			return unpackRGBAToDepth(texture2D(depthBuffer, uv));
+			float depth = unpackRGBAToDepth(texture2D(depthBuffer, uv));
 
 		#else
 
-			return texture2D(depthBuffer, uv).r;
+			float depth = texture2D(depthBuffer, uv).r;
 
 		#endif
+
+		#if defined(USE_LOGARITHMIC_DEPTH_BUFFER) || defined(LOG_DEPTH)
+
+			float d = pow(2.0, depth * log2(cameraFar + 1.0)) - 1.0;
+			float a = cameraFar / (cameraFar - cameraNear);
+			float b = cameraFar * cameraNear / (cameraNear - cameraFar);
+			depth = a + b / d;
+
+		#endif
+
+		return depth;
 
 	}
 
@@ -58,7 +84,6 @@ uniform lowp sampler2D noiseTexture;
 uniform mat4 inverseProjectionMatrix;
 uniform mat4 projectionMatrix;
 uniform vec2 texelSize;
-uniform vec2 cameraNearFar;
 
 uniform float intensity;
 uniform float minRadiusScale;
@@ -75,11 +100,11 @@ float getViewZ(const in float depth) {
 
 	#ifdef PERSPECTIVE_CAMERA
 
-		return perspectiveDepthToViewZ(depth, cameraNearFar.x, cameraNearFar.y);
+		return perspectiveDepthToViewZ(depth, cameraNear, cameraFar);
 
 	#else
 
-		return orthographicDepthToViewZ(depth, cameraNearFar.x, cameraNearFar.y);
+		return orthographicDepthToViewZ(depth, cameraNear, cameraFar);
 
 	#endif
 
@@ -135,7 +160,7 @@ float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth
 
 		#ifdef PERSPECTIVE_CAMERA
 
-			float linearSampleDepth = viewZToOrthographicDepth(viewZ, cameraNearFar.x, cameraNearFar.y);
+			float linearSampleDepth = viewZToOrthographicDepth(viewZ, cameraNear, cameraFar);
 
 		#else
 
@@ -174,6 +199,15 @@ void main() {
 
 		vec4 normalDepth = texture2D(normalDepthBuffer, vUv);
 
+		#if defined(USE_LOGARITHMIC_DEPTH_BUFFER) || defined(LOG_DEPTH)
+
+			float d = pow(2.0, normalDepth.a * log2(cameraFar + 1.0)) - 1.0;
+			float a = cameraFar / (cameraFar - cameraNear);
+			float b = cameraFar * cameraNear / (cameraNear - cameraFar);
+			normalDepth.a = a + b / d;
+
+		#endif
+
 	#else
 
 		vec4 normalDepth = vec4(texture2D(normalBuffer, vUv).xyz, readDepth(vUv));
@@ -186,7 +220,7 @@ void main() {
 
 	#ifdef PERSPECTIVE_CAMERA
 
-		float linearDepth = viewZToOrthographicDepth(viewZ, cameraNearFar.x, cameraNearFar.y);
+		float linearDepth = viewZToOrthographicDepth(viewZ, cameraNear, cameraFar);
 
 	#else
 

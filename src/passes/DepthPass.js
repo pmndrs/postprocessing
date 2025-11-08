@@ -51,10 +51,6 @@ export class DepthPass extends Pass {
 		renderPass.skipShadowMapUpdate = true;
 		renderPass.ignoreBackground = true;
 
-		const clearPass = renderPass.clearPass;
-		clearPass.overrideClearColor = new Color(0xffffff);
-		clearPass.overrideClearAlpha = 1;
-
 		/**
 		 * A render target that contains the scene depth.
 		 *
@@ -191,6 +187,23 @@ export class DepthPass extends Pass {
 		const resolution = this.resolution;
 		resolution.setBaseSize(width, height);
 		this.renderTarget.setSize(resolution.width, resolution.height);
+
+	}
+
+	/**
+	 * Performs initialization tasks.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 * @param {Number} frameBufferType - The type of the main frame buffers.
+	 */
+
+	initialize(renderer, alpha, frameBufferType) {
+
+		const clearColor = renderer.capabilities.reversedDepthBuffer ? 0x000000 : 0xffffff;
+		const clearPass = this.renderPass.clearPass;
+		clearPass.overrideClearColor = new Color(clearColor);
+		clearPass.overrideClearAlpha = 1;
 
 	}
 

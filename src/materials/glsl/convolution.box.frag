@@ -13,6 +13,8 @@
 	#include <packing>
 
 	uniform vec2 cameraNearFar;
+	#define cameraNear cameraNearFar.x
+	#define cameraFar cameraNearFar.y
 
 	#ifdef NORMAL_DEPTH
 
@@ -28,7 +30,22 @@
 
 		float readDepth(const in vec2 uv) {
 
-			return texture2D(normalDepthBuffer, uv).a;
+			float depth = texture2D(normalDepthBuffer, uv).a;
+
+			#if defined(USE_LOGARITHMIC_DEPTH_BUFFER) || defined(LOG_DEPTH)
+
+				float d = pow(2.0, depth * log2(cameraFar + 1.0)) - 1.0;
+				float a = cameraFar / (cameraFar - cameraNear);
+				float b = cameraFar * cameraNear / (cameraNear - cameraFar);
+				depth = a + b / d;
+
+			#elif defined(USE_REVERSED_DEPTH_BUFFER)
+
+				depth = 1.0 - depth;
+
+			#endif
+
+			return depth;
 
 		}
 
@@ -52,13 +69,28 @@
 
 			#if DEPTH_PACKING == 3201
 
-				return unpackRGBAToDepth(texture2D(depthBuffer, uv));
+				float depth = unpackRGBAToDepth(texture2D(depthBuffer, uv));
 
 			#else
 
-				return texture2D(depthBuffer, uv).r;
+				float depth = texture2D(depthBuffer, uv).r;
 
 			#endif
+
+			#if defined(USE_LOGARITHMIC_DEPTH_BUFFER) || defined(LOG_DEPTH)
+
+				float d = pow(2.0, depth * log2(cameraFar + 1.0)) - 1.0;
+				float a = cameraFar / (cameraFar - cameraNear);
+				float b = cameraFar * cameraNear / (cameraNear - cameraFar);
+				depth = a + b / d;
+
+			#elif defined(USE_REVERSED_DEPTH_BUFFER)
+
+				depth = 1.0 - depth;
+
+			#endif
+
+			return depth;
 
 		}
 

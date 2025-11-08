@@ -1,4 +1,4 @@
-import { BasicDepthPacking, SRGBColorSpace, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
+import { BasicDepthPacking, SRGBColorSpace, Uniform, UnsignedByteType, Vector3, WebGLRenderTarget } from "three";
 import { Resolution } from "../core/Resolution.js";
 import { ColorChannel } from "../enums/ColorChannel.js";
 import { EffectAttribute } from "../enums/EffectAttribute.js";
@@ -9,10 +9,11 @@ import { CircleOfConfusionMaterial } from "../materials/CircleOfConfusionMateria
 import { MaskMaterial } from "../materials/MaskMaterial.js";
 import { KawaseBlurPass } from "../passes/KawaseBlurPass.js";
 import { ShaderPass } from "../passes/ShaderPass.js";
-import { viewZToOrthographicDepth } from "../utils/viewZToOrthographicDepth.js";
 import { Effect } from "./Effect.js";
 
 import fragmentShader from "./glsl/depth-of-field.frag";
+
+const v = /* @__PURE__ */ new Vector3();
 
 /**
  * A depth of field effect.
@@ -30,11 +31,11 @@ export class DepthOfFieldEffect extends Effect {
 	 * @param {Camera} camera - The main camera.
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction] - The blend function of this effect.
-	 * @param {Number} [options.worldFocusDistance] - The focus distance in world units.
-	 * @param {Number} [options.worldFocusRange] - The focus distance in world units.
-	 * @param {Number} [options.focusDistance=0.0] - The normalized focus distance. Range is [0.0, 1.0].
-	 * @param {Number} [options.focusRange=0.1] - The focus range. Range is [0.0, 1.0].
-	 * @param {Number} [options.focalLength=0.1] - Deprecated.
+	 * @param {Number} [options.worldFocusDistance] - Deprecated. Use focusRange instead.
+	 * @param {Number} [options.worldFocusRange] - Deprecated. Use focusRange instead.
+	 * @param {Number} [options.focusDistance=3.0] - The focus distance in world units.
+	 * @param {Number} [options.focusRange=2.0] - The focus range in world units.
+	 * @param {Number} [options.focalLength] - Deprecated. Use focusRange instead.
 	 * @param {Number} [options.bokehScale=1.0] - The scale of the bokeh blur.
 	 * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
 	 * @param {Number} [options.resolutionX=Resolution.AUTO_SIZE] - The horizontal resolution.
@@ -47,15 +48,15 @@ export class DepthOfFieldEffect extends Effect {
 		blendFunction,
 		worldFocusDistance,
 		worldFocusRange,
-		focusDistance = 0.0,
-		focalLength = 0.1,
-		focusRange = focalLength,
+		focalLength,
+		focusDistance = worldFocusDistance || 3.0,
+		focusRange = worldFocusRange || focalLength || 2.0,
 		bokehScale = 1.0,
-		resolutionScale = 1.0,
-		width = Resolution.AUTO_SIZE,
-		height = Resolution.AUTO_SIZE,
-		resolutionX = width,
-		resolutionY = height
+		resolutionScale = 0.5,
+		width,
+		height,
+		resolutionX = width || Resolution.AUTO_SIZE,
+		resolutionY = height || Resolution.AUTO_SIZE
 	} = {}) {
 
 		super("DepthOfFieldEffect", fragmentShader, {
@@ -157,18 +158,6 @@ export class DepthOfFieldEffect extends Effect {
 		const cocMaterial = this.cocMaterial;
 		cocMaterial.focusDistance = focusDistance;
 		cocMaterial.focusRange = focusRange;
-
-		if(worldFocusDistance !== undefined) {
-
-			cocMaterial.worldFocusDistance = worldFocusDistance;
-
-		}
-
-		if(worldFocusRange !== undefined) {
-
-			cocMaterial.worldFocusRange = worldFocusRange;
-
-		}
 
 		/**
 		 * This pass blurs the foreground CoC buffer to soften edges.
@@ -439,14 +428,12 @@ export class DepthOfFieldEffect extends Effect {
 	 * Calculates the focus distance from the camera to the given position.
 	 *
 	 * @param {Vector3} target - The target.
-	 * @return {Number} The normalized focus distance.
+	 * @return {Number} The focus distance in world units.
 	 */
 
 	calculateFocusDistance(target) {
 
-		const camera = this.camera;
-		const distance = camera.position.distanceTo(target);
-		return viewZToOrthographicDepth(-distance, camera.near, camera.far);
+		return this.camera.getWorldPosition(v).distanceTo(target);
 
 	}
 

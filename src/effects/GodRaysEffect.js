@@ -1,6 +1,5 @@
 import {
 	BasicDepthPacking,
-	Color,
 	DepthTexture,
 	Matrix4,
 	Scene,
@@ -8,6 +7,7 @@ import {
 	Uniform,
 	Vector2,
 	Vector3,
+	Vector4,
 	WebGLRenderTarget
 } from "three";
 
@@ -15,10 +15,9 @@ import { Resolution } from "../core/Resolution.js";
 import { BlendFunction } from "../enums/BlendFunction.js";
 import { EffectAttribute } from "../enums/EffectAttribute.js";
 import { KernelSize } from "../enums/KernelSize.js";
-import { DepthMaskMaterial } from "../materials/DepthMaskMaterial.js";
 import { GodRaysMaterial } from "../materials/GodRaysMaterial.js";
+import { CopyPass } from "../passes/CopyPass.js";
 import { KawaseBlurPass } from "../passes/KawaseBlurPass.js";
-import { ClearPass } from "../passes/ClearPass.js";
 import { RenderPass } from "../passes/RenderPass.js";
 import { ShaderPass } from "../passes/ShaderPass.js";
 import { Effect } from "./Effect.js";
@@ -158,17 +157,7 @@ export class GodRaysEffect extends Effect {
 		 */
 
 		this.renderPassLight = new RenderPass(this.lightScene, camera);
-		this.renderPassLight.clearPass.overrideClearColor = new Color(0x000000);
-
-		/**
-		 * A clear pass.
-		 *
-		 * @type {ClearPass}
-		 * @private
-		 */
-
-		this.clearPass = new ClearPass(true, false, false);
-		this.clearPass.overrideClearColor = new Color(0x000000);
+		this.renderPassLight.clearPass.enabled = false;
 
 		/**
 		 * A blur pass that reduces aliasing artifacts to make the light softer.
@@ -183,16 +172,14 @@ export class GodRaysEffect extends Effect {
 		this.blurPass.enabled = blur;
 
 		/**
-		 * A depth mask pass.
+		 * A copy pass.
 		 *
-		 * @type {ShaderPass}
+		 * @type {CopyPass}
 		 * @private
 		 */
 
-		this.depthMaskPass = new ShaderPass(new DepthMaskMaterial());
-		const depthMaskMaterial = this.depthMaskMaterial;
-		depthMaskMaterial.depthBuffer1 = this.renderTargetLight.depthTexture;
-		depthMaskMaterial.copyCameraSettings(camera);
+		this.copyPass = new CopyPass(this.renderTargetLight);
+		this.copyPass.fullscreenMaterial.channelWeights = new Vector4(0.0, 0.0, 0.0, 1.0);
 
 		/**
 		 * A god rays blur pass.
@@ -226,7 +213,6 @@ export class GodRaysEffect extends Effect {
 
 		this.camera = value;
 		this.renderPassLight.mainCamera = value;
-		this.depthMaskMaterial.copyCameraSettings(value);
 
 	}
 
@@ -290,19 +276,6 @@ export class GodRaysEffect extends Effect {
 	getTexture() {
 
 		return this.texture;
-
-	}
-
-	/**
-	 * The depth mask material.
-	 *
-	 * @type {DepthMaskMaterial}
-	 * @private
-	 */
-
-	get depthMaskMaterial() {
-
-		return this.depthMaskPass.fullscreenMaterial;
 
 	}
 
@@ -502,8 +475,8 @@ export class GodRaysEffect extends Effect {
 
 	setDepthTexture(depthTexture, depthPacking = BasicDepthPacking) {
 
-		this.depthMaskPass.fullscreenMaterial.depthBuffer0 = depthTexture;
-		this.depthMaskPass.fullscreenMaterial.depthPacking0 = depthPacking;
+		this.copyPass.fullscreenMaterial.depthBuffer = depthTexture;
+		this.copyPass.fullscreenMaterial.depthPacking = depthPacking;
 
 	}
 
@@ -547,9 +520,8 @@ export class GodRaysEffect extends Effect {
 
 		// Render the light source and mask it based on depth.
 		this.lightScene.add(lightSource);
+		this.copyPass.render(renderer, inputBuffer);
 		this.renderPassLight.render(renderer, renderTargetLight);
-		this.clearPass.render(renderer, renderTargetA);
-		this.depthMaskPass.render(renderer, renderTargetLight, renderTargetA);
 
 		// Restore the original values.
 		lightSource.material.depthWrite = false;
@@ -576,15 +548,18 @@ export class GodRaysEffect extends Effect {
 			Math.min(Math.max((v.y + 1.0) * 0.5, -1.0), 2.0)
 		);
 
+		let renderTarget = renderTargetLight;
+
 		if(this.blurPass.enabled) {
 
 			// Blur the masked scene to reduce artifacts.
-			this.blurPass.render(renderer, renderTargetA, renderTargetA);
+			this.blurPass.render(renderer, renderTarget, renderTargetA);
+			renderTarget = renderTargetA;
 
 		}
 
 		// Blur the masked scene along radial lines towards the light source.
-		this.godRaysPass.render(renderer, renderTargetA, this.renderTargetB);
+		this.godRaysPass.render(renderer, renderTarget, this.renderTargetB);
 
 	}
 
@@ -601,9 +576,9 @@ export class GodRaysEffect extends Effect {
 		resolution.setBaseSize(width, height);
 		const w = resolution.width, h = resolution.height;
 
+		this.renderTargetLight.setSize(width, height);
 		this.renderTargetA.setSize(w, h);
 		this.renderTargetB.setSize(w, h);
-		this.renderTargetLight.setSize(w, h);
 		this.blurPass.resolution.copy(resolution);
 
 	}
@@ -620,7 +595,7 @@ export class GodRaysEffect extends Effect {
 
 		this.blurPass.initialize(renderer, alpha, frameBufferType);
 		this.renderPassLight.initialize(renderer, alpha, frameBufferType);
-		this.depthMaskPass.initialize(renderer, alpha, frameBufferType);
+		this.copyPass.initialize(renderer, alpha, frameBufferType);
 		this.godRaysPass.initialize(renderer, alpha, frameBufferType);
 
 		if(frameBufferType !== undefined) {

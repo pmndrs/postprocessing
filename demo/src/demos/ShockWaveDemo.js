@@ -105,7 +105,24 @@ export class ShockWaveDemo extends PostProcessingDemo {
 		ndc.x = (event.clientX / window.innerWidth) * 2.0 - 1.0;
 		ndc.y = -(event.clientY / window.innerHeight) * 2.0 + 1.0;
 
-		ndc.z = await this.depthPickingPass.readDepth(ndc);
+		const renderer = this.composer.getRenderer();
+		let depth = await this.depthPickingPass.readDepth(ndc);
+
+		if(renderer.capabilities.reversedDepthBuffer) {
+
+			depth = 1.0 - depth;
+
+		} else if(renderer.capabilities.logarithmicDepthBuffer) {
+
+			const camera = this.camera;
+			const d = Math.pow(2.0, depth * Math.log2(camera.far + 1.0)) - 1.0;
+			const a = camera.far / (camera.far - camera.near);
+			const b = camera.far * camera.near / (camera.near - camera.far);
+			depth = a + b / d;
+
+		}
+
+		ndc.z = depth;
 		ndc.z = ndc.z * 2.0 - 1.0;
 
 		// Convert from NDC to world position.

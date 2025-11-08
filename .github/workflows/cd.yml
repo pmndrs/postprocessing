@@ -4,15 +4,18 @@ on:
   workflow_dispatch:
   push:
     tags:
-      - "*"
+      - "v*"
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Git checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install PNPM
         uses: pnpm/action-setup@v4
         with:
@@ -20,19 +23,16 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
+          registry-url: "https://registry.npmjs.org"
           cache: "pnpm"
       - name: Install dependencies and test
         run: pnpm install-test --frozen-lockfile
       - name: Publish
-        id: publish
-        uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-      - if: ${{ steps.publish.outputs.type }}
-        run: |
-          echo "Published version: ${{ steps.publish.outputs.version }}"
-      - name: Deploy
+        run: pnpm publish --ignore-scripts
+        env:
+          NPM_CONFIG_PROVENANCE: true
+      - name: Pages
         run: pnpm run deploy
       - uses: JamesIves/github-pages-deploy-action@v4
         with:

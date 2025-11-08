@@ -2,7 +2,6 @@ import { EventDispatcher, Uniform } from "three";
 import { BlendFunction } from "../../enums/BlendFunction.js";
 
 import add from "./glsl/add.frag";
-import alpha from "./glsl/alpha.frag";
 import average from "./glsl/average.frag";
 import color from "./glsl/color.frag";
 import colorBurn from "./glsl/color-burn.frag";
@@ -43,7 +42,6 @@ import vividLight from "./glsl/vivid-light.frag";
 
 const blendFunctions = new Map([
 	[BlendFunction.ADD, add],
-	[BlendFunction.ALPHA, alpha],
 	[BlendFunction.AVERAGE, average],
 	[BlendFunction.COLOR, color],
 	[BlendFunction.COLOR_BURN, colorBurn],
