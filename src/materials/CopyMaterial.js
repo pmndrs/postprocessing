@@ -132,8 +132,14 @@ export class CopyMaterial extends ShaderMaterial {
 	 *
 	 * Set to `null` to disable.
 	 *
-	 * @type {Vector4}
+	 * @type {Vector4 | null}
 	 */
+
+	get channelWeights() {
+
+		return this.uniforms.channelWeights.value;
+
+	}
 
 	set channelWeights(value) {
 
