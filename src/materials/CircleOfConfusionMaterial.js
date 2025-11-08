@@ -1,6 +1,4 @@
 import { BasicDepthPacking, NoBlending, PerspectiveCamera, ShaderMaterial, Uniform } from "three";
-import { orthographicDepthToViewZ } from "../utils/orthographicDepthToViewZ.js";
-import { viewZToOrthographicDepth } from "../utils/viewZToOrthographicDepth.js";
 
 import fragmentShader from "./glsl/circle-of-confusion.frag";
 import vertexShader from "./glsl/common.vert";
@@ -26,10 +24,12 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 			},
 			uniforms: {
 				depthBuffer: new Uniform(null),
-				focusDistance: new Uniform(0.0),
-				focusRange: new Uniform(0.0),
+				projectionMatrix: new Uniform(null),
+				projectionMatrixInverse: new Uniform(null),
 				cameraNear: new Uniform(0.3),
-				cameraFar: new Uniform(1000)
+				cameraFar: new Uniform(1000),
+				focusDistance: new Uniform(0.0),
+				focusRange: new Uniform(0.0)
 			},
 			blending: NoBlending,
 			toneMapped: false,
@@ -43,32 +43,6 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 		this.uniforms.focalLength = this.uniforms.focusRange;
 
 		this.copyCameraSettings(camera);
-
-	}
-
-	/**
-	 * The current near plane setting.
-	 *
-	 * @type {Number}
-	 * @private
-	 */
-
-	get near() {
-
-		return this.uniforms.cameraNear.value;
-
-	}
-
-	/**
-	 * The current far plane setting.
-	 *
-	 * @type {Number}
-	 * @private
-	 */
-
-	get far() {
-
-		return this.uniforms.cameraFar.value;
 
 	}
 
@@ -113,7 +87,7 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * The focus distance. Range: [0.0, 1.0].
+	 * The focus distance in world units.
 	 *
 	 * @type {Number}
 	 */
@@ -133,18 +107,19 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 	/**
 	 * The focus distance in world units.
 	 *
+	 * @deprecated Use focusDistance instead.
 	 * @type {Number}
 	 */
 
 	get worldFocusDistance() {
 
-		return -orthographicDepthToViewZ(this.focusDistance, this.near, this.far);
+		return this.focusDistance;
 
 	}
 
 	set worldFocusDistance(value) {
 
-		this.focusDistance = viewZToOrthographicDepth(-value, this.near, this.far);
+		this.focusDistance = value;
 
 	}
 
@@ -177,7 +152,7 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 	/**
 	 * The focal length.
 	 *
-	 * @deprecated Renamed to focusRange.
+	 * @deprecated Use focusRange instead.
 	 * @type {Number}
 	 */
 
@@ -214,18 +189,19 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 	/**
 	 * The focus range in world units.
 	 *
+	 * @deprecated Use focusRange instead.
 	 * @type {Number}
 	 */
 
 	get worldFocusRange() {
 
-		return -orthographicDepthToViewZ(this.focusRange, this.near, this.far);
+		return this.focusRange;
 
 	}
 
 	set worldFocusRange(value) {
 
-		this.focusRange = viewZToOrthographicDepth(-value, this.near, this.far);
+		this.focusRange = value;
 
 	}
 
@@ -276,21 +252,26 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 
 	copyCameraSettings(camera) {
 
-		if(camera) {
+		this.uniforms.projectionMatrix.value = camera.projectionMatrix;
+		this.uniforms.projectionMatrixInverse.value = camera.projectionMatrixInverse;
 
-			this.uniforms.cameraNear.value = camera.near;
-			this.uniforms.cameraFar.value = camera.far;
+		this.uniforms.cameraNear.value = camera.near;
+		this.uniforms.cameraFar.value = camera.far;
 
-			if(camera instanceof PerspectiveCamera) {
+		const perspectiveCameraDefined = (this.defines.PERSPECTIVE_CAMERA !== undefined);
 
-				this.defines.PERSPECTIVE_CAMERA = "1";
+		if(camera instanceof PerspectiveCamera) {
 
-			} else {
+			if(!perspectiveCameraDefined) {
 
-				delete this.defines.PERSPECTIVE_CAMERA;
+				this.defines.PERSPECTIVE_CAMERA = true;
+				this.needsUpdate = true;
 
 			}
 
+		} else if(perspectiveCameraDefined) {
+
+			delete this.defines.PERSPECTIVE_CAMERA;
 			this.needsUpdate = true;
 
 		}

@@ -183,9 +183,9 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 		smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.01);
 
 		const depthOfFieldEffect = new DepthOfFieldEffect(camera, {
-			focusDistance: 0.0,
-			focalLength: 0.048,
-			bokehScale: 2.0,
+			focusDistance: 0.4,
+			focusRange: 2.2,
+			bokehScale: 2.3,
 			height: 480
 		});
 
@@ -250,7 +250,7 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 			"coc": {
 				"edge blur kernel": depthOfFieldEffect.blurPass.kernelSize,
 				"focus": cocMaterial.uniforms.focusDistance.value,
-				"focal length": cocMaterial.uniforms.focalLength.value
+				"focus range": cocMaterial.uniforms.focalLength.value
 			},
 			"vignette": {
 				"enabled": true,
@@ -303,16 +303,16 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 
 		});
 
-		folder.add(params.coc, "focus", 0.0, 1.0, 0.001).onChange((value) => {
+		folder.add(params.coc, "focus", 0.0, 15.0, 0.1).onChange((value) => {
 
 			cocMaterial.uniforms.focusDistance.value = value;
 
 		});
 
-		folder.add(params.coc, "focal length", 0.0, 1.0, 0.0001)
+		folder.add(params.coc, "focus range", 0.0, 5.0, 0.01)
 			.onChange((value) => {
 
-				cocMaterial.uniforms.focalLength.value = value;
+				cocMaterial.uniforms.focusRange.value = value;
 
 			});
 
