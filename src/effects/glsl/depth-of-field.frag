@@ -10,8 +10,13 @@
 
 #endif
 
+#if MASK_FUNCTION != 1 && MASK_FUNCTION != 2
+
+	uniform lowp sampler2D farCoCBuffer;
+
+#endif
+
 uniform lowp sampler2D nearCoCBuffer;
-uniform lowp sampler2D farCoCBuffer;
 uniform float scale;
 
 void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
@@ -19,7 +24,7 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
 	vec4 colorNear = texture2D(nearColorBuffer, uv);
 	vec4 colorFar = texture2D(farColorBuffer, uv);
 
-	#if MASK_FUNCTION == 1
+	#if MASK_FUNCTION == 1 || MASK_FUNCTION == 2
 
 		// Use the CoC from the far color buffer's alpha channel.
 		vec2 cocNearFar = vec2(texture2D(nearCoCBuffer, uv).r, colorFar.a);
@@ -30,9 +35,12 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
 		vec2 cocNearFar = vec2(texture2D(nearCoCBuffer, uv).r, texture2D(farCoCBuffer, uv).g);
 		cocNearFar = min(cocNearFar * scale, 1.0);
 
+		// Modulate the alpha value for the subsequent manual mix.
+		colorFar.a *= cocNearFar.y;
+
 	#endif
 
-	// The far color buffer has been premultiplied with the CoC buffer.
+	// Mix manually because the far color buffer has been premultiplied with the CoC buffer.
 	vec4 result = inputColor * (1.0 - cocNearFar.y) + colorFar;
 	result = mix(result, colorNear, cocNearFar.x);
 
