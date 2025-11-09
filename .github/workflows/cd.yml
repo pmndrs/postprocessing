@@ -8,7 +8,7 @@ on:
 
 permissions:
   id-token: write
-  contents: read
+  contents: write
 
 jobs:
   deploy:
@@ -21,7 +21,7 @@ jobs:
         with:
           version: 10
       - name: Install Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24
           registry-url: "https://registry.npmjs.org"
@@ -29,9 +29,13 @@ jobs:
       - name: Install dependencies and test
         run: pnpm install-test --frozen-lockfile
       - name: Publish
-        run: pnpm publish --ignore-scripts --no-git-checks
-        env:
-          NPM_CONFIG_PROVENANCE: true
+        uses: JS-DevTools/npm-publish@v4
+        id: publish
+        with:
+          provenance: true
+          ignore-scripts: true
+      - if: ${{ steps.publish.outputs.type }}
+        run: echo "Version changed!"
       - name: Pages
         run: pnpm run deploy
       - uses: JamesIves/github-pages-deploy-action@v4
