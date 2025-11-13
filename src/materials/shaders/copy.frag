@@ -14,13 +14,27 @@
 
 #endif
 
+#ifdef USE_WEIGHTS
+
+	uniform vec4 channelWeights;
+
+#endif
+
 in vec2 vUv;
 
 void main() {
 
 	#ifdef COLOR_WRITE
 
-		out_Color = texture(inputBuffer, vUv);
+		vec4 texel = texture2D(inputBuffer, vUv);
+
+		#ifdef USE_WEIGHTS
+
+			texel *= channelWeights;
+
+		#endif
+
+		out_Color = texel;
 
 		#ifdef COLOR_SPACE_CONVERSION
 

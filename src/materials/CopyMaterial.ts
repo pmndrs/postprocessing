@@ -1,4 +1,4 @@
-import { AlwaysDepth, Texture, Uniform } from "three";
+import { AlwaysDepth, Texture, Uniform, Vector4 } from "three";
 import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentShader from "./shaders/copy.frag";
@@ -27,7 +27,8 @@ export class CopyMaterial extends FullscreenMaterial {
 				COLOR_WRITE: true
 			},
 			uniforms: {
-				depthBuffer: new Uniform(null)
+				depthBuffer: new Uniform(null),
+				channelWeights: new Uniform(null)
 			}
 		});
 
@@ -129,6 +130,35 @@ export class CopyMaterial extends FullscreenMaterial {
 			this.needsUpdate = true;
 
 		}
+
+	}
+
+	/**
+	 * Color channel weights that modulate texels from the input buffer.
+	 *
+	 * Set to `null` to disable.
+	 */
+
+	get channelWeights(): Vector4 | null {
+
+		return this.uniforms.channelWeights.value as Vector4;
+
+	}
+
+	set channelWeights(value: Vector4 | null) {
+
+		if(value !== null) {
+
+			this.defines.USE_WEIGHTS = true;
+			this.uniforms.channelWeights.value = value;
+
+		} else {
+
+			delete this.defines.USE_WEIGHTS;
+
+		}
+
+		this.needsUpdate = true;
 
 	}
 
