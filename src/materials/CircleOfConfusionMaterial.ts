@@ -1,5 +1,4 @@
 import { Texture, Uniform } from "three";
-import { orthographicDepthToViewZ, viewZToOrthographicDepth } from "../utils/functions/camera.js";
 import { FullscreenMaterial } from "./FullscreenMaterial.js";
 
 import fragmentShader from "./shaders/circle-of-confusion.frag";
@@ -43,7 +42,7 @@ export class CircleOfConfusionMaterial extends FullscreenMaterial {
 	}
 
 	/**
-	 * The focus distance. Range: [0.0, 1.0].
+	 * The focus distance in world units.
 	 */
 
 	get focusDistance(): number {
@@ -59,23 +58,7 @@ export class CircleOfConfusionMaterial extends FullscreenMaterial {
 	}
 
 	/**
-	 * The focus distance in world units.
-	 */
-
-	get worldFocusDistance(): number {
-
-		return -orthographicDepthToViewZ(this.focusDistance, this.near, this.far);
-
-	}
-
-	set worldFocusDistance(value: number) {
-
-		this.focusDistance = viewZToOrthographicDepth(-value, this.near, this.far);
-
-	}
-
-	/**
-	 * The focus range. Range: [0.0, 1.0].
+	 * The focus range in world units.
 	 */
 
 	get focusRange(): number {
@@ -87,22 +70,6 @@ export class CircleOfConfusionMaterial extends FullscreenMaterial {
 	set focusRange(value: number) {
 
 		this.uniforms.focusRange.value = value;
-
-	}
-
-	/**
-	 * The focus range in world units.
-	 */
-
-	get worldFocusRange(): number {
-
-		return -orthographicDepthToViewZ(this.focusRange, this.near, this.far);
-
-	}
-
-	set worldFocusRange(value: number) {
-
-		this.focusRange = viewZToOrthographicDepth(-value, this.near, this.far);
 
 	}
 
