@@ -8,6 +8,6 @@ vec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {
 		step(x.rgb, y2 - 1.0)
 	);
 
-	return mix(x, vec4(z, y.a), opacity);
+	return mix(x, vec4(z, y.a), y.a * opacity);
 
 }
