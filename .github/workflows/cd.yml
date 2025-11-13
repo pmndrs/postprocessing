@@ -30,12 +30,9 @@ jobs:
         run: pnpm install-test --frozen-lockfile
       - name: Publish
         uses: JS-DevTools/npm-publish@v4
-        id: publish
         with:
           provenance: true
           ignore-scripts: true
-      - if: ${{ steps.publish.outputs.type }}
-        run: echo "Version changed!"
       - name: Pages
         run: pnpm run deploy
       - uses: JamesIves/github-pages-deploy-action@v4
