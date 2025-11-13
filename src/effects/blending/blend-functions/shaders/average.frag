@@ -1,5 +1,5 @@
-vec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {
+vec4 blend(const in vec4 dst, const in vec4 src, const in float opacity) {
 
-	return mix(x, vec4((x.rgb + y.rgb) * 0.5, y.a), y.a * opacity);
+	return mix(dst, vec4((dst.rgb + src.rgb) * 0.5, src.a), src.a * opacity);
 
 }

@@ -1,6 +1,7 @@
-vec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {
+vec4 blend(const in vec4 dst, const in vec4 src, const in float opacity) {
 
-	vec3 z = mix(min(x.rgb * x.rgb / max(1.0 - y.rgb, 1e-12), 1.0), y.rgb, step(1.0, y.rgb));
-	return mix(x, vec4(z, y.a), y.a * opacity);
+	vec3 a = min(dst.rgb * dst.rgb / max(1.0 - src.rgb, 1e-12), 1.0);
+	vec3 c = mix(a, src.rgb, step(1.0, src.rgb));
+	return mix(dst, vec4(c, src.a), src.a * opacity);
 
 }

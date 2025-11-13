@@ -1,8 +1,8 @@
-vec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {
+vec4 blend(const in vec4 dst, const in vec4 src, const in float opacity) {
 
-	vec3 xHSL = RGBToHSL(x.rgb);
-	vec3 yHSL = RGBToHSL(y.rgb);
-	vec3 z = HSLToRGB(vec3(xHSL.x, yHSL.y, xHSL.z));
-	return mix(x, vec4(z, y.a), y.a * opacity);
+	vec3 a = RGBToHSL(dst.rgb);
+	vec3 b = RGBToHSL(src.rgb);
+	vec3 c = HSLToRGB(vec3(a.x, b.y, a.z));
+	return mix(dst, vec4(c, src.a), src.a * opacity);
 
 }
