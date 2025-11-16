@@ -11,7 +11,7 @@
  * @property {Number} SKIP - Deprecated. Use DST instead. Warning: This blend function does NOT fully disable the effect.
  * @property {Number} SET - Deprecated. Use SRC instead.
  * @property {Number} ADD - Additive blending. Supports HDR.
- * @property {Number} ALPHA - Deprecated. Use NORMAL instead.
+ * @property {Number} ALPHA - Blends based on alpha.
  * @property {Number} AVERAGE - Calculates the avarage of the new color and the base color. Supports HDR.
  * @property {Number} COLOR - Converts the colors to HSL and blends based on color.
  * @property {Number} COLOR_BURN - Color burn.
@@ -49,7 +49,7 @@ export const BlendFunction = {
 	SKIP: 9,
 	SET: 30,
 	ADD: 0,
-	ALPHA: 23,
+	ALPHA: 1,
 	AVERAGE: 2,
 	COLOR: 3,
 	COLOR_BURN: 4,
