@@ -12,7 +12,6 @@ uniform float intensity;
 
 void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
 
-	vec4 texel = texture2D(map, uv);
-	outputColor = vec4(texel.rgb * intensity, max(inputColor.a, texel.a));
+	outputColor = texture2D(map, uv) * intensity;
 
 }
