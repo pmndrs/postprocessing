@@ -1,4 +1,13 @@
-import { BasicDepthPacking, NoBlending, PerspectiveCamera, REVISION, ShaderMaterial, Uniform, Vector2 } from "three";
+import {
+	BasicDepthPacking,
+	NormalBlending,
+	PerspectiveCamera,
+	REVISION,
+	ShaderMaterial,
+	Uniform,
+	Vector2
+} from "three";
+
 import { EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
 
 import fragmentTemplate from "./glsl/effect.frag";
@@ -41,7 +50,7 @@ export class EffectMaterial extends ShaderMaterial {
 				aspect: new Uniform(1.0),
 				time: new Uniform(0.0)
 			},
-			blending: NoBlending,
+			blending: NormalBlending,
 			toneMapped: false,
 			depthWrite: false,
 			depthTest: false,
