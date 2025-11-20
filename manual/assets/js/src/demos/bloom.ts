@@ -99,11 +99,13 @@ window.addEventListener("load", () => void load().then((assets) => {
 		levels: 8
 	});
 
+	const effectPass = new EffectPass(effect, new ToneMappingEffect());
+
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.add(
 		new ClearPass(),
 		new GeometryPass(scene, camera, { samples: 4 }),
-		new EffectPass(effect, new ToneMappingEffect())
+		effectPass
 	);
 
 	// Settings
@@ -117,6 +119,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	folder.addBinding(effect.mipmapBlurPass, "radius", { min: 0, max: 1, step: 1e-3 });
 	folder.addBinding(effect.mipmapBlurPass, "levels", { min: 1, max: 10, step: 1 });
 	folder.addBinding(effect.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
+	folder.addBinding(effectPass, "dithering");
 
 	const subfolder = folder.addFolder({ title: "Luminance Filter" });
 	subfolder.addBinding(effect.luminancePass, "enabled");
