@@ -86,7 +86,7 @@ export class LookupTexture extends Data3DTexture {
 
 			});
 
-			const transferList = transferData ? [image.data.buffer] : [];
+			const transferList = (transferData && image.data !== null) ? [image.data.buffer] : [];
 
 			worker.postMessage({
 				data: image.data,
@@ -101,6 +101,7 @@ export class LookupTexture extends Data3DTexture {
 	 * Applies the given LUT to this one.
 	 *
 	 * @param lut - A LUT. Must have the same dimensions, type and format as this LUT.
+	 * @throws If the given LUT can't be applied.
 	 * @return This texture.
 	 */
 
@@ -123,6 +124,10 @@ export class LookupTexture extends Data3DTexture {
 		} else if(lut.format !== RGBAFormat || this.format !== RGBAFormat) {
 
 			throw new Error("Both LUTs must be RGBA textures");
+
+		} else if(img0.data === null || img1.data === null) {
+
+			throw new Error("The image data must not be null");
 
 		}
 
@@ -165,7 +170,7 @@ export class LookupTexture extends Data3DTexture {
 		if(this.type === FloatType) {
 
 			const img = this.image;
-			const floatData = img.data;
+			const floatData = img.data!;
 			const uint8Data = new Uint8Array(floatData.length);
 
 			for(let i = 0, l = floatData.length; i < l; ++i) {
@@ -195,7 +200,7 @@ export class LookupTexture extends Data3DTexture {
 		if(this.type === UnsignedByteType) {
 
 			const img = this.image;
-			const uint8Data = img.data;
+			const uint8Data = img.data!;
 			const floatData = new Float32Array(uint8Data.length);
 
 			for(let i = 0, l = uint8Data.length; i < l; ++i) {
@@ -223,7 +228,7 @@ export class LookupTexture extends Data3DTexture {
 	convertLinearToSRGB(): this {
 
 		const img = this.image;
-		const data = img.data;
+		const data = img.data!;
 
 		if(this.type !== FloatType) {
 
@@ -253,7 +258,7 @@ export class LookupTexture extends Data3DTexture {
 	convertSRGBToLinear(): this {
 
 		const img = this.image;
-		const data = img.data;
+		const data = img.data!;
 
 		if(this.type !== FloatType) {
 
