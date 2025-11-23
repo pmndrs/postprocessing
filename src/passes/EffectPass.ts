@@ -106,6 +106,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		super.subpasses = value;
 		this.input.gBuffer.clear();
+		this.input.gBuffer.add(GBuffer.COLOR);
 
 		for(const effect of super.subpasses) {
 
