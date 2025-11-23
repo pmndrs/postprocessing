@@ -12,7 +12,7 @@ weight: 100
 ## v6 &rarr; v7
 
 * `RenderPass` was replaced by `GeometryPass`.
-	* A `ClearPass` must now be used to explicitly clear the screen.
+	* A `ClearPass` must now be used for clearing.
 * `EffectComposer` was replaced by `RenderPipeline`.
 	* Most options have been moved to `GeometryPass`.
 	* The method `addPass` was replaced by `add`.
