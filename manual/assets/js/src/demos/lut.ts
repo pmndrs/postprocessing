@@ -189,7 +189,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.add(
 		new ClearPass(),
-		new GeometryPass(scene, camera),
+		new GeometryPass(scene, camera, { alpha: true }),
 		new EffectPass(effect)
 	);
 
