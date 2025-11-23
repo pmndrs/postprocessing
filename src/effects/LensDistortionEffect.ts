@@ -49,6 +49,8 @@ export interface LensDistortionEffectOptions {
  * A lens distortion effect.
  *
  * Original shader ported from https://github.com/ycw/three-lens-distortion
+ *
+ * @category Effects
  */
 
 export class LensDistortionEffect extends Effect implements LensDistortionEffectOptions {

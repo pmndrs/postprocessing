@@ -241,29 +241,39 @@ function analyzeOutputResources(passes: readonly Pass<Material | null>[],
 }
 
 /**
- * Logs details about a given render pipeline.
+ * A collection of debug tools.
  *
- * @param pipeline - A render pipeline.
+ * @category Utils
  */
 
-export function analyzePipeline(pipeline: RenderPipeline): void {
+export class DebugTools {
 
-	const textureIds = createTextureIds(pipeline.passes);
+	/**
+	 * Logs details about a given render pipeline.
+	 *
+	 * @param pipeline - A render pipeline.
+	 */
 
-	console.debug("RenderPipeline", pipeline);
+	static analyzePipeline(pipeline: RenderPipeline): void {
 
-	console.groupCollapsed("Data Flow");
-	analyzeDataFlow(pipeline.passes, textureIds);
-	console.groupEnd();
+		const textureIds = createTextureIds(pipeline.passes);
 
-	console.groupCollapsed("Resources");
-	console.group("Input Buffers");
-	analyzeInputResources(pipeline.passes, textureIds);
-	console.groupEnd();
-	console.group("Output Buffers");
-	analyzeOutputResources(pipeline.passes, textureIds);
-	console.groupEnd();
+		console.debug("RenderPipeline", pipeline);
 
-	console.groupEnd();
+		console.groupCollapsed("Data Flow");
+		analyzeDataFlow(pipeline.passes, textureIds);
+		console.groupEnd();
+
+		console.groupCollapsed("Resources");
+		console.group("Input Buffers");
+		analyzeInputResources(pipeline.passes, textureIds);
+		console.groupEnd();
+		console.group("Output Buffers");
+		analyzeOutputResources(pipeline.passes, textureIds);
+		console.groupEnd();
+
+		console.groupEnd();
+
+	}
 
 }

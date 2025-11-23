@@ -5,6 +5,7 @@ export * from "./Background.js";
 export * from "./ClearFlags.js";
 export * from "./ClearValues.js";
 export * from "./ColorDecisionList.js";
+export * from "./DebugTools.js";
 export * from "./EffectMaterialManager.js";
 export * from "./EffectShaderData.js";
 export * from "./GaussKernel.js";
@@ -17,5 +18,3 @@ export * from "./Scissor.js";
 export * from "./Selection.js";
 export * from "./ShaderDataTracker.js";
 export * from "./Viewport.js";
-
-export * as DebugTools from "./DebugTools.js";

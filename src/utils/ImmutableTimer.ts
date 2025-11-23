@@ -8,16 +8,16 @@ export interface ImmutableTimer {
 
 	/**
 	 * Returns the current delta time in seconds.
-	 +
-	 + @return The current delta time.
+	 *
+	 * @return The current delta time.
 	 */
 
 	getDelta(): number;
 
 	/**
 	 * Returns the elapsed time in seconds.
-	 +
-	 + @return The elapsed time.
+	 *
+	 * @return The elapsed time.
 	 */
 
 	getElapsed(): number;
