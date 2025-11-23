@@ -25,18 +25,18 @@
 .sidebar-button-open,
 .sidebar-button-close {
 	background: no-repeat center transparent;
-	background-image: url("/img/svg/chevron_left_white_24dp.svg");
+	background-image: var(--icon-chevron-left-white);
 	border-radius: 25%;
 	cursor: pointer;
 	display: block;
-	opacity: 0.5;
+	opacity: 0.8;
 	position: absolute;
 	transition: opacity durations.$short;
 	width: 32px;
 	z-index: layers.$hud;
 	&:focus,
 	&:hover {
-		opacity: 0.85;
+		opacity: 1;
 	}
 	&.hidden {
 		display: none;
@@ -45,7 +45,7 @@
 
 .sidebar-button-open {
 	background-color: var(--viewport-button-background-color);
-	background-image: url("/img/svg/menu_open_black_24dp.svg");
+	background-image: var(--icon-menu-open);
 	height: 32px;
 	left: 0.5rem;
 	top: 1rem;
@@ -65,8 +65,5 @@
 		h3 {
 			opacity: 1;
 		}
-	}
-	.sidebar-button-open {
-		background-image: url("/img/svg/menu_open_white_24dp.svg");
 	}
 }

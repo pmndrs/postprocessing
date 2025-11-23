@@ -21,7 +21,7 @@
 		}
 		&[target="_blank"] {
 			&::after {
-				background: no-repeat center/cover url("/img/svg/open_in_new_black_24dp.svg");
+				background: no-repeat center/cover var(--icon-open-in-new);
 				background-attachment: scroll;
 				background-origin: content-box;
 				content: "";
@@ -55,7 +55,7 @@
 			display: inline-block;
 			height: 1.25rem;
 			margin-left: 0.5rem;
-			mask-image: url("/img/svg/chevron_left_black_24dp.svg");
+			mask-image: var(--icon-chevron-left-black);
 			mask-position: center;
 			opacity: 0.3;
 			transform: rotate(180deg);
@@ -147,18 +147,6 @@
 		}
 		&:last-child {
 			padding-bottom: 0;
-		}
-	}
-}
-
-// Dark Mode
-
-.dark {
-	.navigation {
-		li {
-			a[target="_blank"]::after {
-				background-image: url("/img/svg/open_in_new_white_24dp.svg");
-			}
 		}
 	}
 }

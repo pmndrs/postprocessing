@@ -65,33 +65,15 @@ footer {
 			}
 		}
 		.dark-mode {
-			background-image: url("/img/svg/dark_mode_black_24dp.svg");
+			background-image: var(--icon-dark-mode);
 		}
 		.repository {
-			background-image: url("/img/svg/github_black_24dp.svg");
+			background-image: var(--icon-github);
 			padding: 2px;
 		}
 		.support {
-			background-image: url("/img/svg/heart_black_24dp.svg");
+			background-image: var(--icon-heart);
 			padding: 1px;
-		}
-	}
-}
-
-// Dark Mode
-
-.dark {
-	.page-footer {
-		.buttons {
-			.dark-mode {
-				background-image: url("/img/svg/dark_mode_white_24dp.svg");
-			}
-			.repository {
-				background-image: url("/img/svg/github_white_24dp.svg");
-			}
-			.support {
-				background-image: url("/img/svg/heart_white_24dp.svg");
-			}
 		}
 	}
 }

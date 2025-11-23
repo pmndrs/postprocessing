@@ -1,6 +1,21 @@
 @use "colors";
 
 html {
+	color-scheme: light;
+
+	// Colors
+	--alert-info-color: #{colors.$grey_500};
+	--alert-info-background-color: #{rgba(colors.$grey_500, 0.05)};
+	--alert-note-color: #{colors.$navy_blue};
+	--alert-note-background-color: #{rgba(colors.$navy_blue, 0.05)};
+	--alert-tip-color: #{colors.$pale_moss};
+	--alert-tip-background-color: #{rgba(colors.$pale_moss, 0.05)};
+	--alert-important-color: #{colors.$iris_pastel};
+	--alert-important-background-color: #{rgba(colors.$iris_pastel, 0.05)};
+	--alert-warning-color: #{colors.$terracotta};
+	--alert-warning-background-color: #{rgba(colors.$terracotta, 0.05)};
+	--alert-caution-color: #{colors.$red_600};
+	--alert-caution-background-color: #{rgba(colors.$red_400, 0.05)};
 	--anchor-color: #{colors.$cyan_800};
 	--body-background-color: #{colors.$grey_100};
 	--button-background-color: #{colors.$cyan_500};
@@ -22,6 +37,7 @@ html {
 	--nav-anchor-color-active: black;
 	--nav-anchor-color-focus: #{colors.$grey_A100};
 	--nav-indicator-background-color: #{colors.$pale_rust};
+	--paused-background-color: white;
 	--sidebar-background-color: #{colors.$grey_200};
 	--sidebar-heading-color: #{colors.$cyan_800};
 	--spinner-background-color: #{colors.$mine-shaft};
@@ -29,4 +45,35 @@ html {
 	--viewport-background-color: #{colors.$grey_200};
 	--viewport-button-background-color: #{rgba(white, 0.5)};
 	--viewport-separator-color: #{colors.$grey_300};
+
+	// Icons (black)
+	--icon-bubble-black: url("../../img/svg/bubble_black_24dp.svg");
+	--icon-chevron-left-black: url("../../img/svg/chevron_left_black_24dp.svg");
+	--icon-caution-black: url("../../img/svg/caution_black_24dp.svg");
+	--icon-extension-black: url("../../img/svg/extension_black_24dp.svg");
+	--icon-info-black: url("../../img/svg/info_black_24dp.svg");
+	--icon-lightbulb-black: url("../../img/svg/lightbulb_black_24dp.svg");
+	--icon-warning-black: url("../../img/svg/warning_black_24dp.svg");
+
+	// Icons (white)
+	--icon-chevron-left-white: url("../../img/svg/chevron_left_white_24dp.svg");
+
+	// Icons (black-white)
+	--icon-bubble: url("../../img/svg/bubble_black_24dp.svg");
+	--icon-caution: url("../../img/svg/caution_black_24dp.svg");
+	--icon-chevron-left: url("../../img/svg/chevron_left_black_24dp.svg");
+	--icon-code: url("../../img/svg/code_black_24dp.svg");
+	--icon-dark-mode: url("../../img/svg/dark_mode_black_24dp.svg");
+	--icon-error: url("../../img/svg/error_black_24dp.svg");
+	--icon-extension: url("../../img/svg/extension_black_24dp.svg");
+	--icon-fullscreen: url("../../img/svg/fullscreen_black_24dp.svg");
+	--icon-fullscreen-exit: url("../../img/svg/fullscreen_exit_black_24dp.svg");
+	--icon-github: url("../../img/svg/github_black_24dp.svg");
+	--icon-heart: url("../../img/svg/heart_black_24dp.svg");
+	--icon-info: url("../../img/svg/info_black_24dp.svg");
+	--icon-lightbulb: url("../../img/svg/lightbulb_black_24dp.svg");
+	--icon-menu-open: url("../../img/svg/menu_open_black_24dp.svg");
+	--icon-open-in-new: url("../../img/svg/open_in_new_black_24dp.svg");
+	--icon-pause-circle: url("../../img/svg/pause_circle_black_24dp.svg");
+	--icon-warning: url("../../img/svg/warning_black_24dp.svg");
 }

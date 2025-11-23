@@ -4,6 +4,19 @@
 .dark {
 	color-scheme: dark;
 
+	// Colors
+	--alert-info-color: #{colors.$grey_700};
+	--alert-info-background-color: #{rgba(colors.$grey_700, 0.05)};
+	--alert-note-color: #{colors.$shiny};
+	--alert-note-background-color: #{rgba(colors.$shiny, 0.05)};
+	--alert-tip-color: #{colors.$tana};
+	--alert-tip-background-color: #{rgba(colors.$tana, 0.05)};
+	--alert-important-color: #{colors.$blue-chalk};
+	--alert-important-background-color: #{rgba(colors.$blue-chalk, 0.05)};
+	--alert-warning-color: #{colors.$vanilla};
+	--alert-warning-background-color: #{rgba(colors.$vanilla, 0.05)};
+	--alert-caution-color: #{colors.$bittersweet};
+	--alert-caution-background-color: #{rgba(colors.$bittersweet, 0.05)};
 	--anchor-color: #{colors.$shiny};
 	--body-background-color: #{colors.$blind};
 	--button-background-color: #{colors.$cyan_500};
@@ -25,6 +38,7 @@
 	--nav-anchor-color-active: #{colors.$grey_200};
 	--nav-anchor-color-focus: #{colors.$grey_300};
 	--nav-indicator-background-color: #{colors.$shiny};
+	--paused-background-color: black;
 	--sidebar-background-color: #{colors.$coal};
 	--sidebar-heading-color: #{colors.$whimsical};
 	--spinner-background-color: #{colors.$shiny};
@@ -32,4 +46,23 @@
 	--viewport-background-color: #{colors.$coal};
 	--viewport-button-background-color: #{rgba(black, 0.5)};
 	--viewport-separator-color: #{colors.$grey_900};
+
+	// Icons (black-white)
+	--icon-bubble: url("../../img/svg/bubble_white_24dp.svg");
+	--icon-caution: url("../../img/svg/caution_white_24dp.svg");
+	--icon-chevron-left: url("../../img/svg/chevron_left_white_24dp.svg");
+	--icon-code: url("../../img/svg/code_white_24dp.svg");
+	--icon-dark-mode: url("../../img/svg/dark_mode_white_24dp.svg");
+	--icon-error: url("../../img/svg/error_white_24dp.svg");
+	--icon-extension: url("../../img/svg/extension_white_24dp.svg");
+	--icon-fullscreen: url("../../img/svg/fullscreen_white_24dp.svg");
+	--icon-fullscreen-exit: url("../../img/svg/fullscreen_exit_white_24dp.svg");
+	--icon-github: url("../../img/svg/github_white_24dp.svg");
+	--icon-heart: url("../../img/svg/heart_white_24dp.svg");
+	--icon-info: url("../../img/svg/info_white_24dp.svg");
+	--icon-lightbulb: url("../../img/svg/lightbulb_white_24dp.svg");
+	--icon-menu-open: url("../../img/svg/menu_open_white_24dp.svg");
+	--icon-open-in-new: url("../../img/svg/open_in_new_white_24dp.svg");
+	--icon-pause-circle: url("../../img/svg/pause_circle_white_24dp.svg");
+	--icon-warning: url("../../img/svg/warning_white_24dp.svg");
 }

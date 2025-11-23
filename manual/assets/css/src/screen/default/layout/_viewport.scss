@@ -36,17 +36,17 @@
 		}
 	}
 	.fullscreen {
-		background-image: url("/img/svg/fullscreen_black_24dp.svg");
+		background-image: var(--icon-fullscreen);
 		&.active {
-			background-image: url("/img/svg/fullscreen_exit_black_24dp.svg");
+			background-image: var(--icon-fullscreen-exit);
 		}
 	}
 	.code {
-		background-image: url("/img/svg/code_black_24dp.svg");
+		background-image: var(--icon-code);
 		padding: 2px;
 	}
 	.info {
-		background-image: url("/img/svg/info_black_24dp.svg");
+		background-image: var(--icon-info);
 		padding: 3px;
 	}
 	.lut {
@@ -94,10 +94,10 @@
 }
 
 .paused {
-	background-color: white;
+	background-color: var(--paused-background-color);
 	opacity: 0.5;
 	&::before {
-		background: no-repeat center/cover url("/img/svg/pause_circle_black_24dp.svg");
+		background: no-repeat center/cover var(--icon-pause-circle);
 		content: "";
 		display: inline-block;
 		height: 100px;
@@ -119,7 +119,7 @@
 		display: flex;
 		margin: 0;
 		&::before {
-			background: no-repeat center/cover url("/img/svg/warning_black_24dp.svg");
+			background: no-repeat center/cover var(--icon-warning);
 			content: "";
 			display: inline-block;
 			height: 24px;
@@ -132,41 +132,6 @@
 
 .error {
 	h4::before {
-		background-image: url("/img/svg/error_black_24dp.svg");
-	}
-}
-
-// Dark Mode
-
-.dark {
-	#viewport {
-		.fullscreen {
-			background-image: url("/img/svg/fullscreen_white_24dp.svg");
-			&.active {
-				background-image: url("/img/svg/fullscreen_exit_white_24dp.svg");
-			}
-		}
-		.code {
-			background-image: url("/img/svg/code_white_24dp.svg");
-		}
-		.info {
-			background-image: url("/img/svg/info_white_24dp.svg");
-		}
-	}
-	.paused {
-		background-color: black;
-		&::before {
-			background-image: url("/img/svg/pause_circle_white_24dp.svg");
-		}
-	}
-	.warning {
-		h4::before {
-			background-image: url("/img/svg/warning_white_24dp.svg");
-		}
-	}
-	.error {
-		h4::before {
-			background-image: url("/img/svg/error_white_24dp.svg");
-		}
+		background-image: var(--icon-error);
 	}
 }
