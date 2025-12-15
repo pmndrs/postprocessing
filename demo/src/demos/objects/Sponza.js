@@ -25,8 +25,6 @@ export function createLights(shadowCameraHelper = false) {
 	directionalLight.castShadow = true;
 	directionalLight.shadow.mapSize.width = 2048;
 	directionalLight.shadow.mapSize.height = 2048;
-	directionalLight.shadow.bias = 0.001;
-	directionalLight.shadow.normalBias = 0.02;
 	directionalLight.shadow.camera.top = 20;
 	directionalLight.shadow.camera.right = 20;
 	directionalLight.shadow.camera.bottom = -20;
@@ -37,13 +35,11 @@ export function createLights(shadowCameraHelper = false) {
 
 		directionalLight.shadow.mapSize.width = 512;
 		directionalLight.shadow.mapSize.height = 512;
-		directionalLight.shadow.normalBias = 0.1;
 
 	} else if(window.innerWidth < 1280) {
 
 		directionalLight.shadow.mapSize.width = 1024;
 		directionalLight.shadow.mapSize.height = 1024;
-		directionalLight.shadow.normalBias = 0.033;
 
 	}
 

@@ -382,6 +382,19 @@ export class EffectPass extends Pass {
 	}
 
 	/**
+	 * Indicates whether the renderer uses alpha.
+	 *
+	 * @private
+	 * @type {Boolean}
+	 */
+
+	get alpha() {
+
+		return this.renderer !== null && this.renderer.getContext().getContextAttributes().alpha;
+
+	}
+
+	/**
 	 * Sets the effects.
 	 *
 	 * @param {Effect[]} effects - The effects.
@@ -571,6 +584,7 @@ export class EffectPass extends Pass {
 		if(!this.skipRendering || this.renderToScreen) {
 
 			const material = this.fullscreenMaterial;
+			material.transparent = this.renderToScreen && this.alpha;
 			material.inputBuffer = inputBuffer.texture;
 			material.time += deltaTime * this.timeScale;
 

@@ -456,6 +456,13 @@ export class CopyMaterial extends ShaderMaterial {
 	 */
 	set depthPacking(arg: DepthPackingStrategies);
 	/**
+	 * Indicates whether output color space conversion is enabled.
+	 *
+	 * @type {Boolean}
+	 */
+	get colorSpaceConversion(): boolean;
+	set colorSpaceConversion(value: boolean);
+	/**
 	 * Color channel weights that modulate texels from the input buffer.
 	 *
 	 * Set to `null` to disable.

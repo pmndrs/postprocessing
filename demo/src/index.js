@@ -1,6 +1,6 @@
 import {
 	HalfFloatType,
-	PCFSoftShadowMap,
+	PCFShadowMap,
 	SRGBColorSpace,
 	Vector3,
 	WebGLRenderer
@@ -45,7 +45,7 @@ window.addEventListener("load", (event) => {
 	renderer.debug.checkShaderErrors = debug;
 	renderer.setSize(viewport.clientWidth, viewport.clientHeight);
 	renderer.setClearColor(0x000000, 0.0);
-	renderer.shadowMap.type = PCFSoftShadowMap;
+	renderer.shadowMap.type = PCFShadowMap;
 	renderer.shadowMap.autoUpdate = false;
 	renderer.shadowMap.needsUpdate = true;
 	renderer.shadowMap.enabled = true;
