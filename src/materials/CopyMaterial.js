@@ -18,6 +18,7 @@ export class CopyMaterial extends ShaderMaterial {
 		super({
 			name: "CopyMaterial",
 			defines: {
+				COLOR_SPACE_CONVERSION: "1",
 				DEPTH_PACKING: "0",
 				COLOR_WRITE: "1"
 			},
@@ -124,6 +125,38 @@ export class CopyMaterial extends ShaderMaterial {
 
 		this.defines.DEPTH_PACKING = value.toFixed(0);
 		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Indicates whether output color space conversion is enabled.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get colorSpaceConversion() {
+
+		return (this.defines.COLOR_SPACE_CONVERSION !== undefined);
+
+	}
+
+	set colorSpaceConversion(value) {
+
+		if(this.colorSpaceConversion !== value) {
+
+			if(value) {
+
+				this.defines.COLOR_SPACE_CONVERSION = true;
+
+			} else {
+
+				delete this.defines.COLOR_SPACE_CONVERSION;
+
+			}
+
+			this.needsUpdate = true;
+
+		}
 
 	}
 
