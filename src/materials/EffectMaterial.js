@@ -1,6 +1,6 @@
 import {
 	BasicDepthPacking,
-	NormalBlending,
+	NoBlending,
 	PerspectiveCamera,
 	REVISION,
 	ShaderMaterial,
@@ -50,7 +50,7 @@ export class EffectMaterial extends ShaderMaterial {
 				aspect: new Uniform(1.0),
 				time: new Uniform(0.0)
 			},
-			blending: NormalBlending,
+			blending: NoBlending,
 			toneMapped: false,
 			depthWrite: false,
 			depthTest: false,
