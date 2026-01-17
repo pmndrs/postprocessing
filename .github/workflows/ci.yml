@@ -21,6 +21,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 24
+          registry-url: "https://registry.npmjs.org"
           cache: "pnpm"
       - name: Install and test
         run: pnpm install-test --frozen-lockfile
