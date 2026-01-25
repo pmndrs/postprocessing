@@ -1,2 +1,2 @@
 import aether from "eslint-config-aether";
-export default [...aether];
+export default aether;
