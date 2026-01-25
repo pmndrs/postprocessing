@@ -20,9 +20,9 @@ const workers = {
 	entryPoints: await glob("./src/**/worker.ts"),
 	outExtension: { ".js": ".txt" },
 	outdir: "./temp",
-	target: "es6",
 	logLevel: "info",
 	format: "iife",
+	target: "es6",
 	bundle: true,
 	minify
 };
@@ -46,9 +46,9 @@ const vendor = {
 	entryPoints: ["./manual/assets/js/libs/vendor.ts"],
 	outdir: "./manual/assets/js/dist/libs",
 	globalName: "VENDOR",
-	target: "es6",
 	logLevel: "info",
 	format: "iife",
+	target: "es6",
 	bundle: true,
 	minify
 };
