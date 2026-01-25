@@ -126,6 +126,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 		preset: CDLPreset.DEFAULT
 	};
 
+	// eslint-disable-next-line prefer-const
 	let binding: BindingApi | undefined;
 
 	const container = document.getElementById("viewport")!;

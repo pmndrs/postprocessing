@@ -142,6 +142,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	});
 
+	// eslint-disable-next-line prefer-const
 	let binding: BindingApi | undefined;
 
 	folder.addBinding(params, "preset", { options: Utils.enumToRecord(SMAAPreset) }).on("change", (e) => {
