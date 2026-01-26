@@ -8,7 +8,7 @@ function restoreMenuState(): void {
 	const expandedMenusJSON = localStorage.getItem("expanded-menus");
 	const expandedMenus = (expandedMenusJSON !== null) ? JSON.parse(expandedMenusJSON) as string[] : null;
 
-	if(nav === null || expandedMenus === null || !Array.isArray(expandedMenus) || expandedMenus.length === 0) {
+	if(nav === null || expandedMenus === null || !Array.isArray(expandedMenus)) {
 
 		return;
 
@@ -17,6 +17,12 @@ function restoreMenuState(): void {
 	for(const menu of nav.querySelectorAll(".menu")) {
 
 		menu.classList.remove("expanded");
+
+	}
+
+	if(expandedMenus.length > 0) {
+
+		return;
 
 	}
 
