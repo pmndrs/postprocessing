@@ -92,7 +92,7 @@ export class ASCIITexture extends CanvasTexture {
 		this.characterCount = characters.length;
 		this.cellCount = cellCount;
 
-		const canvas = this.image as HTMLCanvasElement;
+		const canvas = this.image;
 		canvas.width = canvas.height = size;
 
 		const context = canvas.getContext("2d")!;
