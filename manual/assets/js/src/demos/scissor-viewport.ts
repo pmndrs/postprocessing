@@ -5,7 +5,6 @@ import {
 	Scene,
 	SRGBColorSpace,
 	Texture,
-	VSMShadowMap,
 	WebGLRenderer
 } from "three";
 
@@ -72,7 +71,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.debug.checkShaderErrors = Utils.isLocalhost;
-	renderer.shadowMap.type = VSMShadowMap;
 	renderer.shadowMap.autoUpdate = false;
 	renderer.shadowMap.needsUpdate = true;
 	renderer.shadowMap.enabled = true;
@@ -101,6 +99,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const sceneB = new Scene();
 	sceneB.background = assets.get("sky-sunset")! as Texture;
+	sceneB.environment = assets.get("sky-sunset")! as Texture;
+	sceneB.environmentIntensity = 0.33;
 	sceneB.add(CornellBox.createLights());
 	sceneB.add(CornellBox.createEnvironment());
 	sceneB.add(CornellBox.createActors());

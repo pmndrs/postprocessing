@@ -9,7 +9,6 @@ import {
 	SRGBColorSpace,
 	Texture,
 	Vector3,
-	VSMShadowMap,
 	WebGLRenderer
 } from "three";
 
@@ -63,7 +62,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.debug.checkShaderErrors = Utils.isLocalhost;
-	renderer.shadowMap.type = VSMShadowMap;
 	renderer.shadowMap.autoUpdate = false;
 	renderer.shadowMap.needsUpdate = true;
 	renderer.shadowMap.enabled = true;
@@ -84,6 +82,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const scene = new Scene();
 	scene.background = assets.get("sky")!;
+	scene.environment = assets.get("sky")!;
+	scene.environmentIntensity = 0.33;
 	scene.add(CornellBox.createLights());
 	scene.add(CornellBox.createEnvironment());
 	scene.add(CornellBox.createActors());

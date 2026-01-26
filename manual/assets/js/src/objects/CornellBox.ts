@@ -42,10 +42,8 @@ export function createLights(): Group {
 	const lightCeiling = new PointLight(0xd9a859, 1, 10);
 	lightCeiling.position.set(0, 0.84, 0);
 	lightCeiling.castShadow = true;
-	lightCeiling.shadow.bias = -0.015;
 	lightCeiling.shadow.mapSize.width = 1024;
 	lightCeiling.shadow.mapSize.height = 1024;
-	lightCeiling.shadow.radius = 4;
 	lightCeiling.shadow.camera.near = 0.1;
 
 	const lights = new Group();

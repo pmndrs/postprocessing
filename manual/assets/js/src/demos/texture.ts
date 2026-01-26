@@ -8,7 +8,6 @@ import {
 	Scene,
 	Texture,
 	TextureLoader,
-	VSMShadowMap,
 	WebGLRenderer
 } from "three";
 
@@ -77,7 +76,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.debug.checkShaderErrors = Utils.isLocalhost;
-	renderer.shadowMap.type = VSMShadowMap;
 	renderer.shadowMap.autoUpdate = false;
 	renderer.shadowMap.needsUpdate = true;
 	renderer.shadowMap.enabled = true;
