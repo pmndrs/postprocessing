@@ -1,7 +1,10 @@
 {
 	"extends": "../tsconfig.json",
 	"compilerOptions": {
-		"allowJs": true,
+		"paths": {
+			// Need to use bundle for tests because of custom shader imports.
+			"postprocessing": ["../dist/index.js"]
+		},
 		"noEmit": true
 	}
 }
