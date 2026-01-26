@@ -12,7 +12,7 @@ import { EffectShaderData } from "./EffectShaderData.js";
  * An effect material manager that creates, updates and caches effect shader combinations.
  *
  * @category Utils
- * @internal
+ * @ignore
  */
 
 export class EffectMaterialManager implements Disposable {
