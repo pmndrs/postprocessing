@@ -20,7 +20,7 @@ function restoreMenuState(): void {
 
 	}
 
-	if(expandedMenus.length > 0) {
+	if(expandedMenus.length === 0) {
 
 		return;
 
