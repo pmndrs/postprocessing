@@ -7,7 +7,7 @@ menu: contentinfo
 weight: 1
 ---
 
-# Legal Details
+# Legal Notice
 
 ## Information in Accordance with § 5 TMG
 
