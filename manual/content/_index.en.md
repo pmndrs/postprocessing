@@ -23,7 +23,7 @@ The purpose of the postprocessing library is to provide advanced real-time image
 Postprocessing aims to support the six most recent releases of three. Older releases may still work but are not officially supported. The release schedule of this library is not strictly tied to three, meaning that official support for the latest release can fall behind by a few days. Releases follow [semantic versioning](https://semver.org/).
 
 > [!NOTE]
-> Please note that this library is not compatible with the postprocessing examples from three due to API differences.
+> Please note that this library is not compatible with three's own postprocessing examples due to API differences.
 
 ## Concepts
 
