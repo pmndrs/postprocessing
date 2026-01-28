@@ -29,6 +29,14 @@
 		{{ end }}
 		{{ block "styles" . }}{{ end }}
 
+		<link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+		<script src="/pagefind/pagefind-ui.js"></script>
+		<script>
+		window.addEventListener("DOMContentLoaded", (event) => {
+			new PagefindUI({ element: "#search", showSubResults: true });
+		});
+		</script>
+
 		{{ with resources.Get "js/dist/index.js" }}
 			{{ if hugo.IsDevelopment }}
 				<script defer src="{{ .RelPermalink }}"></script>
