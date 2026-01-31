@@ -10,6 +10,7 @@
 	}
 }
 
+/* stylelint-disable selector-id-pattern */
 :is(*, #\#):is(*, #\#):is(*, #\#) {
 	&.pf-searchbox-input {
 		padding: 0 22px;
@@ -19,8 +20,8 @@
 		display: flex;
 		padding: 0.25rem dimensions.$nav-padding;
 		&::before {
-			top: unset;
 			left: unset;
+			top: unset;
 		}
 	}
 	&.pf-searchbox-result {
@@ -30,3 +31,4 @@
 		scrollbar-width: thin;
 	}
 }
+/* stylelint-enable selector-id-pattern */
