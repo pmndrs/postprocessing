@@ -1,5 +1,10 @@
 <nav class="navigation">
-	<div id="search"></div>
+
+	<div class="search">
+		<pagefind-config bundle-path="{{ absURL `pagefind/` }}"></pagefind-config>
+		<pagefind-searchbox></pagefind-searchbox>
+	</div>
+
 	<ul>
 
 		{{ $currentPage := . }}

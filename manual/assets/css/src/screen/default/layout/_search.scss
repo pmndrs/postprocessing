@@ -1,0 +1,32 @@
+@use "dimensions";
+
+.search {
+	background-color: var(--pf-background);
+	margin-bottom: 1rem;
+	pagefind-searchbox {
+		align-items: center;
+		display: flex;
+		height: 56px;
+	}
+}
+
+:is(*, #\#):is(*, #\#):is(*, #\#) {
+	&.pf-searchbox-input {
+		padding: 0 22px;
+	}
+	&.pf-searchbox-input-wrapper {
+		align-items: center;
+		display: flex;
+		padding: 0.25rem dimensions.$nav-padding;
+		&::before {
+			top: unset;
+			left: unset;
+		}
+	}
+	&.pf-searchbox-result {
+		border-radius: 0;
+	}
+	&.pf-searchbox-results {
+		scrollbar-width: thin;
+	}
+}

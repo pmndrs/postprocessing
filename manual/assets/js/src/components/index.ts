@@ -1,3 +1,4 @@
+export { Component } from "./Component.js";
 export { NavigationManager } from "./NavigationManager.js";
 export { SidebarManager } from "./SidebarManager.js";
 export { ThemeManager } from "./ThemeManager.js";

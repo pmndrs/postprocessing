@@ -1,0 +1,20 @@
+@use "colors";
+
+:root.dark {
+	pagefind-searchbox {
+		color-scheme: dark;
+	}
+
+  --pf-text: #{colors.$grey_200};
+  --pf-text-secondary: #{colors.$grey_500};
+  --pf-text-muted: #{colors.$grey_500};
+  --pf-background: #{colors.$grey_900};
+  --pf-error-bg: #{colors.$blind};
+  --pf-border: transparent;
+  --pf-border-focus: transparent;
+  --pf-outline-focus: transparent;
+  --pf-skeleton: #{colors.$grey_700};
+  --pf-skeleton-shine: #{colors.$grey_500};
+  --pf-hover: #{colors.$coal};
+  --pf-mark: #{colors.$shiny};
+}

@@ -1,0 +1,34 @@
+@use "colors";
+
+:root {
+	pagefind-searchbox {
+		color-scheme: light;
+	}
+
+  --pf-text: #{colors.$coal};
+  --pf-text-secondary: #{colors.$grey_600};
+  --pf-text-muted: #{colors.$grey_600};
+  --pf-background: #{colors.$grey_100};
+  --pf-error-bg: #{colors.$grey_100};
+  --pf-border: transparent;
+  --pf-border-focus: transparent;
+  --pf-outline-focus: transparent;
+  --pf-skeleton: #{colors.$grey_400};
+  --pf-skeleton-shine: #{colors.$grey_200};
+  --pf-hover: #{colors.$grey_300};
+  --pf-mark: #{colors.$flamingo};
+  --pf-scroll-shadow: rgba(0, 0, 0, 0.08);
+
+  //--pf-icon-search: url("data:image/svg+xml,...");
+  //--pf-icon-arrow: url("data:image/svg+xml,...");
+
+  --pf-outline-width: 0;
+  --pf-outline-offset: 0;
+  --pf-font: inherit;
+  --pf-input-height: 3rem;
+  --pf-border-radius: 0;
+  --pf-image-width: 64px;
+  --pf-image-height: 48px;
+  --pf-searchbox-max-width: 480px;
+  --pf-searchbox-dropdown-max-height: 320px;
+}

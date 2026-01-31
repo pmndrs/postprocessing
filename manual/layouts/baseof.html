@@ -7,11 +7,12 @@
 		<meta name="author" content="{{ .Site.Params.Author }}">
 		{{ with .Description }}<meta name="description" content="{{ . }}">{{ end }}
 		<meta name="generator" content="Hugo {{ hugo.Version }}">
-
 		<title>{{ block "title" . }}{{ .Title }}{{ end }} &middot; {{ .Site.Title }}</title>
-
 		<base href="{{ .Site.BaseURL }}">
-		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+
+		{{/* {{ with resources.Get "img/favicon.png" }}
+			<link rel="icon" type="image/png" href="{{ .RelPermalink }}">
+		{{ end }} */}}
 
 		{{ with resources.Get "js/dist/inline/header.js" }}
 			{{ $script := .Content | safeJS }}
@@ -28,14 +29,6 @@
 			{{ end }}
 		{{ end }}
 		{{ block "styles" . }}{{ end }}
-
-		<link href="/pagefind/pagefind-ui.css" rel="stylesheet">
-		<script src="/pagefind/pagefind-ui.js"></script>
-		<script>
-		window.addEventListener("DOMContentLoaded", (event) => {
-			new PagefindUI({ element: "#search", showSubResults: true });
-		});
-		</script>
 
 		{{ with resources.Get "js/dist/index.js" }}
 			{{ if hugo.IsDevelopment }}
@@ -83,7 +76,7 @@
 					{{ block "navigation" . }}{{ partial "navigation.html" . }}{{ end }}
 					{{ block "footer" . }}{{ partial "footer.html" . }}{{ end }}
 				</div>
-				<main id="main"{{ if not .IsHome }} class="{{ path.Base .RelPermalink -}}"{{ end }} tabindex="-1">
+				<main id="main"{{ if not .IsHome }} class="{{ path.Base .RelPermalink -}}"{{ end }} tabindex="-1" data-pagefind-body>
 					{{ partial "viewport.html" . }}
 					<div class="content">
 						<div>{{ block "main" . }}{{ end }}</div>
