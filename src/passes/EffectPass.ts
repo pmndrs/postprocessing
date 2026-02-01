@@ -1,4 +1,4 @@
-import { Event as Event3, Material, Texture, WebGLRenderer } from "three";
+import { Event as Event3, Material, Texture } from "three";
 import { Pass } from "../core/Pass.js";
 import { Effect } from "../effects/Effect.js";
 import { GBuffer } from "../enums/GBuffer.js";
@@ -73,19 +73,6 @@ export class EffectPass extends Pass<EffectMaterial> {
 		this.effects = effects;
 		this.disposed = false;
 		this.timeScale = 1.0;
-
-	}
-
-	override get renderer(): WebGLRenderer | null {
-
-		return super.renderer;
-
-	}
-
-	override set renderer(value: WebGLRenderer | null) {
-
-		super.renderer = value;
-		this.updateMaterialTransparency();
 
 	}
 
@@ -202,7 +189,6 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		// Get the material for the current effect combination.
 		this.fullscreenMaterial = this.effectMaterialManager.getMaterial(this.effects);
-		this.updateMaterialTransparency();
 
 		// Pick up new materials.
 		for(const material of this.effectMaterialManager.materials) {
@@ -210,24 +196,6 @@ export class EffectPass extends Pass<EffectMaterial> {
 			this.materials.add(material);
 
 		}
-
-	}
-
-	/**
-	 * Updates the fullscreen material to use alpha blending if needed.
-	 */
-
-	private updateMaterialTransparency(): void {
-
-		if(this.renderer === null) {
-
-			return;
-
-		}
-
-		const alpha = this.renderer.getContext().getContextAttributes()?.alpha ?? false;
-		const outputBuffer = this.output.defaultBuffer?.value ?? null;
-		this.fullscreenMaterial.transparent = (alpha && outputBuffer === null);
 
 	}
 
@@ -370,12 +338,6 @@ export class EffectPass extends Pass<EffectMaterial> {
 			this.updateMaterial(true);
 
 		}
-
-	}
-
-	protected override onOutputChange(): void {
-
-		this.updateMaterialTransparency();
 
 	}
 

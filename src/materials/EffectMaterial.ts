@@ -1,4 +1,4 @@
-import { IUniform, NormalBlending, Texture, Uniform } from "three";
+import { IUniform, Texture, Uniform } from "three";
 import { EffectShaderSection } from "../enums/EffectShaderSection.js";
 import { EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
 import { ShaderDataTracker } from "../utils/ShaderDataTracker.js";
@@ -29,7 +29,6 @@ export class EffectMaterial extends FullscreenMaterial {
 
 		super({
 			name: "EffectMaterial",
-			blending: NormalBlending,
 			defines: {
 				COLOR_SPACE_CONVERSION: true
 			},
