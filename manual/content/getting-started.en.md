@@ -25,12 +25,11 @@ The following WebGL attributes should be used for an optimal workflow:
 import { WebGLRenderer } from "three";
 
 const renderer = new WebGLRenderer({
-	powerPreference: "high-performance", // optional
+	powerPreference: "high-performance",
 	antialias: false,
 	stencil: false,
 	depth: false
 });
-
 ```
 
 [RenderPipelines]() are used to group passes. Common setups will only require one pipeline that contains a [ClearPass](), a [GeometryPass]() and one or more [EffectPass]() instances. The latter is used to render fullscreen [Effects](). Please refer to the [three.js manual](https://threejs.org/docs/#manual/en/introduction/Creating-a-scene) for more information on how to setup the renderer, scene and camera.
