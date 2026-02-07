@@ -69,16 +69,16 @@
 
 		<div class="frame-content">
 			<div>
-				<a class="skip-main" href="#main">{{ i18n "skipToContent" . }}</a>
+				<a class="skip-to-content" href="{{ .RelPermalink }}#content">{{ i18n "skipToContent" . }}</a>
 				<div class="sidebar-button-open" aria-label="{{ i18n `openNav` . }}"></div>
 				<div class="sidebar">
 					{{ block "header" . }}{{ partialCached "header.html" . }}{{ end }}
 					{{ block "navigation" . }}{{ partial "navigation.html" . }}{{ end }}
 					{{ block "footer" . }}{{ partial "footer.html" . }}{{ end }}
 				</div>
-				<main id="main"{{ if not .IsHome }} class="{{ path.Base .RelPermalink -}}"{{ end }} tabindex="-1" data-pagefind-body>
+				<main id="main"{{ if not .IsHome }} class="{{ path.Base .RelPermalink }}"{{ end }} tabindex="-1">
 					{{ partial "viewport.html" . }}
-					<div class="content">
+					<div id="content" class="content" data-pagefind-body>
 						<div>{{ block "main" . }}{{ end }}</div>
 					</div>
 				</main>
