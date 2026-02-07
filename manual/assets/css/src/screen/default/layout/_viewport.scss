@@ -3,7 +3,6 @@
 
 #viewport {
 	background: var(--viewport-background-color);
-	border-bottom: 1px solid var(--viewport-separator-color);
 	box-sizing: border-box;
 	height: calc(100vh - 10rem);
 	position: relative;
@@ -59,15 +58,20 @@
 			display: none;
 		}
 	}
+	&+.content {
+		border-top: 1px solid var(--viewport-separator-color);
+	}
 	&.loading {
 		.buttons {
 			display: none;
 		}
 	}
 	&:not(.loading) {
-		border-bottom-color: transparent;
 		.progress {
 			display: none;
+		}
+		&+.content {
+			border-top-color: transparent;
 		}
 	}
 }

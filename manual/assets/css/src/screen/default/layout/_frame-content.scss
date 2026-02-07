@@ -1,6 +1,30 @@
+@use "layers";
+
 .frame-content > div {
 	display: flex;
 	flex-direction: row;
 	min-height: 100vh;
 	width: 100%;
+}
+
+.skip-to-content {
+	background: white;
+	color: black;
+	display: block;
+	flex-shrink: 0;
+	font-size: 75%;
+	height: 1px;
+	left: -100%;
+	outline: 0;
+	overflow: hidden;
+	padding: 0.25rem;
+	position: absolute;
+	top: 0;
+	width: 1px;
+	z-index: layers.$skip-main;
+	&:focus {
+		height: auto;
+		left: 0;
+		width: 100px;
+	}
 }

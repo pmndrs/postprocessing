@@ -15,7 +15,7 @@
 	transform: translateX(-100%);
 	transition: transform durations.$short;
 	width: 320px;
-	z-index: layers.$hud + 1;
+	z-index: layers.$sidebar;
 	&.active {
 		pointer-events: initial;
 		transform: none;
