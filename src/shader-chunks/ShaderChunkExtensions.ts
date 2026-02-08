@@ -11,6 +11,7 @@ import depthUtilsParsFragment from "./shaders/depth-utils-pars.frag";
 import frameBufferPrecisionParsFragment from "./shaders/frame-buffer-precision-pars.frag";
 import gbufferDefaultOutputFragment from "./shaders/gbuffer-default-output.frag";
 import inputBufferParsFragment from "./shaders/input-buffer-pars.frag";
+import noiseParsFragment from "./shaders/noise-pars.frag";
 import normalCodecParsFragment from "./shaders/normal-codec-pars.frag";
 import normalUtilsParsFragment from "./shaders/normal-utils-pars.frag";
 import resolutionParsFragment from "./shaders/resolution-pars.frag";
@@ -71,6 +72,7 @@ export class ShaderChunkExtensions {
 			"pp_gbuffer_emission_fragment": gbufferEmissionFragment,
 			"pp_input_buffer_pars_fragment": inputBufferParsFragment,
 			"pp_normal_codec_pars_fragment": normalCodecParsFragment,
+			"pp_noise_pars_fragment": noiseParsFragment,
 			"pp_normal_utils_pars_fragment": normalUtilsParsFragment,
 			"pp_resolution_pars_fragment": resolutionParsFragment,
 			"pp_world_utils_pars_fragment": worldUtilsParsFragment
