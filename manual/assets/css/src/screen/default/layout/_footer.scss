@@ -10,7 +10,7 @@ footer {
 	display: flex;
 	flex-grow: 0;
 	justify-content: space-between;
-	padding: 0.5rem 0.3rem 0.5rem dimensions.$nav-padding;
+	padding: 0.6rem calc(dimensions.$nav-padding / 2) 0.6rem dimensions.$nav-padding;
 	ul {
 		font-size: 75%;
 		list-style: none;
@@ -40,10 +40,12 @@ footer {
 	.contentinfo {
 		align-items: center;
 		display: flex;
-		flex-wrap: wrap;
+		white-space: nowrap;
 	}
 	.buttons {
+		display: flex;
 		line-height: 1;
+		margin-left: 2rem;
 		a, div {
 			display: inline-block;
 			height: 24px;
