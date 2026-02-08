@@ -1,6 +1,8 @@
 /**
  * Octahedron normal vector encoding and decoding.
  *
+ * These functions need to be prefixed because they are injected into user shader code.
+ *
  * @see https://knarkowicz.wordpress.com/2014/04/16/octahedron-normal-vector-encoding/
  * @see https://aras-p.info/texts/CompactNormalStorage.html
  * @see https://x.com/Stubbesaurus/status/937994790553227264
