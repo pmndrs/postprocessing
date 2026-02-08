@@ -271,7 +271,7 @@ export class EffectShaderData implements ShaderData {
 				// Convert the input color to the required color space.
 				fragmentMainImage += (effect.inputColorSpace === SRGBColorSpace) ?
 					"color0 = sRGBTransferOETF(color0);\n\t" :
-					"color0 = sRGBToLinear(color0);\n\t";
+					"color0 = sRGBTransferEOTF(color0);\n\t";
 
 			}
 

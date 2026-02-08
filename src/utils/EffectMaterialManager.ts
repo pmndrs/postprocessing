@@ -290,7 +290,7 @@ export class EffectMaterialManager implements Disposable {
 
 			// Convert back to linear.
 			const fragmentMainImage = data.shaderParts.get(Section.FRAGMENT_MAIN_IMAGE)!;
-			data.shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, fragmentMainImage + "color0 = sRGBToLinear(color0);\n\t");
+			data.shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, fragmentMainImage + "color0 = sRGBTransferEOTF(color0);\n\t");
 
 		}
 

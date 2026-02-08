@@ -1,15 +1,8 @@
-vec4 sRGBToLinear(const in vec4 value) {
-
-	return vec4(mix(
-		pow(value.rgb * 0.9478672986 + vec3(0.0521327014), vec3(2.4)),
-		value.rgb * 0.0773993808,
-		vec3(lessThanEqual(value.rgb, vec3(0.04045)))
-	), value.a);
-
-}
-
-// Based on work by Sam Hocevar, Emil Persson and Ian Taylor.
-// https://www.chilliant.com/rgb2hsv.html
+/**
+ * Color space conversion functions, based on work by Sam Hocevar, Emil Persson and Ian Taylor.
+ *
+ * @see https://www.chilliant.com/rgb2hsv.html
+ */
 
 vec3 RGBToHCV(const in vec3 RGB) {
 
