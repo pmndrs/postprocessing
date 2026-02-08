@@ -82,8 +82,8 @@ export class NoiseEffect extends Effect implements NoiseEffectOptions {
 		this.fragmentShader = fragmentShader;
 		this.blendMode.blendFunction = new AddBlendFunction();
 
-		this.input.defines.set("SEED", Math.max(1, Math.round(Math.random() * 1000)).toFixed(1));
 		this.input.uniforms.set("page", new Uniform(0.0));
+		this.input.defines.set("SEED", Math.max(1, Math.round(Math.random() * 1024)).toFixed(1));
 
 		this._fps = 0;
 		this.timeout = 0.0;
@@ -188,7 +188,7 @@ export class NoiseEffect extends Effect implements NoiseEffectOptions {
 
 		if(this.acc >= this.timeout) {
 
-			this.page = (this.page + 1.0) % 1000.0;
+			this.page = (this.page + 1.0) % 1024.0;
 			this.acc = 0.0;
 
 		}
