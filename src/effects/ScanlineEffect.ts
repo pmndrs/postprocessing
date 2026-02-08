@@ -1,6 +1,6 @@
 import { Uniform, Vector2 } from "three";
-import { Effect } from "./Effect.js";
 import { OverlayBlendFunction } from "./blending/blend-functions/OverlayBlendFunction.js";
+import { Effect } from "./Effect.js";
 
 import fragmentShader from "./shaders/scanline.frag";
 
