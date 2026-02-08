@@ -1,9 +1,11 @@
 {{ define "main" }}
 
-	<h1>{{ .Title }}</h1>
-	{{ .Content }}
+	<div>
+		<h1>{{ .Title }}</h1>
+		{{ .Content }}
 
-	{{ partial "contents.html" . }}
-	{{ partialCached "pagination.html" . }}
+		{{ partial "contents.html" . }}
+		{{ partialCached "pagination.html" . }}
+	</div>
 
 {{ end }}

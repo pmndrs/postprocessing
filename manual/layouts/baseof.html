@@ -78,8 +78,8 @@
 				</div>
 				<main id="main"{{ if not .IsHome }} class="{{ path.Base .RelPermalink }}"{{ end }} tabindex="-1">
 					{{ partial "viewport.html" . }}
-					<div id="content" class="content" data-pagefind-body>
-						<div>{{ block "main" . }}{{ end }}</div>
+					<div id="content" class="content">
+						{{ block "main" . }}{{ end }}
 					</div>
 				</main>
 			</div>
