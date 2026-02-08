@@ -1,5 +1,5 @@
 import { Uniform } from "three";
-import { SoftLightBlendFunction } from "./blending/index.js";
+import { AddBlendFunction } from "./blending/blend-functions/AddBlendFunction.js";
 import { Effect } from "./Effect.js";
 
 import fragmentShader from "./shaders/noise.frag";
@@ -23,7 +23,7 @@ export interface NoiseEffectOptions {
 	/**
 	 * Controls whether the noise should be multiplied with the input colors prior to blending.
 	 *
-	 * @defaultValue false
+	 * @defaultValue true
 	 */
 
 	premultiply?: boolean;
@@ -73,14 +73,14 @@ export class NoiseEffect extends Effect implements NoiseEffectOptions {
 
 	constructor({
 		rgb = true,
-		premultiply = false,
+		premultiply = true,
 		fps = 24
 	}: NoiseEffectOptions = {}) {
 
 		super("NoiseEffect");
 
 		this.fragmentShader = fragmentShader;
-		this.blendMode.blendFunction = new SoftLightBlendFunction();
+		this.blendMode.blendFunction = new AddBlendFunction();
 
 		this.input.uniforms.set("page", new Uniform(1.0));
 		this.input.defines.set("SEED", Math.max(1, Math.round(Math.random() * 1000)).toFixed(1));
