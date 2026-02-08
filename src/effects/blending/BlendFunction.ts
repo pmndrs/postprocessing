@@ -42,7 +42,7 @@ export abstract class BlendFunction implements Identifiable {
 	 *
 	 * @param name - A unique blend function name.
 	 * @param shader - The shader code.
-	 * @param supportsHDR - Indicates whether this blend function supports HDR colors.
+	 * @param supportsHDR - Indicates whether this blend function supports HDR colors. Defaults to false.
 	 */
 
 	constructor(name: string, shader: string | null, supportsHDR = false) {
