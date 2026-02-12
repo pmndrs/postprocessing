@@ -31,7 +31,7 @@ export interface NoiseEffectOptions {
 	/**
 	 * The animation update rate expressed in frames per second.
 	 *
-	 * This value does not affect performance. The update rate is limited by the actual frame rate.
+	 * This value does not affect performance and the simulated update rate is limited by the actual frame rate.
 	 *
 	 * @defaultValue 24
 	 */
@@ -43,7 +43,6 @@ export interface NoiseEffectOptions {
 /**
  * A noise effect.
  *
- * @see https://www.shadertoy.com/view/w3B3Wz
  * @category Effects
  */
 
