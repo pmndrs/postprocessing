@@ -16,26 +16,43 @@ export class ThemeManager implements Component {
 
 		if(enabled) {
 
-			localStorage.setItem("dark-mode", "1");
+			localStorage.setItem("dark-mode", "enabled");
 			document.documentElement.classList.add("dark");
 
 		} else {
 
-			localStorage.removeItem("dark-mode");
+			localStorage.setItem("dark-mode", "disabled");
 			document.documentElement.classList.remove("dark");
 
 		}
 
 	}
 
+	/**
+	 * Toggles dark mode.
+	 */
+
+	private toggleDarkMode(): void {
+
+		const enabled = localStorage.getItem("dark-mode") === "enabled";
+		this.setDarkModeEnabled(!enabled);
+
+	}
+
 	initialize() {
 
+		const darkModeValue = localStorage.getItem("dark-mode");
 		const themeSwitch = document.querySelector(".dark-mode");
-		themeSwitch?.addEventListener("click", () => this.setDarkModeEnabled(localStorage.getItem("dark-mode") === null));
+		themeSwitch?.addEventListener("click", () => this.toggleDarkMode());
 
 		const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 		mediaQuery.addEventListener("change", (e) => this.setDarkModeEnabled(e.matches));
-		this.setDarkModeEnabled(mediaQuery.matches || localStorage.getItem("dark-mode") !== null);
+
+		if(darkModeValue === null) {
+
+			this.setDarkModeEnabled(mediaQuery.matches);
+
+		}
 
 	}
 
