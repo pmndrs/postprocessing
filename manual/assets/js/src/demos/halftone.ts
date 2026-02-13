@@ -95,9 +95,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Post Processing
 
 	const effect = new HalftoneEffect({
-		shape: HalftoneShape.LINE,
-		radius: 7.073,
-		rotation: Math.PI / 4
+		shape: HalftoneShape.HATCH,
+		bias: 0.03
 	});
 
 	const pipeline = new RenderPipeline(renderer);
@@ -109,8 +108,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Settings
 
-	const params = { rotation: effect.rotationR };
-
 	const container = document.getElementById("viewport")!;
 	const pane = new Pane({ container: container.querySelector<HTMLElement>(".tp")! });
 	const fpsGraph = Utils.createFPSGraph(pane);
@@ -118,23 +115,11 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const folder = pane.addFolder({ title: "Settings" });
 	folder.addBinding(effect, "shape", { options: Utils.enumToRecord(HalftoneShape) });
 	folder.addBinding(effect, "radius", { min: 1, max: 25, step: 1e-3 });
-	folder.addBinding(effect, "samples", { min: 1, max: 24, step: 1 });
-	folder.addBinding(effect, "scatterFactor", { min: 0, max: 1, step: 1e-3 });
-
-	const subfolder = folder.addFolder({ title: "Rotation", expanded: false });
-	const bindingR = subfolder.addBinding(effect, "rotationR", { min: 0, max: Math.PI, step: 1e-4 });
-	const bindingG = subfolder.addBinding(effect, "rotationG", { min: 0, max: Math.PI, step: 1e-4 });
-	const bindingB = subfolder.addBinding(effect, "rotationB", { min: 0, max: Math.PI, step: 1e-4 });
-
-	folder.addBinding(params, "rotation", { min: 0, max: Math.PI, step: 1e-4 }).on("change", (e) => {
-
-		effect.rotation = e.value;
-
-		bindingR.refresh();
-		bindingG.refresh();
-		bindingB.refresh();
-
-	});
+	folder.addBinding(effect, "samples", { min: 1, max: 16, step: 1 });
+	folder.addBinding(effect, "rotation", { min: 0, max: Math.PI, step: 1e-4 });
+	folder.addBinding(effect, "bias", { min: 0, max: 1, step: 1e-6 });
+	folder.addBinding(effect, "premultiply");
+	folder.addBinding(effect, "inverted");
 
 	Utils.addBlendModeBindings(folder, effect.blendMode);
 

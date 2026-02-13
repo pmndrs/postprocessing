@@ -1,6 +1,6 @@
-import { Uniform, Vector3 } from "three";
+import { Uniform, Vector2 } from "three";
 import { HalftoneShape } from "../enums/HalftoneShape.js";
-import { LinearDodgeBlendFunction } from "./blending/blend-functions/LinearDodgeBlendFunction.js";
+import { ColorDodgeBlendFunction } from "./blending/blend-functions/ColorDodgeBlendFunction.js";
 import { Effect } from "./Effect.js";
 
 import fragmentShader from "./shaders/halftone.frag";
@@ -30,54 +30,44 @@ export interface HalftoneEffectOptions {
 	radius?: number;
 
 	/**
-	 * The grid rotation for all color channels in radians.
+	 * The grid rotation in radians.
 	 *
-	 * This setting yields better performance compared to individual rotations per channel.
-	 *
-	 * @defaultValue 0
+	 * @defaultValue 0.7513
 	 */
 
 	rotation?: number;
 
 	/**
-	 * The grid rotation for the red channel in radians.
-	 *
-	 * @defaultValue {@link rotation}
-	 */
-
-	rotationR?: number;
-
-	/**
-	 * The grid rotation for the green channel in radians.
-	 *
-	 * @defaultValue {@link rotationR}
-	 */
-
-	rotationG?: number;
-
-	/**
-	 * The grid rotation for the blue channel in radians.
-	 *
-	 * @defaultValue {@link rotationG}
-	 */
-
-	rotationB?: number;
-
-	/**
-	 * The halftone scatter factor.
-	 *
-	 * @defaultValue 0
-	 */
-
-	scatterFactor?: number;
-
-	/**
 	 * The sample count.
 	 *
-	 * @defaultValue 8
+	 * @defaultValue 6
 	 */
 
 	samples?: number;
+
+	/**
+	 * A threshold bias.
+	 *
+	 * @defaultValue 0.0
+	 */
+
+	bias?: number;
+
+	/**
+	 * Whether the halftone pattern should be premultiplied with the input color.
+	 *
+	 * @defaultValue true
+	 */
+
+	premultiply?: boolean;
+
+	/**
+	 * Whether the halftone thresholding should be inverted.
+	 *
+	 * @defaultValue false
+	 */
+
+	inverted?: boolean;
 
 }
 
@@ -85,8 +75,7 @@ export interface HalftoneEffectOptions {
  * A halftone effect.
  *
  * @category Effects
- * @see https://github.com/meatbags/after-effects-plugins/blob/master/Halftone/HalftoneSampler.hpp
- * @see https://github.com/mrdoob/three.js/blob/0bf3908b73b2cf73d7361cce17cfc8b816cb2a00/examples/jsm/postprocessing/HalftonePass.js
+ * @see https://github.com/mrange/shader-advent-2024/blob/main/day-22/README.md
  */
 
 export class HalftoneEffect extends Effect implements HalftoneEffectOptions {
@@ -98,6 +87,12 @@ export class HalftoneEffect extends Effect implements HalftoneEffectOptions {
 	private _radius: number;
 
 	/**
+	 * @see {@link rotation}
+	 */
+
+	private _rotation: number;
+
+	/**
 	 * Constructs a new halftone effect.
 	 *
 	 * @param options - The options.
@@ -106,29 +101,31 @@ export class HalftoneEffect extends Effect implements HalftoneEffectOptions {
 	constructor({
 		shape = HalftoneShape.DOT,
 		radius = 6.0,
-		rotation = 0,
-		rotationR = rotation,
-		rotationG = rotationR,
-		rotationB = rotationG,
-		scatterFactor = 0,
-		samples = 8
+		rotation = 0.7513,
+		samples = 6,
+		bias = 0.0,
+		premultiply = false,
+		inverted = false
 	}: HalftoneEffectOptions = {}) {
 
 		super("HalftoneEffect");
 
 		this.fragmentShader = fragmentShader;
-		this.blendMode.blendFunction = new LinearDodgeBlendFunction();
+		this.blendMode.blendFunction = new ColorDodgeBlendFunction();
 
 		const uniforms = this.input.uniforms;
-		uniforms.set("radius", new Uniform(1.0));
-		uniforms.set("rotationRGB", new Uniform(new Vector3(rotationR, rotationG, rotationB)));
-		uniforms.set("scatterFactor", new Uniform(scatterFactor));
+		uniforms.set("invRadius", new Uniform(1.0));
+		uniforms.set("rotation", new Uniform(new Vector2()));
+		uniforms.set("bias", new Uniform(bias));
 
 		this._radius = radius;
-		this.shape = shape;
-		this.samples = samples;
+		this._rotation = rotation;
 
-		this.updateRGBRotation();
+		this.shape = shape;
+		this.rotation = rotation;
+		this.samples = samples;
+		this.premultiply = premultiply;
+		this.inverted = inverted;
 
 	}
 
@@ -157,7 +154,7 @@ export class HalftoneEffect extends Effect implements HalftoneEffectOptions {
 
 		this.input.defines.set("SAMPLES", value);
 		this.input.defines.set("INV_SAMPLES", (1.0 / value).toFixed(9));
-		this.input.defines.set("INV_SAMPLES_PLUS_ONE", (1.0 / (value + 1.0)).toFixed(9));
+		this.input.defines.set("INV_SAMPLES_SQ", (1.0 / (value * value)).toFixed(9));
 		this.setChanged();
 
 	}
@@ -175,96 +172,77 @@ export class HalftoneEffect extends Effect implements HalftoneEffectOptions {
 
 	}
 
-	get scatterFactor() {
+	get rotation() {
 
-		return this.input.uniforms.get("scatterFactor")!.value as number;
-
-	}
-
-	set scatterFactor(value: number) {
-
-		this.input.uniforms.get("scatterFactor")!.value = value;
+		return this._rotation;
 
 	}
 
 	set rotation(value: number) {
 
-		const rotationRGB = this.input.uniforms.get("rotationRGB")!.value as Vector3;
-		rotationRGB.setScalar(value);
-		this.updateRGBRotation();
+		const rotation = this.input.uniforms.get("rotation")!.value as Vector2;
+		rotation.set(Math.sin(value), Math.cos(value));
+		this._rotation = value;
 
 	}
 
-	get rotationR() {
+	get bias() {
 
-		const rotationRGB = this.input.uniforms.get("rotationRGB")!.value as Vector3;
-		return rotationRGB.x;
-
-	}
-
-	set rotationR(value: number) {
-
-		const rotationRGB = this.input.uniforms.get("rotationRGB")!.value as Vector3;
-		rotationRGB.x = value;
-		this.updateRGBRotation();
+		return this.input.uniforms.get("bias")!.value as number;
 
 	}
 
-	get rotationG() {
+	set bias(value: number) {
 
-		const rotationRGB = this.input.uniforms.get("rotationRGB")!.value as Vector3;
-		return rotationRGB.y;
-
-	}
-
-	set rotationG(value: number) {
-
-		const rotationRGB = this.input.uniforms.get("rotationRGB")!.value as Vector3;
-		rotationRGB.y = value;
-		this.updateRGBRotation();
+		this.input.uniforms.get("bias")!.value = value;
 
 	}
 
-	get rotationB() {
+	get premultiply(): boolean {
 
-		const rotationRGB = this.input.uniforms.get("rotationRGB")!.value as Vector3;
-		return rotationRGB.z;
-
-	}
-
-	set rotationB(value: number) {
-
-		const rotationRGB = this.input.uniforms.get("rotationRGB")!.value as Vector3;
-		rotationRGB.z = value;
-		this.updateRGBRotation();
+		return this.input.defines.has("PREMULTIPLY");
 
 	}
 
-	/**
-	 * Enables or disables RGB rotation based on the current rotation settings.
-	 */
+	set premultiply(value: boolean) {
 
-	private updateRGBRotation() {
+		if(this.premultiply !== value) {
 
-		const currentlyEnabled = this.input.defines.has("RGB_ROTATION");
+			if(value) {
 
-		const shouldBeEnabled = (
-			this.rotationR !== this.rotationG ||
-			this.rotationR !== this.rotationB ||
-			this.rotationG !== this.rotationB
-		);
+				this.input.defines.set("PREMULTIPLY", true);
 
-		if(shouldBeEnabled) {
+			} else {
 
-			this.input.defines.set("RGB_ROTATION", true);
+				this.input.defines.delete("PREMULTIPLY");
 
-		} else {
+			}
 
-			this.input.defines.delete("RGB_ROTATION");
+			this.setChanged();
 
 		}
 
-		if(currentlyEnabled !== shouldBeEnabled) {
+	}
+
+	get inverted(): boolean {
+
+		return this.input.defines.has("INVERTED");
+
+	}
+
+	set inverted(value: boolean) {
+
+		if(this.inverted !== value) {
+
+			if(value) {
+
+				this.input.defines.set("INVERTED", true);
+
+			} else {
+
+				this.input.defines.delete("INVERTED");
+
+			}
 
 			this.setChanged();
 
@@ -275,7 +253,7 @@ export class HalftoneEffect extends Effect implements HalftoneEffectOptions {
 	protected override onResolutionChange(): void {
 
 		const r = this.radius * this.resolution.scaledPixelRatio;
-		this.input.uniforms.get("radius")!.value = Math.max(r, 1e-9);
+		this.input.uniforms.get("invRadius")!.value = 1.0 / Math.max(r, 1e-9);
 
 	}
 

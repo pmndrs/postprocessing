@@ -1,222 +1,92 @@
-#define SQRT2_MINUS_ONE 0.41421356
-#define SQRT2_HALF_MINUS_ONE 0.20710678
-
 #define SHAPE_DOT 1
-#define SHAPE_ELLIPSE 2
-#define SHAPE_LINE 3
-#define SHAPE_SQUARE 4
+#define SHAPE_HATCH 2
+#define SHAPE_SQUARE 3
 
-uniform vec3 rotationRGB;
-uniform float radius;
-uniform float scatterFactor;
+uniform vec2 rotation;
+uniform float invRadius;
+uniform float bias;
 
-struct Cell {
-	vec2 n;
-	vec2 p1;
-	vec2 p2;
-	vec2 p3;
-	vec2 p4;
-	float sample1;
-	float sample2;
-	float sample3;
-	float sample4;
-};
+float hatchHalftone(vec2 uv) {
 
-float getPattern(float cellSample, vec2 coord, vec2 n, vec2 p, float angle) {
+	return 1.0 - 2.0 * abs(uv.y - 0.5);
 
-	float maxRadius = radius;
-	float magnitude = length(coord - p);
-	float r = cellSample;
+}
+
+float squareHalftone(vec2 uv) {
+
+	float s = 2.0 * max(abs(uv.x - 0.5), abs(uv.y - 0.5));
+	return 1.0 - pow2(s);
+
+}
+
+float dotHalftone(vec2 uv) {
+
+	const float invDiag = 1.414213562373095; // sqrt(2), or 1.0/length(vec2(0.5))
+	return 1.0 - distance(uv, vec2(0.5)) * invDiag;
+
+}
+
+float getSample(vec2 p, float threshold) {
 
 	#if SHAPE == SHAPE_DOT
 
-		r = pow(abs(r), 1.125) * maxRadius;
+		float halftone = dotHalftone(p);
 
-	#elif SHAPE == SHAPE_ELLIPSE
+	#elif SHAPE == SHAPE_HATCH
 
-		r = pow(abs(r), 1.125) * maxRadius;
-
-		if(magnitude != 0.0) {
-
-			float dotP = abs(dot((p - coord) / magnitude, n));
-
-			magnitude = dot(
-				vec2(magnitude, magnitude * dotP),
-				vec2(1.0 - SQRT2_HALF_MINUS_ONE, SQRT2_MINUS_ONE)
-			);
-
-		}
-
-	#elif SHAPE == SHAPE_LINE
-
-		r = pow(abs(r), 1.5) * maxRadius;
-		float dotP = dot(p - coord, n);
-		magnitude = length(n * dotP);
+		float halftone = hatchHalftone(p);
 
 	#elif SHAPE == SHAPE_SQUARE
 
-		float theta = atan(p.y - coord.y, p.x - coord.x) - angle;
-		float sinT = abs(sin(theta));
-		float cosT = abs(cos(theta));
-		r = pow(abs(r), 1.4);
-		r += (sinT > cosT) ? r - sinT * r : r - cosT * r;
-		r *= maxRadius;
+		float halftone = squareHalftone(p);
 
 	#endif
 
-	return r - magnitude;
-
-}
-
-vec4 getSample(vec2 p) {
-
-	vec2 uv = p * resolution.zw;
-	vec4 texel = texture(gBuffer.color, uv);
-	float base = rand(floor(p)) * PI2;
-	float step = PI2 * INV_SAMPLES;
-	vec2 magnitude = radius * 0.666667 * resolution.zw;
-
-	for(int i = 0; i < SAMPLES; ++i) {
-
-		float angle = base + step * float(i);
-		vec2 offset = vec2(cos(angle), sin(angle)) * magnitude;
-		texel += texture(gBuffer.color, uv + offset);
-
-	}
-
-	texel *= INV_SAMPLES_PLUS_ONE;
-	return texel;
-
-}
-
-Cell getReferenceCell(vec2 p, vec2 origin, float angle) {
-
-	Cell cell;
-
-	float step = radius;
-	vec2 n = vec2(cos(angle), sin(angle));
-
-	vec2 v = p - origin;
-	float dotNormal = dot(v, n);
-	float dotLine = dot(v, vec2(-n.y, n.x));
-
-	float threshold = step * 0.5;
-	vec2 offset = n * dotNormal;
-
-	float offsetNormal = mod(length(offset), step);
-	float normalDir = (dotNormal < 0.0) ? 1.0 : -1.0;
-	float normalScale = (offsetNormal < threshold) ? -offsetNormal : step - offsetNormal;
-	normalScale *= normalDir;
-
-	float offsetLine = mod(length(v - offset), step);
-	float lineDir = (dotLine < 0.0) ? 1.0 : -1.0;
-	float lineScale = (offsetLine < threshold) ? -offsetLine : step - offsetLine;
-	lineScale *= lineDir;
-
-	// Get the closest corner.
-	cell.n = n;
-	cell.p1 = p - n * normalScale + vec2(n.y, -n.x) * lineScale;
-
-	if(scatterFactor != 0.0) {
-
-		float offMagnitude = scatterFactor * threshold * 0.5;
-		float offAngle = rand(floor(cell.p1)) * PI2;
-		cell.p1 += vec2(cos(offAngle), sin(offAngle)) * offMagnitude;
-
-	}
-
-	// Find corners.
-	float normalStep = normalDir * ((offsetNormal < threshold) ? step : -step);
-	float lineStep = lineDir * ((offsetLine < threshold) ? step : -step);
-	vec2 lineOffset = vec2(n.y, -n.x) * lineStep;
-	cell.p2 = cell.p1 - n * normalStep;
-	cell.p3 = cell.p1 + lineOffset;
-	cell.p4 = cell.p2 + lineOffset;
-
-	return cell;
-
-}
-
-float halftone(Cell cell, vec2 p, float angle, float aa) {
-
-	float distC1 = getPattern(cell.sample1, cell.p1, cell.n, p, angle);
-	float distC2 = getPattern(cell.sample2, cell.p2, cell.n, p, angle);
-	float distC3 = getPattern(cell.sample3, cell.p3, cell.n, p, angle);
-	float distC4 = getPattern(cell.sample4, cell.p4, cell.n, p, angle);
-
-	float result = clamp(distC1 * aa, 0.0, 1.0);
-	result += clamp(distC2 * aa, 0.0, 1.0);
-	result += clamp(distC3 * aa, 0.0, 1.0);
-	result += clamp(distC4 * aa, 0.0, 1.0);
-	result = clamp(result, 0.0, 1.0);
-
-	return result;
+	halftone = 1.0 - halftone;
+	return (halftone < threshold) ? 1.0 : 0.0;
 
 }
 
 vec4 mainImage(const in vec4 inputColor, const in vec2 uv, const in GData gData) {
 
 	vec2 p = uv * resolution.xy;
-	vec2 origin = vec2(0.0);
 
-	#ifdef RGB_ROTATION
+	mat2 r = mat2(rotation.y, rotation.x, -rotation.x, rotation.y);
+	float threshold = gData.luminance - bias;
+	float pattern = 0.0;
 
-		Cell cellR = getReferenceCell(p, origin, rotationRGB.r);
-		Cell cellG = getReferenceCell(p, origin, rotationRGB.g);
-		Cell cellB = getReferenceCell(p, origin, rotationRGB.b);
+	for(int x = 0; x < SAMPLES; x++) {
 
-		cellR.sample1 = getSample(cellR.p1).r;
-		cellR.sample2 = getSample(cellR.p2).r;
-		cellR.sample3 = getSample(cellR.p3).r;
-		cellR.sample4 = getSample(cellR.p4).r;
+		for(int y = 0; y < SAMPLES; y++) {
 
-		cellG.sample1 = getSample(cellG.p1).g;
-		cellG.sample2 = getSample(cellG.p2).g;
-		cellG.sample3 = getSample(cellG.p3).g;
-		cellG.sample4 = getSample(cellG.p4).g;
+			vec2 coord = p + vec2(x, y) * INV_SAMPLES;
+			coord = coord * r * invRadius;
+			vec2 gridUv = fract(coord);
 
-		cellB.sample1 = getSample(cellB.p1).b;
-		cellB.sample2 = getSample(cellB.p2).b;
-		cellB.sample3 = getSample(cellB.p3).b;
-		cellB.sample4 = getSample(cellB.p4).b;
+			pattern += getSample(gridUv, threshold);
+
+		}
+
+	}
+
+	pattern *= INV_SAMPLES_SQ;
+
+	#ifdef INVERTED
+
+		vec3 result = vec3(1.0 - pattern);
 
 	#else
 
-		Cell cell = getReferenceCell(p, origin, rotationRGB.r);
-		Cell cellR = cell;
-		Cell cellG = cell;
-		Cell cellB = cell;
-
-		vec3 sample1 = getSample(cell.p1).rgb;
-		vec3 sample2 = getSample(cell.p2).rgb;
-		vec3 sample3 = getSample(cell.p3).rgb;
-		vec3 sample4 = getSample(cell.p4).rgb;
-
-		cellR.sample1 = sample1.r;
-		cellR.sample2 = sample2.r;
-		cellR.sample3 = sample3.r;
-		cellR.sample4 = sample4.r;
-
-		cellG.sample1 = sample1.g;
-		cellG.sample2 = sample2.g;
-		cellG.sample3 = sample3.g;
-		cellG.sample4 = sample4.g;
-
-		cellB.sample1 = sample1.b;
-		cellB.sample2 = sample2.b;
-		cellB.sample3 = sample3.b;
-		cellB.sample4 = sample4.b;
+		vec3 result = vec3(pattern);
 
 	#endif
 
-	float aa = 2.0 / min(radius, 2.5); 
+	#ifdef PREMULTIPLY
 
-	vec3 pattern = vec3(
-		halftone(cellR, p, rotationRGB.r, aa),
-		halftone(cellG, p, rotationRGB.g, aa),
-		halftone(cellB, p, rotationRGB.b, aa)
-	);
+		result *= inputColor.rgb;
 
-	return vec4(pattern, inputColor.a);
+	#endif
+
+	return vec4(result, inputColor.a);
 
 }

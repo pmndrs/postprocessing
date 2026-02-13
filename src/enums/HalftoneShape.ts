@@ -7,8 +7,7 @@
 export enum HalftoneShape {
 
 	DOT = 1,
-	ELLIPSE = 2,
-	LINE = 3,
-	SQUARE = 4
+	HATCH = 2,
+	SQUARE = 3
 
 }
