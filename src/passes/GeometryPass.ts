@@ -420,15 +420,22 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 		}
 
 		const indices = extractIndices(gBuffer);
-		const useSRGB = (!this.frameBufferPrecisionHigh && renderer.outputColorSpace === SRGBColorSpace);
-		const colorSpace = useSRGB ? SRGBColorSpace : NoColorSpace;
+
+		// If the output buffer uses low precision, enable sRGB encoding to reduce information loss.
+		const useSRGB = (
+			this.autoSRGB &&
+			!this.frameBufferPrecisionHigh &&
+			renderer.outputColorSpace === SRGBColorSpace
+		);
 
 		for(const entry of this.textureConfigs) {
 
 			if(entry[1].isColorBuffer === true && indices.has(entry[0])) {
 
 				const index = indices.get(entry[0])!;
-				gBuffer.textures[index].colorSpace = colorSpace;
+				const texture = gBuffer.textures[index];
+				texture.colorSpace = useSRGB ? SRGBColorSpace : NoColorSpace;
+				texture.needsUpdate = true;
 
 			}
 

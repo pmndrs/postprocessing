@@ -155,6 +155,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	private _autoSyncDefaultBuffers: boolean;
 
 	/**
+	 * @see {@link autoSRGB}
+	 */
+
+	private _autoSRGB: boolean;
+
+	/**
 	 * @see {@link timer}
 	 */
 
@@ -258,6 +264,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this._enabled = true;
 		this._attached = false;
 		this._autoSyncDefaultBuffers = true;
+		this._autoSRGB = true;
 		this._renderer = null;
 		this._timer = null;
 		this._scene = null;
@@ -363,6 +370,29 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		if(this._autoSyncDefaultBuffers !== value) {
 
 			this._autoSyncDefaultBuffers = value;
+			this.syncDefaultBuffers();
+
+		}
+
+	}
+
+	/**
+	 * Controls automatic sRGB encoding for low precision output buffers.
+	 *
+	 * @defaultValue true
+	 */
+
+	protected get autoSRGB(): boolean {
+
+		return this._autoSRGB;
+
+	}
+
+	protected set autoSRGB(value: boolean) {
+
+		if(this._autoSRGB !== value) {
+
+			this._autoSRGB = value;
 			this.syncDefaultBuffers();
 
 		}
@@ -828,9 +858,13 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		}
 
 		// If the output buffer uses low precision, enable sRGB encoding to reduce information loss.
-		const useSRGBFramebuffer = !this.output.frameBufferPrecisionHigh && renderer.outputColorSpace === SRGBColorSpace;
+		const useSRGB = (
+			this.autoSRGB &&
+			!this.output.frameBufferPrecisionHigh &&
+			renderer.outputColorSpace === SRGBColorSpace
+		);
 
-		if(useSRGBFramebuffer && texture.colorSpace !== SRGBColorSpace) {
+		if(useSRGB && texture.colorSpace !== SRGBColorSpace) {
 
 			texture.colorSpace = SRGBColorSpace;
 			texture.needsUpdate = true;
