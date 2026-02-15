@@ -34,61 +34,60 @@ void main() {
 
 		// Skip blurring.
 		out_Color = texture(inputBuffer, vUv);
-
-	} else {
-
-		#ifdef FOREGROUND
-
-			// Use far CoC to avoid weak blurring around foreground objects.
-			vec2 step = resolution.zw * max(cocNearFar.x, cocNearFar.y);
-
-		#else
-
-			vec2 step = resolution.zw * coc;
-
-		#endif
-
-		#if PASS == 1
-
-			vec4 acc = vec4(0.0);
-
-			// Each vector contains two sampling points (64 in total).
-			for(int i = 0; i < 32; ++i) {
-
-				vec4 kernel = kernel64[i];
-
-				vec2 uv = step * kernel.xy + vUv;
-				acc += texture(inputBuffer, uv);
-
-				uv = step * kernel.zw + vUv;
-				acc += texture(inputBuffer, uv);
-
-			}
-
-			out_Color = acc / 64.0;
-
-		#else
-
-			vec4 maxValue = texture(inputBuffer, vUv);
-
-			// Each vector contains two sampling points (16 in total).
-			for(int i = 0; i < 8; ++i) {
-
-				vec4 kernel = kernel16[i];
-
-				vec2 uv = step * kernel.xy + vUv;
-				maxValue = max(texture(inputBuffer, uv), maxValue);
-
-				uv = step * kernel.zw + vUv;
-				maxValue = max(texture(inputBuffer, uv), maxValue);
-
-
-			}
-
-			out_Color = maxValue;
-
-		#endif
+		return;
 
 	}
+
+	#ifdef FOREGROUND
+
+		// Use far CoC to avoid weak blurring around foreground objects.
+		vec2 step = resolution.zw * max(cocNearFar.x, cocNearFar.y);
+
+	#else
+
+		vec2 step = resolution.zw * coc;
+
+	#endif
+
+	#if PASS == 1
+
+		vec4 acc = vec4(0.0);
+
+		// Each vector contains two sampling points (64 in total).
+		for(int i = 0; i < 32; ++i) {
+
+			vec4 kernel = kernel64[i];
+
+			vec2 uv = step * kernel.xy + vUv;
+			acc += texture(inputBuffer, uv);
+
+			uv = step * kernel.zw + vUv;
+			acc += texture(inputBuffer, uv);
+
+		}
+
+		out_Color = acc / 64.0;
+
+	#else
+
+		vec4 maxValue = texture(inputBuffer, vUv);
+
+		// Each vector contains two sampling points (16 in total).
+		for(int i = 0; i < 8; ++i) {
+
+			vec4 kernel = kernel16[i];
+
+			vec2 uv = step * kernel.xy + vUv;
+			maxValue = max(texture(inputBuffer, uv), maxValue);
+
+			uv = step * kernel.zw + vUv;
+			maxValue = max(texture(inputBuffer, uv), maxValue);
+
+
+		}
+
+		out_Color = maxValue;
+
+	#endif
 
 }
