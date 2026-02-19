@@ -7,7 +7,7 @@
 export interface Identifiable {
 
 	/**
-	 * An ID.
+	 * An identifier.
 	 */
 
 	readonly id: number;
