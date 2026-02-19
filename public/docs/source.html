@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href>
+  <title data-ice="title">Source | postprocessing</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="A post processing library for three.js."><meta property="twitter:card" content="summary"><meta property="twitter:title" content="postprocessing"><meta property="twitter:description" content="A post processing library for three.js."></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/pmndrs/postprocessing"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectShaderData.js~EffectShaderData.html">EffectShaderData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/GaussKernel.js~GaussKernel.html">GaussKernel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/OverrideMaterialManager.js~OverrideMaterialManager.html">OverrideMaterialManager</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Resolution.js~Resolution.html">Resolution</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Selection.js~Selection.html">Selection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Timer.js~Timer.html">Timer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/ImmutableTimer.js~ImmutableTimer.html">ImmutableTimer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Initializable.js~Initializable.html">Initializable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects">effects</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ASCIIEffect.js~ASCIIEffect.html">ASCIIEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html">BloomEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BokehEffect.js~BokehEffect.html">BokehEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BrightnessContrastEffect.js~BrightnessContrastEffect.html">BrightnessContrastEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ChromaticAberrationEffect.js~ChromaticAberrationEffect.html">ChromaticAberrationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ColorAverageEffect.js~ColorAverageEffect.html">ColorAverageEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ColorDepthEffect.js~ColorDepthEffect.html">ColorDepthEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/DepthEffect.js~DepthEffect.html">DepthEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect.html">DepthOfFieldEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/DotScreenEffect.js~DotScreenEffect.html">DotScreenEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html">Effect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/FXAAEffect.js~FXAAEffect.html">FXAAEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GammaCorrectionEffect.js~GammaCorrectionEffect.html">GammaCorrectionEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GlitchEffect.js~GlitchEffect.html">GlitchEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html">GodRaysEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GridEffect.js~GridEffect.html">GridEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/HueSaturationEffect.js~HueSaturationEffect.html">HueSaturationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/LUT1DEffect.js~LUT1DEffect.html">LUT1DEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/LUT3DEffect.js~LUT3DEffect.html">LUT3DEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/LensDistortionEffect.js~LensDistortionEffect.html">LensDistortionEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/NoiseEffect.js~NoiseEffect.html">NoiseEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html">OutlineEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/PixelationEffect.js~PixelationEffect.html">PixelationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html">RealisticBokehEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SMAAEffect.js~SMAAEffect.html">SMAAEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SSAOEffect.js~SSAOEffect.html">SSAOEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ScanlineEffect.js~ScanlineEffect.html">ScanlineEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html">SelectiveBloomEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SepiaEffect.js~SepiaEffect.html">SepiaEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ShockWaveEffect.js~ShockWaveEffect.html">ShockWaveEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/TextureEffect.js~TextureEffect.html">TextureEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/TiltShiftEffect.js~TiltShiftEffect.html">TiltShiftEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html">ToneMappingEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/VignetteEffect.js~VignetteEffect.html">VignetteEffect</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects-blending">effects/blending</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/blending/BlendMode.js~BlendMode.html">BlendMode</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#enums">enums</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-BlendFunction">BlendFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ColorChannel">ColorChannel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DepthCopyMode">DepthCopyMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DepthTestStrategy">DepthTestStrategy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EdgeDetectionMode">EdgeDetectionMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EffectAttribute">EffectAttribute</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EffectShaderSection">EffectShaderSection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GlitchMode">GlitchMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-KernelSize">KernelSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LUTOperation">LUTOperation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MaskFunction">MaskFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-PredicationMode">PredicationMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SMAAPreset">SMAAPreset</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ToneMappingMode">ToneMappingMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-VignetteTechnique">VignetteTechnique</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-WebGLExtension">WebGLExtension</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#loaders">loaders</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/loaders/LUT3dlLoader.js~LUT3dlLoader.html">LUT3dlLoader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/loaders/LUTCubeLoader.js~LUTCubeLoader.html">LUTCubeLoader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/loaders/SMAAImageLoader.js~SMAAImageLoader.html">SMAAImageLoader</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#materials">materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/AdaptiveLuminanceMaterial.js~AdaptiveLuminanceMaterial.html">AdaptiveLuminanceMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/BokehMaterial.js~BokehMaterial.html">BokehMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/BoxBlurMaterial.js~BoxBlurMaterial.html">BoxBlurMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CircleOfConfusionMaterial.js~CircleOfConfusionMaterial.html">CircleOfConfusionMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthCopyMaterial.js~DepthCopyMaterial.html">DepthCopyMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthDownsamplingMaterial.js~DepthDownsamplingMaterial.html">DepthDownsamplingMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html">DepthMaskMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DownsamplingMaterial.js~DownsamplingMaterial.html">DownsamplingMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial.html">EdgeDetectionMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GaussianBlurMaterial.js~GaussianBlurMaterial.html">GaussianBlurMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/KawaseBlurMaterial.js~KawaseBlurMaterial.html">KawaseBlurMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/MaskMaterial.js~MaskMaterial.html">MaskMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/OutlineMaterial.js~OutlineMaterial.html">OutlineMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/SSAOMaterial.js~SSAOMaterial.html">SSAOMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/TiltShiftBlurMaterial.js~TiltShiftBlurMaterial.html">TiltShiftBlurMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/UpsamplingMaterial.js~UpsamplingMaterial.html">UpsamplingMaterial</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#passes">passes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/AdaptiveLuminancePass.js~AdaptiveLuminancePass.html">AdaptiveLuminancePass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BoxBlurPass.js~BoxBlurPass.html">BoxBlurPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearMaskPass.js~ClearMaskPass.html">ClearMaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/CopyPass.js~CopyPass.html">CopyPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthCopyPass.js~DepthCopyPass.html">DepthCopyPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass.html">DepthDownsamplingPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthPass.js~DepthPass.html">DepthPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthPickingPass.js~DepthPickingPass.html">DepthPickingPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/EffectPass.js~EffectPass.html">EffectPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/GaussianBlurPass.js~GaussianBlurPass.html">GaussianBlurPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/KawaseBlurPass.js~KawaseBlurPass.html">KawaseBlurPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/LambdaPass.js~LambdaPass.html">LambdaPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/LuminancePass.js~LuminancePass.html">LuminancePass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/MaskPass.js~MaskPass.html">MaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/MipmapBlurPass.js~MipmapBlurPass.html">MipmapBlurPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/NormalPass.js~NormalPass.html">NormalPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html">Pass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ShaderPass.js~ShaderPass.html">ShaderPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/TiltShiftBlurPass.js~TiltShiftBlurPass.html">TiltShiftBlurPass</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#textures">textures</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/ASCIITexture.js~ASCIITexture.html">ASCIITexture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/NoiseTexture.js~NoiseTexture.html">NoiseTexture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/RawImageData.js~RawImageData.html">RawImageData</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#textures-lut">textures/lut</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/lut/LookupTexture.js~LookupTexture.html">LookupTexture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/lut/TetrahedralUpscaler.js~TetrahedralUpscaler.html">TetrahedralUpscaler</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#textures-smaa">textures/smaa</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/smaa/SMAAAreaImageData.js~SMAAAreaImageData.html">SMAAAreaImageData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/smaa/SMAAImageGenerator.js~SMAAImageGenerator.html">SMAAImageGenerator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/textures/smaa/SMAASearchImageData.js~SMAASearchImageData.html">SMAASearchImageData</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/utils/IdManager.js~IdManager.html">IdManager</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1>Source <img data-ice="coverageBadge" src="./badge.svg"><span data-ice="totalCoverageCount" class="total-coverage-count">1369/1704</span></h1>
+
+<table class="files-summary" data-ice="files" data-use-coverage="true">
+  <thead>
+    <tr>
+      <td>File</td>
+      <td>Identifier</td>
+      <td class="coverage">Document</td>
+      <td style="display: none;">Size</td>
+      <td style="display: none;">Lines</td>
+      <td style="display: none;">Updated</td>
+    </tr>
+  </thead>
+  <tbody>
+    
+  <tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/core/Disposable.js.html">src/core/Disposable.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">2/2</span></td>
+      <td style="display: none;" data-ice="size">202 byte</td>
+      <td style="display: none;" data-ice="lines">17</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/core/EffectComposer.js.html">src/core/EffectComposer.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">28/28</span></td>
+      <td style="display: none;" data-ice="size">14430 byte</td>
+      <td style="display: none;" data-ice="lines">721</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/core/EffectShaderData.js.html">src/core/EffectShaderData.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/core/EffectShaderData.js~EffectShaderData.html">EffectShaderData</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">12/12</span></td>
+      <td style="display: none;" data-ice="size">1847 byte</td>
+      <td style="display: none;" data-ice="lines">113</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/core/GaussKernel.js.html">src/core/GaussKernel.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/core/GaussKernel.js~GaussKernel.html">GaussKernel</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">10/10</span></td>
+      <td style="display: none;" data-ice="size">3874 byte</td>
+      <td style="display: none;" data-ice="lines">195</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/core/ImmutableTimer.js.html">src/core/ImmutableTimer.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/core/ImmutableTimer.js~ImmutableTimer.html">ImmutableTimer</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">3/3</span></td>
+      <td style="display: none;" data-ice="size">310 byte</td>
+      <td style="display: none;" data-ice="lines">25</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/core/Initializable.js.html">src/core/Initializable.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/core/Initializable.js~Initializable.html">Initializable</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">2/2</span></td>
+      <td style="display: none;" data-ice="size">441 byte</td>
+      <td style="display: none;" data-ice="lines">21</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/core/OverrideMaterialManager.js.html">src/core/OverrideMaterialManager.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/core/OverrideMaterialManager.js~OverrideMaterialManager.html">OverrideMaterialManager</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">20/20</span></td>
+      <td style="display: none;" data-ice="size">7790 byte</td>
+      <td style="display: none;" data-ice="lines">436</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/core/Resizable.js.html">src/core/Resizable.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">2/2</span></td>
+      <td style="display: none;" data-ice="size">288 byte</td>
+      <td style="display: none;" data-ice="lines">20</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/core/Resolution.js.html#errorLines=140,160,208,261,3,311,380,432">src/core/Resolution.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/core/Resolution.js~Resolution.html">Resolution</a></span></td>
+      <td class="coverage"><span data-ice="coverage">80 %</span><span data-ice="coverageCount" class="coverage-count">32/40</span></td>
+      <td style="display: none;" data-ice="size">8690 byte</td>
+      <td style="display: none;" data-ice="lines">521</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/core/Selection.js.html#errorLines=3,67">src/core/Selection.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/core/Selection.js~Selection.html">Selection</a></span></td>
+      <td class="coverage"><span data-ice="coverage">88 %</span><span data-ice="coverageCount" class="coverage-count">16/18</span></td>
+      <td style="display: none;" data-ice="size">5025 byte</td>
+      <td style="display: none;" data-ice="lines">293</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/core/Timer.js.html#errorLines=1,122,142,148,154,160,2,203,209,215,226">src/core/Timer.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/core/Timer.js~Timer.html">Timer</a></span></td>
+      <td class="coverage"><span data-ice="coverage">56 %</span><span data-ice="coverageCount" class="coverage-count">14/25</span></td>
+      <td style="display: none;" data-ice="size">3467 byte</td>
+      <td style="display: none;" data-ice="lines">232</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/core/index.js.html">src/core/index.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">487 byte</td>
+      <td style="display: none;" data-ice="lines">14</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/ASCIIEffect.js.html#errorLines=113,147,179,76">src/effects/ASCIIEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/ASCIIEffect.js~ASCIIEffect.html">ASCIIEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">73 %</span><span data-ice="coverageCount" class="coverage-count">11/15</span></td>
+      <td style="display: none;" data-ice="size">4004 byte</td>
+      <td style="display: none;" data-ice="lines">238</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/BloomEffect.js.html#errorLines=225,244,263,282,300,318">src/effects/BloomEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html">BloomEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">81 %</span><span data-ice="coverageCount" class="coverage-count">26/32</span></td>
+      <td style="display: none;" data-ice="size">9423 byte</td>
+      <td style="display: none;" data-ice="lines">467</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/BokehEffect.js.html">src/effects/BokehEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/BokehEffect.js~BokehEffect.html">BokehEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">2/2</span></td>
+      <td style="display: none;" data-ice="size">1481 byte</td>
+      <td style="display: none;" data-ice="lines">50</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/BrightnessContrastEffect.js.html#errorLines=34,50,94">src/effects/BrightnessContrastEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/BrightnessContrastEffect.js~BrightnessContrastEffect.html">BrightnessContrastEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">72 %</span><span data-ice="coverageCount" class="coverage-count">8/11</span></td>
+      <td style="display: none;" data-ice="size">2228 byte</td>
+      <td style="display: none;" data-ice="lines">126</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/ChromaticAberrationEffect.js.html#errorLines=102,54,74">src/effects/ChromaticAberrationEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/ChromaticAberrationEffect.js~ChromaticAberrationEffect.html">ChromaticAberrationEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">70 %</span><span data-ice="coverageCount" class="coverage-count">7/10</span></td>
+      <td style="display: none;" data-ice="size">2419 byte</td>
+      <td style="display: none;" data-ice="lines">134</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/ColorAverageEffect.js.html">src/effects/ColorAverageEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/ColorAverageEffect.js~ColorAverageEffect.html">ColorAverageEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">2/2</span></td>
+      <td style="display: none;" data-ice="size">425 byte</td>
+      <td style="display: none;" data-ice="lines">23</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/ColorDepthEffect.js.html#errorLines=57">src/effects/ColorDepthEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/ColorDepthEffect.js~ColorDepthEffect.html">ColorDepthEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">85 %</span><span data-ice="coverageCount" class="coverage-count">6/7</span></td>
+      <td style="display: none;" data-ice="size">1511 byte</td>
+      <td style="display: none;" data-ice="lines">88</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/DepthEffect.js.html#errorLines=46">src/effects/DepthEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/DepthEffect.js~DepthEffect.html">DepthEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">83 %</span><span data-ice="coverageCount" class="coverage-count">5/6</span></td>
+      <td style="display: none;" data-ice="size">1599 byte</td>
+      <td style="display: none;" data-ice="lines">92</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/DepthOfFieldEffect.js.html#errorLines=16,245,276,364">src/effects/DepthOfFieldEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect.html">DepthOfFieldEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">89 %</span><span data-ice="coverageCount" class="coverage-count">34/38</span></td>
+      <td style="display: none;" data-ice="size">15049 byte</td>
+      <td style="display: none;" data-ice="lines">574</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/DotScreenEffect.js.html#errorLines=47,91">src/effects/DotScreenEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/DotScreenEffect.js~DotScreenEffect.html">DotScreenEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">75 %</span><span data-ice="coverageCount" class="coverage-count">6/8</span></td>
+      <td style="display: none;" data-ice="size">1578 byte</td>
+      <td style="display: none;" data-ice="lines">97</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/Effect.js.html">src/effects/Effect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/Effect.js~Effect.html">Effect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">37/37</span></td>
+      <td style="display: none;" data-ice="size">9572 byte</td>
+      <td style="display: none;" data-ice="lines">486</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/FXAAEffect.js.html#errorLines=108,51,70,89">src/effects/FXAAEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/FXAAEffect.js~FXAAEffect.html">FXAAEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">60 %</span><span data-ice="coverageCount" class="coverage-count">6/10</span></td>
+      <td style="display: none;" data-ice="size">2171 byte</td>
+      <td style="display: none;" data-ice="lines">115</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/GammaCorrectionEffect.js.html">src/effects/GammaCorrectionEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/GammaCorrectionEffect.js~GammaCorrectionEffect.html">GammaCorrectionEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">2/2</span></td>
+      <td style="display: none;" data-ice="size">849 byte</td>
+      <td style="display: none;" data-ice="lines">34</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/GlitchEffect.js.html#errorLines=220,264,308,352,396,440,536,606,8">src/effects/GlitchEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/GlitchEffect.js~GlitchEffect.html">GlitchEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">84 %</span><span data-ice="coverageCount" class="coverage-count">48/57</span></td>
+      <td style="display: none;" data-ice="size">13464 byte</td>
+      <td style="display: none;" data-ice="lines">772</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/GodRaysEffect.js.html#errorLines=212,231,27,28,333,352,371,392,411">src/effects/GodRaysEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html">GodRaysEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">78 %</span><span data-ice="coverageCount" class="coverage-count">33/42</span></td>
+      <td style="display: none;" data-ice="size">13405 byte</td>
+      <td style="display: none;" data-ice="lines">619</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/GridEffect.js.html#errorLines=120,75">src/effects/GridEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/GridEffect.js~GridEffect.html">GridEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">85 %</span><span data-ice="coverageCount" class="coverage-count">12/14</span></td>
+      <td style="display: none;" data-ice="size">2828 byte</td>
+      <td style="display: none;" data-ice="lines">172</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/HueSaturationEffect.js.html#errorLines=50,95">src/effects/HueSaturationEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/HueSaturationEffect.js~HueSaturationEffect.html">HueSaturationEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">80 %</span><span data-ice="coverageCount" class="coverage-count">8/10</span></td>
+      <td style="display: none;" data-ice="size">2274 byte</td>
+      <td style="display: none;" data-ice="lines">133</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/LUT1DEffect.js.html#errorLines=44">src/effects/LUT1DEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/LUT1DEffect.js~LUT1DEffect.html">LUT1DEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">75 %</span><span data-ice="coverageCount" class="coverage-count">3/4</span></td>
+      <td style="display: none;" data-ice="size">1056 byte</td>
+      <td style="display: none;" data-ice="lines">56</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/LUT3DEffect.js.html#errorLines=274,64,81">src/effects/LUT3DEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/LUT3DEffect.js~LUT3DEffect.html">LUT3DEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">75 %</span><span data-ice="coverageCount" class="coverage-count">9/12</span></td>
+      <td style="display: none;" data-ice="size">6624 byte</td>
+      <td style="display: none;" data-ice="lines">305</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/LensDistortionEffect.js.html#errorLines=108,54,72,90">src/effects/LensDistortionEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/LensDistortionEffect.js~LensDistortionEffect.html">LensDistortionEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">60 %</span><span data-ice="coverageCount" class="coverage-count">6/10</span></td>
+      <td style="display: none;" data-ice="size">2005 byte</td>
+      <td style="display: none;" data-ice="lines">114</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/NoiseEffect.js.html#errorLines=39">src/effects/NoiseEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/NoiseEffect.js~NoiseEffect.html">NoiseEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">83 %</span><span data-ice="coverageCount" class="coverage-count">5/6</span></td>
+      <td style="display: none;" data-ice="size">1661 byte</td>
+      <td style="display: none;" data-ice="lines">85</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/OutlineEffect.js.html#errorLines=232,240,288,307,325,343,361,432,451,470,489,508,527,545,603">src/effects/OutlineEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html">OutlineEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">75 %</span><span data-ice="coverageCount" class="coverage-count">46/61</span></td>
+      <td style="display: none;" data-ice="size">16318 byte</td>
+      <td style="display: none;" data-ice="lines">827</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/PixelationEffect.js.html#errorLines=64">src/effects/PixelationEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/PixelationEffect.js~PixelationEffect.html">PixelationEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">88 %</span><span data-ice="coverageCount" class="coverage-count">8/9</span></td>
+      <td style="display: none;" data-ice="size">2038 byte</td>
+      <td style="display: none;" data-ice="lines">125</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/RealisticBokehEffect.js.html#errorLines=115,137,171,205,93">src/effects/RealisticBokehEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html">RealisticBokehEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">58 %</span><span data-ice="coverageCount" class="coverage-count">7/12</span></td>
+      <td style="display: none;" data-ice="size">4785 byte</td>
+      <td style="display: none;" data-ice="lines">225</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/SMAAEffect.js.html">src/effects/SMAAEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/SMAAEffect.js~SMAAEffect.html">SMAAEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">25/25</span></td>
+      <td style="display: none;" data-ice="size">10723 byte</td>
+      <td style="display: none;" data-ice="lines">471</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/SSAOEffect.js.html#errorLines=13,210,229,287,306,325,343,397,411,452,470">src/effects/SSAOEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/SSAOEffect.js~SSAOEffect.html">SSAOEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">71 %</span><span data-ice="coverageCount" class="coverage-count">28/39</span></td>
+      <td style="display: none;" data-ice="size">15013 byte</td>
+      <td style="display: none;" data-ice="lines">624</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/ScanlineEffect.js.html#errorLines=114,69">src/effects/ScanlineEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/ScanlineEffect.js~ScanlineEffect.html">ScanlineEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">81 %</span><span data-ice="coverageCount" class="coverage-count">9/11</span></td>
+      <td style="display: none;" data-ice="size">2664 byte</td>
+      <td style="display: none;" data-ice="lines">149</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/SelectiveBloomEffect.js.html#errorLines=124,130,176,221">src/effects/SelectiveBloomEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html">SelectiveBloomEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">84 %</span><span data-ice="coverageCount" class="coverage-count">22/26</span></td>
+      <td style="display: none;" data-ice="size">7242 byte</td>
+      <td style="display: none;" data-ice="lines">356</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/SepiaEffect.js.html#errorLines=48">src/effects/SepiaEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/SepiaEffect.js~SepiaEffect.html">SepiaEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">88 %</span><span data-ice="coverageCount" class="coverage-count">8/9</span></td>
+      <td style="display: none;" data-ice="size">2008 byte</td>
+      <td style="display: none;" data-ice="lines">116</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/ShockWaveEffect.js.html#errorLines=107,125,143,161,180,7,8,9">src/effects/ShockWaveEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/ShockWaveEffect.js~ShockWaveEffect.html">ShockWaveEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">69 %</span><span data-ice="coverageCount" class="coverage-count">18/26</span></td>
+      <td style="display: none;" data-ice="size">5381 byte</td>
+      <td style="display: none;" data-ice="lines">303</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/TextureEffect.js.html#errorLines=137,171,54">src/effects/TextureEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/TextureEffect.js~TextureEffect.html">TextureEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">75 %</span><span data-ice="coverageCount" class="coverage-count">9/12</span></td>
+      <td style="display: none;" data-ice="size">4434 byte</td>
+      <td style="display: none;" data-ice="lines">226</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/TiltShiftEffect.js.html#errorLines=148,167,187,207,223">src/effects/TiltShiftEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/TiltShiftEffect.js~TiltShiftEffect.html">TiltShiftEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">76 %</span><span data-ice="coverageCount" class="coverage-count">16/21</span></td>
+      <td style="display: none;" data-ice="size">5876 byte</td>
+      <td style="display: none;" data-ice="lines">282</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/ToneMappingEffect.js.html#errorLines=121,214,234,254,297,347,366,384">src/effects/ToneMappingEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html">ToneMappingEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">72 %</span><span data-ice="coverageCount" class="coverage-count">21/29</span></td>
+      <td style="display: none;" data-ice="size">9285 byte</td>
+      <td style="display: none;" data-ice="lines">423</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/VignetteEffect.js.html#errorLines=132,176,57">src/effects/VignetteEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/VignetteEffect.js~VignetteEffect.html">VignetteEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">81 %</span><span data-ice="coverageCount" class="coverage-count">13/16</span></td>
+      <td style="display: none;" data-ice="size">3437 byte</td>
+      <td style="display: none;" data-ice="lines">208</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/blending/BlendMode.js.html#errorLines=153">src/effects/blending/BlendMode.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/blending/BlendMode.js~BlendMode.html">BlendMode</a></span></td>
+      <td class="coverage"><span data-ice="coverage">91 %</span><span data-ice="coverageCount" class="coverage-count">11/12</span></td>
+      <td style="display: none;" data-ice="size">4638 byte</td>
+      <td style="display: none;" data-ice="lines">198</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/blending/index.js.html">src/effects/blending/index.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">32 byte</td>
+      <td style="display: none;" data-ice="lines">1</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/index.js.html">src/effects/index.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">1417 byte</td>
+      <td style="display: none;" data-ice="lines">39</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/enums/BlendFunction.js.html">src/enums/BlendFunction.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-BlendFunction">BlendFunction</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">1/1</span></td>
+      <td style="display: none;" data-ice="size">3415 byte</td>
+      <td style="display: none;" data-ice="lines">84</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/enums/ColorChannel.js.html">src/enums/ColorChannel.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-ColorChannel">ColorChannel</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">1/1</span></td>
+      <td style="display: none;" data-ice="size">277 byte</td>
+      <td style="display: none;" data-ice="lines">16</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/enums/DepthCopyMode.js.html">src/enums/DepthCopyMode.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-DepthCopyMode">DepthCopyMode</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">1/1</span></td>
+      <td style="display: none;" data-ice="size">283 byte</td>
+      <td style="display: none;" data-ice="lines">12</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/enums/DepthTestStrategy.js.html">src/enums/DepthTestStrategy.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-DepthTestStrategy">DepthTestStrategy</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">1/1</span></td>
+      <td style="display: none;" data-ice="size">354 byte</td>
+      <td style="display: none;" data-ice="lines">14</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/enums/EdgeDetectionMode.js.html">src/enums/EdgeDetectionMode.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-EdgeDetectionMode">EdgeDetectionMode</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">1/1</span></td>
+      <td style="display: none;" data-ice="size">320 byte</td>
+      <td style="display: none;" data-ice="lines">14</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/enums/EffectAttribute.js.html">src/enums/EffectAttribute.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-EffectAttribute">EffectAttribute</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">1/1</span></td>
+      <td style="display: none;" data-ice="size">656 byte</td>
+      <td style="display: none;" data-ice="lines">17</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/enums/EffectShaderSection.js.html">src/enums/EffectShaderSection.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-EffectShaderSection">EffectShaderSection</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">1/1</span></td>
+      <td style="display: none;" data-ice="size">851 byte</td>
+      <td style="display: none;" data-ice="lines">19</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/enums/GlitchMode.js.html">src/enums/GlitchMode.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-GlitchMode">GlitchMode</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">1/1</span></td>
+      <td style="display: none;" data-ice="size">378 byte</td>
+      <td style="display: none;" data-ice="lines">16</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/enums/KernelSize.js.html">src/enums/KernelSize.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-KernelSize">KernelSize</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">1/1</span></td>
+      <td style="display: none;" data-ice="size">749 byte</td>
+      <td style="display: none;" data-ice="lines">20</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/enums/LUTOperation.js.html">src/enums/LUTOperation.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-LUTOperation">LUTOperation</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">1/1</span></td>
+      <td style="display: none;" data-ice="size">196 byte</td>
+      <td style="display: none;" data-ice="lines">10</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/enums/MaskFunction.js.html">src/enums/MaskFunction.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-MaskFunction">MaskFunction</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">1/1</span></td>
+      <td style="display: none;" data-ice="size">581 byte</td>
+      <td style="display: none;" data-ice="lines">16</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/enums/PredicationMode.js.html">src/enums/PredicationMode.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-PredicationMode">PredicationMode</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">1/1</span></td>
+      <td style="display: none;" data-ice="size">353 byte</td>
+      <td style="display: none;" data-ice="lines">14</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/enums/SMAAPreset.js.html">src/enums/SMAAPreset.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-SMAAPreset">SMAAPreset</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">1/1</span></td>
+      <td style="display: none;" data-ice="size">439 byte</td>
+      <td style="display: none;" data-ice="lines">16</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/enums/ToneMappingMode.js.html">src/enums/ToneMappingMode.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-ToneMappingMode">ToneMappingMode</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">1/1</span></td>
+      <td style="display: none;" data-ice="size">1225 byte</td>
+      <td style="display: none;" data-ice="lines">28</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/enums/VignetteTechnique.js.html">src/enums/VignetteTechnique.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-VignetteTechnique">VignetteTechnique</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">1/1</span></td>
+      <td style="display: none;" data-ice="size">242 byte</td>
+      <td style="display: none;" data-ice="lines">12</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/enums/WebGLExtension.js.html">src/enums/WebGLExtension.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-WebGLExtension">WebGLExtension</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">1/1</span></td>
+      <td style="display: none;" data-ice="size">627 byte</td>
+      <td style="display: none;" data-ice="lines">16</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/enums/index.js.html">src/enums/index.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">716 byte</td>
+      <td style="display: none;" data-ice="lines">19</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/index.js.html">src/index.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">308 byte</td>
+      <td style="display: none;" data-ice="lines">10</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/loaders/LUT3dlLoader.js.html">src/loaders/LUT3dlLoader.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/loaders/LUT3dlLoader.js~LUT3dlLoader.html">LUT3dlLoader</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">4/4</span></td>
+      <td style="display: none;" data-ice="size">3979 byte</td>
+      <td style="display: none;" data-ice="lines">164</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/loaders/LUTCubeLoader.js.html">src/loaders/LUTCubeLoader.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/loaders/LUTCubeLoader.js~LUTCubeLoader.html">LUTCubeLoader</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">4/4</span></td>
+      <td style="display: none;" data-ice="size">3874 byte</td>
+      <td style="display: none;" data-ice="lines">166</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/loaders/SMAAImageLoader.js.html">src/loaders/SMAAImageLoader.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/loaders/SMAAImageLoader.js~SMAAImageLoader.html">SMAAImageLoader</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">2/2</span></td>
+      <td style="display: none;" data-ice="size">2355 byte</td>
+      <td style="display: none;" data-ice="lines">108</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/loaders/index.js.html">src/loaders/index.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">109 byte</td>
+      <td style="display: none;" data-ice="lines">3</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/materials/AdaptiveLuminanceMaterial.js.html#errorLines=104,158,202">src/materials/AdaptiveLuminanceMaterial.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/materials/AdaptiveLuminanceMaterial.js~AdaptiveLuminanceMaterial.html">AdaptiveLuminanceMaterial</a></span></td>
+      <td class="coverage"><span data-ice="coverage">84 %</span><span data-ice="coverageCount" class="coverage-count">16/19</span></td>
+      <td style="display: none;" data-ice="size">3753 byte</td>
+      <td style="display: none;" data-ice="lines">234</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/materials/BokehMaterial.js.html#errorLines=119">src/materials/BokehMaterial.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/materials/BokehMaterial.js~BokehMaterial.html">BokehMaterial</a></span></td>
+      <td class="coverage"><span data-ice="coverage">92 %</span><span data-ice="coverageCount" class="coverage-count">12/13</span></td>
+      <td style="display: none;" data-ice="size">3715 byte</td>
+      <td style="display: none;" data-ice="lines">218</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/materials/BoxBlurMaterial.js.html#errorLines=113,218,246,84,97">src/materials/BoxBlurMaterial.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/materials/BoxBlurMaterial.js~BoxBlurMaterial.html">BoxBlurMaterial</a></span></td>
+      <td class="coverage"><span data-ice="coverage">75 %</span><span data-ice="coverageCount" class="coverage-count">15/20</span></td>
+      <td style="display: none;" data-ice="size">5042 byte</td>
+      <td style="display: none;" data-ice="lines">295</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/materials/CircleOfConfusionMaterial.js.html#errorLines=105,124,169,187,206,74">src/materials/CircleOfConfusionMaterial.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/materials/CircleOfConfusionMaterial.js~CircleOfConfusionMaterial.html">CircleOfConfusionMaterial</a></span></td>
+      <td class="coverage"><span data-ice="coverage">72 %</span><span data-ice="coverageCount" class="coverage-count">16/22</span></td>
+      <td style="display: none;" data-ice="size">4702 byte</td>
+      <td style="display: none;" data-ice="lines">285</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/materials/CopyMaterial.js.html#errorLines=108,109,143,177,39,55,71,72,92">src/materials/CopyMaterial.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></td>
+      <td class="coverage"><span data-ice="coverage">52 %</span><span data-ice="coverageCount" class="coverage-count">10/19</span></td>
+      <td style="display: none;" data-ice="size">3408 byte</td>
+      <td style="display: none;" data-ice="lines">233</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/materials/DepthComparisonMaterial.js.html#errorLines=66">src/materials/DepthComparisonMaterial.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></td>
+      <td class="coverage"><span data-ice="coverage">87 %</span><span data-ice="coverageCount" class="coverage-count">7/8</span></td>
+      <td style="display: none;" data-ice="size">2363 byte</td>
+      <td style="display: none;" data-ice="lines">127</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/materials/DepthCopyMaterial.js.html#errorLines=218,61,76,92">src/materials/DepthCopyMaterial.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/materials/DepthCopyMaterial.js~DepthCopyMaterial.html">DepthCopyMaterial</a></span></td>
+      <td class="coverage"><span data-ice="coverage">80 %</span><span data-ice="coverageCount" class="coverage-count">17/21</span></td>
+      <td style="display: none;" data-ice="size">4423 byte</td>
+      <td style="display: none;" data-ice="lines">252</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/materials/DepthDownsamplingMaterial.js.html#errorLines=64">src/materials/DepthDownsamplingMaterial.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/materials/DepthDownsamplingMaterial.js~DepthDownsamplingMaterial.html">DepthDownsamplingMaterial</a></span></td>
+      <td class="coverage"><span data-ice="coverage">90 %</span><span data-ice="coverageCount" class="coverage-count">9/10</span></td>
+      <td style="display: none;" data-ice="size">2560 byte</td>
+      <td style="display: none;" data-ice="lines">147</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/materials/DepthMaskMaterial.js.html#errorLines=155,175,219,265,84">src/materials/DepthMaskMaterial.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html">DepthMaskMaterial</a></span></td>
+      <td class="coverage"><span data-ice="coverage">80 %</span><span data-ice="coverageCount" class="coverage-count">20/25</span></td>
+      <td style="display: none;" data-ice="size">6519 byte</td>
+      <td style="display: none;" data-ice="lines">380</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/materials/DownsamplingMaterial.js.html">src/materials/DownsamplingMaterial.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/materials/DownsamplingMaterial.js~DownsamplingMaterial.html">DownsamplingMaterial</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">4/4</span></td>
+      <td style="display: none;" data-ice="size">1142 byte</td>
+      <td style="display: none;" data-ice="lines">64</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/materials/EdgeDetectionMaterial.js.html#errorLines=108,158,210,259,329,376,423,77">src/materials/EdgeDetectionMaterial.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial.html">EdgeDetectionMaterial</a></span></td>
+      <td class="coverage"><span data-ice="coverage">78 %</span><span data-ice="coverageCount" class="coverage-count">29/37</span></td>
+      <td style="display: none;" data-ice="size">9278 byte</td>
+      <td style="display: none;" data-ice="lines">469</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/materials/EffectMaterial.js.html#errorLines=119,137,140,185,190,250,274,332">src/materials/EffectMaterial.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></td>
+      <td class="coverage"><span data-ice="coverage">72 %</span><span data-ice="coverageCount" class="coverage-count">21/29</span></td>
+      <td style="display: none;" data-ice="size">7548 byte</td>
+      <td style="display: none;" data-ice="lines">422</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/materials/GaussianBlurMaterial.js.html#errorLines=112,142,81">src/materials/GaussianBlurMaterial.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/materials/GaussianBlurMaterial.js~GaussianBlurMaterial.html">GaussianBlurMaterial</a></span></td>
+      <td class="coverage"><span data-ice="coverage">75 %</span><span data-ice="coverageCount" class="coverage-count">9/12</span></td>
+      <td style="display: none;" data-ice="size">2943 byte</td>
+      <td style="display: none;" data-ice="lines">159</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/materials/GodRaysMaterial.js.html#errorLines=130,174,218,262,306,350,355">src/materials/GodRaysMaterial.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></td>
+      <td class="coverage"><span data-ice="coverage">78 %</span><span data-ice="coverageCount" class="coverage-count">25/32</span></td>
+      <td style="display: none;" data-ice="size">5721 byte</td>
+      <td style="display: none;" data-ice="lines">385</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/materials/KawaseBlurMaterial.js.html#errorLines=118,175,7">src/materials/KawaseBlurMaterial.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/materials/KawaseBlurMaterial.js~KawaseBlurMaterial.html">KawaseBlurMaterial</a></span></td>
+      <td class="coverage"><span data-ice="coverage">82 %</span><span data-ice="coverageCount" class="coverage-count">14/17</span></td>
+      <td style="display: none;" data-ice="size">3995 byte</td>
+      <td style="display: none;" data-ice="lines">222</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/materials/LuminanceMaterial.js.html#errorLines=149,204,218,230,273,291,95">src/materials/LuminanceMaterial.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></td>
+      <td class="coverage"><span data-ice="coverage">72 %</span><span data-ice="coverageCount" class="coverage-count">18/25</span></td>
+      <td style="display: none;" data-ice="size">5568 byte</td>
+      <td style="display: none;" data-ice="lines">334</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/materials/MaskMaterial.js.html#errorLines=167,223,86">src/materials/MaskMaterial.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/materials/MaskMaterial.js~MaskMaterial.html">MaskMaterial</a></span></td>
+      <td class="coverage"><span data-ice="coverage">84 %</span><span data-ice="coverageCount" class="coverage-count">16/19</span></td>
+      <td style="display: none;" data-ice="size">4202 byte</td>
+      <td style="display: none;" data-ice="lines">257</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/materials/OutlineMaterial.js.html">src/materials/OutlineMaterial.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/materials/OutlineMaterial.js~OutlineMaterial.html">OutlineMaterial</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">6/6</span></td>
+      <td style="display: none;" data-ice="size">1718 byte</td>
+      <td style="display: none;" data-ice="lines">96</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/materials/SMAAWeightsMaterial.js.html#errorLines=115,152,157,190,224,278,312,97">src/materials/SMAAWeightsMaterial.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></span></td>
+      <td class="coverage"><span data-ice="coverage">71 %</span><span data-ice="coverageCount" class="coverage-count">20/28</span></td>
+      <td style="display: none;" data-ice="size">7373 byte</td>
+      <td style="display: none;" data-ice="lines">369</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/materials/SSAOMaterial.js.html#errorLines=128,247,293,339,390,434,478,537,578,618,639,657,675,710,731,749,767">src/materials/SSAOMaterial.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/materials/SSAOMaterial.js~SSAOMaterial.html">SSAOMaterial</a></span></td>
+      <td class="coverage"><span data-ice="coverage">76 %</span><span data-ice="coverageCount" class="coverage-count">54/71</span></td>
+      <td style="display: none;" data-ice="size">14607 byte</td>
+      <td style="display: none;" data-ice="lines">874</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/materials/TiltShiftBlurMaterial.js.html#errorLines=102,120,139,158,34,35,36">src/materials/TiltShiftBlurMaterial.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/materials/TiltShiftBlurMaterial.js~TiltShiftBlurMaterial.html">TiltShiftBlurMaterial</a></span></td>
+      <td class="coverage"><span data-ice="coverage">61 %</span><span data-ice="coverageCount" class="coverage-count">11/18</span></td>
+      <td style="display: none;" data-ice="size">3036 byte</td>
+      <td style="display: none;" data-ice="lines">179</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/materials/UpsamplingMaterial.js.html#errorLines=77">src/materials/UpsamplingMaterial.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/materials/UpsamplingMaterial.js~UpsamplingMaterial.html">UpsamplingMaterial</a></span></td>
+      <td class="coverage"><span data-ice="coverage">85 %</span><span data-ice="coverageCount" class="coverage-count">6/7</span></td>
+      <td style="display: none;" data-ice="size">1515 byte</td>
+      <td style="display: none;" data-ice="lines">96</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/materials/index.js.html">src/materials/index.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">1350 byte</td>
+      <td style="display: none;" data-ice="lines">30</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/passes/AdaptiveLuminancePass.js.html#errorLines=25,26">src/passes/AdaptiveLuminancePass.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/AdaptiveLuminancePass.js~AdaptiveLuminancePass.html">AdaptiveLuminancePass</a></span></td>
+      <td class="coverage"><span data-ice="coverage">84 %</span><span data-ice="coverageCount" class="coverage-count">11/13</span></td>
+      <td style="display: none;" data-ice="size">3922 byte</td>
+      <td style="display: none;" data-ice="lines">157</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/passes/BoxBlurPass.js.html#errorLines=133,36,96">src/passes/BoxBlurPass.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/BoxBlurPass.js~BoxBlurPass.html">BoxBlurPass</a></span></td>
+      <td class="coverage"><span data-ice="coverage">78 %</span><span data-ice="coverageCount" class="coverage-count">11/14</span></td>
+      <td style="display: none;" data-ice="size">5585 byte</td>
+      <td style="display: none;" data-ice="lines">211</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/passes/ClearMaskPass.js.html#errorLines=16">src/passes/ClearMaskPass.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/ClearMaskPass.js~ClearMaskPass.html">ClearMaskPass</a></span></td>
+      <td class="coverage"><span data-ice="coverage">75 %</span><span data-ice="coverageCount" class="coverage-count">3/4</span></td>
+      <td style="display: none;" data-ice="size">976 byte</td>
+      <td style="display: none;" data-ice="lines">38</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/passes/ClearPass.js.html#errorLines=24,4">src/passes/ClearPass.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></td>
+      <td class="coverage"><span data-ice="coverage">86 %</span><span data-ice="coverageCount" class="coverage-count">13/15</span></td>
+      <td style="display: none;" data-ice="size">4100 byte</td>
+      <td style="display: none;" data-ice="lines">184</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/passes/CopyPass.js.html#errorLines=22,23,70">src/passes/CopyPass.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/CopyPass.js~CopyPass.html">CopyPass</a></span></td>
+      <td class="coverage"><span data-ice="coverage">78 %</span><span data-ice="coverageCount" class="coverage-count">11/14</span></td>
+      <td style="display: none;" data-ice="size">3688 byte</td>
+      <td style="display: none;" data-ice="lines">177</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/passes/DepthCopyPass.js.html#errorLines=32,33,34">src/passes/DepthCopyPass.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/DepthCopyPass.js~DepthCopyPass.html">DepthCopyPass</a></span></td>
+      <td class="coverage"><span data-ice="coverage">76 %</span><span data-ice="coverageCount" class="coverage-count">10/13</span></td>
+      <td style="display: none;" data-ice="size">3188 byte</td>
+      <td style="display: none;" data-ice="lines">148</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/passes/DepthDownsamplingPass.js.html#errorLines=40,41,42">src/passes/DepthDownsamplingPass.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass.html">DepthDownsamplingPass</a></span></td>
+      <td class="coverage"><span data-ice="coverage">76 %</span><span data-ice="coverageCount" class="coverage-count">10/13</span></td>
+      <td style="display: none;" data-ice="size">5030 byte</td>
+      <td style="display: none;" data-ice="lines">183</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/passes/DepthPass.js.html#errorLines=37,85,91">src/passes/DepthPass.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/DepthPass.js~DepthPass.html">DepthPass</a></span></td>
+      <td class="coverage"><span data-ice="coverage">80 %</span><span data-ice="coverageCount" class="coverage-count">12/15</span></td>
+      <td style="display: none;" data-ice="size">4865 byte</td>
+      <td style="display: none;" data-ice="lines">210</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/passes/DepthPickingPass.js.html#errorLines=15,5,6,68,8">src/passes/DepthPickingPass.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/DepthPickingPass.js~DepthPickingPass.html">DepthPickingPass</a></span></td>
+      <td class="coverage"><span data-ice="coverage">61 %</span><span data-ice="coverageCount" class="coverage-count">8/13</span></td>
+      <td style="display: none;" data-ice="size">4884 byte</td>
+      <td style="display: none;" data-ice="lines">193</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/passes/EffectPass.js.html#errorLines=256,323,333,358,376,463,506,613">src/passes/EffectPass.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/EffectPass.js~EffectPass.html">EffectPass</a></span></td>
+      <td class="coverage"><span data-ice="coverage">73 %</span><span data-ice="coverageCount" class="coverage-count">22/30</span></td>
+      <td style="display: none;" data-ice="size">15170 byte</td>
+      <td style="display: none;" data-ice="lines">668</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/passes/GaussianBlurPass.js.html#errorLines=110">src/passes/GaussianBlurPass.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/GaussianBlurPass.js~GaussianBlurPass.html">GaussianBlurPass</a></span></td>
+      <td class="coverage"><span data-ice="coverage">90 %</span><span data-ice="coverageCount" class="coverage-count">10/11</span></td>
+      <td style="display: none;" data-ice="size">5293 byte</td>
+      <td style="display: none;" data-ice="lines">195</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/passes/KawaseBlurPass.js.html#errorLines=140,159,230,336">src/passes/KawaseBlurPass.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/KawaseBlurPass.js~KawaseBlurPass.html">KawaseBlurPass</a></span></td>
+      <td class="coverage"><span data-ice="coverage">86 %</span><span data-ice="coverageCount" class="coverage-count">26/30</span></td>
+      <td style="display: none;" data-ice="size">8667 byte</td>
+      <td style="display: none;" data-ice="lines">424</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/passes/LambdaPass.js.html#errorLines=19">src/passes/LambdaPass.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/LambdaPass.js~LambdaPass.html">LambdaPass</a></span></td>
+      <td class="coverage"><span data-ice="coverage">80 %</span><span data-ice="coverageCount" class="coverage-count">4/5</span></td>
+      <td style="display: none;" data-ice="size">993 byte</td>
+      <td style="display: none;" data-ice="lines">48</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/passes/LuminancePass.js.html#errorLines=37,38">src/passes/LuminancePass.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/LuminancePass.js~LuminancePass.html">LuminancePass</a></span></td>
+      <td class="coverage"><span data-ice="coverage">81 %</span><span data-ice="coverageCount" class="coverage-count">9/11</span></td>
+      <td style="display: none;" data-ice="size">4049 byte</td>
+      <td style="display: none;" data-ice="lines">159</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/passes/MaskPass.js.html#errorLines=24,46,48,52,54,70,89">src/passes/MaskPass.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/MaskPass.js~MaskPass.html">MaskPass</a></span></td>
+      <td class="coverage"><span data-ice="coverage">58 %</span><span data-ice="coverageCount" class="coverage-count">10/17</span></td>
+      <td style="display: none;" data-ice="size">4148 byte</td>
+      <td style="display: none;" data-ice="lines">214</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/passes/MipmapBlurPass.js.html#errorLines=110,156,181,25">src/passes/MipmapBlurPass.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/MipmapBlurPass.js~MipmapBlurPass.html">MipmapBlurPass</a></span></td>
+      <td class="coverage"><span data-ice="coverage">78 %</span><span data-ice="coverageCount" class="coverage-count">15/19</span></td>
+      <td style="display: none;" data-ice="size">6283 byte</td>
+      <td style="display: none;" data-ice="lines">298</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/passes/NormalPass.js.html#errorLines=37,88,94">src/passes/NormalPass.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/NormalPass.js~NormalPass.html">NormalPass</a></span></td>
+      <td class="coverage"><span data-ice="coverage">78 %</span><span data-ice="coverageCount" class="coverage-count">11/14</span></td>
+      <td style="display: none;" data-ice="size">4528 byte</td>
+      <td style="display: none;" data-ice="lines">196</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/passes/Pass.js.html#errorLines=13,163,248">src/passes/Pass.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/Pass.js~Pass.html">Pass</a></span></td>
+      <td class="coverage"><span data-ice="coverage">90 %</span><span data-ice="coverageCount" class="coverage-count">27/30</span></td>
+      <td style="display: none;" data-ice="size">8003 byte</td>
+      <td style="display: none;" data-ice="lines">404</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/passes/RenderPass.js.html#errorLines=110,174,25,72,74,78,80,84,90">src/passes/RenderPass.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a></span></td>
+      <td class="coverage"><span data-ice="coverage">67 %</span><span data-ice="coverageCount" class="coverage-count">19/28</span></td>
+      <td style="display: none;" data-ice="size">6191 byte</td>
+      <td style="display: none;" data-ice="lines">334</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/passes/ShaderPass.js.html#errorLines=24">src/passes/ShaderPass.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/ShaderPass.js~ShaderPass.html">ShaderPass</a></span></td>
+      <td class="coverage"><span data-ice="coverage">85 %</span><span data-ice="coverageCount" class="coverage-count">6/7</span></td>
+      <td style="display: none;" data-ice="size">2458 byte</td>
+      <td style="display: none;" data-ice="lines">95</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/passes/TiltShiftBlurPass.js.html#errorLines=38">src/passes/TiltShiftBlurPass.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/TiltShiftBlurPass.js~TiltShiftBlurPass.html">TiltShiftBlurPass</a></span></td>
+      <td class="coverage"><span data-ice="coverage">66 %</span><span data-ice="coverageCount" class="coverage-count">2/3</span></td>
+      <td style="display: none;" data-ice="size">1518 byte</td>
+      <td style="display: none;" data-ice="lines">42</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/passes/index.js.html">src/passes/index.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">1061 byte</td>
+      <td style="display: none;" data-ice="lines">28</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/textures/ASCIITexture.js.html">src/textures/ASCIITexture.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/textures/ASCIITexture.js~ASCIITexture.html">ASCIITexture</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">4/4</span></td>
+      <td style="display: none;" data-ice="size">1698 byte</td>
+      <td style="display: none;" data-ice="lines">75</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/textures/NoiseTexture.js.html#errorLines=81">src/textures/NoiseTexture.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/textures/NoiseTexture.js~NoiseTexture.html">NoiseTexture</a></span></td>
+      <td class="coverage"><span data-ice="coverage">75 %</span><span data-ice="coverageCount" class="coverage-count">3/4</span></td>
+      <td style="display: none;" data-ice="size">1532 byte</td>
+      <td style="display: none;" data-ice="lines">85</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/textures/RawImageData.js.html">src/textures/RawImageData.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/textures/RawImageData.js~RawImageData.html">RawImageData</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">8/8</span></td>
+      <td style="display: none;" data-ice="size">2185 byte</td>
+      <td style="display: none;" data-ice="lines">124</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/textures/index.js.html">src/textures/index.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">171 byte</td>
+      <td style="display: none;" data-ice="lines">6</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/textures/lut/LookupTexture.js.html#errorLines=19,40,41,42,43,44,45,46,47,48,50">src/textures/lut/LookupTexture.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/textures/lut/LookupTexture.js~LookupTexture.html">LookupTexture</a></span></td>
+      <td class="coverage"><span data-ice="coverage">57 %</span><span data-ice="coverageCount" class="coverage-count">15/26</span></td>
+      <td style="display: none;" data-ice="size">9392 byte</td>
+      <td style="display: none;" data-ice="lines">474</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/textures/lut/TetrahedralUpscaler.js.html">src/textures/lut/TetrahedralUpscaler.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/textures/lut/TetrahedralUpscaler.js~TetrahedralUpscaler.html">TetrahedralUpscaler</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">8/8</span></td>
+      <td style="display: none;" data-ice="size">6948 byte</td>
+      <td style="display: none;" data-ice="lines">300</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/textures/lut/index.js.html">src/textures/lut/index.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">195 byte</td>
+      <td style="display: none;" data-ice="lines">5</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/textures/lut/worker.js.html">src/textures/lut/worker.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">524 byte</td>
+      <td style="display: none;" data-ice="lines">27</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/textures/smaa/SMAAAreaImageData.js.html">src/textures/smaa/SMAAAreaImageData.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/textures/smaa/SMAAAreaImageData.js~SMAAAreaImageData.html">SMAAAreaImageData</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">22/22</span></td>
+      <td style="display: none;" data-ice="size">23160 byte</td>
+      <td style="display: none;" data-ice="lines">1255</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/textures/smaa/SMAAImageGenerator.js.html">src/textures/smaa/SMAAImageGenerator.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/textures/smaa/SMAAImageGenerator.js~SMAAImageGenerator.html">SMAAImageGenerator</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">6/6</span></td>
+      <td style="display: none;" data-ice="size">3390 byte</td>
+      <td style="display: none;" data-ice="lines">138</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/textures/smaa/SMAASearchImageData.js.html">src/textures/smaa/SMAASearchImageData.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/textures/smaa/SMAASearchImageData.js~SMAASearchImageData.html">SMAASearchImageData</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">7/7</span></td>
+      <td style="display: none;" data-ice="size">4782 byte</td>
+      <td style="display: none;" data-ice="lines">208</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/textures/smaa/areaImageDataURL.js.html">src/textures/smaa/areaImageDataURL.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">66908 byte</td>
+      <td style="display: none;" data-ice="lines">3</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/textures/smaa/index.js.html">src/textures/smaa/index.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">123 byte</td>
+      <td style="display: none;" data-ice="lines">3</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/textures/smaa/searchImageDataURL.js.html">src/textures/smaa/searchImageDataURL.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">419 byte</td>
+      <td style="display: none;" data-ice="lines">3</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/textures/smaa/worker.js.html">src/textures/smaa/worker.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">534 byte</td>
+      <td style="display: none;" data-ice="lines">23</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/utils/IdManager.js.html">src/utils/IdManager.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/utils/IdManager.js~IdManager.html">IdManager</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">5/5</span></td>
+      <td style="display: none;" data-ice="size">523 byte</td>
+      <td style="display: none;" data-ice="lines">49</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/utils/index.js.html">src/utils/index.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">127 byte</td>
+      <td style="display: none;" data-ice="lines">4</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/utils/orthographicDepthToViewZ.js.html">src/utils/orthographicDepthToViewZ.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">1/1</span></td>
+      <td style="display: none;" data-ice="size">484 byte</td>
+      <td style="display: none;" data-ice="lines">16</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/utils/viewZToOrthographicDepth.js.html">src/utils/viewZToOrthographicDepth.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">1/1</span></td>
+      <td style="display: none;" data-ice="size">533 byte</td>
+      <td style="display: none;" data-ice="lines">16</td>
+      <td style="display: none;" data-ice="updated">2026-02-05 21:20:22 (UTC)</td>
+    </tr>
+</tbody>
+</table>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
