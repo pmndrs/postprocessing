@@ -19,24 +19,29 @@ npm install postprocessing
 
 ## Usage
 
-The following WebGL attributes should be used for an optimal workflow:
+The `renderer`, `scene` and `camera` are created as normal. Please refer to the [three.js manual](https://threejs.org/manual/#en/creating-a-scene) for more information on how to create a scene.
 
 ```ts
-import { WebGLRenderer } from "three";
+import { PerspectiveCamera, Scene, WebGLRenderer } from "three";
 
+// Recommended settings for postprocessing:
 const renderer = new WebGLRenderer({
 	powerPreference: "high-performance",
 	antialias: false,
 	stencil: false,
 	depth: false
 });
+
+document.body.append(renderer.domElement);
+
+const scene = new Scene();
+const camera = new PerspectiveCamera();
 ```
 
-[RenderPipelines]() are used to group passes. Common setups will only require one pipeline that contains a [ClearPass](), a [GeometryPass]() and one or more [EffectPass]() instances. The latter is used to render fullscreen [Effects](). Please refer to the [three.js manual](https://threejs.org/docs/#manual/en/introduction/Creating-a-scene) for more information on how to setup the renderer, scene and camera.
+Postprocessing uses [RenderPipelines](../docs/classes/RenderPipeline.html) to render [Passes](../docs/classes/Pass.html). Common setups will only require one pipeline that contains a [ClearPass](../docs/classes/ClearPass.html), a [GeometryPass](../docs/classes/GeometryPass.html) and one or more [EffectPass](../docs/classes/EffectPass.html) instances. The latter is used to render fullscreen [Effects](../docs/classes/Effect.html). 
 
 ```ts
 import {
-	BloomEffect,
 	ClearPass,
 	EffectPass,
 	GeometryPass,
@@ -44,20 +49,12 @@ import {
 	ToneMappingEffect
 } from "postprocessing";
 
-const container = document.getElementById("viewport");
-container.append(renderer.domElement);
-
-const scene = new Scene();
-const camera = new PerspectiveCamera();
 const pipeline = new RenderPipeline(renderer);
 
 pipeline.add(
 	new ClearPass(),
 	new GeometryPass(scene, camera),
-	new EffectPass(
-		new BloomEffect(),
-		new ToneMappingEffect()
-	)
+	new EffectPass(new ToneMappingEffect())
 );
 
 function onResize(): void {
@@ -66,6 +63,8 @@ function onResize(): void {
 	const height = container.clientHeight;
 	camera.aspect = width / height;
 	camera.updateProjectionMatrix();
+
+	// The resolution must be set through the pipeline.
 	pipeline.setSize(width, height);
 
 }
@@ -73,7 +72,8 @@ function onResize(): void {
 window.addEventListener("resize", onResize);
 onResize();
 
-renderer.setAnimationLoop((timestamp) => pipeline.render(timestamp));
+// Use pipeline.render() instead of renderer.render()
+renderer.setAnimationLoop(timestamp => pipeline.render(timestamp));
 ```
 
 > [!TIP]
@@ -91,7 +91,7 @@ pipeline.compile()
 
 ## Color Space Considerations
 
-New applications should follow a [linear workflow](https://docs.unity3d.com/Manual/LinearRendering-LinearOrGammaWorkflow.html) for color management and postprocessing supports this automatically. In most cases, `WebGLRenderer.outputColorSpace` can be left at default and postprocessing will follow suit. Built-in passes automatically convert colors when they render to screen and internal render operations are always performed in the correct color space.
+It's recommended to follow a [linear workflow](https://docs.unity3d.com/Manual/LinearRendering-LinearOrGammaWorkflow.html) for color management and postprocessing supports this automatically. In most cases, `WebGLRenderer.outputColorSpace` can be left at default and postprocessing will follow suit. Built-in passes automatically convert colors when they render to screen and internal render operations are always performed in the appropriate color space.
 
 Postprocessing uses `HalfFloatType` frame buffers by default to store intermediate results with minimal information loss. Linear colors normally require at least 12 bits per color channel to prevent [color degradation and banding](https://blog.demofox.org/2018/03/10/dont-convert-srgb-u8-to-linear-u8/). The default buffer type supports HDR-like workflows with correct tone mapping. When alpha is disabled, postprocessing will use the compact `R11F_G11F_B10F` framebuffer format to save space. For more details see [Geometry Buffer]({{< relref "gbuffer/#alpha" >}}).
 

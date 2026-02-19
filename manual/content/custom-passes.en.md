@@ -154,7 +154,7 @@ private get renderTarget(): WebGLRenderTarget {
 
 ### G-Buffer
 
-Passes can request [GBuffer]() components via `input.gBuffer`. The actual textures will be supplied via `input.buffers` and can be retrieved by using the `GBuffer` value as the key. Passes should override the `onInputChange` hook to fetch and utilize the requested textures.
+Passes can request [GBuffer](../docs/enums/GBuffer.html) components via `input.gBuffer`. The actual textures will be supplied via `input.buffers` and can be retrieved by using the `GBuffer` value as the key. Passes should override the `onInputChange` hook to fetch and utilize the requested textures.
 
 #### G-Buffer Packing
 
@@ -190,7 +190,7 @@ The `Pass` base class defines lifecycle methods that can be overridden to react 
 
 ### Fullscreen Passes
 
-It's recommended to use materials that extend [FullscreenMaterial]() for passes that perform fullscreen render operations. This base class defines the following uniforms by default and populates them automatically:
+It's recommended to use materials that extend [FullscreenMaterial](../docs/classes/FullscreenMaterial.html) for passes that perform fullscreen render operations. This base class defines the following uniforms by default and populates them automatically:
 
 ```glsl
 uniform mat4 projectionMatrix;

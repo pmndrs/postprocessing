@@ -11,7 +11,7 @@ weight: 50
 
 ## Introduction
 
-[Effects]() are headless fullscreen passes. They can be combined and rendered using the [EffectPass](). Just like passes, effects may perform initialization tasks, react to render size changes and execute supporting render operations if needed but they don't have access to a default output buffer and are not supposed to render to screen by themselves.
+[Effects](../docs/classes/Effect.html) are headless fullscreen passes. They can be combined and rendered using the [EffectPass](../docs/classes/EffectPass.html). Just like passes, effects may perform initialization tasks, react to render size changes and execute supporting render operations if needed but they don't have access to a default output buffer and are not supposed to render to screen by themselves.
 
 <details><summary>TL;DR</summary>
 <p>
