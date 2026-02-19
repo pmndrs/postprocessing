@@ -164,7 +164,7 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	});
 
-	let subfolder = folder.addFolder({ title: "Edge Detection", expanded: false });
+	const subfolder = folder.addFolder({ title: "Edge Detection", expanded: false });
 	subfolder.addBinding(edgeDetectionMaterial, "edgeDetectionMode", { options: EdgeDetectionMode });
 	subfolder.addBinding(edgeDetectionMaterial, "edgeDetectionThreshold", { min: 0.01, max: 0.3, step: 1e-4 });
 	subfolder.addBinding(edgeDetectionMaterial, "predicationMode", { options: PredicationMode });
