@@ -10,8 +10,8 @@
 
 // (1 / 4) * 0.5 = 0.125
 #define WEIGHT_INNER 0.125
-// (1 / 9) * 0.5 = 0.0555555
-#define WEIGHT_OUTER 0.0555555
+// (1 / 9) * 0.5 ≈ 0.05556
+#define WEIGHT_OUTER 0.05556
 
 varying vec2 vUv;
 varying vec2 vUv00;

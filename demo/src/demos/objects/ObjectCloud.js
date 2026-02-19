@@ -28,7 +28,7 @@ export function create(amount = 30, range = 10.0) {
 		new SphereGeometry(1, 16, 16)
 	];
 
-	for(let i = 0, j = 0, l = geometries.length; i < amount; ++i, j = ++j % l) {
+	for(let i = 0, j = 0, l = geometries.length; i < amount; ++i, j = (j + 1) % l) {
 
 		const material = new MeshPhongMaterial({
 			color: 0xffffff * Math.random()
