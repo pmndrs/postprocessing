@@ -28,6 +28,10 @@ void main() {
 
 		out_Color = vec4(texture(inputBuffer, vUv).xyz, 1.0);
 
+	#elif defined(EMISSION)
+
+		out_Color = vec4(texture(inputBuffer, vUv).rgb, 1.0);
+
 	#elif defined(POSITION)
 
 		float depth = readDepth(depthBuffer, vUv);
