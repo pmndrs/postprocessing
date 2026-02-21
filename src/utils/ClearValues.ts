@@ -44,7 +44,7 @@ export class ClearValues extends EventDispatcher<BaseEventMap> {
 
 		const gBuffer = new ObservableMap<string, GLfloat | GLfloat[]>([
 			[GBuffer.NORMAL, [0.0, 0.0]],
-			[GBuffer.ORM, [1.0, 0.0, 0.0, 1.0]],
+			[GBuffer.ORM, [1.0, 0.0, 0.0, 0.0]],
 			[GBuffer.EMISSION, [0.0, 0.0, 0.0, 1.0]]
 		]);
 

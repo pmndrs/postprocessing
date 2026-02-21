@@ -112,8 +112,13 @@ export class Background extends Group implements Disposable {
 		for(const material of [skyBoxMaterial, backgroundMaterial]) {
 
 			material.fragmentShader = material.fragmentShader.replace(
-				/(void main\(\) {)/,
-				`\n${shaderCodeHead}\n$1\n${shaderCodeBody}\n`
+				/(void\s+main\(\)\s+{)/,
+				`\n${shaderCodeHead}\n$1`
+			);
+
+			material.fragmentShader = material.fragmentShader.replace(
+				/(#include\s+<pp_gbuffer_default_output_fragment>)/,
+				`${shaderCodeBody}\n`
 			);
 
 			for(const entry of uniforms) {
