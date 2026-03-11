@@ -11,7 +11,7 @@ script: fxaa
 
 # Fast Approximate Anti-Aliasing
 
-FXAA is a lightweight, image-based anti-aliasing solution. It's less stable in terms of shimmering compared to MSAA but oftentimes much faster. Its edge detection algorithm is based on luminance. The current implementation is based on FXAA version 3.11.
+FXAA is a lightweight, image-based anti-aliasing solution. It's less stable in terms of shimmering compared to MSAA but oftentimes much faster. Its edge detection algorithm operates on luminance and the current implementation in postprocessing is based on FXAA version 3.11.
 
 ```ts
 const effect = new FXAAEffect({
