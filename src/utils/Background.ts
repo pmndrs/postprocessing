@@ -3,7 +3,6 @@ import {
 	Camera,
 	CubeTexture,
 	CubeUVReflectionMapping,
-	Euler,
 	Group,
 	Matrix3,
 	Matrix4,
@@ -22,7 +21,7 @@ import { SkyBoxMaterial } from "../materials/SkyBoxMaterial.js";
 import { extractOutputDefinitions } from "./gbuffer/GBufferUtils.js";
 import { ClearValues } from "./ClearValues.js";
 
-const euler = /* @__PURE__ */ new Euler();
+const flipEnvMap = /* @__PURE__ */ new Matrix3(-1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
 const matrix4 = /* @__PURE__ */ new Matrix4();
 
 /**
@@ -174,17 +173,19 @@ export class Background extends Group implements Disposable {
 
 		if(scene.background instanceof CubeTexture || scene.background.mapping === CubeUVReflectionMapping) {
 
-			const flipEnvMap = scene.background.isRenderTargetTexture ? 1 : -1;
-			euler.copy(scene.backgroundRotation);
-			euler.x *= -1; euler.y *= -1; euler.z *= -1;
-			euler.y *= flipEnvMap; euler.z *= flipEnvMap;
-
 			skyBox.material.envMap = scene.background;
-			skyBox.material.uniforms.flipEnvMap.value = flipEnvMap;
 			skyBox.material.uniforms.backgroundBlurriness.value = scene.backgroundBlurriness;
 			skyBox.material.uniforms.backgroundIntensity.value = scene.backgroundIntensity;
 			const backgroundRotation = skyBox.material.uniforms.backgroundRotation.value as Matrix3;
-			backgroundRotation.setFromMatrix4(matrix4.makeRotationFromEuler(euler));
+			backgroundRotation.setFromMatrix4(matrix4.makeRotationFromEuler(scene.backgroundRotation));
+			backgroundRotation.transpose(); // Same as invert in this case, but faster.
+
+			if(scene.background instanceof Texture) {
+
+				backgroundRotation.premultiply(flipEnvMap);
+
+			}
+
 			skyBox.visible = true;
 
 		} else {
