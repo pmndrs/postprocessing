@@ -668,7 +668,7 @@ export class EffectComposer {
 			if(pass.enabled) {
 
 				// Copy the depth buffer to the stable depth target just before the first pass that swaps buffers
-				if(!depthBlitted && this._stableDepthTarget !== null && pass.needsDepthTexture) {
+				if(!depthBlitted && this._stableDepthTarget !== null && pass.needsSwap) {
 
 					this.blitDepthBuffer(this.inputBuffer);
 					depthBlitted = true;
