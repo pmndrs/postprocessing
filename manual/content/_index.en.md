@@ -30,7 +30,7 @@ Postprocessing extends the common rendering workflow with fullscreen image manip
 
 ## Performance
 
-This library provides an `EffectPass` that implements a structured mechanism for merging fullscreen effects into a single composite shader with configurable blend functions per effect. This minimizes the amount of render operations and makes it possible to combine many effects in interesting ways without the performance penalties of traditional pass chaining.
+Fullscreen effects in postprocessing are designed to be merged into a single composite shader using an [EffectPass](../docs/classes/EffectPass.html). This minimizes the amount of render operations and avoids the performance penalties of traditional pass chaining. Additionally, each effect can use its own blend function to achieve different artistic results.
 
 All fullscreen render operations also use a [single shared triangle](https://michaldrobot.com/2014/04/01/gcn-execution-patterns-in-full-screen-passes/) that fills the screen. Compared to using a quad, this approach harmonizes with modern GPU rasterization patterns and eliminates unnecessary fragment calculations along the screen diagonal. This is especially beneficial for effects that use complex fragment shaders.
 
