@@ -39,7 +39,7 @@ const myShaderPass = new ShaderPass(myShaderMaterial, "tDiffuse");
 </p>
 </details>
 
-The `ShaderPass` expects an instance of `ShaderMaterial` as its first argument. The second argument specifies the name of the texture sampler uniform of the shader you provide. This name defaults to `"inputBuffer"` and the `ShaderPass` binds its `input.defaultBuffer` to this uniform.
+The [ShaderPass](../docs/classes/ShaderPass.html) expects an instance of `ShaderMaterial` as its first argument. The second argument specifies the name of the texture sampler uniform of the shader you provide. This name defaults to `"inputBuffer"` and the `ShaderPass` binds its `input.defaultBuffer` to this uniform.
 
 In order to render a simple `ShaderMaterial`, you have to pass your shader object (uniforms, defines, fragment and vertex shader code) to `ShaderMaterial` and then pass that material instance to `ShaderPass`. Depending on the material you use, you may have to adjust the name of the input texture.
 
@@ -120,7 +120,7 @@ export class CustomPass extends Pass<CustomMaterial> {
 </p>
 </details>
 
-By extending `Pass`, you can decide what happens during resizing, initialization and rendering. There are also several lifecycle hooks that you can take advantage of. Passes in postprocessing receive various input data from the main `GeometryPass` and the preceding pass in a render pipeline.
+By extending [Pass](../docs/classes/Pass.html), you can decide what happens during resizing, initialization and rendering. There are also several lifecycle hooks that you can take advantage of. Passes in postprocessing receive various input data from the main `GeometryPass` and the preceding pass in a render pipeline.
 
 The minimum requirement to create a custom pass is to override the `render` method. If you're creating a fullscreen effect, you'll need to assign a `fullscreenMaterial`:
 
@@ -158,7 +158,7 @@ Passes can request [GBuffer](../docs/enums/GBuffer.html) components via `input.g
 
 #### G-Buffer Packing
 
-WebGL 2 guarantees that a compatible device supports at least 4 texture attachments per render target. For broad device support, postprocessing stays within this limitation and packs certain combinations of G-Buffer components into a single texture attachment. To be able to unpack this data, special shader macros that control predefined unpacking functions are provided to the requesting passes via input `defines`. If a pass uses a fullscreen material that extends `FullscreenMaterial`, these `defines` will automatically be integrated into the shaders. To finally read the data, the following shader chunks must be included in the fragment shader as needed:
+WebGL 2 guarantees that a compatible device supports at least 4 texture attachments per render target. For broad device support, postprocessing stays within this limitation and packs certain combinations of G-Buffer components into a single texture attachment. To be able to unpack this data, special shader macros that control predefined unpacking functions are provided to the requesting passes via input `defines`. If a pass uses a fullscreen material that extends `FullscreenMaterial`, these `defines` will automatically be integrated into the shaders. The following shader chunks must be included in the fragment shader as needed:
 
 ```glsl
 #include <pp_depth_utils_pars_fragment>
@@ -167,14 +167,13 @@ WebGL 2 guarantees that a compatible device supports at least 4 texture attachme
 #include <pp_velocity_utils_pars_fragment>
 ```
 
-This include adds the following utility functions that should be used to read the respective G-Buffer data:
+These includes add the following utility functions for reading data from the G-Buffer:
 
 ```glsl
 float readDepth(sampler2D depthBuffer, vec2 uv);
 vec3 readNormal(sampler2D normalBuffer, vec2 uv);
 vec2 readVelocity(sampler2D velocityBuffer, vec2 uv);
 ```
-
 
 ### Lifecycle Hooks
 
