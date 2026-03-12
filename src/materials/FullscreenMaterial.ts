@@ -88,7 +88,7 @@ export abstract class FullscreenMaterial extends ShaderMaterial implements Resiz
 	}
 
 	/**
-	 * The precision of the output color.
+	 * The precision of the output buffer.
 	 */
 
 	get outputPrecision(): Precision {
