@@ -26,7 +26,7 @@ void main() {
 
 	#ifdef COLOR_WRITE
 
-		vec4 texel = texture2D(inputBuffer, vUv);
+		vec4 texel = texture(inputBuffer, vUv);
 
 		#ifdef USE_WEIGHTS
 
