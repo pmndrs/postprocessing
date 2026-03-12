@@ -97,6 +97,17 @@ export class EffectComposer {
 		this.depthTexture = null;
 
 		/**
+		 * A render target that holds a stable copy of the scene depth.  Scene depth is copied into here
+		 * to avoid feedback loops and undefined behavior that can happen when the same depth attachment is
+		 * used on both the input and output buffers.
+		 *
+		 * @type {WebGLRenderTarget}
+		 * @private
+		 */
+
+		this._stableDepthTarget = null;
+
+		/**
 		 * The passes.
 		 *
 		 * @type {Pass[]}
@@ -278,13 +289,14 @@ export class EffectComposer {
 	/**
 	 * Creates a depth texture attachment that will be provided to all passes.
 	 *
-	 * Note: When a shader reads from a depth texture and writes to a render target that uses the same depth texture
-	 * attachment, the depth information will be lost. This happens even if `depthWrite` is disabled.
+	 * To prevent errors or incorrect behavior when the same depth buffer is attached to the input and output buffers,
+	 * a separate stable depth target is created alongside the ping-pong buffers.  All passes receive the stable target's
+	 * depth texture, which is never used as a render output and therefore cannot create a feedback loop.  The stable
+	 * texture is populated each frame via blitFramebuffer immediately before the first buffer swap.
 	 *
 	 * @private
-	 * @return {DepthTexture} The depth texture.
+	 * @return {DepthTexture} The stable depth texture distributed to passes.
 	 */
-
 	createDepthTexture() {
 
 		const depthTexture = this.depthTexture = new DepthTexture();
@@ -304,7 +316,56 @@ export class EffectComposer {
 
 		}
 
-		return depthTexture;
+		const stableDepthTexture = new DepthTexture();
+		stableDepthTexture.format = depthTexture.format;
+		stableDepthTexture.type = depthTexture.type;
+		stableDepthTexture.name = "EffectComposer.StableDepth";
+
+		this._stableDepthTarget = new WebGLRenderTarget(this.inputBuffer.width, this.inputBuffer.height, {
+			depthBuffer: true,
+			stencilBuffer: this.inputBuffer.stencilBuffer,
+			depthTexture: stableDepthTexture
+		});
+
+		return stableDepthTexture;
+
+	}
+
+	/**
+	 * Copies the depth buffer from the src render target into the stable depth target.
+	 *
+	 * @private
+	 * @param {WebGLRenderTarget} srcTarget - The render target whose depth buffer should be copied.
+	 */
+
+	blitDepthBuffer(srcTarget) {
+
+		const renderer = this.renderer;
+		const gl = renderer.getContext();
+
+		renderer.setRenderTarget(this._stableDepthTarget);
+
+		const props = renderer.properties;
+		// eslint-disable-next-line no-underscore-dangle
+		const srcFBO = props.get(srcTarget).__webglFramebuffer;
+		// eslint-disable-next-line no-underscore-dangle
+		const dstFBO = props.get(this._stableDepthTarget).__webglFramebuffer;
+
+		const blitMask = srcTarget.stencilBuffer
+			? (gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT)
+			: gl.DEPTH_BUFFER_BIT;
+
+		gl.bindFramebuffer(gl.READ_FRAMEBUFFER, srcFBO);
+		gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, dstFBO);
+		gl.blitFramebuffer(
+			0, 0, srcTarget.width, srcTarget.height,
+			0, 0, this._stableDepthTarget.width, this._stableDepthTarget.height,
+			blitMask, gl.NEAREST
+		);
+		gl.bindFramebuffer(gl.READ_FRAMEBUFFER, null);
+		gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, null);
+
+		renderer.setRenderTarget(null);
 
 	}
 
@@ -324,6 +385,13 @@ export class EffectComposer {
 			// Update the input buffer.
 			this.inputBuffer.depthTexture = null;
 			this.inputBuffer.dispose();
+
+			if(this._stableDepthTarget !== null) {
+
+				this._stableDepthTarget.dispose();
+				this._stableDepthTarget = null;
+
+			}
 
 			for(const pass of this.passes) {
 
@@ -478,7 +546,7 @@ export class EffectComposer {
 
 			} else {
 
-				pass.setDepthTexture(this.depthTexture);
+				pass.setDepthTexture(this._stableDepthTarget.depthTexture);
 
 			}
 
@@ -509,7 +577,11 @@ export class EffectComposer {
 
 				if(!depthTextureRequired) {
 
-					if(pass.getDepthTexture() === this.depthTexture) {
+					const composerDepth = this._stableDepthTarget !== null
+						? this._stableDepthTarget.depthTexture
+						: this.depthTexture;
+
+					if(pass.getDepthTexture() === composerDepth) {
 
 						pass.setDepthTexture(null);
 
@@ -581,6 +653,7 @@ export class EffectComposer {
 		let outputBuffer = this.outputBuffer;
 
 		let stencilTest = false;
+		let depthBlitted = false;
 		let context, stencil, buffer;
 
 		if(deltaTime === undefined) {
@@ -593,6 +666,14 @@ export class EffectComposer {
 		for(const pass of this.passes) {
 
 			if(pass.enabled) {
+
+				// Copy the depth buffer to the stable depth target just before the first pass that swaps buffers
+				if(!depthBlitted && this._stableDepthTarget !== null && pass.needsSwap) {
+
+					this.blitDepthBuffer(this.inputBuffer);
+					depthBlitted = true;
+
+				}
 
 				pass.render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest);
 
@@ -664,6 +745,12 @@ export class EffectComposer {
 		const drawingBufferSize = renderer.getDrawingBufferSize(new Vector2());
 		this.inputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
 		this.outputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
+
+		if(this._stableDepthTarget !== null) {
+
+			this._stableDepthTarget.setSize(drawingBufferSize.width, drawingBufferSize.height);
+
+		}
 
 		for(const pass of this.passes) {
 
