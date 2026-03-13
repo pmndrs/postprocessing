@@ -10,11 +10,11 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { Timer } from "./Timer.js";
 import { ClearMaskPass } from "../passes/ClearMaskPass.js";
 import { CopyPass } from "../passes/CopyPass.js";
 import { MaskPass } from "../passes/MaskPass.js";
 import { Pass } from "../passes/Pass.js";
+import { Timer } from "./Timer.js"; // TODO Replace with Timer from three, requires r179.
 
 /**
  * The EffectComposer may be used in place of a normal WebGLRenderer.
