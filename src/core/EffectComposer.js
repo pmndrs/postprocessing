@@ -663,48 +663,50 @@ export class EffectComposer {
 
 		for(const pass of this.passes) {
 
-			if(pass.enabled) {
+			if(!pass.enabled) {
 
-				// Copy the depth buffer to the stable depth target just before the first pass that swaps buffers
-				if(!depthBlitted && this._stableDepthTarget !== null && pass.needsSwap) {
+				continue;
 
-					this.blitDepthBuffer(this.inputBuffer);
-					depthBlitted = true;
+			}
 
-				}
+			// Copy the depth buffer to the stable depth target just before the first pass that swaps buffers
+			if(!depthBlitted && this._stableDepthTarget !== null && pass.needsSwap) {
 
-				pass.render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest);
+				this.blitDepthBuffer(this.inputBuffer);
+				depthBlitted = true;
 
-				if(pass.needsSwap) {
+			}
 
-					if(stencilTest) {
+			pass.render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest);
 
-						copyPass.renderToScreen = pass.renderToScreen;
-						context = renderer.getContext();
-						stencil = renderer.state.buffers.stencil;
+			if(pass.needsSwap) {
 
-						// Preserve the unaffected pixels.
-						stencil.setFunc(context.NOTEQUAL, 1, 0xffffffff);
-						copyPass.render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest);
-						stencil.setFunc(context.EQUAL, 1, 0xffffffff);
+				if(stencilTest) {
 
-					}
+					copyPass.renderToScreen = pass.renderToScreen;
+					context = renderer.getContext();
+					stencil = renderer.state.buffers.stencil;
 
-					buffer = inputBuffer;
-					inputBuffer = outputBuffer;
-					outputBuffer = buffer;
+					// Preserve the unaffected pixels.
+					stencil.setFunc(context.NOTEQUAL, 1, 0xffffffff);
+					copyPass.render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest);
+					stencil.setFunc(context.EQUAL, 1, 0xffffffff);
 
 				}
 
-				if(pass instanceof MaskPass) {
+				buffer = inputBuffer;
+				inputBuffer = outputBuffer;
+				outputBuffer = buffer;
 
-					stencilTest = true;
+			}
 
-				} else if(pass instanceof ClearMaskPass) {
+			if(pass instanceof MaskPass) {
 
-					stencilTest = false;
+				stencilTest = true;
 
-				}
+			} else if(pass instanceof ClearMaskPass) {
+
+				stencilTest = false;
 
 			}
 
