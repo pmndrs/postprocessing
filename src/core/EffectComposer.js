@@ -37,7 +37,6 @@ export class EffectComposer {
 	 * @param {Object} [options] - The options.
 	 * @param {Boolean} [options.depthBuffer=true] - Whether the main render targets should have a depth buffer.
 	 * @param {Boolean} [options.stencilBuffer=false] - Whether the main render targets should have a stencil buffer.
-	 * @param {Boolean} [options.alpha] - Deprecated. Buffers are always RGBA since three r137.
 	 * @param {Number} [options.multisampling=0] - The number of samples used for multisample antialiasing. Requires WebGL 2.
 	 * @param {Number} [options.frameBufferType] - The type of the internal frame buffers. It's recommended to use HalfFloatType if possible.
 	 */
