@@ -4885,22 +4885,6 @@ export class EffectComposer implements Resizable, Disposable {
 		updateDOM?: boolean
 	): WebGLRenderer;
 	/**
-	 * Creates a new render target.
-	 *
-	 * @deprecated Create buffers manually via WebGLRenderTarget instead.
-	 * @param {Boolean} depthBuffer - Whether the render target should have a depth buffer.
-	 * @param {Boolean} stencilBuffer - Whether the render target should have a stencil buffer.
-	 * @param {Number} type - The frame buffer type.
-	 * @param {Number} multisampling - The number of samples to use for antialiasing.
-	 * @return {WebGLRenderTarget} A new render target that equals the renderer's canvas.
-	 */
-	createBuffer(
-		depthBuffer: boolean,
-		stencilBuffer: boolean,
-		type: number,
-		multisampling: number
-	): WebGLRenderTarget;
-	/**
 	 * Can be used to change the main scene for all registered passes and effects.
 	 *
 	 * @param {Scene} scene - The scene.
