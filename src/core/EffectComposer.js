@@ -144,8 +144,7 @@ export class EffectComposer {
 
 	get multisampling() {
 
-		// TODO Raise min three version to 138 and remove || 0.
-		return this.inputBuffer.samples || 0;
+		return this.inputBuffer.samples;
 
 	}
 
