@@ -404,7 +404,7 @@ export class EffectComposer {
 	/**
 	 * Creates a new render target.
 	 *
-	 * @deprecated Create buffers manually via WebGLRenderTarget instead.
+	 * @private
 	 * @param {Boolean} depthBuffer - Whether the render target should have a depth buffer.
 	 * @param {Boolean} stencilBuffer - Whether the render target should have a stencil buffer.
 	 * @param {Number} type - The frame buffer type.
