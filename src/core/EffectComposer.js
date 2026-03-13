@@ -1,10 +1,10 @@
 import {
 	DepthStencilFormat,
 	DepthTexture,
+	FloatType,
 	LinearFilter,
 	SRGBColorSpace,
 	UnsignedByteType,
-	UnsignedIntType,
 	UnsignedInt248Type,
 	Vector2,
 	WebGLRenderTarget
@@ -312,7 +312,7 @@ export class EffectComposer {
 
 		} else {
 
-			depthTexture.type = UnsignedIntType;
+			depthTexture.type = FloatType;
 
 		}
 
