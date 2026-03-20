@@ -26,18 +26,16 @@ export function createLights() {
 /**
  * Creates the environment.
  *
- * @param {Texture} envMap - An environment map.
  * @return {Group} The environment.
  */
 
-export function createEnvironment(envMap) {
+export function createEnvironment() {
 
 	const environment = new Group();
 	const material = new MeshStandardMaterial({
 		color: 0xc1c1c1,
 		roughness: 0.0,
-		metalness: 1.0,
-		envMap
+		metalness: 1.0
 	});
 
 	const m = new Matrix4();
@@ -105,11 +103,10 @@ export function createEnvironment(envMap) {
 /**
  * Creates the scene actors.
  *
- * @param {Texture} envMap - An environment map.
  * @return {Group} The actors.
  */
 
-export function createActors(envMap) {
+export function createActors() {
 
 	const actors = new Group();
 	return actors;

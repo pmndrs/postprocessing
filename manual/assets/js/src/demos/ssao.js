@@ -5,7 +5,6 @@ import {
 	PerspectiveCamera,
 	Scene,
 	SRGBColorSpace,
-	VSMShadowMap,
 	WebGLRenderer
 } from "three";
 
@@ -13,6 +12,7 @@ import {
 	BlendFunction,
 	EffectComposer,
 	EffectPass,
+	FXAAEffect,
 	NormalPass,
 	RenderPass,
 	SSAOEffect
@@ -65,7 +65,6 @@ window.addEventListener("load", () => load().then((assets) => {
 	});
 
 	renderer.debug.checkShaderErrors = (window.location.hostname === "localhost");
-	renderer.shadowMap.type = VSMShadowMap;
 	renderer.shadowMap.autoUpdate = false;
 	renderer.shadowMap.needsUpdate = true;
 	renderer.shadowMap.enabled = true;
@@ -89,6 +88,8 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const scene = new Scene();
 	scene.background = assets.get("sky");
+	scene.environment = assets.get("sky");
+	scene.environmentIntensity = 0.33;
 	scene.add(CornellBox.createLights());
 	scene.add(CornellBox.createEnvironment());
 	scene.add(CornellBox.createActors());
@@ -114,6 +115,7 @@ window.addEventListener("load", () => load().then((assets) => {
 	composer.addPass(new RenderPass(scene, camera));
 	composer.addPass(normalPass);
 	composer.addPass(effectPass);
+	composer.addPass(new EffectPass(camera, new FXAAEffect()));
 
 	// Settings
 

@@ -83,9 +83,10 @@ window.addEventListener("load", () => load().then((assets) => {
 	const scene = new Scene();
 	scene.fog = new FogExp2(0x373134, 0.06);
 	scene.background = assets.get("sky");
+	scene.environment = assets.get("sky");
 	scene.add(Domain.createLights());
-	scene.add(Domain.createEnvironment(scene.background));
-	scene.add(Domain.createActors(scene.background));
+	scene.add(Domain.createEnvironment());
+	scene.add(Domain.createActors());
 
 	// Post Processing
 
