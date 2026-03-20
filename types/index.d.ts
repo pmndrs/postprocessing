@@ -2818,6 +2818,15 @@ export class Pass implements Initializable, Resizable, Disposable {
 	/**
 	 * Only relevant for subclassing.
 	 *
+	 * Controls whether the {@link EffectComposer} should copy the depth buffer after this pass has finished rendering.
+	 * Default is `false`.
+	 *
+	 * @type {Boolean}
+	 */
+	needsDepthBlit: boolean;
+	/**
+	 * Only relevant for subclassing.
+	 *
 	 * Indicates whether the {@link EffectComposer} should prepare a depth texture for this pass.
 	 * Set this to `true` if this pass relies on depth information from a preceding {@link RenderPass}.
 	 *
@@ -4884,22 +4893,6 @@ export class EffectComposer implements Resizable, Disposable {
 		renderer: WebGLRenderer,
 		updateDOM?: boolean
 	): WebGLRenderer;
-	/**
-	 * Creates a new render target.
-	 *
-	 * @deprecated Create buffers manually via WebGLRenderTarget instead.
-	 * @param {Boolean} depthBuffer - Whether the render target should have a depth buffer.
-	 * @param {Boolean} stencilBuffer - Whether the render target should have a stencil buffer.
-	 * @param {Number} type - The frame buffer type.
-	 * @param {Number} multisampling - The number of samples to use for antialiasing.
-	 * @return {WebGLRenderTarget} A new render target that equals the renderer's canvas.
-	 */
-	createBuffer(
-		depthBuffer: boolean,
-		stencilBuffer: boolean,
-		type: number,
-		multisampling: number
-	): WebGLRenderTarget;
 	/**
 	 * Can be used to change the main scene for all registered passes and effects.
 	 *

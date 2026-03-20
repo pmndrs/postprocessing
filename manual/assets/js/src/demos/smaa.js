@@ -4,7 +4,6 @@ import {
 	PerspectiveCamera,
 	Scene,
 	SRGBColorSpace,
-	VSMShadowMap,
 	WebGLRenderer
 } from "three";
 
@@ -67,7 +66,6 @@ window.addEventListener("load", () => load().then((assets) => {
 	});
 
 	renderer.debug.checkShaderErrors = (window.location.hostname === "localhost");
-	renderer.shadowMap.type = VSMShadowMap;
 	renderer.shadowMap.autoUpdate = false;
 	renderer.shadowMap.needsUpdate = true;
 	renderer.shadowMap.enabled = true;
@@ -91,6 +89,8 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	const scene = new Scene();
 	scene.background = assets.get("sky");
+	scene.environment = assets.get("sky");
+	scene.environmentIntensity = 0.33;
 	scene.add(CornellBox.createLights());
 	scene.add(CornellBox.createEnvironment());
 	scene.add(CornellBox.createActors());

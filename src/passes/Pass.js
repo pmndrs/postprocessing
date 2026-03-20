@@ -116,9 +116,9 @@ export class Pass {
 		/**
 		 * Only relevant for subclassing.
 		 *
-		 * Indicates whether the {@link EffectComposer} should swap the frame buffers after this pass has finished
-		 * rendering. Set this to `false` if this pass doesn't render to the output buffer or the screen. Otherwise, the
-		 * contents of the input buffer will be lost.
+		 * Controls whether the {@link EffectComposer} should swap the frame buffers after this pass has finished rendering.
+		 * Set this to `false` if this pass doesn't render to the output buffer or the screen. Otherwise, the contents of
+		 * the input buffer will be lost.
 		 *
 		 * @type {Boolean}
 		 */
@@ -128,7 +128,18 @@ export class Pass {
 		/**
 		 * Only relevant for subclassing.
 		 *
-		 * Indicates whether the {@link EffectComposer} should prepare a depth texture for this pass.
+		 * Controls whether the {@link EffectComposer} should copy the depth buffer after this pass has finished rendering.
+		 * Default is `false`.
+		 *
+		 * @type {Boolean}
+		 */
+
+		this.needsDepthBlit = false;
+
+		/**
+		 * Only relevant for subclassing.
+		 *
+		 * Controls whether the {@link EffectComposer} should prepare a depth texture for this pass.
 		 * Set this to `true` if this pass relies on depth information from a preceding {@link RenderPass}.
 		 *
 		 * @type {Boolean}
