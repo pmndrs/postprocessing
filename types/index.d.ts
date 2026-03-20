@@ -2818,6 +2818,15 @@ export class Pass implements Initializable, Resizable, Disposable {
 	/**
 	 * Only relevant for subclassing.
 	 *
+	 * Controls whether the {@link EffectComposer} should copy the depth buffer after this pass has finished rendering.
+	 * Default is `false`.
+	 *
+	 * @type {Boolean}
+	 */
+	needsDepthBlit: boolean;
+	/**
+	 * Only relevant for subclassing.
+	 *
 	 * Indicates whether the {@link EffectComposer} should prepare a depth texture for this pass.
 	 * Set this to `true` if this pass relies on depth information from a preceding {@link RenderPass}.
 	 *

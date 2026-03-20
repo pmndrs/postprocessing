@@ -14,7 +14,6 @@ import { ClearMaskPass } from "../passes/ClearMaskPass.js";
 import { CopyPass } from "../passes/CopyPass.js";
 import { MaskPass } from "../passes/MaskPass.js";
 import { Pass } from "../passes/Pass.js";
-import { RenderPass } from "../passes/RenderPass.js";
 import { Timer } from "./Timer.js"; // TODO Replace with Timer from three, requires r179.
 
 /**
@@ -669,7 +668,7 @@ export class EffectComposer {
 
 			pass.render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest);
 
-			if(pass instanceof RenderPass) {
+			if(pass.needsDepthBlit) {
 
 				// Copy depth to the stable depth texture.
 				if(this.depthRenderTarget !== null) {

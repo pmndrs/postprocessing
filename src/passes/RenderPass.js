@@ -23,6 +23,7 @@ export class RenderPass extends Pass {
 		super("RenderPass", scene, camera);
 
 		this.needsSwap = false;
+		this.needsDepthBlit = true;
 
 		/**
 		 * A clear pass.
