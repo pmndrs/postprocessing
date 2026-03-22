@@ -71,8 +71,8 @@ export class ShaderChunkExtensions {
 			"pp_gbuffer_metalness_fragment": gbufferMetalnessFragment,
 			"pp_gbuffer_emission_fragment": gbufferEmissionFragment,
 			"pp_input_buffer_pars_fragment": inputBufferParsFragment,
-			"pp_normal_codec_pars_fragment": normalCodecParsFragment,
 			"pp_noise_pars_fragment": noiseParsFragment,
+			"pp_normal_codec_pars_fragment": normalCodecParsFragment,
 			"pp_normal_utils_pars_fragment": normalUtilsParsFragment,
 			"pp_resolution_pars_fragment": resolutionParsFragment,
 			"pp_world_utils_pars_fragment": worldUtilsParsFragment
