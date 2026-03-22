@@ -78,7 +78,7 @@
 		"pagefind:dev": "pagefind --site public/manual --output-path manual/static/pagefind",
 		"postcss": "postcss manual/assets/css/dist/index.css -o manual/assets/css/dist/index.css -c manual",
 		"prepublishOnly": "npm test",
-		"start": "hugo server -s manual -e development --quiet",
+		"start": "hugo server -s manual -e development --quiet --poll 700",
 		"pretest": "run-s clean lint build",
 		"test": "run-p test:*",
 		"test:unit": "tsx --test --tsconfig test/tsconfig.json \"test/**/*.ts\"",
