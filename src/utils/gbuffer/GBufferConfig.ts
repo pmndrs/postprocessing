@@ -86,8 +86,8 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 			[GData.DEPTH, "float depth;"],
 			[GData.NORMAL, "vec3 normal;"],
 			[GData.POSITION, "vec3 position;"],
-			[GData.ORM, "vec3 orm;"],
-			[GData.EMISSION, "vec3 emission;"],
+			[GData.ORM, "lowp vec3 orm;"],
+			[GData.EMISSION, "mediump vec3 emission;"],
 			[GData.LUMINANCE, "float luminance;"]
 		]);
 
