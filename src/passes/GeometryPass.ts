@@ -195,6 +195,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 		this.camera = camera;
 
 		this.updateTextureConfigs();
+		this.updateGBuffer();
 
 	}
 
@@ -335,7 +336,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 	}
 
 	/**
-	 * Defines all possible G-Buffer texture configs and updates the G-Buffer.
+	 * Defines all possible G-Buffer texture configs.
 	 */
 
 	protected updateTextureConfigs(): void {
@@ -373,8 +374,6 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 			format: RGBAFormat
 			// R11F_G11F_B10F causes artifacts in some scenes.
 		});
-
-		this.updateGBuffer();
 
 	}
 
