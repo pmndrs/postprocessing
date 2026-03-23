@@ -124,7 +124,7 @@ export class Background extends Group implements Disposable {
 
 			}
 
-			// @todo Remove when three support auto shader outputs.
+			// TODO Remove when three supports auto shader outputs.
 			material.onBeforeCompile = (shader: WebGLProgramParametersWithUniforms, renderer: WebGLRenderer) => {
 
 				const renderTarget = renderer.getRenderTarget();
