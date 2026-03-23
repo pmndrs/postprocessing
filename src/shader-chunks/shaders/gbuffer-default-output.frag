@@ -18,6 +18,6 @@
 
 #ifdef out_Normal
 
-	out_Normal = vec2(0.0);
+	out_Normal = vec4(0.0);
 
 #endif
