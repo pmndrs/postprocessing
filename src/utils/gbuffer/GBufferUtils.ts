@@ -1,13 +1,11 @@
 import {
-	AnyPixelFormat,
 	FloatType,
 	HalfFloatType,
-	RGBAFormat,
-	RGBFormat,
-	RGFormat,
-	RedFormat,
-	TextureDataType,
-	UnsignedByteType,
+	IntType,
+	ShortType,
+	Texture,
+	UnsignedIntType,
+	UnsignedShortType,
 	WebGLRenderTarget
 } from "three";
 
@@ -15,33 +13,54 @@ import { Precision } from "../../enums/Precision.js";
 
 /**
  * Maps texture data types to the GLSL precision modifiers.
+ *
+ * @param texture - A texture.
+ * @return The GLSL precision.
  */
 
-const textureTypeToPrecision = new Map<TextureDataType, Precision>([
-	[FloatType, "highp"],
-	[HalfFloatType, "mediump"],
-	[UnsignedByteType, "lowp"]
-]);
+function getOutputPrecision(texture: Texture): Precision {
+
+	switch(texture.type) {
+
+		case IntType:
+		case UnsignedIntType:
+		case FloatType:
+			return "highp";
+
+		case ShortType:
+		case UnsignedShortType:
+		case HalfFloatType:
+			return "mediump";
+
+		default:
+			return "lowp";
+
+	}
+
+}
 
 /**
  * GLSL texel types.
  */
 
-declare type TexelType = "float" | "vec2" | "vec3" | "vec4";
+declare type TexelType = "uvec4" | "ivec4" | "vec4";
 
 /**
  * Determines the GLSL texel type that corresponds to a given pixel format.
  *
- * @param type - The pixel format.
+ * @param texture - A texture.
  * @return The GLSL texel type.
  */
 
-const pixelFormatToTexelType = new Map<AnyPixelFormat, TexelType>([
-	[RedFormat, "float"],
-	[RGFormat, "vec2"],
-	[RGBFormat, "vec3"],
-	[RGBAFormat, "vec4"]
-]);
+function getOutputType(texture: Texture): TexelType {
+
+	const isIntType = texture.type === IntType || texture.type === ShortType;
+	const isUintType = texture.type === UnsignedIntType || texture.type === UnsignedShortType;
+
+	// Using vec4 for best compatibility and flexibility.
+	return isUintType ? "uvec4" : isIntType ? "ivec4" : "vec4";
+
+}
 
 /**
  * Extracts G-Buffer texture indices from a given render target.
@@ -72,6 +91,7 @@ export function extractIndices(renderTarget: WebGLRenderTarget): Map<string, num
  *
  * TODO Remove when three supports auto shader outputs.
  *
+ * @see https://github.com/mrdoob/three.js/pull/27808
  * @param renderTarget - A render target.
  * @return The output definitions.
  * @category Utils
@@ -85,9 +105,9 @@ export function extractOutputDefinitions(renderTarget: WebGLRenderTarget): strin
 	for(let i = 0, l = renderTarget.textures.length; i < l; ++i) {
 
 		const texture = renderTarget.textures[i];
-		const precision = textureTypeToPrecision.get(texture.type);
-		const type = pixelFormatToTexelType.get(texture.format);
 		const name = texture.name.replace(/\W*/g, "");
+		const precision = getOutputPrecision(texture);
+		const type = getOutputType(texture);
 
 		if(i === 0) {
 
