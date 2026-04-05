@@ -172,4 +172,54 @@ export class ObservableSet<T> extends EventDispatcher<ObservableSetEventMap<T>> 
 
 	}
 
+	union<U>(other: ReadonlySetLike<U>): Set<T | U> {
+
+		const result = new ObservableSet<T | U>();
+		result.data = this.data.union(other);
+		return result;
+
+	}
+
+	intersection<U>(other: ReadonlySetLike<U>): Set<T & U> {
+
+		const result = new ObservableSet<T & U>();
+		result.data = this.data.intersection(other);
+		return result;
+
+	}
+
+	difference<U>(other: ReadonlySetLike<U>): Set<T> {
+
+		const result = new ObservableSet<T>();
+		result.data = this.data.difference(other);
+		return result;
+
+	}
+
+	symmetricDifference<U>(other: ReadonlySetLike<U>): Set<T | U> {
+
+		const result = new ObservableSet<T | U>();
+		result.data = this.data.symmetricDifference(other);
+		return result;
+
+	}
+
+	isSubsetOf(other: ReadonlySetLike<unknown>): boolean {
+
+		return this.data.isSubsetOf(other);
+
+	}
+
+	isSupersetOf(other: ReadonlySetLike<unknown>): boolean {
+
+		return this.data.isSupersetOf(other);
+
+	}
+
+	isDisjointFrom(other: ReadonlySetLike<unknown>): boolean {
+
+		return this.data.isDisjointFrom(other);
+
+	}
+
 }
