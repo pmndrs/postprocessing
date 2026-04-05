@@ -1,7 +1,7 @@
 import pkg from "./package.json" with { type: "json" };
 import esbuild from "esbuild";
 import { glsl } from "esbuild-plugin-glsl";
-import glob from "tiny-glob";
+import { glob } from "node:fs/promises";
 
 const minify = process.argv.includes("-m");
 const external = ["three", "spatial-controls", "tweakpane", "@tweakpane/plugin-essentials"];
@@ -17,7 +17,7 @@ const banner = `/**
 // #region Library
 
 const workers = {
-	entryPoints: await glob("./src/**/worker.ts"),
+	entryPoints: await Array.fromAsync(glob("./src/**/worker.ts")),
 	outExtension: { ".js": ".txt" },
 	outdir: "./temp",
 	logLevel: "info",
@@ -55,7 +55,7 @@ const vendor = {
 
 const manual = {
 	entryPoints: ["./manual/assets/js/src/index.ts"]
-		.concat(await glob("./manual/assets/js/src/demos/*.ts")),
+		.concat(await Array.fromAsync(glob("./manual/assets/js/src/demos/*.ts"))),
 	outdir: "./manual/assets/js/dist",
 	logLevel: "info",
 	format: "iife",
@@ -67,7 +67,7 @@ const manual = {
 };
 
 const inline = {
-	entryPoints: await glob("./manual/assets/js/src/inline/*.ts"),
+	entryPoints: await Array.fromAsync(glob("./manual/assets/js/src/inline/*.ts")),
 	outdir: "./manual/assets/js/dist/inline",
 	logLevel: "info",
 	format: "iife",
