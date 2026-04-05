@@ -9,23 +9,21 @@
 	"compilerOptions": {
 		// File Layout
 		"rootDir": ".",
-		"baseUrl": ".",
 		"outDir": "./dist",
 		"paths": {
 			"postprocessing": ["./src/index.js"],
-			"temp": ["./temp"]
+			"temp/*": ["./temp/*"]
 		},
 		// Environment Settings
+		"module": "esnext",
+		"target": "es2025",
 		"moduleResolution": "bundler",
-		"module": "es2022",
-		"target": "es2022",
+		"types": ["node"],
 		// Style Options
 		"noImplicitReturns": true,
 		"noImplicitOverride": false,
 		// Other
-		"noUncheckedSideEffectImports": true,
 		"resolveJsonModule": true,
-		"strict": true,
 		"sourceMap": false,
 		"skipLibCheck": true
 	}
