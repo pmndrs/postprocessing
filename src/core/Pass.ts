@@ -843,13 +843,13 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		const texture = outputBuffer.texture;
 
-		texture.needsUpdate = (
+		let textureNeedsUpdate = (
 			texture.format !== inputBuffer.format ||
 			texture.internalFormat !== inputBuffer.internalFormat ||
 			texture.type !== inputBuffer.type
 		);
 
-		if(texture.needsUpdate) {
+		if(textureNeedsUpdate) {
 
 			texture.format = inputBuffer.format;
 			texture.internalFormat = inputBuffer.internalFormat;
@@ -867,13 +867,14 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		if(useSRGB && texture.colorSpace !== SRGBColorSpace) {
 
 			texture.colorSpace = SRGBColorSpace;
-			texture.needsUpdate = true;
+			textureNeedsUpdate = true;
 
 		}
 
-		if(texture.needsUpdate) {
+		if(textureNeedsUpdate) {
 
 			// Notify listeners.
+			texture.needsUpdate = true;
 			this.output.defaultBuffer!.texture.setChanged();
 
 		}
