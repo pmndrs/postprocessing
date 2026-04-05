@@ -57,7 +57,7 @@ export interface LUT3DEffectOptions {
  *
  * @see https://developer.nvidia.com/gpugems/gpugems2/part-iii-high-quality-rendering/chapter-24-using-lookup-tables-accelerate-color
  * @see https://www.nvidia.com/content/GTC/posters/2010/V01-Real-Time-Color-Space-Conversion-for-High-Resolution-Video.pdf
- * @see https://github.com/AcademySoftwareFoundation/OpenColorIO/blob/master/src/OpenColorIO/ops/lut3d/
+ * @see https://github.com/AcademySoftwareFoundation/OpenColorIO/blob/main/src/OpenColorIO/ops/lut3d/
  * @see https://github.com/gkjohnson/threejs-sandbox/tree/master/3d-lut
  * @category Effects
  */
