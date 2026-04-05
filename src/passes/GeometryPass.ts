@@ -347,7 +347,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 		textureConfigs.set(GBuffer.COLOR, {
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
-			type: this.frameBufferType,
+			type: useSmallFloatFormat ? FloatType : this.frameBufferType,
 			format: useSmallFloatFormat ? RGBFormat : RGBAFormat,
 			internalFormat: useSmallFloatFormat ? "R11F_G11F_B10F" : undefined,
 			isColorBuffer: true
