@@ -203,7 +203,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 * A collection of fullscreen materials that are used by this pass.
 	 *
 	 * This only needs to be filled if multiple fullscreen materials are used. The initial {@link fullscreenMaterial}
-	 * will automatically be added.
+	 * will be added automatically.
 	 */
 
 	protected readonly materials: Set<TMaterial>;
