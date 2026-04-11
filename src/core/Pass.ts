@@ -193,14 +193,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	// #endregion
 
 	/**
-	 * A collection of objects that will be disposed when this pass is disposed.
-	 *
-	 * IO resources, materials and subpasses will be disposed separately and don't need to be added.
-	 */
-
-	protected readonly disposables: Set<Disposable>;
-
-	/**
 	 * A collection of shader materials that are used by this pass.
 	 *
 	 * This only needs to be filled if multiple fullscreen materials are used. The initial {@link fullscreenMaterial}
@@ -208,6 +200,14 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 */
 
 	protected readonly materials: Set<Material>;
+
+	/**
+	 * A collection of objects that will be disposed when this pass is disposed.
+	 *
+	 * IO resources, materials and subpasses will be disposed separately and don't need to be added.
+	 */
+
+	protected readonly disposables: Set<Disposable>;
 
 	/**
 	 * The current resolution.
@@ -253,6 +253,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		super();
 
+		this.id = Pass.idManager.getNextId();
 		this.sceneListener = (event) => this.handleSceneEvent(event);
 		this.shaderDataTracker = new ShaderDataTracker();
 
@@ -271,13 +272,11 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this._camera = null;
 		this._subpasses = [];
 
-		this.id = Pass.idManager.getNextId();
-		this.disposables = new Set();
-
 		const materials = new ObservableSet<Material>();
 		materials.addEventListener("add", (e) => this.updateFullscreenMaterial(e.value));
 		this.materials = materials;
 
+		this.disposables = new Set();
 		this.resolution = new Resolution();
 		this.viewport = new Viewport();
 		this.scissor = new Scissor();
@@ -709,30 +708,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	// #endregion
 
-	/**
-	 * Updates the size of the default output buffer, if it exists.
-	 */
-
-	private updateOutputBufferSize(): void {
-
-		this.output.defaultBuffer?.value?.setSize(this.resolution.width, this.resolution.height);
-
-	}
-
-	/**
-	 * Updates the viewport and scissor based on the current resolution.
-	 */
-
-	private updateViewportAndScissor(): void {
-
-		const { baseWidth, baseHeight, scaledPixelRatio } = this.resolution;
-		this.viewport.pixelRatio = scaledPixelRatio;
-		this.viewport.setBaseSize(baseWidth, baseHeight);
-		this.scissor.pixelRatio = scaledPixelRatio;
-		this.scissor.setBaseSize(baseWidth, baseHeight);
-
-	}
-
 	// #region Materials
 
 	/**
@@ -913,6 +888,30 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	}
 
+	/**
+	 * Updates the size of the default output buffer, if it exists.
+	 */
+
+	private updateOutputBufferSize(): void {
+
+		this.output.defaultBuffer?.value?.setSize(this.resolution.width, this.resolution.height);
+
+	}
+
+	/**
+	 * Updates the viewport and scissor based on the current resolution.
+	 */
+
+	private updateViewportAndScissor(): void {
+
+		const { baseWidth, baseHeight, scaledPixelRatio } = this.resolution;
+		this.viewport.pixelRatio = scaledPixelRatio;
+		this.viewport.setBaseSize(baseWidth, baseHeight);
+		this.scissor.pixelRatio = scaledPixelRatio;
+		this.scissor.setBaseSize(baseWidth, baseHeight);
+
+	}
+
 	// #region Lifecycle Hooks
 
 	/**
@@ -987,200 +986,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	protected onSceneChildRemoved(object: Object3D): void {}
 
 	// #endregion
-
-	/**
-	 * Compiles the materials used by this pass.
-	 *
-	 * @return A promise that resolves when the compilation has finished.
-	 */
-
-	async compile(): Promise<void> {
-
-		if(this.renderer === null) {
-
-			return;
-
-		}
-
-		const group = new Group();
-
-		for(const material of this.materials) {
-
-			group.add(new Mesh(Pass.fullscreenGeometry, material));
-
-		}
-
-		const promises: Promise<Object3D | void>[] = [
-			this.renderer.compileAsync(group, this.fullscreenCamera!, this.fullscreenScene)
-		];
-
-		for(const pass of this.subpasses) {
-
-			promises.push(pass.compile());
-
-		}
-
-		await Promise.all(promises);
-
-	}
-
-	/**
-	 * Creates a standard render target with default settings and no depth.
-	 *
-	 * @see https://threejs.org/docs/?q=rendert#api/en/renderers/WebGLRenderTarget
-	 * @return The framebuffer.
-	 */
-
-	protected createFramebuffer(): WebGLRenderTarget {
-
-		const { width, height } = this.resolution;
-		return new WebGLRenderTarget(width, height, { depthBuffer: false });
-
-	}
-
-	/**
-	 * Dispatches a `change` event.
-	 */
-
-	protected setChanged(): void {
-
-		this.dispatchEvent({ type: "change" });
-
-	}
-
-	/**
-	 * Applies the viewport of this pass to the given render target.
-	 *
-	 * Note: viewport/scissor on render targets use absolute pixels whereas the renderer expects logical pixels.
-	 */
-
-	protected applyViewport(renderTarget: WebGLRenderTarget | WebGLRenderTarget<Texture[]> | null = null): void {
-
-		const renderer = this.renderer;
-
-		if(renderer === null) {
-
-			return;
-
-		}
-
-		const viewport = this.viewport;
-
-		if(viewport.enabled) {
-
-			if(renderTarget !== null) {
-
-				renderTarget.viewport.copy(viewport);
-
-			} else {
-
-				renderer.setViewport(viewport.x, viewport.y, viewport.z, viewport.w);
-
-			}
-
-		} else {
-
-			if(renderTarget !== null) {
-
-				const { width, height } = renderTarget;
-				renderTarget.viewport.set(0, 0, width, height);
-
-			} else {
-
-				const { width, height } = renderer.getSize(v);
-				renderer.setViewport(0, 0, width, height);
-
-			}
-
-		}
-
-	}
-
-	/**
-	 * Applies the scissor region of this pass to the given render target.
-	 *
-	 * Note: viewport/scissor on render targets use absolute pixels whereas the renderer expects logical pixels.
-	 */
-
-	protected applyScissor(renderTarget: WebGLRenderTarget | WebGLRenderTarget<Texture[]> | null = null): void {
-
-		const renderer = this.renderer;
-
-		if(renderer === null) {
-
-			return;
-
-		}
-
-		const scissor = this.scissor;
-
-		if(scissor.enabled) {
-
-			if(renderTarget !== null) {
-
-				renderTarget.scissor.copy(scissor);
-				renderTarget.scissorTest = true;
-
-			} else {
-
-				renderer.setScissor(scissor.x, scissor.y, scissor.z, scissor.w);
-				renderer.setScissorTest(true);
-
-			}
-
-		} else {
-
-			if(renderTarget !== null) {
-
-				const { width, height } = renderTarget;
-				renderTarget.scissor.set(0, 0, width, height);
-				renderTarget.scissorTest = false;
-
-			} else if(renderer.getScissorTest()) {
-
-				const { width, height } = renderer.getSize(v);
-				renderer.setScissor(0, 0, width, height);
-				renderer.setScissorTest(false);
-
-			}
-
-		}
-
-	}
-
-	/**
-	 * Sets the active render target.
-	 *
-	 * This method also calls {@link applyViewport} and {@link applyScissor}.
-	 *
-	 * @param renderTarget - A render target. Use `null` to render to the canvas.
-	 * @param activeCubeFace - The active cube side (PX 0, NX 1, PY 2, NY 3, PZ 4, NZ 5) of `WebGLCubeRenderTarget`.
-	 * @param activeMipmapLevel - Specifies the active mipmap level.
-	 */
-
-	protected setRenderTarget(renderTarget: WebGLRenderTarget | WebGLRenderTarget<Texture[]> | null = null,
-		activeCubeFace?: number, activeMipmapLevel?: number): void {
-
-		// Viewport and scissor need to be set before setting the render target.
-		this.applyViewport(renderTarget);
-		this.applyScissor(renderTarget);
-		this.renderer?.setRenderTarget(renderTarget, activeCubeFace, activeMipmapLevel);
-
-	}
-
-	/**
-	 * Renders the fullscreen material to the current render target.
-	 */
-
-	protected renderFullscreen(): void {
-
-		if(this.renderer !== null && this.fullscreenMaterial !== null) {
-
-			this.renderer.render(this.fullscreenScene!, this.fullscreenCamera!);
-
-		}
-
-	}
 
 	// #region Event Handlers
 
@@ -1344,6 +1149,200 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	}
 
 	// #endregion
+
+	/**
+	 * Dispatches a `change` event.
+	 */
+
+	protected setChanged(): void {
+
+		this.dispatchEvent({ type: "change" });
+
+	}
+
+	/**
+	 * Creates a standard render target with default settings and no depth.
+	 *
+	 * @see https://threejs.org/docs/?q=rendert#api/en/renderers/WebGLRenderTarget
+	 * @return The framebuffer.
+	 */
+
+	protected createFramebuffer(): WebGLRenderTarget {
+
+		const { width, height } = this.resolution;
+		return new WebGLRenderTarget(width, height, { depthBuffer: false });
+
+	}
+
+	/**
+	 * Compiles the materials used by this pass.
+	 *
+	 * @return A promise that resolves when the compilation has finished.
+	 */
+
+	async compile(): Promise<void> {
+
+		if(this.renderer === null) {
+
+			return;
+
+		}
+
+		const group = new Group();
+
+		for(const material of this.materials) {
+
+			group.add(new Mesh(Pass.fullscreenGeometry, material));
+
+		}
+
+		const promises: Promise<Object3D | void>[] = [
+			this.renderer.compileAsync(group, this.fullscreenCamera!, this.fullscreenScene)
+		];
+
+		for(const pass of this.subpasses) {
+
+			promises.push(pass.compile());
+
+		}
+
+		await Promise.all(promises);
+
+	}
+
+	/**
+	 * Applies the viewport of this pass to the given render target.
+	 *
+	 * Note: viewport/scissor on render targets use absolute pixels whereas the renderer expects logical pixels.
+	 */
+
+	protected applyViewport(renderTarget: WebGLRenderTarget | WebGLRenderTarget<Texture[]> | null = null): void {
+
+		const renderer = this.renderer;
+
+		if(renderer === null) {
+
+			return;
+
+		}
+
+		const viewport = this.viewport;
+
+		if(viewport.enabled) {
+
+			if(renderTarget !== null) {
+
+				renderTarget.viewport.copy(viewport);
+
+			} else {
+
+				renderer.setViewport(viewport.x, viewport.y, viewport.z, viewport.w);
+
+			}
+
+		} else {
+
+			if(renderTarget !== null) {
+
+				const { width, height } = renderTarget;
+				renderTarget.viewport.set(0, 0, width, height);
+
+			} else {
+
+				const { width, height } = renderer.getSize(v);
+				renderer.setViewport(0, 0, width, height);
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Applies the scissor region of this pass to the given render target.
+	 *
+	 * Note: viewport/scissor on render targets use absolute pixels whereas the renderer expects logical pixels.
+	 */
+
+	protected applyScissor(renderTarget: WebGLRenderTarget | WebGLRenderTarget<Texture[]> | null = null): void {
+
+		const renderer = this.renderer;
+
+		if(renderer === null) {
+
+			return;
+
+		}
+
+		const scissor = this.scissor;
+
+		if(scissor.enabled) {
+
+			if(renderTarget !== null) {
+
+				renderTarget.scissor.copy(scissor);
+				renderTarget.scissorTest = true;
+
+			} else {
+
+				renderer.setScissor(scissor.x, scissor.y, scissor.z, scissor.w);
+				renderer.setScissorTest(true);
+
+			}
+
+		} else {
+
+			if(renderTarget !== null) {
+
+				const { width, height } = renderTarget;
+				renderTarget.scissor.set(0, 0, width, height);
+				renderTarget.scissorTest = false;
+
+			} else if(renderer.getScissorTest()) {
+
+				const { width, height } = renderer.getSize(v);
+				renderer.setScissor(0, 0, width, height);
+				renderer.setScissorTest(false);
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Sets the active render target.
+	 *
+	 * This method also calls {@link applyViewport} and {@link applyScissor}.
+	 *
+	 * @param renderTarget - A render target. Use `null` to render to the canvas.
+	 * @param activeCubeFace - The active cube side (PX 0, NX 1, PY 2, NY 3, PZ 4, NZ 5) of `WebGLCubeRenderTarget`.
+	 * @param activeMipmapLevel - Specifies the active mipmap level.
+	 */
+
+	protected setRenderTarget(renderTarget: WebGLRenderTarget | WebGLRenderTarget<Texture[]> | null = null,
+		activeCubeFace?: number, activeMipmapLevel?: number): void {
+
+		// Viewport and scissor need to be set before setting the render target.
+		this.applyViewport(renderTarget);
+		this.applyScissor(renderTarget);
+		this.renderer?.setRenderTarget(renderTarget, activeCubeFace, activeMipmapLevel);
+
+	}
+
+	/**
+	 * Renders the fullscreen material to the current render target.
+	 */
+
+	protected renderFullscreen(): void {
+
+		if(this.renderer !== null && this.fullscreenMaterial !== null) {
+
+			this.renderer.render(this.fullscreenScene!, this.fullscreenCamera!);
+
+		}
+
+	}
 
 	dispose(): void {
 
