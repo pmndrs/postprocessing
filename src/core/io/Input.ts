@@ -147,7 +147,7 @@ export class Input extends EventDispatcher<BaseEventMap> implements Disposable, 
 	}
 
 	/**
-	 * The default input buffer.
+	 * The default input buffer, or `null` if there is none.
 	 */
 
 	get defaultBuffer(): TextureResource | null {
