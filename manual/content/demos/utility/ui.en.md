@@ -57,7 +57,7 @@ Due to the lack of depth information, MSAA is not supported.
 
 ### Multiple Render Pipelines
 
-UI elements can also be rendered in a separate pipeline with a `ClearPass` and a `GeometryPass`. The `GeometryPass` can make use of MSAA if it has a `depthBuffer` and the UI scene can be rendered only when needed. The resulting UI output texture can then be integrated into the main pipeline by using a `TextureEffect`. This approach is not depth-aware between pipelines.
+UI elements can also be rendered in a separate pipeline with a `ClearPass` and a `GeometryPass`. The `GeometryPass` can make use of MSAA if it has a `depthBuffer` and the UI pipeline can be rendered only when needed. The resulting UI output texture can then be integrated into the main pipeline by using a `TextureEffect`. This approach is not depth-aware across pipelines.
 
 ```ts
 const uiClearPass = new ClearPass();
