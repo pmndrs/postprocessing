@@ -881,43 +881,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	}
 
-	/**
-	 * Checks if this pass uses convolution shaders.
-	 *
-	 * Only works on passes that use a `FullscreenMaterial`.
-	 *
-	 * @param recursive - Controls whether subpasses should be checked recursively.
-	 * @return True if the pass uses convolution shaders.
-	 */
-
-	isConvolutionPass(recursive: boolean): boolean {
-
-		const material = this.fullscreenMaterial;
-
-		if(material instanceof FullscreenMaterial && /texture\s*\(\s*gBuffer.color/.test(material.fragmentShader)) {
-
-			return true;
-
-		}
-
-		if(recursive) {
-
-			for(const subpass of this.subpasses) {
-
-				if(subpass.isConvolutionPass(recursive)) {
-
-					return true;
-
-				}
-
-			}
-
-		}
-
-		return false;
-
-	}
-
 	// #region Lifecycle Hooks
 
 	/**

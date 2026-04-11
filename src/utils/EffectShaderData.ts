@@ -5,6 +5,7 @@ import { BlendMode } from "../effects/blending/BlendMode.js";
 import { EffectShaderSection, EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
 import { GData } from "../enums/GData.js";
 import { prefixSubstrings } from "../utils/functions/string.js";
+import { isConvolutionPass } from "./functions/pass.js";
 import { topologicalSort } from "./functions/sorting.js";
 import { GBufferConfig } from "./gbuffer/GBufferConfig.js";
 
@@ -219,7 +220,7 @@ export class EffectShaderData implements ShaderData {
 
 		effect.validate();
 
-		if(effect.isConvolutionPass(false)) {
+		if(isConvolutionPass(effect, false)) {
 
 			this.convolutionEffects.add(effect);
 
