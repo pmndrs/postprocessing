@@ -101,23 +101,7 @@ export class ClearPass extends Pass {
 
 			}
 
-			if(typeof clearValue === "number") {
-
-				fv[0] = clearValue;
-				fv[1] = 0.0;
-				fv[2] = 0.0;
-				fv[3] = 1.0;
-
-			} else {
-
-				fv[0] = (clearValue.length > 0) ? clearValue[0] : 0.0;
-				fv[1] = (clearValue.length > 1) ? clearValue[1] : 0.0;
-				fv[2] = (clearValue.length > 2) ? clearValue[2] : 0.0;
-				fv[3] = (clearValue.length > 3) ? clearValue[3] : 1.0;
-
-			}
-
-			gl.clearBufferfv(gl.COLOR, entry[1], fv);
+			gl.clearBufferfv(gl.COLOR, entry[1], clearValue);
 
 		}
 
