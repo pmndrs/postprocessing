@@ -2,6 +2,7 @@ import { WebGLRenderer, WebGLRenderTarget } from "three";
 import { Pass } from "../core/Pass.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { CopyMaterial } from "../materials/CopyMaterial.js";
+import { blitFramebuffer } from "../utils/index.js";
 
 /**
  * Copies the contents of the default input buffer to another buffer or to screen.
@@ -12,15 +13,10 @@ import { CopyMaterial } from "../materials/CopyMaterial.js";
 export class CopyPass extends Pass<CopyMaterial> {
 
 	/**
-	 * Indicates whether {@link WebGLRenderer.copyTextureToTexture} should be used for copying. Depending on the device
-	 * and graphics backend, this operation can be faster or slower than a fullscreen copy shader.
-	 *
-	 * This feature is disabled by default because it tends to be slower in most cases.
-	 *
-	 * @defaultValue false
+	 * Indicates whether {@link blitFramebuffer} can be used for copying.
 	 */
 
-	static blitEnabled = false;
+	private blitEnabled: boolean;
 
 	/**
 	 * Constructs a new copy pass.
@@ -34,6 +30,8 @@ export class CopyPass extends Pass<CopyMaterial> {
 
 		this.output.defaultBuffer = outputBuffer ?? this.createFramebuffer();
 		this.fullscreenMaterial = new CopyMaterial();
+
+		this.blitEnabled = false;
 
 	}
 
@@ -67,6 +65,46 @@ export class CopyPass extends Pass<CopyMaterial> {
 	}
 
 	/**
+	 * Checks if the input buffer can be copied with {@link blitFramebuffer} and updates {@link blitEnabled}.
+	 */
+
+	private setupBlit(): void {
+
+		this.blitEnabled = false;
+
+		const inputBuffer = this.input.defaultBuffer?.value?.renderTarget ?? null;
+		const outputBuffer = this.output.defaultBuffer?.value ?? null;
+
+		if(inputBuffer === null || outputBuffer === null ||
+			inputBuffer.texture.type !== outputBuffer.texture.type ||
+			inputBuffer.texture.format !== outputBuffer.texture.format ||
+			inputBuffer.width !== outputBuffer.width ||
+			inputBuffer.height !== outputBuffer.height) {
+
+			return;
+
+		}
+
+		const inputDepthTexture = this.input.getBuffer(GBuffer.DEPTH);
+
+		if(inputDepthTexture !== null) {
+
+			if(inputDepthTexture.renderTarget !== inputBuffer ||
+				inputDepthTexture === outputBuffer.depthTexture ||
+				inputDepthTexture.type !== outputBuffer.depthTexture?.type ||
+				inputDepthTexture.format !== outputBuffer.depthTexture?.format) {
+
+				return;
+
+			}
+
+		}
+
+		this.blitEnabled = true;
+
+	}
+
+	/**
 	 * Configures the depth buffer for copying.
 	 */
 
@@ -83,12 +121,14 @@ export class CopyPass extends Pass<CopyMaterial> {
 	protected override onInputChange(): void {
 
 		this.configureDepthBuffer();
+		this.setupBlit();
 
 	}
 
 	protected override onOutputChange(): void {
 
 		this.configureDepthBuffer();
+		this.setupBlit();
 		this.initializeOutputBuffer();
 
 	}
@@ -100,71 +140,40 @@ export class CopyPass extends Pass<CopyMaterial> {
 	}
 
 	/**
-	 * Rapidly copies the input buffer into the output buffer.
-	 *
-	 * @return True, if the operation was successful.
+	 * Rapidly copies the contents of the input buffer into the output buffer.
 	 */
 
-	private blit(): boolean {
+	private blit(): void {
 
-		if(!CopyPass.blitEnabled) {
-
-			return false;
-
-		}
-
-		const inputBuffer = this.input.defaultBuffer?.value ?? null;
+		const inputBuffer = this.input.defaultBuffer?.value?.renderTarget as WebGLRenderTarget ?? null;
 		const outputBuffer = this.output.defaultBuffer?.value ?? null;
 
 		if(this.renderer === null || inputBuffer === null || outputBuffer === null) {
-
-			return false;
-
-		}
-
-		const imgData = inputBuffer.source.data as ImageData;
-
-		if(imgData.width !== outputBuffer.width || imgData.height !== outputBuffer.height) {
-
-			return false;
-
-		}
-
-		if(inputBuffer.type === outputBuffer.texture.type &&
-			inputBuffer.format === outputBuffer.texture.format) {
-
-			this.renderer.copyTextureToTexture(inputBuffer, outputBuffer.texture);
-
-		}
-
-		const inputDepthTexture = this.input.getBuffer(GBuffer.DEPTH);
-
-		if(inputDepthTexture !== null && outputBuffer.depthTexture !== null &&
-			inputDepthTexture !== outputBuffer.depthTexture &&
-			inputDepthTexture.type === outputBuffer.depthTexture.type &&
-			inputDepthTexture.format === outputBuffer.depthTexture.format) {
-
-			this.renderer.copyTextureToTexture(inputDepthTexture, outputBuffer.depthTexture);
-
-		}
-
-		return true;
-
-	}
-
-	override render(): void {
-
-		const inputBuffer = this.input.defaultBuffer?.value ?? null;
-
-		if(this.renderer === null || inputBuffer === null) {
 
 			return;
 
 		}
 
-		if(!this.blit()) {
+		const depth = inputBuffer.depthBuffer && outputBuffer.depthBuffer;
+		const stencil = inputBuffer.stencilBuffer && outputBuffer.stencilBuffer;
 
-			// Blit failed: use a shader to copy the input buffer.
+		blitFramebuffer(this.renderer, inputBuffer, outputBuffer, true, depth, stencil);
+
+	}
+
+	override render(): void {
+
+		if(this.blitEnabled) {
+
+			this.blit();
+			return;
+
+		}
+
+		const material = this.fullscreenMaterial;
+
+		if(material.colorWrite || material.depthWrite) {
+
 			this.setRenderTarget(this.output.defaultBuffer?.value);
 			this.renderFullscreen();
 
