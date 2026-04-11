@@ -120,8 +120,8 @@ export class ObservableSet<T> extends EventDispatcher<ObservableSetEventMap<T>> 
 
 		}
 
-		this.dispatchEvent({ type: "delete", value });
 		this.data.delete(value);
+		this.dispatchEvent({ type: "delete", value });
 		this.dispatchEvent({ type: "change" });
 		return true;
 
