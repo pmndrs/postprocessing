@@ -193,7 +193,6 @@ export class Output extends EventDispatcher<BaseEventMap> implements Disposable,
 
 		for(const disposable of this.renderTargets.values()) {
 
-			disposable.value?.depthTexture?.dispose();
 			disposable.value?.dispose();
 
 		}

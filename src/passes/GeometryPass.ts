@@ -463,7 +463,6 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 		}
 
 		// Dispose the current G-Buffer if it exists.
-		output.defaultBuffer.value?.depthTexture?.dispose();
 		output.defaultBuffer.value?.dispose();
 
 		if(gBufferComponents.size === 0) {
