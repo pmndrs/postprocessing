@@ -34,6 +34,7 @@ import { Identifiable } from "./Identifiable.js";
 import { Input } from "./io/Input.js";
 import { Output } from "./io/Output.js";
 import { Renderable } from "./Renderable.js";
+import { ObservableSet } from "../utils/ObservableSet.js";
 
 const v = /* @__PURE__ */ new Vector2();
 
@@ -200,13 +201,13 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	protected readonly disposables: Set<Disposable>;
 
 	/**
-	 * A collection of fullscreen materials that are used by this pass.
+	 * A collection of shader materials that are used by this pass.
 	 *
 	 * This only needs to be filled if multiple fullscreen materials are used. The initial {@link fullscreenMaterial}
 	 * will be added automatically.
 	 */
 
-	protected readonly materials: Set<TMaterial>;
+	protected readonly materials: Set<Material>;
 
 	/**
 	 * The current resolution.
@@ -271,8 +272,11 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this._subpasses = [];
 
 		this.id = Pass.idManager.getNextId();
-		this.disposables = new Set<Disposable>();
-		this.materials = new Set<TMaterial>();
+		this.disposables = new Set();
+
+		const materials = new ObservableSet<Material>();
+		materials.addEventListener("add", (e) => this.updateFullscreenMaterial(e.value));
+		this.materials = materials;
 
 		this.resolution = new Resolution();
 		this.viewport = new Viewport();
@@ -620,16 +624,13 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		}
 
-		if(!this.materials.has(value)) {
-
-			this.materials.add(value);
-			this.updateFullscreenMaterialInput(value);
-
-		}
+		this.materials.add(value);
 
 	}
 
 	// #endregion
+
+	// #region Subpasses
 
 	/**
 	 * Sets the base settings of all subpasses.
@@ -706,6 +707,8 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	}
 
+	// #endregion
+
 	/**
 	 * Updates the size of the default output buffer, if it exists.
 	 */
@@ -730,6 +733,8 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	}
 
+	// #region Materials
+
 	/**
 	 * Updates the size of the given material.
 	 */
@@ -745,7 +750,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	}
 
 	/**
-	 * Updates the size of the fullscreen materials.
+	 * Updates the size of all fullscreen materials.
 	 */
 
 	private updateFullscreenMaterialsResolution(): void {
@@ -804,6 +809,23 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	}
 
 	/**
+	 * Updates the shader output settings of the given fullscreen material.
+	 *
+	 * @param material - The material to update.
+	 */
+
+	private updateFullscreenMaterialOutput(material: Material | null): void {
+
+		if(material instanceof FullscreenMaterial) {
+
+			// High precision buffers use HalfFloatType (mediump).
+			material.outputPrecision = this.output.frameBufferPrecisionHigh ? "mediump" : "lowp";
+
+		}
+
+	}
+
+	/**
 	 * Updates the shader output settings of all fullscreen {@link materials}.
 	 */
 
@@ -811,16 +833,27 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		for(const material of this.materials) {
 
-			if(material instanceof FullscreenMaterial) {
-
-				// High precision buffers use HalfFloatType (mediump).
-				material.outputPrecision = this.output.frameBufferPrecisionHigh ? "mediump" : "lowp";
-
-			}
+			this.updateFullscreenMaterialOutput(material);
 
 		}
 
 	}
+
+	/**
+	 * Updates the given material's resolution and input/output data.
+	 *
+	 * @param material - The material to update.
+	 */
+
+	private updateFullscreenMaterial(material: Material | null): void {
+
+		this.updateFullscreenMaterialResolution(material);
+		this.updateFullscreenMaterialInput(material);
+		this.updateFullscreenMaterialOutput(material);
+
+	}
+
+	// #endregion
 
 	/**
 	 * Synchronizes the texture settings of the input and output default buffers.
@@ -973,7 +1006,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		for(const material of this.materials) {
 
-			group.add(new Mesh(Pass.fullscreenGeometry, material!));
+			group.add(new Mesh(Pass.fullscreenGeometry, material));
 
 		}
 
