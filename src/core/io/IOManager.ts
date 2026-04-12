@@ -144,7 +144,7 @@ export class IOManager {
 
 		for(const pass of passes) {
 
-			if(pass.output.defaultBuffer === null) {
+			if(pass.output.defaultBuffer === undefined) {
 
 				continue;
 
@@ -180,7 +180,7 @@ export class IOManager {
 			const outputDefaultBuffers = this.outputDefaultBuffers;
 			const lastPass = passes[passes.length - 1];
 
-			if(lastPass.output.defaultBuffer !== null) {
+			if(lastPass.output.defaultBuffer !== undefined) {
 
 				// Remember the original buffer and set the default buffer to null.
 				outputDefaultBuffers.set(lastPass.output.defaultBuffer, lastPass.output.defaultBuffer.value);

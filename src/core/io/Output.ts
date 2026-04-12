@@ -86,17 +86,27 @@ export class Output extends EventDispatcher<BaseEventMap> implements Disposable,
 
 	/**
 	 * The default output buffer.
+	 *
+	 * Setting the default buffer to `undefined` is the same as calling {@link removeDefaultBuffer}.
 	 */
 
-	get defaultBuffer(): RenderTargetResource | null {
+	get defaultBuffer(): RenderTargetResource | undefined {
 
-		return this.renderTargets.get(Output.BUFFER_DEFAULT) ?? null;
+		return this.renderTargets.get(Output.BUFFER_DEFAULT);
 
 	}
 
-	set defaultBuffer(value: RenderTargetResource | WebGLRenderTarget | null) {
+	set defaultBuffer(value: RenderTargetResource | WebGLRenderTarget | null | undefined) {
 
-		this.setBuffer(Output.BUFFER_DEFAULT, value);
+		if(value === undefined) {
+
+			this.removeDefaultBuffer();
+
+		} else {
+
+			this.setBuffer(Output.BUFFER_DEFAULT, value);
+
+		}
 
 	}
 
@@ -167,13 +177,15 @@ export class Output extends EventDispatcher<BaseEventMap> implements Disposable,
 	/**
 	 * Retrieves a buffer.
 	 *
+	 * Unlike input buffers, output buffers can be `undefined` because `null` represents the canvas.
+	 *
 	 * @param key - A buffer key.
-	 * @return The buffer, or `null` if it doesn't exist.
+	 * @return The buffer, or `undefined` if it doesn't exist.
 	 */
 
-	getBuffer(key: string): WebGLRenderTarget | null {
+	getBuffer(key: string): WebGLRenderTarget | null | undefined {
 
-		return this.renderTargets.get(key)?.value ?? null;
+		return this.renderTargets.get(key)?.value;
 
 	}
 
