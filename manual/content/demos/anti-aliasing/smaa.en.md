@@ -22,7 +22,7 @@ const effect = new SMAAEffect({
 ```
 
 > [!TIP]
-> Anti-aliasing works best when applied after tone-mapping because it requires LDR input colors.
+> Anti-aliasing works best when applied after tone-mapping because it requires SDR input colors.
 
 ## External Resources
 
