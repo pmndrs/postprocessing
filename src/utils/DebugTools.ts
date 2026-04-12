@@ -12,12 +12,18 @@ import { ClearPass } from "../passes/ClearPass.js";
  * @param buffer - A collection that maps texture UUIDs to simple ids.
  */
 
-function toTextureId(textureIds: Map<string, number | string>,
-	buffer: RenderTargetResource | TextureResource | null): number | string {
+function toTextureId(textureIds: Map<string, number>,
+	buffer: RenderTargetResource | TextureResource | null | undefined): number | null | undefined {
+
+	if(buffer === undefined) {
+
+		return undefined;
+
+	}
 
 	if(buffer === null || buffer.value === null) {
 
-		return "canvas";
+		return null;
 
 	}
 
@@ -25,7 +31,7 @@ function toTextureId(textureIds: Map<string, number | string>,
 		buffer.value.texture.uuid :
 		buffer.value.uuid;
 
-	return (uuid !== null) ? textureIds.get(uuid) ?? "unknown" : "canvas";
+	return textureIds.get(uuid);
 
 }
 
@@ -37,7 +43,7 @@ function toTextureId(textureIds: Map<string, number | string>,
  */
 
 function createTextureIds(passes: readonly Pass<Material | null>[],
-	result = new Map<string, number | string>(), nextId = 0): Map<string, number | string> {
+	result = new Map<string, number>(), nextId = 0): Map<string, number> {
 
 	for(const pass of passes) {
 
@@ -76,7 +82,7 @@ function createTextureIds(passes: readonly Pass<Material | null>[],
  * @param textureIds - A collection that maps texture UUIDs to simple ids.
  */
 
-function analyzeDataFlow(passes: readonly Pass<Material | null>[], textureIds: Map<string, number | string>): void {
+function analyzeDataFlow(passes: readonly Pass<Material | null>[], textureIds: Map<string, number>): void {
 
 	for(const pass of passes) {
 
@@ -117,7 +123,7 @@ function analyzeDataFlow(passes: readonly Pass<Material | null>[], textureIds: M
 
 				if(output.hasDefaultBuffer) {
 
-					const defaultbufferId = toTextureId(textureIds, output.defaultBuffer);
+					const defaultbufferId = toTextureId(textureIds, output.defaultBuffer) ?? "canvas";
 					console.debug("writes", defaultbufferId, buffers.map(x => toTextureId(textureIds, x)).join(" "));
 
 				} else {
@@ -200,17 +206,40 @@ function gatherOutputResources(passes: readonly Pass<Material | null>[],
  */
 
 function analyzeInputResources(passes: readonly Pass<Material | null>[],
-	textureIds: Map<string, number | string>): void {
+	textureIds: Map<string, number>): void {
 
 	const resources = gatherInputResources(passes);
+	const idToResources = new Map<number, TextureResource[]>();
 
+	// Group resources by texture UUID.
 	for(const resource of resources) {
 
-		console.debug(
-			`${toTextureId(textureIds, resource)}:`,
-			`(${resource.id})`,
-			resource.value?.uuid
-		);
+		const id = toTextureId(textureIds, resource);
+
+		if(id === null || id === undefined) {
+
+			// Empty input resource.
+			continue;
+
+		}
+
+		if(idToResources.has(id)) {
+
+			idToResources.get(id)!.push(resource);
+
+		} else {
+
+			idToResources.set(id, [resource]);
+
+		}
+
+	}
+
+	for(const [id, resources] of Array.from(idToResources).sort((a, b) => a[0] - b[0])) {
+
+		const resource = resources[0];
+		const uuid = resource.value!.uuid;
+		console.debug(id, uuid);
 
 	}
 
@@ -224,17 +253,40 @@ function analyzeInputResources(passes: readonly Pass<Material | null>[],
  */
 
 function analyzeOutputResources(passes: readonly Pass<Material | null>[],
-	textureIds: Map<string, number | string>): void {
+	textureIds: Map<string, number>): void {
 
 	const resources = gatherOutputResources(passes);
+	const idToResources = new Map<number, RenderTargetResource[]>();
 
+	// Group resources by texture UUID.
 	for(const resource of resources) {
 
-		console.debug(
-			`${toTextureId(textureIds, resource)}:`,
-			`(${resource.id} → ${resource.texture.id})`,
-			resource.texture.value?.uuid ?? "null"
-		);
+		const id = toTextureId(textureIds, resource);
+
+		if(id === null || id === undefined) {
+
+			console.debug(id, "canvas");
+			continue;
+
+		}
+
+		if(idToResources.has(id)) {
+
+			idToResources.get(id)!.push(resource);
+
+		} else {
+
+			idToResources.set(id, [resource]);
+
+		}
+
+	}
+
+	for(const [id, resources] of Array.from(idToResources).sort((a, b) => a[0] - b[0])) {
+
+		const resource = resources[0];
+		const uuid = resource.texture.value!.uuid;
+		console.debug(id, uuid);
 
 	}
 
