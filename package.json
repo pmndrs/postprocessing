@@ -45,12 +45,6 @@
 	"publishConfig": {
 		"tag": "beta"
 	},
-	"ava": {
-		"failFast": true,
-		"files": [
-			"test/**/*.js"
-		]
-	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
 			"@parcel/watcher",
@@ -92,7 +86,7 @@
 		"three": ">= 0.179.0 < 0.184.0"
 	},
 	"devDependencies": {
-		"@pagefind/component-ui": "1.5.0-beta.2",
+		"@pagefind/component-ui": "1.5.x",
 		"@tweakpane/core": "2.x.x",
 		"@tweakpane/plugin-essentials": "0.x.x",
 		"@types/node": "25.x.x",
@@ -107,7 +101,7 @@
 		"gzipper": "8.x.x",
 		"hugo-bin": "0.x.x",
 		"npm-run-all": "4.x.x",
-		"pagefind": "1.5.0-beta.2",
+		"pagefind": "1.5.x",
 		"postcss": "8.x.x",
 		"postcss-cli": "11.x.x",
 		"postcss-preset-env": "11.x.x",
