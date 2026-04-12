@@ -105,10 +105,10 @@ export class TextureEffect extends Effect implements TextureEffectOptions {
 	 * @param r - The swizzle for the `r` component.
 	 * @param g - The swizzle for the `g` component. Defaults to the same value used for `r`.
 	 * @param b - The swizzle for the `b` component. Defaults to the same value used for `r`.
-	 * @param a - The swizzle for the `a` component. Defaults to the same value used for `r`.
+	 * @param a - The swizzle for the `a` component. Defaults to `ColorChannel.ALPHA`.
 	 */
 
-	setTextureSwizzleRGBA(r: ColorChannel, g = r, b = r, a = r) {
+	setTextureSwizzleRGBA(r: ColorChannel, g = r, b = r, a = ColorChannel.ALPHA) {
 
 		const rgba = "rgba";
 		let swizzle = "";
