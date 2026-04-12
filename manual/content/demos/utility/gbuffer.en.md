@@ -13,7 +13,7 @@ script: gbuffer
 
 ## GeometryPass
 
-The `GeometryPass` is responsible for rendering a scene and its output serves as the starting point in a render pipeline. This output is generally referred to as a "G-Buffer" and in its simplest form, it only consists of a single color texture attachment. With [MRT](https://registry.khronos.org/webgl/specs/latest/2.0/#3.7.11) it's possible to render to multiple buffers at once which enables more advanced effects. Without MRT, the entire scene would have to be rendered multiple times to obtain various types of geometry data.
+The `GeometryPass` is responsible for rendering a scene and its output serves as the starting point in a render pipeline. This output is generally referred to as a "G-Buffer" and in its simplest form it only consists of a single color texture attachment. With [MRT](https://registry.khronos.org/webgl/specs/latest/2.0/#3.7.11) it's possible to render to multiple buffers at once which enables more advanced effects. Without MRT, the entire scene would have to be rendered multiple times to obtain various types of geometry data.
 
 Depending on the requirements of other passes in the pipeline, the `GeometryPass` will configure a G-Buffer that contains the needed texture attachments. The individual render textures will then be provided to the passes that requested them.
 
