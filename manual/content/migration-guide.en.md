@@ -11,6 +11,16 @@ weight: 100
 
 ## v6 &rarr; v7
 
+### How to install
+
+```json
+{
+	"dependencies": {
+		"postprocessing": ">= 7.0.0-beta.17"
+	}
+}
+```
+
 * `RenderPass` was replaced by `GeometryPass`.
 	* A `ClearPass` must now be used for clearing.
 * `EffectComposer` was replaced by `RenderPipeline`.
