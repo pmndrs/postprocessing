@@ -127,6 +127,41 @@ export class ObservableSet<T> extends EventDispatcher<ObservableSetEventMap<T>> 
 
 	}
 
+	/**
+	 * Removes multiple elements from the Set.
+	 *
+	 * @param values - The elements.
+	 * @return This Set.
+	 */
+
+	deleteAll(...values: T[]): this {
+
+		let changed = false;
+
+		for(const value of values) {
+
+			if(!this.data.has(value)) {
+
+				continue;
+
+			}
+
+			this.data.delete(value);
+			this.dispatchEvent({ type: "delete", value });
+			changed = true;
+
+		}
+
+		if(changed) {
+
+			this.dispatchEvent({ type: "change" });
+
+		}
+
+		return this;
+
+	}
+
 	has(value: T): boolean {
 
 		return this.data.has(value);
@@ -144,6 +179,41 @@ export class ObservableSet<T> extends EventDispatcher<ObservableSetEventMap<T>> 
 		this.data.add(value);
 		this.dispatchEvent({ type: "add", value });
 		this.dispatchEvent({ type: "change" });
+		return this;
+
+	}
+
+	/**
+	 * Adds multiple elements to the end of the Set.
+	 *
+	 * @param values - The elements.
+	 * @return This Set.
+	 */
+
+	addAll(...values: T[]): this {
+
+		let changed = false;
+
+		for(const value of values) {
+
+			if(this.data.has(value)) {
+
+				continue;
+
+			}
+
+			this.data.add(value);
+			this.dispatchEvent({ type: "add", value });
+			changed = true;
+
+		}
+
+		if(changed) {
+
+			this.dispatchEvent({ type: "change" });
+
+		}
+
 		return this;
 
 	}
