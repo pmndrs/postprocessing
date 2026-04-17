@@ -199,6 +199,8 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 	}
 
+	// #region Accessors
+
 	override get enabled(): boolean {
 
 		return super.enabled;
@@ -300,6 +302,8 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 		this.updateOutputBufferColorSpace();
 
 	}
+
+	// #endregion
 
 	/**
 	 * Refreshes the material of the given object.
