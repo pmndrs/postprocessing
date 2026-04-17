@@ -106,6 +106,12 @@ export interface GeometryPassOptions {
 
 export class GeometryPass extends Pass implements GeometryPassOptions, Selective {
 
+	/**
+	 * Identifies the G-Buffer resource.
+	 */
+
+	private static readonly GBUFFER = "GBUFFER";
+
 	readonly selection: Selection;
 
 	/**
@@ -189,6 +195,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 		this.gBufferComponents = gBufferComponents;
 		this.gBufferShaderPlugin = new GBufferShaderPlugin();
 		this.gBufferResource = new RenderTargetResource();
+		this.output.buffers.set(GeometryPass.GBUFFER, this.gBufferResource);
 		this.output.defaultBuffer = this.gBufferResource;
 
 		this.scene = scene;
@@ -249,7 +256,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		this._samples = value;
 
-		const buffer = this.output.defaultBuffer?.value ?? null;
+		const buffer = this.gBufferResource?.value ?? null;
 
 		if(buffer !== null && buffer.samples !== value) {
 
@@ -299,7 +306,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 	override set renderer(value: WebGLRenderer | null) {
 
 		super.renderer = value;
-		this.updateOutputBufferColorSpace();
+		this.updateGBufferColorSpace();
 
 	}
 
@@ -408,10 +415,10 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 	}
 
 	/**
-	 * Updates the color space of the output buffers.
+	 * Updates the color space of the G-Buffer texture attachments.
 	 */
 
-	private updateOutputBufferColorSpace(): void {
+	private updateGBufferColorSpace(): void {
 
 		const gBuffer = this.gBuffer;
 		const renderer = this.renderer;
@@ -453,26 +460,23 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 	private updateGBuffer(): void {
 
 		const output = this.output;
+		const gBufferResource = this.gBufferResource;
 		const gBufferComponents = this.gBufferComponents;
 
 		if(!output.hasDefaultBuffer) {
 
+			// Restore the default output buffer.
 			output.defaultBuffer = this.gBufferResource;
-
-		} else if(output.defaultBuffer !== this.gBufferResource) {
-
-			// Don't modify foreign resources.
-			return;
 
 		}
 
 		// Dispose the current G-Buffer if it exists.
-		output.defaultBuffer.value?.dispose();
+		gBufferResource.value?.dispose();
 
 		if(gBufferComponents.size === 0) {
 
 			// Fall back to the canvas.
-			output.defaultBuffer = null;
+			gBufferResource.value = null;
 			output.defines.clear();
 			return;
 
@@ -507,9 +511,10 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		}
 
-		output.defaultBuffer = renderTarget;
+		gBufferResource.value = renderTarget;
 		this.configureDepthTexture();
-		this.updateOutputBufferColorSpace();
+		this.updateGBufferColorSpace();
+		this.gBufferShaderPlugin.gBuffer = this.gBuffer;
 
 	}
 
@@ -521,18 +526,9 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 	private configureDepthTexture(): void {
 
-		const output = this.output;
+		const gBuffer = this.gBuffer;
 
-		if(output.defaultBuffer !== this.gBufferResource) {
-
-			// Don't modify foreign resources.
-			return;
-
-		}
-
-		const outputBuffer = output.defaultBuffer?.value ?? null;
-
-		if(outputBuffer === null) {
+		if(gBuffer === null) {
 
 			return;
 
@@ -540,8 +536,8 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		if(!this.gBufferComponents.has(GBuffer.DEPTH)) {
 
-			outputBuffer.depthTexture?.dispose();
-			outputBuffer.depthTexture = null;
+			gBuffer.depthTexture?.dispose();
+			gBuffer.depthTexture = null;
 			return;
 
 		}
@@ -550,10 +546,10 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		if(inputDepthTexture !== null) {
 
-			if(outputBuffer.depthTexture !== inputDepthTexture) {
+			if(gBuffer.depthTexture !== inputDepthTexture) {
 
-				outputBuffer.depthTexture?.dispose();
-				outputBuffer.depthTexture = inputDepthTexture as DepthTexture;
+				gBuffer.depthTexture?.dispose();
+				gBuffer.depthTexture = inputDepthTexture as DepthTexture;
 
 			}
 
@@ -563,8 +559,8 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 			depthTexture.name = GBuffer.DEPTH;
 			depthTexture.format = this.stencilBuffer ? DepthStencilFormat : DepthFormat;
 			depthTexture.type = this.stencilBuffer ? UnsignedInt248Type : FloatType;
-			outputBuffer.depthTexture?.dispose();
-			outputBuffer.depthTexture = depthTexture;
+			gBuffer.depthTexture?.dispose();
+			gBuffer.depthTexture = depthTexture;
 
 		}
 
@@ -572,6 +568,9 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 	/**
 	 * Updates the settings of the internal copy pass.
+	 *
+	 * If present, the contents of the default input buffer will be copied to the output buffer unless the buffers are the
+	 * same or the output buffer has multiple texture attachments.
 	 */
 
 	private updateCopyPass(): void {
@@ -609,19 +608,10 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		if(!this.output.hasDefaultBuffer) {
 
-			// Silently restore the G-Buffer to avoid a nested double update.
-			// The render pipeline will be updated right after this hook.
-			this.gBufferResource.mute();
-			this.updateGBuffer();
-			this.gBufferResource.unmute();
-
-		} else {
-
-			this.configureDepthTexture();
+			this.output.defaultBuffer = this.gBufferResource;
 
 		}
 
-		this.gBufferShaderPlugin.gBuffer = this.output.defaultBuffer?.value ?? null;
 		this.copyPass.output.defaultBuffer = this.output.defaultBuffer;
 		this.updateCopyPass();
 
@@ -631,6 +621,12 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		// Use the same resolution settings for the copy pass.
 		this.copyPass.resolution.copy(this.resolution);
+
+		if(this.gBufferResource !== this.output.defaultBuffer) {
+
+			this.gBufferResource?.value?.setSize(this.resolution.width, this.resolution.height);
+
+		}
 
 	}
 
@@ -657,7 +653,9 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 	override render(): void {
 
-		const { renderer, scene, camera } = this;
+		const renderer = this.renderer;
+		const scene = this.scene;
+		const camera = this.camera;
 
 		if(renderer === null || scene === null || camera === null) {
 
