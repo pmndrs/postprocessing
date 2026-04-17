@@ -113,15 +113,47 @@ export class ObservableMap<K, V> extends EventDispatcher<ObservableMapEventMap<K
 
 		}
 
-		this.dispatchEvent({
-			type: "delete",
-			key: key,
-			value: this.data.get(key) as V
-		});
-
+		const value = this.data.get(key) as V;
 		this.data.delete(key);
+		this.dispatchEvent({ type: "delete", key, value });
 		this.dispatchEvent({ type: "change" });
 		return true;
+
+	}
+
+	/**
+	 * Removes multiple entries from the Map.
+	 *
+	 * @param keys - The keys of the entries that should be deleted.
+	 * @return This Map.
+	 */
+
+	deleteAll(...keys: K[]): this {
+
+		let changed = false;
+
+		for(const key of keys) {
+
+			if(!this.data.has(key)) {
+
+				continue;
+
+			}
+
+			const value = this.data.get(key) as V;
+			this.data.delete(key);
+			this.dispatchEvent({ type: "delete", key, value });
+			changed = true;
+
+		}
+
+		if(changed) {
+
+			this.dispatchEvent({ type: "change" });
+
+		}
+
+		return this;
 
 	}
 
@@ -152,6 +184,45 @@ export class ObservableMap<K, V> extends EventDispatcher<ObservableMapEventMap<K
 		this.data.set(key, value);
 		this.dispatchEvent({ type: "add", key, value });
 		this.dispatchEvent({ type: "change" });
+		return this;
+
+	}
+
+	/**
+	 * Sets multiple entries.
+	 *
+	 * @param entries - The entries.
+	 * @return This Map.
+	 */
+
+	setAll(...entries: [K, V][]): this {
+
+		let changed = false;
+
+		for(const entry of entries) {
+
+			const key = entry[0];
+
+			if(this.data.has(key)) {
+
+				const value = this.data.get(key) as V;
+				this.dispatchEvent({ type: "delete", key, value });
+
+			}
+
+			const value = entry[1];
+			this.data.set(key, value);
+			this.dispatchEvent({ type: "add", key, value });
+			changed = true;
+
+		}
+
+		if(changed) {
+
+			this.dispatchEvent({ type: "change" });
+
+		}
+
 		return this;
 
 	}
