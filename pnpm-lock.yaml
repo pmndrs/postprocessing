@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       three:
-        specifier: '>= 0.179.0 < 0.184.0'
-        version: 0.183.2
+        specifier: '>= 0.179.0 < 0.185.0'
+        version: 0.184.0
     devDependencies:
       '@pagefind/component-ui':
         specifier: 1.5.x
@@ -74,7 +74,7 @@ importers:
         version: 1.99.0
       spatial-controls:
         specifier: 6.x.x
-        version: 6.3.0(three@0.183.2)
+        version: 6.3.0(three@0.184.0)
       stylelint:
         specifier: 17.x.x
         version: 17.8.0(typescript@6.0.3)
@@ -3269,8 +3269,8 @@ packages:
   thenby@1.4.0:
     resolution: {integrity: sha512-D+BkEl5MpeTbQ1Rz0io/TLZmwmYUAgvUpS1r2eKUvPicYOnpqzjZE6bVa7rSEYv189zkSM+CVc+hG5X7nVe9LQ==}
 
-  three@0.183.2:
-    resolution: {integrity: sha512-di3BsL2FEQ1PA7Hcvn4fyJOlxRRgFYBpMTcyOgkwJIaDOdJMebEFPA+t98EvjuljDx4hNulAGwF6KIjtwI5jgQ==}
+  three@0.184.0:
+    resolution: {integrity: sha512-wtTRjG92pM5eUg/KuUnHsqSAlPM296brTOcLgMRqEeylYTh/CdtvKUvCyyCQTzFuStieWxvZb8mVTMvdPyUpxg==}
 
   through2@2.0.5:
     resolution: {integrity: sha512-/mrRod8xqpA+IHSLyGCQ2s8SPHiCDEeQJSep1jqLYeEUClOFG2Qsh+4FU6G9VeqpZnGW/Su8LQGc4YKni5rYSQ==}
@@ -6580,9 +6580,9 @@ snapshots:
 
   source-map-js@1.2.1: {}
 
-  spatial-controls@6.3.0(three@0.183.2):
+  spatial-controls@6.3.0(three@0.184.0):
     dependencies:
-      three: 0.183.2
+      three: 0.184.0
 
   spdx-correct@3.2.0:
     dependencies:
@@ -6835,7 +6835,7 @@ snapshots:
 
   thenby@1.4.0: {}
 
-  three@0.183.2: {}
+  three@0.184.0: {}
 
   through2@2.0.5:
     dependencies:
