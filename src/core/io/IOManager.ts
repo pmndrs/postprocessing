@@ -307,11 +307,7 @@ export class IOManager {
 
 		for(const pass of pipeline.passes.filter(x => x.enabled)) {
 
-			for(const component of pass.input.gBuffer) {
-
-				geoPass.gBufferComponents.add(component);
-
-			}
+			geoPass.gBufferComponents.addAll(...pass.input.gBuffer);
 
 		}
 
