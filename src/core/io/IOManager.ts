@@ -74,6 +74,8 @@ export class IOManager {
 
 			const pass = passes[i];
 
+			IOManager.assignGBufferTextures(pass, geoPass);
+
 			if(pass === geoPass) {
 
 				continue;
@@ -92,8 +94,6 @@ export class IOManager {
 				pass.camera = geoPass.camera;
 
 			}
-
-			IOManager.assignGBufferTextures(pass, geoPass);
 
 		}
 
