@@ -134,7 +134,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 	 * @internal
 	 */
 
-	readonly gBufferComponents: Set<GBuffer | string>;
+	readonly gBufferComponents: ObservableSet<GBuffer | string>;
 
 	// #region Settings
 
