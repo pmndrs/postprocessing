@@ -9,7 +9,6 @@ import { Input } from "./Input.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
 import { Resource } from "./Resource.js";
 import { ResourceManager } from "./ResourceManager.js";
-import { TextureResource } from "./TextureResource.js";
 
 /**
  * An I/O manager.
@@ -361,12 +360,12 @@ export class IOManager {
 
 			if(component === GBuffer.DEPTH as string) {
 
-				pass.input.buffers.set(component, new TextureResource(geoPass.gBuffer.depthTexture));
+				pass.input.setBuffer(component, geoPass.gBuffer.depthTexture);
 
 			} else if(indices.has(component)) {
 
 				const index = indices.get(component)!;
-				pass.input.buffers.set(component, new TextureResource(geoPass.gBuffer.textures[index]));
+				pass.input.setBuffer(component, geoPass.gBuffer.textures[index]);
 
 			}
 
