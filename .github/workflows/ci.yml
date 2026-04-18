@@ -14,7 +14,7 @@ jobs:
       - name: Git checkout
         uses: actions/checkout@v5
       - name: Install PNPM
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
         with:
           version: 10
       - name: Install Node
