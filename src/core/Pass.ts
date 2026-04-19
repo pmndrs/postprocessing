@@ -1170,7 +1170,9 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	protected createFramebuffer(): WebGLRenderTarget {
 
 		const { width, height } = this.resolution;
-		return new WebGLRenderTarget(width, height, { depthBuffer: false });
+		const buffer = new WebGLRenderTarget(width, height, { depthBuffer: false });
+		buffer.texture.name = "Intermediate";
+		return buffer;
 
 	}
 
