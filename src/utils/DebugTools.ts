@@ -6,32 +6,33 @@ import { RenderPipeline } from "../core/RenderPipeline.js";
 import { ClearPass } from "../passes/ClearPass.js";
 
 /**
- * Returns an ID for a given buffer.
+ * Returns the texture IDs of the given buffer.
  *
  * @param textureIds - A collection that maps texture UUIDs to simple ids.
  * @param buffer - A collection that maps texture UUIDs to simple ids.
+ * @return The IDs.
  */
 
-function toTextureId(textureIds: Map<string, number>,
-	buffer: RenderTargetResource | TextureResource | null | undefined): number | null | undefined {
+function getTextureIds(textureIds: Map<string, number>,
+	buffer: RenderTargetResource | TextureResource | null | undefined): number[] {
 
-	if(buffer === undefined) {
+	if(buffer === undefined || buffer === null || buffer.value === null) {
 
-		return undefined;
-
-	}
-
-	if(buffer === null || buffer.value === null) {
-
-		return null;
+		return [];
 
 	}
 
-	const uuid = (buffer instanceof RenderTargetResource) ?
-		buffer.value.texture.uuid :
-		buffer.value.uuid;
+	if(buffer instanceof TextureResource) {
 
-	return textureIds.get(uuid);
+		return [textureIds.get(buffer.value.uuid)!];
+
+	}
+
+	const textures = buffer.value.depthTexture !== null ?
+		buffer.value.textures.concat([buffer.value.depthTexture]) :
+		buffer.value.textures;
+
+	return textures.map(x => textureIds.get(x.uuid)!);
 
 }
 
@@ -59,9 +60,25 @@ function createTextureIds(passes: readonly Pass<Material | null>[],
 
 		for(const buffer of pass.output.buffers.values()) {
 
-			if(buffer.value !== null && !result.has(buffer.value.texture.uuid)) {
+			if(buffer.value === null) {
 
-				result.set(buffer.value.texture.uuid, nextId++);
+				continue;
+
+			}
+
+			for(const texture of buffer.value.textures) {
+
+				if(!result.has(texture.uuid)) {
+
+					result.set(texture.uuid, nextId++);
+
+				}
+
+			}
+
+			if(buffer.value.depthTexture !== null && !result.has(buffer.value.depthTexture.uuid)) {
+
+				result.set(buffer.value.depthTexture.uuid, nextId++);
 
 			}
 
@@ -96,7 +113,15 @@ function analyzeDataFlow(passes: readonly Pass<Material | null>[], textureIds: M
 
 		} else if(pass instanceof ClearPass) {
 
-			console.debug("clears", toTextureId(textureIds, output.defaultBuffer));
+			if(output.hasDefaultBuffer) {
+
+				console.debug("clears", ...getTextureIds(textureIds, output.defaultBuffer));
+
+			} else {
+
+				console.debug("no target");
+
+			}
 
 		} else {
 
@@ -106,12 +131,12 @@ function analyzeDataFlow(passes: readonly Pass<Material | null>[], textureIds: M
 
 				if(input.hasDefaultBuffer) {
 
-					const defaultbufferId = toTextureId(textureIds, input.defaultBuffer);
-					console.debug("reads", defaultbufferId, buffers.map(x => toTextureId(textureIds, x)).join(" "));
+					const defaultbufferId = getTextureIds(textureIds, input.defaultBuffer)[0];
+					console.debug("reads", defaultbufferId, buffers.map(x => getTextureIds(textureIds, x)[0]).join(" "));
 
 				} else {
 
-					console.debug("reads", buffers.map(x => toTextureId(textureIds, x)).join(" "));
+					console.debug("reads", buffers.map(x => getTextureIds(textureIds, x)[0]).join(" "));
 
 				}
 
@@ -121,14 +146,19 @@ function analyzeDataFlow(passes: readonly Pass<Material | null>[], textureIds: M
 
 				const buffers = Array.from(output.buffers.values()).filter(x => x.id !== output.defaultBuffer?.id);
 
+				const additionalBuffers = buffers
+					.map(x => getTextureIds(textureIds, x))
+					.reduce((a, b) => [...a, ...b], [])
+					.join(" ");
+
 				if(output.hasDefaultBuffer) {
 
-					const defaultbufferId = toTextureId(textureIds, output.defaultBuffer) ?? "canvas";
-					console.debug("writes", defaultbufferId, buffers.map(x => toTextureId(textureIds, x)).join(" "));
+					const defaultbufferId = getTextureIds(textureIds, output.defaultBuffer)[0] ?? "canvas";
+					console.debug("writes", defaultbufferId, additionalBuffers);
 
 				} else {
 
-					console.debug("writes", buffers.map(x => toTextureId(textureIds, x)).join(" "));
+					console.debug("writes", additionalBuffers);
 
 				}
 
@@ -214,22 +244,23 @@ function analyzeInputResources(passes: readonly Pass<Material | null>[],
 	// Group resources by texture UUID.
 	for(const resource of resources) {
 
-		const id = toTextureId(textureIds, resource);
+		const ids = getTextureIds(textureIds, resource);
 
-		if(id === null || id === undefined) {
+		if(ids.length === 0) {
 
 			// Empty input resource.
 			continue;
 
 		}
 
-		if(idToResources.has(id)) {
+		// Texture resources only contain a single texture.
+		if(idToResources.has(ids[0])) {
 
-			idToResources.get(id)!.push(resource);
+			idToResources.get(ids[0])!.push(resource);
 
 		} else {
 
-			idToResources.set(id, [resource]);
+			idToResources.set(ids[0], [resource]);
 
 		}
 
@@ -238,8 +269,8 @@ function analyzeInputResources(passes: readonly Pass<Material | null>[],
 	for(const [id, resources] of Array.from(idToResources).sort((a, b) => a[0] - b[0])) {
 
 		const resource = resources[0];
-		const uuid = resource.value!.uuid;
-		console.debug(id, uuid);
+		const texture = resource.value!;
+		console.debug(id, texture.uuid, texture.name);
 
 	}
 
@@ -256,37 +287,34 @@ function analyzeOutputResources(passes: readonly Pass<Material | null>[],
 	textureIds: Map<string, number>): void {
 
 	const resources = gatherOutputResources(passes);
-	const idToResources = new Map<number, RenderTargetResource[]>();
+	const uniqueResources = new Map<number, RenderTargetResource>();
 
-	// Group resources by texture UUID.
+	// Deduplicate resources based on their ID.
 	for(const resource of resources) {
 
-		const id = toTextureId(textureIds, resource);
-
-		if(id === null || id === undefined) {
-
-			console.debug(id, "canvas");
-			continue;
-
-		}
-
-		if(idToResources.has(id)) {
-
-			idToResources.get(id)!.push(resource);
-
-		} else {
-
-			idToResources.set(id, [resource]);
-
-		}
+		uniqueResources.set(resource.id, resource);
 
 	}
 
-	for(const [id, resources] of Array.from(idToResources).sort((a, b) => a[0] - b[0])) {
+	for(const resource of Array.from(uniqueResources.values()).sort((a, b) => a.id - b.id)) {
 
-		const resource = resources[0];
-		const uuid = resource.texture.value!.uuid;
-		console.debug(id, uuid);
+		console.group(`rt${resource.id}`);
+
+		if(resource.value === null) {
+
+			console.debug(null, "canvas");
+
+		} else {
+
+			for(const texture of resource.value.textures) {
+
+				console.debug(textureIds.get(texture.uuid), texture.uuid, texture.name);
+
+			}
+
+		}
+
+		console.groupEnd();
 
 	}
 
@@ -317,10 +345,10 @@ export class DebugTools {
 		console.groupEnd();
 
 		console.groupCollapsed("Resources");
-		console.group("Input Buffers");
+		console.group("Input Textures");
 		analyzeInputResources(pipeline.passes, textureIds);
 		console.groupEnd();
-		console.group("Output Buffers");
+		console.group("Output Render Targets");
 		analyzeOutputResources(pipeline.passes, textureIds);
 		console.groupEnd();
 
