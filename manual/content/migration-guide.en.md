@@ -22,7 +22,8 @@ weight: 100
 ```
 
 * `RenderPass` was replaced by `GeometryPass`.
-	* A `ClearPass` must now be used for clearing.
+	* `GeometryPass` automatically clears its render target.
+	* Clearing can be disabled by setting `autoClear` to `false`.
 * `EffectComposer` was replaced by `RenderPipeline`.
 	* Most options have been moved to `GeometryPass`.
 	* The method `addPass` was replaced by `add`.
