@@ -632,6 +632,25 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	// #region Subpasses
 
 	/**
+	 * Sets the base settings of the given subpass.
+	 *
+	 * @param pass - The subpass.
+	 */
+
+	private initializeSubpass(pass: Pass<Material | null>): void {
+
+		pass.timer = this.timer;
+		pass.renderer = this.renderer;
+		pass.scene = this.scene;
+		pass.camera = this.camera;
+		pass.resolution.copy(this.resolution);
+		pass.viewport.copy(this.viewport);
+		pass.scissor.copy(this.scissor);
+		pass.attached = true;
+
+	}
+
+	/**
 	 * Sets the base settings of all subpasses.
 	 */
 
@@ -639,14 +658,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		for(const pass of this.subpasses) {
 
-			pass.timer = this.timer;
-			pass.renderer = this.renderer;
-			pass.scene = this.scene;
-			pass.camera = this.camera;
-			pass.resolution.copy(this.resolution);
-			pass.viewport.copy(this.viewport);
-			pass.scissor.copy(this.scissor);
-			pass.attached = true;
+			this.initializeSubpass(pass);
 
 		}
 
@@ -1329,6 +1341,24 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this.applyViewport(renderTarget);
 		this.applyScissor(renderTarget);
 		this.renderer?.setRenderTarget(renderTarget, activeCubeFace, activeMipmapLevel);
+
+	}
+
+	/**
+	 * Renders the subpasses in the order in which they were added.
+	 */
+
+	protected renderSubpasses(): void {
+
+		for(const pass of this.subpasses) {
+
+			if(pass.enabled) {
+
+				pass.render();
+
+			}
+
+		}
 
 	}
 
