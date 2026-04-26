@@ -1,4 +1,5 @@
-import { Object3D } from "three";
+import { Object3D, Object3DEventMap } from "three";
+import { SetExtensions } from "../core/SetExtensions.js";
 import { IdManager } from "./IdManager.js";
 
 /**
@@ -9,13 +10,19 @@ import { IdManager } from "./IdManager.js";
  * @category Utils
  */
 
-export class Selection extends Set<Object3D> {
+export class Selection implements Set<Object3D>, SetExtensions<Object3D> {
 
 	/**
 	 * An ID manager.
 	 */
 
 	private static idManager = /* @__PURE__ */ new IdManager(2);
+
+	/**
+	 * The internal data collection.
+	 */
+
+	private data: Set<Object3D>;
 
 	/**
 	 * @see {@link layer}
@@ -44,7 +51,7 @@ export class Selection extends Set<Object3D> {
 
 	constructor(iterable?: Iterable<Object3D> | null, layer = Selection.idManager.getNextId()) {
 
-		super();
+		this.data = new Set<Object3D>(iterable);
 
 		this._layer = layer;
 
@@ -81,7 +88,7 @@ export class Selection extends Set<Object3D> {
 
 		const currentLayer = this._layer;
 
-		for(const object of this) {
+		for(const object of this.data) {
 
 			object.layers.disable(currentLayer);
 			object.layers.enable(value);
@@ -92,21 +99,41 @@ export class Selection extends Set<Object3D> {
 
 	}
 
-	/**
-	 * Clears this selection.
-	 */
+	get size(): number {
 
-	override clear(): void {
+		return this.data.size;
+
+	}
+
+	get [Symbol.toStringTag](): string {
+
+		return this.data[Symbol.toStringTag];
+
+	}
+
+	[Symbol.iterator](): SetIterator<Object3D> {
+
+		return this.data[Symbol.iterator]();
+
+	}
+
+	has(value: Object3D<Object3DEventMap>): boolean {
+
+		return this.data.has(value);
+
+	}
+
+	clear(): void {
 
 		const layer = this.layer;
 
-		for(const object of this) {
+		for(const object of this.data) {
 
 			object.layers.disable(layer);
 
 		}
 
-		super.clear();
+		this.data.clear();
 
 	}
 
@@ -115,59 +142,50 @@ export class Selection extends Set<Object3D> {
 	 *
 	 * If {@link exclusive} is set to `true`, the object will also be removed from all other layers.
 	 *
-	 * @param object - The object that should be selected.
+	 * @param value - The object that should be selected.
 	 * @return This selection.
 	 */
 
-	override add(object: Object3D): this {
+	add(value: Object3D): this {
 
 		if(this.exclusive) {
 
-			object.layers.set(this.layer);
+			value.layers.set(this.layer);
 
 		} else {
 
-			object.layers.enable(this.layer);
+			value.layers.enable(this.layer);
 
 		}
 
-		return super.add(object);
+		this.data.add(value);
+
+		return this;
 
 	}
 
 	/**
-	 * Removes an object from this selection.
+	 * Adds the given objects to this selection.
 	 *
-	 * @param object - The object that should be deselected.
-	 * @return Returns true if an object has successfully been removed from this selection; otherwise false.
-	 */
-
-	override delete(object: Object3D): boolean {
-
-		if(this.has(object)) {
-
-			object.layers.disable(this.layer);
-
-		}
-
-		return super.delete(object);
-
-	}
-
-	/**
-	 * Clears this selection and adds the given objects.
+	 * If {@link exclusive} is set to `true`, the objects will also be removed from all other layers.
 	 *
-	 * @param objects - The objects that should be selected.
+	 * @param values - The objects that should be selected.
 	 * @return This selection.
 	 */
 
-	set(objects: Iterable<Object3D>): this {
+	addAll(...values: Object3D[]): this {
 
-		this.clear();
+		for(const object of values) {
 
-		for(const object of objects) {
+			if(this.exclusive) {
 
-			this.add(object);
+				object.layers.set(this.layer);
+
+			} else {
+
+				object.layers.enable(this.layer);
+
+			}
 
 		}
 
@@ -176,24 +194,81 @@ export class Selection extends Set<Object3D> {
 	}
 
 	/**
+	 * Removes an object from this selection.
+	 *
+	 * @param value - The object that should be deselected.
+	 * @return Returns true if an object has successfully been removed from this selection; otherwise false.
+	 */
+
+	delete(value: Object3D): boolean {
+
+		if(this.data.has(value)) {
+
+			value.layers.disable(this.layer);
+
+		}
+
+		return this.data.delete(value);
+
+	}
+
+	/**
+	 * Removes the given objects from this selection.
+	 *
+	 * @param values - The objects that should be deselected.
+	 * @return This selection.
+	 */
+
+	deleteAll(...values: Object3D[]): this {
+
+		for(const object of values) {
+
+			if(this.data.has(object)) {
+
+				object.layers.disable(this.layer);
+
+			}
+
+		}
+
+		return this;
+
+	}
+
+	/**
+	 * Clears this selection and adds the given objects.
+	 *
+	 * @param values - The objects that should be selected.
+	 * @return This selection.
+	 */
+
+	set(values: Iterable<Object3D>): this {
+
+		this.clear();
+		this.addAll(...values);
+		return this;
+
+	}
+
+	/**
 	 * Removes an existing object from the selection. If the object doesn't exist it's added instead.
 	 *
-	 * @param object - The object.
+	 * @param value - The object.
 	 * @return Returns true if the object is added, false otherwise.
 	 */
 
-	toggle(object: Object3D): boolean {
+	toggle(value: Object3D): boolean {
 
 		let result: boolean;
 
-		if(this.has(object)) {
+		if(this.data.has(value)) {
 
-			this.delete(object);
+			this.delete(value);
 			result = false;
 
 		} else {
 
-			this.add(object);
+			this.add(value);
 			result = true;
 
 		}
@@ -213,7 +288,7 @@ export class Selection extends Set<Object3D> {
 
 	setVisible(visible: boolean): this {
 
-		for(const object of this) {
+		for(const object of this.data) {
 
 			if(visible) {
 
@@ -228,6 +303,72 @@ export class Selection extends Set<Object3D> {
 		}
 
 		return this;
+
+	}
+
+	entries(): SetIterator<[Object3D, Object3D]> {
+
+		return this.data.entries();
+
+	}
+
+	keys(): SetIterator<Object3D> {
+
+		return this.data.keys();
+
+	}
+
+	values(): SetIterator<Object3D> {
+
+		return this.data.values();
+
+	}
+
+	forEach(callbackfn: (value: Object3D, value2: Object3D, set: Set<Object3D>) => void, thisArg?: unknown): void {
+
+		return this.data.forEach(callbackfn, thisArg);
+
+	}
+
+	union<U>(other: ReadonlySetLike<U>): Set<Object3D> {
+
+		throw new Error("Method not implemented.");
+
+	}
+
+	intersection<U>(other: ReadonlySetLike<U>): Set<Object3D & U> {
+
+		throw new Error("Method not implemented.");
+
+	}
+
+	difference<U>(other: ReadonlySetLike<U>): Set<Object3D> {
+
+		throw new Error("Method not implemented.");
+
+	}
+
+	symmetricDifference<Object3D>(other: ReadonlySetLike<Object3D>): Set<Object3D> {
+
+		throw new Error("Method not implemented.");
+
+	}
+
+	isSubsetOf(other: ReadonlySetLike<unknown>): boolean {
+
+		return this.data.isSubsetOf(other);
+
+	}
+
+	isSupersetOf(other: ReadonlySetLike<unknown>): boolean {
+
+		return this.data.isSupersetOf(other);
+
+	}
+
+	isDisjointFrom(other: ReadonlySetLike<unknown>): boolean {
+
+		return this.data.isDisjointFrom(other);
 
 	}
 
