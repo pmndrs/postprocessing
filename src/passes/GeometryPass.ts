@@ -630,21 +630,20 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 	protected override onInputChange(): void {
 
-		this.configureDepthTexture();
-
-		const copyPass = this.copyPass;
-		copyPass.input.defaultBuffer = this.input.defaultBuffer;
-		this.updateCopyPass();
+		this.copyPass.input.defaultBuffer = this.input.defaultBuffer;
 
 		if(this.input.buffers.has(GBuffer.DEPTH)) {
 
-			copyPass.input.buffers.set(GBuffer.DEPTH, this.input.buffers.get(GBuffer.DEPTH)!);
+			this.copyPass.input.buffers.set(GBuffer.DEPTH, this.input.buffers.get(GBuffer.DEPTH)!);
 
 		} else {
 
-			copyPass.input.buffers.delete(GBuffer.DEPTH);
+			this.copyPass.input.buffers.delete(GBuffer.DEPTH);
 
 		}
+
+		this.configureDepthTexture();
+		this.configureCopyPass();
 
 	}
 
@@ -658,7 +657,8 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		this.clearPass.output.defaultBuffer = this.output.defaultBuffer;
 		this.copyPass.output.defaultBuffer = this.output.defaultBuffer;
-		this.updateCopyPass();
+
+		this.configureCopyPass();
 
 	}
 
@@ -669,6 +669,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		if(this.gBufferResource !== this.output.defaultBuffer) {
 
+			// Set the size manually.
 			this.gBufferResource?.value?.setSize(this.resolution.width, this.resolution.height);
 
 		}
