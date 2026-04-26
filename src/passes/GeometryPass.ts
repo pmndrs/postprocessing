@@ -681,6 +681,20 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 	}
 
+	protected override onScissorChange(): void {
+
+		this.clearPass.scissor.copy(this.scissor);
+		this.copyPass.scissor.copy(this.scissor);
+
+	}
+
+	protected override onViewportChange(): void {
+
+		this.clearPass.viewport.copy(this.viewport);
+		this.copyPass.viewport.copy(this.viewport);
+
+	}
+
 	override async compile(): Promise<void> {
 
 		if(this.renderer === null || this.scene === null || this.camera === null) {
