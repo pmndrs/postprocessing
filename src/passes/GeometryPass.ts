@@ -35,6 +35,7 @@ import { GBufferTextureConfig } from "../utils/gbuffer/GBufferTextureConfig.js";
 import { extractIndices } from "../utils/gbuffer/GBufferUtils.js";
 import { ObservableSet } from "../utils/ObservableSet.js";
 import { Selection } from "../utils/Selection.js";
+import { ClearPass } from "./ClearPass.js";
 import { CopyPass } from "./CopyPass.js";
 
 /**
@@ -97,6 +98,14 @@ export interface GeometryPassOptions {
 
 	gBufferConfig?: GBufferConfig;
 
+	/**
+	 * Determines whether automatic clearing is enabled.
+	 *
+	 * @defaultValue true
+	 */
+
+	autoClear?: boolean;
+
 }
 
 /**
@@ -114,6 +123,16 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 	private static readonly GBUFFER = "GBUFFER";
 
 	readonly selection: Selection;
+
+	/**
+	 * A clear pass that clears the G-Buffer by default.
+	 *
+	 * Clearing will be disabled if the G-Buffer is not the default output buffer or if the {@link copyPass} is enabled.
+	 *
+	 * @see {@link autoClear} to disable the auto clear behavior.
+	 */
+
+	protected readonly clearPass: ClearPass;
 
 	/**
 	 * A pass that copies the default input buffer to the default output buffer.
@@ -160,6 +179,12 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 	private _samples: MSAASamples;
 
+	/**
+	 * @see {@link autoClear}
+	 */
+
+	private _autoClear: boolean;
+
 	// #endregion
 
 	/**
@@ -176,7 +201,8 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 		depthBuffer = true,
 		frameBufferType = HalfFloatType,
 		samples = 0,
-		gBufferConfig = new GBufferConfig()
+		gBufferConfig = new GBufferConfig(),
+		autoClear = true
 	}: GeometryPassOptions = {}) {
 
 		super("GeometryPass");
@@ -186,13 +212,17 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 		this.depthBuffer = depthBuffer;
 		this.frameBufferType = frameBufferType;
 		this._samples = samples;
+		this._autoClear = autoClear;
 
 		this.selection = new Selection();
 		this.selection.enabled = false;
 		this.gBufferConfig = gBufferConfig;
+
+		this.clearPass = new ClearPass();
+		this.clearPass.enabled = autoClear;
 		this.copyPass = new CopyPass();
 		this.copyPass.enabled = false;
-		this.subpasses = [this.copyPass];
+		this.subpasses = [this.clearPass, this.copyPass];
 
 		const gBufferComponents = new ObservableSet<string>();
 		gBufferComponents.addEventListener("change", () => this.updateGBuffer());
@@ -268,6 +298,19 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 			buffer.dispose();
 
 		}
+
+	}
+
+	get autoClear(): boolean {
+
+		return this._autoClear;
+
+	}
+
+	set autoClear(value: boolean) {
+
+		this._autoClear = value;
+		this.clearPass.enabled &&= value;
 
 	}
 
@@ -613,6 +656,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		}
 
+		this.clearPass.output.defaultBuffer = this.output.defaultBuffer;
 		this.copyPass.output.defaultBuffer = this.output.defaultBuffer;
 		this.updateCopyPass();
 
@@ -664,6 +708,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		}
 
+		this.renderSubpasses();
 
 		// The background is rendered by the ClearPass.
 		const background = scene.background;
@@ -674,12 +719,6 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 		if(this.selection.enabled) {
 
 			camera.layers.set(this.selection.layer);
-
-		}
-
-		if(this.copyPass.enabled) {
-
-			this.copyPass.render();
 
 		}
 

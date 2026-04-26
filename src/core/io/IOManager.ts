@@ -1,6 +1,5 @@
 import { Material, WebGLRenderTarget } from "three";
 import { GBuffer } from "../../enums/GBuffer.js";
-import { ClearPass } from "../../passes/ClearPass.js";
 import { GeometryPass } from "../../passes/GeometryPass.js";
 import { extractIndices } from "../../utils/gbuffer/GBufferUtils.js";
 import { Pass } from "../Pass.js";
@@ -81,13 +80,7 @@ export class IOManager {
 
 			}
 
-			if(j < l && pass instanceof ClearPass) {
-
-				const nextPass = passes[j];
-				pass.scene = nextPass.scene;
-				pass.camera = nextPass.camera;
-
-			} else if(!(pass instanceof GeometryPass) && geoPass !== undefined) {
+			if(!(pass instanceof GeometryPass) && geoPass !== undefined) {
 
 				pass.scene = geoPass.scene;
 				pass.camera = geoPass.camera;
@@ -105,8 +98,7 @@ export class IOManager {
 			const nextPass = passes[j];
 
 			// Keep track of the last output buffer.
-			if(!(pass instanceof ClearPass) && pass.output.hasDefaultBuffer &&
-				pass.output.defaultBuffer!.value !== null) {
+			if(pass.output.hasDefaultBuffer && pass.output.defaultBuffer!.value !== null) {
 
 				outputBuffer = pass.output.defaultBuffer!;
 
@@ -184,23 +176,6 @@ export class IOManager {
 				// Remember the original buffer and set the default buffer to null.
 				outputDefaultBuffers.set(lastPass.output.defaultBuffer, lastPass.output.defaultBuffer.value);
 				lastPass.output.defaultBuffer = null;
-
-			}
-
-		}
-
-		// Connect clear passes with subsequent passes.
-		for(let i = 0, j = 1, l = passes.length; j < l; ++i, ++j) {
-
-			const pass = passes[i];
-
-			if(pass instanceof ClearPass) {
-
-				// Assign the output resources of the next pass to this clear pass.
-				const nextPass = passes[j];
-				nextPass.output.defines.forEach((value, key) => pass.output.defines.set(key, value));
-				nextPass.output.uniforms.forEach((value, key) => pass.output.uniforms.set(key, value));
-				pass.output.defaultBuffer = nextPass.output.defaultBuffer;
 
 			}
 
