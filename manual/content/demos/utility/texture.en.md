@@ -16,7 +16,7 @@ A `TextureEffect` can be used to blend any texture with the input buffer. This e
 The `texture` can be any 2D texture, including render target textures.
 
 ```ts
-const effect = new TexturEffect({ texture });
+const effect = new TextureEffect({ texture });
 
 // Texture settings can be configured as usual
 texture.offset.set(0, 0);
