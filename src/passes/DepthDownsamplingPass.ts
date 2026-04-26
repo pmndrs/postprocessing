@@ -27,8 +27,7 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 		super("DepthDownsamplingPass");
 
 		this.fullscreenMaterial = new DepthDownsamplingMaterial();
-		this.input.gBuffer.add(GBuffer.DEPTH);
-		this.input.gBuffer.add(GBuffer.NORMAL);
+		this.input.gBuffer.addAll(GBuffer.DEPTH, GBuffer.NORMAL);
 
 		this.output.setBuffer(
 			DepthDownsamplingPass.BUFFER_DEPTH,

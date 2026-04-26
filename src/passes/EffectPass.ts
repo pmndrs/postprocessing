@@ -97,7 +97,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		for(const effect of super.subpasses) {
 
-			this.copyGBufferComponents(effect as Effect);
+			this.input.gBuffer.addAll(...effect.input.gBuffer);
 
 			effect.addEventListener("change", this.effectListener);
 			effect.addEventListener("toggle", this.effectListener);
@@ -149,22 +149,6 @@ export class EffectPass extends Pass<EffectMaterial> {
 	set dithering(value: boolean) {
 
 		this.effectMaterialManager.dithering = value;
-
-	}
-
-	/**
-	 * Copies the G-Buffer components of the given effect.
-	 *
-	 * @param effect - The effect.
-	 */
-
-	private copyGBufferComponents(effect: Effect): void {
-
-		for(const gBufferComponent of effect.input.gBuffer) {
-
-			this.input.gBuffer.add(gBufferComponent);
-
-		}
 
 	}
 
@@ -241,7 +225,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 		switch(e.type) {
 
 			case "change":
-				this.copyGBufferComponents(e.target as Effect);
+				this.input.gBuffer.addAll(...(e.target as Effect).input.gBuffer);
 				this.effectMaterialManager.invalidateShaderData(e.target as Effect);
 				this.updateMaterial(true);
 				break;

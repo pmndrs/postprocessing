@@ -26,15 +26,16 @@ import {
 import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 import { Pass } from "../core/Pass.js";
 import { Selective } from "../core/Selective.js";
+import { SetExtensions } from "../core/SetExtensions.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { MSAASamples } from "../enums/MSAASamples.js";
 import { GBufferConfig } from "../utils/gbuffer/GBufferConfig.js";
+import { GBufferShaderPlugin } from "../utils/gbuffer/GBufferShaderPlugin.js";
 import { GBufferTextureConfig } from "../utils/gbuffer/GBufferTextureConfig.js";
 import { extractIndices } from "../utils/gbuffer/GBufferUtils.js";
 import { ObservableSet } from "../utils/ObservableSet.js";
 import { Selection } from "../utils/Selection.js";
 import { CopyPass } from "./CopyPass.js";
-import { GBufferShaderPlugin } from "../utils/gbuffer/GBufferShaderPlugin.js";
 
 /**
  * GeometryPass constructor options.
@@ -140,7 +141,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 	 * @internal
 	 */
 
-	readonly gBufferComponents: ObservableSet<GBuffer | string>;
+	readonly gBufferComponents: Set<string> & SetExtensions<string>;
 
 	// #region Settings
 
@@ -190,7 +191,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 		this.copyPass.enabled = false;
 		this.subpasses = [this.copyPass];
 
-		const gBufferComponents = new ObservableSet<GBuffer | string>();
+		const gBufferComponents = new ObservableSet<string>();
 		gBufferComponents.addEventListener("change", () => this.updateGBuffer());
 		this.gBufferComponents = gBufferComponents;
 		this.gBufferShaderPlugin = new GBufferShaderPlugin();

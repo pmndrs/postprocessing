@@ -82,11 +82,7 @@ export class BufferDebugPass extends Pass<BufferDebugMaterial> {
 
 		if(gBufferComponents !== undefined) {
 
-			for(const component of gBufferComponents) {
-
-				this.input.gBuffer.add(component);
-
-			}
+			this.input.gBuffer.addAll(...gBufferComponents);
 
 		}
 

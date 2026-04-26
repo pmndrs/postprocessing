@@ -7,6 +7,7 @@ import { BaseEventMap } from "../BaseEventMap.js";
 import { Disposable } from "../Disposable.js";
 import { ShaderData } from "../ShaderData.js";
 import { TextureResource } from "./TextureResource.js";
+import { SetExtensions } from "../SetExtensions.js";
 
 /**
  * Input resources.
@@ -31,7 +32,7 @@ export class Input extends EventDispatcher<BaseEventMap> implements Disposable, 
 	 * {@link GBuffer.COLOR} is included by default.
 	 */
 
-	readonly gBuffer: Set<GBuffer | string>;
+	readonly gBuffer: Set<string> & SetExtensions<string>;
 
 	/**
 	 * Input textures.

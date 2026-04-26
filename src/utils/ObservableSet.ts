@@ -1,5 +1,6 @@
 import { BaseEvent, EventDispatcher } from "three";
 import { BaseEventMap } from "../core/BaseEventMap.js";
+import { SetExtensions } from "../core/SetExtensions.js";
 
 /**
  * An event that contains information about a value that was added or deleted.
@@ -24,7 +25,7 @@ export interface SetEvent<T> extends BaseEvent {
 export interface ObservableSetEventMap<T> extends BaseEventMap {
 
 	/**
-	 * Triggers when a single entry is added.
+	 * Triggers when an entry is added.
 	 *
 	 * @event
 	 */
@@ -32,7 +33,7 @@ export interface ObservableSetEventMap<T> extends BaseEventMap {
 	add: SetEvent<T>;
 
 	/**
-	 * Triggers when a single entry is removed.
+	 * Triggers when an entry is removed.
 	 *
 	 * Does not trigger when the set is cleared.
 	 *
@@ -58,7 +59,7 @@ export interface ObservableSetEventMap<T> extends BaseEventMap {
  * @category Utils
  */
 
-export class ObservableSet<T> extends EventDispatcher<ObservableSetEventMap<T>> implements Set<T> {
+export class ObservableSet<T> extends EventDispatcher<ObservableSetEventMap<T>> implements Set<T>, SetExtensions<T> {
 
 	/**
 	 * The internal data collection.
@@ -127,13 +128,6 @@ export class ObservableSet<T> extends EventDispatcher<ObservableSetEventMap<T>> 
 
 	}
 
-	/**
-	 * Removes multiple elements from the Set.
-	 *
-	 * @param values - The elements.
-	 * @return This Set.
-	 */
-
 	deleteAll(...values: T[]): this {
 
 		let changed = false;
@@ -182,13 +176,6 @@ export class ObservableSet<T> extends EventDispatcher<ObservableSetEventMap<T>> 
 		return this;
 
 	}
-
-	/**
-	 * Adds multiple elements to the end of the Set.
-	 *
-	 * @param values - The elements.
-	 * @return This Set.
-	 */
 
 	addAll(...values: T[]): this {
 
