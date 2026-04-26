@@ -42,7 +42,6 @@ Postprocessing uses [RenderPipelines](../docs/classes/RenderPipeline.html) to re
 
 ```ts
 import {
-	ClearPass,
 	EffectPass,
 	GeometryPass,
 	RenderPipeline,
@@ -52,7 +51,6 @@ import {
 const pipeline = new RenderPipeline(renderer);
 
 pipeline.add(
-	new ClearPass(),
 	new GeometryPass(scene, camera),
 	new EffectPass(new ToneMappingEffect())
 );
@@ -63,9 +61,7 @@ function onResize(): void {
 	const height = container.clientHeight;
 	camera.aspect = width / height;
 	camera.updateProjectionMatrix();
-
-	// The resolution must be set through the pipeline.
-	pipeline.setSize(width, height);
+	renderer.setSize(width, height);
 
 }
 
