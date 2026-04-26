@@ -18,7 +18,8 @@ script: tone-mapping
 
 ```ts
 const toneMappingEffect = new ToneMappingEffect({
-  toneMapping: ToneMapping.AGX // default
+  toneMapping: ToneMapping.AGX, // default
+  cdlPreset: CDLPreset.DEFAULT // default
 });
 ```
 
@@ -29,6 +30,24 @@ const toneMappingEffect = new ToneMappingEffect({
 
 The `ToneMappingEffect` uses the American Society of Cinematographers Color Decision List (ASC CDL) format to configure primary
 color grading information. This format defines the math for Slope, Offset, Power and Saturation and provides a way to influence the look of the tone-mapped image.
+
+```ts
+// Changing the preset:
+toneMappingEffect.cdl.applyPreset(CDLPreset...);
+
+// Manual tuning:
+toneMappingEffect.cdl.slope.set(1.0, 1.0, 1.0);
+toneMappingEffect.cdl.offset.set(0.0, 0.0, 0.0);
+toneMappingEffect.cdl.power.set(1.0, 1.0, 1.0);
+toneMappingEffect.cdl.saturation = 1.0;
+
+// Linear interpolation between two CDLs:
+const cdl1 = new ColorDecisionList();
+const cdl2 = new ColorDecisionList();
+cdl1.applyPreset(CDLPreset.DEFAULT);
+cdl2.applyPreset(CDLPreset.GRAYSCALE);
+toneMappingEffect.cdl.lerp(cdl1, cdl2, 0.5);
+```
 
 > [!INFO]
 > Only `ToneMapping.AGX` currently supports CDL parameters.
