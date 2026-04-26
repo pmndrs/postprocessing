@@ -396,16 +396,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		}
 
-		for(const effect of this.effects) {
-
-			if(effect.enabled) {
-
-				effect.render();
-
-			}
-
-		}
-
+		this.renderSubpasses();
 		this.fullscreenMaterial.time += this.timer.getDelta() * this.timeScale;
 		this.setRenderTarget(this.output.defaultBuffer?.value);
 		this.renderFullscreen();
