@@ -4,7 +4,6 @@ import { GeometryPass } from "../../passes/GeometryPass.js";
 import { extractIndices } from "../../utils/gbuffer/GBufferUtils.js";
 import { Pass } from "../Pass.js";
 import { RenderPipeline } from "../RenderPipeline.js";
-import { Input } from "./Input.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
 import { Resource } from "./Resource.js";
 import { ResourceManager } from "./ResourceManager.js";
@@ -110,7 +109,7 @@ export class IOManager {
 
 			if(outputBuffer === undefined) {
 
-				nextPass.input.buffers.delete(Input.BUFFER_DEFAULT);
+				nextPass.input.removeDefaultBuffer();
 
 			} else if(outputBuffer !== undefined) {
 
