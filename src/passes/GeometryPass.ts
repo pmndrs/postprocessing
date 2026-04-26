@@ -116,7 +116,9 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 	readonly selection: Selection;
 
 	/**
-	 * A pass that copies the default input buffer to the output color buffer.
+	 * A pass that copies the default input buffer to the default output buffer.
+	 *
+	 * This pass will be disabled if the buffers are the same or the output buffer has multiple texture attachments.
 	 */
 
 	private readonly copyPass: CopyPass;
@@ -138,6 +140,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 	 *
 	 * This will automatically be configured based on the requirements of other passes in the same pipeline.
 	 *
+	 * @see {@link GBuffer} for built-in components.
 	 * @internal
 	 */
 
@@ -554,27 +557,24 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 			}
 
-		} else {
-
-			const depthTexture = new DepthTexture(1, 1);
-			depthTexture.name = GBuffer.DEPTH;
-			depthTexture.format = this.stencilBuffer ? DepthStencilFormat : DepthFormat;
-			depthTexture.type = this.stencilBuffer ? UnsignedInt248Type : FloatType;
-			gBuffer.depthTexture?.dispose();
-			gBuffer.depthTexture = depthTexture;
+			return;
 
 		}
+
+		const depthTexture = new DepthTexture(1, 1);
+		depthTexture.name = GBuffer.DEPTH;
+		depthTexture.format = this.stencilBuffer ? DepthStencilFormat : DepthFormat;
+		depthTexture.type = this.stencilBuffer ? UnsignedInt248Type : FloatType;
+		gBuffer.depthTexture?.dispose();
+		gBuffer.depthTexture = depthTexture;
 
 	}
 
 	/**
-	 * Updates the settings of the internal copy pass.
-	 *
-	 * If present, the contents of the default input buffer will be copied to the output buffer unless the buffers are the
-	 * same or the output buffer has multiple texture attachments.
+	 * Configures the internal {@link copyPass}.
 	 */
 
-	private updateCopyPass(): void {
+	private configureCopyPass(): void {
 
 		const inputBuffer = this.input.defaultBuffer?.value ?? null;
 		const outputBuffer = this.output.defaultBuffer?.value ?? null;
@@ -664,11 +664,12 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		}
 
-		const mask = camera.layers.mask;
-		const background = scene.background;
 
-		// The background is rendered by the ClearPass, if present.
+		// The background is rendered by the ClearPass.
+		const background = scene.background;
 		scene.background = null;
+
+		const mask = camera.layers.mask;
 
 		if(this.selection.enabled) {
 

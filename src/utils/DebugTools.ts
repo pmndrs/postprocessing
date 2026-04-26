@@ -119,7 +119,7 @@ function analyzeDataFlow(passes: readonly Pass<Material | null>[], textureIds: M
 
 			} else {
 
-				console.debug("no target");
+				console.debug("inactive (no target)");
 
 			}
 

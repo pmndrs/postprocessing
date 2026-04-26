@@ -27,7 +27,7 @@ export interface MapEvent<K, V> extends BaseEvent {
 export interface ObservableMapEventMap<K, V> extends BaseEventMap {
 
 	/**
-	 * Triggers when a single entry is added.
+	 * Triggers when an entry is added.
 	 *
 	 * @event
 	 */
@@ -35,7 +35,7 @@ export interface ObservableMapEventMap<K, V> extends BaseEventMap {
 	add: MapEvent<K, V>;
 
 	/**
-	 * Triggers when a single entry is removed or overwritten.
+	 * Triggers when an entry is removed or overwritten.
 	 *
 	 * Does not trigger when the map is cleared.
 	 *
