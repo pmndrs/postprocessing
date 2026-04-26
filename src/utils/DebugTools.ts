@@ -153,8 +153,17 @@ function analyzeDataFlow(passes: readonly Pass<Material | null>[], textureIds: M
 
 				if(output.hasDefaultBuffer) {
 
-					const defaultbufferId = getTextureIds(textureIds, output.defaultBuffer)[0] ?? "canvas";
-					console.debug("writes", defaultbufferId, additionalBuffers);
+					const defaultbufferIds = getTextureIds(textureIds, output.defaultBuffer);
+
+					if(defaultbufferIds.length > 0) {
+
+						console.debug("writes", ...defaultbufferIds, additionalBuffers);
+
+					} else {
+
+						console.debug("writes", "canvas", additionalBuffers);
+
+					}
 
 				} else {
 
@@ -308,6 +317,13 @@ function analyzeOutputResources(passes: readonly Pass<Material | null>[],
 
 			for(const texture of resource.value.textures) {
 
+				console.debug(textureIds.get(texture.uuid), texture.uuid, texture.name);
+
+			}
+
+			if(resource.value.depthTexture !== null) {
+
+				const texture = resource.value.depthTexture;
 				console.debug(textureIds.get(texture.uuid), texture.uuid, texture.name);
 
 			}
