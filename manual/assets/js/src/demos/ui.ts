@@ -21,6 +21,7 @@ import {
 
 import {
 	ClearPass,
+	DebugTools,
 	EffectPass,
 	FXAAEffect,
 	GeometryPass,
@@ -172,6 +173,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	pipeline.add(clearPass, geometryPass, effectPass, uiPass, antialiasingPass);
 
+	DebugTools.analyzePipeline(pipeline);
+
 	// Settings
 
 	const params = { depthAware: true };
@@ -192,6 +195,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 			uiPass.output.defaultBuffer = effectPass.output.defaultBuffer;
 
 		}
+
+		DebugTools.analyzePipeline(pipeline);
 
 	});
 
