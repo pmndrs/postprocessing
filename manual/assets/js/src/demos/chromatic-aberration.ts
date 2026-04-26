@@ -11,7 +11,6 @@ import {
 } from "three";
 
 import {
-	ClearPass,
 	EffectPass,
 	GeometryPass,
 	RenderPipeline,
@@ -122,7 +121,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.add(
-		new ClearPass(),
 		new GeometryPass(scene, camera, { samples: 4 }),
 		new EffectPass(new ToneMappingEffect())
 	);

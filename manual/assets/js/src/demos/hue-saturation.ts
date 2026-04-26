@@ -12,7 +12,6 @@ import {
 } from "three";
 
 import {
-	ClearPass,
 	GeometryPass,
 	RenderPipeline
 } from "postprocessing";
@@ -87,14 +86,13 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.add(
-		new ClearPass(),
 		new GeometryPass(scene, camera)
 	);
 
 	/*
 	const effect = new HueSaturationEffect();
 	effect.blendMode.blendFunction = new MixBlendFunction();
-	pipeline.addPass(new EffectPass(effect, new ToneMappingEffect()));
+	pipeline.add(new EffectPass(effect, new ToneMappingEffect()));
 	*/
 
 	// Settings

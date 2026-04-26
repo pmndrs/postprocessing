@@ -9,7 +9,6 @@ import {
 } from "three";
 
 import {
-	ClearPass,
 	EffectPass,
 	GeometryPass,
 	RenderPipeline,
@@ -113,8 +112,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Post Processing
 
 	const pipeline = new RenderPipeline(renderer);
-	const clearPassA = new ClearPass();
-	const clearPassB = new ClearPass();
 	const geometryPassA = new GeometryPass(sceneA, camera, { samples: 4 });
 	const geometryPassB = new GeometryPass(sceneB, camera);
 	const effectPass = new EffectPass(new ToneMappingEffect());
@@ -122,16 +119,11 @@ window.addEventListener("load", () => void load().then((assets) => {
 	geometryPassB.output.defaultBuffer = geometryPassA.output.defaultBuffer;
 
 	geometryPassA.scissor.enabled = true;
-	geometryPassB.scissor.enabled = true;
 	geometryPassA.viewport.enabled = true;
+	geometryPassB.scissor.enabled = true;
 	geometryPassB.viewport.enabled = true;
 
-	clearPassA.scissor.enabled = true;
-	clearPassB.scissor.enabled = true;
-	clearPassA.viewport.enabled = true;
-	clearPassB.viewport.enabled = true;
-
-	pipeline.add(clearPassA, geometryPassA, clearPassB, geometryPassB, effectPass);
+	pipeline.add(geometryPassA, geometryPassB, effectPass);
 
 	// Settings
 
@@ -153,14 +145,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 		pipeline.setSize(width, height);
 
 		geometryPassA.scissor.set(0, 0, widthHalf, height);
-		geometryPassB.scissor.set(widthHalf, 0, widthHalf, height);
 		geometryPassA.viewport.set(0, 0, widthHalf, height);
+		geometryPassB.scissor.set(widthHalf, 0, widthHalf, height);
 		geometryPassB.viewport.set(widthHalf, 0, widthHalf, height);
-
-		clearPassA.scissor.set(0, 0, widthHalf, height);
-		clearPassB.scissor.set(widthHalf, 0, widthHalf, height);
-		clearPassA.viewport.set(0, 0, widthHalf, height);
-		clearPassB.viewport.set(widthHalf, 0, widthHalf, height);
 
 	}
 

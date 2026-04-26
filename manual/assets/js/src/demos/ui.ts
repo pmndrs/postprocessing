@@ -20,7 +20,6 @@ import {
 } from "three";
 
 import {
-	ClearPass,
 	DebugTools,
 	EffectPass,
 	FXAAEffect,
@@ -165,13 +164,12 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Post Processing
 
 	const pipeline = new RenderPipeline(renderer);
-	const clearPass = new ClearPass();
 	const geometryPass = new GeometryPass(scene, camera);
 	const effectPass = new EffectPass(new ToneMappingEffect());
-	const uiPass = new GeometryPass(uiScene, camera);
+	const uiPass = new GeometryPass(uiScene, camera, { autoClear: false });
 	const antialiasingPass = new EffectPass(new FXAAEffect());
 
-	pipeline.add(clearPass, geometryPass, effectPass, uiPass, antialiasingPass);
+	pipeline.add(geometryPass, effectPass, uiPass, antialiasingPass);
 
 	DebugTools.analyzePipeline(pipeline);
 

@@ -36,20 +36,12 @@ Scene depth is usually stored in a standard depth buffer for fixed-function dept
 
 View space normals are encoded using Octahedron Normal Vector Encoding which converts the normal vectors into 2 uniformly packed floats. Not only does this save space in the G-Buffer but it also increases the effective precision of the normals because it uses the whole range of values that can be expressed with 16 bit floats.
 
-## ClearPass
+## Clearing
 
-Postprocessing pipelines process image data in a step-by-step fashion and it's crucial to not clear intermediate results unintentionally. Therefore, clearing has to be performed explicitly by using instances of `ClearPass` where needed. This special pass operates on the default output buffer of the next pass. If that next pass is a `GeometryPass`, clearing will be performed on the G-Buffer.
-
-> [!NOTE]
-> The `GeometryPass` does not clear its output buffer automatically. Instead, an explicit `ClearPass` must be used before it.
+Postprocessing pipelines process image data in a step-by-step fashion and it's crucial not to clear intermediate results unintentionally. Therefore, the auto clear behavior of the `renderer` is disabled and passes take care of clearing. The `GeometryPass` clears its output buffer automatically. If this is not desired, clearing can be disabled by setting `autoClear` to `false`.
 
 ```ts
-const pipeline = new RenderPipeline(renderer);
-
-pipeline.add(
-  new ClearPass(),
-  new GeometryPass(scene, camera)
-);
+const geoPass = new GeometryPass(scene, camera, { autoClear: false });
 ```
 
 ## External Resources

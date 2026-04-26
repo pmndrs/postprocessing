@@ -9,7 +9,6 @@ import {
 } from "three";
 
 import {
-	ClearPass,
 	EffectPass,
 	GeometryPass,
 	MixBlendFunction,
@@ -102,17 +101,15 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const pipeline = new RenderPipeline(renderer);
 	const effectPass = new EffectPass(effect, new ToneMappingEffect());
 	effect.blendMode.blendFunction = new MixBlendFunction();
-	pipeline.add(new ClearPass(), geoPass, effectPass);
+	pipeline.add(geoPass, effectPass);
 
 	// #region DEBUG
 	const smaaEdgesDebugPass = new EffectPass(new TextureEffect({ texture: effect.edgesTexture.value }));
 	const smaaWeightsDebugPass = new EffectPass(new TextureEffect({ texture: effect.weightsTexture.value }));
-
 	smaaEdgesDebugPass.enabled = false;
 	smaaWeightsDebugPass.enabled = false;
 	smaaEdgesDebugPass.fullscreenMaterial.colorSpaceConversion = false;
 	smaaWeightsDebugPass.fullscreenMaterial.colorSpaceConversion = false;
-
 	pipeline.add(smaaEdgesDebugPass, smaaWeightsDebugPass);
 	// #endregion DEBUG
 

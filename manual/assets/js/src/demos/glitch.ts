@@ -10,7 +10,6 @@ import {
 } from "three";
 
 import {
-	ClearPass,
 	GeometryPass,
 	RenderPipeline
 } from "postprocessing";
@@ -87,7 +86,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.add(
-		new ClearPass(),
 		new GeometryPass(scene, camera, { samples: 4 })
 	);
 
@@ -96,8 +94,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const effect = new GlitchEffect({ perturbationMap: assets.get("noise") });
 	effect.input.uniforms.set(GlitchEffect.INPUT_UNIFORM_OFFSET, chromaticAberrationEffect.offset); // TODO not like this
 
-	pipeline.addPass(new EffectPass(effect));
-	pipeline.addPass(new EffectPass(chromaticAberrationEffect, new ToneMappingEffect());
+	pipeline.add(new EffectPass(effect));
+	pipeline.add(new EffectPass(chromaticAberrationEffect, new ToneMappingEffect());
 	*/
 
 	// Settings

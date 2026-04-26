@@ -15,8 +15,6 @@ script: scissor-viewport
 
 ```ts
 const pipeline = new RenderPipeline(renderer);
-const clearPassA = new ClearPass();
-const clearPassB = new ClearPass();
 const geometryPassA = new GeometryPass(sceneA, camera, { samples: 4 });
 const geometryPassB = new GeometryPass(sceneB, camera);
 const effectPass = new EffectPass(new ToneMappingEffect());
@@ -25,16 +23,11 @@ const effectPass = new EffectPass(new ToneMappingEffect());
 geometryPassB.output.defaultBuffer = geometryPassA.output.defaultBuffer;
 
 geometryPassA.scissor.enabled = true;
-geometryPassB.scissor.enabled = true;
 geometryPassA.viewport.enabled = true;
+geometryPassB.scissor.enabled = true;
 geometryPassB.viewport.enabled = true;
 
-clearPassA.scissor.enabled = true;
-clearPassB.scissor.enabled = true;
-clearPassA.viewport.enabled = true;
-clearPassB.viewport.enabled = true;
-
-pipeline.add(clearPassA, geometryPassA, clearPassB, geometryPassB, effectPass);
+pipeline.add(geometryPassA, geometryPassB, effectPass);
 
 function onResize(): void {
 
@@ -44,19 +37,13 @@ function onResize(): void {
 
   camera.aspect = widthHalf / height;
   camera.updateProjectionMatrix();
-  pipeline.setSize(width, height);
+  renderer.setSize(width, height);
 
-  // Scissor and viewport use logical sizes (without pixel ratio).
-
+  // Scissor & Viewport use logical sizes (without pixel ratio).
   geometryPassA.scissor.set(0, 0, widthHalf, height);
-  geometryPassB.scissor.set(widthHalf, 0, widthHalf, height);
   geometryPassA.viewport.set(0, 0, widthHalf, height);
+  geometryPassB.scissor.set(widthHalf, 0, widthHalf, height);
   geometryPassB.viewport.set(widthHalf, 0, widthHalf, height);
-
-  clearPassA.scissor.set(0, 0, widthHalf, height);
-  clearPassB.scissor.set(widthHalf, 0, widthHalf, height);
-  clearPassA.viewport.set(0, 0, widthHalf, height);
-  clearPassB.viewport.set(widthHalf, 0, widthHalf, height);
 
 }
 

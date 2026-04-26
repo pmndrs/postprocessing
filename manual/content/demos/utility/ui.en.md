@@ -22,14 +22,13 @@ Excluding UI elements, or any other 3D object, from being affected by image effe
 3. The additional copy operation is fast but not free.
 
 ```ts
-const clearPass = new ClearPass();
 const geoPass = new GeometryPass(scene, camera);
 const effectPass = new EffectPass(..., toneMappingEffect);
-const uiPass = new GeometryPass(uiScene, camera);
+const uiPass = new GeometryPass(uiScene, camera, { autoClear: false });
 const aaPass = new EffectPass(aaEffect);
 
 const pipeline = new RenderPipeline(renderer);
-pipeline.add(clearPass, geoPass, effectPass, uiPass, aaPass);
+pipeline.add(geoPass, effectPass, uiPass, aaPass);
 ```
 
 > [!NOTE]
@@ -42,38 +41,35 @@ pipeline.add(clearPass, geoPass, effectPass, uiPass, aaPass);
 Instead of using a depth-aware `GeometryPass`, the UI elements can be rendered directly on top of the output buffer of a preceding fullscreen pass. To do this, the `GeometryPass` must be instantiated without a `depthBuffer` and its `output.defaultBuffer` must be set to the `output.defaultBuffer` of the preceding pass. The result then needs to be rendered to screen with a final `CopyPass` or `EffectPass`.
 
 ```ts
-const clearPass = new ClearPass();
 const geoPass = new GeometryPass(scene, camera);
 const effectPass = new EffectPass(..., toneMappingEffect);
-const uiPass = new GeometryPass(uiScene, camera, { depthBuffer: false });
+const uiPass = new GeometryPass(uiScene, camera, { autoClear: false, depthBuffer: false });
 uiPass.output.defaultBuffer = effectPass.output.defaultBuffer;
 const aaPass = new EffectPass(aaEffect);
 
 const pipeline = new RenderPipeline(renderer);
-pipeline.add(clearPass, geoPass, effectPass, uiPass, aaPass);
+pipeline.add(geoPass, effectPass, uiPass, aaPass);
 ```
 
 Due to the lack of depth information, MSAA is not supported.
 
 ### Multiple Render Pipelines
 
-UI elements can also be rendered in a separate pipeline with a `ClearPass` and a `GeometryPass`. The `GeometryPass` can make use of MSAA if it has a `depthBuffer` and the UI pipeline can be rendered only when needed. The resulting UI output texture can then be integrated into the main pipeline by using a `TextureEffect`. This approach is not depth-aware across pipelines.
+UI elements can also be rendered in a separate pipeline with a `GeometryPass`. The `GeometryPass` can make use of MSAA if it has a `depthBuffer` and the UI pipeline can be rendered only when needed. The resulting UI output texture can then be integrated into the main pipeline by using a `TextureEffect`. This approach is not depth-aware across pipelines.
 
 ```ts
-const uiClearPass = new ClearPass();
 const uiPass = new GeometryPass(uiScene, camera, { alpha: true, samples: 4 });
 
 const uiPipeline = new RenderPipeline(renderer);
-uiPipeline.add(uiClearPass, uiPass);
+uiPipeline.add(uiPass);
 
-const uiOverlayTexture = uiPass.output.defaultBuffer?.texture?.value ?? null;
-const uiOverlayEffect = new TextureEffect(uiOverlayTexture);
+const texture = uiPass.output.defaultBuffer?.texture?.value ?? null;
+const uiOverlayEffect = new TextureEffect({ texture });
 
-const clearPass = new ClearPass();
 const geoPass = new GeometryPass(scene, camera);
 const effectPass = new EffectPass(..., uiOverlayEffect, toneMappingEffect);
 const aaPass = new EffectPass(aaEffect);
 
 const pipeline = new RenderPipeline(renderer);
-pipeline.add(clearPass, geoPass, effectPass, aaPass);
+pipeline.add(geoPass, effectPass, aaPass);
 ```

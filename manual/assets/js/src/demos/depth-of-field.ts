@@ -11,7 +11,6 @@ import {
 } from "three";
 
 import {
-	ClearPass,
 	GeometryPass,
 	RenderPipeline
 } from "postprocessing";
@@ -113,7 +112,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.autoRenderToScreen = false;
 	pipeline.add(
-		new ClearPass(),
 		new GeometryPass(scene, camera, { samples: 4 })
 	);
 
@@ -137,8 +135,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// #endregion DEBUG
 
 	effect.blendMode.blendFunction = new MixBlendFunction();
-	pipeline.addPass(new EffectPass(effect, new ToneMappingEffect()));
-	pipeline.addPass(cocDebugPass);
+	pipeline.add(new EffectPass(effect, new ToneMappingEffect()));
+	pipeline.add(cocDebugPass);
 	*/
 
 	// Settings

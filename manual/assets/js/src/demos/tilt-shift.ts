@@ -12,7 +12,6 @@ import {
 } from "three";
 
 import {
-	ClearPass,
 	GeometryPass,
 	RenderPipeline
 } from "postprocessing";
@@ -87,7 +86,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.add(
-		new ClearPass(),
 		new GeometryPass(scene, camera)
 	);
 
