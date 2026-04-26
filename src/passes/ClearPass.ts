@@ -182,7 +182,7 @@ export class ClearPass extends Pass {
 
 	override render(): void {
 
-		if(this.renderer === null) {
+		if(this.renderer === null || !this.output.hasDefaultBuffer) {
 
 			return;
 
@@ -192,7 +192,7 @@ export class ClearPass extends Pass {
 		const hasOverrideClearColor = this.clearValues.color !== null;
 		const flags = this.clearFlags;
 
-		this.setRenderTarget(this.output.defaultBuffer?.value);
+		this.setRenderTarget(this.output.defaultBuffer!.value);
 
 		if(flags.depth || flags.stencil) {
 
