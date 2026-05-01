@@ -102,17 +102,16 @@ window.addEventListener("load", () => void load().then((assets) => {
 		asciiTexture: new ASCIITexture({
 			characters: " .:,'-^=*+?0X%M@",
 			font: "Arial",
-			fontSize: 72,
+			fontSize: 56,
 			size: 1024,
 			cellCount: 16
 		}),
 		cellSize: 8,
-		color: null,
+		color: 0xffffff,
 		inverted: false
 	});
 
 	effect.blendMode.blendFunction = new MixBlendFunction();
-	effect.blendMode.opacity = 0.9;
 
 	const pipeline = new RenderPipeline(renderer);
 	pipeline.add(
@@ -134,8 +133,11 @@ window.addEventListener("load", () => void load().then((assets) => {
 	folder.addBinding(effect, "inverted");
 	folder.addBinding(effect, "cellSize", { min: 2, max: 24, step: 2 });
 	folder.addBinding(effect, "color", { color: { type: "float" } });
-	folder.addBinding(params, "useSceneColor").on("change",
-		(e) => void (effect.color = e.value ? null : effect.color.getHex()));
+	folder.addBinding(params, "useSceneColor").on("change", (e) => {
+
+		effect.color = e.value ? null : effect.color.getHex();
+
+	});
 
 	Utils.addBlendModeBindings(folder, effect.blendMode);
 
