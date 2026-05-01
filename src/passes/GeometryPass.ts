@@ -26,7 +26,6 @@ import {
 import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 import { Pass } from "../core/Pass.js";
 import { Selective } from "../core/Selective.js";
-import { SetExtensions } from "../core/SetExtensions.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { MSAASamples } from "../enums/MSAASamples.js";
 import { GBufferConfig } from "../utils/gbuffer/GBufferConfig.js";
@@ -35,6 +34,7 @@ import { GBufferTextureConfig } from "../utils/gbuffer/GBufferTextureConfig.js";
 import { extractIndices } from "../utils/gbuffer/GBufferUtils.js";
 import { ObservableSet } from "../utils/ObservableSet.js";
 import { Selection } from "../utils/Selection.js";
+import { SetExtensions } from "../utils/SetExtensions.js";
 import { ClearPass } from "./ClearPass.js";
 import { CopyPass } from "./CopyPass.js";
 

@@ -4,10 +4,10 @@ import { GBufferConfig } from "../../utils/gbuffer/GBufferConfig.js";
 import { ObservableMap } from "../../utils/ObservableMap.js";
 import { ObservableSet } from "../../utils/ObservableSet.js";
 import { BaseEventMap } from "../BaseEventMap.js";
+import { SetExtensions } from "../../utils/SetExtensions.js";
 import { Disposable } from "../Disposable.js";
 import { ShaderData } from "../ShaderData.js";
 import { TextureResource } from "./TextureResource.js";
-import { SetExtensions } from "../SetExtensions.js";
 
 /**
  * Input resources.

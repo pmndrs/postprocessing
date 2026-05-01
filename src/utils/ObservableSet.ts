@@ -1,6 +1,6 @@
 import { BaseEvent, EventDispatcher } from "three";
 import { BaseEventMap } from "../core/BaseEventMap.js";
-import { SetExtensions } from "../core/SetExtensions.js";
+import { SetExtensions } from "./SetExtensions.js";
 
 /**
  * An event that contains information about a value that was added or deleted.

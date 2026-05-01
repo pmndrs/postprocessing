@@ -16,5 +16,6 @@ export * from "./ObservableSet.js";
 export * from "./Resolution.js";
 export * from "./Scissor.js";
 export * from "./Selection.js";
+export * from "./SetExtensions.js";
 export * from "./ShaderDataTracker.js";
 export * from "./Viewport.js";
