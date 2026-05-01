@@ -125,9 +125,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 	readonly selection: Selection;
 
 	/**
-	 * A clear pass that clears the G-Buffer by default.
-	 *
-	 * Clearing will be disabled if the G-Buffer is not the default output buffer or if the {@link copyPass} is enabled.
+	 * A clear pass that clears the default output buffer.
 	 *
 	 * @see {@link autoClear} to disable the auto clear behavior.
 	 */
@@ -229,7 +227,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 		this.gBufferComponents = gBufferComponents;
 		this.gBufferShaderPlugin = new GBufferShaderPlugin();
 		this.gBufferResource = new RenderTargetResource();
-		this.output.buffers.set(GeometryPass.GBUFFER, this.gBufferResource);
+		this.output.setBuffer(GeometryPass.GBUFFER, this.gBufferResource);
 		this.output.defaultBuffer = this.gBufferResource;
 
 		this.scene = scene;

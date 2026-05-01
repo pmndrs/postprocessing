@@ -334,7 +334,7 @@ export class EffectMaterialManager implements Disposable {
 
 			for(const entry of Object.entries(this.defaultMaterial.defines)) {
 
-				result.defines[entry[0]] = entry[1] as string | number | boolean;
+				result.defines[entry[0]] = entry[1];
 
 			}
 
@@ -410,7 +410,7 @@ export class EffectMaterialManager implements Disposable {
 
 			if(entry[1] !== activeMaterial.defines[entry[0]]) {
 
-				defaultMaterial.defines[entry[0]] = activeMaterial.defines[entry[0]] as string | number | boolean;
+				defaultMaterial.defines[entry[0]] = activeMaterial.defines[entry[0]];
 				defaultMaterial.needsUpdate = true;
 
 			}
@@ -435,7 +435,7 @@ export class EffectMaterialManager implements Disposable {
 
 			for(const entry of Object.entries(defaultMaterial.defines)) {
 
-				material.defines[entry[0]] = entry[1] as string | number | boolean;
+				material.defines[entry[0]] = entry[1];
 
 			}
 
