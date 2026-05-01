@@ -27,7 +27,7 @@ export interface ASCIITextureOptions {
 	/**
 	 * The font size in pixels.
 	 *
-	 * @defaultValue 54
+	 * @defaultValue 56
 	 */
 
 	fontSize?: number;
@@ -77,7 +77,7 @@ export class ASCIITexture extends CanvasTexture {
 	constructor({
 		characters = " .:,'-^=*+?!|0#X%WM@",
 		font = "Arial",
-		fontSize = 35,
+		fontSize = 56,
 		size = 1024,
 		cellCount = 16
 	}: ASCIITextureOptions = {}) {
@@ -93,7 +93,8 @@ export class ASCIITexture extends CanvasTexture {
 		this.cellCount = cellCount;
 
 		const canvas = this.image;
-		canvas.width = canvas.height = size;
+		canvas.width = size;
+		canvas.height = size;
 
 		const context = canvas.getContext("2d")!;
 		const cellSize = size / cellCount;
