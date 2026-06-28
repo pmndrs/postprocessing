@@ -1,0 +1,13 @@
+save: false
+
+allowBuilds:
+  '@parcel/watcher': true
+  'esbuild': true
+  'hugo-bin': true
+
+minimumReleaseAgeExclude:
+- 'esbuild-plugin-glsl'
+- 'eslint-config-aether'
+- 'spatial-controls'
+- 'three'
+
