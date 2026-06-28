@@ -442,15 +442,7 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 
 	setChanged(): void {
 
-		if(this.locked) {
-
-			throw new Error("Unable to change resolution inside change event handler");
-
-		}
-
-		this.locked = true;
 		this.dispatchEvent({ type: "change" });
-		this.locked = false;
 
 	}
 
