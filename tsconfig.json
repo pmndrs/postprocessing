@@ -1,6 +1,5 @@
 {
 	"include": [
-		"./*.js",
 		"./src",
 		"./manual/assets/js/src",
 		"./manual/assets/js/libs",
@@ -11,18 +10,19 @@
 		"rootDir": ".",
 		"outDir": "./dist",
 		"paths": {
-			"postprocessing": ["./src/index.js"],
 			"temp/*": ["./temp/*"]
 		},
 		// Environment Settings
+		"moduleResolution": "bundler",
 		"module": "esnext",
 		"target": "es2025",
-		"moduleResolution": "bundler",
 		"types": ["node"],
 		// Style Options
 		"noImplicitReturns": true,
 		"noImplicitOverride": true,
 		// Other
+		"allowSyntheticDefaultImports": true,
+		"noUncheckedSideEffectImports": true,
 		"resolveJsonModule": true,
 		"sourceMap": false,
 		"skipLibCheck": true
