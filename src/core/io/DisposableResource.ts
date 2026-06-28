@@ -2,15 +2,15 @@ import { Disposable } from "../Disposable.js";
 import { Resource } from "./Resource.js";
 
 /**
- * A wrapper base class for disposable resources.
+ * A disposable resource.
  *
- * This wrapper automatically disposes resources when they are no longer referenced by any wrapper.
+ * This class automatically disposes the resource value when it's no longer referenced by any resource.
  *
  * @param T - The type of the internal value.
  * @category IO
  */
 
-export abstract class DisposableResource<T extends Disposable | null> extends Resource<T> implements Disposable {
+export class DisposableResource<T extends Disposable | null> extends Resource<T> implements Disposable {
 
 	/**
 	 * Keeps track of resource references.
@@ -24,7 +24,7 @@ export abstract class DisposableResource<T extends Disposable | null> extends Re
 	 * @param value - A resource value.
 	 */
 
-	constructor(value: T | null) {
+	constructor(value: T) {
 
 		super(value);
 
@@ -32,13 +32,13 @@ export abstract class DisposableResource<T extends Disposable | null> extends Re
 
 	}
 
-	override get value(): T | null {
+	override get value(): T {
 
 		return super.value;
 
 	}
 
-	override set value(value: T | null) {
+	override set value(value: T) {
 
 		const previousValue = super.value;
 		super.value = value;
