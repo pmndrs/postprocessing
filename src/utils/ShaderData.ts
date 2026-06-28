@@ -1,9 +1,9 @@
 import { IUniform } from "three";
 
 /**
- * Basic shader data.
+ * A collection of shader data.
  *
- * @category Core
+ * @category Utils
  */
 
 export interface ShaderData {

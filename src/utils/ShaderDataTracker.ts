@@ -1,6 +1,6 @@
 import { ShaderMaterial, IUniform } from "three";
 import { Disposable } from "../core/Disposable.js";
-import { ShaderData } from "../core/ShaderData.js";
+import { ShaderData } from "./ShaderData.js";
 
 /**
  * A shader data tracker.
