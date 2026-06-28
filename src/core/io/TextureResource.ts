@@ -13,7 +13,7 @@ export class TextureResource extends DisposableResource<Texture | null> {
 	 * A collection of `change` listeners for bound uniforms.
 	 */
 
-	private uniformListeners: WeakMap<IUniform, EventListener<BaseEvent<string>, "change", this>>;
+	private uniformListeners: WeakMap<IUniform, EventListener<BaseEvent<"change">, "change", this>>;
 
 	/**
 	 * Constructs a new texture resource.
