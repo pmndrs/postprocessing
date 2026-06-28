@@ -26,7 +26,7 @@ This library aims to support the six most recent releases of three. Older releas
 
 ## Concepts
 
-Postprocessing extends the common rendering workflow with fullscreen image manipulation tools. It uses render pipelines to organize and run passes with explicit input/output management to facilitate smart resource usage and efficiency. Render logic and shaders are highly optimized to ensure production-ready performance and reliability across devices.
+Postprocessing extends the common rendering workflow with fullscreen image manipulation tools. It uses a [frame graph](https://www.gdcvault.com/play/1024612/FrameGraph-Extensible-Rendering-Architecture-in) to organize and run render tasks with explicit input/output management to facilitate smart resource usage and efficiency. Render logic and shaders are optimized to ensure production-ready performance and reliability across devices.
 
 ## Performance
 
