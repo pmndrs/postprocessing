@@ -38,22 +38,42 @@ const scene = new Scene();
 const camera = new PerspectiveCamera();
 ```
 
-Postprocessing uses [RenderPipelines](../docs/classes/RenderPipeline.html) to render [Passes](../docs/classes/Pass.html). Common setups will only require one pipeline that contains a [ClearPass](../docs/classes/ClearPass.html), a [GeometryPass](../docs/classes/GeometryPass.html) and one or more [EffectPass](../docs/classes/EffectPass.html) instances. The latter is used to render fullscreen [Effects](../docs/classes/Effect.html). 
+Postprocessing uses [FrameGraphs](../docs/classes/FrameGraph.html) to render [Passes](../docs/classes/Pass.html). Common setups will only require one frame graph that contains a [ClearPass](../docs/classes/ClearPass.html), a [GeometryPass](../docs/classes/GeometryPass.html) and one or more [EffectPass](../docs/classes/EffectPass.html) instances. The latter is used to render fullscreen [Effects](../docs/classes/Effect.html). 
 
 ```ts
 import {
+	ClearPass,
 	EffectPass,
+	FrameGraph,
 	GeometryPass,
-	RenderPipeline,
 	ToneMappingEffect
 } from "postprocessing";
 
-const pipeline = new RenderPipeline(renderer);
+const clearPass = new ClearPass();
+const geoPass = new GeometryPass(scene, camera);
+const effectPass = new EffectPass(new ToneMappingEffect());
+const aaPass = new EffectPass(new SMAAEffect());
 
-pipeline.add(
-	new GeometryPass(scene, camera),
-	new EffectPass(new ToneMappingEffect())
-);
+clearPass.output.connect(geoPass.output);
+geoPass.output.connect(effectPass.input);
+geoPass.output.connect(aaPass.input);
+effectPass.output.connectDefaultBuffer(aaPass.input);
+
+const frameGraph = new FrameGraph(renderer);
+frameGraph.add(clearPass, geoPass, effectPass, aaPass);
+
+renderer.setAnimationLoop(timestamp => frameGraph.render(timestamp));
+```
+
+> [!TIP]
+> It's recommended to apply anti-aliasing effects with an additional, separate `EffectPass`. See the anti-aliasing demos for details.
+
+## Resolution
+
+Frame graphs adjust internal buffer sizes automatically by using [mutation observers](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver) to detect canvas size changes. Therefore, the canvas resolution (and pixel ratio) should be set as usual via the renderer:
+
+```ts
+renderer.setPixelRatio(window.devicePixelRatio);
 
 function onResize(): void {
 
@@ -67,22 +87,17 @@ function onResize(): void {
 
 window.addEventListener("resize", onResize);
 onResize();
-
-// Use pipeline.render() instead of renderer.render()
-renderer.setAnimationLoop(timestamp => pipeline.render(timestamp));
 ```
 
-> [!TIP]
-> It's recommended to apply anti-aliasing effects with an additional, separate `EffectPass`. See the anti-aliasing demos for details.
+Passes also have their own `resolution` property which allows customization of internal buffer sizes based on the main resolution.
 
 ## Precompilation
 
-Render pipelines can be precompiled to avoid frame stuttering during the initial render call. The `compile` method takes care of compiling fullscreen shaders as well as all shaders used by 3D objects that are rendered by a `GeometryPass`. It's also possible to recompile individual passes as needed if, for example, the `scene` of a `GeometryPass` is changed or the `effects` of an `EffectPass` are replaced.
+Render pipelines can be precompiled to avoid frame stuttering during the initial render call. The `compile` method takes care of compiling fullscreen shaders as well as all shaders used by 3D objects that are rendered by a `GeometryPass`. It's also possible to recompile individual passes if, for example, the `scene` of a `GeometryPass` is changed at runtime or the `effects` of an `EffectPass` are replaced.
 
 ```ts
-pipeline.compile()
-	.then(() => renderer.setAnimationLoop((timestamp) => pipeline.render(timestamp)))
-	.catch((e) => console.error(e));
+await frameGraph.compile();
+renderer.setAnimationLoop(timestamp => frameGraph.render(timestamp));
 ```
 
 ## Color Space Considerations
