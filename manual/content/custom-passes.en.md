@@ -1,17 +1,17 @@
 ---
 layout: single
 collection: sections
-title: Custom Passes
+title: Passes
 draft: false
 menu: main
 weight: 40
 ---
 
-# Custom Passes
+# Passes
 
 ## Introduction
 
-At a closer look, passes can be divided into four groups. The first group consists of passes that render normal scenes like the `GeometryPass`. The second type doesn't render anything but performs supporting operations like the `ClearPass` or `LambdaPass`. Passes that render textures for further use make up the third group. One example would be the `LuminancePass`. The fourth and most prominent group contains the fullscreen effect passes. If you want to make a pass that belongs to the last group, you should consider [creating an Effect]({{< relref "custom-effects" >}}) instead.
+At a closer look, passes can be divided into four groups. The first group consists of passes that render common scenes like the `GeometryPass`. The second type doesn't render anything but performs supporting operations like the `ClearPass` or `LambdaPass`. Passes that render textures for further use make up the third group. One example would be the `LuminancePass`. The fourth and most prominent group contains the fullscreen effect passes. If you want to make a pass that belongs to the last group, you should consider [creating an Effect]({{< relref "custom-effects" >}}) instead.
 
 There are two options for creating custom passes. You can either rely on the general-purpose `ShaderPass` or extend `Pass`.
 
