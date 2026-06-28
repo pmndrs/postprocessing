@@ -97,7 +97,6 @@ window.addEventListener("load", () => load().then((assets) => {
 
 	// Post Processing
 
-
 	const effect = new SMAAEffect({
 		blendFunction: BlendFunction.NORMAL,
 		preset: SMAAPreset.MEDIUM,
