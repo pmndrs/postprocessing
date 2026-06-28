@@ -45,13 +45,6 @@
 	"publishConfig": {
 		"tag": "beta"
 	},
-	"pnpm": {
-		"onlyBuiltDependencies": [
-			"@parcel/watcher",
-			"esbuild",
-			"hugo-bin"
-		]
-	},
 	"scripts": {
 		"build": "run-p build:css build:js:min build:dts",
 		"build:css": "sass -p node -I manual/assets/css/src/values manual/assets/css/src:manual/assets/css/dist",
@@ -83,16 +76,16 @@
 		"watch:js": "node esbuild -w"
 	},
 	"peerDependencies": {
-		"three": ">= 0.179.0 < 0.185.0"
+		"three": ">= 0.179.0 < 0.186.0"
 	},
 	"devDependencies": {
 		"@pagefind/component-ui": "1.5.x",
 		"@tweakpane/core": "2.x.x",
 		"@tweakpane/plugin-essentials": "0.x.x",
-		"@types/node": "25.x.x",
+		"@types/node": "26.x.x",
 		"@types/three": "0.x.x",
 		"autoprefixer": "10.x.x",
-		"cssnano": "7.x.x",
+		"cssnano": "8.x.x",
 		"del-cli": "7.x.x",
 		"esbuild": "0.28.x",
 		"esbuild-plugin-glsl": "1.x.x",
@@ -112,7 +105,7 @@
 		"stylelint-order": "8.x.x",
 		"tsx": "4.x.x",
 		"tweakpane": "4.x.x",
-		"typedoc": "0.x.x",
+		"typedoc": "0.28.x",
 		"typedoc-plugin-mdn-links": "5.x.x",
 		"typescript": "6.0.x"
 	}
