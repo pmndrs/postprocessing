@@ -13,7 +13,7 @@ export abstract class BlendFunction implements Identifiable {
 	 * An ID manager.
 	 */
 
-	private static idManager = /* @__PURE__ */ new IdManager();
+	private static readonly idManager = /* @__PURE__ */ new IdManager();
 
 	readonly id: number;
 

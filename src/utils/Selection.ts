@@ -16,7 +16,7 @@ export class Selection implements Set<Object3D>, SetExtensions<Object3D> {
 	 * An ID manager.
 	 */
 
-	private static idManager = /* @__PURE__ */ new IdManager(2);
+	private static readonly idManager = /* @__PURE__ */ new IdManager(2);
 
 	/**
 	 * The internal data collection.
