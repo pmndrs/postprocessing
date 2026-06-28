@@ -55,17 +55,9 @@
 			"./test/**/*"
 		]
 	},
-	"pnpm": {
-		"onlyBuiltDependencies": [
-			"@parcel/watcher",
-			"core-js",
-			"esbuild",
-			"hugo-bin"
-		]
-	},
 	"scripts": {
 		"ava": "ava",
-		"build": "npm run clean && run-p build:css build:js:min build:dts",
+		"build": "run-p build:css build:js:min build:dts",
 		"build:css": "sass --no-source-map -I manual/assets/css/src/values manual/assets/css/src:manual/assets/css/dist",
 		"build:js": "node esbuild",
 		"build:js:min": "node esbuild -m",
@@ -81,9 +73,9 @@
 		"lint:js": "eslint --fix src demo/src manual/assets/js/src",
 		"lint:dts": "tsc --project tsconfig.types.json",
 		"postcss": "postcss manual/assets/css/dist/index.css -o manual/assets/css/dist/index.css -c manual",
-		"prepublishOnly": "npm test",
+		"prepublishOnly": "run-s test",
 		"prewatch": "run-s clean copy build:css build:js",
-		"test": "run-s lint build ava doc",
+		"test": "run-s lint clean build ava doc",
 		"start": "hugo server -s manual -e development",
 		"watch": "run-p watch:* start",
 		"watch:css": "sass --no-source-map -I manual/assets/css/src/values manual/assets/css/src:manual/assets/css/dist -w",
