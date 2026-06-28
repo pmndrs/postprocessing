@@ -192,8 +192,7 @@ export class GodRaysDemo extends PostProcessingDemo {
 		const sun = new Mesh(sunGeometry, sunMaterial);
 		sun.frustumCulled = false;
 		sun.matrixAutoUpdate = false;
-		// sun.position.copy(this.light.position);
-		// sun.updateMatrix();
+		sun.updateMatrix();
 
 		// Using a group here to check if matrix updates work correctly.
 		const group = new Group();
