@@ -1,13 +1,13 @@
 ---
 layout: single
 collection: sections
-title: Custom Effects
+title: Effects
 draft: false
 menu: main
 weight: 50
 ---
 
-# Custom Effects
+# Effects
 
 ## Introduction
 
@@ -147,7 +147,7 @@ Available macros:
 > [!WARNING]
 > Effects may define custom uniforms, varyings, functions and preprocessor macros as usual, but should not define global variables or constants.
 
-## Functions
+## Shader Functions
 
 The shader chunks [common](https://github.com/mrdoob/three.js/blob/dev/src/renderers/shaders/ShaderChunk/common.glsl.js)
 and [packing](https://github.com/mrdoob/three.js/blob/dev/src/renderers/shaders/ShaderChunk/packing.glsl.js) are included in the fragment shader by default. Additionally, the following utility functions are available:
@@ -166,3 +166,7 @@ float getDistance(vec3 viewPosition);
 
 > [!INFO]
 > The required samplers for the read* functions above are available via the `gBuffer` uniform.
+
+## Working Color Space
+
+Effect can explicitly declare input/output color spaces. The `LUT3DEffect`, for example, [expects input colors to be in SRGBColorSpace](https://github.com/pmndrs/postprocessing/blob/321c772371320bf8af7e44e684332bf59772812b/src/effects/LUT3DEffect.ts#L96). This is respected [when the effect shader is assembled](https://github.com/pmndrs/postprocessing/blob/321c772371320bf8af7e44e684332bf59772812b/src/utils/EffectShaderData.ts#L272-L274); input colors are converted to the specified color space as needed and finally [back to linear-sRGB](https://github.com/pmndrs/postprocessing/blob/321c772371320bf8af7e44e684332bf59772812b/src/utils/EffectMaterialManager.ts#L291-L293).
