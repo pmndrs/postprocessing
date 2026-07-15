@@ -32,7 +32,7 @@ export class Resource<T = unknown> extends EventDispatcher<BaseEventMap> impleme
 	 * @param value - A resource value.
 	 */
 
-	constructor(value: T | null) {
+	constructor(value: T) {
 
 		super();
 
