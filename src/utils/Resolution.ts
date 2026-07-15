@@ -421,8 +421,10 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 	/**
 	 * Checks if this resolution equals the given resolution.
 	 *
+	 * This method compares all settings individually, not just the effective {@link width} and {@link height} .
+	 *
 	 * @param resolution - A resolution.
-	 * @return True if the resolutions are the same.
+	 * @return True if all of the resolution settings are the same.
 	 */
 
 	equals(resolution: Resolution): boolean {
