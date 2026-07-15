@@ -1,108 +1,50 @@
 import {
-	BaseEvent,
-	BufferAttribute,
-	BufferGeometry,
 	Camera,
-	Event,
 	EventDispatcher,
 	Group,
 	Material,
 	Mesh,
 	Object3D,
-	OrthographicCamera,
-	PerspectiveCamera,
-	SRGBColorSpace,
 	Scene,
 	ShaderMaterial,
+	SRGBColorSpace,
 	Texture,
 	Vector2,
-	WebGLRenderTarget,
-	WebGLRenderer
+	WebGLRenderer,
+	WebGLRenderTarget
 } from "three";
 
 import { FullscreenMaterial } from "../materials/FullscreenMaterial.js";
 import { IdManager } from "../utils/IdManager.js";
-import { ImmutableTimer } from "../utils/ImmutableTimer.js";
+import { ObservableSet } from "../utils/ObservableSet.js";
+import { ReadonlyTimer } from "../utils/ReadonlyTimer.js";
 import { Resolution } from "../utils/Resolution.js";
 import { SceneEvent, SceneEventTarget } from "../utils/SceneEventTarget.js";
-import { ShaderDataTracker } from "../utils/ShaderDataTracker.js";
 import { Scissor } from "../utils/Scissor.js";
+import { ShaderDataTracker } from "../utils/ShaderDataTracker.js";
 import { Viewport } from "../utils/Viewport.js";
-import { BaseEventMap } from "./BaseEventMap.js";
+import { fullscreenCamera, fullscreenGeometry } from "../utils/index.js";
 import { Disposable } from "./Disposable.js";
-import { Identifiable } from "./Identifiable.js";
+import { RenderTask, RenderTaskEventMap } from "./RenderTask.js";
 import { Input } from "./io/Input.js";
 import { Output } from "./io/Output.js";
-import { Renderable } from "./Renderable.js";
-import { ObservableSet } from "../utils/ObservableSet.js";
 
 const v = /* @__PURE__ */ new Vector2();
 
 /**
- * Pass events.
+ * A pass.
  *
- * @category Core
- */
-
-export interface PassEventMap extends BaseEventMap {
-
-	/**
-	 * Triggers when the pass gets enabled or disabled.
-	 *
-	 * @event
-	 */
-
-	toggle: BaseEvent;
-
-}
-
-/**
- * An abstract pass.
- *
- * @param TMaterial - The type of the fullscreen material, or null if this pass has none.
  * @category Core
  */
 
 export abstract class Pass<TMaterial extends Material | null = null>
-	extends EventDispatcher<PassEventMap> implements Disposable, Identifiable, Renderable {
-
-	/**
-	 * A shared fullscreen triangle.
-	 *
-	 * The screen size is 2x2 units (NDC). A triangle needs to be 4x4 units to fill the screen.
-	 * @see https://michaldrobot.com/2014/04/01/gcn-execution-patterns-in-full-screen-passes/
-	 */
-
-	static readonly fullscreenGeometry: Readonly<BufferGeometry> = /* @__PURE__ */ (() => {
-
-		const vertices = new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]);
-		const geometry = new BufferGeometry();
-		geometry.setAttribute("position", new BufferAttribute(vertices, 3));
-		return geometry;
-
-	})();
+	extends EventDispatcher<RenderTaskEventMap> implements RenderTask {
 
 	/**
 	 * An ID manager.
 	 */
 
-	private static idManager = /* @__PURE__ */ new IdManager();
-
-	/**
-	 * A collection of scene event helpers.
-	 *
-	 * One helper is created per scene to efficiently forward events of all child objects.
-	 */
-
-	private static sceneEventTargets = /* @__PURE__ */ new WeakMap<Scene, SceneEventTarget>();
-
-	readonly id: number;
-
-	/**
-	 * A listener for events dispatched by the {@link scene}.
-	 */
-
-	private readonly sceneListener: (event: SceneEvent) => void;
+	private static readonly idManager = /* @__PURE__ */ new IdManager();
 
 	/**
 	 * A container that keeps track of input shader data.
@@ -111,16 +53,22 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	private readonly shaderDataTracker: ShaderDataTracker;
 
 	/**
+	 * A listener for `childadded` events dispatched by the scene.
+	 */
+
+	private readonly sceneChildAddedListener: (event: SceneEvent) => void;
+
+	/**
+	 * A listener for `childremoved` events dispatched by the scene.
+	 */
+
+	private readonly sceneChildRemovedListener: (event: SceneEvent) => void;
+
+	/**
 	 * A scene that contains the fullscreen mesh.
 	 */
 
 	private fullscreenScene: Scene | null;
-
-	/**
-	 * A fullscreen camera.
-	 */
-
-	private fullscreenCamera: Camera | null;
 
 	/**
 	 * A fullscreen mesh.
@@ -131,7 +79,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	// #region Backing Data
 
 	/**
-	 * @see {@link Pass.prototype.name}
+	 * @see {@link Pass.prototype.name|name}
 	 */
 
 	private _name: string;
@@ -143,10 +91,46 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	private _enabled: boolean;
 
 	/**
-	 * @see {@link attached}
+	 * @see {@link timer}
 	 */
 
-	private _attached: boolean;
+	private _timer: ReadonlyTimer | null;
+
+	/**
+	 * @see {@link renderer}
+	 */
+
+	private _renderer: WebGLRenderer | null;
+
+	/**
+	 * @see {@link mainScene}
+	 */
+
+	private _mainScene: Scene | null;
+
+	/**
+	 * @see {@link mainCamera}
+	 */
+
+	private _mainCamera: Camera | null;
+
+	/**
+	 * @see {@link scene}
+	 */
+
+	private _scene: Scene | null;
+
+	/**
+	 * @see {@link camera}
+	 */
+
+	private _camera: Camera | null;
+
+	/**
+	 * @see {@link subtasks}
+	 */
+
+	private _subtasks: Pass<Material | null>[];
 
 	/**
 	 * @see {@link autoSyncDefaultBuffers}
@@ -160,54 +144,21 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	private _autoSRGB: boolean;
 
-	/**
-	 * @see {@link timer}
-	 */
-
-	private _timer: ImmutableTimer | null;
-
-	/**
-	 * @see {@link renderer}
-	 */
-
-	private _renderer: WebGLRenderer | null;
-
-	/**
-	 * @see {@link scene}
-	 */
-
-	private _scene: Scene | null;
-
-	/**
-	 * @see {@link camera}
-	 */
-
-	private _camera: OrthographicCamera | PerspectiveCamera | null;
-
-	/**
-	 * @see {@link subpasses}
-	 */
-
-	private _subpasses: Pass<Material | null>[];
-
 	// #endregion
 
-	/**
-	 * A collection of shader materials that are used by this pass.
-	 *
-	 * This only needs to be filled if multiple fullscreen materials are used. The initial {@link fullscreenMaterial}
-	 * will be added automatically.
-	 */
-
-	protected readonly materials: Set<Material>;
+	readonly id: number;
 
 	/**
-	 * A collection of objects that will be disposed when this pass is disposed.
-	 *
-	 * IO resources, materials and subpasses will be disposed separately and don't need to be added.
+	 * The input resources of this pass.
 	 */
 
-	protected readonly disposables: Set<Disposable>;
+	readonly input: Input;
+
+	/**
+	 * The output resources of this pass.
+	 */
+
+	readonly output: Output;
 
 	/**
 	 * The current resolution.
@@ -224,7 +175,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	readonly viewport: Viewport;
 
 	/**
-	 * A rectangular area inside the viewport. Fragments that are outside the area will not be rendered.
+	 * A rectangular area inside the viewport. Fragments outside this area will not be rendered.
 	 *
 	 * @see {@link Scissor.enabled} to enable the scissor.
 	 */
@@ -232,21 +183,23 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	readonly scissor: Scissor;
 
 	/**
-	 * The input resources of this pass.
+	 * A collection of objects that will be disposed together with this pass.
 	 */
 
-	readonly input: Input;
+	protected readonly disposables: Set<Disposable>;
 
 	/**
-	 * The output resources of this pass.
+	 * A collection of materials that are used by this pass.
+	 *
+	 * Materials set via {@link fullscreenMaterial} will be added/removed automatically.
 	 */
 
-	readonly output: Output;
+	protected readonly materials: Set<Material>;
 
 	/**
 	 * Constructs a new pass.
 	 *
-	 * @param name - A name that will be used for debugging purposes.
+	 * @param name - The name of this pass.
 	 */
 
 	constructor(name: string) {
@@ -254,48 +207,60 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		super();
 
 		this.id = Pass.idManager.getNextId();
-		this.sceneListener = (event) => this.handleSceneEvent(event);
 		this.shaderDataTracker = new ShaderDataTracker();
-
 		this.fullscreenScene = null;
-		this.fullscreenCamera = null;
 		this.screen = null;
+
+		this.sceneChildAddedListener = (event) => this.onSceneChildAdded(event.child);
+		this.sceneChildRemovedListener = (event) => this.onSceneChildRemoved(event.child);
 
 		this._name = name;
 		this._enabled = true;
-		this._attached = false;
-		this._autoSyncDefaultBuffers = true;
-		this._autoSRGB = true;
-		this._renderer = null;
 		this._timer = null;
+		this._renderer = null;
+		this._mainScene = null;
+		this._mainCamera = null;
 		this._scene = null;
 		this._camera = null;
-		this._subpasses = [];
-
-		const materials = new ObservableSet<Material>();
-		materials.addEventListener("add", (e) => this.updateFullscreenMaterial(e.value));
-		this.materials = materials;
-
-		this.disposables = new Set();
-		this.resolution = new Resolution();
-		this.viewport = new Viewport();
-		this.scissor = new Scissor();
-		this.resolution.addEventListener("change", (e) => this.handleResolutionEvent(e));
-		this.viewport.addEventListener("change", (e) => this.handleViewportEvent(e));
-		this.scissor.addEventListener("change", (e) => this.handleScissorEvent(e));
+		this._subtasks = [];
+		this._autoSyncDefaultBuffers = true;
+		this._autoSRGB = true;
 
 		this.input = new Input();
 		this.output = new Output();
-		this.input.addEventListener("change", (e) => this.handleInputEvent(e));
-		this.output.addEventListener("change", (e) => this.handleOutputEvent(e));
+		this.resolution = new Resolution();
+		this.viewport = new Viewport();
+		this.scissor = new Scissor();
+		this.disposables = new Set();
+
+		const materials = new ObservableSet<Material>();
+		this.materials = materials;
+
+		this.input.addEventListener("texturechange", () => this.syncDefaultBuffers());//X
+		this.output.addEventListener("rendertargetchange", () => this.syncDefaultBuffers());//X
+
+		// Manage built-in fullscreen material data.
+		materials.addEventListener("add", (e) => this.updateFullscreenMaterial(e.value));
+		this.input.addEventListener("change", () => this.updateFullscreenMaterialsInput());
+		this.output.addEventListener("change", () => this.updateFullscreenMaterialsOutput());
+		this.resolution.addEventListener("change", () => this.updateFullscreenMaterialsResolution());
+
+		// Synchronize subpasses.
+		this.resolution.addEventListener("change", () => this.updateViewportAndScissor());
+		this.resolution.addEventListener("change", () => this.updateSubpassResolution());
+		this.viewport.addEventListener("change", () => this.updateSubpassViewport());
+		this.scissor.addEventListener("change", () => this.updateSubpassScissor());
+
+		// Wire up lifecycle hooks.
+		this.input.addEventListener("change", () => this.onInputChange());
+		this.output.addEventListener("change", () => this.onOutputChange());
+		this.resolution.addEventListener("change", () => this.onResolutionChange());
+		this.viewport.addEventListener("change", () => this.onViewportChange());
+		this.scissor.addEventListener("change", () => this.onScissorChange());
 
 	}
 
 	// #region Accessors
-
-	/**
-	 * The name of this pass.
-	 */
 
 	get name(): string {
 
@@ -309,12 +274,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	}
 
-	/**
-	 * Indicates whether this pass is enabled.
-	 *
-	 * @defaultValue true
-	 */
-
 	get enabled(): boolean {
 
 		return this._enabled;
@@ -323,141 +282,24 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	set enabled(value: boolean) {
 
-		if(this._enabled !== value) {
+		if(this._enabled === value) {
 
-			this._enabled = value;
-			this.dispatchEvent({ type: "toggle" });
-
-		}
-
-	}
-
-	/**
-	 * Indicates whether this pass is currently attached to another pass or a render pipeline.
-	 */
-
-	get attached(): boolean {
-
-		return this._attached;
-
-	}
-
-	set attached(value: boolean) {
-
-		if(this._attached !== value) {
-
-			this._attached = value;
-			this.input.setChanged();
-			this.output.setChanged();
-			this.resolution.setChanged();
+			return;
 
 		}
 
-	}
-
-	/**
-	 * Controls whether the settings of the input and output default buffers should be synchronized.
-	 *
-	 * @defaultValue true
-	 */
-
-	protected get autoSyncDefaultBuffers(): boolean {
-
-		return this._autoSyncDefaultBuffers;
+		this._enabled = value;
+		this.dispatchEvent({ type: "toggle" });
 
 	}
 
-	protected set autoSyncDefaultBuffers(value: boolean) {
-
-		if(this._autoSyncDefaultBuffers !== value) {
-
-			this._autoSyncDefaultBuffers = value;
-			this.syncDefaultBuffers();
-
-		}
-
-	}
-
-	/**
-	 * Controls automatic sRGB encoding for low precision output buffers.
-	 *
-	 * @defaultValue true
-	 */
-
-	protected get autoSRGB(): boolean {
-
-		return this._autoSRGB;
-
-	}
-
-	protected set autoSRGB(value: boolean) {
-
-		if(this._autoSRGB !== value) {
-
-			this._autoSRGB = value;
-			this.syncDefaultBuffers();
-
-		}
-
-	}
-
-	/**
-	 * A list of subpasses.
-	 *
-	 * Subpasses are included in automatic resource optimizations and will be disposed when the parent pass is disposed.
-	 * The resolution, viewport and scissor of the subpasses are also kept in sync with the parent pass.
-	 *
-	 * They also gain access to the following data:
-	 * - {@link timer}
-	 * - {@link renderer}
-	 * - {@link scene}
-	 * - {@link camera}
-	 * - {@link attached}
-	 */
-
-	get subpasses(): readonly Pass<Material | null>[] {
-
-		return this._subpasses;
-
-	}
-
-	protected set subpasses(value: Pass<Material | null>[]) {
-
-		// Detach the current subpasses.
-		for(const pass of this.subpasses) {
-
-			pass.attached = false;
-
-		}
-
-		for(const pass of value) {
-
-			if(pass.attached) {
-
-				throw new Error(`${pass.name} is already attached to another pass`);
-
-			}
-
-		}
-
-		this._subpasses = value;
-		Object.freeze(this._subpasses);
-
-		this.initializeSubpasses();
-
-	}
-
-	/**
-	 * A timer.
-	 */
-
-	get timer(): ImmutableTimer | null {
+	get timer(): ReadonlyTimer | null {
 
 		return this._timer;
 
 	}
 
-	set timer(value: ImmutableTimer | null) {
+	set timer(value: ReadonlyTimer | null) {
 
 		this._timer = value;
 
@@ -468,10 +310,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		}
 
 	}
-
-	/**
-	 * The current renderer.
-	 */
 
 	get renderer(): WebGLRenderer | null {
 
@@ -507,13 +345,66 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	}
 
+	get subtasks(): readonly RenderTask[] {
+
+		return this._subtasks;
+
+	}
+
 	/**
-	 * The main scene.
+	 * A list of subpasses.
+	 *
+	 * Subpasses are considered part of this pass; they are included in automatic resource optimizations and will be
+	 * disposed together with the parent pass.
 	 */
+
+	get subpasses(): readonly Pass<Material | null>[] {
+
+		return this._subtasks;
+
+	}
+
+	protected set subpasses(value: Pass<Material | null>[]) {
+
+		this._subtasks = value;
+		Object.freeze(this._subtasks);
+		this.initializeSubpasses();
+
+	}
+
+	set mainScene(value: Scene | null) {
+
+		if(this._mainScene === value) {
+
+			return;
+
+		}
+
+		this.removeSceneListeners();
+		const previous = this.scene;
+		this._mainScene = value;
+		this.addSceneListeners();
+		this.onSceneChange(previous, this.scene);
+
+	}
+
+	set mainCamera(value: Camera | null) {
+
+		if(this._mainCamera === value) {
+
+			return;
+
+		}
+
+		const previous = this.camera;
+		this._mainCamera = value;
+		this.onCameraChange(previous, this.camera);
+
+	}
 
 	get scene(): Scene | null {
 
-		return this._scene;
+		return this._scene ?? this._mainScene;
 
 	}
 
@@ -525,49 +416,21 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		}
 
-		if(this._scene !== null && Pass.sceneEventTargets.has(this._scene)) {
-
-			const sceneEventTarget = Pass.sceneEventTargets.get(this._scene)!;
-			sceneEventTarget.removeEventListener("childadded", this.sceneListener);
-			sceneEventTarget.removeEventListener("childremoved", this.sceneListener);
-
-		}
-
+		this.removeSceneListeners();
+		const previous = this.scene;
 		this._scene = value;
-
-		if(value !== null) {
-
-			if(!Pass.sceneEventTargets.has(value)) {
-
-				Pass.sceneEventTargets.set(value, new SceneEventTarget(value));
-
-			}
-
-			const sceneEventTarget = Pass.sceneEventTargets.get(value)!;
-			sceneEventTarget.addEventListener("childadded", this.sceneListener);
-			sceneEventTarget.addEventListener("childremoved", this.sceneListener);
-
-		}
-
-		for(const pass of this.subpasses) {
-
-			pass.scene = value;
-
-		}
+		this.addSceneListeners();
+		this.onSceneChange(previous, this.scene);
 
 	}
 
-	/**
-	 * The main camera.
-	 */
+	get camera(): Camera | null {
 
-	get camera(): OrthographicCamera | PerspectiveCamera | null {
-
-		return this._camera;
+		return this._camera ?? this._mainCamera;
 
 	}
 
-	set camera(value: OrthographicCamera | PerspectiveCamera | null) {
+	set camera(value: Camera | null) {
 
 		if(this._camera === value) {
 
@@ -575,19 +438,9 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		}
 
+		const previous = this.camera;
 		this._camera = value;
-
-		if(value !== null && this.fullscreenMaterial instanceof FullscreenMaterial) {
-
-			this.fullscreenMaterial.copyCameraSettings(value);
-
-		}
-
-		for(const pass of this.subpasses) {
-
-			pass.camera = value;
-
-		}
+		this.onCameraChange(previous, this.camera);
 
 	}
 
@@ -615,10 +468,9 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		} else {
 
-			this.screen = new Mesh(Pass.fullscreenGeometry, value);
+			this.screen = new Mesh(fullscreenGeometry, value);
 			this.screen.frustumCulled = false;
 			this.fullscreenScene = new Scene();
-			this.fullscreenCamera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
 			this.fullscreenScene.add(this.screen);
 
 		}
@@ -627,26 +479,164 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	}
 
+	/**
+	 * Controls whether this pass should render to screen.
+	 */
+
+	protected get renderToScreen(): boolean {
+
+		return this.output.renderToScreen;
+
+	}
+
+	protected set renderToScreen(value: boolean) {
+
+		this.output.renderToScreen = value;
+
+	}
+
+	/**
+	 * Controls whether the settings of the input and output default buffers should be synchronized.
+	 *
+	 * @defaultValue true
+	 */
+
+	protected get autoSyncDefaultBuffers(): boolean {
+
+		return this._autoSyncDefaultBuffers;
+
+	}
+
+	protected set autoSyncDefaultBuffers(value: boolean) {
+
+		if(this._autoSyncDefaultBuffers === value) {
+
+			return;
+
+		}
+
+		this._autoSyncDefaultBuffers = value;
+		this.syncDefaultBuffers();
+
+	}
+
+	/**
+	 * Controls automatic sRGB encoding for low precision output buffers.
+	 *
+	 * @defaultValue true
+	 */
+
+	protected get autoSRGB(): boolean {
+
+		return this._autoSRGB;
+
+	}
+
+	protected set autoSRGB(value: boolean) {
+
+		if(this._autoSRGB === value) {
+
+			return;
+
+		}
+
+		this._autoSRGB = value;
+		this.syncDefaultBuffers();
+
+	}
+
+	// #endregion
+
+	// #region Lifecycle Hooks
+
+	/**
+	 * Checks if the current renderer supports all the features that are required by this pass.
+	 *
+	 * This method should throw an error if the requirements are not met.
+	 *
+	 * @throws If the device doesn't meet the requirements.
+	 */
+
+	checkRequirements(): void {}
+
+	/**
+	 * Performs tasks when the input resources have changed.
+	 */
+
+	protected onInputChange(): void {}
+
+	/**
+	 * Performs tasks when the output resources have changed.
+	 */
+
+	protected onOutputChange(): void {}
+
+	/**
+	 * Performs tasks when the {@link resolution} has changed.
+	 */
+
+	protected onResolutionChange(): void {}
+
+	/**
+	 * Performs tasks when the {@link viewport} has changed.
+	 */
+
+	protected onViewportChange(): void {}
+
+	/**
+	 * Performs tasks when the {@link scissor} has changed.
+	 */
+
+	protected onScissorChange(): void {}
+
+	/**
+	 * Performs tasks when the {@link scene} has changed.
+	 *
+	 * @param previous - The previous scene.
+	 * @param current - The new scene.
+	 */
+
+	protected onSceneChange(previous: Object3D | null, current: Object3D | null): void {}
+
+	/**
+	 * Performs tasks when a child node is added to the current {@link scene}.
+	 *
+	 * Note: This method will only be called for child nodes and not for the scene itself.
+	 *
+	 * @param object - The child node that was added.
+	 */
+
+	protected onSceneChildAdded(object: Object3D): void {}
+
+	/**
+	 * Performs tasks when a child node is removed from the current {@link scene}.
+	 *
+	 * Note: This method will only be called for child nodes and not for the scene itself.
+	 *
+	 * @param object - The child node that was removed.
+	 */
+
+	protected onSceneChildRemoved(object: Object3D): void {}
+
+	/**
+	 * Performs tasks when the {@link camera} has changed.
+	 *
+	 * @param previous - The previous camera.
+	 * @param current - The new camera.
+	 */
+
+	protected onCameraChange(previous: Camera | null, current: Camera | null): void {}
+
 	// #endregion
 
 	// #region Subpasses
-
-	/**
-	 * Sets the base settings of the given subpass.
-	 *
-	 * @param pass - The subpass.
-	 */
 
 	private initializeSubpass(pass: Pass<Material | null>): void {
 
 		pass.timer = this.timer;
 		pass.renderer = this.renderer;
-		pass.scene = this.scene;
-		pass.camera = this.camera;
-		pass.resolution.copy(this.resolution);
-		pass.viewport.copy(this.viewport);
-		pass.scissor.copy(this.scissor);
-		pass.attached = true;
+
+		// TODO I/O
 
 	}
 
@@ -661,6 +651,10 @@ export abstract class Pass<TMaterial extends Material | null = null>
 			this.initializeSubpass(pass);
 
 		}
+
+		this.updateSubpassResolution();
+		this.updateSubpassViewport();
+		this.updateSubpassScissor();
 
 	}
 
@@ -843,6 +837,42 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	// #endregion
 
 	/**
+	 * Registers scene child node listeners.
+	 */
+
+	private removeSceneListeners(): void {
+
+		if(this.scene === null) {
+
+			return;
+
+		}
+
+		const sceneEventTarget = SceneEventTarget.getInstance(this.scene);
+		sceneEventTarget.removeEventListener("childadded", this.sceneChildAddedListener);
+		sceneEventTarget.removeEventListener("childremoved", this.sceneChildRemovedListener);
+
+	}
+
+	/**
+	 * Registers scene child node listeners.
+	 */
+
+	private addSceneListeners(): void {
+
+		if(this.scene === null) {
+
+			return;
+
+		}
+
+		const sceneEventTarget = SceneEventTarget.getInstance(this.scene);
+		sceneEventTarget.addEventListener("childadded", this.sceneChildAddedListener);
+		sceneEventTarget.addEventListener("childremoved", this.sceneChildRemovedListener);
+
+	}
+
+	/**
 	 * Synchronizes the texture settings of the input and output default buffers.
 	 *
 	 * This method ensures that the output buffer uses adequate settings for storing values from the input buffer.
@@ -901,16 +931,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	}
 
 	/**
-	 * Updates the size of the default output buffer, if it exists.
-	 */
-
-	private updateOutputBufferSize(): void {
-
-		this.output.defaultBuffer?.value?.setSize(this.resolution.width, this.resolution.height);
-
-	}
-
-	/**
 	 * Updates the viewport and scissor based on the current resolution.
 	 */
 
@@ -924,244 +944,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	}
 
-	// #region Lifecycle Hooks
-
-	/**
-	 * Checks if the current renderer supports all features that are required by this pass.
-	 *
-	 * Override this method to check if the current device supports the necessary features.
-	 * This method should throw an error if the requirements are not met.
-	 *
-	 * @throws If the device doesn't meet the requirements.
-	 */
-
-	checkRequirements(): void {}
-
-	/**
-	 * Performs tasks when the input resources have changed.
-	 *
-	 * Override this empty method to handle input changes.
-	 */
-
-	protected onInputChange(): void {}
-
-	/**
-	 * Performs tasks when the output resources have changed.
-	 *
-	 * Override this empty method to handle output changes.
-	 */
-
-	protected onOutputChange(): void {}
-
-	/**
-	 * Performs tasks when the {@link resolution} has changed.
-	 *
-	 * Override this empty method to handle resolution changes.
-	 */
-
-	protected onResolutionChange(): void {}
-
-	/**
-	 * Performs tasks when the {@link viewport} has changed.
-	 *
-	 * Override this empty method to handle viewport changes.
-	 */
-
-	protected onViewportChange(): void {}
-
-	/**
-	 * Performs tasks when the {@link scissor} has changed.
-	 *
-	 * Override this empty method to handle scissor changes.
-	 */
-
-	protected onScissorChange(): void {}
-
-	/**
-	 * Performs tasks when a child node is added to the current {@link scene}.
-	 *
-	 * Note: This method will only be called for child nodes and not for the scene itself.
-	 *
-	 * @param object - The child node that was added.
-	 */
-
-	protected onSceneChildAdded(object: Object3D): void {}
-
-	/**
-	 * Performs tasks when a child node is removed from the current {@link scene}.
-	 *
-	 * Note: This method will only be called for child nodes and not for the scene itself.
-	 *
-	 * @param object - The child node that was removed.
-	 */
-
-	protected onSceneChildRemoved(object: Object3D): void {}
-
-	// #endregion
-
-	// #region Event Handlers
-
-	/**
-	 * Handles {@link resolution} events.
-	 *
-	 * @param event - A resolution event.
-	 */
-
-	private handleResolutionEvent(event: Event): void {
-
-		if(!this.attached) {
-
-			return;
-
-		}
-
-		switch(event.type) {
-
-			case "change":
-				this.updateFullscreenMaterialsResolution();
-				this.updateOutputBufferSize();
-				this.onResolutionChange();
-				this.updateSubpassResolution();
-				this.updateViewportAndScissor();
-				break;
-
-		}
-
-	}
-
-	/**
-	 * Handles {@link viewport} events.
-	 *
-	 * @param event - A viewport event.
-	 */
-
-	private handleViewportEvent(event: Event): void {
-
-		if(!this.attached) {
-
-			return;
-
-		}
-
-		switch(event.type) {
-
-			case "change":
-				this.onViewportChange();
-				this.updateSubpassViewport();
-				break;
-
-		}
-
-	}
-
-	/**
-	 * Handles {@link scissor} events.
-	 *
-	 * @param event - A scissor event.
-	 */
-
-	private handleScissorEvent(event: Event): void {
-
-		if(!this.attached) {
-
-			return;
-
-		}
-
-		switch(event.type) {
-
-			case "change":
-				this.onScissorChange();
-				this.updateSubpassScissor();
-				break;
-
-		}
-
-	}
-
-	/**
-	 * Handles {@link input} events.
-	 *
-	 * @param event - An input event.
-	 */
-
-	private handleInputEvent(event: Event): void {
-
-		if(!this.attached) {
-
-			return;
-
-		}
-
-		switch(event.type) {
-
-			case "change":
-				this.updateFullscreenMaterialsInput();
-				this.syncDefaultBuffers();
-				this.onInputChange();
-				break;
-
-		}
-
-	}
-
-	/**
-	 * Handles {@link output} events.
-	 *
-	 * @param event - An output event.
-	 */
-
-	private handleOutputEvent(event: Event): void {
-
-		if(!this.attached) {
-
-			return;
-
-		}
-
-		switch(event.type) {
-
-			case "change":
-				this.updateOutputBufferSize();
-				this.updateFullscreenMaterialsOutput();
-				this.syncDefaultBuffers();
-				this.onOutputChange();
-				break;
-
-		}
-
-	}
-
-	/**
-	 * Handles scene graph events.
-	 *
-	 * @param event - A scene graph event.
-	 */
-
-	private handleSceneEvent(event: SceneEvent): void {
-
-		if(!this.attached) {
-
-			return;
-
-		}
-
-		switch(event.type) {
-
-			case "childadded":
-				this.onSceneChildAdded(event.child);
-				break;
-
-			case "childremoved":
-				this.onSceneChildRemoved(event.child);
-				break;
-
-		}
-
-	}
-
-	// #endregion
-
 	/**
 	 * Dispatches a `change` event.
 	 */
@@ -1169,58 +951,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	protected setChanged(): void {
 
 		this.dispatchEvent({ type: "change" });
-
-	}
-
-	/**
-	 * Creates a standard render target with default settings and no depth.
-	 *
-	 * @see https://threejs.org/docs/?q=rendert#api/en/renderers/WebGLRenderTarget
-	 * @return The framebuffer.
-	 */
-
-	protected createFramebuffer(): WebGLRenderTarget {
-
-		const { width, height } = this.resolution;
-		const buffer = new WebGLRenderTarget(width, height, { depthBuffer: false });
-		buffer.texture.name = "Intermediate";
-		return buffer;
-
-	}
-
-	/**
-	 * Compiles the materials used by this pass.
-	 *
-	 * @return A promise that resolves when the compilation has finished.
-	 */
-
-	async compile(): Promise<void> {
-
-		if(this.renderer === null) {
-
-			return;
-
-		}
-
-		const group = new Group();
-
-		for(const material of this.materials) {
-
-			group.add(new Mesh(Pass.fullscreenGeometry, material));
-
-		}
-
-		const promises: Promise<Object3D | void>[] = [
-			this.renderer.compileAsync(group, this.fullscreenCamera!, this.fullscreenScene)
-		];
-
-		for(const pass of this.subpasses) {
-
-			promises.push(pass.compile());
-
-		}
-
-		await Promise.all(promises);
 
 	}
 
@@ -1370,7 +1100,49 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		if(this.renderer !== null && this.fullscreenMaterial !== null) {
 
-			this.renderer.render(this.fullscreenScene!, this.fullscreenCamera!);
+			this.renderer.render(this.fullscreenScene!, fullscreenCamera);
+
+		}
+
+	}
+
+	async compile(): Promise<void> {
+
+		if(this.renderer === null) {
+
+			return;
+
+		}
+
+		const group = new Group();
+
+		for(const material of this.materials) {
+
+			group.add(new Mesh(fullscreenGeometry, material));
+
+		}
+
+		const promises: Promise<Object3D | void>[] = [
+			this.renderer.compileAsync(group, fullscreenCamera, this.fullscreenScene)
+		];
+
+		for(const pass of this.subpasses) {
+
+			promises.push(pass.compile());
+
+		}
+
+		await Promise.all(promises);
+
+	}
+
+	abstract render(): void;
+
+	execute(): void {
+
+		if(this.enabled) {
+
+			this.render();
 
 		}
 
@@ -1382,15 +1154,15 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this.output.dispose();
 		this.shaderDataTracker.dispose();
 
-		for(const material of this.materials) {
-
-			material?.dispose();
-
-		}
-
 		for(const disposable of this.disposables) {
 
 			disposable.dispose();
+
+		}
+
+		for(const material of this.materials) {
+
+			material?.dispose();
 
 		}
 
@@ -1401,7 +1173,5 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		}
 
 	}
-
-	abstract render(): void;
 
 }
