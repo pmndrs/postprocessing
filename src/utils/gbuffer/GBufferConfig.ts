@@ -1,9 +1,8 @@
-import { EventDispatcher } from "three";
+import { EventDispatcher, TextureParameters } from "three";
 import { BaseEventMap } from "../../core/BaseEventMap.js";
 import { GBuffer } from "../../enums/GBuffer.js";
 import { GData } from "../../enums/GData.js";
 import { ObservableMap } from "../ObservableMap.js";
-import { GBufferTextureConfig } from "./GBufferTextureConfig.js";
 
 /**
  * A G-Buffer configuration.
@@ -17,7 +16,7 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 	 * A collection that maps G-Buffer components to G-Buffer texture configurations.
 	 */
 
-	readonly textureConfigs: Map<GBuffer | string, GBufferTextureConfig>;
+	readonly textureConfigs: Map<GBuffer | string, TextureParameters>;
 
 	/**
 	 * A collection that maps G-Buffer components to G-Buffer struct field names that are used in effects.
@@ -63,7 +62,7 @@ export class GBufferConfig extends EventDispatcher<BaseEventMap> {
 
 		super();
 
-		const textureConfigs = new ObservableMap<GBuffer | string, GBufferTextureConfig>();
+		const textureConfigs = new ObservableMap<GBuffer | string, TextureParameters>();
 
 		const gBufferStructFields = new ObservableMap([
 			[GBuffer.COLOR, "color"],
