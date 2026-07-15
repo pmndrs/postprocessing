@@ -10,7 +10,7 @@ import { BaseEventMap } from "../BaseEventMap.js";
  * @category IO
  */
 
-export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap> implements Identifiable {
+export class Resource<T = unknown> extends EventDispatcher<BaseEventMap> implements Identifiable {
 
 	/**
 	 * An ID manager.
