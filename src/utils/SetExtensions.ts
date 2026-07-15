@@ -3,7 +3,7 @@
  *
  * @see https://github.com/tc39/proposal-collection-methods#proposal
  * @param T - The type of the values.
- * @category Core
+ * @category Utils
  */
 
 export interface SetExtensions<T> {
