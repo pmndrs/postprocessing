@@ -1,9 +1,9 @@
 import { Color, Scene } from "three";
 import { Pass } from "../core/Pass.js";
-import { extractIndices } from "../utils/gbuffer/GBufferUtils.js";
 import { Background } from "../utils/Background.js";
 import { ClearFlags } from "../utils/ClearFlags.js";
 import { ClearValues } from "../utils/ClearValues.js";
+import { GBufferResource } from "../core/index.js";
 
 const color = /* @__PURE__ */ new Color();
 const fv = /* @__PURE__ */ new Float32Array(4);
@@ -35,7 +35,7 @@ export class ClearPass extends Pass {
 	 * G-Buffer texture indices.
 	 */
 
-	private gBufferIndices: Map<string, number> | null;
+	private gBufferIndices: ReadonlyMap<string, number> | null;
 
 	/**
 	 * A background object.
@@ -86,7 +86,7 @@ export class ClearPass extends Pass {
 	 * @param textureIndices - The indices of the texture attachments that should be cleared.
 	 */
 
-	private clearBuffers(gl: WebGL2RenderingContext, textureIndices: Map<string, number>): void {
+	private clearBuffers(gl: WebGL2RenderingContext, textureIndices: ReadonlyMap<string, number>): void {
 
 		const flags = this.clearFlags;
 		const clearValues = this.clearValues.gBuffer;
@@ -161,7 +161,7 @@ export class ClearPass extends Pass {
 	protected override onOutputChange(): void {
 
 		const buffer = this.output.defaultBuffer?.value ?? null;
-		this.gBufferIndices = (buffer !== null) ? extractIndices(buffer) : null;
+		this.gBufferIndices = (buffer instanceof GBufferResource) ? buffer.textureIndices : null;
 
 	}
 
@@ -182,7 +182,7 @@ export class ClearPass extends Pass {
 
 	override render(): void {
 
-		if(this.renderer === null || !this.output.hasDefaultBuffer) {
+		if(this.renderer === null || this.output.defaultBuffer === undefined) {
 
 			return;
 
@@ -192,7 +192,7 @@ export class ClearPass extends Pass {
 		const hasOverrideClearColor = this.clearValues.color !== null;
 		const flags = this.clearFlags;
 
-		this.setRenderTarget(this.output.defaultBuffer!.value);
+		this.setRenderTarget(this.output.defaultBuffer.value);
 
 		if(flags.depth || flags.stencil) {
 
