@@ -63,30 +63,6 @@ function getOutputType(texture: Texture): TexelType {
 }
 
 /**
- * Extracts G-Buffer texture indices from a given render target.
- *
- * @param renderTarget - A render target.
- * @return A collection that maps G-Buffer components to texture indices.
- * @category Utils
- * @internal
- */
-
-export function extractIndices(renderTarget: WebGLRenderTarget): Map<string, number> {
-
-	const indices = new Map<string, number>();
-
-	for(let i = 0, l = renderTarget.textures.length; i < l; ++i) {
-
-		const texture = renderTarget.textures[i];
-		indices.set(texture.name, i);
-
-	}
-
-	return indices;
-
-}
-
-/**
  * Creates output definitions from a given render target.
  *
  * TODO Remove when three supports auto shader outputs.
