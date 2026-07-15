@@ -1,9 +1,38 @@
-import { EventDispatcher, IUniform, UnsignedByteType, WebGLRenderTarget } from "three";
+import { BaseEvent, EventDispatcher, RenderTargetOptions, UnsignedByteType } from "three";
 import { ObservableMap } from "../../utils/ObservableMap.js";
 import { BaseEventMap } from "../BaseEventMap.js";
 import { Disposable } from "../Disposable.js";
-import { ShaderData } from "../ShaderData.js";
+import { GBufferResource } from "./GBufferResource.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
+import { ShaderDataResource } from "./ShaderDataResource.js";
+import { TextureResource } from "./TextureResource.js";
+import { ObservableReadonlyMap } from "../../utils/ObservableReadonlyMap.js";
+
+/**
+ * Output events.
+ *
+ * @category IO
+ */
+
+export interface OutputEventMap extends BaseEventMap {
+
+	/**
+	 * Triggers when the output render targets have changed.
+	 *
+	 * @event
+	 */
+
+	rendertargetchange: BaseEvent<"rendertargetchange">;
+
+	/**
+	 * Triggers when the output shader data has changed.
+	 *
+	 * @event
+	 */
+
+	shaderdatachange: BaseEvent<"shaderdatachange">;
+
+}
 
 /**
  * Output resources.
@@ -11,7 +40,7 @@ import { RenderTargetResource } from "./RenderTargetResource.js";
  * @category IO
  */
 
-export class Output extends EventDispatcher<BaseEventMap> implements Disposable, ShaderData {
+export class Output extends EventDispatcher<OutputEventMap> implements Disposable {
 
 	/**
 	 * Identifies the default output buffer in the {@link renderTargets} collection.
@@ -19,14 +48,37 @@ export class Output extends EventDispatcher<BaseEventMap> implements Disposable,
 
 	static readonly BUFFER_DEFAULT = "BUFFER_DEFAULT";
 
-	readonly defines: Map<string, string | number | boolean>;
-	readonly uniforms: Map<string, IUniform>;
+	/**
+	 * Identifies the G-Buffer in the {@link renderTargets} collection.
+	 */
+
+	static readonly GBUFFER = "GBUFFER";
 
 	/**
 	 * Output render targets.
 	 */
 
 	readonly renderTargets: Map<string, RenderTargetResource>;
+
+	/**
+	 * Output render target textures.
+	 *
+	 * @internal
+	 */
+
+	readonly textures: ObservableReadonlyMap<string, TextureResource>;
+
+	/**
+	 * Output shader data.
+	 */
+
+	readonly shaderData: ShaderDataResource;
+
+	/**
+	 * Indicates whether the {@link defaultBuffer} should return `null` (canvas).
+	 */
+
+	renderToScreen: boolean;
 
 	/**
 	 * Constructs new output resources.
@@ -36,36 +88,61 @@ export class Output extends EventDispatcher<BaseEventMap> implements Disposable,
 
 		super();
 
-		const defines = new ObservableMap<string, string | number | boolean>();
-		const uniforms = new ObservableMap<string, IUniform>();
 		const renderTargets = new ObservableMap<string, RenderTargetResource>();
-		const propagateChangeEvent = () => this.setChanged();
+		const textures = new ObservableMap<string, TextureResource>();
 
-		defines.addEventListener("change", propagateChangeEvent);
-		uniforms.addEventListener("change", propagateChangeEvent);
-		renderTargets.addEventListener("change", propagateChangeEvent);
+		const renderTargetListener = () => {
 
-		renderTargets.addEventListener("add", (e) => e.value.addEventListener("change", propagateChangeEvent));
-		renderTargets.addEventListener("delete", (e) => e.value.removeEventListener("change", propagateChangeEvent));
+			this.dispatchEvent({ type: "rendertargetchange" });
+			this.dispatchEvent({ type: "change" });
+
+		};
+
+		renderTargets.addEventListener("change", renderTargetListener);
+
+		renderTargets.addEventListener("add", (e) => {
+
+			e.value.addEventListener("change", renderTargetListener);
+			textures.set(e.key, e.value.texture);
+
+		});
+
+		renderTargets.addEventListener("delete", (e) => {
+
+			e.value.removeEventListener("change", renderTargetListener);
+			textures.delete(e.key);
+
+		});
 
 		renderTargets.addEventListener("clear", (e) => {
 
 			for(const value of e.target.values()) {
 
-				value.removeEventListener("change", propagateChangeEvent);
+				value.removeEventListener("change", renderTargetListener);
 
 			}
 
+			textures.clear();
+
 		});
 
-		this.defines = defines;
-		this.uniforms = uniforms;
+		const shaderData = new ShaderDataResource();
+		shaderData.addEventListener("change", () => {
+
+			this.dispatchEvent({ type: "shaderdatachange" });
+			this.dispatchEvent({ type: "change" });
+
+		});
+
 		this.renderTargets = renderTargets;
+		this.textures = textures;
+		this.shaderData = shaderData;
+		this.renderToScreen = false;
 
 	}
 
 	/**
-	 * Alias for {@link renderTargets}.
+	 * An alias for {@link renderTargets}.
 	 */
 
 	get buffers(): Map<string, RenderTargetResource> {
@@ -75,36 +152,24 @@ export class Output extends EventDispatcher<BaseEventMap> implements Disposable,
 	}
 
 	/**
-	 * Indicates whether a default output buffer has been set.
+	 * The primary G-Buffer, or `null` if none has been set.
 	 */
 
-	get hasDefaultBuffer(): boolean {
+	get gBuffer(): GBufferResource | null {
 
-		return this.renderTargets.has(Output.BUFFER_DEFAULT);
+		return (this.renderTargets.get(Output.GBUFFER) as GBufferResource | undefined) ?? null;
 
 	}
 
-	/**
-	 * The default output buffer.
-	 *
-	 * Setting the default buffer to `undefined` is the same as calling {@link removeDefaultBuffer}.
-	 */
+	set gBuffer(value: GBufferResource | null) {
 
-	get defaultBuffer(): RenderTargetResource | undefined {
+		if(value === null) {
 
-		return this.renderTargets.get(Output.BUFFER_DEFAULT);
-
-	}
-
-	set defaultBuffer(value: RenderTargetResource | WebGLRenderTarget | null | undefined) {
-
-		if(value === undefined) {
-
-			this.removeDefaultBuffer();
+			this.renderTargets.delete(Output.GBUFFER);
 
 		} else {
 
-			this.setBuffer(Output.BUFFER_DEFAULT, value);
+			this.setBuffer(Output.GBUFFER, value);
 
 		}
 
@@ -130,69 +195,33 @@ export class Output extends EventDispatcher<BaseEventMap> implements Disposable,
 	}
 
 	/**
-	 * Dispatches a `change` event.
-	 *
-	 * @internal
+	 * The default output buffer, or `undefined` if none has been set.
 	 */
 
-	setChanged(): void {
+	get defaultBuffer(): RenderTargetResource | null | undefined {
 
-		this.dispatchEvent({ type: "change" });
+		return this.getBuffer(Output.BUFFER_DEFAULT);
 
 	}
 
-	/**
-	 * Sets a buffer.
-	 *
-	 * A new resource will be created if the buffer doesn't already exist.
-	 *
-	 * @param key - A buffer key.
-	 * @param value - The buffer.
-	 */
+	set defaultBuffer(value: RenderTargetResource | RenderTargetOptions | undefined) {
 
-	setBuffer(key: string, value: RenderTargetResource | WebGLRenderTarget | null): void {
+		if(value === undefined) {
 
-		if(value instanceof RenderTargetResource) {
-
-			this.renderTargets.set(key, value);
+			this.removeDefaultBuffer();
 
 		} else {
 
-			const resource = this.renderTargets.get(key);
-
-			if(resource !== undefined && resource !== null) {
-
-				resource.value = value;
-
-			} else {
-
-				this.renderTargets.set(key, new RenderTargetResource(value));
-
-			}
+			this.setBuffer(Output.BUFFER_DEFAULT, value);
 
 		}
 
 	}
 
 	/**
-	 * Retrieves a buffer.
-	 *
-	 * Unlike input buffers, output buffers can be `undefined` because `null` represents the canvas.
-	 *
-	 * @param key - A buffer key.
-	 * @return The buffer, or `undefined` if it doesn't exist.
-	 */
-
-	getBuffer(key: string): WebGLRenderTarget | null | undefined {
-
-		return this.renderTargets.get(key)?.value;
-
-	}
-
-	/**
 	 * Removes the default buffer.
 	 *
-	 * @return True if the buffer existed and has been removed, or false if it doesn't exist.
+	 * @return True if the buffer existed and has been removed, or false if there is none.
 	 */
 
 	removeDefaultBuffer(): boolean {
@@ -201,11 +230,43 @@ export class Output extends EventDispatcher<BaseEventMap> implements Disposable,
 
 	}
 
+	/**
+	 * Retrieves a buffer.
+	 *
+	 * @param key - The key of the buffer.
+	 * @return The render target resource, or `undefined` if it doesn't exist.
+	 */
+
+	getBuffer(key: string): RenderTargetResource | null | undefined {
+
+		return this.renderToScreen ? null : this.renderTargets.get(key);
+
+	}
+
+	/**
+	 * Sets a buffer.
+	 *
+	 * If no value is provided, a default render target descriptor will be used.
+	 * Render target descriptors will automatically be wrapped in a new resource.
+	 *
+	 * @param key - The key of the buffer.
+	 * @param value - A render target resource or descriptor.
+	 * @return The render target resource.
+	 */
+
+	setBuffer(key: string, value: RenderTargetResource | RenderTargetOptions = {}): RenderTargetResource {
+
+		const resource = value instanceof RenderTargetResource ? value : new RenderTargetResource(value);
+		this.renderTargets.set(key, resource);
+		return resource;
+
+	}
+
 	dispose(): void {
 
 		for(const disposable of this.renderTargets.values()) {
 
-			disposable.value?.dispose();
+			disposable.dispose();
 
 		}
 
