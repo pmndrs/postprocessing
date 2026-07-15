@@ -1,5 +1,6 @@
 import { BaseEvent, EventDispatcher } from "three";
 import { BaseEventMap } from "../core/BaseEventMap.js";
+import { MapExtensions } from "./MapExtensions.js";
 
 /**
  * An event that contains information about a map entry that was added or deleted.
@@ -62,7 +63,8 @@ export interface ObservableMapEventMap<K, V> extends BaseEventMap {
  * @category Utils
  */
 
-export class ObservableMap<K, V> extends EventDispatcher<ObservableMapEventMap<K, V>> implements Map<K, V> {
+export class ObservableMap<K, V> extends EventDispatcher<ObservableMapEventMap<K, V>>
+	implements Map<K, V>, MapExtensions<K, V> {
 
 	/**
 	 * The internal data collection.
@@ -120,13 +122,6 @@ export class ObservableMap<K, V> extends EventDispatcher<ObservableMapEventMap<K
 		return true;
 
 	}
-
-	/**
-	 * Removes multiple entries from the Map.
-	 *
-	 * @param keys - The keys of the entries that should be deleted.
-	 * @return This Map.
-	 */
 
 	deleteAll(...keys: K[]): this {
 
@@ -187,13 +182,6 @@ export class ObservableMap<K, V> extends EventDispatcher<ObservableMapEventMap<K
 		return this;
 
 	}
-
-	/**
-	 * Sets multiple entries.
-	 *
-	 * @param entries - The entries.
-	 * @return This Map.
-	 */
 
 	setAll(...entries: [K, V][]): this {
 
