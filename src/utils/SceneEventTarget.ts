@@ -1,4 +1,4 @@
-import { Event as Event3, EventDispatcher, Object3D } from "three";
+import { BaseEvent, EventDispatcher, Object3D } from "three";
 
 /**
  * A scene event.
@@ -7,7 +7,11 @@ import { Event as Event3, EventDispatcher, Object3D } from "three";
  * @internal
  */
 
-export interface SceneEvent extends Event3<keyof SceneEventTargetMap> {
+export interface SceneEvent extends BaseEvent<keyof SceneEventTargetEventMap> {
+
+	/**
+	 * A scene child node.
+	 */
 
 	child: Object3D;
 
@@ -20,7 +24,7 @@ export interface SceneEvent extends Event3<keyof SceneEventTargetMap> {
  * @internal
  */
 
-export interface SceneEventTargetMap {
+export interface SceneEventTargetEventMap {
 
 	/**
 	 * Triggers when a child is added to the scene.
@@ -41,13 +45,22 @@ export interface SceneEventTargetMap {
 }
 
 /**
- * A helper that forwards `childadded` and `childremoved` events of all objects in a given scene.
+ * A unified event target that efficiently forwards nested `childadded` and `childremoved` scene events.
  *
+ * @see {@link getInstance} for fetching an event target for a given scene.
  * @category Utils
  * @internal
  */
 
-export class SceneEventTarget extends EventDispatcher<SceneEventTargetMap> {
+export class SceneEventTarget extends EventDispatcher<SceneEventTargetEventMap> {
+
+	/**
+	 * A collection of scene event helpers.
+	 *
+	 * One helper is created per scene to efficiently forward events of all child objects.
+	 */
+
+	private static sceneEventTargets = /* @__PURE__ */ new WeakMap<Object3D, SceneEventTarget>();
 
 	/**
 	 * A listener for events dispatched by the {@link scene}.
@@ -61,7 +74,7 @@ export class SceneEventTarget extends EventDispatcher<SceneEventTargetMap> {
 	 * @param scene - A scene.
 	 */
 
-	constructor(scene: Object3D) {
+	private constructor(scene: Object3D) {
 
 		super();
 
@@ -70,7 +83,6 @@ export class SceneEventTarget extends EventDispatcher<SceneEventTargetMap> {
 		// Attach the listener to the scene and its children.
 		this.handleSceneEvent({
 			type: "childadded",
-			target: scene,
 			child: scene
 		});
 
@@ -117,6 +129,29 @@ export class SceneEventTarget extends EventDispatcher<SceneEventTargetMap> {
 		}
 
 		this.dispatchEvent(event);
+
+	}
+
+	/**
+	 * Returns a scene event target instance for the given scene.
+	 *
+	 * Event targets are created on demand and cached per scene. This ensures that only one listener is added to each
+	 * node of the scene graph.
+	 *
+	 * @param scene - A scene.
+	 * @return A scene event target.
+	 */
+
+	static getInstance(scene: Object3D): SceneEventTarget {
+
+		if(!SceneEventTarget.sceneEventTargets.has(scene)) {
+
+			// Create a new scene event target for this scene.
+			SceneEventTarget.sceneEventTargets.set(scene, new SceneEventTarget(scene));
+
+		}
+
+		return SceneEventTarget.sceneEventTargets.get(scene)!;
 
 	}
 
