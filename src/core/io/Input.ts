@@ -1,13 +1,50 @@
-import { EventDispatcher, IUniform, Texture, UnsignedByteType } from "three";
+import { BaseEvent, EventDispatcher, IUniform, Texture, UnsignedByteType } from "three";
 import { GBuffer } from "../../enums/GBuffer.js";
-import { GBufferConfig } from "../../utils/gbuffer/GBufferConfig.js";
-import { ObservableMap } from "../../utils/ObservableMap.js";
+import { CompositeMap } from "../../utils/CompositeMap.js";
 import { ObservableSet } from "../../utils/ObservableSet.js";
-import { BaseEventMap } from "../BaseEventMap.js";
 import { SetExtensions } from "../../utils/SetExtensions.js";
+import { ShaderData } from "../../utils/ShaderData.js";
+import { BaseEventMap } from "../BaseEventMap.js";
+import { Connectable } from "../Connectable.js";
 import { Disposable } from "../Disposable.js";
-import { ShaderData } from "../ShaderData.js";
+import type { Output } from "./Output.js";
+import { RenderTargetResource } from "./RenderTargetResource.js";
+import { ShaderDataResource } from "./ShaderDataResource.js";
 import { TextureResource } from "./TextureResource.js";
+
+/**
+ * Input events.
+ *
+ * @category IO
+ */
+
+export interface InputEventMap extends BaseEventMap {
+
+	/**
+	 * Triggers when the input textures have changed.
+	 *
+	 * @event
+	 */
+
+	texturechange: BaseEvent<"texturechange">;
+
+	/**
+	 * Triggers when the input shader data has changed.
+	 *
+	 * @event
+	 */
+
+	shaderdatachange: BaseEvent<"shaderdatachange">;
+
+	/**
+	 * Triggers when the input G-Buffer components have changed.
+	 *
+	 * @event
+	 */
+
+	gbufferchange: BaseEvent<"gbufferchange">;
+
+}
 
 /**
  * Input resources.
@@ -15,16 +52,13 @@ import { TextureResource } from "./TextureResource.js";
  * @category IO
  */
 
-export class Input extends EventDispatcher<BaseEventMap> implements Disposable, ShaderData {
+export class Input extends EventDispatcher<InputEventMap> implements Connectable, Disposable, ShaderData {
 
 	/**
 	 * Identifies the default input buffer in the {@link textures} collection.
 	 */
 
 	static readonly BUFFER_DEFAULT = "BUFFER_DEFAULT";
-
-	readonly defines: Map<string, string | number | boolean>;
-	readonly uniforms: Map<string, IUniform>;
 
 	/**
 	 * Required {@link GBuffer} components.
@@ -36,23 +70,15 @@ export class Input extends EventDispatcher<BaseEventMap> implements Disposable, 
 
 	/**
 	 * Input textures.
-	 *
-	 * Entries specified in {@link gBuffer} will be added automatically.
 	 */
 
-	readonly textures: Map<GBuffer | string, TextureResource>;
+	readonly textures: Map<string, TextureResource>;
 
 	/**
-	 * @see {@link gBufferConfig}.
+	 * Input shader data.
 	 */
 
-	private _gBufferConfig: GBufferConfig | null;
-
-	/**
-	 * An event listener that triggers a `change` event.
-	 */
-
-	private readonly propagateChangeEvent: () => void;
+	readonly shaderData: ShaderDataResource;
 
 	/**
 	 * Constructs new input resources.
@@ -63,103 +89,91 @@ export class Input extends EventDispatcher<BaseEventMap> implements Disposable, 
 		super();
 
 		const gBuffer = new ObservableSet<GBuffer>([GBuffer.COLOR]);
-		const defines = new ObservableMap<string, string | number | boolean>();
-		const uniforms = new ObservableMap<string, IUniform>();
-		const textures = new ObservableMap<GBuffer | string, TextureResource>();
-		const propagateChangeEvent = () => this.setChanged();
+		gBuffer.addEventListener("change", () => {
 
-		gBuffer.addEventListener("change", propagateChangeEvent);
-		defines.addEventListener("change", propagateChangeEvent);
-		uniforms.addEventListener("change", propagateChangeEvent);
-		textures.addEventListener("change", propagateChangeEvent);
-
-		textures.addEventListener("add", (e) => e.value.addEventListener("change", propagateChangeEvent));
-		textures.addEventListener("delete", (e) => e.value.removeEventListener("change", propagateChangeEvent));
-
-		textures.addEventListener("clear", (e) => {
-
-			for(const value of e.target.values()) {
-
-				value.removeEventListener("change", propagateChangeEvent);
-
-			}
+			this.dispatchEvent({ type: "gbufferchange" });
+			this.dispatchEvent({ type: "change" });
 
 		});
 
-		this.propagateChangeEvent = propagateChangeEvent;
-		this.defines = defines;
-		this.uniforms = uniforms;
-		this.textures = textures;
+		const textures = new CompositeMap<string, TextureResource>();
+		const observedTextures = new Set<TextureResource>();
+
+		const textureListener = () => {
+
+			this.dispatchEvent({ type: "texturechange" });
+			this.dispatchEvent({ type: "change" });
+
+		};
+
+		const syncTextureListeners = () => {
+
+			const currentTextures = new Set(textures.values());
+
+			for(const texture of observedTextures) {
+
+				if(!currentTextures.has(texture)) {
+
+					texture.removeEventListener("change", textureListener);
+					observedTextures.delete(texture);
+
+				}
+
+			}
+
+			for(const texture of currentTextures) {
+
+				if(!observedTextures.has(texture)) {
+
+					texture.addEventListener("change", textureListener);
+					observedTextures.add(texture);
+
+				}
+
+			}
+
+		};
+
+		textures.addEventListener("change", () => {
+
+			syncTextureListeners();
+			textureListener();
+
+		});
+
+		const shaderData = new ShaderDataResource();
+		shaderData.addEventListener("change", () => {
+
+			this.dispatchEvent({ type: "shaderdatachange" });
+			this.dispatchEvent({ type: "change" });
+
+		});
+
 		this.gBuffer = gBuffer;
+		this.textures = textures;
+		this.shaderData = shaderData;
 
-		this._gBufferConfig = null;
+	}
+
+	get defines(): Map<string, string | number | boolean> {
+
+		return this.shaderData.defines;
+
+	}
+
+	get uniforms(): Map<string, IUniform> {
+
+		return this.shaderData.uniforms;
 
 	}
 
 	/**
-	 * The current G-Buffer configuration.
-	 *
-	 * @internal
+	 * An alias for {@link textures}.
 	 */
 
-	get gBufferConfig(): GBufferConfig | null {
-
-		return this._gBufferConfig;
-
-	}
-
-	set gBufferConfig(value: GBufferConfig | null) {
-
-		if(this._gBufferConfig !== null) {
-
-			this._gBufferConfig.removeEventListener("change", this.propagateChangeEvent);
-
-		}
-
-		if(value !== null) {
-
-			value.addEventListener("change", this.propagateChangeEvent);
-
-		}
-
-		this._gBufferConfig = value;
-		this.setChanged();
-
-	}
-
-	/**
-	 * Alias for {@link textures}.
-	 */
-
-	get buffers(): Map<GBuffer | string, TextureResource> {
+	get buffers(): Map<string, TextureResource> {
 
 		return this.textures;
-
-	}
-
-	/**
-	 * Indicates whether a default input buffer has been set.
-	 */
-
-	get hasDefaultBuffer(): boolean {
-
-		return this.textures.has(Input.BUFFER_DEFAULT);
-
-	}
-
-	/**
-	 * The default input buffer, or `null` if there is none.
-	 */
-
-	get defaultBuffer(): TextureResource | null {
-
-		return this.textures.get(Input.BUFFER_DEFAULT) ?? null;
-
-	}
-
-	set defaultBuffer(value: TextureResource | Texture | null) {
-
-		this.setBuffer(Input.BUFFER_DEFAULT, value);
 
 	}
 
@@ -174,67 +188,26 @@ export class Input extends EventDispatcher<BaseEventMap> implements Disposable, 
 	}
 
 	/**
-	 * Dispatches a `change` event.
-	 *
-	 * @internal
+	 * The default input buffer, or `null` if there is none.
 	 */
 
-	setChanged(): void {
+	get defaultBuffer(): TextureResource | null {
 
-		this.dispatchEvent({ type: "change" });
+		return this.textures.get(Input.BUFFER_DEFAULT) ?? null;
 
 	}
 
-	/**
-	 * Sets a buffer.
-	 *
-	 * A new resource will be created if the buffer doesn't already exist.
-	 *
-	 * @param key - A buffer key.
-	 * @param value - The buffer.
-	 */
+	set defaultBuffer(value: RenderTargetResource | TextureResource | Texture | null) {
 
-	setBuffer(key: string, value: TextureResource | Texture | null): void {
-
-		if(value instanceof TextureResource) {
-
-			this.textures.set(key, value);
-
-		} else {
-
-			const resource = this.textures.get(key);
-
-			if(resource !== undefined && resource !== null) {
-
-				resource.value = value;
-
-			} else {
-
-				this.textures.set(key, new TextureResource(value));
-
-			}
-
-		}
-
-	}
-
-	/**
-	 * Retrieves a buffer.
-	 *
-	 * @param key - A buffer key.
-	 * @return The buffer, or `null` if it doesn't exist.
-	 */
-
-	getBuffer(key: string): Texture | null {
-
-		return this.textures.get(key)?.value ?? null;
+		const texture = (value instanceof RenderTargetResource) ? value.texture : value;
+		this.setBuffer(Input.BUFFER_DEFAULT, texture);
 
 	}
 
 	/**
 	 * Removes the default buffer.
 	 *
-	 * @return True if the buffer existed and has been removed, or false if it doesn't exist.
+	 * @return True if the buffer existed and has been removed, or false if there is none.
 	 */
 
 	removeDefaultBuffer(): boolean {
@@ -243,11 +216,71 @@ export class Input extends EventDispatcher<BaseEventMap> implements Disposable, 
 
 	}
 
+	/**
+	 * Retrieves a buffer.
+	 *
+	 * @param key - A buffer key.
+	 * @return The buffer, or `undefined` if it doesn't exist.
+	 */
+
+	getBuffer(key: string): TextureResource | undefined {
+
+		return this.textures.get(key);
+
+	}
+
+	/**
+	 * Sets a buffer.
+	 *
+	 * Raw textures will automatically be wrapped in a new resource.
+	 *
+	 * @param key - A buffer key.
+	 * @param value - The buffer.
+	 * @return The texture resource.
+	 */
+
+	setBuffer(key: string, value: TextureResource | Texture | null): TextureResource {
+
+		const resource = value instanceof TextureResource ? value : new TextureResource(value);
+		this.textures.set(key, resource);
+		return resource;
+
+	}
+
+	/**
+	 * Connects an output as an inherited input source.
+	 *
+	 * Textures, defines and uniforms from the given output become available through this input.
+	 * Local input resources override connected resources with the same key.
+	 *
+	 * @param other - The output to inherit resources from.
+	 */
+
+	connect(other: Output): void {
+
+		const textures = this.textures as CompositeMap<string, TextureResource>;
+
+		textures.connect(other.textures);
+		this.shaderData.connect(other.shaderData);
+
+	}
+
+	disconnect(other: Output): void {
+
+		const textures = this.textures as CompositeMap<string, TextureResource>;
+
+		textures.disconnect(other.textures);
+		this.shaderData.disconnect(other.shaderData);
+
+	}
+
 	dispose(): void {
 
-		for(const disposable of this.textures.values()) {
+		const textures = this.textures as CompositeMap<string, TextureResource>;
 
-			disposable.value?.dispose();
+		for(const disposable of textures.localValues()) {
+
+			disposable.dispose();
 
 		}
 
