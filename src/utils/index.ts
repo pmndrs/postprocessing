@@ -1,5 +1,6 @@
 export * from "./functions/index.js";
 export * from "./gbuffer/index.js";
+export * from "./objects/index.js";
 
 export * from "./Background.js";
 export * from "./ClearFlags.js";
@@ -10,9 +11,14 @@ export * from "./EffectMaterialManager.js";
 export * from "./EffectShaderData.js";
 export * from "./GaussKernel.js";
 export * from "./IdManager.js";
+export * from "./MapExtensions.js";
 export * from "./ObservableMap.js";
+export * from "./ObservableReadonlyMap.js";
 export * from "./ObservableSet.js";
+export * from "./ReadonlyShaderData.js";
 export * from "./ReadonlyTimer.js";
+export * from "./ReadonlyWeakSet.js";
+export * from "./RenderTargetDescriptor.js";
 export * from "./Resolution.js";
 export * from "./Scissor.js";
 export * from "./Selection.js";
