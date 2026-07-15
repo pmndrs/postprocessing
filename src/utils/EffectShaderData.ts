@@ -1,5 +1,5 @@
 import { ColorSpace, IUniform, LinearSRGBColorSpace, NoColorSpace, SRGBColorSpace } from "three";
-import { ShaderData } from "../core/ShaderData.js";
+import { ShaderData } from "../utils/ShaderData.js";
 import { Effect } from "../effects/Effect.js";
 import { BlendMode } from "../effects/blending/BlendMode.js";
 import { EffectShaderSection, EffectShaderSection as Section } from "../enums/EffectShaderSection.js";

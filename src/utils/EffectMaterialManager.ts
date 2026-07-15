@@ -1,6 +1,6 @@
 import { SRGBColorSpace } from "three";
 import { Disposable } from "../core/Disposable.js";
-import { ShaderData } from "../core/ShaderData.js";
+import { ShaderData } from "../utils/ShaderData.js";
 import { Effect } from "../effects/Effect.js";
 import { EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
 import { GBuffer } from "../enums/GBuffer.js";
