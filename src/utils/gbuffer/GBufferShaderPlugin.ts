@@ -7,6 +7,7 @@ import {
 } from "three";
 
 import { addGBufferDefaultOutput, extractOutputDefinitions } from "./GBufferUtils.js";
+import { ReadonlyWeakSet } from "../ReadonlyWeakSet.js";
 
 /**
  * A shader plugin that enables rendering to G-Buffer render targets.
@@ -18,10 +19,10 @@ import { addGBufferDefaultOutput, extractOutputDefinitions } from "./GBufferUtil
 export class GBufferShaderPlugin {
 
 	/**
-	 * A collection of materials that have been modified with `onBeforeCompile`.
+	 * @see {@link registeredMaterials}
 	 */
 
-	private readonly registeredMaterials = new WeakSet<Material>();
+	private readonly _registeredMaterials = new WeakSet<Material>();
 
 	/**
 	 * @see {@link enabled}
@@ -43,6 +44,16 @@ export class GBufferShaderPlugin {
 
 		this._enabled = true;
 		this._gBuffer = null;
+
+	}
+
+	/**
+	 * A collection of materials that have been modified by this plugin.
+	 */
+
+	get registeredMaterials(): ReadonlyWeakSet<Material> {
+
+		return this._registeredMaterials;
 
 	}
 
@@ -86,13 +97,13 @@ export class GBufferShaderPlugin {
 
 	applyTo(material: Material) {
 
-		if(this.registeredMaterials.has(material)) {
+		if(this._registeredMaterials.has(material)) {
 
 			return;
 
 		}
 
-		this.registeredMaterials.add(material);
+		this._registeredMaterials.add(material);
 
 		/* eslint-disable @typescript-eslint/unbound-method */
 		const onBeforeCompile = material.onBeforeCompile;
