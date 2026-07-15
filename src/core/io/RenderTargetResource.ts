@@ -1,62 +1,83 @@
-import { WebGLRenderTarget } from "three";
-import { DisposableResource } from "./DisposableResource.js";
+import { RenderTargetOptions, WebGLRenderTarget } from "three";
+import { RenderTargetDescriptor } from "../../utils/RenderTargetDescriptor.js";
 import { TextureResource } from "./TextureResource.js";
+import { DisposableResource } from "./DisposableResource.js";
+import { Resolution } from "../../utils/Resolution.js";
 
 /**
- * A render target resource wrapper.
+ * A managed offscreen render target resource.
  *
  * @category IO
  */
 
-export class RenderTargetResource extends DisposableResource<WebGLRenderTarget | null> {
+export class RenderTargetResource extends DisposableResource<Readonly<WebGLRenderTarget> | null> {
 
 	/**
-	 * A live resource that wraps the texture of the current render target.
+	 * A live resource that references the texture of the current render target.
 	 */
 
 	readonly texture: TextureResource;
 
 	/**
-	 * Constructs a new render target resource.
+	 * The resolution of this render target.
 	 *
-	 * @param value - A render target.
+	 * Defaults to the resolution of the associated pass.
 	 */
 
-	constructor(value: WebGLRenderTarget | null = null) {
+	readonly resolution: Resolution;
 
-		super(value);
+	/**
+	 * The current render target descriptor.
+	 *
+	 * The actual render target is made available through the resource {@link value}.
+	 */
 
-		this.texture = new TextureResource(this.value?.texture);
+	readonly descriptor: RenderTargetDescriptor;
+
+	/**
+	 * Constructs a new render target resource.
+	 *
+	 * @param options - Render target options.
+	 */
+
+	constructor(options: RenderTargetOptions = {}) {
+
+		super(null);
+
+		this.texture = new TextureResource();
+		this.resolution = new Resolution();
+
+		this.descriptor = new RenderTargetDescriptor(options);
+		this.descriptor.addEventListener("change", () => this.setChanged());
 
 	}
 
-	override get value(): WebGLRenderTarget | null {
+	override get value(): Readonly<WebGLRenderTarget> | null {
 
 		return super.value;
 
 	}
 
-	override set value(value: WebGLRenderTarget | null) {
+	/**
+	 * An alias for {@link value}.
+	 */
 
-		// Note: Three automatically deletes textures and depth textures of a render target on dispose.
+	get renderTarget(): Readonly<WebGLRenderTarget> | null {
+
+		return super.value;
+
+	}
+
+	/**
+	 * Sets the render target.
+	 *
+	 * @internal
+	 */
+
+	setRenderTarget(value: WebGLRenderTarget | null): void {
+
 		super.value = value;
-		this.texture.value = value !== null ? value.texture : null;
-
-	}
-
-	override mute() {
-
-		super.mute();
-
-		this.texture.mute();
-
-	}
-
-	override unmute() {
-
-		super.unmute();
-
-		this.texture.unmute();
+		this.texture.value = value?.texture ?? null;
 
 	}
 
