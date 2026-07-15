@@ -9,7 +9,7 @@ import { SetExtensions } from "./SetExtensions.js";
  * @category Utils
  */
 
-export interface SetEvent<T> extends BaseEvent {
+export interface SetEvent<T> extends BaseEvent<keyof ObservableSetEventMap<T>> {
 
 	value: T;
 

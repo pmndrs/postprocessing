@@ -9,7 +9,7 @@ import { BaseEventMap } from "../core/BaseEventMap.js";
  * @category Utils
  */
 
-export interface MapEvent<K, V> extends BaseEvent {
+export interface MapEvent<K, V> extends BaseEvent<keyof ObservableMapEventMap<K, V>> {
 
 	key: K;
 	value: V;
