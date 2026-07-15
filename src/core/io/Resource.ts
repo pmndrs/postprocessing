@@ -1,10 +1,10 @@
 import { EventDispatcher } from "three";
 import { IdManager } from "../../utils/IdManager.js";
-import { BaseEventMap } from "../BaseEventMap.js";
 import { Identifiable } from "../Identifiable.js";
+import { BaseEventMap } from "../BaseEventMap.js";
 
 /**
- * A resource wrapper base class.
+ * A resource.
  *
  * @param T - The type of the internal value.
  * @category IO
@@ -16,7 +16,7 @@ export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap
 	 * An ID manager.
 	 */
 
-	private static idManager = new IdManager();
+	private static readonly idManager = /* @__PURE__ */ new IdManager();
 
 	readonly id: number;
 
@@ -24,29 +24,7 @@ export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap
 	 * @see {@link value}
 	 */
 
-	private _value: T | null;
-
-	/**
-	 * @see {@link overrideValue}
-	 */
-
-	private _overrideValue: T | null;
-
-	/**
-	 * Indicates whether this resource is currently muted.
-	 *
-	 * Muted resources don't dispatch `change` events.
-	 */
-
-	private muted: boolean;
-
-	/**
-	 * Indicates whether this resource is currently locked.
-	 *
-	 * A resource will be locked for the duration of a `change` event dispatch.
-	 */
-
-	private locked: boolean;
+	private _value: T;
 
 	/**
 	 * Constructs a new resource wrapper.
@@ -60,9 +38,6 @@ export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap
 
 		this.id = Resource.idManager.getNextId();
 		this._value = value;
-		this._overrideValue = null;
-		this.locked = false;
-		this.muted = false;
 
 	}
 
@@ -70,13 +45,19 @@ export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap
 	 * The value of this resource.
 	 */
 
-	get value(): T | null {
+	get value(): T {
 
-		return this._overrideValue ?? this._value;
+		return this._value;
 
 	}
 
-	set value(value: T | null) {
+	set value(value: T) {
+
+		if(this._value === value) {
+
+			return;
+
+		}
 
 		this._value = value;
 		this.setChanged();
@@ -84,72 +65,12 @@ export abstract class Resource<T = unknown> extends EventDispatcher<BaseEventMap
 	}
 
 	/**
-	 * An additional value that overrides the main {@link value}.
-	 *
-	 * @internal
-	 */
-
-	get overrideValue(): T | null {
-
-		return this._overrideValue;
-
-	}
-
-	set overrideValue(value: T | null) {
-
-		this._overrideValue = value;
-		this.setChanged();
-
-	}
-
-	/**
-	 * Mutes all events dispatched by this resource.
-	 *
-	 * @internal
-	 */
-
-	mute() {
-
-		this.muted = true;
-
-	}
-
-	/**
-	 * Unmutes this resource and resumes dispatching events.
-	 *
-	 * @internal
-	 */
-
-	unmute() {
-
-		this.muted = false;
-
-	}
-
-	/**
 	 * Dispatches a `change` event.
-	 *
-	 * @throws If the resource is currently locked.
-	 * @internal
 	 */
 
 	setChanged(): void {
 
-		if(this.muted) {
-
-			return;
-
-		}
-
-		if(this.locked) {
-
-			throw new Error("Unable to change resource value inside change event handler");
-
-		}
-
-		this.locked = true;
 		this.dispatchEvent({ type: "change" });
-		this.locked = false;
 
 	}
 
