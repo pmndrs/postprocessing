@@ -4,7 +4,7 @@
  * @category Utils
  */
 
-export interface ImmutableTimer {
+export interface ReadonlyTimer {
 
 	/**
 	 * Returns the current delta time in seconds.
