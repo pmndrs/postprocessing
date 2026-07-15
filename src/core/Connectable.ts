@@ -12,7 +12,7 @@ export interface Connectable {
 	 * @param other - The object to connect.
 	 */
 
-	connect(other: unknown): this;
+	connect(other: unknown): void;
 
 	/**
 	 * Disconnects the given object from this one.
@@ -20,6 +20,6 @@ export interface Connectable {
 	 * @param other - The object to disconnect.
 	 */
 
-	disconnect(other: unknown): this;
+	disconnect(other: unknown): void;
 
 }
