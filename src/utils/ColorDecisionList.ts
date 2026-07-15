@@ -9,7 +9,7 @@ import { CDLPreset } from "../enums/CDLPreset.js";
 
 export interface CDLEventMap {
 
-	toggle: BaseEvent;
+	toggle: BaseEvent<"toggle">;
 
 }
 
@@ -99,7 +99,6 @@ export class ColorDecisionList extends EventDispatcher<CDLEventMap> {
 		return this.uniform.value.offset;
 
 	}
-
 
 	/**
 	 * The power. Valid values: (0 < Power < +Infinity)
