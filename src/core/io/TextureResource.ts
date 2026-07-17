@@ -7,7 +7,7 @@ import { DisposableResource } from "./DisposableResource.js";
  * @category IO
  */
 
-export class TextureResource extends DisposableResource<Texture | null> {
+export class TextureResource extends DisposableResource<Readonly<Texture> | null> {
 
 	/**
 	 * A collection of `change` listeners for bound uniforms.
@@ -26,6 +26,16 @@ export class TextureResource extends DisposableResource<Texture | null> {
 		super(value);
 
 		this.uniformListeners = new WeakMap();
+
+	}
+
+	/**
+	 * An alias for {@link value}.
+	 */
+
+	get texture(): Readonly<Texture> | null {
+
+		return super.value;
 
 	}
 
