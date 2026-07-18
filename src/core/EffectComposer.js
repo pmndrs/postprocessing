@@ -87,15 +87,6 @@ export class EffectComposer {
 		this.copyPass = new CopyPass();
 
 		/**
-		 * A depth texture.
-		 *
-		 * @type {DepthTexture}
-		 * @private
-		 */
-
-		this.depthTexture = null;
-
-		/**
 		 * A render target that holds a stable copy of the scene depth.
 		 *
 		 * The scene depth needs to be copied to avoid feedback loops and undefined behavior that can happen when the same
@@ -138,6 +129,19 @@ export class EffectComposer {
 	}
 
 	/**
+	 * A stable depth texture to be used by depth-aware passes.
+	 *
+	 * @type {DepthTexture}
+	 * @private
+	 */
+
+	get stableDepthTexture() {
+
+		return this.depthRenderTarget?.depthTexture ?? null;
+
+	}
+
+	/**
 	 * The current amount of samples used for multisample anti-aliasing.
 	 *
 	 * @type {Number}
@@ -159,32 +163,16 @@ export class EffectComposer {
 
 	set multisampling(value) {
 
-		const buffer = this.inputBuffer;
-		const multisampling = this.multisampling;
+		if(this.multisampling === value) {
 
-		if(multisampling > 0 && value > 0) {
-
-			this.inputBuffer.samples = value;
-			this.outputBuffer.samples = value;
-			this.inputBuffer.dispose();
-			this.outputBuffer.dispose();
-
-		} else if(multisampling !== value) {
-
-			this.inputBuffer.dispose();
-			this.outputBuffer.dispose();
-
-			// Enable or disable MSAA.
-			this.inputBuffer = this.createBuffer(
-				buffer.depthBuffer,
-				buffer.stencilBuffer,
-				buffer.texture.type,
-				value
-			);
-
-			this.outputBuffer = this.inputBuffer.clone();
+			return;
 
 		}
+
+		this.inputBuffer.samples = value;
+		this.outputBuffer.samples = value;
+		this.inputBuffer.dispose();
+		this.outputBuffer.dispose();
 
 	}
 
@@ -288,41 +276,49 @@ export class EffectComposer {
 	 * Creates a depth texture attachment that will be provided to all passes.
 	 *
 	 * To prevent errors or incorrect behavior when the same depth buffer is attached to the input and output buffers,
-	 * a separate stable depth target is created alongside the ping-pong buffers.  All passes receive the stable target's
+	 * a separate stable depth target is created alongside the ping-pong buffers. All passes receive the stable target's
 	 * depth texture, which is never used as a render output and therefore cannot create a feedback loop.  The stable
 	 * texture is populated each frame via blitFramebuffer immediately before the first buffer swap.
 	 *
 	 * @private
-	 * @return {DepthTexture} The stable depth texture distributed to passes.
 	 */
 
 	createDepthTexture() {
 
-		const inputBuffer = this.inputBuffer;
-		const depthTexture = new DepthTexture();
-		this.depthTexture = depthTexture;
+		const inputDepthTexture = new DepthTexture();
+		inputDepthTexture.name = "EffectComposer.InputDepth";
 
-		if(inputBuffer.stencilBuffer) {
+		if(this.inputBuffer.stencilBuffer) {
 
-			depthTexture.format = DepthStencilFormat;
-			depthTexture.type = UnsignedInt248Type;
+			inputDepthTexture.format = DepthStencilFormat;
+			inputDepthTexture.type = UnsignedInt248Type;
 
 		} else {
 
-			depthTexture.type = FloatType;
+			inputDepthTexture.type = FloatType;
 
 		}
 
-		const stableDepthTexture = depthTexture.clone();
+		const outputDepthTexture = inputDepthTexture.clone();
+		outputDepthTexture.name = "EffectComposer.OutputDepth";
+
+		const stableDepthTexture = inputDepthTexture.clone();
 		stableDepthTexture.name = "EffectComposer.StableDepth";
 
-		this.depthRenderTarget = new WebGLRenderTarget(inputBuffer.width, inputBuffer.height, {
+		this.inputBuffer.depthTexture = inputDepthTexture;
+		this.outputBuffer.depthTexture = outputDepthTexture;
+
+		// Force rebuild renderbuffers.
+		this.inputBuffer.dispose();
+		this.outputBuffer.dispose();
+
+		const { width, height } = this.inputBuffer;
+
+		this.depthRenderTarget = new WebGLRenderTarget(width, height, {
 			depthBuffer: true,
-			stencilBuffer: inputBuffer.stencilBuffer,
+			stencilBuffer: this.inputBuffer.stencilBuffer,
 			depthTexture: stableDepthTexture
 		});
-
-		return stableDepthTexture;
 
 	}
 
@@ -375,23 +371,27 @@ export class EffectComposer {
 
 	deleteDepthTexture() {
 
-		if(this.depthTexture !== null) {
+		const stableDepthTexture = this.stableDepthTexture;
 
-			this.depthTexture.dispose();
-			this.depthTexture = null;
-			this.depthRenderTarget.dispose();
-			this.depthRenderTarget = null;
+		for(const pass of this.passes) {
 
-			this.inputBuffer.depthTexture = null;
-			this.outputBuffer.depthTexture = null;
-
-			for(const pass of this.passes) {
+			// Don't remove foreign depth textures.
+			if(pass.getDepthTexture() === stableDepthTexture) {
 
 				pass.setDepthTexture(null);
 
 			}
 
 		}
+
+		this.depthRenderTarget?.dispose();
+		this.depthRenderTarget = null;
+
+		this.inputBuffer.depthTexture?.dispose();
+		this.inputBuffer.depthTexture = null;
+
+		this.outputBuffer.depthTexture?.dispose();
+		this.outputBuffer.depthTexture = null;
 
 	}
 
@@ -411,21 +411,14 @@ export class EffectComposer {
 		const renderer = this.renderer;
 		const size = (renderer === null) ? new Vector2() : renderer.getDrawingBufferSize(new Vector2());
 
-		const options = {
+		const renderTarget = new WebGLRenderTarget(size.width, size.height, {
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
+			samples: multisampling,
 			stencilBuffer,
 			depthBuffer,
 			type
-		};
-
-		const renderTarget = new WebGLRenderTarget(size.width, size.height, options);
-
-		if(multisampling > 0) {
-
-			renderTarget.samples = multisampling;
-
-		}
+		});
 
 		if(type === UnsignedByteType && renderer !== null && renderer.outputColorSpace === SRGBColorSpace) {
 
@@ -524,22 +517,21 @@ export class EffectComposer {
 
 		}
 
-		if(pass.needsDepthTexture || this.depthTexture !== null) {
+		if(pass.needsDepthTexture || this.depthRenderTarget !== null) {
 
-			if(this.depthTexture === null) {
+			if(this.depthRenderTarget === null) {
 
-				const stableDepthTexture = this.createDepthTexture();
+				this.createDepthTexture();
 
-				for(pass of passes) {
+				for(const existingPass of passes) {
 
-					pass.setDepthTexture(stableDepthTexture);
+					existingPass.setDepthTexture(this.stableDepthTexture);
 
 				}
 
 			} else {
 
-				const stableDepthTexture = this.depthRenderTarget.depthTexture;
-				pass.setDepthTexture(stableDepthTexture);
+				pass.setDepthTexture(this.stableDepthTexture);
 
 			}
 
@@ -562,15 +554,15 @@ export class EffectComposer {
 
 		if(removed) {
 
-			if(this.depthTexture !== null) {
+			const stableDepthTexture = this.stableDepthTexture;
+
+			if(stableDepthTexture !== null) {
 
 				// Check if the depth texture is still required.
 				const reducer = (a, b) => (a || b.needsDepthTexture);
 				const depthTextureRequired = passes.reduce(reducer, false);
 
 				if(!depthTextureRequired) {
-
-					const stableDepthTexture = this.depthRenderTarget.depthTexture;
 
 					// Don't remove foreign depth textures.
 					if(pass.getDepthTexture() === stableDepthTexture) {
@@ -661,10 +653,6 @@ export class EffectComposer {
 				continue;
 
 			}
-
-			// Setup the depth texture (RenderPass renders into the inputBuffer).
-			inputBuffer.depthTexture = this.depthTexture;
-			outputBuffer.depthTexture = null;
 
 			pass.render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest);
 
@@ -783,23 +771,12 @@ export class EffectComposer {
 
 		}
 
-		this.passes = [];
-
-		if(this.inputBuffer !== null) {
-
-			this.inputBuffer.dispose();
-
-		}
-
-		if(this.outputBuffer !== null) {
-
-			this.outputBuffer.dispose();
-
-		}
-
 		this.deleteDepthTexture();
+		this.inputBuffer.dispose();
+		this.outputBuffer.dispose();
 		this.copyPass.dispose();
 		this.timer.dispose();
+		this.passes = [];
 
 		Pass.fullscreenGeometry.dispose();
 
