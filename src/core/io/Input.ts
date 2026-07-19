@@ -11,6 +11,7 @@ import type { Output } from "./Output.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
 import { ShaderDataResource } from "./ShaderDataResource.js";
 import { TextureResource } from "./TextureResource.js";
+import { MapExtensions } from "../../utils/MapExtensions.js";
 
 /**
  * Input events.
@@ -155,13 +156,13 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 
 	}
 
-	get defines(): Map<string, string | number | boolean> {
+	get defines(): Map<string, string | number | boolean> & MapExtensions<string, string | number | boolean> {
 
 		return this.shaderData.defines;
 
 	}
 
-	get uniforms(): Map<string, IUniform> {
+	get uniforms(): Map<string, IUniform> & MapExtensions<string, IUniform> {
 
 		return this.shaderData.uniforms;
 
