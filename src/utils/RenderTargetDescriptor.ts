@@ -2,6 +2,7 @@ import { EventDispatcher, type RenderTargetOptions, type TextureParameters } fro
 import { BaseEventMap } from "../core/BaseEventMap.js";
 import { MapExtensions } from "./MapExtensions.js";
 import { ObservableMap } from "./ObservableMap.js";
+import { defaultRenderTargetOptions } from "./objects/defaultRenderTargetOptions.js";
 
 /**
  * A render target descriptor.
@@ -61,7 +62,7 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> implem
 	 * @param options - The options.
 	 */
 
-	constructor(options: RenderTargetOptions = {}) {
+	constructor(options?: RenderTargetOptions) {
 
 		super();
 
@@ -71,7 +72,7 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> implem
 		textures.addEventListener("change", () => this.setChanged());
 		this.textures = textures;
 
-		Object.assign(this, options);
+		Object.assign(this, defaultRenderTargetOptions, options);
 
 		return new Proxy(this, {
 			set(target, property, value, receiver) {
@@ -122,7 +123,7 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> implem
 	setValues(values: RenderTargetOptions): void {
 
 		this.muted = true;
-		Object.assign(this, values);
+		Object.assign(this, defaultRenderTargetOptions, values);
 		this.muted = false;
 		this.setChanged();
 
