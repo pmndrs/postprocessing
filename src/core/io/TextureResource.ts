@@ -30,7 +30,7 @@ export class TextureResource extends DisposableResource<Readonly<Texture> | null
 	}
 
 	/**
-	 * An alias for {@link value}.
+	 * Alias for {@link value}.
 	 */
 
 	get texture(): Readonly<Texture> | null {

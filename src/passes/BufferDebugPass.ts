@@ -17,7 +17,7 @@ import { GBufferDebug } from "../enums/GBufferDebug.js";
 /**
  * A debug pass that visualizes all input buffers.
  *
- * @remarks This pass should always be added last.
+ * @remarks This pass should be added last since it adds an overlay.
  * @category Passes
  */
 

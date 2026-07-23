@@ -157,7 +157,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 	 *
 	 * The required material will be swapped in if it exists. Otherwise, a new material will be created.
 	 *
-	 * @param invalidateCache - Controls whether the material cache should be rebuild.
+	 * @param invalidateCache - Controls whether the material cache should be rebuilt.
 	 * @throws If the current effects cannot be merged.
 	 */
 

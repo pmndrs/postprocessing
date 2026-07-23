@@ -22,6 +22,8 @@ export interface GaussianBlurPassOptions {
 	/**
 	 * The amount of times the blur should be applied.
 	 *
+	 * Must be greater than 0.
+	 *
 	 * @defaultValue 1
 	 */
 
@@ -112,7 +114,7 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> implements Gaus
 	}
 
 	/**
-	 * A texture that contains the blurred result.
+	 * The output texture.
 	 */
 
 	get texture(): TextureResource {

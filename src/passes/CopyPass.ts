@@ -21,7 +21,7 @@ export class CopyPass extends Pass<CopyMaterial> {
 	/**
 	 * Constructs a new copy pass.
 	 *
-	 * @param outputBuffer - An output buffer. If not provided, a new framebuffer will be created.
+	 * @param outputBuffer - An output buffer. If not provided, a new buffer will be created.
 	 */
 
 	constructor(outputBuffer?: WebGLRenderTarget) {

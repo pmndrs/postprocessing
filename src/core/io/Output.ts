@@ -235,7 +235,7 @@ export class Output extends EventDispatcher<OutputEventMap> implements Disposabl
 	 * Retrieves a buffer.
 	 *
 	 * @param key - The key of the buffer.
-	 * @return The render target resource, or `undefined` if it doesn't exist.
+	 * @return The render target resource, or `undefined` if no buffer is set.
 	 */
 
 	getBuffer(key: string): RenderTargetResource | null | undefined {
@@ -247,11 +247,10 @@ export class Output extends EventDispatcher<OutputEventMap> implements Disposabl
 	/**
 	 * Sets a buffer.
 	 *
-	 * If no value is provided, a default render target descriptor will be used.
 	 * Render target descriptors will automatically be wrapped in a new resource.
 	 *
 	 * @param key - The key of the buffer.
-	 * @param value - A render target resource or descriptor.
+	 * @param value - A resource or render target options. Falls back to a default configuration if omitted.
 	 * @return The render target resource.
 	 */
 

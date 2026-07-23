@@ -220,7 +220,7 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 	/**
 	 * Retrieves a buffer.
 	 *
-	 * @param key - A buffer key.
+	 * @param key - The key of the buffer.
 	 * @return The buffer, or `undefined` if it doesn't exist.
 	 */
 
@@ -235,7 +235,7 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 	 *
 	 * Raw textures will automatically be wrapped in a new resource.
 	 *
-	 * @param key - A buffer key.
+	 * @param key - The key of the buffer.
 	 * @param value - The buffer.
 	 * @return The texture resource.
 	 */
