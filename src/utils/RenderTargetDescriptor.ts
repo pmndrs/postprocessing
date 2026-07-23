@@ -38,6 +38,12 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> implem
 	useArrayDepthTexture?: RenderTargetOptions["useArrayDepthTexture"];
 
 	/**
+	 * The name of the primary texture attachment.
+	 */
+
+	name?: string;
+
+	/**
 	 * A collection of texture configurations organized by name.
 	 */
 
