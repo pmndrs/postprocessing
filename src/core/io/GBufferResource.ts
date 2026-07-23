@@ -137,12 +137,7 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 		samples = 0
 	}: GBufferResourceOptions = {}) {
 
-		super();
-
-		this.gBufferConfig = gBufferConfig;
-		this.alpha = alpha;
-
-		this.descriptor.setValues({
+		super({
 			type: frameBufferType,
 			stencilBuffer,
 			depthBuffer,
@@ -150,6 +145,9 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 			depthTexture: null,
 			count: 1
 		});
+
+		this.gBufferConfig = gBufferConfig;
+		this.alpha = alpha;
 
 		this._textures = new Map();
 		this._textureIndices = new Map();
