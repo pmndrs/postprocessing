@@ -220,6 +220,20 @@ export class Output extends EventDispatcher<OutputEventMap> implements Disposabl
 	}
 
 	/**
+	 * Creates a new default buffer.
+	 *
+	 *
+	 * @param value - Render target options. Defaults to a configuration without a `depthBuffer`.
+	 * @return The render target resource.
+	 */
+
+	createDefaultBuffer(options?: RenderTargetOptions): RenderTargetResource {
+
+		return this.setBuffer(Output.BUFFER_DEFAULT, options);
+
+	}
+
+	/**
 	 * Removes the default buffer.
 	 *
 	 * @return True if the buffer existed and has been removed, or false if there is none.
