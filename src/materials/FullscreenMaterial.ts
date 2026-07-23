@@ -1,4 +1,5 @@
 import {
+	Camera,
 	GLSL3,
 	NoBlending,
 	OrthographicCamera,
@@ -187,7 +188,16 @@ export abstract class FullscreenMaterial extends ShaderMaterial implements Resiz
 	 * @param camera - A camera.
 	 */
 
-	copyCameraSettings(camera: OrthographicCamera | PerspectiveCamera): void {
+	copyCameraSettings(camera: Camera | null): void {
+
+		const isOrthographic = camera instanceof OrthographicCamera;
+		const isPerspective = camera instanceof PerspectiveCamera;
+
+		if(!(isOrthographic || isPerspective)) {
+
+			return;
+
+		}
 
 		this.uniforms.projectionMatrix.value = camera.projectionMatrix;
 		this.uniforms.projectionMatrixInverse.value = camera.projectionMatrixInverse;
@@ -199,7 +209,7 @@ export abstract class FullscreenMaterial extends ShaderMaterial implements Resiz
 
 		const perspectiveCameraDefined = (this.defines.PERSPECTIVE_CAMERA !== undefined);
 
-		if(camera instanceof PerspectiveCamera) {
+		if(isPerspective) {
 
 			if(!perspectiveCameraDefined) {
 

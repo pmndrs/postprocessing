@@ -40,7 +40,7 @@ export class RenderTargetResource extends DisposableResource<Readonly<WebGLRende
 	 * @param options - Render target options.
 	 */
 
-	constructor(options: RenderTargetOptions = {}) {
+	constructor(options?: RenderTargetOptions) {
 
 		super(null);
 
