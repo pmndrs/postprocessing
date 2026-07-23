@@ -276,6 +276,19 @@ export class Output extends EventDispatcher<OutputEventMap> implements Disposabl
 
 	}
 
+	/**
+	 * Removes a buffer.
+	 *
+	 * @param key - The key of the buffer.
+	 * @return True if the buffer existed and has been removed, or false if not.
+	 */
+
+	removeBuffer(key: string): boolean {
+
+		return this.renderTargets.delete(key);
+
+	}
+
 	dispose(): void {
 
 		for(const disposable of this.renderTargets.values()) {
