@@ -32,7 +32,7 @@ export class ShaderPass<TMaterial extends ShaderMaterial = ShaderMaterial> exten
 
 		super("ShaderPass");
 
-		this.output.defaultBuffer = this.createFramebuffer();
+		this.output.createDefaultBuffer();
 		this.fullscreenMaterial = material;
 		this.uniformName = uniformName;
 
@@ -42,9 +42,9 @@ export class ShaderPass<TMaterial extends ShaderMaterial = ShaderMaterial> exten
 
 		const uniforms = this.fullscreenMaterial.uniforms;
 
-		if(this.input.hasDefaultBuffer && uniforms[this.uniformName] !== undefined) {
+		if(this.input.defaultBuffer !== undefined && uniforms[this.uniformName] !== undefined) {
 
-			uniforms[this.uniformName].value = this.input.defaultBuffer!.value;
+			uniforms[this.uniformName].value = this.input.defaultBuffer.value;
 
 		}
 
