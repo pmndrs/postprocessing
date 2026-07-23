@@ -189,12 +189,12 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 	}
 
 	/**
-	 * The default input buffer, or `null` if there is none.
+	 * The default input buffer, or `undefined` if there is none.
 	 */
 
-	get defaultBuffer(): TextureResource | null {
+	get defaultBuffer(): TextureResource | undefined {
 
-		return this.textures.get(Input.BUFFER_DEFAULT) ?? null;
+		return this.textures.get(Input.BUFFER_DEFAULT);
 
 	}
 
