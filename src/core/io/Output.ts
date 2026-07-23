@@ -7,6 +7,7 @@ import { RenderTargetResource } from "./RenderTargetResource.js";
 import { ShaderDataResource } from "./ShaderDataResource.js";
 import { TextureResource } from "./TextureResource.js";
 import { ObservableReadonlyMap } from "../../utils/ObservableReadonlyMap.js";
+import { MapExtensions } from "../../utils/MapExtensions.js";
 
 /**
  * Output events.
@@ -58,7 +59,7 @@ export class Output extends EventDispatcher<OutputEventMap> implements Disposabl
 	 * Output render targets.
 	 */
 
-	readonly renderTargets: Map<string, RenderTargetResource>;
+	readonly renderTargets: Map<string, RenderTargetResource> & MapExtensions<string, RenderTargetResource>;
 
 	/**
 	 * Output render target textures.
@@ -142,10 +143,10 @@ export class Output extends EventDispatcher<OutputEventMap> implements Disposabl
 	}
 
 	/**
-	 * An alias for {@link renderTargets}.
+	 * Alias for {@link renderTargets}.
 	 */
 
-	get buffers(): Map<string, RenderTargetResource> {
+	get buffers(): typeof this.renderTargets {
 
 		return this.renderTargets;
 

@@ -73,7 +73,7 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 	 * Input textures.
 	 */
 
-	readonly textures: Map<string, TextureResource>;
+	readonly textures: Map<string, TextureResource> & MapExtensions<string, TextureResource>;
 
 	/**
 	 * Input shader data.
@@ -169,10 +169,10 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 	}
 
 	/**
-	 * An alias for {@link textures}.
+	 * Alias for {@link textures}.
 	 */
 
-	get buffers(): Map<string, TextureResource> {
+	get buffers(): typeof this.textures {
 
 		return this.textures;
 
