@@ -218,6 +218,19 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 	}
 
 	/**
+	 * Retrieves a texture.
+	 *
+	 * @param key - The key of the buffer.
+	 * @return The texture, or `null` if it doesn't exist.
+	 */
+
+	getTexture(key: string): Readonly<Texture> | null {
+
+		return this.getBuffer(key)?.value ?? null;
+
+	}
+
+	/**
 	 * Retrieves a buffer.
 	 *
 	 * @param key - The key of the buffer.
