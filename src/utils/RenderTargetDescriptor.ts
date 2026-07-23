@@ -128,4 +128,16 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> implem
 
 	}
 
+	/**
+	 * Creates a new descriptor that equals this one.
+	 *
+	 * @return The clone.
+	 */
+
+	clone(): RenderTargetDescriptor {
+
+		return new RenderTargetDescriptor(this);
+
+	}
+
 }
