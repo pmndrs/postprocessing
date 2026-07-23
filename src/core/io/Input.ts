@@ -249,6 +249,19 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 	}
 
 	/**
+	 * Removes a buffer.
+	 *
+	 * @param key - The key of the buffer.
+	 * @return True if the buffer existed and has been removed, or false if not.
+	 */
+
+	removeBuffer(key: string): boolean {
+
+		return this.textures.delete(key);
+
+	}
+
+	/**
 	 * Connects an output as an inherited input source.
 	 *
 	 * Textures, defines and uniforms from the given output become available through this input.
@@ -260,7 +273,6 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 	connect(other: Output): void {
 
 		const textures = this.textures as CompositeMap<string, TextureResource>;
-
 		textures.connect(other.textures);
 		this.shaderData.connect(other.shaderData);
 
@@ -269,7 +281,6 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 	disconnect(other: Output): void {
 
 		const textures = this.textures as CompositeMap<string, TextureResource>;
-
 		textures.disconnect(other.textures);
 		this.shaderData.disconnect(other.shaderData);
 
