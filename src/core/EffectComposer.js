@@ -137,7 +137,7 @@ export class EffectComposer {
 
 	get stableDepthTexture() {
 
-		return this.depthRenderTarget?.depthTexture ?? null;
+		return (this.depthRenderTarget === null) ? null : this.depthRenderTarget.depthTexture;
 
 	}
 
@@ -384,14 +384,26 @@ export class EffectComposer {
 
 		}
 
-		this.depthRenderTarget?.dispose();
-		this.depthRenderTarget = null;
+		if(this.depthRenderTarget !== null) {
 
-		this.inputBuffer.depthTexture?.dispose();
-		this.inputBuffer.depthTexture = null;
+			this.depthRenderTarget.dispose();
+			this.depthRenderTarget = null;
 
-		this.outputBuffer.depthTexture?.dispose();
-		this.outputBuffer.depthTexture = null;
+		}
+
+		if(this.inputBuffer.depthTexture !== null) {
+
+			this.inputBuffer.depthTexture.dispose();
+			this.inputBuffer.depthTexture = null;
+
+		}
+
+		if(this.outputBuffer.depthTexture !== null) {
+
+			this.outputBuffer.depthTexture.dispose();
+			this.outputBuffer.depthTexture = null;
+
+		}
 
 	}
 
