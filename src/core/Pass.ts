@@ -480,22 +480,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	}
 
 	/**
-	 * Controls whether this pass should render to screen.
-	 */
-
-	protected get renderToScreen(): boolean {
-
-		return this.output.renderToScreen;
-
-	}
-
-	protected set renderToScreen(value: boolean) {
-
-		this.output.renderToScreen = value;
-
-	}
-
-	/**
 	 * Controls whether the settings of the input and output default buffers should be synchronized.
 	 *
 	 * @defaultValue true
