@@ -163,18 +163,15 @@ export class TextureEffect extends Effect {
 
 	get uvTransform() {
 
-		const texture = this.texture;
-		return (texture !== null && texture.matrixAutoUpdate);
+		return (this.texture !== null && this.texture.matrixAutoUpdate);
 
 	}
 
 	set uvTransform(value) {
 
-		const texture = this.texture;
+		if(this.texture !== null) {
 
-		if(texture !== null) {
-
-			texture.matrixAutoUpdate = value;
+			this.texture.matrixAutoUpdate = value;
 
 		}
 
@@ -215,9 +212,11 @@ export class TextureEffect extends Effect {
 
 	update(renderer, inputBuffer, deltaTime) {
 
-		if(this.texture.matrixAutoUpdate) {
+		const texture = this.texture;
 
-			this.texture.updateMatrix();
+		if(texture !== null && texture.matrixAutoUpdate) {
+
+			texture.updateMatrix();
 
 		}
 

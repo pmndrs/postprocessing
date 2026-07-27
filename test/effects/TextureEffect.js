@@ -9,3 +9,10 @@ test("can be created and destroyed", t => {
 	t.pass();
 
 });
+
+test("can be updated", t => {
+
+	const effect = new TextureEffect();
+	t.notThrows(() => effect.update());
+
+});
