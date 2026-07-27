@@ -265,6 +265,16 @@ export class CompositeMap<K, V> extends ObservableMap<K, V> implements Connectab
 	}
 
 	/**
+	 * Returns the local keys, excluding connected maps.
+	 */
+
+	localKeys(): MapIterator<K> {
+
+		return super.keys();
+
+	}
+
+	/**
 	 * Returns the local values, excluding connected maps.
 	 */
 
