@@ -1,4 +1,5 @@
 import { BaseEvent, EventDispatcher, RenderTargetOptions, UnsignedByteType } from "three";
+import { MapExtensions } from "../../utils/MapExtensions.js";
 import { ObservableMap } from "../../utils/ObservableMap.js";
 import { BaseEventMap } from "../BaseEventMap.js";
 import { Disposable } from "../Disposable.js";
@@ -7,7 +8,6 @@ import { RenderTargetResource } from "./RenderTargetResource.js";
 import { ShaderDataResource } from "./ShaderDataResource.js";
 import { TextureResource } from "./TextureResource.js";
 import { ObservableReadonlyMap } from "../../utils/ObservableReadonlyMap.js";
-import { MapExtensions } from "../../utils/MapExtensions.js";
 
 /**
  * Output events.

@@ -1,6 +1,7 @@
 import { BaseEvent, EventDispatcher, IUniform, Texture, UnsignedByteType } from "three";
 import { GBuffer } from "../../enums/GBuffer.js";
-import { CompositeMap } from "../../utils/CompositeMap.js";
+import { MapExtensions } from "../../utils/MapExtensions.js";
+import { ObservableMap } from "../../utils/ObservableMap.js";
 import { ObservableSet } from "../../utils/ObservableSet.js";
 import { SetExtensions } from "../../utils/SetExtensions.js";
 import { ShaderData } from "../../utils/ShaderData.js";
@@ -11,7 +12,6 @@ import type { Output } from "./Output.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
 import { ShaderDataResource } from "./ShaderDataResource.js";
 import { TextureResource } from "./TextureResource.js";
-import { MapExtensions } from "../../utils/MapExtensions.js";
 
 /**
  * Input events.
