@@ -275,12 +275,11 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 	}
 
 	/**
-	 * Connects an output as an inherited input source.
+	 * Connects resources from a given output to this input.
 	 *
 	 * Textures, defines and uniforms from the given output become available through this input.
-	 * Local input resources override connected resources with the same key.
 	 *
-	 * @param other - The output to inherit resources from.
+	 * @param other - The output to connect.
 	 */
 
 	connect(other: Output): void {

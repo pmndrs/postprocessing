@@ -44,12 +44,12 @@ export class ShaderDataResource extends Resource<ShaderData> implements Connecta
 	}
 
 	/**
-	 * Connects another shader data resource as an inherited source.
+	 * Connects another shader data resource to this data.
 	 *
 	 * Defines and uniforms from the connected resource become visible through this resource.
-	 * Local defines and uniforms override connected ones with the same key.
+	 * Local defines and uniforms are overridden by connected ones with the same key.
 	 *
-	 * @param other - The shader data to inherit entries from.
+	 * @param other - The shader data to connect.
 	 */
 
 	connect(other: ShaderDataResource): void {

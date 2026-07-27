@@ -82,12 +82,12 @@ export class CompositeMap<K, V> extends ObservableMap<K, V> implements Connectab
 	}
 
 	/**
-	 * Connects another map as an inherited source.
+	 * Connects another map to this one.
 	 *
 	 * Entries from the connected map are included in this map's composite data.
-	 * Local entries in this map override connected entries with the same key.
+	 * Local entries in this map are overridden by connected entries with the same key.
 	 *
-	 * @param other - The map to inherit entries from.
+	 * @param other - The map to read entries from.
 	 * @throws If the given map is this map.
 	 */
 
@@ -208,7 +208,14 @@ export class CompositeMap<K, V> extends ObservableMap<K, V> implements Connectab
 		const compositeData = this._compositeData;
 		compositeData.clear();
 
-		// Inherited data first.
+		// Local data first.
+		for(const [key, value] of super.entries()) {
+
+			compositeData.set(key, value);
+
+		}
+
+		// Connected data overrides local data.
 		for(const m of this.connectedMaps) {
 
 			for(const [key, value] of m.entries()) {
@@ -216,13 +223,6 @@ export class CompositeMap<K, V> extends ObservableMap<K, V> implements Connectab
 				compositeData.set(key, value);
 
 			}
-
-		}
-
-		// Local data overrides inherited data.
-		for(const [key, value] of super.entries()) {
-
-			compositeData.set(key, value);
 
 		}
 
