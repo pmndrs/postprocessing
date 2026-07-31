@@ -22,7 +22,6 @@ import { GBufferConfig } from "../../utils/gbuffer/GBufferConfig.js";
 import { ObservableSet } from "../../utils/ObservableSet.js";
 import { SetExtensions } from "../../utils/SetExtensions.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
-import { TextureResource } from "./TextureResource.js";
 
 /**
  * GBufferResource constructor options.
@@ -102,12 +101,6 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 	// #endregion
 
 	/**
-	 * @see {@link textures}
-	 */
-
-	private readonly _textures: Map<string, TextureResource>;
-
-	/**
 	 * @see {@link textureIndices}
 	 */
 
@@ -149,7 +142,6 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 		this.gBufferConfig = gBufferConfig;
 		this.alpha = alpha;
 
-		this._textures = new Map();
 		this._textureIndices = new Map();
 
 		const gBufferComponents = new ObservableSet<string>();
@@ -164,9 +156,6 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 		// Update the render target descriptor when the G-Buffer config changes.
 		gBufferConfig.addEventListener("change", () => this.updateDescriptor());
 		gBufferComponents.addEventListener("change", () => this.updateDescriptor());
-
-		// Update texture resources when the render target changes.
-		this.addEventListener("change", () => this.updateTextures());
 
 	}
 
@@ -197,18 +186,6 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 	set samples(value: MSAASamples) {
 
 		this.descriptor.samples = value;
-
-	}
-
-	/**
-	 * G-Buffer textures organized by G-Buffer components.
-	 *
-	 * @see {@link GBuffer} for built-in components.
-	 */
-
-	get textures(): ReadonlyMap<string, TextureResource> {
-
-		return this._textures;
 
 	}
 
@@ -288,10 +265,10 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 
 			}
 
-			// Create a texture resource for each config.
-			this._textures.set(entry[0], new TextureResource());
-
 		}
+
+		// Create a texture resource for each config.
+		this.setTextures(textureConfigs.map(x => x[0]));
 
 	}
 
@@ -303,7 +280,6 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 
 		const descriptor = this.descriptor;
 		const textureConfig = this.gBufferConfig.textureConfigs.get(GBuffer.DEPTH);
-		const depthTextureResource = this._textures.get(GBuffer.DEPTH)!;
 
 		if(this.value === null || textureConfig === undefined) {
 
@@ -313,60 +289,15 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 
 		if(!this.components.has(GBuffer.DEPTH)) {
 
-			//descriptor.depthTexture?.dispose();
 			descriptor.depthTexture = null;
-			depthTextureResource.value = null;
 			return;
 
 		}
 
-		const texture = new DepthTexture(1, 1);
+		const texture = new DepthTexture();
 		texture.name = GBuffer.DEPTH;
 		texture.setValues(textureConfig);
-
-		//descriptor.depthTexture?.dispose();
 		descriptor.depthTexture = texture;
-		depthTextureResource.value = texture;
-
-	}
-
-	/**
-	 *
-	 */
-
-	private updateTextures(): void {
-
-		this.resetTextures();
-
-		if(this.value === null) {
-
-			return;
-
-		}
-
-		for(const texture of this.value.textures) {
-
-			if(this._textures.has(texture.name)) {
-
-				this._textures.get(texture.name)!.value = texture;
-
-			}
-
-		}
-
-	}
-
-	/**
-	 * Resets the texture resource values.
-	 */
-
-	private resetTextures(): void {
-
-		for(const textureResource of this._textures.values()) {
-
-			textureResource.value = null;
-
-		}
 
 	}
 
@@ -378,7 +309,6 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 
 		if(this.components.size === 0) {
 
-			this.resetTextures();
 			this.descriptor.textures.clear();
 			return;
 

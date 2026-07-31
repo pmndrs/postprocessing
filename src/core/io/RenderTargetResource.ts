@@ -3,6 +3,8 @@ import { RenderTargetDescriptor } from "../../utils/RenderTargetDescriptor.js";
 import { TextureResource } from "./TextureResource.js";
 import { DisposableResource } from "./DisposableResource.js";
 import { Resolution } from "../../utils/Resolution.js";
+import { MapExtensions } from "../../utils/MapExtensions.js";
+import { ObservableMap } from "../../utils/ObservableMap.js";
 
 /**
  * A managed offscreen render target resource.
@@ -13,7 +15,21 @@ import { Resolution } from "../../utils/Resolution.js";
 export class RenderTargetResource extends DisposableResource<Readonly<WebGLRenderTarget> | null> {
 
 	/**
-	 * A live resource that references the texture of the current render target.
+	 * @see {@link textures}
+	 */
+
+	private readonly _textures: Map<string, TextureResource> & MapExtensions<string, TextureResource>;
+
+	/**
+	 * The current render target descriptor.
+	 *
+	 * The materialized render target is made available through the resource's {@link value}.
+	 */
+
+	protected readonly descriptor: RenderTargetDescriptor;
+
+	/**
+	 * A resource that references the `texture` of the current render target, or `null` if {@link textures} is empty.
 	 */
 
 	readonly texture: TextureResource;
@@ -27,14 +43,6 @@ export class RenderTargetResource extends DisposableResource<Readonly<WebGLRende
 	readonly resolution: Resolution;
 
 	/**
-	 * The current render target descriptor.
-	 *
-	 * The actual render target is made available through the resource {@link value}.
-	 */
-
-	readonly descriptor: RenderTargetDescriptor;
-
-	/**
 	 * Constructs a new render target resource.
 	 *
 	 * @param options - Render target options.
@@ -43,6 +51,10 @@ export class RenderTargetResource extends DisposableResource<Readonly<WebGLRende
 	constructor(options?: RenderTargetOptions) {
 
 		super(null);
+
+		const textures = new ObservableMap<string, TextureResource>();
+		textures.addEventListener("change", () => this.updateTextureResources());
+		this._textures = textures;
 
 		this.texture = new TextureResource();
 		this.resolution = new Resolution();
@@ -59,12 +71,89 @@ export class RenderTargetResource extends DisposableResource<Readonly<WebGLRende
 	}
 
 	/**
-	 * An alias for {@link value}.
+	 * A collection of texture resources, organized by texture name.
+	 *
+	 * These resources reference the individual `textures` of the current render target.
+	 */
+
+	get textures(): ReadonlyMap<string, TextureResource> {
+
+		return this._textures;
+
+	}
+
+	/**
+	 * Defines available texture resources as handles for the `textures` of the current render target.
+	 *
+	 * @param names - A list of names to use for creating texture resources.
+	 */
+
+	protected setTextures(names: string[]): void {
+
+		this._textures.clear();
+
+		for(const name of names) {
+
+			const texture = new TextureResource();
+			this._textures.set(name, texture);
+
+		}
+
+	}
+
+	/**
+	 * Alias for {@link value}.
 	 */
 
 	get renderTarget(): Readonly<WebGLRenderTarget> | null {
 
-		return super.value;
+		return this.value;
+
+	}
+
+	/**
+	 * Updates the texture resources.
+	 */
+
+	private updateTextureResources(): void {
+
+		this.texture.value = this.value?.texture ?? null;
+
+		for(const textureResource of this.textures.values()) {
+
+			textureResource.value = null;
+
+		}
+
+		if(this.value === null) {
+
+			return;
+
+		}
+
+		for(const texture of this.value.textures) {
+
+			const textureResource = this.textures.get(texture.name);
+
+			if(textureResource !== undefined) {
+
+				textureResource.value = texture;
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Returns the descriptor.
+	 *
+	 * @internal
+	 */
+
+	getDescriptor(): Readonly<RenderTargetDescriptor> {
+
+		return this.descriptor;
 
 	}
 
@@ -77,7 +166,7 @@ export class RenderTargetResource extends DisposableResource<Readonly<WebGLRende
 	setRenderTarget(value: WebGLRenderTarget | null): void {
 
 		super.value = value;
-		this.texture.value = value?.texture ?? null;
+		this.updateTextureResources();
 
 	}
 
