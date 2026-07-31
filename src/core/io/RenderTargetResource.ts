@@ -57,6 +57,8 @@ export class RenderTargetResource extends DisposableResource<Readonly<WebGLRende
 		this._textures = textures;
 
 		this.texture = new TextureResource();
+		this.texture.setRenderTarget(this);
+
 		this.resolution = new Resolution();
 
 		this.descriptor = new RenderTargetDescriptor(options);
@@ -95,6 +97,7 @@ export class RenderTargetResource extends DisposableResource<Readonly<WebGLRende
 		for(const name of names) {
 
 			const texture = new TextureResource();
+			texture.setRenderTarget(this);
 			this._textures.set(name, texture);
 
 		}

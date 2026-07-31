@@ -1,5 +1,6 @@
 import { BaseEvent, EventListener, IUniform, Texture } from "three";
 import { DisposableResource } from "./DisposableResource.js";
+import type { RenderTargetResource } from "./RenderTargetResource.js";
 
 /**
  * A texture resource wrapper.
@@ -16,6 +17,12 @@ export class TextureResource extends DisposableResource<Readonly<Texture> | null
 	private uniformListeners: WeakMap<IUniform, EventListener<BaseEvent<"change">, "change", this>>;
 
 	/**
+	 * @see {@link renderTarget}
+	 */
+
+	private _renderTarget: RenderTargetResource | null;
+
+	/**
 	 * Constructs a new texture resource.
 	 *
 	 * @param value - A texture.
@@ -26,6 +33,7 @@ export class TextureResource extends DisposableResource<Readonly<Texture> | null
 		super(value);
 
 		this.uniformListeners = new WeakMap();
+		this._renderTarget = null;
 
 	}
 
@@ -36,6 +44,28 @@ export class TextureResource extends DisposableResource<Readonly<Texture> | null
 	get texture(): Readonly<Texture> | null {
 
 		return super.value;
+
+	}
+
+	/**
+	 * A reference to the associated render target resource, or `null` if there is none.
+	 */
+
+	get renderTarget(): RenderTargetResource | null {
+
+		return this._renderTarget;
+
+	}
+
+	/**
+	 * Sets the render target resource.
+	 *
+	 * @internal
+	 */
+
+	setRenderTarget(value: RenderTargetResource | null): void {
+
+		this._renderTarget = value;
 
 	}
 
