@@ -23,6 +23,10 @@ export class ShaderDataResource extends Resource<ShaderData> implements Connecta
 			uniforms: new CompositeMap()
 		});
 
+		// Propagate change events.
+		this.defines.addEventListener("change", () => this.setChanged());
+		this.uniforms.addEventListener("change", () => this.setChanged());
+
 	}
 
 	override get value(): ShaderData {
