@@ -72,8 +72,9 @@ export class TextureResource extends DisposableResource<Readonly<Texture> | null
 	/**
 	 * Binds a uniform to this texture resource to keep its value up-to-date.
 	 *
-	 * Please use {@link unbindUniform} in case you want to discard the bound uniform to prevent memory leaks.
+	 * Use {@link unbindUniform} before discarding the bound uniform to prevent memory leaks.
 	 *
+	 * @internal
 	 * @param uniform - The uniform.
 	 */
 
@@ -94,6 +95,7 @@ export class TextureResource extends DisposableResource<Readonly<Texture> | null
 	/**
 	 * Unbinds a uniform from this texture resource.
 	 *
+	 * @internal
 	 * @param uniform - The uniform.
 	 */
 
