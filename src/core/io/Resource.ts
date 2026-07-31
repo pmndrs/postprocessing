@@ -68,7 +68,7 @@ export class Resource<T = unknown> extends EventDispatcher<BaseEventMap> impleme
 	 * Dispatches a `change` event.
 	 */
 
-	setChanged(): void {
+	protected setChanged(): void {
 
 		this.dispatchEvent({ type: "change" });
 
