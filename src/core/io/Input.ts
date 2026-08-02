@@ -37,14 +37,6 @@ export interface InputEventMap extends BaseEventMap {
 
 	shaderdatachange: BaseEvent<"shaderdatachange">;
 
-	/**
-	 * Triggers when the input G-Buffer components have changed.
-	 *
-	 * @event
-	 */
-
-	gbufferchange: BaseEvent<"gbufferchange">;
-
 }
 
 /**
@@ -92,7 +84,6 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 		const gBuffer = new ObservableSet<GBuffer>([GBuffer.COLOR]);
 		gBuffer.addEventListener("change", () => {
 
-			this.dispatchEvent({ type: "gbufferchange" });
 			this.dispatchEvent({ type: "change" });
 
 		});
