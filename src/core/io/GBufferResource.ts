@@ -18,7 +18,7 @@ import {
 
 import { GBuffer } from "../../enums/GBuffer.js";
 import { MSAASamples } from "../../enums/MSAASamples.js";
-import { GBufferConfig } from "../../utils/gbuffer/GBufferConfig.js";
+import { GBufferSchema } from "../../utils/gbuffer/GBufferSchema.js";
 import { ObservableSet } from "../../utils/ObservableSet.js";
 import { SetExtensions } from "../../utils/SetExtensions.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
@@ -35,7 +35,7 @@ export interface GBufferResourceOptions {
 	 * A G-Buffer configuration.
 	 */
 
-	gBufferConfig?: GBufferConfig;
+	gBufferSchema?: GBufferSchema;
 
 	/**
 	 * Controls whether color buffers should use an alpha channel.
@@ -96,7 +96,7 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 
 	// #region Settings
 
-	readonly gBufferConfig: GBufferConfig;
+	readonly gBufferSchema: GBufferSchema;
 	readonly alpha: boolean;
 
 	// #endregion
@@ -123,7 +123,7 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 	 */
 
 	constructor({
-		gBufferConfig = new GBufferConfig(),
+		gBufferSchema = new GBufferSchema(),
 		alpha = false,
 		stencilBuffer = false,
 		depthBuffer = true,
@@ -140,7 +140,7 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 			count: 1
 		});
 
-		this.gBufferConfig = gBufferConfig;
+		this.gBufferSchema = gBufferSchema;
 		this.alpha = alpha;
 
 		this._textureIndices = new Map();
@@ -150,9 +150,9 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 
 		this.defineTextureConfigs();
 
-		// Update the render target descriptor when the G-Buffer config changes.
+		// Update the render target descriptor when the G-Buffer schema changes.
 		// Descriptor changes will also emit a change event from this resource.
-		gBufferConfig.addEventListener("change", () => this.updateDescriptor());
+		gBufferSchema.addEventListener("change", () => this.updateDescriptor());
 		gBufferComponents.addEventListener("change", () => this.updateDescriptor());
 
 	}
@@ -257,9 +257,9 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 		for(const entry of textureConfigs) {
 
 			// Keep existing configs.
-			if(!this.gBufferConfig.textureConfigs.has(entry[0])) {
+			if(!this.gBufferSchema.textureConfigs.has(entry[0])) {
 
-				this.gBufferConfig.textureConfigs.set(entry[0], entry[1]);
+				this.gBufferSchema.textureConfigs.set(entry[0], entry[1]);
 
 			}
 
@@ -277,7 +277,7 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 	private configureDepthTexture(): void {
 
 		const descriptor = this.descriptor;
-		const textureConfig = this.gBufferConfig.textureConfigs.get(GBuffer.DEPTH);
+		const textureConfig = this.gBufferSchema.textureConfigs.get(GBuffer.DEPTH);
 
 		if(this.value === null || textureConfig === undefined) {
 
@@ -313,7 +313,7 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 		}
 
 		// Get the texture configs that correspond to the required G-Buffer components (depth is handled separately).
-		const textureConfigs = Array.from(this.gBufferConfig.textureConfigs)
+		const textureConfigs = Array.from(this.gBufferSchema.textureConfigs)
 			.filter(x => this.components.has(x[0]) && x[0] !== GBuffer.DEPTH as string);
 
 		const descriptor = this.descriptor;

@@ -72,7 +72,7 @@ export class EffectMaterialManager implements Disposable {
 	// #region Backing Data
 
 	/**
-	 * @see {@link gBufferConfig}
+	 * @see {@link gBufferSchema}
 	 */
 
 	private _gBufferConfig: GBufferConfig | null;
@@ -122,13 +122,13 @@ export class EffectMaterialManager implements Disposable {
 	 * Assigning a new configuration will invalidate all caches.
 	 */
 
-	get gBufferConfig(): GBufferConfig | null {
+	get gBufferSchema(): GBufferConfig | null {
 
 		return this._gBufferConfig;
 
 	}
 
-	set gBufferConfig(value: GBufferConfig | null) {
+	set gBufferSchema(value: GBufferConfig | null) {
 
 		if(this._gBufferConfig !== value) {
 
@@ -215,15 +215,15 @@ export class EffectMaterialManager implements Disposable {
 	/**
 	 * Creates shader code for a `GBuffer` struct declaration.
 	 *
-	 * @param gBufferConfig - A G-Buffer config.
+	 * @param gBufferSchema - A G-Buffer config.
 	 * @return The shader code.
 	 */
 
-	private createGBufferStructDeclaration(gBufferConfig: GBufferConfig): string {
+	private createGBufferStructDeclaration(gBufferSchema: GBufferConfig): string {
 
 		return [
 			"struct GBuffer {",
-			...Array.from(gBufferConfig.gBufferStructDeclaration)
+			...Array.from(gBufferSchema.gBufferStructDeclaration)
 				.filter(x => this.requiredTextures!.has(x[0]))
 				.map(x => `\t${x[1]}`),
 			"};\n"
@@ -244,14 +244,13 @@ export class EffectMaterialManager implements Disposable {
 		const id = EffectMaterialManager.getMaterialId(effects);
 		const result = (id === EffectMaterialManager.DEFAULT_MATERIAL_ID) ? this.defaultMaterial : new EffectMaterial();
 		const data = this.getEffectShaderData(effects);
+		const schema = this.gBufferSchema;
 
-		const gBufferConfig = this.gBufferConfig;
+		if(schema !== null) {
 
-		if(gBufferConfig !== null) {
-
-			data.shaderParts.set(Section.FRAGMENT_HEAD_GBUFFER, this.createGBufferStructDeclaration(gBufferConfig));
-			data.shaderParts.set(Section.FRAGMENT_HEAD_GDATA, data.createGDataStructDeclaration(gBufferConfig));
-			data.shaderParts.set(Section.FRAGMENT_MAIN_GDATA, data.createGDataStructInitialization(gBufferConfig));
+			data.shaderParts.set(Section.FRAGMENT_HEAD_GBUFFER, this.createGBufferStructDeclaration(schema));
+			data.shaderParts.set(Section.FRAGMENT_HEAD_GDATA, data.createGDataStructDeclaration(schema));
+			data.shaderParts.set(Section.FRAGMENT_MAIN_GDATA, data.createGDataStructInitialization(schema));
 
 		}
 
@@ -428,7 +427,7 @@ export class EffectMaterialManager implements Disposable {
 
 	getMaterial(effects: readonly Effect[]): EffectMaterial {
 
-		if(this.gBufferConfig === null) {
+		if(this.gBufferSchema === null) {
 
 			// Effects don't need to be processed if there is no G-Buffer configuration.
 			return this.defaultMaterial;

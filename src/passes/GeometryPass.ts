@@ -28,7 +28,7 @@ import { Pass } from "../core/Pass.js";
 import { Selective } from "../core/Selective.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { MSAASamples } from "../enums/MSAASamples.js";
-import { GBufferConfig } from "../utils/gbuffer/GBufferConfig.js";
+import { GBufferSchema } from "../utils/gbuffer/GBufferSchema.js";
 import { GBufferShaderPlugin } from "../utils/gbuffer/GBufferShaderPlugin.js";
 import { GBufferTextureConfig } from "../utils/gbuffer/GBufferTextureConfig.js";
 import { extractIndices } from "../utils/gbuffer/GBufferUtils.js";

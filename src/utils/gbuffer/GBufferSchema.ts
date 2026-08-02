@@ -5,12 +5,12 @@ import { GData } from "../../enums/GData.js";
 import { ObservableMap } from "../ObservableMap.js";
 
 /**
- * A G-Buffer configuration.
+ * A G-Buffer schema.
  *
  * @category Utils
  */
 
-export class GBufferConfig extends EventDispatcher<BaseEventMap> {
+export class GBufferSchema extends EventDispatcher<BaseEventMap> {
 
 	/**
 	 * A collection that maps G-Buffer components to G-Buffer texture configurations.
