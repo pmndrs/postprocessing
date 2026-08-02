@@ -26,7 +26,7 @@ export class RenderTargetResource extends DisposableResource<Readonly<WebGLRende
 	 * The materialized render target is made available through the resource's {@link value}.
 	 */
 
-	protected readonly descriptor: RenderTargetDescriptor;
+	readonly descriptor: RenderTargetDescriptor;
 
 	/**
 	 * A resource that references the `texture` of the current render target, or `null` if {@link textures} is empty.
@@ -145,18 +145,6 @@ export class RenderTargetResource extends DisposableResource<Readonly<WebGLRende
 			}
 
 		}
-
-	}
-
-	/**
-	 * Returns the descriptor.
-	 *
-	 * @internal
-	 */
-
-	getDescriptor(): Readonly<RenderTargetDescriptor> {
-
-		return this.descriptor;
 
 	}
 
