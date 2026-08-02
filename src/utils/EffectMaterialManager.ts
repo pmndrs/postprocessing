@@ -58,6 +58,12 @@ export class EffectMaterialManager implements Disposable {
 	private readonly effectShaderDataCache: Map<Effect, EffectShaderData>;
 
 	/**
+	 * The required input textures.
+	 */
+
+	private readonly requiredTextures: Set<GBuffer | string> | null;
+
+	/**
 	 * A material that is currently active.
 	 */
 
@@ -72,12 +78,6 @@ export class EffectMaterialManager implements Disposable {
 	private _gBufferConfig: GBufferConfig | null;
 
 	/**
-	 * @see {@link gBufferConfig}
-	 */
-
-	private _gBuffer: Set<GBuffer | string> | null;
-
-	/**
 	 * @see {@link dithering}
 	 */
 
@@ -88,19 +88,20 @@ export class EffectMaterialManager implements Disposable {
 	/**
 	 * Constructs a new effect material manager.
 	 *
-	 * @param shaderData - A collection of shader data that will be applied to new materials.
+	 * @param shaderData - Input shader data.
+	 * @param requiredTextures - A collection of required input textures.
 	 */
 
-	constructor(shaderData: ShaderData) {
+	constructor(shaderData: ShaderData, requiredTextures: Set<string>) {
 
 		this.shaderData = shaderData;
 		this.defaultMaterial = new EffectMaterial();
 		this.materialCache = new Map<string, EffectMaterial>();
 		this.effectShaderDataCache = new Map<Effect, EffectShaderData>();
+		this.requiredTextures = requiredTextures;
 		this.activeMaterial = null;
 
 		this._gBufferConfig = null;
-		this._gBuffer = null;
 		this._dithering = false;
 
 	}
@@ -133,29 +134,6 @@ export class EffectMaterialManager implements Disposable {
 
 			this.dispose();
 			this._gBufferConfig = value;
-
-		}
-
-	}
-
-	/**
-	 * The current input G-Buffer components.
-	 *
-	 * Assigning a new G-Buffer will invalidate the material cache.
-	 */
-
-	get gBuffer(): Set<GBuffer | string> | null {
-
-		return this._gBuffer;
-
-	}
-
-	set gBuffer(value: Set<GBuffer | string> | null) {
-
-		if(this._gBuffer !== value) {
-
-			this.invalidateMaterialCache();
-			this._gBuffer = value;
 
 		}
 
@@ -243,16 +221,10 @@ export class EffectMaterialManager implements Disposable {
 
 	private createGBufferStructDeclaration(gBufferConfig: GBufferConfig): string {
 
-		if(this.gBuffer === null) {
-
-			throw new Error("Missing G-Buffer information");
-
-		}
-
 		return [
 			"struct GBuffer {",
 			...Array.from(gBufferConfig.gBufferStructDeclaration)
-				.filter(x => this.gBuffer!.has(x[0]))
+				.filter(x => this.requiredTextures!.has(x[0]))
 				.map(x => `\t${x[1]}`),
 			"};\n"
 		].join("\n");

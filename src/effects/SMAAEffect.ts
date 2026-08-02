@@ -116,7 +116,7 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 		this.fragmentShader = fragmentShader;
 		this.output.setBuffer(SMAAEffect.BUFFER_EDGES, this.createFramebuffer());
 		this.output.setBuffer(SMAAEffect.BUFFER_WEIGHTS, this.createFramebuffer());
-		this.input.gBuffer.add(GBuffer.DEPTH);
+		this.input.requiredTextures.add(GBuffer.DEPTH);
 		this.input.uniforms.set("weightMap", new Uniform(null));
 		this.weightsTexture.bindUniform(this.input.uniforms.get("weightMap")!);
 

@@ -92,12 +92,12 @@ export class EffectPass extends Pass<EffectMaterial> {
 		}
 
 		super.subpasses = value;
-		this.input.gBuffer.clear();
-		this.input.gBuffer.add(GBuffer.COLOR);
+		this.input.requiredTextures.clear();
+		this.input.requiredTextures.add(GBuffer.COLOR);
 
 		for(const effect of super.subpasses) {
 
-			this.input.gBuffer.addAll(...effect.input.gBuffer);
+			this.input.requiredTextures.addAll(...effect.input.requiredTextures);
 
 			effect.addEventListener("change", this.effectListener);
 			effect.addEventListener("toggle", this.effectListener);

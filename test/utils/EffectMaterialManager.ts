@@ -40,7 +40,7 @@ describe("EffectMaterialManager", () => {
 		effects.forEach((effect) => void (effect.optional = true));
 
 		const manager = new EffectMaterialManager(emptyShaderData);
-		manager.gBuffer = new Set([GBuffer.COLOR]);
+		manager.requiredTextures = new Set([GBuffer.COLOR]);
 		manager.gBufferConfig = new GBufferConfig();
 
 		assert.doesNotThrow(() => manager.getMaterial(effects));
@@ -64,7 +64,7 @@ describe("EffectMaterialManager", () => {
 		effects.forEach((effect) => void (effect.optional = true));
 
 		const manager = new EffectMaterialManager(emptyShaderData);
-		manager.gBuffer = new Set([GBuffer.COLOR]);
+		manager.requiredTextures = new Set([GBuffer.COLOR]);
 		manager.gBufferConfig = new GBufferConfig();
 
 		assert.doesNotThrow(() => manager.getMaterial(effects));

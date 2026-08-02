@@ -27,7 +27,6 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 		super("DepthDownsamplingPass");
 
 		this.fullscreenMaterial = new DepthDownsamplingMaterial();
-		this.input.gBuffer.addAll(GBuffer.DEPTH, GBuffer.NORMAL);
 
 		this.output.setBuffer(
 			DepthDownsamplingPass.BUFFER_DEPTH,
@@ -46,6 +45,7 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 	 */
 
 	private get renderTarget(): WebGLRenderTarget {
+		this.input.requiredTextures.addAll(GBuffer.DEPTH, GBuffer.NORMAL);
 
 		return this.output.getBuffer(DepthDownsamplingPass.BUFFER_DEPTH)!;
 

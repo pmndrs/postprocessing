@@ -28,7 +28,7 @@ export class DepthCopyPass extends Pass<DepthCopyMaterial> {
 		super("DepthCopyPass");
 
 		this.fullscreenMaterial = new DepthCopyMaterial();
-		this.input.gBuffer.add(GBuffer.DEPTH);
+		this.input.requiredTextures.add(GBuffer.DEPTH);
 
 		this.output.setBuffer(DepthCopyPass.BUFFER_DEPTH, new WebGLRenderTarget(1, 1, {
 			minFilter: NearestFilter,

@@ -54,12 +54,12 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 	static readonly BUFFER_DEFAULT = "BUFFER_DEFAULT";
 
 	/**
-	 * Required {@link GBuffer} components.
+	 * Required input textures.
 	 *
 	 * {@link GBuffer.COLOR} is included by default.
 	 */
 
-	readonly gBuffer: Set<string> & SetExtensions<string>;
+	readonly requiredTextures: Set<string> & SetExtensions<string>;
 
 	/**
 	 * Input textures.
@@ -81,8 +81,8 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 
 		super();
 
-		const gBuffer = new ObservableSet<GBuffer>([GBuffer.COLOR]);
-		gBuffer.addEventListener("change", () => {
+		const requiredTextures = new ObservableSet<string>([GBuffer.COLOR]);
+		requiredTextures.addEventListener("change", () => {
 
 			this.dispatchEvent({ type: "change" });
 
@@ -141,7 +141,7 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 
 		});
 
-		this.gBuffer = gBuffer;
+		this.requiredTextures = requiredTextures;
 		this.textures = textures;
 		this.shaderData = shaderData;
 
