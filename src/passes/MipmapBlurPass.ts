@@ -118,6 +118,8 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 	}
 
+	// #region Settings
+
 	get clampToBorder(): boolean {
 
 		return this.downsamplingMaterial.clampToBorder;
@@ -180,6 +182,8 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 		}
 
 	}
+
+	// #endregion
 
 	/**
 	 * Updates the mipmap render targets.

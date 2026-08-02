@@ -56,7 +56,7 @@ export class Output extends EventDispatcher<OutputEventMap> implements Disposabl
 	static readonly GBUFFER = "GBUFFER";
 
 	/**
-	 * Output render targets.
+	 * Output render targets, organized by name.
 	 */
 
 	readonly renderTargets: Map<string, RenderTargetResource> & MapExtensions<string, RenderTargetResource>;

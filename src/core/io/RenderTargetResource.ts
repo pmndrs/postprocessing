@@ -115,7 +115,7 @@ export class RenderTargetResource extends DisposableResource<Readonly<WebGLRende
 	}
 
 	/**
-	 * Updates the texture resources.
+	 * Synchronizes the texture resources with the current render target.
 	 */
 
 	private updateTextureResources(): void {

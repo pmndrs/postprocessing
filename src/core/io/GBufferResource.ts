@@ -68,6 +68,7 @@ export interface GBufferResourceOptions {
 	 * The texture data type used for color buffers.
 	 *
 	 * Disabling {@link alpha} enables small internal float formats for reduced memory consumption.
+	 * Changes to the type after the resource has been created will have no effect.
 	 *
 	 * @see https://www.khronos.org/opengl/wiki/Small_Float_Formats
 	 * @defaultValue HalfFloatType
@@ -149,11 +150,8 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 
 		this.defineTextureConfigs();
 
-		// Propagate change events.
-		//gBufferConfig.addEventListener("change", () => this.setChanged());
-		//gBufferComponents.addEventListener("change", () => this.setChanged());
-
 		// Update the render target descriptor when the G-Buffer config changes.
+		// Descriptor changes will also emit a change event from this resource.
 		gBufferConfig.addEventListener("change", () => this.updateDescriptor());
 		gBufferComponents.addEventListener("change", () => this.updateDescriptor());
 

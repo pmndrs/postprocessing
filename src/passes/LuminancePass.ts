@@ -12,7 +12,7 @@ import { LuminanceHighPassMaterial } from "../materials/LuminanceHighPassMateria
 export class LuminancePass extends Pass<LuminanceHighPassMaterial> {
 
 	/**
-	 * Identifies the luminance output buffer.
+	 * Identifies the luminance buffer.
 	 */
 
 	private static readonly BUFFER_LUMINANCE = "BUFFER_LUMINANCE";
