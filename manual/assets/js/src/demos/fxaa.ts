@@ -9,6 +9,7 @@ import {
 } from "three";
 
 import {
+	ClearPass,
 	EffectPass,
 	FrameGraph,
 	FXAAEffect,
@@ -88,12 +89,15 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const effect = new FXAAEffect();
 	effect.blendMode.blendFunction = new MixBlendFunction();
 
+	const clearPass = new ClearPass();
 	const geoPass = new GeometryPass({ scene, camera });
 	const effectPass = new EffectPass(effect, new ToneMappingEffect());
+
+	clearPass.output.defaultBuffer = geoPass.output.defaultBuffer;
 	effectPass.input.connect(geoPass.output);
 
-	const pipeline = new FrameGraph(renderer);
-	pipeline.add(geoPass, effectPass);
+	const frameGraph = new FrameGraph(renderer);
+	frameGraph.add(clearPass, geoPass, effectPass);
 
 	// Settings
 
@@ -129,12 +133,12 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		fpsGraph.begin();
 		controls.update(timestamp);
-		pipeline.render(timestamp);
+		frameGraph.render(timestamp);
 		fpsGraph.end();
 
 	}
 
-	pipeline.compile().then(() => {
+	frameGraph.compile().then(() => {
 
 		// Only render when the canvas is visible.
 		const viewportObserver = new IntersectionObserver(

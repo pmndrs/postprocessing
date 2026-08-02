@@ -12,10 +12,11 @@ import {
 } from "three";
 
 import {
+	ClearPass,
 	EffectPass,
+	FrameGraph,
 	GeometryPass,
-	NoiseEffect,
-	RenderPipeline
+	NoiseEffect
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
@@ -88,11 +89,15 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const effect = new NoiseEffect();
 
-	const pipeline = new RenderPipeline(renderer);
-	pipeline.add(
-		new GeometryPass(scene, camera, { alpha: true }),
-		new EffectPass(effect)
-	);
+	const clearPass = new ClearPass();
+	const geoPass = new GeometryPass({ scene, camera, alpha: true });
+	const effectPass = new EffectPass(effect);
+
+	clearPass.output.defaultBuffer = geoPass.output.defaultBuffer;
+	effectPass.input.connect(geoPass.output);
+
+	const frameGraph = new FrameGraph(renderer);
+	frameGraph.add(clearPass, geoPass, effectPass);
 
 	// Settings
 
@@ -114,7 +119,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 		camera.aspect = width / height;
 		camera.fov = Utils.calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
 		camera.updateProjectionMatrix();
-		pipeline.setSize(width, height);
 
 	}
 
@@ -127,12 +131,12 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		fpsGraph.begin();
 		controls.update(timestamp);
-		pipeline.render(timestamp);
+		frameGraph.render(timestamp);
 		fpsGraph.end();
 
 	}
 
-	pipeline.compile().then(() => {
+	frameGraph.compile().then(() => {
 
 		// Only render when the canvas is visible.
 		const viewportObserver = new IntersectionObserver(

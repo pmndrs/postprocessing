@@ -9,10 +9,11 @@ import {
 } from "three";
 
 import {
+	ClearPass,
 	EffectPass,
+	FrameGraph,
 	GeometryPass,
 	MixBlendFunction,
-	RenderPipeline,
 	ToneMappingEffect,
 	VignetteEffect,
 	VignetteTechnique
@@ -101,13 +102,16 @@ window.addEventListener("load", () => void load().then((assets) => {
 	});
 
 	effect.blendMode.blendFunction = new MixBlendFunction();
+
+	const clearPass = new ClearPass();
+	const geoPass = new GeometryPass({ scene, camera, samples: 4 });
 	const effectPass = new EffectPass(new ToneMappingEffect(), effect);
 
-	const pipeline = new RenderPipeline(renderer);
-	pipeline.add(
-		new GeometryPass(scene, camera, { samples: 4 }),
-		effectPass
-	);
+	clearPass.output.defaultBuffer = geoPass.output.defaultBuffer;
+	effectPass.input.connect(geoPass.output);
+
+	const frameGraph = new FrameGraph(renderer);
+	frameGraph.add(clearPass, geoPass, effectPass);
 
 	// Settings
 
@@ -133,7 +137,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 		camera.aspect = width / height;
 		camera.fov = Utils.calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
 		camera.updateProjectionMatrix();
-		pipeline.setSize(width, height);
 
 	}
 
@@ -146,12 +149,12 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		fpsGraph.begin();
 		controls.update(timestamp);
-		pipeline.render(timestamp);
+		frameGraph.render(timestamp);
 		fpsGraph.end();
 
 	}
 
-	pipeline.compile().then(() => {
+	frameGraph.compile().then(() => {
 
 		// Only render when the canvas is visible.
 		const viewportObserver = new IntersectionObserver(

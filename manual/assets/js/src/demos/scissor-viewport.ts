@@ -9,9 +9,10 @@ import {
 } from "three";
 
 import {
+	ClearPass,
 	EffectPass,
+	FrameGraph,
 	GeometryPass,
-	RenderPipeline,
 	ToneMappingEffect
 } from "postprocessing";
 
@@ -111,19 +112,22 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
-	const pipeline = new RenderPipeline(renderer);
-	const geometryPassA = new GeometryPass(sceneA, camera, { samples: 4 });
-	const geometryPassB = new GeometryPass(sceneB, camera);
+	const clearPass = new ClearPass();
+	const geoPassA = new GeometryPass({ scene: sceneA, camera, samples: 4 });
+	const geoPassB = new GeometryPass({ scene: sceneB, camera });
 	const effectPass = new EffectPass(new ToneMappingEffect());
 
-	geometryPassB.output.defaultBuffer = geometryPassA.output.defaultBuffer;
+	clearPass.output.defaultBuffer = geoPassA.output.defaultBuffer;
+	geoPassB.output.defaultBuffer = geoPassA.output.defaultBuffer;
+	effectPass.input.defaultBuffer = geoPassA.output.defaultBuffer?.texture;
 
-	geometryPassA.scissor.enabled = true;
-	geometryPassA.viewport.enabled = true;
-	geometryPassB.scissor.enabled = true;
-	geometryPassB.viewport.enabled = true;
+	geoPassA.scissor.enabled = true;
+	geoPassA.viewport.enabled = true;
+	geoPassB.scissor.enabled = true;
+	geoPassB.viewport.enabled = true;
 
-	pipeline.add(geometryPassA, geometryPassB, effectPass);
+	const frameGraph = new FrameGraph(renderer);
+	frameGraph.add(clearPass, geoPassA, geoPassB, effectPass);
 
 	// Settings
 
@@ -142,12 +146,11 @@ window.addEventListener("load", () => void load().then((assets) => {
 		camera.aspect = widthHalf / height;
 		camera.fov = Utils.calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
 		camera.updateProjectionMatrix();
-		pipeline.setSize(width, height);
 
-		geometryPassA.scissor.set(0, 0, widthHalf, height);
-		geometryPassA.viewport.set(0, 0, widthHalf, height);
-		geometryPassB.scissor.set(widthHalf, 0, widthHalf, height);
-		geometryPassB.viewport.set(widthHalf, 0, widthHalf, height);
+		geoPassA.scissor.set(0, 0, widthHalf, height);
+		geoPassA.viewport.set(0, 0, widthHalf, height);
+		geoPassB.scissor.set(widthHalf, 0, widthHalf, height);
+		geoPassB.viewport.set(widthHalf, 0, widthHalf, height);
 
 	}
 
@@ -160,12 +163,12 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		fpsGraph.begin();
 		controls.update(timestamp);
-		pipeline.render(timestamp);
+		frameGraph.render(timestamp);
 		fpsGraph.end();
 
 	}
 
-	pipeline.compile().then(() => {
+	frameGraph.compile().then(() => {
 
 		// Only render when the canvas is visible.
 		const viewportObserver = new IntersectionObserver(

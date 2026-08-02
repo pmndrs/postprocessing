@@ -20,12 +20,14 @@ import {
 } from "three";
 
 import {
+	ClearPass,
 	DebugTools,
 	EffectPass,
+	FrameGraph,
 	FXAAEffect,
 	GeometryPass,
-	RenderPipeline,
-	ToneMappingEffect
+	ToneMappingEffect,
+	UIPass
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
@@ -163,15 +165,21 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
-	const pipeline = new RenderPipeline(renderer);
-	const geometryPass = new GeometryPass(scene, camera);
+	const clearPass = new ClearPass();
+	const geoPass = new GeometryPass({ scene, camera });
 	const effectPass = new EffectPass(new ToneMappingEffect());
-	const uiPass = new GeometryPass(uiScene, camera, { autoClear: false });
-	const antialiasingPass = new EffectPass(new FXAAEffect());
+	const uiPass = new UIPass({ scene: uiScene, camera });
+	const aaPass = new EffectPass(new FXAAEffect());
 
-	pipeline.add(geometryPass, effectPass, uiPass, antialiasingPass);
+	clearPass.output.defaultBuffer = geoPass.output.defaultBuffer;
+	effectPass.input.connect(geoPass.output);
+	uiPass.input.connect(effectPass.output);
+	aaPass.input.connect(uiPass.output);
 
-	DebugTools.analyzePipeline(pipeline);
+	const frameGraph = new FrameGraph(renderer);
+	frameGraph.add(clearPass, geoPass, effectPass, uiPass, aaPass);
+
+	DebugTools.analyzePipeline(frameGraph);
 
 	// Settings
 
@@ -186,7 +194,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		if(e.value) {
 
-			uiPass.output.removeDefaultBuffer();
+			uiPass.restoreDefaultBuffer();
 
 		} else {
 
@@ -194,7 +202,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		}
 
-		DebugTools.analyzePipeline(pipeline);
+		DebugTools.analyzePipeline(frameGraph);
 
 	});
 
@@ -207,7 +215,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 		camera.aspect = width / height;
 		camera.fov = Utils.calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
 		camera.updateProjectionMatrix();
-		pipeline.setSize(width, height);
 
 	}
 
@@ -225,12 +232,12 @@ window.addEventListener("load", () => void load().then((assets) => {
 		timer.update(timestamp);
 		coin.rotation.y = (coin.rotation.y + timer.getDelta() * 5) % Math.PI;
 		health.position.y = (healthPosition.y + Math.sin(timer.getElapsed()) * 0.025);
-		pipeline.render(timestamp);
+		frameGraph.render(timestamp);
 		fpsGraph.end();
 
 	}
 
-	pipeline.compile().then(() => {
+	frameGraph.compile().then(() => {
 
 		// Only render when the canvas is visible.
 		const viewportObserver = new IntersectionObserver(

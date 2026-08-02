@@ -9,8 +9,9 @@ import {
 } from "three";
 
 import {
-	GeometryPass,
-	RenderPipeline
+	ClearPass,
+	FrameGraph,
+	GeometryPass
 } from "postprocessing";
 
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
@@ -89,10 +90,13 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
-	const pipeline = new RenderPipeline(renderer);
-	pipeline.add(
-		new GeometryPass(scene, camera, { samples: 4 })
-	);
+	const clearPass = new ClearPass();
+	const geoPass = new GeometryPass({ scene, camera, samples: 4 });
+
+	clearPass.output.defaultBuffer = geoPass.output.defaultBuffer;
+
+	const frameGraph = new FrameGraph(renderer);
+	frameGraph.add(clearPass, geoPass);
 
 	/*
 	const effect = new PixelationEffect();
@@ -119,7 +123,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 		camera.aspect = width / height;
 		camera.fov = Utils.calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
 		camera.updateProjectionMatrix();
-		pipeline.setSize(width, height);
 
 	}
 
@@ -132,13 +135,13 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		fpsGraph.begin();
 		controls.update(timestamp);
-		gltf.scene.position.y = 1 + Math.sin(pipeline.timer.getElapsed()) * 0.01;
-		pipeline.render(timestamp);
+		gltf.scene.position.y = 1 + Math.sin(frameGraph.timer.getElapsed()) * 0.01;
+		frameGraph.render(timestamp);
 		fpsGraph.end();
 
 	}
 
-	pipeline.compile().then(() => {
+	frameGraph.compile().then(() => {
 
 		// Only render when the canvas is visible.
 		const viewportObserver = new IntersectionObserver(

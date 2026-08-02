@@ -10,12 +10,13 @@ import {
 
 import {
 	BufferDebugPass,
+	ClearPass,
 	DebugTools,
 	EffectPass,
+	FrameGraph,
 	GBuffer,
 	GBufferDebug,
 	GeometryPass,
-	RenderPipeline,
 	ToneMappingEffect
 } from "postprocessing";
 
@@ -100,14 +101,19 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	bufferDebugPass.columns = 3;
 
-	const pipeline = new RenderPipeline(renderer);
-	pipeline.add(
-		new GeometryPass(scene, camera, { samples: 4 }),
-		new EffectPass(new ToneMappingEffect()),
-		bufferDebugPass
-	);
+	const clearPass = new ClearPass();
+	const geoPass = new GeometryPass({ scene, camera, samples: 4 });
+	const effectPass = new EffectPass(new ToneMappingEffect());
 
-	DebugTools.analyzePipeline(pipeline);
+	clearPass.output.defaultBuffer = geoPass.output.defaultBuffer;
+	effectPass.input.connect(geoPass.output);
+	bufferDebugPass.input.connect(geoPass.output);
+	bufferDebugPass.input.connect(effectPass.output);
+
+	const frameGraph = new FrameGraph(renderer);
+	frameGraph.add(clearPass, geoPass, effectPass, bufferDebugPass);
+
+	DebugTools.analyzePipeline(frameGraph);
 
 	// Settings
 
@@ -150,12 +156,12 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		fpsGraph.begin();
 		controls.update(timestamp);
-		pipeline.render(timestamp);
+		frameGraph.render(timestamp);
 		fpsGraph.end();
 
 	}
 
-	pipeline.compile().then(() => {
+	frameGraph.compile().then(() => {
 
 		// Only render when the canvas is visible.
 		const viewportObserver = new IntersectionObserver(

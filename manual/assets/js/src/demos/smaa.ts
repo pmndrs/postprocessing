@@ -9,10 +9,11 @@ import {
 } from "three";
 
 import {
+	ClearPass,
 	EffectPass,
+	FrameGraph,
 	GeometryPass,
 	MixBlendFunction,
-	RenderPipeline,
 	SMAAEdgeDetectionMode,
 	SMAAPredicationMode,
 	SMAAEffect,
@@ -90,7 +91,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
-	const geoPass = new GeometryPass(scene, camera);
+	const clearPass = new ClearPass();
+	const geoPass = new GeometryPass({ scene, camera });
 
 	const effect = new SMAAEffect({
 		preset: SMAAPreset.MEDIUM,
@@ -98,20 +100,23 @@ window.addEventListener("load", () => void load().then((assets) => {
 		predicationMode: SMAAPredicationMode.DEPTH
 	});
 
-	const pipeline = new RenderPipeline(renderer);
 	const effectPass = new EffectPass(effect, new ToneMappingEffect());
 	effect.blendMode.blendFunction = new MixBlendFunction();
-	pipeline.add(geoPass, effectPass);
+
+	clearPass.output.defaultBuffer = geoPass.output.defaultBuffer;
+	effectPass.input.connect(geoPass.output);
 
 	// #region DEBUG
-	const smaaEdgesDebugPass = new EffectPass(new TextureEffect({ texture: effect.edgesTexture.value }));
-	const smaaWeightsDebugPass = new EffectPass(new TextureEffect({ texture: effect.weightsTexture.value }));
-	smaaEdgesDebugPass.enabled = false;
-	smaaWeightsDebugPass.enabled = false;
+	const smaaEdgesDebugPass = new EffectPass(new TextureEffect({ texture: effect.edgesTexture }));
+	const smaaWeightsDebugPass = new EffectPass(new TextureEffect({ texture: effect.weightsTexture }));
 	smaaEdgesDebugPass.fullscreenMaterial.colorSpaceConversion = false;
 	smaaWeightsDebugPass.fullscreenMaterial.colorSpaceConversion = false;
-	pipeline.add(smaaEdgesDebugPass, smaaWeightsDebugPass);
+	smaaEdgesDebugPass.enabled = false;
+	smaaWeightsDebugPass.enabled = false;
 	// #endregion DEBUG
+
+	const frameGraph = new FrameGraph(renderer);
+	frameGraph.add(clearPass, geoPass, effectPass, smaaEdgesDebugPass, smaaWeightsDebugPass);
 
 	// Settings
 
@@ -171,7 +176,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 		camera.aspect = width / height;
 		camera.fov = Utils.calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
 		camera.updateProjectionMatrix();
-		pipeline.setSize(width, height);
 
 	}
 
@@ -184,12 +188,12 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		fpsGraph.begin();
 		controls.update(timestamp);
-		pipeline.render(timestamp);
+		frameGraph.render(timestamp);
 		fpsGraph.end();
 
 	}
 
-	pipeline.compile().then(() => {
+	frameGraph.compile().then(() => {
 
 		// Only render when the canvas is visible.
 		const viewportObserver = new IntersectionObserver(

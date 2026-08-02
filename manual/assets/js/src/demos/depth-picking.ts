@@ -13,11 +13,12 @@ import {
 } from "three";
 
 import {
+	ClearPass,
 	DepthCopyMode,
 	DepthPickingPass,
 	EffectPass,
+	FrameGraph,
 	GeometryPass,
-	RenderPipeline,
 	ToneMappingEffect
 } from "postprocessing";
 
@@ -101,14 +102,17 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post Processing
 
+	const clearPass = new ClearPass();
+	const geoPass = new GeometryPass({ scene, camera, samples: 4 });
 	const depthPickingPass = new DepthPickingPass();
+	const effectPass = new EffectPass(new ToneMappingEffect());
 
-	const pipeline = new RenderPipeline(renderer);
-	pipeline.add(
-		new GeometryPass(scene, camera, { samples: 4 }),
-		depthPickingPass,
-		new EffectPass(new ToneMappingEffect())
-	);
+	clearPass.output.defaultBuffer = geoPass.output.defaultBuffer;
+	depthPickingPass.input.connect(geoPass.output);
+	effectPass.input.connect(geoPass.output);
+
+	const frameGraph = new FrameGraph(renderer);
+	frameGraph.add(clearPass, geoPass, depthPickingPass, effectPass);
 
 	const ndc = new Vector3();
 
@@ -148,7 +152,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 		camera.aspect = width / height;
 		camera.fov = Utils.calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
 		camera.updateProjectionMatrix();
-		pipeline.setSize(width, height);
 
 	}
 
@@ -161,12 +164,12 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		fpsGraph.begin();
 		controls.update(timestamp);
-		pipeline.render(timestamp);
+		frameGraph.render(timestamp);
 		fpsGraph.end();
 
 	}
 
-	pipeline.compile().then(() => {
+	frameGraph.compile().then(() => {
 
 		// Only render when the canvas is visible.
 		const viewportObserver = new IntersectionObserver(

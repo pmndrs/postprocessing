@@ -9,13 +9,12 @@ import {
 } from "three";
 
 import {
-	EffectPass,
+	ClearPass,
+	CopyPass,
+	FrameGraph,
 	GaussianBlurPass,
 	GeometryPass,
-	MipmapBlurPass,
-	RenderPipeline,
-	TextureEffect,
-	ToneMappingEffect
+	MipmapBlurPass
 } from "postprocessing";
 
 import { Pane } from "tweakpane";
@@ -100,20 +99,18 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	gaussianBlurPass.enabled = false;
 	gaussianBlurPass.resolution.scale = 0.5;
-	const textureEffect = new TextureEffect({ texture: mipmapBlurPass.texture.value });
 
-	const outputPass = new EffectPass(
-		textureEffect,
-		new ToneMappingEffect()
-	);
+	const clearPass = new ClearPass();
+	const geoPass = new GeometryPass({ scene, camera, samples: 4 });
+	const outputPass = new CopyPass();
 
-	const pipeline = new RenderPipeline(renderer);
-	pipeline.add(
-		new GeometryPass(scene, camera, { samples: 4 }),
-		mipmapBlurPass,
-		gaussianBlurPass,
-		outputPass
-	);
+	clearPass.output.defaultBuffer = geoPass.output.defaultBuffer;
+	mipmapBlurPass.input.connect(geoPass.output);
+	gaussianBlurPass.input.connect(geoPass.output);
+	outputPass.input.defaultBuffer = mipmapBlurPass.texture;
+
+	const frameGraph = new FrameGraph(renderer);
+	frameGraph.add(clearPass, geoPass, mipmapBlurPass, gaussianBlurPass, outputPass);
 
 	// Settings
 
@@ -122,7 +119,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const fpsGraph = Utils.createFPSGraph(pane);
 
 	const folder = pane.addFolder({ title: "Settings" });
-	folder.addBinding(outputPass, "dithering");
 
 	const tab = folder.addTab({
 		pages: [
@@ -135,9 +131,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		mipmapBlurPass.enabled = (event.index === 0);
 		gaussianBlurPass.enabled = (event.index === 1);
-		textureEffect.texture = gaussianBlurPass.enabled ?
-			gaussianBlurPass.texture.value :
-			mipmapBlurPass.texture.value;
+		outputPass.input.defaultBuffer = gaussianBlurPass.enabled ?
+			gaussianBlurPass.texture :
+			mipmapBlurPass.texture;
 
 	});
 
@@ -171,7 +167,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 		camera.aspect = width / height;
 		camera.fov = Utils.calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
 		camera.updateProjectionMatrix();
-		pipeline.setSize(width, height);
 
 	}
 
@@ -184,12 +179,12 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		fpsGraph.begin();
 		controls.update(timestamp);
-		pipeline.render(timestamp);
+		frameGraph.render(timestamp);
 		fpsGraph.end();
 
 	}
 
-	pipeline.compile().then(() => {
+	frameGraph.compile().then(() => {
 
 		// Only render when the canvas is visible.
 		const viewportObserver = new IntersectionObserver(
