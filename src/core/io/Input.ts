@@ -9,7 +9,6 @@ import { BaseEventMap } from "../BaseEventMap.js";
 import { Connectable } from "../Connectable.js";
 import { Disposable } from "../Disposable.js";
 import type { Output } from "./Output.js";
-import { RenderTargetResource } from "./RenderTargetResource.js";
 import { ShaderDataResource } from "./ShaderDataResource.js";
 import { TextureResource } from "./TextureResource.js";
 
@@ -88,48 +87,11 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 
 		});
 
-		const textures = new CompositeMap<string, TextureResource>();
-		const observedTextures = new Set<TextureResource>();
-
-		const textureListener = () => {
+		const textures = new ObservableMap<string, TextureResource>();
+		textures.addEventListener("change", () => {
 
 			this.dispatchEvent({ type: "texturechange" });
 			this.dispatchEvent({ type: "change" });
-
-		};
-
-		const syncTextureListeners = () => {
-
-			const currentTextures = new Set(textures.values());
-
-			for(const texture of observedTextures) {
-
-				if(!currentTextures.has(texture)) {
-
-					texture.removeEventListener("change", textureListener);
-					observedTextures.delete(texture);
-
-				}
-
-			}
-
-			for(const texture of currentTextures) {
-
-				if(!observedTextures.has(texture)) {
-
-					texture.addEventListener("change", textureListener);
-					observedTextures.add(texture);
-
-				}
-
-			}
-
-		};
-
-		textures.addEventListener("change", () => {
-
-			syncTextureListeners();
-			textureListener();
 
 		});
 
@@ -189,10 +151,17 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 
 	}
 
-	set defaultBuffer(value: RenderTargetResource | TextureResource | Texture | null) {
+	set defaultBuffer(value: TextureResource | Texture | undefined) {
 
-		const texture = (value instanceof RenderTargetResource) ? value.texture : value;
-		this.setBuffer(Input.BUFFER_DEFAULT, texture);
+		if(value === undefined) {
+
+			this.removeDefaultBuffer();
+
+		} else {
+
+			this.setBuffer(Input.BUFFER_DEFAULT, value);
+
+		}
 
 	}
 
@@ -209,33 +178,7 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 	}
 
 	/**
-	 * Retrieves a texture.
-	 *
-	 * @param key - The key of the buffer.
-	 * @return The texture, or `null` if it doesn't exist.
-	 */
-
-	getTexture(key: string): Readonly<Texture> | null {
-
-		return this.getBuffer(key)?.value ?? null;
-
-	}
-
-	/**
-	 * Retrieves a buffer.
-	 *
-	 * @param key - The key of the buffer.
-	 * @return The buffer, or `undefined` if it doesn't exist.
-	 */
-
-	getBuffer(key: string): TextureResource | undefined {
-
-		return this.textures.get(key);
-
-	}
-
-	/**
-	 * Sets a buffer.
+	 * Sets a texture resource or creates a new one.
 	 *
 	 * Raw textures will automatically be wrapped in a new resource.
 	 *
@@ -246,54 +189,46 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 
 	setBuffer(key: string, value: TextureResource | Texture | null): TextureResource {
 
-		const resource = value instanceof TextureResource ? value : new TextureResource(value);
+		const resource = (value instanceof TextureResource) ? value : new TextureResource(value);
 		this.textures.set(key, resource);
 		return resource;
 
 	}
 
 	/**
-	 * Removes a buffer.
-	 *
-	 * @param key - The key of the buffer.
-	 * @return True if the buffer existed and has been removed, or false if not.
-	 */
-
-	removeBuffer(key: string): boolean {
-
-		return this.textures.delete(key);
-
-	}
-
-	/**
 	 * Connects resources from a given output to this input.
 	 *
-	 * Textures, defines and uniforms from the given output become available through this input.
+	 * {@link requiredTextures | Required textures} will be connected if they are provided by the given output.
 	 *
 	 * @param other - The output to connect.
 	 */
 
 	connect(other: Output): void {
 
-		const textures = this.textures as CompositeMap<string, TextureResource>;
-		textures.connect(other.textures);
+		this.textures.setAll(...Array.from(other.textures()).filter(x => this.requiredTextures.has(x[0])));
 		this.shaderData.connect(other.shaderData);
 
 	}
 
 	disconnect(other: Output): void {
 
-		const textures = this.textures as CompositeMap<string, TextureResource>;
-		textures.disconnect(other.textures);
+		for(const [key, value] of other.textures()) {
+
+			if(this.textures.get(key) === value) {
+
+				this.textures.delete(key);
+
+			}
+
+		}
+
 		this.shaderData.disconnect(other.shaderData);
 
 	}
 
 	dispose(): void {
 
-		const textures = this.textures as CompositeMap<string, TextureResource>;
-
-		for(const disposable of textures.localValues()) {
+		for(const disposable of this.textures.values()) {
 
 			disposable.dispose();
 
