@@ -1,4 +1,5 @@
 import { Texture, Uniform, UnsignedByteType } from "three";
+import { TextureResource } from "../core/io/TextureResource.js";
 import { ColorChannel } from "../enums/ColorChannel.js";
 import { Effect } from "./Effect.js";
 
@@ -17,7 +18,7 @@ export interface TextureEffectOptions {
 	 * The texture.
 	 */
 
-	texture?: Texture | null;
+	texture?: TextureResource | Texture | null;
 
 }
 
@@ -28,6 +29,24 @@ export interface TextureEffectOptions {
  */
 
 export class TextureEffect extends Effect implements TextureEffectOptions {
+
+	/**
+	 * Identifies the texture buffer.
+	 */
+
+	private static readonly BUFFER_TEXTURE = "BUFFER_TEXTURE";
+
+	/**
+	 * A texture resource.
+	 */
+
+	private _texture!: TextureResource;
+
+	/**
+	 * A texture `change` event listener.
+	 */
+
+	private readonly textureListener: () => void;
 
 	/**
 	 * Constructs a new texture effect.
@@ -48,54 +67,65 @@ export class TextureEffect extends Effect implements TextureEffectOptions {
 		uniforms.set("map", new Uniform(null));
 		uniforms.set("uvTransform", new Uniform(null));
 
+		this.textureListener = () => this.onTextureChange();
 		this.texture = texture;
 
 	}
 
-	get texture(): Texture | null {
+	get texture(): Readonly<Texture> | null {
 
-		return this.input.uniforms.get("map")!.value as Texture;
+		return this._texture.value;
 
 	}
 
-	set texture(value: Texture | null) {
+	set texture(value: TextureResource | Texture | null) {
 
-		const prevTexture = this.texture;
+		this._texture?.removeEventListener("change", this.textureListener);
+		this._texture = this.input.setBuffer(TextureEffect.BUFFER_TEXTURE, value);
+		this._texture.addEventListener("change", this.textureListener);
+
+		this.onTextureChange();
+
+	}
+
+	/**
+	 * Performs configuration tasks when the texture is changed.
+	 */
+
+	private onTextureChange(): void {
+
+		const texture = this.texture;
 		const uniforms = this.input.uniforms;
 		const defines = this.input.defines;
 
-		if(prevTexture !== value) {
+		uniforms.get("map")!.value = texture;
+		defines.delete("TEXTURE_PRECISION_HIGH");
 
-			uniforms.get("map")!.value = value;
-			defines.delete("TEXTURE_PRECISION_HIGH");
+		if(texture !== null) {
 
-			if(value !== null) {
+			if(texture.matrixAutoUpdate) {
 
-				if(value.matrixAutoUpdate) {
+				defines.set("UV_TRANSFORM", true);
+				uniforms.get("uvTransform")!.value = texture.matrix;
+				this.vertexShader = vertexShader;
 
-					defines.set("UV_TRANSFORM", true);
-					uniforms.get("uvTransform")!.value = value.matrix;
-					this.vertexShader = vertexShader;
+			} else {
 
-				} else {
-
-					defines.delete("UV_TRANSFORM");
-					uniforms.get("uvTransform")!.value = null;
-					this.vertexShader = null;
-
-				}
-
-				if(value.type !== UnsignedByteType) {
-
-					defines.set("TEXTURE_PRECISION_HIGH", true);
-
-				}
+				defines.delete("UV_TRANSFORM");
+				uniforms.get("uvTransform")!.value = null;
+				this.vertexShader = null;
 
 			}
 
-			this.setChanged();
+			if(texture.type !== UnsignedByteType) {
+
+				defines.set("TEXTURE_PRECISION_HIGH", true);
+
+			}
 
 		}
+
+		this.setChanged();
 
 	}
 
