@@ -1,14 +1,4 @@
-import {
-	Color,
-	LinearFilter,
-	LoadingManager,
-	NearestFilter,
-	OrthographicCamera,
-	PerspectiveCamera,
-	Texture,
-	Uniform
-} from "three";
-
+import { Camera, Color, LinearFilter, LoadingManager, NearestFilter, Texture, Uniform } from "three";
 import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 import { TextureResource } from "../core/io/TextureResource.js";
 import { GBuffer } from "../enums/GBuffer.js";
@@ -82,6 +72,18 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 	private static readonly BUFFER_WEIGHTS = "BUFFER_WEIGHTS";
 
 	/**
+	 * A render target for the SMAA edge detection.
+	*/
+
+	private readonly bufferEdges: RenderTargetResource;
+
+	/**
+	 * A render target for the SMAA edge weights.
+	*/
+
+	private readonly bufferWeights: RenderTargetResource;
+
+	/**
 	* A clear pass for the edges buffer.
 	*/
 
@@ -114,25 +116,25 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 		super("SMAAEffect");
 
 		this.fragmentShader = fragmentShader;
-		this.output.setBuffer(SMAAEffect.BUFFER_EDGES, this.createFramebuffer());
-		this.output.setBuffer(SMAAEffect.BUFFER_WEIGHTS, this.createFramebuffer());
+		this.bufferEdges = this.output.setBuffer(SMAAEffect.BUFFER_EDGES);
+		this.bufferWeights = this.output.setBuffer(SMAAEffect.BUFFER_WEIGHTS);
 		this.input.requiredTextures.add(GBuffer.DEPTH);
 		this.input.uniforms.set("weightMap", new Uniform(null));
 		this.weightsTexture.bindUniform(this.input.uniforms.get("weightMap")!);
 
 		this.clearPass = new ClearPass(true, false, false);
-		this.clearPass.output.defaultBuffer = this.renderTargetEdges;
+		this.clearPass.output.defaultBuffer = this.bufferEdges;
 		this.clearPass.clearValues.color = new Color(0x000000);
 		this.clearPass.clearValues.alpha = 1;
 
 		this.edgeDetectionPass = new ShaderPass(new SMAAEdgeDetectionMaterial());
-		this.edgeDetectionPass.output.defaultBuffer = this.renderTargetEdges;
+		this.edgeDetectionPass.output.defaultBuffer = this.bufferEdges;
 		this.edgeDetectionMaterial.edgeDetectionMode = edgeDetectionMode;
 		this.edgeDetectionMaterial.predicationMode = predicationMode;
 
 		this.weightsPass = new ShaderPass(new SMAAWeightsMaterial());
 		this.weightsPass.input.defaultBuffer = this.edgesTexture;
-		this.weightsPass.output.defaultBuffer = this.renderTargetWeights;
+		this.weightsPass.output.defaultBuffer = this.bufferWeights;
 
 		this.subpasses = [this.clearPass, this.edgeDetectionPass, this.weightsPass];
 
@@ -141,41 +143,13 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 
 	}
 
-	override get camera(): OrthographicCamera | PerspectiveCamera | null {
+	override onCameraChange(_previous: Camera | null, current: Camera | null): void {
 
-		return super.camera;
+		if(current !== null) {
 
-	}
-
-	override set camera(value: OrthographicCamera | PerspectiveCamera | null) {
-
-		super.camera = value;
-
-		if(value !== null) {
-
-			this.edgeDetectionMaterial.copyCameraSettings(value);
+			this.edgeDetectionMaterial.copyCameraSettings(current);
 
 		}
-
-	}
-
-	/**
-	 * A render target for the SMAA edge detection.
-	 */
-
-	private get renderTargetEdges(): RenderTargetResource {
-
-		return this.output.buffers.get(SMAAEffect.BUFFER_EDGES)!;
-
-	}
-
-	/**
-	 * A render target for the SMAA edge weights.
-	 */
-
-	private get renderTargetWeights(): RenderTargetResource {
-
-		return this.output.buffers.get(SMAAEffect.BUFFER_WEIGHTS)!;
 
 	}
 
@@ -351,23 +325,21 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 	protected override onInputChange(): void {
 
 		this.edgeDetectionMaterial.inputBuffer = this.input.defaultBuffer?.value ?? null;
-		this.edgeDetectionMaterial.depthBuffer = this.input.getBuffer(GBuffer.DEPTH);
+		this.edgeDetectionMaterial.depthBuffer = this.input.buffers.get(GBuffer.DEPTH)?.value ?? null;
 
 	}
 
 	protected override onResolutionChange(): void {
 
 		const { width, height } = this.resolution;
-		this.renderTargetEdges.value!.setSize(width, height);
-		this.renderTargetWeights.value!.setSize(width, height);
+		this.bufferEdges.value?.setSize(width, height);
+		this.bufferWeights.value?.setSize(width, height);
 
 	}
 
 	override render(): void {
 
-		this.clearPass.render();
-		this.edgeDetectionPass.render();
-		this.weightsPass.render();
+		this.renderSubpasses();
 
 	}
 

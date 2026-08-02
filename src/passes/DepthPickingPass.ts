@@ -1,3 +1,4 @@
+import type { OrthographicCamera, PerspectiveCamera } from "three";
 import { Vector2, Vector3 } from "three";
 import { DepthCopyMode } from "../enums/DepthCopyMode.js";
 import { DepthCopyPass } from "./DepthCopyPass.js";
@@ -46,14 +47,15 @@ export class DepthPickingPass extends DepthCopyPass {
 	private readDepthAt(x: number, y: number): number {
 
 		const renderer = this.renderer;
+		const renderTarget = this.output.defaultBuffer?.value ?? null;
 
-		if(renderer === null) {
+		if(renderer === null || renderTarget === null) {
 
 			return 0.0;
 
 		}
 
-		renderer.readRenderTargetPixels(this.renderTarget, x, y, 1, 1, pixelBuffer);
+		renderer.readRenderTargetPixels(renderTarget, x, y, 1, 1, pixelBuffer);
 		const depth = pixelBuffer[0];
 
 		if(renderer.capabilities.reversedDepthBuffer) {
@@ -68,7 +70,7 @@ export class DepthPickingPass extends DepthCopyPass {
 
 			}
 
-			const camera = this.camera;
+			const camera = this.camera as OrthographicCamera | PerspectiveCamera;
 			const d = Math.pow(2.0, depth * Math.log2(camera.far + 1.0)) - 1.0;
 			const a = camera.far / (camera.far - camera.near);
 			const b = camera.far * camera.near / (camera.near - camera.far);
@@ -110,11 +112,15 @@ export class DepthPickingPass extends DepthCopyPass {
 
 				// The specific depth value needs to be copied before it can be read.
 				this.callback = resolve;
+				return;
 
-			} else {
+			}
 
-				// The depth values from the current or last frame are already available.
-				const renderTarget = this.renderTarget;
+			// The depth values from the current or last frame are already available.
+			const renderTarget = this.output.defaultBuffer?.value ?? null;
+
+			if(renderTarget !== null) {
+
 				const texelPosition = this.fullscreenMaterial.texelPosition;
 				const x = Math.round(texelPosition.x * renderTarget.width);
 				const y = Math.round(texelPosition.y * renderTarget.height);

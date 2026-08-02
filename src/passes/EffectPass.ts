@@ -1,10 +1,11 @@
-import { Event as Event3, Material, Texture } from "three";
+import { Event, Material, Texture } from "three";
 import { Pass } from "../core/Pass.js";
 import { Effect } from "../effects/Effect.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { EffectMaterial } from "../materials/EffectMaterial.js";
 import { EffectMaterialManager } from "../utils/EffectMaterialManager.js";
 import { GBufferConfig } from "../utils/gbuffer/GBufferConfig.js";
+import { GBufferResource } from "../core/index.js";
 
 /**
  * An effect pass.
@@ -26,13 +27,13 @@ export class EffectPass extends Pass<EffectMaterial> {
 	 * An event listener that calls {@link handleEffectEvent}.
 	 */
 
-	private readonly effectListener: (e: Event3) => void;
+	private readonly effectListener: (e: Event) => void;
 
 	/**
 	 * An event listener that calls {@link handleGBufferConfigEvent}.
 	 */
 
-	private readonly gBufferConfigListener: (e: Event3) => void;
+	private readonly gBufferConfigListener: (e: Event) => void;
 
 	/**
 	 * Keeps track of the previous G-Buffer configuration.
@@ -64,11 +65,10 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		super("EffectPass");
 
-		this.output.defaultBuffer = this.createFramebuffer();
-		this.effectMaterialManager = new EffectMaterialManager(this.input);
-		this.effectMaterialManager.gBuffer = this.input.gBuffer;
-		this.effectListener = (e: Event3) => this.handleEffectEvent(e);
-		this.gBufferConfigListener = (e: Event3) => this.handleGBufferConfigEvent(e);
+		this.output.createDefaultBuffer();
+		this.effectMaterialManager = new EffectMaterialManager(this.input.shaderData, this.input.requiredTextures);
+		this.effectListener = (e: Event) => this.handleEffectEvent(e as Event<string, Effect>);
+		this.gBufferConfigListener = (e: Event) => this.handleGBufferConfigEvent(e);
 		this.previousGBufferConfig = null;
 		this.effects = effects;
 		this.disposed = false;
@@ -190,21 +190,21 @@ export class EffectPass extends Pass<EffectMaterial> {
 	private updateGBufferStruct(): void {
 
 		const input = this.input;
-		const gBufferConfig = input.gBufferConfig;
-
-		if(gBufferConfig === null) {
-
-			return;
-
-		}
-
 		const gBufferEntries: [string, Texture | null][] = [];
 
-		for(const component of input.gBuffer) {
+		for(const texture of input.requiredTextures) {
 
-			const useDefaultBuffer = (component === GBuffer.COLOR as string);
-			const buffer = useDefaultBuffer ? input.defaultBuffer?.value : input.buffers.get(component)?.value;
-			gBufferEntries.push([gBufferConfig.gBufferStructFields.get(component)!, buffer ?? null]);
+			// The color texture contains the original output of the initial geometry pass.
+			// The default buffer can be a different texture with modified data.
+			const useDefaultBuffer = (texture === GBuffer.COLOR as string);
+			const resource = useDefaultBuffer ? input.defaultBuffer : input.buffers.get(texture);
+
+			if(resource?.renderTarget instanceof GBufferResource) {
+
+				const gBufferConfig = resource.renderTarget.gBufferSchema;
+				gBufferEntries.push([gBufferConfig.gBufferStructFields.get(texture)!, resource.value]);
+
+			}
 
 		}
 
@@ -220,13 +220,13 @@ export class EffectPass extends Pass<EffectMaterial> {
 	 * @param event - An event.
 	 */
 
-	private handleEffectEvent(e: Event3): void {
+	private handleEffectEvent(e: Event<string, Effect>): void {
 
 		switch(e.type) {
 
 			case "change":
-				this.input.gBuffer.addAll(...(e.target as Effect).input.gBuffer);
-				this.effectMaterialManager.invalidateShaderData(e.target as Effect);
+				this.input.requiredTextures.addAll(...e.target.input.requiredTextures);
+				this.effectMaterialManager.invalidateShaderData(e.target);
 				this.updateMaterial(true);
 				break;
 
@@ -244,7 +244,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 	 * @param event - An event.
 	 */
 
-	private handleGBufferConfigEvent(e: Event3): void {
+	private handleGBufferConfigEvent(e: Event): void {
 
 		switch(e.type) {
 
@@ -278,7 +278,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		}
 
-		this.effectMaterialManager.gBufferConfig = gBufferConfig;
+		this.effectMaterialManager.gBufferSchema = gBufferConfig;
 		this.previousGBufferConfig = gBufferConfig;
 
 		for(const effect of this.effects) {

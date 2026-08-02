@@ -1,4 +1,5 @@
-import { WebGLRenderTarget } from "three";
+import { ColorSpace, PixelFormat } from "three";
+import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 import { TextureResource } from "../core/io/TextureResource.js";
 import { Pass } from "../core/Pass.js";
 import { GaussianBlurMaterial } from "../materials/GaussianBlurMaterial.js";
@@ -51,7 +52,23 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> implements Gaus
 
 	private static readonly BUFFER_B = "BUFFER_B";
 
-	iterations: number;
+	/**
+	 * @see {@link iterations}
+	 */
+
+	private _iterations: number;
+
+	/**
+	 * A render target resource used for blurring.
+	 */
+
+	private readonly bufferA: RenderTargetResource;
+
+	/**
+	 * A render target resource used for blurring.
+	 */
+
+	private readonly bufferB: RenderTargetResource;
 
 	/**
 	 * Constructs a new Gaussian blur pass.
@@ -63,55 +80,41 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> implements Gaus
 
 		super("GaussianBlurPass");
 
-		this.output.setBuffer(GaussianBlurPass.BUFFER_A, this.createFramebuffer());
-		this.output.setBuffer(GaussianBlurPass.BUFFER_B, this.createFramebuffer());
+		this.bufferA = this.output.setBuffer(GaussianBlurPass.BUFFER_A);
+		this.bufferB = this.output.setBuffer(GaussianBlurPass.BUFFER_B);
 
 		this.fullscreenMaterial = new GaussianBlurMaterial({ kernelSize });
-		this.iterations = iterations;
+		this._iterations = iterations;
 
 	}
 
-	/**
-	 * The blur material.
-	 */
-
-	private get blurMaterial(): GaussianBlurMaterial {
-
-		return this.fullscreenMaterial;
-
-	}
+	// #region Settings
 
 	get kernelSize(): number {
 
-		return this.blurMaterial.kernelSize;
+		return this.fullscreenMaterial.kernelSize;
 
 	}
 
 	set kernelSize(value: number) {
 
-		this.blurMaterial.kernelSize = value;
+		this.fullscreenMaterial.kernelSize = value;
 
 	}
 
-	/**
-	 * The first blur render target.
-	 */
+	get iterations(): number {
 
-	private get renderTargetA(): WebGLRenderTarget {
-
-		return this.output.getBuffer(GaussianBlurPass.BUFFER_A)!;
+		return this._iterations;
 
 	}
 
-	/**
-	 * The second blur render target.
-	 */
+	set iterations(value: number) {
 
-	private get renderTargetB(): WebGLRenderTarget {
-
-		return this.output.getBuffer(GaussianBlurPass.BUFFER_B)!;
+		this._iterations = Math.max(value, 1);
 
 	}
+
+	// #endregion
 
 	/**
 	 * The output texture.
@@ -119,7 +122,7 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> implements Gaus
 
 	get texture(): TextureResource {
 
-		return this.output.buffers.get(GaussianBlurPass.BUFFER_B)!.texture;
+		return this.bufferB.texture;
 
 	}
 
@@ -134,35 +137,26 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> implements Gaus
 
 		}
 
-		const { format, internalFormat, type, colorSpace } = inputTexture;
+		const { format, type, colorSpace } = inputTexture;
 
-		for(const renderTarget of [this.renderTargetA, this.renderTargetB]) {
+		for(const buffer of [this.bufferA, this.bufferB]) {
 
-			const texture = renderTarget.texture;
-			texture.format = format;
-			texture.internalFormat = internalFormat;
-			texture.type = type;
-			texture.colorSpace = colorSpace;
-			renderTarget.dispose();
-
-		}
-
-		if(this.input.frameBufferPrecisionHigh) {
-
-			this.blurMaterial.outputPrecision = "mediump";
-
-		} else {
-
-			this.blurMaterial.outputPrecision = "lowp";
+			buffer.descriptor.setValues({
+				colorSpace: colorSpace as ColorSpace,
+				format: format as PixelFormat,
+				type
+			});
 
 		}
 
+		this.fullscreenMaterial.outputPrecision = this.input.frameBufferPrecisionHigh ? "mediump" : "lowp";
 		this.onResolutionChange();
 
 	}
 
 	protected override onResolutionChange(): void {
 
+		// Use the size of the input texture to calculate the texel size for sampling.
 		const inputBuffer = this.input.defaultBuffer?.value ?? null;
 
 		if(inputBuffer === null) {
@@ -171,31 +165,27 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> implements Gaus
 
 		}
 
-		const resolution = this.resolution;
-		this.renderTargetA.setSize(resolution.width, resolution.height);
-		this.renderTargetB.setSize(resolution.width, resolution.height);
-
-		// Use the size of the input texture to calculate the texel size for sampling.
 		const imgData = inputBuffer.source.data as ImageData;
-		this.blurMaterial.setSize(imgData.width, imgData.height);
+		this.fullscreenMaterial.setSize(imgData.width, imgData.height);
 
 	}
 
 	override render(): void {
 
-		if(this.renderer === null || this.input.defaultBuffer === null || this.input.defaultBuffer.value === null) {
+		const inputBuffer = this.input.defaultBuffer?.value ?? null;
+		const renderTargetA = this.bufferA.value!;
+		const renderTargetB = this.bufferB.value!;
+
+		if(this.renderer === null || inputBuffer === null) {
 
 			return;
 
 		}
 
-		const renderTargetA = this.renderTargetA;
-		const renderTargetB = this.renderTargetB;
-		const blurMaterial = this.blurMaterial;
+		const blurMaterial = this.fullscreenMaterial;
+		let previousBuffer = inputBuffer;
 
-		let previousBuffer = this.input.defaultBuffer.value;
-
-		for(let i = 0, l = Math.max(this.iterations, 1); i < l; ++i) {
+		for(let i = 0, l = this.iterations; i < l; ++i) {
 
 			// Blur direction: Horizontal
 			blurMaterial.direction.set(1.0, 0.0);

@@ -1,9 +1,10 @@
-import { FloatType, NearestFilter, WebGLRenderTarget } from "three";
+import { FloatType, NearestFilter } from "three";
 import { TextureResource } from "../core/io/TextureResource.js";
 import { Pass } from "../core/Pass.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { DepthCopyMaterial } from "../materials/DepthCopyMaterial.js";
 import { DepthCopyMode } from "../enums/DepthCopyMode.js";
+import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 
 /**
  * A pass that copies depth into a render target.
@@ -20,6 +21,12 @@ export class DepthCopyPass extends Pass<DepthCopyMaterial> {
 	private static readonly BUFFER_DEPTH = "BUFFER_DEPTH";
 
 	/**
+	 * The depth render target resource.
+	 */
+
+	private readonly buffer: RenderTargetResource;
+
+	/**
 	 * Constructs a new depth copy pass.
 	 */
 
@@ -30,32 +37,22 @@ export class DepthCopyPass extends Pass<DepthCopyMaterial> {
 		this.fullscreenMaterial = new DepthCopyMaterial();
 		this.input.requiredTextures.add(GBuffer.DEPTH);
 
-		this.output.setBuffer(DepthCopyPass.BUFFER_DEPTH, new WebGLRenderTarget(1, 1, {
+		this.buffer = this.output.setBuffer(DepthCopyPass.BUFFER_DEPTH, {
 			minFilter: NearestFilter,
 			magFilter: NearestFilter,
 			depthBuffer: false,
 			type: FloatType
-		}));
+		});
 
 	}
 
 	/**
-	 * The depth render target.
-	 */
-
-	protected get renderTarget(): WebGLRenderTarget {
-
-		return this.output.getBuffer(DepthCopyPass.BUFFER_DEPTH)!;
-
-	}
-
-	/**
-	 * The output texture.
+	 * The copied depth texture.
 	 */
 
 	get texture(): TextureResource {
 
-		return this.output.buffers.get(DepthCopyPass.BUFFER_DEPTH)!.texture;
+		return this.buffer.texture;
 
 	}
 
@@ -87,20 +84,13 @@ export class DepthCopyPass extends Pass<DepthCopyMaterial> {
 
 	protected override onInputChange(): void {
 
-		this.fullscreenMaterial.depthBuffer = this.input.getBuffer(GBuffer.DEPTH);
-
-	}
-
-	protected override onResolutionChange(): void {
-
-		const resolution = this.resolution;
-		this.renderTarget.setSize(resolution.width, resolution.height);
+		this.fullscreenMaterial.depthBuffer = this.input.buffers.get(GBuffer.DEPTH)?.value ?? null;
 
 	}
 
 	override render(): void {
 
-		this.setRenderTarget(this.renderTarget);
+		this.setRenderTarget(this.buffer.value);
 		this.renderFullscreen();
 
 	}

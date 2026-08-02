@@ -55,8 +55,8 @@ export class UIPass extends GeometryPass {
 
 		super.onInputChange();
 
-		this.copyPass.input.defaultBuffer = this.input.defaultBuffer?.value ?? null;
-		const depthTextureResource = this.input.getBuffer(GBuffer.DEPTH);
+		this.copyPass.input.defaultBuffer = this.input.defaultBuffer;
+		const depthTextureResource = this.input.buffers.get(GBuffer.DEPTH);
 
 		if(depthTextureResource !== undefined) {
 
@@ -64,7 +64,7 @@ export class UIPass extends GeometryPass {
 
 		} else {
 
-			this.copyPass.input.removeBuffer(GBuffer.DEPTH);
+			this.copyPass.input.buffers.delete(GBuffer.DEPTH);
 
 		}
 
@@ -84,7 +84,6 @@ export class UIPass extends GeometryPass {
 	protected override onResolutionChange(): void {
 
 		super.onResolutionChange();
-
 		this.copyPass.resolution.copy(this.resolution);
 
 	}
@@ -92,7 +91,6 @@ export class UIPass extends GeometryPass {
 	protected override onScissorChange(): void {
 
 		super.onScissorChange();
-
 		this.copyPass.scissor.copy(this.scissor);
 
 	}
@@ -100,7 +98,6 @@ export class UIPass extends GeometryPass {
 	protected override onViewportChange(): void {
 
 		super.onViewportChange();
-
 		this.copyPass.viewport.copy(this.viewport);
 
 	}

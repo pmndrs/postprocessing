@@ -85,23 +85,26 @@ export class BloomEffect extends Effect implements BloomEffectOptions {
 		this.fragmentShader = fragmentShader;
 		this.blendMode.blendFunction = new AddBlendFunction();
 
-		const luminancePass = new LuminancePass();
-		luminancePass.addEventListener("toggle", () => this.onInputChange());
-		this.luminancePass = luminancePass;
+		this.luminancePass = new LuminancePass();
+		this.luminancePass.addEventListener("toggle", () => this.onInputChange());
 
 		const luminanceMaterial = this.luminanceMaterial;
 		luminanceMaterial.threshold = luminanceThreshold;
 		luminanceMaterial.smoothing = luminanceSmoothing;
 
-		const mipmapBlurPass = new MipmapBlurPass({ levels, radius, fullResolutionUpsampling, clampToBorder });
-		this.mipmapBlurPass = mipmapBlurPass;
+		this.mipmapBlurPass = new MipmapBlurPass({
+			levels,
+			radius,
+			fullResolutionUpsampling,
+			clampToBorder
+		});
 
 		const uniforms = this.input.uniforms;
 		uniforms.set("intensity", new Uniform(intensity));
 		uniforms.set("map", new Uniform(null));
-		mipmapBlurPass.texture.bindUniform(uniforms.get("map")!);
+		this.mipmapBlurPass.texture.bindUniform(uniforms.get("map")!);
 
-		this.subpasses = [luminancePass, mipmapBlurPass];
+		this.subpasses = [this.luminancePass, this.mipmapBlurPass];
 
 	}
 
@@ -114,6 +117,8 @@ export class BloomEffect extends Effect implements BloomEffectOptions {
 		return this.luminancePass.fullscreenMaterial;
 
 	}
+
+	// #region Settings
 
 	get luminanceThreshold(): number {
 
@@ -151,17 +156,9 @@ export class BloomEffect extends Effect implements BloomEffectOptions {
 
 	}
 
+	// #endregion
+
 	protected override onInputChange(): void {
-
-		if(this.input.defaultBuffer === null) {
-
-			// Discard the texture resources.
-			this.luminancePass.input.removeDefaultBuffer();
-			this.mipmapBlurPass.input.removeDefaultBuffer();
-
-			return;
-
-		}
 
 		if(this.luminancePass.enabled) {
 
@@ -170,6 +167,7 @@ export class BloomEffect extends Effect implements BloomEffectOptions {
 
 		} else {
 
+			this.luminancePass.input.removeDefaultBuffer();
 			this.mipmapBlurPass.input.defaultBuffer = this.input.defaultBuffer;
 
 		}
@@ -178,13 +176,7 @@ export class BloomEffect extends Effect implements BloomEffectOptions {
 
 	override render(): void {
 
-		if(this.luminancePass.enabled) {
-
-			this.luminancePass.render();
-
-		}
-
-		this.mipmapBlurPass.render();
+		this.renderSubpasses();
 
 	}
 

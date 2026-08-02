@@ -3,6 +3,7 @@ import { Pass } from "../core/Pass.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { CopyMaterial } from "../materials/CopyMaterial.js";
 import { blitFramebuffer } from "../utils/index.js";
+import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 
 /**
  * Copies the contents of the default input buffer to another buffer.
@@ -24,13 +25,21 @@ export class CopyPass extends Pass<CopyMaterial> {
 	 * @param outputBuffer - An output buffer. If not provided, a new buffer will be created.
 	 */
 
-	constructor(outputBuffer?: WebGLRenderTarget) {
+	constructor(outputBuffer?: RenderTargetResource) {
 
 		super("CopyPass");
 
-		this.output.defaultBuffer = outputBuffer ?? this.createFramebuffer();
-		this.fullscreenMaterial = new CopyMaterial();
+		if(outputBuffer !== undefined) {
 
+			this.output.defaultBuffer = outputBuffer;
+
+		} else {
+
+			this.output.createDefaultBuffer();
+
+		}
+
+		this.fullscreenMaterial = new CopyMaterial();
 		this.blitEnabled = false;
 
 	}
@@ -85,7 +94,7 @@ export class CopyPass extends Pass<CopyMaterial> {
 
 		}
 
-		const inputDepthTexture = this.input.getBuffer(GBuffer.DEPTH);
+		const inputDepthTexture = this.input.buffers.get(GBuffer.DEPTH)?.value ?? null;
 
 		if(inputDepthTexture !== null) {
 
@@ -110,7 +119,7 @@ export class CopyPass extends Pass<CopyMaterial> {
 
 	private configureDepthBuffer(): void {
 
-		const inputDepthBuffer = this.input.getBuffer(GBuffer.DEPTH);
+		const inputDepthBuffer = this.input.buffers.get(GBuffer.DEPTH)?.value ?? null;
 		const outputDepthBuffer = this.output.defaultBuffer?.value?.depthTexture ?? null;
 		const inputIsOutput = (inputDepthBuffer === outputDepthBuffer);
 

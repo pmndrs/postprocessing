@@ -1,7 +1,8 @@
-import { WebGLRenderTarget } from "three";
+import { RenderTargetResource } from "../core/index.js";
 import { TextureResource } from "../core/io/TextureResource.js";
 import { Pass } from "../core/Pass.js";
 import { LuminanceHighPassMaterial } from "../materials/LuminanceHighPassMaterial.js";
+import { ColorSpace, PixelFormat } from "three";
 
 /**
  * A luminance pass.
@@ -18,6 +19,12 @@ export class LuminancePass extends Pass<LuminanceHighPassMaterial> {
 	private static readonly BUFFER_LUMINANCE = "BUFFER_LUMINANCE";
 
 	/**
+	 * The luminance buffer resource.
+	 */
+
+	private readonly buffer: RenderTargetResource;
+
+	/**
 	 * Constructs a new luminance pass.
 	 */
 
@@ -25,28 +32,18 @@ export class LuminancePass extends Pass<LuminanceHighPassMaterial> {
 
 		super("LuminancePass");
 
-		this.output.setBuffer(LuminancePass.BUFFER_LUMINANCE, this.createFramebuffer());
+		this.buffer = this.output.setBuffer(LuminancePass.BUFFER_LUMINANCE);
 		this.fullscreenMaterial = new LuminanceHighPassMaterial();
 
 	}
 
 	/**
-	 * The luminance render target.
-	 */
-
-	private get renderTarget(): WebGLRenderTarget {
-
-		return this.output.getBuffer(LuminancePass.BUFFER_LUMINANCE)!;
-
-	}
-
-	/**
-	 * The output texture.
+	 * The luminance texture.
 	 */
 
 	get texture(): TextureResource {
 
-		return this.output.buffers.get(LuminancePass.BUFFER_LUMINANCE)!.texture;
+		return this.buffer.texture;
 
 	}
 
@@ -61,35 +58,19 @@ export class LuminancePass extends Pass<LuminanceHighPassMaterial> {
 
 		}
 
-		const texture = this.renderTarget.texture;
-		texture.format = inputTexture.format;
-		texture.internalFormat = inputTexture.internalFormat;
-		texture.type = inputTexture.type;
-		texture.colorSpace = inputTexture.colorSpace;
-		texture.needsUpdate = true;
+		this.output.buffers.get(LuminancePass.BUFFER_LUMINANCE)!.descriptor.setValues({
+			colorSpace: inputTexture.colorSpace as ColorSpace,
+			format: inputTexture.format as PixelFormat,
+			type: inputTexture.type
+		});
 
-		if(this.input.frameBufferPrecisionHigh) {
-
-			this.fullscreenMaterial.outputPrecision = "mediump";
-
-		} else {
-
-			this.fullscreenMaterial.outputPrecision = "lowp";
-
-		}
-
-	}
-
-	protected override onResolutionChange(): void {
-
-		const resolution = this.resolution;
-		this.renderTarget.setSize(resolution.width, resolution.height);
+		this.fullscreenMaterial.outputPrecision = this.input.frameBufferPrecisionHigh ? "mediump" : "lowp";
 
 	}
 
 	override render(): void {
 
-		this.setRenderTarget(this.renderTarget);
+		this.setRenderTarget(this.buffer.value);
 		this.renderFullscreen();
 
 	}

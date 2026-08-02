@@ -1,8 +1,9 @@
-import { FloatType, NearestFilter, WebGLRenderTarget } from "three";
+import { FloatType, NearestFilter } from "three";
 import { TextureResource } from "../core/io/TextureResource.js";
 import { Pass } from "../core/Pass.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { DepthDownsamplingMaterial } from "../materials/DepthDownsamplingMaterial.js";
+import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 
 /**
  * A downsampling pass that picks the most representative depth (and normal) in 2x2 texel neighborhoods.
@@ -19,6 +20,12 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 	private static readonly BUFFER_DEPTH = "BUFFER_DEPTH";
 
 	/**
+	 * The depth render target resource.
+	 */
+
+	private readonly buffer: RenderTargetResource;
+
+	/**
 	 * Constructs a new depth downsampling pass.
 	 */
 
@@ -27,27 +34,14 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 		super("DepthDownsamplingPass");
 
 		this.fullscreenMaterial = new DepthDownsamplingMaterial();
-
-		this.output.setBuffer(
-			DepthDownsamplingPass.BUFFER_DEPTH,
-			new WebGLRenderTarget(1, 1, {
-				minFilter: NearestFilter,
-				magFilter: NearestFilter,
-				depthBuffer: false,
-				type: FloatType
-			})
-		);
-
-	}
-
-	/**
-	 * The depth render target.
-	 */
-
-	private get renderTarget(): WebGLRenderTarget {
 		this.input.requiredTextures.addAll(GBuffer.DEPTH, GBuffer.NORMAL);
 
-		return this.output.getBuffer(DepthDownsamplingPass.BUFFER_DEPTH)!;
+		this.buffer = this.output.setBuffer(DepthDownsamplingPass.BUFFER_DEPTH, {
+			minFilter: NearestFilter,
+			magFilter: NearestFilter,
+			depthBuffer: false,
+			type: FloatType
+		});
 
 	}
 
@@ -57,14 +51,14 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 
 	get texture(): TextureResource {
 
-		return this.output.buffers.get(DepthDownsamplingPass.BUFFER_DEPTH)!.texture;
+		return this.buffer.texture;
 
 	}
 
 	protected override onInputChange(): void {
 
-		this.fullscreenMaterial.depthBuffer = this.input.getBuffer(GBuffer.DEPTH);
-		this.fullscreenMaterial.normalBuffer = this.input.getBuffer(GBuffer.NORMAL);
+		this.fullscreenMaterial.depthBuffer = this.input.buffers.get(GBuffer.DEPTH)?.value ?? null;
+		this.fullscreenMaterial.normalBuffer = this.input.buffers.get(GBuffer.NORMAL)?.value ?? null;
 		this.onResolutionChange();
 
 	}
@@ -97,7 +91,7 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 		const gl = this.renderer.getContext();
 		const renderable = gl.getExtension("EXT_color_buffer_float") ?? gl.getExtension("EXT_color_buffer_half_float");
 
-		if(!renderable) {
+		if(renderable === null) {
 
 			throw new Error("Rendering to a float texture is not supported");
 
@@ -107,7 +101,7 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 
 	override render(): void {
 
-		this.setRenderTarget(this.renderTarget);
+		this.setRenderTarget(this.buffer.value);
 		this.renderFullscreen();
 
 	}
