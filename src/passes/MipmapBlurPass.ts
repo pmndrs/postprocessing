@@ -52,6 +52,12 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 	private static readonly BUFFER_MAIN = "BUFFER_MAIN";
 
 	/**
+	 * @see {@link fullResolutionUpsampling}
+	*/
+
+	private _fullResolutionUpsampling: boolean;
+
+	/**
 	 * The mipmaps used for downsampling.
 	 */
 
@@ -74,12 +80,6 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 	*/
 
 	private upsamplingMaterial: UpsamplingMaterial;
-
-	/**
-	 * @see {@link fullResolutionUpsampling}
-	*/
-
-	private _fullResolutionUpsampling: boolean;
 
 	/**
 	 * Constructs a new mipmap blur pass.
