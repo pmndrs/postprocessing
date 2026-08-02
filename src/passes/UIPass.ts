@@ -3,7 +3,7 @@ import { CopyPass } from "./CopyPass.js";
 import { GeometryPass, GeometryPassOptions } from "./GeometryPass.js";
 
 /**
- * A UI pass.
+ * A user interface pass.
  *
  * @category Passes
  */
@@ -19,7 +19,7 @@ export class UIPass extends GeometryPass {
 	protected readonly copyPass: CopyPass;
 
 	/**
-	 * Constructs a new geometry pass.
+	 * Constructs a new user interface pass.
 	 *
 	 * @param scene - A scene.
 	 * @param camera - A camera.
