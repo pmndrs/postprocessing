@@ -69,8 +69,6 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 	/**
 	 * Constructs a new geometry pass.
 	 *
-	 * @param scene - A scene.
-	 * @param camera - A camera.
 	 * @param options - Additional options.
 	 */
 
