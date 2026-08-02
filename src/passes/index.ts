@@ -7,7 +7,6 @@ export * from "./DepthCopyPass.js";
 export * from "./EffectPass.js";
 export * from "./GaussianBlurPass.js";
 export * from "./GeometryPass.js";
-export * from "./LambdaPass.js";
 export * from "./LuminancePass.js";
 export * from "./MipmapBlurPass.js";
 export * from "./ShaderPass.js";
