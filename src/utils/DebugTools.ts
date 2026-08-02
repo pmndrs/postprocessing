@@ -171,7 +171,6 @@ function analyzeDataFlow(passes: readonly Pass<Material | null>[], textureIds: M
 
 				}
 
-
 			}
 
 		}

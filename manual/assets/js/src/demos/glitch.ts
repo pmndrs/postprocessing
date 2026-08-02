@@ -142,7 +142,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Render Loop
 
-
 	function render(timestamp: number): void {
 
 		fpsGraph.begin();

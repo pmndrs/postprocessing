@@ -5,7 +5,7 @@ import { Effect } from "../effects/Effect.js";
 import { EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { EffectMaterial } from "../materials/EffectMaterial.js";
-import { GBufferConfig } from "./gbuffer/GBufferConfig.js";
+import { GBufferSchema } from "./gbuffer/GBufferSchema.js";
 import { EffectShaderData } from "./EffectShaderData.js";
 
 /**
@@ -75,7 +75,7 @@ export class EffectMaterialManager implements Disposable {
 	 * @see {@link gBufferSchema}
 	 */
 
-	private _gBufferConfig: GBufferConfig | null;
+	private _gBufferSchema: GBufferSchema | null;
 
 	/**
 	 * @see {@link dithering}
@@ -101,7 +101,7 @@ export class EffectMaterialManager implements Disposable {
 		this.requiredTextures = requiredTextures;
 		this.activeMaterial = null;
 
-		this._gBufferConfig = null;
+		this._gBufferSchema = null;
 		this._dithering = false;
 
 	}
@@ -122,18 +122,18 @@ export class EffectMaterialManager implements Disposable {
 	 * Assigning a new configuration will invalidate all caches.
 	 */
 
-	get gBufferSchema(): GBufferConfig | null {
+	get gBufferSchema(): GBufferSchema | null {
 
-		return this._gBufferConfig;
+		return this._gBufferSchema;
 
 	}
 
-	set gBufferSchema(value: GBufferConfig | null) {
+	set gBufferSchema(value: GBufferSchema | null) {
 
-		if(this._gBufferConfig !== value) {
+		if(this._gBufferSchema !== value) {
 
 			this.dispose();
-			this._gBufferConfig = value;
+			this._gBufferSchema = value;
 
 		}
 
@@ -215,15 +215,15 @@ export class EffectMaterialManager implements Disposable {
 	/**
 	 * Creates shader code for a `GBuffer` struct declaration.
 	 *
-	 * @param gBufferSchema - A G-Buffer config.
+	 * @param schema - A G-Buffer schema.
 	 * @return The shader code.
 	 */
 
-	private createGBufferStructDeclaration(gBufferSchema: GBufferConfig): string {
+	private createGBufferStructDeclaration(schema: GBufferSchema): string {
 
 		return [
 			"struct GBuffer {",
-			...Array.from(gBufferSchema.gBufferStructDeclaration)
+			...Array.from(schema.gBufferStructDeclaration)
 				.filter(x => this.requiredTextures!.has(x[0]))
 				.map(x => `\t${x[1]}`),
 			"};\n"

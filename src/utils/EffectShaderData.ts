@@ -7,7 +7,7 @@ import { GData } from "../enums/GData.js";
 import { prefixSubstrings } from "../utils/functions/string.js";
 import { isConvolutionPass } from "./functions/pass.js";
 import { topologicalSort } from "./functions/sorting.js";
-import { GBufferConfig } from "./gbuffer/GBufferConfig.js";
+import { GBufferSchema } from "./gbuffer/GBufferSchema.js";
 
 const functionRegExp = /\w+\s+(\w+)\([\w\s,]*\)\s*{/g;
 const structRegExp = /struct\s+(\w*)/g;
@@ -414,15 +414,15 @@ export class EffectShaderData implements ShaderData {
 	/**
 	 * Creates shader code for a `GData` struct declaration.
 	 *
-	 * @param gBufferConfig - A G-Buffer config.
+	 * @param schema - A G-Buffer schema.
 	 * @return The shader code.
 	 */
 
-	createGDataStructDeclaration(gBufferConfig: GBufferConfig): string {
+	createGDataStructDeclaration(schema: GBufferSchema): string {
 
 		return [
 			"struct GData {",
-			...Array.from(gBufferConfig.gDataStructDeclaration)
+			...Array.from(schema.gDataStructDeclaration)
 				.filter(x => this.gData.has(x[0]))
 				.map(x => `\t${x[1]}`),
 			"};\n"
@@ -433,14 +433,14 @@ export class EffectShaderData implements ShaderData {
 	/**
 	 * Creates shader code for the `GData` struct initialization.
 	 *
-	 * @param gBufferConfig - A G-Buffer config.
+	 * @param schema - A G-Buffer schema.
 	 * @return The shader code.
 	 */
 
-	createGDataStructInitialization(gBufferConfig: GBufferConfig): string {
+	createGDataStructInitialization(schema: GBufferSchema): string {
 
-		const gDataDependencies = gBufferConfig.gDataDependencies;
-		const gDataStructInitialization = gBufferConfig.gDataStructInitialization;
+		const gDataDependencies = schema.gDataDependencies;
+		const gDataStructInitialization = schema.gDataStructInitialization;
 
 		const dependencyGraph = new Map<string, Iterable<string>>(
 			Array.from(this.gData)
