@@ -4,7 +4,6 @@ import { Effect } from "../effects/Effect.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { EffectMaterial } from "../materials/EffectMaterial.js";
 import { EffectMaterialManager } from "../utils/EffectMaterialManager.js";
-import { GBufferConfig } from "../utils/gbuffer/GBufferConfig.js";
 import { GBufferResource } from "../core/index.js";
 
 /**
@@ -28,18 +27,6 @@ export class EffectPass extends Pass<EffectMaterial> {
 	 */
 
 	private readonly effectListener: (e: Event) => void;
-
-	/**
-	 * An event listener that calls {@link handleGBufferConfigEvent}.
-	 */
-
-	private readonly gBufferConfigListener: (e: Event) => void;
-
-	/**
-	 * Keeps track of the previous G-Buffer configuration.
-	 */
-
-	private previousGBufferConfig: GBufferConfig | null;
 
 	/**
 	 * Indicates whether this pass has been disposed.
@@ -68,8 +55,6 @@ export class EffectPass extends Pass<EffectMaterial> {
 		this.output.createDefaultBuffer();
 		this.effectMaterialManager = new EffectMaterialManager(this.input.shaderData, this.input.requiredTextures);
 		this.effectListener = (e: Event) => this.handleEffectEvent(e as Event<string, Effect>);
-		this.gBufferConfigListener = (e: Event) => this.handleGBufferConfigEvent(e);
-		this.previousGBufferConfig = null;
 		this.effects = effects;
 		this.disposed = false;
 		this.timeScale = 1.0;
@@ -212,8 +197,6 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 	}
 
-	// #region Event Handlers
-
 	/**
 	 * Handles {@link Effect} events.
 	 *
@@ -238,60 +221,6 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 	}
 
-	/**
-	 * Handles {@link GBufferConfig} events.
-	 *
-	 * @param event - An event.
-	 */
-
-	private handleGBufferConfigEvent(e: Event): void {
-
-		switch(e.type) {
-
-			case "change":
-				this.updateMaterial(true);
-				break;
-
-		}
-
-	}
-
-	// #endregion
-
-	/**
-	 * Performs tasks when the {@link GBufferConfig} has changed.
-	 */
-
-	private onGBufferConfigChange(): void {
-
-		const gBufferConfig = this.input.gBufferConfig;
-
-		if(this.previousGBufferConfig !== null) {
-
-			this.previousGBufferConfig.removeEventListener("change", this.gBufferConfigListener);
-
-		}
-
-		if(this.input.gBufferConfig !== null) {
-
-			this.input.gBufferConfig.addEventListener("change", this.gBufferConfigListener);
-
-		}
-
-		this.effectMaterialManager.gBufferSchema = gBufferConfig;
-		this.previousGBufferConfig = gBufferConfig;
-
-		for(const effect of this.effects) {
-
-			effect.input.gBufferConfig = gBufferConfig;
-
-		}
-
-		// Discard outdated materials and rebuild.
-		this.updateMaterial(true);
-
-	}
-
 	protected override onInputChange(): void {
 
 		this.updateGBufferStruct();
@@ -312,16 +241,8 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		}
 
-		if(this.previousGBufferConfig !== this.input.gBufferConfig) {
-
-			this.onGBufferConfigChange();
-
-		} else {
-
-			// Discard outdated materials and rebuild.
-			this.updateMaterial(true);
-
-		}
+		// Discard outdated materials and rebuild.
+		this.updateMaterial(true);
 
 	}
 
@@ -349,12 +270,6 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 			effect.removeEventListener("change", this.effectListener);
 			effect.removeEventListener("toggle", this.effectListener);
-
-		}
-
-		if(this.input.gBufferConfig !== null) {
-
-			this.input.gBufferConfig.removeEventListener("change", this.gBufferConfigListener);
 
 		}
 
