@@ -10,10 +10,10 @@ import {
 
 import {
 	EffectPass,
+	FrameGraph,
 	FXAAEffect,
 	GeometryPass,
 	MixBlendFunction,
-	RenderPipeline,
 	ToneMappingEffect
 } from "postprocessing";
 
@@ -88,11 +88,12 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const effect = new FXAAEffect();
 	effect.blendMode.blendFunction = new MixBlendFunction();
 
-	const pipeline = new RenderPipeline(renderer);
-	pipeline.add(
-		new GeometryPass(scene, camera),
-		new EffectPass(effect, new ToneMappingEffect())
-	);
+	const geoPass = new GeometryPass({ scene, camera });
+	const effectPass = new EffectPass(effect, new ToneMappingEffect());
+	effectPass.input.connect(geoPass.output);
+
+	const pipeline = new FrameGraph(renderer);
+	pipeline.add(geoPass, effectPass);
 
 	// Settings
 
@@ -116,7 +117,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 		camera.aspect = width / height;
 		camera.fov = Utils.calculateVerticalFoV(90, Math.max(camera.aspect, 16 / 9));
 		camera.updateProjectionMatrix();
-		pipeline.setSize(width, height);
 
 	}
 
