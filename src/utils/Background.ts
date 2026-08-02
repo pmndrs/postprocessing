@@ -30,7 +30,7 @@ const matrix4 = /* @__PURE__ */ new Matrix4();
  * A background that supports normal textures and cube textures.
  *
  * @category Utils
- * @internal
+ * @ignore
  */
 
 export class Background extends Group implements Disposable {
