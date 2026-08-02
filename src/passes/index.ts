@@ -10,3 +10,4 @@ export * from "./GeometryPass.js";
 export * from "./LuminancePass.js";
 export * from "./MipmapBlurPass.js";
 export * from "./ShaderPass.js";
+export * from "./UIPass.js";
