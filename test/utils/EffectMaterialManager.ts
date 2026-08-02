@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { EffectMaterialManager, GBuffer, GBufferConfig, ToneMappingEffect } from "postprocessing";
+import { EffectMaterialManager, GBuffer, GBufferSchema, ToneMappingEffect } from "postprocessing";
 
 const emptyShaderData = {
 	uniforms: new Map(),
@@ -41,7 +41,7 @@ describe("EffectMaterialManager", () => {
 
 		const manager = new EffectMaterialManager(emptyShaderData);
 		manager.requiredTextures = new Set([GBuffer.COLOR]);
-		manager.gBufferConfig = new GBufferConfig();
+		manager.gBufferSchema = new GBufferSchema();
 
 		assert.doesNotThrow(() => manager.getMaterial(effects));
 		assert.equal(Array.from(manager.materials).length, 8 /* 2^3 */);
@@ -65,7 +65,7 @@ describe("EffectMaterialManager", () => {
 
 		const manager = new EffectMaterialManager(emptyShaderData);
 		manager.requiredTextures = new Set([GBuffer.COLOR]);
-		manager.gBufferConfig = new GBufferConfig();
+		manager.gBufferSchema = new GBufferSchema();
 
 		assert.doesNotThrow(() => manager.getMaterial(effects));
 		assert.equal(Array.from(manager.materials).length, 1);

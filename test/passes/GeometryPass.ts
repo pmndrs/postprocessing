@@ -6,13 +6,13 @@ describe("GeometryPass", () => {
 
 	it("can be instantiated", () => {
 
-		assert.doesNotThrow(() => new GeometryPass(null, null));
+		assert.doesNotThrow(() => new GeometryPass({ scene: null, camera: null }));
 
 	});
 
 	it("can be disposed", () => {
 
-		const object = new GeometryPass(null, null);
+		const object = new GeometryPass({ scene: null, camera: null });
 		assert.doesNotThrow(() => object.dispose());
 
 	});

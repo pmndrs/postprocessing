@@ -1,12 +1,12 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { GBufferConfig } from "postprocessing";
+import { GBufferSchema } from "postprocessing";
 
-describe("GBufferConfig", () => {
+describe("GBufferSchema", () => {
 
 	it("can be instantiated", () => {
 
-		assert.doesNotThrow(() => new GBufferConfig());
+		assert.doesNotThrow(() => new GBufferSchema());
 
 	});
 
