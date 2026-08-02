@@ -238,14 +238,13 @@ export abstract class Effect extends Pass {
 
 		this.gData.clear();
 
-		if(this.input.gBufferConfig === null || !this.hasMainImageFunction) {
+		if(this.fragmentShader === null || !this.hasMainImageFunction) {
 
 			return;
 
 		}
 
-		const shader = this.fragmentShader!;
-		const gBufferConfig = this.input.gBufferConfig;
+		const shader = this.fragmentShader;
 		const gDataParamName = /GData\s+(\w+)/.exec(shader)![1];
 
 		for(const value of Object.values(GData)) {
@@ -256,30 +255,30 @@ export abstract class Effect extends Pass {
 
 			}
 
-			for(const dependency of gBufferConfig.gDataDependencies.get(value) ?? []) {
+			//for(const dependency of schema.gDataDependencies.get(value) ?? []) {
 
-				this.gData.add(dependency);
+			//	this.gData.add(dependency);
 
-			}
+			//}
 
 			this.gData.add(value);
 
 		}
 
-		for(const gData of this.gData) {
+		//for(const gData of this.gData) {
 
-			for(const component of gBufferConfig.gDataBufferSources.get(gData) ?? []) {
+		//	for(const texture of schema.gDataBufferSources.get(gData) ?? []) {
 
-				if(!this.input.gBuffer.has(component)) {
+		//		if(!this.input.requiredTextures.has(texture)) {
 
-					this.input.gBuffer.add(component);
-					console.warn(`${this.name} uses ${gData} but does not declare input G-Buffer component ${component}`);
+		//			this.input.requiredTextures.add(texture);
+		//			console.warn(`${this.name} uses ${gData} but does not declare input texture ${texture}`);
 
-				}
+		//		}
 
-			}
+		//	}
 
-		}
+		//}
 
 	}
 
