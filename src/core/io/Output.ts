@@ -3,11 +3,9 @@ import { MapExtensions } from "../../utils/MapExtensions.js";
 import { ObservableMap } from "../../utils/ObservableMap.js";
 import { BaseEventMap } from "../BaseEventMap.js";
 import { Disposable } from "../Disposable.js";
-import { GBufferResource } from "./GBufferResource.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
 import { ShaderDataResource } from "./ShaderDataResource.js";
 import { TextureResource } from "./TextureResource.js";
-import { ObservableReadonlyMap } from "../../utils/ObservableReadonlyMap.js";
 
 /**
  * Output events.
@@ -50,36 +48,16 @@ export class Output extends EventDispatcher<OutputEventMap> implements Disposabl
 	static readonly BUFFER_DEFAULT = "BUFFER_DEFAULT";
 
 	/**
-	 * Identifies the G-Buffer in the {@link renderTargets} collection.
-	 */
-
-	static readonly GBUFFER = "GBUFFER";
-
-	/**
 	 * Output render targets, organized by name.
 	 */
 
 	readonly renderTargets: Map<string, RenderTargetResource> & MapExtensions<string, RenderTargetResource>;
 
 	/**
-	 * Output render target textures.
-	 *
-	 * @internal
-	 */
-
-	readonly textures: ObservableReadonlyMap<string, TextureResource>;
-
-	/**
 	 * Output shader data.
 	 */
 
 	readonly shaderData: ShaderDataResource;
-
-	/**
-	 * Indicates whether the {@link defaultBuffer} should return `null` (canvas).
-	 */
-
-	renderToScreen: boolean;
 
 	/**
 	 * Constructs new output resources.
@@ -90,8 +68,6 @@ export class Output extends EventDispatcher<OutputEventMap> implements Disposabl
 		super();
 
 		const renderTargets = new ObservableMap<string, RenderTargetResource>();
-		const textures = new ObservableMap<string, TextureResource>();
-
 		const renderTargetListener = () => {
 
 			this.dispatchEvent({ type: "rendertargetchange" });
@@ -100,21 +76,8 @@ export class Output extends EventDispatcher<OutputEventMap> implements Disposabl
 		};
 
 		renderTargets.addEventListener("change", renderTargetListener);
-
-		renderTargets.addEventListener("add", (e) => {
-
-			e.value.addEventListener("change", renderTargetListener);
-			textures.set(e.key, e.value.texture);
-
-		});
-
-		renderTargets.addEventListener("delete", (e) => {
-
-			e.value.removeEventListener("change", renderTargetListener);
-			textures.delete(e.key);
-
-		});
-
+		renderTargets.addEventListener("add", (e) => e.value.addEventListener("change", renderTargetListener));
+		renderTargets.addEventListener("delete", (e) => e.value.removeEventListener("change", renderTargetListener));
 		renderTargets.addEventListener("clear", (e) => {
 
 			for(const value of e.target.values()) {
@@ -122,8 +85,6 @@ export class Output extends EventDispatcher<OutputEventMap> implements Disposabl
 				value.removeEventListener("change", renderTargetListener);
 
 			}
-
-			textures.clear();
 
 		});
 
@@ -136,9 +97,7 @@ export class Output extends EventDispatcher<OutputEventMap> implements Disposabl
 		});
 
 		this.renderTargets = renderTargets;
-		this.textures = textures;
 		this.shaderData = shaderData;
-		this.renderToScreen = false;
 
 	}
 
@@ -149,30 +108,6 @@ export class Output extends EventDispatcher<OutputEventMap> implements Disposabl
 	get buffers(): typeof this.renderTargets {
 
 		return this.renderTargets;
-
-	}
-
-	/**
-	 * The primary G-Buffer, or `null` if none has been set.
-	 */
-
-	get gBuffer(): GBufferResource | null {
-
-		return (this.renderTargets.get(Output.GBUFFER) as GBufferResource | undefined) ?? null;
-
-	}
-
-	set gBuffer(value: GBufferResource | null) {
-
-		if(value === null) {
-
-			this.renderTargets.delete(Output.GBUFFER);
-
-		} else {
-
-			this.setBuffer(Output.GBUFFER, value);
-
-		}
 
 	}
 
@@ -199,9 +134,9 @@ export class Output extends EventDispatcher<OutputEventMap> implements Disposabl
 	 * The default output buffer, or `undefined` if none has been set.
 	 */
 
-	get defaultBuffer(): RenderTargetResource | null | undefined {
+	get defaultBuffer(): RenderTargetResource | undefined {
 
-		return this.getBuffer(Output.BUFFER_DEFAULT);
+		return this.renderTargets.get(Output.BUFFER_DEFAULT);
 
 	}
 
@@ -246,46 +181,43 @@ export class Output extends EventDispatcher<OutputEventMap> implements Disposabl
 	}
 
 	/**
-	 * Retrieves a buffer.
+	 * Defines a render target resource.
+	 *
+	 * - Falls back to a default render target descriptor that is suitable for fullscreen passes if none is provided.
+	 * - Raw render target descriptors will automatically be wrapped in a new resource.
 	 *
 	 * @param key - The key of the buffer.
-	 * @return The render target resource, or `undefined` if no buffer is set.
-	 */
-
-	getBuffer(key: string): RenderTargetResource | null | undefined {
-
-		return this.renderToScreen ? null : this.renderTargets.get(key);
-
-	}
-
-	/**
-	 * Sets a buffer.
-	 *
-	 * Render target descriptors will automatically be wrapped in a new resource.
-	 *
-	 * @param key - The key of the buffer.
-	 * @param value - A resource or render target options. Falls back to a default configuration if omitted.
+	 * @param value - A resource or render target options.
 	 * @return The render target resource.
 	 */
 
-	setBuffer(key: string, value: RenderTargetResource | RenderTargetOptions = {}): RenderTargetResource {
+	setBuffer(key: string, value?: RenderTargetResource | RenderTargetOptions): RenderTargetResource {
 
-		const resource = value instanceof RenderTargetResource ? value : new RenderTargetResource(value);
+		const resource = (value instanceof RenderTargetResource) ? value : new RenderTargetResource(value);
 		this.renderTargets.set(key, resource);
 		return resource;
 
 	}
 
 	/**
-	 * Removes a buffer.
+	 * Returns all texture resources of the current render target resources.
 	 *
-	 * @param key - The key of the buffer.
-	 * @return True if the buffer existed and has been removed, or false if not.
+	 * @return An iterator over the render target textures.
 	 */
 
-	removeBuffer(key: string): boolean {
+	*textures(): IterableIterator<[string, TextureResource]> {
 
-		return this.renderTargets.delete(key);
+		for(const [name, renderTarget] of this.renderTargets) {
+
+			yield [name, renderTarget.texture];
+
+			for(const entry of renderTarget.textures) {
+
+				yield entry;
+
+			}
+
+		}
 
 	}
 
