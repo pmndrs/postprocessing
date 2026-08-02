@@ -51,6 +51,12 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> implem
 	textures: Map<string, TextureParameters> & MapExtensions<string, TextureParameters>;
 
 	/**
+	 * @see {@link autoSRGB}
+	 */
+
+	autoSRGB: boolean;
+
+	/**
 	 * Controls whether events will be dispatched.
 	 */
 
@@ -67,6 +73,7 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> implem
 		super();
 
 		this.muted = false;
+		this.autoSRGB = true;
 
 		const textures = new ObservableMap<string, TextureParameters>();
 		textures.addEventListener("change", () => this.setChanged());

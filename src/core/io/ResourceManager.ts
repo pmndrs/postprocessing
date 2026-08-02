@@ -44,6 +44,18 @@ function gatherResources(pass: Pass<Material | null>, result: Set<Resource>): vo
 export class ResourceManager {
 
 	/**
+	 * @see {@link autoSyncDefaultBuffers}
+	 */
+
+	private _autoSyncDefaultBuffers: boolean;
+
+	/**
+	 * @see {@link autoSRGB}
+	 */
+
+	private _autoSRGB: boolean;
+
+	/**
 	 * A collection of active render pipelines.
 	 */
 
@@ -67,9 +79,62 @@ export class ResourceManager {
 
 	constructor() {
 
+		this._autoSyncDefaultBuffers = true;
+		this._autoSRGB = true;
+
 		this.frameGraphs = new Set();
 		this.activeResources = new Set();
 		this.updating = false;
+
+	}
+
+	/**
+	 * Controls whether the settings of the input and output default buffers should be synchronized.
+	 *
+	 * @defaultValue true
+	 */
+
+	protected get autoSyncDefaultBuffers(): boolean {
+
+		return this._autoSyncDefaultBuffers;
+
+	}
+
+	protected set autoSyncDefaultBuffers(value: boolean) {
+
+		if(this._autoSyncDefaultBuffers === value) {
+
+			return;
+
+		}
+
+		this._autoSyncDefaultBuffers = value;
+		this.syncDefaultBuffers();
+
+	}
+
+	/**
+	 * Controls automatic sRGB encoding for low precision output buffers.
+	 *
+	 * @defaultValue true
+	 */
+
+	protected get autoSRGB(): boolean {
+
+		return this._autoSRGB;
+
+	}
+
+	protected set autoSRGB(value: boolean) {
+
+		if(this._autoSRGB === value) {
+
+			return;
+
+		}
+
+		this._autoSRGB = value;
+		this.syncDefaultBuffers();
 
 	}
 
@@ -119,6 +184,64 @@ export class ResourceManager {
 		}
 
 		return renderTarget;
+
+	}
+
+	/**
+	 * Synchronizes the texture settings of the input and output default buffers.
+	 *
+	 * This method ensures that the output buffer uses adequate settings for storing values from the input buffer.
+	 */
+
+	private syncDefaultBuffers(): void {
+
+		//const renderer = this.renderer;
+		//const inputBuffer = this.input.defaultBuffer?.value ?? null;
+		//const outputBuffer = this.output.defaultBuffer?.value ?? null;
+
+		//if(!this.autoSyncDefaultBuffers || renderer === null || inputBuffer === null || outputBuffer === null) {
+
+		//	return;
+
+		//}
+
+		//const texture = outputBuffer.texture;
+
+		//let textureNeedsUpdate = (
+		//	texture.format !== inputBuffer.format ||
+		//	texture.internalFormat !== inputBuffer.internalFormat ||
+		//	texture.type !== inputBuffer.type
+		//);
+
+		//if(textureNeedsUpdate) {
+
+		//	texture.format = inputBuffer.format;
+		//	texture.internalFormat = inputBuffer.internalFormat;
+		//	texture.type = inputBuffer.type;
+
+		//}
+
+		//// If the output buffer uses low precision, enable sRGB encoding to reduce information loss.
+		//const useSRGB = (
+		//	this.autoSRGB &&
+		//	!this.output.frameBufferPrecisionHigh &&
+		//	renderer.outputColorSpace === SRGBColorSpace
+		//);
+
+		//if(useSRGB && texture.colorSpace !== SRGBColorSpace) {
+
+		//	texture.colorSpace = SRGBColorSpace;
+		//	textureNeedsUpdate = true;
+
+		//}
+
+		//if(textureNeedsUpdate) {
+
+		//	// Notify listeners.
+		//	texture.needsUpdate = true;
+		//	this.output.defaultBuffer!.texture.setChanged();
+
+		//}
 
 	}
 

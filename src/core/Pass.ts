@@ -7,7 +7,6 @@ import {
 	Object3D,
 	Scene,
 	ShaderMaterial,
-	SRGBColorSpace,
 	Texture,
 	Vector2,
 	WebGLRenderer,
@@ -132,18 +131,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	private _subtasks: Pass<Material | null>[];
 
-	/**
-	 * @see {@link autoSyncDefaultBuffers}
-	 */
-
-	private _autoSyncDefaultBuffers: boolean;
-
-	/**
-	 * @see {@link autoSRGB}
-	 */
-
-	private _autoSRGB: boolean;
-
 	// #endregion
 
 	readonly id: number;
@@ -223,8 +210,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this._scene = null;
 		this._camera = null;
 		this._subtasks = [];
-		this._autoSyncDefaultBuffers = true;
-		this._autoSRGB = true;
 
 		this.input = new Input();
 		this.output = new Output();
@@ -235,9 +220,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		const materials = new ObservableSet<Material>();
 		this.materials = materials;
-
-		this.input.addEventListener("texturechange", () => this.syncDefaultBuffers());//X
-		this.output.addEventListener("rendertargetchange", () => this.syncDefaultBuffers());//X
 
 		// Manage built-in fullscreen material data.
 		materials.addEventListener("add", (e) => this.updateFullscreenMaterial(e.value));
@@ -476,56 +458,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		}
 
 		this.materials.add(value);
-
-	}
-
-	/**
-	 * Controls whether the settings of the input and output default buffers should be synchronized.
-	 *
-	 * @defaultValue true
-	 */
-
-	protected get autoSyncDefaultBuffers(): boolean {
-
-		return this._autoSyncDefaultBuffers;
-
-	}
-
-	protected set autoSyncDefaultBuffers(value: boolean) {
-
-		if(this._autoSyncDefaultBuffers === value) {
-
-			return;
-
-		}
-
-		this._autoSyncDefaultBuffers = value;
-		this.syncDefaultBuffers();
-
-	}
-
-	/**
-	 * Controls automatic sRGB encoding for low precision output buffers.
-	 *
-	 * @defaultValue true
-	 */
-
-	protected get autoSRGB(): boolean {
-
-		return this._autoSRGB;
-
-	}
-
-	protected set autoSRGB(value: boolean) {
-
-		if(this._autoSRGB === value) {
-
-			return;
-
-		}
-
-		this._autoSRGB = value;
-		this.syncDefaultBuffers();
 
 	}
 
@@ -853,64 +785,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		const sceneEventTarget = SceneEventTarget.getInstance(this.scene);
 		sceneEventTarget.addEventListener("childadded", this.sceneChildAddedListener);
 		sceneEventTarget.addEventListener("childremoved", this.sceneChildRemovedListener);
-
-	}
-
-	/**
-	 * Synchronizes the texture settings of the input and output default buffers.
-	 *
-	 * This method ensures that the output buffer uses adequate settings for storing values from the input buffer.
-	 */
-
-	private syncDefaultBuffers(): void {
-
-		const renderer = this.renderer;
-		const inputBuffer = this.input.defaultBuffer?.value ?? null;
-		const outputBuffer = this.output.defaultBuffer?.value ?? null;
-
-		if(!this.autoSyncDefaultBuffers || renderer === null || inputBuffer === null || outputBuffer === null) {
-
-			return;
-
-		}
-
-		const texture = outputBuffer.texture;
-
-		let textureNeedsUpdate = (
-			texture.format !== inputBuffer.format ||
-			texture.internalFormat !== inputBuffer.internalFormat ||
-			texture.type !== inputBuffer.type
-		);
-
-		if(textureNeedsUpdate) {
-
-			texture.format = inputBuffer.format;
-			texture.internalFormat = inputBuffer.internalFormat;
-			texture.type = inputBuffer.type;
-
-		}
-
-		// If the output buffer uses low precision, enable sRGB encoding to reduce information loss.
-		const useSRGB = (
-			this.autoSRGB &&
-			!this.output.frameBufferPrecisionHigh &&
-			renderer.outputColorSpace === SRGBColorSpace
-		);
-
-		if(useSRGB && texture.colorSpace !== SRGBColorSpace) {
-
-			texture.colorSpace = SRGBColorSpace;
-			textureNeedsUpdate = true;
-
-		}
-
-		if(textureNeedsUpdate) {
-
-			// Notify listeners.
-			texture.needsUpdate = true;
-			this.output.defaultBuffer!.texture.setChanged();
-
-		}
 
 	}
 
