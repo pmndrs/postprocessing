@@ -14,7 +14,9 @@ import inputBufferParsFragment from "./shaders/input-buffer-pars.frag";
 import noiseParsFragment from "./shaders/noise-pars.frag";
 import normalCodecParsFragment from "./shaders/normal-codec-pars.frag";
 import normalUtilsParsFragment from "./shaders/normal-utils-pars.frag";
+import premultiplyAlphaFragment from "./shaders/premultiply-alpha.frag";
 import resolutionParsFragment from "./shaders/resolution-pars.frag";
+import unpremultiplyAlphaFragment from "./shaders/unpremultiply-alpha.frag";
 import worldUtilsParsFragment from "./shaders/world-utils-pars.frag";
 
 // G-Buffer shader chunks for built-in materials.
@@ -74,7 +76,9 @@ export class ShaderChunkExtensions {
 			"pp_noise_pars_fragment": noiseParsFragment,
 			"pp_normal_codec_pars_fragment": normalCodecParsFragment,
 			"pp_normal_utils_pars_fragment": normalUtilsParsFragment,
+			"pp_premultiply_alpha_fragment": premultiplyAlphaFragment,
 			"pp_resolution_pars_fragment": resolutionParsFragment,
+			"pp_unpremultiply_alpha_fragment": unpremultiplyAlphaFragment,
 			"pp_world_utils_pars_fragment": worldUtilsParsFragment
 		});
 
