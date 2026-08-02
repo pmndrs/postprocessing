@@ -129,7 +129,7 @@ function analyzeDataFlow(passes: readonly Pass<Material | null>[], textureIds: M
 
 				const buffers = Array.from(input.buffers.values()).filter(x => x.id !== input.defaultBuffer?.id);
 
-				if(input.hasDefaultBuffer) {
+				if(input.defaultBuffer !== undefined) {
 
 					const defaultbufferId = getTextureIds(textureIds, input.defaultBuffer)[0];
 					console.debug("reads", defaultbufferId, buffers.map(x => getTextureIds(textureIds, x)[0]).join(" "));
