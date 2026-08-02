@@ -2,7 +2,7 @@ import { Material } from "three";
 import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 import { TextureResource } from "../core/io/TextureResource.js";
 import { Pass } from "../core/Pass.js";
-import { RenderPipeline } from "../core/RenderPipeline.js";
+import { FrameGraph } from "../core/FrameGraph.js";
 import { ClearPass } from "../passes/ClearPass.js";
 
 /**
@@ -113,7 +113,7 @@ function analyzeDataFlow(passes: readonly Pass<Material | null>[], textureIds: M
 
 		} else if(pass instanceof ClearPass) {
 
-			if(output.hasDefaultBuffer) {
+			if(output.defaultBuffer !== undefined) {
 
 				console.debug("clears", ...getTextureIds(textureIds, output.defaultBuffer));
 
@@ -151,7 +151,7 @@ function analyzeDataFlow(passes: readonly Pass<Material | null>[], textureIds: M
 					.reduce((a, b) => [...a, ...b], [])
 					.join(" ");
 
-				if(output.hasDefaultBuffer) {
+				if(output.defaultBuffer !== undefined) {
 
 					const defaultbufferIds = getTextureIds(textureIds, output.defaultBuffer);
 
@@ -345,30 +345,30 @@ function analyzeOutputResources(passes: readonly Pass<Material | null>[],
 export class DebugTools {
 
 	/**
-	 * Logs details about a given render pipeline.
+	 * Logs details about a given frame graph.
 	 *
-	 * @param pipeline - A render pipeline.
+	 * @param graph - A frame graph.
 	 */
 
-	static analyzePipeline(pipeline: RenderPipeline): void {
+	static analyzePipeline(graph: FrameGraph): void {
 
-		const textureIds = createTextureIds(pipeline.passes);
+		//const textureIds = createTextureIds(graph.passes);
 
-		console.debug("RenderPipeline", pipeline);
+		//console.debug("RenderPipeline", graph);
 
-		console.groupCollapsed("Data Flow");
-		analyzeDataFlow(pipeline.passes, textureIds);
-		console.groupEnd();
+		//console.groupCollapsed("Data Flow");
+		//analyzeDataFlow(graph.passes, textureIds);
+		//console.groupEnd();
 
-		console.groupCollapsed("Resources");
-		console.group("Input Textures");
-		analyzeInputResources(pipeline.passes, textureIds);
-		console.groupEnd();
-		console.group("Output Render Targets");
-		analyzeOutputResources(pipeline.passes, textureIds);
-		console.groupEnd();
+		//console.groupCollapsed("Resources");
+		//console.group("Input Textures");
+		//analyzeInputResources(graph.passes, textureIds);
+		//console.groupEnd();
+		//console.group("Output Render Targets");
+		//analyzeOutputResources(graph.passes, textureIds);
+		//console.groupEnd();
 
-		console.groupEnd();
+		//console.groupEnd();
 
 	}
 
