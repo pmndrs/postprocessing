@@ -143,16 +143,6 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 
 	}
 
-	override onCameraChange(_previous: Camera | null, current: Camera | null): void {
-
-		if(current !== null) {
-
-			this.edgeDetectionMaterial.copyCameraSettings(current);
-
-		}
-
-	}
-
 	/**
 	 * The edges texture.
 	 */
@@ -183,6 +173,18 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 
 	}
 
+	/**
+	 * The edge weights material.
+	 */
+
+	get weightsMaterial(): SMAAWeightsMaterial {
+
+		return this.weightsPass.fullscreenMaterial;
+
+	}
+
+	// #region Settings
+
 	get edgeDetectionMode(): SMAAEdgeDetectionMode {
 
 		return this.edgeDetectionMaterial.edgeDetectionMode;
@@ -207,15 +209,7 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 
 	}
 
-	/**
-	 * The edge weights material.
-	 */
-
-	get weightsMaterial(): SMAAWeightsMaterial {
-
-		return this.weightsPass.fullscreenMaterial;
-
-	}
+	// #endregion
 
 	/**
 	 * Loads the SMAA lookup textures.
@@ -334,6 +328,16 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 		const { width, height } = this.resolution;
 		this.bufferEdges.value?.setSize(width, height);
 		this.bufferWeights.value?.setSize(width, height);
+
+	}
+
+	override onCameraChange(_previous: Camera | null, current: Camera | null): void {
+
+		if(current !== null) {
+
+			this.edgeDetectionMaterial.copyCameraSettings(current);
+
+		}
 
 	}
 

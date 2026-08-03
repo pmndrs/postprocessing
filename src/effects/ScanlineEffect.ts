@@ -81,6 +81,8 @@ export class ScanlineEffect extends Effect implements ScanlineEffectOptions {
 
 	}
 
+	// #region Settings
+
 	get density() {
 
 		return this._density;
@@ -134,6 +136,8 @@ export class ScanlineEffect extends Effect implements ScanlineEffectOptions {
 		}
 
 	}
+
+	// #endregion
 
 	protected override onResolutionChange(): void {
 

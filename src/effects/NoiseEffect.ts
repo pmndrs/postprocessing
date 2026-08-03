@@ -110,6 +110,8 @@ export class NoiseEffect extends Effect implements NoiseEffectOptions {
 
 	}
 
+	// #region Settings
+
 	get fps(): number {
 
 		return this._fps;
@@ -174,6 +176,8 @@ export class NoiseEffect extends Effect implements NoiseEffectOptions {
 		}
 
 	}
+
+	// #endregion
 
 	override render(): void {
 

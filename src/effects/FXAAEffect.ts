@@ -82,6 +82,8 @@ export class FXAAEffect extends Effect implements FXAAEffectOptions {
 
 	}
 
+	// #region Settings
+
 	get minEdgeThreshold(): number {
 
 		return Number(this.input.defines.get("EDGE_THRESHOLD_MIN"));
@@ -133,5 +135,7 @@ export class FXAAEffect extends Effect implements FXAAEffectOptions {
 		this.setChanged();
 
 	}
+
+	// #endregion
 
 }

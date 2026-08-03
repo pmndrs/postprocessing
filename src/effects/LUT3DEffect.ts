@@ -128,6 +128,8 @@ export class LUT3DEffect extends Effect implements LUT3DEffectOptions {
 
 	}
 
+	// #region Settings
+
 	get lut(): LookupTexture | null {
 
 		return this.input.uniforms.get("lut")!.value as LookupTexture;
@@ -174,6 +176,32 @@ export class LUT3DEffect extends Effect implements LUT3DEffectOptions {
 		this.setChanged();
 
 	}
+
+	get tetrahedralInterpolation(): boolean {
+
+		return this.input.defines.has("TETRAHEDRAL_INTERPOLATION");
+
+	}
+
+	set tetrahedralInterpolation(value: boolean) {
+
+		if(value) {
+
+			this.input.defines.set("TETRAHEDRAL_INTERPOLATION", true);
+
+		} else {
+
+			this.input.defines.delete("TETRAHEDRAL_INTERPOLATION");
+
+		}
+
+		this.configureTetrahedralInterpolation();
+		this.updateScaleOffset();
+		this.setChanged();
+
+	}
+
+	// #endregion
 
 	/**
 	 * Updates the scale and offset for the LUT sampling coordinates.
@@ -251,30 +279,6 @@ export class LUT3DEffect extends Effect implements LUT3DEffectOptions {
 		}
 
 		lut.needsUpdate = true;
-
-	}
-
-	get tetrahedralInterpolation(): boolean {
-
-		return this.input.defines.has("TETRAHEDRAL_INTERPOLATION");
-
-	}
-
-	set tetrahedralInterpolation(value: boolean) {
-
-		if(value) {
-
-			this.input.defines.set("TETRAHEDRAL_INTERPOLATION", true);
-
-		} else {
-
-			this.input.defines.delete("TETRAHEDRAL_INTERPOLATION");
-
-		}
-
-		this.configureTetrahedralInterpolation();
-		this.updateScaleOffset();
-		this.setChanged();
 
 	}
 

@@ -92,6 +92,8 @@ export class ColorDepthEffect extends Effect implements ColorDepthEffectOptions 
 
 	}
 
+	// #region Settings
+
 	get r(): number {
 
 		return this.bits.x;
@@ -130,5 +132,7 @@ export class ColorDepthEffect extends Effect implements ColorDepthEffectOptions 
 		this.updateFactors();
 
 	}
+
+	// #endregion
 
 }

@@ -77,6 +77,8 @@ export class ToneMappingEffect extends Effect implements ToneMappingEffectOption
 
 	}
 
+	// #region Settings
+
 	get toneMapping(): ToneMapping {
 
 		return this.input.defines.get("TONE_MAPPING") as ToneMapping;
@@ -94,6 +96,8 @@ export class ToneMappingEffect extends Effect implements ToneMappingEffectOption
 		}
 
 	}
+
+	// #endregion
 
 	/**
 	 * Performs tasks when the CDL is enabled or disabled.

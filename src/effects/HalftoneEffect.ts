@@ -129,6 +129,8 @@ export class HalftoneEffect extends Effect implements HalftoneEffectOptions {
 
 	}
 
+	// #region Settings
+
 	get shape() {
 
 		return this.input.defines.get("SHAPE") as number;
@@ -249,6 +251,8 @@ export class HalftoneEffect extends Effect implements HalftoneEffectOptions {
 		}
 
 	}
+
+	// #endregion
 
 	protected override onResolutionChange(): void {
 

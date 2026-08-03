@@ -79,6 +79,8 @@ export class LensDistortionEffect extends Effect implements LensDistortionEffect
 
 	}
 
+	// #region Settings
+
 	get distortion(): Vector2 {
 
 		return this.input.uniforms.get("distortion")!.value as Vector2;
@@ -126,5 +128,7 @@ export class LensDistortionEffect extends Effect implements LensDistortionEffect
 		this.input.uniforms.get("skew")!.value = value;
 
 	}
+
+	// #endregion
 
 }

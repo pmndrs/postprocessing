@@ -74,6 +74,8 @@ export class LUT1DEffect extends Effect implements LUT1DEffectOptions {
 
 	}
 
+	// #region Settings
+
 	get lut(): Texture | null {
 
 		return this.input.uniforms.get("lut")!.value as Texture;
@@ -86,5 +88,7 @@ export class LUT1DEffect extends Effect implements LUT1DEffectOptions {
 		this.lutPrecisionHigh = (value?.type === FloatType || value?.type === HalfFloatType);
 
 	}
+
+	// #endregion
 
 }

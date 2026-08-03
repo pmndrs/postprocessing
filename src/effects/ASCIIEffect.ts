@@ -89,6 +89,8 @@ export class ASCIIEffect extends Effect implements ASCIIEffectOptions {
 
 	}
 
+	// #region Settings
+
 	get asciiTexture(): ASCIITexture | null {
 
 		return this.input.uniforms.get("asciiTexture")!.value as ASCIITexture;
@@ -191,6 +193,8 @@ export class ASCIIEffect extends Effect implements ASCIIEffectOptions {
 		}
 
 	}
+
+	// #endregion
 
 	/**
 	 * Updates the cell count uniform.

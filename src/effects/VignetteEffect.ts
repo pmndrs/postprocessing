@@ -78,6 +78,8 @@ export class VignetteEffect extends Effect implements VignetteEffectOptions {
 
 	}
 
+	// #region Settings
+
 	get technique(): VignetteTechnique {
 
 		return this.input.defines.get("VIGNETTE_TECHNIQUE") as VignetteTechnique;
@@ -135,5 +137,7 @@ export class VignetteEffect extends Effect implements VignetteEffectOptions {
 		color.set(value);
 
 	}
+
+	// #endregion
 
 }
