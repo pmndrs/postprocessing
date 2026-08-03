@@ -326,8 +326,8 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 	protected override onResolutionChange(): void {
 
 		const { width, height } = this.resolution;
-		this.bufferEdges.value?.setSize(width, height);
-		this.bufferWeights.value?.setSize(width, height);
+		this.bufferEdges.resolution.setPreferredSize(width, height);
+		this.bufferWeights.resolution.setPreferredSize(width, height);
 
 	}
 
