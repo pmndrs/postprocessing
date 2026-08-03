@@ -1,4 +1,4 @@
-import { RenderTargetResource } from "../core/index.js";
+import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 import { TextureResource } from "../core/io/TextureResource.js";
 import { Pass } from "../core/Pass.js";
 import { LuminanceHighPassMaterial } from "../materials/LuminanceHighPassMaterial.js";

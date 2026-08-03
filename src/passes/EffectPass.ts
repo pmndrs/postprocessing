@@ -4,7 +4,7 @@ import { Effect } from "../effects/Effect.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { EffectMaterial } from "../materials/EffectMaterial.js";
 import { EffectMaterialManager } from "../utils/EffectMaterialManager.js";
-import { GBufferResource } from "../core/index.js";
+import { GBufferResource } from "../core/io/GBufferResource.js";
 
 /**
  * An effect pass.

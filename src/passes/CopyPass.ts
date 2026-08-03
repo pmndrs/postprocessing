@@ -2,7 +2,7 @@ import { WebGLRenderer, WebGLRenderTarget } from "three";
 import { Pass } from "../core/Pass.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { CopyMaterial } from "../materials/CopyMaterial.js";
-import { blitFramebuffer } from "../utils/index.js";
+import { blitFramebuffer } from "../utils/functions/framebuffer.js";
 import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 
 /**
