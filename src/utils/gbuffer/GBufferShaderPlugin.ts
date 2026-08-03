@@ -6,8 +6,8 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { addGBufferDefaultOutput, extractOutputDefinitions } from "./GBufferUtils.js";
 import { ReadonlyWeakSet } from "../ReadonlyWeakSet.js";
+import { addGBufferDefaultOutput, extractOutputDefinitions } from "./GBufferUtils.js";
 
 /**
  * A shader plugin that enables rendering to G-Buffer render targets.

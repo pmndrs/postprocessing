@@ -1,9 +1,9 @@
 import { Color, Scene } from "three";
+import { GBufferResource } from "../core/io/GBufferResource.js";
 import { Pass } from "../core/Pass.js";
 import { Background } from "../utils/Background.js";
 import { ClearFlags } from "../utils/ClearFlags.js";
 import { ClearValues } from "../utils/ClearValues.js";
-import { GBufferResource } from "../core/io/GBufferResource.js";
 
 const color = /* @__PURE__ */ new Color();
 const fv = /* @__PURE__ */ new Float32Array(4);

@@ -1,9 +1,9 @@
 import { ColorSpace, IUniform, LinearSRGBColorSpace, NoColorSpace, SRGBColorSpace } from "three";
-import { ShaderData } from "../utils/ShaderData.js";
 import { Effect } from "../effects/Effect.js";
 import { BlendMode } from "../effects/blending/BlendMode.js";
 import { EffectShaderSection, EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
 import { GData } from "../enums/GData.js";
+import { ShaderData } from "../utils/ShaderData.js";
 import { prefixSubstrings } from "../utils/functions/string.js";
 import { isConvolutionPass } from "./functions/pass.js";
 import { topologicalSort } from "./functions/sorting.js";

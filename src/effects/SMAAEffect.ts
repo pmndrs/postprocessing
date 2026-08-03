@@ -11,8 +11,8 @@ import { ClearPass } from "../passes/ClearPass.js";
 import { ShaderPass } from "../passes/ShaderPass.js";
 import { Effect } from "./Effect.js";
 
-import searchImageDataURL from "../textures/smaa/searchImageDataURL.js";
 import areaImageDataURL from "../textures/smaa/areaImageDataURL.js";
+import searchImageDataURL from "../textures/smaa/searchImageDataURL.js";
 
 import fragmentShader from "./shaders/smaa.frag";
 

@@ -1,9 +1,9 @@
 import { FloatType, NearestFilter } from "three";
+import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 import { TextureResource } from "../core/io/TextureResource.js";
 import { Pass } from "../core/Pass.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { DepthDownsamplingMaterial } from "../materials/DepthDownsamplingMaterial.js";
-import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 
 /**
  * A downsampling pass that picks the most representative depth (and normal) in 2x2 texel neighborhoods.

@@ -1,7 +1,7 @@
 import { Uniform } from "three";
+import { LuminanceHighPassMaterial } from "../materials/LuminanceHighPassMaterial.js";
 import { LuminancePass } from "../passes/LuminancePass.js";
 import { MipmapBlurPass, MipmapBlurPassOptions } from "../passes/MipmapBlurPass.js";
-import { LuminanceHighPassMaterial } from "../materials/LuminanceHighPassMaterial.js";
 import { AddBlendFunction } from "./blending/blend-functions/AddBlendFunction.js";
 import { Effect } from "./Effect.js";
 

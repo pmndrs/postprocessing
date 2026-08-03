@@ -11,8 +11,8 @@ import {
 import { Input } from "../core/io/Input.js";
 import { Pass } from "../core/Pass.js";
 import { GBuffer } from "../enums/GBuffer.js";
-import { BufferDebugMaterial } from "../materials/BufferDebugMaterial.js";
 import { GBufferDebug } from "../enums/GBufferDebug.js";
+import { BufferDebugMaterial } from "../materials/BufferDebugMaterial.js";
 
 /**
  * A debug pass that visualizes all input buffers.

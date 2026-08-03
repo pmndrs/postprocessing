@@ -1,4 +1,4 @@
-import { ShaderMaterial, IUniform } from "three";
+import { IUniform, ShaderMaterial } from "three";
 import { Disposable } from "../core/Disposable.js";
 import { ShaderData } from "./ShaderData.js";
 

@@ -1,9 +1,9 @@
 import { WebGLRenderer, WebGLRenderTarget } from "three";
+import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 import { Pass } from "../core/Pass.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { CopyMaterial } from "../materials/CopyMaterial.js";
 import { blitFramebuffer } from "../utils/functions/framebuffer.js";
-import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 
 /**
  * Copies the contents of the default input buffer to another buffer.

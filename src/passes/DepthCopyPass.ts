@@ -1,10 +1,10 @@
 import { FloatType, NearestFilter } from "three";
+import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 import { TextureResource } from "../core/io/TextureResource.js";
 import { Pass } from "../core/Pass.js";
+import { DepthCopyMode } from "../enums/DepthCopyMode.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { DepthCopyMaterial } from "../materials/DepthCopyMaterial.js";
-import { DepthCopyMode } from "../enums/DepthCopyMode.js";
-import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 
 /**
  * A pass that copies depth into a render target.

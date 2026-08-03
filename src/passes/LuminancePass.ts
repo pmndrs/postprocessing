@@ -1,8 +1,8 @@
+import { ColorSpace, PixelFormat } from "three";
 import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 import { TextureResource } from "../core/io/TextureResource.js";
 import { Pass } from "../core/Pass.js";
 import { LuminanceHighPassMaterial } from "../materials/LuminanceHighPassMaterial.js";
-import { ColorSpace, PixelFormat } from "three";
 
 /**
  * A luminance pass.

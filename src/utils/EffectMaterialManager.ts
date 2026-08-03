@@ -1,12 +1,12 @@
 import { SRGBColorSpace } from "three";
 import { Disposable } from "../core/Disposable.js";
-import { ShaderData } from "../utils/ShaderData.js";
 import { Effect } from "../effects/Effect.js";
 import { EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { EffectMaterial } from "../materials/EffectMaterial.js";
-import { GBufferSchema } from "./gbuffer/GBufferSchema.js";
+import { ShaderData } from "../utils/ShaderData.js";
 import { EffectShaderData } from "./EffectShaderData.js";
+import { GBufferSchema } from "./gbuffer/GBufferSchema.js";
 
 /**
  * An effect material manager that creates, updates and caches effect shader combinations.

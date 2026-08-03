@@ -1,6 +1,6 @@
 import { Object3D, Object3DEventMap } from "three";
-import { SetExtensions } from "./SetExtensions.js";
 import { IdManager } from "./IdManager.js";
+import { SetExtensions } from "./SetExtensions.js";
 
 /**
  * An object selection.
