@@ -29,6 +29,9 @@ export class CopyPass extends Pass<CopyMaterial> {
 
 		super("CopyPass");
 
+		this.fullscreenMaterial = new CopyMaterial();
+		this.blitEnabled = false;
+
 		if(outputBuffer !== undefined) {
 
 			this.output.defaultBuffer = outputBuffer;
@@ -38,9 +41,6 @@ export class CopyPass extends Pass<CopyMaterial> {
 			this.output.createDefaultBuffer();
 
 		}
-
-		this.fullscreenMaterial = new CopyMaterial();
-		this.blitEnabled = false;
 
 	}
 

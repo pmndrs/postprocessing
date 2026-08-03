@@ -118,9 +118,6 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 		this.fragmentShader = fragmentShader;
 		this.bufferEdges = this.output.setBuffer(SMAAEffect.BUFFER_EDGES);
 		this.bufferWeights = this.output.setBuffer(SMAAEffect.BUFFER_WEIGHTS);
-		this.input.requiredTextures.add(GBuffer.DEPTH);
-		this.input.uniforms.set("weightMap", new Uniform(null));
-		this.weightsTexture.bindUniform(this.input.uniforms.get("weightMap")!);
 
 		this.clearPass = new ClearPass(true, false, false);
 		this.clearPass.output.defaultBuffer = this.bufferEdges;
@@ -135,6 +132,10 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 		this.weightsPass = new ShaderPass(new SMAAWeightsMaterial());
 		this.weightsPass.input.defaultBuffer = this.edgesTexture;
 		this.weightsPass.output.defaultBuffer = this.bufferWeights;
+
+		this.input.requiredTextures.add(GBuffer.DEPTH);
+		this.input.uniforms.set("weightMap", new Uniform(null));
+		this.weightsTexture.bindUniform(this.input.uniforms.get("weightMap")!);
 
 		this.subpasses = [this.clearPass, this.edgeDetectionPass, this.weightsPass];
 
