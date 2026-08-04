@@ -92,7 +92,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Post Processing
 
 	const clearPass = new ClearPass();
-	const geoPass = new GeometryPass({ scene, camera });
+	const geoPass = new GeometryPass();
 
 	const effect = new SMAAEffect({
 		preset: SMAAPreset.MEDIUM,
@@ -115,7 +115,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	smaaWeightsDebugPass.enabled = false;
 	// #endregion DEBUG
 
-	const frameGraph = new FrameGraph(renderer);
+	const frameGraph = new FrameGraph({ renderer, scene, camera });
 	frameGraph.add(clearPass, geoPass, effectPass, smaaEdgesDebugPass, smaaWeightsDebugPass);
 
 	// Settings

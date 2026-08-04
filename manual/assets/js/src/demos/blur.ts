@@ -101,7 +101,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	gaussianBlurPass.resolution.scale = 0.5;
 
 	const clearPass = new ClearPass();
-	const geoPass = new GeometryPass({ scene, camera, samples: 4 });
+	const geoPass = new GeometryPass({ samples: 4 });
 	const outputPass = new CopyPass();
 
 	clearPass.output.defaultBuffer = geoPass.output.defaultBuffer;
@@ -109,7 +109,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	gaussianBlurPass.input.connect(geoPass.output);
 	outputPass.input.defaultBuffer = mipmapBlurPass.texture;
 
-	const frameGraph = new FrameGraph(renderer);
+	const frameGraph = new FrameGraph({ renderer, scene, camera });
 	frameGraph.add(clearPass, geoPass, mipmapBlurPass, gaussianBlurPass, outputPass);
 
 	// Settings

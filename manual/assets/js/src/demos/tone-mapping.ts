@@ -114,13 +114,13 @@ window.addEventListener("load", () => void load().then((assets) => {
 	effect.blendMode.blendFunction = new MixBlendFunction();
 
 	const clearPass = new ClearPass();
-	const geoPass = new GeometryPass({ scene, camera, samples: 4 });
+	const geoPass = new GeometryPass({ samples: 4 });
 	const effectPass = new EffectPass(effect);
 
 	clearPass.output.defaultBuffer = geoPass.output.defaultBuffer;
 	effectPass.input.connect(geoPass.output);
 
-	const frameGraph = new FrameGraph(renderer);
+	const frameGraph = new FrameGraph({ renderer, scene, camera });
 	frameGraph.add(clearPass, geoPass, effectPass);
 
 	// Settings

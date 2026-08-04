@@ -113,8 +113,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Post Processing
 
 	const clearPass = new ClearPass();
-	const geoPassA = new GeometryPass({ scene: sceneA, camera, samples: 4 });
-	const geoPassB = new GeometryPass({ scene: sceneB, camera });
+	const geoPassA = new GeometryPass({ scene: sceneA, samples: 4 });
+	const geoPassB = new GeometryPass({ scene: sceneB });
 	const effectPass = new EffectPass(new ToneMappingEffect());
 
 	clearPass.output.defaultBuffer = geoPassA.output.defaultBuffer;
@@ -126,7 +126,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	geoPassB.scissor.enabled = true;
 	geoPassB.viewport.enabled = true;
 
-	const frameGraph = new FrameGraph(renderer);
+	const frameGraph = new FrameGraph({ renderer, camera });
 	frameGraph.add(clearPass, geoPassA, geoPassB, effectPass);
 
 	// Settings

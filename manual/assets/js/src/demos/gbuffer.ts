@@ -102,7 +102,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	bufferDebugPass.columns = 3;
 
 	const clearPass = new ClearPass();
-	const geoPass = new GeometryPass({ scene, camera, samples: 4 });
+	const geoPass = new GeometryPass({ samples: 4 });
 	const effectPass = new EffectPass(new ToneMappingEffect());
 
 	clearPass.output.defaultBuffer = geoPass.output.defaultBuffer;
@@ -110,7 +110,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	bufferDebugPass.input.connect(geoPass.output);
 	bufferDebugPass.input.connect(effectPass.output);
 
-	const frameGraph = new FrameGraph(renderer);
+	const frameGraph = new FrameGraph({ renderer, scene, camera });
 	frameGraph.add(clearPass, geoPass, effectPass, bufferDebugPass);
 
 	DebugTools.analyzePipeline(frameGraph);

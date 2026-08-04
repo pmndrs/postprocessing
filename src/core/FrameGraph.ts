@@ -11,6 +11,34 @@ import { Task } from "./Task.js";
 const v = /* @__PURE__ */ new Vector2();
 
 /**
+ * FrameGraph constructor options.
+ *
+ * @category Core
+ */
+
+export interface FrameGraphOptions {
+
+	/**
+	 * A renderer.
+	 */
+
+	renderer?: WebGLRenderer | null;
+
+	/**
+	 * The main scene.
+	 */
+
+	scene?: Scene | null;
+
+	/**
+	 * The main camera.
+	 */
+
+	camera?: Camera | null;
+
+}
+
+/**
  * A graph that manages and runs render tasks to produce a frame.
  *
  * @see https://www.gdcvault.com/play/1024612/FrameGraph-Extensible-Rendering-Architecture-in
@@ -92,18 +120,18 @@ export class FrameGraph implements Disposable, Renderable {
 	/**
 	 * Constructs a new frame graph.
 	 *
-	 * @param renderer - A renderer.
+	 * @param options - The options.
 	 */
 
-	constructor(renderer: WebGLRenderer | null = null) {
+	constructor({ renderer = null, scene = null, camera = null }: FrameGraphOptions = {}) {
 
 		ShaderChunkExtensions.register();
 		FrameGraph.resourceManager.addFrameGraph(this);
 
 		this._timer = new Timer();
 		this._renderer = null;
-		this._scene = null;
-		this._camera = null;
+		this._scene = scene;
+		this._camera = camera;
 
 		this.tasks = [];
 		this.taskDependencies = new Map();

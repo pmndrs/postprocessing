@@ -90,13 +90,13 @@ window.addEventListener("load", () => void load().then((assets) => {
 	effect.blendMode.blendFunction = new MixBlendFunction();
 
 	const clearPass = new ClearPass();
-	const geoPass = new GeometryPass({ scene, camera });
+	const geoPass = new GeometryPass();
 	const effectPass = new EffectPass(effect, new ToneMappingEffect());
 
 	clearPass.output.defaultBuffer = geoPass.output.defaultBuffer;
 	effectPass.input.connect(geoPass.output);
 
-	const frameGraph = new FrameGraph(renderer);
+	const frameGraph = new FrameGraph({ renderer, scene, camera });
 	frameGraph.add(clearPass, geoPass, effectPass);
 
 	// Settings

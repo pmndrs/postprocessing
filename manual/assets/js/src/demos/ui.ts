@@ -166,9 +166,9 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// Post Processing
 
 	const clearPass = new ClearPass();
-	const geoPass = new GeometryPass({ scene, camera });
+	const geoPass = new GeometryPass();
 	const effectPass = new EffectPass(new ToneMappingEffect());
-	const uiPass = new UIPass({ scene: uiScene, camera });
+	const uiPass = new UIPass({ scene: uiScene });
 	const aaPass = new EffectPass(new FXAAEffect());
 
 	clearPass.output.defaultBuffer = geoPass.output.defaultBuffer;
@@ -176,7 +176,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	uiPass.input.connect(effectPass.output);
 	aaPass.input.connect(uiPass.output);
 
-	const frameGraph = new FrameGraph(renderer);
+	const frameGraph = new FrameGraph({ renderer, scene, camera });
 	frameGraph.add(clearPass, geoPass, effectPass, uiPass, aaPass);
 
 	DebugTools.analyzePipeline(frameGraph);
