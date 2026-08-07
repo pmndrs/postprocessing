@@ -42,6 +42,7 @@ export interface FrameGraphOptions {
  * A graph that manages and runs render tasks to produce a frame.
  *
  * @see https://www.gdcvault.com/play/1024612/FrameGraph-Extensible-Rendering-Architecture-in
+ * @see https://stoleckipawel.dev/posts/frame-graph-theory/
  * @category Core
  */
 
