@@ -222,6 +222,9 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		const materials = new ObservableSet<Material>();
 		this.materials = materials;
 
+		// Update the viewport/scissor base size.
+		this.resolution.addEventListener("change", () => this.updateViewportAndScissor());
+
 		// Manage built-in fullscreen material data.
 		materials.addEventListener("add", (e) => this.updateFullscreenMaterial(e.value));
 		this.input.addEventListener("change", () => this.updateFullscreenMaterialsInput());
@@ -229,7 +232,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this.resolution.addEventListener("change", () => this.updateFullscreenMaterialsResolution());
 
 		// Synchronize subpasses.
-		this.resolution.addEventListener("change", () => this.updateViewportAndScissor());
+		this.input.addEventListener("change", () => this.updateSubpassInput());
 		this.resolution.addEventListener("change", () => this.updateSubpassResolution());
 		this.viewport.addEventListener("change", () => this.updateSubpassViewport());
 		this.scissor.addEventListener("change", () => this.updateSubpassScissor());
@@ -553,8 +556,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		pass.timer = this.timer;
 		pass.renderer = this.renderer;
 
-		// TODO I/O
-
 	}
 
 	/**
@@ -572,6 +573,22 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this.updateSubpassResolution();
 		this.updateSubpassViewport();
 		this.updateSubpassScissor();
+
+	}
+
+	/**
+	 * Updates the input resources of all subpasses.
+	 */
+
+	private updateSubpassInput(): void {
+
+		for(const pass of this.subpasses) {
+
+			pass.input.textures.clear();
+			pass.input.connectRequiredTextures(this.input.textures);
+			pass.input.shaderData.connect(this.input.shaderData);
+
+		}
 
 	}
 
