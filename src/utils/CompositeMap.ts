@@ -16,7 +16,7 @@ export class CompositeMap<K, V> extends ObservableMap<K, V> implements Connectab
 	 * A list of connected maps.
 	 */
 
-	private readonly connectedMaps: ReadonlyMap<K, V>[];
+	private readonly connectedMaps: ObservableReadonlyMap<K, V>[];
 
 	/**
 	 * @see {@link compositeData}
@@ -111,19 +111,49 @@ export class CompositeMap<K, V> extends ObservableMap<K, V> implements Connectab
 
 	}
 
-	disconnect(other: ObservableReadonlyMap<K, V>): void {
+	/**
+	 * Disconnects a given map from this one.
+	 *
+	 * If no specific map is given, all connected maps will be disconnected.
+	 *
+	 * @param other - The map to disconnect. Omit to disconnect all connected maps.
+	 */
 
-		const index = this.connectedMaps.indexOf(other);
+	disconnect(other?: ObservableReadonlyMap<K, V>): void {
 
-		if(index >= 0) {
+		if(other !== undefined) {
 
-			other.removeEventListener("change", this.propagateChangeEvent);
+			const index = this.connectedMaps.indexOf(other);
 
-			this.needsUpdate = true;
-			this.connectedMaps.splice(index, 1);
-			this.dispatchEvent({ type: "change" });
+			if(index >= 0) {
+
+				other.removeEventListener("change", this.propagateChangeEvent);
+
+				this.connectedMaps.splice(index, 1);
+				this.needsUpdate = true;
+				this.dispatchEvent({ type: "change" });
+
+			}
+
+			return;
 
 		}
+
+		if(this.connectedMaps.length === 0) {
+
+			return;
+
+		}
+
+		for(const map of this.connectedMaps) {
+
+			map.removeEventListener("change", this.propagateChangeEvent);
+
+		}
+
+		this.connectedMaps.length = 0;
+		this.needsUpdate = true;
+		this.dispatchEvent({ type: "change" });
 
 	}
 
@@ -174,6 +204,14 @@ export class CompositeMap<K, V> extends ObservableMap<K, V> implements Connectab
 		return super.deleteAll(...keys);
 
 	}
+
+	/**
+	 * Removes all local elements from the Map.
+	 *
+	 * This method does not disconnect maps that are currently connected to this map.
+	 *
+	 * @see {@link disconnect} for disconnecting all maps.
+	 */
 
 	override clear(): void {
 
