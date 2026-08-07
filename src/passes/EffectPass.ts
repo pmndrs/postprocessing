@@ -55,6 +55,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 		this.output.createDefaultBuffer();
 		this.effectMaterialManager = new EffectMaterialManager(this.input.shaderData, this.input.requiredTextures);
 		this.effectListener = (e: Event) => this.handleEffectEvent(e as Event<string, Effect>);
+		this.fullscreenMaterial = this.effectMaterialManager.getMaterial([]);
 		this.effects = effects;
 		this.disposed = false;
 		this.timeScale = 1.0;
