@@ -1,5 +1,4 @@
 import { SRGBColorSpace } from "three";
-import { Disposable } from "../core/Disposable.js";
 import { Effect } from "../effects/Effect.js";
 import { EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
 import { GBuffer } from "../enums/GBuffer.js";
@@ -15,7 +14,7 @@ import { GBufferSchema } from "./gbuffer/GBufferSchema.js";
  * @ignore
  */
 
-export class EffectMaterialManager implements Disposable {
+export class EffectMaterialManager {
 
 	/**
 	 * The maximum number of optional effects.
@@ -132,7 +131,7 @@ export class EffectMaterialManager implements Disposable {
 
 		if(this._gBufferSchema !== value) {
 
-			this.dispose();
+			this.invalidateMaterialCache();
 			this._gBufferSchema = value;
 
 		}
@@ -510,13 +509,6 @@ export class EffectMaterialManager implements Disposable {
 	invalidateShaderData(effect: Effect): void {
 
 		this.effectShaderDataCache.delete(effect);
-
-	}
-
-	dispose(): void {
-
-		this.invalidateMaterialCache();
-		this.effectShaderDataCache.clear();
 
 	}
 

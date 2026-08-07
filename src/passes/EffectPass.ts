@@ -29,14 +29,6 @@ export class EffectPass extends Pass<EffectMaterial> {
 	private readonly effectListener: (e: Event) => void;
 
 	/**
-	 * Indicates whether this pass has been disposed.
-	 *
-	 * If true, resources will be refreshed before the next render operation.
-	 */
-
-	private disposed: boolean;
-
-	/**
 	 * An animation time scale.
 	 */
 
@@ -57,7 +49,6 @@ export class EffectPass extends Pass<EffectMaterial> {
 		this.effectListener = (e: Event) => this.handleEffectEvent(e as Event<string, Effect>);
 		this.fullscreenMaterial = this.effectMaterialManager.getMaterial([]);
 		this.effects = effects;
-		this.disposed = false;
 		this.timeScale = 1.0;
 
 	}
@@ -91,7 +82,6 @@ export class EffectPass extends Pass<EffectMaterial> {
 		}
 
 		this.updateMaterial(true);
-		this.disposed = false;
 
 	}
 
@@ -229,16 +219,6 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 	}
 
-	override checkRequirements(): void {
-
-		for(const effect of this.effects) {
-
-			effect.checkRequirements();
-
-		}
-
-	}
-
 	override async compile(): Promise<void> {
 
 		// Make sure all materials are created prior to compilation.
@@ -247,34 +227,11 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 	}
 
-	override dispose(): void {
-
-		for(const effect of this.effects) {
-
-			effect.removeEventListener("change", this.effectListener);
-			effect.removeEventListener("toggle", this.effectListener);
-
-		}
-
-		this.effectMaterialManager.dispose();
-		super.dispose();
-
-		this.disposed = true;
-
-	}
-
 	override render(): void {
 
 		if(this.renderer === null || this.timer === null) {
 
 			return;
-
-		}
-
-		if(this.disposed) {
-
-			// Restore resources and event listeners.
-			this.effects = [...this.effects];
 
 		}
 
