@@ -224,24 +224,6 @@ export class EffectPass extends Pass<EffectMaterial> {
 	protected override onInputChange(): void {
 
 		this.updateGBufferStruct();
-
-		for(const effect of this.effects) {
-
-			// Temporarily remove the listener to avoid unnecessary event churn.
-			effect.removeEventListener("change", this.effectListener);
-			effect.input.buffers.clear();
-
-			for(const entry of this.input.buffers) {
-
-				effect.input.buffers.set(entry[0], entry[1]);
-
-			}
-
-			effect.addEventListener("change", this.effectListener);
-
-		}
-
-		// Discard outdated materials and rebuild.
 		this.updateMaterial(true);
 
 	}
