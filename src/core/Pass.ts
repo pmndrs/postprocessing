@@ -342,6 +342,8 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 *
 	 * Subpasses are considered part of this pass; they are included in automatic resource optimizations and will be
 	 * disposed together with the parent pass.
+	 *
+	 * @see {@link renderSubpasses} for rendering subpasses.
 	 */
 
 	get subpasses(): readonly Pass<Material | null>[] {
