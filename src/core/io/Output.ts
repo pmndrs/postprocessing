@@ -210,12 +210,7 @@ export class Output extends EventDispatcher<OutputEventMap> implements Disposabl
 		for(const [name, renderTarget] of this.renderTargets) {
 
 			yield [name, renderTarget.texture];
-
-			for(const entry of renderTarget.textures) {
-
-				yield entry;
-
-			}
+			yield* renderTarget.textures;
 
 		}
 
