@@ -196,16 +196,28 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 	}
 
 	/**
-	 * Connects resources from a given output to this input.
+	 * Connects {@link requiredTextures | required textures} if they are provided by the given output.
 	 *
-	 * {@link requiredTextures | Required textures} will be connected if they are provided by the given output.
+	 * @param textures - The textures to connect.
+	 */
+
+	connectRequiredTextures(textures: Iterable<[string, TextureResource]>): void {
+
+		this.textures.setAll(...Array.from(textures).filter(x => this.requiredTextures.has(x[0])));
+
+	}
+
+	/**
+	 * Connects the given resources to this input.
 	 *
-	 * @param other - The output to connect.
+	 * This method uses {@link connectRequiredTextures} internally to connect required textures.
+	 *
+	 * @param other - The resources to connect.
 	 */
 
 	connect(other: Output): void {
 
-		this.textures.setAll(...Array.from(other.textures()).filter(x => this.requiredTextures.has(x[0])));
+		this.connectRequiredTextures(other.textures());
 		this.shaderData.connect(other.shaderData);
 
 	}
