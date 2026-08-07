@@ -1,20 +1,19 @@
 import { SRGBColorSpace } from "three";
+import { Input } from "../core/io/Input.js";
 import { Effect } from "../effects/Effect.js";
 import { EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
-import { GBuffer } from "../enums/GBuffer.js";
 import { EffectMaterial } from "../materials/EffectMaterial.js";
-import { ShaderData } from "../utils/ShaderData.js";
 import { EffectShaderData } from "./EffectShaderData.js";
 import { GBufferSchema } from "./gbuffer/GBufferSchema.js";
 
 /**
- * An effect material manager that creates, updates and caches effect shader combinations.
+ * An effect material cache that creates, updates and caches effect shader combinations.
  *
  * @category Utils
  * @ignore
  */
 
-export class EffectMaterialManager {
+export class EffectMaterialCache {
 
 	/**
 	 * The maximum number of optional effects.
@@ -31,10 +30,10 @@ export class EffectMaterialManager {
 	private static readonly DEFAULT_MATERIAL_ID = "default";
 
 	/**
-	 * A collection of shader data that will be applied to new materials.
+	 * Input resources.
 	 */
 
-	private readonly shaderData: ShaderData;
+	private readonly input: Input;
 
 	/**
 	 * A default effect material.
@@ -55,12 +54,6 @@ export class EffectMaterialManager {
 	 */
 
 	private readonly effectShaderDataCache: Map<Effect, EffectShaderData>;
-
-	/**
-	 * The required input textures.
-	 */
-
-	private readonly requiredTextures: Set<GBuffer | string> | null;
 
 	/**
 	 * A material that is currently active.
@@ -85,19 +78,17 @@ export class EffectMaterialManager {
 	// #endregion
 
 	/**
-	 * Constructs a new effect material manager.
+	 * Constructs a new effect material cache.
 	 *
-	 * @param shaderData - Input shader data.
-	 * @param requiredTextures - A collection of required input textures.
+	 * @param shaderData - Input resources.
 	 */
 
-	constructor(shaderData: ShaderData, requiredTextures: Set<string>) {
+	constructor(input: Input) {
 
-		this.shaderData = shaderData;
+		this.input = input;
 		this.defaultMaterial = new EffectMaterial();
 		this.materialCache = new Map<string, EffectMaterial>();
 		this.effectShaderDataCache = new Map<Effect, EffectShaderData>();
-		this.requiredTextures = requiredTextures;
 		this.activeMaterial = null;
 
 		this._gBufferSchema = null;
@@ -118,7 +109,7 @@ export class EffectMaterialManager {
 	/**
 	 * The current G-Buffer configuration.
 	 *
-	 * Assigning a new configuration will invalidate all caches.
+	 * Assigning a new configuration will invalidate the material cache.
 	 */
 
 	get gBufferSchema(): GBufferSchema | null {
@@ -223,7 +214,7 @@ export class EffectMaterialManager {
 		return [
 			"struct GBuffer {",
 			...Array.from(schema.gBufferStructDeclaration)
-				.filter(x => this.requiredTextures!.has(x[0]))
+				.filter(x => this.input.requiredTextures.has(x[0]))
 				.map(x => `\t${x[1]}`),
 			"};\n"
 		].join("\n");
@@ -240,8 +231,8 @@ export class EffectMaterialManager {
 
 	private createMaterial(effects: Effect[]): EffectMaterial {
 
-		const id = EffectMaterialManager.getMaterialId(effects);
-		const result = (id === EffectMaterialManager.DEFAULT_MATERIAL_ID) ? this.defaultMaterial : new EffectMaterial();
+		const id = EffectMaterialCache.getMaterialId(effects);
+		const result = (id === EffectMaterialCache.DEFAULT_MATERIAL_ID) ? this.defaultMaterial : new EffectMaterial();
 		const data = this.getEffectShaderData(effects);
 		const schema = this.gBufferSchema;
 
@@ -281,13 +272,13 @@ export class EffectMaterialManager {
 		data.shaderParts.forEach((v, k, map) => map.set(k, v.trim().replace(/^#/, "\n#")));
 
 		// Add input defines and uniforms.
-		for(const entry of this.shaderData.defines) {
+		for(const entry of this.input.shaderData.defines) {
 
 			data.defines.set(entry[0], entry[1]);
 
 		}
 
-		for(const entry of this.shaderData.uniforms) {
+		for(const entry of this.input.shaderData.uniforms) {
 
 			data.uniforms.set(entry[0], entry[1]);
 
@@ -330,13 +321,13 @@ export class EffectMaterialManager {
 	private createMaterials(effects: readonly Effect[]): void {
 
 		const optionalEffects = effects.filter(x => x.optional);
-		const tooManyOptionalEffects = optionalEffects.length > EffectMaterialManager.MAX_OPTIONAL_EFFECTS;
+		const tooManyOptionalEffects = optionalEffects.length > EffectMaterialCache.MAX_OPTIONAL_EFFECTS;
 
 		if(optionalEffects.length === 0 || tooManyOptionalEffects) {
 
 			// Only create the required material for the active effects.
 			const combination = effects.filter(x => x.enabled);
-			const id = EffectMaterialManager.getMaterialId(combination);
+			const id = EffectMaterialCache.getMaterialId(combination);
 			this.materialCache.set(id, this.createMaterial(combination));
 
 			return;
@@ -346,7 +337,7 @@ export class EffectMaterialManager {
 		// Create materials for all effect combinations.
 		for(const combination of this.getEffectCombinations(effects)) {
 
-			const id = EffectMaterialManager.getMaterialId(combination);
+			const id = EffectMaterialCache.getMaterialId(combination);
 
 			if(!this.materialCache.has(id)) {
 
@@ -436,7 +427,7 @@ export class EffectMaterialManager {
 		this.synchronizeMaterials();
 
 		const activeEffects = effects.filter(x => x.enabled);
-		const id = EffectMaterialManager.getMaterialId(activeEffects);
+		const id = EffectMaterialCache.getMaterialId(activeEffects);
 
 		if(!this.materialCache.has(id)) {
 
@@ -524,7 +515,7 @@ export class EffectMaterialManager {
 	private static getMaterialId(effects: Effect[]): string {
 
 		return (effects.length === 0) ?
-			EffectMaterialManager.DEFAULT_MATERIAL_ID :
+			EffectMaterialCache.DEFAULT_MATERIAL_ID :
 			effects.map(x => x.id).join("-");
 
 	}

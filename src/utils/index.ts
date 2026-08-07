@@ -7,7 +7,7 @@ export * from "./ClearFlags.js";
 export * from "./ClearValues.js";
 export * from "./ColorDecisionList.js";
 export * from "./DebugTools.js";
-export * from "./EffectMaterialManager.js";
+export * from "./EffectMaterialCache.js";
 export * from "./EffectShaderData.js";
 export * from "./GaussKernel.js";
 export * from "./IdManager.js";

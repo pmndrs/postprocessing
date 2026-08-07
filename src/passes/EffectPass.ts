@@ -4,7 +4,7 @@ import { Pass } from "../core/Pass.js";
 import { Effect } from "../effects/Effect.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { EffectMaterial } from "../materials/EffectMaterial.js";
-import { EffectMaterialManager } from "../utils/EffectMaterialManager.js";
+import { EffectMaterialCache } from "../utils/EffectMaterialCache.js";
 
 /**
  * An effect pass.
@@ -17,16 +17,16 @@ import { EffectMaterialManager } from "../utils/EffectMaterialManager.js";
 export class EffectPass extends Pass<EffectMaterial> {
 
 	/**
-	 * An effect material manager.
-	 */
-
-	private readonly effectMaterialManager: EffectMaterialManager;
-
-	/**
 	 * An event listener that calls {@link handleEffectEvent}.
 	 */
 
 	private readonly effectListener: (e: Event) => void;
+
+	/**
+	 * An effect material cache.
+	 */
+
+	private readonly effectMaterialCache: EffectMaterialCache;
 
 	/**
 	 * An animation time scale.
@@ -45,9 +45,9 @@ export class EffectPass extends Pass<EffectMaterial> {
 		super("EffectPass");
 
 		this.output.createDefaultBuffer();
-		this.effectMaterialManager = new EffectMaterialManager(this.input.shaderData, this.input.requiredTextures);
 		this.effectListener = (e: Event) => this.handleEffectEvent(e as Event<string, Effect>);
-		this.fullscreenMaterial = this.effectMaterialManager.getMaterial([]);
+		this.effectMaterialCache = new EffectMaterialCache(this.input);
+		this.fullscreenMaterial = this.effectMaterialCache.getMaterial([]);
 		this.effects = effects;
 		this.timeScale = 1.0;
 
@@ -118,13 +118,13 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 	get dithering(): boolean {
 
-		return this.effectMaterialManager.dithering;
+		return this.effectMaterialCache.dithering;
 
 	}
 
 	set dithering(value: boolean) {
 
-		this.effectMaterialManager.dithering = value;
+		this.effectMaterialCache.dithering = value;
 
 	}
 
@@ -142,16 +142,16 @@ export class EffectPass extends Pass<EffectMaterial> {
 		if(invalidateCache) {
 
 			// Remove all materials.
-			this.effectMaterialManager.invalidateMaterialCache();
+			this.effectMaterialCache.invalidateMaterialCache();
 			this.materials.clear();
 
 		}
 
 		// Get the material for the current effect combination.
-		this.fullscreenMaterial = this.effectMaterialManager.getMaterial(this.effects);
+		this.fullscreenMaterial = this.effectMaterialCache.getMaterial(this.effects);
 
 		// Pick up new materials.
-		for(const material of this.effectMaterialManager.materials) {
+		for(const material of this.effectMaterialCache.materials) {
 
 			this.materials.add(material);
 
@@ -200,7 +200,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 			case "change":
 				this.input.requiredTextures.addAll(...e.target.input.requiredTextures);
-				this.effectMaterialManager.invalidateShaderData(e.target);
+				this.effectMaterialCache.invalidateShaderData(e.target);
 				this.updateMaterial(true);
 				break;
 
