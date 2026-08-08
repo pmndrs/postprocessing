@@ -257,9 +257,9 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 		for(const entry of textureConfigs) {
 
 			// Keep existing configs.
-			if(!this.gBufferSchema.textureConfigs.has(entry[0])) {
+			if(!this.gBufferSchema.textureTemplates.has(entry[0])) {
 
-				this.gBufferSchema.textureConfigs.set(entry[0], entry[1]);
+				this.gBufferSchema.textureTemplates.set(entry[0], entry[1]);
 
 			}
 
@@ -277,7 +277,7 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 	private configureDepthTexture(): void {
 
 		const descriptor = this.descriptor;
-		const textureConfig = this.gBufferSchema.textureConfigs.get(GBuffer.DEPTH);
+		const textureConfig = this.gBufferSchema.textureTemplates.get(GBuffer.DEPTH);
 
 		if(this.value === null || textureConfig === undefined) {
 
@@ -313,7 +313,7 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 		}
 
 		// Get the texture configs that correspond to the required G-Buffer components (depth is handled separately).
-		const textureConfigs = Array.from(this.gBufferSchema.textureConfigs)
+		const textureConfigs = Array.from(this.gBufferSchema.textureTemplates)
 			.filter(x => this.components.has(x[0]) && x[0] !== GBuffer.DEPTH as string);
 
 		const descriptor = this.descriptor;

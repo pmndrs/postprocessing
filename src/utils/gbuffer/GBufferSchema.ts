@@ -16,7 +16,7 @@ export class GBufferSchema extends EventDispatcher<BaseEventMap> {
 	 * A collection that maps G-Buffer components to G-Buffer texture configurations.
 	 */
 
-	readonly textureConfigs: Map<GBuffer | string, TextureParameters>;
+	readonly textureTemplates: Map<GBuffer | string, TextureParameters>;
 
 	/**
 	 * A collection that maps G-Buffer components to G-Buffer struct field names that are used in effects.
@@ -62,7 +62,7 @@ export class GBufferSchema extends EventDispatcher<BaseEventMap> {
 
 		super();
 
-		const textureConfigs = new ObservableMap<GBuffer | string, TextureParameters>();
+		const textureTemplates = new ObservableMap<GBuffer | string, TextureParameters>();
 
 		const gBufferStructFields = new ObservableMap([
 			[GBuffer.COLOR, "color"],
@@ -116,7 +116,7 @@ export class GBufferSchema extends EventDispatcher<BaseEventMap> {
 		]);
 
 		const listener = () => this.dispatchEvent({ type: "change" });
-		textureConfigs.addEventListener("change", listener);
+		textureTemplates.addEventListener("change", listener);
 		gBufferStructFields.addEventListener("change", listener);
 		gBufferStructDeclaration.addEventListener("change", listener);
 		gDataStructDeclaration.addEventListener("change", listener);
@@ -124,7 +124,7 @@ export class GBufferSchema extends EventDispatcher<BaseEventMap> {
 		gDataDependencies.addEventListener("change", listener);
 		gDataBufferSources.addEventListener("change", listener);
 
-		this.textureConfigs = textureConfigs;
+		this.textureTemplates = textureTemplates;
 		this.gBufferStructFields = gBufferStructFields;
 		this.gBufferStructDeclaration = gBufferStructDeclaration;
 		this.gDataStructDeclaration = gDataStructDeclaration;
