@@ -74,7 +74,7 @@ export interface GBufferResourceOptions {
 	 * @defaultValue HalfFloatType
 	 */
 
-	frameBufferType?: TextureDataType;
+	type?: TextureDataType;
 
 	/**
 	 * The amount of samples used for MSAA.
@@ -127,12 +127,12 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 		alpha = false,
 		stencilBuffer = false,
 		depthBuffer = true,
-		frameBufferType = HalfFloatType,
+		type = HalfFloatType,
 		samples = 0
 	}: GBufferResourceOptions = {}) {
 
 		super({
-			type: frameBufferType,
+			type,
 			stencilBuffer,
 			depthBuffer,
 			samples,
@@ -169,7 +169,7 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 
 	}
 
-	get frameBufferType(): TextureDataType {
+	get type(): TextureDataType {
 
 		return this.descriptor.type!;
 
@@ -205,7 +205,7 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 
 	private get frameBufferPrecisionHigh(): boolean {
 
-		return this.frameBufferType === HalfFloatType || this.frameBufferType === FloatType;
+		return this.type === HalfFloatType || this.type === FloatType;
 
 	}
 

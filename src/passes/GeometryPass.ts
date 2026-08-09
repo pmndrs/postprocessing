@@ -79,7 +79,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 		alpha,
 		stencilBuffer,
 		depthBuffer,
-		frameBufferType,
+		type,
 		samples
 	}: GeometryPassOptions = {}) {
 
@@ -93,7 +93,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 			alpha,
 			stencilBuffer,
 			depthBuffer,
-			frameBufferType,
+			type,
 			samples
 		});
 
@@ -143,7 +143,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 	get alpha(): boolean { return this.gBuffer.alpha; }
 	get stencilBuffer(): boolean { return this.gBuffer.stencilBuffer; }
 	get depthBuffer(): boolean { return this.gBuffer.depthBuffer; }
-	get frameBufferType(): TextureDataType { return this.gBuffer.frameBufferType; }
+	get type(): TextureDataType { return this.gBuffer.type; }
 
 	// #endregion
 
