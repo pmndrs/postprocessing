@@ -17,7 +17,7 @@ const defineRegExp = /^\s*#define\s+(\w*)/gm;
  * A collection of shader data.
  *
  * @category Utils
- * @internal
+ * @ignore
  */
 
 export class EffectShaderData implements ShaderData {
@@ -41,7 +41,7 @@ export class EffectShaderData implements ShaderData {
 	 * A collection of required G-Buffer data.
 	 */
 
-	readonly gData: Set<GData | string>;
+	readonly gData: Set<string>;
 
 	/**
 	 * A list of effects that use convolution operations.
@@ -81,7 +81,7 @@ export class EffectShaderData implements ShaderData {
 		this.defines = new Map<string, string | number | boolean>();
 		this.uniforms = new Map<string, IUniform>();
 		this.blendModes = new Map<number, BlendMode>();
-		this.gData = new Set<GData | string>([GData.COLOR]);
+		this.gData = new Set<string>([GData.COLOR]);
 		this.convolutionEffects = new Set<Effect>();
 		this.uvTransformationEffects = new Set<Effect>();
 		this._colorSpace = LinearSRGBColorSpace;

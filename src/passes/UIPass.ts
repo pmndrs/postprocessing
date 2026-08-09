@@ -21,9 +21,7 @@ export class UIPass extends GeometryPass {
 	/**
 	 * Constructs a new user interface pass.
 	 *
-	 * @param scene - A scene.
-	 * @param camera - A camera.
-	 * @param options - Additional options.
+	 * @param options - The options.
 	 */
 
 	constructor(options?: GeometryPassOptions) {

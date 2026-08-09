@@ -102,6 +102,8 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	private _renderer: WebGLRenderer | null;
 
+	// #region Internal
+
 	/**
 	 * @see {@link mainScene}
 	 */
@@ -115,6 +117,14 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	private _mainCamera: Camera | null;
 
 	/**
+	 * @see {@link subtasks}
+	 */
+
+	private _subtasks: Pass<Material | null>[];
+
+	// #endregion
+
+	/**
 	 * @see {@link scene}
 	 */
 
@@ -125,12 +135,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 */
 
 	private _camera: Camera | null;
-
-	/**
-	 * @see {@link subtasks}
-	 */
-
-	private _subtasks: Pass<Material | null>[];
 
 	// #endregion
 
@@ -331,65 +335,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	}
 
-	get subtasks(): readonly RenderTask[] {
-
-		return this._subtasks;
-
-	}
-
-	/**
-	 * A list of subpasses.
-	 *
-	 * Subpasses are considered part of this pass; they are included in automatic resource optimizations and will be
-	 * disposed together with the parent pass.
-	 *
-	 * @see {@link renderSubpasses} for rendering subpasses.
-	 */
-
-	get subpasses(): readonly Pass<Material | null>[] {
-
-		return this._subtasks;
-
-	}
-
-	protected set subpasses(value: Pass<Material | null>[]) {
-
-		this._subtasks = value;
-		Object.freeze(this._subtasks);
-		this.initializeSubpasses();
-
-	}
-
-	set mainScene(value: Scene | null) {
-
-		if(this._mainScene === value) {
-
-			return;
-
-		}
-
-		this.removeSceneListeners();
-		const previous = this.scene;
-		this._mainScene = value;
-		this.addSceneListeners();
-		this.onSceneChange(previous, this.scene);
-
-	}
-
-	set mainCamera(value: Camera | null) {
-
-		if(this._mainCamera === value) {
-
-			return;
-
-		}
-
-		const previous = this.camera;
-		this._mainCamera = value;
-		this.onCameraChange(previous, this.camera);
-
-	}
-
 	get scene(): Scene | null {
 
 		return this._scene ?? this._mainScene;
@@ -429,6 +374,67 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		const previous = this.camera;
 		this._camera = value;
 		this.onCameraChange(previous, this.camera);
+
+	}
+
+	set mainScene(value: Scene | null) {
+
+		if(this._mainScene === value) {
+
+			return;
+
+		}
+
+		this.removeSceneListeners();
+		const previous = this.scene;
+		this._mainScene = value;
+		this.addSceneListeners();
+		this.onSceneChange(previous, this.scene);
+
+	}
+
+	set mainCamera(value: Camera | null) {
+
+		if(this._mainCamera === value) {
+
+			return;
+
+		}
+
+		const previous = this.camera;
+		this._mainCamera = value;
+		this.onCameraChange(previous, this.camera);
+
+	}
+
+	get subtasks(): readonly RenderTask[] {
+
+		return this._subtasks;
+
+	}
+
+	// #endregion
+
+	/**
+	 * A list of subpasses.
+	 *
+	 * Subpasses are considered part of this pass; they are included in automatic resource optimizations and will be
+	 * disposed together with the parent pass.
+	 *
+	 * @see {@link renderSubpasses} for rendering subpasses.
+	 */
+
+	get subpasses(): readonly Pass<Material | null>[] {
+
+		return this._subtasks;
+
+	}
+
+	protected set subpasses(value: Pass<Material | null>[]) {
+
+		this._subtasks = value;
+		Object.freeze(this._subtasks);
+		this.initializeSubpasses();
 
 	}
 

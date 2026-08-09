@@ -80,7 +80,7 @@ export class EffectMaterialCache {
 	/**
 	 * Constructs a new effect material cache.
 	 *
-	 * @param shaderData - Input resources.
+	 * @param input - Input resources.
 	 */
 
 	constructor(input: Input) {

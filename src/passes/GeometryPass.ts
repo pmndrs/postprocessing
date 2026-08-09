@@ -69,7 +69,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 	/**
 	 * Constructs a new geometry pass.
 	 *
-	 * @param options - Additional options.
+	 * @param options - The options.
 	 */
 
 	constructor({

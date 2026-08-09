@@ -16,40 +16,40 @@ export class GBufferSchema extends EventDispatcher<BaseEventMap> {
 	 * A collection that maps G-Buffer components to G-Buffer struct field names that are used in effects.
 	 */
 
-	readonly gBufferStructFields: Map<GBuffer | string, string>;
+	readonly gBufferStructFields: Map<string, string>;
 
 	/**
 	 * A collection that maps G-Buffer components to shader code that declares the respective G-Buffer struct field.
 	 */
 
-	readonly gBufferStructDeclaration: Map<GBuffer | string, string>;
+	readonly gBufferStructDeclaration: Map<string, string>;
 
 	/**
 	 * A collection that maps G-Data to shader code that declares the respective G-Data struct field.
 	 */
 
-	readonly gDataStructDeclaration: Map<GData | string, string>;
+	readonly gDataStructDeclaration: Map<string, string>;
 
 	/**
 	 * A collection that maps G-Data to shader code that fills the respective G-Data struct field.
 	 */
 
-	readonly gDataStructInitialization: Map<GData | string, string>;
+	readonly gDataStructInitialization: Map<string, string>;
 
 	/**
 	 * A collection that describes G-Data interdependencies.
 	 */
 
-	readonly gDataDependencies: Map<GData | string, Set<GData | string>>;
+	readonly gDataDependencies: Map<string, ReadonlySet<string>>;
 
 	/**
 	 * A collection that describes which G-Buffer components are required for the G-Data.
 	 */
 
-	readonly gDataBufferSources: Map<GData | string, Set<GBuffer | string>>;
+	readonly gDataBufferSources: Map<string, ReadonlySet<string>>;
 
 	/**
-	 * Constructs a new G-Buffer config.
+	 * Constructs a new G-Buffer schema.
 	 */
 
 	constructor() {

@@ -85,12 +85,12 @@ export class RenderTargetResource extends DisposableResource<Readonly<WebGLRende
 	}
 
 	/**
-	 * Defines available texture resources as handles for the `textures` of the current render target.
+	 * Defines texture resources as handles for the `textures` of the current render target.
 	 *
-	 * @param names - A list of names to use for creating texture resources.
+	 * @param names - The names to use for creating the texture resources.
 	 */
 
-	protected setTextures(names: string[]): void {
+	protected setTextures(names: Iterable<string>): void {
 
 		this._textures.clear();
 
@@ -152,6 +152,7 @@ export class RenderTargetResource extends DisposableResource<Readonly<WebGLRende
 	 * Sets the render target.
 	 *
 	 * @internal
+	 * @param value - The render target.
 	 */
 
 	setRenderTarget(value: WebGLRenderTarget | null): void {

@@ -158,7 +158,7 @@ export class Output extends EventDispatcher<OutputEventMap> implements Disposabl
 	 * Creates a new default buffer.
 	 *
 	 *
-	 * @param value - Render target options. Defaults to a configuration without a `depthBuffer`.
+	 * @param options - Render target options. Defaults to a configuration without a `depthBuffer`.
 	 * @return The render target resource.
 	 */
 

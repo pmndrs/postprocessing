@@ -16,7 +16,7 @@ export interface MapExtensions<K, V> {
 	 * @return This Map.
 	 */
 
-	deleteAll(...values: K[]): this;
+	deleteAll(...keys: K[]): this;
 
 	/**
 	 * Sets multiple entries.
