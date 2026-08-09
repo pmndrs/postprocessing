@@ -1,30 +1,18 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { EffectMaterialManager, GBuffer, GBufferSchema, ToneMappingEffect } from "postprocessing";
+import { EffectMaterialCache, GBuffer, GBufferSchema, Input, ToneMappingEffect } from "postprocessing";
 
-const emptyShaderData = {
-	uniforms: new Map(),
-	defines: new Map()
-};
-
-describe("EffectMaterialManager", () => {
+describe("EffectMaterialCache", () => {
 
 	it("can be instantiated", () => {
 
-		assert.doesNotThrow(() => new EffectMaterialManager(emptyShaderData));
-
-	});
-
-	it("can be disposed", () => {
-
-		const object = new EffectMaterialManager(emptyShaderData);
-		assert.doesNotThrow(() => object.dispose());
+		assert.doesNotThrow(() => new EffectMaterialCache(new Input()));
 
 	});
 
 	it("returns a material", () => {
 
-		const manager = new EffectMaterialManager(emptyShaderData);
+		const manager = new EffectMaterialCache(new Input());
 		assert.doesNotThrow(() => manager.getMaterial([]));
 
 	});
@@ -39,9 +27,11 @@ describe("EffectMaterialManager", () => {
 
 		effects.forEach((effect) => void (effect.optional = true));
 
-		const manager = new EffectMaterialManager(emptyShaderData);
-		manager.requiredTextures = new Set([GBuffer.COLOR]);
-		manager.gBufferSchema = new GBufferSchema();
+		const input = new Input();
+		input.requiredTextures.add(GBuffer.COLOR);
+		input.gBufferSchema = new GBufferSchema();
+
+		const manager = new EffectMaterialCache(input);
 
 		assert.doesNotThrow(() => manager.getMaterial(effects));
 		assert.equal(Array.from(manager.materials).length, 8 /* 2^3 */);
@@ -63,9 +53,11 @@ describe("EffectMaterialManager", () => {
 
 		effects.forEach((effect) => void (effect.optional = true));
 
-		const manager = new EffectMaterialManager(emptyShaderData);
-		manager.requiredTextures = new Set([GBuffer.COLOR]);
-		manager.gBufferSchema = new GBufferSchema();
+		const input = new Input();
+		input.requiredTextures.add(GBuffer.COLOR);
+		input.gBufferSchema = new GBufferSchema();
+
+		const manager = new EffectMaterialCache(input);
 
 		assert.doesNotThrow(() => manager.getMaterial(effects));
 		assert.equal(Array.from(manager.materials).length, 1);
