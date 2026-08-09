@@ -65,13 +65,13 @@
 		"start": "hugo server -s manual -e development --quiet --poll 700",
 		"pretest": "run-s clean tsc lint build",
 		"test": "run-p test:*",
-		"posttest": "npm run doc",
 		"test:unit": "node --experimental-strip-types --test",
+		"posttest": "run-s doc",
 		"prewatch": "run-s clean tsc build hugo:dev pagefind:dev",
 		"watch": "run-p watch:* start",
 		"watch:css": "sass -p node -I manual/assets/css/src/values manual/assets/css/src:manual/assets/css/dist -w",
 		"watch:js": "node esbuild -w",
-		"prepublishOnly": "npm test"
+		"prepublishOnly": "run-s test"
 	},
 	"peerDependencies": {
 		"three": ">= 0.179.0 < 0.186.0"
