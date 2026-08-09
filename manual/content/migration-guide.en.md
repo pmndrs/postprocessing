@@ -24,13 +24,12 @@ weight: 100
 * `RenderPass` was replaced by `GeometryPass`.
 	* `GeometryPass` automatically clears its render target.
 	* Clearing can be disabled by setting `autoClear` to `false`.
-* `EffectComposer` was replaced by `RenderPipeline`.
+* `EffectComposer` was replaced by `FrameGraph`.
 	* Most options have been moved to `GeometryPass`.
 	* The method `addPass` was replaced by `add`.
 	* The method `render` now expects a `timestamp` parameter.
 * The `EffectPass` constructor no longer requires a `camera` parameter.
 * The `Pass.renderToScreen` flag was removed.
-	* The last pass in the pipeline will automatically render to screen.
-	* To force any pass to render to screen, set `pass.output.defaultBuffer` to `null`.
-* The same instances of `Pass` can not be added to multiple `RenderPipelines`.
+	* Passes whose output is not consumed by another pass render to the screen automatically.
+* The same instances of `Pass` can not be added to multiple `FrameGraphs`.
 * The same instances of `Effect` can not be added to multiple `EffectPasses`.
