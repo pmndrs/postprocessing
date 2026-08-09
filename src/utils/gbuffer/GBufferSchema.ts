@@ -1,4 +1,4 @@
-import { EventDispatcher, TextureParameters } from "three";
+import { EventDispatcher } from "three";
 import { BaseEventMap } from "../../core/BaseEventMap.js";
 import { GBuffer } from "../../enums/GBuffer.js";
 import { GData } from "../../enums/GData.js";
@@ -11,12 +11,6 @@ import { ObservableMap } from "../ObservableMap.js";
  */
 
 export class GBufferSchema extends EventDispatcher<BaseEventMap> {
-
-	/**
-	 * A collection that maps G-Buffer components to G-Buffer texture configurations.
-	 */
-
-	readonly textureTemplates: Map<GBuffer | string, TextureParameters>;
 
 	/**
 	 * A collection that maps G-Buffer components to G-Buffer struct field names that are used in effects.
@@ -61,8 +55,6 @@ export class GBufferSchema extends EventDispatcher<BaseEventMap> {
 	constructor() {
 
 		super();
-
-		const textureTemplates = new ObservableMap<GBuffer | string, TextureParameters>();
 
 		const gBufferStructFields = new ObservableMap([
 			[GBuffer.COLOR, "color"],
@@ -116,7 +108,6 @@ export class GBufferSchema extends EventDispatcher<BaseEventMap> {
 		]);
 
 		const listener = () => this.dispatchEvent({ type: "change" });
-		textureTemplates.addEventListener("change", listener);
 		gBufferStructFields.addEventListener("change", listener);
 		gBufferStructDeclaration.addEventListener("change", listener);
 		gDataStructDeclaration.addEventListener("change", listener);
@@ -124,7 +115,6 @@ export class GBufferSchema extends EventDispatcher<BaseEventMap> {
 		gDataDependencies.addEventListener("change", listener);
 		gDataBufferSources.addEventListener("change", listener);
 
-		this.textureTemplates = textureTemplates;
 		this.gBufferStructFields = gBufferStructFields;
 		this.gBufferStructDeclaration = gBufferStructDeclaration;
 		this.gDataStructDeclaration = gDataStructDeclaration;

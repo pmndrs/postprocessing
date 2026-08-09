@@ -18,10 +18,11 @@ import {
 
 import { GBuffer } from "../../enums/GBuffer.js";
 import { MSAASamples } from "../../enums/MSAASamples.js";
-import { GBufferSchema } from "../../utils/gbuffer/GBufferSchema.js";
 import { ObservableSet } from "../../utils/ObservableSet.js";
 import { SetExtensions } from "../../utils/SetExtensions.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
+import { ObservableMap } from "../../utils/ObservableMap.js";
+import { MapExtensions } from "../../utils/MapExtensions.js";
 
 /**
  * GBufferResource constructor options.
@@ -30,12 +31,6 @@ import { RenderTargetResource } from "./RenderTargetResource.js";
  */
 
 export interface GBufferResourceOptions {
-
-	/**
-	 * A G-Buffer configuration.
-	 */
-
-	gBufferSchema?: GBufferSchema;
 
 	/**
 	 * Controls whether color buffers should use an alpha channel.
@@ -96,7 +91,6 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 
 	// #region Settings
 
-	readonly gBufferSchema: GBufferSchema;
 	readonly alpha: boolean;
 
 	// #endregion
@@ -117,13 +111,18 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 	readonly components: Set<string> & SetExtensions<string>;
 
 	/**
+	 * A collection that maps G-Buffer components to G-Buffer texture configurations.
+	 */
+
+	readonly textureTemplates: Map<string, TextureParameters> & MapExtensions<string, TextureParameters>;
+
+	/**
 	 * Constructs a new G-Buffer resource.
 	 *
 	 * @param options - The options.
 	 */
 
 	constructor({
-		gBufferSchema = new GBufferSchema(),
 		alpha = false,
 		stencilBuffer = false,
 		depthBuffer = true,
@@ -140,20 +139,23 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 			count: 1
 		});
 
-		this.gBufferSchema = gBufferSchema;
 		this.alpha = alpha;
-
 		this._textureIndices = new Map();
 
 		const gBufferComponents = new ObservableSet<string>();
+		gBufferComponents.addEventListener("change", () => this.updateDescriptor());
 		this.components = gBufferComponents;
 
-		this.defineTextureConfigs();
+		const textureTemplates = new ObservableMap<GBuffer | string, TextureParameters>();
+		textureTemplates.addEventListener("change", () => {
 
-		// Update the render target descriptor when the G-Buffer schema changes.
-		// Descriptor changes will also emit a change event from this resource.
-		gBufferSchema.addEventListener("change", () => this.updateDescriptor());
-		gBufferComponents.addEventListener("change", () => this.updateDescriptor());
+			this.setTextures(this.textureTemplates.keys());
+			this.updateDescriptor();
+
+		});
+
+		this.textureTemplates = textureTemplates;
+		this.defineTextureTemplates();
 
 	}
 
@@ -210,18 +212,18 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 	}
 
 	/**
-	 * Defines all possible G-Buffer texture configs.
+	 * Defines all built-in G-Buffer texture templates.
 	 */
 
-	private defineTextureConfigs(): void {
+	private defineTextureTemplates(): void {
 
 		const useSmallFloatFormat = (this.frameBufferPrecisionHigh && !this.alpha);
 
-		const textureConfigs: [string, TextureParameters][] = [
+		this.textureTemplates.setAll(
 			[GBuffer.COLOR, {
 				minFilter: LinearFilter,
 				magFilter: LinearFilter,
-				type: useSmallFloatFormat ? UnsignedInt101111Type : this.frameBufferType,
+				type: useSmallFloatFormat ? UnsignedInt101111Type : this.type,
 				format: useSmallFloatFormat ? RGBFormat : RGBAFormat
 			}],
 			[GBuffer.DEPTH, {
@@ -252,21 +254,7 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 				// format: RGBFormat,
 				// internalFormat: "R11F_G11F_B10F"
 			}]
-		];
-
-		for(const entry of textureConfigs) {
-
-			// Keep existing configs.
-			if(!this.gBufferSchema.textureTemplates.has(entry[0])) {
-
-				this.gBufferSchema.textureTemplates.set(entry[0], entry[1]);
-
-			}
-
-		}
-
-		// Create a texture resource for each config.
-		this.setTextures(textureConfigs.map(x => x[0]));
+		);
 
 	}
 
@@ -277,15 +265,9 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 	private configureDepthTexture(): void {
 
 		const descriptor = this.descriptor;
-		const textureConfig = this.gBufferSchema.textureTemplates.get(GBuffer.DEPTH);
+		const textureTemplate = this.textureTemplates.get(GBuffer.DEPTH);
 
-		if(this.value === null || textureConfig === undefined) {
-
-			return;
-
-		}
-
-		if(!this.components.has(GBuffer.DEPTH)) {
+		if(textureTemplate === undefined || !this.components.has(GBuffer.DEPTH)) {
 
 			descriptor.depthTexture = null;
 			return;
@@ -294,7 +276,7 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 
 		const texture = new DepthTexture();
 		texture.name = GBuffer.DEPTH;
-		texture.setValues(textureConfig);
+		texture.setValues(textureTemplate);
 		descriptor.depthTexture = texture;
 
 	}
@@ -305,28 +287,21 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 
 	private updateDescriptor(): void {
 
-		if(this.components.size === 0) {
-
-			this.descriptor.textures.clear();
-			return;
-
-		}
-
-		// Get the texture configs that correspond to the required G-Buffer components (depth is handled separately).
-		const textureConfigs = Array.from(this.gBufferSchema.textureTemplates)
+		// Get the templates for the required G-Buffer components (depth is handled separately).
+		const textureTemplates = Array.from(this.textureTemplates)
 			.filter(x => this.components.has(x[0]) && x[0] !== GBuffer.DEPTH as string);
 
 		const descriptor = this.descriptor;
-		descriptor.count = textureConfigs.length;
-		descriptor.textures.setAll(...textureConfigs);
+		descriptor.count = textureTemplates.length;
+		descriptor.textures.clear();
+		descriptor.textures.setAll(...textureTemplates);
 
 		this._textureIndices.clear();
 
-		for(let i = 0, l = textureConfigs.length; i < l; ++i) {
+		for(let i = 0, l = textureTemplates.length; i < l; ++i) {
 
-			const textureConfig = textureConfigs[i];
-			const gBufferComponent = textureConfig[0];
-			this._textureIndices.set(gBufferComponent, i);
+			// gBufferComponent => index
+			this._textureIndices.set(textureTemplates[i][0], i);
 
 		}
 
