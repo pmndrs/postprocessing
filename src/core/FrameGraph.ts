@@ -46,7 +46,7 @@ export interface FrameGraphOptions {
  * @category Core
  */
 
-export class FrameGraph implements Disposable, Renderable {
+export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 
 	/**
 	 * A shared resource manager.
@@ -153,10 +153,6 @@ export class FrameGraph implements Disposable, Renderable {
 
 	}
 
-	/**
-	 * The current renderer.
-	 */
-
 	get renderer(): WebGLRenderer | null {
 
 		return this._renderer;
@@ -193,10 +189,6 @@ export class FrameGraph implements Disposable, Renderable {
 
 	}
 
-	/**
-	 * The current main scene.
-	 */
-
 	get scene(): Scene | null {
 
 		return this._scene;
@@ -220,10 +212,6 @@ export class FrameGraph implements Disposable, Renderable {
 		}
 
 	}
-
-	/**
-	 * The current main camera.
-	 */
 
 	get camera(): Camera | null {
 
