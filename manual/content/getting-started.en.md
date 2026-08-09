@@ -50,16 +50,16 @@ import {
 } from "postprocessing";
 
 const clearPass = new ClearPass();
-const geoPass = new GeometryPass(scene, camera);
+const geoPass = new GeometryPass();
 const effectPass = new EffectPass(new ToneMappingEffect());
 const aaPass = new EffectPass(new SMAAEffect());
 
-clearPass.output.connect(geoPass.output);
-geoPass.output.connect(effectPass.input);
-geoPass.output.connect(aaPass.input);
-effectPass.output.connectDefaultBuffer(aaPass.input);
+clearPass.output.defaultBuffer = geoPass.output.defaultBuffer;
+effectPass.input.connect(geoPass.output);
+aaPass.input.connect(geoPass.output);
+aaPass.input.defaultBuffer = effectPass.output.defaultBuffer?.texture;
 
-const frameGraph = new FrameGraph(renderer);
+const frameGraph = new FrameGraph({ renderer, scene, camera });
 frameGraph.add(clearPass, geoPass, effectPass, aaPass);
 
 renderer.setAnimationLoop(timestamp => frameGraph.render(timestamp));
@@ -111,8 +111,8 @@ If hardware support and resource efficiency is a concern, postprocessing can be 
 ```ts
 import { UnsignedByteType } from "three";
 
-const geoPass = new GeometryPass(scene, camera, {
-	frameBufferType: UnsignedByteType // enables low precision buffers
+const geoPass = new GeometryPass({
+	type: UnsignedByteType // enables low precision buffers
 });
 ```
 
