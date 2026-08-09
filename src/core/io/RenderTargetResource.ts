@@ -92,15 +92,25 @@ export class RenderTargetResource extends DisposableResource<Readonly<WebGLRende
 
 	protected setTextures(names: Iterable<string>): void {
 
-		this._textures.clear();
+		const textures = new Map<string, TextureResource>();
 
 		for(const name of names) {
 
+			if(this._textures.has(name)) {
+
+				textures.set(name, this._textures.get(name)!);
+				continue;
+
+			}
+
 			const texture = new TextureResource();
 			texture.setRenderTarget(this);
-			this._textures.set(name, texture);
+			textures.set(name, texture);
 
 		}
+
+		this._textures.clear();
+		this._textures.setAll(...textures);
 
 	}
 
