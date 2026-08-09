@@ -237,6 +237,28 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 	}
 
 	/**
+	 * Sets the required textures.
+	 *
+	 * @internal
+	 * @param values - The textures to use.
+	 */
+
+	setRequiredTextures(values: Set<string>): void {
+
+		const current = this.requiredTextures;
+
+		if(current.size === values.size && Array.from(current).every(x => values.has(x))) {
+
+			return;
+
+		}
+
+		current.clear();
+		current.addAll(...values);
+
+	}
+
+	/**
 	 * Connects {@link requiredTextures | required textures} if they are provided by the given output.
 	 *
 	 * @param textures - The textures to connect.

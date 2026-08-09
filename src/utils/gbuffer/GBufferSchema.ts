@@ -124,4 +124,94 @@ export class GBufferSchema extends EventDispatcher<BaseEventMap> {
 
 	}
 
+	/**
+	 * Resolves G-Data dependencies.
+	 *
+	 * @param roots - The base G-Data.
+	 * @return The resolved G-Data dependencies.
+	 */
+
+	resolveGDataGraph(roots: Iterable<string>): Map<string, Iterable<string>> {
+
+		const graph = new Map<string, Set<string>>();
+		const visiting = new Set<string>();
+
+		const visit = (value: string): void => {
+
+			if(visiting.has(value)) {
+
+				throw new Error(`Circular GData dependency involving "${value}"`);
+
+			}
+
+			if(graph.has(value)) {
+
+				return;
+
+			}
+
+			visiting.add(value);
+
+			const dependencies = new Set(this.gDataDependencies.get(value) ?? []);
+			graph.set(value, dependencies);
+
+			for(const dependency of dependencies) {
+
+				visit(dependency);
+
+			}
+
+			visiting.delete(value);
+
+		};
+
+		for(const root of roots) {
+
+			visit(root);
+
+		}
+
+		return graph;
+
+	}
+
+	/**
+	 * Resolves G-Data dependencies.
+	 *
+	 * @param roots - The base G-Data.
+	 * @return The resolved G-Data dependencies.
+	 */
+
+	resolveGData(roots: Iterable<string>): Set<string> {
+
+		return new Set(this.resolveGDataGraph(roots).keys());
+
+	}
+
+	/**
+	 * Resolves G-Buffer components based on G-Data usage.
+	 *
+	 * @param roots - The G-Data for which to find the required components.
+	 * @return The G-Buffer components needed for the given G-Data.
+	 */
+
+	resolveGBufferComponents(roots: Iterable<string>): Set<string> {
+
+		const result = new Set<string>();
+		const graph = this.resolveGDataGraph(roots);
+
+		for(const gData of graph.keys()) {
+
+			for(const component of this.gDataBufferSources.get(gData) ?? []) {
+
+				result.add(component);
+
+			}
+
+		}
+
+		return result;
+
+	}
+
 }

@@ -45,9 +45,7 @@ export abstract class Effect extends Pass {
 	private _outputColorSpace: ColorSpace;
 
 	/**
-	 * A collection of required GBuffer data.
-	 *
-	 * This data depends on the current fragment shader and will be updated automatically.
+	 * A collection of G-Buffer data that is directly referenced by the current fragment shader.
 	 *
 	 * @internal
 	 */
@@ -249,36 +247,13 @@ export abstract class Effect extends Pass {
 
 		for(const value of Object.values(GData)) {
 
-			if(!shader.includes(`${gDataParamName}.${value}`)) {
+			if(shader.includes(`${gDataParamName}.${value}`)) {
 
-				continue;
+				this.gData.add(value);
 
 			}
 
-			//for(const dependency of schema.gDataDependencies.get(value) ?? []) {
-
-			//	this.gData.add(dependency);
-
-			//}
-
-			this.gData.add(value);
-
 		}
-
-		//for(const gData of this.gData) {
-
-		//	for(const texture of schema.gDataBufferSources.get(gData) ?? []) {
-
-		//		if(!this.input.requiredTextures.has(texture)) {
-
-		//			this.input.requiredTextures.add(texture);
-		//			console.warn(`${this.name} uses ${gData} but does not declare input texture ${texture}`);
-
-		//		}
-
-		//	}
-
-		//}
 
 	}
 

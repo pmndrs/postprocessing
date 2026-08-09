@@ -420,11 +420,13 @@ export class EffectShaderData implements ShaderData {
 
 	createGDataStructDeclaration(schema: GBufferSchema): string {
 
+		const graph = schema.resolveGDataGraph(this.gData);
+
 		return [
 			"struct GData {",
 			...Array.from(schema.gDataStructDeclaration)
-				.filter(x => this.gData.has(x[0]))
-				.map(x => `\t${x[1]}`),
+				.filter(([key]) => graph.has(key))
+				.map(([, declaration]) => `\t${declaration}`),
 			"};\n"
 		].join("\n");
 
@@ -439,19 +441,13 @@ export class EffectShaderData implements ShaderData {
 
 	createGDataStructInitialization(schema: GBufferSchema): string {
 
-		const gDataDependencies = schema.gDataDependencies;
-		const gDataStructInitialization = schema.gDataStructInitialization;
-
-		const dependencyGraph = new Map<string, Iterable<string>>(
-			Array.from(this.gData)
-				.filter(x => gDataStructInitialization.has(x))
-				.map(x => [x, gDataDependencies.get(x) ?? []])
-		);
+		const graph = schema.resolveGDataGraph(this.gData);
 
 		return [
 			"\tGData gData;",
-			...topologicalSort(dependencyGraph, true)
-				.map(x => `\t${gDataStructInitialization.get(x)}`)
+			...topologicalSort(graph, true)
+				.filter(x => schema.gDataStructInitialization.has(x))
+				.map(x => `\t${schema.gDataStructInitialization.get(x)}`)
 		].join("\n");
 
 	}

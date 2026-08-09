@@ -1,10 +1,10 @@
 import { Event, Material, Texture } from "three";
-import { GBufferResource } from "../core/io/GBufferResource.js";
 import { Pass } from "../core/Pass.js";
 import { Effect } from "../effects/Effect.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { EffectMaterial } from "../materials/EffectMaterial.js";
 import { EffectMaterialCache } from "../utils/EffectMaterialCache.js";
+import { GData } from "../enums/GData.js";
 
 /**
  * An effect pass.
@@ -69,12 +69,9 @@ export class EffectPass extends Pass<EffectMaterial> {
 		}
 
 		super.subpasses = value;
-		this.input.requiredTextures.clear();
-		this.input.requiredTextures.add(GBuffer.COLOR);
+		this.updateRequiredTextures();
 
 		for(const effect of super.subpasses) {
-
-			this.input.requiredTextures.addAll(...effect.input.requiredTextures);
 
 			effect.addEventListener("change", this.effectListener);
 			effect.addEventListener("toggle", this.effectListener);
@@ -129,6 +126,46 @@ export class EffectPass extends Pass<EffectMaterial> {
 	}
 
 	/**
+	 * Determines required input textures based on the current effects.
+	 */
+
+	private updateRequiredTextures(): void {
+
+		const schema = this.input.gBufferSchema;
+		const requiredTextures = new Set<string>([GBuffer.COLOR]);
+		const requiredGData = new Set<string>([GData.COLOR]);
+
+		for(const effect of this.effects) {
+
+			for(const texture of effect.input.requiredTextures) {
+
+				requiredTextures.add(texture);
+
+			}
+
+			for(const gData of effect.gData) {
+
+				requiredGData.add(gData);
+
+			}
+
+		}
+
+		if(schema !== null) {
+
+			for(const component of schema.resolveGBufferComponents(requiredGData)) {
+
+				requiredTextures.add(component);
+
+			}
+
+		}
+
+		this.input.setRequiredTextures(requiredTextures);
+
+	}
+
+	/**
 	 * Updates the fullscreen material based on the current effect combination.
 	 *
 	 * The required material will be swapped in if it exists. Otherwise, a new material will be created.
@@ -167,6 +204,13 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		const input = this.input;
 		const gBufferEntries: [string, Texture | null][] = [];
+		const schema = this.input.gBufferSchema;
+
+		if(schema === null) {
+
+			return;
+
+		}
 
 		for(const texture of input.requiredTextures) {
 
@@ -174,11 +218,11 @@ export class EffectPass extends Pass<EffectMaterial> {
 			// The default buffer can be a different texture with modified data.
 			const useDefaultBuffer = (texture === GBuffer.COLOR as string);
 			const resource = useDefaultBuffer ? input.defaultBuffer : input.buffers.get(texture);
+			const structField = schema.gBufferStructFields.get(texture);
 
-			if(resource?.renderTarget instanceof GBufferResource) {
+			if(resource !== undefined && structField !== undefined) {
 
-				const gBufferConfig = resource.renderTarget.gBufferSchema;
-				gBufferEntries.push([gBufferConfig.gBufferStructFields.get(texture)!, resource.value]);
+				gBufferEntries.push([structField, resource.value]);
 
 			}
 
@@ -199,7 +243,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 		switch(e.type) {
 
 			case "change":
-				this.input.requiredTextures.addAll(...e.target.input.requiredTextures);
+				this.updateRequiredTextures();
 				this.effectMaterialCache.invalidateShaderData(e.target);
 				this.updateMaterial(true);
 				break;
@@ -214,6 +258,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 	protected override onInputChange(): void {
 
+		this.updateRequiredTextures();
 		this.updateGBufferStruct();
 		this.updateMaterial(true);
 
