@@ -1,5 +1,6 @@
 import { Camera, Scene, Timer, Vector2, Vector4, WebGLRenderer } from "three";
 import { ShaderChunkExtensions } from "../shader-chunks/ShaderChunkExtensions.js";
+import { GBufferSchema } from "../utils/gbuffer/GBufferSchema.js";
 import { fullscreenGeometry } from "../utils/objects/fullscreenGeometry.js";
 import { ReadonlyTimer } from "../utils/ReadonlyTimer.js";
 import { Disposable } from "./Disposable.js";
@@ -23,6 +24,12 @@ export interface FrameGraphOptions {
 	 */
 
 	renderer?: WebGLRenderer | null;
+
+	/**
+	 * A G-Buffer configuration.
+	 */
+
+	gBufferSchema?: GBufferSchema;
 
 	/**
 	 * The main scene.
@@ -92,6 +99,12 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 
 	private _camera: Camera | null;
 
+	/**
+	 * @see {@link gBufferSchema}
+	 */
+
+	private _gBufferSchema: GBufferSchema;
+
 	// #endregion
 
 	/**
@@ -124,13 +137,19 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 	 * @param options - The options.
 	 */
 
-	constructor({ renderer = null, scene = null, camera = null }: FrameGraphOptions = {}) {
+	constructor({
+		renderer = null,
+		gBufferSchema = new GBufferSchema(),
+		scene = null,
+		camera = null
+	}: FrameGraphOptions = {}) {
 
 		ShaderChunkExtensions.register();
 		FrameGraph.resourceManager.addFrameGraph(this);
 
 		this._timer = new Timer();
 		this._renderer = null;
+		this._gBufferSchema = gBufferSchema;
 		this._scene = scene;
 		this._camera = camera;
 
@@ -237,6 +256,30 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 
 	}
 
+	get gBufferSchema(): GBufferSchema {
+
+		return this._gBufferSchema;
+
+	}
+
+	set gBufferSchema(value: GBufferSchema) {
+
+		if(this._gBufferSchema === value) {
+
+			return;
+
+		}
+
+		this._gBufferSchema = value;
+
+		for(const task of this.tasks) {
+
+			task.gBufferSchema = value;
+
+		}
+
+	}
+
 	/**
 	 * Creates a mutation observer for the canvas size.
 	 *
@@ -295,8 +338,9 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 
 		}
 
-		task.renderer = this.renderer;
 		task.timer = this.timer;
+		task.renderer = this.renderer;
+		task.gBufferSchema = this.gBufferSchema;
 
 		task.addEventListener("toggle", FrameGraph.updateResources);
 		task.input.addEventListener("change", FrameGraph.updateResources);
@@ -314,8 +358,9 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 
 		FrameGraph.registeredTasks.delete(task);
 
-		task.renderer = null;
 		task.timer = null;
+		task.renderer = null;
+		task.gBufferSchema = null;
 
 		task.removeEventListener("toggle", FrameGraph.updateResources);
 		task.input.removeEventListener("change", FrameGraph.updateResources);

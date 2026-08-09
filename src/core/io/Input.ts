@@ -1,5 +1,6 @@
 import { BaseEvent, EventDispatcher, IUniform, Texture, UnsignedByteType } from "three";
 import { GBuffer } from "../../enums/GBuffer.js";
+import { GBufferSchema } from "../../utils/gbuffer/GBufferSchema.js";
 import { MapExtensions } from "../../utils/MapExtensions.js";
 import { ObservableMap } from "../../utils/ObservableMap.js";
 import { ObservableSet } from "../../utils/ObservableSet.js";
@@ -52,6 +53,12 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 	static readonly BUFFER_DEFAULT = "BUFFER_DEFAULT";
 
 	/**
+	 * An event listener that dispatches a `change` event.
+	 */
+
+	private readonly propagateChangeEvent: () => void;
+
+	/**
 	 * Required input textures.
 	 *
 	 * {@link GBuffer.COLOR} is included by default.
@@ -72,12 +79,20 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 	readonly shaderData: ShaderDataResource;
 
 	/**
+	 * @see {@link gBufferSchema}
+	 */
+
+	private _gBufferSchema: GBufferSchema | null;
+
+	/**
 	 * Constructs new input resources.
 	 */
 
 	constructor() {
 
 		super();
+
+		this.propagateChangeEvent = () => this.dispatchEvent({ type: "change" });
 
 		const requiredTextures = new ObservableSet<string>([GBuffer.COLOR]);
 		requiredTextures.addEventListener("change", () => {
@@ -105,6 +120,7 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 		this.requiredTextures = requiredTextures;
 		this.textures = textures;
 		this.shaderData = shaderData;
+		this._gBufferSchema = null;
 
 	}
 
@@ -137,6 +153,32 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 	get frameBufferPrecisionHigh(): boolean {
 
 		return (this.defaultBuffer?.value?.type !== UnsignedByteType);
+
+	}
+
+	/**
+	 * The current G-Buffer schema, or `null` if there is none.
+	 */
+
+	get gBufferSchema(): GBufferSchema | null {
+
+		return this._gBufferSchema;
+
+	}
+
+	set gBufferSchema(value: GBufferSchema | null) {
+
+		if(this._gBufferSchema === value) {
+
+			return;
+
+		}
+
+		this._gBufferSchema?.removeEventListener("change", this.propagateChangeEvent);
+		value?.addEventListener("change", this.propagateChangeEvent);
+		this._gBufferSchema = value;
+
+		this.dispatchEvent({ type: "change" });
 
 	}
 

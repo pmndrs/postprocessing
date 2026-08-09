@@ -1,15 +1,16 @@
 import { BaseEvent, Camera, EventDispatcher, Scene, WebGLRenderer } from "three";
+import { GBufferSchema } from "../utils/gbuffer/GBufferSchema.js";
 import { ReadonlyTimer } from "../utils/ReadonlyTimer.js";
 import { Resolution } from "../utils/Resolution.js";
 import { Scissor } from "../utils/Scissor.js";
 import { Viewport } from "../utils/Viewport.js";
+import { BaseEventMap } from "./BaseEventMap.js";
 import { Disposable } from "./Disposable.js";
 import { Identifiable } from "./Identifiable.js";
 import { Input } from "./io/Input.js";
 import { Output } from "./io/Output.js";
 import { Renderable } from "./Renderable.js";
 import { Task } from "./Task.js";
-import { BaseEventMap } from "./BaseEventMap.js";
 
 /**
  * RenderTask events.
@@ -83,7 +84,31 @@ export interface RenderTask extends EventDispatcher<RenderTaskEventMap>, Disposa
 
 	renderer: WebGLRenderer | null;
 
+	/**
+	 * The current scene.
+	 *
+	 * Defaults to the main scene of the associated frame graph if not defined.
+	 */
+
+	scene: Scene | null;
+
+	/**
+	 * The current camera.
+	 *
+	 * Defaults to the main camera of the associated frame graph if not defined.
+	 */
+
+	camera: Camera | null;
+
 	// #region Internal
+
+	/**
+	 * The current G-Buffer schema.
+	 *
+	 * @internal
+	 */
+
+	set gBufferSchema(value: GBufferSchema | null);
 
 	/**
 	 * The main scene.
@@ -110,22 +135,6 @@ export interface RenderTask extends EventDispatcher<RenderTaskEventMap>, Disposa
 	readonly subtasks: readonly RenderTask[];
 
 	// #endregion
-
-	/**
-	 * The current scene.
-	 *
-	 * Defaults to the main scene of the associated frame graph if not defined.
-	 */
-
-	scene: Scene | null;
-
-	/**
-	 * The current camera.
-	 *
-	 * Defaults to the main camera of the associated frame graph if not defined.
-	 */
-
-	camera: Camera | null;
 
 	/**
 	 * Compiles the resources used by this task.

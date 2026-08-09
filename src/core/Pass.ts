@@ -14,6 +14,7 @@ import {
 } from "three";
 
 import { FullscreenMaterial } from "../materials/FullscreenMaterial.js";
+import { GBufferSchema } from "../utils/gbuffer/GBufferSchema.js";
 import { IdManager } from "../utils/IdManager.js";
 import { ObservableSet } from "../utils/ObservableSet.js";
 import { ReadonlyTimer } from "../utils/ReadonlyTimer.js";
@@ -374,6 +375,20 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		const previous = this.camera;
 		this._camera = value;
 		this.onCameraChange(previous, this.camera);
+
+	}
+
+	// #region Internal
+
+	set gBufferSchema(value: GBufferSchema | null) {
+
+		this.input.gBufferSchema = value;
+
+		for(const subpass of this.subpasses) {
+
+			subpass.gBufferSchema = value;
+
+		}
 
 	}
 

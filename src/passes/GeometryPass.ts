@@ -4,7 +4,6 @@ import { Pass } from "../core/Pass.js";
 import { Selective } from "../core/Selective.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { MSAASamples } from "../enums/MSAASamples.js";
-import { GBufferSchema } from "../utils/gbuffer/GBufferSchema.js";
 import { GBufferShaderPlugin } from "../utils/gbuffer/GBufferShaderPlugin.js";
 import { Selection } from "../utils/Selection.js";
 
@@ -75,7 +74,6 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 	constructor({
 		scene = null,
 		camera = null,
-		gBufferSchema: gBufferConfig,
 		alpha,
 		stencilBuffer,
 		depthBuffer,
@@ -89,7 +87,6 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 		this.selection.enabled = false;
 
 		this.gBuffer = new GBufferResource({
-			gBufferSchema: gBufferConfig,
 			alpha,
 			stencilBuffer,
 			depthBuffer,
@@ -139,7 +136,6 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 	get samples(): MSAASamples { return this.gBuffer.samples; }
 	set samples(value: MSAASamples) { this.gBuffer.samples = value; }
-	get gBufferSchema(): GBufferSchema { return this.gBuffer.gBufferSchema; }
 	get alpha(): boolean { return this.gBuffer.alpha; }
 	get stencilBuffer(): boolean { return this.gBuffer.stencilBuffer; }
 	get depthBuffer(): boolean { return this.gBuffer.depthBuffer; }

@@ -64,12 +64,6 @@ export class EffectMaterialCache {
 	// #region Backing Data
 
 	/**
-	 * @see {@link gBufferSchema}
-	 */
-
-	private _gBufferSchema: GBufferSchema | null;
-
-	/**
 	 * @see {@link dithering}
 	 */
 
@@ -90,8 +84,6 @@ export class EffectMaterialCache {
 		this.materialCache = new Map<string, EffectMaterial>();
 		this.effectShaderDataCache = new Map<Effect, EffectShaderData>();
 		this.activeMaterial = null;
-
-		this._gBufferSchema = null;
 		this._dithering = false;
 
 	}
@@ -103,29 +95,6 @@ export class EffectMaterialCache {
 	get materials(): Iterable<EffectMaterial> {
 
 		return this.materialCache.values();
-
-	}
-
-	/**
-	 * The current G-Buffer configuration.
-	 *
-	 * Assigning a new configuration will invalidate the material cache.
-	 */
-
-	get gBufferSchema(): GBufferSchema | null {
-
-		return this._gBufferSchema;
-
-	}
-
-	set gBufferSchema(value: GBufferSchema | null) {
-
-		if(this._gBufferSchema !== value) {
-
-			this.invalidateMaterialCache();
-			this._gBufferSchema = value;
-
-		}
 
 	}
 
@@ -234,7 +203,7 @@ export class EffectMaterialCache {
 		const id = EffectMaterialCache.getMaterialId(effects);
 		const result = (id === EffectMaterialCache.DEFAULT_MATERIAL_ID) ? this.defaultMaterial : new EffectMaterial();
 		const data = this.getEffectShaderData(effects);
-		const schema = this.gBufferSchema;
+		const schema = this.input.gBufferSchema;
 
 		if(schema !== null) {
 
@@ -417,7 +386,7 @@ export class EffectMaterialCache {
 
 	getMaterial(effects: readonly Effect[]): EffectMaterial {
 
-		if(this.gBufferSchema === null) {
+		if(this.input.gBufferSchema === null) {
 
 			// Effects don't need to be processed if there is no G-Buffer configuration.
 			return this.defaultMaterial;
