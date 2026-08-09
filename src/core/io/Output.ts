@@ -2,7 +2,6 @@ import { BaseEvent, EventDispatcher, RenderTargetOptions, UnsignedByteType } fro
 import { MapExtensions } from "../../utils/MapExtensions.js";
 import { ObservableMap } from "../../utils/ObservableMap.js";
 import { BaseEventMap } from "../BaseEventMap.js";
-import { Disposable } from "../Disposable.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
 import { ShaderDataResource } from "./ShaderDataResource.js";
 import { TextureResource } from "./TextureResource.js";
@@ -39,7 +38,7 @@ export interface OutputEventMap extends BaseEventMap {
  * @category IO
  */
 
-export class Output extends EventDispatcher<OutputEventMap> implements Disposable {
+export class Output extends EventDispatcher<OutputEventMap> {
 
 	/**
 	 * Identifies the default output buffer in the {@link renderTargets} collection.
@@ -211,16 +210,6 @@ export class Output extends EventDispatcher<OutputEventMap> implements Disposabl
 
 			yield [name, renderTarget.texture];
 			yield* renderTarget.textures;
-
-		}
-
-	}
-
-	dispose(): void {
-
-		for(const disposable of this.renderTargets.values()) {
-
-			disposable.dispose();
 
 		}
 

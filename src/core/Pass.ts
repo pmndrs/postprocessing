@@ -1034,8 +1034,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	dispose(): void {
 
-		this.input.dispose();
-		this.output.dispose();
 		this.shaderDataTracker.dispose();
 
 		for(const disposable of this.disposables) {

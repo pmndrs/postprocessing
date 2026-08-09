@@ -7,7 +7,6 @@ import { SetExtensions } from "../../utils/SetExtensions.js";
 import { ShaderData } from "../../utils/ShaderData.js";
 import { BaseEventMap } from "../BaseEventMap.js";
 import { Connectable } from "../Connectable.js";
-import { Disposable } from "../Disposable.js";
 import type { Output } from "./Output.js";
 import { ShaderDataResource } from "./ShaderDataResource.js";
 import { TextureResource } from "./TextureResource.js";
@@ -44,7 +43,7 @@ export interface InputEventMap extends BaseEventMap {
  * @category IO
  */
 
-export class Input extends EventDispatcher<InputEventMap> implements Connectable, Disposable, ShaderData {
+export class Input extends EventDispatcher<InputEventMap> implements Connectable, ShaderData {
 
 	/**
 	 * Identifies the default input buffer in the {@link textures} collection.
@@ -235,16 +234,6 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 		}
 
 		this.shaderData.disconnect(other.shaderData);
-
-	}
-
-	dispose(): void {
-
-		for(const disposable of this.textures.values()) {
-
-			disposable.dispose();
-
-		}
 
 	}
 
