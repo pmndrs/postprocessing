@@ -58,7 +58,7 @@ export class LuminancePass extends Pass<LuminanceHighPassMaterial> {
 
 		}
 
-		this.output.buffers.get(LuminancePass.BUFFER_LUMINANCE)!.descriptor.setValues({
+		this.buffer.descriptor.setValues({
 			colorSpace: inputTexture.colorSpace as ColorSpace,
 			format: inputTexture.format as PixelFormat,
 			type: inputTexture.type
