@@ -59,6 +59,12 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 	private readonly propagateChangeEvent: () => void;
 
 	/**
+	 * @see {@link gBufferSchema}
+	 */
+
+	private _gBufferSchema: GBufferSchema | null;
+
+	/**
 	 * Required input textures.
 	 *
 	 * {@link GBuffer.COLOR} is included by default.
@@ -79,12 +85,6 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 	readonly shaderData: ShaderDataResource;
 
 	/**
-	 * @see {@link gBufferSchema}
-	 */
-
-	private _gBufferSchema: GBufferSchema | null;
-
-	/**
 	 * Constructs new input resources.
 	 */
 
@@ -93,6 +93,7 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 		super();
 
 		this.propagateChangeEvent = () => this.dispatchEvent({ type: "change" });
+		this._gBufferSchema = null;
 
 		const requiredTextures = new ObservableSet<string>([GBuffer.COLOR]);
 		requiredTextures.addEventListener("change", () => {
@@ -120,7 +121,6 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 		this.requiredTextures = requiredTextures;
 		this.textures = textures;
 		this.shaderData = shaderData;
-		this._gBufferSchema = null;
 
 	}
 

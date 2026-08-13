@@ -104,6 +104,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		this.output.setBuffer(GeometryPass.GBUFFER, this.gBuffer);
 		this.output.defaultBuffer = this.gBuffer;
+		this.output.saveDefaultBuffer();
 
 		this.scene = scene;
 		this.camera = camera;

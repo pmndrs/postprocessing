@@ -47,6 +47,12 @@ export class Output extends EventDispatcher<OutputEventMap> {
 	static readonly BUFFER_DEFAULT = "BUFFER_DEFAULT";
 
 	/**
+	 * The default buffer that was last saved via {@link saveDefaultBuffer}.
+	 */
+
+	private _defaultBuffer: RenderTargetResource | null;
+
+	/**
 	 * Output render targets, organized by name.
 	 */
 
@@ -65,6 +71,8 @@ export class Output extends EventDispatcher<OutputEventMap> {
 	constructor() {
 
 		super();
+
+		this._defaultBuffer = null;
 
 		const renderTargets = new ObservableMap<string, RenderTargetResource>();
 		const renderTargetListener = () => {
@@ -156,14 +164,55 @@ export class Output extends EventDispatcher<OutputEventMap> {
 	/**
 	 * Creates a new default buffer.
 	 *
-	 *
-	 * @param options - Render target options. Defaults to a configuration without a `depthBuffer`.
+	 * @param options - Render target options. Defaults to a configuration suited for fullscreen passes.
 	 * @return The render target resource.
 	 */
 
 	createDefaultBuffer(options?: RenderTargetOptions): RenderTargetResource {
 
 		return this.setBuffer(Output.BUFFER_DEFAULT, options);
+
+	}
+
+	/**
+	 * Saves the current default buffer so that it can be restored via {@link restoreDefaultBuffer}.
+	 *
+	 * The currently saved buffer will be overwritten.
+	 *
+	 * @return True if the current {@link defaultBuffer} was successfully saved, or false if there is none.
+	 */
+
+	saveDefaultBuffer(): boolean {
+
+		if(this.defaultBuffer === undefined) {
+
+			return false;
+
+		}
+
+		this._defaultBuffer = this.defaultBuffer ?? null;
+		return true;
+
+	}
+
+	/**
+	 * Restores the default buffer that was last saved via {@link saveDefaultBuffer}.
+	 *
+	 * The currently saved buffer will __not__ be cleared by this method.
+	 *
+	 * @return True if the {@link defaultBuffer} was restored, or false if there is no saved buffer.
+	 */
+
+	restoreDefaultBuffer(): boolean {
+
+		if(this._defaultBuffer !== null) {
+
+			this.setBuffer(Output.BUFFER_DEFAULT, this._defaultBuffer);
+			return true;
+
+		}
+
+		return false;
 
 	}
 
