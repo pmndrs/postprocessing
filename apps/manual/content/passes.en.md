@@ -11,7 +11,7 @@ weight: 40
 
 ## Introduction
 
-At a closer look, passes can be divided into four groups. The first group consists of passes that render common scenes like the `GeometryPass`. The second type doesn't render anything but performs supporting operations like the `ClearPass` or `LambdaPass`. Passes that render textures for further use make up the third group. One example would be the `LuminancePass`. The fourth and most prominent group contains the fullscreen effect passes. If you want to make a pass that belongs to the last group, you should consider [creating an Effect]({{< relref "effects" >}}) instead.
+Passes are concrete [RenderTasks](../docs/interfaces/RenderTask.html) that participate in a frame graph. A pass may render a 3D scene, perform supporting operations, produce intermediate textures, or render a fullscreen result. For example, the `GeometryPass` renders a scene, the `ClearPass` clears an output that is often shared with another pass, and the `LuminancePass` produces a texture for later use. Fullscreen effects are typically combined and rendered by the `EffectPass`. If you want to create a fullscreen effect, you should consider [creating an Effect]({{< relref "effects" >}}) instead.
 
 There are two options for creating custom passes. You can either rely on the general-purpose `ShaderPass` or extend `Pass`.
 
@@ -69,8 +69,8 @@ void main() {
 ##### CustomMaterial.ts
 
 ```ts
-import { ShaderMaterial, Uniform, Vector3 } from "three";
-import { FullscreenMaterial, Uniform, Vector3 } from "postprocessing";
+import { Uniform, Vector3 } from "three";
+import { FullscreenMaterial } from "postprocessing";
 
 // Tip: Use a bundler plugin like esbuild-plugin-glsl to import shaders as text.
 import fragmentShader from "./shader.frag";
@@ -80,7 +80,7 @@ export class CustomMaterial extends FullscreenMaterial {
 	constructor() {
 
 		super({
-			name: "LuminanceMaterial",
+			name: "CustomMaterial",
 			fragmentShader,
 			uniforms: {
 				weights: new Uniform(new Vector3())
@@ -104,6 +104,7 @@ export class CustomPass extends Pass<CustomMaterial> {
 
 		super("CustomPass");
 		this.fullscreenMaterial = new CustomMaterial();
+		this.output.createDefaultBuffer();
 
 	}
 
@@ -120,9 +121,7 @@ export class CustomPass extends Pass<CustomMaterial> {
 </p>
 </details>
 
-By extending [Pass](../docs/classes/Pass.html), you can decide what happens during resizing, initialization and rendering. There are also several lifecycle hooks that you can take advantage of. Passes in postprocessing receive various input data from the main `GeometryPass` and the preceding pass in a render pipeline.
-
-The minimum requirement to create a custom pass is to override the `render` method. If you're creating a fullscreen effect, you'll need to assign a `fullscreenMaterial`:
+By extending [Pass](../docs/classes/Pass.html), you can decide what happens during various lifecycle stages and rendering. The minimum requirement to create a custom pass is to override the `render` method. If you're creating a fullscreen effect, you'll also need to define a `fullscreenMaterial`:
 
 ```ts
 this.fullscreenMaterial = new MyMaterial();
@@ -133,28 +132,34 @@ this.fullscreenMaterial = new MyMaterial();
 
 ### Resources
 
-Framebuffers can be created manually or via the `createFrambuffer` method. All framebuffers should be added to the `output` buffer resources so that the pipeline can optimize them:
+Render targets are fully managed by the frame graph; Passes operate on [render target resources](../docs/classes/RenderTargetResource.html) which rely on [render target descriptors](../docs/classes/RenderTargetDescriptor.html) to define framebuffers. The actual render targets are assigned by the frame graph at runtime.  The `Output` API provides convenience methods for specifying framebuffers:
 
 ```ts
-this.output.setBuffer(MyPass.BUFFER_ID, this.createFramebuffer());
-```
+// Creates a "defaultBuffer" with a default descriptor that is suitable for fullscreen passes.
+this.output.createDefaultBuffer();
 
-A convenience getter can be defined to retrieve the buffer as needed:
+// Creates a private buffer with a default descriptor.
+this.output.setBuffer("my-buffer");
 
-```ts
-private get renderTarget(): WebGLRenderTarget {
+// Buffers can be retrieved by their name.
+const myBuffer = this.output.buffers.get("my-buffer");
 
-	return this.output.getBuffer(MyPass.BUFFER_ID)!;
+// The default buffer has a dedicated accessor.
+this.output.defaultBuffer;
 
-}
+// Creates a private buffer with a customized descriptor (and keeps a reference for convenience).
+const otherBuffer = this.output.setBuffer("other-buffer", {
+	// Specified fields overwrite defaults.
+	depthBuffer: true
+});
 ```
 
 > [!TIP]
-> If your pass uses disposable resources that don't fit into the existing `input` and `output` resources, add them to the `disposables` set instead.
+> If your pass uses custom disposable objects that don't fit into `input` or `output`, add them to `disposables` instead.
 
 ### G-Buffer
 
-Passes can request [GBuffer](../docs/enums/GBuffer.html) components via `input.gBuffer`. The actual textures will be supplied via `input.buffers` and can be retrieved by using the `GBuffer` value as the key. Passes should override the `onInputChange` hook to fetch and utilize the requested textures.
+Passes can request [GBuffer](../docs/enums/GBuffer.html) components via `input.requiredTextures`. The actual textures will be supplied via `input.buffers` and can be retrieved by using the `GBuffer` value as the key. Passes should override the `onInputChange` hook to fetch and utilize the requested textures.
 
 #### G-Buffer Packing
 
@@ -184,8 +189,28 @@ The `Pass` base class defines lifecycle methods that can be overridden to react 
 * `onResolutionChange(): void;`
 * `onViewportChange(): void;`
 * `onScissorChange(): void;`
-* `onSceneChildAdded(): void;`
-* `onSceneChildRemoved(): void;`
+* `onSceneChange(previous: Object3D | null, current: Object3D | null): void;`
+* `onCameraChange(previous: Camera | null, current: Camera | null): void;`
+* `onSceneChildAdded(object: Object3D): void;`
+* `onSceneChildRemoved(object: Object3D): void;`
+
+### Subpasses
+
+Passes may define `subpasses` which are considered part of the parent pass:
+
+```ts
+this.subpasses = [subpass1, subpass2, ...];
+```
+
+Subpasses can be rendered in the order in which they were defined by calling `renderSubpasses`:
+
+```ts
+override render(): void {
+
+	this.renderSubpasses();
+
+}
+```
 
 ### Fullscreen Passes
 
