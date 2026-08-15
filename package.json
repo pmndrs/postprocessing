@@ -14,6 +14,13 @@
 			"default": "./dist/index.js"
 		}
 	},
+	"devEngines": {
+		"packageManager": {
+			"name": "pnpm",
+			"version": ">=11 <12",
+			"onFail": "error"
+		}
+	},
 	"keywords": [
 		"effect",
 		"filter",
