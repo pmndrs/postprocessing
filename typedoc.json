@@ -2,12 +2,25 @@
   "$schema": "https://typedoc.org/schema.json",
 	"entryPoints": ["./src/index.ts"],
 	"exclude": ["**/node_modules/**"],
-	"out": "./public/docs",
+	"outputs": [
+		{
+			"name": "html",
+			"path": "./public/docs"
+		},
+		{
+			"name": "markdown",
+			"path": "./public/docs-md"
+		}
+	],
 	"theme": "default",
 	"excludePrivate": true,
 	"excludeInternal": true,
 	"includeVersion": true,
 	"treatWarningsAsErrors": true,
+	"plugin": [
+		"typedoc-plugin-markdown",
+		"typedoc-plugin-mdn-links"
+	],
 	"externalSymbolLinkMappings": {
 		"@types/three": {
 			"*": "https://threejs.org/docs/"

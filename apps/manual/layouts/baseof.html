@@ -14,6 +14,10 @@
 			<link rel="icon" type="image/png" href="{{ .RelPermalink }}">
 		{{ end }} */}}
 
+		{{ if .OutputFormats.Get "markdown" }}
+			<link href="{{ with .OutputFormats.Get `markdown` }}{{ .Permalink }}{{ end }}" rel="alternate" type="text/markdown" title="{{ .Title }}" />
+		{{ end }}
+
 		{{ with resources.Get "js/dist/inline/header.js" }}
 			{{ $script := .Content | safeJS }}
 			<script>{{ $script }}</script>
