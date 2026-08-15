@@ -56,6 +56,7 @@
 		"lint": "eslint --fix src",
 		"build": "node esbuild",
 		"watch": "node esbuild -w",
+		"watch:all": "pnpm --parallel -r watch",
 		"deploy": "cpy llms.txt public/llms.txt",
 		"gzip": "gzipper c public",
 		"doc": "typedoc --tsconfig tsconfig.d.json",
