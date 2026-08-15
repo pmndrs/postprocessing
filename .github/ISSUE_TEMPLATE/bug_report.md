@@ -29,7 +29,7 @@ If applicable, add screenshots to help explain your problem.
 ### Library versions used
 
  - Three: [e.g. X.XXX.X]
- - Post Processing: [e.g. X.X.X]
+ - Post-Processing: [e.g. X.X.X]
 
 
 ### Desktop
