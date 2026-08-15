@@ -1,0 +1,73 @@
+{
+	"name": "postprocessing-manual",
+	"private": true,
+	"description": "The postprocessing manual.",
+	"homepage": "https://pmndrs.github.io/postprocessing/manual",
+	"license": "Zlib",
+	"type": "module",
+	"sideEffects": false,
+	"author": {
+		"name": "Raoul van Rüschen",
+		"email": "vanruesc@outlook.de"
+	},
+	"repository": {
+		"url": "git+https://github.com/pmndrs/postprocessing.git"
+	},
+	"bugs": {
+		"url": "https://github.com/pmndrs/postprocessing/issues"
+	},
+	"scripts": {
+		"clean": "del-cli public resources \"assets/**/dist\" static/pagefind",
+		"lint": "run-p lint:*",
+		"lint:css": "stylelint --fix assets/css/src",
+		"lint:js": "eslint --fix assets/js/src",
+		"build": "run-p build:*",
+		"build:css": "sass -p node -I assets/css/src/values assets/css/src:assets/css/dist",
+		"build:js": "node esbuild",
+		"prewatch": "run-s clean build hugo:dev pagefind:dev",
+		"watch": "run-p watch:* start",
+		"watch:css": "sass -p node -I assets/css/src/values assets/css/src:assets/css/dist -w",
+		"watch:js": "node esbuild -w",
+		"deploy": "run-s postcss hugo pagefind",
+		"hugo": "hugo --minify",
+		"hugo:dev": "hugo -e development",
+		"pagefind": "pagefind --site ../../public/manual --output-path ../../public/manual/pagefind",
+		"pagefind:dev": "pagefind --site ../../public/manual --output-path static/pagefind",
+		"postcss": "postcss assets/css/dist/index.css -o assets/css/dist/index.css -c manual",
+		"start": "hugo server -e development --quiet",
+		"pretest": "run-s clean lint build",
+		"test": "run-p test:*",
+		"test:unit": "node --experimental-strip-types --test \"assets/js/test/**/*\""
+	},
+	"dependencies": {
+		"postprocessing": "workspace:"
+	},
+	"devDependencies": {
+		"@pagefind/component-ui": "catalog:",
+		"@tweakpane/core": "catalog:",
+		"@tweakpane/plugin-essentials": "catalog:",
+		"@types/node": "catalog:",
+		"@types/three": "catalog:",
+		"autoprefixer": "catalog:",
+		"cssnano": "catalog:",
+		"del-cli": "catalog:",
+		"esbuild": "catalog:",
+		"esbuild-plugin-glsl": "catalog:",
+		"eslint": "catalog:",
+		"eslint-config-aether": "catalog:",
+		"hugo-bin": "catalog:",
+		"npm-run-all": "catalog:",
+		"pagefind": "catalog:",
+		"postcss": "catalog:",
+		"postcss-cli": "catalog:",
+		"postcss-preset-env": "catalog:",
+		"sass": "catalog:",
+		"spatial-controls": "catalog:",
+		"three": "catalog:",
+		"stylelint": "catalog:",
+		"stylelint-config-standard-scss": "catalog:",
+		"stylelint-order": "catalog:",
+		"tweakpane": "catalog:",
+		"typescript": "catalog:"
+	}
+}

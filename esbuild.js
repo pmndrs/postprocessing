@@ -3,18 +3,12 @@ import esbuild from "esbuild";
 import { glsl } from "esbuild-plugin-glsl";
 import { glob } from "node:fs/promises";
 
-const minify = process.argv.includes("-m");
-const external = ["three", "spatial-controls", "tweakpane", "@tweakpane/plugin-essentials"];
-const plugins = [glsl({ minify })];
-const date = new Date();
 const banner = `/**
- * ${pkg.name} v${pkg.version} build ${date.toDateString()}
+ * ${pkg.name} v${pkg.version} build ${new Date().toDateString()}
  * ${pkg.homepage}
  * Copyright 2015 ${pkg.author.name}
  * @license ${pkg.license}
  */`;
-
-// #region Library
 
 const workers = {
 	entryPoints: await Array.fromAsync(glob("./src/**/worker.ts")),
@@ -23,79 +17,31 @@ const workers = {
 	logLevel: "info",
 	format: "iife",
 	target: "es6",
-	bundle: true,
-	minify
+	bundle: true
 };
 
 const lib = {
 	entryPoints: ["./src/index.ts"],
 	outfile: "./dist/index.js",
 	banner: { js: banner },
+	external: ["three"],
+	plugins: [glsl()],
 	logLevel: "info",
 	format: "esm",
-	bundle: true,
-	external,
-	plugins
+	bundle: true
 };
-
-// #endregion
-
-// #region Manual
-
-const vendor = {
-	entryPoints: ["./manual/assets/js/libs/vendor.ts"],
-	outdir: "./manual/assets/js/dist/libs",
-	globalName: "VENDOR",
-	logLevel: "info",
-	format: "iife",
-	target: "es6",
-	bundle: true,
-	minify
-};
-
-const manual = {
-	entryPoints: ["./manual/assets/js/src/index.ts"]
-		.concat(await Array.fromAsync(glob("./manual/assets/js/src/demos/*.ts"))),
-	outdir: "./manual/assets/js/dist",
-	logLevel: "info",
-	format: "iife",
-	target: "es6",
-	bundle: true,
-	external,
-	plugins,
-	minify
-};
-
-const inline = {
-	entryPoints: await Array.fromAsync(glob("./manual/assets/js/src/inline/*.ts")),
-	outdir: "./manual/assets/js/dist/inline",
-	logLevel: "info",
-	format: "iife",
-	target: "es6",
-	bundle: true,
-	external,
-	plugins,
-	minify
-};
-
-// #endregion
-
-await esbuild.build(vendor);
 
 if(process.argv.includes("-w")) {
 
 	const ctxWorkers = await esbuild.context(workers);
 	await ctxWorkers.watch();
-	const ctxManual = await esbuild.context(manual);
-	await ctxManual.watch();
-	const ctxInline = await esbuild.context(inline);
-	await ctxInline.watch();
+
+	const ctxLib = await esbuild.context(lib);
+	await ctxLib.watch();
 
 } else {
 
 	await esbuild.build(workers);
 	await esbuild.build(lib);
-	await esbuild.build(manual);
-	await esbuild.build(inline);
 
 }

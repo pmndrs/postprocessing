@@ -1,14 +1,50 @@
 save: false
+includeWorkspaceRoot: true
+
+packages:
+- "./apps/*"
 
 allowBuilds:
-  '@parcel/watcher': true
-  'esbuild': true
-  'hugo-bin': true
+  "@parcel/watcher": true
+  "esbuild": true
+  "hugo-bin": true
 
 minimumReleaseAgeExclude:
-- '@types/three'
-- 'esbuild-plugin-glsl'
-- 'eslint-config-aether'
-- 'spatial-controls'
-- 'three'
+- "@types/three"
+- "esbuild-plugin-glsl"
+- "eslint-config-aether"
+- "spatial-controls"
+- "three"
 
+catalog:
+  "@pagefind/component-ui": "1.5.x"
+  "@tweakpane/core": "2.x.x"
+  "@tweakpane/plugin-essentials": "0.x.x"
+  "@types/node": "26.x.x"
+  "@types/three": "0.x.x"
+  "autoprefixer": "10.x.x"
+  "cssnano": "8.x.x"
+  "cpy-cli": "7.x.x"
+  "del-cli": "7.x.x"
+  "esbuild": "0.28.x"
+  "esbuild-plugin-glsl": "1.x.x"
+  "eslint": "10.x.x"
+  "eslint-config-aether": "3.x.x"
+  "gzipper": "8.x.x"
+  "hugo-bin": "0.x.x"
+  "npm-run-all": "4.x.x"
+  "pagefind": "1.5.x"
+  "postcss": "8.x.x"
+  "postcss-cli": "11.x.x"
+  "postcss-preset-env": "11.x.x"
+  "sass": "1.x.x"
+  "spatial-controls": "6.x.x"
+  "stylelint": "17.x.x"
+  "stylelint-config-standard-scss": "17.x.x"
+  "stylelint-order": "8.x.x"
+  "three": "0.x.x"
+  "tweakpane": "4.x.x"
+  "typedoc": "0.28.x"
+  "typedoc-plugin-markdown": "4.x.x"
+  "typedoc-plugin-mdn-links": "5.x.x"
+  "typescript": "6.0.x"
