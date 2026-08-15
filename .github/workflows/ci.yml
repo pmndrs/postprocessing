@@ -11,17 +11,12 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - name: Git checkout
-        uses: actions/checkout@v6
-      - name: Install PNPM
-        uses: pnpm/action-setup@v5
+      - uses: actions/checkout@v6
+      - name: Install pnpm and Node.js
+        uses: pnpm/setup@v2
         with:
-          version: 10
-      - name: Install Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          registry-url: "https://registry.npmjs.org"
-          cache: "pnpm"
-      - name: Install and test
-        run: pnpm install-test --frozen-lockfile
+          version: 11
+          runtime: node@24
+          cache: true
+      - name: Build and test
+        run: pnpm -r test
