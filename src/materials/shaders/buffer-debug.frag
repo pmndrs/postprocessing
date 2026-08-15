@@ -51,9 +51,9 @@ void main() {
 
 		#ifdef COLOR_SPACE_CONVERSION
 
-			#include <pp_unpremultiply_alpha>
+			#include <pp_unpremultiply_alpha_fragment>
 			#include <colorspace_fragment>
-			#include <pp_premultiply_alpha>
+			#include <pp_premultiply_alpha_fragment>
 
 		#endif
 
