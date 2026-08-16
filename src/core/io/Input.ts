@@ -259,9 +259,9 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 	}
 
 	/**
-	 * Connects {@link requiredTextures | required textures} if they are provided by the given output.
+	 * Connects {@link requiredTextures | required textures}.
 	 *
-	 * @param textures - The textures to connect.
+	 * @param textures - A list of available textures.
 	 */
 
 	connectRequiredTextures(textures: Iterable<[string, TextureResource]>): void {
