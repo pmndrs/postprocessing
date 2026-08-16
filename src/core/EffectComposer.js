@@ -299,10 +299,14 @@ export class EffectComposer {
 
 		}
 
-		const outputDepthTexture = inputDepthTexture.clone();
+		const outputDepthTexture = new DepthTexture();
+		outputDepthTexture.format = inputDepthTexture.format;
+		outputDepthTexture.type = inputDepthTexture.type;
 		outputDepthTexture.name = "EffectComposer.OutputDepth";
 
-		const stableDepthTexture = inputDepthTexture.clone();
+		const stableDepthTexture = new DepthTexture();
+		stableDepthTexture.format = inputDepthTexture.format;
+		stableDepthTexture.type = inputDepthTexture.type;
 		stableDepthTexture.name = "EffectComposer.StableDepth";
 
 		this.inputBuffer.depthTexture = inputDepthTexture;
