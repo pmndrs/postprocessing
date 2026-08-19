@@ -1,5 +1,4 @@
 import { BaseEvent, EventDispatcher, IUniform, Texture, UnsignedByteType } from "three";
-import { GBuffer } from "../../enums/GBuffer.js";
 import { GBufferSchema } from "../../utils/gbuffer/GBufferSchema.js";
 import { MapExtensions } from "../../utils/MapExtensions.js";
 import { ObservableMap } from "../../utils/ObservableMap.js";
@@ -95,7 +94,7 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 		this.propagateChangeEvent = () => this.dispatchEvent({ type: "change" });
 		this._gBufferSchema = null;
 
-		const requiredTextures = new ObservableSet<string>([GBuffer.COLOR]);
+		const requiredTextures = new ObservableSet<string>();
 		requiredTextures.addEventListener("change", () => {
 
 			this.dispatchEvent({ type: "change" });
