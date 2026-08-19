@@ -118,15 +118,20 @@ export class ClearPass extends Pass {
 
 		const renderer = this.renderer!;
 		const gl = renderer.getContext() as WebGL2RenderingContext;
-		const clearAlpha = this.clearValues.alpha ?? renderer.getClearAlpha();
-		clearColor ??= renderer.getClearColor(color);
 
-		fv[0] = clearColor.r;
-		fv[1] = clearColor.g;
-		fv[2] = clearColor.b;
-		fv[3] = clearAlpha;
+		if(this.clearFlags.color) {
 
-		gl.clearBufferfv(gl.COLOR, 0, fv);
+			const clearAlpha = this.clearValues.alpha ?? renderer.getClearAlpha();
+			clearColor ??= renderer.getClearColor(color);
+
+			fv[0] = clearColor.r;
+			fv[1] = clearColor.g;
+			fv[2] = clearColor.b;
+			fv[3] = clearAlpha;
+
+			gl.clearBufferfv(gl.COLOR, 0, fv);
+
+		}
 
 		if(this.gBufferIndices !== null && this.gBufferIndices.size > 1) {
 
