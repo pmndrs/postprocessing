@@ -1,10 +1,11 @@
 import { RenderTargetOptions, WebGLRenderTarget } from "three";
-import { RenderTargetDescriptor } from "../../utils/RenderTargetDescriptor.js";
-import { TextureResource } from "./TextureResource.js";
-import { DisposableResource } from "./DisposableResource.js";
-import { Resolution } from "../../utils/Resolution.js";
 import { MapExtensions } from "../../utils/MapExtensions.js";
 import { ObservableMap } from "../../utils/ObservableMap.js";
+import { RenderTargetDescriptor } from "../../utils/RenderTargetDescriptor.js";
+import { Resolution } from "../../utils/Resolution.js";
+import { Disposable } from "../Disposable.js";
+import { Resource } from "./Resource.js";
+import { TextureResource } from "./TextureResource.js";
 
 /**
  * A managed offscreen render target resource.
@@ -12,7 +13,7 @@ import { ObservableMap } from "../../utils/ObservableMap.js";
  * @category IO
  */
 
-export class RenderTargetResource extends DisposableResource<Readonly<WebGLRenderTarget> | null> {
+export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> | null> implements Disposable {
 
 	/**
 	 * @see {@link textures}
@@ -155,6 +156,12 @@ export class RenderTargetResource extends DisposableResource<Readonly<WebGLRende
 			}
 
 		}
+
+	}
+
+	dispose(): void {
+
+		this.value?.dispose();
 
 	}
 
