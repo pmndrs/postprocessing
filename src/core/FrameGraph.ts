@@ -4,10 +4,10 @@ import { GBufferSchema } from "../utils/gbuffer/GBufferSchema.js";
 import { fullscreenGeometry } from "../utils/objects/fullscreenGeometry.js";
 import { ReadonlyTimer } from "../utils/ReadonlyTimer.js";
 import { Disposable } from "./Disposable.js";
-import { ResourceManager } from "./io/ResourceManager.js";
 import { Renderable } from "./Renderable.js";
 import { RenderTask } from "./RenderTask.js";
 import { Task } from "./Task.js";
+import { FrameGraphCompiler } from "./FrameGraphCompiler.js";
 
 const v = /* @__PURE__ */ new Vector2();
 
@@ -56,22 +56,22 @@ export interface FrameGraphOptions {
 export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 
 	/**
-	 * A shared resource manager.
-	 */
-
-	private static readonly resourceManager = /* @__PURE__ */ new ResourceManager();
-
-	/**
 	 * Keeps track of tasks that have been added to a frame graph.
 	 */
 
 	private static readonly registeredTasks = /* @__PURE__ */ new WeakSet<Task>();
 
 	/**
+	 * A frame graph compiler.
+	 */
+
+	private readonly compiler: FrameGraphCompiler;
+
+	/**
 	 * A listener that triggers a resource update.
 	 */
 
-	private static readonly updateResources = /* @__PURE__ */ () => this.resourceManager.update();
+	private readonly listener: () => void;
 
 	// #region Backing Data
 
@@ -120,12 +120,6 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 	private tasks: RenderTask[];
 
 	/**
-	 * A collection of render tasks and their depdendencies.
-	 */
-
-	private readonly taskDependencies: Map<RenderTask, RenderTask[]>;
-
-	/**
 	 * A render pipeline that contains executable tasks, sorted based on their dependencies.
 	 */
 
@@ -145,7 +139,9 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 	}: FrameGraphOptions = {}) {
 
 		ShaderChunkExtensions.register();
-		FrameGraph.resourceManager.addFrameGraph(this);
+
+		this.compiler = new FrameGraphCompiler(this);
+		this.listener = () => this.compiler.compile();
 
 		this._timer = new Timer();
 		this._renderer = null;
@@ -154,7 +150,6 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 		this._camera = camera;
 
 		this.tasks = [];
-		this.taskDependencies = new Map();
 		this.renderPipeline = [];
 
 		this.sizeObserver = this.createSizeObserver();
@@ -200,7 +195,7 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 			if(this.tasks.length > 0) {
 
 				// Refresh the buffers.
-				FrameGraph.resourceManager.update();
+				this.compiler.compile();
 
 			}
 
@@ -342,9 +337,9 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 		task.renderer = this.renderer;
 		task.gBufferSchema = this.gBufferSchema;
 
-		task.addEventListener("toggle", FrameGraph.updateResources);
-		task.input.addEventListener("change", FrameGraph.updateResources);
-		task.output.addEventListener("change", FrameGraph.updateResources);
+		task.addEventListener("toggle", this.listener);
+		task.input.addEventListener("change", this.listener);
+		task.output.addEventListener("change", this.listener);
 
 	}
 
@@ -362,9 +357,9 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 		task.renderer = null;
 		task.gBufferSchema = null;
 
-		task.removeEventListener("toggle", FrameGraph.updateResources);
-		task.input.removeEventListener("change", FrameGraph.updateResources);
-		task.output.removeEventListener("change", FrameGraph.updateResources);
+		task.removeEventListener("toggle", this.listener);
+		task.input.removeEventListener("change", this.listener);
+		task.output.removeEventListener("change", this.listener);
 
 	}
 
@@ -394,7 +389,7 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 
 		}
 
-		FrameGraph.resourceManager.update();
+		this.compiler.compile();
 
 	}
 
@@ -425,7 +420,7 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 
 		if(removedAny) {
 
-			FrameGraph.resourceManager.update();
+			this.compiler.compile();
 
 		}
 
@@ -446,7 +441,7 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 		}
 
 		this.tasks = [];
-		FrameGraph.resourceManager.update();
+		this.compiler.compile();
 
 	}
 
@@ -604,7 +599,7 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 
 	dispose(): void {
 
-		FrameGraph.resourceManager.removeFrameGraph(this);
+		this.compiler.dispose();
 
 		for(const task of this.tasks) {
 

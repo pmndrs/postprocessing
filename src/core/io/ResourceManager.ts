@@ -2,7 +2,7 @@ import { Material, WebGLRenderTarget } from "three";
 import { Pass } from "../Pass.js";
 import { FrameGraph } from "../FrameGraph.js";
 import { Resource } from "./Resource.js";
-import { isDisposable } from "../Disposable.js";
+import { Disposable, isDisposable } from "../Disposable.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
 import { RenderTargetDescriptor } from "../../utils/RenderTargetDescriptor.js";
 
@@ -41,7 +41,7 @@ function gatherResources(pass: Pass<Material | null>, result: Set<Resource>): vo
  * @category IO
  */
 
-export class ResourceManager {
+export class ResourceManager implements Disposable {
 
 	/**
 	 * @see {@link autoSyncDefaultBuffers}
@@ -56,13 +56,13 @@ export class ResourceManager {
 	private _autoSRGB: boolean;
 
 	/**
-	 * A collection of active render pipelines.
+	 * A frame graph.
 	 */
 
-	private readonly frameGraphs: Set<FrameGraph>;
+	private readonly frameGraph: FrameGraph;
 
 	/**
-	 * A set of resources that are currently being used in frame graphs.
+	 * A set of resources that are currently being used by the frame graph.
 	 */
 
 	private activeResources: Set<Resource>;
@@ -75,14 +75,16 @@ export class ResourceManager {
 
 	/**
 	 * Constructs a new resource manager.
+	 *
+	 * @param frameGraph - A frame graph.
 	 */
 
-	constructor() {
+	constructor(frameGraph: FrameGraph) {
 
 		this._autoSyncDefaultBuffers = true;
 		this._autoSRGB = true;
 
-		this.frameGraphs = new Set();
+		this.frameGraph = frameGraph;
 		this.activeResources = new Set();
 		this.updating = false;
 
@@ -139,7 +141,7 @@ export class ResourceManager {
 	}
 
 	/**
-	 * Gathers all resources from all pipelines.
+	 * Gathers all resources.
 	 *
 	 * @return The resources.
 	 */
@@ -148,15 +150,11 @@ export class ResourceManager {
 
 		const result = new Set<Resource>();
 
-		//for(const graph of this.graphs) {
+		//	for(const task of this.frameGraph.tasks) {
 
-		//	for(const pass of graph.passes) {
-
-		//		gatherResources(pass, result);
+		//		gatherResources(task, result);
 
 		//	}
-
-		//}
 
 		return result;
 
@@ -246,31 +244,7 @@ export class ResourceManager {
 	}
 
 	/**
-	 * Adds a frame graph.
-	 *
-	 * @param graph - The graph to add.
-	 */
-
-	addFrameGraph(graph: FrameGraph): void {
-
-		this.frameGraphs.add(graph);
-
-	}
-
-	/**
-	 * Removes a frame graph.
-	 *
-	 * @param graph - The graph to remove.
-	 */
-
-	removeFrameGraph(graph: FrameGraph): void {
-
-		this.frameGraphs.delete(graph);
-
-	}
-
-	/**
-	 * Updates the input and output resources of all graphs.
+	 * Updates the input and output resources of the frame graph.
 	 */
 
 	update(): void {
@@ -282,30 +256,22 @@ export class ResourceManager {
 		}
 
 		this.updating = true;
-
-		for(const graph of this.frameGraphs) {
-
-			this.updateFrameGraph(graph);
-
-		}
-
+		this.updateFrameGraph();
 		this.optimize();
 		this.updating = false;
 
 	}
 
 	/**
-	 * Updates the input and output resources of a given graph.
-	 *
-	 * @param graph - The graph to update.
+	 * Updates the input and output resources of the frame graph.
 	 */
 
-	private updateFrameGraph(graph: FrameGraph): void {
+	private updateFrameGraph(): void {
 
 	}
 
 	/**
-	 * Optimizes resources across all pipelines.
+	 * Optimizes resources.
 	 */
 
 	optimize(): void {
@@ -324,6 +290,10 @@ export class ResourceManager {
 		}
 
 		this.activeResources = resources;
+
+	}
+
+	dispose(): void {
 
 	}
 
