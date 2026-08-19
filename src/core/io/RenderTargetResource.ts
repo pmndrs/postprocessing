@@ -22,6 +22,12 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 	private readonly _textures: Map<string, TextureResource> & MapExtensions<string, TextureResource>;
 
 	/**
+	 * @see {@link persistent}
+	 */
+
+	private _persistent: boolean;
+
+	/**
 	 * The current render target descriptor.
 	 *
 	 * The materialized render target is made available through the resource's {@link value}.
@@ -56,6 +62,7 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 		const textures = new ObservableMap<string, TextureResource>();
 		textures.addEventListener("change", () => this.updateTextureResources());
 		this._textures = textures;
+		this._persistent = false;
 
 		this.texture = new TextureResource();
 		this.texture.setRenderTarget(this);
@@ -82,6 +89,23 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 	get textures(): ReadonlyMap<string, TextureResource> {
 
 		return this._textures;
+
+	}
+
+	/**
+	 * Persistent resources keep their allocation and contents across frames and are excluded from pooling.
+	 */
+
+	get persistent(): boolean {
+
+		return this._persistent;
+
+	}
+
+	set persistent(value: boolean) {
+
+		this._persistent = value;
+		this.setChanged();
 
 	}
 
