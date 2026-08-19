@@ -161,7 +161,7 @@ export class ClearPass extends Pass {
 
 	protected override onOutputChange(): void {
 
-		const buffer = this.output.defaultBuffer?.value ?? null;
+		const buffer = this.output.defaultBuffer;
 		this.gBufferIndices = (buffer instanceof GBufferResource) ? buffer.textureIndices : null;
 
 	}
