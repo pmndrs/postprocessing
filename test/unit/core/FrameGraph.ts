@@ -12,7 +12,7 @@ import {
 } from "postprocessing";
 
 import { PerspectiveCamera, Scene, Texture, WebGLRenderer } from "three";
-import { TestPass } from "support/TestPass.ts";
+import { TestPass } from "../../support/TestPass.ts";
 
 // #region Setup
 
