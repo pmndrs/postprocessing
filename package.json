@@ -67,7 +67,7 @@
 		"doc": "typedoc --tsconfig tsconfig.d.json",
 		"pretest": "run-s clean tsc lint build",
 		"test": "run-s test:*",
-		"test:unit": "node --experimental-strip-types --test \"test/unit/**/*.ts\"",
+		"test:unit": "node --test \"test/unit/**/*.ts\"",
 		"posttest": "run-s doc",
 		"prepublishOnly": "run-s test"
 	},

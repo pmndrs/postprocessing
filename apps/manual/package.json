@@ -38,7 +38,7 @@
 		"start": "hugo server -e development --quiet",
 		"pretest": "run-s clean lint build",
 		"test": "run-p test:*",
-		"test:unit": "node --experimental-strip-types --test \"assets/js/test/**/*.ts\""
+		"test:unit": "node --test \"assets/js/test/**/*.ts\""
 	},
 	"dependencies": {
 		"postprocessing": "workspace:"
