@@ -9,6 +9,7 @@ export * from "./GData.js";
 export * from "./GlitchMode.js";
 export * from "./HalftoneShape.js";
 export * from "./KernelSize.js";
+export * from "./LoadOp.js";
 export * from "./MaskFunction.js";
 export * from "./MSAASamples.js";
 export * from "./Precision.js";
