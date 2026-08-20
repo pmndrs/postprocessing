@@ -1,13 +1,7 @@
 {
 	"extends": "../tsconfig.json",
-	"include": [
-		"./**/*.ts"
-	],
 	"compilerOptions": {
 		"allowImportingTsExtensions": true,
-		"noEmit": true,
-		"paths": {
-			"support/*": ["./support/*"]
-		}
+		"noEmit": true
 	}
 }
