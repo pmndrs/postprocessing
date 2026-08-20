@@ -19,6 +19,11 @@
 			"name": "pnpm",
 			"version": ">=11 <12",
 			"onFail": "error"
+		},
+		"runtime": {
+			"name": "node",
+			"version": ">=24",
+			"onFail": "error"
 		}
 	},
 	"keywords": [
