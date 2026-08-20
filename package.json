@@ -58,7 +58,7 @@
 		"watch": "node esbuild -w",
 		"watch:all": "pnpm --parallel -r watch",
 		"deploy": "cpy llms.txt public/llms.txt",
-		"gzip": "gzipper c public",
+		"gzip": "gzipper c \"public\"",
 		"doc": "typedoc --tsconfig tsconfig.d.json",
 		"pretest": "run-s clean tsc lint build",
 		"test": "run-s test:*",
