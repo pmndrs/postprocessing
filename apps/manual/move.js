@@ -6,6 +6,7 @@ const dest = path.join(import.meta.dirname, "..", "..", "public", "manual");
 
 try {
 
+	await fs.rm(dest, { recursive: true, force: true });
 	await fs.rename(src, dest);
 
 } catch(error) {
