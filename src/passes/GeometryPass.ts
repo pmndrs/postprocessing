@@ -45,13 +45,12 @@ export interface GeometryPassOptions extends GBufferResourceOptions {
 
 export class GeometryPass extends Pass implements GeometryPassOptions, Selective {
 
+	readonly selection: Selection;
+
 	/**
-	 * Identifies the G-Buffer resource.
+	 * Clears the G-Buffer before geometry is rendered.
 	 */
 
-	private static readonly GBUFFER = "GBUFFER";
-
-	readonly selection: Selection;
 
 	/**
 	 * A shader plugin that enables rendering to G-Buffer render targets.
@@ -102,10 +101,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		});
 
-		this.output.setBuffer(GeometryPass.GBUFFER, this.gBuffer);
-		this.output.defaultBuffer = this.gBuffer;
-		this.output.saveDefaultBuffer();
-
+		this.setDefaultBuffer(this.gBuffer);
 		this.scene = scene;
 		this.camera = camera;
 
