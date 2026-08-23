@@ -60,18 +60,6 @@ export interface SMAAEffectOptions {
 export class SMAAEffect extends Effect implements SMAAEffectOptions {
 
 	/**
-	 * Identifies the SMAA edges buffer.
-	 */
-
-	private static readonly BUFFER_EDGES = "BUFFER_EDGES";
-
-	/**
-	 * Identifies the SMAA weights buffer.
-	 */
-
-	private static readonly BUFFER_WEIGHTS = "BUFFER_WEIGHTS";
-
-	/**
 	 * A render target for the SMAA edge detection.
 	*/
 
@@ -125,13 +113,13 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 		this.clearPass.clearValues.alpha = 1;
 
 		this.edgeDetectionPass = new ShaderPass(new SMAAEdgeDetectionMaterial());
-		this.edgeDetectionPass.output.defaultBuffer = this.bufferEdges;
+		this.bufferEdges = this.edgeDetectionPass.output.defaultBuffer!;
 		this.edgeDetectionMaterial.edgeDetectionMode = edgeDetectionMode;
 		this.edgeDetectionMaterial.predicationMode = predicationMode;
 
 		this.weightsPass = new ShaderPass(new SMAAWeightsMaterial());
 		this.weightsPass.input.defaultBuffer = this.edgesTexture;
-		this.weightsPass.output.defaultBuffer = this.bufferWeights;
+		this.bufferWeights = this.weightsPass.output.defaultBuffer!;
 
 		this.input.requiredTextures.add(GBuffer.DEPTH);
 		this.input.uniforms.set("weightMap", new Uniform(null));
@@ -150,7 +138,7 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 
 	get edgesTexture(): TextureResource {
 
-		return this.output.buffers.get(SMAAEffect.BUFFER_EDGES)!.texture;
+		return this.bufferEdges.texture;
 
 	}
 
@@ -160,7 +148,7 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 
 	get weightsTexture(): TextureResource {
 
-		return this.output.buffers.get(SMAAEffect.BUFFER_WEIGHTS)!.texture;
+		return this.bufferWeights.texture;
 
 	}
 
