@@ -268,7 +268,17 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		// Make sure all materials are created prior to compilation.
 		this.updateMaterial(false);
-		return super.compile();
+
+		const promises: Promise<void>[] = [];
+		promises.push(super.compile());
+
+		for(const effect of this.effects) {
+
+			promises.push(effect.compile());
+
+		}
+
+		await Promise.all(promises);
 
 	}
 
