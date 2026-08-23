@@ -4,7 +4,6 @@ import { Pass } from "../core/Pass.js";
 import { Background } from "../utils/Background.js";
 import { ClearFlags } from "../utils/ClearFlags.js";
 import { ClearValues } from "../utils/ClearValues.js";
-import { RenderTargetWrite } from "../core/index.js";
 
 const color = /* @__PURE__ */ new Color();
 const fv = /* @__PURE__ */ new Float32Array(4);
@@ -168,18 +167,6 @@ export class ClearPass extends Pass {
 
 		const buffer = this.output.defaultBuffer;
 		this.gBufferIndices = (buffer instanceof GBufferResource) ? buffer.textureIndices : null;
-
-	}
-
-	override getRenderTargetWrites(): RenderTargetWrite[] {
-
-		const target = this.output.defaultBuffer;
-
-		return target === undefined ? [] : [{
-			target,
-			loadOp: "clear",
-			clearFlags: this.clearFlags
-		}];
 
 	}
 

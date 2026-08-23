@@ -5,7 +5,6 @@ export * from "./Input.js";
 export * from "./Output.js";
 export * from "./RenderTargetResource.js";
 export * from "./RenderTargetVersion.js";
-export * from "./RenderTargetWrite.js";
 export * from "./Resource.js";
 export * from "./ResourceManager.js";
 export * from "./ShaderDataResource.js";

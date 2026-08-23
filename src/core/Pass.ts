@@ -29,7 +29,6 @@ import { Disposable } from "./Disposable.js";
 import { RenderTask, RenderTaskEventMap } from "./RenderTask.js";
 import { Input } from "./io/Input.js";
 import { Output } from "./io/Output.js";
-import { RenderTargetWrite } from "./io/RenderTargetWrite.js";
 
 const v = /* @__PURE__ */ new Vector2();
 
@@ -1003,25 +1002,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 			this.renderer.render(this.fullscreenScene!, fullscreenCamera);
 
 		}
-
-	}
-
-	/**
-	 * Creates a list of write declarations for the current output buffers.
-	 *
-	 * The default write declarations define all buffers with the `load` operation which is suitable for most cases.
-	 *
-	 * @return The render target write declarations.
-	 */
-
-	getRenderTargetWrites(): RenderTargetWrite[] {
-
-		const targets = new Set(this.output.renderTargets.values());
-
-		return Array.from(targets, target => ({
-			target,
-			loadOp: "load"
-		}));
 
 	}
 
