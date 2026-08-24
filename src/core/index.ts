@@ -8,6 +8,7 @@ export * from "./FrameGraph.js";
 export * from "./Identifiable.js";
 export * from "./Pass.js";
 export * from "./Renderable.js";
+export * from "./RenderOperation.js";
 export * from "./RenderTask.js";
 export * from "./RenderTaskContext.js";
 export * from "./Resizable.js";

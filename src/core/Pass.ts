@@ -31,6 +31,7 @@ import { RenderTask, RenderTaskEventMap } from "./RenderTask.js";
 import { Input } from "./io/Input.js";
 import { Output } from "./io/Output.js";
 import { RenderTargetResource } from "./io/RenderTargetResource.js";
+import { RenderOperation } from "./RenderOperation.js";
 
 const v = /* @__PURE__ */ new Vector2();
 
@@ -178,6 +179,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	readonly scissor: Scissor;
 
 	/**
+	 * A collection of inline render operations that are owned by this task.
+	 */
+
+	protected readonly operations: Set<RenderOperation>;
+
+	/**
 	 * A collection of objects that will be disposed together with this pass.
 	 */
 
@@ -224,6 +231,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this.resolution = new Resolution();
 		this.viewport = new Viewport();
 		this.scissor = new Scissor();
+		this.operations = new Set();
 		this.disposables = new Set();
 
 		const materials = new ObservableSet<Material>();
@@ -1104,6 +1112,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 			this.renderer.compileAsync(group, fullscreenCamera, this.fullscreenScene)
 		];
 
+		for(const operation of this.operations) {
+
+			promises.push(operation.compile());
+
+		}
+
 		for(const pass of this.subpasses) {
 
 			promises.push(pass.compile());
@@ -1129,6 +1143,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	dispose(): void {
 
 		this.shaderDataTracker.dispose();
+
+		for(const operation of this.operations) {
+
+			operation.dispose();
+
+		}
 
 		for(const disposable of this.disposables) {
 
