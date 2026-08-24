@@ -4,6 +4,8 @@ import { RenderTargetResource } from "./RenderTargetResource.js";
  * A history resource for buffer feedback use cases.
  *
  * This resource manages two render target resources that will be swapped automatically at the end of a frame.
+ *
+ * @todo Refactor into an actual RenderTargetResource that has an additional `previousValue` instead of just managing two individual RenderTargetResources.
  */
 
 export class HistoryResource {
@@ -27,7 +29,10 @@ export class HistoryResource {
 	constructor() {
 
 		this._previousBuffer = new RenderTargetResource();
+		this._previousBuffer.persistent = true;
+
 		this._currentBuffer = new RenderTargetResource();
+		this._currentBuffer.persistent = true;
 
 	}
 
