@@ -96,12 +96,6 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 	// #endregion
 
 	/**
-	 * @see {@link textureIndices}
-	 */
-
-	private readonly _textureIndices: Map<string, number>;
-
-	/**
 	 * A collection of G-Buffer components that are required for rendering.
 	 *
 	 * @see {@link GBuffer} for built-in components.
@@ -140,7 +134,6 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 		});
 
 		this.alpha = alpha;
-		this._textureIndices = new Map();
 
 		const gBufferComponents = new ObservableSet<string>();
 		gBufferComponents.addEventListener("change", () => this.updateDescriptor());
@@ -186,18 +179,6 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 	set samples(value: MSAASamples) {
 
 		this.descriptor.samples = value;
-
-	}
-
-	/**
-	 * G-Buffer texture indices organized by G-Buffer components.
-	 *
-	 * @internal
-	 */
-
-	get textureIndices(): ReadonlyMap<string, number> {
-
-		return this._textureIndices;
 
 	}
 
@@ -295,15 +276,6 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 		descriptor.count = textureTemplates.length;
 		descriptor.textures.clear();
 		descriptor.textures.setAll(...textureTemplates);
-
-		this._textureIndices.clear();
-
-		for(let i = 0, l = textureTemplates.length; i < l; ++i) {
-
-			// gBufferComponent => index
-			this._textureIndices.set(textureTemplates[i][0], i);
-
-		}
 
 		this.configureDepthTexture();
 
