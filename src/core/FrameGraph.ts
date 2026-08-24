@@ -141,7 +141,7 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 		ShaderChunkExtensions.register();
 
 		this.compiler = new FrameGraphCompiler(this);
-		this.listener = () => this.compiler.compile();
+		this.listener = () => this.compiler.update();
 
 		this._timer = new Timer();
 		this._renderer = null;
@@ -195,7 +195,7 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 			if(this.tasks.length > 0) {
 
 				// Refresh the buffers.
-				this.compiler.compile();
+				this.compiler.update();
 
 			}
 
@@ -389,7 +389,7 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 
 		}
 
-		this.compiler.compile();
+		this.compiler.update();
 
 	}
 
@@ -420,7 +420,7 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 
 		if(removedAny) {
 
-			this.compiler.compile();
+			this.compiler.update();
 
 		}
 
@@ -441,7 +441,7 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 		}
 
 		this.tasks = [];
-		this.compiler.compile();
+		this.compiler.update();
 
 	}
 

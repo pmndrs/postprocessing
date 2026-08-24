@@ -41,7 +41,7 @@ export class FrameGraphCompiler implements Disposable {
 
 	}
 
-	compile() {
+	update() {
 
 		this.resourceManager.update();
 
