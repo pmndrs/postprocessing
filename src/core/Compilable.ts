@@ -1,5 +1,5 @@
 /**
- * Describes objects that can be compiled.
+ * Describes objects that can compile shaders.
  *
  * @category Core
  */
@@ -7,7 +7,7 @@
 export interface Compilable {
 
 	/**
-	 * Compiles the resources used by this object.
+	 * Compiles the shaders used by this object.
 	 *
 	 * @return A promise that resolves when the compilation has finished.
 	 */
