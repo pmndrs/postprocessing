@@ -1,5 +1,4 @@
-import { Pass, RenderTargetResource } from "postprocessing";
-import type { LoadOp, RenderTargetWrite } from "postprocessing";
+import { Input, Pass, RenderTargetResource } from "postprocessing";
 
 /**
  * Options for a task used by the frame-graph tests.
@@ -32,10 +31,10 @@ export interface TestPassOptions {
 	bufferKey?: string;
 
 	/**
-	 * The load operation for the initial target.
+	 * Named texture inputs that must be available to this pass.
 	 */
 
-	loadOp?: LoadOp;
+	requiredTextures?: string[];
 
 	/**
 	 * Subtasks that are executed inline by this task.
@@ -61,7 +60,6 @@ export class TestPass extends Pass {
 
 	readonly execution: string[];
 
-	private readonly writes: RenderTargetWrite[];
 	private readonly renderChildren: boolean;
 
 	constructor({
@@ -69,7 +67,7 @@ export class TestPass extends Pass {
 		execution = [],
 		target,
 		bufferKey,
-		loadOp,
+		requiredTextures = [],
 		subtasks,
 		renderSubtasks
 	}: TestPassOptions = {}) {
@@ -77,17 +75,12 @@ export class TestPass extends Pass {
 		super(name);
 
 		this.execution = execution;
-		this.writes = [];
 		this.renderChildren = renderSubtasks ?? false;
+		this.requireTextures(...requiredTextures);
 
 		if(target !== undefined) {
 
-			const key = bufferKey ?? "BUFFER_DEFAULT";
-			this.output.setBuffer(key, target);
-			this.writes.push({
-				target: target,
-				loadOp: loadOp ?? "load"
-			});
+			this.setBuffer(bufferKey ?? Input.BUFFER_DEFAULT, target);
 
 		}
 
@@ -100,13 +93,12 @@ export class TestPass extends Pass {
 	}
 
 	/**
-	 * Adds an output target and its write declaration.
+	 * Adds an output target.
 	 */
 
-	addOutput(key: string, target: RenderTargetResource, loadOp: LoadOp = "load"): void {
+	addOutput(key: string, target: RenderTargetResource): void {
 
-		this.output.setBuffer(key, target);
-		this.writes.push({ target, loadOp });
+		this.setBuffer(key, target);
 
 	}
 
@@ -114,41 +106,31 @@ export class TestPass extends Pass {
 	 * Creates and adds a default output target.
 	 */
 
-	createOutput(loadOp: LoadOp = "load"): RenderTargetResource {
+	createOutput(): RenderTargetResource {
 
-		const target = this.output.createDefaultBuffer();
-		this.writes.push({ target, loadOp });
-		return target;
+		return this.createDefaultBuffer();
 
 	}
 
 	/**
-	 * Connects an input to a producer output while making the selected buffer required.
-	 *
-	 * The matching key is intentional: it mirrors the existing Input.connect(Output) API used by real passes.
+	 * Connects the producer's output resources to this pass.
 	 */
 
-	readFrom(producer: TestPass, key = "BUFFER_DEFAULT"): void {
+	readFrom(producer: TestPass): void {
 
-		this.input.requiredTextures.add(key);
 		this.input.connect(producer.output);
 
 	}
 
 	/**
 	 * Adds an imported texture input.
+	 *
+	 * Declare it in {@link TestPassOptions.requiredTextures} if the test requires it to be validated.
 	 */
 
 	readImported(key: string, texture: import("three").Texture): void {
 
-		this.input.requiredTextures.add(key);
 		this.input.setBuffer(key, texture);
-
-	}
-
-	override getRenderTargetWrites(): RenderTargetWrite[] {
-
-		return this.writes;
 
 	}
 
