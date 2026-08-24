@@ -7,7 +7,7 @@ import {
 	GBufferResource,
 	GeometryPass,
 	HistoryResource,
-	Output,
+	OutputPass,
 	RenderTargetResource
 } from "postprocessing";
 
@@ -15,10 +15,6 @@ import { PerspectiveCamera, Scene, Texture, WebGLRenderer } from "three";
 import { TestPass } from "../../support/TestPass.ts";
 
 // #region Setup
-
-type PresentableFrameGraph = FrameGraph & {
-	present(source: Output, bufferKey?: string, target?: unknown): void;
-};
 
 function createGraph(renderer = true): FrameGraph {
 
@@ -48,9 +44,11 @@ function createRenderer(): WebGLRenderer {
 
 }
 
-function present(graph: FrameGraph, task: TestPass, bufferKey = Output.BUFFER_DEFAULT): void {
+function addOutputPass(graph: FrameGraph, task: TestPass): void {
 
-	(graph as PresentableFrameGraph).present(task.output, bufferKey);
+	const outputPass = new OutputPass();
+	outputPass.input.connect(task.output);
+	graph.add(outputPass);
 
 }
 
@@ -148,8 +146,8 @@ describe("FrameGraph", () => {
 		const graph = createGraph();
 
 		graph.add(first, second);
-		present(graph, first);
-		present(graph, second);
+		addOutputPass(graph, first);
+		addOutputPass(graph, second);
 		render(graph);
 
 		assert.deepEqual(execution, ["first", "second"]);
@@ -168,29 +166,27 @@ describe("FrameGraph", () => {
 
 		const graph = createGraph();
 		graph.add(left, right, producer);
-		present(graph, left);
-		present(graph, right);
+		addOutputPass(graph, left);
+		addOutputPass(graph, right);
 		render(graph);
 
 		assert.deepEqual(execution, ["producer", "left", "right"]);
 
 	});
 
-	it("orders Clear and Geometry when they share one target", () => {
+	it("orders tasks that share one target", () => {
 
 		const execution: string[] = [];
 		const shared = target();
-		const clear = new TestPass({ name: "Clear", execution, target: shared, loadOp: "clear" });
+		const first = new TestPass({ name: "First", execution, target: shared });
 		const geometry = new TestPass({ name: "Geometry", execution, target: shared });
 		const graph = createGraph();
 
-		graph.add(geometry, clear);
-		present(graph, geometry);
+		graph.add(geometry, first);
+		addOutputPass(graph, geometry);
 		render(graph);
 
-		assert.deepEqual(execution, ["Clear", "Geometry"]);
-		assert.equal(clear.getRenderTargetWrites()[0]?.loadOp, "clear");
-		assert.equal(geometry.getRenderTargetWrites()[0]?.target, shared);
+		assert.deepEqual(execution, ["First", "Geometry"]);
 
 	});
 
@@ -198,18 +194,18 @@ describe("FrameGraph", () => {
 
 		const execution: string[] = [];
 		const shared = target();
-		const clear = new TestPass({ name: "Clear", execution, target: shared, loadOp: "clear" });
+		const first = new TestPass({ name: "First", execution, target: shared });
 		const debug = new TestPass({ name: "Debug", execution, target: target() });
 		const geometry = new TestPass({ name: "Geometry", execution, target: shared });
 
-		debug.readFrom(clear);
+		debug.readFrom(first);
 		const graph = createGraph();
-		graph.add(geometry, debug, clear);
-		present(graph, debug);
-		present(graph, geometry);
+		graph.add(geometry, debug, first);
+		addOutputPass(graph, debug);
+		addOutputPass(graph, geometry);
 		render(graph);
 
-		assert.deepEqual(execution, ["Clear", "Debug", "Geometry"]);
+		assert.deepEqual(execution, ["First", "Debug", "Geometry"]);
 
 	});
 
@@ -218,12 +214,11 @@ describe("FrameGraph", () => {
 		const execution: string[] = [];
 		const shared = target();
 
-		const clear = new TestPass({
-			name: "Clear",
+		const first = new TestPass({
+			name: "First",
 			execution,
 			target: shared,
-			bufferKey: "old",
-			loadOp: "clear"
+			bufferKey: "old"
 		});
 
 		const geometry = new TestPass({
@@ -235,25 +230,28 @@ describe("FrameGraph", () => {
 
 		const reader = new TestPass({ name: "OlderReader", execution, target: target() });
 
-		reader.readFrom(clear, "old");
+		reader.readFrom(first);
 		geometry.readFrom(reader);
-		reader.readFrom(geometry, "new");
+		reader.readFrom(geometry);
 
 		const graph = createGraph();
-		graph.add(clear, geometry, reader);
-		present(graph, reader);
+		graph.add(first, geometry, reader);
+		addOutputPass(graph, reader);
 
-		assert.throws(() => render(graph), /Clear|Geometry|OlderReader|BUFFER_DEFAULT|cycle|order/i);
+		assert.throws(() => render(graph), /First|Geometry|OlderReader|BUFFER_DEFAULT|cycle|order/i);
 
 	});
 
 	it("rejects missing required inputs and disabled producers only when live", () => {
 
-		const missing = new TestPass({ name: "Missing", target: target() });
-		missing.input.requiredTextures.add("missing");
+		const missing = new TestPass({
+			name: "Missing",
+			target: target(),
+			requiredTextures: ["missing"]
+		});
 		const graph = createGraph();
 		graph.add(missing);
-		present(graph, missing);
+		addOutputPass(graph, missing);
 		assert.throws(() => render(graph), /missing|required/i);
 
 		const execution: string[] = [];
@@ -264,19 +262,23 @@ describe("FrameGraph", () => {
 
 		const disabledGraph = createGraph();
 		disabledGraph.add(producer, consumer);
-		present(disabledGraph, consumer);
+		addOutputPass(disabledGraph, consumer);
 		assert.throws(() => render(disabledGraph), /disabled|producer|required/i);
 
 	});
 
 	it("accepts imported textures as valid required inputs", () => {
 
-		const task = new TestPass({ name: "Imported", target: target() });
+		const task = new TestPass({
+			name: "Imported",
+			target: target(),
+			requiredTextures: ["external"]
+		});
 		task.readImported("external", new Texture());
 		const graph = createGraph();
 
 		graph.add(task);
-		present(graph, task);
+		addOutputPass(graph, task);
 		assert.doesNotThrow(() => render(graph));
 
 	});
@@ -290,7 +292,7 @@ describe("FrameGraph", () => {
 
 		const graph = createGraph();
 		graph.add(a, b);
-		present(graph, a);
+		addOutputPass(graph, a);
 
 		assert.throws(() => render(graph), /CycleA.*CycleB|CycleB.*CycleA|cycle/i);
 
@@ -312,7 +314,7 @@ describe("FrameGraph", () => {
 		const graph = createGraph();
 
 		graph.add(parent);
-		present(graph, parent);
+		addOutputPass(graph, parent);
 		render(graph);
 
 		assert.deepEqual(execution, ["Parent", "Subpass"]);
@@ -328,7 +330,7 @@ describe("FrameGraph", () => {
 		const graph = createGraph();
 
 		graph.add(culled, live);
-		present(graph, live);
+		addOutputPass(graph, live);
 		render(graph);
 
 		assert.deepEqual(execution, ["Live"]);
@@ -338,12 +340,12 @@ describe("FrameGraph", () => {
 	it("uses the screen binding for an unsampled shared-target presentation chain", () => {
 
 		const shared = target();
-		const clear = new TestPass({ name: "Clear", target: shared, loadOp: "clear" });
+		const first = new TestPass({ name: "First", target: shared });
 		const geometry = new TestPass({ name: "Geometry", target: shared });
 		const graph = createGraph();
 
-		graph.add(clear, geometry);
-		present(graph, geometry);
+		graph.add(first, geometry);
+		addOutputPass(graph, geometry);
 		render(graph);
 
 		assert.equal(shared.value, null);
@@ -353,14 +355,14 @@ describe("FrameGraph", () => {
 	it("materializes a shared target when one of its versions is sampled", () => {
 
 		const shared = target();
-		const clear = new TestPass({ name: "Clear", target: shared, loadOp: "clear" });
+		const first = new TestPass({ name: "First", target: shared });
 		const geometry = new TestPass({ name: "Geometry", target: shared });
 		const effect = new TestPass({ name: "Effect", target: target() });
 		effect.readFrom(geometry);
 		const graph = createGraph();
 
-		graph.add(clear, geometry, effect);
-		present(graph, effect);
+		graph.add(first, geometry, effect);
+		addOutputPass(graph, effect);
 		render(graph);
 
 		assert.notEqual(shared.value, null);
@@ -371,12 +373,16 @@ describe("FrameGraph", () => {
 
 		const gBuffer = new GBufferResource();
 		const producer = new TestPass({ name: "GBufferWriter", target: gBuffer });
-		const consumer = new TestPass({ name: "NormalReader", target: target() });
-		consumer.readFrom(producer, GBuffer.NORMAL);
+		const consumer = new TestPass({
+			name: "NormalReader",
+			target: target(),
+			requiredTextures: [GBuffer.NORMAL]
+		});
+		consumer.readFrom(producer);
 		const graph = createGraph();
 
 		graph.add(producer, consumer);
-		present(graph, consumer);
+		addOutputPass(graph, consumer);
 		render(graph);
 
 		assert.ok(gBuffer.textures.has(GBuffer.COLOR));
@@ -391,7 +397,7 @@ describe("FrameGraph", () => {
 		const graph = createGraph();
 
 		graph.add(task);
-		present(graph, task);
+		addOutputPass(graph, task);
 		render(graph);
 
 		assert.equal(resource.value?.width, 40);
@@ -409,7 +415,7 @@ describe("FrameGraph", () => {
 		const graph = createGraph();
 
 		graph.add(first, second);
-		present(graph, second);
+		addOutputPass(graph, second);
 
 		assert.throws(() => render(graph), /resolution|width|FirstWriter|SecondWriter/i);
 
@@ -422,7 +428,7 @@ describe("FrameGraph", () => {
 		const graph = createGraph();
 
 		graph.add(task);
-		present(graph, task);
+		addOutputPass(graph, task);
 
 		assert.throws(() => render(graph), /feedback|same.*pass|Feedback/i);
 
@@ -434,7 +440,7 @@ describe("FrameGraph", () => {
 		const task = new TestPass({ name: "ReplaceTarget", target: resource });
 		const graph = createGraph();
 		graph.add(task);
-		present(graph, task);
+		addOutputPass(graph, task);
 		render(graph);
 
 		const previous = resource.value!;
@@ -463,11 +469,15 @@ describe("FrameGraph", () => {
 			disposed++;
 
 		};
-		const task = new TestPass({ name: "External", target: target() });
+		const task = new TestPass({
+			name: "External",
+			target: target(),
+			requiredTextures: ["external"]
+		});
 		task.readImported("external", texture);
 		const graph = createGraph();
 		graph.add(task);
-		present(graph, task);
+		addOutputPass(graph, task);
 		render(graph);
 
 		assert.equal(disposed, 0);
