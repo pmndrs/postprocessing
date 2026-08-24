@@ -1,24 +1,50 @@
 import { Color, Scene, WebGLRenderer, WebGLRenderTarget } from "three";
-import { Disposable } from "../core/Disposable.js";
 import { Background } from "../utils/Background.js";
 import { ClearFlags } from "../utils/ClearFlags.js";
 import { ClearValues } from "../utils/ClearValues.js";
-import { Compilable } from "./Compilable.js";
 import { RenderTaskContext } from "./RenderTaskContext.js";
-import { Task } from "./Task.js";
+import { RenderOperation } from "./RenderOperation.js";
 
 const color = /* @__PURE__ */ new Color();
 const fv = /* @__PURE__ */ new Float32Array(4);
 
 /**
- * A clear task.
+ * ClearOperation constructor options.
+ *
+ * @category Core
+ */
+
+export interface ClearOperationOptions {
+
+	/**
+	 * The color clear flag.
+	 */
+
+	color?: boolean;
+
+	/**
+	 * The depth clear flag.
+	 */
+
+	depth?: boolean;
+
+	/**
+	 * The stencil clear flag.
+	 */
+
+	stencil?: boolean;
+
+}
+
+/**
+ * A clear operation.
  *
  * This operation clears the current render target using its parent task's context.
  *
  * @category Core
  */
 
-export class ClearTask implements Compilable, Disposable, Task {
+export class ClearOperation implements RenderOperation {
 
 	// #region Task
 
@@ -26,6 +52,12 @@ export class ClearTask implements Compilable, Disposable, Task {
 	enabled;
 
 	// #endregion
+
+	/**
+	 * The context of the parent render task.
+	 */
+
+	private readonly context: Readonly<RenderTaskContext>;
 
 	/**
 	 * The clear flags.
@@ -55,17 +87,21 @@ export class ClearTask implements Compilable, Disposable, Task {
 	private readonly backgroundScene: Scene;
 
 	/**
-	 * Constructs a new clear task.
+	 * Constructs a new clear operation.
 	 *
-	 * @param color - The color clear flag.
-	 * @param depth - The depth clear flag.
-	 * @param stencil - The stencil clear flag.
+	 * @param context - The context of the parent render task..
+	 * @param options - Additional options.
 	 */
 
-	constructor(color = true, depth = true, stencil = true) {
+	constructor(context: Readonly<RenderTaskContext>, {
+		color = true,
+		depth = true,
+		stencil = true
+	}: ClearOperationOptions = {}) {
 
 		this.name = "ClearTask";
 		this.enabled = true;
+		this.context = context;
 
 		this.clearFlags = new ClearFlags(color, depth, stencil);
 		this.clearValues = new ClearValues();
@@ -153,7 +189,9 @@ export class ClearTask implements Compilable, Disposable, Task {
 	 * @param context - The render task context.
 	 */
 
-	private clearWithBackground(context: RenderTaskContext): void {
+	private clearWithBackground(): void {
+
+		const context = this.context;
 
 		if(context.scene!.background instanceof Color) {
 
@@ -168,16 +206,11 @@ export class ClearTask implements Compilable, Disposable, Task {
 
 	}
 
-	/**
-	 * Compiles the background materials used by this task.
-	 *
-	 * @param context - The render task context.
-	 * @return A promise that resolves when compilation has finished.
-	 */
+	async compile(): Promise<void> {
 
-	async compile(context?: RenderTaskContext): Promise<void> {
+		const context = this.context;
 
-		if(context === undefined || context.renderer === null || context.camera === null) {
+		if(context.renderer === null || context.camera === null) {
 
 			return;
 
@@ -193,7 +226,9 @@ export class ClearTask implements Compilable, Disposable, Task {
 	 * @param context - The render task context.
 	 */
 
-	execute(context?: RenderTaskContext): void {
+	execute(): void {
+
+		const context = this.context;
 
 		if(!this.enabled || context === undefined || context.renderer === null) {
 
@@ -212,7 +247,7 @@ export class ClearTask implements Compilable, Disposable, Task {
 
 		if(!hasOverrideClearColor && context.camera !== null && background !== null) {
 
-			this.clearWithBackground(context);
+			this.clearWithBackground();
 
 		} else {
 

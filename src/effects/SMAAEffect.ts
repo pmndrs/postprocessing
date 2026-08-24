@@ -1,5 +1,5 @@
 import { Camera, Color, LinearFilter, LoadingManager, NearestFilter, Texture, Uniform } from "three";
-import { ClearTask } from "../core/ClearTask.js";
+import { ClearOperation } from "../core/ClearOperation.js";
 import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 import { TextureResource } from "../core/io/TextureResource.js";
 import { GBuffer } from "../enums/GBuffer.js";
@@ -72,10 +72,10 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 	private readonly bufferWeights: RenderTargetResource;
 
 	/**
-	* A clear pass for the edges buffer.
+	* A clear operation for the edges buffer.
 	*/
 
-	private clear: ClearTask;
+	private clear: ClearOperation;
 
 	/**
 	* An edge detection pass.
@@ -105,10 +105,10 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 
 		this.fragmentShader = fragmentShader;
 
-		this.clear = new ClearTask(true, false, false);
+		this.clear = new ClearOperation(this, { color: true, depth: false, stencil: false });
 		this.clear.clearValues.color = new Color(0x000000);
 		this.clear.clearValues.alpha = 1;
-		this.disposables.add(this.clear);
+		this.operations.add(this.clear);
 
 		this.edgeDetectionPass = new ShaderPass(new SMAAEdgeDetectionMaterial());
 		this.bufferEdges = this.edgeDetectionPass.output.defaultBuffer!;
@@ -328,21 +328,6 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 
 	}
 
-	override async compile(): Promise<void> {
-
-		if(this.renderer === null || this.scene === null || this.camera === null) {
-
-			return;
-
-		}
-
-		const promises: Promise<void>[] = [];
-		promises.push(super.compile());
-		promises.push(this.clear.compile(this));
-		await Promise.all(promises);
-
-	}
-
 	override render(): void {
 
 		if(this.renderer === null) {
@@ -352,7 +337,7 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 		}
 
 		this.setRenderTarget(this.bufferEdges.value);
-		this.clear.execute(this);
+		this.clear.execute();
 		this.renderSubpasses();
 
 	}

@@ -1,7 +1,7 @@
 import { Camera, DepthTexture, Material, Object3D, Scene, TextureDataType } from "three";
 import { GBufferResource, GBufferResourceOptions } from "../core/io/GBufferResource.js";
 import { Pass } from "../core/Pass.js";
-import { ClearTask } from "../core/ClearTask.js";
+import { ClearOperation } from "../core/ClearOperation.js";
 import { Selective } from "../core/Selective.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { MSAASamples } from "../enums/MSAASamples.js";
@@ -52,7 +52,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 	 * Clears the G-Buffer before geometry is rendered.
 	 */
 
-	readonly clear: ClearTask;
+	readonly clear: ClearOperation;
 
 	/**
 	 * A shader plugin that enables rendering to G-Buffer render targets.
@@ -86,8 +86,9 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		this.selection = new Selection();
 		this.selection.enabled = false;
-		this.clear = new ClearTask();
-		this.disposables.add(this.clear);
+
+		this.clear = new ClearOperation(this);
+		this.operations.add(this.clear);
 
 		this.gBuffer = new GBufferResource({
 			alpha,
@@ -267,7 +268,6 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 		const promises: Promise<Object3D | void>[] = [];
 		promises.push(super.compile());
 		promises.push(this.renderer.compileAsync(this.scene, this.camera));
-		promises.push(this.clear.compile(this));
 		await Promise.all(promises);
 
 	}
@@ -284,7 +284,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 		}
 
 		this.setRenderTarget(this.output.defaultBuffer?.value);
-		this.clear.execute(this);
+		this.clear.execute();
 
 		// The background is rendered by the clear task.
 		const background = scene.background;
