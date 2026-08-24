@@ -54,6 +54,12 @@ export class UIPass extends GeometryPass {
 
 		super.onInputChange();
 
+		if(this.copyPass === undefined) {
+
+			return;
+
+		}
+
 		this.copyPass.input.defaultBuffer = this.input.defaultBuffer;
 		const depthTextureResource = this.input.buffers.get(GBuffer.DEPTH);
 
@@ -74,6 +80,12 @@ export class UIPass extends GeometryPass {
 	protected override onOutputChange(): void {
 
 		super.onOutputChange();
+
+		if(this.copyPass === undefined) {
+
+			return;
+
+		}
 
 		this.copyPass.output.setDefaultBuffer(this.output.defaultBuffer);
 		this.configureCopyPass();
