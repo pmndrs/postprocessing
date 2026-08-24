@@ -104,8 +104,6 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 		super("SMAAEffect");
 
 		this.fragmentShader = fragmentShader;
-		this.bufferEdges = this.output.setBuffer(SMAAEffect.BUFFER_EDGES);
-		this.bufferWeights = this.output.setBuffer(SMAAEffect.BUFFER_WEIGHTS);
 
 		this.clearPass = new ClearPass(true, false, false);
 		this.clearPass.output.defaultBuffer = this.bufferEdges;
