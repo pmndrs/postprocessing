@@ -37,7 +37,7 @@ export class DepthCopyPass extends Pass<DepthCopyMaterial> {
 		this.fullscreenMaterial = new DepthCopyMaterial();
 		this.input.requiredTextures.add(GBuffer.DEPTH);
 
-		this.buffer = this.output.setBuffer(DepthCopyPass.BUFFER_DEPTH, {
+		this.buffer = this.setBuffer(DepthCopyPass.BUFFER_DEPTH, {
 			minFilter: NearestFilter,
 			magFilter: NearestFilter,
 			depthBuffer: false,

@@ -32,7 +32,7 @@ export class LuminancePass extends Pass<LuminanceHighPassMaterial> {
 
 		super("LuminancePass");
 
-		this.buffer = this.output.setBuffer(LuminancePass.BUFFER_LUMINANCE);
+		this.buffer = this.setBuffer(LuminancePass.BUFFER_LUMINANCE);
 		this.fullscreenMaterial = new LuminanceHighPassMaterial();
 
 	}

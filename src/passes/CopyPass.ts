@@ -34,11 +34,11 @@ export class CopyPass extends Pass<CopyMaterial> {
 
 		if(outputBuffer !== undefined) {
 
-			this.output.defaultBuffer = outputBuffer;
+			this.setDefaultBuffer(outputBuffer);
 
 		} else {
 
-			this.output.createDefaultBuffer();
+			this.createDefaultBuffer();
 
 		}
 

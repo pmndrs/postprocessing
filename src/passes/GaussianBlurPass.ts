@@ -80,8 +80,8 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> implements Gaus
 
 		super("GaussianBlurPass");
 
-		this.bufferA = this.output.setBuffer(GaussianBlurPass.BUFFER_A);
-		this.bufferB = this.output.setBuffer(GaussianBlurPass.BUFFER_B);
+		this.bufferA = this.setBuffer(GaussianBlurPass.BUFFER_A);
+		this.bufferB = this.setBuffer(GaussianBlurPass.BUFFER_B);
 
 		this.fullscreenMaterial = new GaussianBlurMaterial({ kernelSize });
 		this._iterations = iterations;

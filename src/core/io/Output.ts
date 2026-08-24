@@ -1,5 +1,4 @@
 import { BaseEvent, EventDispatcher, RenderTargetOptions, UnsignedByteType } from "three";
-import { MapExtensions } from "../../utils/MapExtensions.js";
 import { ObservableMap } from "../../utils/ObservableMap.js";
 import { BaseEventMap } from "../BaseEventMap.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
@@ -47,16 +46,10 @@ export class Output extends EventDispatcher<OutputEventMap> {
 	static readonly BUFFER_DEFAULT = "BUFFER_DEFAULT";
 
 	/**
-	 * The default buffer that was last saved via {@link saveDefaultBuffer}.
+	 * @see {@link buffers}
 	 */
 
-	private _defaultBuffer: RenderTargetResource | null;
-
-	/**
-	 * Output render targets, organized by name.
-	 */
-
-	readonly renderTargets: Map<string, RenderTargetResource> & MapExtensions<string, RenderTargetResource>;
+	private readonly renderTargets: ObservableMap<string, RenderTargetResource>;
 
 	/**
 	 * Output shader data.
@@ -71,8 +64,6 @@ export class Output extends EventDispatcher<OutputEventMap> {
 	constructor() {
 
 		super();
-
-		this._defaultBuffer = null;
 
 		const renderTargets = new ObservableMap<string, RenderTargetResource>();
 		const renderTargetListener = () => {
@@ -109,10 +100,10 @@ export class Output extends EventDispatcher<OutputEventMap> {
 	}
 
 	/**
-	 * Alias for {@link renderTargets}.
+	 * Output render targets, organized by name.
 	 */
 
-	get buffers(): typeof this.renderTargets {
+	get buffers(): ReadonlyMap<string, RenderTargetResource> {
 
 		return this.renderTargets;
 
@@ -138,7 +129,7 @@ export class Output extends EventDispatcher<OutputEventMap> {
 	}
 
 	/**
-	 * The default output buffer, or `undefined` if none has been set.
+	 * The default output buffer, or `undefined` if there is none.
 	 */
 
 	get defaultBuffer(): RenderTargetResource | undefined {
@@ -147,11 +138,17 @@ export class Output extends EventDispatcher<OutputEventMap> {
 
 	}
 
-	set defaultBuffer(value: RenderTargetResource | RenderTargetOptions | undefined) {
+	/**
+	 * Sets the default buffer.
+	 *
+	 * @internal
+	 */
+
+	setDefaultBuffer(value: RenderTargetResource | RenderTargetOptions | undefined): void {
 
 		if(value === undefined) {
 
-			this.removeDefaultBuffer();
+			this.deleteDefaultBuffer();
 
 		} else {
 
@@ -164,6 +161,7 @@ export class Output extends EventDispatcher<OutputEventMap> {
 	/**
 	 * Creates a new default buffer.
 	 *
+	 * @internal
 	 * @param options - Render target options. Defaults to a configuration suited for fullscreen passes.
 	 * @return The render target resource.
 	 */
@@ -175,54 +173,13 @@ export class Output extends EventDispatcher<OutputEventMap> {
 	}
 
 	/**
-	 * Saves the current default buffer so that it can be restored via {@link restoreDefaultBuffer}.
-	 *
-	 * The currently saved buffer will be overwritten.
-	 *
-	 * @return True if the current {@link defaultBuffer} was successfully saved, or false if there is none.
-	 */
-
-	saveDefaultBuffer(): boolean {
-
-		if(this.defaultBuffer === undefined) {
-
-			return false;
-
-		}
-
-		this._defaultBuffer = this.defaultBuffer ?? null;
-		return true;
-
-	}
-
-	/**
-	 * Restores the default buffer that was last saved via {@link saveDefaultBuffer}.
-	 *
-	 * The currently saved buffer will __not__ be cleared by this method.
-	 *
-	 * @return True if the {@link defaultBuffer} was restored, or false if there is no saved buffer.
-	 */
-
-	restoreDefaultBuffer(): boolean {
-
-		if(this._defaultBuffer !== null) {
-
-			this.setBuffer(Output.BUFFER_DEFAULT, this._defaultBuffer);
-			return true;
-
-		}
-
-		return false;
-
-	}
-
-	/**
 	 * Removes the default buffer.
 	 *
-	 * @return True if the buffer existed and has been removed, or false if there is none.
+	 * @internal
+	 * @return Whether the default buffer was removed.
 	 */
 
-	removeDefaultBuffer(): boolean {
+	deleteDefaultBuffer(): boolean {
 
 		return this.renderTargets.delete(Output.BUFFER_DEFAULT);
 
@@ -234,8 +191,9 @@ export class Output extends EventDispatcher<OutputEventMap> {
 	 * - Falls back to a default render target descriptor that is suitable for fullscreen passes if none is provided.
 	 * - Raw render target descriptors will automatically be wrapped in a new resource.
 	 *
+	 * @internal
 	 * @param key - The key of the buffer.
-	 * @param value - A resource or render target options.
+	 * @param value - A render target resource or its options.
 	 * @return The render target resource.
 	 */
 
@@ -244,6 +202,32 @@ export class Output extends EventDispatcher<OutputEventMap> {
 		const resource = (value instanceof RenderTargetResource) ? value : new RenderTargetResource(value);
 		this.renderTargets.set(key, resource);
 		return resource;
+
+	}
+
+	/**
+	 * Removes the specified buffer.
+	 *
+	 * @internal
+	 * @param key - The key of the buffer.
+	 * @return Whether the buffer was removed.
+	 */
+
+	deleteBuffer(key: string): boolean {
+
+		return this.renderTargets.delete(key);
+
+	}
+
+	/**
+	 * Removes all output buffers.
+	 *
+	 * @internal
+	 */
+
+	clearBuffers(): void {
+
+		this.renderTargets.clear();
 
 	}
 

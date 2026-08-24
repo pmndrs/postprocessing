@@ -5,6 +5,7 @@ import {
 	Material,
 	Mesh,
 	Object3D,
+	RenderTargetOptions,
 	Scene,
 	ShaderMaterial,
 	Texture,
@@ -29,6 +30,7 @@ import { Disposable } from "./Disposable.js";
 import { RenderTask, RenderTaskEventMap } from "./RenderTask.js";
 import { Input } from "./io/Input.js";
 import { Output } from "./io/Output.js";
+import { RenderTargetResource } from "./io/RenderTargetResource.js";
 
 const v = /* @__PURE__ */ new Vector2();
 
@@ -850,6 +852,83 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	protected setChanged(): void {
 
 		this.dispatchEvent({ type: "change" });
+
+	}
+
+	/**
+	 * Creates a new default output buffer.
+	 *
+	 * @param options - Render target options. Defaults to a configuration suited for fullscreen passes.
+	 * @return The render target resource.
+	 */
+
+	protected createDefaultBuffer(options?: RenderTargetOptions): RenderTargetResource {
+
+		return this.output.createDefaultBuffer(options);
+
+	}
+
+	/**
+	 * Sets the default output buffer.
+	 *
+	 * @param value - A render target resource, its options, or `undefined`.
+	 */
+
+	protected setDefaultBuffer(value: RenderTargetOptions | RenderTargetResource | undefined): void {
+
+		this.output.setDefaultBuffer(value);
+
+	}
+
+	/**
+	 * Removes the default output buffer.
+	 *
+	 * @return Whether the default buffer was removed.
+	 */
+
+	protected removeDefaultOutputBuffer(): boolean {
+
+		return this.output.deleteDefaultBuffer();
+
+	}
+
+	/**
+	 * Defines an output render target resource.
+	 *
+	 * - Falls back to a default render target descriptor that is suitable for fullscreen passes if none is provided.
+	 * - Raw render target descriptors will automatically be wrapped in a new resource.
+	 *
+	 * @param key - The key of the buffer.
+	 * @param value - A render target resource or its options.
+	 * @return The render target resource.
+	 */
+
+	protected setBuffer(key: string, value?: RenderTargetOptions | RenderTargetResource): RenderTargetResource {
+
+		return this.output.setBuffer(key, value);
+
+	}
+
+	/**
+	 * Removes the specified output buffer.
+	 *
+	 * @param key - The key of the buffer.
+	 * @return Whether the buffer was removed.
+	 */
+
+	protected deleteBuffer(key: string): boolean {
+
+		return this.output.deleteBuffer(key);
+
+	}
+
+	/**
+	 * Removes all output buffers.
+	 */
+
+	protected clearBuffers(): void {
+
+		this.output.clearBuffers();
 
 	}
 

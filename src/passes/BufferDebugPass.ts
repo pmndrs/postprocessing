@@ -69,7 +69,7 @@ export class BufferDebugPass extends Pass<BufferDebugMaterial> {
 
 		super("BufferDebugPass");
 
-		this.output.createDefaultBuffer();
+		this.createDefaultBuffer();
 		this.fullscreenMaterial = new BufferDebugMaterial();
 
 		this._viewSize = 0.1;

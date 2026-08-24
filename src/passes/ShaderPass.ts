@@ -32,7 +32,7 @@ export class ShaderPass<TMaterial extends ShaderMaterial = ShaderMaterial> exten
 
 		super("ShaderPass");
 
-		this.output.createDefaultBuffer();
+		this.createDefaultBuffer();
 		this.fullscreenMaterial = material;
 		this.uniformName = uniformName;
 

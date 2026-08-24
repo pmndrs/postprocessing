@@ -44,7 +44,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		super("EffectPass");
 
-		this.output.createDefaultBuffer();
+		this.createDefaultBuffer();
 		this.effectListener = (e: Event) => this.handleEffectEvent(e as Event<string, Effect>);
 		this.effectMaterialCache = new EffectMaterialCache(this.input);
 		this.fullscreenMaterial = this.effectMaterialCache.getMaterial([]);

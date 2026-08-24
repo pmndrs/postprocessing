@@ -19,18 +19,13 @@ describe("Output", () => {
 
 	});
 
-	it("can save and restore the default buffer", () => {
+	it("can remove the default buffer", () => {
 
 		const output = new Output();
-		const defaultBuffer = output.createDefaultBuffer();
-		output.saveDefaultBuffer();
+		output.createDefaultBuffer();
 		output.removeDefaultBuffer();
 
 		assert.equal(output.defaultBuffer, undefined);
-
-		output.restoreDefaultBuffer();
-
-		assert.equal(output.defaultBuffer, defaultBuffer);
 
 	});
 

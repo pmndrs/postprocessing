@@ -232,16 +232,6 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 	}
 
-	/**
-	 * Restores the default buffer to the initial {@link gBuffer} resource.
-	 */
-
-	restoreDefaultBuffer(): void {
-
-		this.output.defaultBuffer = this.gBuffer;
-
-	}
-
 	// #endregion
 
 	protected override onInputChange(): void {

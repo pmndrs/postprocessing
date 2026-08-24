@@ -92,7 +92,7 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 		super("MipmapBlurPass");
 
-		const buffer = this.output.setBuffer(MipmapBlurPass.BUFFER_MAIN);
+		const buffer = this.setBuffer(MipmapBlurPass.BUFFER_MAIN);
 		buffer.descriptor.name = MipmapBlurPass.BUFFER_MAIN;
 
 		this.downsamplingMipmaps = [];
@@ -200,7 +200,7 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 		this.dispose();
 		this.disposables.clear();
 
-		output.buffers.clear();
+		this.clearBuffers();
 
 		this.downsamplingMipmaps = [];
 		this.upsamplingMipmaps = [];
@@ -208,7 +208,7 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 		if(levels === 1 && !this.fullResolutionUpsampling) {
 
 			// Only need one render target for downsampling.
-			output.setBuffer(MipmapBlurPass.BUFFER_MAIN, mainBufferResource);
+			this.setBuffer(MipmapBlurPass.BUFFER_MAIN, mainBufferResource);
 			this.downsamplingMipmaps.push(mainBufferResource);
 
 			return;
@@ -219,18 +219,18 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 			const mipmap = descriptor.clone();
 			mipmap.name = "DOWNSAMPLING_MIPMAP" + i;
-			this.downsamplingMipmaps.push(output.setBuffer(mipmap.name, mipmap));
+			this.downsamplingMipmaps.push(this.setBuffer(mipmap.name, mipmap));
 
 		}
 
-		output.setBuffer(MipmapBlurPass.BUFFER_MAIN, mainBufferResource);
+		this.setBuffer(MipmapBlurPass.BUFFER_MAIN, mainBufferResource);
 		this.upsamplingMipmaps.push(mainBufferResource);
 
 		for(let i = 1, l = this.fullResolutionUpsampling ? levels : levels - 1; i < l; ++i) {
 
 			const mipmap = descriptor.clone();
 			mipmap.name = "UPSAMPLING_MIPMAP" + i;
-			this.upsamplingMipmaps.push(output.setBuffer(mipmap.name, mipmap));
+			this.upsamplingMipmaps.push(this.setBuffer(mipmap.name, mipmap));
 
 		}
 

@@ -74,7 +74,7 @@ export class UIPass extends GeometryPass {
 
 		super.onOutputChange();
 
-		this.copyPass.output.defaultBuffer = this.output.defaultBuffer;
+		this.copyPass.output.setDefaultBuffer(this.output.defaultBuffer);
 		this.configureCopyPass();
 
 	}
