@@ -9,6 +9,7 @@ export * from "./Identifiable.js";
 export * from "./Pass.js";
 export * from "./Renderable.js";
 export * from "./RenderTask.js";
+export * from "./RenderTaskContext.js";
 export * from "./Resizable.js";
 export * from "./Selective.js";
 export * from "./Task.js";

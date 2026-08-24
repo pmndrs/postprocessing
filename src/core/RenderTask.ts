@@ -11,6 +11,7 @@ import { Identifiable } from "./Identifiable.js";
 import { Input } from "./io/Input.js";
 import { Output } from "./io/Output.js";
 import { Renderable } from "./Renderable.js";
+import { RenderTaskContext } from "./RenderTaskContext.js";
 import { Task } from "./Task.js";
 
 /**
@@ -38,7 +39,7 @@ export interface RenderTaskEventMap extends BaseEventMap {
  */
 
 export interface RenderTask extends EventDispatcher<RenderTaskEventMap>,
-	Compilable, Disposable, Identifiable, Renderable, Task {
+	Compilable, Disposable, Identifiable, Renderable, RenderTaskContext, Task {
 
 	/**
 	 * The input resources of this task.
@@ -79,28 +80,6 @@ export interface RenderTask extends EventDispatcher<RenderTaskEventMap>,
 	 */
 
 	timer: ReadonlyTimer | null;
-
-	/**
-	 * The current renderer.
-	 */
-
-	renderer: WebGLRenderer | null;
-
-	/**
-	 * The current scene.
-	 *
-	 * Defaults to the main scene of the associated frame graph if not defined.
-	 */
-
-	scene: Scene | null;
-
-	/**
-	 * The current camera.
-	 *
-	 * Defaults to the main camera of the associated frame graph if not defined.
-	 */
-
-	camera: Camera | null;
 
 	// #region Internal
 
