@@ -34,7 +34,7 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 		super("DepthDownsamplingPass");
 
 		this.fullscreenMaterial = new DepthDownsamplingMaterial();
-		this.input.requiredTextures.addAll(GBuffer.DEPTH, GBuffer.NORMAL);
+		this.requireTextures(GBuffer.DEPTH, GBuffer.NORMAL);
 
 		this.buffer = this.setBuffer(DepthDownsamplingPass.BUFFER_DEPTH, {
 			minFilter: NearestFilter,

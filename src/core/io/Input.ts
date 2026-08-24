@@ -2,8 +2,6 @@ import { BaseEvent, EventDispatcher, IUniform, Texture, UnsignedByteType } from 
 import { GBufferSchema } from "../../utils/gbuffer/GBufferSchema.js";
 import { MapExtensions } from "../../utils/MapExtensions.js";
 import { ObservableMap } from "../../utils/ObservableMap.js";
-import { ObservableSet } from "../../utils/ObservableSet.js";
-import { SetExtensions } from "../../utils/SetExtensions.js";
 import { ShaderData } from "../../utils/ShaderData.js";
 import { BaseEventMap } from "../BaseEventMap.js";
 import { Connectable } from "../Connectable.js";
@@ -64,14 +62,6 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 	private _gBufferSchema: GBufferSchema | null;
 
 	/**
-	 * Required input textures.
-	 *
-	 * {@link GBuffer.COLOR} is included by default.
-	 */
-
-	readonly requiredTextures: Set<string> & SetExtensions<string>;
-
-	/**
 	 * Input textures.
 	 */
 
@@ -94,13 +84,6 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 		this.propagateChangeEvent = () => this.dispatchEvent({ type: "change" });
 		this._gBufferSchema = null;
 
-		const requiredTextures = new ObservableSet<string>();
-		requiredTextures.addEventListener("change", () => {
-
-			this.dispatchEvent({ type: "change" });
-
-		});
-
 		const textures = new ObservableMap<string, TextureResource>();
 		textures.addEventListener("change", () => {
 
@@ -117,7 +100,6 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 
 		});
 
-		this.requiredTextures = requiredTextures;
 		this.textures = textures;
 		this.shaderData = shaderData;
 
@@ -236,40 +218,6 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 	}
 
 	/**
-	 * Sets the required textures.
-	 *
-	 * @internal
-	 * @param values - The textures to use.
-	 */
-
-	setRequiredTextures(values: Set<string>): void {
-
-		const current = this.requiredTextures;
-
-		if(current.size === values.size && Array.from(current).every(x => values.has(x))) {
-
-			return;
-
-		}
-
-		current.clear();
-		current.addAll(...values);
-
-	}
-
-	/**
-	 * Connects {@link requiredTextures | required textures}.
-	 *
-	 * @param textures - A list of available textures.
-	 */
-
-	connectRequiredTextures(textures: Iterable<[string, TextureResource]>): void {
-
-		this.textures.setAll(...Array.from(textures).filter(x => this.requiredTextures.has(x[0])));
-
-	}
-
-	/**
 	 * Connects the given resources to this input.
 	 *
 	 * This method uses {@link connectRequiredTextures} internally to connect required textures.
@@ -279,7 +227,15 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 
 	connect(other: Output): void {
 
-		this.connectRequiredTextures(other.textures());
+		const defaultBuffer = other.defaultBuffer?.texture;
+
+		if(defaultBuffer !== undefined) {
+
+			this.defaultBuffer = defaultBuffer;
+
+		}
+
+		this.textures.setAll(...other.textures());
 		this.shaderData.connect(other.shaderData);
 
 	}

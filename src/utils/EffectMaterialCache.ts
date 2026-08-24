@@ -1,8 +1,8 @@
 import { SRGBColorSpace } from "three";
-import { Input } from "../core/io/Input.js";
 import { Effect } from "../effects/Effect.js";
 import { EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
 import { EffectMaterial } from "../materials/EffectMaterial.js";
+import { EffectPassContext } from "./EffectPassContext.js";
 import { EffectShaderData } from "./EffectShaderData.js";
 import { GBufferSchema } from "./gbuffer/GBufferSchema.js";
 
@@ -30,10 +30,10 @@ export class EffectMaterialCache {
 	private static readonly DEFAULT_MATERIAL_ID = "default";
 
 	/**
-	 * Input resources.
+	 * The associated effect pass context.
 	 */
 
-	private readonly input: Input;
+	private readonly context: EffectPassContext;
 
 	/**
 	 * A default effect material.
@@ -74,12 +74,12 @@ export class EffectMaterialCache {
 	/**
 	 * Constructs a new effect material cache.
 	 *
-	 * @param input - Input resources.
+	 * @param context - An `EffectPass` context.
 	 */
 
-	constructor(input: Input) {
+	constructor(context: EffectPassContext) {
 
-		this.input = input;
+		this.context = context;
 		this.defaultMaterial = new EffectMaterial();
 		this.materialCache = new Map<string, EffectMaterial>();
 		this.effectShaderDataCache = new Map<Effect, EffectShaderData>();
@@ -183,7 +183,7 @@ export class EffectMaterialCache {
 		return [
 			"struct GBuffer {",
 			...Array.from(schema.gBufferStructDeclaration)
-				.filter(x => this.input.requiredTextures.has(x[0]))
+				.filter(x => this.context.requiredTextures.includes(x[0]))
 				.map(x => `\t${x[1]}`),
 			"};\n"
 		].join("\n");
@@ -203,7 +203,7 @@ export class EffectMaterialCache {
 		const id = EffectMaterialCache.getMaterialId(effects);
 		const result = (id === EffectMaterialCache.DEFAULT_MATERIAL_ID) ? this.defaultMaterial : new EffectMaterial();
 		const data = this.getEffectShaderData(effects);
-		const schema = this.input.gBufferSchema;
+		const schema = this.context.input.gBufferSchema;
 
 		if(schema !== null) {
 
@@ -241,13 +241,13 @@ export class EffectMaterialCache {
 		data.shaderParts.forEach((v, k, map) => map.set(k, v.trim().replace(/^#/, "\n#")));
 
 		// Add input defines and uniforms.
-		for(const entry of this.input.shaderData.defines) {
+		for(const entry of this.context.input.shaderData.defines) {
 
 			data.defines.set(entry[0], entry[1]);
 
 		}
 
-		for(const entry of this.input.shaderData.uniforms) {
+		for(const entry of this.context.input.shaderData.uniforms) {
 
 			data.uniforms.set(entry[0], entry[1]);
 
@@ -386,7 +386,7 @@ export class EffectMaterialCache {
 
 	getMaterial(effects: readonly Effect[]): EffectMaterial {
 
-		if(this.input.gBufferSchema === null) {
+		if(this.context.input.gBufferSchema === null) {
 
 			// Effects don't need to be processed if there is no G-Buffer configuration.
 			return this.defaultMaterial;

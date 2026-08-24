@@ -119,7 +119,7 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 		this.weightsPass.input.defaultBuffer = this.edgesTexture;
 		this.bufferWeights = this.weightsPass.output.defaultBuffer!;
 
-		this.input.requiredTextures.add(GBuffer.DEPTH);
+		this.requireTextures(GBuffer.DEPTH);
 		this.input.uniforms.set("weightMap", new Uniform(null));
 		this.weightsTexture.bindUniform(this.input.uniforms.get("weightMap")!);
 

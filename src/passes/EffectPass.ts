@@ -46,7 +46,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		this.createDefaultBuffer();
 		this.effectListener = (e: Event) => this.handleEffectEvent(e as Event<string, Effect>);
-		this.effectMaterialCache = new EffectMaterialCache(this.input);
+		this.effectMaterialCache = new EffectMaterialCache(this);
 		this.fullscreenMaterial = this.effectMaterialCache.getMaterial([]);
 		this.effects = effects;
 		this.timeScale = 1.0;
@@ -137,7 +137,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		for(const effect of this.effects) {
 
-			for(const texture of effect.input.requiredTextures) {
+			for(const texture of effect.requiredTextures) {
 
 				requiredTextures.add(texture);
 
@@ -161,7 +161,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		}
 
-		this.input.setRequiredTextures(requiredTextures);
+		this.requireTextures(...requiredTextures);
 
 	}
 
@@ -212,7 +212,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		}
 
-		for(const texture of input.requiredTextures) {
+		for(const texture of this.requiredTextures) {
 
 			// The color texture contains the original output of the initial geometry pass.
 			// The default buffer can be a different texture with modified data.

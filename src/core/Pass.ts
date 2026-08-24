@@ -17,6 +17,8 @@ import {
 import { FullscreenMaterial } from "../materials/FullscreenMaterial.js";
 import { GBufferSchema } from "../utils/gbuffer/GBufferSchema.js";
 import { IdManager } from "../utils/IdManager.js";
+import { fullscreenCamera } from "../utils/objects/fullscreenCamera.js";
+import { fullscreenGeometry } from "../utils/objects/fullscreenGeometry.js";
 import { ObservableSet } from "../utils/ObservableSet.js";
 import { ReadonlyTimer } from "../utils/ReadonlyTimer.js";
 import { Resolution } from "../utils/Resolution.js";
@@ -24,14 +26,12 @@ import { SceneEvent, SceneEventTarget } from "../utils/SceneEventTarget.js";
 import { Scissor } from "../utils/Scissor.js";
 import { ShaderDataTracker } from "../utils/ShaderDataTracker.js";
 import { Viewport } from "../utils/Viewport.js";
-import { fullscreenCamera } from "../utils/objects/fullscreenCamera.js";
-import { fullscreenGeometry } from "../utils/objects/fullscreenGeometry.js";
 import { Disposable } from "./Disposable.js";
-import { RenderTask, RenderTaskEventMap } from "./RenderTask.js";
 import { Input } from "./io/Input.js";
 import { Output } from "./io/Output.js";
 import { RenderTargetResource } from "./io/RenderTargetResource.js";
 import { RenderOperation } from "./RenderOperation.js";
+import { RenderTask, RenderTaskEventMap } from "./RenderTask.js";
 
 const v = /* @__PURE__ */ new Vector2();
 
@@ -125,6 +125,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 */
 
 	private _subtasks: Pass<Material | null>[];
+
+	/**
+	 * @see {@link requiredTextures}
+	 */
+
+	private _requiredTextures: readonly string[];
 
 	// #endregion
 
@@ -225,6 +231,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this._scene = null;
 		this._camera = null;
 		this._subtasks = [];
+		this._requiredTextures = [];
 
 		this.input = new Input();
 		this.output = new Output();
@@ -498,7 +505,31 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	}
 
+	/**
+	 * Required input textures.
+	 */
+
+	get requiredTextures(): readonly string[] {
+
+		return this._requiredTextures;
+
+	}
+
 	// #endregion
+
+	/**
+	 * Defines required input textures.
+	 *
+	 * @remarks This method __replaces__ the current list of required textures.
+	 * @param textures - A list of required texture names.
+	 */
+
+	protected requireTextures(...textures: string[]): void {
+
+		this._requiredTextures = Object.freeze(textures);
+		this.setChanged();
+
+	}
 
 	// #region Lifecycle Hooks
 
@@ -618,7 +649,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		for(const pass of this.subpasses) {
 
 			pass.input.textures.clear();
-			pass.input.connectRequiredTextures(this.input.textures);
+			pass.input.textures.setAll(...this.input.textures);
 			pass.input.shaderData.connect(this.input.shaderData);
 
 		}
@@ -863,6 +894,8 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	}
 
+	// #region Output
+
 	/**
 	 * Creates a new default output buffer.
 	 *
@@ -939,6 +972,8 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this.output.clearBuffers();
 
 	}
+
+	// #endregion
 
 	/**
 	 * Applies the viewport of this pass to the given render target.

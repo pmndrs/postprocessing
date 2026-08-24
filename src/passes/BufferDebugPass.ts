@@ -82,7 +82,7 @@ export class BufferDebugPass extends Pass<BufferDebugMaterial> {
 
 		if(gBufferComponents !== undefined) {
 
-			this.input.requiredTextures.addAll(...gBufferComponents);
+			this.requireTextures(...gBufferComponents);
 
 		}
 
