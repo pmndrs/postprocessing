@@ -2,6 +2,7 @@ export * from "./io/index.js";
 
 export * from "./BaseEventMap.js";
 export * from "./Connectable.js";
+export * from "./Compilable.js";
 export * from "./Disposable.js";
 export * from "./FrameGraph.js";
 export * from "./Identifiable.js";

@@ -1,10 +1,11 @@
-import { BaseEvent, Camera, EventDispatcher, Scene, WebGLRenderer } from "three";
+import { BaseEvent, Camera, EventDispatcher, Scene } from "three";
 import { GBufferSchema } from "../utils/gbuffer/GBufferSchema.js";
 import { ReadonlyTimer } from "../utils/ReadonlyTimer.js";
 import { Resolution } from "../utils/Resolution.js";
 import { Scissor } from "../utils/Scissor.js";
 import { Viewport } from "../utils/Viewport.js";
 import { BaseEventMap } from "./BaseEventMap.js";
+import { Compilable } from "./Compilable.js";
 import { Disposable } from "./Disposable.js";
 import { Identifiable } from "./Identifiable.js";
 import { Input } from "./io/Input.js";
@@ -36,7 +37,8 @@ export interface RenderTaskEventMap extends BaseEventMap {
  * @category Core
  */
 
-export interface RenderTask extends EventDispatcher<RenderTaskEventMap>, Disposable, Identifiable, Renderable, Task {
+export interface RenderTask extends EventDispatcher<RenderTaskEventMap>,
+	Compilable, Disposable, Identifiable, Renderable, Task {
 
 	/**
 	 * The input resources of this task.
@@ -135,13 +137,5 @@ export interface RenderTask extends EventDispatcher<RenderTaskEventMap>, Disposa
 	readonly subtasks: readonly RenderTask[];
 
 	// #endregion
-
-	/**
-	 * Compiles the resources used by this task.
-	 *
-	 * @return A promise that resolves when the compilation has finished.
-	 */
-
-	compile(): Promise<void>;
 
 }
