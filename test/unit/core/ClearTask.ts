@@ -1,18 +1,18 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { ClearPass } from "postprocessing";
+import { ClearTask } from "postprocessing";
 
-describe("ClearPass", () => {
+describe("ClearTask", () => {
 
 	it("can be instantiated", () => {
 
-		assert.doesNotThrow(() => new ClearPass());
+		assert.doesNotThrow(() => new ClearTask());
 
 	});
 
 	it("can be disposed", () => {
 
-		const object = new ClearPass();
+		const object = new ClearTask();
 		assert.doesNotThrow(() => object.dispose());
 
 	});

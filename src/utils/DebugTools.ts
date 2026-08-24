@@ -3,7 +3,6 @@ import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 import { TextureResource } from "../core/io/TextureResource.js";
 import { Pass } from "../core/Pass.js";
 import { FrameGraph } from "../core/FrameGraph.js";
-import { ClearPass } from "../passes/ClearPass.js";
 
 /**
  * Returns the texture IDs of the given buffer.
@@ -110,18 +109,6 @@ function analyzeDataFlow(passes: readonly Pass<Material | null>[], textureIds: M
 		if(!pass.enabled) {
 
 			console.debug("disabled");
-
-		} else if(pass instanceof ClearPass) {
-
-			if(output.defaultBuffer !== undefined) {
-
-				console.debug("clears", ...getTextureIds(textureIds, output.defaultBuffer));
-
-			} else {
-
-				console.debug("inactive (no target)");
-
-			}
 
 		} else {
 

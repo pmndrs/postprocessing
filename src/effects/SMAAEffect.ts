@@ -1,4 +1,5 @@
 import { Camera, Color, LinearFilter, LoadingManager, NearestFilter, Texture, Uniform } from "three";
+import { ClearTask } from "../core/ClearTask.js";
 import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 import { TextureResource } from "../core/io/TextureResource.js";
 import { GBuffer } from "../enums/GBuffer.js";
@@ -7,7 +8,6 @@ import { SMAAPredicationMode } from "../enums/SMAAPredicationMode.js";
 import { SMAAPreset } from "../enums/SMAAPreset.js";
 import { SMAAEdgeDetectionMaterial } from "../materials/SMAAEdgeDetectionMaterial.js";
 import { SMAAWeightsMaterial } from "../materials/SMAAWeightsMaterial.js";
-import { ClearPass } from "../passes/ClearPass.js";
 import { ShaderPass } from "../passes/ShaderPass.js";
 import { Effect } from "./Effect.js";
 
@@ -75,7 +75,7 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 	* A clear pass for the edges buffer.
 	*/
 
-	private clearPass: ClearPass;
+	private clear: ClearTask;
 
 	/**
 	* An edge detection pass.
@@ -105,10 +105,10 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 
 		this.fragmentShader = fragmentShader;
 
-		this.clearPass = new ClearPass(true, false, false);
-		this.clearPass.output.defaultBuffer = this.bufferEdges;
-		this.clearPass.clearValues.color = new Color(0x000000);
-		this.clearPass.clearValues.alpha = 1;
+		this.clear = new ClearTask(true, false, false);
+		this.clear.clearValues.color = new Color(0x000000);
+		this.clear.clearValues.alpha = 1;
+		this.disposables.add(this.clear);
 
 		this.edgeDetectionPass = new ShaderPass(new SMAAEdgeDetectionMaterial());
 		this.bufferEdges = this.edgeDetectionPass.output.defaultBuffer!;
@@ -123,7 +123,7 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 		this.input.uniforms.set("weightMap", new Uniform(null));
 		this.weightsTexture.bindUniform(this.input.uniforms.get("weightMap")!);
 
-		this.subpasses = [this.clearPass, this.edgeDetectionPass, this.weightsPass];
+		this.subpasses = [this.edgeDetectionPass, this.weightsPass];
 
 		this.loadTextures();
 		this.applyPreset(preset);
@@ -328,8 +328,31 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 
 	}
 
+	override async compile(): Promise<void> {
+
+		if(this.renderer === null || this.scene === null || this.camera === null) {
+
+			return;
+
+		}
+
+		const promises: Promise<void>[] = [];
+		promises.push(super.compile());
+		promises.push(this.clear.compile(this));
+		await Promise.all(promises);
+
+	}
+
 	override render(): void {
 
+		if(this.renderer === null) {
+
+			return;
+
+		}
+
+		this.setRenderTarget(this.bufferEdges.value);
+		this.clear.execute(this);
 		this.renderSubpasses();
 
 	}

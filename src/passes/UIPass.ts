@@ -28,6 +28,7 @@ export class UIPass extends GeometryPass {
 
 		super(options);
 
+		this.clear.enabled = false;
 		this.copyPass = new CopyPass();
 		this.copyPass.enabled = false;
 		this.subpasses = [this.copyPass];
