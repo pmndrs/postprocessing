@@ -14,7 +14,6 @@ import {
 } from "three";
 
 import {
-	ClearPass,
 	EffectPass,
 	FrameGraph,
 	GeometryPass,
@@ -186,15 +185,13 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const effect = new LUT3DEffect({ lut });
 	effect.blendMode.blendFunction = new MixBlendFunction();
 
-	const clearPass = new ClearPass();
 	const geoPass = new GeometryPass({ alpha: true });
 	const effectPass = new EffectPass(effect);
 
-	clearPass.output.defaultBuffer = geoPass.output.defaultBuffer;
 	effectPass.input.connect(geoPass.output);
 
 	const frameGraph = new FrameGraph({ renderer, scene, camera });
-	frameGraph.add(clearPass, geoPass, effectPass);
+	frameGraph.add(geoPass, effectPass);
 
 	// Settings
 

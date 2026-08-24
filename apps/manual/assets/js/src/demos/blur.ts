@@ -9,7 +9,6 @@ import {
 } from "three";
 
 import {
-	ClearPass,
 	CopyPass,
 	FrameGraph,
 	GaussianBlurPass,
@@ -100,17 +99,15 @@ window.addEventListener("load", () => void load().then((assets) => {
 	gaussianBlurPass.enabled = false;
 	gaussianBlurPass.resolution.scale = 0.5;
 
-	const clearPass = new ClearPass();
 	const geoPass = new GeometryPass({ samples: 4 });
 	const outputPass = new CopyPass();
 
-	clearPass.output.defaultBuffer = geoPass.output.defaultBuffer;
 	mipmapBlurPass.input.connect(geoPass.output);
 	gaussianBlurPass.input.connect(geoPass.output);
 	outputPass.input.defaultBuffer = mipmapBlurPass.texture;
 
 	const frameGraph = new FrameGraph({ renderer, scene, camera });
-	frameGraph.add(clearPass, geoPass, mipmapBlurPass, gaussianBlurPass, outputPass);
+	frameGraph.add(geoPass, mipmapBlurPass, gaussianBlurPass, outputPass);
 
 	// Settings
 

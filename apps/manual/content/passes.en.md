@@ -11,7 +11,7 @@ weight: 40
 
 ## Introduction
 
-Passes are concrete [RenderTasks](../docs/interfaces/RenderTask.html) that participate in a frame graph. A pass may render a 3D scene, perform supporting operations, produce intermediate textures, or render a fullscreen result. For example, the `GeometryPass` renders a scene, the `ClearPass` clears an output that is often shared with another pass, and the `LuminancePass` produces a texture for later use. Fullscreen effects are typically combined and rendered by the `EffectPass`. If you want to create a fullscreen effect, you should consider [creating an Effect]({{< relref "effects" >}}) instead.
+Passes are concrete [RenderTasks](../docs/interfaces/RenderTask.html) that participate in a frame graph. A pass may render a 3D scene, perform supporting operations, produce intermediate textures, or render a fullscreen result. For example, the `GeometryPass` clears and renders a scene, and the `LuminancePass` produces a texture for later use. Fullscreen effects are typically combined and rendered by the `EffectPass`. If you want to create a fullscreen effect, you should consider [creating an Effect]({{< relref "effects" >}}) instead.
 
 There are two options for creating custom passes. You can either rely on the general-purpose `ShaderPass` or extend `Pass`.
 

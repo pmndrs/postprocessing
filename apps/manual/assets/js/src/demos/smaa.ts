@@ -9,7 +9,6 @@ import {
 } from "three";
 
 import {
-	ClearPass,
 	EffectPass,
 	FrameGraph,
 	GeometryPass,
@@ -91,7 +90,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post-Processing
 
-	const clearPass = new ClearPass();
 	const geoPass = new GeometryPass();
 
 	const effect = new SMAAEffect({
@@ -103,7 +101,6 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const effectPass = new EffectPass(effect, new ToneMappingEffect());
 	effect.blendMode.blendFunction = new MixBlendFunction();
 
-	clearPass.output.defaultBuffer = geoPass.output.defaultBuffer;
 	effectPass.input.connect(geoPass.output);
 
 	// #region DEBUG
@@ -116,7 +113,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	// #endregion DEBUG
 
 	const frameGraph = new FrameGraph({ renderer, scene, camera });
-	frameGraph.add(clearPass, geoPass, effectPass, smaaEdgesDebugPass, smaaWeightsDebugPass);
+	frameGraph.add(geoPass, effectPass, smaaEdgesDebugPass, smaaWeightsDebugPass);
 
 	// Settings
 

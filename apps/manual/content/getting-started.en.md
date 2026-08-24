@@ -38,29 +38,26 @@ const scene = new Scene();
 const camera = new PerspectiveCamera();
 ```
 
-Postprocessing uses the concept of a [FrameGraph](../docs/classes/FrameGraph.html) to render [Passes](../docs/classes/Pass.html). Common setups will only require one frame graph that contains a [ClearPass](../docs/classes/ClearPass.html), a [GeometryPass](../docs/classes/GeometryPass.html) and one or more [EffectPass](../docs/classes/EffectPass.html) instances. The latter is used to render fullscreen [Effects](../docs/classes/Effect.html). 
+Postprocessing uses the concept of a [FrameGraph](../docs/classes/FrameGraph.html) to render [Passes](../docs/classes/Pass.html). Common setups will only require one frame graph that contains a [GeometryPass](../docs/classes/GeometryPass.html) and one or more [EffectPass](../docs/classes/EffectPass.html) instances. Geometry clears its G-buffer before rendering, and the latter is used to render fullscreen [Effects](../docs/classes/Effect.html).
 
 ```ts
 import {
-	ClearPass,
 	EffectPass,
 	FrameGraph,
 	GeometryPass,
 	ToneMappingEffect
 } from "postprocessing";
 
-const clearPass = new ClearPass();
 const geoPass = new GeometryPass();
 const effectPass = new EffectPass(new ToneMappingEffect());
 const aaPass = new EffectPass(new SMAAEffect());
 
-clearPass.output.defaultBuffer = geoPass.output.defaultBuffer;
 effectPass.input.connect(geoPass.output);
 aaPass.input.connect(geoPass.output);
 aaPass.input.defaultBuffer = effectPass.output.defaultBuffer?.texture;
 
 const frameGraph = new FrameGraph({ renderer, scene, camera });
-frameGraph.add(clearPass, geoPass, effectPass, aaPass);
+frameGraph.add(geoPass, effectPass, aaPass);
 
 renderer.setAnimationLoop(timestamp => frameGraph.render(timestamp));
 ```

@@ -9,7 +9,6 @@ import {
 } from "three";
 
 import {
-	ClearPass,
 	EffectPass,
 	FrameGraph,
 	FXAAEffect,
@@ -89,15 +88,13 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const effect = new FXAAEffect();
 	effect.blendMode.blendFunction = new MixBlendFunction();
 
-	const clearPass = new ClearPass();
 	const geoPass = new GeometryPass();
 	const effectPass = new EffectPass(effect, new ToneMappingEffect());
 
-	clearPass.output.defaultBuffer = geoPass.output.defaultBuffer;
 	effectPass.input.connect(geoPass.output);
 
 	const frameGraph = new FrameGraph({ renderer, scene, camera });
-	frameGraph.add(clearPass, geoPass, effectPass);
+	frameGraph.add(geoPass, effectPass);
 
 	// Settings
 

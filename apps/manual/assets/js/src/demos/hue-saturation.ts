@@ -12,7 +12,6 @@ import {
 } from "three";
 
 import {
-	ClearPass,
 	FrameGraph,
 	GeometryPass
 } from "postprocessing";
@@ -85,13 +84,10 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post-Processing
 
-	const clearPass = new ClearPass();
 	const geoPass = new GeometryPass();
 
-	clearPass.output.defaultBuffer = geoPass.output.defaultBuffer;
-
 	const frameGraph = new FrameGraph({ renderer, scene, camera });
-	frameGraph.add(clearPass, geoPass);
+	frameGraph.add(geoPass);
 
 	/*
 	const effect = new HueSaturationEffect();

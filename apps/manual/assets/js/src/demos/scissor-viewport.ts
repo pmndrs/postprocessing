@@ -9,7 +9,6 @@ import {
 } from "three";
 
 import {
-	ClearPass,
 	EffectPass,
 	FrameGraph,
 	GeometryPass,
@@ -112,12 +111,10 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	// Post-Processing
 
-	const clearPass = new ClearPass();
 	const geoPassA = new GeometryPass({ scene: sceneA, samples: 4 });
 	const geoPassB = new GeometryPass({ scene: sceneB });
 	const effectPass = new EffectPass(new ToneMappingEffect());
 
-	clearPass.output.defaultBuffer = geoPassA.output.defaultBuffer;
 	geoPassB.output.defaultBuffer = geoPassA.output.defaultBuffer;
 	effectPass.input.defaultBuffer = geoPassA.output.defaultBuffer?.texture;
 
@@ -127,7 +124,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	geoPassB.viewport.enabled = true;
 
 	const frameGraph = new FrameGraph({ renderer, camera });
-	frameGraph.add(clearPass, geoPassA, geoPassB, effectPass);
+	frameGraph.add(geoPassA, geoPassB, effectPass);
 
 	// Settings
 

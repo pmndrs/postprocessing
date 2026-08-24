@@ -10,7 +10,6 @@ import {
 } from "three";
 
 import {
-	ClearPass,
 	ColorDepthEffect,
 	EffectPass,
 	FrameGraph,
@@ -101,15 +100,13 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const effect = new ColorDepthEffect({ r: 4, g: 4, b: 4 });
 	effect.blendMode.blendFunction = new MixBlendFunction();
 
-	const clearPass = new ClearPass();
 	const geoPass = new GeometryPass({ samples: 4 });
 	const effectPass = new EffectPass(new ToneMappingEffect(), effect);
 
-	clearPass.output.defaultBuffer = geoPass.output.defaultBuffer;
 	effectPass.input.connect(geoPass.output);
 
 	const frameGraph = new FrameGraph({ renderer, scene, camera });
-	frameGraph.add(clearPass, geoPass, effectPass);
+	frameGraph.add(geoPass, effectPass);
 
 	// Settings
 

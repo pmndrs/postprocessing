@@ -10,7 +10,6 @@ import {
 
 import {
 	BloomEffect,
-	ClearPass,
 	EffectPass,
 	FrameGraph,
 	GeometryPass,
@@ -99,14 +98,12 @@ window.addEventListener("load", () => void load().then((assets) => {
 		levels: 8
 	});
 
-	const clearPass = new ClearPass();
 	const geoPass = new GeometryPass({ samples: 4 });
 	const effectPass = new EffectPass(effect, new ToneMappingEffect());
-	clearPass.output.defaultBuffer = geoPass.output.defaultBuffer;
 	effectPass.input.connect(geoPass.output);
 
 	const frameGraph = new FrameGraph({ renderer, scene, camera });
-	frameGraph.add(clearPass, geoPass, effectPass);
+	frameGraph.add(geoPass, effectPass);
 
 	// Settings
 

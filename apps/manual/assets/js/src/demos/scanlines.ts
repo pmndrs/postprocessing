@@ -10,7 +10,6 @@ import {
 } from "three";
 
 import {
-	ClearPass,
 	EffectPass,
 	FrameGraph,
 	GeometryPass,
@@ -96,15 +95,13 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const effect = new ScanlineEffect({ density: 1.25, scrollSpeed: 0.01 });
 	effect.blendMode.opacity = 0.1;
 
-	const clearPass = new ClearPass();
 	const geoPass = new GeometryPass({ samples: 4 });
 	const effectPass = new EffectPass(effect, new ToneMappingEffect());
 
-	clearPass.output.defaultBuffer = geoPass.output.defaultBuffer;
 	effectPass.input.connect(geoPass.output);
 
 	const frameGraph = new FrameGraph({ renderer, scene, camera });
-	frameGraph.add(clearPass, geoPass, effectPass);
+	frameGraph.add(geoPass, effectPass);
 
 	// Settings
 
