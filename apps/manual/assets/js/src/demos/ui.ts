@@ -170,6 +170,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const aaPass = new EffectPass(new FXAAEffect());
 
 	effectPass.input.connect(geoPass.output);
+	uiPass.input.connect(geoPass.output);
 	uiPass.input.connect(effectPass.output);
 	aaPass.input.connect(uiPass.output);
 
