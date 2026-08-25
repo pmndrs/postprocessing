@@ -99,7 +99,6 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 		});
 
 		this.gBufferShaderPlugin = new GBufferShaderPlugin();
-		this.gBufferShaderPlugin.gBuffer = this.gBuffer.value;
 		this.gBuffer.addEventListener("change", () => {
 
 			this.gBufferShaderPlugin.gBuffer = this.gBuffer.value;
@@ -221,7 +220,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 	private configureDepthTexture(): void {
 
-		if(this.gBuffer === null || !this.gBuffer.components.has(GBuffer.DEPTH)) {
+		if(this.gBuffer === null || !this.gBuffer.activeTextures.has(GBuffer.DEPTH)) {
 
 			return;
 

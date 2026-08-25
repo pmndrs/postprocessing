@@ -1,7 +1,6 @@
 import {
 	DepthFormat,
 	DepthStencilFormat,
-	DepthTexture,
 	FloatType,
 	HalfFloatType,
 	LinearFilter,
@@ -10,7 +9,6 @@ import {
 	RGBFormat,
 	RGFormat,
 	TextureDataType,
-	TextureParameters,
 	UnsignedByteType,
 	UnsignedInt101111Type,
 	UnsignedInt248Type
@@ -18,11 +16,7 @@ import {
 
 import { GBuffer } from "../../enums/GBuffer.js";
 import { MSAASamples } from "../../enums/MSAASamples.js";
-import { ObservableSet } from "../../utils/ObservableSet.js";
-import { SetExtensions } from "../../utils/SetExtensions.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
-import { ObservableMap } from "../../utils/ObservableMap.js";
-import { MapExtensions } from "../../utils/MapExtensions.js";
 
 /**
  * GBufferResource constructor options.
@@ -63,8 +57,8 @@ export interface GBufferResourceOptions {
 	 * The texture data type used for color buffers.
 	 *
 	 * Disabling {@link alpha} enables small internal float formats for reduced memory consumption.
-	 * Changes to the type after the resource has been created will have no effect.
 	 *
+	 * @remarks Changes to the type after the resource has been created will have no effect.
 	 * @see https://www.khronos.org/opengl/wiki/Small_Float_Formats
 	 * @defaultValue HalfFloatType
 	 */
@@ -89,26 +83,7 @@ export interface GBufferResourceOptions {
 
 export class GBufferResource extends RenderTargetResource implements GBufferResourceOptions {
 
-	// #region Settings
-
 	readonly alpha: boolean;
-
-	// #endregion
-
-	/**
-	 * A collection of G-Buffer components that are required for rendering.
-	 *
-	 * @see {@link GBuffer} for built-in components.
-	 * @internal
-	 */
-
-	readonly components: Set<string> & SetExtensions<string>;
-
-	/**
-	 * A collection that maps G-Buffer components to G-Buffer texture configurations.
-	 */
-
-	readonly textureTemplates: Map<string, TextureParameters> & MapExtensions<string, TextureParameters>;
 
 	/**
 	 * Constructs a new G-Buffer resource.
@@ -134,23 +109,11 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 		});
 
 		this.alpha = alpha;
-
-		const gBufferComponents = new ObservableSet<string>();
-		gBufferComponents.addEventListener("change", () => this.updateDescriptor());
-		this.components = gBufferComponents;
-
-		const textureTemplates = new ObservableMap<GBuffer | string, TextureParameters>();
-		textureTemplates.addEventListener("change", () => {
-
-			this.setTextures(this.textureTemplates.keys());
-			this.updateDescriptor();
-
-		});
-
-		this.textureTemplates = textureTemplates;
 		this.defineTextureTemplates();
 
 	}
+
+	// #region Settings
 
 	get stencilBuffer(): boolean {
 
@@ -182,15 +145,7 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 
 	}
 
-	/**
-	 * Indicates whether the primary frame buffer is capable of storing HDR values.
-	 */
-
-	private get frameBufferPrecisionHigh(): boolean {
-
-		return this.type === HalfFloatType || this.type === FloatType;
-
-	}
+	// #endregion
 
 	/**
 	 * Defines all built-in G-Buffer texture templates.
@@ -236,48 +191,6 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 				// internalFormat: "R11F_G11F_B10F"
 			}]
 		);
-
-	}
-
-	/**
-	 * Updates the depth texture based on the current requirements.
-	 */
-
-	private configureDepthTexture(): void {
-
-		const descriptor = this.descriptor;
-		const textureTemplate = this.textureTemplates.get(GBuffer.DEPTH);
-
-		if(textureTemplate === undefined || !this.components.has(GBuffer.DEPTH)) {
-
-			descriptor.depthTexture = null;
-			return;
-
-		}
-
-		const texture = new DepthTexture();
-		texture.name = GBuffer.DEPTH;
-		texture.setValues(textureTemplate);
-		descriptor.depthTexture = texture;
-
-	}
-
-	/**
-	 * Updates the G-Buffer descriptor based on the required {@link components}.
-	 */
-
-	private updateDescriptor(): void {
-
-		// Get the templates for the required G-Buffer components (depth is handled separately).
-		const textureTemplates = Array.from(this.textureTemplates)
-			.filter(x => this.components.has(x[0]) && x[0] !== GBuffer.DEPTH as string);
-
-		const descriptor = this.descriptor;
-		descriptor.count = textureTemplates.length;
-		descriptor.textures.clear();
-		descriptor.textures.setAll(...textureTemplates);
-
-		this.configureDepthTexture();
 
 	}
 
