@@ -1,4 +1,5 @@
 import { Input, Pass, RenderTargetResource } from "postprocessing";
+import { Texture } from "three";
 
 /**
  * Options for a task used by the frame-graph tests.
@@ -128,7 +129,7 @@ export class TestPass extends Pass {
 	 * Declare it in {@link TestPassOptions.requiredTextures} if the test requires it to be validated.
 	 */
 
-	readImported(key: string, texture: import("three").Texture): void {
+	readImported(key: string, texture: Texture): void {
 
 		this.input.setBuffer(key, texture);
 
