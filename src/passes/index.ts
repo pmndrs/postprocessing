@@ -8,6 +8,5 @@ export * from "./GaussianBlurPass.js";
 export * from "./GeometryPass.js";
 export * from "./LuminancePass.js";
 export * from "./MipmapBlurPass.js";
-export * from "./OutputPass.js";
 export * from "./ShaderPass.js";
 export * from "./UIPass.js";
