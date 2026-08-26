@@ -1,6 +1,5 @@
 export * from "./DisposableResource.js";
 export * from "./GBufferResource.js";
-export * from "./HistoryResource.js";
 export * from "./Input.js";
 export * from "./Output.js";
 export * from "./RenderTargetResource.js";
