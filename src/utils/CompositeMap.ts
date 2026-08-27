@@ -1,4 +1,3 @@
-import { Connectable } from "../core/Connectable.js";
 import { ObservableMap } from "./ObservableMap.js";
 import { ObservableReadonlyMap } from "./ObservableReadonlyMap.js";
 
@@ -10,7 +9,7 @@ import { ObservableReadonlyMap } from "./ObservableReadonlyMap.js";
  * @category Utils
  */
 
-export class CompositeMap<K, V> extends ObservableMap<K, V> implements Connectable {
+export class CompositeMap<K, V> extends ObservableMap<K, V> {
 
 	/**
 	 * A list of connected maps.

@@ -1,7 +1,6 @@
 import { IUniform } from "three";
 import { CompositeMap } from "../../utils/CompositeMap.js";
 import { ShaderData } from "../../utils/ShaderData.js";
-import { Connectable } from "../Connectable.js";
 import { Resource } from "./Resource.js";
 
 /**
@@ -10,7 +9,7 @@ import { Resource } from "./Resource.js";
  * @category IO
  */
 
-export class ShaderDataResource extends Resource<ShaderData> implements Connectable, ShaderData {
+export class ShaderDataResource extends Resource<ShaderData> implements ShaderData {
 
 	/**
 	 * Constructs a new shader data resource.
@@ -48,22 +47,28 @@ export class ShaderDataResource extends Resource<ShaderData> implements Connecta
 	}
 
 	/**
-	 * Connects another shader data resource to this data.
+	 * Adds another shader data resource to this data.
 	 *
 	 * Defines and uniforms from the connected resource become visible through this resource.
 	 * Local defines and uniforms are overridden by connected ones with the same key.
 	 *
-	 * @param other - The shader data to connect.
+	 * @param other - The shader data to add.
 	 */
 
-	connect(other: ShaderDataResource): void {
+	add(other: ShaderDataResource): void {
 
 		this.defines.connect(other.defines);
 		this.uniforms.connect(other.uniforms);
 
 	}
 
-	disconnect(other: ShaderDataResource): void {
+	/**
+	 * Removes a shader data resource from this data.
+	 *
+	 * @param other - The shader data to remove.
+	 */
+
+	remove(other: ShaderDataResource): void {
 
 		this.defines.disconnect(other.defines);
 		this.uniforms.disconnect(other.uniforms);

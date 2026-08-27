@@ -650,7 +650,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 			pass.input.textures.clear();
 			pass.input.textures.setAll(...this.input.textures);
-			pass.input.shaderData.connect(this.input.shaderData);
+			pass.input.shaderData.add(this.input.shaderData);
 
 		}
 

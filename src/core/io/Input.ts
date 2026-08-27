@@ -4,7 +4,6 @@ import { MapExtensions } from "../../utils/MapExtensions.js";
 import { ObservableMap } from "../../utils/ObservableMap.js";
 import { ShaderData } from "../../utils/ShaderData.js";
 import { BaseEventMap } from "../BaseEventMap.js";
-import { Connectable } from "../Connectable.js";
 import type { Output } from "./Output.js";
 import { ShaderDataResource } from "./ShaderDataResource.js";
 import { TextureResource } from "./TextureResource.js";
@@ -41,7 +40,7 @@ export interface InputEventMap extends BaseEventMap {
  * @category IO
  */
 
-export class Input extends EventDispatcher<InputEventMap> implements Connectable, ShaderData {
+export class Input extends EventDispatcher<InputEventMap> implements ShaderData {
 
 	/**
 	 * Identifies the default input buffer in the {@link textures} collection.
@@ -218,16 +217,14 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 	}
 
 	/**
-	 * Connects the given resources to this input.
+	 * Adds the given resources to this input.
 	 *
-	 * This method uses {@link connectRequiredTextures} internally to connect required textures.
-	 *
-	 * @param other - The resources to connect.
+	 * @param output - The resources to add.
 	 */
 
-	connect(other: Output): void {
+	add(output: Output): void {
 
-		const defaultBuffer = other.defaultBuffer?.texture;
+		const defaultBuffer = output.defaultBuffer?.texture;
 
 		if(defaultBuffer !== undefined) {
 
@@ -235,14 +232,28 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 
 		}
 
-		this.textures.setAll(...other.textures());
-		this.shaderData.connect(other.shaderData);
+		this.textures.setAll(...output.textures());
+		this.shaderData.add(output.shaderData);
 
 	}
 
-	disconnect(other: Output): void {
+	/**
+	 * Removes the given resources from this input.
+	 *
+	 * @param output - The resources to remove.
+	 */
 
-		for(const [key, value] of other.textures()) {
+	remove(output: Output): void {
+
+		const defaultBuffer = output.defaultBuffer?.texture;
+
+		if(defaultBuffer !== undefined && this.defaultBuffer === defaultBuffer) {
+
+			this.deleteDefaultBuffer();
+
+		}
+
+		for(const [key, value] of output.textures()) {
 
 			if(this.textures.get(key) === value) {
 
@@ -252,7 +263,7 @@ export class Input extends EventDispatcher<InputEventMap> implements Connectable
 
 		}
 
-		this.shaderData.disconnect(other.shaderData);
+		this.shaderData.remove(output.shaderData);
 
 	}
 
