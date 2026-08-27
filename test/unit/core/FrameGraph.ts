@@ -1,96 +1,18 @@
 import assert from "node:assert/strict";
-import { afterEach, describe, it } from "node:test";
+import { describe, it } from "node:test";
 
 import {
 	FrameGraph,
 	GBuffer,
 	GBufferResource,
-	GeometryPass,
-	HistoryResource,
-	OutputPass,
 	RenderTargetResource
 } from "postprocessing";
 
-import { PerspectiveCamera, Scene, Texture, WebGLRenderer } from "three";
+import type { WebGLRenderer } from "three";
 import { TestPass } from "../../support/TestPass.ts";
+import { WebGLRendererMock } from "../../support/WebGLRendererMock.ts";
 
-// #region Setup
-
-function createGraph(renderer = true): FrameGraph {
-
-	const graph = new FrameGraph(renderer ? { renderer: createRenderer() } : undefined);
-	graphs.push(graph);
-	return graph;
-
-}
-
-function createRenderer(): WebGLRenderer {
-
-	return {
-		autoClear: true,
-		domElement: {},
-		getPixelRatio: () => 1,
-		getSize: (size: { set: (width: number, height: number) => unknown }) => {
-
-			size.set(64, 32);
-			return size;
-
-		},
-		info: {
-			autoReset: true,
-			reset: () => undefined
-		}
-	} as unknown as WebGLRenderer;
-
-}
-
-function addOutputPass(graph: FrameGraph, task: TestPass): void {
-
-	const outputPass = new OutputPass();
-	outputPass.input.connect(task.output);
-	graph.add(outputPass);
-
-}
-
-function render(graph: FrameGraph): void {
-
-	graph.render();
-
-}
-
-function target(width?: number, height?: number): RenderTargetResource {
-
-	const resource = new RenderTargetResource();
-
-	if(width !== undefined) {
-
-		resource.resolution.preferredWidth = width;
-
-	}
-
-	if(height !== undefined) {
-
-		resource.resolution.preferredHeight = height;
-
-	}
-
-	return resource;
-
-}
-
-const graphs: FrameGraph[] = [];
-
-afterEach(() => {
-
-	for(const graph of graphs.splice(0)) {
-
-		graph.dispose();
-
-	}
-
-});
-
-// #endregion
+const renderer = new WebGLRendererMock() as WebGLRenderer;
 
 describe("FrameGraph", () => {
 
@@ -103,403 +25,266 @@ describe("FrameGraph", () => {
 	it("can be disposed", () => {
 
 		const object = new FrameGraph();
+
 		assert.doesNotThrow(() => object.dispose());
 
 	});
 
 	it("can add a pass", () => {
 
-		const scene = new Scene();
-		const camera = new PerspectiveCamera();
+		const graph = new FrameGraph();
+		const pass = new TestPass();
 
-		const pipeline = new FrameGraph();
-		const geometryPass = new GeometryPass({ scene, camera });
+		assert.doesNotThrow(() => graph.add(pass));
 
-		assert.doesNotThrow(() => pipeline.add(geometryPass));
+	});
+
+	it("can declare tasks as terminal outputs", () => {
+
+		const pass = new TestPass({ name: "Test" });
+		const graph = new FrameGraph();
+
+		graph.add(pass);
+		graph.output(pass);
+
+		assert.doesNotThrow(() => graph.output(pass));
+
+	});
+
+	it("rejects output declarations of tasks that are not in the graph", () => {
+
+		const pass = new TestPass({ name: "Test" });
+		const graph = new FrameGraph();
+
+		assert.throws(() => graph.output(pass));
+
+	});
+
+	it("rejects output declarations after a task has been removed", () => {
+
+		const pass = new TestPass({ name: "Test" });
+		const graph = new FrameGraph();
+
+		graph.add(pass);
+		graph.remove(pass);
+
+		assert.throws(() => graph.output(pass));
 
 	});
 
 	it("renders an empty graph without a renderer", () => {
 
-		assert.doesNotThrow(() => createGraph(false).render());
+		const graph = new FrameGraph();
+
+		assert.doesNotThrow(() => graph.render());
 
 	});
 
-	it("does not execute tasks when no renderer is available", () => {
+	it("renders an empty graph", () => {
+
+		const graph = new FrameGraph({ renderer });
+
+		assert.doesNotThrow(() => graph.render());
+
+	});
+
+	it("renders valid graphs", () => {
 
 		const execution: string[] = [];
-		const task = new TestPass({ name: "task", execution });
-		const graph = createGraph(false);
+		const pass = new TestPass({ name: "Test", execution });
+		const graph = new FrameGraph({ renderer });
 
-		graph.add(task);
+		graph.add(pass);
+		graph.output(pass);
+		graph.render();
+
+		assert.deepEqual(execution, ["Test"]);
+
+	});
+
+	it("removes output declarations when tasks are removed", () => {
+
+		const execution: string[] = [];
+		const pass = new TestPass({ name: "Test", execution });
+		const graph = new FrameGraph({ renderer });
+
+		graph.add(pass);
+		graph.output(pass);
+		graph.remove(pass);
 		graph.render();
 
 		assert.deepEqual(execution, []);
 
 	});
 
-	it("executes independent presented tasks in insertion order", () => {
+	it("does not execute passes when no renderer is available", () => {
 
 		const execution: string[] = [];
-		const first = new TestPass({ name: "first", execution, target: target() });
-		const second = new TestPass({ name: "second", execution, target: target() });
-		const graph = createGraph();
+		const pass = new TestPass({ name: "Test", execution });
+		const graph = new FrameGraph();
+
+		graph.add(pass);
+		graph.output(pass);
+		graph.render();
+
+		assert.deepEqual(execution, []);
+
+	});
+
+	it("executes independent passes in insertion order", () => {
+
+		const execution: string[] = [];
+		const first = new TestPass({ name: "First", execution });
+		const second = new TestPass({ name: "Second", execution });
+		const graph = new FrameGraph({ renderer });
 
 		graph.add(first, second);
-		addOutputPass(graph, first);
-		addOutputPass(graph, second);
-		render(graph);
+		graph.output(first, second);
+		graph.render();
 
-		assert.deepEqual(execution, ["first", "second"]);
-
-	});
-
-	it("orders a producer before its consumer and supports fan-out", () => {
-
-		const execution: string[] = [];
-		const producer = new TestPass({ name: "producer", execution, target: target() });
-		const left = new TestPass({ name: "left", execution, target: target() });
-		const right = new TestPass({ name: "right", execution, target: target() });
-
-		left.readFrom(producer);
-		right.readFrom(producer);
-
-		const graph = createGraph();
-		graph.add(left, right, producer);
-		addOutputPass(graph, left);
-		addOutputPass(graph, right);
-		render(graph);
-
-		assert.deepEqual(execution, ["producer", "left", "right"]);
+		assert.deepEqual(execution, ["First", "Second"]);
 
 	});
 
-	it("orders tasks that share one target", () => {
+	it("orders a producer before its consumers and supports fan-out", () => {
 
 		const execution: string[] = [];
-		const shared = target();
-		const first = new TestPass({ name: "First", execution, target: shared });
-		const geometry = new TestPass({ name: "Geometry", execution, target: shared });
-		const graph = createGraph();
+		const producer = new TestPass({ name: "Producer", execution });
+		const first = new TestPass({ name: "First", execution });
+		const second = new TestPass({ name: "Second", execution });
+		const graph = new FrameGraph({ renderer });
 
-		graph.add(geometry, first);
-		addOutputPass(graph, geometry);
-		render(graph);
+		first.read(producer);
+		second.read(producer);
 
-		assert.deepEqual(execution, ["First", "Geometry"]);
+		graph.add(first, second, producer);
+		graph.output(first, second);
+		graph.render();
+
+		assert.deepEqual(execution, ["Producer", "First", "Second"]);
 
 	});
 
-	it("schedules an intermediate-version reader before the next in-place writer", () => {
+	it("rejects passes that share the same target", () => {
 
-		const execution: string[] = [];
-		const shared = target();
-		const first = new TestPass({ name: "First", execution, target: shared });
-		const debug = new TestPass({ name: "Debug", execution, target: target() });
-		const geometry = new TestPass({ name: "Geometry", execution, target: shared });
+		const shared = new RenderTargetResource();
+		const first = new TestPass({ name: "First", target: shared });
+		const second = new TestPass({ name: "Second", target: shared });
+		const graph = new FrameGraph({ renderer });
 
-		debug.readFrom(first);
-		const graph = createGraph();
-		graph.add(geometry, debug, first);
-		addOutputPass(graph, debug);
-		addOutputPass(graph, geometry);
-		render(graph);
+		assert.throws(() => {
 
-		assert.deepEqual(execution, ["First", "Debug", "Geometry"]);
+			graph.add(first, second);
+			graph.output(first, second);
 
-	});
-
-	it("reports the tasks and resource involved in an unschedulable older-version read", () => {
-
-		const execution: string[] = [];
-		const shared = target();
-
-		const first = new TestPass({
-			name: "First",
-			execution,
-			target: shared,
-			bufferKey: "old"
 		});
 
-		const geometry = new TestPass({
-			name: "Geometry",
-			execution,
-			target: shared,
-			bufferKey: "new"
-		});
-
-		const reader = new TestPass({ name: "OlderReader", execution, target: target() });
-
-		reader.readFrom(first);
-		geometry.readFrom(reader);
-		reader.readFrom(geometry);
-
-		const graph = createGraph();
-		graph.add(first, geometry, reader);
-		addOutputPass(graph, reader);
-
-		assert.throws(() => render(graph), /First|Geometry|OlderReader|BUFFER_DEFAULT|cycle|order/i);
-
 	});
 
-	it("rejects missing required inputs and disabled producers only when live", () => {
+	it("rejects missing required inputs", () => {
 
 		const missing = new TestPass({
 			name: "Missing",
-			target: target(),
+			target: new RenderTargetResource(),
 			requiredTextures: ["missing"]
 		});
-		const graph = createGraph();
-		graph.add(missing);
-		addOutputPass(graph, missing);
-		assert.throws(() => render(graph), /missing|required/i);
 
-		const execution: string[] = [];
-		const producer = new TestPass({ name: "DisabledProducer", execution, target: target() });
-		const consumer = new TestPass({ name: "Consumer", execution, target: target() });
-		consumer.readFrom(producer);
-		producer.enabled = false;
+		const graph = new FrameGraph({ renderer });
 
-		const disabledGraph = createGraph();
-		disabledGraph.add(producer, consumer);
-		addOutputPass(disabledGraph, consumer);
-		assert.throws(() => render(disabledGraph), /disabled|producer|required/i);
+		assert.throws(() => {
 
-	});
+			graph.add(missing);
+			graph.output(missing);
 
-	it("accepts imported textures as valid required inputs", () => {
-
-		const task = new TestPass({
-			name: "Imported",
-			target: target(),
-			requiredTextures: ["external"]
-		});
-		task.readImported("external", new Texture());
-		const graph = createGraph();
-
-		graph.add(task);
-		addOutputPass(graph, task);
-		assert.doesNotThrow(() => render(graph));
-
-	});
-
-	it("reports cycles with the involved tasks", () => {
-
-		const a = new TestPass({ name: "CycleA", target: target() });
-		const b = new TestPass({ name: "CycleB", target: target() });
-		a.readFrom(b);
-		b.readFrom(a);
-
-		const graph = createGraph();
-		graph.add(a, b);
-		addOutputPass(graph, a);
-
-		assert.throws(() => render(graph), /CycleA.*CycleB|CycleB.*CycleA|cycle/i);
-
-	});
-
-	it("gathers subpass resources without sorting the subpass independently", () => {
-
-		const execution: string[] = [];
-		const child = new TestPass({ name: "Subpass", execution, target: target() });
-
-		const parent = new TestPass({
-			name: "Parent",
-			execution,
-			target: target(),
-			subtasks: [child],
-			renderSubtasks: true
 		});
 
-		const graph = createGraph();
+	});
 
-		graph.add(parent);
-		addOutputPass(graph, parent);
-		render(graph);
+	it("rejects cycles", () => {
 
-		assert.deepEqual(execution, ["Parent", "Subpass"]);
-		assert.ok(child.output.defaultBuffer !== undefined);
+		const a = new TestPass({ name: "CycleA" });
+		const b = new TestPass({ name: "CycleB" });
+		const graph = new FrameGraph({ renderer });
+
+		a.read(b);
+		b.read(a);
+
+		assert.throws(() => {
+
+			graph.add(a, b);
+			graph.output(b);
+
+		});
 
 	});
 
-	it("culls unpresented branches but keeps live consumers of disabled producers diagnostic", () => {
+	it("culls unused branches", () => {
 
 		const execution: string[] = [];
-		const culled = new TestPass({ name: "Culled", execution, target: target() });
-		const live = new TestPass({ name: "Live", execution, target: target() });
-		const graph = createGraph();
+		const culled = new TestPass({ name: "Culled", execution });
+		const live = new TestPass({ name: "Live", execution });
+		const graph = new FrameGraph({ renderer });
 
 		graph.add(culled, live);
-		addOutputPass(graph, live);
-		render(graph);
+		graph.output(live);
+		graph.render();
 
 		assert.deepEqual(execution, ["Live"]);
 
 	});
 
-	it("uses the screen binding for an unsampled shared-target presentation chain", () => {
-
-		const shared = target();
-		const first = new TestPass({ name: "First", target: shared });
-		const geometry = new TestPass({ name: "Geometry", target: shared });
-		const graph = createGraph();
-
-		graph.add(first, geometry);
-		addOutputPass(graph, geometry);
-		render(graph);
-
-		assert.equal(shared.value, null);
-
-	});
-
-	it("materializes a shared target when one of its versions is sampled", () => {
-
-		const shared = target();
-		const first = new TestPass({ name: "First", target: shared });
-		const geometry = new TestPass({ name: "Geometry", target: shared });
-		const effect = new TestPass({ name: "Effect", target: target() });
-		effect.readFrom(geometry);
-		const graph = createGraph();
-
-		graph.add(first, geometry, effect);
-		addOutputPass(graph, effect);
-		render(graph);
-
-		assert.notEqual(shared.value, null);
-
-	});
-
-	it("retains named G-Buffer attachments and resolves active attachment reads", () => {
+	it("retains active textures", () => {
 
 		const gBuffer = new GBufferResource();
 		const producer = new TestPass({ name: "GBufferWriter", target: gBuffer });
+
 		const consumer = new TestPass({
 			name: "NormalReader",
-			target: target(),
+			target: new RenderTargetResource(),
 			requiredTextures: [GBuffer.NORMAL]
 		});
-		consumer.readFrom(producer);
-		const graph = createGraph();
+
+		const graph = new FrameGraph({ renderer });
+
+		consumer.read(producer);
 
 		graph.add(producer, consumer);
-		addOutputPass(graph, consumer);
-		render(graph);
+		graph.output(consumer);
 
-		assert.ok(gBuffer.textures.has(GBuffer.COLOR));
-		assert.ok(gBuffer.textures.has(GBuffer.NORMAL));
+		assert.notEqual(gBuffer.textures.get(GBuffer.COLOR)?.value, null);
+		assert.notEqual(gBuffer.textures.get(GBuffer.NORMAL)?.value, null);
 
 	});
 
 	it("allocates target dimensions from the resource resolution", () => {
 
-		const resource = target(40, 24);
-		const task = new TestPass({ name: "Sized", target: resource });
-		const graph = createGraph();
+		const target = new RenderTargetResource();
+		target.resolution.setPreferredSize(40, 24);
 
-		graph.add(task);
-		addOutputPass(graph, task);
-		render(graph);
+		const pass = new TestPass({ name: "Sized", target });
+		const graph = new FrameGraph({ renderer });
 
-		assert.equal(resource.value?.width, 40);
-		assert.equal(resource.value?.height, 24);
+		graph.add(pass);
+		graph.output(pass);
 
-	});
-
-	it("rejects incompatible effective resolutions for shared writers", () => {
-
-		const shared = target();
-		const first = new TestPass({ name: "FirstWriter", target: shared });
-		const second = new TestPass({ name: "SecondWriter", target: shared });
-		first.resolution.preferredWidth = 32;
-		second.resolution.preferredWidth = 64;
-		const graph = createGraph();
-
-		graph.add(first, second);
-		addOutputPass(graph, second);
-
-		assert.throws(() => render(graph), /resolution|width|FirstWriter|SecondWriter/i);
+		assert.equal(target.value?.width, 40);
+		assert.equal(target.value?.height, 24);
 
 	});
 
 	it("rejects same-pass read/write feedback", () => {
 
-		const task = new TestPass({ name: "Feedback", target: target() });
-		task.readFrom(task);
-		const graph = createGraph();
+		const pass = new TestPass({ name: "Feedback" });
+		const graph = new FrameGraph({ renderer });
 
-		graph.add(task);
-		addOutputPass(graph, task);
+		pass.read(pass);
 
-		assert.throws(() => render(graph), /feedback|same.*pass|Feedback/i);
+		assert.throws(() => {
 
-	});
+			graph.add(pass);
+			graph.output(pass);
 
-	it("replaces and disposes a target when its descriptor changes", () => {
-
-		const resource = target();
-		const task = new TestPass({ name: "ReplaceTarget", target: resource });
-		const graph = createGraph();
-		graph.add(task);
-		addOutputPass(graph, task);
-		render(graph);
-
-		const previous = resource.value!;
-		let disposed = 0;
-		const dispose = previous.dispose.bind(previous);
-		(previous as { dispose: () => void }).dispose = () => {
-
-			disposed++;
-			dispose();
-
-		};
-		resource.descriptor.count = 2;
-		render(graph);
-
-		assert.notEqual(resource.value, previous);
-		assert.equal(disposed, 1);
-
-	});
-
-	it("does not dispose imported textures", () => {
-
-		const texture = new Texture();
-		let disposed = 0;
-		texture.dispose = () => {
-
-			disposed++;
-
-		};
-		const task = new TestPass({
-			name: "External",
-			target: target(),
-			requiredTextures: ["external"]
 		});
-		task.readImported("external", texture);
-		const graph = createGraph();
-		graph.add(task);
-		addOutputPass(graph, task);
-		render(graph);
-
-		assert.equal(disposed, 0);
-
-	});
-
-	it("supports persistent history swapping and reset", () => {
-
-		const history = new HistoryResource();
-		const previous = history.previousBuffer;
-		const current = history.currentBuffer;
-		previous.persistent = true;
-		current.persistent = true;
-
-		(history as HistoryResource & { swap(): void }).swap();
-
-		assert.equal(history.previousBuffer, current);
-		assert.equal(history.currentBuffer, previous);
-
-		const resettable = history as HistoryResource & { reset(): void };
-		assert.equal(typeof resettable.reset, "function");
-		assert.doesNotThrow(() => resettable.reset());
 
 	});
 

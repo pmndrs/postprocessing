@@ -1,5 +1,4 @@
 import { Input, Pass, RenderTargetResource } from "postprocessing";
-import { Texture } from "three";
 
 /**
  * Options for a task used by the frame-graph tests.
@@ -66,7 +65,7 @@ export class TestPass extends Pass {
 	constructor({
 		name = "unknown",
 		execution = [],
-		target,
+		target = new RenderTargetResource(),
 		bufferKey,
 		requiredTextures = [],
 		subtasks,
@@ -78,12 +77,7 @@ export class TestPass extends Pass {
 		this.execution = execution;
 		this.renderChildren = renderSubtasks ?? false;
 		this.requireTextures(...requiredTextures);
-
-		if(target !== undefined) {
-
-			this.setBuffer(bufferKey ?? Input.BUFFER_DEFAULT, target);
-
-		}
+		this.setBuffer(bufferKey ?? Input.BUFFER_DEFAULT, target);
 
 		if(subtasks !== undefined) {
 
@@ -110,28 +104,6 @@ export class TestPass extends Pass {
 	createOutput(): RenderTargetResource {
 
 		return this.createDefaultBuffer();
-
-	}
-
-	/**
-	 * Connects the producer's output resources to this pass.
-	 */
-
-	readFrom(producer: TestPass): void {
-
-		this.input.connect(producer.output);
-
-	}
-
-	/**
-	 * Adds an imported texture input.
-	 *
-	 * Declare it in {@link TestPassOptions.requiredTextures} if the test requires it to be validated.
-	 */
-
-	readImported(key: string, texture: Texture): void {
-
-		this.input.setBuffer(key, texture);
 
 	}
 

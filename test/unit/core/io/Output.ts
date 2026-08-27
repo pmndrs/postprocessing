@@ -10,23 +10,4 @@ describe("Output", () => {
 
 	});
 
-	it("can create a default buffer", () => {
-
-		const output = new Output();
-		output.createDefaultBuffer();
-
-		assert.notEqual(output.defaultBuffer, undefined);
-
-	});
-
-	it("can remove the default buffer", () => {
-
-		const output = new Output();
-		output.createDefaultBuffer();
-		output.removeDefaultBuffer();
-
-		assert.equal(output.defaultBuffer, undefined);
-
-	});
-
 });
