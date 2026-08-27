@@ -894,30 +894,43 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	}
 
-	// #region Output
+	// #region Resource Management
 
 	/**
-	 * Creates a new default output buffer.
+	 * Adds all output resources of a given producer to this pass.
 	 *
-	 * @param options - Render target options. Defaults to a configuration suited for fullscreen passes.
-	 * @return The render target resource.
+	 * @param producer - The producer task.
 	 */
 
-	protected createDefaultBuffer(options?: RenderTargetOptions): RenderTargetResource {
+	read(producer: RenderTask): void {
 
-		return this.output.createDefaultBuffer(options);
+		this.input.add(producer.output);
 
 	}
 
 	/**
 	 * Sets the default output buffer.
 	 *
-	 * @param value - A render target resource, its options, or `undefined`.
+	 * @param value - A render target resource or its options. Defaults to a configuration suited for fullscreen passes.
+	 * @return The render target resource.
 	 */
 
-	protected setDefaultBuffer(value: RenderTargetOptions | RenderTargetResource | undefined): void {
+	protected setDefaultBuffer(value?: RenderTargetResource | RenderTargetOptions): RenderTargetResource {
 
-		this.output.setDefaultBuffer(value);
+		return this.output.setDefaultBuffer(value);
+
+	}
+
+	/**
+	 * Creates a new default output buffer.
+	 *
+	 * @param value - Render target options. Defaults to a configuration suited for fullscreen passes.
+	 * @return The render target resource.
+	 */
+
+	protected createDefaultBuffer(value?: RenderTargetOptions): RenderTargetResource {
+
+		return this.setDefaultBuffer(value);
 
 	}
 
@@ -927,7 +940,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 * @return Whether the default buffer was removed.
 	 */
 
-	protected removeDefaultOutputBuffer(): boolean {
+	protected deleteDefaultOutputBuffer(): boolean {
 
 		return this.output.deleteDefaultBuffer();
 

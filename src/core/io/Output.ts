@@ -139,36 +139,35 @@ export class Output extends EventDispatcher<OutputEventMap> {
 	}
 
 	/**
-	 * Sets the default buffer.
+	 * Returns all texture resources of the current render target resources.
 	 *
-	 * @internal
+	 * @return An iterator over the render target textures.
 	 */
 
-	setDefaultBuffer(value: RenderTargetResource | RenderTargetOptions | undefined): void {
+	*textures(): IterableIterator<[string, TextureResource]> {
 
-		if(value === undefined) {
+		for(const [name, renderTarget] of this.renderTargets) {
 
-			this.deleteDefaultBuffer();
-
-		} else {
-
-			this.setBuffer(Output.BUFFER_DEFAULT, value);
+			yield [name, renderTarget.texture];
+			yield* renderTarget.textures;
 
 		}
 
 	}
 
+	// #region Internal
+
 	/**
-	 * Creates a new default buffer.
+	 * Sets the default buffer.
 	 *
 	 * @internal
-	 * @param options - Render target options. Defaults to a configuration suited for fullscreen passes.
+	 * @param value - A render target resource or its options. Defaults to a configuration suited for fullscreen passes.
 	 * @return The render target resource.
 	 */
 
-	createDefaultBuffer(options?: RenderTargetOptions): RenderTargetResource {
+	setDefaultBuffer(value?: RenderTargetResource | RenderTargetOptions): RenderTargetResource {
 
-		return this.setBuffer(Output.BUFFER_DEFAULT, options);
+		return this.setBuffer(Output.BUFFER_DEFAULT, value);
 
 	}
 
@@ -181,7 +180,7 @@ export class Output extends EventDispatcher<OutputEventMap> {
 
 	deleteDefaultBuffer(): boolean {
 
-		return this.renderTargets.delete(Output.BUFFER_DEFAULT);
+		return this.deleteBuffer(Output.BUFFER_DEFAULT);
 
 	}
 
@@ -231,21 +230,6 @@ export class Output extends EventDispatcher<OutputEventMap> {
 
 	}
 
-	/**
-	 * Returns all texture resources of the current render target resources.
-	 *
-	 * @return An iterator over the render target textures.
-	 */
-
-	*textures(): IterableIterator<[string, TextureResource]> {
-
-		for(const [name, renderTarget] of this.renderTargets) {
-
-			yield [name, renderTarget.texture];
-			yield* renderTarget.textures;
-
-		}
-
-	}
+	// #endregion
 
 }

@@ -167,7 +167,7 @@ export class BloomEffect extends Effect implements BloomEffectOptions {
 
 		} else {
 
-			this.luminancePass.input.removeDefaultBuffer();
+			this.luminancePass.input.deleteDefaultBuffer();
 			this.mipmapBlurPass.input.defaultBuffer = this.input.defaultBuffer;
 
 		}

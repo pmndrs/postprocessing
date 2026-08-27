@@ -160,7 +160,7 @@ export class Input extends EventDispatcher<InputEventMap> implements ShaderData 
 
 		if(value === undefined) {
 
-			this.removeDefaultBuffer();
+			this.deleteDefaultBuffer();
 
 		} else {
 
@@ -176,7 +176,7 @@ export class Input extends EventDispatcher<InputEventMap> implements ShaderData 
 	 * @return True if the buffer existed and has been removed, or false if there is none.
 	 */
 
-	removeDefaultBuffer(): boolean {
+	deleteDefaultBuffer(): boolean {
 
 		return this.textures.delete(Input.BUFFER_DEFAULT);
 
