@@ -399,7 +399,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	set gBufferSchema(value: GBufferSchema | null) {
 
-		this.input.gBufferSchema = value;
+		this.input.setGBufferSchema(value);
 
 		for(const subpass of this.subpasses) {
 

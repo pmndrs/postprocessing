@@ -146,22 +146,6 @@ export class Input extends EventDispatcher<InputEventMap> implements ShaderData 
 
 	}
 
-	set gBufferSchema(value: GBufferSchema | null) {
-
-		if(this._gBufferSchema === value) {
-
-			return;
-
-		}
-
-		this._gBufferSchema?.removeEventListener("change", this.propagateChangeEvent);
-		value?.addEventListener("change", this.propagateChangeEvent);
-		this._gBufferSchema = value;
-
-		this.dispatchEvent({ type: "change" });
-
-	}
-
 	/**
 	 * The default input buffer, or `undefined` if there is none.
 	 */
@@ -266,5 +250,32 @@ export class Input extends EventDispatcher<InputEventMap> implements ShaderData 
 		this.shaderData.remove(output.shaderData);
 
 	}
+
+	// #region Internal
+
+	/**
+	 * Sets the G-Buffer schema.
+	 *
+	 * @internal
+	 * @param value - The schema.
+	 */
+
+	setGBufferSchema(value: GBufferSchema | null): void {
+
+		if(this._gBufferSchema === value) {
+
+			return;
+
+		}
+
+		this._gBufferSchema?.removeEventListener("change", this.propagateChangeEvent);
+		value?.addEventListener("change", this.propagateChangeEvent);
+		this._gBufferSchema = value;
+
+		this.dispatchEvent({ type: "change" });
+
+	}
+
+	// #endregion
 
 }
