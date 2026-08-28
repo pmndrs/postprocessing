@@ -7,16 +7,17 @@ import {
 	WebGLRenderTarget
 } from "three";
 
+import { GBuffer } from "../../enums/GBuffer.js";
 import { MapExtensions } from "../../utils/MapExtensions.js";
 import { ObservableMap } from "../../utils/ObservableMap.js";
+import { ObservableSet } from "../../utils/ObservableSet.js";
 import { RenderTargetDescriptor } from "../../utils/RenderTargetDescriptor.js";
 import { Resolution } from "../../utils/Resolution.js";
+import { SetExtensions } from "../../utils/SetExtensions.js";
 import { Disposable } from "../Disposable.js";
+import type { Output } from "./Output.js";
 import { Resource } from "./Resource.js";
 import { TextureResource } from "./TextureResource.js";
-import { SetExtensions } from "../../utils/SetExtensions.js";
-import { ObservableSet } from "../../utils/ObservableSet.js";
-import { GBuffer } from "../../enums/GBuffer.js";
 
 /**
  * A managed offscreen render target resource.
@@ -37,6 +38,12 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 	 */
 
 	private _persistent: boolean;
+
+	/**
+	 * @see {@link owner}
+	 */
+
+	private _owner: Output | null;
 
 	/**
 	 * A collection of texture configurations, organized by name.
@@ -89,6 +96,7 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 		textures.addEventListener("change", () => this.updateTextureResources());
 		this._textures = textures;
 		this._persistent = false;
+		this._owner = null;
 
 		this.texture = new TextureResource();
 		this.texture.setRenderTarget(this);
@@ -283,6 +291,26 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 
 	}
 
+	// #region Internal
+
+	/**
+	 * The current owner of this resource.
+	 *
+	 * @internal
+	 */
+
+	get owner(): Output | null {
+
+		return this._owner;
+
+	}
+
+	set owner(value: Output | null) {
+
+		this._owner = value;
+
+	}
+
 	/**
 	 * Sets the render target.
 	 *
@@ -296,5 +324,7 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 		this.updateTextureResources();
 
 	}
+
+	// #endregion
 
 }

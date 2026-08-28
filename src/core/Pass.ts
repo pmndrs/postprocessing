@@ -911,6 +911,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	/**
 	 * Sets the default output buffer.
 	 *
+	 * @throws If the given resource belongs to another output.
 	 * @param value - A render target resource or its options. Defaults to a configuration suited for fullscreen passes.
 	 * @return The render target resource.
 	 */
@@ -952,6 +953,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 * - Falls back to a default render target descriptor that is suitable for fullscreen passes if none is provided.
 	 * - Raw render target descriptors will automatically be wrapped in a new resource.
 	 *
+	 * @throws If the given resource belongs to another output.
 	 * @param key - The key of the buffer.
 	 * @param value - A render target resource or its options.
 	 * @return The render target resource.

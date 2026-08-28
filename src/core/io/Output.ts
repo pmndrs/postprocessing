@@ -161,6 +161,7 @@ export class Output extends EventDispatcher<OutputEventMap> {
 	 * Sets the default buffer.
 	 *
 	 * @internal
+	 * @throws If the given resource belongs to another output.
 	 * @param value - A render target resource or its options. Defaults to a configuration suited for fullscreen passes.
 	 * @return The render target resource.
 	 */
@@ -191,6 +192,7 @@ export class Output extends EventDispatcher<OutputEventMap> {
 	 * - Raw render target descriptors will automatically be wrapped in a new resource.
 	 *
 	 * @internal
+	 * @throws If the given resource belongs to another output.
 	 * @param key - The key of the buffer.
 	 * @param value - A render target resource or its options.
 	 * @return The render target resource.
@@ -199,7 +201,18 @@ export class Output extends EventDispatcher<OutputEventMap> {
 	setBuffer(key: string, value?: RenderTargetResource | RenderTargetOptions): RenderTargetResource {
 
 		const resource = (value instanceof RenderTargetResource) ? value : new RenderTargetResource(value);
-		this.renderTargets.set(key, resource);
+
+		if(resource.owner === null) {
+
+			resource.owner = this;
+			this.renderTargets.set(key, resource);
+
+		} else if(resource.owner !== this) {
+
+			throw new Error(`The given resource for the key "${key}" is already owned by another output`);
+
+		}
+
 		return resource;
 
 	}
@@ -214,6 +227,12 @@ export class Output extends EventDispatcher<OutputEventMap> {
 
 	deleteBuffer(key: string): boolean {
 
+		if(this.renderTargets.has(key)) {
+
+			this.renderTargets.get(key)!.owner = null;
+
+		}
+
 		return this.renderTargets.delete(key);
 
 	}
@@ -225,6 +244,12 @@ export class Output extends EventDispatcher<OutputEventMap> {
 	 */
 
 	clearBuffers(): void {
+
+		for(const resource of this.renderTargets.values()) {
+
+			resource.owner = null;
+
+		}
 
 		this.renderTargets.clear();
 
