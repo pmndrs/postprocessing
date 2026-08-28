@@ -4,10 +4,10 @@ import { GBufferSchema } from "../utils/gbuffer/GBufferSchema.js";
 import { fullscreenGeometry } from "../utils/objects/fullscreenGeometry.js";
 import { ReadonlyTimer } from "../utils/ReadonlyTimer.js";
 import { Disposable } from "./Disposable.js";
+import { FrameGraphCompiler } from "./FrameGraphCompiler.js";
 import { Renderable } from "./Renderable.js";
 import { RenderTask } from "./RenderTask.js";
 import { Task } from "./Task.js";
-import { FrameGraphCompiler } from "./FrameGraphCompiler.js";
 
 const v = /* @__PURE__ */ new Vector2();
 
@@ -46,14 +46,14 @@ export interface FrameGraphOptions {
 }
 
 /**
- * A graph that manages and runs render tasks to produce a frame.
+ * A directed acyclic graph (DAG) that manages and runs render tasks to produce a frame.
  *
  * @see https://www.gdcvault.com/play/1024612/FrameGraph-Extensible-Rendering-Architecture-in
  * @see https://stoleckipawel.dev/posts/frame-graph-theory/
  * @category Core
  */
 
-export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
+export class FrameGraph implements FrameGraphOptions, Disposable, Renderable {
 
 	/**
 	 * Keeps track of tasks that have been added to a frame graph.
@@ -68,10 +68,10 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 	private readonly compiler: FrameGraphCompiler;
 
 	/**
-	 * A listener that triggers a resource update.
+	 * Rebuilds the graph and updates the render pipeline.
 	 */
 
-	private readonly listener: () => void;
+	private readonly updateRenderPipeline: () => void;
 
 	// #region Backing Data
 
@@ -105,6 +105,18 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 
 	private _gBufferSchema: GBufferSchema;
 
+	/**
+	 * @see {@link tasks}
+	 */
+
+	private readonly _tasks: Set<RenderTask>;
+
+	/**
+	 * @see {@link roots}
+	 */
+
+	private readonly _roots: Set<RenderTask>;
+
 	// #endregion
 
 	/**
@@ -112,12 +124,6 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 	 */
 
 	private readonly sizeObserver: MutationObserver | null;
-
-	/**
-	 * A collection of render tasks.
-	 */
-
-	private tasks: RenderTask[];
 
 	/**
 	 * A render pipeline that contains executable tasks, sorted based on their dependencies.
@@ -141,7 +147,11 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 		ShaderChunkExtensions.register();
 
 		this.compiler = new FrameGraphCompiler(this);
-		this.listener = () => this.compiler.update();
+		this.updateRenderPipeline = () => {
+
+			this.renderPipeline = this.compiler.update();
+
+		};
 
 		this._timer = new Timer();
 		this._renderer = null;
@@ -149,11 +159,38 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 		this._scene = scene;
 		this._camera = camera;
 
-		this.tasks = [];
+		this._tasks = new Set();
+		this._roots = new Set();
 		this.renderPipeline = [];
 
 		this.sizeObserver = this.createSizeObserver();
 		this.renderer = renderer;
+
+	}
+
+	// #region Accessors
+
+	/**
+	 * A collection of render tasks that are part of this graph.
+	 *
+	 * @internal
+	 */
+
+	get tasks(): ReadonlySet<RenderTask> {
+
+		return this._tasks;
+
+	}
+
+	/**
+	 * A collection of render tasks that act as graph roots, i.e. terminal graph outputs.
+	 *
+	 * @internal
+	 */
+
+	get roots(): ReadonlySet<RenderTask> {
+
+		return this._roots;
 
 	}
 
@@ -178,7 +215,7 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 		this.sizeObserver?.disconnect();
 		this._renderer = value;
 
-		for(const task of this.tasks) {
+		for(const task of this._tasks) {
 
 			task.renderer = value;
 
@@ -192,10 +229,9 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 			this.updateResolution();
 			this.sizeObserver?.observe(value.domElement, { attributes: true });
 
-			if(this.tasks.length > 0) {
+			if(this._tasks.size > 0) {
 
-				// Refresh the buffers.
-				this.compiler.update();
+				this.updateRenderPipeline();
 
 			}
 
@@ -219,7 +255,7 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 
 		this._scene = value;
 
-		for(const task of this.tasks) {
+		for(const task of this._tasks) {
 
 			task.mainScene = value;
 
@@ -243,7 +279,7 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 
 		this._camera = value;
 
-		for(const task of this.tasks) {
+		for(const task of this._tasks) {
 
 			task.mainCamera = value;
 
@@ -267,13 +303,15 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 
 		this._gBufferSchema = value;
 
-		for(const task of this.tasks) {
+		for(const task of this._tasks) {
 
 			task.gBufferSchema = value;
 
 		}
 
 	}
+
+	// #endregion
 
 	/**
 	 * Creates a mutation observer for the canvas size.
@@ -337,9 +375,9 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 		task.renderer = this.renderer;
 		task.gBufferSchema = this.gBufferSchema;
 
-		task.addEventListener("toggle", this.listener);
-		task.input.addEventListener("change", this.listener);
-		task.output.addEventListener("change", this.listener);
+		task.addEventListener("toggle", this.updateRenderPipeline);
+		task.input.addEventListener("change", this.updateRenderPipeline);
+		task.output.addEventListener("change", this.updateRenderPipeline);
 
 	}
 
@@ -357,9 +395,15 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 		task.renderer = null;
 		task.gBufferSchema = null;
 
-		task.removeEventListener("toggle", this.listener);
-		task.input.removeEventListener("change", this.listener);
-		task.output.removeEventListener("change", this.listener);
+		task.removeEventListener("toggle", this.updateRenderPipeline);
+		task.input.removeEventListener("change", this.updateRenderPipeline);
+		task.output.removeEventListener("change", this.updateRenderPipeline);
+
+		if(this._roots.has(task)) {
+
+			this._roots.delete(task);
+
+		}
 
 	}
 
@@ -374,7 +418,7 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 
 		for(const task of tasks) {
 
-			if(this.tasks.includes(task)) {
+			if(this._tasks.has(task)) {
 
 				continue;
 
@@ -385,16 +429,18 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 			}
 
 			this.registerTask(task);
-			this.tasks.push(task);
+			this._tasks.add(task);
 
 		}
 
-		this.compiler.update();
+		this.updateRenderPipeline();
 
 	}
 
 	/**
 	 * Removes one or more render tasks.
+	 *
+	 * Existing output declarations for removed tasks will also be removed.
 	 *
 	 * @param tasks - The tasks to remove.
 	 */
@@ -405,11 +451,7 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 
 		for(const task of tasks) {
 
-			const index = this.tasks.indexOf(task);
-			const exists = (index !== -1);
-			const removed = exists && (this.tasks.splice(index, 1).length > 0);
-
-			if(removed) {
+			if(this._tasks.delete(task)) {
 
 				this.unregisterTask(task);
 				removedAny = true;
@@ -420,7 +462,7 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 
 		if(removedAny) {
 
-			this.compiler.update();
+			this.updateRenderPipeline();
 
 		}
 
@@ -429,19 +471,47 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 	/**
 	 * Removes all render tasks.
 	 *
-	 * To also dispose all tasks, use {@link dispose} instead.
+	 * @remarks This method does not dispose the tasks.
+	 * @see {@link dispose} for disposing all tasks.
 	 */
 
 	clear(): void {
 
-		for(const task of this.tasks) {
+		for(const task of this._tasks) {
 
 			this.unregisterTask(task);
 
 		}
 
-		this.tasks = [];
-		this.compiler.update();
+		this._tasks.clear();
+		this._roots.clear();
+		this.updateRenderPipeline();
+
+	}
+
+	/**
+	 * Declares one or more render tasks as terminal graph outputs.
+	 *
+	 * @remarks Removing tasks through {@link remove} also deletes the corresponding output declarations.
+	 * @throws If any of the tasks is not part of this frame graph.
+	 * @param tasks - The tasks to declare as outputs.
+	 */
+
+	output(...tasks: RenderTask[]): void {
+
+		for(const task of tasks) {
+
+			if(!this._tasks.has(task)) {
+
+				throw new Error(`The task "${task.name}" is not part of this frame graph`);
+
+			}
+
+			this._roots.add(task);
+
+		}
+
+		this.updateRenderPipeline();
 
 	}
 
@@ -460,12 +530,14 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 		const logicalSize = this.renderer.getSize(v);
 		const pixelRatio = this.renderer.getPixelRatio();
 
-		for(const task of this.tasks) {
+		for(const task of this._tasks) {
 
 			task.resolution.pixelRatio = pixelRatio;
 			task.resolution.setBaseSize(logicalSize.width, logicalSize.height);
 
 		}
+
+		this.compiler.updateResolution();
 
 	}
 
@@ -492,7 +564,7 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 
 		}
 
-		for(const task of this.tasks) {
+		for(const task of this._tasks) {
 
 			task.viewport.set(x, y, width, height);
 
@@ -523,7 +595,7 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 
 		}
 
-		for(const task of this.tasks) {
+		for(const task of this._tasks) {
 
 			task.scissor.set(x, y, width, height);
 
@@ -545,7 +617,7 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 
 		const promises: Promise<void>[] = [];
 
-		for(const task of this.tasks) {
+		for(const task of this._tasks) {
 
 			promises.push(task.compile());
 
@@ -601,7 +673,7 @@ export class FrameGraph implements Disposable, FrameGraphOptions, Renderable {
 
 		this.compiler.dispose();
 
-		for(const task of this.tasks) {
+		for(const task of this._tasks) {
 
 			task.dispose();
 

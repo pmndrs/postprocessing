@@ -2,6 +2,7 @@ import { Disposable } from "./Disposable.js";
 import { FrameGraph } from "./FrameGraph.js";
 import { ResourceManager } from "./io/ResourceManager.js";
 import { RenderTask } from "./RenderTask.js";
+import { Task } from "./Task.js";
 
 /**
  * A frame graph compiler.
@@ -31,6 +32,8 @@ export class FrameGraphCompiler implements Disposable {
 
 	/**
 	 * Constructs a new frame graph compiler.
+	 *
+	 * @param frameGraph - A frame graph.
 	 */
 
 	constructor(frameGraph: FrameGraph) {
@@ -41,9 +44,15 @@ export class FrameGraphCompiler implements Disposable {
 
 	}
 
-	update() {
+	update(): Task[] {
 
 		this.resourceManager.update();
+
+		return [];
+
+	}
+
+	updateResolution() {
 
 	}
 
