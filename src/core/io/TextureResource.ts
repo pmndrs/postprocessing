@@ -1,6 +1,7 @@
 import { BaseEvent, EventListener, IUniform, Texture } from "three";
-import { DisposableResource } from "./DisposableResource.js";
+import { Disposable } from "../Disposable.js";
 import type { RenderTargetResource } from "./RenderTargetResource.js";
+import { Resource } from "./Resource.js";
 
 /**
  * A texture resource wrapper.
@@ -8,7 +9,7 @@ import type { RenderTargetResource } from "./RenderTargetResource.js";
  * @category IO
  */
 
-export class TextureResource extends DisposableResource<Readonly<Texture> | null> {
+export class TextureResource extends Resource<Readonly<Texture> | null> implements Disposable {
 
 	/**
 	 * A collection of `change` listeners for bound uniforms.
@@ -56,6 +57,14 @@ export class TextureResource extends DisposableResource<Readonly<Texture> | null
 		return this._renderTarget;
 
 	}
+
+	dispose(): void {
+
+		this.value?.dispose();
+
+	}
+
+	// #region Internal
 
 	/**
 	 * Sets the render target resource.
@@ -108,5 +117,7 @@ export class TextureResource extends DisposableResource<Readonly<Texture> | null
 		}
 
 	}
+
+	// #endregion
 
 }
