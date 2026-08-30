@@ -68,10 +68,10 @@ export class FrameGraph implements FrameGraphOptions, Disposable, Renderable {
 	private readonly compiler: FrameGraphCompiler;
 
 	/**
-	 * Rebuilds the graph and updates the render pipeline.
+	 * A task listener that triggers a render pipeline update.
 	 */
 
-	private readonly updateRenderPipeline: () => void;
+	private readonly taskListener: () => void;
 
 	// #region Backing Data
 
@@ -147,11 +147,7 @@ export class FrameGraph implements FrameGraphOptions, Disposable, Renderable {
 		ShaderChunkExtensions.register();
 
 		this.compiler = new FrameGraphCompiler(this);
-		this.updateRenderPipeline = () => {
-
-			this.renderPipeline = this.compiler.update();
-
-		};
+		this.taskListener = () => this.updateRenderPipeline();
 
 		this._timer = new Timer();
 		this._renderer = null;
@@ -354,6 +350,25 @@ export class FrameGraph implements FrameGraphOptions, Disposable, Renderable {
 	}
 
 	/**
+	 * Rebuilds the graph and updates the render pipeline.
+	 */
+
+	private updateRenderPipeline() {
+
+		try {
+
+			this.renderPipeline = this.compiler.update();
+
+		} catch(error) {
+
+			console.error(error);
+			this.renderPipeline = [];
+
+		}
+
+	}
+
+	/**
 	 * Registers a task.
 	 *
 	 * @param task - The task.
@@ -375,9 +390,9 @@ export class FrameGraph implements FrameGraphOptions, Disposable, Renderable {
 		task.renderer = this.renderer;
 		task.gBufferSchema = this.gBufferSchema;
 
-		task.addEventListener("toggle", this.updateRenderPipeline);
-		task.input.addEventListener("change", this.updateRenderPipeline);
-		task.output.addEventListener("change", this.updateRenderPipeline);
+		task.addEventListener("toggle", this.taskListener);
+		task.input.addEventListener("change", this.taskListener);
+		task.output.addEventListener("change", this.taskListener);
 
 	}
 
@@ -395,9 +410,9 @@ export class FrameGraph implements FrameGraphOptions, Disposable, Renderable {
 		task.renderer = null;
 		task.gBufferSchema = null;
 
-		task.removeEventListener("toggle", this.updateRenderPipeline);
-		task.input.removeEventListener("change", this.updateRenderPipeline);
-		task.output.removeEventListener("change", this.updateRenderPipeline);
+		task.removeEventListener("toggle", this.taskListener);
+		task.input.removeEventListener("change", this.taskListener);
+		task.output.removeEventListener("change", this.taskListener);
 
 		if(this._roots.has(task)) {
 
