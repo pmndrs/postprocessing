@@ -103,12 +103,13 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const geoPass = new GeometryPass({ samples: 4 });
 	const effectPass = new EffectPass(new ToneMappingEffect());
 
-	effectPass.input.connect(geoPass.output);
-	bufferDebugPass.input.connect(geoPass.output);
-	bufferDebugPass.input.connect(effectPass.output);
+	effectPass.read(geoPass);
+	bufferDebugPass.read(geoPass);
+	bufferDebugPass.read(effectPass);
 
 	const frameGraph = new FrameGraph({ renderer, scene, camera });
 	frameGraph.add(geoPass, effectPass, bufferDebugPass);
+	frameGraph.output(bufferDebugPass);
 
 	DebugTools.analyzePipeline(frameGraph);
 

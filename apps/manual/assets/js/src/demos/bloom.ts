@@ -100,10 +100,11 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const geoPass = new GeometryPass({ samples: 4 });
 	const effectPass = new EffectPass(effect, new ToneMappingEffect());
-	effectPass.input.connect(geoPass.output);
+	effectPass.read(geoPass);
 
 	const frameGraph = new FrameGraph({ renderer, scene, camera });
 	frameGraph.add(geoPass, effectPass);
+	frameGraph.output(effectPass);
 
 	// Settings
 

@@ -88,6 +88,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const frameGraph = new FrameGraph({ renderer, scene, camera });
 	frameGraph.add(geoPass);
+	frameGraph.output(geoPass);
 
 	/*
 	const effect = new BrightnessContrastEffect();

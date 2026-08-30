@@ -115,8 +115,8 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const geoPassB = new GeometryPass({ scene: sceneB });
 	const effectPass = new EffectPass(new ToneMappingEffect());
 
-	geoPassB.output.defaultBuffer = geoPassA.output.defaultBuffer;
-	effectPass.input.defaultBuffer = geoPassA.output.defaultBuffer?.texture;
+	geoPassB.output.defaultBuffer!.alias(geoPassA.output.defaultBuffer!);
+	effectPass.input.defaultBuffer = geoPassB.output.defaultBuffer?.texture;
 
 	geoPassA.scissor.enabled = true;
 	geoPassA.viewport.enabled = true;
@@ -125,6 +125,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const frameGraph = new FrameGraph({ renderer, camera });
 	frameGraph.add(geoPassA, geoPassB, effectPass);
+	frameGraph.output(effectPass);
 
 	// Settings
 

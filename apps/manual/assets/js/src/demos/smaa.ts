@@ -100,8 +100,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const effectPass = new EffectPass(effect, new ToneMappingEffect());
 	effect.blendMode.blendFunction = new MixBlendFunction();
-
-	effectPass.input.connect(geoPass.output);
+	effectPass.read(geoPass);
 
 	// #region DEBUG
 	const smaaEdgesDebugPass = new EffectPass(new TextureEffect({ texture: effect.edgesTexture }));
@@ -114,6 +113,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	const frameGraph = new FrameGraph({ renderer, scene, camera });
 	frameGraph.add(geoPass, effectPass, smaaEdgesDebugPass, smaaWeightsDebugPass);
+	frameGraph.output(effectPass, smaaEdgesDebugPass, smaaWeightsDebugPass);
 
 	// Settings
 

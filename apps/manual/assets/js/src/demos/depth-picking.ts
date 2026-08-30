@@ -105,11 +105,12 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const depthPickingPass = new DepthPickingPass();
 	const effectPass = new EffectPass(new ToneMappingEffect());
 
-	depthPickingPass.input.connect(geoPass.output);
-	effectPass.input.connect(geoPass.output);
+	depthPickingPass.read(geoPass);
+	effectPass.read(geoPass);
 
 	const frameGraph = new FrameGraph({ renderer, scene, camera });
 	frameGraph.add(geoPass, depthPickingPass, effectPass);
+	frameGraph.output(effectPass);
 
 	const ndc = new Vector3();
 

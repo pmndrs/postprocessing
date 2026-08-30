@@ -24,6 +24,7 @@ import {
 	EffectPass,
 	FrameGraph,
 	FXAAEffect,
+	GBuffer,
 	GeometryPass,
 	ToneMappingEffect,
 	UIPass
@@ -168,16 +169,14 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const effectPass = new EffectPass(new ToneMappingEffect());
 	const uiPass = new UIPass({ scene: uiScene });
 	const aaPass = new EffectPass(new FXAAEffect());
-
-	effectPass.input.connect(geoPass.output);
-	uiPass.input.connect(geoPass.output);
-	uiPass.input.connect(effectPass.output);
-	aaPass.input.connect(uiPass.output);
+	effectPass.read(geoPass);
+	uiPass.read(geoPass);
+	uiPass.read(effectPass);
+	aaPass.read(uiPass);
 
 	const frameGraph = new FrameGraph({ renderer, scene, camera });
 	frameGraph.add(geoPass, effectPass, uiPass, aaPass);
-
-	DebugTools.analyzePipeline(frameGraph);
+	frameGraph.output(aaPass);
 
 	// Settings
 
@@ -192,11 +191,12 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		if(e.value) {
 
-			uiPass.restoreDefaultBuffer();
+			const depthTexture = geoPass.output.defaultBuffer!.textures.get(GBuffer.DEPTH) ?? null;
+			uiPass.input.setBuffer(GBuffer.DEPTH, depthTexture);
 
 		} else {
 
-			uiPass.output.defaultBuffer = effectPass.output.defaultBuffer;
+			uiPass.input.buffers.delete(GBuffer.DEPTH);
 
 		}
 

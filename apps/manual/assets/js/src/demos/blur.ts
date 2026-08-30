@@ -92,22 +92,22 @@ window.addEventListener("load", () => void load().then((assets) => {
 	});
 
 	const gaussianBlurPass = new GaussianBlurPass({
-		kernelSize: 15,
-		iterations: 1
+		kernelSize: 9,
+		sigma: 3
 	});
 
-	gaussianBlurPass.enabled = false;
 	gaussianBlurPass.resolution.scale = 0.5;
 
 	const geoPass = new GeometryPass({ samples: 4 });
 	const outputPass = new CopyPass();
 
-	mipmapBlurPass.input.connect(geoPass.output);
-	gaussianBlurPass.input.connect(geoPass.output);
+	mipmapBlurPass.read(geoPass);
+	gaussianBlurPass.read(geoPass);
 	outputPass.input.defaultBuffer = mipmapBlurPass.texture;
 
 	const frameGraph = new FrameGraph({ renderer, scene, camera });
 	frameGraph.add(geoPass, mipmapBlurPass, gaussianBlurPass, outputPass);
+	frameGraph.output(outputPass);
 
 	// Settings
 
@@ -126,16 +126,14 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	tab.on("select", (event) => {
 
-		mipmapBlurPass.enabled = (event.index === 0);
-		gaussianBlurPass.enabled = (event.index === 1);
-		outputPass.input.defaultBuffer = gaussianBlurPass.enabled ?
-			gaussianBlurPass.texture :
-			mipmapBlurPass.texture;
+		outputPass.input.defaultBuffer = (event.index === 0) ?
+			mipmapBlurPass.texture :
+			gaussianBlurPass.texture;
 
 	});
 
 	const gaussKernels = {
-		"7x7": 7,
+		"9x9": 9,
 		"15x15": 15,
 		"25x25": 25,
 		"35x35": 35,
@@ -152,8 +150,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const p1 = tab.pages[1];
 	p1.addBinding(gaussianBlurPass.resolution, "scale", { label: "resolution", min: 0.5, max: 1, step: 0.05 });
 	p1.addBinding(gaussianBlurPass.fullscreenMaterial, "kernelSize", { options: gaussKernels });
-	p1.addBinding(gaussianBlurPass.fullscreenMaterial, "scale", { min: 0, max: 2, step: 0.01 });
-	p1.addBinding(gaussianBlurPass, "iterations", { min: 1, max: 8, step: 1 });
+	p1.addBinding(gaussianBlurPass, "sigma", { min: 0.5, max: 10, step: 0.1 });
 
 	// Resize Handler
 
