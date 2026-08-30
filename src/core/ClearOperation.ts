@@ -1,9 +1,9 @@
 import { Color, Scene, WebGLRenderer, WebGLRenderTarget } from "three";
+import { RenderOperation } from "../core/RenderOperation.js";
+import { RenderTaskContext } from "../core/RenderTaskContext.js";
 import { Background } from "../utils/Background.js";
 import { ClearFlags } from "../utils/ClearFlags.js";
 import { ClearValues } from "../utils/ClearValues.js";
-import { RenderTaskContext } from "./RenderTaskContext.js";
-import { RenderOperation } from "./RenderOperation.js";
 
 const color = /* @__PURE__ */ new Color();
 const fv = /* @__PURE__ */ new Float32Array(4);
@@ -89,7 +89,7 @@ export class ClearOperation implements RenderOperation {
 	/**
 	 * Constructs a new clear operation.
 	 *
-	 * @param context - The context of the parent render task..
+	 * @param context - The context of the parent render task.
 	 * @param options - Additional options.
 	 */
 
