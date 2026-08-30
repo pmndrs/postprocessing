@@ -44,7 +44,48 @@ export class FrameGraphCompiler implements Disposable {
 
 	}
 
+	/**
+	 * Validates the current frame graph tasks.
+	 *
+	 * - Verifies all required resource inputs are connected.
+	 * - Verifies all consumed resources have producers.
+	 * - Detects missing resources, invalid dependency chains and cycles.
+	 */
+
+	private validate(): void {
+
+
+
+	}
+
+	/**
+	 * Updates the render pipeline.
+	 *
+	 * @throws If any task or resource connection is invalid.
+	 * @return An executable render pipeline.
+	 */
+
 	update(): Task[] {
+
+		// Graph
+		//   ↓
+		// collect resources/accesses
+		//   ↓
+		// resolve aliases
+		//   ↓
+		// validate resources
+		//   ↓
+		// derive dependencies
+		//   ↓
+		// topological sort
+		//   ↓
+		// analyze lifetimes
+		//   ↓
+		// assign physical targets
+		//   ↓
+		// execute
+
+		this.validate();
 
 		this.resourceManager.update();
 
@@ -52,9 +93,17 @@ export class FrameGraphCompiler implements Disposable {
 
 	}
 
+	/**
+	 *
+	 */
+
 	updateResolution() {
 
 	}
+
+	/**
+	 *
+	 */
 
 	getActiveGBufferComponents() {
 
