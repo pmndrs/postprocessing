@@ -27,6 +27,8 @@ import { TextureResource } from "./TextureResource.js";
 
 export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> | null> implements Disposable {
 
+	// #region Backing Data
+
 	/**
 	 * @see {@link textures}
 	 */
@@ -44,6 +46,14 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 	 */
 
 	private _owner: Output | null;
+
+	/**
+	 * @see {@link aliasOf}
+	 */
+
+	private _aliasOf: RenderTargetResource | null;
+
+	// #endregion
 
 	/**
 	 * A collection of texture configurations, organized by name.
@@ -97,6 +107,7 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 		this._textures = textures;
 		this._persistent = false;
 		this._owner = null;
+		this._aliasOf = null;
 
 		this.texture = new TextureResource();
 		this.texture.setRenderTarget(this);
@@ -121,6 +132,8 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 		this.resolution = new Resolution();
 
 	}
+
+	// #region Accessors
 
 	override get value(): Readonly<WebGLRenderTarget> | null {
 
@@ -176,6 +189,54 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 		this.setChanged();
 
 	}
+
+	// #region Internal
+
+	/**
+	 * The current owner of this resource.
+	 *
+	 * @internal
+	 */
+
+	get owner(): Output | null {
+
+		return this._owner;
+
+	}
+
+	set owner(value: Output | null) {
+
+		this._owner = value;
+
+	}
+
+	/**
+	 * The resource that this resource aliases.
+	 *
+	 * @internal
+	 */
+
+	get aliasOf(): RenderTargetResource | null {
+
+		return this._aliasOf;
+
+	}
+
+	/**
+	 * Identifies the materialized render target.
+	 *
+	 * @internal
+	 */
+
+	get storageId(): number {
+
+		return this._aliasOf?.storageId ?? this.id;
+
+	}
+
+	// #endregion
+
+	// #endregion
 
 	/**
 	 * Defines all possible textures that this resource can provide.
@@ -285,6 +346,26 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 
 	}
 
+	/**
+	 * Makes this resource an alias of the given resource.
+	 *
+	 * @throws If the alias is invalid.
+	 * @param resource - The resource to alias. Set to `null` to undo the alias.
+	 */
+
+	alias(resource: RenderTargetResource | null): void {
+
+		if(resource === this) {
+
+			throw new Error("A render target resource cannot alias itself");
+
+		}
+
+		this._aliasOf = resource;
+		this.setChanged();
+
+	}
+
 	dispose(): void {
 
 		this.value?.dispose();
@@ -292,24 +373,6 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 	}
 
 	// #region Internal
-
-	/**
-	 * The current owner of this resource.
-	 *
-	 * @internal
-	 */
-
-	get owner(): Output | null {
-
-		return this._owner;
-
-	}
-
-	set owner(value: Output | null) {
-
-		this._owner = value;
-
-	}
 
 	/**
 	 * Sets the render target.

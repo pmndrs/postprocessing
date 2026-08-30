@@ -181,6 +181,31 @@ describe("FrameGraph", () => {
 
 	});
 
+	it("materializes aliased resources as the same render target", () => {
+
+		const firstTarget = new RenderTargetResource();
+		const secondTarget = new RenderTargetResource();
+
+		secondTarget.alias(firstTarget);
+
+		const first = new TestPass({ name: "First", target: firstTarget });
+		const second = new TestPass({ name: "Second", target: secondTarget });
+		const consumer = new TestPass({ name: "Consumer" });
+
+		consumer.read(first);
+		consumer.read(second);
+
+		const graph = new FrameGraph({ renderer });
+		graph.add(first, second, consumer);
+		graph.output(consumer);
+
+		assert.equal(
+			first.output.defaultBuffer?.renderTarget,
+			second.output.defaultBuffer?.renderTarget
+		);
+
+	});
+
 	it("rejects missing required inputs", () => {
 
 		const missing = new TestPass({
