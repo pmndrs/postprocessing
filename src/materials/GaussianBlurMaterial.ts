@@ -14,12 +14,20 @@ import vertexShader from "./shaders/convolution.gaussian.vert";
 export interface GaussianBlurMaterialOptions {
 
 	/**
-	 * The kernel size. Must be an odd number.
+	 * The kernel size.
 	 *
-	 * @defaultValue 35
+	 * @defaultValue 9
 	 */
 
 	kernelSize?: number;
+
+	/**
+	 * The standard deviation of the Gaussian distribution
+	 *
+	 * @defaultValue 3
+	 */
+
+	sigma?: number;
 
 }
 
@@ -40,12 +48,18 @@ export class GaussianBlurMaterial extends FullscreenMaterial implements Gaussian
 	private _kernelSize: number;
 
 	/**
+	 * @see {@link sigma}
+	 */
+
+	private _sigma: number;
+
+	/**
 	 * Constructs a new blur material.
 	 *
 	 * @param options - The options.
 	 */
 
-	constructor({ kernelSize = 35 }: GaussianBlurMaterialOptions = {}) {
+	constructor({ kernelSize = 9, sigma = 3 }: GaussianBlurMaterialOptions = {}) {
 
 		super({
 			name: "GaussianBlurMaterial",
@@ -61,8 +75,9 @@ export class GaussianBlurMaterial extends FullscreenMaterial implements Gaussian
 			}
 		});
 
-		this._kernelSize = 0;
-		this.kernelSize = kernelSize;
+		this._kernelSize = kernelSize;
+		this._sigma = sigma;
+		this.generateKernel();
 
 	}
 
@@ -75,7 +90,20 @@ export class GaussianBlurMaterial extends FullscreenMaterial implements Gaussian
 	set kernelSize(value: number) {
 
 		this._kernelSize = value;
-		this.generateKernel(value);
+		this.generateKernel();
+
+	}
+
+	get sigma(): number {
+
+		return this._sigma;
+
+	}
+
+	set sigma(value: number) {
+
+		this._sigma = value;
+		this.generateKernel();
 
 	}
 
@@ -90,30 +118,14 @@ export class GaussianBlurMaterial extends FullscreenMaterial implements Gaussian
 	}
 
 	/**
-	 * The blur kernel scale. Values greater than 1.0 may introduce artifacts.
-	 */
-
-	get scale(): number {
-
-		return this.uniforms.scale.value as number;
-
-	}
-
-	set scale(value: number) {
-
-		this.uniforms.scale.value = value;
-
-	}
-
-	/**
 	 * Generates the Gauss kernel.
 	 *
 	 * @param kernelSize - The kernel size.
 	 */
 
-	private generateKernel(kernelSize: number): void {
+	private generateKernel(): void {
 
-		const kernel = new GaussKernel(kernelSize);
+		const kernel = GaussKernel.create(this.kernelSize, this.sigma);
 		const steps = kernel.linearSteps;
 
 		// Store offsets and weights as vec2 instances to minimize the uniform count.

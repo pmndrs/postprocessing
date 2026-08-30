@@ -1,58 +1,6 @@
 /**
- * Uses Pascal's Triangle to generate coefficients in the expansion of any binomial expression.
- *
- * @see https://mathworld.wolfram.com/PascalsTriangle.html
- * @param n - The index of the coefficients row in Pascal's Triangle.
- * @return The integer coefficients stored as doubles.
- */
-
-function getCoefficients(n: number): Float64Array {
-
-	let result: Float64Array<ArrayBuffer>;
-
-	if(n < 0) {
-
-		throw new Error(`Invalid index: ${n}`);
-
-	} else if(n === 0) {
-
-		result = new Float64Array(0);
-
-	} else if(n === 1) {
-
-		result = new Float64Array([1]);
-
-	} else {
-
-		// Incrementally build Pascal's Triangle to get the desired row.
-		let row0 = new Float64Array(n);
-		let row1 = new Float64Array(n);
-		result = row1;
-
-		for(let y = 1; y <= n; ++y) {
-
-			for(let x = 0; x < y; ++x) {
-
-				row1[x] = (x === 0 || x === y - 1) ? 1 : row0[x - 1] + row0[x];
-
-			}
-
-			result = row1;
-			row1 = row0;
-			row0 = result;
-
-		}
-
-	}
-
-	return result;
-
-}
-
-/**
  * A Gauss kernel.
  *
- * @see https://github.com/Jam3/glsl-fast-gaussian-blur
  * @category Utils
  */
 
@@ -62,36 +10,46 @@ export class GaussKernel {
 	 * The weights for discrete sampling.
 	 */
 
-	weights!: Float64Array;
+	readonly weights: Readonly<Float64Array>;
 
 	/**
 	 * The offsets for discrete sampling.
 	 */
 
-	offsets!: Float64Array;
+	readonly offsets: Readonly<Float64Array>;
 
 	/**
 	 * The weights for linear sampling.
 	 */
 
-	linearWeights!: Float64Array;
+	readonly linearWeights: Readonly<Float64Array>;
 
 	/**
 	 * The offsets for linear sampling.
 	 */
 
-	linearOffsets!: Float64Array;
+	readonly linearOffsets: Readonly<Float64Array>;
 
 	/**
 	 * Constructs a new Gauss kernel.
 	 *
-	 * @param kernelSize - The kernel size. Should be an odd number in the range [3, 1020].
-	 * @param edgeBias - Determines how many edge coefficients should be cut off for increased accuracy.
+	 * @param weights - The weights.
+	 * @param offsets - The offsets.
+	 * @param linearWeights - The weights for linear sampling.
+	 * @param linearOffsets - The offsets for linear sampling.
 	 */
 
-	constructor(kernelSize: number, edgeBias = 2) {
+	private constructor(
+		weights: Float64Array,
+		offsets: Float64Array,
+		linearWeights: Float64Array,
+		linearOffsets: Float64Array
+	) {
 
-		this.generate(kernelSize, edgeBias);
+		this.weights = weights;
+		this.offsets = offsets;
+		this.linearWeights = linearWeights;
+		this.linearOffsets = linearOffsets;
 
 	}
 
@@ -101,7 +59,7 @@ export class GaussKernel {
 
 	get steps(): number {
 
-		return (this.offsets === null) ? 0 : this.offsets.length;
+		return this.offsets.length;
 
 	}
 
@@ -111,75 +69,94 @@ export class GaussKernel {
 
 	get linearSteps(): number {
 
-		return (this.linearOffsets === null) ? 0 : this.linearOffsets.length;
+		return this.linearOffsets.length;
 
 	}
 
 	/**
-	 * Generates the kernel.
+	 * Creates a new kernel.
 	 *
-	 * @param kernelSize - The kernel size.
-	 * @param edgeBias - The amount of edge coefficients to ignore.
+	 * @throws If the kernel could not be created due to invalid input.
+	 * @param kernelSize - The kernel size. Must be an odd integer in the range [3, 1020].
+	 * @param sigma - The standard deviation of the Gaussian distribution.
+	 * @return The kernel.
 	 */
 
-	private generate(kernelSize: number, edgeBias: number): void {
+	static create(kernelSize: number, sigma: number): GaussKernel {
 
-		if(kernelSize < 3 || kernelSize > 1020) {
+		if(
+			kernelSize < 3 ||
+			kernelSize > 1020 ||
+			!Number.isInteger(kernelSize) ||
+			!Number.isFinite(kernelSize) ||
+			kernelSize % 2 === 0
+		) {
 
-			throw new Error("The kernel size must be in the range [3, 1020]");
-
-		}
-
-		const n = kernelSize + edgeBias * 2;
-		const coefficients = (edgeBias > 0) ?
-			getCoefficients(n).slice(edgeBias, -edgeBias) :
-			getCoefficients(n);
-
-		const mid = Math.floor((coefficients.length - 1) / 2);
-		const sum = coefficients.reduce((a, b) => a + b, 0);
-		const weights = coefficients.slice(mid);
-		const offsets = [...Array(mid + 1).keys()]; // [0..mid+1]
-
-		const linearWeights = new Float64Array(Math.floor(offsets.length / 2));
-		const linearOffsets = new Float64Array(linearWeights.length);
-		linearWeights[0] = weights[0] / sum;
-
-		for(let i = 1, j = 1, l = offsets.length - 1; i < l; i += 2, ++j) {
-
-			const offset0 = offsets[i], offset1 = offsets[i + 1];
-			const weight0 = weights[i], weight1 = weights[i + 1];
-
-			const w = weight0 + weight1;
-			const o = (offset0 * weight0 + offset1 * weight1) / w;
-
-			linearWeights[j] = w / sum;
-			linearOffsets[j] = o;
+			throw new Error("The kernel size must be an odd integer in the range [3, 1020]");
 
 		}
 
-		for(let i = 0, l = weights.length, s = 1.0 / sum; i < l; ++i) {
+		if(sigma <= 0 || !Number.isFinite(sigma)) {
 
-			weights[i] *= s;
-
-		}
-
-		// Ensure that the weights add up to 1.
-		const linearWeightSum = (linearWeights.reduce((a, b) => a + b, 0) - linearWeights[0] * 0.5) * 2.0;
-
-		if(linearWeightSum !== 0.0) {
-
-			for(let i = 0, l = linearWeights.length, s = 1.0 / linearWeightSum; i < l; ++i) {
-
-				linearWeights[i] *= s;
-
-			}
+			throw new Error("sigma must be a finite number greater than 0");
 
 		}
 
-		this.weights = weights;
-		this.offsets = new Float64Array(offsets);
-		this.linearOffsets = linearOffsets;
-		this.linearWeights = linearWeights;
+		const mid = Math.floor((kernelSize - 1) / 2);
+		const offsets = new Float64Array(mid + 1);
+		const weights = new Float64Array(mid + 1);
+
+		const scale = -1.0 / (2.0 * sigma * sigma);
+
+		let sum = 0.0;
+
+		for(let i = 0; i <= mid; ++i) {
+
+			const weight = Math.exp(i * i * scale);
+
+			offsets[i] = i;
+			weights[i] = weight;
+
+			sum += (i === 0) ? weight : weight * 2.0;
+
+		}
+
+		// Normalize the discrete weights.
+		const inverseSum = 1.0 / sum;
+
+		for(let i = 0; i <= mid; ++i) {
+
+			weights[i] *= inverseSum;
+
+		}
+
+		// Combine adjacent samples for bilinear filtering.
+		// The shader evaluates `(c0 + c1) * linearWeights[i]` at linearOffsets[i],
+		// so the combined weight is the sum of the two discrete weights and the offset is their weighted centroid.
+		const linearSteps = Math.ceil(mid / 2) + 1;
+		const linearWeights = new Float64Array(linearSteps);
+		const linearOffsets = new Float64Array(linearSteps);
+
+		linearWeights[0] = weights[0];
+		linearOffsets[0] = 0.0;
+
+		for(let i = 1, j = 1; i <= mid; i += 2, ++j) {
+
+			const weight0 = weights[i];
+			const weight1 = (i + 1 <= mid) ? weights[i + 1] : 0.0;
+			const weight = weight0 + weight1;
+
+			linearWeights[j] = weight;
+			linearOffsets[j] = weight1 > 0.0 ? (i * weight0 + (i + 1) * weight1) / weight : i;
+
+		}
+
+		return new GaussKernel(
+			weights,
+			offsets,
+			linearWeights,
+			linearOffsets
+		);
 
 	}
 

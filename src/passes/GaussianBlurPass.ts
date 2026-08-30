@@ -2,7 +2,7 @@ import { ColorSpace, PixelFormat } from "three";
 import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 import { TextureResource } from "../core/io/TextureResource.js";
 import { Pass } from "../core/Pass.js";
-import { GaussianBlurMaterial } from "../materials/GaussianBlurMaterial.js";
+import { GaussianBlurMaterial, GaussianBlurMaterialOptions } from "../materials/GaussianBlurMaterial.js";
 
 /**
  * GaussianBlurPass constructor options.
@@ -10,25 +10,15 @@ import { GaussianBlurMaterial } from "../materials/GaussianBlurMaterial.js";
  * @category Passes
  */
 
-export interface GaussianBlurPassOptions {
+export interface GaussianBlurPassOptions extends GaussianBlurMaterialOptions {
 
 	/**
-	 * The kernel size. Should be an odd number in the range [3, 1020].
-	 *
-	 * @defaultValue 35
-	 */
-
-	kernelSize?: number;
-
-	/**
-	 * The amount of times the blur should be applied.
-	 *
-	 * Must be greater than 0.
+	 * The resolution scale.
 	 *
 	 * @defaultValue 1
 	 */
 
-	iterations?: number;
+	resolutionScale?: number;
 
 }
 
@@ -44,31 +34,25 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> implements Gaus
 	 * Identifies the first blur buffer.
 	 */
 
-	private static readonly BUFFER_A = "BUFFER_A";
+	private static readonly BUFFER_X = "BUFFER_X";
 
 	/**
 	 * Identifies the second blur buffer.
 	 */
 
-	private static readonly BUFFER_B = "BUFFER_B";
+	private static readonly BUFFER_Y = "BUFFER_Y";
 
 	/**
-	 * @see {@link iterations}
+	 * A render target for horizontal blurring.
 	 */
 
-	private _iterations: number;
+	private readonly bufferX: RenderTargetResource;
 
 	/**
-	 * A render target resource used for blurring.
+	 * A render target for vertical blurring.
 	 */
 
-	private readonly bufferA: RenderTargetResource;
-
-	/**
-	 * A render target resource used for blurring.
-	 */
-
-	private readonly bufferB: RenderTargetResource;
+	private readonly bufferY: RenderTargetResource;
 
 	/**
 	 * Constructs a new Gaussian blur pass.
@@ -76,15 +60,15 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> implements Gaus
 	 * @param options - The options.
 	 */
 
-	constructor({ kernelSize = 35, iterations = 1 }: GaussianBlurPassOptions = {}) {
+	constructor({ kernelSize, sigma, resolutionScale = 1.0 }: GaussianBlurPassOptions = {}) {
 
 		super("GaussianBlurPass");
 
-		this.bufferA = this.setBuffer(GaussianBlurPass.BUFFER_A);
-		this.bufferB = this.setBuffer(GaussianBlurPass.BUFFER_B);
+		this.bufferX = this.setBuffer(GaussianBlurPass.BUFFER_X);
+		this.bufferY = this.setBuffer(GaussianBlurPass.BUFFER_Y);
 
-		this.fullscreenMaterial = new GaussianBlurMaterial({ kernelSize });
-		this._iterations = iterations;
+		this.fullscreenMaterial = new GaussianBlurMaterial({ kernelSize, sigma });
+		this.resolutionScale = resolutionScale;
 
 	}
 
@@ -102,15 +86,27 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> implements Gaus
 
 	}
 
-	get iterations(): number {
+	get sigma(): number {
 
-		return this._iterations;
+		return this.fullscreenMaterial.sigma;
 
 	}
 
-	set iterations(value: number) {
+	set sigma(value: number) {
 
-		this._iterations = Math.max(value, 1);
+		this.fullscreenMaterial.sigma = value;
+
+	}
+
+	get resolutionScale(): number {
+
+		return this.resolution.scale;
+
+	}
+
+	set resolutionScale(value: number) {
+
+		this.resolution.scale = value;
 
 	}
 
@@ -122,7 +118,7 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> implements Gaus
 
 	get texture(): TextureResource {
 
-		return this.bufferB.texture;
+		return this.bufferY.texture;
 
 	}
 
@@ -139,7 +135,7 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> implements Gaus
 
 		const { format, type, colorSpace } = inputTexture;
 
-		for(const buffer of [this.bufferA, this.bufferB]) {
+		for(const buffer of [this.bufferX, this.bufferY]) {
 
 			buffer.descriptor.setValues({
 				colorSpace: colorSpace as ColorSpace,
@@ -165,16 +161,19 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> implements Gaus
 
 		}
 
-		const imgData = inputBuffer.source.data as ImageData;
-		this.fullscreenMaterial.setSize(imgData.width, imgData.height);
+		const resolution = this.resolution;
+		const inputBufferSize = inputBuffer.source.data as ImageData;
+		// Downsample only along the blurred axis to avoid undersampling and aliasing on the other axis.
+		this.bufferX.resolution.setSize(resolution.width, inputBufferSize.height);
+		this.bufferY.resolution.setSize(resolution.width, resolution.height);
 
 	}
 
 	override render(): void {
 
 		const inputBuffer = this.input.defaultBuffer?.value ?? null;
-		const renderTargetA = this.bufferA.value!;
-		const renderTargetB = this.bufferB.value!;
+		const renderTargetX = this.bufferX.value!;
+		const renderTargetY = this.bufferY.value!;
 
 		if(this.renderer === null || inputBuffer === null) {
 
@@ -182,31 +181,25 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> implements Gaus
 
 		}
 
+		// Downsample only along the axis being blurred:
+		// W × H ──[blur X + ↓X]──► W' × H ──[blur Y + ↓Y]──► W' × H'
+
+		const inputBufferSize = inputBuffer.source.data as ImageData;
 		const blurMaterial = this.fullscreenMaterial;
-		let previousBuffer = inputBuffer;
 
-		for(let i = 0, l = this.iterations; i < l; ++i) {
+		// Blur direction: Horizontal
+		blurMaterial.direction.set(1.0, 0.0);
+		blurMaterial.setSize(inputBufferSize.width, inputBufferSize.height);
+		blurMaterial.inputBuffer = inputBuffer;
+		this.setRenderTarget(renderTargetX);
+		this.renderFullscreen();
 
-			// Blur direction: Horizontal
-			blurMaterial.direction.set(1.0, 0.0);
-			blurMaterial.inputBuffer = previousBuffer;
-			this.setRenderTarget(renderTargetA);
-			this.renderFullscreen();
-
-			// Blur direction: Vertical
-			blurMaterial.direction.set(0.0, 1.0);
-			blurMaterial.inputBuffer = renderTargetA.texture;
-			this.setRenderTarget(renderTargetB);
-			this.renderFullscreen();
-
-			if(i === 0 && l > 1) {
-
-				// Use renderTargetB as input for further blur iterations.
-				previousBuffer = renderTargetB.texture;
-
-			}
-
-		}
+		// Blur direction: Vertical
+		blurMaterial.direction.set(0.0, 1.0);
+		blurMaterial.setSize(renderTargetX.width, renderTargetX.height);
+		blurMaterial.inputBuffer = renderTargetX.texture;
+		this.setRenderTarget(renderTargetY);
+		this.renderFullscreen();
 
 	}
 
