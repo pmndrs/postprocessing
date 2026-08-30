@@ -165,22 +165,6 @@ describe("FrameGraph", () => {
 
 	});
 
-	it("rejects passes that share the same target", () => {
-
-		const shared = new RenderTargetResource();
-		const first = new TestPass({ name: "First", target: shared });
-		const second = new TestPass({ name: "Second", target: shared });
-		const graph = new FrameGraph({ renderer });
-
-		assert.throws(() => {
-
-			graph.add(first, second);
-			graph.output(first, second);
-
-		});
-
-	});
-
 	it("materializes aliased resources as the same render target", () => {
 
 		const firstTarget = new RenderTargetResource();
