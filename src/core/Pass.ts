@@ -1,30 +1,23 @@
 import {
 	Camera,
 	EventDispatcher,
-	Group,
 	Material,
-	Mesh,
 	Object3D,
 	RenderTargetOptions,
 	Scene,
-	ShaderMaterial,
 	Texture,
 	Vector2,
 	WebGLRenderer,
 	WebGLRenderTarget
 } from "three";
 
-import { FullscreenMaterial } from "../materials/FullscreenMaterial.js";
+import { FullscreenRenderOperation } from "../operations/FullscreenRenderOperation.js";
 import { GBufferSchema } from "../utils/gbuffer/GBufferSchema.js";
 import { IdManager } from "../utils/IdManager.js";
-import { fullscreenCamera } from "../utils/objects/fullscreenCamera.js";
-import { fullscreenGeometry } from "../utils/objects/fullscreenGeometry.js";
-import { ObservableSet } from "../utils/ObservableSet.js";
 import { ReadonlyTimer } from "../utils/ReadonlyTimer.js";
 import { Resolution } from "../utils/Resolution.js";
 import { SceneEvent, SceneEventTarget } from "../utils/SceneEventTarget.js";
 import { Scissor } from "../utils/Scissor.js";
-import { ShaderDataTracker } from "../utils/ShaderDataTracker.js";
 import { Viewport } from "../utils/Viewport.js";
 import { Disposable } from "./Disposable.js";
 import { Input } from "./io/Input.js";
@@ -51,12 +44,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	private static readonly idManager = /* @__PURE__ */ new IdManager();
 
 	/**
-	 * A container that keeps track of input shader data.
-	 */
-
-	private readonly shaderDataTracker: ShaderDataTracker;
-
-	/**
 	 * A listener for `childadded` events dispatched by the scene.
 	 */
 
@@ -69,16 +56,10 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	private readonly sceneChildRemovedListener: (event: SceneEvent) => void;
 
 	/**
-	 * A scene that contains the fullscreen mesh.
+	 * A fullscreen render operation.
 	 */
 
-	private fullscreenScene: Scene | null;
-
-	/**
-	 * A fullscreen mesh.
-	 */
-
-	private screen: Mesh | null;
+	private fullscreenRenderOperation: FullscreenRenderOperation<TMaterial> | null;
 
 	// #region Backing Data
 
@@ -197,14 +178,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	protected readonly disposables: Set<Disposable>;
 
 	/**
-	 * A collection of materials that are used by this pass.
-	 *
-	 * Materials set via {@link fullscreenMaterial} will be added/removed automatically.
-	 */
-
-	protected readonly materials: Set<Material>;
-
-	/**
 	 * Constructs a new pass.
 	 *
 	 * @param name - The name of this pass.
@@ -215,9 +188,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		super();
 
 		this.id = Pass.idManager.getNextId();
-		this.shaderDataTracker = new ShaderDataTracker();
-		this.fullscreenScene = null;
-		this.screen = null;
 
 		this.sceneChildAddedListener = (event) => this.onSceneChildAdded(event.child);
 		this.sceneChildRemovedListener = (event) => this.onSceneChildRemoved(event.child);
@@ -238,20 +208,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this.resolution = new Resolution();
 		this.viewport = new Viewport();
 		this.scissor = new Scissor();
-		this.operations = new Set();
 		this.disposables = new Set();
-
-		const materials = new ObservableSet<Material>();
-		this.materials = materials;
+		this.operations = new Set();
+		this.fullscreenRenderOperation = null;
 
 		// Update the viewport/scissor base size.
 		this.resolution.addEventListener("change", () => this.updateViewportAndScissor());
-
-		// Manage built-in fullscreen material data.
-		materials.addEventListener("add", (e) => this.updateFullscreenMaterial(e.value));
-		this.input.addEventListener("change", () => this.updateFullscreenMaterialsInput());
-		this.output.addEventListener("change", () => this.updateFullscreenMaterialsOutput());
-		this.resolution.addEventListener("change", () => this.updateFullscreenMaterialsResolution());
 
 		// Synchronize subpasses.
 		this.input.addEventListener("change", () => this.updateSubpassInput());
@@ -471,37 +433,33 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	}
 
 	/**
+	 * A collection of materials that are used by this pass.
+	 *
+	 * Materials set via {@link fullscreenMaterial} will be added automatically.
+	 */
+
+	protected get materials(): Set<Material> {
+
+		this.fullscreenRenderOperation ??= new FullscreenRenderOperation(this);
+		return this.fullscreenRenderOperation.materials;
+
+	}
+
+	/**
 	 * The current fullscreen material.
 	 */
 
 	get fullscreenMaterial(): TMaterial {
 
-		return this.screen?.material as TMaterial;
+		this.fullscreenRenderOperation ??= new FullscreenRenderOperation(this);
+		return this.fullscreenRenderOperation.fullscreenMaterial;
 
 	}
 
 	protected set fullscreenMaterial(value: TMaterial) {
 
-		if(value === null) {
-
-			return;
-
-		}
-
-		if(this.screen !== null) {
-
-			this.screen.material = value;
-
-		} else {
-
-			this.screen = new Mesh(fullscreenGeometry, value);
-			this.screen.frustumCulled = false;
-			this.fullscreenScene = new Scene();
-			this.fullscreenScene.add(this.screen);
-
-		}
-
-		this.materials.add(value);
+		this.fullscreenRenderOperation ??= new FullscreenRenderOperation(this);
+		this.fullscreenRenderOperation.fullscreenMaterial = value;
 
 	}
 
@@ -707,128 +665,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 			pass.scissor.setBaseSize(baseWidth, baseHeight);
 
 		}
-
-	}
-
-	// #endregion
-
-	// #region Materials
-
-	/**
-	 * Updates the size of the given material.
-	 */
-
-	private updateFullscreenMaterialResolution(material: Material | null): void {
-
-		if(material instanceof FullscreenMaterial) {
-
-			material.setSize(this.resolution.width, this.resolution.height);
-
-		}
-
-	}
-
-	/**
-	 * Updates the size of all fullscreen materials.
-	 */
-
-	private updateFullscreenMaterialsResolution(): void {
-
-		for(const material of this.materials) {
-
-			this.updateFullscreenMaterialResolution(material);
-
-		}
-
-	}
-
-	/**
-	 * Updates the shader input data of the given fullscreen material.
-	 *
-	 * @param material - The material to update.
-	 */
-
-	private updateFullscreenMaterialInput(material: Material | null): void {
-
-		if(!(material instanceof ShaderMaterial)) {
-
-			// No defines and uniforms available.
-			return;
-
-		}
-
-		if(material instanceof FullscreenMaterial) {
-
-			material.inputBuffer = this.input.defaultBuffer?.value ?? null;
-
-		}
-
-		this.shaderDataTracker
-			.applyDefines(material, this.input.defines)
-			.applyUniforms(material, this.input.uniforms);
-
-	}
-
-	/**
-	 * Updates the shader input data of all fullscreen {@link materials}.
-	 */
-
-	private updateFullscreenMaterialsInput(): void {
-
-		for(const material of this.materials) {
-
-			this.updateFullscreenMaterialInput(material);
-
-		}
-
-		this.shaderDataTracker
-			.trackDefines(this.input.defines)
-			.trackUniforms(this.input.uniforms);
-
-	}
-
-	/**
-	 * Updates the shader output settings of the given fullscreen material.
-	 *
-	 * @param material - The material to update.
-	 */
-
-	private updateFullscreenMaterialOutput(material: Material | null): void {
-
-		if(material instanceof FullscreenMaterial) {
-
-			// High precision buffers use HalfFloatType (mediump).
-			material.outputPrecision = this.output.frameBufferPrecisionHigh ? "mediump" : "lowp";
-
-		}
-
-	}
-
-	/**
-	 * Updates the shader output settings of all fullscreen {@link materials}.
-	 */
-
-	private updateFullscreenMaterialsOutput(): void {
-
-		for(const material of this.materials) {
-
-			this.updateFullscreenMaterialOutput(material);
-
-		}
-
-	}
-
-	/**
-	 * Updates the given material's resolution and input/output data.
-	 *
-	 * @param material - The material to update.
-	 */
-
-	private updateFullscreenMaterial(material: Material | null): void {
-
-		this.updateFullscreenMaterialResolution(material);
-		this.updateFullscreenMaterialInput(material);
-		this.updateFullscreenMaterialOutput(material);
 
 	}
 
@@ -1130,15 +966,19 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	/**
 	 * Renders the fullscreen material to the current render target.
+	 *
+	 * @throws If no fullscreen material has been set.
 	 */
 
 	protected renderFullscreen(): void {
 
-		if(this.renderer !== null && this.fullscreenMaterial !== null) {
+		if(this.fullscreenRenderOperation === null) {
 
-			this.renderer.render(this.fullscreenScene!, fullscreenCamera);
+			throw new Error("No fullscreen material has been set");
 
 		}
+
+		this.fullscreenRenderOperation.execute();
 
 	}
 
@@ -1150,17 +990,13 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		}
 
-		const group = new Group();
+		const promises: Promise<void>[] = [];
 
-		for(const material of this.materials) {
+		if(this.fullscreenRenderOperation !== null) {
 
-			group.add(new Mesh(fullscreenGeometry, material));
+			promises.push(this.fullscreenRenderOperation.compile());
 
 		}
-
-		const promises: Promise<Object3D | void>[] = [
-			this.renderer.compileAsync(group, fullscreenCamera, this.fullscreenScene)
-		];
 
 		for(const operation of this.operations) {
 
@@ -1192,7 +1028,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	dispose(): void {
 
-		this.shaderDataTracker.dispose();
+		this.fullscreenRenderOperation?.dispose();
 
 		for(const operation of this.operations) {
 
