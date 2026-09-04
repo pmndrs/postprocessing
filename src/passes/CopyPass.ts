@@ -6,7 +6,7 @@ import { CopyMaterial } from "../materials/CopyMaterial.js";
 import { blitFramebuffer } from "../utils/functions/framebuffer.js";
 
 /**
- * Copies the contents of the default input buffer to another buffer.
+ * Copies the contents of the default input buffer to the default output buffer.
  *
  * @category Passes
  */
