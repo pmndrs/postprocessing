@@ -1,4 +1,7 @@
 import { Camera, Scene, WebGLRenderer } from "three";
+import { Resolution } from "../utils/Resolution.js";
+import { Input } from "./io/Input.js";
+import { Output } from "./io/Output.js";
 
 /**
  * A render task context.
@@ -29,5 +32,23 @@ export interface RenderTaskContext {
 	 */
 
 	camera: Camera | null;
+
+	/**
+	 * The input resources of this task.
+	 */
+
+	readonly input: Input;
+
+	/**
+	 * The output resources of this task.
+	 */
+
+	readonly output: Output;
+
+	/**
+	 * The current resolution.
+	 */
+
+	readonly resolution: Resolution;
 
 }

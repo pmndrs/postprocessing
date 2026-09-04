@@ -1,15 +1,12 @@
 import { BaseEvent, Camera, EventDispatcher, Scene } from "three";
 import { GBufferSchema } from "../utils/gbuffer/GBufferSchema.js";
 import { ReadonlyTimer } from "../utils/ReadonlyTimer.js";
-import { Resolution } from "../utils/Resolution.js";
 import { Scissor } from "../utils/Scissor.js";
 import { Viewport } from "../utils/Viewport.js";
 import { BaseEventMap } from "./BaseEventMap.js";
 import { Compilable } from "./Compilable.js";
 import { Disposable } from "./Disposable.js";
 import { Identifiable } from "./Identifiable.js";
-import { Input } from "./io/Input.js";
-import { Output } from "./io/Output.js";
 import { Renderable } from "./Renderable.js";
 import { RenderTaskContext } from "./RenderTaskContext.js";
 import { Task } from "./Task.js";
@@ -40,24 +37,6 @@ export interface RenderTaskEventMap extends BaseEventMap {
 
 export interface RenderTask extends EventDispatcher<RenderTaskEventMap>,
 	Compilable, Disposable, Identifiable, Renderable, RenderTaskContext, Task {
-
-	/**
-	 * The input resources of this task.
-	 */
-
-	readonly input: Input;
-
-	/**
-	 * The output resources of this task.
-	 */
-
-	readonly output: Output;
-
-	/**
-	 * The current resolution.
-	 */
-
-	readonly resolution: Resolution;
 
 	/**
 	 * The viewport.
