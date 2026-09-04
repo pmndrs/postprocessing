@@ -1,7 +1,6 @@
 export * from "./io/index.js";
 
 export * from "./BaseEventMap.js";
-export * from "./ClearOperation.js";
 export * from "./Compilable.js";
 export * from "./Disposable.js";
 export * from "./FrameGraph.js";

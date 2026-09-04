@@ -44,20 +44,7 @@ export interface ClearOperationOptions {
  * @category Core
  */
 
-export class ClearOperation implements RenderOperation {
-
-	// #region Task
-
-	readonly name;
-	enabled;
-
-	// #endregion
-
-	/**
-	 * The context of the parent render task.
-	 */
-
-	private readonly context: Readonly<RenderTaskContext>;
+export class ClearOperation extends RenderOperation {
 
 	/**
 	 * The clear flags.
@@ -99,9 +86,7 @@ export class ClearOperation implements RenderOperation {
 		stencil = true
 	}: ClearOperationOptions = {}) {
 
-		this.name = "ClearTask";
-		this.enabled = true;
-		this.context = context;
+		super("ClearTask", context);
 
 		this.clearFlags = new ClearFlags(color, depth, stencil);
 		this.clearValues = new ClearValues();
@@ -206,7 +191,7 @@ export class ClearOperation implements RenderOperation {
 
 	}
 
-	async compile(): Promise<void> {
+	override async compile(): Promise<void> {
 
 		const context = this.context;
 
@@ -257,8 +242,9 @@ export class ClearOperation implements RenderOperation {
 
 	}
 
-	dispose(): void {
+	override dispose(): void {
 
+		super.dispose();
 		this.background.dispose();
 
 	}
