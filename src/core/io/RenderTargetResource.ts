@@ -349,7 +349,7 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 	/**
 	 * Makes this resource an alias of the given resource.
 	 *
-	 * @throws If the alias is invalid.
+	 * @throws If the given resource is this resource.
 	 * @param resource - The resource to alias. Set to `null` to undo the alias.
 	 */
 
