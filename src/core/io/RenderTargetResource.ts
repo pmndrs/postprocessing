@@ -349,6 +349,9 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 	/**
 	 * Makes this resource an alias of the given resource.
 	 *
+	 * Once aliased, both resources resolve to the same physical buffer. This is the low-level primitive behind
+	 * {@link Output.shareBufferWith}, which is the API you usually want to use to share a buffer between two outputs.
+	 *
 	 * @throws If the given resource is this resource.
 	 * @param resource - The resource to alias. Set to `null` to undo the alias.
 	 */

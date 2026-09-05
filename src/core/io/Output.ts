@@ -155,6 +155,43 @@ export class Output extends EventDispatcher<OutputEventMap> {
 
 	}
 
+	/**
+	 * Shares a buffer with the given output.
+	 *
+	 * Once shared, both output buffers are backed by the same physical render target, so rendering into either one writes
+	 * to the same image. This is useful for drawing several passes into a single buffer, for example a HUD overlay on top
+	 * of a preceding pass.
+	 *
+	 * The call is directional: this output adopts the buffer of `other`.
+	 *
+	 * @see {@link RenderTargetResource.alias}
+	 * @throws If the specified buffer does not exist on both outputs.
+	 * @param other - The output to share a buffer with.
+	 * @param bufferKey - The key of the buffer to share. Defaults to {@link Output.BUFFER_DEFAULT}.
+	 */
+
+	shareBufferWith(other: Output, bufferKey: string = Output.BUFFER_DEFAULT): void {
+
+		const buffer = this.buffers.get(bufferKey);
+
+		if(buffer === undefined) {
+
+			throw new Error(`The output buffer "${bufferKey}" does not exist`);
+
+		}
+
+		const sharedBuffer = other.buffers.get(bufferKey);
+
+		if(sharedBuffer === undefined) {
+
+			throw new Error(`The output buffer "${bufferKey}" does not exist on the shared output`);
+
+		}
+
+		buffer.alias(sharedBuffer);
+
+	}
+
 	// #region Internal
 
 	/**
