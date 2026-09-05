@@ -10,7 +10,7 @@ import { GBufferSchema } from "./gbuffer/GBufferSchema.js";
  * An effect material cache that creates, updates and caches effect shader combinations.
  *
  * @category Utils
- * @ignore
+ * @internal
  */
 
 export class EffectMaterialCache {

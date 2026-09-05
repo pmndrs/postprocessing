@@ -17,7 +17,7 @@ const defineRegExp = /^\s*#define\s+(\w*)/gm;
  * A collection of shader data.
  *
  * @category Utils
- * @ignore
+ * @internal
  */
 
 export class EffectShaderData implements ShaderData {
