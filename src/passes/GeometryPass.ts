@@ -1,10 +1,10 @@
 import { Camera, DepthTexture, Material, Object3D, Scene, TextureDataType } from "three";
-import { ClearOperation } from "../core/ClearOperation.js";
 import { GBufferResource, GBufferResourceOptions } from "../core/io/GBufferResource.js";
 import { Pass } from "../core/Pass.js";
 import { Selective } from "../core/Selective.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { MSAASamples } from "../enums/MSAASamples.js";
+import { ClearOperation } from "../operations/ClearOperation.js";
 import { GBufferShaderPlugin } from "../utils/gbuffer/GBufferShaderPlugin.js";
 import { Selection } from "../utils/Selection.js";
 
