@@ -115,7 +115,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const geoPassB = new GeometryPass({ scene: sceneB });
 	const effectPass = new EffectPass(new ToneMappingEffect());
 
-	geoPassB.output.defaultBuffer!.alias(geoPassA.output.defaultBuffer!);
+	geoPassB.output.shareBufferWith(geoPassA.output);
 	effectPass.input.defaultBuffer = geoPassB.output.defaultBuffer?.texture;
 
 	geoPassA.scissor.enabled = true;

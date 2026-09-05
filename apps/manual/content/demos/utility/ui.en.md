@@ -38,13 +38,13 @@ pipeline.add(geoPass, effectPass, uiPass, aaPass);
 
 ### Single Render Pipeline
 
-Instead of using a depth-aware `GeometryPass`, the UI elements can be rendered directly on top of the output buffer of a preceding fullscreen pass. To do this, the `GeometryPass` must be instantiated without a `depthBuffer` and its `output.defaultBuffer` must be set to the `output.defaultBuffer` of the preceding pass. The result then needs to be rendered to screen with a final `CopyPass` or `EffectPass`.
+Instead of using a depth-aware `GeometryPass`, the UI elements can be rendered directly on top of the output buffer of a preceding fullscreen pass. To do this, the `GeometryPass` must be instantiated without a `depthBuffer` and its output buffer must be shared with the preceding pass's output buffer (see `Output.shareBufferWith`). The result then needs to be rendered to screen with a final `CopyPass` or `EffectPass`.
 
 ```ts
 const geoPass = new GeometryPass(scene, camera);
 const effectPass = new EffectPass(..., toneMappingEffect);
 const uiPass = new GeometryPass(uiScene, camera, { autoClear: false, depthBuffer: false });
-uiPass.output.defaultBuffer = effectPass.output.defaultBuffer;
+uiPass.output.shareBufferWith(effectPass.output);
 const aaPass = new EffectPass(aaEffect);
 
 const pipeline = new RenderPipeline(renderer);

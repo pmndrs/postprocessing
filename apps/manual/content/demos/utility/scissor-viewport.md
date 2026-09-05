@@ -20,7 +20,7 @@ const geometryPassB = new GeometryPass(sceneB, camera);
 const effectPass = new EffectPass(new ToneMappingEffect());
 
 // Render to the same buffer.
-geometryPassB.output.defaultBuffer = geometryPassA.output.defaultBuffer;
+geometryPassB.output.shareBufferWith(geometryPassA.output);
 
 geometryPassA.scissor.enabled = true;
 geometryPassA.viewport.enabled = true;

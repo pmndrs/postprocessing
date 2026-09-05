@@ -104,7 +104,7 @@ export class CustomPass extends Pass<CustomMaterial> {
 
 		super("CustomPass");
 		this.fullscreenMaterial = new CustomMaterial();
-		this.output.createDefaultBuffer();
+		this.createDefaultBuffer();
 
 	}
 
