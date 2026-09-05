@@ -1,12 +1,15 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
-import { ClearOperation } from "postprocessing";
+import { ClearOperation, Input, Output, Resolution } from "postprocessing";
 import type { RenderTaskContext } from "postprocessing";
 
 function createContext(): RenderTaskContext {
 
 	return {
+		input: new Input(),
+		output: new Output(),
+		resolution: new Resolution(),
 		renderer: null,
 		scene: null,
 		camera: null

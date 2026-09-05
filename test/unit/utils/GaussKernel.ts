@@ -1,12 +1,12 @@
-import { describe, it } from "node:test";
 import assert from "node:assert/strict";
+import { describe, it } from "node:test";
 import { GaussKernel } from "postprocessing";
 
 describe("GaussKernel", () => {
 
 	it("can be instantiated", () => {
 
-		assert.doesNotThrow(() => new GaussKernel(3));
+		assert.doesNotThrow(() => GaussKernel.create(9, 3));
 
 	});
 

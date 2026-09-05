@@ -1,5 +1,5 @@
-import { describe, it } from "node:test";
 import assert from "node:assert/strict";
+import { describe, it } from "node:test";
 import { Input } from "postprocessing";
 import { Texture } from "three";
 
@@ -28,7 +28,7 @@ describe("Input", () => {
 		const input = new Input();
 
 		input.defaultBuffer = texture;
-		input.removeDefaultBuffer();
+		input.deleteDefaultBuffer();
 
 		assert.equal(input.defaultBuffer, undefined);
 

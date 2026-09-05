@@ -1,13 +1,14 @@
-import { describe, it } from "node:test";
 import assert from "node:assert/strict";
+import { describe, it } from "node:test";
+
 import {
 	EffectMaterialCache,
+	type EffectPassContext,
 	GBuffer,
 	GBufferSchema,
 	Input,
 	ToneMappingEffect
 } from "postprocessing";
-import type { EffectPassContext } from "postprocessing";
 
 function createContext(requiredTextures: readonly string[] = []): EffectPassContext {
 
@@ -44,7 +45,7 @@ describe("EffectMaterialCache", () => {
 		effects.forEach((effect) => void (effect.optional = true));
 
 		const context = createContext([GBuffer.COLOR]);
-		context.input.gBufferSchema = new GBufferSchema();
+		context.input.setGBufferSchema(new GBufferSchema());
 
 		const manager = new EffectMaterialCache(context);
 
@@ -69,7 +70,7 @@ describe("EffectMaterialCache", () => {
 		effects.forEach((effect) => void (effect.optional = true));
 
 		const context = createContext([GBuffer.COLOR]);
-		context.input.gBufferSchema = new GBufferSchema();
+		context.input.setGBufferSchema(new GBufferSchema());
 
 		const manager = new EffectMaterialCache(context);
 

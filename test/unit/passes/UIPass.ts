@@ -1,6 +1,5 @@
-import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-
+import { describe, it } from "node:test";
 import { EffectPass, GBuffer, GeometryPass, UIPass } from "postprocessing";
 
 describe("UIPass", () => {
@@ -22,8 +21,8 @@ describe("UIPass", () => {
 		const uiPass = new UIPass();
 		const depth = geometryPass.output.defaultBuffer!.textures.get(GBuffer.DEPTH);
 
-		uiPass.input.connect(geometryPass.output);
-		uiPass.input.connect(effectPass.output);
+		uiPass.read(geometryPass);
+		uiPass.read(effectPass);
 
 		assert.equal(uiPass.input.defaultBuffer, effectPass.output.defaultBuffer!.texture);
 		assert.equal(uiPass.input.buffers.get(GBuffer.DEPTH), depth);
