@@ -11,7 +11,7 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Install pnpm and Node.js
         uses: pnpm/setup@v2
         with:
