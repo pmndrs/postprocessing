@@ -1,8 +1,5 @@
 {
-	"include": [
-		"./src",
-		"./test"
-	],
+	"include": ["./src"],
 	"compilerOptions": {
 		// File Layout
 		"rootDir": ".",
@@ -15,6 +12,7 @@
 		"module": "esnext",
 		"target": "es2025",
 		"types": ["node", "three"],
+		"lib": ["ES2025", "DOM", "WebWorker"],
 		// Style Options
 		"noImplicitReturns": true,
 		"noImplicitOverride": true,

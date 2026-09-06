@@ -1,7 +1,11 @@
 {
 	"extends": "../tsconfig.json",
+	"include": ["."],
 	"compilerOptions": {
 		"allowImportingTsExtensions": true,
-		"noEmit": true
+		"noEmit": true,
+		"paths": {
+			"postprocessing": ["../src/index.ts"]
+		}
 	}
 }
