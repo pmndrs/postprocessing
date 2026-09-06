@@ -57,9 +57,8 @@
 	},
 	"scripts": {
 		"clean": "del-cli temp dist public",
-		"lint": "run-p lint:*",
-		"lint:src": "eslint --fix src",
-		"lint:test": "eslint --fix test",
+		"lint": "eslint src test",
+		"format": "eslint --fix src test",
 		"build": "run-p build:*",
 		"build:js": "node esbuild",
 		"build:tsc": "tsc -p tsconfig.d.json",
