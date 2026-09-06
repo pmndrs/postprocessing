@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Development and contribution guidance for this repository is documented in [`CONTRIBUTING.md`](CONTRIBUTING.md).
+Development and contribution guidance for this repository is documented in [`CONTRIBUTING.md`](.github/CONTRIBUTING.md).
 
 Agents should follow `CONTRIBUTING.md`, including its development workflow, testing requirements, coding conventions, and scope guidelines.
 
