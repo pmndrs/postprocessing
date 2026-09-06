@@ -3,7 +3,7 @@ import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 import { Pass } from "../core/Pass.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { CopyMaterial } from "../materials/CopyMaterial.js";
-import { blitFramebuffer } from "../utils/functions/framebuffer.js";
+import { blitFramebuffer, canUseBlit } from "../utils/functions/framebuffer.js";
 
 /**
  * Copies the contents of the default input buffer to the default output buffer.
@@ -76,37 +76,9 @@ export class CopyPass extends Pass<CopyMaterial> {
 
 	private setupBlit(): void {
 
-		this.blitEnabled = false;
-
-		const inputBuffer = this.input.defaultBuffer?.value?.renderTarget ?? null;
-		const outputBuffer = this.output.defaultBuffer?.value ?? null;
-
-		if(inputBuffer === null || outputBuffer === null ||
-			inputBuffer.texture.type !== outputBuffer.texture.type ||
-			inputBuffer.texture.format !== outputBuffer.texture.format ||
-			inputBuffer.width !== outputBuffer.width ||
-			inputBuffer.height !== outputBuffer.height) {
-
-			return;
-
-		}
-
-		const inputDepthTexture = this.input.buffers.get(GBuffer.DEPTH)?.value ?? null;
-
-		if(inputDepthTexture !== null) {
-
-			if(inputDepthTexture.renderTarget !== inputBuffer ||
-				inputDepthTexture === outputBuffer.depthTexture ||
-				inputDepthTexture.type !== outputBuffer.depthTexture?.type ||
-				inputDepthTexture.format !== outputBuffer.depthTexture?.format) {
-
-				return;
-
-			}
-
-		}
-
-		this.blitEnabled = true;
+		const src = this.input.defaultBuffer?.value?.renderTarget ?? null;
+		const dst = this.output.defaultBuffer?.value ?? null;
+		this.blitEnabled = canUseBlit(src, dst);
 
 	}
 

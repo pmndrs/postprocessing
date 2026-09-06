@@ -1,4 +1,4 @@
-import { LinearFilter, NearestFilter, TextureFilter, WebGLRenderer, WebGLRenderTarget } from "three";
+import { LinearFilter, NearestFilter, RenderTarget, TextureFilter, WebGLRenderer } from "three";
 
 /**
  * Internal RenderTarget properties.
@@ -25,7 +25,7 @@ interface RenderTargetProps {
  * @internal
  */
 
-export function blitFramebuffer(renderer: WebGLRenderer, src: WebGLRenderTarget, dst: WebGLRenderTarget,
+export function blitFramebuffer(renderer: WebGLRenderer, src: RenderTarget, dst: RenderTarget,
 	color = true, depth = false, stencil = false, filter: TextureFilter = NearestFilter): void {
 
 	const gl = renderer.getContext() as WebGL2RenderingContext;
@@ -69,5 +69,43 @@ export function blitFramebuffer(renderer: WebGLRenderer, src: WebGLRenderTarget,
 
 	gl.bindFramebuffer(gl.READ_FRAMEBUFFER, null);
 	gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, null);
+
+}
+
+/**
+ * Checks if the input buffer can be copied with {@link blitFramebuffer} and updates {@link blitEnabled}.
+ *
+ * @param src - The source buffer.
+ * @param dst - The destination buffer.
+ * @return Whether the source buffer can be copied with a blit operation.
+ * @internal
+ */
+
+export function canUseBlit(src: RenderTarget | null, dst: RenderTarget | null): boolean {
+
+	if(src === null || dst === null ||
+		src.texture.type !== dst.texture.type ||
+		src.texture.format !== dst.texture.format ||
+		src.width !== dst.width ||
+		src.height !== dst.height) {
+
+		return false;
+
+	}
+
+	if(src.depthTexture !== null) {
+
+		if(src.depthTexture.renderTarget !== src ||
+			src.depthTexture === dst.depthTexture ||
+			src.depthTexture.type !== dst.depthTexture?.type ||
+			src.depthTexture.format !== dst.depthTexture?.format) {
+
+			return false;
+
+		}
+
+	}
+
+	return true;
 
 }
