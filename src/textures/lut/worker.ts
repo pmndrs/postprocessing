@@ -23,8 +23,7 @@ self.addEventListener("message", (event: MessageEvent<LUTMessage>) => {
 	const request = event.data;
 	const data = TetrahedralUpscaler.expand(request.data, request.size);
 
-	const ctx = (self as unknown) as Worker;
-	ctx.postMessage(data, [data.buffer]);
+	self.postMessage(data, [data.buffer]);
 	close();
 
 });
