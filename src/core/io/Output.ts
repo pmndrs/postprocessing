@@ -40,7 +40,7 @@ export interface OutputEventMap extends BaseEventMap {
 export class Output extends EventDispatcher<OutputEventMap> {
 
 	/**
-	 * Identifies the default output buffer in the {@link renderTargets} collection.
+	 * Identifies the default output buffer in the {@link buffers} collection.
 	 */
 
 	static readonly BUFFER_DEFAULT = "BUFFER_DEFAULT";
