@@ -1,48 +1,34 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-
-import { ClearOperation, Input, Output, Resolution } from "postprocessing";
-import type { RenderTaskContext } from "postprocessing";
-
-function createContext(): RenderTaskContext {
-
-	return {
-		input: new Input(),
-		output: new Output(),
-		resolution: new Resolution(),
-		renderer: null,
-		scene: null,
-		camera: null
-	};
-
-}
+import { ClearOperation } from "postprocessing";
+import { createRenderTaskContext } from "../../support/context.ts";
 
 describe("ClearOperation", () => {
 
 	it("can be instantiated", () => {
 
-		assert.doesNotThrow(() => new ClearOperation(createContext()));
-
-	});
-
-	it("accepts clear flag options", () => {
-
-		const object = new ClearOperation(createContext(), {
-			color: false,
-			depth: false,
-			stencil: true
-		});
-
-		assert.equal(object.clearFlags.color, false);
-		assert.equal(object.clearFlags.depth, false);
-		assert.equal(object.clearFlags.stencil, true);
+		assert.doesNotThrow(() => new ClearOperation(createRenderTaskContext()));
 
 	});
 
 	it("can be disposed", () => {
 
-		const object = new ClearOperation(createContext());
+		const object = new ClearOperation(createRenderTaskContext());
 		assert.doesNotThrow(() => object.dispose());
+
+	});
+
+	it("accepts clear flag options", () => {
+
+		const clear = new ClearOperation(createRenderTaskContext(), {
+			color: false,
+			depth: false,
+			stencil: true
+		});
+
+		assert.equal(clear.clearFlags.color, false);
+		assert.equal(clear.clearFlags.depth, false);
+		assert.equal(clear.clearFlags.stencil, true);
 
 	});
 

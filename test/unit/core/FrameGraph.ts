@@ -25,7 +25,6 @@ describe("FrameGraph", () => {
 	it("can be disposed", () => {
 
 		const object = new FrameGraph();
-
 		assert.doesNotThrow(() => object.dispose());
 
 	});
@@ -75,7 +74,6 @@ describe("FrameGraph", () => {
 	it("renders an empty graph without a renderer", () => {
 
 		const graph = new FrameGraph();
-
 		assert.doesNotThrow(() => graph.render());
 
 	});
@@ -83,7 +81,6 @@ describe("FrameGraph", () => {
 	it("renders an empty graph", () => {
 
 		const graph = new FrameGraph({ renderer });
-
 		assert.doesNotThrow(() => graph.render());
 
 	});
