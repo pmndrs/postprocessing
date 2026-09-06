@@ -50,7 +50,7 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 	 * Identifies the main output buffer.
 	 */
 
-	private static readonly BUFFER_MAIN = "BUFFER_MAIN";
+	private static readonly BUFFER_MAIN = "main";
 
 	/**
 	 * @see {@link fullResolutionUpsampling}

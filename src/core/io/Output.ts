@@ -43,7 +43,7 @@ export class Output extends EventDispatcher<OutputEventMap> {
 	 * Identifies the default output buffer in the {@link buffers} collection.
 	 */
 
-	static readonly BUFFER_DEFAULT = "BUFFER_DEFAULT";
+	static readonly BUFFER_DEFAULT = "default";
 
 	/**
 	 * @see {@link buffers}

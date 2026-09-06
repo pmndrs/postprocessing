@@ -34,13 +34,13 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> implements Gaus
 	 * Identifies the first blur buffer.
 	 */
 
-	private static readonly BUFFER_X = "BUFFER_X";
+	private static readonly BUFFER_X = "buffer-x";
 
 	/**
 	 * Identifies the second blur buffer.
 	 */
 
-	private static readonly BUFFER_Y = "BUFFER_Y";
+	private static readonly BUFFER_Y = "buffer-y";
 
 	/**
 	 * A render target for horizontal blurring.

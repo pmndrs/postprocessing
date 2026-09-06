@@ -46,7 +46,7 @@ export class Input extends EventDispatcher<InputEventMap> implements ShaderData 
 	 * Identifies the default input buffer in the {@link textures} collection.
 	 */
 
-	static readonly BUFFER_DEFAULT = "BUFFER_DEFAULT";
+	static readonly BUFFER_DEFAULT = "default";
 
 	/**
 	 * An event listener that dispatches a `change` event.

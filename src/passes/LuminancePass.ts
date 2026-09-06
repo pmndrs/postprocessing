@@ -16,7 +16,7 @@ export class LuminancePass extends Pass<LuminanceHighPassMaterial> {
 	 * Identifies the luminance buffer.
 	 */
 
-	private static readonly BUFFER_LUMINANCE = "BUFFER_LUMINANCE";
+	private static readonly BUFFER_LUMINANCE = "luminance";
 
 	/**
 	 * The luminance buffer resource.

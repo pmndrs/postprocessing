@@ -17,7 +17,7 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 	 * Identifies the depth output buffer.
 	 */
 
-	private static readonly BUFFER_DEPTH = "BUFFER_DEPTH";
+	private static readonly BUFFER_DEPTH = "depth";
 
 	/**
 	 * The depth render target resource.
