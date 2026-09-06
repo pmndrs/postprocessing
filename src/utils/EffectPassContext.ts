@@ -3,8 +3,8 @@ import { Input } from "../core/io/Input.js";
 /**
  * An {@link EffectPass} context.
  *
- * @see {@link EffectMaterialCache}
  * @category Utils
+ * @internal
  */
 
 export interface EffectPassContext {
