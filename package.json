@@ -57,19 +57,24 @@
 	},
 	"scripts": {
 		"clean": "del-cli temp dist public",
-		"tsc": "tsc -p tsconfig.d.json",
-		"lint": "eslint --fix src",
-		"build": "node esbuild",
-		"watch": "node esbuild -w",
-		"watch:all": "pnpm --parallel -r watch",
+		"lint": "run-p lint:*",
+		"lint:src": "eslint --fix src",
+		"lint:test": "eslint --fix test",
+		"build": "run-p build:*",
+		"build:js": "node esbuild",
+		"build:tsc": "tsc -p tsconfig.d.json",
+		"build:doc": "typedoc --tsconfig tsconfig.d.json",
+		"watch": "run-p watch:*",
+		"watch:js": "node esbuild -w",
+		"watch:tsc": "tsc -p tsconfig.d.json --watch --preserveWatchOutput",
 		"deploy": "cpy llms.txt public/llms.txt",
 		"gzip": "gzipper c \"public\"",
-		"doc": "typedoc --tsconfig tsconfig.d.json",
-		"pretest": "run-s clean tsc lint build",
+		"pretest": "run-s clean lint build",
 		"test": "run-s test:*",
 		"test:unit": "node --test \"test/unit/**/*.ts\"",
-		"posttest": "run-s doc",
-		"prepublishOnly": "run-s test"
+		"test:e2e": "echo \"not yet implemented\"",
+		"prepublishOnly": "run-s test",
+		"dev": "pnpm --parallel -r watch"
 	},
 	"peerDependencies": {
 		"three": ">= 0.179.0 < 0.186.0"
