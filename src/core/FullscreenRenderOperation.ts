@@ -1,16 +1,17 @@
 import { Group, Material, Mesh, Object3D, Scene, ShaderMaterial } from "three";
-import { RenderOperation } from "../core/RenderOperation.js";
-import { RenderTaskContext } from "../core/RenderTaskContext.js";
 import { FullscreenMaterial } from "../materials/FullscreenMaterial.js";
 import { fullscreenCamera } from "../utils/objects/fullscreenCamera.js";
 import { fullscreenGeometry } from "../utils/objects/fullscreenGeometry.js";
 import { ObservableSet } from "../utils/ObservableSet.js";
 import { ShaderDataTracker } from "../utils/ShaderDataTracker.js";
+import { RenderOperation } from "./RenderOperation.js";
+import { RenderTaskContext } from "./RenderTaskContext.js";
 
 /**
  * A fullscreen render operation.
  *
- * @category Operations
+ * @category Core
+ * @internal
  */
 
 export class FullscreenRenderOperation<TMaterial extends Material | null> extends RenderOperation {

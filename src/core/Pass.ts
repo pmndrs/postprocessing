@@ -11,7 +11,6 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { FullscreenRenderOperation } from "../operations/FullscreenRenderOperation.js";
 import { GBufferSchema } from "../utils/gbuffer/GBufferSchema.js";
 import { IdManager } from "../utils/IdManager.js";
 import { ReadonlyTimer } from "../utils/ReadonlyTimer.js";
@@ -20,6 +19,7 @@ import { SceneEvent, SceneEventTarget } from "../utils/SceneEventTarget.js";
 import { Scissor } from "../utils/Scissor.js";
 import { Viewport } from "../utils/Viewport.js";
 import { Disposable } from "./Disposable.js";
+import { FullscreenRenderOperation } from "./FullscreenRenderOperation.js";
 import { Input } from "./io/Input.js";
 import { Output } from "./io/Output.js";
 import { RenderTargetResource } from "./io/RenderTargetResource.js";

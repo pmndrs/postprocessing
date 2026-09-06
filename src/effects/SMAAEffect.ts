@@ -1,4 +1,5 @@
 import { Camera, Color, LinearFilter, LoadingManager, NearestFilter, Texture, Uniform } from "three";
+import { ClearOperation } from "../core/ClearOperation.js";
 import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 import { TextureResource } from "../core/io/TextureResource.js";
 import { GBuffer } from "../enums/GBuffer.js";
@@ -7,7 +8,6 @@ import { SMAAPredicationMode } from "../enums/SMAAPredicationMode.js";
 import { SMAAPreset } from "../enums/SMAAPreset.js";
 import { SMAAEdgeDetectionMaterial } from "../materials/SMAAEdgeDetectionMaterial.js";
 import { SMAAWeightsMaterial } from "../materials/SMAAWeightsMaterial.js";
-import { ClearOperation } from "../operations/ClearOperation.js";
 import { ShaderPass } from "../passes/ShaderPass.js";
 import { Effect } from "./Effect.js";
 
