@@ -207,8 +207,6 @@ export class ClearOperation extends RenderOperation {
 
 	/**
 	 * Clears the currently bound render target.
-	 *
-	 * @param context - The render task context.
 	 */
 
 	execute(): void {
