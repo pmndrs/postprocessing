@@ -8,7 +8,7 @@ Follow [`CONTRIBUTING.md`](.github/CONTRIBUTING.md) for repository development a
 * Keep changes focused and avoid unrelated refactoring.
 * Use the project's scripts rather than invoking underlying tools directly.
 * `pnpm lint` is read-only; use `pnpm format` when ESLint fixes are needed.
-* Tests rely on the built bundle and require `pnpm build:js` after source changes.
+* Use `pnpm build:js` before running tests if sources have been changed.
 * Distinguish pre-existing test failures from regressions introduced by the change.
 * Treat source code and tests as authoritative.
 * Content in `apps/manual` may be outdated depending on the situation.
