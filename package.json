@@ -56,7 +56,7 @@
 		"tag": "beta"
 	},
 	"scripts": {
-		"clean": "del-cli temp dist public",
+		"clean": "del-cli temp dist public test/e2e/pages/dist",
 		"lint": "eslint src test",
 		"format": "eslint --fix src test",
 		"build": "run-p build:*",
@@ -71,7 +71,7 @@
 		"pretest": "run-s clean lint build",
 		"test": "run-s test:*",
 		"test:unit": "node --test \"test/unit/**/*.ts\"",
-		"test:e2e": "echo \"not yet implemented\"",
+		"test:e2e": "playwright test",
 		"prepublishOnly": "run-s test",
 		"dev": "pnpm --parallel -r watch"
 	},
@@ -79,6 +79,7 @@
 		"three": ">= 0.179.0 < 0.186.0"
 	},
 	"devDependencies": {
+		"@playwright/test": "catalog:",
 		"@types/node": "catalog:",
 		"@types/three": "catalog:",
 		"cpy-cli": "catalog:",

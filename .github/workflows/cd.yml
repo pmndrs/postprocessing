@@ -22,6 +22,8 @@ jobs:
           version: 11
           runtime: node@24
           cache: true
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps --no-shell chromium
       - name: Build and test
         run: pnpm -r test
       - name: Publish
