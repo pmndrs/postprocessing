@@ -31,14 +31,6 @@ const lib = {
 	bundle: true
 };
 
-const test = {
-	entryPoints: await Array.fromAsync(glob("./test/e2e/pages/*.ts")),
-	outdir: "./test/e2e/pages/dist",
-	logLevel: "info",
-	format: "iife",
-	bundle: true
-};
-
 if(process.argv.includes("-w")) {
 
 	const ctxWorkers = await esbuild.context(workers);
@@ -47,13 +39,9 @@ if(process.argv.includes("-w")) {
 	const ctxLib = await esbuild.context(lib);
 	await ctxLib.watch();
 
-	const ctxTest = await esbuild.context(test);
-	await ctxTest.watch();
-
 } else {
 
 	await esbuild.build(workers);
 	await esbuild.build(lib);
-	await esbuild.build(test);
 
 }
