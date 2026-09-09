@@ -264,6 +264,7 @@ export class TetrahedralUpscaler {
 		const originalSize = Math.cbrt(data.length / 4);
 
 		const rgb = new Float32Array(3);
+		// eslint-disable-next-line new-cap
 		const array = new data.constructor(size ** 3 * 4);
 		const maxValue = (data instanceof Uint8Array) ? 255 : 1.0;
 		const sizeSq = size ** 2;
