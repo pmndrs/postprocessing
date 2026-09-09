@@ -1,29 +1,31 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import {
-	Vector2,
-	WebGLRenderer,
+	BaseEvent,
 	Camera,
-	PerspectiveCamera,
-	Texture,
-	Material,
-	WebGLRenderTarget,
-	Scene,
-	Uniform,
-	Object3D,
-	Vector3,
-	ShaderMaterial,
-	DataTexture,
-	Mesh,
-	Points,
-	Loader,
-	DepthPackingStrategies,
-	DepthModes,
-	EventDispatcher,
+	CanvasTexture,
 	Color,
 	ColorSpace,
 	Data3DTexture,
-	BaseEvent,
-	CanvasTexture,
-	Vector4
+	DataTexture,
+	DepthModes,
+	DepthPackingStrategies,
+	EventDispatcher,
+	Loader,
+	Material,
+	Mesh,
+	Object3D,
+	PerspectiveCamera,
+	Points,
+	Scene,
+	ShaderMaterial,
+	Texture,
+	TextureDataType,
+	Uniform,
+	Vector2,
+	Vector3,
+	Vector4,
+	WebGLRenderer,
+	WebGLRenderTarget
 } from "three";
 
 /**
@@ -404,6 +406,7 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 	 */
 	get worldFocusRange(): number;
 	set worldFocusRange(value: number);
+
 }
 
 /**
@@ -1541,7 +1544,7 @@ export class BoxBlurPass extends Pass {
 			resolutionScale,
 			resolutionX,
 			resolutionY
-		}?: {
+		} ?: {
 			kernelSize?: number;
 			iterations?: number;
 			bilateral?: boolean;
@@ -1575,7 +1578,7 @@ export class GaussianBlurMaterial extends ShaderMaterial {
 	constructor(
 		{
 			kernelSize
-		}?: {
+		} ?: {
 			kernelSize?: number;
 		}
 	);
@@ -1606,7 +1609,7 @@ export class GaussianBlurPass extends Pass {
 			resolutionScale,
 			resolutionX,
 			resolutionY
-		}?: {
+		} ?: {
 			kernelSize?: number;
 			iterations?: number;
 			resolutionScale?: number;
@@ -2995,7 +2998,7 @@ export class AdaptiveLuminancePass extends Pass {
 		{
 			minLuminance,
 			adaptationRate
-		}?: {
+		} ?: {
 			minLuminance?: number;
 			adaptationRate?: number;
 		}
@@ -3085,7 +3088,7 @@ export class KawaseBlurPass extends Pass {
 		width,
 		height,
 		kernelSize
-	}?: {
+	} ?: {
 		resolutionScale?: number;
 		resolutionX?: number;
 		resolutionY?: number;
@@ -3466,7 +3469,7 @@ export class DepthCopyPass extends Pass {
 	 * @param {Object} [options] - The options.
 	 * @param {DepthPackingStrategies} [options.depthPacking=RGBADepthPacking] - The output depth packing.
 	 */
-	constructor({ depthPacking }?: { depthPacking?: DepthPackingStrategies });
+	constructor({ depthPacking } ?: { depthPacking?: DepthPackingStrategies });
 	/**
 	 * The output depth texture.
 	 *
@@ -3534,7 +3537,7 @@ export class DepthDownsamplingPass extends Pass {
 		resolutionScale,
 		width,
 		height
-	}?: {
+	} ?: {
 		normalBuffer?: Texture;
 		resolutionScale?: number;
 		width?: number;
@@ -3744,7 +3747,7 @@ export class DepthPass extends Pass {
 			width,
 			height,
 			renderTarget
-		}?: {
+		} ?: {
 			resolutionScale?: number;
 			resolutionX?: number;
 			resolutionY?: number;
@@ -3823,7 +3826,7 @@ export class DepthPickingPass extends DepthCopyPass {
 	constructor({
 		depthPacking,
 		mode
-	}?: {
+	} ?: {
 		depthPacking?: DepthPackingStrategies;
 		mode?: number;
 	});
@@ -4050,7 +4053,7 @@ export class Effect
 			uniforms,
 			extensions,
 			vertexShader
-		}?: {
+		} ?: {
 			attributes?: EffectAttribute;
 			blendFunction?: BlendFunction;
 			defines?: Map<string, string>;
@@ -4505,7 +4508,7 @@ export class LuminancePass extends Pass {
 		width,
 		height,
 		renderTarget
-	}?: {
+	} ?: {
 		resolutionScale?: number;
 		resolutionX?: number;
 		resolutionY?: number;
@@ -4664,7 +4667,7 @@ export class NormalPass extends Pass {
 			width,
 			height,
 			renderTarget
-		}?: {
+		} ?: {
 			resolutionScale?: number;
 			resolutionX?: number;
 			resolutionY?: number;
@@ -4801,7 +4804,7 @@ export class EffectComposer implements Resizable, Disposable {
 			stencilBuffer,
 			multisampling,
 			frameBufferType
-		}?: {
+		} ?: {
 			depthBuffer?: boolean;
 			stencilBuffer?: boolean;
 			alpha?: boolean;
@@ -5220,7 +5223,7 @@ export class ASCIIEffect extends Effect {
 		cellSize,
 		color,
 		inverted
-	}?: {
+	} ?: {
 		asciiTexture?: ASCIITexture | null;
 		cellSize?: number;
 		color?: Color | string | number | null;
@@ -5311,7 +5314,7 @@ export class BloomEffect extends Effect {
 		height,
 		resolutionX,
 		resolutionY
-	}?: BloomEffectOptions);
+	} ?: BloomEffectOptions);
 
 	/**
 	 * A luminance shader pass.
@@ -5524,7 +5527,7 @@ export class BokehEffect extends Effect {
 		dof,
 		aperture,
 		maxBlur
-	}?: {
+	} ?: {
 		blendFunction?: BlendFunction;
 		focus?: number;
 		dof?: number;
@@ -5553,7 +5556,7 @@ export class BrightnessContrastEffect extends Effect {
 		blendFunction,
 		brightness,
 		contrast
-	}?: {
+	} ?: {
 		blendFunction?: BlendFunction;
 		brightness?: number;
 		contrast?: number;
@@ -5623,11 +5626,11 @@ export class ChromaticAberrationEffect extends Effect {
 		offset,
 		radialModulation,
 		modulationOffset
-	}?: {
+	} ?: {
 		blendFunction?: BlendFunction;
 		offset?: Vector2;
-		radialModulation: boolean,
-		modulationOffset: number
+		radialModulation: boolean;
+		modulationOffset: number;
 	});
 
 	set offset(arg: Vector2);
@@ -5701,7 +5704,7 @@ export class ColorDepthEffect extends Effect {
 	constructor({
 		blendFunction,
 		bits
-	}?: {
+	} ?: {
 		blendFunction?: BlendFunction;
 		bits?: number;
 	});
@@ -5747,7 +5750,7 @@ export class DepthEffect extends Effect {
 	constructor({
 		blendFunction,
 		inverted
-	}?: {
+	} ?: {
 		blendFunction?: BlendFunction;
 		inverted?: boolean;
 	});
@@ -5818,7 +5821,7 @@ export class DepthOfFieldEffect extends Effect {
 			resolutionY,
 			width,
 			height
-		}?: {
+		} ?: {
 			blendFunction?: BlendFunction;
 			worldFocusDistance?: number;
 			worldFocusRange?: number;
@@ -5993,7 +5996,7 @@ export class DotScreenEffect extends Effect {
 		blendFunction,
 		angle,
 		scale
-	}?: {
+	} ?: {
 		blendFunction?: BlendFunction;
 		angle?: number;
 		scale?: number;
@@ -6047,7 +6050,7 @@ export class GammaCorrectionEffect extends Effect {
 	constructor({
 		blendFunction,
 		gamma
-	}?: {
+	} ?: {
 		blendFunction?: BlendFunction;
 		gamma?: number;
 	});
@@ -6085,17 +6088,17 @@ export class TiltShiftEffect extends Effect {
 		resolutionScale,
 		resolutionX,
 		resolutionY
-	}?: {
-		blendFunction?: BlendFunction,
-		offset?: number,
-		rotation?: number,
-		focusArea?: number,
-		feather?: number,
-		bias?: number,
-		kernelSize?: KernelSize,
-		resolutionScale?: number,
-		resolutionX?: number,
-		resolutionY?: number
+	} ?: {
+		blendFunction?: BlendFunction;
+		offset?: number;
+		rotation?: number;
+		focusArea?: number;
+		feather?: number;
+		bias?: number;
+		kernelSize?: KernelSize;
+		resolutionScale?: number;
+		resolutionX?: number;
+		resolutionY?: number;
 	});
 
 	/**
@@ -6185,7 +6188,7 @@ export class GlitchEffect extends Effect {
 		ratio,
 		perturbationMap,
 		dtSize
-	}?: {
+	} ?: {
 		blendFunction?: BlendFunction;
 		chromaticAberrationOffset?: Vector2;
 		delay?: Vector2;
@@ -6552,7 +6555,7 @@ export class GodRaysEffect extends Effect {
 			height,
 			kernelSize,
 			blur
-		}?: {
+		} ?: {
 			blendFunction?: BlendFunction;
 			samples?: number;
 			density?: number;
@@ -6764,7 +6767,7 @@ export class GridEffect extends Effect {
 		blendFunction,
 		scale,
 		lineWidth
-	}?: {
+	} ?: {
 		blendFunction?: BlendFunction;
 		scale?: number;
 		lineWidth?: number;
@@ -6841,7 +6844,7 @@ export class HueSaturationEffect extends Effect {
 		blendFunction,
 		hue,
 		saturation
-	}?: {
+	} ?: {
 		blendFunction?: BlendFunction;
 		hue?: number;
 		saturation?: number;
@@ -6909,7 +6912,7 @@ export class LUT1DEffect extends Effect {
 		lut: Texture,
 		{
 			blendFunction
-		}?: {
+		} ?: {
 			blendFunction?: BlendFunction;
 		}
 	);
@@ -6947,7 +6950,7 @@ export class LUT3DEffect extends Effect {
 			blendFunction,
 			tetrahedralInterpolation,
 			inputColorSpace
-		}?: {
+		} ?: {
 			blendFunction?: BlendFunction;
 			tetrahedralInterpolation?: boolean;
 			inputColorSpace?: ColorSpace;
@@ -7009,7 +7012,7 @@ export class NoiseEffect extends Effect {
 	constructor({
 		blendFunction,
 		premultiply
-	}?: {
+	} ?: {
 		blendFunction?: BlendFunction;
 		premultiply?: boolean;
 	});
@@ -7086,7 +7089,7 @@ export class OutlineEffect extends Effect {
 			kernelSize,
 			blur,
 			xRay
-		}?: {
+		} ?: {
 			blendFunction?: BlendFunction;
 			patternTexture?: Texture;
 			patternScale?: number;
@@ -7459,7 +7462,7 @@ export class RealisticBokehEffect extends Effect {
 		showFocus,
 		manualDoF,
 		pentagon
-	}?: {
+	} ?: {
 		blendFunction?: BlendFunction;
 		focus?: number;
 		focalLength?: number;
@@ -7534,7 +7537,7 @@ export class ScanlineEffect extends Effect {
 	constructor({
 		blendFunction,
 		density
-	}?: {
+	} ?: {
 		blendFunction?: BlendFunction;
 		density?: number;
 	});
@@ -7711,7 +7714,7 @@ export class SepiaEffect extends Effect {
 	constructor({
 		blendFunction,
 		intensity
-	}?: {
+	} ?: {
 		blendFunction?: BlendFunction;
 		intensity?: number;
 	});
@@ -7768,7 +7771,7 @@ export class ShockWaveEffect extends Effect {
 			maxRadius,
 			waveSize,
 			amplitude
-		}?: {
+		} ?: {
 			speed?: number;
 			maxRadius?: number;
 			waveSize?: number;
@@ -7882,8 +7885,8 @@ export class FXAAEffect extends Effect {
 	 */
 	constructor({
 		blendFunction
-	}?: {
-		blendFunction?: BlendFunction
+	} ?: {
+		blendFunction?: BlendFunction;
 	});
 
 	/**
@@ -7953,7 +7956,7 @@ export class SMAAEffect extends Effect {
 		preset,
 		edgeDetectionMode,
 		predicationMode
-	}?: {
+	} ?: {
 		preset?: SMAAPreset;
 		edgeDetectionMode?: EdgeDetectionMode;
 		predicationMode?: PredicationMode;
@@ -8183,7 +8186,7 @@ export class SSAOEffect extends Effect {
 			resolutionY,
 			width,
 			height
-		}?: {
+		} ?: {
 			blendFunction?: BlendFunction;
 			distanceScaling?: boolean;
 			depthAwareUpsampling?: boolean;
@@ -8384,7 +8387,7 @@ export class TextureEffect extends Effect {
 		blendFunction,
 		texture,
 		aspectCorrection
-	}?: {
+	} ?: {
 		blendFunction?: BlendFunction;
 		texture?: Texture;
 		aspectCorrection?: boolean;
@@ -8539,7 +8542,7 @@ export class ToneMappingEffect extends Effect {
 		minLuminance,
 		averageLuminance,
 		adaptationRate
-	}?: {
+	} ?: {
 		blendFunction?: BlendFunction;
 		adaptive?: boolean;
 		mode?: ToneMappingMode;
@@ -8713,7 +8716,7 @@ export class VignetteEffect extends Effect {
 		eskil,
 		offset,
 		darkness
-	}?: {
+	} ?: {
 		blendFunction?: BlendFunction;
 		technique?: VignetteTechnique;
 		eskil?: boolean;
@@ -9052,7 +9055,7 @@ export class ASCIITexture extends CanvasTexture {
 		fontSize,
 		size,
 		cellCount
-	}?: {
+	} ?: {
 		characters?: string;
 		font?: string;
 		fontSize?: number;
@@ -9324,7 +9327,7 @@ export class LensDistortionEffect extends Effect {
 		principalPoint,
 		focalLength,
 		skew
-	}?: {
+	} ?: {
 		distortion: Vector2;
 		principalPoint: Vector2;
 		focalLength: Vector2;
