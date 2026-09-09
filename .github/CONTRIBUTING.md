@@ -10,7 +10,7 @@ Follow existing project patterns, abstractions, formatting, and naming conventio
 
 ## Development
 
-Use **pnpm** and the scripts defined in `package.json`. Use `pnpm format` to apply ESLint fixes and `pnpm lint` to check the code.
+Use **pnpm** and the scripts defined in `package.json`. Use `pnpm lint` to check the code and to apply fixes.
 
 ### Recommended VSCode plugins
 
@@ -20,10 +20,7 @@ Use **pnpm** and the scripts defined in `package.json`. Use `pnpm format` to app
 
 ## Testing
 
-Add or update tests for changed functionality. During development, use the most targeted test command available such as `pnpm test:unit` for quick iteration. Run the full `pnpm test` for final verification before opening a pull request.
-
-> [!NOTE]
-> Tests rely on the built bundle and require `pnpm build:js` after source changes.
+Add or update tests for changed functionality. During development, use `pnpm ava` for quick iteration. Run the full `pnpm test` for final verification before opening a pull request.
 
 Manually verify affected demos or visual behaviour where practical.
 
