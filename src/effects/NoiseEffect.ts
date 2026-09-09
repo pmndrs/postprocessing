@@ -38,6 +38,17 @@ export interface NoiseEffectOptions {
 
 	fps?: number;
 
+	/**
+	 * The noise seed.
+	 *
+	 * This value is used as a constant offset that determines the resulting noise pattern. Use it to create a
+	 * deterministic, reproducible pattern.
+	 *
+	 * @defaultValue A random value between `1` and `1024`.
+	 */
+
+	seed?: number;
+
 }
 
 /**
@@ -73,7 +84,8 @@ export class NoiseEffect extends Effect implements NoiseEffectOptions {
 	constructor({
 		rgb = true,
 		premultiply = true,
-		fps = 24
+		fps = 24,
+		seed
 	}: NoiseEffectOptions = {}) {
 
 		super("NoiseEffect");
@@ -82,7 +94,7 @@ export class NoiseEffect extends Effect implements NoiseEffectOptions {
 		this.blendMode.blendFunction = new AddBlendFunction();
 
 		this.input.uniforms.set("page", new Uniform(0.0));
-		this.input.defines.set("SEED", Math.max(1, Math.round(Math.random() * 1024)).toFixed(1));
+		this.input.defines.set("SEED", (seed ?? Math.max(1, Math.round(Math.random() * 1024))).toFixed(1));
 
 		this._fps = 0;
 		this.timeout = 0.0;
