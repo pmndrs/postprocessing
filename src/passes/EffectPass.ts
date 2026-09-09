@@ -4,7 +4,6 @@ import { Effect } from "../effects/Effect.js";
 import { GBuffer } from "../enums/GBuffer.js";
 import { EffectMaterial } from "../materials/EffectMaterial.js";
 import { EffectMaterialCache } from "../utils/EffectMaterialCache.js";
-import { GData } from "../enums/GData.js";
 
 /**
  * An effect pass.
@@ -132,8 +131,8 @@ export class EffectPass extends Pass<EffectMaterial> {
 	private updateRequiredTextures(): void {
 
 		const schema = this.input.gBufferSchema;
-		const requiredTextures = new Set<string>([GBuffer.COLOR]);
-		const requiredGData = new Set<string>([GData.COLOR]);
+		const requiredTextures = new Set<string>();
+		const requiredGData = new Set<string>();
 
 		for(const effect of this.effects) {
 
