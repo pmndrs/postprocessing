@@ -1,0 +1,1978 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 1225,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 29,
+      "column": 0
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 1225,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 29,
+        "column": 0
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 1036,
+        "end": 1224,
+        "loc": {
+          "start": {
+            "line": 17,
+            "column": 0
+          },
+          "end": {
+            "line": 28,
+            "column": 2
+          }
+        },
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "VariableDeclaration",
+          "start": 1043,
+          "end": 1224,
+          "loc": {
+            "start": {
+              "line": 17,
+              "column": 7
+            },
+            "end": {
+              "line": 28,
+              "column": 2
+            }
+          },
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start": 1049,
+              "end": 1223,
+              "loc": {
+                "start": {
+                  "line": 17,
+                  "column": 13
+                },
+                "end": {
+                  "line": 28,
+                  "column": 1
+                }
+              },
+              "id": {
+                "type": "Identifier",
+                "start": 1049,
+                "end": 1064,
+                "loc": {
+                  "start": {
+                    "line": 17,
+                    "column": 13
+                  },
+                  "end": {
+                    "line": 17,
+                    "column": 28
+                  },
+                  "identifierName": "ToneMappingMode"
+                },
+                "name": "ToneMappingMode",
+                "leadingComments": null
+              },
+              "init": {
+                "type": "ObjectExpression",
+                "start": 1067,
+                "end": 1223,
+                "loc": {
+                  "start": {
+                    "line": 17,
+                    "column": 31
+                  },
+                  "end": {
+                    "line": 28,
+                    "column": 1
+                  }
+                },
+                "properties": [
+                  {
+                    "type": "ObjectProperty",
+                    "start": 1070,
+                    "end": 1079,
+                    "loc": {
+                      "start": {
+                        "line": 18,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 18,
+                        "column": 10
+                      }
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 1070,
+                      "end": 1076,
+                      "loc": {
+                        "start": {
+                          "line": 18,
+                          "column": 1
+                        },
+                        "end": {
+                          "line": 18,
+                          "column": 7
+                        },
+                        "identifierName": "LINEAR"
+                      },
+                      "name": "LINEAR"
+                    },
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start": 1078,
+                      "end": 1079,
+                      "loc": {
+                        "start": {
+                          "line": 18,
+                          "column": 9
+                        },
+                        "end": {
+                          "line": 18,
+                          "column": 10
+                        }
+                      },
+                      "extra": {
+                        "rawValue": 0,
+                        "raw": "0"
+                      },
+                      "value": 0
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start": 1082,
+                    "end": 1093,
+                    "loc": {
+                      "start": {
+                        "line": 19,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 19,
+                        "column": 12
+                      }
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 1082,
+                      "end": 1090,
+                      "loc": {
+                        "start": {
+                          "line": 19,
+                          "column": 1
+                        },
+                        "end": {
+                          "line": 19,
+                          "column": 9
+                        },
+                        "identifierName": "REINHARD"
+                      },
+                      "name": "REINHARD"
+                    },
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start": 1092,
+                      "end": 1093,
+                      "loc": {
+                        "start": {
+                          "line": 19,
+                          "column": 11
+                        },
+                        "end": {
+                          "line": 19,
+                          "column": 12
+                        }
+                      },
+                      "extra": {
+                        "rawValue": 1,
+                        "raw": "1"
+                      },
+                      "value": 1
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start": 1096,
+                    "end": 1108,
+                    "loc": {
+                      "start": {
+                        "line": 20,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 20,
+                        "column": 13
+                      }
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 1096,
+                      "end": 1105,
+                      "loc": {
+                        "start": {
+                          "line": 20,
+                          "column": 1
+                        },
+                        "end": {
+                          "line": 20,
+                          "column": 10
+                        },
+                        "identifierName": "REINHARD2"
+                      },
+                      "name": "REINHARD2"
+                    },
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start": 1107,
+                      "end": 1108,
+                      "loc": {
+                        "start": {
+                          "line": 20,
+                          "column": 12
+                        },
+                        "end": {
+                          "line": 20,
+                          "column": 13
+                        }
+                      },
+                      "extra": {
+                        "rawValue": 2,
+                        "raw": "2"
+                      },
+                      "value": 2
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start": 1111,
+                    "end": 1132,
+                    "loc": {
+                      "start": {
+                        "line": 21,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 21,
+                        "column": 22
+                      }
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 1111,
+                      "end": 1129,
+                      "loc": {
+                        "start": {
+                          "line": 21,
+                          "column": 1
+                        },
+                        "end": {
+                          "line": 21,
+                          "column": 19
+                        },
+                        "identifierName": "REINHARD2_ADAPTIVE"
+                      },
+                      "name": "REINHARD2_ADAPTIVE"
+                    },
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start": 1131,
+                      "end": 1132,
+                      "loc": {
+                        "start": {
+                          "line": 21,
+                          "column": 21
+                        },
+                        "end": {
+                          "line": 21,
+                          "column": 22
+                        }
+                      },
+                      "extra": {
+                        "rawValue": 3,
+                        "raw": "3"
+                      },
+                      "value": 3
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start": 1135,
+                    "end": 1148,
+                    "loc": {
+                      "start": {
+                        "line": 22,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 22,
+                        "column": 14
+                      }
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 1135,
+                      "end": 1145,
+                      "loc": {
+                        "start": {
+                          "line": 22,
+                          "column": 1
+                        },
+                        "end": {
+                          "line": 22,
+                          "column": 11
+                        },
+                        "identifierName": "UNCHARTED2"
+                      },
+                      "name": "UNCHARTED2"
+                    },
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start": 1147,
+                      "end": 1148,
+                      "loc": {
+                        "start": {
+                          "line": 22,
+                          "column": 13
+                        },
+                        "end": {
+                          "line": 22,
+                          "column": 14
+                        }
+                      },
+                      "extra": {
+                        "rawValue": 4,
+                        "raw": "4"
+                      },
+                      "value": 4
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start": 1151,
+                    "end": 1170,
+                    "loc": {
+                      "start": {
+                        "line": 23,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 23,
+                        "column": 20
+                      }
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 1151,
+                      "end": 1167,
+                      "loc": {
+                        "start": {
+                          "line": 23,
+                          "column": 1
+                        },
+                        "end": {
+                          "line": 23,
+                          "column": 17
+                        },
+                        "identifierName": "OPTIMIZED_CINEON"
+                      },
+                      "name": "OPTIMIZED_CINEON"
+                    },
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start": 1169,
+                      "end": 1170,
+                      "loc": {
+                        "start": {
+                          "line": 23,
+                          "column": 19
+                        },
+                        "end": {
+                          "line": 23,
+                          "column": 20
+                        }
+                      },
+                      "extra": {
+                        "rawValue": 5,
+                        "raw": "5"
+                      },
+                      "value": 5
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start": 1173,
+                    "end": 1182,
+                    "loc": {
+                      "start": {
+                        "line": 24,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 24,
+                        "column": 10
+                      }
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 1173,
+                      "end": 1179,
+                      "loc": {
+                        "start": {
+                          "line": 24,
+                          "column": 1
+                        },
+                        "end": {
+                          "line": 24,
+                          "column": 7
+                        },
+                        "identifierName": "CINEON"
+                      },
+                      "name": "CINEON"
+                    },
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start": 1181,
+                      "end": 1182,
+                      "loc": {
+                        "start": {
+                          "line": 24,
+                          "column": 9
+                        },
+                        "end": {
+                          "line": 24,
+                          "column": 10
+                        }
+                      },
+                      "extra": {
+                        "rawValue": 5,
+                        "raw": "5"
+                      },
+                      "value": 5
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start": 1185,
+                    "end": 1199,
+                    "loc": {
+                      "start": {
+                        "line": 25,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 25,
+                        "column": 15
+                      }
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 1185,
+                      "end": 1196,
+                      "loc": {
+                        "start": {
+                          "line": 25,
+                          "column": 1
+                        },
+                        "end": {
+                          "line": 25,
+                          "column": 12
+                        },
+                        "identifierName": "ACES_FILMIC"
+                      },
+                      "name": "ACES_FILMIC"
+                    },
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start": 1198,
+                      "end": 1199,
+                      "loc": {
+                        "start": {
+                          "line": 25,
+                          "column": 14
+                        },
+                        "end": {
+                          "line": 25,
+                          "column": 15
+                        }
+                      },
+                      "extra": {
+                        "rawValue": 6,
+                        "raw": "6"
+                      },
+                      "value": 6
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start": 1202,
+                    "end": 1208,
+                    "loc": {
+                      "start": {
+                        "line": 26,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 26,
+                        "column": 7
+                      }
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 1202,
+                      "end": 1205,
+                      "loc": {
+                        "start": {
+                          "line": 26,
+                          "column": 1
+                        },
+                        "end": {
+                          "line": 26,
+                          "column": 4
+                        },
+                        "identifierName": "AGX"
+                      },
+                      "name": "AGX"
+                    },
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start": 1207,
+                      "end": 1208,
+                      "loc": {
+                        "start": {
+                          "line": 26,
+                          "column": 6
+                        },
+                        "end": {
+                          "line": 26,
+                          "column": 7
+                        }
+                      },
+                      "extra": {
+                        "rawValue": 7,
+                        "raw": "7"
+                      },
+                      "value": 7
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start": 1211,
+                    "end": 1221,
+                    "loc": {
+                      "start": {
+                        "line": 27,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 27,
+                        "column": 11
+                      }
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 1211,
+                      "end": 1218,
+                      "loc": {
+                        "start": {
+                          "line": 27,
+                          "column": 1
+                        },
+                        "end": {
+                          "line": 27,
+                          "column": 8
+                        },
+                        "identifierName": "NEUTRAL"
+                      },
+                      "name": "NEUTRAL"
+                    },
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start": 1220,
+                      "end": 1221,
+                      "loc": {
+                        "start": {
+                          "line": 27,
+                          "column": 10
+                        },
+                        "end": {
+                          "line": 27,
+                          "column": 11
+                        }
+                      },
+                      "extra": {
+                        "rawValue": 8,
+                        "raw": "8"
+                      },
+                      "value": 8
+                    }
+                  }
+                ]
+              },
+              "leadingComments": null
+            }
+          ],
+          "kind": "const",
+          "leadingComments": [
+            {
+              "type": "CommentBlock",
+              "value": "*\n * A tone mapping mode enumeration.\n *\n * @type {Object}\n * @property {Number} LINEAR - No tone mapping, only exposure.\n * @property {Number} REINHARD - Simple Reinhard tone mapping.\n * @property {Number} REINHARD2 - Modified Reinhard tone mapping.\n * @property {Number} REINHARD2_ADAPTIVE - Simulates the optic nerve responding to the amount of light it is receiving.\n * @property {Number} UNCHARTED2 - Uncharted 2 tone mapping. http://filmicworlds.com/blog/filmic-tonemapping-operators.\n * @property {Number} OPTIMIZED_CINEON - Deprecated. Use `CINEON` instead.\n * @property {Number} CINEON - Optimized filmic operator by Jim Hejl and Richard Burgess-Dawson. Requires three r168 or higher.\n * @property {Number} ACES_FILMIC - ACES tone mapping with a scale of 1.0/0.6.\n * @property {Number} AGX - Filmic tone mapping. Requires three r160 or higher. https://github.com/EaryChow/AgX.\n * @property {Number} NEUTRAL - Neutral tone mapping by Khronos. Requires three r162 or higher. https://modelviewer.dev/examples/tone-mapping.\n ",
+              "start": 0,
+              "end": 1034,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 0
+                },
+                "end": {
+                  "line": 15,
+                  "column": 3
+                }
+              }
+            }
+          ],
+          "trailingComments": []
+        },
+        "leadingComments": [
+          {
+            "type": "CommentBlock",
+            "value": "*\n * A tone mapping mode enumeration.\n *\n * @type {Object}\n * @property {Number} LINEAR - No tone mapping, only exposure.\n * @property {Number} REINHARD - Simple Reinhard tone mapping.\n * @property {Number} REINHARD2 - Modified Reinhard tone mapping.\n * @property {Number} REINHARD2_ADAPTIVE - Simulates the optic nerve responding to the amount of light it is receiving.\n * @property {Number} UNCHARTED2 - Uncharted 2 tone mapping. http://filmicworlds.com/blog/filmic-tonemapping-operators.\n * @property {Number} OPTIMIZED_CINEON - Deprecated. Use `CINEON` instead.\n * @property {Number} CINEON - Optimized filmic operator by Jim Hejl and Richard Burgess-Dawson. Requires three r168 or higher.\n * @property {Number} ACES_FILMIC - ACES tone mapping with a scale of 1.0/0.6.\n * @property {Number} AGX - Filmic tone mapping. Requires three r160 or higher. https://github.com/EaryChow/AgX.\n * @property {Number} NEUTRAL - Neutral tone mapping by Khronos. Requires three r162 or higher. https://modelviewer.dev/examples/tone-mapping.\n ",
+            "start": 0,
+            "end": 1034,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 15,
+                "column": 3
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": "*\n * A tone mapping mode enumeration.\n *\n * @type {Object}\n * @property {Number} LINEAR - No tone mapping, only exposure.\n * @property {Number} REINHARD - Simple Reinhard tone mapping.\n * @property {Number} REINHARD2 - Modified Reinhard tone mapping.\n * @property {Number} REINHARD2_ADAPTIVE - Simulates the optic nerve responding to the amount of light it is receiving.\n * @property {Number} UNCHARTED2 - Uncharted 2 tone mapping. http://filmicworlds.com/blog/filmic-tonemapping-operators.\n * @property {Number} OPTIMIZED_CINEON - Deprecated. Use `CINEON` instead.\n * @property {Number} CINEON - Optimized filmic operator by Jim Hejl and Richard Burgess-Dawson. Requires three r168 or higher.\n * @property {Number} ACES_FILMIC - ACES tone mapping with a scale of 1.0/0.6.\n * @property {Number} AGX - Filmic tone mapping. Requires three r160 or higher. https://github.com/EaryChow/AgX.\n * @property {Number} NEUTRAL - Neutral tone mapping by Khronos. Requires three r162 or higher. https://modelviewer.dev/examples/tone-mapping.\n ",
+      "start": 0,
+      "end": 1034,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 15,
+          "column": 3
+        }
+      }
+    }
+  ],
+  "tokens": [
+    {
+      "type": "CommentBlock",
+      "value": "*\n * A tone mapping mode enumeration.\n *\n * @type {Object}\n * @property {Number} LINEAR - No tone mapping, only exposure.\n * @property {Number} REINHARD - Simple Reinhard tone mapping.\n * @property {Number} REINHARD2 - Modified Reinhard tone mapping.\n * @property {Number} REINHARD2_ADAPTIVE - Simulates the optic nerve responding to the amount of light it is receiving.\n * @property {Number} UNCHARTED2 - Uncharted 2 tone mapping. http://filmicworlds.com/blog/filmic-tonemapping-operators.\n * @property {Number} OPTIMIZED_CINEON - Deprecated. Use `CINEON` instead.\n * @property {Number} CINEON - Optimized filmic operator by Jim Hejl and Richard Burgess-Dawson. Requires three r168 or higher.\n * @property {Number} ACES_FILMIC - ACES tone mapping with a scale of 1.0/0.6.\n * @property {Number} AGX - Filmic tone mapping. Requires three r160 or higher. https://github.com/EaryChow/AgX.\n * @property {Number} NEUTRAL - Neutral tone mapping by Khronos. Requires three r162 or higher. https://modelviewer.dev/examples/tone-mapping.\n ",
+      "start": 0,
+      "end": 1034,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 15,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "export",
+        "keyword": "export",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "export",
+      "start": 1036,
+      "end": 1042,
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 0
+        },
+        "end": {
+          "line": 17,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "const",
+        "keyword": "const",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "const",
+      "start": 1043,
+      "end": 1048,
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 7
+        },
+        "end": {
+          "line": 17,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "ToneMappingMode",
+      "start": 1049,
+      "end": 1064,
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 13
+        },
+        "end": {
+          "line": 17,
+          "column": 28
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "=",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": true,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "=",
+      "start": 1065,
+      "end": 1066,
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 29
+        },
+        "end": {
+          "line": 17,
+          "column": 30
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 1067,
+      "end": 1068,
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 31
+        },
+        "end": {
+          "line": 17,
+          "column": 32
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "LINEAR",
+      "start": 1070,
+      "end": 1076,
+      "loc": {
+        "start": {
+          "line": 18,
+          "column": 1
+        },
+        "end": {
+          "line": 18,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ":",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1076,
+      "end": 1077,
+      "loc": {
+        "start": {
+          "line": 18,
+          "column": 7
+        },
+        "end": {
+          "line": 18,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "num",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": 0,
+      "start": 1078,
+      "end": 1079,
+      "loc": {
+        "start": {
+          "line": 18,
+          "column": 9
+        },
+        "end": {
+          "line": 18,
+          "column": 10
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1079,
+      "end": 1080,
+      "loc": {
+        "start": {
+          "line": 18,
+          "column": 10
+        },
+        "end": {
+          "line": 18,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "REINHARD",
+      "start": 1082,
+      "end": 1090,
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 1
+        },
+        "end": {
+          "line": 19,
+          "column": 9
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ":",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1090,
+      "end": 1091,
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 9
+        },
+        "end": {
+          "line": 19,
+          "column": 10
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "num",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": 1,
+      "start": 1092,
+      "end": 1093,
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 11
+        },
+        "end": {
+          "line": 19,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1093,
+      "end": 1094,
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 12
+        },
+        "end": {
+          "line": 19,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "REINHARD2",
+      "start": 1096,
+      "end": 1105,
+      "loc": {
+        "start": {
+          "line": 20,
+          "column": 1
+        },
+        "end": {
+          "line": 20,
+          "column": 10
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ":",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1105,
+      "end": 1106,
+      "loc": {
+        "start": {
+          "line": 20,
+          "column": 10
+        },
+        "end": {
+          "line": 20,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "num",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": 2,
+      "start": 1107,
+      "end": 1108,
+      "loc": {
+        "start": {
+          "line": 20,
+          "column": 12
+        },
+        "end": {
+          "line": 20,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1108,
+      "end": 1109,
+      "loc": {
+        "start": {
+          "line": 20,
+          "column": 13
+        },
+        "end": {
+          "line": 20,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "REINHARD2_ADAPTIVE",
+      "start": 1111,
+      "end": 1129,
+      "loc": {
+        "start": {
+          "line": 21,
+          "column": 1
+        },
+        "end": {
+          "line": 21,
+          "column": 19
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ":",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1129,
+      "end": 1130,
+      "loc": {
+        "start": {
+          "line": 21,
+          "column": 19
+        },
+        "end": {
+          "line": 21,
+          "column": 20
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "num",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": 3,
+      "start": 1131,
+      "end": 1132,
+      "loc": {
+        "start": {
+          "line": 21,
+          "column": 21
+        },
+        "end": {
+          "line": 21,
+          "column": 22
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1132,
+      "end": 1133,
+      "loc": {
+        "start": {
+          "line": 21,
+          "column": 22
+        },
+        "end": {
+          "line": 21,
+          "column": 23
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "UNCHARTED2",
+      "start": 1135,
+      "end": 1145,
+      "loc": {
+        "start": {
+          "line": 22,
+          "column": 1
+        },
+        "end": {
+          "line": 22,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ":",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1145,
+      "end": 1146,
+      "loc": {
+        "start": {
+          "line": 22,
+          "column": 11
+        },
+        "end": {
+          "line": 22,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "num",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": 4,
+      "start": 1147,
+      "end": 1148,
+      "loc": {
+        "start": {
+          "line": 22,
+          "column": 13
+        },
+        "end": {
+          "line": 22,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1148,
+      "end": 1149,
+      "loc": {
+        "start": {
+          "line": 22,
+          "column": 14
+        },
+        "end": {
+          "line": 22,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "OPTIMIZED_CINEON",
+      "start": 1151,
+      "end": 1167,
+      "loc": {
+        "start": {
+          "line": 23,
+          "column": 1
+        },
+        "end": {
+          "line": 23,
+          "column": 17
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ":",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1167,
+      "end": 1168,
+      "loc": {
+        "start": {
+          "line": 23,
+          "column": 17
+        },
+        "end": {
+          "line": 23,
+          "column": 18
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "num",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": 5,
+      "start": 1169,
+      "end": 1170,
+      "loc": {
+        "start": {
+          "line": 23,
+          "column": 19
+        },
+        "end": {
+          "line": 23,
+          "column": 20
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1170,
+      "end": 1171,
+      "loc": {
+        "start": {
+          "line": 23,
+          "column": 20
+        },
+        "end": {
+          "line": 23,
+          "column": 21
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "CINEON",
+      "start": 1173,
+      "end": 1179,
+      "loc": {
+        "start": {
+          "line": 24,
+          "column": 1
+        },
+        "end": {
+          "line": 24,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ":",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1179,
+      "end": 1180,
+      "loc": {
+        "start": {
+          "line": 24,
+          "column": 7
+        },
+        "end": {
+          "line": 24,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "num",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": 5,
+      "start": 1181,
+      "end": 1182,
+      "loc": {
+        "start": {
+          "line": 24,
+          "column": 9
+        },
+        "end": {
+          "line": 24,
+          "column": 10
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1182,
+      "end": 1183,
+      "loc": {
+        "start": {
+          "line": 24,
+          "column": 10
+        },
+        "end": {
+          "line": 24,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "ACES_FILMIC",
+      "start": 1185,
+      "end": 1196,
+      "loc": {
+        "start": {
+          "line": 25,
+          "column": 1
+        },
+        "end": {
+          "line": 25,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ":",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1196,
+      "end": 1197,
+      "loc": {
+        "start": {
+          "line": 25,
+          "column": 12
+        },
+        "end": {
+          "line": 25,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "num",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": 6,
+      "start": 1198,
+      "end": 1199,
+      "loc": {
+        "start": {
+          "line": 25,
+          "column": 14
+        },
+        "end": {
+          "line": 25,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1199,
+      "end": 1200,
+      "loc": {
+        "start": {
+          "line": 25,
+          "column": 15
+        },
+        "end": {
+          "line": 25,
+          "column": 16
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "AGX",
+      "start": 1202,
+      "end": 1205,
+      "loc": {
+        "start": {
+          "line": 26,
+          "column": 1
+        },
+        "end": {
+          "line": 26,
+          "column": 4
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ":",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1205,
+      "end": 1206,
+      "loc": {
+        "start": {
+          "line": 26,
+          "column": 4
+        },
+        "end": {
+          "line": 26,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "num",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": 7,
+      "start": 1207,
+      "end": 1208,
+      "loc": {
+        "start": {
+          "line": 26,
+          "column": 6
+        },
+        "end": {
+          "line": 26,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1208,
+      "end": 1209,
+      "loc": {
+        "start": {
+          "line": 26,
+          "column": 7
+        },
+        "end": {
+          "line": 26,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "NEUTRAL",
+      "start": 1211,
+      "end": 1218,
+      "loc": {
+        "start": {
+          "line": 27,
+          "column": 1
+        },
+        "end": {
+          "line": 27,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ":",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1218,
+      "end": 1219,
+      "loc": {
+        "start": {
+          "line": 27,
+          "column": 8
+        },
+        "end": {
+          "line": 27,
+          "column": 9
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "num",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": 8,
+      "start": 1220,
+      "end": 1221,
+      "loc": {
+        "start": {
+          "line": 27,
+          "column": 10
+        },
+        "end": {
+          "line": 27,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 1222,
+      "end": 1223,
+      "loc": {
+        "start": {
+          "line": 28,
+          "column": 0
+        },
+        "end": {
+          "line": 28,
+          "column": 1
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1223,
+      "end": 1224,
+      "loc": {
+        "start": {
+          "line": 28,
+          "column": 1
+        },
+        "end": {
+          "line": 28,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "eof",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1225,
+      "end": 1225,
+      "loc": {
+        "start": {
+          "line": 29,
+          "column": 0
+        },
+        "end": {
+          "line": 29,
+          "column": 0
+        }
+      }
+    }
+  ]
+}

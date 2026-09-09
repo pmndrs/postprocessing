@@ -1,0 +1,1338 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 749,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 21,
+      "column": 0
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 749,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 21,
+        "column": 0
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 643,
+        "end": 748,
+        "loc": {
+          "start": {
+            "line": 13,
+            "column": 0
+          },
+          "end": {
+            "line": 20,
+            "column": 2
+          }
+        },
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "VariableDeclaration",
+          "start": 650,
+          "end": 748,
+          "loc": {
+            "start": {
+              "line": 13,
+              "column": 7
+            },
+            "end": {
+              "line": 20,
+              "column": 2
+            }
+          },
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start": 656,
+              "end": 747,
+              "loc": {
+                "start": {
+                  "line": 13,
+                  "column": 13
+                },
+                "end": {
+                  "line": 20,
+                  "column": 1
+                }
+              },
+              "id": {
+                "type": "Identifier",
+                "start": 656,
+                "end": 666,
+                "loc": {
+                  "start": {
+                    "line": 13,
+                    "column": 13
+                  },
+                  "end": {
+                    "line": 13,
+                    "column": 23
+                  },
+                  "identifierName": "KernelSize"
+                },
+                "name": "KernelSize",
+                "leadingComments": null
+              },
+              "init": {
+                "type": "ObjectExpression",
+                "start": 669,
+                "end": 747,
+                "loc": {
+                  "start": {
+                    "line": 13,
+                    "column": 26
+                  },
+                  "end": {
+                    "line": 20,
+                    "column": 1
+                  }
+                },
+                "properties": [
+                  {
+                    "type": "ObjectProperty",
+                    "start": 672,
+                    "end": 685,
+                    "loc": {
+                      "start": {
+                        "line": 14,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 14,
+                        "column": 14
+                      }
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 672,
+                      "end": 682,
+                      "loc": {
+                        "start": {
+                          "line": 14,
+                          "column": 1
+                        },
+                        "end": {
+                          "line": 14,
+                          "column": 11
+                        },
+                        "identifierName": "VERY_SMALL"
+                      },
+                      "name": "VERY_SMALL"
+                    },
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start": 684,
+                      "end": 685,
+                      "loc": {
+                        "start": {
+                          "line": 14,
+                          "column": 13
+                        },
+                        "end": {
+                          "line": 14,
+                          "column": 14
+                        }
+                      },
+                      "extra": {
+                        "rawValue": 0,
+                        "raw": "0"
+                      },
+                      "value": 0
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start": 688,
+                    "end": 696,
+                    "loc": {
+                      "start": {
+                        "line": 15,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 15,
+                        "column": 9
+                      }
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 688,
+                      "end": 693,
+                      "loc": {
+                        "start": {
+                          "line": 15,
+                          "column": 1
+                        },
+                        "end": {
+                          "line": 15,
+                          "column": 6
+                        },
+                        "identifierName": "SMALL"
+                      },
+                      "name": "SMALL"
+                    },
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start": 695,
+                      "end": 696,
+                      "loc": {
+                        "start": {
+                          "line": 15,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 15,
+                          "column": 9
+                        }
+                      },
+                      "extra": {
+                        "rawValue": 1,
+                        "raw": "1"
+                      },
+                      "value": 1
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start": 699,
+                    "end": 708,
+                    "loc": {
+                      "start": {
+                        "line": 16,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 16,
+                        "column": 10
+                      }
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 699,
+                      "end": 705,
+                      "loc": {
+                        "start": {
+                          "line": 16,
+                          "column": 1
+                        },
+                        "end": {
+                          "line": 16,
+                          "column": 7
+                        },
+                        "identifierName": "MEDIUM"
+                      },
+                      "name": "MEDIUM"
+                    },
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start": 707,
+                      "end": 708,
+                      "loc": {
+                        "start": {
+                          "line": 16,
+                          "column": 9
+                        },
+                        "end": {
+                          "line": 16,
+                          "column": 10
+                        }
+                      },
+                      "extra": {
+                        "rawValue": 2,
+                        "raw": "2"
+                      },
+                      "value": 2
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start": 711,
+                    "end": 719,
+                    "loc": {
+                      "start": {
+                        "line": 17,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 17,
+                        "column": 9
+                      }
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 711,
+                      "end": 716,
+                      "loc": {
+                        "start": {
+                          "line": 17,
+                          "column": 1
+                        },
+                        "end": {
+                          "line": 17,
+                          "column": 6
+                        },
+                        "identifierName": "LARGE"
+                      },
+                      "name": "LARGE"
+                    },
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start": 718,
+                      "end": 719,
+                      "loc": {
+                        "start": {
+                          "line": 17,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 17,
+                          "column": 9
+                        }
+                      },
+                      "extra": {
+                        "rawValue": 3,
+                        "raw": "3"
+                      },
+                      "value": 3
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start": 722,
+                    "end": 735,
+                    "loc": {
+                      "start": {
+                        "line": 18,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 18,
+                        "column": 14
+                      }
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 722,
+                      "end": 732,
+                      "loc": {
+                        "start": {
+                          "line": 18,
+                          "column": 1
+                        },
+                        "end": {
+                          "line": 18,
+                          "column": 11
+                        },
+                        "identifierName": "VERY_LARGE"
+                      },
+                      "name": "VERY_LARGE"
+                    },
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start": 734,
+                      "end": 735,
+                      "loc": {
+                        "start": {
+                          "line": 18,
+                          "column": 13
+                        },
+                        "end": {
+                          "line": 18,
+                          "column": 14
+                        }
+                      },
+                      "extra": {
+                        "rawValue": 4,
+                        "raw": "4"
+                      },
+                      "value": 4
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start": 738,
+                    "end": 745,
+                    "loc": {
+                      "start": {
+                        "line": 19,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 19,
+                        "column": 8
+                      }
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 738,
+                      "end": 742,
+                      "loc": {
+                        "start": {
+                          "line": 19,
+                          "column": 1
+                        },
+                        "end": {
+                          "line": 19,
+                          "column": 5
+                        },
+                        "identifierName": "HUGE"
+                      },
+                      "name": "HUGE"
+                    },
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start": 744,
+                      "end": 745,
+                      "loc": {
+                        "start": {
+                          "line": 19,
+                          "column": 7
+                        },
+                        "end": {
+                          "line": 19,
+                          "column": 8
+                        }
+                      },
+                      "extra": {
+                        "rawValue": 5,
+                        "raw": "5"
+                      },
+                      "value": 5
+                    }
+                  }
+                ]
+              },
+              "leadingComments": null
+            }
+          ],
+          "kind": "const",
+          "leadingComments": [
+            {
+              "type": "CommentBlock",
+              "value": "*\n * An enumeration of blur kernel sizes.\n *\n * @type {Object}\n * @property {Number} VERY_SMALL - A very small kernel that matches a 7x7 Gaussian blur kernel.\n * @property {Number} SMALL - A small kernel that matches a 25x25 Gaussian blur kernel.\n * @property {Number} MEDIUM - A medium sized kernel that matches a 63x63 Gaussian blur kernel.\n * @property {Number} LARGE - A large kernel that matches a 127x127 Gaussian blur kernel.\n * @property {Number} VERY_LARGE - A very large kernel that matches a 391x391 Gaussian blur kernel.\n * @property {Number} HUGE - A huge kernel that cannot be replicated with a single Gaussian blur pass.\n ",
+              "start": 0,
+              "end": 641,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 0
+                },
+                "end": {
+                  "line": 11,
+                  "column": 3
+                }
+              }
+            }
+          ],
+          "trailingComments": []
+        },
+        "leadingComments": [
+          {
+            "type": "CommentBlock",
+            "value": "*\n * An enumeration of blur kernel sizes.\n *\n * @type {Object}\n * @property {Number} VERY_SMALL - A very small kernel that matches a 7x7 Gaussian blur kernel.\n * @property {Number} SMALL - A small kernel that matches a 25x25 Gaussian blur kernel.\n * @property {Number} MEDIUM - A medium sized kernel that matches a 63x63 Gaussian blur kernel.\n * @property {Number} LARGE - A large kernel that matches a 127x127 Gaussian blur kernel.\n * @property {Number} VERY_LARGE - A very large kernel that matches a 391x391 Gaussian blur kernel.\n * @property {Number} HUGE - A huge kernel that cannot be replicated with a single Gaussian blur pass.\n ",
+            "start": 0,
+            "end": 641,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 11,
+                "column": 3
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": "*\n * An enumeration of blur kernel sizes.\n *\n * @type {Object}\n * @property {Number} VERY_SMALL - A very small kernel that matches a 7x7 Gaussian blur kernel.\n * @property {Number} SMALL - A small kernel that matches a 25x25 Gaussian blur kernel.\n * @property {Number} MEDIUM - A medium sized kernel that matches a 63x63 Gaussian blur kernel.\n * @property {Number} LARGE - A large kernel that matches a 127x127 Gaussian blur kernel.\n * @property {Number} VERY_LARGE - A very large kernel that matches a 391x391 Gaussian blur kernel.\n * @property {Number} HUGE - A huge kernel that cannot be replicated with a single Gaussian blur pass.\n ",
+      "start": 0,
+      "end": 641,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 11,
+          "column": 3
+        }
+      }
+    }
+  ],
+  "tokens": [
+    {
+      "type": "CommentBlock",
+      "value": "*\n * An enumeration of blur kernel sizes.\n *\n * @type {Object}\n * @property {Number} VERY_SMALL - A very small kernel that matches a 7x7 Gaussian blur kernel.\n * @property {Number} SMALL - A small kernel that matches a 25x25 Gaussian blur kernel.\n * @property {Number} MEDIUM - A medium sized kernel that matches a 63x63 Gaussian blur kernel.\n * @property {Number} LARGE - A large kernel that matches a 127x127 Gaussian blur kernel.\n * @property {Number} VERY_LARGE - A very large kernel that matches a 391x391 Gaussian blur kernel.\n * @property {Number} HUGE - A huge kernel that cannot be replicated with a single Gaussian blur pass.\n ",
+      "start": 0,
+      "end": 641,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 11,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "export",
+        "keyword": "export",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "export",
+      "start": 643,
+      "end": 649,
+      "loc": {
+        "start": {
+          "line": 13,
+          "column": 0
+        },
+        "end": {
+          "line": 13,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "const",
+        "keyword": "const",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "const",
+      "start": 650,
+      "end": 655,
+      "loc": {
+        "start": {
+          "line": 13,
+          "column": 7
+        },
+        "end": {
+          "line": 13,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "KernelSize",
+      "start": 656,
+      "end": 666,
+      "loc": {
+        "start": {
+          "line": 13,
+          "column": 13
+        },
+        "end": {
+          "line": 13,
+          "column": 23
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "=",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": true,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "=",
+      "start": 667,
+      "end": 668,
+      "loc": {
+        "start": {
+          "line": 13,
+          "column": 24
+        },
+        "end": {
+          "line": 13,
+          "column": 25
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 669,
+      "end": 670,
+      "loc": {
+        "start": {
+          "line": 13,
+          "column": 26
+        },
+        "end": {
+          "line": 13,
+          "column": 27
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "VERY_SMALL",
+      "start": 672,
+      "end": 682,
+      "loc": {
+        "start": {
+          "line": 14,
+          "column": 1
+        },
+        "end": {
+          "line": 14,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ":",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 682,
+      "end": 683,
+      "loc": {
+        "start": {
+          "line": 14,
+          "column": 11
+        },
+        "end": {
+          "line": 14,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "num",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": 0,
+      "start": 684,
+      "end": 685,
+      "loc": {
+        "start": {
+          "line": 14,
+          "column": 13
+        },
+        "end": {
+          "line": 14,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 685,
+      "end": 686,
+      "loc": {
+        "start": {
+          "line": 14,
+          "column": 14
+        },
+        "end": {
+          "line": 14,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "SMALL",
+      "start": 688,
+      "end": 693,
+      "loc": {
+        "start": {
+          "line": 15,
+          "column": 1
+        },
+        "end": {
+          "line": 15,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ":",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 693,
+      "end": 694,
+      "loc": {
+        "start": {
+          "line": 15,
+          "column": 6
+        },
+        "end": {
+          "line": 15,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "num",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": 1,
+      "start": 695,
+      "end": 696,
+      "loc": {
+        "start": {
+          "line": 15,
+          "column": 8
+        },
+        "end": {
+          "line": 15,
+          "column": 9
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 696,
+      "end": 697,
+      "loc": {
+        "start": {
+          "line": 15,
+          "column": 9
+        },
+        "end": {
+          "line": 15,
+          "column": 10
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "MEDIUM",
+      "start": 699,
+      "end": 705,
+      "loc": {
+        "start": {
+          "line": 16,
+          "column": 1
+        },
+        "end": {
+          "line": 16,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ":",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 705,
+      "end": 706,
+      "loc": {
+        "start": {
+          "line": 16,
+          "column": 7
+        },
+        "end": {
+          "line": 16,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "num",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": 2,
+      "start": 707,
+      "end": 708,
+      "loc": {
+        "start": {
+          "line": 16,
+          "column": 9
+        },
+        "end": {
+          "line": 16,
+          "column": 10
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 708,
+      "end": 709,
+      "loc": {
+        "start": {
+          "line": 16,
+          "column": 10
+        },
+        "end": {
+          "line": 16,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "LARGE",
+      "start": 711,
+      "end": 716,
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 1
+        },
+        "end": {
+          "line": 17,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ":",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 716,
+      "end": 717,
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 6
+        },
+        "end": {
+          "line": 17,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "num",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": 3,
+      "start": 718,
+      "end": 719,
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 8
+        },
+        "end": {
+          "line": 17,
+          "column": 9
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 719,
+      "end": 720,
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 9
+        },
+        "end": {
+          "line": 17,
+          "column": 10
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "VERY_LARGE",
+      "start": 722,
+      "end": 732,
+      "loc": {
+        "start": {
+          "line": 18,
+          "column": 1
+        },
+        "end": {
+          "line": 18,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ":",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 732,
+      "end": 733,
+      "loc": {
+        "start": {
+          "line": 18,
+          "column": 11
+        },
+        "end": {
+          "line": 18,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "num",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": 4,
+      "start": 734,
+      "end": 735,
+      "loc": {
+        "start": {
+          "line": 18,
+          "column": 13
+        },
+        "end": {
+          "line": 18,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 735,
+      "end": 736,
+      "loc": {
+        "start": {
+          "line": 18,
+          "column": 14
+        },
+        "end": {
+          "line": 18,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "HUGE",
+      "start": 738,
+      "end": 742,
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 1
+        },
+        "end": {
+          "line": 19,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ":",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 742,
+      "end": 743,
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 5
+        },
+        "end": {
+          "line": 19,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "num",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": 5,
+      "start": 744,
+      "end": 745,
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 7
+        },
+        "end": {
+          "line": 19,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 746,
+      "end": 747,
+      "loc": {
+        "start": {
+          "line": 20,
+          "column": 0
+        },
+        "end": {
+          "line": 20,
+          "column": 1
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 747,
+      "end": 748,
+      "loc": {
+        "start": {
+          "line": 20,
+          "column": 1
+        },
+        "end": {
+          "line": 20,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "eof",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 749,
+      "end": 749,
+      "loc": {
+        "start": {
+          "line": 21,
+          "column": 0
+        },
+        "end": {
+          "line": 21,
+          "column": 0
+        }
+      }
+    }
+  ]
+}

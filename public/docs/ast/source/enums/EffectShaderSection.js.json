@@ -1,0 +1,1178 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 851,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 20,
+      "column": 0
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 851,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 20,
+        "column": 0
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 621,
+        "end": 850,
+        "loc": {
+          "start": {
+            "line": 13,
+            "column": 0
+          },
+          "end": {
+            "line": 19,
+            "column": 2
+          }
+        },
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "VariableDeclaration",
+          "start": 628,
+          "end": 850,
+          "loc": {
+            "start": {
+              "line": 13,
+              "column": 7
+            },
+            "end": {
+              "line": 19,
+              "column": 2
+            }
+          },
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start": 634,
+              "end": 849,
+              "loc": {
+                "start": {
+                  "line": 13,
+                  "column": 13
+                },
+                "end": {
+                  "line": 19,
+                  "column": 1
+                }
+              },
+              "id": {
+                "type": "Identifier",
+                "start": 634,
+                "end": 653,
+                "loc": {
+                  "start": {
+                    "line": 13,
+                    "column": 13
+                  },
+                  "end": {
+                    "line": 13,
+                    "column": 32
+                  },
+                  "identifierName": "EffectShaderSection"
+                },
+                "name": "EffectShaderSection",
+                "leadingComments": null
+              },
+              "init": {
+                "type": "ObjectExpression",
+                "start": 656,
+                "end": 849,
+                "loc": {
+                  "start": {
+                    "line": 13,
+                    "column": 35
+                  },
+                  "end": {
+                    "line": 19,
+                    "column": 1
+                  }
+                },
+                "properties": [
+                  {
+                    "type": "ObjectProperty",
+                    "start": 659,
+                    "end": 689,
+                    "loc": {
+                      "start": {
+                        "line": 14,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 14,
+                        "column": 31
+                      }
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 659,
+                      "end": 672,
+                      "loc": {
+                        "start": {
+                          "line": 14,
+                          "column": 1
+                        },
+                        "end": {
+                          "line": 14,
+                          "column": 14
+                        },
+                        "identifierName": "FRAGMENT_HEAD"
+                      },
+                      "name": "FRAGMENT_HEAD"
+                    },
+                    "value": {
+                      "type": "StringLiteral",
+                      "start": 674,
+                      "end": 689,
+                      "loc": {
+                        "start": {
+                          "line": 14,
+                          "column": 16
+                        },
+                        "end": {
+                          "line": 14,
+                          "column": 31
+                        }
+                      },
+                      "extra": {
+                        "rawValue": "FRAGMENT_HEAD",
+                        "raw": "\"FRAGMENT_HEAD\""
+                      },
+                      "value": "FRAGMENT_HEAD"
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start": 692,
+                    "end": 728,
+                    "loc": {
+                      "start": {
+                        "line": 15,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 15,
+                        "column": 37
+                      }
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 692,
+                      "end": 708,
+                      "loc": {
+                        "start": {
+                          "line": 15,
+                          "column": 1
+                        },
+                        "end": {
+                          "line": 15,
+                          "column": 17
+                        },
+                        "identifierName": "FRAGMENT_MAIN_UV"
+                      },
+                      "name": "FRAGMENT_MAIN_UV"
+                    },
+                    "value": {
+                      "type": "StringLiteral",
+                      "start": 710,
+                      "end": 728,
+                      "loc": {
+                        "start": {
+                          "line": 15,
+                          "column": 19
+                        },
+                        "end": {
+                          "line": 15,
+                          "column": 37
+                        }
+                      },
+                      "extra": {
+                        "rawValue": "FRAGMENT_MAIN_UV",
+                        "raw": "\"FRAGMENT_MAIN_UV\""
+                      },
+                      "value": "FRAGMENT_MAIN_UV"
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start": 731,
+                    "end": 773,
+                    "loc": {
+                      "start": {
+                        "line": 16,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 16,
+                        "column": 43
+                      }
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 731,
+                      "end": 750,
+                      "loc": {
+                        "start": {
+                          "line": 16,
+                          "column": 1
+                        },
+                        "end": {
+                          "line": 16,
+                          "column": 20
+                        },
+                        "identifierName": "FRAGMENT_MAIN_IMAGE"
+                      },
+                      "name": "FRAGMENT_MAIN_IMAGE"
+                    },
+                    "value": {
+                      "type": "StringLiteral",
+                      "start": 752,
+                      "end": 773,
+                      "loc": {
+                        "start": {
+                          "line": 16,
+                          "column": 22
+                        },
+                        "end": {
+                          "line": 16,
+                          "column": 43
+                        }
+                      },
+                      "extra": {
+                        "rawValue": "FRAGMENT_MAIN_IMAGE",
+                        "raw": "\"FRAGMENT_MAIN_IMAGE\""
+                      },
+                      "value": "FRAGMENT_MAIN_IMAGE"
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start": 776,
+                    "end": 802,
+                    "loc": {
+                      "start": {
+                        "line": 17,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 17,
+                        "column": 27
+                      }
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 776,
+                      "end": 787,
+                      "loc": {
+                        "start": {
+                          "line": 17,
+                          "column": 1
+                        },
+                        "end": {
+                          "line": 17,
+                          "column": 12
+                        },
+                        "identifierName": "VERTEX_HEAD"
+                      },
+                      "name": "VERTEX_HEAD"
+                    },
+                    "value": {
+                      "type": "StringLiteral",
+                      "start": 789,
+                      "end": 802,
+                      "loc": {
+                        "start": {
+                          "line": 17,
+                          "column": 14
+                        },
+                        "end": {
+                          "line": 17,
+                          "column": 27
+                        }
+                      },
+                      "extra": {
+                        "rawValue": "VERTEX_HEAD",
+                        "raw": "\"VERTEX_HEAD\""
+                      },
+                      "value": "VERTEX_HEAD"
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start": 805,
+                    "end": 847,
+                    "loc": {
+                      "start": {
+                        "line": 18,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 18,
+                        "column": 43
+                      }
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 805,
+                      "end": 824,
+                      "loc": {
+                        "start": {
+                          "line": 18,
+                          "column": 1
+                        },
+                        "end": {
+                          "line": 18,
+                          "column": 20
+                        },
+                        "identifierName": "VERTEX_MAIN_SUPPORT"
+                      },
+                      "name": "VERTEX_MAIN_SUPPORT"
+                    },
+                    "value": {
+                      "type": "StringLiteral",
+                      "start": 826,
+                      "end": 847,
+                      "loc": {
+                        "start": {
+                          "line": 18,
+                          "column": 22
+                        },
+                        "end": {
+                          "line": 18,
+                          "column": 43
+                        }
+                      },
+                      "extra": {
+                        "rawValue": "VERTEX_MAIN_SUPPORT",
+                        "raw": "\"VERTEX_MAIN_SUPPORT\""
+                      },
+                      "value": "VERTEX_MAIN_SUPPORT"
+                    }
+                  }
+                ]
+              },
+              "leadingComments": null
+            }
+          ],
+          "kind": "const",
+          "leadingComments": [
+            {
+              "type": "CommentBlock",
+              "value": "*\n * An enumeration of effect shader placeholders.\n *\n * @type {Object}\n * @property {String} FRAGMENT_HEAD - A placeholder for function and variable declarations in the fragment shader.\n * @property {String} FRAGMENT_MAIN_UV - A placeholder for UV transformations in the fragment shader.\n * @property {String} FRAGMENT_MAIN_IMAGE - A placeholder for color calculations in the fragment shader.\n * @property {String} VERTEX_HEAD - A placeholder for function and variable declarations in the vertex shader.\n * @property {String} VERTEX_MAIN_SUPPORT - A placeholder for supporting calculations in the vertex shader.\n ",
+              "start": 1,
+              "end": 619,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 0
+                },
+                "end": {
+                  "line": 11,
+                  "column": 3
+                }
+              }
+            }
+          ],
+          "trailingComments": []
+        },
+        "leadingComments": [
+          {
+            "type": "CommentBlock",
+            "value": "*\n * An enumeration of effect shader placeholders.\n *\n * @type {Object}\n * @property {String} FRAGMENT_HEAD - A placeholder for function and variable declarations in the fragment shader.\n * @property {String} FRAGMENT_MAIN_UV - A placeholder for UV transformations in the fragment shader.\n * @property {String} FRAGMENT_MAIN_IMAGE - A placeholder for color calculations in the fragment shader.\n * @property {String} VERTEX_HEAD - A placeholder for function and variable declarations in the vertex shader.\n * @property {String} VERTEX_MAIN_SUPPORT - A placeholder for supporting calculations in the vertex shader.\n ",
+            "start": 1,
+            "end": 619,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 0
+              },
+              "end": {
+                "line": 11,
+                "column": 3
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": "*\n * An enumeration of effect shader placeholders.\n *\n * @type {Object}\n * @property {String} FRAGMENT_HEAD - A placeholder for function and variable declarations in the fragment shader.\n * @property {String} FRAGMENT_MAIN_UV - A placeholder for UV transformations in the fragment shader.\n * @property {String} FRAGMENT_MAIN_IMAGE - A placeholder for color calculations in the fragment shader.\n * @property {String} VERTEX_HEAD - A placeholder for function and variable declarations in the vertex shader.\n * @property {String} VERTEX_MAIN_SUPPORT - A placeholder for supporting calculations in the vertex shader.\n ",
+      "start": 1,
+      "end": 619,
+      "loc": {
+        "start": {
+          "line": 2,
+          "column": 0
+        },
+        "end": {
+          "line": 11,
+          "column": 3
+        }
+      }
+    }
+  ],
+  "tokens": [
+    {
+      "type": "CommentBlock",
+      "value": "*\n * An enumeration of effect shader placeholders.\n *\n * @type {Object}\n * @property {String} FRAGMENT_HEAD - A placeholder for function and variable declarations in the fragment shader.\n * @property {String} FRAGMENT_MAIN_UV - A placeholder for UV transformations in the fragment shader.\n * @property {String} FRAGMENT_MAIN_IMAGE - A placeholder for color calculations in the fragment shader.\n * @property {String} VERTEX_HEAD - A placeholder for function and variable declarations in the vertex shader.\n * @property {String} VERTEX_MAIN_SUPPORT - A placeholder for supporting calculations in the vertex shader.\n ",
+      "start": 1,
+      "end": 619,
+      "loc": {
+        "start": {
+          "line": 2,
+          "column": 0
+        },
+        "end": {
+          "line": 11,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "export",
+        "keyword": "export",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "export",
+      "start": 621,
+      "end": 627,
+      "loc": {
+        "start": {
+          "line": 13,
+          "column": 0
+        },
+        "end": {
+          "line": 13,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "const",
+        "keyword": "const",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "const",
+      "start": 628,
+      "end": 633,
+      "loc": {
+        "start": {
+          "line": 13,
+          "column": 7
+        },
+        "end": {
+          "line": 13,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "EffectShaderSection",
+      "start": 634,
+      "end": 653,
+      "loc": {
+        "start": {
+          "line": 13,
+          "column": 13
+        },
+        "end": {
+          "line": 13,
+          "column": 32
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "=",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": true,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "=",
+      "start": 654,
+      "end": 655,
+      "loc": {
+        "start": {
+          "line": 13,
+          "column": 33
+        },
+        "end": {
+          "line": 13,
+          "column": 34
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 656,
+      "end": 657,
+      "loc": {
+        "start": {
+          "line": 13,
+          "column": 35
+        },
+        "end": {
+          "line": 13,
+          "column": 36
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "FRAGMENT_HEAD",
+      "start": 659,
+      "end": 672,
+      "loc": {
+        "start": {
+          "line": 14,
+          "column": 1
+        },
+        "end": {
+          "line": 14,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ":",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 672,
+      "end": 673,
+      "loc": {
+        "start": {
+          "line": 14,
+          "column": 14
+        },
+        "end": {
+          "line": 14,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "FRAGMENT_HEAD",
+      "start": 674,
+      "end": 689,
+      "loc": {
+        "start": {
+          "line": 14,
+          "column": 16
+        },
+        "end": {
+          "line": 14,
+          "column": 31
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 689,
+      "end": 690,
+      "loc": {
+        "start": {
+          "line": 14,
+          "column": 31
+        },
+        "end": {
+          "line": 14,
+          "column": 32
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "FRAGMENT_MAIN_UV",
+      "start": 692,
+      "end": 708,
+      "loc": {
+        "start": {
+          "line": 15,
+          "column": 1
+        },
+        "end": {
+          "line": 15,
+          "column": 17
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ":",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 708,
+      "end": 709,
+      "loc": {
+        "start": {
+          "line": 15,
+          "column": 17
+        },
+        "end": {
+          "line": 15,
+          "column": 18
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "FRAGMENT_MAIN_UV",
+      "start": 710,
+      "end": 728,
+      "loc": {
+        "start": {
+          "line": 15,
+          "column": 19
+        },
+        "end": {
+          "line": 15,
+          "column": 37
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 728,
+      "end": 729,
+      "loc": {
+        "start": {
+          "line": 15,
+          "column": 37
+        },
+        "end": {
+          "line": 15,
+          "column": 38
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "FRAGMENT_MAIN_IMAGE",
+      "start": 731,
+      "end": 750,
+      "loc": {
+        "start": {
+          "line": 16,
+          "column": 1
+        },
+        "end": {
+          "line": 16,
+          "column": 20
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ":",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 750,
+      "end": 751,
+      "loc": {
+        "start": {
+          "line": 16,
+          "column": 20
+        },
+        "end": {
+          "line": 16,
+          "column": 21
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "FRAGMENT_MAIN_IMAGE",
+      "start": 752,
+      "end": 773,
+      "loc": {
+        "start": {
+          "line": 16,
+          "column": 22
+        },
+        "end": {
+          "line": 16,
+          "column": 43
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 773,
+      "end": 774,
+      "loc": {
+        "start": {
+          "line": 16,
+          "column": 43
+        },
+        "end": {
+          "line": 16,
+          "column": 44
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "VERTEX_HEAD",
+      "start": 776,
+      "end": 787,
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 1
+        },
+        "end": {
+          "line": 17,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ":",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 787,
+      "end": 788,
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 12
+        },
+        "end": {
+          "line": 17,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "VERTEX_HEAD",
+      "start": 789,
+      "end": 802,
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 14
+        },
+        "end": {
+          "line": 17,
+          "column": 27
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 802,
+      "end": 803,
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 27
+        },
+        "end": {
+          "line": 17,
+          "column": 28
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "VERTEX_MAIN_SUPPORT",
+      "start": 805,
+      "end": 824,
+      "loc": {
+        "start": {
+          "line": 18,
+          "column": 1
+        },
+        "end": {
+          "line": 18,
+          "column": 20
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ":",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 824,
+      "end": 825,
+      "loc": {
+        "start": {
+          "line": 18,
+          "column": 20
+        },
+        "end": {
+          "line": 18,
+          "column": 21
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "VERTEX_MAIN_SUPPORT",
+      "start": 826,
+      "end": 847,
+      "loc": {
+        "start": {
+          "line": 18,
+          "column": 22
+        },
+        "end": {
+          "line": 18,
+          "column": 43
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 848,
+      "end": 849,
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 0
+        },
+        "end": {
+          "line": 19,
+          "column": 1
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 849,
+      "end": 850,
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 1
+        },
+        "end": {
+          "line": 19,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "eof",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 851,
+      "end": 851,
+      "loc": {
+        "start": {
+          "line": 20,
+          "column": 0
+        },
+        "end": {
+          "line": 20,
+          "column": 0
+        }
+      }
+    }
+  ]
+}
