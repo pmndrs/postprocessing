@@ -15,26 +15,25 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Git checkout
-        uses: actions/checkout@v5
-      - name: Install PNPM
-        uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v7
+      - name: Install pnpm and Node.js
+        uses: pnpm/setup@v2
         with:
-          version: 10
-      - name: Install Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          registry-url: "https://registry.npmjs.org"
-          cache: "pnpm"
-      - name: Install dependencies and test
-        run: pnpm install-test --frozen-lockfile
+          version: 11
+          runtime: node@24
+          cache: true
+      - name: Build and test
+        run: pnpm test
       - name: Publish
-        uses: JS-DevTools/npm-publish@v4
-        with:
-          provenance: true
-          ignore-scripts: true
-      - name: Pages
+        run: |
+          package=$(node -p "require('./package.json').name")
+          version=$(node -p "require('./package.json').version")
+          if pnpm view "$package@$version" version >/dev/null 2>&1; then
+            echo "::notice::$package@$version is already published, skipping."
+            exit 0
+          fi
+          pnpm publish --ignore-scripts
+      - name: Deploy pages
         run: pnpm run deploy
       - uses: JamesIves/github-pages-deploy-action@v4
         with:

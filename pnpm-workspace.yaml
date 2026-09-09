@@ -1,14 +1,15 @@
 save: false
+gitChecks: false
 
 allowBuilds:
-  '@parcel/watcher': true
-  'core-js': true
-  'esbuild': true
-  'hugo-bin': true
+  "@parcel/watcher": true
+  "core-js": true
+  "esbuild": true
+  "hugo-bin": true
 
 minimumReleaseAgeExclude:
-  - '@types/three'
-  - 'esbuild-plugin-glsl'
-  - 'eslint-config-aether'
-  - 'spatial-controls'
-  - 'three'
+- "@types/three"
+- "esbuild-plugin-glsl"
+- "eslint-config-aether"
+- "spatial-controls"
+- "three"

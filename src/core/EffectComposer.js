@@ -14,6 +14,7 @@ import { ClearMaskPass } from "../passes/ClearMaskPass.js";
 import { CopyPass } from "../passes/CopyPass.js";
 import { MaskPass } from "../passes/MaskPass.js";
 import { Pass } from "../passes/Pass.js";
+import { getSafeSamples } from "../utils/compatibility/webgl2.js";
 import { Timer } from "./Timer.js"; // TODO Replace with Timer from three, requires r179.
 
 /**
@@ -163,14 +164,16 @@ export class EffectComposer {
 
 	set multisampling(value) {
 
-		if(this.multisampling === value) {
+		const samples = (this.renderer === null) ? value : getSafeSamples(this.renderer, value);
+
+		if(this.multisampling === samples) {
 
 			return;
 
 		}
 
-		this.inputBuffer.samples = value;
-		this.outputBuffer.samples = value;
+		this.inputBuffer.samples = samples;
+		this.outputBuffer.samples = samples;
 		this.inputBuffer.dispose();
 		this.outputBuffer.dispose();
 
@@ -225,6 +228,10 @@ export class EffectComposer {
 				this.outputBuffer.dispose();
 
 			}
+
+			// Recheck multisampling fallback.
+			const samples = this.multisampling;
+			this.multisampling = samples;
 
 			renderer.autoClear = false;
 			this.setSize(size.width, size.height);
@@ -299,10 +306,14 @@ export class EffectComposer {
 
 		}
 
-		const outputDepthTexture = inputDepthTexture.clone();
+		const outputDepthTexture = new DepthTexture();
+		outputDepthTexture.format = inputDepthTexture.format;
+		outputDepthTexture.type = inputDepthTexture.type;
 		outputDepthTexture.name = "EffectComposer.OutputDepth";
 
-		const stableDepthTexture = inputDepthTexture.clone();
+		const stableDepthTexture = new DepthTexture();
+		stableDepthTexture.format = inputDepthTexture.format;
+		stableDepthTexture.type = inputDepthTexture.type;
 		stableDepthTexture.name = "EffectComposer.StableDepth";
 
 		this.inputBuffer.depthTexture = inputDepthTexture;
