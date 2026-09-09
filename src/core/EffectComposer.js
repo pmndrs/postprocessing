@@ -14,7 +14,7 @@ import { ClearMaskPass } from "../passes/ClearMaskPass.js";
 import { CopyPass } from "../passes/CopyPass.js";
 import { MaskPass } from "../passes/MaskPass.js";
 import { Pass } from "../passes/Pass.js";
-import { getSafeSamples } from "../utils/Compatibility.js";
+import { getSafeSamples } from "../utils/compatibility/webgl2.js";
 import { Timer } from "./Timer.js"; // TODO Replace with Timer from three, requires r179.
 
 /**

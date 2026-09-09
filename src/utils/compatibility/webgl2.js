@@ -1,5 +1,3 @@
-// #region WebGL
-
 /**
  * Returns a safe render target sample count for the given rendering context.
  *
@@ -54,5 +52,3 @@ export function getSafeSamples(renderer, samples) {
 	}
 
 }
-
-// #endregion
