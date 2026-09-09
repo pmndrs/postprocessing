@@ -213,8 +213,8 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		for(const texture of this.requiredTextures) {
 
-			// The color texture contains the original output of the initial geometry pass.
-			// The default buffer can be a different texture with modified data.
+			// The color texture contains the original output of the connected geometry pass.
+			// However, the default buffer can be a different texture with modified data.
 			const useDefaultBuffer = (texture === GBuffer.COLOR as string);
 			const resource = useDefaultBuffer ? input.defaultBuffer : input.buffers.get(texture);
 			const structField = schema.gBufferStructFields.get(texture);
