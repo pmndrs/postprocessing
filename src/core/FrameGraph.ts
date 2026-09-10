@@ -355,16 +355,7 @@ export class FrameGraph implements FrameGraphOptions, Disposable, Renderable {
 
 	private updateRenderPipeline() {
 
-		try {
-
-			this.renderPipeline = this.compiler.update();
-
-		} catch(error) {
-
-			console.error(error);
-			this.renderPipeline = [];
-
-		}
+		this.renderPipeline = this.compiler.update();
 
 	}
 
