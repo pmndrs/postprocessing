@@ -191,12 +191,12 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		if(e.value) {
 
-			const depthTexture = geoPass.output.defaultBuffer!.textures.get(GBuffer.DEPTH) ?? null;
-			uiPass.input.setBuffer(GBuffer.DEPTH, depthTexture);
+			const depthTexture = geoPass.out.defaultBuffer!.textures.get(GBuffer.DEPTH) ?? null;
+			uiPass.in.setBuffer(GBuffer.DEPTH, depthTexture);
 
 		} else {
 
-			uiPass.input.buffers.delete(GBuffer.DEPTH);
+			uiPass.in.buffers.delete(GBuffer.DEPTH);
 
 		}
 

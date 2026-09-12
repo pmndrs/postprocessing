@@ -103,7 +103,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	mipmapBlurPass.read(geoPass);
 	gaussianBlurPass.read(geoPass);
-	outputPass.input.defaultBuffer = mipmapBlurPass.texture;
+	outputPass.in.defaultBuffer = mipmapBlurPass.texture;
 
 	const frameGraph = new FrameGraph({ renderer, scene, camera });
 	frameGraph.add(geoPass, mipmapBlurPass, gaussianBlurPass, outputPass);
@@ -126,7 +126,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 	tab.on("select", (event) => {
 
-		outputPass.input.defaultBuffer = (event.index === 0) ?
+		outputPass.in.defaultBuffer = (event.index === 0) ?
 			mipmapBlurPass.texture :
 			gaussianBlurPass.texture;
 
