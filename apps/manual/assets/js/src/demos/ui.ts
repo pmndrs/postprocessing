@@ -20,7 +20,6 @@ import {
 } from "three";
 
 import {
-	DebugTools,
 	EffectPass,
 	FrameGraph,
 	FXAAEffect,
@@ -169,6 +168,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	const effectPass = new EffectPass(new ToneMappingEffect());
 	const uiPass = new UIPass({ scene: uiScene });
 	const aaPass = new EffectPass(new FXAAEffect());
+
 	effectPass.read(geoPass);
 	uiPass.read(geoPass);
 	uiPass.read(effectPass);
@@ -200,7 +200,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 
 		}
 
-		DebugTools.analyzePipeline(frameGraph);
+		// DebugTools.analyzePipeline(frameGraph);
 
 	});
 

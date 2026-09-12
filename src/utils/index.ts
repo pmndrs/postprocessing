@@ -7,7 +7,6 @@ export * from "./ClearFlags.js";
 export * from "./ClearValues.js";
 export * from "./ColorDecisionList.js";
 export * from "./CompositeMap.js";
-export * from "./DebugTools.js";
 export * from "./EffectMaterialCache.js";
 export * from "./EffectPassContext.js";
 export * from "./EffectShaderData.js";

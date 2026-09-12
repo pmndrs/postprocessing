@@ -10,7 +10,6 @@ import {
 
 import {
 	BufferDebugPass,
-	DebugTools,
 	EffectPass,
 	FrameGraph,
 	GBuffer,
@@ -111,7 +110,7 @@ window.addEventListener("load", () => void load().then((assets) => {
 	frameGraph.add(geoPass, effectPass, bufferDebugPass);
 	frameGraph.output(bufferDebugPass);
 
-	DebugTools.analyzePipeline(frameGraph);
+	// DebugTools.analyzePipeline(frameGraph);
 
 	// Settings
 
