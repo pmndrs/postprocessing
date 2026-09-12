@@ -35,12 +35,16 @@ export interface RenderTaskContext {
 
 	/**
 	 * The input resources of this task.
+	 *
+	 * Input resources are owned by another task and consumed by this task.
 	 */
 
 	readonly in: Input;
 
 	/**
 	 * The output resources of this task.
+	 *
+	 * Output resources are owned by this task and can be consumed by other tasks.
 	 */
 
 	readonly out: Output;

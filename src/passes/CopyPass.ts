@@ -6,7 +6,7 @@ import { CopyMaterial } from "../materials/CopyMaterial.js";
 import { blitFramebuffer, canUseBlit } from "../utils/functions/framebuffer.js";
 
 /**
- * Copies the contents of the default input buffer to the default output buffer.
+ * Copies the contents of the default input buffer to another buffer.
  *
  * @category Passes
  */
@@ -22,7 +22,7 @@ export class CopyPass extends Pass<CopyMaterial> {
 	/**
 	 * Constructs a new copy pass.
 	 *
-	 * @param outputBuffer - An output buffer. If not provided, a new buffer will be created.
+	 * @param outputBuffer - An output buffer to render into.
 	 */
 
 	constructor(outputBuffer?: RenderTargetResource) {

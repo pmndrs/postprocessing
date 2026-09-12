@@ -29,7 +29,7 @@ import { RenderTask, RenderTaskEventMap } from "./RenderTask.js";
 const v = /* @__PURE__ */ new Vector2();
 
 /**
- * A pass.
+ * A pass that can be used to build a frame graph.
  *
  * @category Core
  */
@@ -57,6 +57,8 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	/**
 	 * A fullscreen render operation.
+	 *
+	 * This operation will be instantiated lazily for passes that actually use it.
 	 */
 
 	private fullscreenRenderOperation: FullscreenRenderOperation<TMaterial> | null;
@@ -130,39 +132,11 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	// #endregion
 
 	readonly id: number;
-
-	/**
-	 * The input resources of this pass.
-	 */
-
 	readonly in: Input;
-
-	/**
-	 * The output resources of this pass.
-	 */
-
 	readonly out: Output;
-
-	/**
-	 * The current resolution.
-	 */
-
+	readonly inOut: InOut;
 	readonly resolution: Resolution;
-
-	/**
-	 * The viewport.
-	 *
-	 * @see {@link Viewport.enabled} to enable the viewport.
-	 */
-
 	readonly viewport: Viewport;
-
-	/**
-	 * A rectangular area inside the viewport. Fragments outside this area will not be rendered.
-	 *
-	 * @see {@link Scissor.enabled} to enable the scissor.
-	 */
-
 	readonly scissor: Scissor;
 
 	/**
