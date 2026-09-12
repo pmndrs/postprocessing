@@ -13,7 +13,7 @@ export interface EffectPassContext {
 	 * Input resources.
 	 */
 
-	readonly input: Input;
+	readonly in: Input;
 
 	/**
 	 * A list of required textures.

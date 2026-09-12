@@ -203,7 +203,7 @@ export class EffectMaterialCache {
 		const id = EffectMaterialCache.getMaterialId(effects);
 		const result = (id === EffectMaterialCache.DEFAULT_MATERIAL_ID) ? this.defaultMaterial : new EffectMaterial();
 		const data = this.getEffectShaderData(effects);
-		const schema = this.context.input.gBufferSchema;
+		const schema = this.context.in.gBufferSchema;
 
 		if(schema !== null) {
 
@@ -241,13 +241,13 @@ export class EffectMaterialCache {
 		data.shaderParts.forEach((v, k, map) => map.set(k, v.trim().replace(/^#/, "\n#")));
 
 		// Add input defines and uniforms.
-		for(const entry of this.context.input.shaderData.defines) {
+		for(const entry of this.context.in.shaderData.defines) {
 
 			data.defines.set(entry[0], entry[1]);
 
 		}
 
-		for(const entry of this.context.input.shaderData.uniforms) {
+		for(const entry of this.context.in.shaderData.uniforms) {
 
 			data.uniforms.set(entry[0], entry[1]);
 
@@ -386,7 +386,7 @@ export class EffectMaterialCache {
 
 	getMaterial(effects: readonly Effect[]): EffectMaterial {
 
-		if(this.context.input.gBufferSchema === null) {
+		if(this.context.in.gBufferSchema === null) {
 
 			// Effects don't need to be processed if there is no G-Buffer configuration.
 			return this.defaultMaterial;
