@@ -84,7 +84,7 @@ export class DepthCopyPass extends Pass<DepthCopyMaterial> {
 
 	protected override onInputChange(): void {
 
-		this.fullscreenMaterial.depthBuffer = this.input.buffers.get(GBuffer.DEPTH)?.value ?? null;
+		this.fullscreenMaterial.depthBuffer = this.in.buffers.get(GBuffer.DEPTH)?.value ?? null;
 
 	}
 

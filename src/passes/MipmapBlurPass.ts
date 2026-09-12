@@ -114,7 +114,7 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 	get texture(): TextureResource {
 
-		return this.output.buffers.get(MipmapBlurPass.BUFFER_MAIN)!.texture;
+		return this.out.buffers.get(MipmapBlurPass.BUFFER_MAIN)!.texture;
 
 	}
 
@@ -193,7 +193,7 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 	private createMipmaps(levels: number): void {
 
-		const output = this.output;
+		const output = this.out;
 		const mainBufferResource = output.buffers.get(MipmapBlurPass.BUFFER_MAIN)!;
 		const descriptor = mainBufferResource.descriptor;
 
@@ -241,7 +241,7 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 	protected override onInputChange(): void {
 
 		// The output buffer settings depend on the input buffer.
-		const inputTexture = this.input.defaultBuffer?.value ?? null;
+		const inputTexture = this.in.defaultBuffer?.value ?? null;
 
 		if(inputTexture === null) {
 
@@ -263,7 +263,7 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 		}
 
-		if(this.input.frameBufferPrecisionHigh) {
+		if(this.in.frameBufferPrecisionHigh) {
 
 			this.downsamplingMaterial.outputPrecision = "mediump";
 			this.upsamplingMaterial.outputPrecision = "mediump";
@@ -281,7 +281,7 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 	protected override onResolutionChange(): void {
 
-		const inputBuffer = this.input.defaultBuffer?.value ?? null;
+		const inputBuffer = this.in.defaultBuffer?.value ?? null;
 
 		if(inputBuffer === null) {
 
@@ -327,7 +327,7 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 	override render(): void {
 
-		const inputBuffer = this.input.defaultBuffer?.value ?? null;
+		const inputBuffer = this.in.defaultBuffer?.value ?? null;
 
 		if(this.renderer === null || inputBuffer === null) {
 

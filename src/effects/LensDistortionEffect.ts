@@ -71,7 +71,7 @@ export class LensDistortionEffect extends Effect implements LensDistortionEffect
 		super("LensDistortionEffect");
 
 		this.fragmentShader = fragmentShader;
-		const uniforms = this.input.uniforms;
+		const uniforms = this.in.uniforms;
 		uniforms.set("distortion", new Uniform(distortion));
 		uniforms.set("principalPoint", new Uniform(principalPoint));
 		uniforms.set("focalLength", new Uniform(focalLength));
@@ -83,49 +83,49 @@ export class LensDistortionEffect extends Effect implements LensDistortionEffect
 
 	get distortion(): Vector2 {
 
-		return this.input.uniforms.get("distortion")!.value as Vector2;
+		return this.in.uniforms.get("distortion")!.value as Vector2;
 
 	}
 
 	set distortion(value: Vector2) {
 
-		this.input.uniforms.get("distortion")!.value = value;
+		this.in.uniforms.get("distortion")!.value = value;
 
 	}
 
 	get principalPoint(): Vector2 {
 
-		return this.input.uniforms.get("principalPoint")!.value as Vector2;
+		return this.in.uniforms.get("principalPoint")!.value as Vector2;
 
 	}
 
 	set principalPoint(value) {
 
-		this.input.uniforms.get("principalPoint")!.value = value;
+		this.in.uniforms.get("principalPoint")!.value = value;
 
 	}
 
 	get focalLength(): Vector2 {
 
-		return this.input.uniforms.get("focalLength")!.value as Vector2;
+		return this.in.uniforms.get("focalLength")!.value as Vector2;
 
 	}
 
 	set focalLength(value) {
 
-		this.input.uniforms.get("focalLength")!.value = value;
+		this.in.uniforms.get("focalLength")!.value = value;
 
 	}
 
 	get skew(): number {
 
-		return this.input.uniforms.get("skew")!.value as number;
+		return this.in.uniforms.get("skew")!.value as number;
 
 	}
 
 	set skew(value) {
 
-		this.input.uniforms.get("skew")!.value = value;
+		this.in.uniforms.get("skew")!.value = value;
 
 	}
 

@@ -41,8 +41,8 @@ export class UIPass extends GeometryPass {
 
 	private configureCopyPass(): void {
 
-		const inputBuffer = this.input.defaultBuffer?.value ?? null;
-		const outputBuffer = this.output.defaultBuffer?.value ?? null;
+		const inputBuffer = this.in.defaultBuffer?.value ?? null;
+		const outputBuffer = this.out.defaultBuffer?.value ?? null;
 		const inputIsOutput = (inputBuffer === outputBuffer?.texture);
 		const outputIsMRT = ((outputBuffer?.textures.length ?? 0) > 1);
 
@@ -60,16 +60,16 @@ export class UIPass extends GeometryPass {
 
 		}
 
-		this.copyPass.input.defaultBuffer = this.input.defaultBuffer;
-		const depthTextureResource = this.input.buffers.get(GBuffer.DEPTH);
+		this.copyPass.in.defaultBuffer = this.in.defaultBuffer;
+		const depthTextureResource = this.in.buffers.get(GBuffer.DEPTH);
 
 		if(depthTextureResource !== undefined) {
 
-			this.copyPass.input.setBuffer(GBuffer.DEPTH, depthTextureResource);
+			this.copyPass.in.setBuffer(GBuffer.DEPTH, depthTextureResource);
 
 		} else {
 
-			this.copyPass.input.buffers.delete(GBuffer.DEPTH);
+			this.copyPass.in.buffers.delete(GBuffer.DEPTH);
 
 		}
 
@@ -87,7 +87,7 @@ export class UIPass extends GeometryPass {
 
 		}
 
-		this.copyPass.output.setDefaultBuffer(this.output.defaultBuffer);
+		this.copyPass.out.setDefaultBuffer(this.out.defaultBuffer);
 		this.configureCopyPass();
 
 	}

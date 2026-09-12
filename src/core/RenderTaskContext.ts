@@ -37,13 +37,13 @@ export interface RenderTaskContext {
 	 * The input resources of this task.
 	 */
 
-	readonly input: Input;
+	readonly in: Input;
 
 	/**
 	 * The output resources of this task.
 	 */
 
-	readonly output: Output;
+	readonly out: Output;
 
 	/**
 	 * The current resolution.

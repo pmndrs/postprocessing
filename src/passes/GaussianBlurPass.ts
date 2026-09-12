@@ -125,7 +125,7 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> implements Gaus
 	protected override onInputChange(): void {
 
 		// The output buffer settings depend on the input buffer.
-		const inputTexture = this.input.defaultBuffer?.value ?? null;
+		const inputTexture = this.in.defaultBuffer?.value ?? null;
 
 		if(inputTexture === null) {
 
@@ -145,7 +145,7 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> implements Gaus
 
 		}
 
-		this.fullscreenMaterial.outputPrecision = this.input.frameBufferPrecisionHigh ? "mediump" : "lowp";
+		this.fullscreenMaterial.outputPrecision = this.in.frameBufferPrecisionHigh ? "mediump" : "lowp";
 		this.onResolutionChange();
 
 	}
@@ -153,7 +153,7 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> implements Gaus
 	protected override onResolutionChange(): void {
 
 		// Use the size of the input texture to calculate the texel size for sampling.
-		const inputBuffer = this.input.defaultBuffer?.value ?? null;
+		const inputBuffer = this.in.defaultBuffer?.value ?? null;
 
 		if(inputBuffer === null) {
 
@@ -171,7 +171,7 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> implements Gaus
 
 	override render(): void {
 
-		const inputBuffer = this.input.defaultBuffer?.value ?? null;
+		const inputBuffer = this.in.defaultBuffer?.value ?? null;
 		const renderTargetX = this.bufferX.value!;
 		const renderTargetY = this.bufferY.value!;
 

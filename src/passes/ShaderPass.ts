@@ -42,9 +42,9 @@ export class ShaderPass<TMaterial extends ShaderMaterial = ShaderMaterial> exten
 
 		const uniforms = this.fullscreenMaterial.uniforms;
 
-		if(this.input.defaultBuffer !== undefined && uniforms[this.uniformName] !== undefined) {
+		if(this.in.defaultBuffer !== undefined && uniforms[this.uniformName] !== undefined) {
 
-			uniforms[this.uniformName].value = this.input.defaultBuffer.value;
+			uniforms[this.uniformName].value = this.in.defaultBuffer.value;
 
 		}
 
@@ -52,7 +52,7 @@ export class ShaderPass<TMaterial extends ShaderMaterial = ShaderMaterial> exten
 
 	override render(): void {
 
-		this.setRenderTarget(this.output.defaultBuffer?.value);
+		this.setRenderTarget(this.out.defaultBuffer?.value);
 		this.renderFullscreen();
 
 	}

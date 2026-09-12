@@ -113,7 +113,7 @@ export class HalftoneEffect extends Effect implements HalftoneEffectOptions {
 		this.fragmentShader = fragmentShader;
 		this.blendMode.blendFunction = new ColorDodgeBlendFunction();
 
-		const uniforms = this.input.uniforms;
+		const uniforms = this.in.uniforms;
 		uniforms.set("invRadius", new Uniform(1.0));
 		uniforms.set("rotation", new Uniform(new Vector2()));
 		uniforms.set("bias", new Uniform(bias));
@@ -133,20 +133,20 @@ export class HalftoneEffect extends Effect implements HalftoneEffectOptions {
 
 	get shape() {
 
-		return this.input.defines.get("SHAPE") as number;
+		return this.in.defines.get("SHAPE") as number;
 
 	}
 
 	set shape(value: HalftoneShape) {
 
-		this.input.defines.set("SHAPE", value);
+		this.in.defines.set("SHAPE", value);
 		this.setChanged();
 
 	}
 
 	get samples(): number {
 
-		return this.input.defines.get("SAMPLES") as number;
+		return this.in.defines.get("SAMPLES") as number;
 
 	}
 
@@ -154,9 +154,9 @@ export class HalftoneEffect extends Effect implements HalftoneEffectOptions {
 
 		value = Math.max(value, 1);
 
-		this.input.defines.set("SAMPLES", value);
-		this.input.defines.set("INV_SAMPLES", (1.0 / value).toFixed(9));
-		this.input.defines.set("INV_SAMPLES_SQ", (1.0 / (value * value)).toFixed(9));
+		this.in.defines.set("SAMPLES", value);
+		this.in.defines.set("INV_SAMPLES", (1.0 / value).toFixed(9));
+		this.in.defines.set("INV_SAMPLES_SQ", (1.0 / (value * value)).toFixed(9));
 		this.setChanged();
 
 	}
@@ -182,7 +182,7 @@ export class HalftoneEffect extends Effect implements HalftoneEffectOptions {
 
 	set rotation(value: number) {
 
-		const rotation = this.input.uniforms.get("rotation")!.value as Vector2;
+		const rotation = this.in.uniforms.get("rotation")!.value as Vector2;
 		rotation.set(Math.sin(value), Math.cos(value));
 		this._rotation = value;
 
@@ -190,19 +190,19 @@ export class HalftoneEffect extends Effect implements HalftoneEffectOptions {
 
 	get bias() {
 
-		return this.input.uniforms.get("bias")!.value as number;
+		return this.in.uniforms.get("bias")!.value as number;
 
 	}
 
 	set bias(value: number) {
 
-		this.input.uniforms.get("bias")!.value = value;
+		this.in.uniforms.get("bias")!.value = value;
 
 	}
 
 	get premultiply(): boolean {
 
-		return this.input.defines.has("PREMULTIPLY");
+		return this.in.defines.has("PREMULTIPLY");
 
 	}
 
@@ -212,11 +212,11 @@ export class HalftoneEffect extends Effect implements HalftoneEffectOptions {
 
 			if(value) {
 
-				this.input.defines.set("PREMULTIPLY", true);
+				this.in.defines.set("PREMULTIPLY", true);
 
 			} else {
 
-				this.input.defines.delete("PREMULTIPLY");
+				this.in.defines.delete("PREMULTIPLY");
 
 			}
 
@@ -228,7 +228,7 @@ export class HalftoneEffect extends Effect implements HalftoneEffectOptions {
 
 	get inverted(): boolean {
 
-		return this.input.defines.has("INVERTED");
+		return this.in.defines.has("INVERTED");
 
 	}
 
@@ -238,11 +238,11 @@ export class HalftoneEffect extends Effect implements HalftoneEffectOptions {
 
 			if(value) {
 
-				this.input.defines.set("INVERTED", true);
+				this.in.defines.set("INVERTED", true);
 
 			} else {
 
-				this.input.defines.delete("INVERTED");
+				this.in.defines.delete("INVERTED");
 
 			}
 
@@ -257,7 +257,7 @@ export class HalftoneEffect extends Effect implements HalftoneEffectOptions {
 	protected override onResolutionChange(): void {
 
 		const r = this.radius * this.resolution.scaledPixelRatio;
-		this.input.uniforms.get("invRadius")!.value = 1.0 / Math.max(r, 1e-9);
+		this.in.uniforms.get("invRadius")!.value = 1.0 / Math.max(r, 1e-9);
 
 	}
 

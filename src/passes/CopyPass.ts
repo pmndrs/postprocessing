@@ -35,7 +35,7 @@ export class CopyPass extends Pass<CopyMaterial> {
 
 		if(outputBuffer !== undefined) {
 
-			this.output.defaultBuffer!.alias(outputBuffer);
+			this.out.defaultBuffer!.alias(outputBuffer);
 
 		}
 
@@ -60,7 +60,7 @@ export class CopyPass extends Pass<CopyMaterial> {
 
 	private initializeOutputBuffer(): void {
 
-		const outputBuffer = this.output.defaultBuffer?.value ?? null;
+		const outputBuffer = this.out.defaultBuffer?.value ?? null;
 
 		if(this.renderer !== null && outputBuffer !== null) {
 
@@ -76,8 +76,8 @@ export class CopyPass extends Pass<CopyMaterial> {
 
 	private setupBlit(): void {
 
-		const src = this.input.defaultBuffer?.value?.renderTarget ?? null;
-		const dst = this.output.defaultBuffer?.value ?? null;
+		const src = this.in.defaultBuffer?.value?.renderTarget ?? null;
+		const dst = this.out.defaultBuffer?.value ?? null;
 		this.blitEnabled = canUseBlit(src, dst);
 
 	}
@@ -88,8 +88,8 @@ export class CopyPass extends Pass<CopyMaterial> {
 
 	private configureDepthBuffer(): void {
 
-		const inputDepthBuffer = this.input.buffers.get(GBuffer.DEPTH)?.value ?? null;
-		const outputDepthBuffer = this.output.defaultBuffer?.value?.depthTexture ?? null;
+		const inputDepthBuffer = this.in.buffers.get(GBuffer.DEPTH)?.value ?? null;
+		const outputDepthBuffer = this.out.defaultBuffer?.value?.depthTexture ?? null;
 		const inputIsOutput = (inputDepthBuffer === outputDepthBuffer);
 
 		this.fullscreenMaterial.depthBuffer = (inputDepthBuffer === null || inputIsOutput) ? null : inputDepthBuffer;
@@ -123,8 +123,8 @@ export class CopyPass extends Pass<CopyMaterial> {
 
 	private blit(): void {
 
-		const inputBuffer = this.input.defaultBuffer?.value?.renderTarget as WebGLRenderTarget ?? null;
-		const outputBuffer = this.output.defaultBuffer?.value ?? null;
+		const inputBuffer = this.in.defaultBuffer?.value?.renderTarget as WebGLRenderTarget ?? null;
+		const outputBuffer = this.out.defaultBuffer?.value ?? null;
 
 		if(this.renderer === null || inputBuffer === null || outputBuffer === null) {
 
@@ -152,7 +152,7 @@ export class CopyPass extends Pass<CopyMaterial> {
 
 		if(material.colorWrite || material.depthWrite) {
 
-			this.setRenderTarget(this.output.defaultBuffer?.value);
+			this.setRenderTarget(this.out.defaultBuffer?.value);
 			this.renderFullscreen();
 
 		}

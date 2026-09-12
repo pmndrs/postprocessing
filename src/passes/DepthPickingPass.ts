@@ -47,7 +47,7 @@ export class DepthPickingPass extends DepthCopyPass {
 	private readDepthAt(x: number, y: number): number {
 
 		const renderer = this.renderer;
-		const renderTarget = this.output.defaultBuffer?.value ?? null;
+		const renderTarget = this.out.defaultBuffer?.value ?? null;
 
 		if(renderer === null || renderTarget === null) {
 
@@ -117,7 +117,7 @@ export class DepthPickingPass extends DepthCopyPass {
 			}
 
 			// The depth values from the current or last frame are already available.
-			const renderTarget = this.output.defaultBuffer?.value ?? null;
+			const renderTarget = this.out.defaultBuffer?.value ?? null;
 
 			if(renderTarget !== null) {
 

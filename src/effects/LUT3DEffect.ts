@@ -80,14 +80,14 @@ export class LUT3DEffect extends Effect implements LUT3DEffectOptions {
 
 		this.fragmentShader = fragmentShader;
 
-		const uniforms = this.input.uniforms;
+		const uniforms = this.in.uniforms;
 		uniforms.set("lut", new Uniform(null));
 		uniforms.set("scale", new Uniform(new Vector3()));
 		uniforms.set("offset", new Uniform(new Vector3()));
 		uniforms.set("domainMin", new Uniform(null));
 		uniforms.set("domainMax", new Uniform(null));
 
-		const defines = this.input.defines;
+		const defines = this.in.defines;
 		defines.set("LUT_SIZE", "0");
 		defines.set("LUT_TEXEL_WIDTH", "0");
 		defines.set("LUT_TEXEL_HEIGHT", "0");
@@ -104,7 +104,7 @@ export class LUT3DEffect extends Effect implements LUT3DEffectOptions {
 
 	private get lutPrecisionHigh(): boolean {
 
-		return this.input.defines.has("LUT_PRECISION_HIGH");
+		return this.in.defines.has("LUT_PRECISION_HIGH");
 
 	}
 
@@ -114,11 +114,11 @@ export class LUT3DEffect extends Effect implements LUT3DEffectOptions {
 
 			if(value) {
 
-				this.input.defines.set("LUT_PRECISION_HIGH", true);
+				this.in.defines.set("LUT_PRECISION_HIGH", true);
 
 			} else {
 
-				this.input.defines.delete("LUT_PRECISION_HIGH");
+				this.in.defines.delete("LUT_PRECISION_HIGH");
 
 			}
 
@@ -132,13 +132,13 @@ export class LUT3DEffect extends Effect implements LUT3DEffectOptions {
 
 	get lut(): LookupTexture | null {
 
-		return this.input.uniforms.get("lut")!.value as LookupTexture;
+		return this.in.uniforms.get("lut")!.value as LookupTexture;
 
 	}
 
 	set lut(value: LookupTexture | null) {
 
-		const { defines, uniforms } = this.input;
+		const { defines, uniforms } = this.in;
 		uniforms.get("lut")!.value = value;
 
 		if(value === null) {
@@ -179,7 +179,7 @@ export class LUT3DEffect extends Effect implements LUT3DEffectOptions {
 
 	get tetrahedralInterpolation(): boolean {
 
-		return this.input.defines.has("TETRAHEDRAL_INTERPOLATION");
+		return this.in.defines.has("TETRAHEDRAL_INTERPOLATION");
 
 	}
 
@@ -187,11 +187,11 @@ export class LUT3DEffect extends Effect implements LUT3DEffectOptions {
 
 		if(value) {
 
-			this.input.defines.set("TETRAHEDRAL_INTERPOLATION", true);
+			this.in.defines.set("TETRAHEDRAL_INTERPOLATION", true);
 
 		} else {
 
-			this.input.defines.delete("TETRAHEDRAL_INTERPOLATION");
+			this.in.defines.delete("TETRAHEDRAL_INTERPOLATION");
 
 		}
 
@@ -218,14 +218,14 @@ export class LUT3DEffect extends Effect implements LUT3DEffectOptions {
 		}
 
 		const size = Math.min(lut.image.width, lut.image.height);
-		const scale = this.input.uniforms.get("scale")!.value as Vector3;
-		const offset = this.input.uniforms.get("offset")!.value as Vector3;
+		const scale = this.in.uniforms.get("scale")!.value as Vector3;
+		const offset = this.in.uniforms.get("offset")!.value as Vector3;
 
 		const domainBounds = lut.userData as LUTDomainBounds;
 
 		if(this.tetrahedralInterpolation) {
 
-			if(this.input.defines.has("CUSTOM_INPUT_DOMAIN")) {
+			if(this.in.defines.has("CUSTOM_INPUT_DOMAIN")) {
 
 				const domainScale = domainBounds.domainMax.clone().sub(domainBounds.domainMin);
 				scale.setScalar(size - 1).divide(domainScale);
@@ -238,7 +238,7 @@ export class LUT3DEffect extends Effect implements LUT3DEffectOptions {
 
 			}
 
-		} else if(this.input.defines.has("CUSTOM_INPUT_DOMAIN")) {
+		} else if(this.in.defines.has("CUSTOM_INPUT_DOMAIN")) {
 
 			const domainScale = domainBounds.domainMax.clone().sub(domainBounds.domainMin).multiplyScalar(size);
 			scale.setScalar(size - 1).divide(domainScale);

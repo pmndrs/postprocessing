@@ -67,7 +67,7 @@ export class ColorDepthEffect extends Effect implements ColorDepthEffectOptions 
 
 		this.fragmentShader = fragmentShader;
 
-		const uniforms = this.input.uniforms;
+		const uniforms = this.in.uniforms;
 		uniforms.set("colorRanges", new Uniform(new Vector3()));
 
 		this.bits = new Vector3(r, g, b);
@@ -81,7 +81,7 @@ export class ColorDepthEffect extends Effect implements ColorDepthEffectOptions 
 
 	private updateFactors(): void {
 
-		const colorRanges = this.input.uniforms.get("colorRanges")!.value as Vector3;
+		const colorRanges = this.in.uniforms.get("colorRanges")!.value as Vector3;
 		const bits = this.bits;
 
 		colorRanges.set(

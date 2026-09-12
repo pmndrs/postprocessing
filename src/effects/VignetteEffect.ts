@@ -72,7 +72,7 @@ export class VignetteEffect extends Effect implements VignetteEffectOptions {
 		this.fragmentShader = fragmentShader;
 		this.technique = technique;
 
-		const uniforms = this.input.uniforms;
+		const uniforms = this.in.uniforms;
 		uniforms.set("offsetFeather", new Uniform(new Vector2(offset, feather)));
 		uniforms.set("color", new Uniform(new Color(color)));
 
@@ -82,7 +82,7 @@ export class VignetteEffect extends Effect implements VignetteEffectOptions {
 
 	get technique(): VignetteTechnique {
 
-		return this.input.defines.get("VIGNETTE_TECHNIQUE") as VignetteTechnique;
+		return this.in.defines.get("VIGNETTE_TECHNIQUE") as VignetteTechnique;
 
 	}
 
@@ -90,7 +90,7 @@ export class VignetteEffect extends Effect implements VignetteEffectOptions {
 
 		if(this.technique !== value) {
 
-			this.input.defines.set("VIGNETTE_TECHNIQUE", value);
+			this.in.defines.set("VIGNETTE_TECHNIQUE", value);
 			this.setChanged();
 
 		}
@@ -99,41 +99,41 @@ export class VignetteEffect extends Effect implements VignetteEffectOptions {
 
 	get offset(): number {
 
-		const offsetFeather = this.input.uniforms.get("offsetFeather")!.value as Vector2;
+		const offsetFeather = this.in.uniforms.get("offsetFeather")!.value as Vector2;
 		return offsetFeather.x;
 
 	}
 
 	set offset(value: number) {
 
-		const offsetFeather = this.input.uniforms.get("offsetFeather")!.value as Vector2;
+		const offsetFeather = this.in.uniforms.get("offsetFeather")!.value as Vector2;
 		offsetFeather.x = value;
 
 	}
 
 	get feather(): number {
 
-		const offsetFeather = this.input.uniforms.get("offsetFeather")!.value as Vector2;
+		const offsetFeather = this.in.uniforms.get("offsetFeather")!.value as Vector2;
 		return offsetFeather.y;
 
 	}
 
 	set feather(value: number) {
 
-		const offsetFeather = this.input.uniforms.get("offsetFeather")!.value as Vector2;
+		const offsetFeather = this.in.uniforms.get("offsetFeather")!.value as Vector2;
 		offsetFeather.y = value;
 
 	}
 
 	get color(): Color {
 
-		return this.input.uniforms.get("color")!.value as Color;
+		return this.in.uniforms.get("color")!.value as Color;
 
 	}
 
 	set color(value: Color | number) {
 
-		const color = this.input.uniforms.get("color")!.value as Color;
+		const color = this.in.uniforms.get("color")!.value as Color;
 		color.set(value);
 
 	}

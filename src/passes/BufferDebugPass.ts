@@ -163,14 +163,14 @@ export class BufferDebugPass extends Pass<BufferDebugMaterial> {
 		const material = this.fullscreenMaterial;
 		material.bufferFocus = this.bufferFocus;
 
-		if(this.bufferFocus !== null && this.input.buffers.has(this.bufferFocus)) {
+		if(this.bufferFocus !== null && this.in.buffers.has(this.bufferFocus)) {
 
-			material.inputBuffer = this.input.buffers.get(this.bufferFocus)?.value ?? null;
+			material.inputBuffer = this.in.buffers.get(this.bufferFocus)?.value ?? null;
 			material.colorSpaceConversion = false;
 
 		} else {
 
-			material.inputBuffer = this.input.defaultBuffer?.value ?? null;
+			material.inputBuffer = this.in.defaultBuffer?.value ?? null;
 			material.colorSpaceConversion = true;
 
 		}
@@ -248,7 +248,7 @@ export class BufferDebugPass extends Pass<BufferDebugMaterial> {
 
 	protected override onInputChange(): void {
 
-		this.fullscreenMaterial.depthBuffer = this.input.buffers.get(GBuffer.DEPTH)?.value ?? null;
+		this.fullscreenMaterial.depthBuffer = this.in.buffers.get(GBuffer.DEPTH)?.value ?? null;
 
 		for(const view of this.views) {
 
@@ -260,7 +260,7 @@ export class BufferDebugPass extends Pass<BufferDebugMaterial> {
 		const capturedTextures = new WeakSet<Texture>();
 		this.views = [];
 
-		for(const entry of this.input.buffers) {
+		for(const entry of this.in.buffers) {
 
 			if(entry[0] === Input.BUFFER_DEFAULT || entry[1] === null || capturedTextures.has(entry[1].value!)) {
 
@@ -295,7 +295,7 @@ export class BufferDebugPass extends Pass<BufferDebugMaterial> {
 
 	override render(): void {
 
-		this.setRenderTarget(this.output.defaultBuffer?.value);
+		this.setRenderTarget(this.out.defaultBuffer?.value);
 		this.renderFullscreen();
 		this.renderer?.render(this.debugScene, this.debugCamera);
 

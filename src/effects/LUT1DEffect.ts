@@ -39,7 +39,7 @@ export class LUT1DEffect extends Effect implements LUT1DEffectOptions {
 		super("LUT1DEffect");
 
 		this.fragmentShader = fragmentShader;
-		this.input.uniforms.set("lut", new Uniform(null));
+		this.in.uniforms.set("lut", new Uniform(null));
 		this.lut = lut;
 
 	}
@@ -50,7 +50,7 @@ export class LUT1DEffect extends Effect implements LUT1DEffectOptions {
 
 	private get lutPrecisionHigh(): boolean {
 
-		return this.input.defines.has("LUT_PRECISION_HIGH");
+		return this.in.defines.has("LUT_PRECISION_HIGH");
 
 	}
 
@@ -60,11 +60,11 @@ export class LUT1DEffect extends Effect implements LUT1DEffectOptions {
 
 			if(value) {
 
-				this.input.defines.set("LUT_PRECISION_HIGH", true);
+				this.in.defines.set("LUT_PRECISION_HIGH", true);
 
 			} else {
 
-				this.input.defines.delete("LUT_PRECISION_HIGH");
+				this.in.defines.delete("LUT_PRECISION_HIGH");
 
 			}
 
@@ -78,13 +78,13 @@ export class LUT1DEffect extends Effect implements LUT1DEffectOptions {
 
 	get lut(): Texture | null {
 
-		return this.input.uniforms.get("lut")!.value as Texture;
+		return this.in.uniforms.get("lut")!.value as Texture;
 
 	}
 
 	set lut(value: Texture | null) {
 
-		this.input.uniforms.get("lut")!.value = value;
+		this.in.uniforms.get("lut")!.value = value;
 		this.lutPrecisionHigh = (value?.type === FloatType || value?.type === HalfFloatType);
 
 	}

@@ -295,14 +295,14 @@ export class EffectShaderData implements ShaderData {
 
 		}
 
-		for(const d of effect.input.defines.keys()) {
+		for(const d of effect.in.defines.keys()) {
 
 			// Ignore parameters of function-like macros.
 			names.add(d.replace(/\([\w\s,]*\)/g, ""));
 
 		}
 
-		for(const u of effect.input.uniforms.keys()) {
+		for(const u of effect.in.uniforms.keys()) {
 
 			names.add(u);
 
@@ -314,8 +314,8 @@ export class EffectShaderData implements ShaderData {
 		names.delete("if");
 
 		// Store prefixed uniforms and macros.
-		effect.input.uniforms.forEach((v, k) => this.uniforms.set(prefix + k.charAt(0).toUpperCase() + k.slice(1), v));
-		effect.input.defines.forEach((v, k) => this.defines.set(prefix + k.charAt(0).toUpperCase() + k.slice(1), v));
+		effect.in.uniforms.forEach((v, k) => this.uniforms.set(prefix + k.charAt(0).toUpperCase() + k.slice(1), v));
+		effect.in.defines.forEach((v, k) => this.defines.set(prefix + k.charAt(0).toUpperCase() + k.slice(1), v));
 
 		// Prefix varyings, functions and uniforms in shaders and macros.
 		const shaders = new Map([["fragment", fragmentShader], ["vertex", vertexShader]]);

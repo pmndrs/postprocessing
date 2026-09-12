@@ -226,7 +226,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		}
 
-		const inputDepthTexture = this.input.buffers.get(GBuffer.DEPTH)?.value ?? null;
+		const inputDepthTexture = this.in.buffers.get(GBuffer.DEPTH)?.value ?? null;
 
 		if(inputDepthTexture !== null && this.gBuffer.descriptor.depthTexture !== inputDepthTexture) {
 
@@ -282,7 +282,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		}
 
-		this.setRenderTarget(this.output.defaultBuffer?.value);
+		this.setRenderTarget(this.out.defaultBuffer?.value);
 		this.clear.execute();
 
 		// The background is rendered by the clear task.

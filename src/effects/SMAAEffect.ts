@@ -111,17 +111,17 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 		this.operations.add(this.clear);
 
 		this.edgeDetectionPass = new ShaderPass(new SMAAEdgeDetectionMaterial());
-		this.bufferEdges = this.edgeDetectionPass.output.defaultBuffer!;
+		this.bufferEdges = this.edgeDetectionPass.out.defaultBuffer!;
 		this.edgeDetectionMaterial.edgeDetectionMode = edgeDetectionMode;
 		this.edgeDetectionMaterial.predicationMode = predicationMode;
 
 		this.weightsPass = new ShaderPass(new SMAAWeightsMaterial());
-		this.weightsPass.input.defaultBuffer = this.edgesTexture;
-		this.bufferWeights = this.weightsPass.output.defaultBuffer!;
+		this.weightsPass.in.defaultBuffer = this.edgesTexture;
+		this.bufferWeights = this.weightsPass.out.defaultBuffer!;
 
 		this.requireTextures(GBuffer.DEPTH);
-		this.input.uniforms.set("weightMap", new Uniform(null));
-		this.weightsTexture.bindUniform(this.input.uniforms.get("weightMap")!);
+		this.in.uniforms.set("weightMap", new Uniform(null));
+		this.weightsTexture.bindUniform(this.in.uniforms.get("weightMap")!);
 
 		this.subpasses = [this.edgeDetectionPass, this.weightsPass];
 
@@ -305,8 +305,8 @@ export class SMAAEffect extends Effect implements SMAAEffectOptions {
 
 	protected override onInputChange(): void {
 
-		this.edgeDetectionMaterial.inputBuffer = this.input.defaultBuffer?.value ?? null;
-		this.edgeDetectionMaterial.depthBuffer = this.input.buffers.get(GBuffer.DEPTH)?.value ?? null;
+		this.edgeDetectionMaterial.inputBuffer = this.in.defaultBuffer?.value ?? null;
+		this.edgeDetectionMaterial.depthBuffer = this.in.buffers.get(GBuffer.DEPTH)?.value ?? null;
 
 	}
 

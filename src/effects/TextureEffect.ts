@@ -60,10 +60,10 @@ export class TextureEffect extends Effect implements TextureEffectOptions {
 
 		this.fragmentShader = fragmentShader;
 
-		const defines = this.input.defines;
+		const defines = this.in.defines;
 		defines.set("TEXEL", "texel");
 
-		const uniforms = this.input.uniforms;
+		const uniforms = this.in.uniforms;
 		uniforms.set("map", new Uniform(null));
 		uniforms.set("uvTransform", new Uniform(null));
 
@@ -81,7 +81,7 @@ export class TextureEffect extends Effect implements TextureEffectOptions {
 	set texture(value: TextureResource | Texture | null) {
 
 		this._texture?.removeEventListener("change", this.textureListener);
-		this._texture = this.input.setBuffer(TextureEffect.BUFFER_TEXTURE, value);
+		this._texture = this.in.setBuffer(TextureEffect.BUFFER_TEXTURE, value);
 		this._texture.addEventListener("change", this.textureListener);
 
 		this.onTextureChange();
@@ -95,8 +95,8 @@ export class TextureEffect extends Effect implements TextureEffectOptions {
 	private onTextureChange(): void {
 
 		const texture = this.texture;
-		const uniforms = this.input.uniforms;
-		const defines = this.input.defines;
+		const uniforms = this.in.uniforms;
+		const defines = this.in.defines;
 
 		uniforms.get("map")!.value = texture;
 		defines.delete("TEXTURE_PRECISION_HIGH");
@@ -149,7 +149,7 @@ export class TextureEffect extends Effect implements TextureEffectOptions {
 
 		}
 
-		this.input.defines.set("TEXEL", "texel" + swizzle);
+		this.in.defines.set("TEXEL", "texel" + swizzle);
 		this.setChanged();
 
 	}

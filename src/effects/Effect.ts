@@ -74,7 +74,7 @@ export abstract class Effect extends Pass {
 
 		this.blendMode = new BlendMode(new SrcBlendFunction());
 		this.blendMode.addEventListener("change", () => this.setChanged());
-		this.input.addEventListener("change", () => this.detectGDataUsage());
+		this.in.addEventListener("change", () => this.detectGDataUsage());
 
 		this._fragmentShader = null;
 		this._vertexShader = null;

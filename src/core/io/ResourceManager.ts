@@ -15,13 +15,13 @@ import { RenderTargetDescriptor } from "../../utils/RenderTargetDescriptor.js";
 
 function gatherResources(pass: Pass<Material | null>, result: Set<Resource>): void {
 
-	for(const input of pass.input.buffers.values()) {
+	for(const input of pass.in.buffers.values()) {
 
 		result.add(input);
 
 	}
 
-	for(const output of pass.output.buffers.values()) {
+	for(const output of pass.out.buffers.values()) {
 
 		result.add(output);
 

@@ -57,8 +57,8 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 
 	protected override onInputChange(): void {
 
-		this.fullscreenMaterial.depthBuffer = this.input.buffers.get(GBuffer.DEPTH)?.value ?? null;
-		this.fullscreenMaterial.normalBuffer = this.input.buffers.get(GBuffer.NORMAL)?.value ?? null;
+		this.fullscreenMaterial.depthBuffer = this.in.buffers.get(GBuffer.DEPTH)?.value ?? null;
+		this.fullscreenMaterial.normalBuffer = this.in.buffers.get(GBuffer.NORMAL)?.value ?? null;
 		this.onResolutionChange();
 
 	}
@@ -66,7 +66,7 @@ export class DepthDownsamplingPass extends Pass<DepthDownsamplingMaterial> {
 	protected override onResolutionChange(): void {
 
 		// Use the resolution of the input buffer to calculate the depth/normal buffer texel size.
-		const inputBuffer = this.input.defaultBuffer?.value ?? null;
+		const inputBuffer = this.in.defaultBuffer?.value ?? null;
 
 		if(inputBuffer === null) {
 

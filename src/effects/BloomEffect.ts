@@ -99,7 +99,7 @@ export class BloomEffect extends Effect implements BloomEffectOptions {
 			clampToBorder
 		});
 
-		const uniforms = this.input.uniforms;
+		const uniforms = this.in.uniforms;
 		uniforms.set("intensity", new Uniform(intensity));
 		uniforms.set("map", new Uniform(null));
 		this.mipmapBlurPass.texture.bindUniform(uniforms.get("map")!);
@@ -146,13 +146,13 @@ export class BloomEffect extends Effect implements BloomEffectOptions {
 
 	get intensity(): number {
 
-		return this.input.uniforms.get("intensity")!.value as number;
+		return this.in.uniforms.get("intensity")!.value as number;
 
 	}
 
 	set intensity(value: number) {
 
-		this.input.uniforms.get("intensity")!.value = value;
+		this.in.uniforms.get("intensity")!.value = value;
 
 	}
 
@@ -162,13 +162,13 @@ export class BloomEffect extends Effect implements BloomEffectOptions {
 
 		if(this.luminancePass.enabled) {
 
-			this.luminancePass.input.defaultBuffer = this.input.defaultBuffer;
-			this.mipmapBlurPass.input.defaultBuffer = this.luminancePass.texture;
+			this.luminancePass.in.defaultBuffer = this.in.defaultBuffer;
+			this.mipmapBlurPass.in.defaultBuffer = this.luminancePass.texture;
 
 		} else {
 
-			this.luminancePass.input.deleteDefaultBuffer();
-			this.mipmapBlurPass.input.defaultBuffer = this.input.defaultBuffer;
+			this.luminancePass.in.deleteDefaultBuffer();
+			this.mipmapBlurPass.in.defaultBuffer = this.in.defaultBuffer;
 
 		}
 

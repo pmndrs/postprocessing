@@ -382,8 +382,8 @@ export class FrameGraph implements FrameGraphOptions, Disposable, Renderable {
 		task.gBufferSchema = this.gBufferSchema;
 
 		task.addEventListener("toggle", this.taskListener);
-		task.input.addEventListener("change", this.taskListener);
-		task.output.addEventListener("change", this.taskListener);
+		task.in.addEventListener("change", this.taskListener);
+		task.out.addEventListener("change", this.taskListener);
 
 	}
 
@@ -402,8 +402,8 @@ export class FrameGraph implements FrameGraphOptions, Disposable, Renderable {
 		task.gBufferSchema = null;
 
 		task.removeEventListener("toggle", this.taskListener);
-		task.input.removeEventListener("change", this.taskListener);
-		task.output.removeEventListener("change", this.taskListener);
+		task.in.removeEventListener("change", this.taskListener);
+		task.out.removeEventListener("change", this.taskListener);
 
 		if(this._roots.has(task)) {
 

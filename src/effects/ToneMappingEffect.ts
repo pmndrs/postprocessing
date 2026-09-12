@@ -69,8 +69,8 @@ export class ToneMappingEffect extends Effect implements ToneMappingEffectOption
 		this.cdl = new ColorDecisionList();
 		this.cdl.addEventListener("toggle", () => this.onCDLToggle());
 
-		this.input.uniforms.set("cdl", this.cdl.uniform);
-		this.input.defines.set("USE_CDL", true);
+		this.in.uniforms.set("cdl", this.cdl.uniform);
+		this.in.defines.set("USE_CDL", true);
 
 		this.toneMapping = toneMapping;
 		this.cdl.applyPreset(cdlPreset);
@@ -81,7 +81,7 @@ export class ToneMappingEffect extends Effect implements ToneMappingEffectOption
 
 	get toneMapping(): ToneMapping {
 
-		return this.input.defines.get("TONE_MAPPING") as ToneMapping;
+		return this.in.defines.get("TONE_MAPPING") as ToneMapping;
 
 	}
 
@@ -89,7 +89,7 @@ export class ToneMappingEffect extends Effect implements ToneMappingEffectOption
 
 		if(this.toneMapping !== value) {
 
-			const defines = this.input.defines;
+			const defines = this.in.defines;
 			defines.set("TONE_MAPPING", value);
 			this.setChanged();
 
@@ -107,11 +107,11 @@ export class ToneMappingEffect extends Effect implements ToneMappingEffectOption
 
 		if(this.cdl.enabled) {
 
-			this.input.defines.set("USE_CDL", true);
+			this.in.defines.set("USE_CDL", true);
 
 		} else {
 
-			this.input.defines.delete("USE_CDL");
+			this.in.defines.delete("USE_CDL");
 
 		}
 

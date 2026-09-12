@@ -135,13 +135,13 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 * The input resources of this pass.
 	 */
 
-	readonly input: Input;
+	readonly in: Input;
 
 	/**
 	 * The output resources of this pass.
 	 */
 
-	readonly output: Output;
+	readonly out: Output;
 
 	/**
 	 * The current resolution.
@@ -203,8 +203,8 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this._subtasks = [];
 		this._requiredTextures = [];
 
-		this.input = new Input();
-		this.output = new Output();
+		this.in = new Input();
+		this.out = new Output();
 		this.resolution = new Resolution();
 		this.viewport = new Viewport();
 		this.scissor = new Scissor();
@@ -216,14 +216,14 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this.resolution.addEventListener("change", () => this.updateViewportAndScissor());
 
 		// Synchronize subpasses.
-		this.input.addEventListener("change", () => this.updateSubpassInput());
+		this.in.addEventListener("change", () => this.updateSubpassInput());
 		this.resolution.addEventListener("change", () => this.updateSubpassResolution());
 		this.viewport.addEventListener("change", () => this.updateSubpassViewport());
 		this.scissor.addEventListener("change", () => this.updateSubpassScissor());
 
 		// Wire up lifecycle hooks.
-		this.input.addEventListener("change", () => this.onInputChange());
-		this.output.addEventListener("change", () => this.onOutputChange());
+		this.in.addEventListener("change", () => this.onInputChange());
+		this.out.addEventListener("change", () => this.onOutputChange());
 		this.resolution.addEventListener("change", () => this.onResolutionChange());
 		this.viewport.addEventListener("change", () => this.onViewportChange());
 		this.scissor.addEventListener("change", () => this.onScissorChange());
@@ -361,7 +361,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	set gBufferSchema(value: GBufferSchema | null) {
 
-		this.input.setGBufferSchema(value);
+		this.in.setGBufferSchema(value);
 
 		for(const subpass of this.subpasses) {
 
@@ -606,9 +606,9 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		for(const pass of this.subpasses) {
 
-			pass.input.textures.clear();
-			pass.input.textures.setAll(...this.input.textures);
-			pass.input.shaderData.add(this.input.shaderData);
+			pass.in.textures.clear();
+			pass.in.textures.setAll(...this.in.textures);
+			pass.in.shaderData.add(this.in.shaderData);
 
 		}
 
@@ -740,7 +740,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	read(producer: RenderTask): void {
 
-		this.input.add(producer.output);
+		this.in.add(producer.out);
 
 	}
 
@@ -754,7 +754,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	protected setDefaultBuffer(value?: RenderTargetResource | RenderTargetOptions): RenderTargetResource {
 
-		return this.output.setDefaultBuffer(value);
+		return this.out.setDefaultBuffer(value);
 
 	}
 
@@ -779,7 +779,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	protected deleteDefaultOutputBuffer(): boolean {
 
-		return this.output.deleteDefaultBuffer();
+		return this.out.deleteDefaultBuffer();
 
 	}
 
@@ -797,7 +797,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	protected setBuffer(key: string, value?: RenderTargetOptions | RenderTargetResource): RenderTargetResource {
 
-		return this.output.setBuffer(key, value);
+		return this.out.setBuffer(key, value);
 
 	}
 
@@ -810,7 +810,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	protected deleteBuffer(key: string): boolean {
 
-		return this.output.deleteBuffer(key);
+		return this.out.deleteBuffer(key);
 
 	}
 
@@ -820,7 +820,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	protected clearBuffers(): void {
 
-		this.output.clearBuffers();
+		this.out.clearBuffers();
 
 	}
 

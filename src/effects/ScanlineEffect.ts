@@ -72,7 +72,7 @@ export class ScanlineEffect extends Effect implements ScanlineEffectOptions {
 		this.fragmentShader = fragmentShader;
 		this.blendMode.blendFunction = new OverlayBlendFunction();
 
-		const uniforms = this.input.uniforms;
+		const uniforms = this.in.uniforms;
 		uniforms.set("params", new Uniform(new Vector2(offset, 0.0)));
 		uniforms.set("scrollSpeed", new Uniform(0.0));
 
@@ -98,39 +98,39 @@ export class ScanlineEffect extends Effect implements ScanlineEffectOptions {
 
 	get offset() {
 
-		const params = this.input.uniforms.get("params")!.value as Vector2;
+		const params = this.in.uniforms.get("params")!.value as Vector2;
 		return params.x;
 
 	}
 
 	set offset(value: number) {
 
-		const params = this.input.uniforms.get("params")!.value as Vector2;
+		const params = this.in.uniforms.get("params")!.value as Vector2;
 		params.x = value;
 
 	}
 
 	get scrollSpeed() {
 
-		return this.input.uniforms.get("scrollSpeed")!.value as number;
+		return this.in.uniforms.get("scrollSpeed")!.value as number;
 
 	}
 
 	set scrollSpeed(value: number) {
 
-		this.input.uniforms.get("scrollSpeed")!.value = value;
+		this.in.uniforms.get("scrollSpeed")!.value = value;
 
 		if(value === 0) {
 
-			if(this.input.defines.delete("SCROLL")) {
+			if(this.in.defines.delete("SCROLL")) {
 
 				this.setChanged();
 
 			}
 
-		} else if(!this.input.defines.has("SCROLL")) {
+		} else if(!this.in.defines.has("SCROLL")) {
 
-			this.input.defines.set("SCROLL", "1");
+			this.in.defines.set("SCROLL", "1");
 			this.setChanged();
 
 		}
@@ -142,7 +142,7 @@ export class ScanlineEffect extends Effect implements ScanlineEffectOptions {
 	protected override onResolutionChange(): void {
 
 		const resolution = this.resolution;
-		const params = this.input.uniforms.get("params")!.value as Vector2;
+		const params = this.in.uniforms.get("params")!.value as Vector2;
 		params.y = this.density * resolution.baseHeight;
 
 	}

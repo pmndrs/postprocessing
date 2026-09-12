@@ -63,8 +63,8 @@ export class FullscreenRenderOperation<TMaterial extends Material | null> extend
 
 		// Manage built-in fullscreen material data.
 		materials.addEventListener("add", (e) => this.updateFullscreenMaterial(e.value));
-		context.input.addEventListener("change", () => this.updateFullscreenMaterialsInput());
-		context.output.addEventListener("change", () => this.updateFullscreenMaterialsOutput());
+		context.in.addEventListener("change", () => this.updateFullscreenMaterialsInput());
+		context.out.addEventListener("change", () => this.updateFullscreenMaterialsOutput());
 		context.resolution.addEventListener("change", () => this.updateFullscreenMaterialsResolution());
 
 	}
@@ -139,13 +139,13 @@ export class FullscreenRenderOperation<TMaterial extends Material | null> extend
 
 		if(material instanceof FullscreenMaterial) {
 
-			material.inputBuffer = this.context.input.defaultBuffer?.value ?? null;
+			material.inputBuffer = this.context.in.defaultBuffer?.value ?? null;
 
 		}
 
 		this.shaderDataTracker
-			.applyDefines(material, this.context.input.defines)
-			.applyUniforms(material, this.context.input.uniforms);
+			.applyDefines(material, this.context.in.defines)
+			.applyUniforms(material, this.context.in.uniforms);
 
 	}
 
@@ -162,8 +162,8 @@ export class FullscreenRenderOperation<TMaterial extends Material | null> extend
 		}
 
 		this.shaderDataTracker
-			.trackDefines(this.context.input.defines)
-			.trackUniforms(this.context.input.uniforms);
+			.trackDefines(this.context.in.defines)
+			.trackUniforms(this.context.in.uniforms);
 
 	}
 
@@ -178,7 +178,7 @@ export class FullscreenRenderOperation<TMaterial extends Material | null> extend
 		if(material instanceof FullscreenMaterial) {
 
 			// High precision buffers use HalfFloatType (mediump).
-			material.outputPrecision = this.context.output.frameBufferPrecisionHigh ? "mediump" : "lowp";
+			material.outputPrecision = this.context.out.frameBufferPrecisionHigh ? "mediump" : "lowp";
 
 		}
 

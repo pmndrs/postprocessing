@@ -75,7 +75,7 @@ export class ASCIIEffect extends Effect implements ASCIIEffectOptions {
 
 		this.fragmentShader = fragmentShader;
 
-		const uniforms = this.input.uniforms;
+		const uniforms = this.in.uniforms;
 		uniforms.set("asciiTexture", new Uniform(null));
 		uniforms.set("cellCount", new Uniform(new Vector4()));
 		uniforms.set("color", new Uniform(new Color()));
@@ -93,14 +93,14 @@ export class ASCIIEffect extends Effect implements ASCIIEffectOptions {
 
 	get asciiTexture(): ASCIITexture | null {
 
-		return this.input.uniforms.get("asciiTexture")!.value as ASCIITexture;
+		return this.in.uniforms.get("asciiTexture")!.value as ASCIITexture;
 
 	}
 
 	set asciiTexture(value: ASCIITexture | null) {
 
-		const currentTexture = this.input.uniforms.get("asciiTexture")!.value as ASCIITexture;
-		this.input.uniforms.get("asciiTexture")!.value = value;
+		const currentTexture = this.in.uniforms.get("asciiTexture")!.value as ASCIITexture;
+		this.in.uniforms.get("asciiTexture")!.value = value;
 
 		if(currentTexture !== null && currentTexture !== value) {
 
@@ -112,9 +112,9 @@ export class ASCIIEffect extends Effect implements ASCIIEffectOptions {
 
 			const cellCount = value.cellCount;
 
-			this.input.defines.set("CHAR_COUNT_MINUS_ONE", (value.characterCount - 1).toFixed(1));
-			this.input.defines.set("TEX_CELL_COUNT", cellCount.toFixed(1));
-			this.input.defines.set("INV_TEX_CELL_COUNT", (1.0 / cellCount).toFixed(9));
+			this.in.defines.set("CHAR_COUNT_MINUS_ONE", (value.characterCount - 1).toFixed(1));
+			this.in.defines.set("TEX_CELL_COUNT", cellCount.toFixed(1));
+			this.in.defines.set("INV_TEX_CELL_COUNT", (1.0 / cellCount).toFixed(9));
 
 			this.setChanged();
 
@@ -124,7 +124,7 @@ export class ASCIIEffect extends Effect implements ASCIIEffectOptions {
 
 	get color(): Color {
 
-		return this.input.uniforms.get("color")!.value as Color;
+		return this.in.uniforms.get("color")!.value as Color;
 
 	}
 
@@ -132,19 +132,19 @@ export class ASCIIEffect extends Effect implements ASCIIEffectOptions {
 
 		if(value !== null) {
 
-			const color = this.input.uniforms.get("color")!.value as Color;
+			const color = this.in.uniforms.get("color")!.value as Color;
 			color.set(value);
 
 		}
 
-		if(this.input.defines.has("USE_COLOR") && value === null) {
+		if(this.in.defines.has("USE_COLOR") && value === null) {
 
-			this.input.defines.delete("USE_COLOR");
+			this.in.defines.delete("USE_COLOR");
 			this.setChanged();
 
-		} else if(!this.input.defines.has("USE_COLOR") && value !== null) {
+		} else if(!this.in.defines.has("USE_COLOR") && value !== null) {
 
-			this.input.defines.set("USE_COLOR", true);
+			this.in.defines.set("USE_COLOR", true);
 			this.setChanged();
 
 		}
@@ -153,7 +153,7 @@ export class ASCIIEffect extends Effect implements ASCIIEffectOptions {
 
 	get inverted(): boolean {
 
-		return this.input.defines.has("INVERTED");
+		return this.in.defines.has("INVERTED");
 
 	}
 
@@ -163,11 +163,11 @@ export class ASCIIEffect extends Effect implements ASCIIEffectOptions {
 
 			if(value) {
 
-				this.input.defines.set("INVERTED", true);
+				this.in.defines.set("INVERTED", true);
 
 			} else {
 
-				this.input.defines.delete("INVERTED");
+				this.in.defines.delete("INVERTED");
 
 			}
 
@@ -202,7 +202,7 @@ export class ASCIIEffect extends Effect implements ASCIIEffectOptions {
 
 	private updateCellCount(): void {
 
-		const cellCount = this.input.uniforms.get("cellCount")!.value as Vector4;
+		const cellCount = this.in.uniforms.get("cellCount")!.value as Vector4;
 		const resolution = this.resolution;
 
 		cellCount.x = resolution.width / this.cellSize;

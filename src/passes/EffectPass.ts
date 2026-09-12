@@ -130,7 +130,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 	private updateRequiredTextures(): void {
 
-		const schema = this.input.gBufferSchema;
+		const schema = this.in.gBufferSchema;
 		const requiredTextures = new Set<string>();
 		const requiredGData = new Set<string>();
 
@@ -201,9 +201,9 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 	private updateGBufferStruct(): void {
 
-		const input = this.input;
+		const input = this.in;
 		const gBufferEntries: [string, Texture | null][] = [];
-		const schema = this.input.gBufferSchema;
+		const schema = this.in.gBufferSchema;
 
 		if(schema === null) {
 
@@ -281,7 +281,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		this.renderSubpasses();
 		this.fullscreenMaterial.time += this.timer.getDelta() * this.timeScale;
-		this.setRenderTarget(this.output.defaultBuffer?.value);
+		this.setRenderTarget(this.out.defaultBuffer?.value);
 		this.renderFullscreen();
 
 	}

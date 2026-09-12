@@ -93,8 +93,8 @@ export class NoiseEffect extends Effect implements NoiseEffectOptions {
 		this.fragmentShader = fragmentShader;
 		this.blendMode.blendFunction = new AddBlendFunction();
 
-		this.input.uniforms.set("page", new Uniform(0.0));
-		this.input.defines.set("SEED", (seed ?? Math.max(1, Math.round(Math.random() * 1024))).toFixed(1));
+		this.in.uniforms.set("page", new Uniform(0.0));
+		this.in.defines.set("SEED", (seed ?? Math.max(1, Math.round(Math.random() * 1024))).toFixed(1));
 
 		this._fps = 0;
 		this.timeout = 0.0;
@@ -112,13 +112,13 @@ export class NoiseEffect extends Effect implements NoiseEffectOptions {
 
 	private get page(): number {
 
-		return this.input.uniforms.get("page")!.value as number;
+		return this.in.uniforms.get("page")!.value as number;
 
 	}
 
 	private set page(value: number) {
 
-		this.input.uniforms.get("page")!.value = value;
+		this.in.uniforms.get("page")!.value = value;
 
 	}
 
@@ -139,7 +139,7 @@ export class NoiseEffect extends Effect implements NoiseEffectOptions {
 
 	get rgb(): boolean {
 
-		return this.input.defines.has("RGB");
+		return this.in.defines.has("RGB");
 
 	}
 
@@ -149,11 +149,11 @@ export class NoiseEffect extends Effect implements NoiseEffectOptions {
 
 			if(value) {
 
-				this.input.defines.set("RGB", true);
+				this.in.defines.set("RGB", true);
 
 			} else {
 
-				this.input.defines.delete("RGB");
+				this.in.defines.delete("RGB");
 
 			}
 
@@ -165,7 +165,7 @@ export class NoiseEffect extends Effect implements NoiseEffectOptions {
 
 	get premultiply(): boolean {
 
-		return this.input.defines.has("PREMULTIPLY");
+		return this.in.defines.has("PREMULTIPLY");
 
 	}
 
@@ -175,11 +175,11 @@ export class NoiseEffect extends Effect implements NoiseEffectOptions {
 
 			if(value) {
 
-				this.input.defines.set("PREMULTIPLY", true);
+				this.in.defines.set("PREMULTIPLY", true);
 
 			} else {
 
-				this.input.defines.delete("PREMULTIPLY");
+				this.in.defines.delete("PREMULTIPLY");
 
 			}
 
