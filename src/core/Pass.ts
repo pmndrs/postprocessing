@@ -25,6 +25,7 @@ import { Output } from "./io/Output.js";
 import { RenderTargetResource } from "./io/RenderTargetResource.js";
 import { RenderOperation } from "./RenderOperation.js";
 import { RenderTask, RenderTaskEventMap } from "./RenderTask.js";
+import { InOut } from "./io/InOut.js";
 
 const v = /* @__PURE__ */ new Vector2();
 
@@ -179,6 +180,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		this.in = new Input();
 		this.out = new Output();
+		this.inOut = new InOut();
 		this.resolution = new Resolution();
 		this.viewport = new Viewport();
 		this.scissor = new Scissor();
@@ -198,6 +200,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		// Wire up lifecycle hooks.
 		this.in.addEventListener("change", () => this.onInputChange());
 		this.out.addEventListener("change", () => this.onOutputChange());
+		this.inOut.addEventListener("change", () => this.onOutputChange());
 		this.resolution.addEventListener("change", () => this.onResolutionChange());
 		this.viewport.addEventListener("change", () => this.onViewportChange());
 		this.scissor.addEventListener("change", () => this.onScissorChange());
@@ -1018,7 +1021,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		for(const material of this.materials) {
 
-			material?.dispose();
+			material.dispose();
 
 		}
 

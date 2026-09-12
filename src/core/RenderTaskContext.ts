@@ -1,5 +1,6 @@
 import { Camera, Scene, WebGLRenderer } from "three";
 import { Resolution } from "../utils/Resolution.js";
+import { InOut } from "./io/InOut.js";
 import { Input } from "./io/Input.js";
 import { Output } from "./io/Output.js";
 
@@ -48,6 +49,16 @@ export interface RenderTaskContext {
 	 */
 
 	readonly out: Output;
+
+	/**
+	 * The in-out render target resource connections of this task.
+	 *
+	 * Unlike output resources, in-out resources are owned by another pass. Connecting an in-out resource creates a
+	 * dependency on the pass that produces the resource and allows multiple passes to render into the same materialized
+	 * render target without copying its contents.
+	 */
+
+	readonly inOut: InOut;
 
 	/**
 	 * The current resolution.
