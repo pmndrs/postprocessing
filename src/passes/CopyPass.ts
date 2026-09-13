@@ -35,7 +35,7 @@ export class CopyPass extends Pass<CopyMaterial> {
 
 		if(outputBuffer !== undefined) {
 
-			this.inOut.connectDefaultBuffer(outputBuffer, { loadOp: "discard" });
+			this.inOut.connectDefault(outputBuffer, { loadOp: "discard" });
 
 		}
 

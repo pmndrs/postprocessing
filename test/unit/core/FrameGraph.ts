@@ -167,13 +167,11 @@ describe("FrameGraph", () => {
 		const firstTarget = new RenderTargetResource();
 		const secondTarget = new RenderTargetResource();
 
-		secondTarget.alias(firstTarget);
-
 		const first = new TestPass({ name: "First", target: firstTarget });
 		const second = new TestPass({ name: "Second", target: secondTarget });
 		const consumer = new TestPass({ name: "Consumer" });
 
-		consumer.read(first);
+		second.inOut.connectDefault(firstTarget);
 		consumer.read(second);
 
 		const graph = new FrameGraph({ renderer });
@@ -181,8 +179,8 @@ describe("FrameGraph", () => {
 		graph.output(consumer);
 
 		assert.equal(
-			first.output.defaultBuffer?.renderTarget,
-			second.output.defaultBuffer?.renderTarget
+			first.out.defaultBuffer?.renderTarget,
+			second.out.defaultBuffer?.renderTarget
 		);
 
 	});

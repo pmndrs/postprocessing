@@ -1,35 +1,19 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-
-import {
-	EffectMaterialCache,
-	type EffectPassContext,
-	GBuffer,
-	GBufferSchema,
-	Input,
-	ToneMappingEffect
-} from "postprocessing";
-
-function createContext(requiredTextures: readonly string[] = []): EffectPassContext {
-
-	return {
-		input: new Input(),
-		requiredTextures
-	};
-
-}
+import { EffectMaterialCache, GBuffer, GBufferSchema, ToneMappingEffect } from "postprocessing";
+import { createEffectPassContext } from "../../support/context.ts";
 
 describe("EffectMaterialCache", () => {
 
 	it("can be instantiated", () => {
 
-		assert.doesNotThrow(() => new EffectMaterialCache(createContext()));
+		assert.doesNotThrow(() => new EffectMaterialCache(createEffectPassContext()));
 
 	});
 
 	it("returns a material", () => {
 
-		const manager = new EffectMaterialCache(createContext());
+		const manager = new EffectMaterialCache(createEffectPassContext());
 		assert.doesNotThrow(() => manager.getMaterial([]));
 
 	});
@@ -44,8 +28,8 @@ describe("EffectMaterialCache", () => {
 
 		effects.forEach((effect) => void (effect.optional = true));
 
-		const context = createContext([GBuffer.COLOR]);
-		context.input.setGBufferSchema(new GBufferSchema());
+		const context = createEffectPassContext([GBuffer.COLOR]);
+		context.in.setGBufferSchema(new GBufferSchema());
 
 		const manager = new EffectMaterialCache(context);
 
@@ -69,8 +53,8 @@ describe("EffectMaterialCache", () => {
 
 		effects.forEach((effect) => void (effect.optional = true));
 
-		const context = createContext([GBuffer.COLOR]);
-		context.input.setGBufferSchema(new GBufferSchema());
+		const context = createEffectPassContext([GBuffer.COLOR]);
+		context.in.setGBufferSchema(new GBufferSchema());
 
 		const manager = new EffectMaterialCache(context);
 

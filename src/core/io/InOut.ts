@@ -3,6 +3,7 @@ import { LoadOp } from "../../enums/LoadOp.js";
 import { BaseEventMap } from "../BaseEventMap.js";
 import { Output } from "./Output.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
+import { InOutConnection } from "./InOutConnection.js";
 
 /**
  * Options for a render target connection.
@@ -13,7 +14,7 @@ import { RenderTargetResource } from "./RenderTargetResource.js";
 export interface InOutOptions {
 
 	/**
-	 * Specifies how the contents of the render target are handled before rendering.
+	 * Specifies how the existing contents of the render target resource are handled when it's used.
 	 *
 	 * @defaultValue "load"
 	 */
@@ -23,9 +24,9 @@ export interface InOutOptions {
 }
 
 /**
- * Render target resources that a pass continues writing into.
+ * Connects a pass to render target resources produced by other passes.
  *
- * In-out resource connections allow the current pass to continue writing into the associated render target.
+ * An in-out connection allows the pass to continue rendering into an existing render target without creating a copy.
  *
  * @category IO
  */
@@ -33,16 +34,10 @@ export interface InOutOptions {
 export class InOut extends EventDispatcher<BaseEventMap> {
 
 	/**
-	 * @see {@link buffers}
+	 * @see {@link connections}
 	 */
 
-	private readonly _renderTargets: Map<string, RenderTargetResource>;
-
-	/**
-	 * @see {@link loadOps}
-	 */
-
-	private readonly _loadOps: Map<string, LoadOp>;
+	private readonly _connections: Map<string, InOutConnection>;
 
 	/**
 	 * Constructs new in-out resources.
@@ -51,97 +46,83 @@ export class InOut extends EventDispatcher<BaseEventMap> {
 	constructor() {
 
 		super();
-
-		this._renderTargets = new Map<string, RenderTargetResource>();
-		this._loadOps = new Map();
+		this._connections = new Map();
 
 	}
 
 	/**
-	 * Connected render targets.
+	 * Connected render target resources.
 	 *
 	 * @internal
 	 */
 
-	get buffers(): ReadonlyMap<string, RenderTargetResource> {
+	get connections(): ReadonlyMap<string, InOutConnection> {
 
-		return this._renderTargets;
-
-	}
-
-	/**
-	 * Load operations of the {@link buffers | connected render targets}.
-	 *
-	 * @internal
-	 */
-
-	get loadOps(): ReadonlyMap<string, LoadOp> {
-
-		return this._loadOps;
+		return this._connections;
 
 	}
 
 	/**
-	 * Connects the default output buffer with the given buffer.
+	 * Connects the pass's default output buffer to the given render target resource.
 	 *
 	 * @param resource - The render target resource to connect.
 	 * @param options - Connection options.
 	 */
 
-	connectDefaultBuffer(resource: RenderTargetResource, options?: InOutOptions): void {
+	connectDefault(resource: RenderTargetResource, options?: InOutOptions): void {
 
-		this.connectBuffer(Output.BUFFER_DEFAULT, resource, options);
+		this.connect(Output.BUFFER_DEFAULT, resource, options);
 
 	}
 
 	/**
-	 * Connects the a specific output buffer with the given buffer.
+	 * Connects the pass to the render target resource associated with the given key.
 	 *
 	 * @param key - The name of the output buffer.
 	 * @param resource - The render target resource to connect.
 	 * @param options - Connection options.
 	 */
 
-	connectBuffer(key: string, resource: RenderTargetResource, options?: InOutOptions): void {
+	connect(key: string, resource: RenderTargetResource, options?: InOutOptions): void {
 
-		this._loadOps.set(key, options?.loadOp ?? "load");
-		this._renderTargets.set(key, resource);
-
+		this._connections.set(key, { resource, loadOp: options?.loadOp ?? "load" });
 		this.dispatchEvent({ type: "change" });
 
 	}
 
 	/**
-	 * Disconnects the given buffer.
+	 * Disconnects the pass from the render target resource associated with the given key.
 	 *
-	 * @param key - The name of the buffer.
+	 * @param key - The name of the output buffer.
 	 * @return Whether the buffer was disconnected.
 	 */
 
-	disconnectBuffer(key: string): boolean {
+	disconnect(key: string): boolean {
 
-		const deleted = this._renderTargets.delete(key);
+		if(this._connections.delete(key)) {
 
-		if(deleted) {
-
-			this._loadOps.delete(key);
 			this.dispatchEvent({ type: "change" });
+			return true;
 
 		}
 
-		return deleted;
+		return false;
 
 	}
 
 	/**
-	 * Disconnects all buffer resources.
+	 * Disconnects all render target resources.
 	 */
 
-	clearBuffers(): void {
+	clear(): void {
 
-		this._renderTargets.clear();
-		this._loadOps.clear();
+		if(this._connections.size === 0) {
 
+			return;
+
+		}
+
+		this._connections.clear();
 		this.dispatchEvent({ type: "change" });
 
 	}

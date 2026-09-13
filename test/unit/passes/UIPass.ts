@@ -19,13 +19,13 @@ describe("UIPass", () => {
 		const geometryPass = new GeometryPass();
 		const effectPass = new EffectPass();
 		const uiPass = new UIPass();
-		const depth = geometryPass.output.defaultBuffer!.textures.get(GBuffer.DEPTH);
+		const depth = geometryPass.out.defaultBuffer!.textures.get(GBuffer.DEPTH);
 
 		uiPass.read(geometryPass);
 		uiPass.read(effectPass);
 
-		assert.equal(uiPass.input.defaultBuffer, effectPass.output.defaultBuffer!.texture);
-		assert.equal(uiPass.input.buffers.get(GBuffer.DEPTH), depth);
+		assert.equal(uiPass.in.defaultBuffer, effectPass.out.defaultBuffer!.texture);
+		assert.equal(uiPass.in.buffers.get(GBuffer.DEPTH), depth);
 
 		geometryPass.dispose();
 		effectPass.dispose();
