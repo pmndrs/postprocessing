@@ -1,9 +1,9 @@
 import { EventDispatcher } from "three";
 import { LoadOp } from "../../enums/LoadOp.js";
 import { BaseEventMap } from "../BaseEventMap.js";
+import { InOutConnection } from "./InOutConnection.js";
 import { Output } from "./Output.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
-import { InOutConnection } from "./InOutConnection.js";
 
 /**
  * Options for a render target connection.

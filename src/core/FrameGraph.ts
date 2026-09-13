@@ -154,9 +154,9 @@ export class FrameGraph implements FrameGraphOptions, Disposable, Renderable {
 		this._gBufferSchema = gBufferSchema;
 		this._scene = scene;
 		this._camera = camera;
-
 		this._tasks = new Set();
 		this._roots = new Set();
+
 		this.renderPipeline = [];
 
 		this.sizeObserver = this.createSizeObserver();
@@ -219,7 +219,7 @@ export class FrameGraph implements FrameGraphOptions, Disposable, Renderable {
 
 		if(value !== null) {
 
-			// Clearing will be handled by clear tasks.
+			// Clearing will be handled by clear operations.
 			value.autoClear = false;
 
 			this.updateResolution();
