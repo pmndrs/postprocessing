@@ -215,7 +215,9 @@ export class Background extends Group implements Disposable {
 
 	}
 
-	dispose(): void {
+	override dispose(): void {
+
+		super.dispose();
 
 		this.skyBox.material.dispose();
 		this.background.material.dispose();
