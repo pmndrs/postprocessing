@@ -17,6 +17,8 @@ export interface InOutConnection {
 
 	/**
 	 * The load operation of the connected resource.
+	 *
+	 * @defaultValue "load"
 	 */
 
 	readonly loadOp: LoadOp;
