@@ -2,6 +2,7 @@ import { BaseEvent, EventListener, IUniform, Texture } from "three";
 import { Disposable } from "../Disposable.js";
 import type { RenderTargetResource } from "./RenderTargetResource.js";
 import { Resource } from "./Resource.js";
+import { Output } from "./Output.js";
 
 /**
  * A texture resource wrapper.
@@ -38,6 +39,8 @@ export class TextureResource extends Resource<Readonly<Texture> | null> implemen
 
 	}
 
+	// #region Accessors
+
 	/**
 	 * Alias for {@link value}.
 	 */
@@ -57,6 +60,36 @@ export class TextureResource extends Resource<Readonly<Texture> | null> implemen
 		return this._renderTarget;
 
 	}
+
+	// #region Internal
+
+	/**
+	 * The current owner of this resource.
+	 *
+	 * @internal
+	 */
+
+	get owner(): Output | null {
+
+		return this.renderTarget?.owner ?? null;
+
+	}
+
+	set owner(value: Output | null) {
+
+		if(this.renderTarget === null) {
+
+			return;
+
+		}
+
+		this.renderTarget.owner = value;
+
+	}
+
+	// #endregion
+
+	// #endregion
 
 	dispose(): void {
 
