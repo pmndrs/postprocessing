@@ -55,7 +55,10 @@ describe("FrameGraph", () => {
 		const pass = new TestPass({ name: "Test" });
 		const graph = new FrameGraph();
 
-		assert.throws(() => graph.output(pass));
+		assert.throws(
+			() => graph.output(pass),
+			{ name: "Error", message: /not part of this frame graph/i }
+		);
 
 	});
 
@@ -67,7 +70,10 @@ describe("FrameGraph", () => {
 		graph.add(pass);
 		graph.remove(pass);
 
-		assert.throws(() => graph.output(pass));
+		assert.throws(
+			() => graph.output(pass),
+			{ name: "Error", message: /not part of this frame graph/i }
+		);
 
 	});
 
@@ -162,6 +168,48 @@ describe("FrameGraph", () => {
 
 	});
 
+	it("orders a pass that clears a target before the pass that produces it", () => {
+
+		const execution: string[] = [];
+		const target = new RenderTargetResource();
+
+		const producer = new TestPass({ name: "Producer", execution });
+		const writer = new TestPass({ name: "Writer", execution, target });
+		const clearer = new TestPass({ name: "Clearer", execution });
+
+		writer.read(producer);
+		clearer.inOut.connectDefault(target, { loadOp: "clear" });
+
+		const graph = new FrameGraph({ renderer });
+		graph.add(producer, writer, clearer);
+		graph.output(clearer);
+		graph.render();
+
+		assert.deepEqual(execution, ["Clearer", "Producer", "Writer"]);
+
+	});
+
+	it("orders a pass that loads a target after the pass that produces it", () => {
+
+		const execution: string[] = [];
+		const target = new RenderTargetResource();
+
+		const producer = new TestPass({ name: "Producer", execution });
+		const writer = new TestPass({ name: "Writer", execution, target });
+		const loader = new TestPass({ name: "Loader", execution });
+
+		writer.read(producer);
+		loader.inOut.connectDefault(target, { loadOp: "load" });
+
+		const graph = new FrameGraph({ renderer });
+		graph.add(producer, writer, loader);
+		graph.output(loader);
+		graph.render();
+
+		assert.deepEqual(execution, ["Producer", "Writer", "Loader"]);
+
+	});
+
 	it("materializes aliased resources as the same render target", () => {
 
 		const firstTarget = new RenderTargetResource();
@@ -177,6 +225,9 @@ describe("FrameGraph", () => {
 		const graph = new FrameGraph({ renderer });
 		graph.add(first, second, consumer);
 		graph.output(consumer);
+
+		assert.notEqual(first.out.defaultBuffer?.renderTarget, null);
+		assert.notEqual(second.out.defaultBuffer?.renderTarget, null);
 
 		assert.equal(
 			first.out.defaultBuffer?.renderTarget,
@@ -195,12 +246,15 @@ describe("FrameGraph", () => {
 
 		const graph = new FrameGraph({ renderer });
 
-		assert.throws(() => {
+		assert.throws(
+			() => {
 
-			graph.add(missing);
-			graph.output(missing);
+				graph.add(missing);
+				graph.output(missing);
 
-		});
+			},
+			{ name: "Error", message: /requires the input texture/i }
+		);
 
 	});
 
@@ -213,12 +267,15 @@ describe("FrameGraph", () => {
 		a.read(b);
 		b.read(a);
 
-		assert.throws(() => {
+		assert.throws(
+			() => {
 
-			graph.add(a, b);
-			graph.output(b);
+				graph.add(a, b);
+				graph.output(b);
 
-		});
+			},
+			{ name: "Error", message: /cyclic dependency/i }
+		);
 
 	});
 
@@ -283,12 +340,15 @@ describe("FrameGraph", () => {
 
 		pass.read(pass);
 
-		assert.throws(() => {
+		assert.throws(
+			() => {
 
-			graph.add(pass);
-			graph.output(pass);
+				graph.add(pass);
+				graph.output(pass);
 
-		});
+			},
+			{ name: "Error", message: /cyclic dependency/i }
+		);
 
 	});
 
