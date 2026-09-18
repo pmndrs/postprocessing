@@ -61,6 +61,14 @@ export interface RenderTaskContext {
 	readonly inOut: InOut;
 
 	/**
+	 * The names of {@link in | input} textures that are required for this task to run.
+	 *
+	 * @remarks Every required texture must be connected to this task's inputs before the frame graph can be compiled.
+	 */
+
+	readonly requiredTextures: readonly string[];
+
+	/**
 	 * The current resolution.
 	 */
 

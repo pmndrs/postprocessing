@@ -440,10 +440,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	}
 
-	/**
-	 * Required input textures.
-	 */
-
 	get requiredTextures(): readonly string[] {
 
 		return this._requiredTextures;
