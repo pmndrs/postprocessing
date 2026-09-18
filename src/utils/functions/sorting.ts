@@ -10,19 +10,28 @@
  * @internal
  */
 
-function dfs<T>(vertex: T, graph: Map<T, Iterable<T>>, visited: Set<T>, result: T[]): void {
+function dfs<T>(vertex: T, graph: Map<T, Iterable<T>>, inProgress: Set<T>, completed: Set<T>, result: T[]): void {
 
-	visited.add(vertex);
+	inProgress.add(vertex);
 
 	for(const neighbor of graph.get(vertex) ?? []) {
 
-		if(!visited.has(neighbor)) {
+		if(inProgress.has(neighbor)) {
 
-			dfs(neighbor, graph, visited, result);
+			throw new Error("A cyclic dependency was detected.");
+
+		}
+
+		if(!completed.has(neighbor)) {
+
+			dfs(neighbor, graph, inProgress, completed, result);
 
 		}
 
 	}
+
+	inProgress.delete(vertex);
+	completed.add(vertex);
 
 	// Add the vertex to the result after every neighbor has been visited.
 	result.push(vertex);
@@ -39,6 +48,7 @@ function dfs<T>(vertex: T, graph: Map<T, Iterable<T>>, visited: Set<T>, result: 
  * @param graph - The graph to sort.
  * @param desc - Whether the vertices should be sorted in descending order.
  * @return The sorted vertices.
+ * @throws If the given graph contains cyclic dependencies.
  * @category Utils
  * @internal
  */
@@ -46,13 +56,14 @@ function dfs<T>(vertex: T, graph: Map<T, Iterable<T>>, visited: Set<T>, result: 
 export function topologicalSort<T>(graph: Map<T, Iterable<T>>, desc = false): T[] {
 
 	const result: T[] = [];
-	const visited = new Set<T>();
+	const inProgress = new Set<T>();
+	const completed = new Set<T>();
 
 	for(const vertex of graph.keys()) {
 
-		if(!visited.has(vertex)) {
+		if(!completed.has(vertex)) {
 
-			dfs(vertex, graph, visited, result);
+			dfs(vertex, graph, inProgress, completed, result);
 
 		}
 
