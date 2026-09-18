@@ -242,6 +242,8 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		this.configureDepthTexture();
 
+		// TODO check inOut loadOp for defaultBuffer clear edge and adjust clear.enabled accordingly.
+
 	}
 
 	protected override onOutputChange(): void {
