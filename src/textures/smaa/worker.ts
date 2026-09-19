@@ -12,8 +12,7 @@ self.addEventListener("message", () => {
 	const areaImageData = SMAAAreaImageData.generate();
 	const searchImageData = SMAASearchImageData.generate();
 
-	const ctx = (self as unknown) as Worker;
-	ctx.postMessage({ areaImageData, searchImageData }, [
+	self.postMessage({ areaImageData, searchImageData }, [
 		areaImageData.data.buffer,
 		searchImageData.data.buffer
 	]);
