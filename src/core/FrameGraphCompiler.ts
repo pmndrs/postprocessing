@@ -1,4 +1,4 @@
-import { topologicalSort } from "../utils/functions/sorting.js";
+import { topologicalSortGrouped } from "../utils/functions/sorting.js";
 import { Disposable } from "./Disposable.js";
 import { FrameGraph } from "./FrameGraph.js";
 import { Output } from "./io/Output.js";
@@ -166,24 +166,19 @@ export class FrameGraphCompiler implements Disposable {
 	}
 
 	/**
-	 * Validates the current frame graph tasks.
+	 * Validates the given task.
 	 *
-	 * - Verifies all required resource inputs are connected.
-	 * - Verifies all consumed resources have producers.
-	 * - Detects missing resources, invalid dependency chains and cycles.
+	 * @param task - The task to validate.
+	 * @throws If the validation fails.
 	 */
 
-	private validate(tasks: Iterable<RenderTask>): void {
+	private validateTask(task: RenderTask): void {
 
-		for(const task of tasks) {
+		for(const name of task.requiredTextures) {
 
-			for(const name of task.requiredTextures) {
+			if(!task.in.textures.has(name)) {
 
-				if(!task.in.textures.has(name)) {
-
-					throw new Error(`The task "${task.name}" requires the input texture "${name}", but it is not connected.`);
-
-				}
+				throw new Error(`The task "${task.name}" requires the input texture "${name}", but it is not connected.`);
 
 			}
 
@@ -192,10 +187,37 @@ export class FrameGraphCompiler implements Disposable {
 	}
 
 	/**
+	 * Validates the given frame graph tasks.
 	 *
+	 * - Verifies all required resource inputs are connected.
+	 * - Verifies all consumed resources have producers.
+	 * - Detects missing resources, invalid dependency chains and cycles.
+	 *
+	 * @param tasks - The tasks to validate.
+	 * @throws If the validation fails.
 	 */
 
-	private buildDependencyGraph(): RenderTask[] {
+	private validate(tasks: RenderTask[][]): void {
+
+		for(const executionLevel of tasks) {
+
+			for(const task of executionLevel) {
+
+				this.validateTask(task);
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Builds an executable dependency graph based on the current {@link frameGraph}.
+	 *
+	 * @return The dependency graph.
+	 */
+
+	private buildDependencyGraph(): RenderTask[][] {
 
 		const stack = new WeakSet<RenderTask>();
 		const dependencyGraph = this.dependencyGraph;
@@ -216,7 +238,7 @@ export class FrameGraphCompiler implements Disposable {
 
 		}
 
-		return topologicalSort(dependencyGraph, true);
+		return topologicalSortGrouped(dependencyGraph);
 
 	}
 
@@ -227,7 +249,7 @@ export class FrameGraphCompiler implements Disposable {
 	 * @return An executable render pipeline.
 	 */
 
-	update(): Task[] {
+	update(): Task[][] {
 
 		const result = this.buildDependencyGraph();
 		this.validate(result);

@@ -129,7 +129,7 @@ export class FrameGraph implements FrameGraphOptions, Disposable, Renderable {
 	 * A render pipeline that contains executable tasks, sorted based on their dependencies.
 	 */
 
-	private renderPipeline: Task[];
+	private renderPipeline: Task[][];
 
 	/**
 	 * Constructs a new frame graph.
@@ -667,9 +667,13 @@ export class FrameGraph implements FrameGraphOptions, Disposable, Renderable {
 
 		}
 
-		for(const task of this.renderPipeline) {
+		for(const executionLevel of this.renderPipeline) {
 
-			task.execute();
+			for(const task of executionLevel) {
+
+				task.execute();
+
+			}
 
 		}
 
