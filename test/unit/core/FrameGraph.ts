@@ -1,14 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-
-import {
-	FrameGraph,
-	GBuffer,
-	GBufferResource,
-	RenderTargetResource
-} from "postprocessing";
-
 import type { WebGLRenderer } from "three";
+import { FrameGraph, GBuffer, GBufferResource, RenderTargetResource } from "postprocessing";
 import { TestPass } from "../../support/TestPass.ts";
 import { WebGLRendererMock } from "../../support/WebGLRendererMock.ts";
 
