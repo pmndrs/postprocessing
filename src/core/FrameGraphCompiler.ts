@@ -229,24 +229,6 @@ export class FrameGraphCompiler implements Disposable {
 
 	update(): Task[] {
 
-		// Graph
-		//   ↓
-		// collect resources/accesses
-		//   ↓
-		// resolve aliases
-		//   ↓
-		// validate resources
-		//   ↓
-		// derive dependencies
-		//   ↓
-		// topological sort
-		//   ↓
-		// analyze lifetimes
-		//   ↓
-		// assign physical targets
-		//   ↓
-		// execute
-
 		const result = this.buildDependencyGraph();
 		this.validate(result);
 		this.resourceManager.update();

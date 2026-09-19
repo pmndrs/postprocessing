@@ -249,6 +249,10 @@ export class ResourceManager implements Disposable {
 
 	update(): void {
 
+		// TODO
+		// analyze lifetimes
+		// assign physical targets
+
 		if(this.updating) {
 
 			return;
