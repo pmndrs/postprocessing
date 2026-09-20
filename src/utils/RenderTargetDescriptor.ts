@@ -63,6 +63,14 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> implem
 	private muted: boolean;
 
 	/**
+	 * Indicates whether this descriptor has changed.
+	 *
+	 * This flag will be `true` before and during a `change` event.
+	 */
+
+	private changed: boolean;
+
+	/**
 	 * Constructs a new render target descriptor.
 	 *
 	 * @param options - The options.
@@ -74,6 +82,7 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> implem
 
 		this.muted = false;
 		this.autoSRGB = true;
+		this.changed = false;
 
 		const textures = new ObservableMap<string, TextureParameters>();
 		textures.addEventListener("change", () => this.setChanged());
@@ -111,6 +120,8 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> implem
 
 	private setChanged(): void {
 
+		this.changed = true;
+
 		if(this.muted) {
 
 			return;
@@ -118,6 +129,7 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> implem
 		}
 
 		this.dispatchEvent({ type: "change" });
+		this.changed = false;
 
 	}
 
@@ -132,7 +144,12 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> implem
 		this.muted = true;
 		Object.assign(this, defaultRenderTargetOptions, values);
 		this.muted = false;
-		this.setChanged();
+
+		if(this.changed) {
+
+			this.setChanged();
+
+		}
 
 	}
 
