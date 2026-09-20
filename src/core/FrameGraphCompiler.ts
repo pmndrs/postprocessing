@@ -159,7 +159,7 @@ export class FrameGraphCompiler implements Disposable {
 	constructor(frameGraph: FrameGraph) {
 
 		this.frameGraph = frameGraph;
-		this.resourceManager = new ResourceManager(frameGraph);
+		this.resourceManager = new ResourceManager();
 		this.dependencyGraph = new Map();
 		this.outputToTask = new Map();
 
@@ -253,7 +253,7 @@ export class FrameGraphCompiler implements Disposable {
 
 		const result = this.buildDependencyGraph();
 		this.validate(result);
-		this.resourceManager.update();
+		this.resourceManager.update(result);
 
 		return result;
 
