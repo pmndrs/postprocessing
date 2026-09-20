@@ -3,8 +3,9 @@ import { Pass } from "../Pass.js";
 import { FrameGraph } from "../FrameGraph.js";
 import { Resource } from "./Resource.js";
 import { Disposable, isDisposable } from "../Disposable.js";
-import { RenderTargetResource } from "./RenderTargetResource.js";
 import { RenderTargetDescriptor } from "../../utils/RenderTargetDescriptor.js";
+import { RenderTask } from "../RenderTask.js";
+import { RenderTargetResource } from "./RenderTargetResource.js";
 
 /**
  * Gathers all resources from a given pass and its subpasses.
@@ -56,22 +57,10 @@ export class ResourceManager implements Disposable {
 	private _autoSRGB: boolean;
 
 	/**
-	 * A frame graph.
-	 */
-
-	private readonly frameGraph: FrameGraph;
-
-	/**
 	 * A set of resources that are currently being used by the frame graph.
 	 */
 
 	private activeResources: Set<Resource>;
-
-	/**
-	 * Indicates whether this manager is currently updating resources.
-	 */
-
-	private updating: boolean;
 
 	/**
 	 * Constructs a new resource manager.
@@ -79,14 +68,11 @@ export class ResourceManager implements Disposable {
 	 * @param frameGraph - A frame graph.
 	 */
 
-	constructor(frameGraph: FrameGraph) {
+	constructor() {
 
 		this._autoSyncDefaultBuffers = true;
 		this._autoSRGB = true;
-
-		this.frameGraph = frameGraph;
 		this.activeResources = new Set();
-		this.updating = false;
 
 	}
 
@@ -175,9 +161,9 @@ export class ResourceManager implements Disposable {
 		for(let i = 0, l = textureConfigs.length; i < l; ++i) {
 
 			const texture = renderTarget.textures[i];
-			const textureConfig = textureConfigs[i];
-			texture.name = textureConfig[0];
-			texture.setValues(textureConfig[1]);
+			const [name, values] = textureConfigs[i];
+			texture.name = name;
+			texture.setValues(values);
 
 		}
 
@@ -245,32 +231,19 @@ export class ResourceManager implements Disposable {
 
 	/**
 	 * Updates the input and output resources of the frame graph.
+	 *
+	 * @param graph - The frame graph.
 	 */
 
-	update(): void {
+	update(graph: RenderTask[][]): void {
+
+		
 
 		// TODO
 		// analyze lifetimes
 		// assign physical targets
 
-		if(this.updating) {
-
-			return;
-
-		}
-
-		this.updating = true;
-		this.updateFrameGraph();
 		this.optimize();
-		this.updating = false;
-
-	}
-
-	/**
-	 * Updates the input and output resources of the frame graph.
-	 */
-
-	private updateFrameGraph(): void {
 
 	}
 
