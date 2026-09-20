@@ -190,6 +190,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 		// Update the viewport/scissor base size.
 		this.resolution.addEventListener("change", () => this.updateViewportAndScissor());
+		this.resolution.addEventListener("change", () => this.updateOutputResourceResolution());
 
 		// Synchronize subpasses.
 		this.in.addEventListener("change", () => this.updateSubpassInput());
@@ -690,6 +691,23 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this.viewport.setBaseSize(baseWidth, baseHeight);
 		this.scissor.pixelRatio = scaledPixelRatio;
 		this.scissor.setBaseSize(baseWidth, baseHeight);
+
+	}
+
+	/**
+	 * Updates the resolution of all output render target resources based on the current resolution.
+	 */
+
+	private updateOutputResourceResolution(): void {
+
+		const { baseWidth, baseHeight, scaledPixelRatio } = this.resolution;
+
+		for(const resource of this.out.buffers.values()) {
+
+			resource.resolution.pixelRatio = scaledPixelRatio;
+			resource.resolution.setBaseSize(baseWidth, baseHeight);
+
+		}
 
 	}
 
