@@ -72,11 +72,11 @@ export class DepthCopyPass extends Pass<DepthCopyMaterial> {
 
 		if(value === DepthCopyMode.SINGLE) {
 
-			this.resolution.setPreferredSize(1, 1);
+			this.buffer.resolution.setPreferredSize(1, 1);
 
 		} else {
 
-			this.resolution.resetPreferredSize();
+			this.buffer.resolution.resetPreferredSize();
 
 		}
 
