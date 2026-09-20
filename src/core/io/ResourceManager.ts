@@ -40,6 +40,7 @@ function gatherResources(pass: Pass<Material | null>, result: Set<Resource>): vo
  * A resource manager.
  *
  * @category IO
+ * @internal
  */
 
 export class ResourceManager implements Disposable {
@@ -64,8 +65,6 @@ export class ResourceManager implements Disposable {
 
 	/**
 	 * Constructs a new resource manager.
-	 *
-	 * @param frameGraph - A frame graph.
 	 */
 
 	constructor() {
