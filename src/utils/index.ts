@@ -26,4 +26,5 @@ export * from "./Selection.js";
 export * from "./SetExtensions.js";
 export * from "./ShaderData.js";
 export * from "./ShaderDataTracker.js";
+export * from "./TextureTemplate.js";
 export * from "./Viewport.js";
