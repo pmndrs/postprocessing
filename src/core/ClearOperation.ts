@@ -213,7 +213,7 @@ export class ClearOperation extends RenderOperation {
 
 		const context = this.context;
 
-		if(!this.enabled || context === undefined || context.renderer === null) {
+		if(!this.enabled || context.renderer === null) {
 
 			return;
 
