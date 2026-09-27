@@ -254,13 +254,13 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 		for(const mipmap of this.downsamplingMipmaps.concat(this.upsamplingMipmaps)) {
 
 			// TODO how can this commented code be prevented in the first place?
-			//const renderTarget = mipmap.value!;
-			//const texture = renderTarget.texture;
-			//texture.format = format;
-			//texture.internalFormat = internalFormat;
-			//texture.type = type;
-			//texture.colorSpace = colorSpace;
-			//renderTarget.dispose();
+			// const renderTarget = mipmap.value!;
+			// const texture = renderTarget.texture;
+			// texture.format = format;
+			// texture.internalFormat = internalFormat;
+			// texture.type = type;
+			// texture.colorSpace = colorSpace;
+			// renderTarget.dispose();
 
 			mipmap.descriptor.setValues({
 				colorSpace: inputTexture.colorSpace as ColorSpace,
