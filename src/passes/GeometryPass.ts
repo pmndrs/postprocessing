@@ -220,17 +220,17 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 	private configureDepthTexture(): void {
 
-		if(this.gBuffer === null || !this.gBuffer.activeTextures.has(GBuffer.DEPTH)) {
+		if(this.gBuffer === null) {
 
 			return;
 
 		}
 
-		const inputDepthTexture = this.in.buffers.get(GBuffer.DEPTH)?.value ?? null;
+		const depthTexture = (this.in.buffers.get(GBuffer.DEPTH)?.value ?? null) as DepthTexture | null;
 
-		if(inputDepthTexture !== null && this.gBuffer.descriptor.depthTexture !== inputDepthTexture) {
+		if(depthTexture !== null && this.gBuffer.descriptor.options.depthTexture !== depthTexture) {
 
-			this.gBuffer.descriptor.depthTexture = inputDepthTexture as DepthTexture;
+			this.gBuffer.descriptor.setValues({ depthTexture });
 
 		}
 

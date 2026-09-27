@@ -1,116 +1,124 @@
-import { EventDispatcher, type RenderTargetOptions, type TextureParameters } from "three";
+import { EventDispatcher, RenderTargetOptions } from "three";
 import { BaseEventMap } from "../core/BaseEventMap.js";
-import { MapExtensions } from "./MapExtensions.js";
-import { ObservableMap } from "./ObservableMap.js";
 import { defaultRenderTargetOptions } from "./objects/defaultRenderTargetOptions.js";
+import { TextureTemplate } from "./TextureTemplate.js";
+import { GBuffer } from "../enums/GBuffer.js";
 
 /**
- * A render target descriptor.
- *
- * The property defaults correspond to those of `WebGLRenderTarget`.
- *
- * @category Utils
+ * RenderTargetDescriptor constructor options.
  */
 
-export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> implements RenderTargetOptions {
-
-	mapping?: RenderTargetOptions["mapping"];
-	wrapS?: RenderTargetOptions["wrapS"];
-	wrapT?: RenderTargetOptions["wrapT"];
-	wrapR?: RenderTargetOptions["wrapR"];
-	format?: RenderTargetOptions["format"];
-	internalFormat?: RenderTargetOptions["internalFormat"];
-	type?: RenderTargetOptions["type"];
-	colorSpace?: RenderTargetOptions["colorSpace"];
-	magFilter?: RenderTargetOptions["magFilter"];
-	minFilter?: RenderTargetOptions["minFilter"];
-	anisotropy?: RenderTargetOptions["anisotropy"];
-	flipY?: RenderTargetOptions["flipY"];
-	generateMipmaps?: RenderTargetOptions["generateMipmaps"];
-	depthBuffer?: RenderTargetOptions["depthBuffer"];
-	stencilBuffer?: RenderTargetOptions["stencilBuffer"];
-	resolveDepthBuffer?: RenderTargetOptions["resolveDepthBuffer"];
-	resolveStencilBuffer?: RenderTargetOptions["resolveStencilBuffer"];
-	depthTexture?: RenderTargetOptions["depthTexture"];
-	samples?: RenderTargetOptions["samples"];
-	count?: RenderTargetOptions["count"];
-	depth?: RenderTargetOptions["depth"];
-	multiview?: RenderTargetOptions["multiview"];
-	useArrayDepthTexture?: RenderTargetOptions["useArrayDepthTexture"];
+export interface RenderTargetDescriptorOptions extends RenderTargetOptions {
 
 	/**
-	 * The name of the primary texture attachment.
+	 * The name of the main texture attachment.
 	 */
 
 	name?: string;
 
 	/**
-	 * A collection of texture configurations organized by name.
+	 * Texture attachment templates.
 	 */
 
-	textures: Map<string, TextureParameters> & MapExtensions<string, TextureParameters>;
+	textures?: TextureTemplate[];
+
+}
+
+/**
+ * A render target descriptor.
+ *
+ * @category Utils
+ */
+
+export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> {
+
+	// #region Backing Data
 
 	/**
-	 * @see {@link autoSRGB}
+	 * @see {@link options}
 	 */
 
-	autoSRGB: boolean;
+	private _values: RenderTargetDescriptorOptions;
 
-	/**
-	 * Controls whether events will be dispatched.
-	 */
-
-	private muted: boolean;
-
-	/**
-	 * Indicates whether this descriptor has changed.
-	 *
-	 * This flag will be `true` before and during a `change` event.
-	 */
-
-	private changed: boolean;
+	// #endregion
 
 	/**
 	 * Constructs a new render target descriptor.
 	 *
-	 * @param options - The options.
+	 * @param options - Render target options.
 	 */
 
-	constructor(options?: RenderTargetOptions) {
+	constructor(options?: RenderTargetDescriptorOptions) {
 
 		super();
 
-		this.muted = false;
-		this.autoSRGB = true;
-		this.changed = false;
+		const values = Object.assign({}, defaultRenderTargetOptions, options);
+		this._values = values;
 
-		const textures = new ObservableMap<string, TextureParameters>();
-		textures.addEventListener("change", () => this.setChanged());
-		this.textures = textures;
+		if(values.textures === undefined || values.textures.length === 0) {
 
-		Object.assign(this, defaultRenderTargetOptions, options);
+			const textureTemplate = values as TextureTemplate;
+			textureTemplate.name ??= GBuffer.COLOR;
+			values.textures = [textureTemplate];
 
-		return new Proxy(this, {
-			set(target, property, value, receiver) {
+		} else {
 
-				if(Reflect.get(target, property, receiver) === value) {
+			// Clone the individual templates.
+			values.textures = values.textures.map(x => Object.assign({}, x));
 
-					return true;
+		}
 
-				}
+	}
 
-				const result = Reflect.set(target, property, value, receiver);
+	/**
+	 * The render target options.
+	 *
+	 * @see {@link setValues} for changing these options.
+	 */
 
-				if(typeof property !== "string" || !property.startsWith("_")) {
+	get options(): Readonly<RenderTargetOptions> {
 
-					target.setChanged();
+		return this._values;
 
-				}
+	}
 
-				return result;
+	/**
+	 * The texture attachment templates.
+	 */
 
-			}
-		});
+	get textures(): readonly Readonly<TextureTemplate>[] {
+
+		return this._values.textures!;
+
+	}
+
+	set textures(value: TextureTemplate[]) {
+
+		if(value.length === 0) {
+
+			throw new Error("Expected at least one texture template");
+
+		}
+
+		this._values.textures = value;
+		this.setChanged();
+
+	}
+
+	/**
+	 * The name of the main {@link textures|texture attachment} at index 0.
+	 */
+
+	get name(): string | undefined {
+
+		return this._values.textures![0].name;
+
+	}
+
+	set name(value: string) {
+
+		this._values.textures![0].name = value;
+		this.setChanged();
 
 	}
 
@@ -120,33 +128,36 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> implem
 
 	private setChanged(): void {
 
-		this.changed = true;
-
-		if(this.muted) {
-
-			return;
-
-		}
-
 		this.dispatchEvent({ type: "change" });
-		this.changed = false;
 
 	}
 
 	/**
-	 * Sets multiple options at once.
+	 * Sets the given render target options.
+	 *
+	 * Unrelated options will be retained.
 	 *
 	 * @param values - The values to apply.
 	 */
 
 	setValues(values: RenderTargetOptions): void {
 
-		this.muted = true;
-		Object.assign(this, defaultRenderTargetOptions, values);
-		this.muted = false;
+		let changed = false;
 
-		if(this.changed) {
+		for(const key of Object.keys(values) as (keyof RenderTargetOptions)[]) {
 
+			if(values[key] !== this._values[key]) {
+
+				changed = true;
+				break;
+
+			}
+
+		}
+
+		if(changed) {
+
+			Object.assign(this._values, values);
 			this.setChanged();
 
 		}
@@ -161,7 +172,7 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> implem
 
 	clone(): RenderTargetDescriptor {
 
-		return new RenderTargetDescriptor(this);
+		return new RenderTargetDescriptor(this.options);
 
 	}
 

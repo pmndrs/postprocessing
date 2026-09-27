@@ -103,9 +103,7 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 			type,
 			stencilBuffer,
 			depthBuffer,
-			samples,
-			depthTexture: null,
-			count: 1
+			samples
 		});
 
 		this.alpha = alpha;
@@ -117,31 +115,31 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 
 	get stencilBuffer(): boolean {
 
-		return this.descriptor.stencilBuffer!;
+		return this.descriptor.options.stencilBuffer!;
 
 	}
 
 	get depthBuffer(): boolean {
 
-		return this.descriptor.depthBuffer!;
+		return this.descriptor.options.depthBuffer!;
 
 	}
 
 	get type(): TextureDataType {
 
-		return this.descriptor.type!;
+		return this.descriptor.options.type!;
 
 	}
 
 	get samples(): MSAASamples {
 
-		return this.descriptor.samples as MSAASamples;
+		return this.descriptor.options.samples as MSAASamples;
 
 	}
 
 	set samples(value: MSAASamples) {
 
-		this.descriptor.samples = value;
+		this.descriptor.setValues({ samples: value });
 
 	}
 
@@ -155,32 +153,37 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 
 		const useSmallFloatFormat = (this.frameBufferPrecisionHigh && !this.alpha);
 
-		this.textureTemplates.setAll(
-			[GBuffer.COLOR, {
+		this.descriptor.textures = [
+			{
+				name: GBuffer.COLOR,
 				minFilter: LinearFilter,
 				magFilter: LinearFilter,
 				type: useSmallFloatFormat ? UnsignedInt101111Type : this.type,
 				format: useSmallFloatFormat ? RGBFormat : RGBAFormat
-			}],
-			[GBuffer.DEPTH, {
+			},
+			{
+				name: GBuffer.DEPTH,
 				minFilter: NearestFilter,
 				magFilter: NearestFilter,
 				type: this.stencilBuffer ? UnsignedInt248Type : FloatType,
 				format: this.stencilBuffer ? DepthStencilFormat : DepthFormat
-			}],
-			[GBuffer.NORMAL, {
+			},
+			{
+				name: GBuffer.NORMAL,
 				minFilter: NearestFilter,
 				magFilter: NearestFilter,
 				type: HalfFloatType,
 				format: RGFormat
-			}],
-			[GBuffer.ORM, {
+			},
+			{
+				name: GBuffer.ORM,
 				minFilter: NearestFilter,
 				magFilter: NearestFilter,
 				type: UnsignedByteType,
 				format: RGBAFormat
-			}],
-			[GBuffer.EMISSION, {
+			},
+			{
+				name: GBuffer.EMISSION,
 				minFilter: LinearFilter,
 				magFilter: LinearFilter,
 				type: HalfFloatType,
@@ -189,8 +192,8 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 				// type: UnsignedInt101111Type,
 				// format: RGBFormat,
 				// internalFormat: "R11F_G11F_B10F"
-			}]
-		);
+			}
+		];
 
 	}
 

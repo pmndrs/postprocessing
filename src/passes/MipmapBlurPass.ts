@@ -1,3 +1,4 @@
+import { ColorSpace, PixelFormat } from "three";
 import { RenderTargetResource } from "../core/io/RenderTargetResource.js";
 import { TextureResource } from "../core/io/TextureResource.js";
 import { Pass } from "../core/Pass.js";
@@ -59,6 +60,12 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 	private _fullResolutionUpsampling: boolean;
 
 	/**
+	 * The main buffer.
+	 */
+
+	private readonly mainBuffer: RenderTargetResource;
+
+	/**
 	 * The mipmaps used for downsampling.
 	 */
 
@@ -92,9 +99,7 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 		super("MipmapBlurPass");
 
-		const buffer = this.setBuffer(MipmapBlurPass.BUFFER_MAIN);
-		buffer.descriptor.name = MipmapBlurPass.BUFFER_MAIN;
-
+		this.mainBuffer = this.setBuffer(MipmapBlurPass.BUFFER_MAIN);
 		this.downsamplingMipmaps = [];
 		this.upsamplingMipmaps = [];
 
@@ -114,7 +119,7 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 	get texture(): TextureResource {
 
-		return this.out.buffers.get(MipmapBlurPass.BUFFER_MAIN)!.texture;
+		return this.mainBuffer.texture;
 
 	}
 
@@ -193,14 +198,14 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 	private createMipmaps(levels: number): void {
 
-		const output = this.out;
-		const mainBufferResource = output.buffers.get(MipmapBlurPass.BUFFER_MAIN)!;
-		const descriptor = mainBufferResource.descriptor;
+		const mainBuffer = this.mainBuffer;
+		const descriptor = mainBuffer.descriptor;
 
 		this.dispose();
 		this.disposables.clear();
 
 		this.clearBuffers();
+		this.setBuffer(MipmapBlurPass.BUFFER_MAIN, mainBuffer);
 
 		this.downsamplingMipmaps = [];
 		this.upsamplingMipmaps = [];
@@ -208,9 +213,7 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 		if(levels === 1 && !this.fullResolutionUpsampling) {
 
 			// Only need one render target for downsampling.
-			this.setBuffer(MipmapBlurPass.BUFFER_MAIN, mainBufferResource);
-			this.downsamplingMipmaps.push(mainBufferResource);
-
+			this.downsamplingMipmaps.push(mainBuffer);
 			return;
 
 		}
@@ -219,18 +222,17 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 			const mipmap = descriptor.clone();
 			mipmap.name = "DOWNSAMPLING_MIPMAP" + i;
-			this.downsamplingMipmaps.push(this.setBuffer(mipmap.name, mipmap));
+			this.downsamplingMipmaps.push(this.setBuffer(mipmap.name, mipmap.options));
 
 		}
 
-		this.setBuffer(MipmapBlurPass.BUFFER_MAIN, mainBufferResource);
-		this.upsamplingMipmaps.push(mainBufferResource);
+		this.upsamplingMipmaps.push(mainBuffer);
 
 		for(let i = 1, l = this.fullResolutionUpsampling ? levels : levels - 1; i < l; ++i) {
 
 			const mipmap = descriptor.clone();
 			mipmap.name = "UPSAMPLING_MIPMAP" + i;
-			this.upsamplingMipmaps.push(this.setBuffer(mipmap.name, mipmap));
+			this.upsamplingMipmaps.push(this.setBuffer(mipmap.name, mipmap.options));
 
 		}
 
@@ -249,17 +251,23 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 		}
 
-		const { format, internalFormat, type, colorSpace } = inputTexture;
-
 		for(const mipmap of this.downsamplingMipmaps.concat(this.upsamplingMipmaps)) {
 
-			const renderTarget = mipmap.value!;
-			const texture = renderTarget.texture;
-			texture.format = format;
-			texture.internalFormat = internalFormat;
-			texture.type = type;
-			texture.colorSpace = colorSpace;
-			renderTarget.dispose();
+			// TODO how can this commented code be prevented in the first place?
+			//const renderTarget = mipmap.value!;
+			//const texture = renderTarget.texture;
+			//texture.format = format;
+			//texture.internalFormat = internalFormat;
+			//texture.type = type;
+			//texture.colorSpace = colorSpace;
+			//renderTarget.dispose();
+
+			mipmap.descriptor.setValues({
+				colorSpace: inputTexture.colorSpace as ColorSpace,
+				format: inputTexture.format as PixelFormat,
+				internalFormat: inputTexture.internalFormat,
+				type: inputTexture.type
+			});
 
 		}
 

@@ -1,19 +1,7 @@
-import {
-	DepthTexture,
-	FloatType,
-	HalfFloatType,
-	RenderTargetOptions,
-	TextureParameters,
-	WebGLRenderTarget
-} from "three";
-
+import { DepthTexture, FloatType, HalfFloatType, RenderTargetOptions, WebGLRenderTarget } from "three";
 import { GBuffer } from "../../enums/GBuffer.js";
-import { MapExtensions } from "../../utils/MapExtensions.js";
-import { ObservableMap } from "../../utils/ObservableMap.js";
-import { ObservableSet } from "../../utils/ObservableSet.js";
 import { RenderTargetDescriptor } from "../../utils/RenderTargetDescriptor.js";
 import { Resolution } from "../../utils/Resolution.js";
-import { SetExtensions } from "../../utils/SetExtensions.js";
 import { Disposable } from "../Disposable.js";
 import type { Output } from "./Output.js";
 import { Resource } from "./Resource.js";
@@ -30,12 +18,6 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 	// #region Backing Data
 
 	/**
-	 * @see {@link textures}
-	 */
-
-	private readonly _textures: Map<string, TextureResource> & MapExtensions<string, TextureResource>;
-
-	/**
 	 * @see {@link persistent}
 	 */
 
@@ -47,36 +29,35 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 
 	private _owner: Output | null;
 
+	/**
+	 * @see {@link autoSRGB}
+	 */
+
+	private _autoSRGB: boolean;
+
 	// #endregion
 
 	/**
-	 * A collection of texture configurations, organized by name.
-	 */
-
-	protected readonly textureTemplates: Map<string, TextureParameters> & MapExtensions<string, TextureParameters>;
-
-	/**
-	 * A collection of textures that are currently connected to other passes.
+	 * A collection of texture resources, organized by texture name.
 	 *
-	 * @see {@link GBuffer} for built-in textures.
-	 * @internal
+	 * These resources reference the individual `textures` of the current render target.
 	 */
 
-	readonly activeTextures: Set<string> & SetExtensions<string>;
-
-	/**
-	 * The current render target descriptor.
-	 *
-	 * The materialized render target can be accessed through the resource {@link value}.
-	 */
-
-	readonly descriptor: RenderTargetDescriptor;
+	readonly textures: Map<string, TextureResource>;
 
 	/**
 	 * A resource that references the `texture` of the current render target.
 	 */
 
 	readonly texture: TextureResource;
+
+	/**
+	 * The render target descriptor.
+	 *
+	 * The materialized render target can be accessed through the resource {@link value}.
+	 */
+
+	readonly descriptor: RenderTargetDescriptor;
 
 	/**
 	 * The resolution of this render target.
@@ -96,33 +77,22 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 
 		super(null);
 
-		const textures = new ObservableMap<string, TextureResource>();
-		textures.addEventListener("change", () => this.updateTextureResources());
-		this._textures = textures;
 		this._persistent = false;
 		this._owner = null;
+		this._autoSRGB = true;
 
+		this.textures = new Map<string, TextureResource>();
 		this.texture = new TextureResource();
 		this.texture.setRenderTarget(this);
 
+		this.resolution = new Resolution();
 		this.descriptor = new RenderTargetDescriptor(options);
-		this.descriptor.addEventListener("change", () => this.setChanged());
+		this.descriptor.addEventListener("change", () => {
 
-		const textureTemplates = new ObservableMap<string, TextureParameters>();
-		textureTemplates.addEventListener("change", () => {
-
-			this.setTextureResources(this.textureTemplates.keys());
-			this.updateDescriptor();
+			this.updateTextureResources();
+			this.setChanged();
 
 		});
-
-		this.textureTemplates = textureTemplates;
-
-		const activeTextures = new ObservableSet<string>();
-		activeTextures.addEventListener("change", () => this.updateDescriptor());
-		this.activeTextures = activeTextures;
-
-		this.resolution = new Resolution();
 
 	}
 
@@ -150,24 +120,13 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 
 	get frameBufferPrecisionHigh(): boolean {
 
-		return this.descriptor.type === HalfFloatType || this.descriptor.type === FloatType;
+		const type = this.descriptor.options.type;
+		return type === HalfFloatType || type === FloatType;
 
 	}
 
 	/**
-	 * A collection of texture resources, organized by texture name.
-	 *
-	 * These resources reference the individual `textures` of the current render target.
-	 */
-
-	get textures(): ReadonlyMap<string, TextureResource> {
-
-		return this._textures;
-
-	}
-
-	/**
-	 * Persistent resources keep their allocation and contents across frames and are excluded from pooling.
+	 * Persistent resources keep their allocation and contents across frames.
 	 */
 
 	get persistent(): boolean {
@@ -208,34 +167,45 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 	// #endregion
 
 	/**
-	 * Defines all possible textures that this resource can provide.
+	 * Defines all possible textures that this resource provides.
 	 *
-	 * These texture resources will automatically be populated based on the current render target.
-	 *
-	 * @param names - The names of the texture resources.
+	 * These texture resources will automatically be populated based on the current {@link renderTarget}.
 	 */
 
-	private setTextureResources(names: Iterable<string>): void {
+	private updateTextureResources(): void {
 
-		const textures = new Map<string, TextureResource>();
+		const textures = this.textures;
+		const names = this.descriptor.textures.map(x => x.name);
 
-		for(const name of names) {
+		// Remove unused resources.
+		for(const name of textures.keys()) {
 
-			if(this._textures.has(name)) {
+			if(!names.includes(name)) {
 
-				textures.set(name, this._textures.get(name)!);
-				continue;
+				textures.delete(name);
 
 			}
 
-			const texture = new TextureResource();
-			texture.setRenderTarget(this);
-			textures.set(name, texture);
+		}
+
+		textures.set(names[0], this.texture);
+
+		// Create new resources if they don't exist yet.
+		for(let i = 1, l = names.length; i < l; ++i) {
+
+			const name = names[i];
+
+			if(!textures.has(name)) {
+
+				const texture = new TextureResource();
+				texture.setRenderTarget(this);
+				textures.set(name, texture);
+
+			}
 
 		}
 
-		this._textures.clear();
-		this._textures.setAll(...textures);
+		this.updateTextureResourceValues();
 
 	}
 
@@ -243,7 +213,7 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 	 * Synchronizes the texture resources with the current render target.
 	 */
 
-	private updateTextureResources(): void {
+	private updateTextureResourceValues(): void {
 
 		this.texture.value = this.value?.texture ?? null;
 
@@ -273,48 +243,6 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 
 	}
 
-	/**
-	 * Updates the depth texture based on the current requirements.
-	 */
-
-	private configureDepthTexture(): void {
-
-		const descriptor = this.descriptor;
-		const textureTemplate = this.textureTemplates.get(GBuffer.DEPTH);
-
-		if(textureTemplate === undefined || !this.activeTextures.has(GBuffer.DEPTH)) {
-
-			descriptor.depthTexture = null;
-			return;
-
-		}
-
-		const texture = new DepthTexture();
-		texture.name = GBuffer.DEPTH;
-		texture.setValues(textureTemplate);
-		descriptor.depthTexture = texture;
-
-	}
-
-	/**
-	 * Updates the descriptor based on the {@link activeTextures}.
-	 */
-
-	private updateDescriptor(): void {
-
-		// Get the templates for the required textures (depth is handled separately).
-		const textureTemplates = Array.from(this.textureTemplates)
-			.filter(x => this.activeTextures.has(x[0]) && x[0] !== GBuffer.DEPTH as string);
-
-		const descriptor = this.descriptor;
-		descriptor.count = textureTemplates.length;
-		descriptor.textures.clear();
-		descriptor.textures.setAll(...textureTemplates);
-
-		this.configureDepthTexture();
-
-	}
-
 	dispose(): void {
 
 		this.value?.dispose();
@@ -333,7 +261,61 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 	setRenderTarget(value: WebGLRenderTarget | null): void {
 
 		super.value = value;
-		this.updateTextureResources();
+		this.updateTextureResourceValues();
+
+	}
+
+	/**
+	 * Converts this descriptor into a render target.
+	 *
+	 * @internal
+	 * @return The render target.
+	 */
+
+	createRenderTarget(activeTextures: string[]): WebGLRenderTarget {
+
+		const renderTarget = new WebGLRenderTarget(1, 1, this.descriptor.options);
+
+		// Get the templates for the required textures (depth is handled separately).
+		const textureTemplates = this.descriptor.textures
+			.filter(x => activeTextures.includes(x.name) && x.name !== GBuffer.DEPTH as string);
+
+		for(let i = 0, l = textureTemplates.length; i < l; ++i) {
+
+			const texture = renderTarget.textures[i];
+			const textureTemplate = textureTemplates[i];
+			texture.name = textureTemplate.name;
+			texture.setValues(textureTemplate);
+
+		}
+
+		const depthTexture = this.descriptor.options.depthTexture ?? null;
+
+		if(depthTexture !== null) {
+
+			// Depth texture override.
+			renderTarget.depthTexture = depthTexture;
+
+		} else {
+
+			const depthTextureTemplate = this.descriptor.textures.find(x => x.name !== GBuffer.DEPTH as string);
+
+			if(depthTextureTemplate === undefined || !activeTextures.includes(GBuffer.DEPTH)) {
+
+				renderTarget.depthTexture = null;
+
+			} else {
+
+				const texture = new DepthTexture();
+				texture.name = depthTextureTemplate.name;
+				texture.setValues(depthTextureTemplate);
+				renderTarget.depthTexture = texture;
+
+			}
+
+		}
+
+		return renderTarget;
 
 	}
 
