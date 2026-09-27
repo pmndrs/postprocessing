@@ -1,34 +1,32 @@
-import { Material, WebGLRenderTarget } from "three";
-import { Pass } from "../Pass.js";
-import { FrameGraph } from "../FrameGraph.js";
+import { DepthTexture, SRGBColorSpace, WebGLRenderTarget } from "three";
 import { Resource } from "./Resource.js";
 import { Disposable, isDisposable } from "../Disposable.js";
-import { RenderTargetDescriptor } from "../../utils/RenderTargetDescriptor.js";
 import { RenderTask } from "../RenderTask.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
+import { GBuffer } from "../../enums/GBuffer.js";
 
 /**
  * Gathers all resources from a given pass and its subpasses.
  *
- * @param pass - The pass.
+ * @param task - The pass.
  * @param result - A set to store the resources in.
  */
 
-function gatherResources(pass: Pass<Material | null>, result: Set<Resource>): void {
+function gatherResources(task: RenderTask, result: Set<Resource>): void {
 
-	for(const input of pass.in.buffers.values()) {
+	for(const input of task.in.buffers.values()) {
 
 		result.add(input);
 
 	}
 
-	for(const output of pass.out.buffers.values()) {
+	for(const output of task.out.buffers.values()) {
 
 		result.add(output);
 
 	}
 
-	for(const subpass of pass.subpasses) {
+	for(const subpass of task.subtasks) {
 
 		gatherResources(subpass, result);
 
@@ -46,18 +44,6 @@ function gatherResources(pass: Pass<Material | null>, result: Set<Resource>): vo
 export class ResourceManager implements Disposable {
 
 	/**
-	 * @see {@link autoSyncDefaultBuffers}
-	 */
-
-	private _autoSyncDefaultBuffers: boolean;
-
-	/**
-	 * @see {@link autoSRGB}
-	 */
-
-	private _autoSRGB: boolean;
-
-	/**
 	 * A set of resources that are currently being used by the frame graph.
 	 */
 
@@ -69,162 +55,75 @@ export class ResourceManager implements Disposable {
 
 	constructor() {
 
-		this._autoSyncDefaultBuffers = true;
-		this._autoSRGB = true;
 		this.activeResources = new Set();
-
-	}
-
-	/**
-	 * Controls whether the settings of the input and output default buffers should be synchronized.
-	 *
-	 * @defaultValue true
-	 */
-
-	protected get autoSyncDefaultBuffers(): boolean {
-
-		return this._autoSyncDefaultBuffers;
-
-	}
-
-	protected set autoSyncDefaultBuffers(value: boolean) {
-
-		if(this._autoSyncDefaultBuffers === value) {
-
-			return;
-
-		}
-
-		this._autoSyncDefaultBuffers = value;
-		this.syncDefaultBuffers();
-
-	}
-
-	/**
-	 * Controls automatic sRGB encoding for low precision output buffers.
-	 *
-	 * @defaultValue true
-	 */
-
-	protected get autoSRGB(): boolean {
-
-		return this._autoSRGB;
-
-	}
-
-	protected set autoSRGB(value: boolean) {
-
-		if(this._autoSRGB === value) {
-
-			return;
-
-		}
-
-		this._autoSRGB = value;
-		this.syncDefaultBuffers();
-
-	}
-
-	/**
-	 * Gathers all resources.
-	 *
-	 * @return The resources.
-	 */
-
-	private gatherResources(): Set<Resource> {
-
-		const result = new Set<Resource>();
-
-		//	for(const task of this.frameGraph.tasks) {
-
-		//		gatherResources(task, result);
-
-		//	}
-
-		return result;
 
 	}
 
 	/**
 	 * Creates a new render target based on the given descriptor.
 	 *
-	 * @param descriptor - A render target descriptor.
+	 * @param resource - A render target resource.
+	 * @param activeTextures - Texture attachments that have active consumers.
 	 * @return The new render target.
 	 */
 
-	private createRenderTarget(descriptor: RenderTargetDescriptor): WebGLRenderTarget {
+	private createRenderTarget(resource: RenderTargetResource, activeTextures: string[]): WebGLRenderTarget {
 
-		const renderTarget = new WebGLRenderTarget(1, 1, descriptor);
-		const textureConfigs = Array.from(descriptor.textures.entries());
+		const descriptor = resource.descriptor;
+		const renderTarget = new WebGLRenderTarget(1, 1, descriptor.options);
 
-		for(let i = 0, l = textureConfigs.length; i < l; ++i) {
+		// Get the templates for the required textures (depth is handled separately).
+		const textureTemplates = resource.descriptor.textures
+			.filter(x => activeTextures.includes(x.name) && x.name !== GBuffer.DEPTH as string);
+
+		for(let i = 0, l = textureTemplates.length; i < l; ++i) {
 
 			const texture = renderTarget.textures[i];
-			const [name, values] = textureConfigs[i];
-			texture.name = name;
-			texture.setValues(values);
+			const textureTemplate = textureTemplates[i];
+			texture.name = textureTemplate.name;
+			texture.setValues(textureTemplate);
+
+		}
+
+		// If the output buffer uses low precision, enable sRGB encoding to reduce information loss.
+		const useSRGB = (
+			resource.autoSRGB &&
+			!resource.frameBufferPrecisionHigh // && this.renderer.outputColorSpace === SRGBColorSpace
+		);
+
+		if(useSRGB && renderTarget.texture.colorSpace !== SRGBColorSpace) {
+
+			renderTarget.texture.colorSpace = SRGBColorSpace;
+
+		}
+
+		const depthTexture = descriptor.options.depthTexture ?? null;
+
+		if(depthTexture !== null) {
+
+			// Depth texture override.
+			renderTarget.depthTexture = depthTexture;
+
+		} else {
+
+			const depthTextureTemplate = descriptor.textures.find(x => x.name !== GBuffer.DEPTH as string);
+
+			if(depthTextureTemplate === undefined || !activeTextures.includes(GBuffer.DEPTH)) {
+
+				renderTarget.depthTexture = null;
+
+			} else {
+
+				const texture = new DepthTexture();
+				texture.name = depthTextureTemplate.name;
+				texture.setValues(depthTextureTemplate);
+				renderTarget.depthTexture = texture;
+
+			}
 
 		}
 
 		return renderTarget;
-
-	}
-
-	/**
-	 * Synchronizes the texture settings of the input and output default buffers.
-	 *
-	 * This method ensures that the output buffer uses adequate settings for storing values from the input buffer.
-	 */
-
-	private syncDefaultBuffers(): void {
-
-		//const renderer = this.renderer;
-		//const inputBuffer = this.input.defaultBuffer?.value ?? null;
-		//const outputBuffer = this.output.defaultBuffer?.value ?? null;
-
-		//if(!this.autoSyncDefaultBuffers || renderer === null || inputBuffer === null || outputBuffer === null) {
-
-		//	return;
-
-		//}
-
-		//const texture = outputBuffer.texture;
-
-		//let textureNeedsUpdate = (
-		//	texture.format !== inputBuffer.format ||
-		//	texture.internalFormat !== inputBuffer.internalFormat ||
-		//	texture.type !== inputBuffer.type
-		//);
-
-		//if(textureNeedsUpdate) {
-
-		//	texture.format = inputBuffer.format;
-		//	texture.internalFormat = inputBuffer.internalFormat;
-		//	texture.type = inputBuffer.type;
-
-		//}
-
-		//// If the output buffer uses low precision, enable sRGB encoding to reduce information loss.
-		//const useSRGB = (
-		//	this.autoSRGB &&
-		//	!this.output.frameBufferPrecisionHigh &&
-		//	renderer.outputColorSpace === SRGBColorSpace
-		//);
-
-		//if(useSRGB && texture.colorSpace !== SRGBColorSpace) {
-
-		//	texture.colorSpace = SRGBColorSpace;
-		//	textureNeedsUpdate = true;
-
-		//}
-
-		//if(textureNeedsUpdate) {
-
-		//	// Notify listeners.
-		//	texture.needsUpdate = true;
-		//	this.output.defaultBuffer!.texture.setChanged();
-
-		//}
 
 	}
 
@@ -236,13 +135,11 @@ export class ResourceManager implements Disposable {
 
 	update(graph: RenderTask[][]): void {
 
-		
-
 		// TODO
 		// analyze lifetimes
 		// assign physical targets
 
-		this.optimize();
+		this.optimize(graph);
 
 	}
 
@@ -250,9 +147,10 @@ export class ResourceManager implements Disposable {
 	 * Optimizes resources.
 	 */
 
-	optimize(): void {
+	optimize(graph: RenderTask[][]): void {
 
-		const resources = this.gatherResources();
+		const resources = new Set<Resource>();
+		// TODO gather resources?
 
 		// Dispose orphaned resources.
 		for(const resource of this.activeResources) {

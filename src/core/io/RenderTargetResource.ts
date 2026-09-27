@@ -1,5 +1,4 @@
-import { DepthTexture, FloatType, HalfFloatType, RenderTargetOptions, WebGLRenderTarget } from "three";
-import { GBuffer } from "../../enums/GBuffer.js";
+import { FloatType, HalfFloatType, RenderTargetOptions, WebGLRenderTarget } from "three";
 import { RenderTargetDescriptor } from "../../utils/RenderTargetDescriptor.js";
 import { Resolution } from "../../utils/Resolution.js";
 import { Disposable } from "../Disposable.js";
@@ -126,7 +125,34 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 	}
 
 	/**
+	 * Controls automatic sRGB encoding for low precision output buffers.
+	 *
+	 * @defaultValue true
+	 */
+
+	get autoSRGB(): boolean {
+
+		return this._autoSRGB;
+
+	}
+
+	set autoSRGB(value: boolean) {
+
+		if(this._autoSRGB === value) {
+
+			return;
+
+		}
+
+		this._autoSRGB = value;
+		this.setChanged();
+
+	}
+
+	/**
 	 * Persistent resources keep their allocation and contents across frames.
+	 *
+	 * @defaultValue false
 	 */
 
 	get persistent(): boolean {
@@ -262,60 +288,6 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 
 		super.value = value;
 		this.updateTextureResourceValues();
-
-	}
-
-	/**
-	 * Converts this descriptor into a render target.
-	 *
-	 * @internal
-	 * @return The render target.
-	 */
-
-	createRenderTarget(activeTextures: string[]): WebGLRenderTarget {
-
-		const renderTarget = new WebGLRenderTarget(1, 1, this.descriptor.options);
-
-		// Get the templates for the required textures (depth is handled separately).
-		const textureTemplates = this.descriptor.textures
-			.filter(x => activeTextures.includes(x.name) && x.name !== GBuffer.DEPTH as string);
-
-		for(let i = 0, l = textureTemplates.length; i < l; ++i) {
-
-			const texture = renderTarget.textures[i];
-			const textureTemplate = textureTemplates[i];
-			texture.name = textureTemplate.name;
-			texture.setValues(textureTemplate);
-
-		}
-
-		const depthTexture = this.descriptor.options.depthTexture ?? null;
-
-		if(depthTexture !== null) {
-
-			// Depth texture override.
-			renderTarget.depthTexture = depthTexture;
-
-		} else {
-
-			const depthTextureTemplate = this.descriptor.textures.find(x => x.name !== GBuffer.DEPTH as string);
-
-			if(depthTextureTemplate === undefined || !activeTextures.includes(GBuffer.DEPTH)) {
-
-				renderTarget.depthTexture = null;
-
-			} else {
-
-				const texture = new DepthTexture();
-				texture.name = depthTextureTemplate.name;
-				texture.setValues(depthTextureTemplate);
-				renderTarget.depthTexture = texture;
-
-			}
-
-		}
-
-		return renderTarget;
 
 	}
 
