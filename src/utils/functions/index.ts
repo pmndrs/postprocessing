@@ -6,4 +6,3 @@ export * from "./pass.js";
 export * from "./rand.js";
 export * from "./sorting.js";
 export * from "./string.js";
-export * from "./texture.js";
