@@ -265,21 +265,17 @@ export class FrameGraphCompiler implements Disposable {
 
 	updateResolution() {
 
+		// TODO skip rebuilding the graph and only update render targets.
+
 	}
 
 	/**
 	 *
 	 */
 
-	getActiveGBufferComponents() {
+	private getActiveTextures() {
 
-		//const activeComponents = target.components;
-
-		//const clearedComponents = Array.from(activeComponents)
-		//	.filter(component => write.clearFlags?.gBuffer.has(component) ?? true);
-
-		//const clearsDepth = write.clearFlags?.depth ?? true;
-		//const clearsStencil = write.clearFlags?.stencil ?? true;
+		// TODO per task: find textures that have active consumers and use that to create render targets
 
 	}
 
