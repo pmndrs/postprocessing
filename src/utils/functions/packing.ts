@@ -1,3 +1,7 @@
+/**
+ * Unpack factors for {@link unpackRGBAToFloat}.
+ */
+
 const unpackFactors = new Float32Array([
 	(255 / 256) / (256 ** 3),
 	(255 / 256) / (256 ** 2),

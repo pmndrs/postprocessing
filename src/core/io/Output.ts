@@ -188,8 +188,7 @@ export class Output extends EventDispatcher<OutputEventMap> {
 	/**
 	 * Defines a render target resource.
 	 *
-	 * - Falls back to a default render target descriptor that is suitable for fullscreen passes if none is provided.
-	 * - Raw render target descriptors will automatically be wrapped in a new resource.
+	 * Falls back to a default render target descriptor that is suitable for fullscreen passes if none is provided.
 	 *
 	 * @internal
 	 * @throws If the given resource belongs to another output.

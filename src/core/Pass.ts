@@ -777,8 +777,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	/**
 	 * Defines an output render target resource.
 	 *
-	 * - Falls back to a default render target descriptor that is suitable for fullscreen passes if none is provided.
-	 * - Raw render target descriptors will automatically be wrapped in a new resource.
+	 * Falls back to a default render target descriptor that is suitable for fullscreen passes if none is provided.
 	 *
 	 * @throws If the given resource belongs to another output.
 	 * @param key - The key of the buffer.
@@ -786,7 +785,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 * @return The render target resource.
 	 */
 
-	protected setBuffer(key: string, value?: RenderTargetOptions | RenderTargetResource): RenderTargetResource {
+	protected setBuffer(key: string, value?: RenderTargetResource | RenderTargetOptions): RenderTargetResource {
 
 		return this.out.setBuffer(key, value);
 
