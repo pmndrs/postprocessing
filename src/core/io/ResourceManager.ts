@@ -4,6 +4,7 @@ import { Disposable, isDisposable } from "../Disposable.js";
 import { RenderTask } from "../RenderTask.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
 import { GBuffer } from "../../enums/GBuffer.js";
+import { FrameGraph } from "../FrameGraph.js";
 
 /**
  * Gathers all resources from a given pass and its subpasses.
@@ -44,6 +45,12 @@ function gatherResources(task: RenderTask, result: Set<Resource>): void {
 export class ResourceManager implements Disposable {
 
 	/**
+	 * The frame graph to compile.
+	 */
+
+	private readonly frameGraph: FrameGraph;
+
+	/**
 	 * A set of resources that are currently being used by the frame graph.
 	 */
 
@@ -51,10 +58,13 @@ export class ResourceManager implements Disposable {
 
 	/**
 	 * Constructs a new resource manager.
+	 *
+	 * @param frameGraph - A frame graph.
 	 */
 
-	constructor() {
+	constructor(frameGraph: FrameGraph) {
 
+		this.frameGraph = frameGraph;
 		this.activeResources = new Set();
 
 	}
