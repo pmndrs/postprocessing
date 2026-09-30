@@ -4,11 +4,11 @@
  * Some environments, such as expo-gl, expose `renderbufferStorageMultisample` but throw when it is called.
  * This check detects that case and falls back to zero samples. Samples are also clamped by `gl.MAX_SAMPLES`.
  *
- * @internal
  * @see https://docs.expo.dev/versions/v57.0.0/sdk/gl-view/#webgl-api
  * @param gl - A WebGL 2 rendering context.
  * @param samples - The desired sample count.
  * @return The safe sample count that is closest to the requested one.
+ * @internal
  */
 
 export function getSafeSamples(gl: WebGL2RenderingContext, samples: number): number {

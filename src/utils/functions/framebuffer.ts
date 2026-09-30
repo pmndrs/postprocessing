@@ -1,4 +1,14 @@
-import { LinearFilter, NearestFilter, RenderTarget, TextureFilter, WebGLRenderer } from "three";
+import {
+	FloatType,
+	HalfFloatType,
+	LinearFilter,
+	NearestFilter,
+	RenderTarget,
+	TextureDataType,
+	TextureFilter,
+	UnsignedInt101111Type,
+	WebGLRenderer
+} from "three";
 
 /**
  * Internal RenderTarget properties.
@@ -109,3 +119,18 @@ export function canUseBlit(src: RenderTarget | null, dst: RenderTarget | null): 
 	return true;
 
 }
+
+/**
+ * Determines whether the given texture type uses high precision.
+ *
+ * @param type - The texture type.
+ * @return Whether the type uses high precision.
+ * @internal
+ */
+
+export function frameBufferPrecisionHigh(type?: TextureDataType): boolean {
+
+	return (type === HalfFloatType || type === FloatType || type === UnsignedInt101111Type);
+
+}
+

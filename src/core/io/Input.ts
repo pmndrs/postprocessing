@@ -1,4 +1,5 @@
-import { BaseEvent, EventDispatcher, IUniform, Texture, UnsignedByteType } from "three";
+import { BaseEvent, EventDispatcher, IUniform, Texture } from "three";
+import { frameBufferPrecisionHigh } from "../../utils/functions/framebuffer.js";
 import { GBufferSchema } from "../../utils/gbuffer/GBufferSchema.js";
 import { MapExtensions } from "../../utils/MapExtensions.js";
 import { ObservableMap } from "../../utils/ObservableMap.js";
@@ -132,7 +133,7 @@ export class Input extends EventDispatcher<InputEventMap> implements ShaderData 
 
 	get frameBufferPrecisionHigh(): boolean {
 
-		return (this.defaultBuffer?.value?.type !== UnsignedByteType);
+		return frameBufferPrecisionHigh(this.defaultBuffer?.value?.type);
 
 	}
 
@@ -256,8 +257,8 @@ export class Input extends EventDispatcher<InputEventMap> implements ShaderData 
 	/**
 	 * Sets the G-Buffer schema.
 	 *
-	 * @internal
 	 * @param value - The schema.
+	 * @internal
 	 */
 
 	setGBufferSchema(value: GBufferSchema | null): void {

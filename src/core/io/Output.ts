@@ -1,4 +1,5 @@
-import { BaseEvent, EventDispatcher, RenderTargetOptions, UnsignedByteType } from "three";
+import { BaseEvent, EventDispatcher, RenderTargetOptions } from "three";
+import { frameBufferPrecisionHigh } from "../../utils/functions/framebuffer.js";
 import { ObservableMap } from "../../utils/ObservableMap.js";
 import { BaseEventMap } from "../BaseEventMap.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
@@ -115,16 +116,8 @@ export class Output extends EventDispatcher<OutputEventMap> {
 
 	get frameBufferPrecisionHigh(): boolean {
 
-		const outputBuffer = this.defaultBuffer?.value;
-
-		if(outputBuffer === undefined || outputBuffer === null) {
-
-			return false;
-
-		}
-
 		// Assuming index 0 is the main color attachment if this is a G-Buffer.
-		return outputBuffer.texture.type !== UnsignedByteType;
+		return frameBufferPrecisionHigh(this.defaultBuffer?.descriptor?.texture?.type);
 
 	}
 
@@ -160,10 +153,10 @@ export class Output extends EventDispatcher<OutputEventMap> {
 	/**
 	 * Sets the default buffer.
 	 *
-	 * @internal
 	 * @throws If the given resource belongs to another output.
 	 * @param value - A render target resource or its options. Defaults to a configuration suited for fullscreen passes.
 	 * @return The render target resource.
+	 * @internal
 	 */
 
 	setDefaultBuffer(value?: RenderTargetResource | RenderTargetOptions): RenderTargetResource {
@@ -175,8 +168,8 @@ export class Output extends EventDispatcher<OutputEventMap> {
 	/**
 	 * Removes the default buffer.
 	 *
-	 * @internal
 	 * @return Whether the default buffer was removed.
+	 * @internal
 	 */
 
 	deleteDefaultBuffer(): boolean {
@@ -190,11 +183,11 @@ export class Output extends EventDispatcher<OutputEventMap> {
 	 *
 	 * Falls back to a default render target descriptor that is suitable for fullscreen passes if none is provided.
 	 *
-	 * @internal
 	 * @throws If the given resource belongs to another output.
 	 * @param key - The key of the buffer.
 	 * @param value - A render target resource or its options.
 	 * @return The render target resource.
+	 * @internal
 	 */
 
 	setBuffer(key: string, value?: RenderTargetResource | RenderTargetOptions): RenderTargetResource {
