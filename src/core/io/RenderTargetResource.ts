@@ -1,4 +1,4 @@
-import { FloatType, HalfFloatType, RenderTargetOptions, WebGLRenderTarget } from "three";
+import { RenderTargetOptions, WebGLRenderTarget } from "three";
 import { RenderTargetDescriptor } from "../../utils/RenderTargetDescriptor.js";
 import { Resolution } from "../../utils/Resolution.js";
 import { Disposable } from "../Disposable.js";
@@ -27,12 +27,6 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 	 */
 
 	private _owner: Output | null;
-
-	/**
-	 * @see {@link autoSRGB}
-	 */
-
-	private _autoSRGB: boolean;
 
 	// #endregion
 
@@ -78,7 +72,6 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 
 		this._persistent = false;
 		this._owner = null;
-		this._autoSRGB = true;
 
 		this.textures = new Map<string, TextureResource>();
 		this.texture = new TextureResource();
@@ -110,42 +103,6 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 	get renderTarget(): Readonly<WebGLRenderTarget> | null {
 
 		return this.value;
-
-	}
-
-	/**
-	 * Indicates whether the primary frame buffer is capable of storing HDR values.
-	 */
-
-	get frameBufferPrecisionHigh(): boolean {
-
-		const type = this.descriptor.options.type;
-		return type === HalfFloatType || type === FloatType;
-
-	}
-
-	/**
-	 * Controls automatic sRGB encoding for low precision output buffers.
-	 *
-	 * @defaultValue true
-	 */
-
-	get autoSRGB(): boolean {
-
-		return this._autoSRGB;
-
-	}
-
-	set autoSRGB(value: boolean) {
-
-		if(this._autoSRGB === value) {
-
-			return;
-
-		}
-
-		this._autoSRGB = value;
-		this.setChanged();
 
 	}
 
