@@ -139,9 +139,8 @@ export class Output extends EventDispatcher<OutputEventMap> {
 
 	*textures(): IterableIterator<[string, TextureResource]> {
 
-		for(const [name, renderTarget] of this.renderTargets) {
+		for(const renderTarget of this.renderTargets.values()) {
 
-			yield [name, renderTarget.texture];
 			yield* renderTarget.textures;
 
 		}
