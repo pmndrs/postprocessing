@@ -276,6 +276,7 @@ export class FrameGraphCompiler implements Disposable {
 	updateResolution() {
 
 		// TODO skip rebuilding the graph and only update render targets.
+		this.resourceManager.updateResolution();
 
 	}
 
