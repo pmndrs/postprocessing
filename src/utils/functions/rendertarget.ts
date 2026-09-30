@@ -1,124 +1,72 @@
-import { RenderTarget, TextureParameters } from "three";
+import { ColorSpace, DepthTexture, SRGBColorSpace, WebGLRenderTarget } from "three";
+import { RenderTargetDescriptor } from "../RenderTargetDescriptor.js";
+import { GBuffer } from "../../enums/GBuffer.js";
+import { frameBufferPrecisionHigh } from "./framebuffer.js";
 
 /**
- * Compares texture parameters.
+ * Creates a new render target based on the given descriptor.
  *
- * @param a - Texture parameters.
- * @param b - Texture parameters.
- * @return Whether the parameters are equal.
- * @category Utils
- * @internal
+ * @param resource - A render target resource.
+ * @param activeTextures - Texture attachments that have active consumers.
+ * @return The new render target.
  */
 
-export function textureParametersEqual(a: TextureParameters, b: TextureParameters): boolean {
+export function createRenderTarget(descriptor: RenderTargetDescriptor, activeTextures: string[],
+	outputColorSpace: ColorSpace): WebGLRenderTarget {
 
-	for(const key of Object.keys(a) as (keyof TextureParameters)[]) {
+	const renderTarget = new WebGLRenderTarget(1, 1, descriptor.options);
 
-		if(a[key] !== b[key]) {
+	// Get the templates for the required textures (depth is handled separately).
+	const textureTemplates = descriptor.textures
+		.filter(x => activeTextures.includes(x.name) && x.name !== GBuffer.DEPTH as string);
 
-			return false;
+	for(let i = 0, l = textureTemplates.length; i < l; ++i) {
+
+		const texture = renderTarget.textures[i];
+		const textureTemplate = textureTemplates[i];
+		texture.name = textureTemplate.name;
+		texture.setValues(textureTemplate);
+
+	}
+
+	if(descriptor.options.colorSpace !== undefined) {
+
+		// If the buffer uses low precision, enable sRGB encoding to reduce information loss.
+		if(!frameBufferPrecisionHigh(renderTarget.texture.type) && outputColorSpace === SRGBColorSpace) {
+
+			renderTarget.texture.colorSpace = SRGBColorSpace;
 
 		}
 
 	}
 
-	return true;
+	// Handle depth.
+	const depthTexture = descriptor.options.depthTexture ?? null;
 
-}
+	if(depthTexture !== null) {
 
-/**
- * @param a - A render target.
- * @param b - A render target.
- */
+		// Depth texture override (shared depth).
+		renderTarget.depthTexture = depthTexture;
 
-function targetOptionsEqual(a: RenderTarget, b: RenderTarget): boolean {
+	} else {
 
-	for(const key of Object.keys(a) as (keyof RenderTarget)[]) {
+		const depthTextureTemplate = descriptor.textures.find(x => x.name === GBuffer.DEPTH as string);
 
-		if(a[key] !== b[key]) {
+		if(depthTextureTemplate === undefined || !activeTextures.includes(GBuffer.DEPTH)) {
 
-			return false;
+			renderTarget.depthTexture = null;
 
-		}
+		} else {
 
-	}
-
-	return true;
-
-}
-
-/**
- * @param a - A render target.
- * @param b - A render target.
- */
-
-function texturesEqual(a: RenderTarget, b: RenderTarget): boolean {
-
-	if(a.textures.length !== b.textures.length) {
-
-		return false;
-
-	}
-
-	for(let i = 0, l = a.textures.length; i < l; ++i) {
-
-		if(!textureParametersEqual(a.textures[i] as TextureParameters, b.textures[i] as TextureParameters)) {
-
-			return false;
+			const texture = new DepthTexture();
+			texture.name = depthTextureTemplate.name;
+			texture.setValues(depthTextureTemplate);
+			renderTarget.depthTexture = texture;
 
 		}
 
 	}
 
-	return true;
-
-}
-
-/**
- * Compares depth textures.
- *
- *
- * @param a - A render target.
- * @param b - A render target.
- * @return True if both depth textures are equal.
- */
-
-function depthTextureEqual(a: RenderTarget, b: RenderTarget): boolean {
-
-	const depthA = a.depthTexture ?? null;
-	const depthB = b.depthTexture ?? null;
-
-	if(depthA === depthB) {
-
-		return true;
-
-	}
-
-	if(depthA === null || depthB === null) {
-
-		return false;
-
-	}
-
-	return textureParametersEqual(depthA as TextureParameters, depthB as TextureParameters);
-
-}
-
-/**
- * Compares two render targets.
- *
- * @param a - A render target.
- * @param b - Another render target.
- * @return True if the render targets are equal.
- */
-
-export function equals(a: RenderTarget, b: RenderTarget): boolean {
-
-	return (a === b) || (
-		textureParametersEqual(a as TextureParameters, b as TextureParameters) &&
-		targetOptionsEqual(a, b) &&
-		texturesEqual(a, b) &&
-		depthTextureEqual(a, b)
-	);
+	return renderTarget;
 
 }
