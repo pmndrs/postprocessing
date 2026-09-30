@@ -64,8 +64,6 @@ export class LuminancePass extends Pass<LuminanceHighPassMaterial> {
 			type: inputTexture.type
 		});
 
-		this.fullscreenMaterial.outputPrecision = this.in.frameBufferPrecisionHigh ? "mediump" : "lowp";
-
 	}
 
 	override render(): void {

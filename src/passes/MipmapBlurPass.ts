@@ -271,18 +271,6 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 		}
 
-		if(this.in.frameBufferPrecisionHigh) {
-
-			this.downsamplingMaterial.outputPrecision = "mediump";
-			this.upsamplingMaterial.outputPrecision = "mediump";
-
-		} else {
-
-			this.downsamplingMaterial.outputPrecision = "lowp";
-			this.upsamplingMaterial.outputPrecision = "lowp";
-
-		}
-
 		this.onResolutionChange();
 
 	}

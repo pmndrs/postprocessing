@@ -143,7 +143,6 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> implements Gaus
 
 		}
 
-		this.fullscreenMaterial.outputPrecision = this.in.frameBufferPrecisionHigh ? "mediump" : "lowp";
 		this.onResolutionChange();
 
 	}
