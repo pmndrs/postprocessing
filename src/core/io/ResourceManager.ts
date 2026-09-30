@@ -70,74 +70,6 @@ export class ResourceManager implements Disposable {
 	}
 
 	/**
-	 * Creates a new render target based on the given descriptor.
-	 *
-	 * @param resource - A render target resource.
-	 * @param activeTextures - Texture attachments that have active consumers.
-	 * @return The new render target.
-	 */
-
-	private createRenderTarget(resource: RenderTargetResource, activeTextures: string[]): WebGLRenderTarget {
-
-		const descriptor = resource.descriptor;
-		const renderTarget = new WebGLRenderTarget(1, 1, descriptor.options);
-
-		// Get the templates for the required textures (depth is handled separately).
-		const textureTemplates = resource.descriptor.textures
-			.filter(x => activeTextures.includes(x.name) && x.name !== GBuffer.DEPTH as string);
-
-		for(let i = 0, l = textureTemplates.length; i < l; ++i) {
-
-			const texture = renderTarget.textures[i];
-			const textureTemplate = textureTemplates[i];
-			texture.name = textureTemplate.name;
-			texture.setValues(textureTemplate);
-
-		}
-
-		// If the output buffer uses low precision, enable sRGB encoding to reduce information loss.
-		const useSRGB = (
-			resource.autoSRGB &&
-			!resource.frameBufferPrecisionHigh // && this.renderer.outputColorSpace === SRGBColorSpace
-		);
-
-		if(useSRGB && renderTarget.texture.colorSpace !== SRGBColorSpace) {
-
-			renderTarget.texture.colorSpace = SRGBColorSpace;
-
-		}
-
-		const depthTexture = descriptor.options.depthTexture ?? null;
-
-		if(depthTexture !== null) {
-
-			// Depth texture override.
-			renderTarget.depthTexture = depthTexture;
-
-		} else {
-
-			const depthTextureTemplate = descriptor.textures.find(x => x.name !== GBuffer.DEPTH as string);
-
-			if(depthTextureTemplate === undefined || !activeTextures.includes(GBuffer.DEPTH)) {
-
-				renderTarget.depthTexture = null;
-
-			} else {
-
-				const texture = new DepthTexture();
-				texture.name = depthTextureTemplate.name;
-				texture.setValues(depthTextureTemplate);
-				renderTarget.depthTexture = texture;
-
-			}
-
-		}
-
-		return renderTarget;
-
-	}
-
-	/**
 	 * Updates the input and output resources of the frame graph.
 	 *
 	 * @param graph - The frame graph.
@@ -149,20 +81,28 @@ export class ResourceManager implements Disposable {
 		// analyze lifetimes
 		// assign physical targets
 
-		this.optimize(graph);
+		this.disposeOrphanedResources(graph);
 
 	}
 
 	/**
-	 * Optimizes resources.
+	 *
 	 */
 
-	optimize(graph: RenderTask[][]): void {
+	updateResolution() {
 
-		const resources = new Set<Resource>();
-		// TODO gather resources?
+		// TODO update render target dimensions and recheck aliasing.
 
-		// Dispose orphaned resources.
+	}
+
+	/**
+	 * Disposes orphaned resources.
+	 */
+
+	disposeOrphanedResources(graph: RenderTask[][]): void {
+
+		const resources = new Set<Resource>(); // TODO gather all resources from tasks... or is there a better way?
+
 		for(const resource of this.activeResources) {
 
 			if(isDisposable(resource) && !resources.has(resource)) {
@@ -178,6 +118,16 @@ export class ResourceManager implements Disposable {
 	}
 
 	dispose(): void {
+
+		for(const resource of this.activeResources) {
+
+			if(isDisposable(resource)) {
+
+				resource.dispose();
+
+			}
+
+		}
 
 	}
 
