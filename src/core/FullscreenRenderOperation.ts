@@ -177,7 +177,6 @@ export class FullscreenRenderOperation<TMaterial extends Material | null> extend
 
 		if(material instanceof FullscreenMaterial) {
 
-			// High precision buffers use HalfFloatType (mediump).
 			material.outputPrecision = this.context.out.frameBufferPrecisionHigh ? "mediump" : "lowp";
 
 		}
