@@ -7,32 +7,50 @@ import { RenderTask } from "./RenderTask.js";
 import { Task } from "./Task.js";
 
 /**
+ * Retrieves the dependencies of a given task.
+ *
+ * @param graph - A dependency graph.
+ * @param task - A task.
+ * @return The live dependencies of the task.
+ */
+
+function dependenciesOf(graph: Map<RenderTask, Set<RenderTask>>, task: RenderTask): Set<RenderTask> {
+
+	let dependencies = graph.get(task);
+
+	if(dependencies === undefined) {
+
+		dependencies = new Set();
+		graph.set(task, dependencies);
+
+	}
+
+	return dependencies;
+
+}
+
+/**
  * Recursively builds a dependency graph.
  *
  * @param task - The current task node.
  * @param outputToTask - A collection that maps Output instances to active tasks.
- * @param result - The resulting graph.
+ * @param visiting - Keeps track of tasks that are currently being visited to detect cycles.
+ * @param graph - The resulting graph.
  */
 
 function buildDependencyGraph(task: RenderTask, outputToTask: Map<Output, RenderTask>,
-	stack: WeakSet<RenderTask>, result: Map<RenderTask, Set<RenderTask>>): void {
+	visiting: Set<RenderTask>, graph: Map<RenderTask, Set<RenderTask>>): void {
 
-	if(stack.has(task)) {
+	if(visiting.has(task)) {
 
-		// Cycle; topologicalSort reports it.
+		// Cycle.
 		return;
 
 	}
 
-	stack.add(task);
+	visiting.add(task);
 
-	if(!result.has(task)) {
-
-		result.set(task, new Set());
-
-	}
-
-	const dependencies = result.get(task)!;
+	const dependencies = dependenciesOf(graph, task);
 
 	// Reads: resource → owner → producer.
 	for(const texture of task.in.textures.values()) {
@@ -57,16 +75,14 @@ function buildDependencyGraph(task: RenderTask, outputToTask: Map<Output, Render
 	// Aliases: explicitly shared render targets.
 	for(const connection of task.inOut.connections.values()) {
 
-		const owner = connection.resource.owner;
-
-		if(owner === null) {
+		if(connection.resource.owner === null) {
 
 			// External source, no producer.
 			continue;
 
 		}
 
-		const producer = outputToTask.get(owner);
+		const producer = outputToTask.get(connection.resource.owner);
 
 		if(producer === undefined || producer === task) {
 
@@ -88,16 +104,10 @@ function buildDependencyGraph(task: RenderTask, outputToTask: Map<Output, Render
 			case "clear":
 			case "discard": {
 
-				// This task initiates the render target contents.
-				if(!result.has(producer)) {
-
-					result.set(producer, new Set());
-
-				}
-
-				result.get(producer)!.add(task);
+				// This task initiates the render target contents, so the producer is the dependent.
+				dependenciesOf(graph, producer).add(task);
 				// Ensure the producer's own dependencies are resolved.
-				buildDependencyGraph(producer, outputToTask, stack, result);
+				buildDependencyGraph(producer, outputToTask, visiting, graph);
 				break;
 
 			}
@@ -108,11 +118,11 @@ function buildDependencyGraph(task: RenderTask, outputToTask: Map<Output, Render
 
 	for(const dependency of dependencies) {
 
-		buildDependencyGraph(dependency, outputToTask, stack, result);
+		buildDependencyGraph(dependency, outputToTask, visiting, graph);
 
 	}
 
-	stack.delete(task);
+	visiting.delete(task);
 
 }
 
@@ -137,7 +147,7 @@ export class FrameGraphCompiler implements Disposable {
 	private readonly resourceManager: ResourceManager;
 
 	/**
-	 * A collection of active render tasks and their depdendencies.
+	 * A collection of active render tasks and their dependencies.
 	 */
 
 	private readonly dependencyGraph: Map<RenderTask, Set<RenderTask>>;
@@ -219,7 +229,7 @@ export class FrameGraphCompiler implements Disposable {
 
 	private buildDependencyGraph(): RenderTask[][] {
 
-		const stack = new WeakSet<RenderTask>();
+		const stack = new Set<RenderTask>();
 		const dependencyGraph = this.dependencyGraph;
 		const outputToTask = this.outputToTask;
 

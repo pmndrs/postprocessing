@@ -133,14 +133,12 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> implements Gaus
 
 		}
 
-		const { format, type, colorSpace } = inputTexture;
-
 		for(const buffer of [this.bufferX, this.bufferY]) {
 
 			buffer.descriptor.setValues({
-				colorSpace: colorSpace as ColorSpace,
-				format: format as PixelFormat,
-				type
+				colorSpace: inputTexture.colorSpace as ColorSpace,
+				format: inputTexture.format as PixelFormat,
+				type: inputTexture.type
 			});
 
 		}

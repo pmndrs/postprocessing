@@ -35,7 +35,7 @@ function gatherResources(task: RenderTask, result: Set<Resource>): void {
 }
 
 /**
- * A resource manager.
+ * A resource manager that handles render target pooling and resource lifetimes.
  *
  * @category IO
  * @internal

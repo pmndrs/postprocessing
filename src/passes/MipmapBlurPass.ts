@@ -253,7 +253,7 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 		for(const mipmap of this.downsamplingMipmaps.concat(this.upsamplingMipmaps)) {
 
-			// TODO how can this commented code be prevented in the first place?
+			// TODO warn if users modify texture settings directly
 			// const renderTarget = mipmap.value!;
 			// const texture = renderTarget.texture;
 			// texture.format = format;
