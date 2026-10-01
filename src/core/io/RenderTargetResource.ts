@@ -158,7 +158,38 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 	private updateTextureResources(): void {
 
 		const textures = this.textures;
-		const names = this.descriptor.textures.map(x => x.name);
+		const names: string[] = [];
+
+		for(let i = 0, l = this.descriptor.textures.length; i < l; ++i) {
+
+			const textureTemplate = this.descriptor.textures[i];
+
+			if(textureTemplate.name === undefined) {
+
+				// Unnamed templates are unaddressable.
+				continue;
+
+			}
+
+			names.push(textureTemplate.name);
+
+			if(i === 0) {
+
+				textures.set(textureTemplate.name, this.texture);
+				continue;
+
+			}
+
+			// Create new resources if they don't exist yet.
+			if(!textures.has(textureTemplate.name)) {
+
+				const texture = new TextureResource();
+				texture.setRenderTarget(this);
+				textures.set(textureTemplate.name, texture);
+
+			}
+
+		}
 
 		// Remove unused resources.
 		for(const name of textures.keys()) {
@@ -166,23 +197,6 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 			if(!names.includes(name)) {
 
 				textures.delete(name);
-
-			}
-
-		}
-
-		textures.set(names[0], this.texture);
-
-		// Create new resources if they don't exist yet.
-		for(let i = 1, l = names.length; i < l; ++i) {
-
-			const name = names[i];
-
-			if(!textures.has(name)) {
-
-				const texture = new TextureResource();
-				texture.setRenderTarget(this);
-				textures.set(name, texture);
 
 			}
 
