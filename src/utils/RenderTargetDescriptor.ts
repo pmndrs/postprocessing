@@ -1,20 +1,14 @@
-import { EventDispatcher, RenderTargetOptions } from "three";
+import { EventDispatcher, RenderTargetOptions, TextureParameters } from "three";
 import { BaseEventMap } from "../core/BaseEventMap.js";
+import { textureParametersEqual } from "./functions/texture.js";
 import { defaultRenderTargetOptions } from "./objects/defaultRenderTargetOptions.js";
 import { TextureTemplate } from "./TextureTemplate.js";
-import { GBuffer } from "../enums/GBuffer.js";
 
 /**
  * RenderTargetDescriptor constructor options.
  */
 
 export interface RenderTargetDescriptorOptions extends RenderTargetOptions {
-
-	/**
-	 * The name of the main texture attachment.
-	 */
-
-	name?: string;
 
 	/**
 	 * Texture attachment templates.
@@ -52,21 +46,10 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> {
 
 		super();
 
-		const values = Object.assign({}, defaultRenderTargetOptions, options);
-		this._values = values;
+		this._values = Object.assign({}, defaultRenderTargetOptions, options);
+		const values = this._values;
 
-		if(values.textures === undefined || values.textures.length === 0) {
-
-			const textureTemplate = values as TextureTemplate;
-			textureTemplate.name ??= GBuffer.COLOR;
-			values.textures = [textureTemplate];
-
-		} else {
-
-			// Clone the individual templates.
-			values.textures = values.textures.map(x => Object.assign({}, x));
-
-		}
+		this.textures = (values.textures === undefined || values.textures.length === 0) ? [values] : values.textures;
 
 	}
 
@@ -100,7 +83,8 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> {
 
 		}
 
-		this._values.textures = value;
+		// Clone the templates to prevent external mutation.
+		this._values.textures = value.map(x => Object.assign({}, x));
 		this.setChanged();
 
 	}
