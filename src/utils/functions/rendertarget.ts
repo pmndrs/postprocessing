@@ -1,7 +1,7 @@
 import { ColorSpace, DepthTexture, SRGBColorSpace, WebGLRenderTarget } from "three";
 import { RenderTargetDescriptor } from "../RenderTargetDescriptor.js";
 import { GBuffer } from "../../enums/GBuffer.js";
-import { frameBufferPrecisionHigh } from "./framebuffer.js";
+import { isHighPrecision } from "./texture.js";
 
 /**
  * Creates a new render target based on the given descriptor.
@@ -9,6 +9,8 @@ import { frameBufferPrecisionHigh } from "./framebuffer.js";
  * @param resource - A render target resource.
  * @param activeTextures - Texture attachments that have active consumers.
  * @return The new render target.
+ * @category Utils
+ * @internal
  */
 
 export function createRenderTarget(descriptor: RenderTargetDescriptor, activeTextures: string[],
@@ -32,7 +34,7 @@ export function createRenderTarget(descriptor: RenderTargetDescriptor, activeTex
 	if(descriptor.options.colorSpace !== undefined) {
 
 		// If the buffer uses low precision, enable sRGB encoding to reduce information loss.
-		if(!frameBufferPrecisionHigh(renderTarget.texture.type) && outputColorSpace === SRGBColorSpace) {
+		if(!isHighPrecision(renderTarget.texture.type) && outputColorSpace === SRGBColorSpace) {
 
 			renderTarget.texture.colorSpace = SRGBColorSpace;
 

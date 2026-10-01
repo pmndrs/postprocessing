@@ -1,5 +1,5 @@
 import { BaseEvent, EventDispatcher, IUniform, Texture } from "three";
-import { frameBufferPrecisionHigh } from "../../utils/functions/framebuffer.js";
+import { isHighPrecision } from "../../utils/functions/texture.js";
 import { GBufferSchema } from "../../utils/gbuffer/GBufferSchema.js";
 import { MapExtensions } from "../../utils/MapExtensions.js";
 import { ObservableMap } from "../../utils/ObservableMap.js";
@@ -133,7 +133,7 @@ export class Input extends EventDispatcher<InputEventMap> implements ShaderData 
 
 	get frameBufferPrecisionHigh(): boolean {
 
-		return frameBufferPrecisionHigh(this.defaultBuffer?.value?.type);
+		return isHighPrecision(this.defaultBuffer?.value?.type);
 
 	}
 

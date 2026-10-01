@@ -4,5 +4,7 @@ export * from "./math.js";
 export * from "./packing.js";
 export * from "./pass.js";
 export * from "./rand.js";
+export * from "./rendertarget.js";
 export * from "./sorting.js";
 export * from "./string.js";
+export * from "./texture.js";

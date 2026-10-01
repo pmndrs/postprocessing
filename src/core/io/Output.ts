@@ -1,5 +1,5 @@
 import { BaseEvent, EventDispatcher, RenderTargetOptions } from "three";
-import { frameBufferPrecisionHigh } from "../../utils/functions/framebuffer.js";
+import { isHighPrecision } from "../../utils/functions/texture.js";
 import { ObservableMap } from "../../utils/ObservableMap.js";
 import { BaseEventMap } from "../BaseEventMap.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
@@ -117,7 +117,7 @@ export class Output extends EventDispatcher<OutputEventMap> {
 	get frameBufferPrecisionHigh(): boolean {
 
 		// Assuming index 0 is the main color attachment if this is a G-Buffer.
-		return frameBufferPrecisionHigh(this.defaultBuffer?.descriptor?.texture?.type);
+		return isHighPrecision(this.defaultBuffer?.descriptor?.texture?.type);
 
 	}
 

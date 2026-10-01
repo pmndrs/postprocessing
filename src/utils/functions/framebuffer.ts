@@ -1,14 +1,4 @@
-import {
-	FloatType,
-	HalfFloatType,
-	LinearFilter,
-	NearestFilter,
-	RenderTarget,
-	TextureDataType,
-	TextureFilter,
-	UnsignedInt101111Type,
-	WebGLRenderer
-} from "three";
+import { LinearFilter, NearestFilter, RenderTarget, TextureFilter, WebGLRenderer } from "three";
 
 /**
  * Internal RenderTarget properties.
@@ -88,6 +78,7 @@ export function blitFramebuffer(renderer: WebGLRenderer, src: RenderTarget, dst:
  * @param src - The source buffer.
  * @param dst - The destination buffer.
  * @return Whether the source buffer can be copied with a blit operation.
+ * @category Utils
  * @internal
  */
 
@@ -119,18 +110,3 @@ export function canUseBlit(src: RenderTarget | null, dst: RenderTarget | null): 
 	return true;
 
 }
-
-/**
- * Determines whether the given texture type uses high precision.
- *
- * @param type - The texture type.
- * @return Whether the type uses high precision.
- * @internal
- */
-
-export function frameBufferPrecisionHigh(type?: TextureDataType): boolean {
-
-	return (type === HalfFloatType || type === FloatType || type === UnsignedInt101111Type);
-
-}
-

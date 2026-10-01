@@ -1,4 +1,5 @@
-import { Texture, Uniform, UnsignedByteType } from "three";
+import { Texture, Uniform } from "three";
+import { isHighPrecision } from "../utils/functions/texture.js";
 import { TextureResource } from "../core/io/TextureResource.js";
 import { ColorChannel } from "../enums/ColorChannel.js";
 import { Effect } from "./Effect.js";
@@ -160,7 +161,7 @@ export class TextureEffect extends Effect implements TextureEffectOptions {
 
 			uniforms.get("uvTransform")!.value = texture.matrix;
 
-			if(texture.type !== UnsignedByteType) {
+			if(isHighPrecision(texture.type)) {
 
 				defines.set("TEXTURE_PRECISION_HIGH", true);
 
