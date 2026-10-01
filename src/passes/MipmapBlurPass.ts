@@ -201,9 +201,6 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 		const mainBuffer = this.mainBuffer;
 		const descriptor = mainBuffer.descriptor;
 
-		this.dispose();
-		this.disposables.clear();
-
 		this.clearBuffers();
 		this.setBuffer(MipmapBlurPass.BUFFER_MAIN, mainBuffer);
 
@@ -223,7 +220,8 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 			const name = "DOWNSAMPLING_MIPMAP" + i;
 			this.downsamplingMipmaps.push(this.setBuffer(name, {
 				...descriptor.options,
-				textures: [{ name, ...descriptor.texture.values }]
+				...descriptor.texture.values,
+				name
 			}));
 
 		}
@@ -235,7 +233,8 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 			const name = "UPSAMPLING_MIPMAP" + i;
 			this.upsamplingMipmaps.push(this.setBuffer(name, {
 				...descriptor.options,
-				textures: [{ name, ...descriptor.texture.values }]
+				...descriptor.texture.values,
+				name
 			}));
 
 		}

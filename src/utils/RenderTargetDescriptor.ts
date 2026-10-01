@@ -13,10 +13,18 @@ import { MSAASamples } from "../enums/MSAASamples.js";
 export interface RenderTargetDescriptorOptions extends RenderTargetOptions {
 
 	/**
-	 * Texture attachment templates.
+	 * The name of the primary texture attachment.
 	 */
 
-	textures?: readonly TextureParametersWithName[];
+	name?: string;
+
+	/**
+	 * Multiple named texture attachments.
+	 *
+	 * @remarks Mutually exclusive with {@link name}.
+	 */
+
+	textures?: readonly (TextureTemplate | TextureParametersWithName)[];
 
 }
 
@@ -62,20 +70,18 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> {
 
 		this.propagateChangeEvent = (event) => this.dispatchEvent(event);
 
-		// Destructure textures out before merging.
-		const { textures, ...rest } = options ?? {};
+		// Destructure textures and name out before merging.
+		const { textures, name, ...rest } = options ?? {};
 		this._options = Object.assign({}, defaultRenderTargetOptions, rest);
 		this._textures = [];
 
-		if(textures === undefined || textures.length === 0) {
+		if(textures !== undefined && textures.length > 0) {
 
-			// Pull texture params out of options into a template.
-			const { name, ...params } = rest as TextureParametersWithName;
-			this.textures = [new TextureTemplate(name, params)];
+			this.textures = textures;
 
 		} else {
 
-			this.textures = textures;
+			this.textures = [new TextureTemplate(name, rest)];
 
 		}
 
