@@ -16,9 +16,21 @@ export interface TextureEffectOptions {
 
 	/**
 	 * The texture.
+	 *
+	 * @defaultValue null
 	 */
 
 	texture?: TextureResource | Texture | null;
+
+	/**
+	 * Enables or disables UV transformation.
+	 *
+	 * @see {@link Texture.matrix}
+	 * @see {@link Texture.matrixAutoUpdate}
+	 * @defaultValue true
+	 */
+
+	uvTransform?: boolean;
 
 }
 
@@ -34,13 +46,19 @@ export class TextureEffect extends Effect implements TextureEffectOptions {
 	 * Identifies the texture buffer.
 	 */
 
-	private static readonly BUFFER_TEXTURE = "BUFFER_TEXTURE";
+	private static readonly BUFFER_TEXTURE = "texture";
 
 	/**
-	 * A texture resource.
+	 * @see {@link texture}
 	 */
 
 	private _texture!: TextureResource;
+
+	/**
+	 * @see {@link uvTransform}
+	 */
+
+	private _uvTransform!: boolean;
 
 	/**
 	 * A texture `change` event listener.
@@ -54,7 +72,7 @@ export class TextureEffect extends Effect implements TextureEffectOptions {
 	 * @param options - The options.
 	 */
 
-	constructor({ texture = null }: TextureEffectOptions = {}) {
+	constructor({ texture = null, uvTransform = true }: TextureEffectOptions = {}) {
 
 		super("TextureEffect");
 
@@ -69,6 +87,7 @@ export class TextureEffect extends Effect implements TextureEffectOptions {
 
 		this.textureListener = () => this.onTextureChange();
 		this.texture = texture;
+		this.uvTransform = uvTransform;
 
 	}
 
@@ -80,11 +99,47 @@ export class TextureEffect extends Effect implements TextureEffectOptions {
 
 	set texture(value: TextureResource | Texture | null) {
 
+		if(this._texture === value) {
+
+			return;
+
+		}
+
 		this._texture?.removeEventListener("change", this.textureListener);
 		this._texture = this.in.setBuffer(TextureEffect.BUFFER_TEXTURE, value);
 		this._texture.addEventListener("change", this.textureListener);
 
 		this.onTextureChange();
+
+	}
+
+	get uvTransform(): boolean {
+
+		return this._uvTransform;
+
+	}
+
+	set uvTransform(value: boolean) {
+
+		if(this._uvTransform === value) {
+
+			return;
+
+		}
+
+		this._uvTransform = value;
+
+		if(value) {
+
+			this.in.defines.set("UV_TRANSFORM", true);
+			this.vertexShader = vertexShader;
+
+		} else {
+
+			this.in.defines.delete("UV_TRANSFORM");
+			this.vertexShader = null;
+
+		}
 
 	}
 
@@ -103,19 +158,7 @@ export class TextureEffect extends Effect implements TextureEffectOptions {
 
 		if(texture !== null) {
 
-			if(texture.matrixAutoUpdate) {
-
-				defines.set("UV_TRANSFORM", true);
-				uniforms.get("uvTransform")!.value = texture.matrix;
-				this.vertexShader = vertexShader;
-
-			} else {
-
-				defines.delete("UV_TRANSFORM");
-				uniforms.get("uvTransform")!.value = null;
-				this.vertexShader = null;
-
-			}
+			uniforms.get("uvTransform")!.value = texture.matrix;
 
 			if(texture.type !== UnsignedByteType) {
 
