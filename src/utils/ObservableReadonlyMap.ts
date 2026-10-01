@@ -1,3 +1,5 @@
+import { Event } from "three";
+
 /**
  * A read-only map that emits events when its entries change.
  *
@@ -18,7 +20,7 @@ export interface ObservableReadonlyMap<K, V> extends ReadonlyMap<K, V> {
 	 * @param listener - A listener that will be called when the map changes.
 	 */
 
-	addEventListener(type: "change", listener: () => void): void;
+	addEventListener(type: "change", listener: (event: Event<"change">) => void): void;
 
 	/**
 	 * Removes an event listener.
@@ -27,6 +29,6 @@ export interface ObservableReadonlyMap<K, V> extends ReadonlyMap<K, V> {
 	 * @param listener - The listener to remove.
 	 */
 
-	removeEventListener(type: "change", listener: () => void): void;
+	removeEventListener(type: "change", listener: (event: Event<"change">) => void): void;
 
 }

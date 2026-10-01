@@ -1,4 +1,4 @@
-import { BaseEvent, EventDispatcher, IUniform, Texture } from "three";
+import { BaseEvent, Event, EventDispatcher, IUniform, Texture } from "three";
 import { isHighPrecision } from "../../utils/functions/texture.js";
 import { GBufferSchema } from "../../utils/gbuffer/GBufferSchema.js";
 import { MapExtensions } from "../../utils/MapExtensions.js";
@@ -53,7 +53,7 @@ export class Input extends EventDispatcher<InputEventMap> implements ShaderData 
 	 * An event listener that dispatches a `change` event.
 	 */
 
-	private readonly propagateChangeEvent: () => void;
+	private readonly propagateChangeEvent: (event: Event<"change">) => void;
 
 	/**
 	 * @see {@link gBufferSchema}
@@ -81,7 +81,7 @@ export class Input extends EventDispatcher<InputEventMap> implements ShaderData 
 
 		super();
 
-		this.propagateChangeEvent = () => this.dispatchEvent({ type: "change" });
+		this.propagateChangeEvent = (event) => this.dispatchEvent(event);
 		this._gBufferSchema = null;
 
 		const textures = new ObservableMap<string, TextureResource>();

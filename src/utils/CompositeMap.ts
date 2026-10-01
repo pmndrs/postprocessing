@@ -1,3 +1,4 @@
+import { Event } from "three";
 import { ObservableMap } from "./ObservableMap.js";
 import { ObservableReadonlyMap } from "./ObservableReadonlyMap.js";
 
@@ -33,7 +34,7 @@ export class CompositeMap<K, V> extends ObservableMap<K, V> {
 	 * An event listener that dispatches a `change` event.
 	 */
 
-	private readonly propagateChangeEvent: () => void;
+	private readonly propagateChangeEvent: (event: Event<"change">) => void;
 
 	/**
 	 * Constructs a new composite map.
@@ -45,10 +46,10 @@ export class CompositeMap<K, V> extends ObservableMap<K, V> {
 
 		super(iterable);
 
-		this.propagateChangeEvent = () => {
+		this.propagateChangeEvent = (event) => {
 
 			this.needsUpdate = true;
-			this.dispatchEvent({ type: "change" });
+			this.dispatchEvent(event);
 
 		};
 
