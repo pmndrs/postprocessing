@@ -2,14 +2,16 @@ import { TextureParameters } from "three";
 
 /**
  * A texture template.
+ *
+ * @category Textures
  */
 
-export interface TextureTemplate extends TextureParameters {
+export interface TextureParametersWithName extends TextureParameters {
 
 	/**
 	 * The name of the texture.
 	 */
 
-	name: string;
+	name?: string;
 
 }

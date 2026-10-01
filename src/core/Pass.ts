@@ -3,7 +3,6 @@ import {
 	EventDispatcher,
 	Material,
 	Object3D,
-	RenderTargetOptions,
 	Scene,
 	Texture,
 	Vector2,
@@ -11,6 +10,7 @@ import {
 	WebGLRenderTarget
 } from "three";
 
+import { RenderTargetDescriptorOptions } from "../utils/RenderTargetDescriptor.js";
 import { GBufferSchema } from "../utils/gbuffer/GBufferSchema.js";
 import { IdManager } from "../utils/IdManager.js";
 import { ReadonlyTimer } from "../utils/ReadonlyTimer.js";
@@ -20,12 +20,12 @@ import { Scissor } from "../utils/Scissor.js";
 import { Viewport } from "../utils/Viewport.js";
 import { Disposable } from "./Disposable.js";
 import { FullscreenRenderOperation } from "./FullscreenRenderOperation.js";
+import { InOut } from "./io/InOut.js";
 import { Input } from "./io/Input.js";
 import { Output } from "./io/Output.js";
 import { RenderTargetResource } from "./io/RenderTargetResource.js";
 import { RenderOperation } from "./RenderOperation.js";
 import { RenderTask, RenderTaskEventMap } from "./RenderTask.js";
-import { InOut } from "./io/InOut.js";
 
 const v = /* @__PURE__ */ new Vector2();
 
@@ -450,7 +450,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	// #endregion
 
 	/**
-	 * Defines required input textures.
+	 * Declares required input textures.
 	 *
 	 * @remarks This method __replaces__ the current list of required textures.
 	 * @param textures - A list of required texture names.
@@ -743,7 +743,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 * @return The render target resource.
 	 */
 
-	protected setDefaultBuffer(value?: RenderTargetResource | RenderTargetOptions): RenderTargetResource {
+	protected setDefaultBuffer(value?: RenderTargetResource | RenderTargetDescriptorOptions): RenderTargetResource {
 
 		return this.out.setDefaultBuffer(value);
 
@@ -756,7 +756,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 * @return The render target resource.
 	 */
 
-	protected createDefaultBuffer(value?: RenderTargetOptions): RenderTargetResource {
+	protected createDefaultBuffer(value?: RenderTargetDescriptorOptions): RenderTargetResource {
 
 		return this.setDefaultBuffer(value);
 
@@ -785,7 +785,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 * @return The render target resource.
 	 */
 
-	protected setBuffer(key: string, value?: RenderTargetResource | RenderTargetOptions): RenderTargetResource {
+	protected setBuffer(key: string, value?: RenderTargetResource | RenderTargetDescriptorOptions): RenderTargetResource {
 
 		return this.out.setBuffer(key, value);
 

@@ -23,14 +23,14 @@ export function createRenderTarget(descriptor: RenderTargetDescriptor, activeTex
 
 	// Get the templates for the required textures (depth is handled separately).
 	const textureTemplates = descriptor.textures
-		.filter(x => activeTextures.includes(x.name) && x.name !== GBuffer.DEPTH as string);
+		.filter(x => x.name !== undefined && activeTextures.includes(x.name) && x.name !== GBuffer.DEPTH as string);
 
 	for(let i = 0, l = textureTemplates.length; i < l; ++i) {
 
 		const texture = renderTarget.textures[i];
 		const textureTemplate = textureTemplates[i];
-		texture.name = textureTemplate.name;
-		texture.setValues(textureTemplate);
+		texture.name = textureTemplate.name ?? "Unknown";
+		texture.setValues(textureTemplate.values);
 
 	}
 
@@ -64,8 +64,8 @@ export function createRenderTarget(descriptor: RenderTargetDescriptor, activeTex
 		} else {
 
 			const texture = new DepthTexture();
-			texture.name = depthTextureTemplate.name;
-			texture.setValues(depthTextureTemplate);
+			texture.name = depthTextureTemplate.name ?? GBuffer.DEPTH;
+			texture.setValues(depthTextureTemplate.values);
 			renderTarget.depthTexture = texture;
 
 		}

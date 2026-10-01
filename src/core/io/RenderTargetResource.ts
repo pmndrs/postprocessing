@@ -1,5 +1,5 @@
-import { RenderTargetOptions, WebGLRenderTarget } from "three";
-import { RenderTargetDescriptor } from "../../utils/RenderTargetDescriptor.js";
+import { WebGLRenderTarget } from "three";
+import { RenderTargetDescriptor, RenderTargetDescriptorOptions } from "../../utils/RenderTargetDescriptor.js";
 import { Resolution } from "../../utils/Resolution.js";
 import { Disposable } from "../Disposable.js";
 import type { Output } from "./Output.js";
@@ -66,7 +66,7 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 	 * @param options - Render target options.
 	 */
 
-	constructor(options?: RenderTargetOptions) {
+	constructor(options?: RenderTargetDescriptorOptions) {
 
 		super(null);
 

@@ -220,9 +220,11 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 		for(let i = 0; i < levels; ++i) {
 
-			const mipmap = descriptor.clone();
-			mipmap.name = "DOWNSAMPLING_MIPMAP" + i;
-			this.downsamplingMipmaps.push(this.setBuffer(mipmap.name, mipmap.options));
+			const name = "DOWNSAMPLING_MIPMAP" + i;
+			this.downsamplingMipmaps.push(this.setBuffer(name, {
+				...descriptor.options,
+				textures: [{ name, ...descriptor.texture.values }]
+			}));
 
 		}
 
@@ -230,9 +232,11 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 		for(let i = 1, l = this.fullResolutionUpsampling ? levels : levels - 1; i < l; ++i) {
 
-			const mipmap = descriptor.clone();
-			mipmap.name = "UPSAMPLING_MIPMAP" + i;
-			this.upsamplingMipmaps.push(this.setBuffer(mipmap.name, mipmap.options));
+			const name = "UPSAMPLING_MIPMAP" + i;
+			this.upsamplingMipmaps.push(this.setBuffer(name, {
+				...descriptor.options,
+				textures: [{ name, ...descriptor.texture.values }]
+			}));
 
 		}
 
@@ -262,7 +266,7 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 			// texture.colorSpace = colorSpace;
 			// renderTarget.dispose();
 
-			mipmap.descriptor.setValues({
+			mipmap.descriptor.texture.setValues({
 				colorSpace: inputTexture.colorSpace as ColorSpace,
 				format: inputTexture.format as PixelFormat,
 				internalFormat: inputTexture.internalFormat,

@@ -4,3 +4,5 @@ export * from "./smaa/index.js";
 export * from "./ASCIITexture.js";
 export * from "./NoiseTexture.js";
 export * from "./RawImageData.js";
+export * from "./TextureParametersWithName.js";
+export * from "./TextureTemplate.js";

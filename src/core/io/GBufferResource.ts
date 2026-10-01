@@ -17,6 +17,7 @@ import {
 import { GBuffer } from "../../enums/GBuffer.js";
 import { MSAASamples } from "../../enums/MSAASamples.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
+import { isHighPrecision } from "../../utils/index.js";
 
 /**
  * GBufferResource constructor options.
@@ -99,15 +100,57 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 		samples = 0
 	}: GBufferResourceOptions = {}) {
 
+		const useSmallFloatFormat = (isHighPrecision(type) && !alpha);
+
 		super({
 			type,
 			stencilBuffer,
 			depthBuffer,
-			samples
+			samples,
+			textures: [
+				{
+					name: GBuffer.COLOR,
+					minFilter: LinearFilter,
+					magFilter: LinearFilter,
+					type: useSmallFloatFormat ? UnsignedInt101111Type : type,
+					format: useSmallFloatFormat ? RGBFormat : RGBAFormat
+				},
+				{
+					name: GBuffer.DEPTH,
+					minFilter: NearestFilter,
+					magFilter: NearestFilter,
+					type: stencilBuffer ? UnsignedInt248Type : FloatType,
+					format: stencilBuffer ? DepthStencilFormat : DepthFormat
+				},
+				{
+					name: GBuffer.NORMAL,
+					minFilter: NearestFilter,
+					magFilter: NearestFilter,
+					type: HalfFloatType,
+					format: RGFormat
+				},
+				{
+					name: GBuffer.ORM,
+					minFilter: NearestFilter,
+					magFilter: NearestFilter,
+					type: UnsignedByteType,
+					format: RGBAFormat
+				},
+				{
+					name: GBuffer.EMISSION,
+					minFilter: LinearFilter,
+					magFilter: LinearFilter,
+					type: HalfFloatType,
+					format: RGBAFormat
+					// R11F_G11F_B10F causes random artifacts (possibly a driver bug)
+					// type: UnsignedInt101111Type,
+					// format: RGBFormat,
+					// internalFormat: "R11F_G11F_B10F"
+				}
+			]
 		});
 
 		this.alpha = alpha;
-		this.defineTextureTemplates();
 
 	}
 
@@ -115,86 +158,34 @@ export class GBufferResource extends RenderTargetResource implements GBufferReso
 
 	get stencilBuffer(): boolean {
 
-		return this.descriptor.options.stencilBuffer!;
+		return this.descriptor.stencilBuffer!;
 
 	}
 
 	get depthBuffer(): boolean {
 
-		return this.descriptor.options.depthBuffer!;
+		return this.descriptor.depthBuffer!;
 
 	}
 
 	get type(): TextureDataType {
 
-		return this.descriptor.options.type!;
+		return this.descriptor.texture.values.type!;
 
 	}
 
 	get samples(): MSAASamples {
 
-		return this.descriptor.options.samples as MSAASamples;
+		return this.descriptor.samples!;
 
 	}
 
 	set samples(value: MSAASamples) {
 
-		this.descriptor.setValues({ samples: value });
+		this.descriptor.samples = value;
 
 	}
 
 	// #endregion
-
-	/**
-	 * Defines all built-in G-Buffer texture templates.
-	 */
-
-	private defineTextureTemplates(): void {
-
-		const useSmallFloatFormat = (this.frameBufferPrecisionHigh && !this.alpha);
-
-		this.descriptor.textures = [
-			{
-				name: GBuffer.COLOR,
-				minFilter: LinearFilter,
-				magFilter: LinearFilter,
-				type: useSmallFloatFormat ? UnsignedInt101111Type : this.type,
-				format: useSmallFloatFormat ? RGBFormat : RGBAFormat
-			},
-			{
-				name: GBuffer.DEPTH,
-				minFilter: NearestFilter,
-				magFilter: NearestFilter,
-				type: this.stencilBuffer ? UnsignedInt248Type : FloatType,
-				format: this.stencilBuffer ? DepthStencilFormat : DepthFormat
-			},
-			{
-				name: GBuffer.NORMAL,
-				minFilter: NearestFilter,
-				magFilter: NearestFilter,
-				type: HalfFloatType,
-				format: RGFormat
-			},
-			{
-				name: GBuffer.ORM,
-				minFilter: NearestFilter,
-				magFilter: NearestFilter,
-				type: UnsignedByteType,
-				format: RGBAFormat
-			},
-			{
-				name: GBuffer.EMISSION,
-				minFilter: LinearFilter,
-				magFilter: LinearFilter,
-				type: HalfFloatType,
-				format: RGBAFormat
-				// R11F_G11F_B10F causes random artifacts (possibly a driver bug)
-				// type: UnsignedInt101111Type,
-				// format: RGBFormat,
-				// internalFormat: "R11F_G11F_B10F"
-			}
-		];
-
-	}
 
 }

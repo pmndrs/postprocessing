@@ -1,4 +1,5 @@
-import { BaseEvent, EventDispatcher, RenderTargetOptions } from "three";
+import { BaseEvent, EventDispatcher } from "three";
+import { RenderTargetDescriptorOptions } from "../../utils/RenderTargetDescriptor.js";
 import { isHighPrecision } from "../../utils/functions/texture.js";
 import { ObservableMap } from "../../utils/ObservableMap.js";
 import { BaseEventMap } from "../BaseEventMap.js";
@@ -117,7 +118,7 @@ export class Output extends EventDispatcher<OutputEventMap> {
 	get frameBufferPrecisionHigh(): boolean {
 
 		// Assuming index 0 is the main color attachment if this is a G-Buffer.
-		return isHighPrecision(this.defaultBuffer?.descriptor?.texture?.type);
+		return isHighPrecision(this.defaultBuffer?.descriptor.texture.values.type);
 
 	}
 
@@ -158,7 +159,7 @@ export class Output extends EventDispatcher<OutputEventMap> {
 	 * @internal
 	 */
 
-	setDefaultBuffer(value?: RenderTargetResource | RenderTargetOptions): RenderTargetResource {
+	setDefaultBuffer(value?: RenderTargetResource | RenderTargetDescriptorOptions): RenderTargetResource {
 
 		return this.setBuffer(Output.BUFFER_DEFAULT, value);
 
@@ -189,7 +190,7 @@ export class Output extends EventDispatcher<OutputEventMap> {
 	 * @internal
 	 */
 
-	setBuffer(key: string, value?: RenderTargetResource | RenderTargetOptions): RenderTargetResource {
+	setBuffer(key: string, value?: RenderTargetResource | RenderTargetDescriptorOptions): RenderTargetResource {
 
 		const resource = (value instanceof RenderTargetResource) ? value : new RenderTargetResource(value);
 

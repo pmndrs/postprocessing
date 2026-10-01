@@ -230,7 +230,7 @@ export class GeometryPass extends Pass implements GeometryPassOptions, Selective
 
 		if(depthTexture !== null && this.gBuffer.descriptor.options.depthTexture !== depthTexture) {
 
-			this.gBuffer.descriptor.setValues({ depthTexture });
+			this.gBuffer.descriptor.depthTexture = depthTexture;
 
 		}
 

@@ -1,8 +1,10 @@
-import { EventDispatcher, RenderTargetOptions, TextureParameters } from "three";
+import { DepthTexture, Event, EventDispatcher, RenderTargetOptions, TextureDataType, TextureParameters } from "three";
 import { BaseEventMap } from "../core/BaseEventMap.js";
 import { textureParametersEqual } from "./functions/texture.js";
 import { defaultRenderTargetOptions } from "./objects/defaultRenderTargetOptions.js";
-import { TextureTemplate } from "./TextureTemplate.js";
+import { TextureTemplate } from "../textures/TextureTemplate.js";
+import { TextureParametersWithName } from "../textures/TextureParametersWithName.js";
+import { MSAASamples } from "../enums/MSAASamples.js";
 
 /**
  * RenderTargetDescriptor constructor options.
@@ -14,7 +16,7 @@ export interface RenderTargetDescriptorOptions extends RenderTargetOptions {
 	 * Texture attachment templates.
 	 */
 
-	textures?: TextureTemplate[];
+	textures?: readonly TextureParametersWithName[];
 
 }
 
@@ -26,13 +28,25 @@ export interface RenderTargetDescriptorOptions extends RenderTargetOptions {
 
 export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> {
 
+	/**
+	 * An event listener that dispatches a `change` event.
+	 */
+
+	private readonly propagateChangeEvent: (event: Event<"change">) => void;
+
 	// #region Backing Data
 
 	/**
 	 * @see {@link options}
 	 */
 
-	private _values: RenderTargetDescriptorOptions;
+	private _options: RenderTargetOptions;
+
+	/**
+	 * @see {@link textures}
+	 */
+
+	private _textures: TextureTemplate[];
 
 	// #endregion
 
@@ -46,46 +60,37 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> {
 
 		super();
 
-		this._values = Object.assign({}, defaultRenderTargetOptions, options);
-		const values = this._values;
+		this.propagateChangeEvent = (event) => this.dispatchEvent(event);
 
-		this.textures = (values.textures === undefined || values.textures.length === 0) ? [values] : values.textures;
+		// Destructure textures out before merging.
+		const { textures, ...rest } = options ?? {};
+		this._options = Object.assign({}, defaultRenderTargetOptions, rest);
+		this._textures = [];
+
+		if(textures === undefined || textures.length === 0) {
+
+			// Pull texture params out of options into a template.
+			const { name, ...params } = rest as TextureParametersWithName;
+			this.textures = [new TextureTemplate(name, params)];
+
+		} else {
+
+			this.textures = textures;
+
+		}
 
 	}
 
 	/**
 	 * The render target options.
 	 *
-	 * @see {@link setValues} for changing these options.
+	 * Use the individual property setters (e.g. {@link samples}, {@link depthTexture}) or
+	 * {@link texture} to modify these options.
 	 */
 
 	get options(): Readonly<RenderTargetOptions> {
 
-		return this._values;
-
-	}
-
-	/**
-	 * The texture attachment templates.
-	 */
-
-	get textures(): readonly Readonly<TextureTemplate>[] {
-
-		return this._values.textures!;
-
-	}
-
-	set textures(value: TextureTemplate[]) {
-
-		if(value.length === 0) {
-
-			throw new Error("Expected at least one texture template");
-
-		}
-
-		// Clone the templates to prevent external mutation.
-		this._values.textures = value.map(x => Object.assign({}, x));
-		this.setChanged();
+		return this._options;
 
 	}
 
@@ -93,28 +98,95 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> {
 	 * The primary texture attachment template.
 	 */
 
-	get texture(): Readonly<TextureTemplate> {
+	get texture(): TextureTemplate {
 
-		return this._values.textures![0];
+		return this.textures[0];
 
 	}
+
+	// #region Settings
 
 	/**
-	 * The name of the main {@link textures|texture attachment} at index 0.
+	 * The texture attachment templates.
 	 */
 
-	get name(): string | undefined {
+	get textures(): readonly TextureTemplate[] {
 
-		return this._values.textures![0].name;
+		return this._textures;
 
 	}
 
-	set name(value: string) {
+	set textures(value: readonly (TextureTemplate | TextureParametersWithName)[]) {
 
-		this._values.textures![0].name = value;
+		if(value.length === 0) {
+
+			throw new Error("Expected at least one texture template");
+
+		}
+
+		for(const texture of this.textures) {
+
+			texture.removeEventListener("change", this.propagateChangeEvent);
+
+		}
+
+		this._textures = value.map(t => {
+
+			const template = t instanceof TextureTemplate ? t.clone() : new TextureTemplate(t.name, t);
+			template.addEventListener("change", this.propagateChangeEvent);
+			return template;
+
+		});
+
 		this.setChanged();
 
 	}
+
+	get stencilBuffer(): boolean | undefined {
+
+		return this._options.stencilBuffer;
+
+	}
+
+	get depthBuffer(): boolean | undefined {
+
+		return this._options.depthBuffer;
+
+	}
+
+	get type(): TextureDataType | undefined {
+
+		return this.texture.values.type;
+
+	}
+
+	get samples(): MSAASamples | undefined {
+
+		return this._options.samples as MSAASamples | undefined;
+
+	}
+
+	set samples(value: MSAASamples) {
+
+		this._options.samples = value;
+		this.setChanged();
+
+	}
+
+	get depthTexture(): DepthTexture | null | undefined {
+
+		return this._options.depthTexture;
+
+	}
+
+	set depthTexture(value: DepthTexture | null) {
+
+		this._options.depthTexture = value;
+		this.setChanged();
+
+	}
+
+	// #endregion
 
 	/**
 	 * Dispatches a `change` event.
@@ -127,38 +199,6 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> {
 	}
 
 	/**
-	 * Sets the given render target options.
-	 *
-	 * Unrelated options will be retained.
-	 *
-	 * @param values - The values to apply.
-	 */
-
-	setValues(values: RenderTargetOptions): void {
-
-		let changed = false;
-
-		for(const key of Object.keys(values) as (keyof RenderTargetOptions)[]) {
-
-			if(values[key] !== this._values[key]) {
-
-				changed = true;
-				break;
-
-			}
-
-		}
-
-		if(changed) {
-
-			Object.assign(this._values, values);
-			this.setChanged();
-
-		}
-
-	}
-
-	/**
 	 * Creates a new descriptor that equals this one.
 	 *
 	 * @return The clone.
@@ -166,7 +206,7 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> {
 
 	clone(): RenderTargetDescriptor {
 
-		return new RenderTargetDescriptor(this.options);
+		return new RenderTargetDescriptor({ ...this.options, textures: this.textures });
 
 	}
 
@@ -189,23 +229,15 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> {
 
 		// RenderTarget options
 
-		for(const key of Object.keys(this.options) as (keyof RenderTargetOptions)[]) {
-
-			if(this.options[key] !== other.options[key]) {
-
-				return false;
-
-			}
-
-		}
-
-		// Texture templates
-
-		if(!textureParametersEqual(this.texture, other.texture)) {
+		if(this.stencilBuffer !== other.stencilBuffer ||
+			this.depthBuffer !== other.depthBuffer ||
+			this.samples !== other.samples) {
 
 			return false;
 
 		}
+
+		// Texture templates
 
 		if(this.textures.length !== other.textures.length) {
 
@@ -215,7 +247,7 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> {
 
 		for(let i = 0, l = this.textures.length; i < l; ++i) {
 
-			if(!textureParametersEqual(this.textures[i], other.textures[i])) {
+			if(!this.textures[i].equals(other.textures[i])) {
 
 				return false;
 
@@ -225,16 +257,19 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> {
 
 		// DepthTexture
 
-		const depthTextureA = this.options.depthTexture ?? null;
-		const depthTextureB = other.options.depthTexture ?? null;
+		const depthTextureA = this.depthTexture ?? null;
+		const depthTextureB = other.depthTexture ?? null;
 
-		if(depthTextureA !== depthTextureB || depthTextureA === null || depthTextureB === null) {
+		if(depthTextureA !== depthTextureB) {
 
 			return false;
 
 		}
 
-		return textureParametersEqual(depthTextureA as TextureParameters, depthTextureB as TextureParameters);
+		return textureParametersEqual(
+			depthTextureA as TextureParameters,
+			depthTextureB as TextureParameters
+		);
 
 	}
 
