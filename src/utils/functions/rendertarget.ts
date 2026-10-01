@@ -1,4 +1,4 @@
-import { ColorSpace, DepthTexture, SRGBColorSpace, WebGLRenderTarget } from "three";
+import { ColorSpace, DepthTexture, SRGBColorSpace, WebGL3DRenderTarget, WebGLRenderTarget } from "three";
 import { RenderTargetDescriptor } from "../RenderTargetDescriptor.js";
 import { GBuffer } from "../../enums/GBuffer.js";
 import { isHighPrecision } from "./texture.js";
@@ -16,7 +16,10 @@ import { isHighPrecision } from "./texture.js";
 export function createRenderTarget(descriptor: RenderTargetDescriptor, activeTextures: string[],
 	outputColorSpace: ColorSpace): WebGLRenderTarget {
 
-	const renderTarget = new WebGLRenderTarget(1, 1, descriptor.options);
+	const depth = descriptor.options.depth ?? 1;
+	const renderTarget = (depth > 1) ?
+		new WebGL3DRenderTarget(1, 1, depth, descriptor.options) :
+		new WebGLRenderTarget(1, 1, descriptor.options);
 
 	// Get the templates for the required textures (depth is handled separately).
 	const textureTemplates = descriptor.textures
