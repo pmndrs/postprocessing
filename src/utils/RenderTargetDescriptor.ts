@@ -170,4 +170,72 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> {
 
 	}
 
+	/**
+	 * Compares a given descriptor with this one.
+	 *
+	 * @param other - A descriptor.
+	 * @return True if the descriptors are equal.
+	 */
+
+	equals(other: RenderTargetDescriptor): boolean {
+
+		// Identity
+
+		if(this === other) {
+
+			return true;
+
+		}
+
+		// RenderTarget options
+
+		for(const key of Object.keys(this.options) as (keyof RenderTargetOptions)[]) {
+
+			if(this.options[key] !== other.options[key]) {
+
+				return false;
+
+			}
+
+		}
+
+		// Texture templates
+
+		if(!textureParametersEqual(this.texture, other.texture)) {
+
+			return false;
+
+		}
+
+		if(this.textures.length !== other.textures.length) {
+
+			return false;
+
+		}
+
+		for(let i = 0, l = this.textures.length; i < l; ++i) {
+
+			if(!textureParametersEqual(this.textures[i], other.textures[i])) {
+
+				return false;
+
+			}
+
+		}
+
+		// DepthTexture
+
+		const depthTextureA = this.options.depthTexture ?? null;
+		const depthTextureB = other.options.depthTexture ?? null;
+
+		if(depthTextureA !== depthTextureB || depthTextureA === null || depthTextureB === null) {
+
+			return false;
+
+		}
+
+		return textureParametersEqual(depthTextureA as TextureParameters, depthTextureB as TextureParameters);
+
+	}
+
 }
