@@ -200,9 +200,11 @@ export class TextureEffect extends Effect implements TextureEffectOptions {
 
 	override render(): void {
 
-		if(this.texture !== null && this.texture.matrixAutoUpdate) {
+		const texture = this.texture;
 
-			this.texture.updateMatrix();
+		if(this.uvTransform && texture !== null && texture.matrixAutoUpdate) {
+
+			texture.updateMatrix();
 
 		}
 
