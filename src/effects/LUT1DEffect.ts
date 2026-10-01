@@ -1,4 +1,5 @@
-import { FloatType, HalfFloatType, Texture, Uniform } from "three";
+import { Texture, Uniform } from "three";
+import { isHighPrecision } from "../utils/functions/texture.js";
 import { Effect } from "./Effect.js";
 
 import fragmentShader from "./shaders/lut-1d.frag";
@@ -85,7 +86,7 @@ export class LUT1DEffect extends Effect implements LUT1DEffectOptions {
 	set lut(value: Texture | null) {
 
 		this.in.uniforms.get("lut")!.value = value;
-		this.lutPrecisionHigh = (value?.type === FloatType || value?.type === HalfFloatType);
+		this.lutPrecisionHigh = isHighPrecision(value?.type);
 
 	}
 

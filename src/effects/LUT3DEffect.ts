@@ -1,16 +1,7 @@
-import {
-	ColorSpace,
-	FloatType,
-	HalfFloatType,
-	LinearFilter,
-	NearestFilter,
-	SRGBColorSpace,
-	Uniform,
-	Vector3
-} from "three";
-
+import { ColorSpace, LinearFilter, NearestFilter, SRGBColorSpace, Uniform, Vector3 } from "three";
 import { LookupTexture } from "../textures/lut/LookupTexture.js";
 import { LUTDomainBounds } from "../textures/lut/LUTDomainBounds.js";
+import { isHighPrecision } from "../utils/functions/texture.js";
 import { Effect } from "./Effect.js";
 
 import fragmentShader from "./shaders/lut-3d.frag";
@@ -152,7 +143,7 @@ export class LUT3DEffect extends Effect implements LUT3DEffectOptions {
 		defines.set("LUT_TEXEL_WIDTH", (1.0 / image.width).toFixed(16));
 		defines.set("LUT_TEXEL_HEIGHT", (1.0 / image.height).toFixed(16));
 
-		this.lutPrecisionHigh = (value.type === FloatType || value.type === HalfFloatType);
+		this.lutPrecisionHigh = isHighPrecision(value.type);
 
 		const domainData = value.userData as LUTDomainBounds;
 		const min = domainData.domainMin;
