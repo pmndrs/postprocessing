@@ -90,6 +90,16 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> {
 	}
 
 	/**
+	 * The primary texture attachment template.
+	 */
+
+	get texture(): Readonly<TextureTemplate> {
+
+		return this._values.textures![0];
+
+	}
+
+	/**
 	 * The name of the main {@link textures|texture attachment} at index 0.
 	 */
 
