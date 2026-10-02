@@ -7,42 +7,44 @@ $RECYCLE.BIN/
 
 # Linux
 *.swp
+*.swo
 *.*-swp
 
-# OSX
+# macOS
 .DS_Store
 .AppleDouble
 .LSOverride
 ._*
-.Spotlight-V100
-.Trashes
+.Spotlight-V100/
+.Trashes/
 .AppleDB
 .AppleDesktop
-Network Trash Folder
-Temporary Items
+Network Trash Folder/
+Temporary Items/
 .apdisk
 
 # IDE settings
 .project
-.idea
-.vscode
+.idea/
+.vscode/
 
-# AI
-.agents
-.codex
+# AI tooling
+.agents/
+.codex/
+memory-bank/
 
-# Node
-node_modules
+# Node.js
+node_modules/
 package-lock.json
 
 # Generated files
 dist/
 public/
-temp/
-resources/
 pagefind/
-*.lock
+resources/
+temp/
 *.log
+*.lock
 *.tmp
 
 # Playwright
