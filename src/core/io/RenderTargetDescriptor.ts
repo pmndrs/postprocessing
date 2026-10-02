@@ -1,8 +1,7 @@
-import { DepthTexture, Event, EventDispatcher, RenderTargetOptions, TextureDataType, TextureParameters } from "three";
+import { DepthTexture, Event, EventDispatcher, RenderTargetOptions, TextureDataType } from "three";
 import { MSAASamples } from "../../enums/MSAASamples.js";
 import { TextureParametersWithName } from "../../textures/TextureParametersWithName.js";
 import { TextureTemplate } from "../../textures/TextureTemplate.js";
-import { textureParametersEqual } from "../../utils/functions/texture.js";
 import { defaultRenderTargetOptions } from "../../utils/objects/defaultRenderTargetOptions.js";
 import { BaseEventMap } from "../BaseEventMap.js";
 
@@ -258,21 +257,9 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> {
 
 		}
 
-		// DepthTexture
+		// DepthTexture identity
 
-		const depthTextureA = this.depthTexture ?? null;
-		const depthTextureB = other.depthTexture ?? null;
-
-		if(depthTextureA !== depthTextureB) {
-
-			return false;
-
-		}
-
-		return textureParametersEqual(
-			depthTextureA as TextureParameters,
-			depthTextureB as TextureParameters
-		);
+		return (this.depthTexture ?? null) === (other.depthTexture ?? null);
 
 	}
 
