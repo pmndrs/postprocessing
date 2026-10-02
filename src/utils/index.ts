@@ -19,7 +19,6 @@ export * from "./ObservableSet.js";
 export * from "./ReadonlyShaderData.js";
 export * from "./ReadonlyTimer.js";
 export * from "./ReadonlyWeakSet.js";
-export * from "./RenderTargetDescriptor.js";
 export * from "./Resolution.js";
 export * from "./Scissor.js";
 export * from "./Selection.js";

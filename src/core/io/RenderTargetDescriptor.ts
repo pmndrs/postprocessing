@@ -1,10 +1,10 @@
 import { DepthTexture, Event, EventDispatcher, RenderTargetOptions, TextureDataType, TextureParameters } from "three";
-import { BaseEventMap } from "../core/BaseEventMap.js";
-import { textureParametersEqual } from "./functions/texture.js";
-import { defaultRenderTargetOptions } from "./objects/defaultRenderTargetOptions.js";
-import { TextureTemplate } from "../textures/TextureTemplate.js";
-import { TextureParametersWithName } from "../textures/TextureParametersWithName.js";
-import { MSAASamples } from "../enums/MSAASamples.js";
+import { MSAASamples } from "../../enums/MSAASamples.js";
+import { TextureParametersWithName } from "../../textures/TextureParametersWithName.js";
+import { TextureTemplate } from "../../textures/TextureTemplate.js";
+import { textureParametersEqual } from "../../utils/functions/texture.js";
+import { defaultRenderTargetOptions } from "../../utils/objects/defaultRenderTargetOptions.js";
+import { BaseEventMap } from "../BaseEventMap.js";
 
 /**
  * RenderTargetDescriptor constructor options.
@@ -89,9 +89,6 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> {
 
 	/**
 	 * The render target options.
-	 *
-	 * Use the individual property setters (e.g. {@link samples}, {@link depthTexture}) or
-	 * {@link texture} to modify these options.
 	 */
 
 	get options(): Readonly<RenderTargetOptions> {

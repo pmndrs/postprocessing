@@ -1,8 +1,8 @@
 import { BaseEvent, EventDispatcher } from "three";
-import { RenderTargetDescriptorOptions } from "../../utils/RenderTargetDescriptor.js";
 import { isHighPrecision } from "../../utils/functions/texture.js";
 import { ObservableMap } from "../../utils/ObservableMap.js";
 import { BaseEventMap } from "../BaseEventMap.js";
+import { RenderTargetDescriptorOptions } from "./RenderTargetDescriptor.js";
 import { RenderTargetResource } from "./RenderTargetResource.js";
 import { ShaderDataResource } from "./ShaderDataResource.js";
 import { TextureResource } from "./TextureResource.js";

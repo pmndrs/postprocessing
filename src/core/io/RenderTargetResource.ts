@@ -1,8 +1,8 @@
 import { WebGLRenderTarget } from "three";
-import { RenderTargetDescriptor, RenderTargetDescriptorOptions } from "../../utils/RenderTargetDescriptor.js";
 import { Resolution } from "../../utils/Resolution.js";
 import { Disposable } from "../Disposable.js";
 import type { Output } from "./Output.js";
+import { RenderTargetDescriptor, RenderTargetDescriptorOptions } from "./RenderTargetDescriptor.js";
 import { Resource } from "./Resource.js";
 import { TextureResource } from "./TextureResource.js";
 

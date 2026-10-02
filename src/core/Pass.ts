@@ -10,7 +10,7 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { RenderTargetDescriptorOptions } from "../utils/RenderTargetDescriptor.js";
+import { RenderTargetDescriptorOptions } from "./io/RenderTargetDescriptor.js";
 import { GBufferSchema } from "../utils/gbuffer/GBufferSchema.js";
 import { IdManager } from "../utils/IdManager.js";
 import { ReadonlyTimer } from "../utils/ReadonlyTimer.js";

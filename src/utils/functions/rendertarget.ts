@@ -1,5 +1,5 @@
 import { ColorSpace, DepthTexture, SRGBColorSpace, WebGL3DRenderTarget, WebGLRenderTarget } from "three";
-import { RenderTargetDescriptor } from "../RenderTargetDescriptor.js";
+import { RenderTargetDescriptor } from "../../core/io/RenderTargetDescriptor.js";
 import { GBuffer } from "../../enums/GBuffer.js";
 import { isHighPrecision } from "./texture.js";
 

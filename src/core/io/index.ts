@@ -4,6 +4,7 @@ export * from "./InOut.js";
 export * from "./InOutConnection.js";
 export * from "./Input.js";
 export * from "./Output.js";
+export * from "./RenderTargetDescriptor.js";
 export * from "./RenderTargetResource.js";
 export * from "./Resource.js";
 export * from "./ResourceManager.js";
