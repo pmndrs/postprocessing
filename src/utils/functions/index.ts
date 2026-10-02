@@ -1,6 +1,7 @@
 export * from "./camera.js";
 export * from "./framebuffer.js";
 export * from "./math.js";
+export * from "./object.js";
 export * from "./packing.js";
 export * from "./pass.js";
 export * from "./rand.js";

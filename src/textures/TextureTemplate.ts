@@ -1,6 +1,6 @@
 import { EventDispatcher, TextureParameters } from "three";
 import { BaseEventMap } from "../core/BaseEventMap.js";
-import { textureParametersEqual } from "../utils/index.js";
+import { shallowObjectEquals } from "../utils/functions/object.js";
 
 /**
  * A texture template.
@@ -100,7 +100,7 @@ export class TextureTemplate extends EventDispatcher<BaseEventMap> {
 
 	equals(other: TextureTemplate): boolean {
 
-		return this.name === other.name && textureParametersEqual(this.values, other.values);
+		return this.name === other.name && shallowObjectEquals(this.values, other.values);
 
 	}
 
