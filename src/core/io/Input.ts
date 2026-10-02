@@ -1,4 +1,5 @@
 import { BaseEvent, Event, EventDispatcher, IUniform, Texture } from "three";
+import { CompositeMap } from "../../utils/CompositeMap.js";
 import { isHighPrecision } from "../../utils/functions/texture.js";
 import { GBufferSchema } from "../../utils/gbuffer/GBufferSchema.js";
 import { MapExtensions } from "../../utils/MapExtensions.js";
@@ -65,7 +66,7 @@ export class Input extends EventDispatcher<InputEventMap> implements ShaderData 
 	 * Input textures.
 	 */
 
-	readonly textures: Map<string, TextureResource> & MapExtensions<string, TextureResource>;
+	readonly textures: ObservableMap<string, TextureResource>;
 
 	/**
 	 * Input shader data.
@@ -84,7 +85,7 @@ export class Input extends EventDispatcher<InputEventMap> implements ShaderData 
 		this.propagateChangeEvent = (event) => this.dispatchEvent(event);
 		this._gBufferSchema = null;
 
-		const textures = new ObservableMap<string, TextureResource>();
+		const textures = new CompositeMap<string, TextureResource>();
 		textures.addEventListener("change", () => {
 
 			this.dispatchEvent({ type: "texturechange" });

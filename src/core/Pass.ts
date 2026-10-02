@@ -26,6 +26,8 @@ import { Output } from "./io/Output.js";
 import { RenderTargetResource } from "./io/RenderTargetResource.js";
 import { RenderOperation } from "./RenderOperation.js";
 import { RenderTask, RenderTaskEventMap } from "./RenderTask.js";
+import { CompositeMap } from "../utils/CompositeMap.js";
+import { TextureResource } from "./io/TextureResource.js";
 
 const v = /* @__PURE__ */ new Vector2();
 
@@ -193,7 +195,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this.resolution.addEventListener("change", () => this.updateOutputResourceResolution());
 
 		// Synchronize subpasses.
-		this.in.addEventListener("change", () => this.updateSubpassInput());
 		this.resolution.addEventListener("change", () => this.updateSubpassResolution());
 		this.viewport.addEventListener("change", () => this.updateSubpassViewport());
 		this.scissor.addEventListener("change", () => this.updateSubpassScissor());
@@ -552,6 +553,12 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		pass.timer = this.timer;
 		pass.renderer = this.renderer;
 
+		// Connect input resources; parent data overrides subpass data.
+		pass.in.shaderData.add(this.in.shaderData);
+		// Note: Connecting the entire live texture collection preserves resources owned by the subpass.
+		const textures = pass.in.textures as CompositeMap<string, TextureResource>;
+		textures.connect(this.in.textures);
+
 	}
 
 	/**
@@ -569,22 +576,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this.updateSubpassResolution();
 		this.updateSubpassViewport();
 		this.updateSubpassScissor();
-
-	}
-
-	/**
-	 * Updates the input resources of all subpasses.
-	 */
-
-	private updateSubpassInput(): void {
-
-		for(const pass of this.subpasses) {
-
-			pass.in.textures.clear();
-			pass.in.textures.setAll(...this.in.textures);
-			pass.in.shaderData.add(this.in.shaderData);
-
-		}
 
 	}
 
