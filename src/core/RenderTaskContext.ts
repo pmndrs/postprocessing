@@ -1,5 +1,5 @@
 import { Camera, Scene, WebGLRenderer } from "three";
-import { Resolution } from "../utils/Resolution.js";
+import { Resolution } from "./Resolution.js";
 import { InOut } from "./io/InOut.js";
 import { Input } from "./io/Input.js";
 import { Output } from "./io/Output.js";

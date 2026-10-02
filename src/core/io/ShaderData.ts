@@ -3,7 +3,7 @@ import { IUniform } from "three";
 /**
  * A collection of shader data.
  *
- * @category Utils
+ * @category IO
  */
 
 export interface ShaderData {

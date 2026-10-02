@@ -10,24 +10,24 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { RenderTargetDescriptorOptions } from "./io/RenderTargetDescriptor.js";
-import { GBufferSchema } from "../utils/gbuffer/GBufferSchema.js";
+import { CompositeMap } from "../utils/CompositeMap.js";
 import { IdManager } from "../utils/IdManager.js";
 import { ReadonlyTimer } from "../utils/ReadonlyTimer.js";
-import { Resolution } from "../utils/Resolution.js";
 import { SceneEvent, SceneEventTarget } from "../utils/SceneEventTarget.js";
-import { Scissor } from "../utils/Scissor.js";
-import { Viewport } from "../utils/Viewport.js";
 import { Disposable } from "./Disposable.js";
 import { FullscreenRenderOperation } from "./FullscreenRenderOperation.js";
+import { GBufferSchema } from "./io/gbuffer/GBufferSchema.js";
 import { InOut } from "./io/InOut.js";
 import { Input } from "./io/Input.js";
 import { Output } from "./io/Output.js";
+import { RenderTargetDescriptorOptions } from "./io/RenderTargetDescriptor.js";
 import { RenderTargetResource } from "./io/RenderTargetResource.js";
+import { TextureResource } from "./io/TextureResource.js";
 import { RenderOperation } from "./RenderOperation.js";
 import { RenderTask, RenderTaskEventMap } from "./RenderTask.js";
-import { CompositeMap } from "../utils/CompositeMap.js";
-import { TextureResource } from "./io/TextureResource.js";
+import { Resolution } from "./Resolution.js";
+import { Scissor } from "./Scissor.js";
+import { Viewport } from "./Viewport.js";
 
 const v = /* @__PURE__ */ new Vector2();
 

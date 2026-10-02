@@ -1,13 +1,13 @@
 import { EventDispatcher } from "three";
-import { BaseEventMap } from "../../core/BaseEventMap.js";
-import { GBuffer } from "../../enums/GBuffer.js";
-import { GData } from "../../enums/GData.js";
-import { ObservableMap } from "../ObservableMap.js";
+import { GBuffer } from "../../../enums/GBuffer.js";
+import { GData } from "../../../enums/GData.js";
+import { ObservableMap } from "../../../utils/ObservableMap.js";
+import { BaseEventMap } from "../../BaseEventMap.js";
 
 /**
  * A G-Buffer schema.
  *
- * @category Utils
+ * @category IO
  */
 
 export class GBufferSchema extends EventDispatcher<BaseEventMap> {

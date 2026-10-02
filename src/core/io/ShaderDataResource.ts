@@ -1,7 +1,7 @@
 import { IUniform } from "three";
 import { CompositeMap } from "../../utils/CompositeMap.js";
-import { ShaderData } from "../../utils/ShaderData.js";
 import { Resource } from "./Resource.js";
+import { ShaderData } from "./ShaderData.js";
 
 /**
  * A shader data resource.

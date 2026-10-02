@@ -1,10 +1,10 @@
 import { Camera, Scene, Timer, Vector2, Vector4, WebGLRenderer } from "three";
 import { ShaderChunkExtensions } from "../shader-chunks/ShaderChunkExtensions.js";
-import { GBufferSchema } from "../utils/gbuffer/GBufferSchema.js";
 import { fullscreenGeometry } from "../utils/objects/fullscreenGeometry.js";
 import { ReadonlyTimer } from "../utils/ReadonlyTimer.js";
 import { Disposable } from "./Disposable.js";
 import { FrameGraphCompiler } from "./FrameGraphCompiler.js";
+import { GBufferSchema } from "./io/gbuffer/GBufferSchema.js";
 import { Renderable } from "./Renderable.js";
 import { RenderTask } from "./RenderTask.js";
 import { Task } from "./Task.js";

@@ -9,7 +9,7 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { Precision } from "../../enums/Precision.js";
+import { Precision } from "../../../enums/Precision.js";
 
 /**
  * Maps texture data types to the GLSL precision modifiers.
@@ -70,7 +70,7 @@ function getOutputType(texture: Texture): TexelType {
  * @see https://github.com/mrdoob/three.js/pull/27808
  * @param renderTarget - A render target.
  * @return The output definitions.
- * @category Utils
+ * @category IO
  * @internal
  */
 

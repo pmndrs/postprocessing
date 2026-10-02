@@ -16,11 +16,11 @@ import {
 	WebGLRenderer
 } from "three";
 
-import { Disposable } from "../core/Disposable.js";
 import { BackgroundMaterial } from "../materials/BackgroundMaterial.js";
 import { SkyBoxMaterial } from "../materials/SkyBoxMaterial.js";
 import { ClearValues } from "./ClearValues.js";
-import { extractOutputDefinitions } from "./gbuffer/GBufferUtils.js";
+import { Disposable } from "./Disposable.js";
+import { extractOutputDefinitions } from "./io/gbuffer/GBufferUtils.js";
 
 const euler = /* @__PURE__ */ new Euler();
 const flipEnvMap = /* @__PURE__ */ new Matrix3(-1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
@@ -29,7 +29,7 @@ const matrix4 = /* @__PURE__ */ new Matrix4();
 /**
  * A background that supports normal textures and cube textures.
  *
- * @category Utils
+ * @category Core
  * @internal
  */
 

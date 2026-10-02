@@ -1,12 +1,12 @@
 import { BaseEvent, Event, EventDispatcher, IUniform, Texture } from "three";
 import { CompositeMap } from "../../utils/CompositeMap.js";
 import { isHighPrecision } from "../../utils/functions/texture.js";
-import { GBufferSchema } from "../../utils/gbuffer/GBufferSchema.js";
 import { MapExtensions } from "../../utils/MapExtensions.js";
 import { ObservableMap } from "../../utils/ObservableMap.js";
-import { ShaderData } from "../../utils/ShaderData.js";
 import { BaseEventMap } from "../BaseEventMap.js";
+import { GBufferSchema } from "./gbuffer/GBufferSchema.js";
 import type { Output } from "./Output.js";
+import { ShaderData } from "./ShaderData.js";
 import { ShaderDataResource } from "./ShaderDataResource.js";
 import { TextureResource } from "./TextureResource.js";
 

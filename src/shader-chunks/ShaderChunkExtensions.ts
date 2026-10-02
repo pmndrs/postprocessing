@@ -1,5 +1,5 @@
 import { ShaderChunk, ShaderLib } from "three";
-import { addGBufferDefaultOutput } from "../utils/gbuffer/GBufferUtils.js";
+import { addGBufferDefaultOutput } from "../core/io/gbuffer/GBufferUtils.js";
 
 // Shader chunks for postprocessing shaders.
 import cameraParsFragment from "./shaders/camera-pars.frag";
@@ -20,12 +20,12 @@ import unpremultiplyAlphaFragment from "./shaders/unpremultiply-alpha.frag";
 import worldUtilsParsFragment from "./shaders/world-utils-pars.frag";
 
 // G-Buffer shader chunks for built-in materials.
+import gbufferEmissionFragment from "./shaders/gbuffer-emission.frag";
+import gbufferMetalnessFragment from "./shaders/gbuffer-metalness.frag";
 import gbufferNormalFragment from "./shaders/gbuffer-normal.frag";
 import gbufferOcclusionFragment from "./shaders/gbuffer-occlusion.frag";
-import gbufferRoughnessFragment from "./shaders/gbuffer-roughness.frag";
 import gbufferRoughnessPhysicalFragment from "./shaders/gbuffer-roughness-physical.frag";
-import gbufferMetalnessFragment from "./shaders/gbuffer-metalness.frag";
-import gbufferEmissionFragment from "./shaders/gbuffer-emission.frag";
+import gbufferRoughnessFragment from "./shaders/gbuffer-roughness.frag";
 
 /**
  * A collection of custom shader chunks.

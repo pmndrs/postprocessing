@@ -1,13 +1,13 @@
 import { Object3D, Object3DEventMap } from "three";
-import { IdManager } from "./IdManager.js";
-import { SetExtensions } from "./SetExtensions.js";
+import { IdManager } from "../utils/IdManager.js";
+import { SetExtensions } from "../utils/SetExtensions.js";
 
 /**
  * An object selection.
  *
  * Object selections use render layers to facilitate quick and efficient visibility changes.
  *
- * @category Utils
+ * @category Core
  */
 
 export class Selection implements Set<Object3D>, SetExtensions<Object3D> {

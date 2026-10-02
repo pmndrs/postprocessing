@@ -3,7 +3,7 @@ import { GBuffer } from "../enums/GBuffer.js";
 /**
  * A collection of clear flags.
  *
- * @category Utils
+ * @category Core
  */
 
 export class ClearFlags {

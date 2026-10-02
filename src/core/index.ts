@@ -1,7 +1,10 @@
 export * from "./io/index.js";
 
+export * from "./Background.js";
 export * from "./BaseEventMap.js";
+export * from "./ClearFlags.js";
 export * from "./ClearOperation.js";
+export * from "./ClearValues.js";
 export * from "./Compilable.js";
 export * from "./Disposable.js";
 export * from "./FrameGraph.js";
@@ -13,5 +16,9 @@ export * from "./RenderOperation.js";
 export * from "./RenderTask.js";
 export * from "./RenderTaskContext.js";
 export * from "./Resizable.js";
+export * from "./Resolution.js";
+export * from "./Scissor.js";
 export * from "./Selective.js";
+export * from "./Selection.js";
 export * from "./Task.js";
+export * from "./Viewport.js";

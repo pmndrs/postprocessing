@@ -1,15 +1,15 @@
 import { SRGBColorSpace } from "three";
+import { GBufferSchema } from "../core/io/gbuffer/GBufferSchema.js";
 import { Effect } from "../effects/Effect.js";
 import { EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
 import { EffectMaterial } from "../materials/EffectMaterial.js";
 import { EffectPassContext } from "./EffectPassContext.js";
 import { EffectShaderData } from "./EffectShaderData.js";
-import { GBufferSchema } from "./gbuffer/GBufferSchema.js";
 
 /**
  * An effect material cache that creates, updates and caches effect shader combinations.
  *
- * @category Utils
+ * @category Passes
  * @internal
  */
 

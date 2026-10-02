@@ -1,12 +1,12 @@
 import { EventDispatcher, Vector2, Vector2Like } from "three";
-import { BaseEventMap } from "../core/BaseEventMap.js";
+import { BaseEventMap } from "./BaseEventMap.js";
 
 const AUTO_SIZE = -1;
 
 /**
  * A resolution.
  *
- * @category Utils
+ * @category Core
  */
 
 export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2Like {

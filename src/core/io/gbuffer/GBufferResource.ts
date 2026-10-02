@@ -14,10 +14,10 @@ import {
 	UnsignedInt248Type
 } from "three";
 
-import { GBuffer } from "../../enums/GBuffer.js";
-import { MSAASamples } from "../../enums/MSAASamples.js";
-import { RenderTargetResource } from "./RenderTargetResource.js";
-import { isHighPrecision } from "../../utils/index.js";
+import { GBuffer } from "../../../enums/GBuffer.js";
+import { MSAASamples } from "../../../enums/MSAASamples.js";
+import { isHighPrecision } from "../../../utils/functions/texture.js";
+import { RenderTargetResource } from "../RenderTargetResource.js";
 
 /**
  * GBufferResource constructor options.

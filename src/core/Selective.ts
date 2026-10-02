@@ -1,4 +1,4 @@
-import { Selection } from "../utils/Selection.js";
+import { Selection } from "./Selection.js";
 
 /**
  * Describes objects that can operate on a selection of objects.

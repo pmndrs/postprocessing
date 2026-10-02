@@ -3,7 +3,7 @@ import { Input } from "../core/io/Input.js";
 /**
  * An {@link EffectPass} context.
  *
- * @category Utils
+ * @category Passes
  * @internal
  */
 

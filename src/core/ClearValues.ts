@@ -1,12 +1,12 @@
 import { Color, EventDispatcher } from "three";
-import { BaseEventMap } from "../core/BaseEventMap.js";
 import { GBuffer } from "../enums/GBuffer.js";
-import { ObservableMap } from "./ObservableMap.js";
+import { ObservableMap } from "../utils/ObservableMap.js";
+import { BaseEventMap } from "./BaseEventMap.js";
 
 /**
  * A collection of clear values.
  *
- * @category Utils
+ * @category Core
  */
 
 export class ClearValues extends EventDispatcher<BaseEventMap> {

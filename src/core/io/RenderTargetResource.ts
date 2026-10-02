@@ -1,6 +1,6 @@
 import { WebGLRenderTarget } from "three";
-import { Resolution } from "../../utils/Resolution.js";
 import { Disposable } from "../Disposable.js";
+import { Resolution } from "../Resolution.js";
 import type { Output } from "./Output.js";
 import { RenderTargetDescriptor, RenderTargetDescriptorOptions } from "./RenderTargetDescriptor.js";
 import { Resource } from "./Resource.js";

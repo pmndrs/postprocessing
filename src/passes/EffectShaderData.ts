@@ -1,13 +1,13 @@
 import { ColorSpace, IUniform, LinearSRGBColorSpace, NoColorSpace, SRGBColorSpace } from "three";
+import { ShaderData } from "../core/io/ShaderData.js";
+import { GBufferSchema } from "../core/io/gbuffer/GBufferSchema.js";
 import { Effect } from "../effects/Effect.js";
 import { BlendMode } from "../effects/blending/BlendMode.js";
 import { EffectShaderSection, EffectShaderSection as Section } from "../enums/EffectShaderSection.js";
 import { GData } from "../enums/GData.js";
-import { ShaderData } from "../utils/ShaderData.js";
+import { isConvolutionPass } from "../utils/functions/pass.js";
+import { topologicalSort } from "../utils/functions/sorting.js";
 import { prefixSubstrings } from "../utils/functions/string.js";
-import { isConvolutionPass } from "./functions/pass.js";
-import { topologicalSort } from "./functions/sorting.js";
-import { GBufferSchema } from "./gbuffer/GBufferSchema.js";
 
 const functionRegExp = /\w+\s+(\w+)\([\w\s,]*\)\s*{/g;
 const structRegExp = /struct\s+(\w*)/g;
@@ -16,7 +16,7 @@ const defineRegExp = /^\s*#define\s+(\w*)/gm;
 /**
  * A collection of shader data.
  *
- * @category Utils
+ * @category Passes
  * @internal
  */
 

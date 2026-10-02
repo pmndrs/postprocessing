@@ -1,7 +1,7 @@
 import { Color, Scene, WebGLRenderer, WebGLRenderTarget } from "three";
-import { Background } from "../utils/Background.js";
-import { ClearFlags } from "../utils/ClearFlags.js";
-import { ClearValues } from "../utils/ClearValues.js";
+import { Background } from "./Background.js";
+import { ClearFlags } from "./ClearFlags.js";
+import { ClearValues } from "./ClearValues.js";
 import { RenderOperation } from "./RenderOperation.js";
 import { RenderTaskContext } from "./RenderTaskContext.js";
 

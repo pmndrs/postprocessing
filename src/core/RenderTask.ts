@@ -1,15 +1,15 @@
 import { BaseEvent, Camera, EventDispatcher, Scene } from "three";
-import { GBufferSchema } from "../utils/gbuffer/GBufferSchema.js";
 import { ReadonlyTimer } from "../utils/ReadonlyTimer.js";
-import { Scissor } from "../utils/Scissor.js";
-import { Viewport } from "../utils/Viewport.js";
 import { BaseEventMap } from "./BaseEventMap.js";
 import { Compilable } from "./Compilable.js";
 import { Disposable } from "./Disposable.js";
 import { Identifiable } from "./Identifiable.js";
+import { GBufferSchema } from "./io/gbuffer/GBufferSchema.js";
 import { Renderable } from "./Renderable.js";
 import { RenderTaskContext } from "./RenderTaskContext.js";
+import { Scissor } from "./Scissor.js";
 import { Task } from "./Task.js";
+import { Viewport } from "./Viewport.js";
 
 /**
  * RenderTask events.

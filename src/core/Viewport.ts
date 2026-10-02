@@ -4,7 +4,7 @@ import { Resolution } from "./Resolution.js";
 /**
  * A viewport.
  *
- * @category Utils
+ * @category Core
  */
 
 export class Viewport extends Resolution implements Vector4Like {
