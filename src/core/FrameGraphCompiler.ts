@@ -215,6 +215,12 @@ export class FrameGraphCompiler implements Disposable {
 
 				this.validateTask(task);
 
+				for(const subtask of task.subtasks) {
+
+					this.validateTask(subtask);
+
+				}
+
 			}
 
 		}
