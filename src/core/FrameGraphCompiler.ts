@@ -3,8 +3,56 @@ import { Disposable } from "./Disposable.js";
 import { FrameGraph } from "./FrameGraph.js";
 import { Output } from "./io/Output.js";
 import { ResourceManager } from "./io/ResourceManager.js";
+import { TextureResource } from "./io/TextureResource.js";
 import { RenderTask } from "./RenderTask.js";
 import { Task } from "./Task.js";
+
+/**
+ * Recursively collects the input textures of a given task and its subtasks.
+ *
+ * @param task - The task to collect textures from.
+ * @param textures - A collection to store the textures in.
+ */
+
+function collectInputTextures(task: RenderTask, textures: Set<TextureResource>): void {
+
+	for(const texture of task.in.textures.values()) {
+
+		textures.add(texture);
+
+	}
+
+	for(const subtask of task.subtasks) {
+
+		collectInputTextures(subtask, textures);
+
+	}
+
+}
+
+/**
+ * Retrieves all textures used by the given task and its subtasks.
+ *
+ * @param texturesByTask - Texture collections organized by tasks.
+ * @param task - A task.
+ * @return The textures.
+ */
+
+function texturesOf(texturesByTask: Map<RenderTask, Set<TextureResource>>, task: RenderTask): Set<TextureResource> {
+
+	let textures = texturesByTask.get(task);
+
+	if(textures === undefined) {
+
+		textures = new Set<TextureResource>();
+		collectInputTextures(task, textures);
+		texturesByTask.set(task, textures);
+
+	}
+
+	return textures;
+
+}
 
 /**
  * Retrieves the dependencies of a given task.
@@ -30,16 +78,18 @@ function dependenciesOf(graph: Map<RenderTask, Set<RenderTask>>, task: RenderTas
 }
 
 /**
- * Recursively builds a dependency graph.
+ * Recursively builds a dependency graph based on task input resources.
  *
  * @param task - The current task node.
- * @param outputToTask - A collection that maps Output instances to active tasks.
+ * @param producers - A collection that maps Output instances to active tasks.
+ * @param texturesByTask - A collection to store the input textures of visited tasks in.
  * @param visiting - Keeps track of tasks that are currently being visited to detect cycles.
  * @param graph - The resulting graph.
  */
 
-function buildDependencyGraph(task: RenderTask, outputToTask: Map<Output, RenderTask>,
-	visiting: Set<RenderTask>, graph: Map<RenderTask, Set<RenderTask>>): void {
+function buildDependencyGraph(task: RenderTask, producers: Map<Output, RenderTask>,
+	texturesByTask: Map<RenderTask, Set<TextureResource>>, visiting: Set<RenderTask>,
+	graph: Map<RenderTask, Set<RenderTask>>): void {
 
 	if(visiting.has(task)) {
 
@@ -50,10 +100,11 @@ function buildDependencyGraph(task: RenderTask, outputToTask: Map<Output, Render
 
 	visiting.add(task);
 
+	const textures = texturesOf(texturesByTask, task);
 	const dependencies = dependenciesOf(graph, task);
 
 	// Reads: resource → owner → producer.
-	for(const texture of task.in.textures.values()) {
+	for(const texture of textures) {
 
 		if(texture.owner === null) {
 
@@ -62,7 +113,7 @@ function buildDependencyGraph(task: RenderTask, outputToTask: Map<Output, Render
 
 		}
 
-		const producer = outputToTask.get(texture.owner);
+		const producer = producers.get(texture.owner);
 
 		if(producer !== undefined) {
 
@@ -82,7 +133,7 @@ function buildDependencyGraph(task: RenderTask, outputToTask: Map<Output, Render
 
 		}
 
-		const producer = outputToTask.get(connection.resource.owner);
+		const producer = producers.get(connection.resource.owner);
 
 		if(producer === undefined || producer === task) {
 
@@ -107,7 +158,7 @@ function buildDependencyGraph(task: RenderTask, outputToTask: Map<Output, Render
 				// This task initiates the render target contents, so the producer is the dependent.
 				dependenciesOf(graph, producer).add(task);
 				// Ensure the producer's own dependencies are resolved.
-				buildDependencyGraph(producer, outputToTask, visiting, graph);
+				buildDependencyGraph(producer, producers, texturesByTask, visiting, graph);
 				break;
 
 			}
@@ -118,7 +169,7 @@ function buildDependencyGraph(task: RenderTask, outputToTask: Map<Output, Render
 
 	for(const dependency of dependencies) {
 
-		buildDependencyGraph(dependency, outputToTask, visiting, graph);
+		buildDependencyGraph(dependency, producers, texturesByTask, visiting, graph);
 
 	}
 
@@ -158,7 +209,15 @@ export class FrameGraphCompiler implements Disposable {
 	 * @remarks All tasks in this collection are enabled.
 	 */
 
-	private readonly outputToTask: Map<Output, RenderTask>;
+	private readonly tasksByOutput: Map<Output, RenderTask>;
+
+	/**
+	 * A collection of input textures per task.
+	 *
+	 * @remarks The collection also contains the textures of all subtasks.
+	 */
+
+	private readonly texturesByTask: Map<RenderTask, Set<TextureResource>>;
 
 	/**
 	 * Constructs a new frame graph compiler.
@@ -171,7 +230,8 @@ export class FrameGraphCompiler implements Disposable {
 		this.frameGraph = frameGraph;
 		this.resourceManager = new ResourceManager(frameGraph);
 		this.dependencyGraph = new Map();
-		this.outputToTask = new Map();
+		this.tasksByOutput = new Map();
+		this.texturesByTask = new Map();
 
 	}
 
@@ -237,20 +297,22 @@ export class FrameGraphCompiler implements Disposable {
 
 		const stack = new Set<RenderTask>();
 		const dependencyGraph = this.dependencyGraph;
-		const outputToTask = this.outputToTask;
+		const texturesByTask = this.texturesByTask;
+		const tasksByOutput = this.tasksByOutput;
 
 		dependencyGraph.clear();
-		outputToTask.clear();
+		texturesByTask.clear();
+		tasksByOutput.clear();
 
 		for(const task of Array.from(this.frameGraph.tasks).filter(x => x.enabled)) {
 
-			outputToTask.set(task.out, task);
+			tasksByOutput.set(task.out, task);
 
 		}
 
 		for(const root of Array.from(this.frameGraph.roots).filter(x => x.enabled)) {
 
-			buildDependencyGraph(root, outputToTask, stack, dependencyGraph);
+			buildDependencyGraph(root, tasksByOutput, texturesByTask, stack, dependencyGraph);
 
 		}
 
