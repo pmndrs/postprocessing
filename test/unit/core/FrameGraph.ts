@@ -345,4 +345,48 @@ describe("FrameGraph", () => {
 
 	});
 
+	it("orders a producer before a consumer whose subtask reads from it", () => {
+
+		const execution: string[] = [];
+		const producer = new TestPass({ name: "Producer", execution });
+		const subtask = new TestPass({ name: "Sub", execution });
+		const consumer = new TestPass({
+			name: "Consumer",
+			execution,
+			subtasks: [subtask],
+			renderSubtasks: true
+		});
+
+		subtask.read(producer);
+
+		const graph = new FrameGraph({ renderer });
+		graph.add(consumer, producer);
+		graph.output(consumer);
+		graph.render();
+
+		assert.deepEqual(execution, ["Producer", "Consumer", "Sub"]);
+
+	});
+
+	it("rejects same-pass read/write feedback through a subtask", () => {
+
+		const subtask = new TestPass({ name: "Sub" });
+		const pass = new TestPass({ name: "Feedback", subtasks: [subtask] });
+
+		subtask.read(pass);
+
+		const graph = new FrameGraph({ renderer });
+
+		assert.throws(
+			() => {
+
+				graph.add(pass);
+				graph.output(pass);
+
+			},
+			{ name: "Error", message: /cyclic dependency/i }
+		);
+
+	});
+
 });
