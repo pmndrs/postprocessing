@@ -86,6 +86,8 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 
 		});
 
+		this.updateTextureResources();
+
 	}
 
 	// #region Accessors
