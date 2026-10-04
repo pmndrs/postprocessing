@@ -405,9 +405,10 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	protected set subpasses(value: Pass<Material | null>[]) {
 
+		this.unregisterSubpasses();
 		this._subtasks = value;
 		Object.freeze(this._subtasks);
-		this.initializeSubpasses();
+		this.registerSubpasses();
 
 	}
 
@@ -548,13 +549,20 @@ export abstract class Pass<TMaterial extends Material | null = null>
 
 	// #region Subpasses
 
-	private initializeSubpass(pass: Pass<Material | null>): void {
+	/**
+	 * Registers the given subpass.
+	 *
+	 * @param pass - The subpass.
+	 */
+
+	private registerSubpass(pass: Pass<Material | null>): void {
 
 		pass.timer = this.timer;
 		pass.renderer = this.renderer;
 
 		// Connect input resources; parent data overrides subpass data.
 		pass.in.shaderData.add(this.in.shaderData);
+
 		// Note: Connecting the entire live texture collection preserves resources owned by the subpass.
 		const textures = pass.in.textures as CompositeMap<string, TextureResource>;
 		textures.connect(this.in.textures);
@@ -562,20 +570,51 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	}
 
 	/**
-	 * Sets the base settings of all subpasses.
+	 * Unregisters the given subpass.
+	 *
+	 * @param pass - The subpass.
 	 */
 
-	private initializeSubpasses(): void {
+	private unregisterSubpass(pass: Pass<Material | null>): void {
+
+		pass.timer = null;
+		pass.renderer = null;
+
+		pass.in.shaderData.remove(this.in.shaderData);
+		const textures = pass.in.textures as CompositeMap<string, TextureResource>;
+		textures.disconnect(this.in.textures);
+
+	}
+
+	/**
+	 * Sets the core settings of the current subpasses.
+	 */
+
+	private registerSubpasses(): void {
 
 		for(const pass of this.subpasses) {
 
-			this.initializeSubpass(pass);
+			this.registerSubpass(pass);
 
 		}
 
 		this.updateSubpassResolution();
 		this.updateSubpassViewport();
 		this.updateSubpassScissor();
+
+	}
+
+	/**
+	 * Unsets the core settings of the current subpasses.
+	 */
+
+	private unregisterSubpasses(): void {
+
+		for(const pass of this.subpasses) {
+
+			this.unregisterSubpass(pass);
+
+		}
 
 	}
 
