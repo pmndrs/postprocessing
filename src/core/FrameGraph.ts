@@ -545,6 +545,7 @@ export class FrameGraph implements FrameGraphOptions, Disposable, Renderable {
 
 		}
 
+		// Skip rebuilding the graph and update render targets based on size changes only.
 		this.compiler.updateResolution();
 
 	}
