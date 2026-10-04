@@ -212,7 +212,7 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 
 	private updateTextureResourceValues(): void {
 
-		this.texture.value = this.value?.texture ?? null;
+		this.texture.value = null;
 
 		for(const textureResource of this.textures.values()) {
 
@@ -220,19 +220,33 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 
 		}
 
-		if(this.value === null) {
+		if(this.renderTarget === null) {
 
 			return;
 
 		}
 
-		for(const texture of this.value.textures) {
+		this.texture.value = this.renderTarget.texture;
+
+		for(const texture of this.renderTarget.textures) {
 
 			const textureResource = this.textures.get(texture.name);
 
 			if(textureResource !== undefined) {
 
 				textureResource.value = texture;
+
+			}
+
+		}
+
+		if(this.renderTarget.depthTexture !== null) {
+
+			const textureResource = this.textures.get(this.renderTarget.depthTexture.name);
+
+			if(textureResource !== undefined) {
+
+				textureResource.value = this.renderTarget.depthTexture;
 
 			}
 
