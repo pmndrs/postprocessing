@@ -305,8 +305,12 @@ describe("FrameGraph", () => {
 		graph.add(producer, consumer);
 		graph.output(consumer);
 
-		assert.notEqual(gBuffer.textures.get(GBuffer.COLOR)?.value, null);
-		assert.notEqual(gBuffer.textures.get(GBuffer.NORMAL)?.value, null);
+		assert.notEqual(gBuffer.textures.get(GBuffer.COLOR)!.value, null);
+		assert.notEqual(gBuffer.textures.get(GBuffer.NORMAL)!.value, null);
+
+		assert.equal(gBuffer.textures.get(GBuffer.ORM)!.value, null);
+		assert.equal(gBuffer.textures.get(GBuffer.EMISSION)!.value, null);
+		assert.equal(gBuffer.textures.get(GBuffer.DEPTH)!.value, null);
 
 	});
 
