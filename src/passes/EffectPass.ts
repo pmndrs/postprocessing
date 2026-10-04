@@ -60,6 +60,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 	private override set subpasses(value: Pass<Material | null>[]) {
 
+		// First remove all listeners from the current subpasses.
 		for(const effect of super.subpasses) {
 
 			effect.removeEventListener("change", this.effectListener);
@@ -67,9 +68,10 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		}
 
+		// Register the new subpasses.
 		super.subpasses = value;
-		this.updateRequiredTextures();
 
+		// Attach listeners to the new subpasses.
 		for(const effect of super.subpasses) {
 
 			effect.addEventListener("change", this.effectListener);
@@ -77,6 +79,7 @@ export class EffectPass extends Pass<EffectMaterial> {
 
 		}
 
+		this.updateRequiredTextures();
 		this.updateMaterial(true);
 
 	}
