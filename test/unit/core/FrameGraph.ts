@@ -357,8 +357,7 @@ describe("FrameGraph", () => {
 		const consumer = new TestPass({
 			name: "Consumer",
 			execution,
-			subtasks: [subtask],
-			renderSubtasks: true
+			subpasses: [subtask]
 		});
 
 		subtask.read(producer);

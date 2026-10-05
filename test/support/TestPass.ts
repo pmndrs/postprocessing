@@ -40,13 +40,7 @@ export interface TestPassOptions {
 	 * Subtasks that are executed inline by this task.
 	 */
 
-	subtasks?: TestPass[];
-
-	/**
-	 * Whether the task should execute its subtasks after recording itself.
-	 */
-
-	renderSubtasks?: boolean;
+	subpasses?: TestPass[];
 
 }
 
@@ -58,9 +52,17 @@ export interface TestPassOptions {
 
 export class TestPass extends Pass {
 
+	/**
+	 * An execution seqeuence.
+	 */
+
 	readonly execution: string[];
 
-	private readonly renderChildren: boolean;
+	/**
+	 * Constructs a new dummy pass for unit tests.
+	 *
+	 * @param options - The options.
+	 */
 
 	constructor({
 		name = "unknown",
@@ -68,14 +70,12 @@ export class TestPass extends Pass {
 		target = new RenderTargetResource(),
 		bufferKey,
 		requiredTextures = [],
-		subtasks,
-		renderSubtasks
+		subpasses: subtasks
 	}: TestPassOptions = {}) {
 
 		super(name);
 
 		this.execution = execution;
-		this.renderChildren = renderSubtasks ?? false;
 		this.requireTextures(...requiredTextures);
 		this.setBuffer(bufferKey ?? Input.BUFFER_DEFAULT, target);
 
@@ -107,15 +107,20 @@ export class TestPass extends Pass {
 
 	}
 
+	/**
+	 * Sets the subpasses.
+	 */
+
+	setSubpasses(...value: Pass[]) {
+
+		this.subpasses = value;
+
+	}
+
 	override render(): void {
 
 		this.execution.push(this.name);
-
-		if(this.renderChildren) {
-
-			this.renderSubpasses();
-
-		}
+		this.renderSubpasses();
 
 	}
 
