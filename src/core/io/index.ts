@@ -8,7 +8,6 @@ export * from "./Output.js";
 export * from "./RenderTargetDescriptor.js";
 export * from "./RenderTargetResource.js";
 export * from "./Resource.js";
-export * from "./ResourceManager.js";
 export * from "./ShaderData.js";
 export * from "./ShaderDataResource.js";
 export * from "./TextureResource.js";

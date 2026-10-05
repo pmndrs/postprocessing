@@ -2,23 +2,30 @@ import { topologicalSortGrouped } from "../utils/functions/sorting.js";
 import { Disposable } from "./Disposable.js";
 import { FrameGraph } from "./FrameGraph.js";
 import { Output } from "./io/Output.js";
-import { ResourceManager } from "./io/ResourceManager.js";
+import { RenderTargetResource } from "./io/RenderTargetResource.js";
 import { TextureResource } from "./io/TextureResource.js";
 import { RenderTask } from "./RenderTask.js";
 import { Task } from "./Task.js";
 
 /**
- * Recursively collects the input textures of a given task and its subtasks.
+ * Recursively collects active input textures from a given task and its subtasks.
  *
+ * @remarks Textures are considered active when they are connected __and__ required.
  * @param task - The task to collect textures from.
  * @param textures - A collection to store the textures in.
  */
 
 function collectInputTextures(task: RenderTask, textures: Set<TextureResource>): void {
 
-	for(const texture of task.in.textures.values()) {
+	for(const requiredTexture of task.requiredTextures) {
 
-		textures.add(texture);
+		const texture = task.in.textures.get(requiredTexture);
+
+		if(texture !== undefined) {
+
+			textures.add(texture);
+
+		}
 
 	}
 
@@ -192,32 +199,38 @@ export class FrameGraphCompiler implements Disposable {
 	private readonly frameGraph: FrameGraph;
 
 	/**
-	 * A resource manager.
-	 */
-
-	private readonly resourceManager: ResourceManager;
-
-	/**
 	 * A collection of active render tasks and their dependencies.
 	 */
 
 	private readonly dependencyGraph: Map<RenderTask, Set<RenderTask>>;
 
 	/**
-	 * A collection that maps Output instances to tasks.
+	 * A collection of outputs and their associated tasks.
 	 *
-	 * @remarks All tasks in this collection are enabled.
+	 * @remarks This collection only includes enabled tasks.
 	 */
 
 	private readonly tasksByOutput: Map<Output, RenderTask>;
 
 	/**
-	 * A collection of input textures per task.
+	 * A collection of tasks and their active input textures.
 	 *
-	 * @remarks The collection also contains the textures of all subtasks.
+	 * @remarks The texture sets include the textures of each respective task's subtasks.
 	 */
 
 	private readonly texturesByTask: Map<RenderTask, Set<TextureResource>>;
+
+	/**
+	 * A set of render target resources that are currently being used by the frame graph.
+	 */
+
+	private activeRenderTargetResources: Set<RenderTargetResource>;
+
+	/**
+	 * The current render pipeline.
+	 */
+
+	private renderPipeline: RenderTask[][];
 
 	/**
 	 * Constructs a new frame graph compiler.
@@ -228,10 +241,11 @@ export class FrameGraphCompiler implements Disposable {
 	constructor(frameGraph: FrameGraph) {
 
 		this.frameGraph = frameGraph;
-		this.resourceManager = new ResourceManager(frameGraph);
 		this.dependencyGraph = new Map();
 		this.tasksByOutput = new Map();
 		this.texturesByTask = new Map();
+		this.activeRenderTargetResources = new Set();
+		this.renderPipeline = [];
 
 	}
 
@@ -257,19 +271,18 @@ export class FrameGraphCompiler implements Disposable {
 	}
 
 	/**
-	 * Validates the given frame graph tasks.
+	 * Validates the given render pipeline.
 	 *
 	 * - Verifies all required resource inputs are connected.
 	 * - Verifies all consumed resources have producers.
 	 * - Detects missing resources, invalid dependency chains and cycles.
 	 *
-	 * @param tasks - The tasks to validate.
 	 * @throws If the validation fails.
 	 */
 
-	private validate(tasks: RenderTask[][]): void {
+	private validate(): void {
 
-		for(const executionLevel of tasks) {
+		for(const executionLevel of this.renderPipeline) {
 
 			for(const task of executionLevel) {
 
@@ -290,7 +303,7 @@ export class FrameGraphCompiler implements Disposable {
 	/**
 	 * Builds an executable dependency graph based on the current {@link frameGraph}.
 	 *
-	 * @return The dependency graph.
+	 * @return The dependency graph, grouped and sorted by execution order, ASC.
 	 */
 
 	private buildDependencyGraph(): RenderTask[][] {
@@ -329,38 +342,73 @@ export class FrameGraphCompiler implements Disposable {
 
 	update(): Task[][] {
 
-		const result = this.buildDependencyGraph();
-		this.validate(result);
-		this.resourceManager.update(result);
+		this.renderPipeline = this.buildDependencyGraph();
+		this.validate();
 
-		return result;
+		// TODO
+		// analyze lifetimes
+		// assign physical targets
+
+		this.updateResolution();
+		this.disposeOrphanedRenderTargetResources();
+
+		return this.renderPipeline;
 
 	}
 
 	/**
-	 *
+	 * Updates the resolution of the active RenderTargetResources.
 	 */
 
 	updateResolution() {
 
-		// TODO skip rebuilding the graph and only update render targets.
-		this.resourceManager.updateResolution();
-
 	}
 
 	/**
-	 *
+	 * Disposes orphaned resources.
 	 */
 
-	private getActiveTextures() {
+	disposeOrphanedRenderTargetResources(): void {
 
-		// TODO per task: find textures that have active consumers and use that to create render targets
+		const activeRenderTargetResources = new Set<RenderTargetResource>();
+
+		// Flatten active render target resources into one set.
+		for(const executionLevel of this.renderPipeline) {
+
+			for(const task of executionLevel) {
+
+				for(const resource of task.out.buffers.values()) {
+
+					activeRenderTargetResources.add(resource);
+
+				}
+
+			}
+
+		}
+
+		// Identify render targets that are no longer active and dispose them.
+		for(const resource of this.activeRenderTargetResources) {
+
+			if(!activeRenderTargetResources.has(resource)) {
+
+				resource.dispose();
+
+			}
+
+		}
+
+		this.activeRenderTargetResources = activeRenderTargetResources;
 
 	}
 
 	dispose(): void {
 
-		this.resourceManager.dispose();
+		for(const resource of this.activeRenderTargetResources) {
+
+			resource.dispose();
+
+		}
 
 	}
 
