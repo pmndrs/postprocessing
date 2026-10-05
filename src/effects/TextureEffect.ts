@@ -77,6 +77,7 @@ export class TextureEffect extends Effect implements TextureEffectOptions {
 
 		super("TextureEffect");
 
+		this.requireTextures(TextureEffect.BUFFER_TEXTURE);
 		this.fragmentShader = fragmentShader;
 
 		const defines = this.in.defines;
