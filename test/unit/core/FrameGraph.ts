@@ -219,12 +219,12 @@ describe("FrameGraph", () => {
 		graph.add(first, second, consumer);
 		graph.output(consumer);
 
-		assert.notEqual(first.out.defaultBuffer?.renderTarget, null);
-		assert.notEqual(second.out.defaultBuffer?.renderTarget, null);
+		assert.notEqual(first.out.defaultBuffer!.renderTarget, null);
+		assert.notEqual(second.out.defaultBuffer!.renderTarget, null);
 
 		assert.equal(
-			first.out.defaultBuffer?.renderTarget,
-			second.out.defaultBuffer?.renderTarget
+			first.out.defaultBuffer!.renderTarget,
+			second.out.defaultBuffer!.renderTarget
 		);
 
 	});
@@ -287,33 +287,6 @@ describe("FrameGraph", () => {
 
 	});
 
-	it("retains active textures", () => {
-
-		const gBuffer = new GBufferResource();
-		const producer = new TestPass({ name: "GBufferWriter", target: gBuffer });
-
-		const consumer = new TestPass({
-			name: "NormalReader",
-			target: new RenderTargetResource(),
-			requiredTextures: [GBuffer.NORMAL]
-		});
-
-		const graph = new FrameGraph({ renderer });
-
-		consumer.read(producer);
-
-		graph.add(producer, consumer);
-		graph.output(consumer);
-
-		assert.notEqual(gBuffer.textures.get(GBuffer.COLOR)!.value, null);
-		assert.notEqual(gBuffer.textures.get(GBuffer.NORMAL)!.value, null);
-
-		assert.equal(gBuffer.textures.get(GBuffer.ORM)!.value, null);
-		assert.equal(gBuffer.textures.get(GBuffer.EMISSION)!.value, null);
-		assert.equal(gBuffer.textures.get(GBuffer.DEPTH)!.value, null);
-
-	});
-
 	it("allocates target dimensions from the resource resolution", () => {
 
 		const target = new RenderTargetResource();
@@ -373,10 +346,10 @@ describe("FrameGraph", () => {
 
 	it("rejects same-pass read/write feedback through a subtask", () => {
 
-		const subtask = new TestPass({ name: "Sub" });
-		const pass = new TestPass({ name: "Feedback", subtasks: [subtask] });
+		const subpass = new TestPass({ name: "Sub" });
+		const pass = new TestPass({ name: "Feedback", subpasses: [subpass] });
 
-		subtask.read(pass);
+		subpass.read(pass);
 
 		const graph = new FrameGraph({ renderer });
 
@@ -389,6 +362,44 @@ describe("FrameGraph", () => {
 			},
 			{ name: "Error", message: /cyclic dependency/i }
 		);
+
+	});
+
+	it("retains active textures", () => {
+
+		const gBuffer = new GBufferResource();
+		const producer = new TestPass({ name: "GBufferWriter", target: gBuffer });
+
+		const consumer = new TestPass({
+			name: "NormalReader",
+			target: new RenderTargetResource(),
+			requiredTextures: [GBuffer.NORMAL]
+		});
+
+		const graph = new FrameGraph({ renderer });
+
+		consumer.read(producer);
+
+		graph.add(producer, consumer);
+		graph.output(consumer);
+
+		const nonNullAttachments = [
+			GBuffer.COLOR, // Always included.
+			GBuffer.NORMAL // Explicitly required.
+		] as string[];
+
+		for(const [name, texture] of gBuffer.textures) {
+
+			if(nonNullAttachments.includes(name)) {
+
+				assert.notEqual(texture.value, null);
+				continue;
+
+			}
+
+			assert.equal(texture.value, null);
+
+		}
 
 	});
 
