@@ -403,4 +403,51 @@ describe("FrameGraph", () => {
 
 	});
 
+	it("picks up connected textures after subpasses have changed", () => {
+
+		const gBuffer = new GBufferResource();
+		const producer = new TestPass({ name: "Producer", target: gBuffer });
+		const consumer = new TestPass({ name: "Consumer" });
+
+		consumer.read(producer);
+
+		const graph = new FrameGraph({ renderer });
+		graph.add(consumer, producer);
+		graph.output(consumer);
+
+		const nonNullAttachments = [GBuffer.COLOR] as string[];
+
+		for(const [name, texture] of gBuffer.textures) {
+
+			if(nonNullAttachments.includes(name)) {
+
+				assert.notEqual(texture.value, null);
+				continue;
+
+			}
+
+			assert.equal(texture.value, null);
+
+		}
+
+		const subpass = new TestPass({ name: "Sub", requiredTextures: [GBuffer.NORMAL] });
+		consumer.setSubpasses(subpass);
+
+		nonNullAttachments.push(GBuffer.NORMAL);
+
+		for(const [name, texture] of gBuffer.textures) {
+
+			if(nonNullAttachments.includes(name)) {
+
+				assert.notEqual(texture.value, null);
+				continue;
+
+			}
+
+			assert.equal(texture.value, null);
+
+		}
+
+	});
+
 });
