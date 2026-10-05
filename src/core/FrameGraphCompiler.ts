@@ -10,12 +10,18 @@ import { Task } from "./Task.js";
 /**
  * Recursively collects active input textures from a given task and its subtasks.
  *
- * @remarks Textures are considered active when they are connected __and__ required.
+ * @remarks Textures are considered active when they are declared as required. The default buffer is always active.
  * @param task - The task to collect textures from.
  * @param textures - A collection to store the textures in.
  */
 
 function collectInputTextures(task: RenderTask, textures: Set<TextureResource>): void {
+
+	if(task.in.defaultBuffer !== undefined) {
+
+		textures.add(task.in.defaultBuffer);
+
+	}
 
 	for(const requiredTexture of task.requiredTextures) {
 
