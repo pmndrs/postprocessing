@@ -408,13 +408,16 @@ describe("FrameGraph", () => {
 		const gBuffer = new GBufferResource();
 		const producer = new TestPass({ name: "Producer", target: gBuffer });
 		const consumer = new TestPass({ name: "Consumer" });
+		const subpass = new TestPass({ name: "Sub", requiredTextures: [GBuffer.NORMAL] });
 
 		consumer.read(producer);
+		subpass.read(producer);
 
 		const graph = new FrameGraph({ renderer });
 		graph.add(consumer, producer);
 		graph.output(consumer);
 
+		// Subpass not yet hooked up.
 		const nonNullAttachments = [GBuffer.COLOR] as string[];
 
 		for(const [name, texture] of gBuffer.textures) {
@@ -430,9 +433,8 @@ describe("FrameGraph", () => {
 
 		}
 
-		const subpass = new TestPass({ name: "Sub", requiredTextures: [GBuffer.NORMAL] });
+		// Introduce the subpass now.
 		consumer.setSubpasses(subpass);
-
 		nonNullAttachments.push(GBuffer.NORMAL);
 
 		for(const [name, texture] of gBuffer.textures) {
