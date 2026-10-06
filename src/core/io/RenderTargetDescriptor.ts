@@ -140,6 +140,7 @@ export class RenderTargetDescriptor extends EventDispatcher<BaseEventMap> {
 
 		});
 
+		this._options.count = this._textures.length;
 		this.setChanged();
 
 	}
