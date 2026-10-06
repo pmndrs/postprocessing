@@ -8,13 +8,14 @@ import { isHighPrecision } from "./texture.js";
  *
  * @param resource - A render target resource.
  * @param activeTextures - Texture attachments that have active consumers.
+ * @param outputColorSpace - The output color space.
  * @return The new render target.
  * @category Utils
  * @internal
  */
 
 export function createRenderTarget(descriptor: RenderTargetDescriptor, activeTextures: string[],
-	outputColorSpace: ColorSpace): WebGLRenderTarget {
+	outputColorSpace?: ColorSpace): WebGLRenderTarget {
 
 	const depth = descriptor.options.depth ?? 1;
 	const renderTarget = (depth > 1) ?
