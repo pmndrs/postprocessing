@@ -12,6 +12,12 @@ import { ShaderData } from "./ShaderData.js";
 export class ShaderDataResource extends Resource<ShaderData> implements ShaderData {
 
 	/**
+	 * @see {@link connectedData}
+	 */
+
+	private readonly _connectedData: Set<ShaderDataResource>;
+
+	/**
 	 * Constructs a new shader data resource.
 	 */
 
@@ -21,6 +27,8 @@ export class ShaderDataResource extends Resource<ShaderData> implements ShaderDa
 			defines: new CompositeMap(),
 			uniforms: new CompositeMap()
 		});
+
+		this._connectedData = new Set();
 
 		// Propagate change events.
 		this.defines.addEventListener("change", () => this.setChanged());
@@ -47,6 +55,16 @@ export class ShaderDataResource extends Resource<ShaderData> implements ShaderDa
 	}
 
 	/**
+	 * A collection of shader data resources that are currently connected to this resource.
+	 */
+
+	get connectedData(): ReadonlySet<ShaderDataResource> {
+
+		return this._connectedData;
+
+	}
+
+	/**
 	 * Adds another shader data resource to this data.
 	 *
 	 * Defines and uniforms from the connected resource become visible through this resource.
@@ -57,6 +75,13 @@ export class ShaderDataResource extends Resource<ShaderData> implements ShaderDa
 
 	add(other: ShaderDataResource): void {
 
+		if(this._connectedData.has(other)) {
+
+			return;
+
+		}
+
+		this._connectedData.add(other);
 		this.defines.connect(other.defines);
 		this.uniforms.connect(other.uniforms);
 
@@ -70,6 +95,13 @@ export class ShaderDataResource extends Resource<ShaderData> implements ShaderDa
 
 	remove(other: ShaderDataResource): void {
 
+		if(!this._connectedData.has(other)) {
+
+			return;
+
+		}
+
+		this._connectedData.delete(other);
 		this.defines.disconnect(other.defines);
 		this.uniforms.disconnect(other.uniforms);
 
