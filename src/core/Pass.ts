@@ -411,6 +411,7 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		this._subtasks = value;
 		Object.freeze(this._subtasks);
 		this.registerSubpasses();
+		this.setChanged();
 
 	}
 
