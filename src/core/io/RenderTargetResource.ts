@@ -1,5 +1,4 @@
 import { WebGLRenderTarget } from "three";
-import { Disposable } from "../Disposable.js";
 import { Resolution } from "../Resolution.js";
 import type { Output } from "./Output.js";
 import { RenderTargetDescriptor, RenderTargetDescriptorOptions } from "./RenderTargetDescriptor.js";
@@ -12,7 +11,7 @@ import { TextureResource } from "./TextureResource.js";
  * @category IO
  */
 
-export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> | null> implements Disposable {
+export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> | null> {
 
 	// #region Backing Data
 
@@ -253,12 +252,6 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 			}
 
 		}
-
-	}
-
-	dispose(): void {
-
-		this.value?.dispose();
 
 	}
 
