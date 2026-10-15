@@ -1,6 +1,5 @@
 import { WebGLRenderTarget } from "three";
 import { Resolution } from "../Resolution.js";
-import type { Output } from "./Output.js";
 import { RenderTargetDescriptor, RenderTargetDescriptorOptions } from "./RenderTargetDescriptor.js";
 import { Resource } from "./Resource.js";
 import { TextureResource } from "./TextureResource.js";
@@ -20,12 +19,6 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 	 */
 
 	private _persistent: boolean;
-
-	/**
-	 * @see {@link owner}
-	 */
-
-	private _owner: Output | null;
 
 	// #endregion
 
@@ -70,7 +63,6 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 		super(null);
 
 		this._persistent = false;
-		this._owner = null;
 
 		this.textures = new Map<string, TextureResource>();
 		this.texture = new TextureResource();
@@ -125,28 +117,6 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 		this.setChanged();
 
 	}
-
-	// #region Internal
-
-	/**
-	 * The current owner of this resource.
-	 *
-	 * @internal
-	 */
-
-	get owner(): Output | null {
-
-		return this._owner;
-
-	}
-
-	set owner(value: Output | null) {
-
-		this._owner = value;
-
-	}
-
-	// #endregion
 
 	// #endregion
 

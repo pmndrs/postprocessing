@@ -69,13 +69,13 @@ export class TextureResource extends Resource<Readonly<Texture> | null> implemen
 	 * @internal
 	 */
 
-	get owner(): Output | null {
+	override get owner(): Output | null {
 
 		return this.renderTarget?.owner ?? null;
 
 	}
 
-	set owner(value: Output | null) {
+	override set owner(value: Output | null) {
 
 		if(this.renderTarget === null) {
 

@@ -2,6 +2,7 @@ import { EventDispatcher } from "three";
 import { IdManager } from "../../utils/IdManager.js";
 import { Identifiable } from "../Identifiable.js";
 import { BaseEventMap } from "../BaseEventMap.js";
+import type { Output } from "./Output.js";
 
 /**
  * A resource.
@@ -20,11 +21,21 @@ export class Resource<T = unknown> extends EventDispatcher<BaseEventMap> impleme
 
 	readonly id: number;
 
+	// #region Backing Data
+
 	/**
 	 * @see {@link value}
 	 */
 
 	private _value: T;
+
+	/**
+	 * @see {@link owner}
+	 */
+
+	private _owner: Output | null;
+
+	// #endregion
 
 	/**
 	 * Constructs a new resource wrapper.
@@ -38,8 +49,11 @@ export class Resource<T = unknown> extends EventDispatcher<BaseEventMap> impleme
 
 		this.id = Resource.idManager.getNextId();
 		this._value = value;
+		this._owner = null;
 
 	}
+
+	// #region Accessors
 
 	/**
 	 * The value of this resource.
@@ -63,6 +77,30 @@ export class Resource<T = unknown> extends EventDispatcher<BaseEventMap> impleme
 		this.setChanged();
 
 	}
+
+	// #region Internal
+
+	/**
+	 * The current owner of this resource.
+	 *
+	 * @internal
+	 */
+
+	get owner(): Output | null {
+
+		return this._owner;
+
+	}
+
+	set owner(value: Output | null) {
+
+		this._owner = value;
+
+	}
+
+	// #endregion
+
+	// #endregion
 
 	/**
 	 * Dispatches a `change` event.
