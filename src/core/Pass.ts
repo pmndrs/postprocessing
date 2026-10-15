@@ -394,6 +394,9 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	 * disposed together with the parent pass.
 	 *
 	 * @see {@link renderSubpasses} for rendering subpasses.
+	 * @remarks Required textures of subpasses are not automatically merged with the parent `Pass` because subpasses may
+	 * be private. Concrete passes are responsible for either wiring up required textures of their subpasses or explicitly
+	 * exposing these slots as public settings.
 	 */
 
 	get subpasses(): readonly Pass<Material | null>[] {
