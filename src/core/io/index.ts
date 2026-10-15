@@ -1,6 +1,5 @@
 export * from "./gbuffer/index.js";
 
-export * from "./DisposableResource.js";
 export * from "./InOut.js";
 export * from "./InOutConnection.js";
 export * from "./Input.js";
