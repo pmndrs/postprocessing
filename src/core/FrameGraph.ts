@@ -399,15 +399,15 @@ export class FrameGraph implements FrameGraphOptions, Disposable, Renderable {
 
 		FrameGraph.registeredTasks.delete(task);
 
-		task.timer = null;
-		task.renderer = null;
-		task.gBufferSchema = null;
-
 		task.removeEventListener("toggle", this.taskListener);
 		task.removeEventListener("change", this.taskListener);
 		task.in.removeEventListener("change", this.taskListener);
 		task.out.removeEventListener("change", this.taskListener);
 		task.inOut.removeEventListener("change", this.taskListener);
+
+		task.timer = null;
+		task.renderer = null;
+		task.gBufferSchema = null;
 
 		if(this._roots.has(task)) {
 
