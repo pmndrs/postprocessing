@@ -274,8 +274,6 @@ export class Input extends EventDispatcher<InputEventMap> implements ShaderData 
 		value?.addEventListener("change", this.propagateChangeEvent);
 		this._gBufferSchema = value;
 
-		this.dispatchEvent({ type: "change" });
-
 	}
 
 	// #endregion
