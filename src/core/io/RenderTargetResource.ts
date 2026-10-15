@@ -121,7 +121,7 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 	// #endregion
 
 	/**
-	 * Defines all possible textures that this resource provides.
+	 * Defines __all__ textures that this render target resource can produce.
 	 *
 	 * These texture resources will automatically be populated based on the current {@link renderTarget}.
 	 */
@@ -137,7 +137,7 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 
 			if(textureTemplate.name === undefined) {
 
-				// Unnamed templates are unaddressable.
+				// Unnamed templates are unaddressable, skip.
 				continue;
 
 			}
@@ -197,6 +197,7 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 
 		}
 
+		// The primary texture resource is always considered active.
 		this.texture.value = this.renderTarget.texture;
 
 		for(const texture of this.renderTarget.textures) {
