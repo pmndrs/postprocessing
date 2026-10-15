@@ -191,6 +191,35 @@ function buildDependencyGraph(task: RenderTask, producers: Map<Output, RenderTas
 }
 
 /**
+ * Validates the given task.
+ *
+ * @param task - The task to validate.
+ * @param errors - A list to fill with the identified errors.
+ */
+
+function validateTask(task: RenderTask, errors: Error[]): void {
+
+	for(const name of task.requiredTextures) {
+
+		if(!task.in.textures.has(name)) {
+
+			errors.push(
+				new Error(`The task "${task.name}" requires the input texture "${name}", but it is not connected.`)
+			);
+
+		}
+
+	}
+
+	for(const subtask of task.subtasks) {
+
+		validateTask(subtask, errors);
+
+	}
+
+}
+
+/**
  * A frame graph compiler.
  *
  * @internal
@@ -233,7 +262,7 @@ export class FrameGraphCompiler implements Disposable {
 	private activeRenderTargetResources: Set<RenderTargetResource>;
 
 	/**
-	 * The current render pipeline.
+	 * The current render pipeline, grouped and sorted by execution order, ASC.
 	 */
 
 	private renderPipeline: RenderTask[][];
@@ -256,27 +285,6 @@ export class FrameGraphCompiler implements Disposable {
 	}
 
 	/**
-	 * Validates the given task.
-	 *
-	 * @param task - The task to validate.
-	 * @throws If the validation fails.
-	 */
-
-	private validateTask(task: RenderTask): void {
-
-		for(const name of task.requiredTextures) {
-
-			if(!task.in.textures.has(name)) {
-
-				throw new Error(`The task "${task.name}" requires the input texture "${name}", but it is not connected.`);
-
-			}
-
-		}
-
-	}
-
-	/**
 	 * Validates the given render pipeline.
 	 *
 	 * - Verifies all required resource inputs are connected.
@@ -288,19 +296,21 @@ export class FrameGraphCompiler implements Disposable {
 
 	private validate(): void {
 
+		const errors: Error[] = [];
+
 		for(const executionLevel of this.renderPipeline) {
 
 			for(const task of executionLevel) {
 
-				this.validateTask(task);
-
-				for(const subtask of task.subtasks) {
-
-					this.validateTask(subtask);
-
-				}
+				validateTask(task, errors);
 
 			}
+
+		}
+
+		if(errors.length > 0) {
+
+			throw new AggregateError(errors, "Frame graph validation failed");
 
 		}
 
