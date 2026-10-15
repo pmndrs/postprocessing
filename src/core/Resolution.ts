@@ -419,9 +419,9 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 	}
 
 	/**
-	 * Checks if this resolution equals the given resolution.
+	 * Checks if this resolution strictly equals the given resolution.
 	 *
-	 * This method compares all settings individually, not just the effective {@link width} and {@link height} .
+	 * This method compares all settings individually, not just the effective {@link width} and {@link height}.
 	 *
 	 * @param resolution - A resolution.
 	 * @return True if all of the resolution settings are the same.
@@ -435,6 +435,21 @@ export class Resolution extends EventDispatcher<BaseEventMap> implements Vector2
 			this.baseSize.equals(resolution.baseSize) &&
 			this.preferredSize.equals(resolution.preferredSize)
 		);
+
+	}
+
+	/**
+	 * Checks if this resolution's effective size equals that of the given resolution.
+	 *
+	 * This method compares only the effective {@link width} and {@link height}.
+	 *
+	 * @param resolution - A resolution.
+	 * @return True if the effective size is the same.
+	 */
+
+	effectivelyEquals(resolution: Resolution): boolean {
+
+		return this.effectiveSize.equals(resolution.preferredSize);
 
 	}
 
