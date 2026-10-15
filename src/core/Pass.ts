@@ -202,7 +202,6 @@ export abstract class Pass<TMaterial extends Material | null = null>
 		// Wire up lifecycle hooks.
 		this.in.addEventListener("change", () => this.onInputChange());
 		this.out.addEventListener("change", () => this.onOutputChange());
-		this.inOut.addEventListener("change", () => this.onOutputChange());
 		this.resolution.addEventListener("change", () => this.onResolutionChange());
 		this.viewport.addEventListener("change", () => this.onViewportChange());
 		this.scissor.addEventListener("change", () => this.onScissorChange());
