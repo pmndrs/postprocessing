@@ -13,28 +13,28 @@ import { ObservableReadonlyMap } from "./ObservableReadonlyMap.js";
 export class CompositeMap<K, V> extends ObservableMap<K, V> {
 
 	/**
-	 * A list of connected maps.
-	 */
-
-	private readonly connectedMaps: ObservableReadonlyMap<K, V>[];
-
-	/**
 	 * @see {@link compositeData}
 	 */
 
 	private readonly _compositeData: Map<K, V>;
 
 	/**
-	 * Indicates whether the cached entries need to be updated.
+	 * A list of connected maps.
 	 */
 
-	private needsUpdate: boolean;
+	private readonly connectedMaps: Set<ObservableReadonlyMap<K, V>>;
 
 	/**
 	 * An event listener that dispatches a `change` event.
 	 */
 
 	private readonly propagateChangeEvent: (event: Event<"change">) => void;
+
+	/**
+	 * Indicates whether the cached entries need to be updated.
+	 */
+
+	private needsUpdate: boolean;
 
 	/**
 	 * Constructs a new composite map.
@@ -53,8 +53,8 @@ export class CompositeMap<K, V> extends ObservableMap<K, V> {
 
 		};
 
-		this.connectedMaps = [];
-		this._compositeData = new Map<K, V>();
+		this._compositeData = new Map();
+		this.connectedMaps = new Set();
 		this.needsUpdate = true;
 
 	}
@@ -99,12 +99,12 @@ export class CompositeMap<K, V> extends ObservableMap<K, V> {
 
 		}
 
-		if(!this.connectedMaps.includes(other)) {
+		if(!this.connectedMaps.has(other)) {
 
 			other.addEventListener("change", this.propagateChangeEvent);
 
 			this.needsUpdate = true;
-			this.connectedMaps.push(other);
+			this.connectedMaps.add(other);
 			this.dispatchEvent({ type: "change" });
 
 		}
@@ -123,13 +123,11 @@ export class CompositeMap<K, V> extends ObservableMap<K, V> {
 
 		if(other !== undefined) {
 
-			const index = this.connectedMaps.indexOf(other);
-
-			if(index >= 0) {
+			if(this.connectedMaps.has(other)) {
 
 				other.removeEventListener("change", this.propagateChangeEvent);
 
-				this.connectedMaps.splice(index, 1);
+				this.connectedMaps.delete(other);
 				this.needsUpdate = true;
 				this.dispatchEvent({ type: "change" });
 
@@ -139,7 +137,7 @@ export class CompositeMap<K, V> extends ObservableMap<K, V> {
 
 		}
 
-		if(this.connectedMaps.length === 0) {
+		if(this.connectedMaps.size === 0) {
 
 			return;
 
@@ -151,7 +149,7 @@ export class CompositeMap<K, V> extends ObservableMap<K, V> {
 
 		}
 
-		this.connectedMaps.length = 0;
+		this.connectedMaps.clear();
 		this.needsUpdate = true;
 		this.dispatchEvent({ type: "change" });
 
