@@ -212,9 +212,9 @@ export class Output extends EventDispatcher<OutputEventMap> {
 	/**
 	 * Removes the specified buffer.
 	 *
-	 * @internal
 	 * @param key - The key of the buffer.
 	 * @return Whether the buffer was removed.
+	 * @internal
 	 */
 
 	deleteBuffer(key: string): boolean {

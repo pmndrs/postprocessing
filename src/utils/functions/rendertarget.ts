@@ -1,4 +1,4 @@
-import { ColorSpace, DepthTexture, SRGBColorSpace, WebGL3DRenderTarget, WebGLRenderTarget } from "three";
+import { DepthTexture, SRGBColorSpace, WebGL3DRenderTarget, WebGLRenderTarget } from "three";
 import { RenderTargetDescriptor } from "../../core/io/RenderTargetDescriptor.js";
 import { GBuffer } from "../../enums/GBuffer.js";
 import { isHighPrecision } from "./texture.js";
@@ -15,7 +15,7 @@ import { isHighPrecision } from "./texture.js";
  */
 
 export function createRenderTarget(descriptor: RenderTargetDescriptor, activeTextures: string[],
-	outputColorSpace?: ColorSpace): WebGLRenderTarget {
+	outputColorSpace?: string): WebGLRenderTarget {
 
 	const depth = descriptor.options.depth ?? 1;
 	const renderTarget = (depth > 1) ?
@@ -23,8 +23,11 @@ export function createRenderTarget(descriptor: RenderTargetDescriptor, activeTex
 		new WebGLRenderTarget(1, 1, descriptor.options);
 
 	// Get the templates for the required textures (depth is handled separately).
-	const textureTemplates = descriptor.textures
-		.filter(x => x.name !== undefined && activeTextures.includes(x.name) && x.name !== GBuffer.DEPTH as string);
+	const textureTemplates = descriptor.textures.filter(
+		x => x.name !== undefined &&
+			activeTextures.includes(x.name) &&
+			x.name !== GBuffer.DEPTH as string
+	);
 
 	for(let i = 0, l = textureTemplates.length; i < l; ++i) {
 
@@ -58,11 +61,7 @@ export function createRenderTarget(descriptor: RenderTargetDescriptor, activeTex
 
 		const depthTextureTemplate = descriptor.textures.find(x => x.name === GBuffer.DEPTH as string);
 
-		if(depthTextureTemplate === undefined || !activeTextures.includes(GBuffer.DEPTH)) {
-
-			renderTarget.depthTexture = null;
-
-		} else {
+		if(depthTextureTemplate !== undefined && activeTextures.includes(GBuffer.DEPTH)) {
 
 			const texture = new DepthTexture();
 			texture.name = depthTextureTemplate.name ?? GBuffer.DEPTH;

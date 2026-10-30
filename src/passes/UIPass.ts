@@ -65,6 +65,7 @@ export class UIPass extends GeometryPass {
 
 		if(depthTextureResource !== undefined) {
 
+			// Reuse the existing depth buffer.
 			this.copyPass.in.setBuffer(GBuffer.DEPTH, depthTextureResource);
 
 		} else {

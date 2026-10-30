@@ -759,6 +759,8 @@ export abstract class Pass<TMaterial extends Material | null = null>
 	/**
 	 * Adds all output resources of a given producer to this pass.
 	 *
+	 * @remarks Alias for {@link Input.add|in.add}.
+	 * @see {@link Input.remove|in.remove} for removing all resources of a specific pass.
 	 * @param producer - The producer task.
 	 */
 

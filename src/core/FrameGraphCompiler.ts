@@ -10,7 +10,8 @@ import { Task } from "./Task.js";
 /**
  * Recursively collects active input textures from a given task and its subtasks.
  *
- * @remarks Textures are considered active when they are declared as required. The default buffer is always active.
+ * @remarks Connected textures are only considered active when they are declared as required.
+ * The default buffer is always considered active.
  * @param task - The task to collect textures from.
  * @param textures - A collection to store the textures in.
  */
@@ -250,7 +251,7 @@ export class FrameGraphCompiler implements Disposable {
 	/**
 	 * A collection of tasks and their active input textures.
 	 *
-	 * @remarks The texture sets include the textures of each respective task's subtasks.
+	 * @remarks The texture sets include the input textures of each respective task's subtasks.
 	 */
 
 	private readonly texturesByTask: Map<RenderTask, Set<TextureResource>>;
@@ -317,12 +318,12 @@ export class FrameGraphCompiler implements Disposable {
 	}
 
 	/**
-	 * Builds an executable dependency graph based on the current {@link frameGraph}.
+	 * Builds an executable render pipeline based on the current {@link frameGraph}.
 	 *
-	 * @return The dependency graph, grouped and sorted by execution order, ASC.
+	 * @return The render pipeline.
 	 */
 
-	private buildDependencyGraph(): RenderTask[][] {
+	private buildRenderPipeline(): RenderTask[][] {
 
 		const stack = new Set<RenderTask>();
 		const dependencyGraph = this.dependencyGraph;

@@ -116,8 +116,8 @@ export class TextureResource extends Resource<Readonly<Texture> | null> implemen
 	 *
 	 * Use {@link unbindUniform} before discarding the bound uniform to prevent memory leaks.
 	 *
-	 * @internal
 	 * @param uniform - The uniform.
+	 * @internal
 	 */
 
 	bindUniform(uniform: IUniform): void {
@@ -137,8 +137,8 @@ export class TextureResource extends Resource<Readonly<Texture> | null> implemen
 	/**
 	 * Unbinds a uniform from this texture resource.
 	 *
-	 * @internal
 	 * @param uniform - The uniform.
+	 * @internal
 	 */
 
 	unbindUniform(uniform: IUniform): void {

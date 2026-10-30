@@ -526,7 +526,7 @@ export class FrameGraph implements FrameGraphOptions, Disposable, Renderable {
 	}
 
 	/**
-	 * Updates the resolution based on the renderer size.
+	 * Updates the resolution of all tasks based on the renderer size.
 	 */
 
 	private updateResolution(): void {
