@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Anti-Aliasing on Post Processing Manual</title><link>//pmndrs.github.io/postprocessing/manual/demos/anti-aliasing/</link><description>Recent content in Anti-Aliasing on Post Processing Manual</description><generator>Hugo</generator><language>en</language><managingEditor>vanruesc@outlook.de (Raoul van Rüschen)</managingEditor><webMaster>vanruesc@outlook.de (Raoul van Rüschen)</webMaster><atom:link href="//pmndrs.github.io/postprocessing/manual/demos/anti-aliasing/index.xml" rel="self" type="application/rss+xml"/><item><title>FXAA</title><link>//pmndrs.github.io/postprocessing/manual/demos/anti-aliasing/fxaa/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>vanruesc@outlook.de (Raoul van Rüschen)</author><guid>//pmndrs.github.io/postprocessing/manual/demos/anti-aliasing/fxaa/</guid><description>&lt;h1 id="fast-approximate-anti-aliasing"&gt;
+	&lt;span&gt;Fast Approximate Anti-Aliasing&lt;/span&gt;&amp;nbsp;&lt;a href="//pmndrs.github.io/postprocessing/manual/demos/anti-aliasing/fxaa/#fast-approximate-anti-aliasing" data-pagefind-ignore&gt;¶&lt;/a&gt;
+&lt;/h1&gt;
+&lt;p&gt;FXAA is a lightweight, image-based anti-aliasing solution. It&amp;rsquo;s less stable in terms of shimmering compared to MSAA but oftentimes much faster. Its edge detection algorithm is based on luminance. The current implementation is based on FXAA version 3.11.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-ts" data-lang="ts"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;effect&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nx"&gt;FXAAEffect&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;minEdgeThreshold&lt;/span&gt;: &lt;span class="kt"&gt;0.0312&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;maxEdgeThreshold&lt;/span&gt;: &lt;span class="kt"&gt;0.125&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;subpixelQuality&lt;/span&gt;: &lt;span class="kt"&gt;0.75&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;samples&lt;/span&gt;: &lt;span class="kt"&gt;12&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+	&lt;blockquote class="alert alert-tip"&gt;
+		&lt;div class="alert-heading"&gt;
+			&lt;div class="alert-icon"&gt;&lt;/div&gt;
+			&lt;span&gt;
+				
+					Tip
+				
+			&lt;/span&gt;
+		&lt;/div&gt;
+		&lt;p&gt;Anti-aliasing works best when applied after tone-mapping because it requires LDR input colors.&lt;/p&gt;
+	&lt;/blockquote&gt;
+
+&lt;h2 id="external-resources"&gt;
+	&lt;span&gt;External Resources&lt;/span&gt;&amp;nbsp;&lt;a href="//pmndrs.github.io/postprocessing/manual/demos/anti-aliasing/fxaa/#external-resources" data-pagefind-ignore&gt;¶&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://developer.download.nvidia.com/assets/gamedev/files/sdk/11/FXAA_WhitePaper.pdf"&gt;FXAA white paper&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://blog.simonrodriguez.fr/articles/2016/07/implementing_fxaa.html"&gt;Implementing FXAA&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>MSAA</title><link>//pmndrs.github.io/postprocessing/manual/demos/anti-aliasing/msaa/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>vanruesc@outlook.de (Raoul van Rüschen)</author><guid>//pmndrs.github.io/postprocessing/manual/demos/anti-aliasing/msaa/</guid><description>&lt;h1 id="multisample-anti-aliasing"&gt;
+	&lt;span&gt;Multisample Anti-Aliasing&lt;/span&gt;&amp;nbsp;&lt;a href="//pmndrs.github.io/postprocessing/manual/demos/anti-aliasing/msaa/#multisample-anti-aliasing" data-pagefind-ignore&gt;¶&lt;/a&gt;
+&lt;/h1&gt;
+&lt;p&gt;MSAA is a depth-based anti-aliasing technique that renders additional fragments around object edges. This makes it much more stable in motion compared to non-temporal image-based solutions but it can also be more expensive depending on the complexity of the rendered geometry and shaders. This technique also doesn&amp;rsquo;t remove aliasing artifacts that can occur in texture details.&lt;/p&gt;
+&lt;p&gt;In WebGL and WebGPU, MSAA is implemented natively and can be enabled on a per-rendertarget basis. In postprocessing, this can be achieved by using the &lt;code&gt;samples&lt;/code&gt; option of the &lt;code&gt;GeometryPass&lt;/code&gt;.&lt;/p&gt;</description></item><item><title>SMAA</title><link>//pmndrs.github.io/postprocessing/manual/demos/anti-aliasing/smaa/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>vanruesc@outlook.de (Raoul van Rüschen)</author><guid>//pmndrs.github.io/postprocessing/manual/demos/anti-aliasing/smaa/</guid><description>&lt;h1 id="subpixel-morphological-anti-aliasing"&gt;
+	&lt;span&gt;Subpixel Morphological Anti-Aliasing&lt;/span&gt;&amp;nbsp;&lt;a href="//pmndrs.github.io/postprocessing/manual/demos/anti-aliasing/smaa/#subpixel-morphological-anti-aliasing" data-pagefind-ignore&gt;¶&lt;/a&gt;
+&lt;/h1&gt;
+&lt;p&gt;SMAA can be regarded as an improvement over FXAA with more accurate edge detection and advanced gradient smoothing. It can be configured to use an additional predication buffer to further reduce false positives in the edge detection step.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-ts" data-lang="ts"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;effect&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nx"&gt;SMAAEffect&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;preset&lt;/span&gt;: &lt;span class="kt"&gt;SMAAPreset.MEDIUM&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;edgeDetectionMode&lt;/span&gt;: &lt;span class="kt"&gt;SMAAEdgeDetectionMode.COLOR&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;predicationMode&lt;/span&gt;: &lt;span class="kt"&gt;SMAAPredicationMode.DEPTH&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+	&lt;blockquote class="alert alert-tip"&gt;
+		&lt;div class="alert-heading"&gt;
+			&lt;div class="alert-icon"&gt;&lt;/div&gt;
+			&lt;span&gt;
+				
+					Tip
+				
+			&lt;/span&gt;
+		&lt;/div&gt;
+		&lt;p&gt;Anti-aliasing works best when applied after tone-mapping because it requires LDR input colors.&lt;/p&gt;
+	&lt;/blockquote&gt;
+
+&lt;h2 id="external-resources"&gt;
+	&lt;span&gt;External Resources&lt;/span&gt;&amp;nbsp;&lt;a href="//pmndrs.github.io/postprocessing/manual/demos/anti-aliasing/smaa/#external-resources" data-pagefind-ignore&gt;¶&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/iryoku/smaa"&gt;iryoku/smaa&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>

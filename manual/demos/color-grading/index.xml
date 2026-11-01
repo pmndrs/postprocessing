@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Color Grading on Post Processing Manual</title><link>//pmndrs.github.io/postprocessing/manual/demos/color-grading/</link><description>Recent content in Color Grading on Post Processing Manual</description><generator>Hugo</generator><language>en</language><managingEditor>vanruesc@outlook.de (Raoul van Rüschen)</managingEditor><webMaster>vanruesc@outlook.de (Raoul van Rüschen)</webMaster><atom:link href="//pmndrs.github.io/postprocessing/manual/demos/color-grading/index.xml" rel="self" type="application/rss+xml"/><item><title>LUT</title><link>//pmndrs.github.io/postprocessing/manual/demos/color-grading/lut/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>vanruesc@outlook.de (Raoul van Rüschen)</author><guid>//pmndrs.github.io/postprocessing/manual/demos/color-grading/lut/</guid><description>&lt;h1 id="color-grading-lut"&gt;
+	&lt;span&gt;Color Grading: LUT&lt;/span&gt;&amp;nbsp;&lt;a href="//pmndrs.github.io/postprocessing/manual/demos/color-grading/lut/#color-grading-lut" data-pagefind-ignore&gt;¶&lt;/a&gt;
+&lt;/h1&gt;
+&lt;h2 id="external-resources"&gt;
+	&lt;span&gt;External Resources&lt;/span&gt;&amp;nbsp;&lt;a href="//pmndrs.github.io/postprocessing/manual/demos/color-grading/lut/#external-resources" data-pagefind-ignore&gt;¶&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://developer.nvidia.com/gpugems/gpugems2/part-iii-high-quality-rendering/chapter-24-using-lookup-tables-accelerate-color"&gt;Using Lookup Tables to Accelerate Color Transformations&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.nvidia.com/content/GTC/posters/2010/V01-Real-Time-Color-Space-Conversion-for-High-Resolution-Video.pdf"&gt;Real-Time Color Space Conversion for High Resolution Video&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Tone Mapping</title><link>//pmndrs.github.io/postprocessing/manual/demos/color-grading/tone-mapping/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>vanruesc@outlook.de (Raoul van Rüschen)</author><guid>//pmndrs.github.io/postprocessing/manual/demos/color-grading/tone-mapping/</guid><description>&lt;h1 id="tone-mapping"&gt;
+	&lt;span&gt;Tone Mapping&lt;/span&gt;&amp;nbsp;&lt;a href="//pmndrs.github.io/postprocessing/manual/demos/color-grading/tone-mapping/#tone-mapping" data-pagefind-ignore&gt;¶&lt;/a&gt;
+&lt;/h1&gt;
+
+	&lt;blockquote&gt;
+		&lt;p&gt;Most monitors are capable of displaying RGB values in the range of [0, 255]. However, in real life, there is no limit on the amount of light &amp;rsquo;energy&amp;rsquo; incident on a point. Most renderers output linear radiance values in [0, ∞), which needs to be mapped into a viewable range. Those radiance values are described as High Dynamic Range (HDR), because they are unlimited, and the viewable target range is described as Low Dynamic Range (LDR), because there is a fixed limit of 255. Put simply, tone mapping is the process of mapping HDR values in [0, ∞) into LDR values (e.g values in [0, 255] or [0.0, 1.0]).&lt;br&gt;
+&lt;cite&gt;&lt;a href="https://github.com/64"&gt;Matt Taylor&lt;/a&gt;, 2019&lt;/cite&gt;&lt;/p&gt;</description></item></channel></rss>
