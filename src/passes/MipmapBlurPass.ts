@@ -239,6 +239,32 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 		}
 
+		// Configure the mipmap scalings.
+		let scale = 1.0;
+
+		for(let i = 0, l = this.downsamplingMipmaps.length; i < l; ++i) {
+
+			scale *= 0.5;
+			this.downsamplingMipmaps[i].resolution.scale = scale;
+
+		}
+
+		scale = this.fullResolutionUpsampling ? 1.0 : 0.5;
+
+		for(let i = 0, l = this.upsamplingMipmaps.length; i < l; ++i) {
+
+			this.upsamplingMipmaps[i].resolution.scale = scale;
+			scale *= 0.5;
+
+		}
+
+		if(this.in.defaultBuffer !== undefined) {
+
+			// Update the base sizes of the mipmaps.
+			this.onInputBufferResolutionChange(this.in.defaultBuffer);
+
+		}
+
 		this.onResolutionChange();
 
 	}
@@ -294,31 +320,13 @@ export class MipmapBlurPass extends Pass<DownsamplingMaterial | UpsamplingMateri
 
 		for(let i = 0, l = this.downsamplingMipmaps.length; i < l; ++i) {
 
-			width = Math.round(width / 2);
-			height = Math.round(height / 2);
-
-			this.downsamplingMipmaps[i].resolution.setPreferredSize(width, height);
-
-		}
-
-		if(this.fullResolutionUpsampling) {
-
-			width = imgData.width;
-			height = imgData.height;
-
-		} else {
-
-			width = Math.round(imgData.width / 2);
-			height = Math.round(imgData.height / 2);
+			this.downsamplingMipmaps[i].resolution.setBaseSize(width, height);
 
 		}
 
 		for(let i = 0, l = this.upsamplingMipmaps.length; i < l; ++i) {
 
-			this.upsamplingMipmaps[i].resolution.setPreferredSize(width, height);
-
-			width = Math.round(width / 2);
-			height = Math.round(height / 2);
+			this.upsamplingMipmaps[i].resolution.setBaseSize(width, height);
 
 		}
 
