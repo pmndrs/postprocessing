@@ -23,6 +23,15 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 	// #endregion
 
 	/**
+	 * A list of active texture attachments.
+	 *
+	 * This list controls which {@link textures|texture resources} should be synchronized with the current
+	 * {@link renderTarget|render target attachments}.
+	 */
+
+	private activeTextures: string[];
+
+	/**
 	 * A collection of texture resources, organized by texture name.
 	 *
 	 * These resources reference the individual `textures` of the current render target.
@@ -63,6 +72,7 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 		super(null);
 
 		this._persistent = false;
+		this.activeTextures = [];
 
 		this.textures = new Map<string, TextureResource>();
 		this.texture = new TextureResource();
@@ -200,25 +210,19 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 		// The primary texture resource is always considered active.
 		this.texture.value = this.renderTarget.texture;
 
-		for(const texture of this.renderTarget.textures) {
+		for(const texture of [...this.renderTarget.textures, this.renderTarget.depthTexture]) {
 
-			const textureResource = this.textures.get(texture.name);
+			if(texture === null) {
 
-			if(textureResource !== undefined) {
-
-				textureResource.value = texture;
+				continue;
 
 			}
 
-		}
+			const textureResource = this.textures.get(texture.name);
 
-		if(this.renderTarget.depthTexture !== null) {
+			if(textureResource !== undefined && this.activeTextures.includes(texture.name)) {
 
-			const textureResource = this.textures.get(this.renderTarget.depthTexture.name);
-
-			if(textureResource !== undefined) {
-
-				textureResource.value = this.renderTarget.depthTexture;
+				textureResource.value = texture;
 
 			}
 
@@ -231,13 +235,15 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 	/**
 	 * Sets the render target.
 	 *
+	 * @param renderTarget - The render target.
+	 * @param activeTextures - A list of active texture attachments.
 	 * @internal
-	 * @param value - The render target.
 	 */
 
-	setRenderTarget(value: WebGLRenderTarget | null): void {
+	setRenderTarget(renderTarget: WebGLRenderTarget | null, activeTextures: string[]): void {
 
-		super.value = value;
+		super.value = renderTarget;
+		this.activeTextures = activeTextures;
 		this.updateTextureResourceValues();
 
 	}
