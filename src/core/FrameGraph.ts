@@ -362,10 +362,17 @@ export class FrameGraph implements FrameGraphOptions, Disposable, Renderable {
 	/**
 	 * Registers a task.
 	 *
+	 * @throws If one of the tasks has already been added to another frame graph.
 	 * @param task - The task.
 	 */
 
 	private registerTask(task: RenderTask): void {
+
+		if(FrameGraph.registeredTasks.has(task)) {
+
+			throw new Error(`The task "${task.name}" has already been added to another frame graph`);
+
+		}
 
 		FrameGraph.registeredTasks.add(task);
 
@@ -431,10 +438,6 @@ export class FrameGraph implements FrameGraphOptions, Disposable, Renderable {
 			if(this._tasks.has(task)) {
 
 				continue;
-
-			} else if(FrameGraph.registeredTasks.has(task)) {
-
-				throw new Error(`The task "${task.name}" has already been added to another frame graph`);
 
 			}
 
