@@ -1,5 +1,4 @@
 import { BaseEvent, EventListener, IUniform, Texture } from "three";
-import { Disposable } from "../Disposable.js";
 import type { RenderTargetResource } from "./RenderTargetResource.js";
 import { Resource } from "./Resource.js";
 import { Output } from "./Output.js";
@@ -10,7 +9,7 @@ import { Output } from "./Output.js";
  * @category IO
  */
 
-export class TextureResource extends Resource<Readonly<Texture> | null> implements Disposable {
+export class TextureResource extends Resource<Readonly<Texture> | null> {
 
 	/**
 	 * A collection of `change` listeners for bound uniforms.
@@ -90,12 +89,6 @@ export class TextureResource extends Resource<Readonly<Texture> | null> implemen
 	// #endregion
 
 	// #endregion
-
-	dispose(): void {
-
-		this.value?.dispose();
-
-	}
 
 	// #region Internal
 
