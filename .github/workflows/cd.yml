@@ -19,7 +19,7 @@ jobs:
       - name: Install pnpm and Node.js
         uses: pnpm/setup@v3
         with:
-          version: 11
+          version: 12
           runtime: node@24
           cache: true
       - name: Build and test
