@@ -82,13 +82,13 @@ export class UIPass extends GeometryPass {
 
 		super.onOutputChange();
 
-		if(this.copyPass === undefined) {
+		if(this.copyPass === undefined || this.out.defaultBuffer === undefined) {
 
 			return;
 
 		}
 
-		this.copyPass.out.setDefaultBuffer(this.out.defaultBuffer);
+		this.copyPass.inOut.connectDefault(this.out.defaultBuffer);
 		this.configureCopyPass();
 
 	}
