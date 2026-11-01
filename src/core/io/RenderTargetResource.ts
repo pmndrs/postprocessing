@@ -70,10 +70,10 @@ export class RenderTargetResource extends Resource<Readonly<WebGLRenderTarget> |
 
 		this.resolution = new Resolution();
 		this.descriptor = new RenderTargetDescriptor(options);
-		this.descriptor.addEventListener("change", () => {
+		this.descriptor.addEventListener("change", (e) => {
 
 			this.updateTextureResources();
-			this.setChanged();
+			this.dispatchEvent(e);
 
 		});
 
