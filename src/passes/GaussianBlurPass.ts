@@ -161,8 +161,8 @@ export class GaussianBlurPass extends Pass<GaussianBlurMaterial> implements Gaus
 		const resolution = this.resolution;
 		const inputBufferSize = inputBuffer.source.data as ImageData;
 		// Downsample only along the blurred axis to avoid undersampling and aliasing on the other axis.
-		this.bufferX.resolution.setPreferredSize(resolution.width, inputBufferSize.height);
-		this.bufferY.resolution.setPreferredSize(resolution.width, resolution.height);
+		this.bufferX.resolution.setBaseSize(resolution.width, resolution.baseHeight);
+		this.bufferY.resolution.setBaseSize(resolution.width, resolution.height);
 
 	}
 
