@@ -350,6 +350,33 @@ export class FrameGraph implements FrameGraphOptions, Disposable, Renderable {
 	}
 
 	/**
+	 * Updates the resolution of all tasks based on the renderer size.
+	 */
+
+	private updateResolution(): void {
+
+		if(this.renderer === null) {
+
+			return;
+
+		}
+
+		const logicalSize = this.renderer.getSize(v);
+		const pixelRatio = this.renderer.getPixelRatio();
+
+		for(const task of this._tasks) {
+
+			task.resolution.pixelRatio = pixelRatio;
+			task.resolution.setBaseSize(logicalSize.width, logicalSize.height);
+
+		}
+
+		// Skip rebuilding the graph and update render targets based on size changes only.
+		this.compiler.updateResolution();
+
+	}
+
+	/**
 	 * Rebuilds the graph and updates the render pipeline.
 	 */
 
@@ -525,33 +552,6 @@ export class FrameGraph implements FrameGraphOptions, Disposable, Renderable {
 		}
 
 		this.updateRenderPipeline();
-
-	}
-
-	/**
-	 * Updates the resolution of all tasks based on the renderer size.
-	 */
-
-	private updateResolution(): void {
-
-		if(this.renderer === null) {
-
-			return;
-
-		}
-
-		const logicalSize = this.renderer.getSize(v);
-		const pixelRatio = this.renderer.getPixelRatio();
-
-		for(const task of this._tasks) {
-
-			task.resolution.pixelRatio = pixelRatio;
-			task.resolution.setBaseSize(logicalSize.width, logicalSize.height);
-
-		}
-
-		// Skip rebuilding the graph and update render targets based on size changes only.
-		this.compiler.updateResolution();
 
 	}
 
