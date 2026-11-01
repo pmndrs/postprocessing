@@ -60,10 +60,11 @@ export class TextureEffect extends Effect {
 		if(prevTexture !== value) {
 
 			uniforms.get("map").value = value;
-			uniforms.get("uvTransform").value = value.matrix;
 			defines.delete("TEXTURE_PRECISION_HIGH");
 
 			if(value !== null) {
+
+				uniforms.get("uvTransform").value = value.matrix;
 
 				if(value.matrixAutoUpdate) {
 
@@ -88,6 +89,12 @@ export class TextureEffect extends Effect {
 					this.setChanged();
 
 				}
+
+			} else {
+
+				uniforms.get("uvTransform").value = null;
+				defines.delete("UV_TRANSFORM");
+				this.setVertexShader(null);
 
 			}
 
