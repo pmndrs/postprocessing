@@ -141,7 +141,8 @@ export class TiltShiftEffect extends Effect {
 
 	get rotation() {
 
-		return Math.acos(this.uniforms.get("rotation").value.x);
+		const rotation = this.uniforms.get("rotation").value;
+		return Math.atan2(rotation.y, rotation.x);
 
 	}
 

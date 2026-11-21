@@ -88,7 +88,9 @@ export class HueSaturationEffect extends Effect {
 	get hue() {
 
 		const hue = this.uniforms.get("hue").value;
-		return Math.acos((hue.x * 3.0 - 1.0) / 2.0);
+		const c = (hue.x * 3.0 - 1.0) / 2.0;
+		const s = (hue.z - hue.y) * Math.sqrt(3.0) / 2.0;
+		return Math.atan2(s, c);
 
 	}
 

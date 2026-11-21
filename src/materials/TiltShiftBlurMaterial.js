@@ -95,7 +95,8 @@ export class TiltShiftBlurMaterial extends KawaseBlurMaterial {
 
 	get rotation() {
 
-		return Math.acos(this.uniforms.rotation.value.x);
+		const rotation = this.uniforms.rotation.value;
+		return Math.atan2(rotation.y, rotation.x);
 
 	}
 
