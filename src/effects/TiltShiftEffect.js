@@ -141,7 +141,7 @@ export class TiltShiftEffect extends Effect {
 
 	get rotation() {
 
-		return Math.acos(this.uniforms.get("rotation").value.x);
+		return this._rotation;
 
 	}
 
@@ -149,6 +149,7 @@ export class TiltShiftEffect extends Effect {
 
 		this.uniforms.get("rotation").value.set(Math.cos(value), Math.sin(value));
 		this.blurPass.blurMaterial.rotation = value;
+		this._rotation = value;
 
 	}
 
