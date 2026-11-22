@@ -141,8 +141,7 @@ export class TiltShiftEffect extends Effect {
 
 	get rotation() {
 
-		const rotation = this.uniforms.get("rotation").value;
-		return Math.atan2(rotation.y, rotation.x);
+		return this._rotation;
 
 	}
 
@@ -150,6 +149,7 @@ export class TiltShiftEffect extends Effect {
 
 		this.uniforms.get("rotation").value.set(Math.cos(value), Math.sin(value));
 		this.blurPass.blurMaterial.rotation = value;
+		this._rotation = value;
 
 	}
 

@@ -40,14 +40,14 @@ export class DotScreenEffect extends Effect {
 
 	get angle() {
 
-		const angle = this.uniforms.get("angle").value;
-		return Math.atan2(angle.x, angle.y);
+		return this._angle;
 
 	}
 
 	set angle(value) {
 
 		this.uniforms.get("angle").value.set(Math.sin(value), Math.cos(value));
+		this._angle = value;
 
 	}
 
